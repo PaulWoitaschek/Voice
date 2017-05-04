@@ -32,7 +32,13 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
-@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val repo: BookRepository, private val coverCollector: CoverFromDiscCollector) {
+@Inject constructor(
+    private val context: Context,
+    private val prefs: PrefsManager,
+    private val repo: BookRepository,
+    private val coverCollector: CoverFromDiscCollector,
+    private val mediaAnalyzer: MediaAnalyzer
+) {
 
   private val executor = Executors.newSingleThreadExecutor()
   private val scannerActiveSubject = BehaviorSubject.createDefault(false)
@@ -179,8 +185,10 @@ import javax.inject.Singleton
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = MediaAnalyzer.compute(firstChapterFile)
+    val result = mediaAnalyzer.analyze(firstChapterFile)
+        .blockingGet() as? MediaAnalyzer.Result.Success
         ?: return
+
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
       val withoutExtension = rootFile.nameWithoutExtension
@@ -296,8 +304,9 @@ import javax.inject.Singleton
       }
 
       // else parse and add
-      val result = MediaAnalyzer.compute(f)
-      if (result != null) {
+      val result = mediaAnalyzer.analyze(f)
+          .blockingGet()
+      if (result is MediaAnalyzer.Result.Success) {
         val marks = if (f.extension == "mp3") {
           f.inputStream().use { ID3ChapterReader.readInputStream(it) }
         } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {
