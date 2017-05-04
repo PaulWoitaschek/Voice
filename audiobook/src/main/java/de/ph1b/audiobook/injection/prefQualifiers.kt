@@ -5,6 +5,9 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
 
 @Qualifier @Retention(RUNTIME)
+annotation class ShowCoverArtOnLockscreen
+
+@Qualifier @Retention(RUNTIME)
 annotation class ResumeOnReplug
 
 @Qualifier @Retention(RUNTIME)

@@ -73,6 +73,8 @@
     <string name="bookmark_delete_title">Delete this bookmark?</string>
     <!--Settings-->
     <string name="action_settings">Preferences</string>
+    <string name="pref_show_cover_art_on_lockscreen">Cover art on lockscreen</string>
+    <string name="pref_show_cover_art_on_lockscreen_hint">Shows the cover art of the currently playing book instead of your wallpaper on the lockscreen.</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
     <string name="pref_resume_after_call">Resume after call</string>

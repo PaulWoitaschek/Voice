@@ -11,6 +11,9 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -25,13 +28,21 @@ import javax.inject.Inject
  */
 class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
 
+  private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
+
   init {
     App.component.inject(this)
+    prefs.showCoverArtOnLockscreen.asObservable().subscribe {
+      addBookCoverToMetadata(repo.bookById(prefs.currentBookId.get()!!))
+      mediaSession.setMetadata(mediaMetaDataBuilder.build())
+    }
   }
 
   @Inject lateinit var imageHelper: ImageHelper
   @Inject lateinit var context: Context
   @Inject lateinit var playStateManager: PlayStateManager
+  @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var repo: BookRepository
 
   /** The last file the [.notifyChange] has used to update the metadata. **/
   @Volatile private var lastFileForMetaData = File("")
@@ -46,8 +57,6 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
           PlaybackStateCompat.ACTION_FAST_FORWARD or
           PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
           PlaybackStateCompat.ACTION_SEEK_TO)
-
-  private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   fun notify(what: Type, book: Book) {
     val c = book.currentChapter()
@@ -67,24 +76,8 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
       // this check is necessary. Else the lockscreen controls will flicker due to
       // an updated picture
-      var bitmap: Bitmap? = null
-      val coverFile = book.coverFile()
-      if (coverFile.exists() && coverFile.canRead()) {
-        bitmap = Picasso.with(context)
-            .blocking { load(coverFile).get() }
-      }
-      if (bitmap == null) {
-        val replacement = CoverReplacement(book.name, context)
-        d { "replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}" }
-        bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
-      }
-      // we make a copy because we do not want to use picassos bitmap, since
-      // MediaSessionCompat recycles our bitmap eventually which would make
-      // picassos cached bitmap useless.
-      bitmap = bitmap.copy(bitmap.config, true)
+      addBookCoverToMetadata(book)
       mediaMetaDataBuilder
-          .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-          .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
           .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
@@ -99,6 +92,33 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
 
       lastFileForMetaData = book.currentFile
     }
+  }
+
+  private fun addBookCoverToMetadata(book: Book?) {
+    var bitmap: Bitmap? = null
+    if (book != null && prefs.showCoverArtOnLockscreen.value) {
+      bitmap = coverForBook(book)
+    }
+    mediaMetaDataBuilder
+        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+  }
+
+  private fun coverForBook(book: Book): Bitmap {
+    var bitmap: Bitmap? = null
+    val coverFile = book.coverFile()
+    if (coverFile.exists() && coverFile.canRead()) {
+      bitmap = Picasso.with(context).blocking { load(coverFile).get() }
+    }
+    if (bitmap == null) {
+      val replacement = CoverReplacement(book.name, context)
+      d { "replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}" }
+      bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
+    }
+    // we make a copy because we do not want to use picassos bitmap, since
+    // MediaSessionCompat recycles our bitmap eventually which would make
+    // picassos cached bitmap useless.
+    return bitmap.copy(bitmap.config, true)
   }
 
   enum class Type(private val intentUrl: String) {

@@ -22,6 +22,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
   @Provides @Reusable fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
   @Provides @Reusable fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum("THEME2_KEY", ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
   @Provides @Reusable fun provideDisplayModePreference(prefs: RxSharedPreferences) = prefs.getEnum("displayMode", DisplayMode.GRID, DisplayMode::class.java)
+  @Provides @Reusable @ShowCoverArtOnLockscreen fun provideShowCoverArtOnLockscreenPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHOW_COVER_ART_ON_LOCKSCREEN", true)
   @Provides @Reusable @ResumeOnReplug fun provideResumeOnReplugPreference(prefs: RxSharedPreferences) = prefs.getBoolean("RESUME_ON_REPLUG", true)
   @Provides @Reusable @BookmarkOnSleepTimer fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences) = prefs.getBoolean("BOOKMARK_ON_SLEEP", false)
   @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHAKE_TO_RESET_SLEEP_TIMER", false)

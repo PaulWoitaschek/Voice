@@ -58,6 +58,14 @@ class SettingsController : BaseController() {
         .bindToLifeCycle()
         .subscribe { themeDescription.setText(it.nameId) }
 
+    // show cover art on lockscreen
+    setupSwitchSetting(
+        id = R.id.showCoverArtOnLockscreen,
+        titleRes = R.string.pref_show_cover_art_on_lockscreen,
+        contentRes = R.string.pref_show_cover_art_on_lockscreen_hint,
+        pref = prefs.showCoverArtOnLockscreen
+    )
+
     // resume on playback
     setupSwitchSetting(
         id = R.id.resumePlayback,
