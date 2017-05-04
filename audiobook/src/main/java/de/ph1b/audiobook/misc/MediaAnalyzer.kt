@@ -46,7 +46,9 @@ object MediaAnalyzer {
       if (author.isNullOrEmpty())
         author = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
 
-      val bookName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+      var bookName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+      if (bookName.isNullOrEmpty())
+        bookName = chapterName
 
       return Result(duration, chapterName!!, author, bookName)
     } catch(ignored: RuntimeException) {
