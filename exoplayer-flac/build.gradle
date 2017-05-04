@@ -18,10 +18,8 @@ android {
 }
 
 // make sure that flac is set up before ndk compiling starts
-afterEvaluate {
-    android.libraryVariants.all { variant ->
-        variant.ndkCompile?.dependsOn(downloadFlac)
-    }
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn(downloadFlac)
 }
 
 dependencies {
@@ -41,18 +39,21 @@ task downloadFlac << {
     if (!dstFile.exists()) {
         def tmpFile = file("src/main/jni/flac.temp")
         tmpFile.delete()
-        exec {
-            executable 'sh'
-            args '-c', "curl http://downloads.xiph.org/releases/flac/flac-${flacVersion}.tar.xz > ${tmpFile.absolutePath}"
-        }
+        shell "curl http://downloads.xiph.org/releases/flac/flac-${flacVersion}.tar.xz > ${tmpFile.absolutePath}"
+
         tmpFile.renameTo(dstFile)
     }
+    if (!dstFile.exists()) throw IOException("No dstFile")
 
     // extract flac and rename it
-    exec {
-        executable 'sh'
-        args '-c', "tar -xzf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}"
-    }
+    shell "tar -xvf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}"
     file("src/main/jni/flac-$flacVersion")
             .renameTo(flacDir)
+}
+
+void shell(String command) {
+    exec {
+        executable "sh"
+        args "-c", command
+    }
 }
