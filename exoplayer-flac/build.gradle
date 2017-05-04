@@ -1,3 +1,5 @@
+import de.ph1b.audiobook.build.PrepareFlac
+
 apply plugin: 'com.android.library'
 
 android {
@@ -10,50 +12,19 @@ android {
         consumerProguardFiles 'proguard-rules.txt'
     }
 
-    externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
-        }
+    sourceSets.main {
+        jniLibs.srcDir 'src/main/libs'
+        jni.srcDirs = [] // Disable the automatic ndk-build call by Android Studio.
     }
 }
 
 // make sure that flac is set up before ndk compiling starts
 tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn(downloadFlac)
+    compileTask -> compileTask.dependsOn(prepareFlac)
 }
 
 dependencies {
     compile libraries.exoPlayerCore
 }
 
-task downloadFlac << {
-    // if the flac sources already exist, skip
-    def flacDir = file("src/main/jni/flac")
-    if (flacDir.exists())
-        return
-
-    def flacVersion = "1.3.1"
-
-    // download flac if necessary
-    def dstFile = file("src/main/jni/flac-${flacVersion}.tar.xz")
-    if (!dstFile.exists()) {
-        def tmpFile = file("src/main/jni/flac.temp")
-        tmpFile.delete()
-        shell "curl http://downloads.xiph.org/releases/flac/flac-${flacVersion}.tar.xz > ${tmpFile.absolutePath}"
-
-        tmpFile.renameTo(dstFile)
-    }
-    if (!dstFile.exists()) throw IOException("No dstFile")
-
-    // extract flac and rename it
-    shell "tar -xvf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}"
-    file("src/main/jni/flac-$flacVersion")
-            .renameTo(flacDir)
-}
-
-void shell(String command) {
-    exec {
-        executable "sh"
-        args "-c", command
-    }
-}
+task(prepareFlac, type: PrepareFlac)
