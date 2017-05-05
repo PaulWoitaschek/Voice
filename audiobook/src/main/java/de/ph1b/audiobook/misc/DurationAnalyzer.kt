@@ -4,7 +4,6 @@ import android.content.Context
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import d
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import de.ph1b.audiobook.playback.utils.SimpleEventListener
 import io.reactivex.Single
@@ -51,14 +50,8 @@ class DurationAnalyzer
         }
       }
       .timeout(10, TimeUnit.SECONDS)
-      .map {
-        if (exoPlayer.isCurrentWindowSeekable) {
-          exoPlayer.duration.toInt()
-        } else {
-          d { "file $file is not seekable" }
-          -1
-        }
-      }
+      .map { exoPlayer.duration.toInt() }
       .firstOrError()
       .onErrorReturnItem(-1)
+      .doFinally { exoPlayer.stop() }
 }
