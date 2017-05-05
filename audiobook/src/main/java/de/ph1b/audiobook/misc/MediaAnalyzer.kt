@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.misc
 
+import e
 import io.reactivex.Single
 import java.io.File
 import javax.inject.Inject
@@ -24,7 +25,10 @@ class MediaAnalyzer @Inject constructor(
     val author = metaDataAnalyzer.parseAuthor()
     val bookName = metaDataAnalyzer.parseBookName()
     Result.Success(duration, chapterName, author, bookName)
-  } else Result.Failure
+  } else {
+    e { "Could not parse duration for $file" }
+    Result.Failure
+  }
 
 
   sealed class Result {
