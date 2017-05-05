@@ -12,9 +12,10 @@ android {
         consumerProguardFiles 'proguard-rules.txt'
     }
 
-    sourceSets.main {
-        jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = [] // Disable the automatic ndk-build call by Android Studio.
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
     }
 }
 
@@ -27,6 +28,4 @@ dependencies {
     compile libraries.exoPlayerCore
 }
 
-task(prepareFlac, type: PrepareFlac) {
-    ndkDir = project.extensions.findByName("android").ndkDirectory
-}
+task(prepareFlac, type: PrepareFlac)

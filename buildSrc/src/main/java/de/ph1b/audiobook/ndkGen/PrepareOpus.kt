@@ -21,7 +21,7 @@ open class PrepareOpus : DefaultTask() {
     val opusDir = File(jniDir, "libopus")
 
     d(opusDir.absolutePath)
-    if (opusDir.exists() && opusDir.listFiles()?.isNotEmpty() == true)
+    if (opusDir.listFilesSafely().isNotEmpty())
       return
     opusDir.delete()
 

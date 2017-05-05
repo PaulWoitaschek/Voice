@@ -55,3 +55,5 @@ fun download(what: URI, to: File) {
 fun Task.d(message: Any?) {
   logger.debug(message.toString())
 }
+
+fun File.listFilesSafely() = listFiles()?.toList() ?: emptyList<File>()
