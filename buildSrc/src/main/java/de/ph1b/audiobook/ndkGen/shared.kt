@@ -54,5 +54,5 @@ fun download(what: URI, to: File) {
 }
 
 fun Task.d(message: Any?) {
-  logger.error(message.toString())
+  logger.debug(message.toString())
 }
