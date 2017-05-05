@@ -40,4 +40,6 @@ dependencies {
     compile libraries.exoPlayerCore
 }
 
-task(prepareOpus, type: PrepareOpus)
+task(prepareOpus, type: PrepareOpus) {
+    ndkDir = project.extensions.findByName("android").ndkDirectory
+}

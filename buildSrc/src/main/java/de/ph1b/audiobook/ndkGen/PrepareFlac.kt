@@ -2,16 +2,20 @@ package de.ph1b.audiobook.ndkGen
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 import java.lang.Compiler.command
 import java.net.URI
-import java.util.*
 
 
 @Suppress("unused")
 open class PrepareFlac : DefaultTask() {
 
+  var ndkDir: String = ""
+
   @TaskAction
   fun prepare() {
+    if (!File(ndkDir).exists())
+      throw IllegalArgumentException("Invalid ndkDir $ndkDir")
 
     // if the flac sources already exist, skip
     val flacDir = file("src/main/jni/flac")
@@ -35,10 +39,6 @@ open class PrepareFlac : DefaultTask() {
     command("tar -xvf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}")
     val extractedFolder = file("src/main/jni/flac-$flacVersion")
     extractedFolder.renameTo(flacDir)
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
-    val ndkDir = properties.getProperty("ndk.dir")
 
     command("cd ${file("src/main/jni")} && $ndkDir/ndk-build APP_ABI=all -j4", 60)
   }

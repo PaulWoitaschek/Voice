@@ -2,14 +2,18 @@ package de.ph1b.audiobook.ndkGen
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 import java.net.URI
-import java.util.*
 
 @Suppress("unused")
 open class PrepareOpus : DefaultTask() {
 
+  var ndkDir: String = ""
+
   @TaskAction
   fun prepare() {
+    if (!File(ndkDir).exists())
+      throw IllegalArgumentException("Invalid ndkDir $ndkDir")
 
     // if the opus sources already exist, skip
     val opusDir = file("src/main/jni/libopus")
@@ -32,10 +36,6 @@ open class PrepareOpus : DefaultTask() {
     command("tar -xzf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}")
     val extractedFolder = file("src/main/jni/opus-$opusVersion")
     extractedFolder.renameTo(opusDir)
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
-    val ndkDir = properties.getProperty("ndk.dir")
 
     command(file("src/main/jni/convert_android_asm.sh").absolutePath)
 

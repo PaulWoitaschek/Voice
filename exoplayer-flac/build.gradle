@@ -27,4 +27,6 @@ dependencies {
     compile libraries.exoPlayerCore
 }
 
-task(prepareFlac, type: PrepareFlac)
+task(prepareFlac, type: PrepareFlac) {
+    ndkDir = project.extensions.findByName("android").ndkDirectory
+}
