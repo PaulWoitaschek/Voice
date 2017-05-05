@@ -1,4 +1,4 @@
-import de.ph1b.audiobook.build.PrepareFlac
+import de.ph1b.audiobook.ndkGen.PrepareFlac
 
 apply plugin: 'com.android.library'
 
