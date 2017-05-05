@@ -118,6 +118,7 @@ dependencies {
 
     compile libraries.exoPlayerCore
     compile project(":exoplayer-flac")
+    compile project(":exoplayer-opus")
 
     compile libraries.conductor
     compile libraries.conductorSupport

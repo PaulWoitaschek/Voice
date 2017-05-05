@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/exoplayer-flac/exoplayer-flac.iml" filepath="$PROJECT_DIR$/exoplayer-flac/exoplayer-flac.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exoplayer-opus/exoplayer-opus.iml" filepath="$PROJECT_DIR$/exoplayer-opus/exoplayer-opus.iml" />
     </modules>
   </component>
 </project>
