@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.misc
 
-import android.os.Build
 import java.io.FileFilter
 import java.util.*
 
@@ -13,38 +12,32 @@ import java.util.*
 object FileRecognition {
 
   private val imageTypes = Arrays.asList("jpg", "jpeg", "png", "bmp")
-  private val audioTypes: List<String>
-
-  init {
-    audioTypes = arrayListOf(
-        "3gp",
-        "aac",
-        "awb",
-        "flac",
-        "imy",
-        "m4a",
-        "m4b",
-        "mid",
-        "mka",
-        "mkv",
-        "mp3",
-        "mp3package",
-        "mp4",
-        "mxmf",
-        "oga",
-        "ogg",
-        "ota",
-        "rtttl",
-        "rtx",
-        "wav",
-        "webm",
-        "wma",
-        "xmf"
-    )
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      audioTypes.add("opus")
-    }
-  }
+  private val audioTypes = arrayOf(
+      "3gp",
+      "aac",
+      "awb",
+      "flac",
+      "imy",
+      "m4a",
+      "m4b",
+      "mid",
+      "mka",
+      "mkv",
+      "mp3",
+      "mp3package",
+      "mp4",
+      "opus",
+      "mxmf",
+      "oga",
+      "ogg",
+      "ota",
+      "rtttl",
+      "rtx",
+      "wav",
+      "webm",
+      "wma",
+      "xmf"
+  )
 
   val imageFilter = FileFilter {
     val extension = it.extension.toLowerCase()
