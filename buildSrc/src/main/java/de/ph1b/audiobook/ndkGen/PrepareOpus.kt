@@ -15,8 +15,10 @@ open class PrepareOpus : DefaultTask() {
     if (!File(ndkDir).exists())
       throw IllegalArgumentException("Invalid ndkDir $ndkDir")
 
+    val jniDir = File(project.projectDir, "src/main/jni")
+
     // if the opus sources already exist, skip
-    val opusDir = file("src/main/jni/libopus")
+    val opusDir = File(jniDir, "libopus")
 
     d(opusDir.absolutePath)
     if (opusDir.exists() && opusDir.listFiles()?.isNotEmpty() == true)
@@ -25,7 +27,7 @@ open class PrepareOpus : DefaultTask() {
 
     val opusVersion = "1.1.4"
 
-    val dstFile = file("src/main/jni/opus-$opusVersion.tar.gz")
+    val dstFile = File(jniDir, "opus-$opusVersion.tar.gz")
     if (!dstFile.exists()) {
       val uri = URI.create("http://downloads.xiph.org/releases/opus/opus-$opusVersion.tar.gz")
       download(uri, dstFile)
@@ -33,12 +35,21 @@ open class PrepareOpus : DefaultTask() {
     d("downloaded to $dstFile")
 
     // extract and rename it
-    command("tar -xzf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}")
-    val extractedFolder = file("src/main/jni/opus-$opusVersion")
+    execute(
+        command = "tar -xzf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}"
+    )
+    val extractedFolder = File(jniDir, "opus-$opusVersion")
     extractedFolder.renameTo(opusDir)
 
-    command(file("src/main/jni/convert_android_asm.sh").absolutePath)
+    execute(
+        command = "convert_android_asm.sh",
+        directory = jniDir
+    )
 
-    command("cd ${file("src/main/jni")} && $ndkDir/ndk-build APP_ABI=all -j4", 60)
+    execute(
+        command = "$ndkDir/ndk-build APP_ABI=all -j4",
+        timeOut = 60,
+        directory = jniDir
+    )
   }
 }
