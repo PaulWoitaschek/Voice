@@ -19,15 +19,21 @@ class MediaAnalyzer @Inject constructor(
         assembleMetaData(duration, file)
       }
 
-  private fun assembleMetaData(duration: Int, file: File) = if (duration > 0) {
-    metaDataAnalyzer.prepare(file)
-    val chapterName = metaDataAnalyzer.parseChapterName()
-    val author = metaDataAnalyzer.parseAuthor()
-    val bookName = metaDataAnalyzer.parseBookName()
-    Result.Success(duration, chapterName, author, bookName)
-  } else {
-    e { "Could not parse duration for $file" }
-    Result.Failure
+  private fun assembleMetaData(duration: Int, file: File): Result {
+    if (duration > 0) {
+      if (!metaDataAnalyzer.prepare(file)) {
+        e { "Couldn't prepare MetaDataAnalyzer for $file" }
+        return Result.Failure
+      }
+
+      val chapterName = metaDataAnalyzer.parseChapterName()
+      val author = metaDataAnalyzer.parseAuthor()
+      val bookName = metaDataAnalyzer.parseBookName()
+      return Result.Success(duration, chapterName, author, bookName)
+    } else {
+      e { "Could not parse duration for $file" }
+      return Result.Failure
+    }
   }
 
 
