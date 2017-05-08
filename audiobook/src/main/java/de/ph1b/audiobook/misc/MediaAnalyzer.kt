@@ -23,7 +23,7 @@ class MediaAnalyzer @Inject constructor(
     if (duration > 0) {
       if (!metaDataAnalyzer.prepare(file)) {
         e { "Couldn't prepare MetaDataAnalyzer for $file" }
-        return Result.Failure
+        return Result.Success(duration, metaDataAnalyzer.chapterNameFallback(file), null, null)
       }
 
       val chapterName = metaDataAnalyzer.parseChapterName()

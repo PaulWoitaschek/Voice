@@ -39,14 +39,17 @@ class MetaDataAnalyzer @Inject constructor() {
     val file = this.file
         ?: throw IllegalStateException("No prepared file")
 
-    // getting chapter-name
-    var chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
-    // checking for dot index because otherwise a file called ".mp3" would have no name.
-    if (chapterName.isNullOrEmpty()) {
-      val fileName = file.nameWithoutExtension
-      chapterName = if (fileName.isEmpty()) file.name else fileName
+    val chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
+    if (chapterName == null || chapterName.isEmpty()) {
+      return chapterNameFallback(file)
     }
-    return chapterName!!
+    return chapterName
+  }
+
+  fun chapterNameFallback(file: File): String {
+    val withoutExtension = file.nameWithoutExtension
+        .trim()
+    return if (withoutExtension.isEmpty()) file.name else withoutExtension
   }
 
   fun parseAuthor(): String? {
