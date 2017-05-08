@@ -13,8 +13,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 186
-        versionName '3.3.1'
+        versionCode 187
+        versionName '3.3.2'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
