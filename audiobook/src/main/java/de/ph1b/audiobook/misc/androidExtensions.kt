@@ -49,6 +49,7 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
   return wrapped
 }
 
+@Deprecated("Use a plain toolbar")
 fun Controller.setupActionbar(toolbar: Toolbar,
                               @DrawableRes upIndicator: Int? = null,
                               title: String? = null) =
@@ -57,6 +58,7 @@ fun Controller.setupActionbar(toolbar: Toolbar,
         upIndicator = upIndicator,
         title = title)
 
+@Deprecated("Use a plain toolbar")
 fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
                                      @DrawableRes upIndicator: Int? = null,
                                      title: String? = null) {

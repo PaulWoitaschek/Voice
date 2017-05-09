@@ -8,7 +8,10 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.*
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
@@ -25,7 +28,6 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
-import dagger.Lazy as DaggerLazy
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
@@ -39,7 +41,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
   init {
     App.component.inject(this)
-    setHasOptionsMenu(true)
   }
 
   @Inject lateinit var prefs: PrefsManager
@@ -54,24 +55,36 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
 
-  // views
   private lateinit var recyclerView: RecyclerView
   private lateinit var fab: FloatingActionButton
   private lateinit var toolbar: Toolbar
   private lateinit var loadingProgress: View
+  private lateinit var currentPlaying: MenuItem
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
     val view = inflater.inflate(R.layout.book_shelf, container, false)
+
+    findViews(view)
+    setupFab()
+    setupRecyclerView()
+    setupToolbar()
+
+    return view
+  }
+
+  private fun findViews(view: View) {
     recyclerView = view.find(R.id.recyclerView)
     fab = view.find(R.id.fab)
     toolbar = view.find(R.id.toolbar)
     loadingProgress = view.find(R.id.loadingProgress)
+  }
 
-    // init fab
+  private fun setupFab() {
     fab.setIconDrawable(playPauseDrawable)
     fab.setOnClickListener { presenter.playPauseRequested() }
+  }
 
-    // init RecyclerView
+  private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookShelfAdapter(activity) { book, clickType ->
       if (clickType == BookShelfAdapter.ClickType.REGULAR) {
@@ -88,9 +101,41 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
-    initRecyclerView()
 
-    return view
+    updateDisplayMode()
+  }
+
+  private fun setupToolbar() {
+    toolbar.inflateMenu(R.menu.book_shelf)
+    val menu = toolbar.menu
+
+    currentPlaying = menu.findItem(R.id.action_current)
+
+    // sets the grid / list toggle icon
+    val displayModeItem = menu.findItem(R.id.action_change_layout)
+    displayModeItem.setIcon((!prefs.displayMode.value).icon)
+
+    toolbar.title = getString(R.string.app_name)
+
+    toolbar.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.action_settings -> {
+          val transaction = SettingsController().asTransaction()
+          router.pushController(transaction)
+          true
+        }
+        R.id.action_current -> {
+          invokeBookSelectionCallback(prefs.currentBookId.value)
+          true
+        }
+        R.id.action_change_layout -> {
+          prefs.displayMode.value = !prefs.displayMode.value
+          updateDisplayMode()
+          true
+        }
+        else -> false
+      }
+    }
   }
 
   override fun onActivityResumed(activity: Activity) {
@@ -98,45 +143,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
     pendingTransaction?.commit()
     pendingTransaction = null
-  }
-
-  override fun onAttach(view: View) {
-    // init ActionBar
-    setupActionbar(toolbar = toolbar,
-        title = getString(R.string.app_name))
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.book_shelf, menu)
-
-    // sets menu item visible if there is a current book
-    val currentPlaying = menu.findItem(R.id.action_current)
-    currentPlaying.isVisible = currentBook != null
-
-    // sets the grid / list toggle icon
-    val displayModeItem = menu.findItem(R.id.action_change_layout)
-    displayModeItem.setIcon(prefs.displayMode.value.inverted().icon)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      R.id.action_settings -> {
-        val transaction = SettingsController().asTransaction()
-        router.pushController(transaction)
-        true
-      }
-      R.id.action_current -> {
-        invokeBookSelectionCallback(prefs.currentBookId.value)
-        true
-      }
-      R.id.action_change_layout -> {
-        val newDisplayMode = prefs.displayMode.value.inverted()
-        prefs.displayMode.value = newDisplayMode
-        initRecyclerView()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -169,7 +175,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     return Math.max(columns, 2)
   }
 
-  private fun initRecyclerView() {
+  private fun updateDisplayMode() {
     val defaultDisplayMode = prefs.displayMode.value
     if (defaultDisplayMode == DisplayMode.GRID) {
       recyclerView.removeItemDecoration(listDecoration)
@@ -179,7 +185,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
       recyclerView.layoutManager = linearLayoutManager
     }
     adapter.displayMode = defaultDisplayMode
-    activity.invalidateOptionsMenu()
   }
 
   private fun invokeBookSelectionCallback(bookId: Long) {
@@ -200,14 +205,14 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   }
 
   /** Display a new set of books */
-  fun newBooks(books: List<Book>) {
-    i { "${books.size} newBooks" }
+  fun displayNewBooks(books: List<Book>) {
+    i { "${books.size} displayNewBooks" }
     adapter.newDataSet(books)
   }
 
   /** The book marked as current was changed. Updates the adapter and fab accordingly. */
-  fun currentBookChanged(currentBook: Book?) {
-    i { "currentBookChanged: ${currentBook?.name}" }
+  fun updateCurrentBook(currentBook: Book?) {
+    i { "updateCurrentBook: ${currentBook?.name}" }
     this.currentBook = currentBook
 
     for (i in 0..adapter.itemCount - 1) {
@@ -219,11 +224,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     }
 
     fab.visible = currentBook != null
+
+    currentPlaying.isVisible = currentBook != null
   }
 
   /** Sets the fab icon correctly accordingly to the new play state. */
-  fun setPlayerPlaying(playing: Boolean) {
-    i { "Called setPlayerPlaying $playing" }
+  fun showPlaying(playing: Boolean) {
+    i { "Called showPlaying $playing" }
     if (playing) {
       playPauseDrawable.transformToPause(!firstPlayStateUpdate)
     } else {
@@ -246,8 +253,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     loadingProgress.visible = loading
   }
 
-  override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
-
   fun bookCoverChanged(bookId: Long) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
@@ -255,6 +260,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
       adapter.reloadBookCover(bookId)
     }
   }
+
+  override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
 
   override fun onInternetCoverRequested(book: Book) = router.pushController(RouterTransaction.with(ImagePickerController(book)))
 
@@ -269,11 +276,10 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     GRID(R.drawable.view_grid),
     LIST(R.drawable.ic_view_list);
 
-    fun inverted(): DisplayMode = if (this == GRID) LIST else GRID
+    operator fun not(): DisplayMode = if (this == GRID) LIST else GRID
   }
 
   companion object {
-
     val TAG: String = BookShelfController::class.java.simpleName
     val FM_NO_FOLDER_WARNING = TAG + NoFolderWarningDialogFragment.TAG
   }
