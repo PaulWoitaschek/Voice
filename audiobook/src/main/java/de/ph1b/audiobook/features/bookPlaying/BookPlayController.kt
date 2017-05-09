@@ -43,7 +43,6 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   private val playPauseDrawable = PlayPauseDrawable()
   private var currentChapter: BookPlayChapter? = null
   private var firstPlayStateChange = true
-  private var leftSleepTime = 0
 
   override val presenter = BookPlayPresenter(bookId)
 
@@ -65,8 +64,6 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
 
   init {
     App.component.inject(this)
-
-    setHasOptionsMenu(true)
   }
 
   override fun render(book: Book) {
@@ -108,10 +105,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     }
 
     // name
-    activity.supportActionBar!!.apply {
-      title = book.name
-      setDisplayShowTitleEnabled(true)
-    }
+    toolbar.title = book.name
 
     // Next/Prev/spinner/book progress views hiding
     val multipleChapters = data.size > 1
@@ -140,6 +134,17 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
     val view = inflater.inflate(R.layout.book_play, container, false)
 
+    findViews(view)
+    setupClicks()
+    setupFab()
+    setupSeekbar()
+    setupSpinner()
+    setupToolbar()
+
+    return view
+  }
+
+  private fun findViews(view: View) {
     play = view.find(R.id.play)
     rewind = view.find(R.id.rewind)
     fastForward = view.find(R.id.fastForward)
@@ -152,7 +157,9 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     seekBar = view.find(R.id.seekBar)
     cover = view.find(R.id.cover)
     toolbar = view.find(R.id.toolbar)
+  }
 
+  private fun setupClicks() {
     play.setOnClickListener { presenter.playPause() }
     rewind.setOnClickListener { presenter.rewind() }
     fastForward.setOnClickListener { presenter.fastForward() }
@@ -171,9 +178,13 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
         }
         .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
         .subscribe { presenter.playPause() }
+  }
 
-    //setup buttons
+  private fun setupFab() {
     play.setIconDrawable(playPauseDrawable)
+  }
+
+  private fun setupSeekbar() {
     seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
         //sets text to adjust while using seekBar
@@ -190,7 +201,9 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
         }
       }
     })
+  }
 
+  private fun setupSpinner() {
     spinnerAdapter = MultiLineSpinnerAdapter(spinner = bookSpinner, context = activity, unselectedTextColor = activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)), resolveName = BookPlayChapter::correctedName)
     bookSpinner.adapter = spinnerAdapter
 
@@ -199,8 +212,52 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
       val item = data[it]
       presenter.seekTo(item.start, item.file)
     }
+  }
 
-    return view
+  private fun setupToolbar() {
+    toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+
+    toolbar.inflateMenu(R.menu.book_play)
+    val menu = toolbar.menu
+
+    sleepTimerItem = menu.findItem(R.id.action_sleep)
+    val equalizerItem = menu.findItem(R.id.action_equalizer)
+    equalizerItem.isVisible = equalizer.exists
+
+    toolbar.setNavigationOnClickListener { router.popController(this) }
+    toolbar.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.action_settings -> {
+          val transaction = SettingsController().asTransaction()
+          router.pushController(transaction)
+          true
+        }
+        R.id.action_time_change -> {
+          launchJumpToPositionDialog()
+          true
+        }
+        R.id.action_sleep -> {
+          presenter.toggleSleepTimer()
+          true
+        }
+        R.id.action_time_lapse -> {
+          PlaybackSpeedDialogFragment().show(fragmentManager,
+              PlaybackSpeedDialogFragment.TAG)
+          true
+        }
+        R.id.action_bookmark -> {
+          BookmarkDialogFragment.newInstance(bookId).show(
+              fragmentManager, BookmarkDialogFragment.TAG
+          )
+          true
+        }
+        R.id.action_equalizer -> {
+          equalizer.launch(activity)
+          true
+        }
+        else -> false
+      }
+    }
   }
 
   override fun showPlaying(playing: Boolean) {
@@ -215,8 +272,6 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
 
 
   override fun onAttach(view: View) {
-    setupActionbar(toolbar = toolbar, upIndicator = R.drawable.ic_arrow_back)
-
     firstPlayStateChange = true
   }
 
@@ -225,66 +280,17 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   }
 
   override fun showLeftSleepTime(ms: Int) {
-    this.leftSleepTime = ms
-    activity.invalidateOptionsMenu()
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.book_play, menu)
-    sleepTimerItem = menu.findItem(R.id.action_sleep)
-    val equalizerItem = menu.findItem(R.id.action_equalizer)
-    equalizerItem.isVisible = equalizer.exists
-  }
-
-  override fun onPrepareOptionsMenu(menu: Menu) {
-    super.onPrepareOptionsMenu(menu)
-    val active = leftSleepTime > 0
+    val active = ms > 0
     // sets the correct sleep timer icon
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     // set text and visibility
-    timerCountdownView.text = formatTime(leftSleepTime, leftSleepTime)
+    timerCountdownView.text = formatTime(ms, ms)
     timerCountdownView.visible = active
   }
 
   override fun openSleepTimeDialog() {
     SleepTimerDialogFragment.newInstance(bookId)
         .show(fragmentManager, "fmSleepTimer")
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-    R.id.action_settings -> {
-      val transaction = SettingsController().asTransaction()
-      router.pushController(transaction)
-      true
-    }
-    R.id.action_time_change -> {
-      launchJumpToPositionDialog()
-      true
-    }
-    R.id.action_sleep -> {
-      presenter.toggleSleepTimer()
-      true
-    }
-    R.id.action_time_lapse -> {
-      PlaybackSpeedDialogFragment().show(fragmentManager,
-          PlaybackSpeedDialogFragment.TAG)
-      true
-    }
-    R.id.action_bookmark -> {
-      BookmarkDialogFragment.newInstance(bookId).show(
-          fragmentManager, BookmarkDialogFragment.TAG
-      )
-      true
-    }
-    R.id.action_equalizer -> {
-      equalizer.launch(activity)
-      true
-    }
-    android.R.id.home -> {
-      router.popCurrentController()
-      true
-    }
-    else -> super.onOptionsItemSelected(item)
   }
 
   private fun formatTime(ms: Int, duration: Int): String {
