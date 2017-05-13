@@ -9,14 +9,16 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
@@ -29,10 +31,6 @@ import de.ph1b.audiobook.uitools.visible
 class FolderOverviewController : MvpBaseController<FolderOverviewController, FolderOverviewPresenter>() {
 
   override val presenter: FolderOverviewPresenter = FolderOverviewPresenter()
-
-  init {
-    setHasOptionsMenu(true)
-  }
 
   private lateinit var overlay: View
   private lateinit var fam: FloatingActionsMenu
@@ -87,15 +85,15 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
     addAsSingle.title = "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
 
+    setupToolbar()
+
     return view
   }
 
-  override fun onAttach(view: View) {
-    super.onAttach(view)
-
-    setupActionbar(toolbar = toolbar,
-        title = activity.getString(R.string.audiobook_folders_title),
-        upIndicator = R.drawable.close)
+  private fun setupToolbar() {
+    toolbar.setTitle(R.string.audiobook_folders_title)
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
   }
 
   override fun provideView() = this
@@ -161,16 +159,6 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
     val x = fam.left + ((buttonRepresentingTheFam.left + buttonRepresentingTheFam.right) / 2)
     val y = fam.top + ((buttonRepresentingTheFam.top + buttonRepresentingTheFam.bottom) / 2)
     point.set(x, y)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      android.R.id.home -> {
-        router.popCurrentController()
-        return true
-      }
-      else -> return super.onOptionsItemSelected(item)
-    }
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {

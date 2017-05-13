@@ -19,7 +19,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
@@ -39,7 +38,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   init {
     App.component.inject(this)
-    setHasOptionsMenu(true)
   }
 
   @Inject lateinit var repo: BookRepository
@@ -167,39 +165,34 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       fab.hide()
     }
 
+    setupToolbar()
+
     return view
   }
 
-  override fun onAttach(view: View) {
-    setupActionbar(toolbar = toolbar,
-        upIndicator = R.drawable.close,
-        title = getString(R.string.cover))
-  }
+  private fun setupToolbar() {
+    toolbar.setTitle(R.string.cover)
 
-  override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-    // load the last page loaded or the original one of there is none
-    val url: String? = savedViewState.getString(SI_URL)
-    webView.loadUrl(url)
-  }
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
 
-  override fun handleBack(): Boolean {
-    if (webView.canGoBack()) {
-      webView.goBack()
-      return true
-    } else return false
-  }
-
-  override fun onSaveViewState(view: View, outState: Bundle) {
-    if (webView.url != ABOUT_BLANK) {
-      outState.putString(SI_URL, webView.url)
+    toolbar.inflateMenu(R.menu.image_picker)
+    toolbar.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.refresh -> {
+          webView.reload()
+          true
+        }
+        R.id.home -> {
+          webView.loadUrl(originalUrl)
+          true
+        }
+        else -> false
+      }
     }
-  }
-
-  @SuppressLint("InflateParams")
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.image_picker, menu)
 
     // set the rotating icon
+    val menu = toolbar.menu
     val refreshItem = menu.findItem(R.id.refresh)
     val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
       repeatCount = Animation.INFINITE
@@ -235,21 +228,23 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     })
   }
 
+  override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+    // load the last page loaded or the original one of there is none
+    val url: String? = savedViewState.getString(SI_URL)
+    webView.loadUrl(url)
+  }
 
-  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-    android.R.id.home -> {
-      router.popCurrentController()
-      true
+  override fun handleBack(): Boolean {
+    if (webView.canGoBack()) {
+      webView.goBack()
+      return true
+    } else return false
+  }
+
+  override fun onSaveViewState(view: View, outState: Bundle) {
+    if (webView.url != ABOUT_BLANK) {
+      outState.putString(SI_URL, webView.url)
     }
-    R.id.refresh -> {
-      webView.reload()
-      true
-    }
-    R.id.home -> {
-      webView.loadUrl(originalUrl)
-      true
-    }
-    else -> false
   }
 
   companion object {
