@@ -15,8 +15,6 @@ fun execute(command: String, timeOut: Long = 10, directory: File? = null): List<
       .inheritIO()
   directory?.let { processBuilder.directory(directory) }
 
-  processBuilder.redirectError()
-
   val process = processBuilder
       .start()
 
