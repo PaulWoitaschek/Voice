@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.misc
 
+import e
 import io.reactivex.Single
 import java.io.File
 import javax.inject.Inject
@@ -18,13 +19,22 @@ class MediaAnalyzer @Inject constructor(
         assembleMetaData(duration, file)
       }
 
-  private fun assembleMetaData(duration: Int, file: File) = if (duration > 0) {
-    metaDataAnalyzer.prepare(file)
-    val chapterName = metaDataAnalyzer.parseChapterName()
-    val author = metaDataAnalyzer.parseAuthor()
-    val bookName = metaDataAnalyzer.parseBookName()
-    Result.Success(duration, chapterName, author, bookName)
-  } else Result.Failure
+  private fun assembleMetaData(duration: Int, file: File): Result {
+    if (duration > 0) {
+      if (!metaDataAnalyzer.prepare(file)) {
+        e { "Couldn't prepare MetaDataAnalyzer for $file" }
+        return Result.Success(duration, metaDataAnalyzer.chapterNameFallback(file), null, null)
+      }
+
+      val chapterName = metaDataAnalyzer.parseChapterName()
+      val author = metaDataAnalyzer.parseAuthor()
+      val bookName = metaDataAnalyzer.parseBookName()
+      return Result.Success(duration, chapterName, author, bookName)
+    } else {
+      e { "Could not parse duration for $file" }
+      return Result.Failure
+    }
+  }
 
 
   sealed class Result {
