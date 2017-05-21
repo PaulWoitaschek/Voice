@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.media.AudioManager
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -99,6 +100,7 @@ constructor(
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
+            .filter { it != C.TIME_UNSET }
             .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
