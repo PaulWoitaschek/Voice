@@ -119,6 +119,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       javaScriptEnabled = true
       userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
+    // necessary, else the image capturing does not include the web view. Very performance costly.
+    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     webView.setWebViewClient(object : WebViewClient() {
 
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
