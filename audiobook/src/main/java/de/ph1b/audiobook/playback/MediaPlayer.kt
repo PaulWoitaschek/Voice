@@ -72,10 +72,10 @@ constructor(
 
     // upon position change update the book
     player.onPositionDiscontinuity {
-      i { "onPositionDiscontinuity with currentPos=${player.currentPosition}" }
+      i { "onPositionDiscontinuity with currentPos=${player.currentPositionOrZero}" }
       bookSubject.value?.let {
         val index = player.currentWindowIndex
-        bookSubject.onNext(it.copy(time = player.currentPosition.toInt(), currentFile = it.chapters[index].file))
+        bookSubject.onNext(it.copy(time = player.currentPositionOrZero.toInt(), currentFile = it.chapters[index].file))
       }
     }
 
@@ -154,7 +154,7 @@ constructor(
       return
 
     bookSubject.value?.let {
-      val currentPos = player.currentPosition
+      val currentPos = player.currentPositionOrZero
       val duration = player.duration
       val delta = seekTime * 1000
 
@@ -186,7 +186,7 @@ constructor(
 
   private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
     val previousChapter = book.previousChapter()
-    if (player.currentPosition > 2000 || previousChapter == null) {
+    if (player.currentPositionOrZero > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -245,7 +245,7 @@ constructor(
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
               // get the raw rewinded position
-              val currentPosition = player.currentPosition
+              val currentPosition = player.currentPositionOrZero
               var maybeSeekTo = currentPosition - autoRewind
                   .coerceAtLeast(0) // make sure not to get into negative time
 
@@ -305,6 +305,12 @@ constructor(
       player.setPlaybackSpeed(speed)
     }
   }
+
+  private val ExoPlayer.currentPositionOrZero: Long
+    get() {
+      val position = currentPosition
+      return if (position == C.TIME_UNSET) 0 else position
+    }
 
   /** The direction to skip. */
   enum class Direction {
