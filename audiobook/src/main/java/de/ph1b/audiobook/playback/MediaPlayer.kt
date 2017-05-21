@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.media.AudioManager
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -65,6 +66,7 @@ constructor(
     player.onError {
       e { "onError" }
       player.playWhenReady = false
+      playStateManager.playState = PlayState.STOPPED
     }
 
     // upon position change update the book
@@ -111,7 +113,7 @@ constructor(
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
-    if (bookSubject.value != book) {
+    if (player.playbackState == ExoPlayer.STATE_IDLE || bookSubject.value != book) {
       i { "init called with ${book.name}" }
       bookSubject.onNext(book)
       player.playWhenReady = false
@@ -128,6 +130,7 @@ constructor(
 
   fun play() {
     v { "play called in state $state" }
+    prepareIfIdle()
     bookSubject.value?.let {
       if (state == PlayerState.ENDED) {
         i { "play in state ended. Back to the beginning" }
@@ -144,6 +147,7 @@ constructor(
   fun skip(direction: Direction) {
     v { "direction=$direction" }
 
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
@@ -168,7 +172,7 @@ constructor(
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
     i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
-
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
@@ -208,6 +212,13 @@ constructor(
       }
     }
     return false
+  }
+
+  private fun prepareIfIdle() {
+    if (state == PlayerState.IDLE) {
+      d { "state is idle so ExoPlayer might have an error. Try to prepare it" }
+      bookSubject.value?.let { init(it) }
+    }
   }
 
   /** Stops the playback and releases some resources. */
@@ -261,6 +272,7 @@ constructor(
 
   /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
+    prepareIfIdle()
     val book = bookSubject.value
         ?: return
 
@@ -272,6 +284,7 @@ constructor(
   /** Changes the current position in book. */
   fun changePosition(time: Int, changedFile: File? = null) {
     v { "changePosition with time $time and file $changedFile" }
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
