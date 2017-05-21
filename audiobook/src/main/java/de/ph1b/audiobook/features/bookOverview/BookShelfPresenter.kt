@@ -43,7 +43,7 @@ constructor(
     disposables.apply {
       // update books when they changed
       add(repo.booksStream().subscribe {
-        view.newBooks(it)
+        view.displayNewBooks(it)
       })
 
       // Subscription that notifies the adapter when the current book has changed. It also notifies
@@ -51,7 +51,7 @@ constructor(
       add(prefsManager.currentBookId.asV2Observable()
           .subscribe {
             val book = repo.bookById(it)
-            view.currentBookChanged(book)
+            view.updateCurrentBook(book)
           })
 
       // if there are no books and the scanner is active, show loading
@@ -62,7 +62,7 @@ constructor(
       // Subscription that updates the UI based on the play state.
       add(playStateManager.playStateStream().subscribe {
         val playing = it == PlayState.PLAYING
-        view.setPlayerPlaying(playing)
+        view.showPlaying(playing)
       })
 
       // notify view when a book cover changed

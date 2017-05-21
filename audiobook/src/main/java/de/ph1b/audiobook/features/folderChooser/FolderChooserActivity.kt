@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.MenuItem
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.*
 import de.ph1b.audiobook.R
@@ -71,11 +71,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     spinnerGroup = find(R.id.spinnerGroup)
 
     // toolbar
-    setupActionbar(
-        toolbar = find(R.id.toolbar),
-        upIndicator = R.drawable.close,
-        title = getString(R.string.audiobook_folders_title)
-    )
+    setupToolbar()
 
     // listeners
     choose.setOnClickListener { presenter().chooseClicked() }
@@ -108,6 +104,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
   }
 
+  private fun setupToolbar() {
+    val toolbar = find<Toolbar>(R.id.toolbar)
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener { onBackPressed() }
+    toolbar.setTitle(R.string.audiobook_folders_title)
+  }
+
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -123,15 +126,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun onBackPressed() {
     if (!presenter().backConsumed()) {
       super.onBackPressed()
-    }
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    if (item?.itemId == android.R.id.home) {
-      finish()
-      return true
-    } else {
-      return super.onOptionsItemSelected(item)
     }
   }
 

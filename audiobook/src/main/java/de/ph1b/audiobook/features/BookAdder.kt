@@ -85,13 +85,14 @@ import javax.inject.Singleton
     stopScanner = true
     executor.execute {
       isScanning = true
-      val scanStart = System.nanoTime()
       handler.postBlocking { scannerActiveSubject.onNext(true) }
       stopScanner = false
 
       try {
         deleteOldBooks()
-        checkForBooks()
+        profile("checkForBooks") {
+          checkForBooks()
+        }
         coverCollector.findCovers(repo.activeBooks)
       } catch (ignored: InterruptedException) {
       }
@@ -99,8 +100,13 @@ import javax.inject.Singleton
       stopScanner = false
       handler.postBlocking { scannerActiveSubject.onNext(false) }
       isScanning = false
-      d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
     }
+  }
+
+  private inline fun profile(taskName: String, task: () -> Unit) {
+    val start = System.nanoTime()
+    task()
+    d { "$taskName took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start)}" }
   }
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */

@@ -15,8 +15,6 @@ fun execute(command: String, timeOut: Long = 10, directory: File? = null): List<
       .inheritIO()
   directory?.let { processBuilder.directory(directory) }
 
-  processBuilder.redirectError()
-
   val process = processBuilder
       .start()
 
@@ -24,7 +22,7 @@ fun execute(command: String, timeOut: Long = 10, directory: File? = null): List<
   if (!terminatedNormally) throw TimeoutException("Command $processBuilder timed out")
   val exitValue = process.exitValue()
   if (exitValue != 0) {
-    throw IOException("Command $processBuilder exited with exitCode=$exitValue")
+    throw IOException("Command $command exited with exitCode=$exitValue")
   }
 
   return process.inputStream.bufferedReader()
