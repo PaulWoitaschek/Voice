@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.*
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.*
@@ -85,6 +83,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     recyclerView.layoutManager = LinearLayoutManager(this)
     recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     recyclerView.adapter = adapter
+    val itemAnimator = recyclerView.itemAnimator as DefaultItemAnimator
+    itemAnimator.supportsChangeAnimations = false
 
     // spinner
     spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE) { file, _ ->

@@ -11,7 +11,6 @@ import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import java.io.File
-import java.util.*
 
 
 /**
@@ -40,10 +39,13 @@ class FolderChooserAdapter(private val c: Context,
   private val data = ArrayList<File>()
 
   fun newData(newData: List<File>) {
+    if (data == newData)
+      return
     data.clear()
     data.addAll(newData)
     notifyDataSetChanged()
   }
+
 
   inner class Holder(root: View) : RecyclerView.ViewHolder(root) {
 
