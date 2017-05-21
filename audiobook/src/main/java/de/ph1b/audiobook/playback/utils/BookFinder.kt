@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by Matthias Kutscheid on 01.05.2017.
+ * @author Matthias Kutscheid
  * This class provides a single point of entry to find a book by a search query from any point in the application
  */
 @Singleton
@@ -23,12 +23,8 @@ constructor() {
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
 
-
-  init {
-  }
-
   /**
-   * Find a book by a search query
+   * Find a book by a search query. THe extras may provide more details about what and how to search.
    */
   fun findBook(query: String?, extras: Bundle?) {
     val mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS)
@@ -41,12 +37,10 @@ constructor() {
     val title = extras?.getString(MediaStore.EXTRA_MEDIA_TITLE)
 
     // Determine the search mode and use the corresponding extras
-    if (mediaFocus == null) {
-      // 'Unstructured' search mode (backward compatible)
-      playUnstructuredSearch(query)
-
-    } else if (mediaFocus.compareTo("vnd.android.cursor.item/*") == 0) {
-      if (query?.isEmpty() == true) {
+    when (mediaFocus) {
+      null -> // 'Unstructured' search mode (backward compatible)
+        playUnstructuredSearch(query)
+      "vnd.android.cursor.item/*" -> if (query?.isEmpty() == true) {
         // 'Any' search mode, get the last played book and play it
         val playedBooks = repo.activeBooks.filter {
           it.time != 0
@@ -59,28 +53,21 @@ constructor() {
         // 'Unstructured' search mode
         playUnstructuredSearch(query)
       }
-
-    } else if (mediaFocus.compareTo(MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE) == 0) {
-      // 'Genre' search mode
+      MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
+        // 'Genre' search mode
 //            playGenre(genre);
 
-    } else if (mediaFocus.compareTo(MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE) == 0) {
-      // 'Artist' search mode
-      playArtist(artist)
-
-    } else if (mediaFocus.compareTo(MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE) == 0) {
-      // 'Album' search mode
-      playAlbum(album, artist)
-
-    } else if (mediaFocus.compareTo("vnd.android.cursor.item/audio") == 0) {
-      // 'Song' search mode
-      playSong(album, artist, genre, title)
-
-    } else if (mediaFocus.compareTo(MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE) == 0) {
-      // 'Playlist' search mode
-      //playPlaylist(album, artist, genre, playlist, title);
-      // use the playlist name or album to play a book as a playlist
-      playAlbum(playlist?: album, artist)
+      }
+      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> // 'Artist' search mode
+        playArtist(artist)
+      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE -> // 'Album' search mode
+        playAlbum(album, artist)
+      "vnd.android.cursor.item/audio" -> // 'Song' search mode
+        playAlbum(album, artist)
+      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> // 'Playlist' search mode
+        //playPlaylist(album, artist, genre, playlist, title);
+        // use the playlist name or album to play a book as a playlist
+        playAlbum(playlist?: album, artist)
     }
   }
 

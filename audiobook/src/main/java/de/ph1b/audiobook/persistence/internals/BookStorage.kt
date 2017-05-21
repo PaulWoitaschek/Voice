@@ -115,7 +115,6 @@ class BookStorage
     put(BookTable.ROOT, root)
     put(BookTable.TIME, time)
     put(BookTable.TYPE, type.name)
-    put(BookTable.ID, id)
   }
 
   fun updateBook(book: Book) = db.asTransaction {

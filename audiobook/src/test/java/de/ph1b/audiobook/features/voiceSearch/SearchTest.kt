@@ -25,7 +25,7 @@ import org.robolectric.annotation.Config
 
 
 /**
- * Created by Matthias Kutscheid on 01.05.2017.
+ * @author Matthias Kutscheid
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
  */
 @RunWith(RobolectricTestRunner::class)
@@ -219,21 +219,7 @@ class SearchTest {
   }
 
   @Test
-  fun testMediaFocusTitleNoSuccessBecauseOfTitle() {
-    val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
-    //try to play something from an unknown author
-    intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/audio")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, "TestAuthor")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, "TestBook")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE, "FirstOne")
-    val activity = Robolectric.buildActivity(MainActivity::class.java, intent).create().start().get()
-
-    //nothing should be found
-    Assertions.assertThat(activity.prefs.currentBookId.value).isEqualTo(-1).withFailMessage("No book found for for given search query")
-  }
-
-  @Test
-  fun testMediaFocusTitleFailedBecauseOfBook() {
+  fun testMediaFocusTitleNoSuccessBecauseOfBook() {
     val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
     //try to play something from an unknown author
     intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/audio")

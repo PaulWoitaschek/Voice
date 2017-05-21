@@ -60,11 +60,6 @@
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-            <!-- Use this intent filter to get voice searches, like "Play The Beatles" -->
-            <intent-filter>
-                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
 
         <activity

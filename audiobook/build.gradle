@@ -51,14 +51,10 @@ android {
         exclude 'META-INF/rxjava.properties'
     }
 
-    flavorDimensions "featureSet"
-
     productFlavors {
         opensource {
-            dimension "featureSet"
         }
         proprietary {
-            dimension "featureSet"
         }
     }
 }

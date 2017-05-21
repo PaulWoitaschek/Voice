@@ -70,7 +70,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   }
 
   private fun setupFromIntent(intent: Intent?) {
-    if (intent?.action?.equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) == true) {
+    if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
       //check if we can find something for this search
       bookFinder.findBook(intent.getStringExtra(SearchManager.QUERY), intent.extras)
     }
