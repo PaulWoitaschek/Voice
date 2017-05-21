@@ -14,57 +14,59 @@ class MetaDataAnalyzer @Inject constructor() {
   private val mmr = MediaMetadataRetriever()
   private var file: File? = null
 
-  // prepare a file and return if that worked
-  fun prepare(file: File): Boolean {
+  fun parse(file: File): MetaData {
+    this.file = file
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
-    if (internalPrepare(file))
-      return true
-    return internalPrepare(file)
+    val fallback = chapterNameFallback()
+    if (prepare() || prepare()) {
+      val chapterName = parseChapterName()
+          ?: fallback
+      val duration = parseDuration()
+      val bookName = parseBookName()
+      val author = parseAuthor()
+      return MetaData(chapterName, duration, bookName, author)
+    } else {
+      return MetaData(fallback, null, null, null)
+    }
   }
 
-  private fun internalPrepare(file: File): Boolean {
+  private fun prepare(): Boolean {
     // Note: MediaMetadataRetriever throws undocumented Exceptions. We catch these
     // and act appropriate.
+    val file = file ?: error("No file")
     return try {
       mmr.setDataSource(file.absolutePath)
-      this.file = file
       true
     } catch (e: RuntimeException) {
-      this.file = null
       false
     }
   }
 
-  fun parseChapterName(): String {
-    val file = this.file
-        ?: throw IllegalStateException("No prepared file")
-
+  private fun parseChapterName(): String? {
     val chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
-    if (chapterName == null || chapterName.isEmpty()) {
-      return chapterNameFallback(file)
-    }
+    if (chapterName?.isEmpty() == true)
+      return null
     return chapterName
   }
 
-  fun chapterNameFallback(file: File): String {
+  private fun chapterNameFallback(): String {
+    val file = file ?: error("No file prepared")
     val withoutExtension = file.nameWithoutExtension
         .trim()
     return if (withoutExtension.isEmpty()) file.name else withoutExtension
   }
 
-  fun parseAuthor(): String? {
-    check(file != null) { "No prepared file" }
+  private fun parseDuration() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)
+      ?.toIntOrNull()
+      ?: 0
 
+  private fun parseBookName() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+
+  private fun parseAuthor(): String? {
     var author = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ARTIST)
     if (author.isNullOrEmpty())
       author = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
     return author
-  }
-
-  fun parseBookName(): String? {
-    check(file != null) { "No prepared file" }
-
-    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
   }
 
   /**
@@ -76,4 +78,10 @@ class MetaDataAnalyzer @Inject constructor() {
   } catch(ignored: Exception) {
     null
   }
+
+  data class MetaData(
+      val chapterName: String,
+      val duration: Int?,
+      val bookName: String?,
+      val author: String?)
 }
