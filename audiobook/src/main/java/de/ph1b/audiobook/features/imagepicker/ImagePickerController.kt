@@ -173,6 +173,9 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   }
 
   private fun setupToolbar() {
+    // necessary, else the action mode will be themed wrongly
+    activity.setSupportActionBar(toolbar)
+
     toolbar.setTitle(R.string.cover)
 
     toolbar.setNavigationIcon(R.drawable.close)
