@@ -43,7 +43,7 @@ fun download(what: URI, to: File) {
       .build()
   val source = client.newCall(request)
       .execute()
-      .body()
+      .body()!!
       .source()
 
   sink.writeAll(source)

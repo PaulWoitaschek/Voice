@@ -12,9 +12,9 @@ import com.squareup.moshi.JsonWriter
  */
 class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<SparseArray<T>>() {
 
-  override fun toJson(writer: JsonWriter, sparseArray: SparseArray<T>) {
+  override fun toJson(writer: JsonWriter, sparseArray: SparseArray<T>?) {
     writer.writeObject {
-      sparseArray.forEachIndexed { _, key, value ->
+      sparseArray?.forEachIndexed { _, key, value ->
         writer.name(key.toString())
         adapter.toJson(writer, value)
       }
