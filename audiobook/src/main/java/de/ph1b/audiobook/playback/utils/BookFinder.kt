@@ -30,9 +30,7 @@ import javax.inject.Inject
     // Some of these extras may not be available depending on the search mode
     val album = extras?.getString(MediaStore.EXTRA_MEDIA_ALBUM)
     val artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST)
-//    val genre = extras?.getString("android.intent.extra.genre")
     val playlist = extras?.getString("android.intent.extra.playlist")
-//    val title = extras?.getString(MediaStore.EXTRA_MEDIA_TITLE)
 
     // Determine the search mode and use the corresponding extras
     when (mediaFocus) {
@@ -51,10 +49,6 @@ import javax.inject.Inject
         // 'Unstructured' search mode
         playUnstructuredSearch(query)
       }
-//      MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
-//        // 'Genre' search mode
-//            playGenre(genre);
-//      }
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> // 'Artist' search mode
         playArtist(artist)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, // 'Album' search mode
@@ -64,21 +58,6 @@ import javax.inject.Inject
         //playPlaylist(album, artist, genre, playlist, title);
         // use the playlist name or album to play a book as a playlist
         playAlbum(playlist ?: album, artist)
-    }
-  }
-
-  private fun playSong(album: String?, artist: String?, genre: String?, title: String?) {
-    val match = repo.activeBooks.firstOrNull {
-      (album == null || it.name.contains(album, ignoreCase = true)) &&
-          (artist == null || it.author?.contains(artist, ignoreCase = true) == true) &&
-          (title == null || it.chapters.firstOrNull {
-            it.name.contains(title, ignoreCase = true)
-          } != null)
-    }
-    i { "found a match ${match?.name}" }
-    if (match != null) {
-      prefs.currentBookId.value = match.id
-      player.play()
     }
   }
 
