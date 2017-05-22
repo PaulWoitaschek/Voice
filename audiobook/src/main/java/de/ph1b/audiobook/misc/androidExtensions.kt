@@ -9,14 +9,11 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.SparseArray
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
-import com.bluelinelabs.conductor.Controller
 import com.f2prateek.rx.preferences.Preference
 import java.io.File
 import java.io.FileFilter
@@ -47,27 +44,6 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
   val wrapped = DrawableCompat.wrap(this)
   DrawableCompat.setTint(wrapped, color)
   return wrapped
-}
-
-fun Controller.setupActionbar(toolbar: Toolbar,
-                              @DrawableRes upIndicator: Int? = null,
-                              title: String? = null) =
-    (activity as AppCompatActivity).setupActionbar(
-        toolbar = toolbar,
-        upIndicator = upIndicator,
-        title = title)
-
-fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
-                                     @DrawableRes upIndicator: Int? = null,
-                                     title: String? = null) {
-  setSupportActionBar(toolbar)
-  val actionBar = supportActionBar!!
-
-  if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)
-  actionBar.setDisplayHomeAsUpEnabled(upIndicator != null)
-
-  if (title != null) actionBar.title = title
-  actionBar.setDisplayShowTitleEnabled(title != null)
 }
 
 /**

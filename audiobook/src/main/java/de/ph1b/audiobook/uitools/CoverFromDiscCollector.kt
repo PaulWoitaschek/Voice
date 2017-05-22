@@ -76,10 +76,10 @@ import javax.inject.Singleton
     coverFiles.filter { it.length() < (mi.availMem / 3L) }.forEach {
       try {
         return picasso.load(it)
-          .resize(dimen, dimen)
-          .onlyScaleDown()
-          .centerCrop()
-          .get()
+            .resize(dimen, dimen)
+            .onlyScaleDown()
+            .centerCrop()
+            .get()
       } catch (ex: IOException) {
         e(ex) { "Error when saving cover $it" }
       }

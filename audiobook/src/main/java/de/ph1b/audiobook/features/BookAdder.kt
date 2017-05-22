@@ -14,6 +14,7 @@ import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
+import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.File
@@ -31,13 +32,27 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
-@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val repo: BookRepository, private val coverCollector: CoverFromDiscCollector) {
+@Inject constructor(
+    private val context: Context,
+    private val prefs: PrefsManager,
+    private val repo: BookRepository,
+    private val coverCollector: CoverFromDiscCollector,
+    private val mediaAnalyzer: MediaAnalyzer
+) {
 
   private val executor = Executors.newSingleThreadExecutor()
   private val scannerActiveSubject = BehaviorSubject.createDefault(false)
   val scannerActive: Observable<Boolean> = scannerActiveSubject
   private val handler = Handler(context.mainLooper)
   @Volatile private var stopScanner = false
+  @Volatile private var isScanning = false
+
+  init {
+    val folderChanged = combineLatest(
+        prefs.collectionFolders.asV2Observable(),
+        prefs.singleBookFolders.asV2Observable()) { _, _ -> Unit }
+    folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
+  }
 
   // check for new books
   @Throws(InterruptedException::class)
@@ -62,24 +77,36 @@ import javax.inject.Singleton
   }
 
   /** Restarts the scanner **/
-  fun scanForFiles() {
+  fun scanForFiles(restartIfScanning: Boolean = false) {
+    i { "scanForFiles with restartIfScanning=$restartIfScanning" }
+    if (isScanning && !restartIfScanning)
+      return
+
     stopScanner = true
     executor.execute {
-      val scanStart = System.nanoTime()
+      isScanning = true
       handler.postBlocking { scannerActiveSubject.onNext(true) }
       stopScanner = false
 
       try {
         deleteOldBooks()
-        checkForBooks()
+        profile("checkForBooks") {
+          checkForBooks()
+        }
         coverCollector.findCovers(repo.activeBooks)
       } catch (ignored: InterruptedException) {
       }
 
       stopScanner = false
       handler.postBlocking { scannerActiveSubject.onNext(false) }
-      d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
+      isScanning = false
     }
+  }
+
+  private inline fun profile(taskName: String, task: () -> Unit) {
+    val start = System.nanoTime()
+    task()
+    d { "$taskName took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start)}" }
   }
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
@@ -164,8 +191,10 @@ import javax.inject.Singleton
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = MediaAnalyzer.compute(firstChapterFile)
+    val result = mediaAnalyzer.analyze(firstChapterFile)
+        .blockingGet() as? MediaAnalyzer.Result.Success
         ?: return
+
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
       val withoutExtension = rootFile.nameWithoutExtension
@@ -281,8 +310,9 @@ import javax.inject.Singleton
       }
 
       // else parse and add
-      val result = MediaAnalyzer.compute(f)
-      if (result != null) {
+      val result = mediaAnalyzer.analyze(f)
+          .blockingGet()
+      if (result is MediaAnalyzer.Result.Success) {
         val marks = if (f.extension == "mp3") {
           f.inputStream().use { ID3ChapterReader.readInputStream(it) }
         } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {

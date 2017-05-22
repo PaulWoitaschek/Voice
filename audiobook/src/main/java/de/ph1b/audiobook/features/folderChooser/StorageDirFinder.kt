@@ -128,7 +128,7 @@ import javax.inject.Singleton
     var output = ""
     try {
       val process = ProcessBuilder().command("mount | grep /dev/block/vold")
-        .redirectErrorStream(true).start()
+          .redirectErrorStream(true).start()
       process.waitFor()
       val inputStream = process.inputStream
       val buffer = ByteArray(1024)

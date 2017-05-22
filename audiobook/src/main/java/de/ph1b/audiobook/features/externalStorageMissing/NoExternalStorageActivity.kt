@@ -3,20 +3,19 @@ package de.ph1b.audiobook.features.externalStorageMissing
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.setupActionbar
 
 class NoExternalStorageActivity : AppCompatActivity() {
-
 
   public override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_no_external)
 
-    setupActionbar(toolbar = find(R.id.toolbarInclude),
-      title = getString(R.string.no_external_storage_action_bar_title))
+    val toolbar = find<Toolbar>(R.id.toolbarInclude)
+    toolbar.setTitle(R.string.no_external_storage_action_bar_title)
   }
 
   override fun onBackPressed() {

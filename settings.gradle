@@ -1,1 +1,1 @@
-include ':audiobook', ':core'
+include ':audiobook', ':core', ':exoplayer-flac', ':exoplayer-opus'

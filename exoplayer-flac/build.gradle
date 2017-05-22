@@ -1,0 +1,31 @@
+import de.ph1b.audiobook.ndkGen.PrepareFlac
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        consumerProguardFiles 'proguard-rules.txt'
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+}
+
+// make sure that flac is set up before ndk compiling starts
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn(prepareFlac)
+}
+
+dependencies {
+    compile libraries.exoPlayerCore
+}
+
+task(prepareFlac, type: PrepareFlac)

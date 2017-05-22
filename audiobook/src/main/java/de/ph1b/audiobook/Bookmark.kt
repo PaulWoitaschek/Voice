@@ -11,7 +11,7 @@ import java.io.File
 data class Bookmark(val mediaFile: File, val title: String, val time: Int, val id: Long = ID_UNKNOWN) : Comparable<Bookmark> {
 
   init {
-    check(title.isNotEmpty())
+    require(title.isNotEmpty())
   }
 
   override fun compareTo(other: Bookmark): Int {

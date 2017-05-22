@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
@@ -26,6 +27,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
   private fun callback() = findCallback<Callback>(NI_TARGET)
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
 
@@ -38,7 +40,6 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    @SuppressWarnings("InflateParams")
     val view = context.layoutInflater().inflate(R.layout.book_more_bottom_sheet, null, false)
     val title = view.findViewById(R.id.title) as TextView
     val internetCover = view.findViewById(R.id.internetCover) as TextView
@@ -48,7 +49,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
     title.setOnClickListener {
       EditBookTitleDialogFragment.newInstance(book)
-        .show(fragmentManager, EditBookTitleDialogFragment.TAG)
+          .show(fragmentManager, EditBookTitleDialogFragment.TAG)
       dismiss()
     }
     internetCover.setOnClickListener {
@@ -61,7 +62,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     }
     bookmark.setOnClickListener {
       BookmarkDialogFragment.newInstance(book.id)
-        .show(fragmentManager, BookShelfController.TAG)
+          .show(fragmentManager, BookShelfController.TAG)
       dismiss()
     }
 

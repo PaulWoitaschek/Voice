@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -32,6 +33,7 @@ class EditCoverDialogFragment : DialogFragment() {
   @Inject internal lateinit var repo: BookRepository
   @Inject internal lateinit var imageHelper: ImageHelper
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
 
@@ -51,22 +53,22 @@ class EditCoverDialogFragment : DialogFragment() {
     loadingProgressBar.visible = true
     cropOverlay.selectionOn = false
     picasso.load(uri)
-      .into(coverImage, object : PicassoCallback {
-        override fun onError() {
-          dismiss()
-        }
+        .into(coverImage, object : PicassoCallback {
+          override fun onError() {
+            dismiss()
+          }
 
-        override fun onSuccess() {
-          cropOverlay.selectionOn = true
-          loadingProgressBar.visible = false
-        }
-      })
+          override fun onSuccess() {
+            cropOverlay.selectionOn = true
+            loadingProgressBar.visible = false
+          }
+        })
 
     val dialog = MaterialDialog.Builder(context)
-      .customView(customView, false)
-      .title(R.string.cover)
-      .positiveText(R.string.dialog_confirm)
-      .build()
+        .customView(customView, false)
+        .title(R.string.cover)
+        .positiveText(R.string.dialog_confirm)
+        .build()
 
     // use a click listener so the dialog stays open till the image was saved
     dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
@@ -87,8 +89,8 @@ class EditCoverDialogFragment : DialogFragment() {
         // picasso only holds a weak reference so we have to protect against gc
         coverImage.tag = target
         picasso.load(uri)
-          .transform(CropTransformation(cropOverlay, coverImage))
-          .into(target)
+            .transform(CropTransformation(cropOverlay, coverImage))
+            .into(target)
       } else dismiss()
     }
     return dialog

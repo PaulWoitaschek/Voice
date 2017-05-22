@@ -20,7 +20,7 @@ data class Chapter(
 ) : Comparable<Chapter> {
 
   init {
-    check(name.isNotEmpty())
+    require(name.isNotEmpty())
   }
 
   override fun compareTo(other: Chapter) = NaturalOrderComparator.fileComparator.compare(file, other.file)

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -32,6 +33,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var playerController: PlayerController
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
 
@@ -48,19 +50,19 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
     // observable of seek bar, mapped to speed
     seekBar.progressChangedStream(initialNotification = true)
-      .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
-      .doOnNext {
-        // update speed text
-        val text = "${getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
-        textView.text = text
-      }
-      .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-      .subscribe { playerController.setSpeed(it) } // update speed after debounce
+        .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
+        .doOnNext {
+          // update speed text
+          val text = "${getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
+          textView.text = text
+        }
+        .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+        .subscribe { playerController.setSpeed(it) } // update speed after debounce
 
     return MaterialDialog.Builder(activity)
-      .title(R.string.playback_speed)
-      .customView(view, true)
-      .build()
+        .title(R.string.playback_speed)
+        .customView(view, true)
+        .build()
   }
 
 

@@ -21,7 +21,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
   private val backgroundColor = c.color(R.color.primaryDark)
 
   init {
-    check(text.isNotEmpty())
+    require(text.isNotEmpty())
   }
 
   override fun draw(canvas: Canvas) {

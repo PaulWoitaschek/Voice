@@ -13,10 +13,14 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 183
-        versionName '3.3-RC1'
+        versionCode 189
+        versionName '3.3.3.1'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+        }
     }
 
     signingConfigs {
@@ -63,7 +67,8 @@ def Properties props = new Properties()
 def propFile = new File('signing.properties')
 if (propFile.canRead()) {
     props.load(new FileInputStream(propFile))
-    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') && props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
         android.signingConfigs.release.storeFile = rootProject.file(props['STORE_FILE'])
         android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
         android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
@@ -115,6 +120,8 @@ dependencies {
     compile libraries.slimber
 
     compile libraries.exoPlayerCore
+    compile project(":exoplayer-flac")
+    compile project(":exoplayer-opus")
 
     compile libraries.conductor
     compile libraries.conductorSupport

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -23,6 +24,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var playerController: PlayerController
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
     val view = context.layoutInflater().inflate(R.layout.dialog_time_picker, null)
@@ -81,17 +83,17 @@ class JumpToPositionDialogFragment : DialogFragment() {
     numberHour.theme()
 
     return MaterialDialog.Builder(context)
-      .customView(view, true)
-      .title(R.string.action_time_change)
-      .onPositive { _, _ ->
-        val h = numberHour.value
-        val m = numberMinute.value
-        val newPosition = (m + 60 * h) * 60 * 1000
-        playerController.changePosition(newPosition, book.currentChapter().file)
-      }
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .build()
+        .customView(view, true)
+        .title(R.string.action_time_change)
+        .onPositive { _, _ ->
+          val h = numberHour.value
+          val m = numberMinute.value
+          val newPosition = (m + 60 * h) * 60 * 1000
+          playerController.changePosition(newPosition, book.currentChapter().file)
+        }
+        .positiveText(R.string.dialog_confirm)
+        .negativeText(R.string.dialog_cancel)
+        .build()
   }
 
   companion object {

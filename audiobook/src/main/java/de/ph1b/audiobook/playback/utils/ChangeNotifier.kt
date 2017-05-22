@@ -37,15 +37,15 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
   @Volatile private var lastFileForMetaData = File("")
 
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
-    .setActions(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-      PlaybackStateCompat.ACTION_REWIND or
-      PlaybackStateCompat.ACTION_PLAY or
-      PlaybackStateCompat.ACTION_PAUSE or
-      PlaybackStateCompat.ACTION_PLAY_PAUSE or
-      PlaybackStateCompat.ACTION_STOP or
-      PlaybackStateCompat.ACTION_FAST_FORWARD or
-      PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-      PlaybackStateCompat.ACTION_SEEK_TO)
+      .setActions(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+          PlaybackStateCompat.ACTION_REWIND or
+          PlaybackStateCompat.ACTION_PLAY or
+          PlaybackStateCompat.ACTION_PAUSE or
+          PlaybackStateCompat.ACTION_PLAY_PAUSE or
+          PlaybackStateCompat.ACTION_STOP or
+          PlaybackStateCompat.ACTION_FAST_FORWARD or
+          PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+          PlaybackStateCompat.ACTION_SEEK_TO)
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
@@ -71,7 +71,7 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
       val coverFile = book.coverFile()
       if (coverFile.exists() && coverFile.canRead()) {
         bitmap = Picasso.with(context)
-          .blocking { load(coverFile).get() }
+            .blocking { load(coverFile).get() }
       }
       if (bitmap == null) {
         val replacement = CoverReplacement(book.name, context)
@@ -83,18 +83,18 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
       // picassos cached bitmap useless.
       bitmap = bitmap.copy(bitmap.config, true)
       mediaMetaDataBuilder
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
-        .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
-        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
-        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
-        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
-        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
+          .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+          .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+          .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
+          .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
+          .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
+          .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+          .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+          .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+          .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+          .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+          .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
+          .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
       mediaSession.setMetadata(mediaMetaDataBuilder.build())
 
       lastFileForMetaData = book.currentFile
@@ -110,16 +110,16 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
                         chapterName: String,
                         playState: PlayStateManager.PlayState,
                         time: Int) =
-      Intent(intentUrl).apply {
-        putExtra("id", 1)
-        if (author != null) {
-          putExtra("artist", author)
+        Intent(intentUrl).apply {
+          putExtra("id", 1)
+          if (author != null) {
+            putExtra("artist", author)
+          }
+          putExtra("album", bookName)
+          putExtra("track", chapterName)
+          putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
+          putExtra("position", time)
+          putExtra("package", BuildConfig.APPLICATION_ID)
         }
-        putExtra("album", bookName)
-        putExtra("track", chapterName)
-        putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
-        putExtra("position", time)
-        putExtra("package", BuildConfig.APPLICATION_ID)
-      }
   }
 }

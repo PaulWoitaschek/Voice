@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.imagepicker
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -18,7 +19,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
@@ -38,7 +38,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   init {
     App.component.inject(this)
-    setHasOptionsMenu(true)
   }
 
   @Inject lateinit var repo: BookRepository
@@ -101,6 +100,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
     val view = inflater.inflate(R.layout.activity_image_picker, container, false)
 
@@ -119,6 +119,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       javaScriptEnabled = true
       userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
+    // necessary, else the image capturing does not include the web view. Very performance costly.
+    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     webView.setWebViewClient(object : WebViewClient() {
 
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -147,15 +149,15 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     // after first successful load set visibilities
     webViewIsLoading
-      .distinctUntilChanged()
-      .filter { it == true }
-      .subscribe {
-        // sets progressbar and webviews visibilities correctly once the page is loaded
-        i { "WebView is now loading. Set webView visible" }
-        progressBar.visible = false
-        noNetwork.visible = false
-        webViewContainer.visible = true
-      }
+        .distinctUntilChanged()
+        .filter { it == true }
+        .subscribe {
+          // sets progressbar and webviews visibilities correctly once the page is loaded
+          i { "WebView is now loading. Set webView visible" }
+          progressBar.visible = false
+          noNetwork.visible = false
+          webViewContainer.visible = true
+        }
 
     webView.loadUrl(originalUrl)
 
@@ -165,13 +167,70 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       fab.hide()
     }
 
+    setupToolbar()
+
     return view
   }
 
-  override fun onAttach(view: View) {
-    setupActionbar(toolbar = toolbar,
-      upIndicator = R.drawable.close,
-      title = getString(R.string.cover))
+  private fun setupToolbar() {
+    // necessary, else the action mode will be themed wrongly
+    activity.setSupportActionBar(toolbar)
+
+    toolbar.setTitle(R.string.cover)
+
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+
+    toolbar.inflateMenu(R.menu.image_picker)
+    toolbar.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.refresh -> {
+          webView.reload()
+          true
+        }
+        R.id.home -> {
+          webView.loadUrl(originalUrl)
+          true
+        }
+        else -> false
+      }
+    }
+
+    // set the rotating icon
+    val menu = toolbar.menu
+    val refreshItem = menu.findItem(R.id.refresh)
+    val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
+      repeatCount = Animation.INFINITE
+    }
+    val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
+      animation = rotation
+      setOnClickListener { webView.reload() }
+    }
+    MenuItemCompat.setActionView(refreshItem, rotateView)
+
+    webViewIsLoading
+        .filter { it == true }
+        .filter { !rotation.hasStarted() }
+        .doOnNext { i { "is loading. Start animation" } }
+        .subscribe {
+          rotation.start()
+        }
+
+    rotation.setAnimationListener(object : Animation.AnimationListener {
+      override fun onAnimationRepeat(p0: Animation?) {
+        if (webViewIsLoading.value == false) {
+          i { "we are in the refresh round. cancel now." }
+          rotation.cancel()
+          rotation.reset()
+        }
+      }
+
+      override fun onAnimationEnd(p0: Animation?) {
+      }
+
+      override fun onAnimationStart(p0: Animation?) {
+      }
+    })
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
@@ -191,62 +250,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     if (webView.url != ABOUT_BLANK) {
       outState.putString(SI_URL, webView.url)
     }
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.image_picker, menu)
-
-    // set the rotating icon
-    val refreshItem = menu.findItem(R.id.refresh)
-    val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
-      repeatCount = Animation.INFINITE
-    }
-    val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
-      animation = rotation
-      setOnClickListener { webView.reload() }
-    }
-    MenuItemCompat.setActionView(refreshItem, rotateView)
-
-    webViewIsLoading
-      .filter { it == true }
-      .filter { !rotation.hasStarted() }
-      .doOnNext { i { "is loading. Start animation" } }
-      .subscribe {
-        rotation.start()
-      }
-
-    rotation.setAnimationListener(object : Animation.AnimationListener {
-      override fun onAnimationRepeat(p0: Animation?) {
-        if (webViewIsLoading.value == false) {
-          i { "we are in the refresh round. cancel now." }
-          rotation.cancel()
-          rotation.reset()
-        }
-      }
-
-      override fun onAnimationEnd(p0: Animation?) {
-      }
-
-      override fun onAnimationStart(p0: Animation?) {
-      }
-    })
-  }
-
-
-  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-    android.R.id.home -> {
-      router.popCurrentController()
-      true
-    }
-    R.id.refresh -> {
-      webView.reload()
-      true
-    }
-    R.id.home -> {
-      webView.loadUrl(originalUrl)
-      true
-    }
-    else -> false
   }
 
   companion object {

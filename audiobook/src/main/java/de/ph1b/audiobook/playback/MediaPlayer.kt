@@ -2,6 +2,8 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.media.AudioManager
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -65,14 +67,15 @@ constructor(
     player.onError {
       e { "onError" }
       player.playWhenReady = false
+      playStateManager.playState = PlayState.STOPPED
     }
 
     // upon position change update the book
     player.onPositionDiscontinuity {
-      i { "onPositionDiscontinuity with currentPos=${player.currentPosition}" }
+      i { "onPositionDiscontinuity with currentPos=${player.currentPositionOrZero}" }
       bookSubject.value?.let {
         val index = player.currentWindowIndex
-        bookSubject.onNext(it.copy(time = player.currentPosition.toInt(), currentFile = it.chapters[index].file))
+        bookSubject.onNext(it.copy(time = player.currentPositionOrZero.toInt(), currentFile = it.chapters[index].file))
       }
     }
 
@@ -97,6 +100,7 @@ constructor(
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
+            .filter { it != C.TIME_UNSET }
             .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
@@ -111,13 +115,13 @@ constructor(
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
-    if (bookSubject.value != book) {
+    if (player.playbackState == ExoPlayer.STATE_IDLE || bookSubject.value != book) {
       i { "init called with ${book.name}" }
+      bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
-      bookSubject.onNext(book)
       state = PlayerState.PAUSED
     }
   }
@@ -126,9 +130,9 @@ constructor(
     player.volume = (if (loud) 1F else 0.1F)
   }
 
-  /** Plays the prepared file. */
   fun play() {
     v { "play called in state $state" }
+    prepareIfIdle()
     bookSubject.value?.let {
       if (state == PlayerState.ENDED) {
         i { "play in state ended. Back to the beginning" }
@@ -145,11 +149,12 @@ constructor(
   fun skip(direction: Direction) {
     v { "direction=$direction" }
 
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
     bookSubject.value?.let {
-      val currentPos = player.currentPosition
+      val currentPos = player.currentPositionOrZero
       val duration = player.duration
       val delta = seekTime * 1000
 
@@ -169,7 +174,7 @@ constructor(
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
     i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
-
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
@@ -181,7 +186,7 @@ constructor(
 
   private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
     val previousChapter = book.previousChapter()
-    if (player.currentPosition > 2000 || previousChapter == null) {
+    if (player.currentPositionOrZero > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -211,6 +216,13 @@ constructor(
     return false
   }
 
+  private fun prepareIfIdle() {
+    if (state == PlayerState.IDLE) {
+      d { "state is idle so ExoPlayer might have an error. Try to prepare it" }
+      bookSubject.value?.let { init(it) }
+    }
+  }
+
   /** Stops the playback and releases some resources. */
   fun stop() {
     player.playWhenReady = false
@@ -233,7 +245,7 @@ constructor(
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
               // get the raw rewinded position
-              val currentPosition = player.currentPosition
+              val currentPosition = player.currentPositionOrZero
               var maybeSeekTo = currentPosition - autoRewind
                   .coerceAtLeast(0) // make sure not to get into negative time
 
@@ -262,6 +274,7 @@ constructor(
 
   /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
+    prepareIfIdle()
     val book = bookSubject.value
         ?: return
 
@@ -273,6 +286,7 @@ constructor(
   /** Changes the current position in book. */
   fun changePosition(time: Int, changedFile: File? = null) {
     v { "changePosition with time $time and file $changedFile" }
+    prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
@@ -291,6 +305,12 @@ constructor(
       player.setPlaybackSpeed(speed)
     }
   }
+
+  private val ExoPlayer.currentPositionOrZero: Long
+    get() {
+      val position = currentPosition
+      return if (position == C.TIME_UNSET) 0 else position
+    }
 
   /** The direction to skip. */
   enum class Direction {

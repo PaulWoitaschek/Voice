@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.chapterReader
 
 import android.util.SparseArray
-import timber.log.Timber
+import e
 import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
@@ -55,10 +55,10 @@ object ID3ChapterReader {
         }
         onEndTag()
       }
-    } catch (e: ID3ReaderException) {
-      Timber.e(e)
-    } catch (e: IOException) {
-      Timber.e(e)
+    } catch (exception: ID3ReaderException) {
+      e(exception)
+    } catch (exception: IOException) {
+      e(exception)
     }
 
     val array = SparseArray<String>(chapters.size)

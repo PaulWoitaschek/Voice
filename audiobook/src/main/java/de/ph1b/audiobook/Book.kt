@@ -38,12 +38,12 @@ data class Book(
   private val COVER_TRANSITION_PREFIX = "bookCoverTransition_"
 
   init {
-    check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
-    check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
-    check(chapters.isNotEmpty(), { "chapters must not be empty" })
-    check(chapters.find { it.file == currentFile } != null, { "$chapters must contain current $currentFile" })
-    check(name.isNotEmpty(), { "name must not be empty" })
-    check(root.isNotEmpty(), { "root must not be empty" })
+    require(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
+    require(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
+    require(chapters.isNotEmpty(), { "chapters must not be empty" })
+    require(chapters.find { it.file == currentFile } != null, { "$chapters must contain current $currentFile" })
+    require(name.isNotEmpty(), { "name must not be empty" })
+    require(root.isNotEmpty(), { "root must not be empty" })
   }
 
   /** The transition name for the cover transition. */

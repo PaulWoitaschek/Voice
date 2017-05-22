@@ -15,16 +15,16 @@ import javax.inject.Singleton
  */
 @Singleton class PrefsManager
 @Inject constructor(
-  val theme: Preference<ThemeUtil.Theme>,
-  @ResumeOnReplug val resumeOnReplug: Preference<Boolean>,
-  @BookmarkOnSleepTimer val bookmarkOnSleepTimer: Preference<Boolean>,
-  @ShakeToReset val shakeToReset: Preference<Boolean>,
-  @PrefResumeAfterCall val resumeAfterCall: Preference<Boolean>,
-  @PauseOnTempFocusLoss val pauseOnTempFocusLoss: Preference<Boolean>,
-  @AutoRewindAmount val autoRewindAmount: Preference<Int>,
-  @SeekTime val seekTime: Preference<Int>,
-  val displayMode: Preference<BookShelfController.DisplayMode>,
-  @SleepTime val sleepTime: Preference<Int>,
-  @SingleBookFolders val singleBookFolders: Preference<Set<String>>,
-  @CollectionFolders val collectionFolders: Preference<Set<String>>,
-  @CurrentBookId val currentBookId: Preference<Long>)
+    val theme: Preference<ThemeUtil.Theme>,
+    @ResumeOnReplug val resumeOnReplug: Preference<Boolean>,
+    @BookmarkOnSleepTimer val bookmarkOnSleepTimer: Preference<Boolean>,
+    @ShakeToReset val shakeToReset: Preference<Boolean>,
+    @PrefResumeAfterCall val resumeAfterCall: Preference<Boolean>,
+    @PauseOnTempFocusLoss val pauseOnTempFocusLoss: Preference<Boolean>,
+    @AutoRewindAmount val autoRewindAmount: Preference<Int>,
+    @SeekTime val seekTime: Preference<Int>,
+    val displayMode: Preference<BookShelfController.DisplayMode>,
+    @SleepTime val sleepTime: Preference<Int>,
+    @SingleBookFolders val singleBookFolders: Preference<Set<String>>,
+    @CollectionFolders val collectionFolders: Preference<Set<String>>,
+    @CurrentBookId val currentBookId: Preference<Long>)
