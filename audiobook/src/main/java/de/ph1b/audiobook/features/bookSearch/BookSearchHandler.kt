@@ -1,6 +1,5 @@
-package de.ph1b.audiobook.playback.utils
+package de.ph1b.audiobook.features.bookSearch
 
-import android.os.Bundle
 import android.provider.MediaStore
 import dagger.Reusable
 import de.ph1b.audiobook.misc.value
@@ -16,27 +15,16 @@ import javax.inject.Inject
  * @author Matthias Kutscheid
  * @author Paul Woitaschek
  */
-@Reusable class BookFinder
+@Reusable class BookSearchHandler
 @Inject constructor(
     private val repo: BookRepository,
     private val prefs: PrefsManager,
     private val player: PlayerController) {
 
-  /**
-   * Find a book by a search query. The extras may provide more details about what and how to search.
-   */
-  fun findBook(query: String?, extras: Bundle?) {
-    val mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS)
-
-    // Some of these extras may not be available depending on the search mode
-    val album = extras?.getString(MediaStore.EXTRA_MEDIA_ALBUM)
-    val artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST)
-    val playlist = extras?.getString("android.intent.extra.playlist")
-
-    // Determine the search mode and use the corresponding extras
-    when (mediaFocus) {
+  fun handle(bookSearch: BookSearch) {
+    when (bookSearch.mediaFocus) {
       "vnd.android.cursor.item/*" -> {
-        if (query?.isEmpty() == true) {
+        if (bookSearch.query?.isEmpty() == true) {
           // 'Any' search mode, get the last played book and play it
           val playedBooks = repo.activeBooks.filter {
             it.time != 0
@@ -47,15 +35,15 @@ import javax.inject.Inject
           }
         } else {
           // 'Unstructured' search mode
-          playUnstructuredSearch(query)
+          playUnstructuredSearch(bookSearch.query)
         }
       }
-      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(artist)
+      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(bookSearch.artist)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
-        playAlbum(album, artist)
+        playAlbum(bookSearch.album, bookSearch.artist)
       }
-      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(playlist ?: album, artist)
-      else -> playUnstructuredSearch(query)
+      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(bookSearch.playList ?: bookSearch.album, bookSearch.artist)
+      else -> playUnstructuredSearch(bookSearch.query)
     }
   }
 
