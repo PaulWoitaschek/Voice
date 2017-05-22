@@ -2,27 +2,24 @@ package de.ph1b.audiobook.playback.utils
 
 import android.os.Bundle
 import android.provider.MediaStore
+import dagger.Reusable
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayerController
 import i
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
- * @author Matthias Kutscheid
  * This class provides a single point of entry to find a book by a search query from any point in the application
+ *
+ * @author Matthias Kutscheid
  */
-@Singleton
-class BookFinder
-@Inject
-constructor() {
-
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var player: PlayerController
+@Reusable class BookFinder
+@Inject constructor(
+    private val repo: BookRepository,
+    private val prefs: PrefsManager,
+    private val player: PlayerController) {
 
   /**
    * Find a book by a search query. THe extras may provide more details about what and how to search.
@@ -46,7 +43,7 @@ constructor() {
         val playedBooks = repo.activeBooks.filter {
           it.time != 0
         }
-        if(playedBooks.isNotEmpty()) {
+        if (playedBooks.isNotEmpty()) {
           prefs.currentBookId.value = playedBooks.first().id
           player.play()
         }
@@ -66,7 +63,7 @@ constructor() {
       MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> // 'Playlist' search mode
         //playPlaylist(album, artist, genre, playlist, title);
         // use the playlist name or album to play a book as a playlist
-        playAlbum(playlist?: album, artist)
+        playAlbum(playlist ?: album, artist)
     }
   }
 
