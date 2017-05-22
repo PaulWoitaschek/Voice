@@ -11,9 +11,10 @@ import i
 import javax.inject.Inject
 
 /**
- * This class provides a single point of entry to find a book by a search query from any point in the application
+ * This class provides a single point of entry to find and play a book by a search query
  *
  * @author Matthias Kutscheid
+ * @author Paul Woitaschek
  */
 @Reusable class BookFinder
 @Inject constructor(
@@ -22,7 +23,7 @@ import javax.inject.Inject
     private val player: PlayerController) {
 
   /**
-   * Find a book by a search query. THe extras may provide more details about what and how to search.
+   * Find a book by a search query. The extras may provide more details about what and how to search.
    */
   fun findBook(query: String?, extras: Bundle?) {
     val mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS)
@@ -34,30 +35,27 @@ import javax.inject.Inject
 
     // Determine the search mode and use the corresponding extras
     when (mediaFocus) {
-      null -> // 'Unstructured' search mode (backward compatible)
-        playUnstructuredSearch(query)
-      "vnd.android.cursor.item/*" -> if (query?.isEmpty() == true) {
-        // 'Any' search mode, get the last played book and play it
-        val playedBooks = repo.activeBooks.filter {
-          it.time != 0
+      "vnd.android.cursor.item/*" -> {
+        if (query?.isEmpty() == true) {
+          // 'Any' search mode, get the last played book and play it
+          val playedBooks = repo.activeBooks.filter {
+            it.time != 0
+          }
+          if (playedBooks.isNotEmpty()) {
+            prefs.currentBookId.value = playedBooks.first().id
+            player.play()
+          }
+        } else {
+          // 'Unstructured' search mode
+          playUnstructuredSearch(query)
         }
-        if (playedBooks.isNotEmpty()) {
-          prefs.currentBookId.value = playedBooks.first().id
-          player.play()
-        }
-      } else {
-        // 'Unstructured' search mode
-        playUnstructuredSearch(query)
       }
-      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> // 'Artist' search mode
-        playArtist(artist)
-      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, // 'Album' search mode
-      "vnd.android.cursor.item/audio" -> // 'Song' search mode
+      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(artist)
+      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
         playAlbum(album, artist)
-      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> // 'Playlist' search mode
-        //playPlaylist(album, artist, genre, playlist, title);
-        // use the playlist name or album to play a book as a playlist
-        playAlbum(playlist ?: album, artist)
+      }
+      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(playlist ?: album, artist)
+      else -> playUnstructuredSearch(query)
     }
   }
 
