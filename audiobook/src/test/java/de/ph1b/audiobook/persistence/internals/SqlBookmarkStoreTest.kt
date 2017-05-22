@@ -31,7 +31,7 @@ class SqlBookmarkStoreTest {
 
   @Test fun test() {
     // test adding
-    val book = BookMocker.mock(5)
+    val book = BookMocker.mock()
     val added = (0..2000).map {
       register.addBookmark(Bookmark(book.chapters.first().file, "my title", System.currentTimeMillis().toInt()))
     }

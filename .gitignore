@@ -3,8 +3,6 @@ gradle.properties
 *.apk
 .DS_Store
 captures
-.idea/workspace.xml
-.idea/libraries/
 audiobook/build
 build
 .gradle/
@@ -15,7 +13,7 @@ MaterialAudiobookPlayer.iml
 .kobalt
 reports
 *.mp3
-.idea
+.idea/
 mainframer.sh
 .mainframer
 *.keystore

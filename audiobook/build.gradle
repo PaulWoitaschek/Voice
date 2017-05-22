@@ -54,9 +54,12 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
+
     productFlavors {
-        opensource {}
-        proprietary {}
+        opensource {
+        }
+        proprietary {
+        }
     }
 }
 

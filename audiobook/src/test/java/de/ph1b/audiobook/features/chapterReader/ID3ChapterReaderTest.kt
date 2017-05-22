@@ -5,12 +5,15 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 /**
  * Test for the id3 chapter reader
  *
  * @author Paul Woitaschek
  */
+@RunWith(RobolectricTestRunner::class)
 class ID3ChapterReaderTest {
 
   @Test
@@ -20,7 +23,7 @@ class ID3ChapterReaderTest {
         .url("https://auphonic.com/media/blog/auphonic_chapters_demo.mp3")
         .build()
     val call = client.newCall(request)
-    val inputStream = call.execute().body().byteStream()
+    val inputStream = call.execute().body()!!.byteStream()
     val chapters = ID3ChapterReader.readInputStream(inputStream)
 
     val positions = ArrayList<Int>()
@@ -32,15 +35,15 @@ class ID3ChapterReaderTest {
 
     assertThat(positions)
         .isEqualTo(listOf(
-            0L,
-            15000L,
-            22000L,
-            34000L,
-            45000L,
-            60000L,
-            76000L,
-            94000L,
-            111500L)
+            0,
+            15000,
+            22000,
+            34000,
+            45000,
+            60000,
+            76000,
+            94000,
+            111500)
         )
 
     assertThat(titles)

@@ -1,8 +1,10 @@
 package de.ph1b.audiobook.features
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.*
 import de.ph1b.audiobook.R
@@ -15,6 +17,7 @@ import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.utils.BookFinder
 import javax.inject.Inject
 
 
@@ -30,6 +33,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var playerController: PlayerController
   @Inject lateinit var repo: BookRepository
+  @Inject lateinit var bookFinder: BookFinder
 
   private lateinit var router: Router
 
@@ -56,6 +60,20 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
         from?.setOptionsMenuHidden(false)
       }
     })
+
+    setupFromIntent(intent)
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    setupFromIntent(intent)
+  }
+
+  private fun setupFromIntent(intent: Intent?) {
+    if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
+      //check if we can find something for this search
+      bookFinder.findBook(intent.getStringExtra(SearchManager.QUERY), intent.extras)
+    }
   }
 
   private fun setupRouter() {
