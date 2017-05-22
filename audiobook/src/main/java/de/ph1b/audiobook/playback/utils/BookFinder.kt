@@ -6,6 +6,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayer
+import de.ph1b.audiobook.playback.PlayerController
 import i
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,7 +22,7 @@ constructor() {
 
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var player: MediaPlayer
+  @Inject lateinit var player: PlayerController
 
   /**
    * Find a book by a search query. THe extras may provide more details about what and how to search.
@@ -32,9 +33,9 @@ constructor() {
     // Some of these extras may not be available depending on the search mode
     val album = extras?.getString(MediaStore.EXTRA_MEDIA_ALBUM)
     val artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST)
-    val genre = extras?.getString("android.intent.extra.genre")
+//    val genre = extras?.getString("android.intent.extra.genre")
     val playlist = extras?.getString("android.intent.extra.playlist")
-    val title = extras?.getString(MediaStore.EXTRA_MEDIA_TITLE)
+//    val title = extras?.getString(MediaStore.EXTRA_MEDIA_TITLE)
 
     // Determine the search mode and use the corresponding extras
     when (mediaFocus) {
@@ -53,15 +54,13 @@ constructor() {
         // 'Unstructured' search mode
         playUnstructuredSearch(query)
       }
-      MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
-        // 'Genre' search mode
+//      MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
+//        // 'Genre' search mode
 //            playGenre(genre);
-
-      }
+//      }
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> // 'Artist' search mode
         playArtist(artist)
-      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE -> // 'Album' search mode
-        playAlbum(album, artist)
+      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, // 'Album' search mode
       "vnd.android.cursor.item/audio" -> // 'Song' search mode
         playAlbum(album, artist)
       MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> // 'Playlist' search mode

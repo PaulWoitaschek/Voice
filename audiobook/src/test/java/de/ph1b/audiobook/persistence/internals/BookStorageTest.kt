@@ -38,7 +38,7 @@ class BookStorageTest {
   }
 
   @Test fun testHideRevealBook() {
-    val mock = BookMocker.mock(-1)
+    val mock = BookMocker.mock()
     register.addBook(mock)
 
     val activeBooks = register.activeBooks()
@@ -64,7 +64,7 @@ class BookStorageTest {
    * Tests that the returned book matches the retrieved one
    */
   @Test fun testAddBookReturn() {
-    val mock = BookMocker.mock(-1)
+    val mock = BookMocker.mock()
     val inserted = register.addBook(mock)
     val retrieved = register.activeBooks().single()
 
@@ -72,8 +72,8 @@ class BookStorageTest {
   }
 
   @Test fun testAddBook() {
-    val mock1 = BookMocker.mock(-1)
-    val mock2 = BookMocker.mock(-1)
+    val mock1 = BookMocker.mock()
+    val mock2 = BookMocker.mock()
     val firstInserted = register.addBook(mock1)
     val secondInserted = register.addBook(mock2)
 
@@ -89,7 +89,7 @@ class BookStorageTest {
   }
 
   @Test fun testAddBookWithNullableAuthor() {
-    val mock = BookMocker.mock(-1)
+    val mock = BookMocker.mock()
     val withNullableAuthor = mock.copy(author = null)
     val inserted = register.addBook(withNullableAuthor)
 
@@ -104,7 +104,7 @@ class BookStorageTest {
 
 
   @Test fun testUpdateBook() {
-    val mock = BookMocker.mock(-1)
+    val mock = BookMocker.mock()
     val inserted = register.addBook(mock)
 
     val oldChapters = inserted.chapters

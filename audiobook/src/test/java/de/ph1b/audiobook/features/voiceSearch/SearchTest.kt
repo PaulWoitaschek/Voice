@@ -41,7 +41,7 @@ class SearchTest {
     val moshi = Moshi.Builder().build()
     val internalBookRegister = BookStorage(internalDb, moshi)
     repo = BookRepository(internalBookRegister)
-    val dummy = BookMocker.mock(1)
+    val dummy = BookMocker.mock()
     repo.addBook(dummy)
     // the book ID is assigned during storage, so we have to get it here.
     dummyBookId = repo.activeBooks.first().id
