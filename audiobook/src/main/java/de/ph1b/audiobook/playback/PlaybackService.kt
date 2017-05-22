@@ -25,10 +25,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
 import de.ph1b.audiobook.playback.events.MediaEventReceiver
-import de.ph1b.audiobook.playback.utils.BookUriConverter
-import de.ph1b.audiobook.playback.utils.ChangeNotifier
-import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
-import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
+import de.ph1b.audiobook.playback.utils.*
 import e
 import i
 import io.reactivex.disposables.CompositeDisposable
@@ -64,6 +61,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var telephonyManager: TelephonyManager
+  @Inject lateinit var bookFinder: BookFinder
   private lateinit var mediaSession: MediaSessionCompat
   private val androidAutoState = AndroidAutoStateReceiver()
   private lateinit var changeNotifier: ChangeNotifier
@@ -157,16 +155,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onPlayFromSearch(query: String?, extras: Bundle?) {
           i { "onPlayFromSearch $query" }
-          if (query != null) {
-            val match = repo.activeBooks.firstOrNull {
-              it.name.contains(query, ignoreCase = true) || it.author?.contains(query, ignoreCase = true) == true
-            }
-            i { "found a match ${match?.name}" }
-            if (match != null) {
-              prefs.currentBookId.value = match.id
-              player.play()
-            }
-          }
+          bookFinder.findBook(query, extras)
         }
 
         override fun onSkipToNext() {

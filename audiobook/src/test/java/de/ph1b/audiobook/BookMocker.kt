@@ -14,12 +14,12 @@ object BookMocker {
 
   private val rnd = Random()
 
-  fun mock(id: Long): Book {
+  fun mock(): Book {
     val root = "/root/"
-    return mock(File(root, "First.mp3"), File(root, "/second.mp3"), id)
+    return mock(File(root, "First.mp3"), File(root, "/second.mp3"))
   }
 
-  fun mock(file1: File, file2: File, id: Long): Book {
+  fun mock(file1: File, file2: File): Book {
     val type = Book.Type.SINGLE_FOLDER
     val author = "TestAuthor"
     val time = 0
@@ -36,6 +36,6 @@ object BookMocker {
     if (root == null) {
       root = "fakeRoot"
     }
-    return Book(id, type, author, file1, time, name, chapters, playbackSpeed, root)
+    return Book(-1, type, author, file1, time, name, chapters, playbackSpeed, root)
   }
 }

@@ -41,9 +41,9 @@ class BookRepositoryTest {
 
   @Test
   fun testInOut() {
-    val dummy = BookMocker.mock(5)
+    val dummy = BookMocker.mock()
     repo.addBook(dummy)
-    val firstBook = repo.activeBooks.first()
+    val firstBook = repo.activeBooks.first(
     val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
     assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
