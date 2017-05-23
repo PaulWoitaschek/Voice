@@ -1,11 +1,14 @@
 package de.ph1b.audiobook.features.bookSearch
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import com.f2prateek.rx.preferences.Preference
-import de.ph1b.audiobook.BookMocker
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.given
+import de.ph1b.audiobook.misc.emptySparseArray
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -15,6 +18,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
+import java.io.File
 
 
 /**
@@ -23,6 +27,7 @@ import org.mockito.MockitoAnnotations
  *  @author Matthias Kutscheid
  *  @author Paul Woitaschek
  */
+@SuppressLint("SdCardPath")
 class BookSearchHandlerTest {
 
   lateinit var searchHandler: BookSearchHandler
@@ -32,7 +37,9 @@ class BookSearchHandlerTest {
   @Mock lateinit var player: PlayerController
   @Mock lateinit var currentBookIdPref: Preference<Long>
 
-  private val book = BookMocker.mock().copy(id = 5)
+  private val chapter1 = Chapter(File("/sdcard/Book1/chapter1.mp3"), "chapter1", 5000, 0, emptySparseArray())
+  private val chapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "chapter2", 10000, 0, emptySparseArray())
+  private val book = Book(1, Book.Type.SINGLE_FOLDER, "Book1Author", chapter2.file, 3000, "Book1", listOf(chapter1, chapter2), 1F, "/sdcard/Book1")
 
   @Before
   fun setUp() {
@@ -62,7 +69,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun testUnstructuredSearchByChapter() {
-    val bookSearch = BookSearch(query = book.chapters.first().name)
+    val bookSearch = BookSearch(query = chapter1.name)
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
