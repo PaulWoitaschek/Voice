@@ -107,6 +107,7 @@ dependencies {
     testCompile libraries.junit
     testCompile libraries.robolectric
     testCompile libraries.assertJ
+    testCompile libraries.mockito
 
     testCompile libraries.okHttp
 

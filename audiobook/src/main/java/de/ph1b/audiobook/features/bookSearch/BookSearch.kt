@@ -6,9 +6,9 @@ package de.ph1b.audiobook.features.bookSearch
  * @author Paul Woitaschek
  */
 data class BookSearch(
-    val query: String?,
-    val mediaFocus: String?,
-    val album: String?,
-    val artist: String?,
-    val playList: String?
+    val query: String? = null,
+    val mediaFocus: String? = null,
+    val album: String? = null,
+    val artist: String? = null,
+    val playList: String? = null
 )
