@@ -32,14 +32,13 @@ class BookSearchHandlerTest {
   @Mock lateinit var player: PlayerController
   @Mock lateinit var currentBookIdPref: Preference<Long>
 
-  private val bookId = 5L
+  private val book = BookMocker.mock().copy(id = 5)
 
   @Before
   fun setUp() {
-    val dummy = BookMocker.mock().copy(id = bookId)
     MockitoAnnotations.initMocks(this)
 
-    given { repo.activeBooks }.thenReturn(listOf(dummy))
+    given { repo.activeBooks }.thenReturn(listOf(book))
     given { prefs.currentBookId }.thenReturn(currentBookIdPref)
 
     searchHandler = BookSearchHandler(repo, prefs, player)
@@ -49,15 +48,15 @@ class BookSearchHandlerTest {
   fun testUnstructuredSearchByBook() {
     val bookSearch = BookSearch(query = "TestBook")
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @Test
   fun testUnstructuredSearchByArtist() {
-    val bookSearch = BookSearch(query = "TestAuthor")
+    val bookSearch = BookSearch(query = book.author)
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -65,7 +64,7 @@ class BookSearchHandlerTest {
   fun testUnstructuredSearchByChapter() {
     val bookSearch = BookSearch(query = "first")
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -80,10 +79,10 @@ class BookSearchHandlerTest {
   fun testMediaFocusArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor"
+        artist = book.author
     )
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -91,7 +90,7 @@ class BookSearchHandlerTest {
   fun testMediaFocusArtistNoSuccess() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor1"
+        artist = "UnknownAuthor"
     )
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -101,11 +100,11 @@ class BookSearchHandlerTest {
   fun testMediaFocusAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor",
+        artist = book.author,
         album = "TestBook"
     )
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -113,7 +112,7 @@ class BookSearchHandlerTest {
   fun testMediaFocusAlbumNoSuccessBecauseOfArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor1",
+        artist = "UnknownAuthor",
         album = "TestBook"
     )
     searchHandler.handle(bookSearch)
@@ -124,7 +123,7 @@ class BookSearchHandlerTest {
   fun testMediaFocusAlbumNoSuccessBecauseOfAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor",
+        artist = book.author,
         album = "TestBook1"
     )
     searchHandler.handle(bookSearch)
@@ -136,12 +135,12 @@ class BookSearchHandlerTest {
   fun testMediaFocusPlaylist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor",
+        artist = book.author,
         playList = "TestBook",
         album = "TestBook"
     )
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -149,11 +148,11 @@ class BookSearchHandlerTest {
   fun testMediaFocusPlaylistWithAlbumInsteadOfPlaylist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor",
+        artist = book.author,
         playList = "TestBook"
     )
     searchHandler.handle(bookSearch)
-    verify(currentBookIdPref).set(bookId)
+    verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
   }
 
@@ -162,7 +161,7 @@ class BookSearchHandlerTest {
   fun testMediaFocusPlaylistNoSuccessBecauseOfArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor1",
+        artist = "UnknownAuthor",
         playList = "TestBook"
     )
     searchHandler.handle(bookSearch)
@@ -174,7 +173,7 @@ class BookSearchHandlerTest {
   fun testMediaFocusPlaylistNoSuccessBecauseOfAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = "TestAuthor",
+        artist = book.author,
         playList = "TestBook1"
     )
     searchHandler.handle(bookSearch)
