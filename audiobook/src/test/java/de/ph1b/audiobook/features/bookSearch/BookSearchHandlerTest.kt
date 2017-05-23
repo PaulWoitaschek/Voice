@@ -15,8 +15,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.inOrder
-import org.mockito.Mockito.verifyNoMoreInteractions
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import java.io.File
 
@@ -98,10 +97,11 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusAnyNonePlayed() {
+  fun testMediaFocusAnyNoneFoundButPlayed() {
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
+    verify(player).play()
   }
 
   @Test
@@ -130,6 +130,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
@@ -160,6 +161,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
@@ -172,6 +174,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -222,6 +225,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -235,5 +239,6 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 }
