@@ -10,7 +10,7 @@ import java.net.URI
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-fun execute(command: String, timeOut: Long = 10, directory: File? = null): List<String> {
+fun execute(command: String, directory: File? = null): List<String> {
   val processBuilder = ProcessBuilder().command("/bin/sh", "-c", command)
       .inheritIO()
   directory?.let { processBuilder.directory(directory) }
@@ -18,8 +18,8 @@ fun execute(command: String, timeOut: Long = 10, directory: File? = null): List<
   val process = processBuilder
       .start()
 
-  val terminatedNormally = process.waitFor(timeOut, TimeUnit.SECONDS)
-  if (!terminatedNormally) throw TimeoutException("Command $processBuilder timed out")
+//  val terminatedNormally = process.waitFor()
+//  if (!terminatedNormally) throw TimeoutException("Command $processBuilder timed out")
   val exitValue = process.exitValue()
   if (exitValue != 0) {
     throw IOException("Command $command exited with exitCode=$exitValue")
