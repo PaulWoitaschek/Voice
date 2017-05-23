@@ -3,7 +3,7 @@ general:
     - app/build/outputs/apk
 machine:
   environment:
-    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    GRADLE_OPTS: '-Dorg.gradle.daemon=false org.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
     ANDROID_NDK_HOME: ${ANDROID_NDK}
   java:
     version: oraclejdk8
