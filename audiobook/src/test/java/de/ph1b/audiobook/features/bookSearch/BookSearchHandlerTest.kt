@@ -46,7 +46,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun testUnstructuredSearchByBook() {
-    val bookSearch = BookSearch(query = "TestBook")
+    val bookSearch = BookSearch(query = book.name)
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -62,7 +62,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun testUnstructuredSearchByChapter() {
-    val bookSearch = BookSearch(query = "first")
+    val bookSearch = BookSearch(query = book.chapters.first().name)
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -101,7 +101,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = book.author,
-        album = "TestBook"
+        album = book.name
     )
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
@@ -113,7 +113,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = "UnknownAuthor",
-        album = "TestBook"
+        album = book.name
     )
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -124,7 +124,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = book.author,
-        album = "TestBook1"
+        album = "UnknownBook"
     )
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -136,8 +136,8 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
         artist = book.author,
-        playList = "TestBook",
-        album = "TestBook"
+        playList = book.name,
+        album = book.name
     )
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
@@ -149,7 +149,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
         artist = book.author,
-        playList = "TestBook"
+        playList = book.name
     )
     searchHandler.handle(bookSearch)
     verify(currentBookIdPref).set(book.id)
@@ -162,7 +162,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
         artist = "UnknownAuthor",
-        playList = "TestBook"
+        playList = book.name
     )
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
@@ -174,7 +174,7 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
         artist = book.author,
-        playList = "TestBook1"
+        playList = "UnknownBook"
     )
     searchHandler.handle(bookSearch)
     verifyNoMoreInteractions(currentBookIdPref)
