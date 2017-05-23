@@ -36,18 +36,18 @@ open class PrepareOpus : DefaultTask() {
 
     // extract and rename it
     execute(
-        command = "tar -xzf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}"
+        command = "tar -xzf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\""
     )
     val extractedFolder = File(jniDir, "opus-$opusVersion")
     extractedFolder.renameTo(opusDir)
 
     execute(
-        command = "convert_android_asm.sh",
+        command = "./convert_android_asm.sh",
         directory = jniDir
     )
 
     execute(
-        command = "$ndkDir/ndk-build APP_ABI=all -j4",
+        command = "$ndkDir/ndk-build APP_ABI=\"mips64 mips x86_64 x86 arm64-v8a armeabi-v7a\" -j4",
         timeOut = 60,
         directory = jniDir
     )

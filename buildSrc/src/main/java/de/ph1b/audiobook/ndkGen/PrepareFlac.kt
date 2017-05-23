@@ -30,7 +30,7 @@ open class PrepareFlac : DefaultTask() {
     d("downloaded to $dstFile")
 
     // extract and rename it
-    execute("tar -xvf ${dstFile.absolutePath} -C ${dstFile.parentFile.absolutePath}")
+    execute("tar -xvf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\"")
     val extractedFolder = File(jniDir, "flac-$flacVersion")
     extractedFolder.renameTo(flacDir)
     if (flacDir.listFiles()?.size ?: 0 <= 0)
