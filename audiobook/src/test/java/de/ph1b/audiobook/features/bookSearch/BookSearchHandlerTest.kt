@@ -15,7 +15,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
 import java.io.File
@@ -55,28 +55,49 @@ class BookSearchHandlerTest {
   fun testUnstructuredSearchByBook() {
     val bookSearch = BookSearch(query = book.name)
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
   fun testUnstructuredSearchByArtist() {
     val bookSearch = BookSearch(query = book.author)
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
   fun testUnstructuredSearchByChapter() {
     val bookSearch = BookSearch(query = chapter1.name)
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
   fun testMediaFocusAnyNonePlayed() {
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
-    verifyNoBook()
+    verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @Test
@@ -86,7 +107,14 @@ class BookSearchHandlerTest {
         artist = book.author
     )
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
@@ -96,7 +124,8 @@ class BookSearchHandlerTest {
         artist = "UnknownAuthor"
     )
     searchHandler.handle(bookSearch)
-    verifyNoBook()
+
+    verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @Test
@@ -107,7 +136,14 @@ class BookSearchHandlerTest {
         album = book.name
     )
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
@@ -118,7 +154,8 @@ class BookSearchHandlerTest {
         album = book.name
     )
     searchHandler.handle(bookSearch)
-    verifyNoBook()
+
+    verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @Test
@@ -129,7 +166,8 @@ class BookSearchHandlerTest {
         album = "UnknownBook"
     )
     searchHandler.handle(bookSearch)
-    verifyNoBook()
+
+    verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -142,7 +180,14 @@ class BookSearchHandlerTest {
         album = book.name
     )
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @Test
@@ -153,7 +198,13 @@ class BookSearchHandlerTest {
         playList = book.name
     )
     searchHandler.handle(bookSearch)
-    verifyBookSet()
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(book.id)
+      verify(player).play()
+    }
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
   }
 
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -165,7 +216,8 @@ class BookSearchHandlerTest {
         playList = book.name
     )
     searchHandler.handle(bookSearch)
-    verifyNoBook()
+
+    verifyNoMoreInteractions(currentBookIdPref)
   }
 
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -177,15 +229,7 @@ class BookSearchHandlerTest {
         playList = "UnknownBook"
     )
     searchHandler.handle(bookSearch)
-    verifyNoBook()
-  }
 
-  private fun verifyBookSet() {
-    verify(currentBookIdPref).set(book.id)
-    verifyNoMoreInteractions(currentBookIdPref)
-  }
-
-  private fun verifyNoBook() {
     verifyNoMoreInteractions(currentBookIdPref)
   }
 }
