@@ -23,21 +23,6 @@ import javax.inject.Inject
 
   fun handle(bookSearch: BookSearch) {
     when (bookSearch.mediaFocus) {
-      "vnd.android.cursor.item/*" -> {
-        if (bookSearch.query?.isEmpty() == true) {
-          // 'Any' search mode, get the last played book and play it
-          val playedBooks = repo.activeBooks.filter {
-            it.time != 0
-          }
-          if (playedBooks.isNotEmpty()) {
-            prefs.currentBookId.value = playedBooks.first().id
-            player.play()
-          }
-        } else {
-          // 'Unstructured' search mode
-          playUnstructuredSearch(bookSearch.query)
-        }
-      }
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(bookSearch.artist)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
         playAlbum(bookSearch.album, bookSearch.artist)
@@ -81,6 +66,9 @@ import javax.inject.Inject
     } else {
       //continue playback
       i { "continuing from search without query" }
+      if (prefs.currentBookId.value == -1L) {
+        repo.activeBooks.firstOrNull()?.id?.let { prefs.currentBookId.set(it) }
+      }
       player.play()
     }
   }

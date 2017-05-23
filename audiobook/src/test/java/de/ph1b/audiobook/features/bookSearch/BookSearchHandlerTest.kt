@@ -34,6 +34,7 @@ class BookSearchHandlerTest {
   @Mock lateinit var repo: BookRepository
   @Mock lateinit var prefs: PrefsManager
   @Mock lateinit var player: PlayerController
+
   @Mock lateinit var currentBookIdPref: Preference<Long>
 
   private val anotherBookChapter1 = Chapter(File("/sdcard/AnotherBook/chapter1.mp3"), "anotherBookChapter1", 5000, 0, emptySparseArray())
@@ -98,9 +99,12 @@ class BookSearchHandlerTest {
 
   @Test
   fun testMediaFocusAnyNoneFoundButPlayed() {
+    given { currentBookIdPref.get() }.thenReturn(-1)
+
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
-    verifyNoMoreInteractions(currentBookIdPref)
+
+    verify(currentBookIdPref).set(anotherBook.id)
     verify(player).play()
   }
 
