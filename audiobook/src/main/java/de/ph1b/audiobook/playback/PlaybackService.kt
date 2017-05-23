@@ -15,6 +15,8 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
+import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
+import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
@@ -25,7 +27,10 @@ import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
 import de.ph1b.audiobook.playback.events.MediaEventReceiver
-import de.ph1b.audiobook.playback.utils.*
+import de.ph1b.audiobook.playback.utils.BookUriConverter
+import de.ph1b.audiobook.playback.utils.ChangeNotifier
+import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
+import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
 import e
 import i
 import io.reactivex.disposables.CompositeDisposable
@@ -61,7 +66,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var telephonyManager: TelephonyManager
-  @Inject lateinit var bookFinder: BookFinder
+  @Inject lateinit var bookSearchParser: BookSearchParser
+  @Inject lateinit var bookSearchHandler: BookSearchHandler
   private lateinit var mediaSession: MediaSessionCompat
   private val androidAutoState = AndroidAutoStateReceiver()
   private lateinit var changeNotifier: ChangeNotifier
@@ -100,7 +106,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
         AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
           if (playStateManager.playState == PlayState.PLAYING) {
-            // if android auto is connected temporarily pause the player so the playback does disturb voice recongition
+            // if android auto is connected temporarily pause the player so the playback does disturb voice recognition
             if (prefs.pauseOnTempFocusLoss.value || androidAutoState.connected) {
               d { "Paused by audio-focus loss transient." }
               // Pause is temporary, don't rewind
@@ -155,7 +161,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onPlayFromSearch(query: String?, extras: Bundle?) {
           i { "onPlayFromSearch $query" }
-          bookFinder.findBook(query, extras)
+          val bookSearch = bookSearchParser.parse(query, extras)
+          bookSearchHandler.handle(bookSearch)
         }
 
         override fun onSkipToNext() {

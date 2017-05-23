@@ -1,23 +1,22 @@
 package de.ph1b.audiobook.features
 
-import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
+import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
+import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.utils.BookFinder
 import javax.inject.Inject
 
 
@@ -33,7 +32,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var playerController: PlayerController
   @Inject lateinit var repo: BookRepository
-  @Inject lateinit var bookFinder: BookFinder
+  @Inject lateinit var bookSearchParser: BookSearchParser
+  @Inject lateinit var bookSearchHandler: BookSearchHandler
 
   private lateinit var router: Router
 
@@ -70,10 +70,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   }
 
   private fun setupFromIntent(intent: Intent?) {
-    if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
-      //check if we can find something for this search
-      bookFinder.findBook(intent.getStringExtra(SearchManager.QUERY), intent.extras)
-    }
+    bookSearchParser.parse(intent)?.let { bookSearchHandler.handle(it) }
   }
 
   private fun setupRouter() {
