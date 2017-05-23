@@ -48,7 +48,7 @@ open class PrepareOpus : DefaultTask() {
 
     execute(
         command = "$ndkDir/ndk-build APP_ABI=\"mips64 mips x86_64 x86 arm64-v8a armeabi-v7a\" -j4",
-        timeOut = 60,
+        timeOut = 120,
         directory = jniDir
     )
   }
