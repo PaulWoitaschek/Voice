@@ -203,46 +203,4 @@ class SearchTest {
     //nothing should be found
     Assertions.assertThat(activity.prefs.currentBookId.value).isEqualTo(-1).withFailMessage("No book found for for given search query")
   }
-
-  @Test
-  fun testMediaFocusTitle() {
-    val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
-    //try to play something from an unknown author
-    intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/audio")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, "TestAuthor")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, "TestBook")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE, "First")
-    val activity = Robolectric.buildActivity(MainActivity::class.java, intent).create().start().get()
-
-    //nothing should be found
-    Assertions.assertThat(activity.prefs.currentBookId.value).isEqualTo(1).withFailMessage("No book found for for given search query")
-  }
-
-  @Test
-  fun testMediaFocusTitleNoSuccessBecauseOfBook() {
-    val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
-    //try to play something from an unknown author
-    intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/audio")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, "TestAuthor")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, "TestBook1")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE, "First")
-    val activity = Robolectric.buildActivity(MainActivity::class.java, intent).create().start().get()
-
-    //nothing should be found
-    Assertions.assertThat(activity.prefs.currentBookId.value).isEqualTo(-1).withFailMessage("No book found for for given search query")
-  }
-
-  @Test
-  fun testMediaFocusTitleNoSuccessBecauseOfArtist() {
-    val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
-    //try to play something from an unknown author
-    intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/audio")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, "TestAuthor1")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, "TestBook")
-    intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE, "First")
-    val activity = Robolectric.buildActivity(MainActivity::class.java, intent).create().start().get()
-
-    //nothing should be found
-    Assertions.assertThat(activity.prefs.currentBookId.value).isEqualTo(-1).withFailMessage("No book found for for given search query")
-  }
 }
