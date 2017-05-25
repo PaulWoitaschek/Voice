@@ -39,7 +39,7 @@ class BookSearchHandlerTest {
 
   private val anotherBookChapter1 = Chapter(File("/sdcard/AnotherBook/chapter1.mp3"), "anotherBookChapter1", 5000, 0, emptySparseArray())
   private val anotherBookChapter2 = Chapter(File("/sdcard/AnotherBook/chapter2.mp3"), "anotherBookChapter2", 10000, 0, emptySparseArray())
-  private val anotherBook = Book(1, Book.Type.SINGLE_FOLDER, "AnotherBookAuthor", anotherBookChapter1.file, 3000, "AnotherBook", listOf(anotherBookChapter1, anotherBookChapter2), 1F, "/sdcard/AnotherBook")
+  private val anotherBook = Book(2, Book.Type.SINGLE_FOLDER, "AnotherBookAuthor", anotherBookChapter1.file, 3000, "AnotherBook", listOf(anotherBookChapter1, anotherBookChapter2), 1F, "/sdcard/AnotherBook")
 
   private val bookToFindChapter1 = Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
   private val bookToFindChapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
