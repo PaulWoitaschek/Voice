@@ -36,31 +36,28 @@ import javax.inject.Inject
 
   private fun playAlbum(search: BookSearch) {
     if (search.album != null) {
-      val foundMatch = findAndPlayFirstMatch({
+      val foundMatch = findAndPlayFirstMatch {
         val nameMatches = it.name.contains(search.album, ignoreCase = true)
         val artistMatches = search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
         nameMatches && artistMatches
-      })
+      }
       if (foundMatch) return
     }
 
     playUnstructuredSearch(search.query)
   }
 
-  /**
-   * Look for anything that might match the query
-   * @param query The search string to be used
-   */
+  //Look for anything that might match the query
   private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
-      val foundMatch = findAndPlayFirstMatch({
+      val foundMatch = findAndPlayFirstMatch {
         val bookNameMatches = it.name.contains(query, ignoreCase = true)
         val authorMatches = it.author?.contains(query, ignoreCase = true) == true
         val chapterNameMatches = it.chapters.any {
           it.name.contains(query, ignoreCase = true)
         }
         bookNameMatches || authorMatches || chapterNameMatches
-      })
+      }
       if (foundMatch) return
     }
 
@@ -75,31 +72,21 @@ import javax.inject.Inject
   private fun playArtist(search: BookSearch) {
     i { "playArtist" }
     if (search.artist != null) {
-      val foundMatch = findAndPlayFirstMatch(
-          { it.author?.contains(search.artist, ignoreCase = true) == true },
-          { it.name.contains(search.artist, ignoreCase = true) }
-      )
+      val foundMatch = findAndPlayFirstMatch { it.author?.contains(search.artist, ignoreCase = true) == true }
       if (foundMatch) return
     }
 
     playUnstructuredSearch(search.query)
   }
 
-  @Suppress("LoopToCallChain")
-  /**
-   * Play the first book that matches to a selector. Returns if a book is being played
-   */
-  private fun findAndPlayFirstMatch(vararg selectors: (Book) -> Boolean): Boolean {
-    val books = repo.activeBooks
-    for (s in selectors) {
-      val book = books.firstOrNull { book -> s(book) }
-      if (book != null) {
-        i { "found a match ${book.name}" }
-        prefs.currentBookId.value = book.id
-        player.play()
-        return true
-      }
-    }
-    return false
+  // Play the first book that matches to a selector. Returns if a book is being played
+  private inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
+    val book = repo.activeBooks.firstOrNull(selector)
+    if (book != null) {
+      i { "found a match ${book.name}" }
+      prefs.currentBookId.value = book.id
+      player.play()
+      return true
+    } else return false
   }
 }
