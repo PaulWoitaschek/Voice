@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookSearch
 
 import android.provider.MediaStore
 import dagger.Reusable
+import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -22,6 +23,7 @@ import javax.inject.Inject
     private val player: PlayerController) {
 
   fun handle(bookSearch: BookSearch) {
+    i { "handle $bookSearch" }
     when (bookSearch.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(bookSearch.artist)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
@@ -34,14 +36,11 @@ import javax.inject.Inject
 
   private fun playAlbum(album: String?, artist: String?) {
     if (album != null) {
-      val match = repo.activeBooks.firstOrNull {
-        it.name.contains(album, ignoreCase = true) && (artist == null || it.author?.contains(artist, ignoreCase = true) == true)
-      }
-      i { "found a match ${match?.name}" }
-      if (match != null) {
-        prefs.currentBookId.value = match.id
-        player.play()
-      }
+      findAndPlayFirstMatch({
+        val nameMatches = it.name.contains(album, ignoreCase = true)
+        val artistMatches = artist == null || it.author?.contains(artist, ignoreCase = true) == true
+        nameMatches && artistMatches
+      })
     }
   }
 
@@ -51,18 +50,15 @@ import javax.inject.Inject
    */
   private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
-      val match = repo.activeBooks.firstOrNull {
-        it.name.contains(query, ignoreCase = true)
-            || it.author?.contains(query, ignoreCase = true) == true
-            || it.chapters.firstOrNull {
+      findAndPlayFirstMatch({
+        val bookNameMatches = it.name.contains(query, ignoreCase = true)
+        val authorMatches = it.author?.contains(query, ignoreCase = true) == true
+        val chapterNameMatches = it.chapters.any {
           it.name.contains(query, ignoreCase = true)
-        } != null
-      }
-      i { "found a match ${match?.name}" }
-      if (match != null) {
-        prefs.currentBookId.value = match.id
-        player.play()
-      }
+        }
+        bookNameMatches || authorMatches || chapterNameMatches
+      })
+
     } else {
       //continue playback
       i { "continuing from search without query" }
@@ -74,19 +70,30 @@ import javax.inject.Inject
   }
 
   private fun playArtist(query: String?) {
+    i { "playArtist $query" }
     if (query != null) {
-      val match = repo.activeBooks.firstOrNull {
-        it.author?.contains(query, ignoreCase = true) == true
-      }
-      i { "found a match ${match?.name}" }
-      if (match != null) {
-        prefs.currentBookId.value = match.id
-        player.play()
-      }
+      findAndPlayFirstMatch(
+          { it.author?.contains(query, ignoreCase = true) == true },
+          { it.name.contains(query, ignoreCase = true) }
+      )
     } else {
       //continue playback
       i { "continuing from search without query" }
       player.play()
+    }
+  }
+
+  @Suppress("LoopToCallChain")
+  private fun findAndPlayFirstMatch(vararg selectors: (Book) -> Boolean) {
+    val books = repo.activeBooks
+    for (s in selectors) {
+      val book = books.firstOrNull { book -> s(book) }
+      if (book != null) {
+        i { "found a match ${book.name}" }
+        prefs.currentBookId.value = book.id
+        player.play()
+        return
+      }
     }
   }
 }
