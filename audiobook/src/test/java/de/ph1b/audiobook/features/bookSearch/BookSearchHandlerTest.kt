@@ -126,6 +126,27 @@ class BookSearchHandlerTest {
   }
 
   @Test
+  fun testMediaFocusArtistInTitleNoArtistInBook() {
+    val bookToFind = this.bookToFind.copy(author = null, name = "The book of Tim")
+    given { repo.activeBooks }.thenReturn(listOf(bookToFind))
+
+    val bookSearch = BookSearch(
+        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
+        query = "Tim",
+        artist = "Tim"
+    )
+    searchHandler.handle(bookSearch)
+
+    inOrder(currentBookIdPref, player).apply {
+      verify(currentBookIdPref).set(bookToFind.id)
+      verify(player).play()
+    }
+
+    verifyNoMoreInteractions(currentBookIdPref)
+    verifyNoMoreInteractions(player)
+  }
+
+  @Test
   fun testMediaFocusArtistNoSuccess() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
