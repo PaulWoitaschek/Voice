@@ -50,11 +50,11 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   fun notify(what: Type, book: Book) {
-    val c = book.currentChapter()
+    val chapter = book.currentChapter()
     val playState = playStateManager.playState
 
     val bookName = book.name
-    val chapterName = c.name
+    val chapterName = chapter.name
     val author = book.author
     val position = book.time
 
@@ -85,7 +85,7 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
       mediaMetaDataBuilder
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-          .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
+          .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, chapter.duration.toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
           .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
