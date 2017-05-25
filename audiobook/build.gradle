@@ -26,18 +26,10 @@ android {
     }
 
     signingConfigs {
-        def signingPropFile = new File('signing.properties')
-        def signingDetailsProvider = new SigningDetailsProvider()
-        def signingDetails = signingDetailsProvider.provide(signingPropFile)
-        debug {
-            if (signingDetails != null) {
-                storeFile = signingDetails.storeFile
-                storePassword = signingDetails.storePassword
-                keyAlias = signingDetails.keyAlias
-                keyPassword = signingDetails.keyPassword
-            }
-        }
         release {
+            def signingPropFile = new File('signing.properties')
+            def signingDetailsProvider = new SigningDetailsProvider()
+            def signingDetails = signingDetailsProvider.provide(signingPropFile)
             if (signingDetails != null) {
                 storeFile = signingDetails.storeFile
                 storePassword = signingDetails.storePassword
@@ -133,3 +125,4 @@ dependencies {
 
 // task that is an alias for f-droid
 task fdroid(dependsOn: ':audiobook:assembleOpensourceRelease')
+task release(dependsOn: ':audiobook:assembleProprietaryRelease')
