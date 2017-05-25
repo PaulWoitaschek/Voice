@@ -45,8 +45,7 @@ class BookSearchHandlerTest {
   private val bookToFindChapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
   private val bookToFind = Book(1, Book.Type.SINGLE_FOLDER, "Book1Author", bookToFindChapter2.file, 3000, "Book1", listOf(bookToFindChapter1, bookToFindChapter2), 1F, "/sdcard/Book1")
 
-  @Before
-  fun setUp() {
+  @Before fun setUp() {
     MockitoAnnotations.initMocks(this)
 
     given { repo.activeBooks }.thenReturn(listOf(anotherBook, bookToFind))
@@ -55,8 +54,7 @@ class BookSearchHandlerTest {
     searchHandler = BookSearchHandler(repo, prefs, player)
   }
 
-  @Test
-  fun testUnstructuredSearchByBook() {
+  @Test fun testUnstructuredSearchByBook() {
     val bookSearch = BookSearch(query = bookToFind.name)
     searchHandler.handle(bookSearch)
 
@@ -69,8 +67,7 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test
-  fun testUnstructuredSearchByArtist() {
+  @Test fun testUnstructuredSearchByArtist() {
     val bookSearch = BookSearch(query = bookToFind.author)
     searchHandler.handle(bookSearch)
 
@@ -83,8 +80,7 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test
-  fun testUnstructuredSearchByChapter() {
+  @Test fun testUnstructuredSearchByChapter() {
     val bookSearch = BookSearch(query = bookToFindChapter1.name)
     searchHandler.handle(bookSearch)
 
@@ -97,8 +93,7 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test
-  fun testMediaFocusAnyNoneFoundButPlayed() {
+  @Test fun testMediaFocusAnyNoneFoundButPlayed() {
     given { currentBookIdPref.get() }.thenReturn(-1)
 
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
@@ -108,8 +103,7 @@ class BookSearchHandlerTest {
     verify(player).play()
   }
 
-  @Test
-  fun testMediaFocusArtist() {
+  @Test fun testMediaFocusArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author
@@ -125,8 +119,7 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test
-  fun testMediaFocusArtistInTitleNoArtistInBook() {
+  @Test fun testMediaFocusArtistInTitleNoArtistInBook() {
     val bookToFind = this.bookToFind.copy(author = null, name = "The book of Tim")
     given { repo.activeBooks }.thenReturn(listOf(bookToFind))
 
@@ -146,20 +139,7 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test
-  fun testMediaFocusArtistNoSuccess() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-        artist = "UnknownAuthor"
-    )
-    searchHandler.handle(bookSearch)
-
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @Test
-  fun testMediaFocusAlbum() {
+  @Test fun testMediaFocusAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author,
@@ -171,32 +151,6 @@ class BookSearchHandlerTest {
       verify(currentBookIdPref).set(bookToFind.id)
       verify(player).play()
     }
-
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @Test
-  fun testMediaFocusAlbumNoSuccessBecauseOfArtist() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = "UnknownAuthor",
-        album = bookToFind.name
-    )
-    searchHandler.handle(bookSearch)
-
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @Test
-  fun testMediaFocusAlbumNoSuccessBecauseOfAlbum() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author,
-        album = "UnknownBook"
-    )
-    searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
     verifyNoMoreInteractions(player)
@@ -217,51 +171,6 @@ class BookSearchHandlerTest {
       verify(currentBookIdPref).set(bookToFind.id)
       verify(player).play()
     }
-
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @Test
-  fun testMediaFocusPlaylistWithAlbumInsteadOfPlaylist() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author,
-        playList = bookToFind.name
-    )
-    searchHandler.handle(bookSearch)
-
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-  @Test
-  fun testMediaFocusPlaylistNoSuccessBecauseOfArtist() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = "UnknownAuthor",
-        playList = bookToFind.name
-    )
-    searchHandler.handle(bookSearch)
-
-    verifyNoMoreInteractions(currentBookIdPref)
-    verifyNoMoreInteractions(player)
-  }
-
-  @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-  @Test
-  fun testMediaFocusPlaylistNoSuccessBecauseOfAlbum() {
-    val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author,
-        playList = "UnknownBook"
-    )
-    searchHandler.handle(bookSearch)
 
     verifyNoMoreInteractions(currentBookIdPref)
     verifyNoMoreInteractions(player)

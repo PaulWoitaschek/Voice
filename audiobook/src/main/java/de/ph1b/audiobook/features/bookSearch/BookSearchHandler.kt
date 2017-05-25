@@ -22,26 +22,29 @@ import javax.inject.Inject
     private val prefs: PrefsManager,
     private val player: PlayerController) {
 
-  fun handle(bookSearch: BookSearch) {
-    i { "handle $bookSearch" }
-    when (bookSearch.mediaFocus) {
-      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(bookSearch.artist)
+  fun handle(search: BookSearch) {
+    i { "handle $search" }
+    when (search.mediaFocus) {
+      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
-        playAlbum(bookSearch.album, bookSearch.artist)
+        playAlbum(search)
       }
-      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(bookSearch.playList ?: bookSearch.album, bookSearch.artist)
-      else -> playUnstructuredSearch(bookSearch.query)
+      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(search)
+      else -> playUnstructuredSearch(search.query)
     }
   }
 
-  private fun playAlbum(album: String?, artist: String?) {
-    if (album != null) {
-      findAndPlayFirstMatch({
-        val nameMatches = it.name.contains(album, ignoreCase = true)
-        val artistMatches = artist == null || it.author?.contains(artist, ignoreCase = true) == true
+  private fun playAlbum(search: BookSearch) {
+    if (search.album != null) {
+      val foundMatch = findAndPlayFirstMatch({
+        val nameMatches = it.name.contains(search.album, ignoreCase = true)
+        val artistMatches = search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
         nameMatches && artistMatches
       })
+      if (foundMatch) return
     }
+
+    playUnstructuredSearch(search.query)
   }
 
   /**
@@ -50,7 +53,7 @@ import javax.inject.Inject
    */
   private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
-      findAndPlayFirstMatch({
+      val foundMatch = findAndPlayFirstMatch({
         val bookNameMatches = it.name.contains(query, ignoreCase = true)
         val authorMatches = it.author?.contains(query, ignoreCase = true) == true
         val chapterNameMatches = it.chapters.any {
@@ -58,33 +61,35 @@ import javax.inject.Inject
         }
         bookNameMatches || authorMatches || chapterNameMatches
       })
-
-    } else {
-      //continue playback
-      i { "continuing from search without query" }
-      if (prefs.currentBookId.value == -1L) {
-        repo.activeBooks.firstOrNull()?.id?.let { prefs.currentBookId.set(it) }
-      }
-      player.play()
+      if (foundMatch) return
     }
+
+    //continue playback
+    i { "continuing from search without query" }
+    if (prefs.currentBookId.value == -1L) {
+      repo.activeBooks.firstOrNull()?.id?.let { prefs.currentBookId.set(it) }
+    }
+    player.play()
   }
 
-  private fun playArtist(query: String?) {
-    i { "playArtist $query" }
-    if (query != null) {
-      findAndPlayFirstMatch(
-          { it.author?.contains(query, ignoreCase = true) == true },
-          { it.name.contains(query, ignoreCase = true) }
+  private fun playArtist(search: BookSearch) {
+    i { "playArtist" }
+    if (search.artist != null) {
+      val foundMatch = findAndPlayFirstMatch(
+          { it.author?.contains(search.artist, ignoreCase = true) == true },
+          { it.name.contains(search.artist, ignoreCase = true) }
       )
-    } else {
-      //continue playback
-      i { "continuing from search without query" }
-      player.play()
+      if (foundMatch) return
     }
+
+    playUnstructuredSearch(search.query)
   }
 
   @Suppress("LoopToCallChain")
-  private fun findAndPlayFirstMatch(vararg selectors: (Book) -> Boolean) {
+  /**
+   * Play the first book that matches to a selector. Returns if a book is being played
+   */
+  private fun findAndPlayFirstMatch(vararg selectors: (Book) -> Boolean): Boolean {
     val books = repo.activeBooks
     for (s in selectors) {
       val book = books.firstOrNull { book -> s(book) }
@@ -92,8 +97,9 @@ import javax.inject.Inject
         i { "found a match ${book.name}" }
         prefs.currentBookId.value = book.id
         player.play()
-        return
+        return true
       }
     }
+    return false
   }
 }
