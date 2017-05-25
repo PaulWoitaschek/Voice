@@ -6,7 +6,7 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * Analyzes media files for meta data and duration
+ * Analyzes media files for meta data and duration.
  *
  * @author Paul Woitaschek
  */

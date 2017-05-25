@@ -5,7 +5,7 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * Extracts meta data from media files. First call prepare.
+ * Extracts meta data from media files. This class is thread safe.
  *
  * @author Paul Woitaschek
  */
@@ -14,7 +14,7 @@ class MetaDataAnalyzer @Inject constructor() {
   private val mmr = MediaMetadataRetriever()
   private var file: File? = null
 
-  fun parse(file: File): MetaData {
+  @Synchronized fun parse(file: File): MetaData {
     this.file = file
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
     val fallback = chapterNameFallback()
