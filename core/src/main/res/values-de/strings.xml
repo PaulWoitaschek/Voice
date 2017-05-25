@@ -72,6 +72,8 @@
     <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
     <!--Settings-->
     <string name="action_settings">Einstellungen</string>
+    <string name="pref_show_cover_art_on_lockscreen">Cover auf Sperrbildschirm</string>
+    <string name="pref_show_cover_art_on_lockscreen_hint">Zeigt während der Wiedergabe das Cover des aktuellen Hörbuchs anstatt deines Hintergrundbilds auf dem Sperrbildschirm an.</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
     <string name="pref_resume_after_call">Nach Anruf fortsetzen</string>

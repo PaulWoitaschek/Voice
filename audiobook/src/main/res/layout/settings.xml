@@ -35,6 +35,10 @@
                 layout="@layout/setting_row_double"/>
 
             <include
+                android:id="@+id/showCoverArtOnLockscreen"
+                layout="@layout/setting_row_switch"/>
+
+            <include
                 android:id="@+id/resumePlayback"
                 layout="@layout/setting_row_switch"/>
 

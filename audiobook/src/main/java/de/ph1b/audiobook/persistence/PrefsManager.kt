@@ -16,6 +16,7 @@ import javax.inject.Singleton
 @Singleton class PrefsManager
 @Inject constructor(
     val theme: Preference<ThemeUtil.Theme>,
+    @ShowCoverArtOnLockscreen val showCoverArtOnLockscreen: Preference<Boolean>,
     @ResumeOnReplug val resumeOnReplug: Preference<Boolean>,
     @BookmarkOnSleepTimer val bookmarkOnSleepTimer: Preference<Boolean>,
     @ShakeToReset val shakeToReset: Preference<Boolean>,
