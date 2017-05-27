@@ -3,8 +3,6 @@ package de.ph1b.audiobook.persistence.internals
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import e
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,21 +21,13 @@ import javax.inject.Singleton
   }
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    try {
-      val upgradeHelper = DataBaseUpgradeHelper(db)
-      upgradeHelper.upgrade(oldVersion)
-    } catch (ex: InvalidPropertiesFormatException) {
-      e(ex) { "Error at upgrade" }
-      BookTable.dropTableIfExists(db)
-      ChapterTable.dropTableIfExists(db)
-      BookmarkTable.dropTableIfExists(db)
-      onCreate(db)
-    }
+    val migrator = DataBaseMigrator(db)
+    migrator.upgrade(oldVersion)
   }
 
   companion object {
 
-    private val DATABASE_VERSION = 39
-    private val DATABASE_NAME = "autoBookDB"
+    private const val DATABASE_VERSION = 39
+    private const val DATABASE_NAME = "autoBookDB"
   }
 }
