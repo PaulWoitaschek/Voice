@@ -9,7 +9,7 @@ import java.util.*
  *
  * @author Paul Woitaschek
  */
-class Migration25 : Migration {
+class Migration25to26 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     // get all books

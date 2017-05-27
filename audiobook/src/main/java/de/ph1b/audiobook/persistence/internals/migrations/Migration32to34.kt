@@ -11,7 +11,7 @@ import de.ph1b.audiobook.persistence.internals.string
 import i
 
 
-class Migration32 : Migration {
+class Migration32to34 : Migration {
 
   private val BOOKMARK_TABLE_NAME = "tableBookmarks"
   private val BM_PATH = "bookmarkPath"

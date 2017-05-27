@@ -6,7 +6,7 @@ import d
 import org.json.JSONObject
 import java.io.File
 
-class Migration28 : Migration {
+class Migration28to29 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"), null, null, null, null, null).use { cursor ->

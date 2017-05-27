@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
  *
  * @author Paul Woitaschek
  */
-class Migration34 : Migration {
+class Migration34to35 : Migration {
 
   private val TABLE_NAME = "tableBooks"
 

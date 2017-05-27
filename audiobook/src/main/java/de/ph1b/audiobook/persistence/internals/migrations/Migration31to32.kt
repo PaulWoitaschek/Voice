@@ -12,7 +12,7 @@ import java.util.*
  * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
-class Migration31 : Migration {
+class Migration31to32 : Migration {
 
   private val BOOK_ID = "bookId"
   private val TABLE_BOOK = "tableBooks"

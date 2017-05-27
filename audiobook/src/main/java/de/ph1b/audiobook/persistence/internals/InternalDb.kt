@@ -22,12 +22,12 @@ import javax.inject.Singleton
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
     val migrator = DataBaseMigrator(db)
-    migrator.upgrade(oldVersion)
+    migrator.upgrade(oldVersion, newVersion)
   }
 
   companion object {
 
-    private const val DATABASE_VERSION = 39
+    private const val DATABASE_VERSION = 40
     private const val DATABASE_NAME = "autoBookDB"
   }
 }

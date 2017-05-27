@@ -10,7 +10,7 @@ import de.ph1b.audiobook.persistence.internals.moveToNextLoop
  * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
-class Migration30 : Migration {
+class Migration30to31 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     // book keys

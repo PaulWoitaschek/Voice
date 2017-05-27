@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
  *
  * @author Paul Woitaschek
  */
-class Migration27 : Migration {
+class Migration27to28 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK_COPY")

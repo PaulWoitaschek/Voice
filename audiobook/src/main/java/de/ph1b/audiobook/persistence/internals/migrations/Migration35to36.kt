@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.persistence.internals.*
 
 
-class Migration35 : Migration {
+class Migration35to36 : Migration {
 
   private val ID = "bookId"
   private val NAME = "bookName"

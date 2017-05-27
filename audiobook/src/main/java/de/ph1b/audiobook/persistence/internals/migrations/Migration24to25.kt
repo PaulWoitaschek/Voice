@@ -20,7 +20,7 @@ import java.util.*
  * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
-class Migration24 : Migration {
+class Migration24to25 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"

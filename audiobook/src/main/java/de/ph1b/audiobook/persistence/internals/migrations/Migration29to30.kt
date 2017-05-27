@@ -8,7 +8,7 @@ import org.json.JSONObject
 import java.util.*
 
 @SuppressLint("Recycle")
-class Migration29 : Migration {
+class Migration29to30 : Migration {
 
   // tables
   private val TABLE_BOOK = "tableBooks"

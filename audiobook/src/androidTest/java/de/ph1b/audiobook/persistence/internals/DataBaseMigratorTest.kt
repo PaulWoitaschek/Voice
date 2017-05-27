@@ -24,7 +24,7 @@ class DataBaseMigratorTest {
 
     val currentVersion = InternalDb(context).readableDatabase.version
 
-    upgrade.upgrade(currentVersion)
+    upgrade.upgrade(1, currentVersion)
 
     val bookTableQuery = helper.writableDatabase.query(BookTable.TABLE_NAME)
     assertThat(bookTableQuery.count).isEqualTo(0)

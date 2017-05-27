@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 
 
-class Migration38 : Migration {
+class Migration38to39 : Migration {
   override fun migrate(db: SQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned
     val lastModifiedCv = ContentValues().apply {

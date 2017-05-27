@@ -9,7 +9,7 @@ import de.ph1b.audiobook.persistence.internals.*
  *
  * @author Paul Woitaschek
  */
-class Migration36 : Migration {
+class Migration36to37 : Migration {
 
   private val TABLE_NAME = "tableChapters"
   private val DURATION = "chapterDuration"
