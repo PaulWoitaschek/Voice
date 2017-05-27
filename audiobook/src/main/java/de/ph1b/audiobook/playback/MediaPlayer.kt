@@ -246,18 +246,18 @@ constructor(
             if (autoRewind != 0) {
               // get the raw rewinded position
               val currentPosition = player.currentPositionOrZero
-              var maybeSeekTo = currentPosition - autoRewind
+              var maybeSeekTo = (currentPosition - autoRewind)
                   .coerceAtLeast(0) // make sure not to get into negative time
 
               // now try to find the current chapter mark and make sure we don't auto-rewind
               // to a previous mark
               val chapterMarks = it.currentChapter().marks
-              chapterMarks.forEachIndexed(reversed = true) findStartOfmark@ { index, startOfMark, _ ->
+              chapterMarks.forEachIndexed(reversed = true) findStartOfMark@ { index, startOfMark, _ ->
                 if (startOfMark <= currentPosition) {
                   val next = chapterMarks.keyAtOrNull(index + 1)
                   if (next == null || next > currentPosition) {
                     maybeSeekTo = maybeSeekTo.coerceAtLeast(startOfMark.toLong())
-                    return@findStartOfmark
+                    return@findStartOfMark
                   }
                 }
               }
