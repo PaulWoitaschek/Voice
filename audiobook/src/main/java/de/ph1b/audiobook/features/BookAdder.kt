@@ -197,8 +197,11 @@ import javax.inject.Singleton
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
-      val withoutExtension = rootFile.nameWithoutExtension
-      bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
+      bookName = result.chapterName
+      if (bookName.isNullOrEmpty()) {
+        val withoutExtension = rootFile.nameWithoutExtension
+        bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
+      }
     }
     bookName!!
 
