@@ -5,6 +5,7 @@ machine:
   environment:
     GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx4048m -XX:+HeapDumpOnOutOfMemoryError"'
     ANDROID_NDK_HOME: ${ANDROID_NDK}
+    QEMU_AUDIO_DRV: none # Disable emulator audio
   java:
     version: oraclejdk8
 dependencies:
@@ -20,3 +21,11 @@ dependencies:
   override:
     # workaround from https://code.google.com/p/android/issues/detail?id=212128 for constraint layout
     - ./gradlew dependencies || true
+test:
+  pre:
+    - emulator -avd circleci-android24 -no-window:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+  override:
+    - ./gradlew connectedAndroidTest
