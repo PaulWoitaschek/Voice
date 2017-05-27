@@ -44,6 +44,7 @@ data class Book(
     require(chapters.find { it.file == currentFile } != null, { "$chapters must contain current $currentFile" })
     require(name.isNotEmpty(), { "name must not be empty" })
     require(root.isNotEmpty(), { "root must not be empty" })
+    require(time >= 0) { "time must not be negative" }
   }
 
   /** The transition name for the cover transition. */
