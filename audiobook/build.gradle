@@ -103,6 +103,9 @@ dependencies {
 
     testCompile libraries.okHttp
 
+    androidTestCompile libraries.supportTestRunner
+    androidTestCompile libraries.assertJ
+
     compile libraries.rxJava
     compile libraries.rxAndroid
     compile libraries.rxInterop

@@ -39,6 +39,7 @@ ext.libraries = [
         supportTransitions     : "com.android.support:transition:$versions.support",
         supportV13             : "com.android.support:support-v13:$versions.support",
         supportConstraintLayout: "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
+        supportAnnotations     : "com.android.support:support-annotations:$versions.support",
 
         // ui
         picasso                : "com.squareup.picasso:picasso:$versions.picasso",
@@ -68,4 +69,6 @@ ext.libraries = [
         assertJ                : "org.assertj:assertj-core:$versions.assertJ",
         okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
         mockito                : "org.mockito:mockito-core:$versions.mockito",
+        supportTestRunner      : "com.android.support.test:runner:0.5"
+
 ]
