@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.features.bookPlaying.Equalizer
+import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.misc.value
@@ -106,9 +107,13 @@ constructor(
     }.subscribe {
       // update the book
       bookSubject.value?.let { book ->
-        val index = player.currentWindowIndex
-        val copy = book.copy(time = it.toInt(), currentFile = book.chapters[index].file)
-        bookSubject.onNext(copy)
+        if (it < 0) {
+          CrashlyticsProxy.logException(IllegalArgumentException("Negative time emitted by player: $it"))
+        } else {
+          val index = player.currentWindowIndex
+          val copy = book.copy(time = it.toInt(), currentFile = book.chapters[index].file)
+          bookSubject.onNext(copy)
+        }
       }
     }
   }
