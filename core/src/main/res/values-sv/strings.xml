@@ -38,13 +38,13 @@
     <string name="action_time_change">Hoppa till</string>
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Mapparna får inte vara en undermapp till varandra:</string>
-    <string name="audiobook_folders_title">Ljudboksmapp</string>
+    <string name="audiobook_folders_title">Ljudboksmappar</string>
     <string name="no_audiobook_folders_title">Välj mapp nu</string>
     <string name="no_audiobook_folders_summary_start">Välj din ljudboks mapp(ar) nu.</string>
     <string name="no_audiobook_folders_end">Du kan välja din huvudsakliga mapp som innehåller olika böcker. Eller så kan du välja bara en enda bok.</string>
     <string name="chosen_folder_description">Vald mapp:</string>
     <string name="delete_folder">Ta bort från bibliotek?</string>
-    <string name="delete_folder_content">Vill du ta bort följande mapp från biblioteket?</string>
+    <string name="delete_folder_content">Vill du ta bort följande mappen från biblioteket?</string>
     <string name="folder_add_single_book">En bok</string>
     <string name="folder_add_collection">Folder with multiple books</string>
     <string name="for_example">t.ex</string>
@@ -83,8 +83,8 @@
         <item quantity="other">%d sekunder</item>
     </plurals>
     <string name="pref_seek_time">Hoppa mängd</string>
-    <string name="pref_root_folder_title">Ljudboks mapp</string>
-    <string name="pref_root_folder_summary">De valda ljudboksmapparna.</string>
+    <string name="pref_root_folder_title">Ljudboksmapp</string>
+    <string name="pref_root_folder_summary">Valda ljudboksmapparna.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Dag</string>
     <string name="pref_theme_night">Natt</string>

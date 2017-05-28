@@ -10,12 +10,12 @@
     <string name="action_sleep">Таймер сна</string>
     <plurals name="pauses_after">
         <item quantity="one">Приостановить через %d минуту.</item>
-        <item quantity="few">Приостановить через %d минут.</item>
+        <item quantity="few">Приостановить через %d минуты.</item>
         <item quantity="many">Приостановить через %d минут.</item>
         <item quantity="other">Приостановить через %d минут.</item>
     </plurals>
     <string name="rewind">Перемотать назад</string>
-    <string name="fast_forward">Перемотать вперед</string>
+    <string name="fast_forward">Перемотать вперёд</string>
     <string name="previous_track">Предыдущий файл</string>
     <string name="next_track">Следующий файл</string>
     <string name="play">Воспроизвести</string>
@@ -43,7 +43,7 @@
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
     <string name="no_audiobook_folders_title">Выбор папки</string>
     <string name="no_audiobook_folders_summary_start">Выберите папку(и) с аудиокнигами.</string>
-    <string name="no_audiobook_folders_end">Вы можете выбрать папку в которой содержится одна или несколько книг.</string>
+    <string name="no_audiobook_folders_end">Вы можете выбрать папку, в которой содержится одна или несколько книг.</string>
     <string name="chosen_folder_description">Выбранная папка:</string>
     <string name="delete_folder">Удалить из библиотеки?</string>
     <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
@@ -54,7 +54,7 @@
     <string name="content_is_folder">Папка</string>
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Перейти на папку выше</string>
-    <string name="permission_read_ext_explanation">Приложению необходим доступ к вашей памяти, чтобы найти и воспроизвести аудиокниги.</string>
+    <string name="permission_read_ext_explanation">Приложению необходим доступ к хранилищу устройства, чтобы найти и воспроизвести аудиокниги.</string>
     <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
     <string name="permission_retry">Повторить?</string>
     <string name="permission_goto_settings">Настройки</string>
@@ -76,13 +76,13 @@
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
     <string name="pref_resume_on_replug_hint">Продолжить воспроизведение при повторном подключении наушников.</string>
-    <string name="pref_resume_after_call">Продолжить воспроизведения после звонка</string>
+    <string name="pref_resume_after_call">Продолжить воспроизведение после звонка</string>
     <string name="pref_resume_after_call_hint">Продолжает воспроизведение книги после завершения телефонного звонка</string>
     <string name="min">%s минут</string>
     <string name="delete_last_number">Удаляет последнее введенное число</string>
     <plurals name="seconds">
         <item quantity="one">%d секунду</item>
-        <item quantity="few">%d секунд</item>
+        <item quantity="few">%d секунды</item>
         <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
@@ -98,7 +98,7 @@
     <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматически перемотать назад на %d секунду после ручного приостановления.</item>
-        <item quantity="few">Автоматически перемотать назад на %d секунд после ручного приостановления.</item>
+        <item quantity="few">Автоматически перемотать назад на %d секунды после ручного приостановления.</item>
         <item quantity="many">Автоматически перемотать назад на %d секунд после ручного приостановления.</item>
         <item quantity="other">Автоматически перемотать назад на %d секунд после использования паузы.</item>
     </plurals>
