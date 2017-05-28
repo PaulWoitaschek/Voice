@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.media.AudioManager
-import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -10,7 +9,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.features.bookPlaying.Equalizer
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.misc.value
@@ -73,10 +71,13 @@ constructor(
 
     // upon position change update the book
     player.onPositionDiscontinuity {
-      i { "onPositionDiscontinuity with currentPos=${player.currentPositionOrZero}" }
+      val position = player.currentPosition
+          .coerceAtLeast(0)
+          .toInt()
+      i { "onPositionDiscontinuity with currentPos=$position" }
       bookSubject.value?.let {
         val index = player.currentWindowIndex
-        bookSubject.onNext(it.copy(time = player.currentPositionOrZero.toInt(), currentFile = it.chapters[index].file))
+        bookSubject.onNext(it.copy(time = position, currentFile = it.chapters[index].file))
       }
     }
 
@@ -101,19 +102,16 @@ constructor(
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
-            .filter { it != C.TIME_UNSET }
             .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
       // update the book
       bookSubject.value?.let { book ->
-        if (it < 0) {
-          CrashlyticsProxy.logException(IllegalArgumentException("Negative time emitted by player: $it"))
-        } else {
-          val index = player.currentWindowIndex
-          val copy = book.copy(time = it.toInt(), currentFile = book.chapters[index].file)
-          bookSubject.onNext(copy)
-        }
+        val index = player.currentWindowIndex
+        val time = it.coerceAtLeast(0)
+            .toInt()
+        val copy = book.copy(time = time, currentFile = book.chapters[index].file)
+        bookSubject.onNext(copy)
       }
     }
   }
@@ -159,7 +157,8 @@ constructor(
       return
 
     bookSubject.value?.let {
-      val currentPos = player.currentPositionOrZero
+      val currentPos = player.currentPosition
+          .coerceAtLeast(0)
       val duration = player.duration
       val delta = seekTime * 1000
 
@@ -191,7 +190,7 @@ constructor(
 
   private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
     val previousChapter = book.previousChapter()
-    if (player.currentPositionOrZero > 2000 || previousChapter == null) {
+    if (player.currentPosition > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -250,7 +249,8 @@ constructor(
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
               // get the raw rewinded position
-              val currentPosition = player.currentPositionOrZero
+              val currentPosition = player.currentPosition
+                  .coerceAtLeast(0)
               var maybeSeekTo = (currentPosition - autoRewind)
                   .coerceAtLeast(0) // make sure not to get into negative time
 
@@ -310,12 +310,6 @@ constructor(
       player.setPlaybackSpeed(speed)
     }
   }
-
-  private val ExoPlayer.currentPositionOrZero: Long
-    get() {
-      val position = currentPosition
-      return if (position == C.TIME_UNSET) 0 else position
-    }
 
   /** The direction to skip. */
   enum class Direction {
