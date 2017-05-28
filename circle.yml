@@ -23,7 +23,7 @@ dependencies:
     - ./gradlew dependencies || true
 test:
   pre:
-    - emulator -avd circleci-android24 -no-window -gpu off:
+    - emulator -avd circleci-android22 -no-window -gpu off:
         background: true
         parallel: true
     - circle-android wait-for-boot
