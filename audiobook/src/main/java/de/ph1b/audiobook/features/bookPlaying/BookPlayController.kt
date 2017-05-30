@@ -11,6 +11,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.audio.Equalizer
+import de.ph1b.audiobook.features.audio.LoudnessDialog
+import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
@@ -37,6 +40,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
   @Inject lateinit var equalizer: Equalizer
+  @Inject lateinit var loudnessGain: LoudnessGain
 
   private val data = ArrayList<BookPlayChapter>()
   private val bookId = bundle.getLong(NI_BOOK_ID)
@@ -204,7 +208,12 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   }
 
   private fun setupSpinner() {
-    spinnerAdapter = MultiLineSpinnerAdapter(spinner = bookSpinner, context = activity, unselectedTextColor = activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)), resolveName = BookPlayChapter::correctedName)
+    spinnerAdapter = MultiLineSpinnerAdapter(
+        spinner = bookSpinner,
+        context = activity,
+        unselectedTextColor = activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)),
+        resolveName = BookPlayChapter::correctedName
+    )
     bookSpinner.adapter = spinnerAdapter
 
     bookSpinner.itemSelections {
@@ -223,6 +232,9 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     sleepTimerItem = menu.findItem(R.id.action_sleep)
     val equalizerItem = menu.findItem(R.id.action_equalizer)
     equalizerItem.isVisible = equalizer.exists
+
+    // disable loudness gain item if not supported
+    menu.findItem(R.id.loudness).isEnabled = loudnessGain.supported
 
     toolbar.setNavigationOnClickListener { router.popController(this) }
     toolbar.setOnMenuItemClickListener {
@@ -253,6 +265,10 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
         }
         R.id.action_equalizer -> {
           equalizer.launch(activity)
+          true
+        }
+        R.id.loudness -> {
+          LoudnessDialog().showDialog(router)
           true
         }
         else -> false

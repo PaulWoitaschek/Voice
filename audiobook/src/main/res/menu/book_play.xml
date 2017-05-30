@@ -29,6 +29,11 @@
       app:showAsAction="ifRoom"/>
 
   <item
+      android:id="@+id/loudness"
+      android:title="@string/loudness"
+      app:showAsAction="ifRoom"/>
+
+  <item
       android:id="@+id/action_time_change"
       android:title="@string/action_time_change"
       app:showAsAction="never"/>
@@ -37,4 +42,5 @@
       android:id="@+id/action_settings"
       android:title="@string/action_settings"
       app:showAsAction="never"/>
+
 </menu>

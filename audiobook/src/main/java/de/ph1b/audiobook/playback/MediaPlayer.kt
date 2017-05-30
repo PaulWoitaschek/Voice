@@ -8,7 +8,8 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import d
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.features.bookPlaying.Equalizer
+import de.ph1b.audiobook.features.audio.Equalizer
+import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.misc.value
@@ -34,6 +35,7 @@ constructor(
     private val playStateManager: PlayStateManager,
     private val prefs: PrefsManager,
     private val equalizer: Equalizer,
+    private val loudnessGain: LoudnessGain,
     private val wakeLockManager: WakeLockManager,
     private val dataSourceConverter: DataSourceConverter) {
 
@@ -82,7 +84,10 @@ constructor(
     }
 
     // update equalizer with new audio session upon arrival
-    player.onAudioSessionId { equalizer.update(it) }
+    player.onAudioSessionId {
+      equalizer.update(it)
+      loudnessGain.update(it)
+    }
 
     stateSubject.subscribe {
       i { "state changed to $it" }
