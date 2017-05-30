@@ -1,13 +1,11 @@
 root = true
 
-# 2 space intendation
-[*.{kt,yml,xml,gradle}]
+[*]
+end_of_line = lf
+insert_final_newline = true
 indent_style = space
 indent_size = 2
 continuation_indent_size = 4
 trim_trailing_whitespace = true
 
-# posix new line at end of file
-[*]
-end_of_line = lf
-insert_final_newline = true
+
