@@ -46,7 +46,7 @@ class LoudnessDialog : DialogController() {
     maxValue.text = format(seekBar.max)
 
     return MaterialDialog.Builder(activity!!)
-        .title(R.string.loudness)
+        .title(R.string.volume_boost)
         .customView(view, true)
         .build()
   }
