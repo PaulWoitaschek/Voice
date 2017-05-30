@@ -1,12 +1,12 @@
 project.ext {
-    preDexEnabled = !(System.getenv('DISABLE_PREDEX') == "true")
-    println('PREDEX ' + (preDexEnabled ? 'ENABLED' : 'DISABLED'))
+  preDexEnabled = !(System.getenv('DISABLE_PREDEX') == "true")
+  println('PREDEX ' + (preDexEnabled ? 'ENABLED' : 'DISABLED'))
 }
 
 subprojects {
-    project.plugins.whenPluginAdded { plugin ->
-        if ("com.android.build.gradle.AppPlugin" == plugin.class.name || "com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
-            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexEnabled
-        }
+  project.plugins.whenPluginAdded { plugin ->
+    if ("com.android.build.gradle.AppPlugin" == plugin.class.name || "com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
+      project.android.dexOptions.preDexLibraries = rootProject.ext.preDexEnabled
     }
+  }
 }

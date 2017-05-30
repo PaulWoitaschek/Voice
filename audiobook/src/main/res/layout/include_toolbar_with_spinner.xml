@@ -6,33 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize">
 
-    <RelativeLayout
-        android:id="@+id/spinnerGroup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+  <RelativeLayout
+      android:id="@+id/spinnerGroup"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
-        <Spinner
-            android:id="@+id/toolSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"/>
+    <Spinner
+        android:id="@+id/toolSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"/>
 
-        <TextView
-            android:id="@+id/storageExplanation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/toolSpinner"
-            android:layout_toStartOf="@id/toolSpinner"
-            android:text="@string/storage_pre_device"
-            android:textColor="@color/copy_primary_text_default_material_dark"
-            android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/storageExplanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/toolSpinner"
+        android:layout_toStartOf="@id/toolSpinner"
+        android:text="@string/storage_pre_device"
+        android:textColor="@color/copy_primary_text_default_material_dark"
+        android:textSize="16sp"/>
 
-    </RelativeLayout>
+  </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

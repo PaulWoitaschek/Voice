@@ -7,32 +7,32 @@
     android:paddingBottom="8dp"
     android:paddingTop="8dp">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/BottomSheetRow"
-        android:drawableLeft="@drawable/format_text"
-        android:drawableStart="@drawable/format_text"
-        android:text="@string/change_book_name"/>
+  <TextView
+      android:id="@+id/title"
+      style="@style/BottomSheetRow"
+      android:drawableLeft="@drawable/format_text"
+      android:drawableStart="@drawable/format_text"
+      android:text="@string/change_book_name"/>
 
-    <TextView
-        android:id="@+id/internetCover"
-        style="@style/BottomSheetRow"
-        android:drawableLeft="@drawable/ic_download"
-        android:drawableStart="@drawable/ic_download"
-        android:text="@string/download_book_cover"/>
+  <TextView
+      android:id="@+id/internetCover"
+      style="@style/BottomSheetRow"
+      android:drawableLeft="@drawable/ic_download"
+      android:drawableStart="@drawable/ic_download"
+      android:text="@string/download_book_cover"/>
 
-    <TextView
-        android:id="@+id/fileCover"
-        style="@style/BottomSheetRow"
-        android:drawableLeft="@drawable/ic_image"
-        android:drawableStart="@drawable/ic_image"
-        android:text="@string/pick_book_cover"/>
+  <TextView
+      android:id="@+id/fileCover"
+      style="@style/BottomSheetRow"
+      android:drawableLeft="@drawable/ic_image"
+      android:drawableStart="@drawable/ic_image"
+      android:text="@string/pick_book_cover"/>
 
-    <TextView
-        android:id="@+id/bookmark"
-        style="@style/BottomSheetRow"
-        android:drawableLeft="@drawable/bookmark"
-        android:drawableStart="@drawable/bookmark"
-        android:text="@string/bookmark"/>
+  <TextView
+      android:id="@+id/bookmark"
+      style="@style/BottomSheetRow"
+      android:drawableLeft="@drawable/bookmark"
+      android:drawableStart="@drawable/bookmark"
+      android:text="@string/bookmark"/>
 
 </LinearLayout>

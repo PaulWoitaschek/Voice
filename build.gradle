@@ -1,52 +1,52 @@
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
-    apply from: 'dependencies.gradle'
+  apply from: 'dependencies.gradle'
 
-    repositories {
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-    }
+  repositories {
+    jcenter()
+    maven { url 'https://maven.fabric.io/public' }
+  }
 
-    dependencies {
-        classpath "com.android.tools.build:gradle:$versions.androidPlugin"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugin"
-        classpath "io.fabric.tools:gradle:$versions.fabric"
-    }
+  dependencies {
+    classpath "com.android.tools.build:gradle:$versions.androidPlugin"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+    classpath "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugin"
+    classpath "io.fabric.tools:gradle:$versions.fabric"
+  }
 }
 
 allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://maven.google.com" }
-        mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url "https://jitpack.io" }
-    }
+  repositories {
+    jcenter()
+    maven { url "https://maven.google.com" }
+    mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
+  }
 
-    dependencyUpdates.resolutionStrategy = {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                def candidate = selection.candidate
-                if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
-                if (['rc', 'beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
-                if (candidate.group == 'javax.annotation' && candidate.version == '1.0-20050927.133100') selection.reject()
-            }
-        }
+  dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+      rules.all { ComponentSelection selection ->
+        def candidate = selection.candidate
+        if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
+        if (['rc', 'beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
+        if (candidate.group == 'javax.annotation' && candidate.version == '1.0-20050927.133100') selection.reject()
+      }
     }
-    configurations.all {
-        resolutionStrategy {
-            force libraries.supportV13
-            force "com.squareup.okio:okio:1.13.0"
-            force libraries.supportAnnotations
-        }
+  }
+  configurations.all {
+    resolutionStrategy {
+      force libraries.supportV13
+      force "com.squareup.okio:okio:1.13.0"
+      force libraries.supportAnnotations
     }
+  }
 }
 
 apply from: "predexDisabler.gradle"
 
 task updateTranslations(type: Exec) {
-    executable 'sh'
-    args "-c", "tx pull -f --minimum-perc=5"
+  executable 'sh'
+  args "-c", "tx pull -f --minimum-perc=5"
 }

@@ -7,8 +7,6 @@ import org.gradle.api.Task
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 fun execute(command: String, directory: File? = null): List<String> {
   val processBuilder = ProcessBuilder().command("/bin/sh", "-c", command)

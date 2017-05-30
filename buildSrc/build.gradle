@@ -2,23 +2,23 @@ apply from: '../dependencies.gradle'
 apply plugin: 'java'
 
 buildscript {
-    apply from: '../dependencies.gradle'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-    }
+  apply from: '../dependencies.gradle'
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+  }
 }
 
 
 repositories {
-    jcenter()
+  jcenter()
 }
 
 dependencies {
-    compile libraries.okHttp
-    compile libraries.kotlinStdLib
+  compile libraries.okHttp
+  compile libraries.kotlinStdLib
 }
 
 apply plugin: "kotlin"

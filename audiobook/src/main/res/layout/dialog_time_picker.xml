@@ -6,26 +6,26 @@
               android:gravity="center"
               android:orientation="horizontal">
 
-    <NumberPicker
-        android:id="@+id/numberHour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+  <NumberPicker
+      android:id="@+id/numberHour"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/colon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text=":"
-        android:textSize="28sp"
-        tools:ignore="HardcodedText"/>
+  <TextView
+      android:id="@+id/colon"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:text=":"
+      android:textSize="28sp"
+      tools:ignore="HardcodedText"/>
 
-    <NumberPicker
-        android:id="@+id/numberMinute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+  <NumberPicker
+      android:id="@+id/numberMinute"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"/>
 
 </LinearLayout>

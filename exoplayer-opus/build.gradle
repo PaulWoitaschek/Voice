@@ -16,30 +16,30 @@ import de.ph1b.audiobook.ndkGen.PrepareOpus
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
 
-    defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-        consumerProguardFiles 'proguard-rules.txt'
-    }
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
+    consumerProguardFiles 'proguard-rules.txt'
+  }
 
-    sourceSets.main {
-        jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = [] // Disable the automatic ndk-build call by Android Studio.
-    }
+  sourceSets.main {
+    jniLibs.srcDir 'src/main/libs'
+    jni.srcDirs = [] // Disable the automatic ndk-build call by Android Studio.
+  }
 }
 
 // make sure that opus is set up before ndk compiling starts
 tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn(prepareOpus)
+  compileTask -> compileTask.dependsOn(prepareOpus)
 }
 
 dependencies {
-    compile libraries.exoPlayerCore
+  compile libraries.exoPlayerCore
 }
 
 task(prepareOpus, type: PrepareOpus) {
-    ndkDir = android.ndkDirectory
+  ndkDir = project.extensions.findByName("android").ndkDirectory
 }

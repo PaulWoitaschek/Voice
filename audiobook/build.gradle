@@ -8,122 +8,122 @@ apply from: "../artifacts.gradle"
 
 android {
 
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
 
-    defaultConfig {
-        applicationId "de.ph1b.audiobook"
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-        versionCode 196
-        versionName '3.3.3.6.2'
+  defaultConfig {
+    applicationId "de.ph1b.audiobook"
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
+    versionCode 196
+    versionName '3.3.3.6.2'
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
-        }
+    ndk {
+      abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
     }
+  }
 
-    signingConfigs {
-        release {
-            def signingPropFile = new File('signing.properties')
-            def signingDetailsProvider = new SigningDetailsProvider()
-            def signingDetails = signingDetailsProvider.provide(signingPropFile)
-            if (signingDetails != null) {
-                storeFile = signingDetails.storeFile
-                storePassword = signingDetails.storePassword
-                keyAlias = signingDetails.keyAlias
-                keyPassword = signingDetails.keyPassword
-            }
-        }
+  signingConfigs {
+    release {
+      def signingPropFile = new File('signing.properties')
+      def signingDetailsProvider = new SigningDetailsProvider()
+      def signingDetails = signingDetailsProvider.provide(signingPropFile)
+      if (signingDetails != null) {
+        storeFile = signingDetails.storeFile
+        storePassword = signingDetails.storePassword
+        keyAlias = signingDetails.keyAlias
+        keyPassword = signingDetails.keyPassword
+      }
     }
+  }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            ext.enableCrashlytics = false
-        }
+  buildTypes {
+    release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
+      signingConfig signingConfigs.release
     }
-
-    testOptions.unitTests.returnDefaultValues = true
-
-    lintOptions.abortOnError = false
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+    debug {
+      minifyEnabled false
+      shrinkResources false
+      ext.enableCrashlytics = false
     }
+  }
 
-    //noinspection GroovyMissingReturnStatement
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
-    }
+  testOptions.unitTests.returnDefaultValues = true
 
-    productFlavors {
-        opensource {}
-        proprietary {}
-    }
+  lintOptions.abortOnError = false
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+
+  //noinspection GroovyMissingReturnStatement
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
+  }
+
+  productFlavors {
+    opensource {}
+    proprietary {}
+  }
 }
 
 dependencies {
-    compile project(":core")
+  compile project(":core")
 
-    compile libraries.supportAppCompat
-    compile libraries.supportRecyclerView
-    compile libraries.supportDesign
-    compile libraries.supportTransitions
-    compile libraries.supportConstraintLayout
+  compile libraries.supportAppCompat
+  compile libraries.supportRecyclerView
+  compile libraries.supportDesign
+  compile libraries.supportTransitions
+  compile libraries.supportConstraintLayout
 
-    compile libraries.picasso
+  compile libraries.picasso
 
-    compile libraries.materialDialogs
+  compile libraries.materialDialogs
 
-    compile libraries.floatingActionButton
+  compile libraries.floatingActionButton
 
-    proprietaryCompile(libraries.crashlytics) {
-        transitive = true
-    }
+  proprietaryCompile(libraries.crashlytics) {
+    transitive = true
+  }
 
-    compile libraries.dagger
-    kapt libraries.daggerCompiler
-    provided libraries.jsr250
+  compile libraries.dagger
+  kapt libraries.daggerCompiler
+  provided libraries.jsr250
 
-    testCompile libraries.junit
-    testCompile libraries.robolectric
-    testCompile libraries.assertJ
-    testCompile libraries.mockito
+  testCompile libraries.junit
+  testCompile libraries.robolectric
+  testCompile libraries.assertJ
+  testCompile libraries.mockito
 
-    testCompile libraries.okHttp
+  testCompile libraries.okHttp
 
-    androidTestCompile libraries.supportTestRunner
-    androidTestCompile libraries.assertJ
+  androidTestCompile libraries.supportTestRunner
+  androidTestCompile libraries.assertJ
 
-    compile libraries.rxJava
-    compile libraries.rxAndroid
-    compile libraries.rxInterop
-    compile libraries.rxPreferences
+  compile libraries.rxJava
+  compile libraries.rxAndroid
+  compile libraries.rxInterop
+  compile libraries.rxPreferences
 
-    compile libraries.kotlinStdLib
+  compile libraries.kotlinStdLib
 
-    compile libraries.slimber
+  compile libraries.slimber
 
-    compile libraries.exoPlayerCore
-    compile project(":exoplayer-flac")
-    compile project(":exoplayer-opus")
+  compile libraries.exoPlayerCore
+  compile project(":exoplayer-flac")
+  compile project(":exoplayer-opus")
 
-    compile libraries.conductor
-    compile libraries.conductorSupport
-    compile libraries.conductorLifecycle
+  compile libraries.conductor
+  compile libraries.conductorSupport
+  compile libraries.conductorLifecycle
 
-    compile libraries.moshi
+  compile libraries.moshi
 }
 
 // task that is an alias for f-droid

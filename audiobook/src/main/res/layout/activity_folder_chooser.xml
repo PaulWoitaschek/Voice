@@ -8,40 +8,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/include_toolbar_with_spinner"/>
+  <include layout="@layout/include_toolbar_with_spinner"/>
 
-    <include layout="@layout/include_file_navigation_header"/>
+  <include layout="@layout/include_file_navigation_header"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="16dp"
+      android:layout_weight="1"
+      tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
+
+  <LinearLayout
+      style="?android:buttonBarStyle"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/abort"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
-
-    <LinearLayout
-        style="?android:buttonBarStyle"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:text="@string/dialog_cancel"/>
 
-        <Button
-            android:id="@+id/abort"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dialog_cancel"/>
+    <Button
+        android:id="@+id/choose"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/dialog_confirm"/>
 
-        <Button
-            android:id="@+id/choose"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dialog_confirm"/>
-
-    </LinearLayout>
+  </LinearLayout>
 
 </LinearLayout>

@@ -12,6 +12,8 @@ open class PrepareOpus : DefaultTask() {
 
   @TaskAction
   fun prepare() {
+    logger.error("###")
+    logger.error(ndkDir)
     if (!File(ndkDir).exists())
       throw IllegalArgumentException("Invalid ndkDir $ndkDir")
 
