@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.audio
 
 import android.media.audiofx.LoudnessEnhancer
 import android.os.Build
+import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.properties.Delegates
@@ -35,13 +36,23 @@ import kotlin.properties.Delegates
   private fun attachEffect() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       if (effectWithSessionId != null) {
-        effectWithSessionId!!.loudnessEnhancer.setTargetGain(gainmB)
-      } else {
-        val le = LoudnessEnhancer(audioSessionId).apply {
-          setTargetGain(gainmB)
-          enabled = true
+        try {
+          effectWithSessionId!!.loudnessEnhancer.setTargetGain(gainmB)
+        } catch (e: RuntimeException) {
+          // throws random crashes. We catch and report them
+          CrashlyticsProxy.logException(e)
         }
-        effectWithSessionId = LoudnessEnhancerWithAudioSessionId(le, audioSessionId)
+      } else {
+        try {
+          val le = LoudnessEnhancer(audioSessionId).apply {
+            setTargetGain(gainmB)
+            enabled = true
+          }
+          effectWithSessionId = LoudnessEnhancerWithAudioSessionId(le, audioSessionId)
+        } catch (e: RuntimeException) {
+          // throws random crashes. We catch and report them
+          CrashlyticsProxy.logException(e)
+        }
       }
     }
   }
