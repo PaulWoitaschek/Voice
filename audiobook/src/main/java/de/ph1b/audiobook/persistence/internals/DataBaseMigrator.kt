@@ -24,6 +24,7 @@ class DataBaseMigrator(private val db: SQLiteDatabase) {
     37 -> Migration37to38()
     38 -> Migration38to39()
     39 -> Migration39to40()
+    40 -> Migration40to41()
     else -> null
   }
 
