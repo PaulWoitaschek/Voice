@@ -28,6 +28,12 @@ fun Cursor.int(columnName: String): Int {
   return getInt(getColumnIndexOrThrow(columnName))
 }
 
+fun Cursor.intNullable(columnName: String): Int? {
+  val index = getColumnIndexOrThrow(columnName)
+  return if (isNull(index)) null
+  else getInt(index)
+}
+
 inline fun <T> SQLiteDatabase.asTransaction(func: SQLiteDatabase.() -> T): T {
   beginTransaction()
   try {

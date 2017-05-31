@@ -50,7 +50,7 @@ class BookStorage
       val bookRoot: String = string(BookTable.ROOT)
       val bookTime: Int = int(BookTable.TIME)
       val bookType: String = string(BookTable.TYPE)
-      val loudnessGain = int(BookTable.LOUDNESS_GAIN)
+      val loudnessGain = intNullable(BookTable.LOUDNESS_GAIN) ?: 0
 
       val chapters = db.query(table = ChapterTable.TABLE_NAME,
           columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED, ChapterTable.MARKS),
