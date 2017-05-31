@@ -16,10 +16,6 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 
 # <a name="contrib">Contribution</a>
 
-## Testing
-
-[Join today](https://play.google.com/apps/testing/de.ph1b.audiobook) to become a true beta tester!
-
 ## Development
 
 If you wan to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22). 
