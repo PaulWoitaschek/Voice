@@ -49,7 +49,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
     seekBar.progressChangedStream()
         .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
         .subscribe {
-          player.setLoudness(it)
+          player.setLoudnessGain(it)
           currentText.text = format(it)
         }
 

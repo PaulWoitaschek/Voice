@@ -64,7 +64,7 @@ import javax.inject.Singleton
     })
   }
 
-  fun setLoudness(mB: Int) {
+  fun setLoudnessGain(mB: Int) {
     fire(intent(ACTION_LOUDNESS).apply {
       putExtra(CHANGE_LOUDNESS, mB)
     })
@@ -72,7 +72,7 @@ import javax.inject.Singleton
 
   companion object {
     const val ACTION_SPEED = "action#setSpeed"
-    const val ACTION_LOUDNESS = "action#setLoudness"
+    const val ACTION_LOUDNESS = "action#setLoudnessGain"
     const val EXTRA_SPEED = "extra#speed"
 
     const val ACTION_CHANGE = "action#change"

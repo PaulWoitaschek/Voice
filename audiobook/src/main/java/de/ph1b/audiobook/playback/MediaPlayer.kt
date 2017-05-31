@@ -136,11 +136,11 @@ constructor(
   }
 
   fun setVolume(loud: Boolean) {
-    player.volume = (if (loud) 1F else 0.1F)
+    player.volume = if (loud) 1F else 0.1F
   }
 
-  fun setLoudness(mB: Int) {
-    v { "setLoudness to $mB mB" }
+  fun setLoudnessGain(mB: Int) {
+    v { "setLoudnessGain to $mB mB" }
 
     bookSubject.value?.let {
       val copy = it.copy(loudnessGain = mB)
