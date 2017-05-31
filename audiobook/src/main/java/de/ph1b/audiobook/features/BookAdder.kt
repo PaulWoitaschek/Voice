@@ -208,15 +208,15 @@ import javax.inject.Singleton
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
-          Book.ID_UNKNOWN,
-          type,
-          result.author,
-          firstChapterFile,
-          0,
-          bookName,
-          newChapters,
-          1.0f,
-          bookRoot)
+          id = Book.ID_UNKNOWN,
+          type = type,
+          author = result.author,
+          currentFile = firstChapterFile,
+          time = 0,
+          name = bookName,
+          chapters = newChapters,
+          root = bookRoot
+      )
       handler.postBlocking { repo.addBook(newBook) }
     } else {
       // checks if current path is still valid.

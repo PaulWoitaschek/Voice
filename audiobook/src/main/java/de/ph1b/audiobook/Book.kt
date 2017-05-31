@@ -24,8 +24,10 @@ data class Book(
     val time: Int,
     val name: String,
     val chapters: List<Chapter>,
-    val playbackSpeed: Float,
-    val root: String) : Comparable<Book> {
+    val playbackSpeed: Float = 1F,
+    val root: String,
+    val loudnessGain: Int = 0
+) : Comparable<Book> {
 
   override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
 
@@ -45,6 +47,7 @@ data class Book(
     require(name.isNotEmpty(), { "name must not be empty" })
     require(root.isNotEmpty(), { "root must not be empty" })
     require(time >= 0) { "time must not be negative" }
+    require(loudnessGain >= 0) { "loudnessGain must not be negative" }
   }
 
   /** The transition name for the cover transition. */

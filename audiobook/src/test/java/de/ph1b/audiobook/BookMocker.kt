@@ -36,6 +36,17 @@ object BookMocker {
     if (root == null) {
       root = "fakeRoot"
     }
-    return Book(-1, type, author, file1, time, name, chapters, playbackSpeed, root)
+    return Book(
+        id = -1,
+        type = type,
+        author = author,
+        currentFile = file1,
+        time = time,
+        name = name,
+        chapters = chapters,
+        playbackSpeed = playbackSpeed,
+        root = root,
+        loudnessGain = 500
+    )
   }
 }

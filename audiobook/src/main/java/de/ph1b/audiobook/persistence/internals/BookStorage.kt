@@ -37,7 +37,8 @@ class BookStorage
             BookTable.PLAYBACK_SPEED,
             BookTable.ROOT,
             BookTable.TIME,
-            BookTable.TYPE),
+            BookTable.TYPE,
+            BookTable.LOUDNESS_GAIN),
         selection = "${BookTable.ACTIVE} =?",
         selectionArgs = listOf(if (active) 1 else 0)
     ).mapRows {
@@ -49,6 +50,7 @@ class BookStorage
       val bookRoot: String = string(BookTable.ROOT)
       val bookTime: Int = int(BookTable.TIME)
       val bookType: String = string(BookTable.TYPE)
+      val loudnessGain = int(BookTable.LOUDNESS_GAIN)
 
       val chapters = db.query(table = ChapterTable.TABLE_NAME,
           columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED, ChapterTable.MARKS),
@@ -70,7 +72,7 @@ class BookStorage
         currentFile = chapters[0].file
       }
 
-      Book(bookId, Book.Type.valueOf(bookType), bookAuthor, currentFile, bookTime, bookName, chapters, bookSpeed, bookRoot)
+      Book(bookId, Book.Type.valueOf(bookType), bookAuthor, currentFile, bookTime, bookName, chapters, bookSpeed, bookRoot, loudnessGain)
     }
   }
 
@@ -115,6 +117,7 @@ class BookStorage
     put(BookTable.ROOT, root)
     put(BookTable.TIME, time)
     put(BookTable.TYPE, type.name)
+    put(BookTable.LOUDNESS_GAIN, loudnessGain)
   }
 
   fun updateBook(book: Book) = db.asTransaction {

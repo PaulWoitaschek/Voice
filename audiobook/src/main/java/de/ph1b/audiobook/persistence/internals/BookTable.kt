@@ -17,6 +17,7 @@ object BookTable {
   const val TIME = "bookTime"
   const val TYPE = "bookType"
   const val ACTIVE = "BOOK_ACTIVE"
+  const val LOUDNESS_GAIN = "loudnessGain"
   const val TABLE_NAME = "tableBooks"
   private const val CREATE_TABLE = """
     CREATE TABLE $TABLE_NAME (
@@ -28,6 +29,7 @@ object BookTable {
       $ROOT TEXT NOT NULL,
       $TIME INTEGER NOT NULL,
       $TYPE TEXT NOT NULL,
+      $LOUDNESS_GAIN INTEGER NOT NULL DEFAULT 0,
       $ACTIVE INTEGER NOT NULL DEFAULT 1
     )
   """
