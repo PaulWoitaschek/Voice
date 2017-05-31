@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
-import android.media.audiofx.LoudnessEnhancer
-import android.os.Build
 import i
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,20 +32,10 @@ import javax.inject.Singleton
     putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId)
   }
 
-  private var audioSessionId: Int? = null
-
   fun update(audioSessionId: Int) {
     i { "update to $audioSessionId" }
-    if (audioSessionId == -1) return
-    if (this.audioSessionId != audioSessionId) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        val le = LoudnessEnhancer(audioSessionId)
-        le.setTargetGain(600)
-        le.enabled = true
-        le.release()
-      }
-      this.audioSessionId = audioSessionId
-    }
+    if (audioSessionId == -1)
+      return
     updateIntent.putAudioSessionId(audioSessionId)
     launchIntent.putAudioSessionId(audioSessionId)
     context.sendBroadcast(updateIntent)
