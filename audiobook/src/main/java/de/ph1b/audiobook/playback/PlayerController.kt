@@ -64,15 +64,23 @@ import javax.inject.Singleton
     })
   }
 
+  fun setLoudness(mB: Int) {
+    fire(intent(ACTION_LOUDNESS).apply {
+      putExtra(CHANGE_LOUDNESS, mB)
+    })
+  }
+
   companion object {
-    val ACTION_SPEED = "action#setSpeed"
-    val EXTRA_SPEED = "extra#speed"
+    const val ACTION_SPEED = "action#setSpeed"
+    const val ACTION_LOUDNESS = "action#setLoudness"
+    const val EXTRA_SPEED = "extra#speed"
 
-    val ACTION_CHANGE = "action#change"
-    val CHANGE_TIME = "changeTime"
-    val CHANGE_FILE = "changeFile"
+    const val ACTION_CHANGE = "action#change"
+    const val CHANGE_TIME = "changeTime"
+    const val CHANGE_LOUDNESS = "changeLoudness"
+    const val CHANGE_FILE = "changeFile"
 
-    val ACTION_FORCE_NEXT = "actionForceNext"
-    val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
+    const val ACTION_FORCE_NEXT = "actionForceNext"
+    const val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
   }
 }

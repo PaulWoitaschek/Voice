@@ -268,7 +268,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
           true
         }
         R.id.loudness -> {
-          LoudnessDialog().showDialog(router)
+          LoudnessDialog(bookId).showDialog(router)
           true
         }
         else -> false

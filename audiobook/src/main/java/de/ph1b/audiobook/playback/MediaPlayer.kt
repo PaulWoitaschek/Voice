@@ -130,12 +130,23 @@ constructor(
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
+      loudnessGain.gainmB = book.loudnessGain
       state = PlayerState.PAUSED
     }
   }
 
   fun setVolume(loud: Boolean) {
     player.volume = (if (loud) 1F else 0.1F)
+  }
+
+  fun setLoudness(mB: Int) {
+    v { "setLoudness to $mB mB" }
+
+    bookSubject.value?.let {
+      val copy = it.copy(loudnessGain = mB)
+      bookSubject.onNext(copy)
+      loudnessGain.gainmB = mB
+    }
   }
 
   fun play() {

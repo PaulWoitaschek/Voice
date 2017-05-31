@@ -312,6 +312,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       PlayerController.ACTION_FORCE_NEXT -> player.next()
       PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(toNullOfNewTrack = true)
+      PlayerController.ACTION_LOUDNESS -> {
+        val loudness = intent.getIntExtra(PlayerController.CHANGE_LOUDNESS, 0)
+        player.setLoudness(loudness)
+      }
     }
 
     return Service.START_STICKY
