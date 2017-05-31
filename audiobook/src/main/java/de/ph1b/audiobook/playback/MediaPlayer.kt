@@ -213,7 +213,9 @@ constructor(
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
       } else {
-        changePosition(previousChapter.duration - (seekTime * 1000), previousChapter.file)
+        val time = (previousChapter.duration - (seekTime * 1000))
+            .coerceAtLeast(0)
+        changePosition(time, previousChapter.file)
       }
     }
   }
