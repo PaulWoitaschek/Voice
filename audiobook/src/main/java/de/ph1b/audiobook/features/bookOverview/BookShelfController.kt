@@ -25,6 +25,7 @@ import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.Scroller
 import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
@@ -58,6 +59,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   private lateinit var recyclerView: RecyclerView
   private lateinit var fab: FloatingActionButton
   private lateinit var toolbar: Toolbar
+  private lateinit var scroller: Scroller
   private lateinit var loadingProgress: View
   private lateinit var currentPlaying: MenuItem
 
@@ -77,6 +79,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     fab = view.find(R.id.fab)
     toolbar = view.find(R.id.toolbar)
     loadingProgress = view.find(R.id.loadingProgress)
+    scroller = view.find(R.id.scroller)
   }
 
   private fun setupFab() {
@@ -101,6 +104,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
+
+    scroller.attachTo(recyclerView)
 
     updateDisplayMode()
   }

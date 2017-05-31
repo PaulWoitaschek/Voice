@@ -23,6 +23,13 @@
       android:paddingBottom="104dp"
       android:paddingTop="4dp"/>
 
+  <de.ph1b.audiobook.uitools.Scroller
+      android:id="@+id/scroller"
+      android:layout_width="6dp"
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:layout_marginTop="?attr/actionBarSize"/>
+
   <ProgressBar
       android:id="@+id/loadingProgress"
       style="@style/Widget.AppCompat.ProgressBar"

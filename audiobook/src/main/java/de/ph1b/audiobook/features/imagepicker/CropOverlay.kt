@@ -8,7 +8,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.dpToPx
+import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.uitools.visible
 import i
@@ -69,7 +69,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
   private var eventType: EventType? = null
   private var resizeType: Resize? = null
-  private val touchOffset = context.dpToPx(16)
+  private val touchOffset = context.dpToPxRounded(16F)
 
   private fun newCircle() = context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
     visible = false

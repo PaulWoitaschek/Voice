@@ -37,8 +37,8 @@ var <T> Preference<T>.value: T
   get() = get()!!
   set(value) = set(value!!)
 
-fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
+fun Context.dpToPx(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+fun Context.dpToPxRounded(dp: Float) = Math.round(dpToPx(dp))
 
 fun Drawable.tinted(@ColorInt color: Int): Drawable {
   val wrapped = DrawableCompat.wrap(this)

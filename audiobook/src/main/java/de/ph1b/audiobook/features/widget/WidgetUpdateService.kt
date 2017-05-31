@@ -19,7 +19,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
-import de.ph1b.audiobook.misc.dpToPx
+import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
@@ -87,13 +87,13 @@ class WidgetUpdateService : Service() {
           initElements(remoteViews, book)
 
           val opts = appWidgetManager.getAppWidgetOptions(widgetId)
-          val minHeight = dpToPx(opts.getInt(
+          val minHeight = dpToPxRounded(opts.getFloat(
               AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
-          val maxHeight = dpToPx(opts.getInt(
+          val maxHeight = dpToPxRounded(opts.getFloat(
               AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
-          val minWidth = dpToPx(opts.getInt(
+          val minWidth = dpToPxRounded(opts.getFloat(
               AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
-          val maxWidth = dpToPx(opts.getInt(
+          val maxWidth = dpToPxRounded(opts.getFloat(
               AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
 
           val useWidth: Int
@@ -148,13 +148,6 @@ class WidgetUpdateService : Service() {
       return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
-  /**
-   * Initializes the elements of the widgets with a book
-
-   * @param remoteViews The Widget RemoteViews
-   * *
-   * @param book        The book to be initalized
-   */
   private fun initElements(remoteViews: RemoteViews, book: Book) {
     val playPauseI = serviceController.getPlayPauseIntent()
     val playPausePI = PendingIntent.getService(this,
@@ -236,7 +229,7 @@ class WidgetUpdateService : Service() {
    */
   private fun setXVisibility(remoteViews: RemoteViews, widgetWidth: Int,
                              coverSize: Int) {
-    val singleButtonSize = dpToPx(8 + 36 + 8)
+    val singleButtonSize = dpToPxRounded(8F + 36F + 8F)
     // widget height because cover is square
     var summarizedItemWidth = 3 * singleButtonSize + coverSize
 
@@ -274,7 +267,7 @@ class WidgetUpdateService : Service() {
    */
   private fun setYVisibility(remoteViews: RemoteViews, widgetHeight: Int,
                              singleChapter: Boolean) {
-    val buttonSize = dpToPx(8 + 36 + 8)
+    val buttonSize = dpToPxRounded(8F + 36F + 8F)
     val titleSize = resources.getDimensionPixelSize(R.dimen.list_text_primary_size)
     val summarySize = resources.getDimensionPixelSize(R.dimen.list_text_secondary_size)
 
