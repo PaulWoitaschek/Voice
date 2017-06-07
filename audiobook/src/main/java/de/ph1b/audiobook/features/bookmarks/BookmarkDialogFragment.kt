@@ -35,7 +35,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {
+class BookmarkDialogFragment : DialogFragment(), BookMarkClickListener {
 
   init {
     App.component.inject(this)
@@ -53,9 +53,9 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
               .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
               .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { _, charSequence ->
                 val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
-                adapter.replace(bookmark, newBookmark)
                 bookmarkProvider.deleteBookmark(bookmark.id)
                 bookmarkProvider.addBookmark(newBookmark)
+                updateAdapterContents()
               }
               .positiveText(R.string.dialog_confirm).show()
           return@setOnMenuItemClickListener true
@@ -66,8 +66,8 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
               .positiveText(R.string.remove)
               .negativeText(R.string.dialog_cancel)
               .onPositive { _, _ ->
-                adapter.remove(bookmark)
                 bookmarkProvider.deleteBookmark(bookmark.id)
+                updateAdapterContents()
               }
               .show()
           return@setOnMenuItemClickListener true
@@ -122,17 +122,14 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     bookmarkTitle = view.find(R.id.bookmarkTitle)
 
     book = repo.bookById(bookId())!!
-    adapter = BookmarkAdapter(book.chapters, this, context)
+    adapter = BookmarkAdapter(book.chapters, this)
     val recycler = view.find<RecyclerView>(R.id.recycler)
     recycler.adapter = adapter
     val layoutManager = LinearLayoutManager(activity)
     recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
     recycler.layoutManager = layoutManager
 
-    bookmarkProvider.bookmarks(book)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { adapter.addAll(it) }
+    updateAdapterContents()
 
     val add: View = view.find(R.id.add)
     add.setOnClickListener { addClicked() }
@@ -150,6 +147,13 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         .title(R.string.bookmark)
         .negativeText(R.string.dialog_cancel)
         .build()
+  }
+
+  private fun updateAdapterContents() {
+    bookmarkProvider.bookmarks(book)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { adapter.newData(it) }
   }
 
   companion object {
