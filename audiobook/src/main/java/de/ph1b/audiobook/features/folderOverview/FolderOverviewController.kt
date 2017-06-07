@@ -68,9 +68,10 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
     recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
     adapter = FolderOverviewAdapter { toDelete ->
+      val toDeleteName = toDelete.folder
       MaterialDialog.Builder(activity)
           .title(R.string.delete_folder)
-          .content("${getString(R.string.delete_folder_content)}\n$toDelete")
+          .content("${getString(R.string.delete_folder_content)}\n$toDeleteName")
           .positiveText(R.string.remove)
           .negativeText(R.string.dialog_cancel)
           .onPositive { _, _ ->
