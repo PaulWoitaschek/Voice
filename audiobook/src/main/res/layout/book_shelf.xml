@@ -1,55 +1,59 @@
-<android.support.design.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      style="@style/AppToolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"/>
-
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/recyclerView"
+  <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginLeft="4dp"
-      android:layout_marginRight="4dp"
-      android:layout_marginTop="?attr/actionBarSize"
-      android:clipToPadding="false"
-      android:paddingBottom="104dp"
-      android:paddingTop="4dp"/>
+      android:orientation="vertical">
 
-  <de.ph1b.audiobook.uitools.Scroller
-      android:id="@+id/scroller"
-      android:layout_width="6dp"
-      android:layout_height="match_parent"
-      android:layout_gravity="end"
-      android:layout_marginTop="?attr/actionBarSize"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
 
-  <ProgressBar
-      android:id="@+id/loadingProgress"
-      style="@style/Widget.AppCompat.ProgressBar"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center"
-      android:layout_marginTop="?attr/actionBarSize"
-      android:visibility="gone"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="104dp"
+        android:paddingTop="4dp"/>
 
-  <com.getbase.floatingactionbutton.FloatingActionButton
-      android:id="@+id/fab"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="end|bottom"
-      android:layout_margin="16dp"
-      android:contentDescription="@string/play_pause"
-      android:transitionName="@string/fab_transition"
-      app:fab_colorNormal="?attr/colorAccent"
-      app:fab_colorPressed="?attr/colorAccentDark"
-      tools:ignore="UnusedAttribute"/>
+    <de.ph1b.audiobook.uitools.Scroller
+        android:id="@+id/scroller"
+        android:layout_width="6dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
-</android.support.design.widget.CoordinatorLayout>
+    <ProgressBar
+        android:id="@+id/loadingProgress"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="gone"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/play_pause"
+        android:transitionName="@string/fab_transition"
+        app:fab_colorNormal="?attr/colorAccent"
+        app:fab_colorPressed="?attr/colorAccentDark"
+        tools:ignore="UnusedAttribute"/>
+
+  </android.support.design.widget.CoordinatorLayout>
+
+</layout>

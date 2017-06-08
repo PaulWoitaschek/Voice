@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:focusableInTouchMode="true"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/md_content_padding_bottom"
-              android:paddingLeft="@dimen/md_dialog_frame_margin"
-              android:paddingRight="@dimen/md_dialog_frame_margin"
-              android:paddingTop="@dimen/md_content_padding_top">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:gravity="center_vertical"
-      android:orientation="horizontal">
+      android:focusableInTouchMode="true"
+      android:orientation="vertical"
+      android:paddingBottom="@dimen/md_content_padding_bottom"
+      android:paddingLeft="@dimen/md_dialog_frame_margin"
+      android:paddingRight="@dimen/md_dialog_frame_margin"
+      android:paddingTop="@dimen/md_content_padding_top">
 
-    <EditText
-        android:id="@+id/bookmarkTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="@string/bookmark_edit_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textCapSentences|textAutoCorrect"/>
-
-    <ImageButton
-        android:id="@+id/add"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/acc_button_add_bookmark"
-        android:src="@drawable/ic_add_circle_outline"/>
+        android:layout_marginRight="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+      <EditText
+          android:id="@+id/bookmarkTitle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:hint="@string/bookmark_edit_hint"
+          android:imeOptions="actionDone"
+          android:inputType="textCapSentences|textAutoCorrect"/>
+
+      <ImageButton
+          android:id="@+id/add"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="8dp"
+          android:layout_marginStart="8dp"
+          android:contentDescription="@string/acc_button_add_bookmark"
+          android:src="@drawable/ic_add_circle_outline"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
   </LinearLayout>
-
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/recycler"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
-
-</LinearLayout>
+</layout>

@@ -1,31 +1,35 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-  <NumberPicker
-      android:id="@+id/numberHour"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"/>
-
-  <TextView
-      android:id="@+id/colon"
-      android:layout_width="wrap_content"
+  <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
       android:gravity="center"
-      android:text=":"
-      android:textSize="28sp"
-      tools:ignore="HardcodedText"/>
+      android:orientation="horizontal">
 
-  <NumberPicker
-      android:id="@+id/numberMinute"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"/>
+    <NumberPicker
+        android:id="@+id/numberHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/colon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text=":"
+        android:textSize="28sp"
+        tools:ignore="HardcodedText"/>
+
+    <NumberPicker
+        android:id="@+id/numberMinute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+  </LinearLayout>
+
+</layout>

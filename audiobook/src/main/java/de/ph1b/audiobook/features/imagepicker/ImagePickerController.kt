@@ -3,11 +3,12 @@ package de.ph1b.audiobook.features.imagepicker
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.view.ActionMode
-import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -16,9 +17,9 @@ import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
@@ -30,8 +31,7 @@ import javax.inject.Inject
 /**
  * Hosts the image picker.
  */
-class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
-
+class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>(bundle) {
   constructor(book: Book) : this(Bundle().apply {
     putLong(NI_BOOK_ID, book.id)
   })
@@ -44,11 +44,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   @Inject lateinit var imageHelper: ImageHelper
 
   private var actionMode: ActionMode? = null
-  private lateinit var cropOverlay: CropOverlay
-  private lateinit var webViewContainer: View
-  private lateinit var webView: WebView
-  private lateinit var fab: FloatingActionButton
-  private lateinit var toolbar: Toolbar
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
@@ -58,14 +53,14 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
       if (item?.itemId == R.id.confirm) {
         // obtain screenshot
-        val cropRect = cropOverlay.selectedRect
-        cropOverlay.selectionOn = false
+        val cropRect = binding.cropOverlay.selectedRect
+        binding.cropOverlay.selectionOn = false
 
-        webViewContainer.isDrawingCacheEnabled = true
-        webViewContainer.buildDrawingCache()
-        val cache: Bitmap = webViewContainer.drawingCache
+        binding.webViewContainer.isDrawingCacheEnabled = true
+        binding.webViewContainer.buildDrawingCache()
+        val cache: Bitmap = binding.webViewContainer.drawingCache
         val screenShot = Bitmap.createBitmap(cache, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
-        webViewContainer.isDrawingCacheEnabled = false
+        binding.webViewContainer.isDrawingCacheEnabled = false
         cache.recycle()
 
         // save screenshot
@@ -85,8 +80,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     }
 
     override fun onDestroyActionMode(p0: ActionMode?) {
-      cropOverlay.selectionOn = false
-      fab.show()
+      binding.cropOverlay.selectionOn = false
+      binding.fab.show()
     }
   }
 
@@ -100,19 +95,11 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
+  override val layoutRes = R.layout.image_picker
+
   @SuppressLint("SetJavaScriptEnabled")
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    val view = inflater.inflate(R.layout.activity_image_picker, container, false)
-
-    val progressBar = view.findViewById(R.id.progressBar)
-    val noNetwork = view.findViewById(R.id.noNetwork)
-    cropOverlay = view.find(R.id.cropOverlay)
-    webViewContainer = view.find(R.id.webViewContainer)
-    webView = view.find(R.id.webView)
-    fab = view.find(R.id.fab)
-    toolbar = view.find(R.id.toolbar)
-
-    with(webView.settings) {
+  override fun onBindingCreated(binding: ImagePickerBinding) {
+    with(binding.webView.settings) {
       setSupportZoom(true)
       builtInZoomControls = true
       displayZoomControls = false
@@ -120,8 +107,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     // necessary, else the image capturing does not include the web view. Very performance costly.
-    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-    webView.setWebViewClient(object : WebViewClient() {
+    binding.webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+    binding.webView.setWebViewClient(object : WebViewClient() {
 
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
@@ -141,9 +128,9 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
         d { "received webViewError. Set webVeiw invisible" }
         view.loadUrl(ABOUT_BLANK)
-        progressBar.visible = false
-        noNetwork.visible = true
-        webViewContainer.visible = false
+        binding.progressBar.visible = false
+        view.findViewById(R.id.noNetwork).visible = true
+        binding.webViewContainer.visible = false
       }
     })
 
@@ -154,42 +141,41 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         .subscribe {
           // sets progressbar and webviews visibilities correctly once the page is loaded
           i { "WebView is now loading. Set webView visible" }
-          progressBar.visible = false
-          noNetwork.visible = false
-          webViewContainer.visible = true
+          binding.progressBar.visible = false
+          binding.noNetwork.visible = false
+          binding.webViewContainer.visible = true
         }
 
-    webView.loadUrl(originalUrl)
+    binding.webView.loadUrl(originalUrl)
 
-    fab.setOnClickListener {
-      cropOverlay.selectionOn = true
+    binding.fab.setOnClickListener {
+      binding.cropOverlay.selectionOn = true
       actionMode = activity.startSupportActionMode(actionModeCallback)
-      fab.hide()
+      binding.fab.hide()
     }
 
     setupToolbar()
-
-    return view
   }
 
+  @SuppressLint("InflateParams")
   private fun setupToolbar() {
     // necessary, else the action mode will be themed wrongly
-    activity.setSupportActionBar(toolbar)
+    activity.setSupportActionBar(binding.toolbar)
 
-    toolbar.setTitle(R.string.cover)
+    binding.toolbar.setTitle(R.string.cover)
 
-    toolbar.setNavigationIcon(R.drawable.close)
-    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+    binding.toolbar.setNavigationIcon(R.drawable.close)
+    binding.toolbar.setNavigationOnClickListener { activity.onBackPressed() }
 
-    toolbar.inflateMenu(R.menu.image_picker)
-    toolbar.setOnMenuItemClickListener {
+    binding.toolbar.inflateMenu(R.menu.image_picker)
+    binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.refresh -> {
-          webView.reload()
+          binding.webView.reload()
           true
         }
         R.id.home -> {
-          webView.loadUrl(originalUrl)
+          binding.webView.loadUrl(originalUrl)
           true
         }
         else -> false
@@ -197,14 +183,14 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     }
 
     // set the rotating icon
-    val menu = toolbar.menu
+    val menu = binding.toolbar.menu
     val refreshItem = menu.findItem(R.id.refresh)
     val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
       repeatCount = Animation.INFINITE
     }
-    val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
+    val rotateView = LayoutInflater.from(activity).inflate(R.layout.rotate_view, null).apply {
       animation = rotation
-      setOnClickListener { webView.reload() }
+      setOnClickListener { binding.webView.reload() }
     }
     MenuItemCompat.setActionView(refreshItem, rotateView)
 
@@ -236,19 +222,19 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // load the last page loaded or the original one of there is none
     val url: String? = savedViewState.getString(SI_URL)
-    webView.loadUrl(url)
+    binding.webView.loadUrl(url)
   }
 
   override fun handleBack(): Boolean {
-    if (webView.canGoBack()) {
-      webView.goBack()
+    if (binding.webView.canGoBack()) {
+      binding.webView.goBack()
       return true
     } else return false
   }
 
   override fun onSaveViewState(view: View, outState: Bundle) {
-    if (webView.url != ABOUT_BLANK) {
-      outState.putString(SI_URL, webView.url)
+    if (binding.webView.url != ABOUT_BLANK) {
+      outState.putString(SI_URL, binding.webView.url)
     }
   }
 

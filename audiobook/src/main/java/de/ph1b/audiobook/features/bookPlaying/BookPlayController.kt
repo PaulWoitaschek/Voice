@@ -1,16 +1,14 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import android.os.Bundle
-import android.support.v7.widget.AppCompatSpinner
-import android.support.v7.widget.Toolbar
-import android.view.*
-import android.widget.ImageView
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewConfiguration
 import android.widget.SeekBar
-import android.widget.TextView
-import com.getbase.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.audio.LoudnessGain
@@ -19,7 +17,7 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
-import de.ph1b.audiobook.mvp.MvpBaseController
+import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -35,7 +33,7 @@ private const val NI_BOOK_ID = "niBookId"
  *
  * @author Paul Woitaschek
  */
-class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, BookPlayMvp.Presenter>(bundle), BookPlayMvp.View {
+class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle), BookPlayMvp.View {
 
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
@@ -48,23 +46,11 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   private var currentChapter: BookPlayChapter? = null
   private var firstPlayStateChange = true
 
+  override val layoutRes = R.layout.book_play
   override val presenter = BookPlayPresenter(bookId)
 
   private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter>
   private lateinit var sleepTimerItem: MenuItem
-
-  private lateinit var play: FloatingActionButton
-  private lateinit var rewind: View
-  private lateinit var fastForward: View
-  private lateinit var next: View
-  private lateinit var previous: View
-  private lateinit var playedTime: TextView
-  private lateinit var maxTime: TextView
-  private lateinit var timerCountdownView: TextView
-  private lateinit var bookSpinner: AppCompatSpinner
-  private lateinit var seekBar: SeekBar
-  private lateinit var cover: ImageView
-  private lateinit var toolbar: Toolbar
 
   init {
     App.component.inject(this)
@@ -96,28 +82,28 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     this.currentChapter = currentChapter
 
     val chapterIndex = data.indexOf(currentChapter)
-    bookSpinner.setSelection(chapterIndex, true)
+    binding.bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
-    seekBar.max = duration
-    maxTime.text = formatTime(duration, duration)
+    binding.seekBar.max = duration
+    binding.maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
     val progress = book.time - currentChapter.start
-    if (!seekBar.isPressed) {
-      seekBar.progress = progress
-      playedTime.text = formatTime(progress, duration)
+    if (!binding.seekBar.isPressed) {
+      binding.seekBar.progress = progress
+      binding.playedTime.text = formatTime(progress, duration)
     }
 
     // name
-    toolbar.title = book.name
+    binding.toolbar.title = book.name
 
     // Next/Prev/spinner/book progress views hiding
     val multipleChapters = data.size > 1
-    next.visible = multipleChapters
-    previous.visible = multipleChapters
-    bookSpinner.visible = multipleChapters
+    binding.next.visible = multipleChapters
+    binding.previous.visible = multipleChapters
+    binding.bookSpinner.visible = multipleChapters
 
-    cover.supportTransitionName = book.coverTransitionName
+    binding.cover.supportTransitionName = book.coverTransitionName
 
     // (Cover)
     val coverReplacement = CoverReplacement(book.name, activity)
@@ -125,9 +111,9 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
       Picasso.with(activity)
           .load(book.coverFile())
           .placeholder(coverReplacement)
-          .into(cover)
+          .into(binding.cover)
     } else {
-      cover.setImageDrawable(coverReplacement)
+      binding.cover.setImageDrawable(coverReplacement)
     }
   }
 
@@ -135,45 +121,25 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     router.popController(this)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    val view = inflater.inflate(R.layout.book_play, container, false)
-
-    findViews(view)
+  override fun onBindingCreated(binding: BookPlayBinding) {
     setupClicks()
     setupFab()
     setupSeekbar()
     setupSpinner()
     setupToolbar()
-
-    return view
-  }
-
-  private fun findViews(view: View) {
-    play = view.find(R.id.play)
-    rewind = view.find(R.id.rewind)
-    fastForward = view.find(R.id.fastForward)
-    next = view.find(R.id.next)
-    previous = view.find(R.id.previous)
-    playedTime = view.find(R.id.playedTime)
-    maxTime = view.find(R.id.maxTime)
-    timerCountdownView = view.find(R.id.timerCountdownView)
-    bookSpinner = view.find(R.id.bookSpinner)
-    seekBar = view.find(R.id.seekBar)
-    cover = view.find(R.id.cover)
-    toolbar = view.find(R.id.toolbar)
   }
 
   private fun setupClicks() {
-    play.setOnClickListener { presenter.playPause() }
-    rewind.setOnClickListener { presenter.rewind() }
-    fastForward.setOnClickListener { presenter.fastForward() }
-    next.setOnClickListener { presenter.next() }
-    previous.setOnClickListener { presenter.previous() }
-    playedTime.setOnClickListener { launchJumpToPositionDialog() }
+    binding.play.setOnClickListener { presenter.playPause() }
+    binding.rewind.setOnClickListener { presenter.rewind() }
+    binding.fastForward.setOnClickListener { presenter.fastForward() }
+    binding.next.setOnClickListener { presenter.next() }
+    binding.previous.setOnClickListener { presenter.previous() }
+    binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
     var lastClick = 0L
     val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
-    cover.clicks()
+    binding.cover.clicks()
         .filter {
           val currentTime = System.currentTimeMillis()
           val doubleClick = currentTime - lastClick < doubleClickTime
@@ -185,14 +151,14 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   }
 
   private fun setupFab() {
-    play.setIconDrawable(playPauseDrawable)
+    binding.play.setIconDrawable(playPauseDrawable)
   }
 
   private fun setupSeekbar() {
-    seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+    binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
         //sets text to adjust while using seekBar
-        playedTime.text = formatTime(progress, seekBar.max)
+        binding.playedTime.text = formatTime(progress, binding.seekBar.max)
       }
 
       override fun onStartTrackingTouch(view: SeekBar?) {
@@ -200,7 +166,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
 
       override fun onStopTrackingTouch(view: SeekBar?) {
         currentChapter?.let {
-          val progress = seekBar.progress
+          val progress = binding.seekBar.progress
           presenter.seekTo(it.start + progress, it.file)
         }
       }
@@ -209,14 +175,14 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
 
   private fun setupSpinner() {
     spinnerAdapter = MultiLineSpinnerAdapter(
-        spinner = bookSpinner,
+        spinner = binding.bookSpinner,
         context = activity,
         unselectedTextColor = activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)),
         resolveName = BookPlayChapter::correctedName
     )
-    bookSpinner.adapter = spinnerAdapter
+    binding.bookSpinner.adapter = spinnerAdapter
 
-    bookSpinner.itemSelections {
+    binding.bookSpinner.itemSelections {
       i { "spinner: onItemSelected. firing: $it" }
       val item = data[it]
       presenter.seekTo(item.start, item.file)
@@ -224,10 +190,10 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   }
 
   private fun setupToolbar() {
-    toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+    binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
 
-    toolbar.inflateMenu(R.menu.book_play)
-    val menu = toolbar.menu
+    binding.toolbar.inflateMenu(R.menu.book_play)
+    val menu = binding.toolbar.menu
 
     sleepTimerItem = menu.findItem(R.id.action_sleep)
     val equalizerItem = menu.findItem(R.id.action_equalizer)
@@ -236,8 +202,8 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     // hide loudness gain item if not supported
     menu.findItem(R.id.loudness).isVisible = loudnessGain.supported
 
-    toolbar.setNavigationOnClickListener { router.popController(this) }
-    toolbar.setOnMenuItemClickListener {
+    binding.toolbar.setNavigationOnClickListener { router.popController(this) }
+    binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -300,8 +266,8 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     // sets the correct sleep timer icon
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     // set text and visibility
-    timerCountdownView.text = formatTime(ms, ms)
-    timerCountdownView.visible = active
+    binding.timerCountdownView.text = formatTime(ms, ms)
+    binding.timerCountdownView.visible = active
   }
 
   override fun openSleepTimeDialog() {

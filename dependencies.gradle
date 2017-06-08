@@ -1,5 +1,5 @@
 ext.versions = [
-    androidPlugin       : "2.3.2",
+    androidPlugin       : "2.3.3",
     assertJ             : "1.7.1",
     buildTools          : "25.0.3",
     compileSdk          : 25,
@@ -45,6 +45,7 @@ ext.libraries = [
     picasso                : "com.squareup.picasso:picasso:$versions.picasso",
     materialDialogs        : "com.afollestad.material-dialogs:core:$versions.materialDialogs",
     floatingActionButton   : "com.getbase:floatingactionbutton:$versions.floatingActionButton",
+    dataBindingCompiler    : "com.android.databinding:compiler:$versions.androidPlugin",
 
     // base
     dagger                 : "com.google.dagger:dagger:$versions.dagger",

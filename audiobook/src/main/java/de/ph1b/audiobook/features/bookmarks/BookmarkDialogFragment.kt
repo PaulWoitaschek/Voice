@@ -6,19 +6,17 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.DialogBookmarkBinding
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
@@ -97,19 +95,19 @@ class BookmarkDialogFragment : DialogFragment(), BookMarkClickListener {
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var playerController: PlayerController
   private lateinit var book: Book
-  private lateinit var bookmarkTitle: TextView
   private lateinit var adapter: BookmarkAdapter
+  private lateinit var binding: DialogBookmarkBinding
 
   fun addClicked() {
     i { "Add bookmark clicked." }
-    var title = bookmarkTitle.text.toString()
+    var title = binding.bookmarkTitle.text.toString()
     if (title.isEmpty()) {
       title = book.currentChapter().name
     }
 
     bookmarkProvider.addBookmarkAtBookPosition(book, title)
     Toast.makeText(activity, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
-    bookmarkTitle.text = ""
+    binding.bookmarkTitle.setText("")
     dismiss()
   }
 
@@ -118,23 +116,20 @@ class BookmarkDialogFragment : DialogFragment(), BookMarkClickListener {
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val inflater = activity.layoutInflater
-    val view = inflater.inflate(R.layout.dialog_bookmark, null)
-    bookmarkTitle = view.find(R.id.bookmarkTitle)
+    binding = DialogBookmarkBinding.inflate(inflater)
+
 
     book = repo.bookById(bookId())!!
     adapter = BookmarkAdapter(book.chapters, this)
-    val recycler = view.find<RecyclerView>(R.id.recycler)
-    recycler.adapter = adapter
+    binding.recycler.adapter = adapter
     val layoutManager = LinearLayoutManager(activity)
-    recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
-    recycler.layoutManager = layoutManager
+    binding.recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+    binding.recycler.layoutManager = layoutManager
 
     updateAdapterContents()
 
-    val add: View = view.find(R.id.add)
-    add.setOnClickListener { addClicked() }
-    val bookmarkTitle: TextView = view.find(R.id.bookmarkTitle)
-    bookmarkTitle.setOnEditorActionListener { _, actionId, _ ->
+    binding.add.setOnClickListener { addClicked() }
+    binding.bookmarkTitle.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         addClicked() //same as clicking on the +
         return@setOnEditorActionListener true
@@ -143,7 +138,7 @@ class BookmarkDialogFragment : DialogFragment(), BookMarkClickListener {
     }
 
     return MaterialDialog.Builder(context)
-        .customView(view, false)
+        .customView(binding.root, false)
         .title(R.string.bookmark)
         .negativeText(R.string.dialog_cancel)
         .build()

@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.features.bookmarks
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.databinding.DialogBookmarkRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
 import java.util.concurrent.TimeUnit
 
@@ -18,19 +16,14 @@ import java.util.concurrent.TimeUnit
  * @author Paul Woitaschek
  */
 class BookMarkHolder private constructor(
-    itemView: View,
+    private val binding: DialogBookmarkRowLayoutBinding,
     private val listener: BookMarkClickListener
-) : RecyclerView.ViewHolder(itemView) {
-
-  private val title: TextView = find(R.id.title)
-  private val summary: TextView = find(R.id.summary)
-  private val time: TextView = find(R.id.time)
-  private val edit: View = find(R.id.edit)
+) : RecyclerView.ViewHolder(binding.root) {
 
   private var boundBookmark: Bookmark? = null
 
   init {
-    edit.setOnClickListener { view ->
+    binding.edit.setOnClickListener { view ->
       boundBookmark?.let {
         listener.onOptionsMenuClicked(it, view)
       }
@@ -44,14 +37,14 @@ class BookMarkHolder private constructor(
 
   fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
     boundBookmark = bookmark
-    title.text = bookmark.title
+    binding.title.text = bookmark.title
 
     val size = chapters.size
     val currentChapter = chapters.single { it.file == bookmark.mediaFile }
     val index = chapters.indexOf(currentChapter)
 
-    summary.text = itemView.context.getString(R.string.format_bookmarks_n_of, index + 1, size)
-    time.text = itemView.context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
+    binding.summary.text = itemView.context.getString(R.string.format_bookmarks_n_of, index + 1, size)
+    binding.time.text = itemView.context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
         formatTime(currentChapter.duration))
   }
 
@@ -71,8 +64,8 @@ class BookMarkHolder private constructor(
 
     operator fun invoke(parent: ViewGroup, listener: BookMarkClickListener): BookMarkHolder {
       val layoutInflater = parent.layoutInflater()
-      val itemView = layoutInflater.inflate(R.layout.dialog_bookmark_row_layout, parent, false)
-      return BookMarkHolder(itemView, listener)
+      val binding = DialogBookmarkRowLayoutBinding.inflate(layoutInflater)
+      return BookMarkHolder(binding, listener)
     }
   }
 }

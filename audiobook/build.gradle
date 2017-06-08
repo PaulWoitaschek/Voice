@@ -71,10 +71,14 @@ android {
     opensource {}
     proprietary {}
   }
+
+  dataBinding.enabled = true
 }
 
 dependencies {
   compile project(":core")
+
+  kapt libraries.dataBindingCompiler
 
   compile libraries.supportAppCompat
   compile libraries.supportRecyclerView

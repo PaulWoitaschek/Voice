@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.mvp
 
+import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.view.View
 import com.bluelinelabs.conductor.Controller
@@ -10,7 +11,7 @@ import de.ph1b.audiobook.features.BaseController
  *
  * @author Paul Woitaschek
  */
-abstract class MvpBaseController<V, out P>(args: Bundle) : BaseController(args) where P : Presenter<V> {
+abstract class MvpController<V, out P, B>(args: Bundle) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
   constructor() : this(Bundle())
 
