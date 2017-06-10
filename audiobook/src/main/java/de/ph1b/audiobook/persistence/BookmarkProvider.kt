@@ -27,5 +27,7 @@ class BookmarkProvider
     v { "Added bookmark=$addedBookmark" }
   }
 
+  fun get_bookmarks(book: Book) = store.bookmarks(book)
+
   fun bookmarks(book: Book): Observable<List<Bookmark>> = Observable.fromCallable { store.bookmarks(book) }
 }

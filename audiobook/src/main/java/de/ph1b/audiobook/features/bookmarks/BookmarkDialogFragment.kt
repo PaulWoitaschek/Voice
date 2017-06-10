@@ -72,6 +72,20 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
               .show()
           return@setOnMenuItemClickListener true
         }
+        R.id.delete_all -> {
+          builder.title(R.string.bookmark_delete_all_title)
+              .content(R.string.bookmark_delete_all)
+              .positiveText(R.string.remove)
+              .negativeText(R.string.dialog_cancel)
+              .onPositive { _, _ ->
+                for ( bm in bookmarkProvider.get_bookmarks(book) ) {
+                  adapter.remove(bm)
+                  bookmarkProvider.deleteBookmark(bm.id)
+                }
+              }
+              .show()
+          return@setOnMenuItemClickListener true
+        }
         else -> return@setOnMenuItemClickListener false
       }
     }
