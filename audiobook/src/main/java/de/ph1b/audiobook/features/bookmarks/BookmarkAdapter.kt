@@ -14,12 +14,8 @@ import java.util.*
  */
 class BookmarkAdapter(
     private val chapters: List<Chapter>,
-    private val listener: BookMarkClickListener
+    private val listener: BookmarkClickListener
 ) : RecyclerView.Adapter<BookMarkHolder>() {
-
-  init {
-    setHasStableIds(true)
-  }
 
   private val bookmarks = ArrayList<Bookmark>()
 
@@ -32,6 +28,8 @@ class BookmarkAdapter(
     diff.dispatchUpdatesTo(this)
   }
 
+  fun indexOf(bookmark: Bookmark) = bookmarks.indexOf(bookmark)
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BookMarkHolder(parent, listener)
 
   override fun onBindViewHolder(holder: BookMarkHolder, position: Int) {
@@ -40,5 +38,4 @@ class BookmarkAdapter(
   }
 
   override fun getItemCount(): Int = bookmarks.size
-
 }

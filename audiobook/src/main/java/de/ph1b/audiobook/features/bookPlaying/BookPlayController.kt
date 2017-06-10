@@ -12,7 +12,7 @@ import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.audio.LoudnessGain
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
@@ -224,9 +224,9 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
           true
         }
         R.id.action_bookmark -> {
-          BookmarkDialogFragment.newInstance(bookId).show(
-              fragmentManager, BookmarkDialogFragment.TAG
-          )
+          val bookmarkController = BookmarkController.newInstance(bookId)
+              .asTransaction()
+          router.pushController(bookmarkController)
           true
         }
         R.id.action_equalizer -> {

@@ -10,7 +10,7 @@ import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
@@ -58,8 +58,10 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       dismiss()
     }
     binding.bookmark.setOnClickListener {
-      BookmarkDialogFragment.newInstance(book.id)
-          .show(fragmentManager, BookShelfController.TAG)
+      val router = (activity as RouterProvider).provideRouter()
+      val controller = BookmarkController.newInstance(book.id)
+      router.pushController(controller.asTransaction())
+
       dismiss()
     }
 

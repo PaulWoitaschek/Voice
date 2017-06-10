@@ -87,14 +87,14 @@ class WidgetUpdateService : Service() {
           initElements(remoteViews, book)
 
           val opts = appWidgetManager.getAppWidgetOptions(widgetId)
-          val minHeight = dpToPxRounded(opts.getFloat(
-              AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
-          val maxHeight = dpToPxRounded(opts.getFloat(
-              AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
-          val minWidth = dpToPxRounded(opts.getFloat(
-              AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
-          val maxWidth = dpToPxRounded(opts.getFloat(
-              AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
+          val minHeightDp = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+          val minHeight = dpToPxRounded(minHeightDp.toFloat())
+          val maxHeightDp = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+          val maxHeight = dpToPxRounded(maxHeightDp.toFloat())
+          val minWidthDp = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+          val minWidth = dpToPxRounded(minWidthDp.toFloat())
+          val maxWidthDp = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
+          val maxWidth = dpToPxRounded(maxWidthDp.toFloat())
 
           val useWidth: Int
           val useHeight: Int

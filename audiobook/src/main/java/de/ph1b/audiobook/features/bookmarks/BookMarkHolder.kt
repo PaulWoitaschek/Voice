@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.DialogBookmarkRowLayoutBinding
+import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
 import java.util.concurrent.TimeUnit
 
@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit
  * @author Paul Woitaschek
  */
 class BookMarkHolder private constructor(
-    private val binding: DialogBookmarkRowLayoutBinding,
-    private val listener: BookMarkClickListener
+    private val binding: BookmarkRowLayoutBinding,
+    private val listener: BookmarkClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
   private var boundBookmark: Bookmark? = null
@@ -62,9 +62,9 @@ class BookMarkHolder private constructor(
 
   companion object {
 
-    operator fun invoke(parent: ViewGroup, listener: BookMarkClickListener): BookMarkHolder {
+    operator fun invoke(parent: ViewGroup, listener: BookmarkClickListener): BookMarkHolder {
       val layoutInflater = parent.layoutInflater()
-      val binding = DialogBookmarkRowLayoutBinding.inflate(layoutInflater)
+      val binding = BookmarkRowLayoutBinding.inflate(layoutInflater, parent, false)
       return BookMarkHolder(binding, listener)
     }
   }
