@@ -10,10 +10,8 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.Transformation
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
