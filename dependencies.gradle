@@ -6,11 +6,11 @@ ext.versions = [
     conductor           : "2.1.2",
     constraintLayout    : "1.0.2",
     crashlytics         : "2.6.8",
-    dagger              : "2.10",
+    dagger              : "2.11",
     exoPlayer           : "2.4.1",
-    fabric              : "1.22.1",
+    fabric              : "1.22.2",
     floatingActionButton: "1.10.1",
-    gradleVersionsPlugin: "0.14.0",
+    gradleVersionsPlugin: "0.15.0",
     jsr250              : "1.0",
     junit               : "4.12",
     kotlin              : "1.1.2-3",
@@ -26,7 +26,7 @@ ext.versions = [
     rxJavaInterop       : "0.10.0",
     rxPreferences       : "1.0.2",
     slimber             : "1.0.6",
-    support             : "25.3.1",
+    support             : "25.4.0",
     targetSdk           : 25,
 ]
 
