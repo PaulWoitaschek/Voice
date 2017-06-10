@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.Transformation
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
@@ -86,6 +88,9 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     override fun onDestroyActionMode(p0: ActionMode?) {
       cropOverlay.selectionOn = false
+
+      // unset the margin needed for the image crop again
+      (webView.layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(0, 0, 0, 0)
       fab.show()
     }
   }
@@ -163,6 +168,10 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     fab.setOnClickListener {
       cropOverlay.selectionOn = true
+
+      // set the margin needed for the image crop
+      val margin = webView.context.resources.getDimensionPixelOffset(R.dimen.half_circle_size)
+      (webView.layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(margin, margin, margin, margin)
       actionMode = activity.startSupportActionMode(actionModeCallback)
       fab.hide()
     }
