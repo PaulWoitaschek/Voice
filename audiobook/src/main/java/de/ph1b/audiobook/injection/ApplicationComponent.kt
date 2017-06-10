@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
+import de.ph1b.audiobook.features.settings.dialogs.QuickmarkRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.features.widget.WidgetUpdateService
@@ -41,6 +42,7 @@ interface ApplicationComponent {
 
   fun inject(target: App)
   fun inject(target: AutoRewindDialogFragment)
+  fun inject(target: QuickmarkRewindDialogFragment)
   fun inject(target: BaseActivity)
   fun inject(target: LoudnessDialog)
   fun inject(target: BookmarkDialogFragment)

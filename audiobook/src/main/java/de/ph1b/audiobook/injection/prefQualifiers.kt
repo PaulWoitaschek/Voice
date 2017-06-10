@@ -17,6 +17,9 @@ annotation class ShakeToReset
 annotation class AutoRewindAmount
 
 @Qualifier @Retention(RUNTIME)
+annotation class QuickmarkRewindAmount
+
+@Qualifier @Retention(RUNTIME)
 annotation class SeekTime
 
 @Qualifier @Retention(RUNTIME)

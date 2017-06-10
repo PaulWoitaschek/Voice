@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
+import de.ph1b.audiobook.features.settings.dialogs.QuickmarkRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
@@ -108,6 +109,18 @@ class SettingsController : BaseController() {
         .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
         .bindToLifeCycle()
         .subscribe { autoRewindDescription.text = it }
+
+    // quickmark rewind
+    val quickmarkRewindDescription = setupTextSetting(
+        view = view,
+        id = R.id.quickmarkRewind,
+        titleRes = R.string.pref_quickmark_rewind_title) {
+      QuickmarkRewindDialogFragment().show(fragmentManager, QuickmarkRewindDialogFragment.TAG)
+    }
+    prefs.quickmarkRewindAmount.asV2Observable()
+        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+        .bindToLifeCycle()
+        .subscribe { quickmarkRewindDescription.text = it }
 
     return view
   }

@@ -22,6 +22,7 @@ import javax.inject.Singleton
     @PrefResumeAfterCall val resumeAfterCall: Preference<Boolean>,
     @PauseOnTempFocusLoss val pauseOnTempFocusLoss: Preference<Boolean>,
     @AutoRewindAmount val autoRewindAmount: Preference<Int>,
+    @QuickmarkRewindAmount val quickmarkRewindAmount: Preference<Int>,
     @SeekTime val seekTime: Preference<Int>,
     val displayMode: Preference<BookShelfController.DisplayMode>,
     @SleepTime val sleepTime: Preference<Int>,

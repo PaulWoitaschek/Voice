@@ -27,6 +27,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
   @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHAKE_TO_RESET_SLEEP_TIMER", false)
   @Provides @Reusable @PauseOnTempFocusLoss fun providePauseOnTempFocusLossPreference(prefs: RxSharedPreferences) = prefs.getBoolean("PAUSE_ON_CAN_DUCK", false)
   @Provides @Reusable @AutoRewindAmount fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences) = prefs.getInteger("AUTO_REWIND", 2)
+  @Provides @Reusable @QuickmarkRewindAmount fun provideQuickmarkRewindAmountPreference(prefs: RxSharedPreferences) = prefs.getInteger("QUICKMARK_REWIND", 4)
   @Provides @Reusable @SeekTime fun provideSeekTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SEEK_TIME", 20)
   @Provides @Reusable @SleepTime fun provideSleepTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SLEEP_TIME", 20)
   @Provides @Reusable @SingleBookFolders fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
