@@ -18,16 +18,11 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:clipToPadding="false"
-        android:paddingBottom="104dp"
-        android:paddingTop="4dp"/>
+        android:layout_marginTop="?attr/actionBarSize"/>
 
     <de.ph1b.audiobook.uitools.Scroller
         android:id="@+id/scroller"
-        android:layout_width="6dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:layout_marginTop="?attr/actionBarSize"/>
@@ -47,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
         app:fab_colorNormal="?attr/colorAccent"
