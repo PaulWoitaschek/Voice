@@ -80,7 +80,12 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     }
 
     override fun onDestroyActionMode(p0: ActionMode?) {
+      
       binding.cropOverlay.selectionOn = false
+      
+      // unset the margin needed for the image crop again
+      (webView.layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(0, 0, 0, 0)
+      
       binding.fab.show()
     }
   }
@@ -150,6 +155,11 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
     binding.fab.setOnClickListener {
       binding.cropOverlay.selectionOn = true
+      
+      // set the margin needed for the image crop
+      val margin = webView.context.resources.getDimensionPixelOffset(R.dimen.half_circle_size)
+      (webView.layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(margin, margin, margin, margin)
+
       actionMode = activity.startSupportActionMode(actionModeCallback)
       binding.fab.hide()
     }
