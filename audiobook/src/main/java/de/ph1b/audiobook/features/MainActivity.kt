@@ -2,10 +2,12 @@ package de.ph1b.audiobook.features
 
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.*
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
@@ -39,14 +41,13 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_book)
+    val binding = DataBindingUtil.setContentView<ActivityBookBinding>(this, R.layout.activity_book)
     App.component.inject(this)
 
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)
 
-    val root = findViewById(R.id.root) as ViewGroup
-    router = Conductor.attachRouter(this, root, savedInstanceState)
+    router = Conductor.attachRouter(this, binding.root, savedInstanceState)
     if (!router.hasRootController()) {
       setupRouter()
     }

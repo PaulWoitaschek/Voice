@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.SeekBar
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.LoudnessBinding
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
@@ -35,30 +33,27 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
+    val binding = LoudnessBinding.inflate(LayoutInflater.from(activity))
+
     val bookId = args.getLong(NI_BOOK_ID)
     val book = repo.bookById(bookId)
         ?: return MaterialDialog.Builder(activity!!).build()
 
-    val view = LayoutInflater.from(activity).inflate(R.layout.loudness, null, false)
-    val currentText = view.find<TextView>(R.id.currentValue)
-    val maxValue = view.find<TextView>(R.id.maxValue)
-    val seekBar = view.find<SeekBar>(R.id.seekBar)
-
-    seekBar.max = LoudnessGain.MAX_MB
-    seekBar.progress = book.loudnessGain
-    seekBar.progressChangedStream()
+    binding.seekBar.max = LoudnessGain.MAX_MB
+    binding.seekBar.progress = book.loudnessGain
+    binding.seekBar.progressChangedStream()
         .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
         .subscribe {
           player.setLoudnessGain(it)
-          currentText.text = format(it)
+          binding.currentValue.text = format(it)
         }
 
-    currentText.text = format(book.loudnessGain)
-    maxValue.text = format(seekBar.max)
+    binding.currentValue.text = format(book.loudnessGain)
+    binding.maxValue.text = format(binding.seekBar.max)
 
     return MaterialDialog.Builder(activity!!)
         .title(R.string.volume_boost)
-        .customView(view, true)
+        .customView(binding.root, true)
         .build()
   }
 

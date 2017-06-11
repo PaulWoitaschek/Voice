@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.folderOverview
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.ActivityFolderOverviewRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
 import java.util.*
 
@@ -12,8 +12,9 @@ class FolderOverviewAdapter(private val deleteClicked: (toDelete: FolderModel) -
   private val items = ArrayList<FolderModel>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderOverviewHolder {
-    val view = parent.layoutInflater().inflate(R.layout.activity_folder_overview_row_layout, parent, false)
-    return FolderOverviewHolder(view) {
+    val layoutInflater = parent.layoutInflater()
+    val binding = ActivityFolderOverviewRowLayoutBinding.inflate(layoutInflater)
+    return FolderOverviewHolder(binding) {
       deleteClicked(items[it])
     }
   }

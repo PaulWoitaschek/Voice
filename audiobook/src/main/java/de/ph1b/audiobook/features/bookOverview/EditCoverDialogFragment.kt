@@ -7,14 +7,13 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.widget.ImageView
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.imagepicker.CropOverlay
+import de.ph1b.audiobook.databinding.DialogCoverEditBinding
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.persistence.BookRepository
@@ -39,40 +38,36 @@ class EditCoverDialogFragment : DialogFragment() {
 
     val picasso = Picasso.with(context)
 
-    // retrieve views
-    val customView = activity.layoutInflater.inflate(R.layout.dialog_cover_edit, null)
-    val cropOverlay = customView.findViewById(R.id.cropOverlay) as CropOverlay
-    val coverImage = customView.findViewById(R.id.coverImage) as ImageView
-    val loadingProgressBar = customView.findViewById(R.id.cover_replacement)
+    val binding = DialogCoverEditBinding.inflate(activity.layoutInflater)
 
     // init values
     val bookId = arguments.getLong(NI_BOOK_ID)
     val uri = Uri.parse(arguments.getString(NI_COVER_URI))
     val book = repo.bookById(bookId)!!
 
-    loadingProgressBar.visible = true
-    cropOverlay.selectionOn = false
+    binding.coverReplacement.visible = true
+    binding.cropOverlay.selectionOn = false
     picasso.load(uri)
-        .into(coverImage, object : PicassoCallback {
+        .into(binding.coverImage, object : PicassoCallback {
           override fun onError() {
             dismiss()
           }
 
           override fun onSuccess() {
-            cropOverlay.selectionOn = true
-            loadingProgressBar.visible = false
+            binding.cropOverlay.selectionOn = true
+            binding.coverReplacement.visible = false
           }
         })
 
     val dialog = MaterialDialog.Builder(context)
-        .customView(customView, false)
+        .customView(binding.root, false)
         .title(R.string.cover)
         .positiveText(R.string.dialog_confirm)
         .build()
 
     // use a click listener so the dialog stays open till the image was saved
     dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
-      val r = cropOverlay.selectedRect
+      val r = binding.cropOverlay.selectedRect
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
@@ -87,9 +82,9 @@ class EditCoverDialogFragment : DialogFragment() {
           }
         }
         // picasso only holds a weak reference so we have to protect against gc
-        coverImage.tag = target
+        binding.coverImage.tag = target
         picasso.load(uri)
-            .transform(CropTransformation(cropOverlay, coverImage))
+            .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
             .into(target)
       } else dismiss()
     }

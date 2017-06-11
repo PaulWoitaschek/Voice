@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.widget.SeekBar
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -25,26 +22,24 @@ class SeekDialogFragment : DialogFragment() {
     App.component.inject(this)
 
     // find views
-    val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
-    val seekBar: SeekBar = view.find(R.id.seekBar)
-    val textView: TextView = view.find(R.id.textView)
+    val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
 
     // init
     val oldSeekTime = prefs.seekTime.value
-    seekBar.max = (MAX - MIN) * FACTOR
-    seekBar.onProgressChanged(initialNotification = true) {
+    binding.seekBar.max = (MAX - MIN) * FACTOR
+    binding.seekBar.onProgressChanged(initialNotification = true) {
       val value = it / FACTOR + MIN
-      textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
+      binding.textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
     }
-    seekBar.progress = (oldSeekTime - MIN) * FACTOR
+    binding.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
     return MaterialDialog.Builder(context)
         .title(R.string.pref_seek_time)
-        .customView(view, true)
+        .customView(binding.root, true)
         .positiveText(R.string.dialog_confirm)
         .negativeText(R.string.dialog_cancel)
         .onPositive { _, _ ->
-          val newSeekTime = seekBar.progress / FACTOR + MIN
+          val newSeekTime = binding.seekBar.progress / FACTOR + MIN
           prefs.seekTime.value = newSeekTime
         }.build()
   }

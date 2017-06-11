@@ -7,7 +7,7 @@ import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.*
 import de.ph1b.audiobook.features.bookPlaying.*
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
@@ -43,7 +43,7 @@ interface ApplicationComponent {
   fun inject(target: AutoRewindDialogFragment)
   fun inject(target: BaseActivity)
   fun inject(target: LoudnessDialog)
-  fun inject(target: BookmarkDialogFragment)
+  fun inject(target: BookmarkController)
   fun inject(target: BookPlayController)
   fun inject(target: BookPlayPresenter)
   fun inject(target: BookShelfAdapter)

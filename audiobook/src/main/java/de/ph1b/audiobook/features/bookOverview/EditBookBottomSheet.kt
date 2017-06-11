@@ -9,7 +9,8 @@ import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
+import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
@@ -40,36 +41,34 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    val view = context.layoutInflater().inflate(R.layout.book_more_bottom_sheet, null, false)
-    val title = view.findViewById(R.id.title) as TextView
-    val internetCover = view.findViewById(R.id.internetCover) as TextView
-    val fileCover = view.findViewById(R.id.fileCover) as TextView
-    val bookmark = view.findViewById(R.id.bookmark) as TextView
-    dialog.setContentView(view)
+    val binding = BookMoreBottomSheetBinding.inflate(activity.layoutInflater)
+    dialog.setContentView(binding.root)
 
-    title.setOnClickListener {
+    binding.title.setOnClickListener {
       EditBookTitleDialogFragment.newInstance(book)
           .show(fragmentManager, EditBookTitleDialogFragment.TAG)
       dismiss()
     }
-    internetCover.setOnClickListener {
+    binding.internetCover.setOnClickListener {
       callback().onInternetCoverRequested(book)
       dismiss()
     }
-    fileCover.setOnClickListener {
+    binding.fileCover.setOnClickListener {
       callback().onFileCoverRequested(book)
       dismiss()
     }
-    bookmark.setOnClickListener {
-      BookmarkDialogFragment.newInstance(book.id)
-          .show(fragmentManager, BookShelfController.TAG)
+    binding.bookmark.setOnClickListener {
+      val router = (activity as RouterProvider).provideRouter()
+      val controller = BookmarkController.newInstance(book.id)
+      router.pushController(controller.asTransaction())
+
       dismiss()
     }
 
-    tintLeftDrawable(title)
-    tintLeftDrawable(internetCover)
-    tintLeftDrawable(fileCover)
-    tintLeftDrawable(bookmark)
+    tintLeftDrawable(binding.title)
+    tintLeftDrawable(binding.internetCover)
+    tintLeftDrawable(binding.fileCover)
+    tintLeftDrawable(binding.bookmark)
 
     return dialog
   }

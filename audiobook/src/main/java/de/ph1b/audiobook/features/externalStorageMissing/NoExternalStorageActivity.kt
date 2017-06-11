@@ -1,20 +1,20 @@
 package de.ph1b.audiobook.features.externalStorageMissing
 
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.ActivityNoExternalBinding
 import de.ph1b.audiobook.features.BaseActivity
-import de.ph1b.audiobook.misc.find
 
 class NoExternalStorageActivity : AppCompatActivity() {
 
   public override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_no_external)
+    val binding = DataBindingUtil.setContentView<ActivityNoExternalBinding>(this, R.layout.activity_no_external)
 
-    val toolbar = find<Toolbar>(R.id.toolbarInclude)
+    val toolbar = binding.toolbarInclude.toolbar
     toolbar.setTitle(R.string.no_external_storage_action_bar_title)
   }
 

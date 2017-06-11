@@ -8,24 +8,23 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.*
-import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
-import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.BookShelfBinding
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.*
-import de.ph1b.audiobook.mvp.MvpBaseController
+import de.ph1b.audiobook.misc.asTransaction
+import de.ph1b.audiobook.misc.postedIfComputingLayout
+import de.ph1b.audiobook.misc.supportTransitionName
+import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.Scroller
 import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
@@ -33,9 +32,11 @@ import javax.inject.Inject
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
+class BookShelfController : MvpController<BookShelfController, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 
   override val presenter = App.component.bookShelfPresenter
+  override val layoutRes = R.layout.book_shelf
+
   private val COVER_FROM_GALLERY = 1
 
   override fun provideView() = this
@@ -56,39 +57,21 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
 
-  private lateinit var recyclerView: RecyclerView
-  private lateinit var fab: FloatingActionButton
-  private lateinit var toolbar: Toolbar
-  private lateinit var scroller: Scroller
-  private lateinit var loadingProgress: View
   private lateinit var currentPlaying: MenuItem
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    val view = inflater.inflate(R.layout.book_shelf, container, false)
-
-    findViews(view)
+  override fun onBindingCreated(binding: BookShelfBinding) {
     setupFab()
     setupRecyclerView()
     setupToolbar()
-
-    return view
-  }
-
-  private fun findViews(view: View) {
-    recyclerView = view.find(R.id.recyclerView)
-    fab = view.find(R.id.fab)
-    toolbar = view.find(R.id.toolbar)
-    loadingProgress = view.find(R.id.loadingProgress)
-    scroller = view.find(R.id.scroller)
   }
 
   private fun setupFab() {
-    fab.setIconDrawable(playPauseDrawable)
-    fab.setOnClickListener { presenter.playPauseRequested() }
+    binding.fab.setIconDrawable(playPauseDrawable)
+    binding.fab.setOnClickListener { presenter.playPauseRequested() }
   }
 
   private fun setupRecyclerView() {
-    recyclerView.setHasFixedSize(true)
+    binding.recyclerView.setHasFixedSize(true)
     adapter = BookShelfAdapter(activity) { book, clickType ->
       if (clickType == BookShelfAdapter.ClickType.REGULAR) {
         invokeBookSelectionCallback(book.id)
@@ -97,22 +80,22 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
             .show(fragmentManager, "editBottomSheet")
       }
     }
-    recyclerView.adapter = adapter
+    binding.recyclerView.adapter = adapter
     // without this the item would blink on every change
-    val anim = recyclerView.itemAnimator as SimpleItemAnimator
+    val anim = binding.recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
     listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
 
-    scroller.attachTo(recyclerView)
+    binding.scroller.attachTo(binding.recyclerView)
 
     updateDisplayMode()
   }
 
   private fun setupToolbar() {
-    toolbar.inflateMenu(R.menu.book_shelf)
-    val menu = toolbar.menu
+    binding.toolbar.inflateMenu(R.menu.book_shelf)
+    val menu = binding.toolbar.menu
 
     currentPlaying = menu.findItem(R.id.action_current)
 
@@ -120,9 +103,9 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     val displayModeItem = menu.findItem(R.id.action_change_layout)
     displayModeItem.setIcon((!prefs.displayMode.value).icon)
 
-    toolbar.title = getString(R.string.app_name)
+    binding.toolbar.title = getString(R.string.app_name)
 
-    toolbar.setOnMenuItemClickListener {
+    binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -172,7 +155,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
   // Returns the amount of columns the main-grid will need
   private fun amountOfColumns(): Int {
-    val r = recyclerView.resources
+    val r = binding.recyclerView.resources
     val displayMetrics = r.displayMetrics
     val widthPx = displayMetrics.widthPixels.toFloat()
     val desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover).toFloat()
@@ -183,11 +166,11 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   private fun updateDisplayMode() {
     val defaultDisplayMode = prefs.displayMode.value
     if (defaultDisplayMode == DisplayMode.GRID) {
-      recyclerView.removeItemDecoration(listDecoration)
-      recyclerView.layoutManager = gridLayoutManager
+      binding.recyclerView.removeItemDecoration(listDecoration)
+      binding.recyclerView.layoutManager = gridLayoutManager
     } else {
-      recyclerView.addItemDecoration(listDecoration, 0)
-      recyclerView.layoutManager = linearLayoutManager
+      binding.recyclerView.addItemDecoration(listDecoration, 0)
+      binding.recyclerView.layoutManager = linearLayoutManager
     }
     adapter.displayMode = defaultDisplayMode
   }
@@ -195,7 +178,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   private fun invokeBookSelectionCallback(bookId: Long) {
     prefs.currentBookId.value = bookId
 
-    val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
+    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       val transition = BookTransition()
@@ -222,13 +205,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
     for (i in 0..adapter.itemCount - 1) {
       val itemId = adapter.getItemId(i)
-      val vh = recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
+      val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
       if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
         adapter.notifyItemChanged(i)
       }
     }
 
-    fab.visible = currentBook != null
+    binding.fab.visible = currentBook != null
 
     currentPlaying.isVisible = currentBook != null
   }
@@ -255,13 +238,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   }
 
   fun showLoading(loading: Boolean) {
-    loadingProgress.visible = loading
+    binding.loadingProgress.visible = loading
   }
 
   fun bookCoverChanged(bookId: Long) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-    recyclerView.postedIfComputingLayout {
+    binding.recyclerView.postedIfComputingLayout {
       adapter.reloadBookCover(bookId)
     }
   }

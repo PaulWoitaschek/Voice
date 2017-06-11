@@ -1,15 +1,12 @@
 package de.ph1b.audiobook.features.settings
 
-import android.support.annotation.IdRes
 import android.support.annotation.StringRes
-import android.support.v7.widget.SwitchCompat
-import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.SettingRowDoubleBinding
+import de.ph1b.audiobook.databinding.SettingRowSwitchBinding
+import de.ph1b.audiobook.databinding.SettingsBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
@@ -19,7 +16,6 @@ import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asTransaction
 import de.ph1b.audiobook.misc.asV2Observable
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
@@ -28,7 +24,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class SettingsController : BaseController() {
+class SettingsController : BaseController<SettingsBinding>() {
 
   @Inject lateinit var prefs: PrefsManager
 
@@ -36,15 +32,14 @@ class SettingsController : BaseController() {
     App.component.inject(this)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    val view = inflater.inflate(R.layout.settings, container, false)
+  override val layoutRes = R.layout.settings
 
-    setupToolbar(view)
+  override fun onBindingCreated(binding: SettingsBinding) {
+    setupToolbar()
 
     // audio book folders
     setupTextSetting(
-        view = view,
-        id = R.id.audiobookFolder,
+        binding = binding.audiobookFolder,
         titleRes = R.string.pref_root_folder_title,
         contentRes = R.string.pref_root_folder_summary) {
       val transaction = FolderOverviewController().asTransaction()
@@ -53,8 +48,7 @@ class SettingsController : BaseController() {
 
     // theme
     val themeDescription = setupTextSetting(
-        view = view,
-        id = R.id.theme,
+        binding = binding.theme,
         titleRes = R.string.pref_theme_title) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
@@ -64,7 +58,7 @@ class SettingsController : BaseController() {
 
     // resume on playback
     setupSwitchSetting(
-        view = view, id = R.id.resumePlayback,
+        binding = binding.resumePlayback,
         titleRes = R.string.pref_resume_on_replug,
         contentRes = R.string.pref_resume_on_replug_hint,
         pref = prefs.resumeOnReplug
@@ -72,8 +66,7 @@ class SettingsController : BaseController() {
 
     // resume on playback
     setupSwitchSetting(
-        view = view,
-        id = R.id.resumeAfterCall,
+        binding = binding.resumeAfterCall,
         titleRes = R.string.pref_resume_after_call,
         contentRes = R.string.pref_resume_after_call_hint,
         pref = prefs.resumeAfterCall
@@ -81,15 +74,17 @@ class SettingsController : BaseController() {
 
     // pause on interruption
     setupSwitchSetting(
-        view = view,
-        id = R.id.pauseOnInterruption,
+        binding = binding.pauseOnInterruption,
         titleRes = R.string.pref_pause_on_can_duck_title,
         contentRes = R.string.pref_pause_on_can_duck_summary,
         pref = prefs.pauseOnTempFocusLoss
     )
 
     // skip amount
-    val skipAmountDescription = setupTextSetting(view, R.id.skipAmount, R.string.pref_seek_time) {
+    val skipAmountDescription = setupTextSetting(
+        binding = binding.skipAmount,
+        titleRes = R.string.pref_seek_time
+    ) {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
     prefs.seekTime.asV2Observable()
@@ -99,8 +94,7 @@ class SettingsController : BaseController() {
 
     // auto rewind
     val autoRewindDescription = setupTextSetting(
-        view = view,
-        id = R.id.autoRewind,
+        binding = binding.autoRewind,
         titleRes = R.string.pref_auto_rewind_title) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
@@ -108,55 +102,46 @@ class SettingsController : BaseController() {
         .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
         .bindToLifeCycle()
         .subscribe { autoRewindDescription.text = it }
-
-    return view
   }
 
-  private fun setupToolbar(view: View) {
-    val toolbar = view.find<Toolbar>(R.id.toolbar)
-    toolbar.setNavigationIcon(R.drawable.close)
-    toolbar.inflateMenu(R.menu.menu_settings)
-    toolbar.setOnMenuItemClickListener {
+  private fun setupToolbar() {
+    binding.toolbar.setNavigationIcon(R.drawable.close)
+    binding.toolbar.inflateMenu(R.menu.menu_settings)
+    binding.toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
         SupportDialogFragment().show(fragmentManager, SupportDialogFragment.TAG)
         true
       } else
         false
     }
-    toolbar.setNavigationOnClickListener {
+    binding.toolbar.setNavigationOnClickListener {
       activity.onBackPressed()
     }
-    toolbar.title = getString(R.string.action_settings)
+    binding.toolbar.title = getString(R.string.action_settings)
   }
 
-  private inline fun setupTextSetting(view: View, @IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {
-    val theme: View = view.find(id)
-    val title: TextView = theme.find(R.id.title)
-    val description: TextView = theme.find(R.id.description)
+  private inline fun setupTextSetting(binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {
+    val title: TextView = binding.title
+    val description: TextView = binding.description
     if (contentRes != null) description.setText(contentRes)
     title.setText(titleRes)
-    theme.setOnClickListener {
+    binding.root.setOnClickListener {
       onClick()
     }
     return description
   }
 
-  private fun setupSwitchSetting(view: View, @IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int, pref: Preference<Boolean>) {
-    val root = view.find<View>(id)
-    val title = root.find<TextView>(R.id.switchTitle)
-    val content = root.find<TextView>(R.id.switchDescription)
-    val switch: SwitchCompat = root.find(R.id.switchSetting)
+  private fun setupSwitchSetting(binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int, pref: Preference<Boolean>) {
+    binding.switchTitle.setText(titleRes)
+    binding.switchDescription.setText(contentRes)
 
-    title.setText(titleRes)
-    content.setText(contentRes)
-
-    switch.setOnCheckedChangeListener { _, checked ->
+    binding.switchSetting.setOnCheckedChangeListener { _, checked ->
       pref.set(checked)
     }
     pref.asV2Observable()
         .bindToLifeCycle()
-        .subscribe { switch.isChecked = it }
+        .subscribe { binding.switchSetting.isChecked = it }
 
-    root.setOnClickListener { switch.toggle() }
+    binding.root.setOnClickListener { binding.switchSetting.toggle() }
   }
 }
