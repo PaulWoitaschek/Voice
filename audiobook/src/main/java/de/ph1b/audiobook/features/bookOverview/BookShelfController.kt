@@ -26,6 +26,7 @@ import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
+import w
 import javax.inject.Inject
 
 /**
@@ -92,10 +93,13 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     binding.recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
       val twoDp = activity.dpToPx(2F)
       override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-
         val position = parent.getChildAdapterPosition(view)
         val count = state.itemCount
         val isGrid = prefs.displayMode.value == DisplayMode.GRID
+        if (position >= count) {
+          w { "position=$position is >= count=$count. Skipping decoration" }
+          return
+        }
         positionResolver.prepare(position = position, count = count, columnCount = if (isGrid) amountOfColumns() else 1)
 
         if (isGrid) {
