@@ -42,7 +42,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
   }
 
   private val scaleGestureDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-
     override fun onScale(detector: ScaleGestureDetector): Boolean {
       val dx = detector.currentSpanX - detector.previousSpanX
       val dy = detector.currentSpanY - detector.previousSpanY
@@ -66,7 +65,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
       }
     }
 
-
   private var eventType: EventType? = null
   private var resizeType: Resize? = null
   private val touchOffset = context.dpToPxRounded(16F)
@@ -74,7 +72,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
   private fun newCircle() = context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
     visible = false
   }
-
 
   private fun minRectSize() = Math.min(bounds.width(), bounds.height()) / 3f
 
@@ -169,25 +166,22 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
   }
 
   private fun preserveBounds() {
-
-    val halfCircleSize = bottomCircle.width / 2f
-
-    val rightDiff = dragRect.right - bounds.right + halfCircleSize
+    val rightDiff = dragRect.right - bounds.right
     if (rightDiff > 0) {
       dragRect.offset(-rightDiff, 0f)
     }
 
-    val leftDiff = dragRect.left - bounds.left - halfCircleSize
+    val leftDiff = dragRect.left - bounds.left
     if (leftDiff < 0) {
       dragRect.offset(-leftDiff, 0f)
     }
 
-    val topDiff = dragRect.top - bounds.top - halfCircleSize
+    val topDiff = dragRect.top - bounds.top
     if (topDiff < 0) {
       dragRect.offset(0f, -topDiff)
     }
 
-    val bottomDiff = dragRect.bottom - bounds.bottom + halfCircleSize
+    val bottomDiff = dragRect.bottom - bounds.bottom
     if (bottomDiff > 0) {
       dragRect.offset(0f, -bottomDiff)
     }
@@ -233,7 +227,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
    * Calculates the position of the chosen cropped rect.
    * @return the rect selection
    */
-  //returning the actual sizes
   val selectedRect: Rect
     get() {
       val widthScaleFactor = 1
@@ -268,8 +261,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
       canvas.drawRect(left, bottom, right, boundsHeight, darkeningPaint) // bottom
 
       with(canvas) {
-        // top
-        //  circleAt(left, top)
         topCircle.center(centerX, top)
         leftCircle.center(left, centerY)
         rightCircle.center(right, centerY)
