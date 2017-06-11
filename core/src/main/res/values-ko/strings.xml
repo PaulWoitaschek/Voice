@@ -87,8 +87,6 @@
   <string name="pref_theme_day"> 낮</string>
   <string name="pref_theme_night">밤</string>
   <string name="pref_theme_daynight">낮 / 밤</string>
-
-
   <string name="pref_auto_rewind_title">자동 다시감기</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="other"> 일시정지 후 %d 초 앞에서 시작합니다</item>

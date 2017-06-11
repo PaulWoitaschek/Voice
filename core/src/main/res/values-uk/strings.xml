@@ -20,6 +20,7 @@
   <string name="play">Програвати</string>
   <string name="pause">Призупинити</string>
   <string name="equalizer">Еквалайзер</string>
+  <string name="volume_boost">Підвищення гучності </string>
   <!--NoExternalStorage-->
   <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
   <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
@@ -91,8 +92,6 @@
   <string name="pref_theme_day">День</string>
   <string name="pref_theme_night">Ніч</string>
   <string name="pref_theme_daynight">Режим день / ніч</string>
-
-
   <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>

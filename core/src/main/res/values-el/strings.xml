@@ -73,8 +73,6 @@
   <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>
   <string name="pref_root_folder_summary">Οι επιλεγμένοι φακέλοι ηχητικού βιβλίου.</string>
   <string name="pref_theme_title">Θέμα</string>
-
-
   <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Ξαναγυρνάει αυτόματα %d δευτερόλεπτο πίσω μετά από μια χειροκίνητη παύση.</item>
