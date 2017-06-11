@@ -28,7 +28,7 @@ class AddBookmarkDialog : DialogController() {
         .positiveText(R.string.dialog_confirm)
         .build()
     val editText = dialog.inputEditText!!
-    editText.setOnEditorActionListener { v, actionId, event ->
+    editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         val title = editText.text.toString()
         val callback = targetController as Callback

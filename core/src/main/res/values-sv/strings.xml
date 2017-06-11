@@ -89,8 +89,8 @@
   <string name="pref_theme_day">Dag</string>
   <string name="pref_theme_night">Natt</string>
   <string name="pref_theme_daynight">Dag/Natt</string>
-  <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
-  <string name="pref_pause_on_can_duck_summary">Pausa när du blir avbruten i stället för att sänka volymen under hela avbrottet.</string>
+
+
   <string name="pref_auto_rewind_title">Automatisk återspolning</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Spolas automatiskt %d sekund efter manuell paus.</item>

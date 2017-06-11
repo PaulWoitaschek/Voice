@@ -91,8 +91,8 @@
   <string name="pref_theme_day">День</string>
   <string name="pref_theme_night">Ніч</string>
   <string name="pref_theme_daynight">Режим день / ніч</string>
-  <string name="pref_pause_on_can_duck_title">Призупинити при перериванні</string>
-  <string name="pref_pause_on_can_duck_summary">Призупинити, коли перервано програвання замість зменшення гучності на час переривання.</string>
+
+
   <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>

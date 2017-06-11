@@ -89,8 +89,8 @@
   <string name="pref_theme_day">Giorno</string>
   <string name="pref_theme_night">Notte</string>
   <string name="pref_theme_daynight">Giorno / Notte</string>
-  <string name="pref_pause_on_can_duck_title">Pausa se interrotto</string>
-  <string name="pref_pause_on_can_duck_summary">Pausa se interrotto, invece di abbassare il volume per la durata dell\'interruzione.</string>
+
+
   <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Riavvolgimento automatico di %d secondo quando si mette in pausa manualmente.</item>

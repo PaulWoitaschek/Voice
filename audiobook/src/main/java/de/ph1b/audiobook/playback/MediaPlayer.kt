@@ -135,10 +135,6 @@ constructor(
     }
   }
 
-  fun setVolume(loud: Boolean) {
-    player.volume = if (loud) 1F else 0.1F
-  }
-
   fun setLoudnessGain(mB: Int) {
     v { "setLoudnessGain to $mB mB" }
 

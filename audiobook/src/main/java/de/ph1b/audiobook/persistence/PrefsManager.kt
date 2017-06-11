@@ -20,7 +20,6 @@ import javax.inject.Singleton
     @BookmarkOnSleepTimer val bookmarkOnSleepTimer: Preference<Boolean>,
     @ShakeToReset val shakeToReset: Preference<Boolean>,
     @PrefResumeAfterCall val resumeAfterCall: Preference<Boolean>,
-    @PauseOnTempFocusLoss val pauseOnTempFocusLoss: Preference<Boolean>,
     @AutoRewindAmount val autoRewindAmount: Preference<Int>,
     @SeekTime val seekTime: Preference<Int>,
     val displayMode: Preference<BookShelfController.DisplayMode>,

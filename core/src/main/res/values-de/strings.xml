@@ -89,8 +89,8 @@
   <string name="pref_theme_day">Tag</string>
   <string name="pref_theme_night">Nacht</string>
   <string name="pref_theme_daynight">Tag / Nacht</string>
-  <string name="pref_pause_on_can_duck_title">Pause bei Unterbrechung</string>
-  <string name="pref_pause_on_can_duck_summary">Pausiert bei kurzer Unterbrechung anstelle die Lautstärke kurz herunterzusetzen.</string>
+
+
   <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Spult nach manuellem Pausieren automatisch um %d Sekunde zurück.</item>

@@ -69,7 +69,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookSearchParser: BookSearchParser
   @Inject lateinit var bookSearchHandler: BookSearchHandler
   private lateinit var mediaSession: MediaSessionCompat
-  private val androidAutoState = AndroidAutoStateReceiver()
   private lateinit var changeNotifier: ChangeNotifier
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
@@ -94,9 +93,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
           } else if (pauseReason == PauseReason.CALL && prefs.resumeAfterCall.value) {
             d { "we were paused because of a call and we should resume after a call. Start playback" }
             player.play()
-          } else if (playStateManager.playState == PlayState.PLAYING) {
-            d { "increasing volume" }
-            player.setVolume(loud = true)
           }
         }
         AudioManager.AUDIOFOCUS_LOSS -> {
@@ -104,24 +100,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
           player.pause(rewind = true)
           playStateManager.pauseReason = PauseReason.NONE
         }
-        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
           if (playStateManager.playState == PlayState.PLAYING) {
-            // if android auto is connected temporarily pause the player so the playback does disturb voice recognition
-            if (prefs.pauseOnTempFocusLoss.value || androidAutoState.connected) {
-              d { "Paused by audio-focus loss transient." }
-              // Pause is temporary, don't rewind
-              player.pause(rewind = false)
-              playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-            } else {
-              d { "lowering volume" }
-              player.setVolume(loud = false)
-            }
-          }
-        }
-        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-          if (playStateManager.playState === PlayState.PLAYING) {
             d { "Paused by audio-focus loss transient." }
-            player.pause(rewind = true) // auto pause
+            // Pause is temporary, don't rewind
+            player.pause(rewind = false)
             playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
           }
         }
@@ -130,12 +113,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-
   override fun onCreate() {
     super.onCreate()
-
-    // register android auto connected receiver
-    registerReceiver(androidAutoState, AndroidAutoStateReceiver.filter())
 
     val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
@@ -327,8 +306,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     mediaSession.release()
     disposables.dispose()
-
-    unregisterReceiver(androidAutoState)
 
     super.onDestroy()
   }

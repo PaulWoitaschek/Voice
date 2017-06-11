@@ -20,9 +20,6 @@ annotation class AutoRewindAmount
 annotation class SeekTime
 
 @Qualifier @Retention(RUNTIME)
-annotation class PauseOnTempFocusLoss
-
-@Qualifier @Retention(RUNTIME)
 annotation class PrefResumeAfterCall
 
 @Qualifier @Retention(RUNTIME)
