@@ -84,11 +84,22 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     prefs.currentBookId.value = bookId()
     playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
-    if (wasPlaying) {
+    if (bookmark.title.endsWith(getString(R.string.quick_bookmark))) {
+      var bm_title = getString(R.string.quick_bookmark)
+      if (!bookmark.title.startsWith("X")) {
+        bm_title="X "+getString(R.string.quick_bookmark)
+      }
+      val newBookmark = Bookmark(bookmark.mediaFile, bm_title, bookmark.time)
+      adapter.replace(bookmark, newBookmark)
+      bookmarkProvider.deleteBookmark(bookmark.id)
+      bookmarkProvider.addBookmark(newBookmark)
       playerController.play()
+    } else {
+      if (wasPlaying) {
+        playerController.play()
+      }
+      dialog.cancel()
     }
-
-    dialog.cancel()
   }
 
   @Inject lateinit var prefs: PrefsManager
