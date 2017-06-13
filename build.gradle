@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath "com.android.tools.build:gradle:$versions.androidPlugin"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     classpath "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugin"
     classpath "io.fabric.tools:gradle:$versions.fabric"

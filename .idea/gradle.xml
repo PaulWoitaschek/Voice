@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$/audiobook" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/exoplayer-flac" />
+            <option value="$PROJECT_DIR$/exoplayer-opus" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
