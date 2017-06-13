@@ -161,7 +161,7 @@ constructor(
     }
   }
 
-  fun skip(direction: Direction) {
+  fun skip(direction: Direction, doSeekTime:Int = seekTime, start_after_2sec: Boolean = true) {
     v { "direction=$direction" }
 
     prepareIfIdle()
@@ -172,13 +172,13 @@ constructor(
       val currentPos = player.currentPosition
           .coerceAtLeast(0)
       val duration = player.duration
-      val delta = seekTime * 1000
+      val delta = doSeekTime * 1000
 
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
       if (seekTo < 0) {
-        previous(false)
+        previous(false, start_after_2sec)
       } else if (seekTo > duration) {
         next()
       } else {
@@ -188,21 +188,21 @@ constructor(
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
-  fun previous(toNullOfNewTrack: Boolean) {
+  fun previous(toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
     i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
     bookSubject.value?.let {
-      val handled = previousByMarks(it)
-      if (!handled) previousByFile(it, toNullOfNewTrack)
+      val handled = previousByMarks(it, start_after_2sec)
+      if (!handled) previousByFile(it, toNullOfNewTrack, start_after_2sec)
     }
   }
 
-  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
+  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
     val previousChapter = book.previousChapter()
-    if (player.currentPosition > 2000 || previousChapter == null) {
+    if ( (start_after_2sec && player.currentPosition > 2000) || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -216,12 +216,12 @@ constructor(
     }
   }
 
-  private fun previousByMarks(book: Book): Boolean {
+  private fun previousByMarks(book: Book, start_after_2sec: Boolean = true): Boolean {
     val marks = book.currentChapter().marks
     marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
-        if (diff > 2000) {
+        if (start_after_2sec && diff > 2000) {
           changePosition(startOfMark)
           return true
         } else if (index > 0) {

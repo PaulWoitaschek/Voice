@@ -118,11 +118,19 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
     prefs.currentBookId.value = bookId
     playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
-    if (wasPlaying) {
+    if (bookmark.title.endsWith(getString(R.string.quick_bookmark))) {
+      var bm_title = getString(R.string.quick_bookmark)
+      if (!bookmark.title.startsWith("X")) {
+        bm_title="X "+getString(R.string.quick_bookmark)
+      }
+      onEditBookmark(bookmark.id,bm_title)
       playerController.play()
+    } else {
+      if (wasPlaying) {
+        playerController.play()
+      }
+      router.popController(this)
     }
-
-    router.popController(this)
   }
 
   override fun onEditBookmark(id: Long, title: String) {

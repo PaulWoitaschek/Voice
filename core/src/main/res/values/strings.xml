@@ -72,6 +72,7 @@
   <string name="bookmark_edit_hint">Bookmark name</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="bookmark_delete_title">Delete this bookmark?</string>
+  <string name="quick_bookmark">Quick Bookmark</string>
   <!--Settings-->
   <string name="action_settings">Preferences</string>
   <string name="pref_resume_on_replug">Resume playback</string>
@@ -95,6 +96,11 @@
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Automatically rewinds %d second after manual pausing.</item>
     <item quantity="other">Automatically rewinds %d seconds after manual pausing.</item>
+  </plurals>
+  <string name="pref_quickmark_rewind_title">Quick Bookmark Rewind</string>
+  <plurals name="pref_quickmark_rewind_summary">
+    <item quantity="one">Automatically rewinds %d second before making a Quick Bookmark.</item>
+    <item quantity="other">Automatically rewinds %d seconds before making a Quick Bookmark.</item>
   </plurals>
   <string name="pref_support_title">Support</string>
   <string name="pref_support_translations">Translations</string>
