@@ -26,7 +26,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
+class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, DeleteAllBookmarksDialog.Callback, EditBookmarkDialog.Callback {
 
   private var bookId by LongArgumentDelegate()
   private val bookmarks = ArrayList<Bookmark>()
@@ -88,6 +88,10 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
           showDeleteBookmarkDialog(bookmark)
           true
         }
+        R.id.delete_all -> {
+          showDeleteAllBookmarksDialog()
+          true
+        }
         else -> false
       }
     }
@@ -110,6 +114,19 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
     bookmarkProvider.deleteBookmark(id)
     bookmarks.removeIf { it.id == id }
     adapter.newData(bookmarks)
+  }
+
+  private fun showDeleteAllBookmarksDialog() {
+    DeleteAllBookmarksDialog(this).showDialog(router)
+  }
+
+  override fun onDeleteAllBookmarksConfirmed() {
+    for ( bm in bookmarkProvider.bookmarks(book) ) {
+      bookmarkProvider.deleteBookmark(bm.id)
+    }
+    bookmarks.clear()
+    adapter.newData(bookmarks)
+    //router.popController(this)
   }
 
   override fun onBookmarkClicked(bookmark: Bookmark) {
