@@ -203,7 +203,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         override fun onPlay() {
           i { "onPlay current(${System.currentTimeMillis()}) lastPaused($lastPaused) diff(${System.currentTimeMillis() - lastPaused})" }
           if( System.currentTimeMillis() - lastPaused < 1000 ) {
-            player.rewind(prefs.quickmarkRewindAmount.value)
+            player.skip(MediaPlayer.Direction.BACKWARD,prefs.quickmarkRewindAmount.value,start_after_2sec=false)
             bookmarkProvider.addBookmarkAtBookPosition(player.book()!!, getString(R.string.quick_bookmark))
           }
           player.play()

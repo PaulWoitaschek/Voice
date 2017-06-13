@@ -165,7 +165,7 @@ constructor(
     }
   }
 
-  fun skip(direction: Direction) {
+  fun skip(direction: Direction, doSeekTime:Int = seekTime, start_after_2sec: Boolean = true) {
     v { "direction=$direction" }
 
     prepareIfIdle()
@@ -176,13 +176,13 @@ constructor(
       val currentPos = player.currentPosition
           .coerceAtLeast(0)
       val duration = player.duration
-      val delta = seekTime * 1000
+      val delta = doSeekTime * 1000
 
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
       if (seekTo < 0) {
-        previous(false)
+        previous(false, start_after_2sec)
       } else if (seekTo > duration) {
         next()
       } else {
@@ -192,21 +192,21 @@ constructor(
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
-  fun previous(toNullOfNewTrack: Boolean) {
+  fun previous(toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
     i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
     bookSubject.value?.let {
-      val handled = previousByMarks(it)
-      if (!handled) previousByFile(it, toNullOfNewTrack)
+      val handled = previousByMarks(it, start_after_2sec)
+      if (!handled) previousByFile(it, toNullOfNewTrack, start_after_2sec)
     }
   }
 
-  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
+  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
     val previousChapter = book.previousChapter()
-    if (player.currentPosition > 2000 || previousChapter == null) {
+    if ( (start_after_2sec && player.currentPosition > 2000) || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -220,12 +220,12 @@ constructor(
     }
   }
 
-  private fun previousByMarks(book: Book): Boolean {
+  private fun previousByMarks(book: Book, start_after_2sec: Boolean = true): Boolean {
     val marks = book.currentChapter().marks
     marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
-        if (diff > 2000) {
+        if (start_after_2sec && diff > 2000) {
           changePosition(startOfMark)
           return true
         } else if (index > 0) {
@@ -252,38 +252,6 @@ constructor(
   }
 
   /**
-   * Rewind X seconds
-   */
-  fun rewind(seconds: Int) {
-    bookSubject.value?.let {
-      val rewind_millis = seconds * 1000
-      if (rewind_millis != 0) {
-        // get the raw rewinded position
-        val currentPosition = player.currentPosition
-            .coerceAtLeast(0)
-        var maybeSeekTo = (currentPosition - rewind_millis)
-            .coerceAtLeast(0) // make sure not to get into negative time
-
-        // now try to find the current chapter mark and make sure we don't auto-rewind
-        // to a previous mark
-        val chapterMarks = it.currentChapter().marks
-        chapterMarks.forEachIndexed(reversed = true) findStartOfMark@ { index, startOfMark, _ ->
-          if (startOfMark <= currentPosition) {
-            val next = chapterMarks.keyAtOrNull(index + 1)
-            if (next == null || next > currentPosition) {
-              maybeSeekTo = maybeSeekTo.coerceAtLeast(startOfMark.toLong())
-              return@findStartOfMark
-            }
-          }
-        }
-
-        // finally change position
-        changePosition(maybeSeekTo.toInt())
-      }
-    }
-  }
-
-  /**
    * Pauses the player.
    * @param rewind true if the player should automatically rewind a little bit.
    */
@@ -294,8 +262,32 @@ constructor(
         bookSubject.value?.let {
           player.playWhenReady = false
           playStateManager.playState = PlayState.PAUSED
+
           if (rewind) {
-            rewind(autoRewindAmount)
+            val autoRewind = autoRewindAmount * 1000
+            if (autoRewind != 0) {
+              // get the raw rewinded position
+              val currentPosition = player.currentPosition
+                  .coerceAtLeast(0)
+              var maybeSeekTo = (currentPosition - autoRewind)
+                  .coerceAtLeast(0) // make sure not to get into negative time
+
+              // now try to find the current chapter mark and make sure we don't auto-rewind
+              // to a previous mark
+              val chapterMarks = it.currentChapter().marks
+              chapterMarks.forEachIndexed(reversed = true) findStartOfMark@ { index, startOfMark, _ ->
+                if (startOfMark <= currentPosition) {
+                  val next = chapterMarks.keyAtOrNull(index + 1)
+                  if (next == null || next > currentPosition) {
+                    maybeSeekTo = maybeSeekTo.coerceAtLeast(startOfMark.toLong())
+                    return@findStartOfMark
+                  }
+                }
+              }
+
+              // finally change position
+              changePosition(maybeSeekTo.toInt())
+            }
           }
         }
       }
