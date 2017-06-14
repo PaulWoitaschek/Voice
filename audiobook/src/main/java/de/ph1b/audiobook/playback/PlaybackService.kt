@@ -15,6 +15,7 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
+import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.injection.App
@@ -22,6 +23,7 @@ import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -56,9 +58,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val disposables = CompositeDisposable()
   private var currentlyHasFocus = false
+  private var lastPaused = 0L
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
+  @Inject lateinit var bookmarkProvider: BookmarkProvider
   @Inject lateinit var notificationManager: NotificationManager
   @Inject lateinit var audioManager: AudioManager
   @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
@@ -171,11 +175,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onPause() {
           i { "onPause" }
+          lastPaused = System.currentTimeMillis()
           player.pause(true)
         }
 
         override fun onPlay() {
-          i { "onPlay" }
+          i { "onPlay current(${System.currentTimeMillis()}) lastPaused($lastPaused) diff(${System.currentTimeMillis() - lastPaused})" }
+          if( System.currentTimeMillis() - lastPaused < 1300 ) {
+            player.skip(MediaPlayer.Direction.BACKWARD,quickmark=true)
+            bookmarkProvider.addBookmarkAtBookPosition(player.book()!!, getString(R.string.quick_bookmark))
+          }
           player.play()
         }
       })

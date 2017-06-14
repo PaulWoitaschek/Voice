@@ -26,7 +26,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
+class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, DeleteAllBookmarksDialog.Callback, EditBookmarkDialog.Callback {
 
   private var bookId by LongArgumentDelegate()
   private val bookmarks = ArrayList<Bookmark>()
@@ -88,6 +88,10 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
           showDeleteBookmarkDialog(bookmark)
           true
         }
+        R.id.delete_all -> {
+          showDeleteAllBookmarksDialog()
+          true
+        }
         else -> false
       }
     }
@@ -112,17 +116,38 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
     adapter.newData(bookmarks)
   }
 
+  private fun showDeleteAllBookmarksDialog() {
+    DeleteAllBookmarksDialog(this).showDialog(router)
+  }
+
+  override fun onDeleteAllBookmarksConfirmed() {
+    for ( bm in bookmarkProvider.bookmarks(book) ) {
+      bookmarkProvider.deleteBookmark(bm.id)
+    }
+    bookmarks.clear()
+    adapter.newData(bookmarks)
+    //router.popController(this)
+  }
+
   override fun onBookmarkClicked(bookmark: Bookmark) {
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
 
     prefs.currentBookId.value = bookId
     playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
-    if (wasPlaying) {
+    if (bookmark.title.endsWith(getString(R.string.quick_bookmark))) {
+      var bm_title = getString(R.string.quick_bookmark)
+      if (!bookmark.title.startsWith("X")) {
+        bm_title="X "+getString(R.string.quick_bookmark)
+      }
+      onEditBookmark(bookmark.id,bm_title)
       playerController.play()
+    } else {
+      if (wasPlaying) {
+        playerController.play()
+      }
+      router.popController(this)
     }
-
-    router.popController(this)
   }
 
   override fun onEditBookmark(id: Long, title: String) {

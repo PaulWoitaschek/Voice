@@ -54,6 +54,8 @@ constructor(
     get() = prefs.seekTime.value
   private val autoRewindAmount: Int
     get() = prefs.autoRewindAmount.value
+  private val quickmarkRewindAmount: Int
+    get() = prefs.quickmarkRewindAmount.value
 
   fun book(): Book? = bookSubject.value
   val bookStream = bookSubject.hide()!!
@@ -161,7 +163,7 @@ constructor(
     }
   }
 
-  fun skip(direction: Direction) {
+  fun skip(direction: Direction, quickmark:Boolean = false) {
     v { "direction=$direction" }
 
     prepareIfIdle()
@@ -172,13 +174,26 @@ constructor(
       val currentPos = player.currentPosition
           .coerceAtLeast(0)
       val duration = player.duration
-      val delta = seekTime * 1000
+      val delta = 1000L * if (quickmark) quickmarkRewindAmount else seekTime
 
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
       if (seekTo < 0) {
-        previous(false)
+        if (quickmark) { // skip back quickmarkRewindAmount, working around cp > 2000 'helper' code.
+          changePosition(0)
+          bookSubject.value?.let {
+            previousByFile(it, true)
+            val previousChapter = it.previousChapter()
+            if (previousChapter != null) {
+              val seekTo = previousChapter.duration - (delta+seekTo) // delta less how much was left in current file.
+              v { "quickmark: seekTo=$seekTo, duration=${previousChapter.duration}" }
+              changePosition(seekTo.toInt())
+            }
+          }
+        } else {
+          previous(false)
+        }
       } else if (seekTo > duration) {
         next()
       } else {
