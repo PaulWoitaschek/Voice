@@ -54,6 +54,8 @@ constructor(
     get() = prefs.seekTime.value
   private val autoRewindAmount: Int
     get() = prefs.autoRewindAmount.value
+  private val quickmarkRewindAmount: Int
+    get() = prefs.quickmarkRewindAmount.value
 
   fun book(): Book? = bookSubject.value
   val bookStream = bookSubject.hide()!!
@@ -161,7 +163,7 @@ constructor(
     }
   }
 
-  fun skip(direction: Direction, doSeekTime:Int = seekTime, start_after_2sec: Boolean = true) {
+  fun skip(direction: Direction, quickmark:Boolean = false) {
     v { "direction=$direction" }
 
     prepareIfIdle()
@@ -172,13 +174,26 @@ constructor(
       val currentPos = player.currentPosition
           .coerceAtLeast(0)
       val duration = player.duration
-      val delta = doSeekTime * 1000
+      val delta = 1000L * if (quickmark) quickmarkRewindAmount else seekTime
 
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
       if (seekTo < 0) {
-        previous(false, start_after_2sec)
+        if (quickmark) { // skip back quickmarkRewindAmount, working around cp > 2000 'helper' code.
+          changePosition(0)
+          bookSubject.value?.let {
+            previousByFile(it, true)
+            val previousChapter = it.previousChapter()
+            if (previousChapter != null) {
+              val seekTo = previousChapter.duration - (delta+seekTo) // delta less how much was left in current file.
+              v { "quickmark: seekTo=$seekTo, duration=${previousChapter.duration}" }
+              changePosition(seekTo.toInt())
+            }
+          }
+        } else {
+          previous(false)
+        }
       } else if (seekTo > duration) {
         next()
       } else {
@@ -188,21 +203,21 @@ constructor(
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
-  fun previous(toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
+  fun previous(toNullOfNewTrack: Boolean) {
     i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
     bookSubject.value?.let {
-      val handled = previousByMarks(it, start_after_2sec)
-      if (!handled) previousByFile(it, toNullOfNewTrack, start_after_2sec)
+      val handled = previousByMarks(it)
+      if (!handled) previousByFile(it, toNullOfNewTrack)
     }
   }
 
-  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean, start_after_2sec: Boolean = true) {
+  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
     val previousChapter = book.previousChapter()
-    if ( (start_after_2sec && player.currentPosition > 2000) || previousChapter == null) {
+    if (player.currentPosition > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
       changePosition(0)
     } else {
@@ -216,12 +231,12 @@ constructor(
     }
   }
 
-  private fun previousByMarks(book: Book, start_after_2sec: Boolean = true): Boolean {
+  private fun previousByMarks(book: Book): Boolean {
     val marks = book.currentChapter().marks
     marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
-        if (start_after_2sec && diff > 2000) {
+        if (diff > 2000) {
           changePosition(startOfMark)
           return true
         } else if (index > 0) {
