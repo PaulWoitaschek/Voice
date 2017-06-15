@@ -89,8 +89,6 @@
   <string name="pref_theme_day">दिन</string>
   <string name="pref_theme_night">रात</string>
   <string name="pref_theme_daynight">दिन / रात</string>
-  <string name="pref_pause_on_can_duck_title">रूकावट पर पॉज़ हो जाए</string>
-  <string name="pref_pause_on_can_duck_summary">आवाज़ धीमी करने की जगह रूकावट पैर पॉज हो जाए।</string>
   <string name="pref_auto_rewind_title">अपने आप रिवाइंड</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">पॉज़ करने पर अपने आप %d सेकंड रिवाइंड हो जायेगा।</item>

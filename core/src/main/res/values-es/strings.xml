@@ -82,8 +82,6 @@
   <string name="pref_theme_day">Día</string>
   <string name="pref_theme_night">Noche</string>
   <string name="pref_theme_daynight">Día / Noche</string>
-  <string name="pref_pause_on_can_duck_title">Pausar en interrupción</string>
-  <string name="pref_pause_on_can_duck_summary">Pausar en interrupción en vez de bajar el volumen por la duración de la interrupción.</string>
   <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
   <plurals name="pref_auto_rewind_summary">
     <item quantity="one">Automáticamente retrasar %d segundo después de pausa manual.</item>

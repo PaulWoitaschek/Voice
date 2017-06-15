@@ -2,6 +2,7 @@ ext.versions = [
     androidPlugin       : "2.3.3",
     assertJ             : "1.7.1",
     buildTools          : "25.0.3",
+    burst               : "1.1.1",
     compileSdk          : 25,
     conductor           : "2.1.2",
     constraintLayout    : "1.0.2",
@@ -33,43 +34,43 @@ ext.versions = [
 ext.libraries = [
 
     // support libraries
+    supportAnnotations     : "com.android.support:support-annotations:$versions.support",
     supportAppCompat       : "com.android.support:appcompat-v7:$versions.support",
-    supportRecyclerView    : "com.android.support:recyclerview-v7:$versions.support",
+    supportConstraintLayout: "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
     supportDesign          : "com.android.support:design:$versions.support",
+    supportRecyclerView    : "com.android.support:recyclerview-v7:$versions.support",
     supportTransitions     : "com.android.support:transition:$versions.support",
     supportV13             : "com.android.support:support-v13:$versions.support",
-    supportConstraintLayout: "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
-    supportAnnotations     : "com.android.support:support-annotations:$versions.support",
 
     // ui
-    picasso                : "com.squareup.picasso:picasso:$versions.picasso",
-    materialDialogs        : "com.afollestad.material-dialogs:core:$versions.materialDialogs",
-    floatingActionButton   : "com.getbase:floatingactionbutton:$versions.floatingActionButton",
     dataBindingCompiler    : "com.android.databinding:compiler:$versions.androidPlugin",
+    floatingActionButton   : "com.getbase:floatingactionbutton:$versions.floatingActionButton",
+    materialDialogs        : "com.afollestad.material-dialogs:core:$versions.materialDialogs",
+    picasso                : "com.squareup.picasso:picasso:$versions.picasso",
 
     // base
+    conductor              : "com.bluelinelabs:conductor:$versions.conductor",
+    conductorLifecycle     : "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
+    conductorSupport       : "com.bluelinelabs:conductor-support:$versions.conductor",
+    crashlytics            : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
     dagger                 : "com.google.dagger:dagger:$versions.dagger",
     daggerCompiler         : "com.google.dagger:dagger-compiler:$versions.dagger",
+    exoPlayerCore          : "com.google.android.exoplayer:exoplayer-core:r$versions.exoPlayer",
     jsr250                 : "javax.annotation:jsr250-api:$versions.jsr250",
-    rxJava                 : "io.reactivex.rxjava2:rxjava:$versions.rxJava2",
+    kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+    moshi                  : "com.squareup.moshi:moshi:$versions.moshi",
     rxAndroid              : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
     rxInterop              : "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
+    rxJava                 : "io.reactivex.rxjava2:rxjava:$versions.rxJava2",
     rxPreferences          : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
-    kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
     slimber                : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
-    conductor              : "com.bluelinelabs:conductor:$versions.conductor",
-    conductorSupport       : "com.bluelinelabs:conductor-support:$versions.conductor",
-    conductorLifecycle     : "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
-    crashlytics            : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
-    moshi                  : "com.squareup.moshi:moshi:$versions.moshi",
-    exoPlayerCore          : "com.google.android.exoplayer:exoplayer-core:r$versions.exoPlayer",
 
     // testing
-    junit                  : "junit:junit:$versions.junit",
-    robolectric            : "org.robolectric:robolectric:$versions.robolectric",
     assertJ                : "org.assertj:assertj-core:$versions.assertJ",
-    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
+    burst                  : "com.squareup.burst:burst-junit4:$versions.burst",
+    junit                  : "junit:junit:$versions.junit",
     mockito                : "org.mockito:mockito-core:$versions.mockito",
+    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
+    robolectric            : "org.robolectric:robolectric:$versions.robolectric",
     supportTestRunner      : "com.android.support.test:runner:0.5"
-
 ]

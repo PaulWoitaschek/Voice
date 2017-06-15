@@ -3,12 +3,14 @@ package de.ph1b.audiobook.features.bookOverview
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.*
 import android.view.MenuItem
+import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -17,20 +19,20 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.asTransaction
-import de.ph1b.audiobook.misc.postedIfComputingLayout
-import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
+import w
 import javax.inject.Inject
 
 /**
- * Showing the shelf of all the available books and provide a navigation to each book
+ * Showing the shelf of all the available books and provide a navigation to each book.
+ *
+ * @author Paul Woitaschek
  */
 class BookShelfController : MvpController<BookShelfController, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 
@@ -56,6 +58,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   private var pendingTransaction: FragmentTransaction? = null
   private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
+  private val positionResolver = GridPositionResolver()
 
   private lateinit var currentPlaying: MenuItem
 
@@ -76,8 +79,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
       if (clickType == BookShelfAdapter.ClickType.REGULAR) {
         invokeBookSelectionCallback(book.id)
       } else {
-        EditBookBottomSheet.newInstance(this, book)
-            .show(fragmentManager, "editBottomSheet")
+        EditBookBottomSheet.newInstance(this, book).show(fragmentManager, "editBottomSheet")
       }
     }
     binding.recyclerView.adapter = adapter
@@ -87,6 +89,29 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
+
+    binding.recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+      val twoDp = activity.dpToPx(2F)
+      override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val position = parent.getChildAdapterPosition(view)
+        val count = state.itemCount
+        val isGrid = prefs.displayMode.value == DisplayMode.GRID
+        if (position >= count) {
+          w { "position=$position is >= count=$count. Skipping decoration" }
+          return
+        }
+        positionResolver.prepare(position = position, count = count, columnCount = if (isGrid) amountOfColumns() else 1)
+
+        if (isGrid) {
+          outRect.left = if (positionResolver.isLeft()) 0 else Math.round(twoDp)
+          outRect.right = if (positionResolver.isRight()) 0 else Math.round(twoDp)
+          outRect.top = Math.round(if (positionResolver.isTop()) 2 * twoDp else twoDp)
+          outRect.bottom = Math.round(if (positionResolver.isBottom()) activity.dpToPx(104F) else twoDp)
+        } else {
+          outRect.bottom = if (positionResolver.isBottom()) Math.round(activity.dpToPx(104F)) else 0
+        }
+      }
+    })
 
     binding.scroller.attachTo(binding.recyclerView)
 

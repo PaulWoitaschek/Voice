@@ -72,14 +72,6 @@ class SettingsController : BaseController<SettingsBinding>() {
         pref = prefs.resumeAfterCall
     )
 
-    // pause on interruption
-    setupSwitchSetting(
-        binding = binding.pauseOnInterruption,
-        titleRes = R.string.pref_pause_on_can_duck_title,
-        contentRes = R.string.pref_pause_on_can_duck_summary,
-        pref = prefs.pauseOnTempFocusLoss
-    )
-
     // skip amount
     val skipAmountDescription = setupTextSetting(
         binding = binding.skipAmount,

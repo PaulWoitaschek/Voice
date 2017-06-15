@@ -44,10 +44,6 @@
             layout="@layout/setting_row_switch"/>
 
         <include
-            android:id="@+id/pauseOnInterruption"
-            layout="@layout/setting_row_switch"/>
-
-        <include
             android:id="@+id/skipAmount"
             layout="@layout/setting_row_double"/>
 
