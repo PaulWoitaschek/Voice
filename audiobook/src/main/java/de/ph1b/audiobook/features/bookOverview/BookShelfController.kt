@@ -106,9 +106,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
           outRect.left = if (positionResolver.isLeft()) 0 else Math.round(twoDp)
           outRect.right = if (positionResolver.isRight()) 0 else Math.round(twoDp)
           outRect.top = Math.round(if (positionResolver.isTop()) 2 * twoDp else twoDp)
-          outRect.bottom = Math.round(if (positionResolver.isBottom()) activity.dpToPx(104F) else twoDp)
-        } else {
-          outRect.bottom = if (positionResolver.isBottom()) Math.round(activity.dpToPx(104F)) else 0
+          outRect.bottom = Math.round(if (positionResolver.isBottom()) 2 * twoDp else twoDp)
         }
       }
     })
