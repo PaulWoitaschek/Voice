@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookmarks
+package de.ph1b.audiobook.features.bookmarks.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
@@ -17,21 +17,24 @@ import de.ph1b.audiobook.misc.DialogController
 class AddBookmarkDialog : DialogController() {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+    val inputType = InputType.TYPE_CLASS_TEXT or
+        InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
     val dialog = MaterialDialog.Builder(activity!!)
         .title(R.string.bookmark)
-        .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+        .inputType(inputType)
         .input(activity!!.getString(R.string.bookmark_edit_hint), null, true) { _, charSequence ->
           val title = charSequence.toString()
-          val callback = targetController as Callback
+          val callback = targetController as AddBookmarkDialog.Callback
           callback.onBookmarkNameChosen(title)
         }
-        .positiveText(R.string.dialog_confirm)
+        .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
         .build()
     val editText = dialog.inputEditText!!
-    editText.setOnEditorActionListener { v, actionId, event ->
+    editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         val title = editText.text.toString()
-        val callback = targetController as Callback
+        val callback = targetController as AddBookmarkDialog.Callback
         callback.onBookmarkNameChosen(title)
         dismissDialog()
         true
@@ -45,7 +48,7 @@ class AddBookmarkDialog : DialogController() {
   }
 
   companion object {
-    operator fun <T> invoke(target: T) where T : Controller, T : Callback = AddBookmarkDialog().apply {
+    operator fun <T> invoke(target: T) where T : Controller, T : AddBookmarkDialog.Callback = AddBookmarkDialog().apply {
       targetController = target
     }
   }

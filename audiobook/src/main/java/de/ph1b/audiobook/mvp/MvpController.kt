@@ -19,10 +19,12 @@ abstract class MvpController<V, out P, B>(args: Bundle) : BaseController<B>(args
     @Suppress("LeakingThis")
     addLifecycleListener(object : LifecycleListener() {
       override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+        if (internalPresenter == null) internalPresenter = createPresenter()
         presenter.onRestore(savedInstanceState)
       }
 
       override fun postAttach(controller: Controller, view: View) {
+        if (internalPresenter == null) internalPresenter = createPresenter()
         presenter.bind(provideView())
       }
 
@@ -39,5 +41,10 @@ abstract class MvpController<V, out P, B>(args: Bundle) : BaseController<B>(args
   @Suppress("UNCHECKED_CAST")
   open fun provideView(): V = this as V
 
-  abstract val presenter: P
+  val presenter: P
+    get() = internalPresenter!!
+
+  private var internalPresenter: P? = null
+
+  abstract fun createPresenter(): P
 }

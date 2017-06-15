@@ -47,7 +47,7 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   private var firstPlayStateChange = true
 
   override val layoutRes = R.layout.book_play
-  override val presenter = BookPlayPresenter(bookId)
+  override fun createPresenter() = BookPlayPresenter(bookId)
 
   private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter>
   private lateinit var sleepTimerItem: MenuItem

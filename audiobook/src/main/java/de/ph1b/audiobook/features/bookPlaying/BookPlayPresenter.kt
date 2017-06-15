@@ -81,7 +81,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   override fun toggleSleepTimer() {
     if (sandman.sleepTimerActive()) sandman.setActive(false)
     else {
-      view!!.openSleepTimeDialog()
+      view.openSleepTimeDialog()
     }
   }
 }

@@ -26,7 +26,7 @@ import de.ph1b.audiobook.uitools.visible
  */
 class FolderOverviewController : MvpController<FolderOverviewController, FolderOverviewPresenter, FolderOverviewBinding>() {
 
-  override val presenter: FolderOverviewPresenter = FolderOverviewPresenter()
+  override fun createPresenter(): FolderOverviewPresenter = FolderOverviewPresenter()
 
   override val layoutRes = R.layout.folder_overview
 

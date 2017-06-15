@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookmarks
+package de.ph1b.audiobook.features.bookmarks.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,8 +9,6 @@ import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.argumentDelegate.LongArgumentDelegate
-import de.ph1b.audiobook.misc.argumentDelegate.StringArgumentDelegate
 
 /**
  * Dialog for changing the bookmark title.
@@ -19,24 +17,24 @@ import de.ph1b.audiobook.misc.argumentDelegate.StringArgumentDelegate
  */
 class EditBookmarkDialog : DialogController() {
 
-  private var bookmarkTitle by StringArgumentDelegate()
-  private var bookmarkId by LongArgumentDelegate()
-
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+    val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)
+    val bookmarkId = args.getLong(NI_BOOK_ID)
+
     val dialog = MaterialDialog.Builder(activity!!)
-        .title(R.string.bookmark_edit_title)
+        .title(de.ph1b.audiobook.R.string.bookmark_edit_title)
         .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
         .input(activity!!.getString(R.string.bookmark_edit_hint), bookmarkTitle, false) { _, charSequence ->
-          val callback = targetController as Callback
+          val callback = targetController as EditBookmarkDialog.Callback
           val newTitle = charSequence.toString()
           callback.onEditBookmark(bookmarkId, newTitle)
         }
-        .positiveText(R.string.dialog_confirm)
+        .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
         .build()
     val editText = dialog.inputEditText!!
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
-        val callback = targetController as Callback
+        val callback = targetController as EditBookmarkDialog.Callback
         val newTitle = editText.text.toString()
         callback.onEditBookmark(bookmarkId, newTitle)
         dismissDialog()
@@ -52,10 +50,13 @@ class EditBookmarkDialog : DialogController() {
 
   companion object {
 
-    operator fun <T> invoke(target: T, bookmark: Bookmark) where T : Controller, T : Callback = EditBookmarkDialog().apply {
+    private const val NI_BOOK_ID = "ni#bookId"
+    private const val NI_BOOKMARK_TITLE = "ni#bookmarkTitle"
+
+    operator fun <T> invoke(target: T, bookmark: Bookmark) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
       targetController = target
-      bookmarkTitle = bookmark.title
-      bookmarkId = bookmark.id
+      args.putLong(NI_BOOK_ID, bookmark.id)
+      args.putString(NI_BOOKMARK_TITLE, bookmark.title)
     }
   }
 }

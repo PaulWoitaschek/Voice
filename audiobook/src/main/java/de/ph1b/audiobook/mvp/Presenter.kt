@@ -13,7 +13,9 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class Presenter<V> {
 
-  protected var view: V? = null
+  val view: V
+    get() = internalView!!
+  private var internalView: V? = null
 
   private var compositeDisposable: CompositeDisposable? = null
 
@@ -22,9 +24,9 @@ abstract class Presenter<V> {
   }
 
   fun bind(view: V) {
-    if (this.view == null) {
+    if (internalView == null) {
       i { "binding $view" }
-      this.view = view
+      internalView = view
 
       compositeDisposable = CompositeDisposable()
       onBind(view, compositeDisposable!!)
@@ -35,7 +37,7 @@ abstract class Presenter<V> {
 
   fun unbind() {
     i { "Unbinding $view" }
-    this.view = null
+    internalView = null
     compositeDisposable?.dispose()
   }
 

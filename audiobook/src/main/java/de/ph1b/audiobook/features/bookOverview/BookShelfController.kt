@@ -34,7 +34,7 @@ import javax.inject.Inject
  */
 class BookShelfController : MvpController<BookShelfController, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 
-  override val presenter = App.component.bookShelfPresenter
+  override fun createPresenter() = App.component.bookShelfPresenter
   override val layoutRes = R.layout.book_shelf
 
   private val COVER_FROM_GALLERY = 1

@@ -2,60 +2,82 @@ package de.ph1b.audiobook.features.bookmarks
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.PopupMenu
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookmarkBinding
-import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
+import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog
+import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
+import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
+import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.argumentDelegate.LongArgumentDelegate
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.BookmarkProvider
-import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerController
-import javax.inject.Inject
+import de.ph1b.audiobook.mvp.MvpController
 
 /**
  * Dialog for creating a bookmark
  *
  * @author Paul Woitaschek
  */
-class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
+class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(args), BookmarkView, BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
 
-  private var bookId by LongArgumentDelegate()
-  private val bookmarks = ArrayList<Bookmark>()
-
-  @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var bookmarkProvider: BookmarkProvider
-  @Inject lateinit var playStateManager: PlayStateManager
-  @Inject lateinit var playerController: PlayerController
-
-  private lateinit var book: Book
+  private val bookId = args.getLong(NI_BOOK_ID)
   private lateinit var adapter: BookmarkAdapter
-  override val layoutRes = R.layout.bookmark
 
-  init {
-    App.component.inject(this)
+  override val layoutRes = R.layout.bookmark
+  override fun createPresenter() = App.component.bookmarkPresenter.apply {
+    bookId = this@BookmarkController.bookId
+  }
+
+  override fun render(bookmarks: List<Bookmark>) {
+    adapter.newData(bookmarks)
+  }
+
+  override fun showBookmarkAdded(bookmark: Bookmark) {
+    val index = adapter.indexOf(bookmark)
+    binding.recycler.smoothScrollToPosition(index)
+    Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
+        .show()
+  }
+
+  override fun onDeleteBookmarkConfirmed(id: Long) {
+    presenter.deleteBookmark(id)
+  }
+
+  override fun onBookmarkClicked(bookmark: Bookmark) {
+    presenter.selectBookmark(bookmark.id)
+    router.popController(this)
+  }
+
+  override fun onEditBookmark(id: Long, title: String) {
+    presenter.editBookmark(id, title)
+  }
+
+  override fun onBookmarkNameChosen(name: String) {
+    presenter.addBookmark(name)
+  }
+
+  override fun finish() {
+    router.popController(this)
   }
 
   override fun onBindingCreated(binding: BookmarkBinding) {
-    book = repo.bookById(bookId)!!
-    this.bookmarks.clear()
-    this.bookmarks.addAll(bookmarkProvider.bookmarks(book))
-
     setupToolbar()
     setupList()
 
     binding.addBookmarkFab.setOnClickListener {
       showAddBookmarkDialog()
     }
+  }
+
+  override fun init(chapters: List<Chapter>) {
+    adapter = BookmarkAdapter(chapters, this)
+    binding.recycler.adapter = adapter
   }
 
   private fun setupToolbar() {
@@ -67,12 +89,11 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
   }
 
   private fun setupList() {
-    adapter = BookmarkAdapter(book.chapters, this)
-    binding.recycler.adapter = adapter
     val layoutManager = LinearLayoutManager(activity)
     binding.recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
     binding.recycler.layoutManager = layoutManager
-    adapter.newData(bookmarks)
+    val itemAnimator = binding.recycler.itemAnimator as DefaultItemAnimator
+    itemAnimator.supportsChangeAnimations = false
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
@@ -106,54 +127,12 @@ class BookmarkController(args: Bundle) : BaseController<BookmarkBinding>(args), 
     DeleteBookmarkDialog(this, bookmark).showDialog(router)
   }
 
-  override fun onDeleteBookmarkConfirmed(id: Long) {
-    bookmarkProvider.deleteBookmark(id)
-    bookmarks.removeIf { it.id == id }
-    adapter.newData(bookmarks)
-  }
-
-  override fun onBookmarkClicked(bookmark: Bookmark) {
-    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
-
-    prefs.currentBookId.value = bookId
-    playerController.changePosition(bookmark.time, bookmark.mediaFile)
-
-    if (wasPlaying) {
-      playerController.play()
-    }
-
-    router.popController(this)
-  }
-
-  override fun onEditBookmark(id: Long, title: String) {
-    bookmarks.find { it.id == id }?.let {
-      val withNewTitle = it.copy(
-          title = title,
-          id = Bookmark.ID_UNKNOWN
-      )
-      bookmarkProvider.deleteBookmark(it.id)
-      val newBookmark = bookmarkProvider.addBookmark(withNewTitle)
-      val index = bookmarks.indexOfFirst { it.id == id }
-      bookmarks[index] = newBookmark
-      adapter.newData(bookmarks)
-    }
-  }
-
-  override fun onBookmarkNameChosen(name: String) {
-    val title = if (name.isEmpty()) book.currentChapter().name else name
-    val addedBookmark = bookmarkProvider.addBookmarkAtBookPosition(book, title)
-    bookmarks.add(addedBookmark)
-    adapter.newData(bookmarks)
-    val index = adapter.indexOf(addedBookmark)
-    binding.recycler.smoothScrollToPosition(index)
-    Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-        .show()
-  }
-
   companion object {
 
-    fun newInstance(bookId: Long) = BookmarkController(Bundle()).apply {
-      this.bookId = bookId
-    }
+    private const val NI_BOOK_ID = "ni#bookId"
+
+    fun newInstance(bookId: Long) = BookmarkController(Bundle().apply {
+      putLong(NI_BOOK_ID, bookId)
+    })
   }
 }

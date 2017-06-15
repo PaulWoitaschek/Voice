@@ -67,7 +67,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   /** Call this when a file was selected by the user or the root folder has changed */
   fun fileSelected(selectedFile: File?) {
     chosenFile = selectedFile
-    view!!.apply {
+    view.apply {
       showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
       setCurrentFolderText(selectedFile?.name ?: "")
       setUpButtonEnabled(canGoBack())
@@ -99,14 +99,14 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   }
 
   private fun addFileAndTerminate(chosen: File) {
-    when (view!!.getMode()) {
+    when (view.getMode()) {
       FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
           val collections = HashSet(prefsManager.collectionFolders.value)
           collections.add(chosen.absolutePath)
           prefsManager.collectionFolders.value = collections
         }
-        view!!.finish()
+        view.finish()
         v { "chosenCollection = $chosen" }
       }
       FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
@@ -115,7 +115,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
           singleBooks.add(chosen.absolutePath)
           prefsManager.singleBookFolders.value = singleBooks
         }
-        view!!.finish()
+        view.finish()
         v { "chosenSingleBook = $chosen" }
       }
     }
@@ -151,7 +151,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
       val filesAreSubsets = (0..max).none { oldParts[it] != newParts[it] }
       if (filesAreSubsets) {
         i { "the files are sub folders of each other." }
-        view!!.showSubFolderWarning(s, newFile)
+        view.showSubFolderWarning(s, newFile)
         return false
       }
     }
@@ -162,8 +162,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   private fun refreshRootDirs() {
     rootDirs.clear()
     rootDirs.addAll(storageDirFinder.storageDirs())
-    view!!.newRootFolders(rootDirs)
-    view!!.setChooseButtonEnabled(rootDirs.isNotEmpty())
+    view.newRootFolders(rootDirs)
+    view.setChooseButtonEnabled(rootDirs.isNotEmpty())
 
     if (chosenFile != null) {
       fileSelected(chosenFile)

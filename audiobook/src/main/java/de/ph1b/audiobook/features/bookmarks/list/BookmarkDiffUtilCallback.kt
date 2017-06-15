@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookmarks
+package de.ph1b.audiobook.features.bookmarks.list
 
 import android.support.v7.util.DiffUtil
 import de.ph1b.audiobook.Bookmark
