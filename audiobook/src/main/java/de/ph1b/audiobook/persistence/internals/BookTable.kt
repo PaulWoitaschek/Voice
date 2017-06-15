@@ -37,8 +37,4 @@ object BookTable {
   fun onCreate(db: SQLiteDatabase) {
     db.execSQL(CREATE_TABLE)
   }
-
-  fun dropTableIfExists(db: SQLiteDatabase) {
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-  }
 }

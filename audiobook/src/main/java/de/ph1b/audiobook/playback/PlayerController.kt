@@ -15,7 +15,6 @@ import javax.inject.Singleton
 
   private val playPauseIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
   private val playIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PLAY)
-  private val pauseIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PAUSE)
   private val stopIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_STOP)
   private val nextIntent = intent(ACTION_FORCE_NEXT)
   private val previousIntent = intent(ACTION_FORCE_PREVIOUS)
@@ -30,8 +29,6 @@ import javax.inject.Singleton
     val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
     putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
   }
-
-  fun pause() = fire(pauseIntent)
 
   fun stop() = fire(stopIntent)
 
