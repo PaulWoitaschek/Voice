@@ -43,3 +43,7 @@ dependencies {
 task(prepareOpus, type: PrepareOpus) {
   ndkDir = project.extensions.findByName("android").ndkDirectory
 }
+
+clean {
+  delete ".externalNativeBuild/"
+}
