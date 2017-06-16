@@ -96,7 +96,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
         val position = parent.getChildAdapterPosition(view)
         val count = state.itemCount
         val isGrid = prefs.displayMode.value == DisplayMode.GRID
-        if (position >= count) {
+        if (position >= count || position == -1) {
           w { "position=$position is >= count=$count. Skipping decoration" }
           return
         }
