@@ -8,6 +8,7 @@ import android.support.annotation.RequiresPermission
 import android.support.v4.os.EnvironmentCompat
 import android.text.TextUtils
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
@@ -111,7 +112,13 @@ import javax.inject.Singleton
         if (it != null) {
           val path = it.path.split("/Android")[0]
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (Environment.isExternalStorageRemovable(it)) {
+            val externalStorageRemovable = try {
+              Environment.isExternalStorageRemovable(it)
+            } catch (e: IllegalArgumentException) {
+              Timber.e(e, "Error in isExternalStorageRemovable")
+              false
+            }
+            if (externalStorageRemovable) {
               results.add(path)
             }
           } else {
