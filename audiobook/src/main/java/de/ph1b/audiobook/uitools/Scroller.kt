@@ -129,7 +129,8 @@ class Scroller @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
           invalidate()
 
           val position = recycler.layoutManager.itemCount * yPosition
-          recycler.smoothScrollToPosition(position.round())
+              .round()
+          if (position >= 0) recycler.smoothScrollToPosition(position)
 
           return true
         }
