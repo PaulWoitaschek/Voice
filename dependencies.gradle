@@ -17,7 +17,7 @@ ext.versions = [
     kotlin              : "1.1.2-5",
     materialDialogs     : "0.9.4.5",
     minSdk              : 16,
-    mockito             : "2.8.9",
+    mockito             : "2.8.47",
     moshi               : "1.5.0",
     okHttp              : "3.8.0",
     picasso             : "2.5.2",
