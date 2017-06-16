@@ -11,9 +11,7 @@ import de.ph1b.audiobook.features.BaseController
  *
  * @author Paul Woitaschek
  */
-abstract class MvpController<V, out P, B>(args: Bundle) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
-
-  constructor() : this(Bundle())
+abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
   init {
     @Suppress("LeakingThis")

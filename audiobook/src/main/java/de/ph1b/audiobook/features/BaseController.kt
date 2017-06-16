@@ -13,10 +13,7 @@ import com.bluelinelabs.conductor.rxlifecycle2.RxController
 import io.reactivex.Observable
 
 
-abstract class BaseController<B : ViewDataBinding> : RxController {
-
-  constructor(args: Bundle) : super(args)
-  constructor() : super()
+abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : RxController(args) {
 
   fun <T> Observable<T>.bindToLifeCycle(): Observable<T> = compose(bindToLifecycle<T>())
 
