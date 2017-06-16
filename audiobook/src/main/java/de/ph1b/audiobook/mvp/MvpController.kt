@@ -13,16 +13,26 @@ import de.ph1b.audiobook.features.BaseController
  */
 abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
+  private var internalPresenter: P? = null
+  val presenter: P
+    get() {
+      if (isDestroyed) throw IllegalStateException("Must not call presenter when destroyed!")
+      else {
+        if (internalPresenter == null) {
+          internalPresenter = createPresenter()
+        }
+        return internalPresenter!!
+      }
+    }
+
   init {
     @Suppress("LeakingThis")
     addLifecycleListener(object : LifecycleListener() {
       override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
-        if (internalPresenter == null) internalPresenter = createPresenter()
         presenter.onRestore(savedInstanceState)
       }
 
       override fun postAttach(controller: Controller, view: View) {
-        if (internalPresenter == null) internalPresenter = createPresenter()
         presenter.bind(provideView())
       }
 
@@ -33,16 +43,15 @@ abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseControl
       override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
         presenter.onSave(outState)
       }
+
+      override fun postDestroy(controller: Controller) {
+        internalPresenter = null
+      }
     })
   }
 
   @Suppress("UNCHECKED_CAST")
   open fun provideView(): V = this as V
-
-  val presenter: P
-    get() = internalPresenter!!
-
-  private var internalPresenter: P? = null
 
   abstract fun createPresenter(): P
 }
