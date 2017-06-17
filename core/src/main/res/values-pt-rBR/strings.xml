@@ -19,6 +19,7 @@
   <string name="play">Tocar</string>
   <string name="pause">Pausar</string>
   <string name="equalizer">Equalizador</string>
+  <string name="volume_boost">Amplificador de Volume</string>
   <!--NoExternalStorage-->
   <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
   <string name="no_external_storage_action_bar_title">Memória Externa</string>
