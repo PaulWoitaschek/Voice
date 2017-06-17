@@ -30,7 +30,5 @@ test:
   override:
     - ./gradlew connectedAndroidTest:
         timeout: 720
-  post:
-    # junit test result
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - cp -r audiobook/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r audiobook/build/test-results/* $CIRCLE_TEST_REPORTS
