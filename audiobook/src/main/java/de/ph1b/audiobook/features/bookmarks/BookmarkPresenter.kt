@@ -40,7 +40,7 @@ class BookmarkPresenter @Inject constructor(
 
   fun deleteBookmark(id: Long) {
     bookmarkProvider.deleteBookmark(id)
-    bookmarks.removeIf { it.id == id }
+    bookmarks.removeAll { it.id == id }
     view.render(bookmarks)
   }
 
