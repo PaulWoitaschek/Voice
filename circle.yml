@@ -28,7 +28,7 @@ test:
         parallel: true
     - circle-android wait-for-boot
   override:
-    - ./gradlew connectedAndroidTest:
+    - ./gradlew test connectedAndroidTest:
         timeout: 720
     - cp -r audiobook/build/outputs $CIRCLE_ARTIFACTS
     - cp -r audiobook/build/test-results/* $CIRCLE_TEST_REPORTS
