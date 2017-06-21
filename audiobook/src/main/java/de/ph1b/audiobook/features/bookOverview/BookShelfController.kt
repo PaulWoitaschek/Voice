@@ -3,14 +3,13 @@ package de.ph1b.audiobook.features.bookOverview
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.*
 import android.view.MenuItem
-import android.view.View
+import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -26,7 +25,6 @@ import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
-import w
 import javax.inject.Inject
 
 /**
@@ -58,7 +56,6 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   private var pendingTransaction: FragmentTransaction? = null
   private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
-  private val positionResolver = GridPositionResolver()
 
   private lateinit var currentPlaying: MenuItem
 
@@ -89,27 +86,6 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
-
-    binding.recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-      val twoDp = activity.dpToPx(2F)
-      override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val position = parent.getChildAdapterPosition(view)
-        val count = state.itemCount
-        val isGrid = prefs.displayMode.value == DisplayMode.GRID
-        if (position >= count || position == -1) {
-          w { "position=$position is >= count=$count. Skipping decoration" }
-          return
-        }
-        positionResolver.prepare(position = position, count = count, columnCount = if (isGrid) amountOfColumns() else 1)
-
-        if (isGrid) {
-          outRect.left = if (positionResolver.isLeft()) 0 else Math.round(twoDp)
-          outRect.right = if (positionResolver.isRight()) 0 else Math.round(twoDp)
-          outRect.top = Math.round(if (positionResolver.isTop()) 2 * twoDp else twoDp)
-          outRect.bottom = Math.round(if (positionResolver.isBottom()) 2 * twoDp else twoDp)
-        }
-      }
-    })
 
     binding.scroller.attachTo(binding.recyclerView)
 
@@ -188,13 +164,19 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   private fun updateDisplayMode() {
     val defaultDisplayMode = prefs.displayMode.value
+    val margin: Int
     if (defaultDisplayMode == DisplayMode.GRID) {
       binding.recyclerView.removeItemDecoration(listDecoration)
       binding.recyclerView.layoutManager = gridLayoutManager
+      margin = activity.dpToPxRounded(2F)
     } else {
       binding.recyclerView.addItemDecoration(listDecoration, 0)
       binding.recyclerView.layoutManager = linearLayoutManager
+      margin = 0
     }
+    val layoutParams = binding.recyclerView.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.leftMargin = margin
+    layoutParams.rightMargin = margin
     adapter.displayMode = defaultDisplayMode
   }
 
