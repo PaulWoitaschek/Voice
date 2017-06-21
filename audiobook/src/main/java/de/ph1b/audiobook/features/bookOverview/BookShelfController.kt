@@ -260,7 +260,9 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
 
-  override fun onInternetCoverRequested(book: Book) = router.pushController(RouterTransaction.with(ImagePickerController(book)))
+  override fun onInternetCoverRequested(book: Book) {
+    router.pushController(ImagePickerController(book).asTransaction())
+  }
 
   override fun onFileCoverRequested(book: Book) {
     menuBook = book
