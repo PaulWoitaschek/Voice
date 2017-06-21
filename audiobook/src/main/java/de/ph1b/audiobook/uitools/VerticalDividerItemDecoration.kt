@@ -4,23 +4,22 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.support.annotation.Px
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ItemDecoration
 import android.support.v7.widget.RecyclerView.State
 import android.view.View
-import de.ph1b.audiobook.misc.dpToPxRounded
 
 /**
- * A item decoration with a left offset for the book shelf list
+ * A item decoration with a left offset.
  *
  * @author Paul Woitaschek
  */
-class BookShelfListDecoration(context: Context) : ItemDecoration() {
+class VerticalDividerItemDecoration(context: Context, @Px private val leftMargin: Int = 0) : ItemDecoration() {
 
   private val divider: Drawable
   private val bounds = Rect()
-  private val marginLeft = context.dpToPxRounded(72F)
 
   init {
     val a = context.obtainStyledAttributes(ATTRS)
@@ -34,12 +33,13 @@ class BookShelfListDecoration(context: Context) : ItemDecoration() {
 
     val childCount = parent.childCount
 
+    // don't draw the bottom-most divider
     for (i in 0 until childCount - 1) {
       val child = parent.getChildAt(i)
       parent.getDecoratedBoundsWithMargins(child, bounds)
       val bottom = bounds.bottom + Math.round(ViewCompat.getTranslationY(child))
       val top = bottom - divider.intrinsicHeight
-      divider.setBounds(marginLeft, top, right, bottom)
+      divider.setBounds(leftMargin, top, right, bottom)
       divider.draw(c)
     }
 

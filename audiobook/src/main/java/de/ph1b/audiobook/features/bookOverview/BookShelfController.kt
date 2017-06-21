@@ -24,9 +24,9 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.BookShelfListDecoration
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
@@ -87,7 +87,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     // without this the item would blink on every change
     val anim = binding.recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    listDecoration = BookShelfListDecoration(activity)
+    listDecoration = VerticalDividerItemDecoration(activity, activity.dpToPxRounded(72F))
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
 

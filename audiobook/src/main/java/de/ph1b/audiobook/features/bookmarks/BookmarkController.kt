@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookmarks
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.PopupMenu
@@ -18,6 +17,7 @@ import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.MvpController
+import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 
 /**
  * Dialog for creating a bookmark
@@ -89,7 +89,7 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
 
   private fun setupList() {
     val layoutManager = LinearLayoutManager(activity)
-    binding.recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+    binding.recycler.addItemDecoration(VerticalDividerItemDecoration(activity))
     binding.recycler.layoutManager = layoutManager
     binding.recycler.adapter = adapter
     val itemAnimator = binding.recycler.itemAnimator as DefaultItemAnimator
