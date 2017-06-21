@@ -8,11 +8,22 @@
       android:layout_height="match_parent"
       android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/AppToolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="wrap_content">
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          style="@style/AppToolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"/>
+
+      <ViewStub
+          android:id="@+id/cabStub"
+          android:layout_width="match_parent"
+          android:layout_height="?actionBarSize"/>
+
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

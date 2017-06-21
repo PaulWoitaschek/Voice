@@ -89,6 +89,7 @@ dependencies {
   compile libraries.picasso
 
   compile libraries.materialDialogs
+  compile libraries.materialCab
 
   compile libraries.floatingActionButton
 
