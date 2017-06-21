@@ -40,9 +40,12 @@ abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : Rx
 
   override final fun onDestroyView(view: View) {
     super.onDestroyView(view)
+    onDestroyBinding(binding)
     internalBinding!!.unbind()
     internalBinding = null
   }
 
   open fun onBindingCreated(binding: B) {}
+
+  open fun onDestroyBinding(binding: B) {}
 }

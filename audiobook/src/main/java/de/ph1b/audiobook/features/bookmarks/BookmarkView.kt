@@ -9,9 +9,7 @@ import de.ph1b.audiobook.Chapter
  * @author Paul Woitaschek
  */
 interface BookmarkView {
-
-  fun init(chapters: List<Chapter>)
-  fun render(bookmarks: List<Bookmark>)
+  fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>)
   fun showBookmarkAdded(bookmark: Bookmark)
   fun finish()
 }

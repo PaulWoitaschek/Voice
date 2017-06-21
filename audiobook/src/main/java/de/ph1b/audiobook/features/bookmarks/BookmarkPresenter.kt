@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookmarks
 
 import de.ph1b.audiobook.Bookmark
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
@@ -26,6 +27,7 @@ class BookmarkPresenter @Inject constructor(
 
   var bookId = -1L
   private val bookmarks = ArrayList<Bookmark>()
+  private val chapters = ArrayList<Chapter>()
 
   override fun onBind(view: BookmarkView, disposables: CompositeDisposable) {
     check(bookId != -1L) { "You must initialize the bookId" }
@@ -33,15 +35,16 @@ class BookmarkPresenter @Inject constructor(
     val book = repo.bookById(bookId) ?: return
     bookmarks.clear()
     bookmarks.addAll(bookmarkProvider.bookmarks(book))
+    chapters.clear()
+    chapters.addAll(book.chapters)
 
-    view.init(book.chapters)
-    view.render(bookmarks)
+    renderView()
   }
 
   fun deleteBookmark(id: Long) {
     bookmarkProvider.deleteBookmark(id)
     bookmarks.removeAll { it.id == id }
-    view.render(bookmarks)
+    renderView()
   }
 
   fun selectBookmark(id: Long) {
@@ -70,7 +73,7 @@ class BookmarkPresenter @Inject constructor(
       val newBookmark = bookmarkProvider.addBookmark(withNewTitle)
       val index = bookmarks.indexOfFirst { it.id == id }
       bookmarks[index] = newBookmark
-      view.render(bookmarks)
+      renderView()
     }
   }
 
@@ -79,6 +82,10 @@ class BookmarkPresenter @Inject constructor(
     val title = if (name.isEmpty()) book.currentChapter().name else name
     val addedBookmark = bookmarkProvider.addBookmarkAtBookPosition(book, title)
     bookmarks.add(addedBookmark)
-    view.render(bookmarks)
+    renderView()
+  }
+
+  private fun renderView() {
+    view.render(bookmarks, chapters)
   }
 }
