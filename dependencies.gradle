@@ -20,7 +20,7 @@ ext.versions = [
     minSdk              : 16,
     mockito             : "2.8.47",
     moshi               : "1.5.0",
-    okHttp              : "3.8.0",
+    okHttp              : "3.8.1",
     picasso             : "2.5.2",
     robolectric         : "3.3.2",
     rxAndroid           : "2.0.1",
