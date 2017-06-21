@@ -7,7 +7,10 @@ import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
-import android.support.v7.widget.*
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.MenuItem
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
@@ -21,6 +24,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.uitools.BookShelfListDecoration
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
@@ -83,7 +87,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     // without this the item would blink on every change
     val anim = binding.recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+    listDecoration = BookShelfListDecoration(activity)
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
 
