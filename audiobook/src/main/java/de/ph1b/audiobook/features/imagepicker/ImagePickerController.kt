@@ -20,6 +20,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.popOrBack
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
@@ -126,10 +127,10 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
-        d { "received webViewError. Set webVeiw invisible" }
+        d { "received webViewError. Set webView invisible" }
         view.loadUrl(ABOUT_BLANK)
         binding.progressBar.visible = false
-        view.findViewById(R.id.noNetwork).visible = true
+        binding.noNetwork.visible = true
         binding.webViewContainer.visible = false
       }
     })
@@ -159,22 +160,15 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
   @SuppressLint("InflateParams")
   private fun setupToolbar() {
-    // necessary, else the action mode will be themed wrongly
-    activity.setSupportActionBar(binding.toolbar)
-
     binding.toolbar.setTitle(R.string.cover)
 
     binding.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+    binding.toolbar.setNavigationOnClickListener { popOrBack() }
 
     binding.toolbar.inflateMenu(R.menu.image_picker)
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
-        R.id.refresh -> {
-          binding.webView.reload()
-          true
-        }
-        R.id.home -> {
+        R.id.reset -> {
           binding.webView.loadUrl(originalUrl)
           true
         }
@@ -191,6 +185,11 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     val rotateView = LayoutInflater.from(activity).inflate(R.layout.rotate_view, null).apply {
       animation = rotation
       setOnClickListener { binding.webView.reload() }
+    }
+    rotateView.setOnClickListener {
+      if (binding.webView.url == ABOUT_BLANK) {
+        binding.webView.loadUrl(originalUrl)
+      } else binding.webView.reload()
     }
     MenuItemCompat.setActionView(refreshItem, rotateView)
 

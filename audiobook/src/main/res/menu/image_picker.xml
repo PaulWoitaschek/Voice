@@ -9,7 +9,7 @@
       app:showAsAction="ifRoom"/>
 
   <item
-      android:id="@+id/home"
+      android:id="@+id/reset"
       android:icon="@drawable/home"
       android:title="@string/reset"
       app:showAsAction="ifRoom"/>
