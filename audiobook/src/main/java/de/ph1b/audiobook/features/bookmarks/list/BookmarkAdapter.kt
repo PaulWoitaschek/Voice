@@ -12,13 +12,16 @@ import de.ph1b.audiobook.Chapter
  * @author Paul Woitaschek
  */
 class BookmarkAdapter(
-    private val chapters: List<Chapter>,
     private val listener: BookmarkClickListener
 ) : RecyclerView.Adapter<BookMarkHolder>() {
 
   private val bookmarks = ArrayList<Bookmark>()
+  private val chapters = ArrayList<Chapter>()
 
-  fun newData(bookmarks: List<Bookmark>) {
+  fun newData(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
+    this.chapters.clear()
+    this.chapters.addAll(chapters)
+
     val newBookmarks = bookmarks.sorted()
     val callback = BookmarkDiffUtilCallback(this.bookmarks, newBookmarks)
     val diff = DiffUtil.calculateDiff(callback)

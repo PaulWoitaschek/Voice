@@ -2,7 +2,6 @@ ext.versions = [
     androidPlugin       : "2.3.3",
     assertJ             : "1.7.1",
     buildTools          : "25.0.3",
-    burst               : "1.1.1",
     compileSdk          : 25,
     conductor           : "2.1.2",
     constraintLayout    : "1.0.2",
@@ -16,10 +15,11 @@ ext.versions = [
     junit               : "4.12",
     kotlin              : "1.1.2-5",
     materialDialogs     : "0.9.4.5",
+    materialCab         : "0.1.12",
     minSdk              : 16,
     mockito             : "2.8.47",
     moshi               : "1.5.0",
-    okHttp              : "3.8.0",
+    okHttp              : "3.8.1",
     picasso             : "2.5.2",
     robolectric         : "3.3.2",
     rxAndroid           : "2.0.1",
@@ -46,6 +46,7 @@ ext.libraries = [
     dataBindingCompiler    : "com.android.databinding:compiler:$versions.androidPlugin",
     floatingActionButton   : "com.getbase:floatingactionbutton:$versions.floatingActionButton",
     materialDialogs        : "com.afollestad.material-dialogs:core:$versions.materialDialogs",
+    materialCab            : "com.afollestad:material-cab:$versions.materialCab",
     picasso                : "com.squareup.picasso:picasso:$versions.picasso",
 
     // base
@@ -67,7 +68,6 @@ ext.libraries = [
 
     // testing
     assertJ                : "org.assertj:assertj-core:$versions.assertJ",
-    burst                  : "com.squareup.burst:burst-junit4:$versions.burst",
     junit                  : "junit:junit:$versions.junit",
     mockito                : "org.mockito:mockito-core:$versions.mockito",
     okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",

@@ -14,3 +14,8 @@ fun Controller.asTransaction(
   pushChangeHandler?.let { pushChangeHandler(it) }
   popChangeHandler?.let { popChangeHandler(it) }
 }
+
+fun Controller.popOrBack() {
+  val hasRemaining = router.popController(this)
+  if (!hasRemaining) activity?.onBackPressed()
+}

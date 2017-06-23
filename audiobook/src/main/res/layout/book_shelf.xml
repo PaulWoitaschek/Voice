@@ -20,7 +20,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"/>
+        android:paddingBottom="100dp"
+        android:paddingTop="2dp"/>
 
     <de.ph1b.audiobook.uitools.Scroller
         android:id="@+id/scroller"

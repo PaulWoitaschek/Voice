@@ -15,8 +15,8 @@ android {
     applicationId "de.ph1b.audiobook"
     minSdkVersion versions.minSdk
     targetSdkVersion versions.targetSdk
-    versionCode 201
-    versionName '3.3.6.2'
+    versionCode 202
+    versionName '3.3.6.3'
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -89,6 +89,7 @@ dependencies {
   compile libraries.picasso
 
   compile libraries.materialDialogs
+  compile libraries.materialCab
 
   compile libraries.floatingActionButton
 
@@ -105,7 +106,6 @@ dependencies {
   testCompile libraries.assertJ
   testCompile libraries.mockito
   testCompile libraries.okHttp
-  testCompile libraries.burst
 
   androidTestCompile libraries.supportTestRunner
   androidTestCompile libraries.assertJ

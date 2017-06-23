@@ -14,11 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
 
+    <!-- 88 dp bottom padding is the sum of the FAB + vertical margins.
+    that way, the controls for the last bookmark are always visible -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addBookmarkFab"

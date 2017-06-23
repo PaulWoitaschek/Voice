@@ -6,13 +6,25 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:background="?android:attr/windowBackground"
       android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/AppToolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="wrap_content">
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          style="@style/AppToolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"/>
+
+      <ViewStub
+          android:id="@+id/cabStub"
+          android:layout_width="match_parent"
+          android:layout_height="?actionBarSize"/>
+
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -22,11 +34,10 @@
           android:id="@+id/noNetwork"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_gravity="center"
-          android:layout_marginTop="-32dp"
           android:background="#009688"
+          android:gravity="center"
           android:orientation="vertical"
-          android:visibility="invisible">
+          android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

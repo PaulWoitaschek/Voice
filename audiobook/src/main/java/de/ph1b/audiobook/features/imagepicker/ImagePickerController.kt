@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
-import android.support.v7.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +12,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
@@ -20,6 +20,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.popOrBack
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
@@ -32,6 +33,7 @@ import javax.inject.Inject
  * Hosts the image picker.
  */
 class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>(bundle) {
+
   constructor(book: Book) : this(Bundle().apply {
     putLong(NI_BOOK_ID, book.id)
   })
@@ -43,15 +45,18 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var imageHelper: ImageHelper
 
-  private var actionMode: ActionMode? = null
+  private var cab: MaterialCab? = null
 
-  private val actionModeCallback = object : ActionMode.Callback {
-    override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
-      return false
+  private val cabCallback = object : MaterialCab.Callback {
+
+    override fun onCabFinished(p0: MaterialCab?): Boolean {
+      binding.cropOverlay.selectionOn = false
+      binding.fab.show()
+      return true
     }
 
-    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-      if (item?.itemId == R.id.confirm) {
+    override fun onCabItemClicked(item: MenuItem): Boolean {
+      if (item.itemId == R.id.confirm) {
         // obtain screenshot
         val cropRect = binding.cropOverlay.selectedRect
         binding.cropOverlay.selectionOn = false
@@ -67,21 +72,15 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
         imageHelper.saveCover(screenShot, book.coverFile())
         screenShot.recycle()
         Picasso.with(activity).invalidate(book.coverFile())
-        actionMode?.finish()
+        cab?.finish()
         router.popCurrentController()
         return true
       }
       return false
     }
 
-    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-      activity.menuInflater.inflate(R.menu.crop_menu, menu)
+    override fun onCabCreated(p0: MaterialCab?, p1: Menu?): Boolean {
       return true
-    }
-
-    override fun onDestroyActionMode(p0: ActionMode?) {
-      binding.cropOverlay.selectionOn = false
-      binding.fab.show()
     }
   }
 
@@ -126,10 +125,10 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
-        d { "received webViewError. Set webVeiw invisible" }
+        d { "received webViewError. Set webView invisible" }
         view.loadUrl(ABOUT_BLANK)
         binding.progressBar.visible = false
-        view.findViewById(R.id.noNetwork).visible = true
+        binding.noNetwork.visible = true
         binding.webViewContainer.visible = false
       }
     })
@@ -150,7 +149,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
     binding.fab.setOnClickListener {
       binding.cropOverlay.selectionOn = true
-      actionMode = activity.startSupportActionMode(actionModeCallback)
+      cab!!.start(cabCallback)
       binding.fab.hide()
     }
 
@@ -159,28 +158,24 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
   @SuppressLint("InflateParams")
   private fun setupToolbar() {
-    // necessary, else the action mode will be themed wrongly
-    activity.setSupportActionBar(binding.toolbar)
-
     binding.toolbar.setTitle(R.string.cover)
 
     binding.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+    binding.toolbar.setNavigationOnClickListener { popOrBack() }
 
     binding.toolbar.inflateMenu(R.menu.image_picker)
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
-        R.id.refresh -> {
-          binding.webView.reload()
-          true
-        }
-        R.id.home -> {
+        R.id.reset -> {
           binding.webView.loadUrl(originalUrl)
           true
         }
         else -> false
       }
     }
+
+    cab = MaterialCab(activity, R.id.cabStub)
+        .setMenu(R.menu.crop_menu)
 
     // set the rotating icon
     val menu = binding.toolbar.menu
@@ -191,6 +186,11 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     val rotateView = LayoutInflater.from(activity).inflate(R.layout.rotate_view, null).apply {
       animation = rotation
       setOnClickListener { binding.webView.reload() }
+    }
+    rotateView.setOnClickListener {
+      if (binding.webView.url == ABOUT_BLANK) {
+        binding.webView.loadUrl(originalUrl)
+      } else binding.webView.reload()
     }
     MenuItemCompat.setActionView(refreshItem, rotateView)
 
@@ -226,10 +226,17 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
   }
 
   override fun handleBack(): Boolean {
+    if (cab!!.isActive) {
+      cab!!.finish()
+      return true
+    }
+
     if (binding.webView.canGoBack()) {
       binding.webView.goBack()
       return true
-    } else return false
+    }
+
+    return false
   }
 
   override fun onSaveViewState(view: View, outState: Bundle) {
