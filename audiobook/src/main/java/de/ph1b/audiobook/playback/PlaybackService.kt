@@ -186,7 +186,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     // update book when changed by player
     player.bookStream.distinctUntilChanged().subscribe {
-      it?.let { repo.updateBook(it) }
+      repo.updateBook(it)
     }
 
     disposables.apply {
@@ -214,7 +214,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             d { "onPlayStateManager.PlayStateChanged:$it" }
             val controllerBook = player.book()
             if (controllerBook != null) {
-              when (it!!) {
+              when (it) {
                 PlayState.PLAYING -> {
                   if (!currentlyHasFocus) {
                     d { "we don't have focus so we request it now" }

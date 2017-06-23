@@ -26,7 +26,7 @@ class PermissionHelper(private val activity: Activity, private val permissions: 
         .toObservable()
         .repeatWhen { it.flatMap { permissionDialogConfirmed } }
         .subscribe {
-          when (it!!) {
+          when (it) {
             Permissions.PermissionResult.GRANTED -> gotPermission()
             Permissions.PermissionResult.DENIED_FOREVER -> handleDeniedForever(root)
             Permissions.PermissionResult.DENIED_ASK_AGAIN -> showRationale(root) {

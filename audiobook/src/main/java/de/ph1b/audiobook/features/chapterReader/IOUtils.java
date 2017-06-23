@@ -40,7 +40,7 @@ public final class IOUtils {
     }
   }
 
-  public static long skip(final InputStream input, final long toSkip) throws IOException {
+  private static long skip(final InputStream input, final long toSkip) throws IOException {
     if (toSkip < 0) {
       throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
     }

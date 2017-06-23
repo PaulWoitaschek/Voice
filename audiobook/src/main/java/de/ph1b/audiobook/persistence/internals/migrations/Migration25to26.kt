@@ -17,15 +17,13 @@ class Migration25to26 : Migration {
         arrayOf("BOOK_ID", "BOOK_JSON"),
         null, null, null, null, null)
     val allBooks = ArrayList<JSONObject>(cursor.count)
-    try {
-      while (cursor.moveToNext()) {
-        val content = cursor.getString(1)
+    cursor.use {
+      while (it.moveToNext()) {
+        val content = it.getString(1)
         val book = JSONObject(content)
-        book.put("id", cursor.getLong(0))
+        book.put("id", it.getLong(0))
         allBooks.add(book)
       }
-    } finally {
-      cursor.close()
     }
 
     // delete empty books

@@ -136,7 +136,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     // after first successful load set visibilities
     webViewIsLoading
         .distinctUntilChanged()
-        .filter { it == true }
+        .filter { it }
         .subscribe {
           // sets progressbar and webviews visibilities correctly once the page is loaded
           i { "WebView is now loading. Set webView visible" }
@@ -195,7 +195,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     MenuItemCompat.setActionView(refreshItem, rotateView)
 
     webViewIsLoading
-        .filter { it == true }
+        .filter { it }
         .filter { !rotation.hasStarted() }
         .doOnNext { i { "is loading. Start animation" } }
         .subscribe {
