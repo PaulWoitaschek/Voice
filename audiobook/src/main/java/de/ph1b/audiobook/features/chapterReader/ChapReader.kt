@@ -88,22 +88,34 @@ object ChapReader {
   }
 
   private fun readNames(raf: RandomAccessFile, atoms: List<Mp4Atom>, chapterTrackId: Int): List<String> {
-    val mdatAtom = atoms.filter { it.name == "mdat" }
-        .getOrNull(chapterTrackId - 1)
+    val stco = atoms.firstOrNull { it.name == "moov" }?.children
+        ?.filter { it.name == "trak" }
+        ?.getOrNull(chapterTrackId - 1)?.children
+        ?.firstOrNull { it.name == "mdia" }?.children
+        ?.firstOrNull { it.name == "minf" }?.children
+        ?.firstOrNull { it.name == "stbl" }?.children
+        ?.firstOrNull { it.name == "stco" }
         ?: return emptyList()
 
-    raf.seek(mdatAtom.position + 8)
+    raf.seek(stco.position + 8)
+    val version = raf.readByte().toInt()
+    if (version != 0) {
+      return emptyList()
+    }
+    raf.skipBytes(3)
+    val entryCount = raf.readUnsignedInt().toInt()
+    val chunkOffsets = ArrayList<Long>(entryCount)
+    repeat(entryCount) {
+      chunkOffsets.add(raf.readUnsignedInt())
+    }
 
-    val names = ArrayList<String>()
-    while (raf.filePointer < mdatAtom.position + mdatAtom.length) {
+    return chunkOffsets.map {
+      raf.seek(it)
       val textLength = raf.readShort().toInt()
       val textBytes = ByteArray(textLength)
       raf.read(textBytes)
-      val name = String(textBytes)
-      names.add(name)
-      raf.skipBytes(12)
+      String(textBytes)
     }
-    return names
   }
 
   private fun readDurations(raf: RandomAccessFile, chapterTrakAtom: Mp4Atom, timeScale: Int): List<Long> {
