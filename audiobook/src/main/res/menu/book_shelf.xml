@@ -3,23 +3,23 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-  <item
-      android:id="@+id/action_current"
-      android:icon="@drawable/ic_play_circle_outline"
-      android:orderInCategory="90"
-      android:title="@string/current_book"
-      app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_current"
+        android:icon="@drawable/ic_play_circle_outline"
+        android:orderInCategory="90"
+        android:title="@string/current_book"
+        app:showAsAction="ifRoom"/>
 
-  <item
-      android:id="@+id/action_change_layout"
-      android:icon="@drawable/view_grid"
-      android:orderInCategory="95"
-      android:title="@string/change_layout_type"
-      app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_change_layout"
+        android:icon="@drawable/view_grid"
+        android:orderInCategory="95"
+        android:title="@string/change_layout_type"
+        app:showAsAction="ifRoom"/>
 
-  <item
-      android:id="@+id/action_settings"
-      android:orderInCategory="100"
-      android:title="@string/action_settings"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
 </menu>
