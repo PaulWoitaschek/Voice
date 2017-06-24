@@ -1,120 +1,121 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--BookShelf-->
-  <string name="content_current_book">To jest aktualna książka</string>
-  <string name="current_book">Aktualna książka</string>
-  <string name="change_layout_type">Zmień układ</string>
-  <!--BookPlayFragment-->
-  <string name="cover">Okładka</string>
-  <string name="play_pause">Odtwarzaj/Pauza</string>
-  <string name="action_sleep">Wyłącznik czasowy</string>
-  <plurals name="pauses_after">
-    <item quantity="one">Zatrzymaj po %d minucie.</item>
-    <item quantity="few">Zatrzymaj po %d minutach.</item>
-    <item quantity="many">Zatrzymaj po %d minutach.</item>
-    <item quantity="other">Zatrzymaj po %d minutach.</item>
-  </plurals>
-  <string name="rewind">Przewiń</string>
-  <string name="fast_forward">Do przodu</string>
-  <string name="previous_track">Poprzednia ścieżka</string>
-  <string name="next_track">Następna ścieżka</string>
-  <string name="play">Odtwórz</string>
-  <string name="pause">Pauza</string>
-  <string name="equalizer">Equalizer</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
-  <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Wybierz</string>
-  <string name="dialog_cancel">Anuluj</string>
-  <string name="dialog_no">Nie</string>
-  <!--EditBookDialog-->
-  <string name="content_previous_cover">Wybiera poprzednią okładkę</string>
-  <string name="content_next_cover">Wybiera następną okładkę</string>
-  <string name="content_cover">Pokazuje okładki do wyboru</string>
-  <string name="change_book_name">Nazwa</string>
-  <string name="download_book_cover">Okładka z internetu</string>
-  <string name="pick_book_cover">Okładka z pamięci telefonu</string>
-  <string name="edit_book_title">Edytuj książkę</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Skocz do</string>
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">Te foldery nie mogą być swoimi podfolderami:</string>
-  <string name="audiobook_folders_title">Foldery audiobooków</string>
-  <string name="no_audiobook_folders_title">Wybierz folder</string>
-  <string name="no_audiobook_folders_summary_start">Proszę wybrać folder(y) dla twoich audiobooków.</string>
-  <string name="no_audiobook_folders_end">Można wybrać główny folder zawierający różne książki. Możesz też wybrać jedna książkę.</string>
-  <string name="chosen_folder_description">Wybrany folder: </string>
-  <string name="delete_folder">Usunąć z Biblioteki?</string>
-  <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
-  <string name="folder_add_single_book">Jedna książka</string>
-  <string name="folder_add_collection">Folder z wieloma książkami</string>
-  <string name="for_example">np.</string>
-  <string name="content_add_book">Dodaj książkę</string>
-  <string name="content_is_folder">Folder</string>
-  <string name="content_is_file">Plik</string>
-  <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
-  <string name="permission_read_ext_explanation">Aplikacja musi posiadać dostęp do pamięci dyskowej, by móc znaleźć i odtwarzać audiobooki.</string>
-  <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
-  <string name="permission_retry">Powtórzyć?</string>
-  <string name="permission_goto_settings">Ustawienia</string>
-  <string name="permission_read_ext_request">Czy powinniśmy pytać ponownie o nadanie uprawnień?</string>
-  <string name="permission_rescan">Zarządaj ponownie</string>
-  <string name="storage_pre_device">Przestrzeń dyskowa:</string>
-  <string name="storage_all">Wszystko</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Szybkość odtwarzania</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Zakładki</string>
-  <string name="shake_to_reset">Wstrząśnij by zrestartować</string>
-  <string name="bookmark_edit_title">Edytuj zakładkę</string>
-  <string name="acc_button_add_bookmark">Dodaje zakładkę w tym miejscu.</string>
-  <string name="bookmark_edit_hint">Nazwa zakładki</string>
-  <string name="bookmark_added">Zakładka dodana</string>
-  <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
-  <!--Settings-->
-  <string name="action_settings">Preferencje</string>
-  <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
-  <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
-  <string name="pref_resume_after_call">Przywróć po połączeniu</string>
-  <string name="pref_resume_after_call_hint">Przywraca odtwarzanie po zakończeniu połączenia</string>
-  <string name="min">%s min</string>
-  <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
-  <plurals name="seconds">
-    <item quantity="one">%d sekunda</item>
-    <item quantity="few">%d sekundy</item>
-    <item quantity="many">%d sekund</item>
-    <item quantity="other">%d sekund</item>
-  </plurals>
-  <string name="pref_seek_time">Przewiń o</string>
-  <string name="pref_root_folder_title">Folder audiobooków</string>
-  <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
-  <string name="pref_theme_title">Motyw</string>
-  <string name="pref_theme_day">Dzień</string>
-  <string name="pref_theme_night">Noc</string>
-  <string name="pref_theme_daynight">Dzień / Noc</string>
-  <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
-    <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
-    <item quantity="many">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
-    <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
-  </plurals>
-  <string name="pref_support_title">Wsparcie</string>
-  <string name="pref_support_translations">Tłumaczenia</string>
-  <string name="pref_support_contribute">Wsparcie i propozycje</string>
-  <!--Misc-->
-  <string name="popup_edit">Edytuj</string>
-  <string name="remove">Usuń</string>
-  <string name="play_current">Odtwórz aktualne</string>
-  <!--hide folder dialog-->
-  <string name="hide_folder_title">Ukryj folder</string>
-  <string name="hide_folder_content">Czy chcesz ukryć ten folder tak, że programy do odtwarzania muzyki nie będą rozpoznawały książki jako muzyki?</string>
-  <string name="hide_confirm">Ukryj</string>
-  <!--license activity-->
-  <string name="refresh">Odśwież</string>
-  <string name="reset">Reset</string>
-  <string name="no_network">Brak sieci?</string>
-  <string name="network_top">To nie zadziałało…</string>
-  <string name="cover_crop">Przytnij okładkę</string>
+    <!--BookShelf-->
+    <string name="content_current_book">To jest aktualna książka</string>
+    <string name="current_book">Aktualna książka</string>
+    <string name="change_layout_type">Zmień układ</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Okładka</string>
+    <string name="play_pause">Odtwarzaj/Pauza</string>
+    <string name="action_sleep">Wyłącznik czasowy</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Zatrzymaj po %d minucie.</item>
+        <item quantity="few">Zatrzymaj po %d minutach.</item>
+        <item quantity="many">Zatrzymaj po %d minutach.</item>
+        <item quantity="other">Zatrzymaj po %d minutach.</item>
+    </plurals>
+    <string name="rewind">Przewiń</string>
+    <string name="fast_forward">Do przodu</string>
+    <string name="previous_track">Poprzednia ścieżka</string>
+    <string name="next_track">Następna ścieżka</string>
+    <string name="play">Odtwórz</string>
+    <string name="pause">Pauza</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="volume_boost">Volume Boost</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
+    <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Wybierz</string>
+    <string name="dialog_cancel">Anuluj</string>
+    <string name="dialog_no">Nie</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Wybiera poprzednią okładkę</string>
+    <string name="content_next_cover">Wybiera następną okładkę</string>
+    <string name="content_cover">Pokazuje okładki do wyboru</string>
+    <string name="change_book_name">Nazwa</string>
+    <string name="download_book_cover">Okładka z internetu</string>
+    <string name="pick_book_cover">Okładka z pamięci telefonu</string>
+    <string name="edit_book_title">Edytuj książkę</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Skocz do</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Te foldery nie mogą być swoimi podfolderami:</string>
+    <string name="audiobook_folders_title">Foldery audiobooków</string>
+    <string name="no_audiobook_folders_title">Wybierz folder</string>
+    <string name="no_audiobook_folders_summary_start">Proszę wybrać folder(y) dla twoich audiobooków.</string>
+    <string name="no_audiobook_folders_end">Można wybrać główny folder zawierający różne książki. Możesz też wybrać jedna książkę.</string>
+    <string name="chosen_folder_description">Wybrany folder: </string>
+    <string name="delete_folder">Usunąć z Biblioteki?</string>
+    <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
+    <string name="folder_add_single_book">Jedna książka</string>
+    <string name="folder_add_collection">Folder z wieloma książkami</string>
+    <string name="for_example">np.</string>
+    <string name="content_add_book">Dodaj książkę</string>
+    <string name="content_is_folder">Folder</string>
+    <string name="content_is_file">Plik</string>
+    <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
+    <string name="permission_read_ext_explanation">Aplikacja musi posiadać dostęp do pamięci dyskowej, by móc znaleźć i odtwarzać audiobooki.</string>
+    <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
+    <string name="permission_retry">Powtórzyć?</string>
+    <string name="permission_goto_settings">Ustawienia</string>
+    <string name="permission_read_ext_request">Czy powinniśmy pytać ponownie o nadanie uprawnień?</string>
+    <string name="permission_rescan">Zarządaj ponownie</string>
+    <string name="storage_pre_device">Przestrzeń dyskowa:</string>
+    <string name="storage_all">Wszystko</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Szybkość odtwarzania</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Zakładki</string>
+    <string name="shake_to_reset">Wstrząśnij by zrestartować</string>
+    <string name="bookmark_edit_title">Edytuj zakładkę</string>
+    <string name="acc_button_add_bookmark">Dodaje zakładkę w tym miejscu.</string>
+    <string name="bookmark_edit_hint">Nazwa zakładki</string>
+    <string name="bookmark_added">Zakładka dodana</string>
+    <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
+    <!--Settings-->
+    <string name="action_settings">Preferencje</string>
+    <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
+    <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
+    <string name="pref_resume_after_call">Przywróć po połączeniu</string>
+    <string name="pref_resume_after_call_hint">Przywraca odtwarzanie po zakończeniu połączenia</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
+    <string name="pref_seek_time">Przewiń o</string>
+    <string name="pref_root_folder_title">Folder audiobooków</string>
+    <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
+    <string name="pref_theme_title">Motyw</string>
+    <string name="pref_theme_day">Dzień</string>
+    <string name="pref_theme_night">Noc</string>
+    <string name="pref_theme_daynight">Dzień / Noc</string>
+    <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
+        <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
+        <item quantity="many">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
+        <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
+    </plurals>
+    <string name="pref_support_title">Wsparcie</string>
+    <string name="pref_support_translations">Tłumaczenia</string>
+    <string name="pref_support_contribute">Wsparcie i propozycje</string>
+    <!--Misc-->
+    <string name="popup_edit">Edytuj</string>
+    <string name="remove">Usuń</string>
+    <string name="play_current">Odtwórz aktualne</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Ukryj folder</string>
+    <string name="hide_folder_content">Czy chcesz ukryć ten folder tak, że programy do odtwarzania muzyki nie będą rozpoznawały książki jako muzyki?</string>
+    <string name="hide_confirm">Ukryj</string>
+    <!--license activity-->
+    <string name="refresh">Odśwież</string>
+    <string name="reset">Reset</string>
+    <string name="no_network">Brak sieci?</string>
+    <string name="network_top">To nie zadziałało…</string>
+    <string name="cover_crop">Przytnij okładkę</string>
 </resources>

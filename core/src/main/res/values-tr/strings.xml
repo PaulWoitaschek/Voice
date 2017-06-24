@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="content_current_book">Bu kitap şu anki kitap</string>
+    <string name="current_book">Şu anki kitap</string>
+    <string name="change_layout_type">Düzeni değiştir</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Kapak</string>
+    <string name="play_pause">Oynat / Durdur</string>
+    <string name="action_sleep">Uyku zamanlama</string>
+    <plurals name="pauses_after">
+        <item quantity="one">%d dakika sonra duraklatır</item>
+        <item quantity="other">%d dakika sonra duraklatır</item>
+    </plurals>
+    <string name="rewind">Geri sar</string>
+    <string name="fast_forward">Hızlı ilerlet</string>
+    <string name="previous_track">Önceki parça</string>
+    <string name="next_track">Sonraki parça</string>
+    <string name="play">Oynat</string>
+    <string name="pause">Duraklat</string>
+    <string name="equalizer">Ekolayzer</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Harici Depolama Birimi mevcut değil. Lütfen bağlı olduğundan ve bilgisayarınıza takılı olmadığından emin olun.</string>
+    <string name="no_external_storage_action_bar_title">Harici Depolama</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Kur</string>
+    <string name="dialog_cancel">İptal</string>
+    <string name="dialog_no">Hayır</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Önceki kapağı seçer</string>
+    <string name="content_next_cover">Sonraki kapağı seçer</string>
+    <string name="content_cover">Seçmek için kapak gösterir</string>
+    <string name="change_book_name">Ad</string>
+    <string name="download_book_cover">İnternetten kapak</string>
+    <string name="pick_book_cover">Dosyalardan kapak</string>
+    <string name="edit_book_title">Kitabı düzenle</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Şuna git:</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Klasörler birbirinin alt klasörü olmamalıdır:</string>
+    <string name="audiobook_folders_title">Sesli kitap klasörleri</string>
+    <string name="no_audiobook_folders_title">Şimdi klasörü seçin</string>
+    <string name="no_audiobook_folders_summary_start">Lütfen şimdi sesli kitap klasör(ler)i seçin.</string>
+    <string name="no_audiobook_folders_end">Farklı kitapları içeren ana klasörünüzü seçebilirsiniz. Ya da sadece tek bir kitap seçebilirsiniz.</string>
+    <string name="chosen_folder_description">Seçilen klasör:</string>
+    <string name="delete_folder">Kütüphaneden kaldırılsın mı?</string>
+    <string name="delete_folder_content">Aşağıdaki klasörü kitaplığınızdan kaldırmak istiyor musunuz?</string>
+    <string name="folder_add_single_book">Tek kitap</string>
+    <string name="folder_add_collection">Birden fazla kitap içeren klasör</string>
+    <string name="for_example">örn.</string>
+    <string name="content_add_book">Bir kitap ekle</string>
+    <string name="content_is_folder">Klasör </string>
+    <string name="content_is_file">Dosya</string>
+    <string name="content_navigate_up">Üst klasöre gidin</string>
+    <string name="permission_read_ext_explanation">Uygulamanın, sesli kitapları bulabilmesi ve çalabilmesi için saklama alanınızı okuması gerekiyor.</string>
+    <string name="permission_external_new_explanation">İzinsiz kitap okuyamıyor</string>
+    <string name="permission_retry">Tekrar?</string>
+    <string name="permission_goto_settings">Ayarlar</string>
+    <string name="permission_read_ext_request">Tekrar izin isteyebilir miyiz?</string>
+    <string name="permission_rescan">Tekrar isteyin</string>
+    <string name="storage_pre_device">Depolama:</string>
+    <string name="storage_all">Tümü</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Oynatma hızı</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Yerimi</string>
+    <string name="shake_to_reset">Sıfırlamak için sallayın</string>
+    <string name="bookmark_edit_title">Yerimini düzenle</string>
+    <string name="acc_button_add_bookmark">Geçerli konuma bir yer işareti ekler</string>
+    <string name="bookmark_edit_hint">Yer imi adı</string>
+    <string name="bookmark_added">Yer imi eklendi</string>
+    <string name="bookmark_delete_title">Bu yer imi silinsin mi?</string>
+    <!--Settings-->
+    <string name="action_settings">Tercihler</string>
+    <string name="pref_resume_on_replug">Oynatmaya devam et</string>
+    <string name="pref_resume_on_replug_hint">Kulaklığı çıkardığınızda durakladıysa, tekrar taktığınızda devam eder.</string>
+    <string name="pref_resume_after_call">Görüşmeden sonra devam et</string>
+    <string name="pref_resume_after_call_hint">Görüşme sonrasında oynatmayı sürdürür.</string>
+    <string name="min">%s dak</string>
+    <string name="delete_last_number">Son girilen numarayı siler</string>
+    <plurals name="seconds">
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
+    </plurals>
+    <string name="pref_seek_time">Değeri atla</string>
+    <string name="pref_root_folder_title">Sesli kitap klasörü</string>
+    <string name="pref_root_folder_summary">Seçilen sesli kitap klasörleri.</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_day">Gündüz</string>
+    <string name="pref_theme_night">Gece</string>
+    <string name="pref_theme_daynight">Gündüz / Gece</string>
+    <string name="pref_auto_rewind_title">Otomatik geri sarma</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Elle duraklatıldıktan sonra %d saniye otomatik olarak geri sarar.</item>
+        <item quantity="other">Elle duraklatıldıktan sonra %d saniye otomatik olarak geri sarar.</item>
+    </plurals>
+    <string name="pref_support_title">Destek</string>
+    <string name="pref_support_translations">Çeviriler</string>
+    <string name="pref_support_contribute">Destek ve öneriler</string>
+    <!--Misc-->
+    <string name="popup_edit">Düzenle</string>
+    <string name="remove">Kaldır</string>
+    <string name="play_current">Geçerli oynatma</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Klasörü gizle</string>
+    <string name="hide_folder_content">Klasörü müzik çalarlardan gizlemek mi istiyorsunuz, bu nedenle kitabınızı müzik olarak tanımıyorlar mı?</string>
+    <string name="hide_confirm">Gizle</string>
+    <!--license activity-->
+    <string name="refresh">Yenile</string>
+    <string name="reset">Sıfırla</string>
+    <string name="no_network">Ağ yok?</string>
+    <string name="network_top">Bu iş çok iyi sonuç vermedi …</string>
+    <string name="cover_crop">Kapağı kırp</string>
+</resources>

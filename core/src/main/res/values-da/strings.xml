@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="content_current_book">Dette er den aktuelle bog</string>
+    <string name="current_book">Aktuelle bog</string>
+    <string name="change_layout_type">Ændre layout</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Cover</string>
+    <string name="play_pause">Afspil / Pause</string>
+    <string name="action_sleep">Sleep-Timer</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pauser efter %d minut.</item>
+        <item quantity="other">Pauser efter %d minutter.</item>
+    </plurals>
+    <string name="rewind">Spol tilbage</string>
+    <string name="fast_forward">Spol fremad</string>
+    <string name="previous_track">Forrige nummer</string>
+    <string name="next_track">Næste nummer</string>
+    <string name="play">Afspil</string>
+    <string name="pause">Pause</string>
+    <string name="equalizer">Equalizer</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Ekstern hukommelse er ikke tilgængeligt. Tjek om det er tilsluttet og ikke mounted i din computer.</string>
+    <string name="no_external_storage_action_bar_title">Ekstern hukommelse</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Sæt</string>
+    <string name="dialog_cancel">Annuller</string>
+    <string name="dialog_no">Nej</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Vælger forrige cover</string>
+    <string name="content_next_cover">Vælger næste cover</string>
+    <string name="content_cover">Viser cover der kan vælges</string>
+    <string name="change_book_name">Navn</string>
+    <string name="download_book_cover">Cover fra internettet</string>
+    <string name="pick_book_cover">Cover fra filsystemet</string>
+    <string name="edit_book_title">Rediger bog</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Hop til</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Mapperne må ikke være undermapper af hinanden:</string>
+    <string name="audiobook_folders_title">Lydbogs mapper</string>
+    <string name="no_audiobook_folders_title">Vælg mappe nu</string>
+    <string name="no_audiobook_folders_summary_start">Vælg venligst din lydbogs mappe(r) nu</string>
+    <string name="no_audiobook_folders_end">Du kan vælge din hovedmappe der indeholder forskellige bøger. Eller du kan vælge en enkelt bog.</string>
+    <string name="chosen_folder_description">Valgte mappe:</string>
+    <string name="delete_folder">Fjern fra biblioteket?</string>
+    <string name="delete_folder_content">Vil du fjerne den følgende mappe fra biblioteket?</string>
+    <string name="folder_add_single_book">Enkelt bog</string>
+    <string name="folder_add_collection">Mappe med flere bøger</string>
+    <string name="for_example">f.eks.</string>
+    <string name="content_add_book">Tilføj en bog</string>
+    <string name="content_is_folder">Mappe</string>
+    <string name="content_is_file">Fil</string>
+    <string name="content_navigate_up">Gå til overordnet mappe</string>
+    <string name="permission_read_ext_explanation">Appen har brug for at læse din hukommelse, så den kan finde og afspille lydbøgerne.</string>
+    <string name="permission_external_new_explanation">Kan ikke læse bøger uden tilladelse</string>
+    <string name="permission_retry">Prøv igen?</string>
+    <string name="permission_goto_settings">Indstillinger</string>
+    <string name="permission_read_ext_request">Skal vi spørge efter tilladelse igen?</string>
+    <string name="permission_rescan">Anmod igen</string>
+    <string name="storage_pre_device">Hukommelse:</string>
+    <string name="storage_all">Alt</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Afspilningshastighed</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Bogmærke</string>
+    <string name="shake_to_reset">Ryst for at nulstille</string>
+    <string name="bookmark_edit_title">Rediger bogmærke</string>
+    <string name="acc_button_add_bookmark">Tilføjer et bogmærke ved den nuværende position</string>
+    <string name="bookmark_edit_hint">Bogmærke navn</string>
+    <string name="bookmark_added">Bogmærke tilføjet</string>
+    <string name="bookmark_delete_title">Fjern dette bogmærke?</string>
+    <!--Settings-->
+    <string name="action_settings">Indstillinger</string>
+    <string name="pref_resume_on_replug">Genoptag afspilning</string>
+    <string name="pref_resume_on_replug_hint">Hvis du pausede ved at trække høretelefoner ud, vil den fortsætte når det sættes i igen.</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
+    <string name="pref_seek_time">Spring over mængde</string>
+    <string name="pref_root_folder_title">Lydbogs mappe</string>
+    <string name="pref_root_folder_summary">De valgte lydbogsmapper.</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_day">Dag</string>
+    <string name="pref_theme_night">Nat</string>
+    <string name="pref_theme_daynight">Dag / Nat</string>
+    <string name="pref_auto_rewind_title">Auto tilbagespoling</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Spoler automatisk %d sekund tilbage efter manuel pause.</item>
+        <item quantity="other">Spoler automatisk %d sekunder tilbage efter manuel pause.</item>
+    </plurals>
+    <string name="pref_support_title">Support</string>
+    <string name="pref_support_translations">Oversættelser</string>
+    <string name="pref_support_contribute">Support og forslag</string>
+    <!--Misc-->
+    <string name="popup_edit">Rediger</string>
+    <string name="remove">Fjern</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Skjul mappe</string>
+    <string name="hide_folder_content">Vil du skjule mappen fra musikafspillere, så du ikke ser dine lydbøger som musik?</string>
+    <string name="hide_confirm">Skjul</string>
+    <!--license activity-->
+    <string name="refresh">Opfrisk</string>
+    <string name="reset">Nulstil</string>
+    <string name="no_network">Ingen netværk?</string>
+    <string name="network_top">Dette fungerede ikke optimalt…</string>
+    <string name="cover_crop">Skær cover til</string>
+</resources>
