@@ -32,6 +32,9 @@ fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
   return bitmap.first()
 }
 
+// 500 kb
+val maxImageSize = 500 * 1024
+
 @Singleton
 class ImageHelper
 @Inject

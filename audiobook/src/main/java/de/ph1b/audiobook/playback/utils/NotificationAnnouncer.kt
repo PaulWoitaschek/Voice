@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.maxImageSize
 import e
 import java.io.IOException
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class NotificationAnnouncer
     // get the cover or fallback to a replacement
     val cover = try {
       val coverFile = book.coverFile()
-      if (coverFile.exists() && coverFile.canRead()) {
+      if (coverFile.canRead() && coverFile.length() < maxImageSize) {
         Picasso.with(context)
             .load(coverFile)
             .resize(width, height)

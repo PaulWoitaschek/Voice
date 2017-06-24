@@ -28,6 +28,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.utils.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.maxImageSize
 import e
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -84,7 +85,6 @@ class WidgetUpdateService : Service() {
         val remoteViews = RemoteViews(packageName, R.layout.widget)
 
         if (book != null) {
-          initElements(remoteViews, book)
 
           val opts = appWidgetManager.getAppWidgetOptions(widgetId)
           val minHeightDp = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
@@ -106,6 +106,10 @@ class WidgetUpdateService : Service() {
             useWidth = maxWidth
             useHeight = minHeight
           }
+
+          initElements(remoteViews = remoteViews, book = book, coverSize = useHeight)
+
+
           if (useWidth > 0 && useHeight > 0) {
             setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
           }
@@ -115,11 +119,12 @@ class WidgetUpdateService : Service() {
           wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
           val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
               wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
-          remoteViews.setImageViewBitmap(R.id.imageView,
-              imageHelper.drawableToBitmap(
-                  drawable(R.drawable.icon_108dp),
-                  imageHelper.smallerScreenSize,
-                  imageHelper.smallerScreenSize))
+          val cover = imageHelper.drawableToBitmap(
+              drawable = drawable(R.drawable.icon_108dp),
+              width = imageHelper.smallerScreenSize,
+              height = imageHelper.smallerScreenSize
+          )
+          remoteViews.setImageViewBitmap(R.id.imageView, cover)
           remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
         }
 
@@ -148,7 +153,7 @@ class WidgetUpdateService : Service() {
       return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
-  private fun initElements(remoteViews: RemoteViews, book: Book) {
+  private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPauseI = serviceController.getPlayPauseIntent()
     val playPausePI = PendingIntent.getService(this,
         KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -185,8 +190,11 @@ class WidgetUpdateService : Service() {
     var cover: Bitmap? = null
     try {
       val coverFile = book.coverFile()
-      if (coverFile.exists() && coverFile.canRead()) {
-        cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
+      if (coverFile.canRead() && coverFile.length() < maxImageSize) {
+        cover = Picasso.with(this@WidgetUpdateService)
+            .load(coverFile)
+            .resize(coverSize, coverSize)
+            .get()
       }
     } catch (ex: IOException) {
       e(ex) { "Error when retrieving cover for book $book" }

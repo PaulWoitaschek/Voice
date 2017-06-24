@@ -17,6 +17,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import i
 import java.util.*
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 // display all the books
-class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+class BookShelfAdapter(private val context: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
   private val books = ArrayList<Book>()
 
@@ -168,12 +169,16 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     private fun bindCover(book: Book) {
       // (Cover)
       val coverFile = book.coverFile()
-      val coverReplacement = CoverReplacement(book.name, c)
+      val coverReplacement = CoverReplacement(book.name, context)
 
-      if (coverFile.exists() && coverFile.canRead()) {
-        Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView)
+      if (coverFile.canRead() && coverFile.length() < maxImageSize) {
+        Picasso.with(context)
+            .load(coverFile)
+            .placeholder(coverReplacement)
+            .into(coverView)
       } else {
-        Picasso.with(c).cancelRequest(coverView)
+        Picasso.with(context)
+            .cancelRequest(coverView)
         // we have to set the replacement in onPreDraw, else the transition will fail.
         coverView.onFirstPreDraw { coverView.setImageDrawable(coverReplacement) }
       }

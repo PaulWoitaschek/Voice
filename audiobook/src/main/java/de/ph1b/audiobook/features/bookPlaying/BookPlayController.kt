@@ -18,10 +18,7 @@ import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.visible
+import de.ph1b.audiobook.uitools.*
 import i
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -107,7 +104,7 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
 
     // (Cover)
     val coverReplacement = CoverReplacement(book.name, activity)
-    if (book.coverFile().canRead()) {
+    if (book.coverFile().canRead() && book.coverFile().length() < maxImageSize) {
       Picasso.with(activity)
           .load(book.coverFile())
           .placeholder(coverReplacement)
