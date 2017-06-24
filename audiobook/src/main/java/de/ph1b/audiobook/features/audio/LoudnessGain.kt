@@ -36,6 +36,8 @@ import kotlin.properties.Delegates
   private fun attachEffect() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
       return
+    if (audioSessionId == -1)
+      return
 
     try {
       if (effectWithSessionId == null) {
