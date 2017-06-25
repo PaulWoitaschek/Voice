@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback.utils
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
@@ -39,6 +40,7 @@ import javax.inject.Inject
         MediaDescriptionCompat.Builder()
             .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
             .setMediaId(bookUriConverter.book(it.id).toString())
+            .setIconBitmap(BitmapFactory.decodeFile(it.coverFile().absolutePath))
             .build().let {
           MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
         }
@@ -48,6 +50,7 @@ import javax.inject.Inject
         val description = MediaDescriptionCompat.Builder()
             .setTitle(it.name)
             .setMediaId(bookUriConverter.book(it.id).toString())
+            .setIconBitmap(BitmapFactory.decodeFile(it.coverFile().absolutePath))
             .build()
         return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
       }
