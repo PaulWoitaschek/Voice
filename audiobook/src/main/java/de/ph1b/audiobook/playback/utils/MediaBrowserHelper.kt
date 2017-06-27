@@ -46,6 +46,7 @@ import javax.inject.Inject
             .setIconUri(if (coverFile.exists()) {
               val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
               context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              context.grantUriPermission("com.google.android.projection.gearhead", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
               uriForFile
             } else null)
             .build().let {
@@ -61,6 +62,7 @@ import javax.inject.Inject
             .setIconUri(if (coverFile.exists()) {
               val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
               context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              context.grantUriPermission("com.google.android.projection.gearhead", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
               uriForFile
             } else null)
             .build()
