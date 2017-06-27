@@ -1,8 +1,10 @@
 package de.ph1b.audiobook.playback.utils
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.support.v4.content.FileProvider
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
@@ -37,20 +39,30 @@ import javax.inject.Inject
 
     if (match == BookUriConverter.ROOT) {
       val current = repo.bookById(prefs.currentBookId.value)?.let {
+        val coverFile = it.coverFile()
         MediaDescriptionCompat.Builder()
             .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
             .setMediaId(bookUriConverter.book(it.id).toString())
-            .setIconBitmap(BitmapFactory.decodeFile(it.coverFile().absolutePath))
+            .setIconUri(if (coverFile.exists()) {
+              val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
+              context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              uriForFile
+            } else null)
             .build().let {
           MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
         }
       }
 
       val all = repo.activeBooks.map {
+        val coverFile = it.coverFile()
         val description = MediaDescriptionCompat.Builder()
             .setTitle(it.name)
             .setMediaId(bookUriConverter.book(it.id).toString())
-            .setIconBitmap(BitmapFactory.decodeFile(it.coverFile().absolutePath))
+            .setIconUri(if (coverFile.exists()) {
+              val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
+              context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              uriForFile
+            } else null)
             .build()
         return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
       }
