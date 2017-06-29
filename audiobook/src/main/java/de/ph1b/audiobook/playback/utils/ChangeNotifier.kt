@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -37,15 +38,19 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
   @Volatile private var lastFileForMetaData = File("")
 
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
-      .setActions(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-          PlaybackStateCompat.ACTION_REWIND or
+      .setActions(PlaybackStateCompat.ACTION_REWIND or
           PlaybackStateCompat.ACTION_PLAY or
+          PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
+          PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
           PlaybackStateCompat.ACTION_PAUSE or
           PlaybackStateCompat.ACTION_PLAY_PAUSE or
           PlaybackStateCompat.ACTION_STOP or
           PlaybackStateCompat.ACTION_FAST_FORWARD or
-          PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
           PlaybackStateCompat.ACTION_SEEK_TO)
+      .addCustomAction("rewind", context.getString(R.string.rewind), R.drawable.ic_fast_rewind)
+      .addCustomAction("fast_forward", context.getString(R.string.fast_forward), R.drawable.ic_fast_forward)
+      .addCustomAction("previous", context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
+      .addCustomAction("next", context.getString(R.string.next_track), R.drawable.ic_skip_next)
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 

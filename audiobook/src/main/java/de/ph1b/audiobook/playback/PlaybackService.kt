@@ -3,9 +3,7 @@ package de.ph1b.audiobook.playback
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ComponentName
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
@@ -113,6 +111,17 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
+  private val carConnectionReceiver = object: BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if("media_connected" == intent?.getStringExtra("media_connection_status")) {
+        // display the current book but don't play it
+        repo.bookById(prefs.currentBookId.value)?.let {
+          changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
+        }
+      }
+    }
+  }
+
   override fun onCreate() {
     super.onCreate()
 
@@ -146,7 +155,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToNext() {
           i { "onSkipToNext" }
-          onFastForward()
+          player.next()
         }
 
         override fun onRewind() {
@@ -156,7 +165,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToPrevious() {
           i { "onSkipToPrevious" }
-          onRewind()
+          player.previous(toNullOfNewTrack = true)
         }
 
         override fun onFastForward() {
@@ -178,6 +187,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
           i { "onPlay" }
           player.play()
         }
+
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+          super.onCustomAction(action, extras)
+          when(action) {
+            "next" -> onSkipToNext()
+            "previous" -> onSkipToPrevious()
+            "fast_forward" -> onFastForward()
+            "rewind" -> onRewind()
+          }
+        }
       })
       setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
@@ -188,6 +207,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
     player.bookStream.distinctUntilChanged().subscribe {
       repo.updateBook(it)
     }
+
+    registerReceiver(carConnectionReceiver, IntentFilter("com.google.android.gms.car.media.STATUS"))
 
     disposables.apply {
       // re-init controller when there is a new book set as the current book
@@ -307,6 +328,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.release()
     disposables.dispose()
 
+    unregisterReceiver(carConnectionReceiver)
     super.onDestroy()
   }
 
