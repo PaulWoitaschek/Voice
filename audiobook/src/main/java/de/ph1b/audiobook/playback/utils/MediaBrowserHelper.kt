@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback.utils
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v4.content.FileProvider
 import android.support.v4.media.MediaBrowserCompat
@@ -10,10 +9,12 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import d
 import dagger.Reusable
+import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -39,37 +40,14 @@ import javax.inject.Inject
 
     if (match == BookUriConverter.ROOT) {
       val currentBook = repo.bookById(prefs.currentBookId.value)
-      val current = currentBook?.let {
-        val coverFile = it.coverFile()
-        MediaDescriptionCompat.Builder()
-            .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
-            .setMediaId(bookUriConverter.book(it.id).toString())
-            .setIconUri(if (coverFile.exists()) {
-              val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
-              context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-              context.grantUriPermission("com.google.android.projection.gearhead", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-              uriForFile
-            } else null)
-            .build().let {
-          MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-        }
-      }
+      val current = currentBook?.toMediaDescription(
+          titlePrefix = "${context.getString(R.string.current_book)}: "
+      )
 
       // do NOT return the current book twice as this will break the listing due to stable IDs
-      val all = repo.activeBooks.filter { it != currentBook }.map {
-        val coverFile = it.coverFile()
-        val description = MediaDescriptionCompat.Builder()
-            .setTitle(it.name)
-            .setMediaId(bookUriConverter.book(it.id).toString())
-            .setIconUri(if (coverFile.exists()) {
-              val uriForFile = FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
-              context.grantUriPermission("com.google.android.wearable.app", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-              context.grantUriPermission("com.google.android.projection.gearhead", uriForFile, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-              uriForFile
-            } else null)
-            .build()
-        return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-      }
+      val all = repo.activeBooks
+          .filter { it != currentBook }
+          .map { it.toMediaDescription() }
 
       if (current == null) {
         return all
@@ -79,5 +57,26 @@ import javax.inject.Inject
     } else {
       return null
     }
+  }
+
+  private fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
+    val iconUri = fileProviderUri(coverFile())
+    val mediaId = bookUriConverter.book(id).toString()
+    val description = MediaDescriptionCompat.Builder()
+        .setTitle(titlePrefix + name)
+        .setMediaId(mediaId)
+        .setIconUri(iconUri)
+        .build()
+    return MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+  }
+
+  private fun fileProviderUri(coverFile: File): Uri? {
+    return if (coverFile.exists()) {
+      FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
+          .apply {
+            context.grantUriPermission("com.google.android.wearable.app", this, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.grantUriPermission("com.google.android.projection.gearhead", this, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+          }
+    } else null
   }
 }
