@@ -38,7 +38,8 @@ import javax.inject.Inject
     val match = bookUriConverter.match(uri)
 
     if (match == BookUriConverter.ROOT) {
-      val current = repo.bookById(prefs.currentBookId.value)?.let {
+      val currentBook = repo.bookById(prefs.currentBookId.value)
+      val current = currentBook?.let {
         val coverFile = it.coverFile()
         MediaDescriptionCompat.Builder()
             .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
@@ -54,7 +55,8 @@ import javax.inject.Inject
         }
       }
 
-      val all = repo.activeBooks.map {
+      // do NOT return the current book twice as this will break the listing due to stable IDs
+      val all = repo.activeBooks.filter { it != currentBook }.map {
         val coverFile = it.coverFile()
         val description = MediaDescriptionCompat.Builder()
             .setTitle(it.name)
