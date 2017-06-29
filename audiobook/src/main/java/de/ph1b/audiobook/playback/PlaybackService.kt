@@ -68,6 +68,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookSearchHandler: BookSearchHandler
   private lateinit var mediaSession: MediaSessionCompat
   private lateinit var changeNotifier: ChangeNotifier
+  private var carConnected: Boolean = false
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
     i { "audio focus listener got focus $focusChange" }
@@ -113,10 +114,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val carConnectionReceiver = object: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-      if("media_connected" == intent?.getStringExtra("media_connection_status")) {
+      when (intent?.getStringExtra("media_connection_status")) {
+        "media_connected" -> carConnected = true
+        "media_disconnected" -> carConnected = false
+      }
+      if (carConnected) {
         // display the current book but don't play it
         repo.bookById(prefs.currentBookId.value)?.let {
-          changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
+          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, carConnected)
         }
       }
     }
@@ -155,7 +160,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToNext() {
           i { "onSkipToNext" }
-          player.next()
+          if(carConnected) {
+            player.next()
+          } else {
+            onFastForward()
+          }
         }
 
         override fun onRewind() {
@@ -165,7 +174,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToPrevious() {
           i { "onSkipToPrevious" }
-          player.previous(toNullOfNewTrack = true)
+          if(carConnected) {
+            player.previous(toNullOfNewTrack = true)
+          } else {
+            onRewind()
+          }
         }
 
         override fun onFastForward() {
@@ -225,7 +238,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           .filter { it.id == prefs.currentBookId.value }
           .subscribe {
             player.init(it)
-            changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
+            changeNotifier.notify(ChangeNotifier.Type.METADATA, it, carConnected)
           })
 
       // handle changes on the play state
@@ -265,7 +278,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 }
               }
 
-              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook)
+              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook, carConnected)
             }
           })
 
