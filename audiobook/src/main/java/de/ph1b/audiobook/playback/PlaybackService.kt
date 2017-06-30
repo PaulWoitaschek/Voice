@@ -3,9 +3,7 @@ package de.ph1b.audiobook.playback
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ComponentName
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
@@ -70,6 +68,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookSearchHandler: BookSearchHandler
   private lateinit var mediaSession: MediaSessionCompat
   private lateinit var changeNotifier: ChangeNotifier
+  private var carConnected: Boolean = false
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
     i { "audio focus listener got focus $focusChange" }
@@ -113,6 +112,21 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
+  private val carConnectionReceiver = object: BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      when (intent?.getStringExtra("media_connection_status")) {
+        "media_connected" -> carConnected = true
+        "media_disconnected" -> carConnected = false
+      }
+      if (carConnected) {
+        // display the current book but don't play it
+        repo.bookById(prefs.currentBookId.value)?.let {
+          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, carConnected)
+        }
+      }
+    }
+  }
+
   override fun onCreate() {
     super.onCreate()
 
@@ -146,7 +160,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToNext() {
           i { "onSkipToNext" }
-          onFastForward()
+          if(carConnected) {
+            player.next()
+          } else {
+            onFastForward()
+          }
         }
 
         override fun onRewind() {
@@ -156,7 +174,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onSkipToPrevious() {
           i { "onSkipToPrevious" }
-          onRewind()
+          if(carConnected) {
+            player.previous(toNullOfNewTrack = true)
+          } else {
+            onRewind()
+          }
         }
 
         override fun onFastForward() {
@@ -178,6 +200,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
           i { "onPlay" }
           player.play()
         }
+
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+          super.onCustomAction(action, extras)
+          when(action) {
+            "next" -> onSkipToNext()
+            "previous" -> onSkipToPrevious()
+            "fast_forward" -> onFastForward()
+            "rewind" -> onRewind()
+          }
+        }
       })
       setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
@@ -188,6 +220,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
     player.bookStream.distinctUntilChanged().subscribe {
       repo.updateBook(it)
     }
+
+    registerReceiver(carConnectionReceiver, IntentFilter("com.google.android.gms.car.media.STATUS"))
 
     disposables.apply {
       // re-init controller when there is a new book set as the current book
@@ -204,7 +238,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           .filter { it.id == prefs.currentBookId.value }
           .subscribe {
             player.init(it)
-            changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
+            changeNotifier.notify(ChangeNotifier.Type.METADATA, it, carConnected)
           })
 
       // handle changes on the play state
@@ -244,7 +278,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 }
               }
 
-              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook)
+              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook, carConnected)
             }
           })
 
@@ -307,6 +341,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.release()
     disposables.dispose()
 
+    unregisterReceiver(carConnectionReceiver)
     super.onDestroy()
   }
 
