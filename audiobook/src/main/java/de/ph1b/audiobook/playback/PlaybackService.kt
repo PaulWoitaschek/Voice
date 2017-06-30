@@ -193,10 +193,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
         override fun onCustomAction(action: String?, extras: Bundle?) {
           i { "onCustomAction $action" }
           when (action) {
-            "next" -> onSkipToNext()
-            "previous" -> onSkipToPrevious()
-            "fast_forward" -> onFastForward()
-            "rewind" -> onRewind()
+            ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
+            ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
+            ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
+            ANDROID_AUTO_ACTION_REWIND -> onRewind()
           }
         }
       })
