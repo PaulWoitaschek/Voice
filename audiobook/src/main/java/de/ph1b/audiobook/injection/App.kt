@@ -24,8 +24,8 @@ class App : Application() {
 
     CrashlyticsProxy.init(this)
 
-    component = DaggerApplicationComponent.builder()
-        .androidModule(AndroidModule(this))
+    component = DaggerAppComponent.builder()
+        .application(this)
         .build()
     component.inject(this)
 
@@ -40,7 +40,7 @@ class App : Application() {
 
   companion object {
 
-    lateinit var component: ApplicationComponent
+    lateinit var component: AppComponent
       private set
   }
 }

@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.injection
 
+import android.app.Application
 import android.content.Context
+import dagger.BindsInstance
 import dagger.Component
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.MainActivity
@@ -24,6 +26,7 @@ import de.ph1b.audiobook.playback.PlaybackService
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import javax.inject.Singleton
 
+
 /**
  * Base component that is the entry point for injection.
  *
@@ -31,7 +34,7 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = arrayOf(AndroidModule::class, PrefsModule::class))
-interface ApplicationComponent {
+interface AppComponent {
 
   val bookShelfPresenter: BookShelfPresenter
   val context: Context
@@ -39,6 +42,12 @@ interface ApplicationComponent {
   val player: MediaPlayer
   val playStateManager: PlayStateManager
   val bookmarkPresenter: BookmarkPresenter
+
+  @Component.Builder
+  interface Builder {
+    @BindsInstance fun application(application: Application): Builder
+    fun build(): AppComponent
+  }
 
   fun inject(target: App)
   fun inject(target: AutoRewindDialogFragment)

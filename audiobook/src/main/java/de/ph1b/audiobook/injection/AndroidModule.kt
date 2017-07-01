@@ -21,8 +21,8 @@ import javax.inject.Singleton
  *
  * @author Paul Woitaschek
  */
-@Module class AndroidModule constructor(private val application: Application) {
-  @Provides fun provideContext(): Context = application
+@Module class AndroidModule {
+  @Provides fun provideContext(app: Application): Context = app
   @Provides @Singleton fun provideAudioManager(context: Context) = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @Provides @Singleton fun provideActivityManager(context: Context) = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
   @Provides @Singleton fun provideTelephonyManager(context: Context) = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
