@@ -117,8 +117,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onCreate() {
     super.onCreate()
 
-    autoConnected = AndroidAutoConnection(changeNotifier, repo, prefs)
-
     val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
       component = eventReceiver
@@ -204,6 +202,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
     sessionToken = mediaSession.sessionToken
     changeNotifier = ChangeNotifier(mediaSession)
+    autoConnected = AndroidAutoConnection(changeNotifier, repo, prefs)
 
     // update book when changed by player
     player.bookStream.distinctUntilChanged().subscribe {
