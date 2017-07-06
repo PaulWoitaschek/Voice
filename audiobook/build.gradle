@@ -98,7 +98,9 @@ dependencies {
   }
 
   compile libraries.dagger
+  compile libraries.daggerAndroidSupport
   kapt libraries.daggerCompiler
+  kapt libraries.daggerAndroidProcessor
   provided libraries.jsr250
 
   testCompile libraries.junit
@@ -128,10 +130,6 @@ dependencies {
   compile libraries.conductorLifecycle
 
   compile libraries.moshi
-
-  compile "com.google.dagger:dagger-android-support:$versions.dagger"
-  kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
-
 }
 
 // task that is an alias for f-droid
