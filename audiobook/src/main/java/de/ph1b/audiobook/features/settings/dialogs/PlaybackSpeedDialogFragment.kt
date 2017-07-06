@@ -5,10 +5,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
@@ -32,7 +32,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     // init views
     val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)

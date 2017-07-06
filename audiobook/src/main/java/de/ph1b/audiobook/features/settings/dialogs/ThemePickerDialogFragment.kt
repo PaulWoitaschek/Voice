@@ -7,8 +7,8 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -24,7 +24,7 @@ class ThemePickerDialogFragment : DialogFragment() {
   @Inject lateinit var prefsManager: PrefsManager
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     val oldTheme = prefsManager.theme.value
     val existingThemes = ThemeUtil.Theme.values()

@@ -5,9 +5,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -20,7 +20,7 @@ class AutoRewindDialogFragment : DialogFragment() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
 

@@ -11,10 +11,10 @@ import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.CropTransformation
@@ -34,7 +34,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     val picasso = Picasso.with(context)
 

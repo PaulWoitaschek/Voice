@@ -15,9 +15,9 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
+import dagger.android.AndroidInjection
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.value
@@ -49,10 +49,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) = mediaBrowserHelper.onLoadChildren(parentId, result)
 
   override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
-
-  init {
-    App.component.inject(this)
-  }
 
   private val disposables = CompositeDisposable()
   private var currentlyHasFocus = false
@@ -115,6 +111,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   override fun onCreate() {
+    AndroidInjection.inject(this)
     super.onCreate()
 
     val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)

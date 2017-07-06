@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogSleepBinding
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
@@ -58,7 +58,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     binding = DialogSleepBinding.inflate(activity.layoutInflater)
 

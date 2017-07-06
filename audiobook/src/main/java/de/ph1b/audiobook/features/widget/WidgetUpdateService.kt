@@ -14,10 +14,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.MainActivity
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.drawable
@@ -52,8 +52,8 @@ class WidgetUpdateService : Service() {
   @Inject lateinit var serviceController: ServiceController
 
   override fun onCreate() {
+    AndroidInjection.inject(this)
     super.onCreate()
-    App.component.inject(this)
 
     // update widget if current book, current book id or playState have changed.
     disposables.add(Observable.merge(

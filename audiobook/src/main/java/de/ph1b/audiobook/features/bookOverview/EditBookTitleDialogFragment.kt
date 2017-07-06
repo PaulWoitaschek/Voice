@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.BookRepository
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
   @Inject lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     val presetName = arguments.getString(NI_PRESET_NAME)
     val bookId = arguments.getLong(NI_BOOK_ID)

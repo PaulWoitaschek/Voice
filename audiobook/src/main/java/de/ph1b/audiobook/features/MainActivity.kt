@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.*
+import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
@@ -14,7 +15,6 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -40,9 +40,9 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
     val binding = DataBindingUtil.setContentView<ActivityBookBinding>(this, R.layout.activity_book)
-    App.component.inject(this)
 
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)

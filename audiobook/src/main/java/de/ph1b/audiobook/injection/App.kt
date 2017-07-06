@@ -1,8 +1,15 @@
 package de.ph1b.audiobook.injection
 
+import android.app.Activity
 import android.app.Application
+import android.app.Service
 import android.content.Intent
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDelegate
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.HasServiceInjector
+import dagger.android.support.HasSupportFragmentInjector
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
@@ -14,10 +21,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class App : Application() {
+class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector {
 
   @Inject lateinit var bookAdder: BookAdder
   @Inject lateinit var prefsManager: PrefsManager
+  @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+  @Inject lateinit var serviceInjector: DispatchingAndroidInjector<Service>
+  @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+
+  override fun activityInjector() = activityInjector
+  override fun serviceInjector() = serviceInjector
+  override fun supportFragmentInjector() = supportFragmentInjector
 
   override fun onCreate() {
     super.onCreate()

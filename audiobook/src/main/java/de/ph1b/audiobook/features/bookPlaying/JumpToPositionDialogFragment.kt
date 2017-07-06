@@ -4,9 +4,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogTimePickerBinding
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -23,7 +23,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
   @Inject lateinit var playerController: PlayerController
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
     val binding = DialogTimePickerBinding.inflate(activity.layoutInflater)
 
     // init

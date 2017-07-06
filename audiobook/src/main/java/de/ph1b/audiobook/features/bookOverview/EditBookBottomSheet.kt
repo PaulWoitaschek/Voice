@@ -7,11 +7,11 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import e
@@ -30,7 +30,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    AndroidSupportInjection.inject(this)
 
     val dialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
 
