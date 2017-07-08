@@ -57,9 +57,9 @@ class ChangeNotifier @Inject constructor(
           PlaybackStateCompat.ACTION_PLAY_PAUSE or
           PlaybackStateCompat.ACTION_STOP or
           PlaybackStateCompat.ACTION_SEEK_TO)
+      .addCustomAction(ANDROID_AUTO_ACTION_PREVIOUS, context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
       .addCustomAction(ANDROID_AUTO_ACTION_REWIND, context.getString(R.string.rewind), R.drawable.ic_fast_rewind)
       .addCustomAction(ANDROID_AUTO_ACTION_FAST_FORWARD, context.getString(R.string.fast_forward), R.drawable.ic_fast_forward)
-      .addCustomAction(ANDROID_AUTO_ACTION_PREVIOUS, context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
       .addCustomAction(ANDROID_AUTO_ACTION_NEXT, context.getString(R.string.next_track), R.drawable.ic_skip_next)
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
@@ -75,14 +75,10 @@ class ChangeNotifier @Inject constructor(
 
     context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
-    //noinspection ResourceType
-    if (forAuto) {
-      playbackStateBuilderForAuto.setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
-      mediaSession.setPlaybackState(playbackStateBuilderForAuto.build())
-    } else {
-      playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
-      mediaSession.setPlaybackState(playbackStateBuilder.build())
-    }
+    val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
+        .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
+        .build()
+    mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
       // this check is necessary. Else the lockscreen controls will flicker due to
