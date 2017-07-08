@@ -11,7 +11,7 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.playback.*
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -24,15 +24,13 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
-
-  init {
-    App.component.inject(this)
-  }
-
-  @Inject lateinit var imageHelper: ImageHelper
-  @Inject lateinit var context: Context
-  @Inject lateinit var playStateManager: PlayStateManager
+class ChangeNotifier @Inject constructor(
+    @PerService
+    private val mediaSession: MediaSessionCompat,
+    private val imageHelper: ImageHelper,
+    private val context: Context,
+    private val playStateManager: PlayStateManager
+) {
 
   /** The last file the [.notifyChange] has used to update the metadata. **/
   @Volatile private var lastFileForMetaData = File("")

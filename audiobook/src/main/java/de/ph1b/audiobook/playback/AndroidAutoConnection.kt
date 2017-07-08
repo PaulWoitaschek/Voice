@@ -8,6 +8,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
+import javax.inject.Inject
 
 /**
  * Holds the current connection status and notifies about
@@ -15,7 +16,7 @@ import de.ph1b.audiobook.playback.utils.ChangeNotifier
  *
  * @author Paul Woitaschek
  */
-class AndroidAutoConnection(
+class AndroidAutoConnection @Inject constructor(
     private val changeNotifier: ChangeNotifier,
     private val repo: BookRepository,
     private val prefs: PrefsManager

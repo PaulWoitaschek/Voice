@@ -50,6 +50,8 @@ android {
       minifyEnabled false
       shrinkResources false
       ext.enableCrashlytics = false
+
+      applicationIdSuffix ".debug"
     }
   }
 

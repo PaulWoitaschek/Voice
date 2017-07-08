@@ -1,13 +1,10 @@
 package de.ph1b.audiobook.playback
 
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
-import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
@@ -16,8 +13,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
 import dagger.android.AndroidInjection
-import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
-import de.ph1b.audiobook.features.bookSearch.BookSearchParser
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.value
@@ -26,12 +22,10 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
-import de.ph1b.audiobook.playback.events.MediaEventReceiver
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
-import e
 import i
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -52,6 +46,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val disposables = CompositeDisposable()
   private var currentlyHasFocus = false
+
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
@@ -62,11 +57,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var telephonyManager: TelephonyManager
-  @Inject lateinit var bookSearchParser: BookSearchParser
-  @Inject lateinit var bookSearchHandler: BookSearchHandler
-  private lateinit var mediaSession: MediaSessionCompat
-  private lateinit var changeNotifier: ChangeNotifier
-  private lateinit var autoConnected: AndroidAutoConnection
+  @field:[Inject PerService]
+  lateinit var mediaSession: MediaSessionCompat
+  @Inject lateinit var changeNotifier: ChangeNotifier
+  @Inject lateinit var autoConnected: AndroidAutoConnection
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
     i { "audio focus listener got focus $focusChange" }
@@ -114,92 +108,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     AndroidInjection.inject(this)
     super.onCreate()
 
-    val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)
-    val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-      component = eventReceiver
-    }
-    val buttonReceiverIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
-
-      setCallback(object : MediaSessionCompat.Callback() {
-
-        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-          i { "onPlayFromMediaId $mediaId" }
-          val uri = Uri.parse(mediaId)
-          val type = bookUriConverter.match(uri)
-          if (type == BookUriConverter.BOOK_ID) {
-            val id = bookUriConverter.extractBook(uri)
-            prefs.currentBookId.value = id
-            onPlay()
-          } else {
-            e { "Invalid mediaId $mediaId" }
-          }
-        }
-
-        override fun onPlayFromSearch(query: String?, extras: Bundle?) {
-          i { "onPlayFromSearch $query" }
-          val bookSearch = bookSearchParser.parse(query, extras)
-          bookSearchHandler.handle(bookSearch)
-        }
-
-        override fun onSkipToNext() {
-          i { "onSkipToNext" }
-          if (autoConnected.connected) {
-            player.next()
-          } else {
-            onFastForward()
-          }
-        }
-
-        override fun onRewind() {
-          i { "onRewind" }
-          player.skip(MediaPlayer.Direction.BACKWARD)
-        }
-
-        override fun onSkipToPrevious() {
-          i { "onSkipToPrevious" }
-          if (autoConnected.connected) {
-            player.previous(toNullOfNewTrack = true)
-          } else {
-            onRewind()
-          }
-        }
-
-        override fun onFastForward() {
-          i { "onFastForward" }
-          player.skip(MediaPlayer.Direction.FORWARD)
-        }
-
-        override fun onStop() {
-          i { "onStop" }
-          player.stop()
-        }
-
-        override fun onPause() {
-          i { "onPause" }
-          player.pause(true)
-        }
-
-        override fun onPlay() {
-          i { "onPlay" }
-          player.play()
-        }
-
-        override fun onCustomAction(action: String?, extras: Bundle?) {
-          i { "onCustomAction $action" }
-          when (action) {
-            ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
-            ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
-            ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
-            ANDROID_AUTO_ACTION_REWIND -> onRewind()
-          }
-        }
-      })
-      setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
-    }
     sessionToken = mediaSession.sessionToken
-    changeNotifier = ChangeNotifier(mediaSession)
-    autoConnected = AndroidAutoConnection(changeNotifier, repo, prefs)
 
     // update book when changed by player
     player.bookStream.distinctUntilChanged().subscribe {
@@ -331,7 +240,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   companion object {
-    private val TAG = PlaybackService::class.java.simpleName
-    private val NOTIFICATION_ID = 42
+    private const val NOTIFICATION_ID = 42
   }
 }

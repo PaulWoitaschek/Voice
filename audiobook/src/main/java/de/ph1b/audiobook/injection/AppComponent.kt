@@ -19,7 +19,6 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import javax.inject.Singleton
 
 
@@ -50,7 +49,6 @@ interface AppComponent {
   fun inject(target: BookPlayPresenter)
   fun inject(target: BookShelfAdapter)
   fun inject(target: BookShelfController)
-  fun inject(target: ChangeNotifier)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
   fun inject(target: ImagePickerController)

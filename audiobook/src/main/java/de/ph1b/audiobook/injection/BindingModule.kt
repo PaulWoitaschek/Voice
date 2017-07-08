@@ -18,7 +18,7 @@ import de.ph1b.audiobook.features.widget.WidgetUpdateService
 import de.ph1b.audiobook.playback.PlaybackService
 
 /**
- * todo
+ * Module for dagger bindings
  *
  * @author Paul Woitaschek
  */
@@ -28,7 +28,8 @@ abstract class BindingModule {
   @ContributesAndroidInjector
   abstract fun mainActivity(): MainActivity
 
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = arrayOf(PlaybackModule::class))
+  @PerService
   abstract fun playbackService(): PlaybackService
 
   @ContributesAndroidInjector
