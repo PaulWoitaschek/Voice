@@ -13,7 +13,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
 import dagger.android.AndroidInjection
-import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.value
@@ -57,8 +56,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var telephonyManager: TelephonyManager
-  @field:[Inject PerService]
-  lateinit var mediaSession: MediaSessionCompat
+  @Inject lateinit var mediaSession: MediaSessionCompat
   @Inject lateinit var changeNotifier: ChangeNotifier
   @Inject lateinit var autoConnected: AndroidAutoConnection
 

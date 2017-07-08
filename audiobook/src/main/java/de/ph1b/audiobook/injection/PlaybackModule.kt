@@ -33,7 +33,7 @@ class PlaybackModule {
       service: PlaybackService,
       callback: MediaSessionCallback,
       mbrComponentName: ComponentName,
-      @PerService buttonReceiverPendingIntent: PendingIntent
+      buttonReceiverPendingIntent: PendingIntent
   ): MediaSessionCompat {
     return MediaSessionCompat(service, PlaybackService::class.java.name, mbrComponentName, buttonReceiverPendingIntent).apply {
       setCallback(callback)

@@ -11,7 +11,6 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.playback.*
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -25,7 +24,6 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class ChangeNotifier @Inject constructor(
-    @PerService
     private val mediaSession: MediaSessionCompat,
     private val imageHelper: ImageHelper,
     private val context: Context,
