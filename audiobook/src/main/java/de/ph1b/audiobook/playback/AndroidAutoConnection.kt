@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -16,7 +17,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class AndroidAutoConnection @Inject constructor(
+@PerService class AndroidAutoConnection @Inject constructor(
     private val changeNotifier: ChangeNotifier,
     private val repo: BookRepository,
     private val prefs: PrefsManager
