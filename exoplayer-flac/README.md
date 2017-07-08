@@ -45,7 +45,8 @@ mv flac-1.3.1 flac
 ```
 cd "${FLAC_EXT_PATH}"/jni && \
 ${NDK_PATH}/ndk-build APP_ABI=all -j4
-``` 	
+```
+
 * In your project, you can add a dependency to the Flac Extension by using a
   rule like this:
 
