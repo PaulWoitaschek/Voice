@@ -7,8 +7,6 @@ import de.ph1b.audiobook.persistence.internals.moveToNextLoop
 
 /**
  * Adds a new column indicating if the book should be actively shown or hidden.
- *
- * @author Paul Woitaschek
  */
 class Migration26to27 : Migration {
 

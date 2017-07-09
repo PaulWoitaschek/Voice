@@ -16,8 +16,6 @@ import javax.inject.Inject
 
 /**
  * Converts books to media sources.
- *
- * @author Paul Woitaschek
  */
 @Reusable class DataSourceConverter
 @Inject constructor(context: Context) {

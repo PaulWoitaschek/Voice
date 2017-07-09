@@ -9,8 +9,6 @@ import java.io.IOException
 
 /**
  * Reads mp4 chapters
- *
- * @author Paul Woitaschek
  */
 object Mp4ChapterReader {
 

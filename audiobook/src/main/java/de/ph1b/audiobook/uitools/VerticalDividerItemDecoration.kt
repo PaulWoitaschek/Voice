@@ -13,8 +13,6 @@ import android.view.View
 
 /**
  * A item decoration with a left offset.
- *
- * @author Paul Woitaschek
  */
 class VerticalDividerItemDecoration(context: Context, @Px private val leftMargin: Int = 0) : ItemDecoration() {
 

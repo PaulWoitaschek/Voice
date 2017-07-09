@@ -19,8 +19,6 @@ import javax.inject.Inject
 
 /**
  * Helper class for MediaBrowserServiceCompat handling
- *
- * @author Paul Woitaschek
  */
 @Reusable class MediaBrowserHelper
 @Inject constructor(private val bookUriConverter: BookUriConverter, private val repo: BookRepository, private val prefs: PrefsManager, private val context: Context) {

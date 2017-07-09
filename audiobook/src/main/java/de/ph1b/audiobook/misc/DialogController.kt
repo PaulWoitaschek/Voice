@@ -15,8 +15,6 @@ private const val SI_DIALOG = "android:savedDialogState"
 
 /**
  * A wrapper that wraps a dialog in a controller
- *
- * @author Paul Woitaschek
  */
 abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args) {
 

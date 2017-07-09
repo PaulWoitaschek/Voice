@@ -4,8 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 
 /**
  * Collection of strings representing the chapters table
- *
- * @author Paul Woitaschek
  */
 object ChapterTable {
   const val DURATION = "chapterDuration"

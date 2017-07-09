@@ -18,8 +18,6 @@ import org.junit.Test
 
 /**
  * Test the migration from 40 to 41
-
- * @author Paul Woitaschek
  */
 class Migration40to41Test {
 

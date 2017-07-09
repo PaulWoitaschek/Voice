@@ -6,8 +6,6 @@ import javax.inject.Inject
 
 /**
  * Provides access to the peristent storage for bookmarks.
- *
- * @author Paul Woitaschek
  */
 class SqlBookmarkStore
 @Inject constructor(internalDb: InternalDb) {

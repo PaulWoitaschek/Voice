@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 /**
  * Dialog for setting the playback speed of the current book.
- *
- * @author Paul Woitaschek
  */
 class PlaybackSpeedDialogFragment : DialogFragment() {
 

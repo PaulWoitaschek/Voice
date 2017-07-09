@@ -4,8 +4,6 @@ import timber.log.Timber
 
 /**
  * Timber tree adds logs to crashes
- *
- * @author Paul Woitaschek
  */
 class CrashLoggingTree : Timber.Tree() {
 

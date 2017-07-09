@@ -5,8 +5,6 @@ import java.util.*
 
 /**
  * Read the signing details from a properties file.
- *
- * @author Paul Woitaschek
  */
 @Suppress("unused")
 class SigningDetailsProvider {

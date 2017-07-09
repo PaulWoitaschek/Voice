@@ -27,8 +27,6 @@ private const val NI_BOOK_ID = "niBookId"
 
 /**
  * Base class for book playing interaction.
- *
- * @author Paul Woitaschek
  */
 class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle), BookPlayMvp.View {
 

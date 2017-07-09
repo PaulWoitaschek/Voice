@@ -6,8 +6,6 @@ import java.util.*
 
 /**
  * Class containing methods for recognizing different file types by their file ending.
- *
- * @author Paul Woitaschek
  */
 object FileRecognition {
 

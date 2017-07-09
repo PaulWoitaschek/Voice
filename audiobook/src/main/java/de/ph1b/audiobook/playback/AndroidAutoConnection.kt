@@ -14,8 +14,6 @@ import javax.inject.Inject
 /**
  * Holds the current connection status and notifies about
  * changes upon connection.
- *
- * @author Paul Woitaschek
  */
 @PerService class AndroidAutoConnection @Inject constructor(
     private val changeNotifier: ChangeNotifier,

@@ -5,8 +5,6 @@ import de.ph1b.audiobook.Bookmark
 
 /**
  * Calculates the diff between two bookmark lists.
- *
- * @author Paul Woitaschek
  */
 class BookmarkDiffUtilCallback(
     private val oldItems: List<Bookmark>,

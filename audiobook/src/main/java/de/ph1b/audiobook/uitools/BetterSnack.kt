@@ -9,8 +9,6 @@ import de.ph1b.audiobook.misc.find
 
 /**
  * Creates [Snackbar]s with convenient values set + theming
- *
- * @author Paul Woitaschek
  */
 object BetterSnack {
 

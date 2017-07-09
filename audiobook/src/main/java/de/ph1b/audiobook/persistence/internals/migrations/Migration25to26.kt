@@ -6,8 +6,6 @@ import java.util.*
 
 /**
  * A previous version caused empty books to be added. So we delete them now.
- *
- * @author Paul Woitaschek
  */
 class Migration25to26 : Migration {
 

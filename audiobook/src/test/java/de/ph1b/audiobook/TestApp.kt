@@ -5,8 +5,6 @@ import timber.log.Timber
 
 /**
  * Application sub class for usage in testing.
- *
- * @author Paul Woitaschek
  */
 class TestApp : Application() {
 

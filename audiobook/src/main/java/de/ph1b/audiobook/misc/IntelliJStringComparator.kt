@@ -6,8 +6,6 @@ import java.util.*
  * Simple copy of IntelliJs-Community naturalCompare.
  * Licensed as Apache v2.
  *
- * @see {https://github.com/JetBrains/intellij-community/blob/master/platform/util/src/com/intellij/openapi/util/text/StringUtil.java}
- * @author Paul Woitaschek
  */
 class IntelliJStringComparator : Comparator<String> {
 

@@ -4,8 +4,6 @@ import android.app.Application
 
 /**
  * No-Op proxy for crashlytics
- *
- * @author Paul Woitaschek
  */
 @Suppress("UNUSED_PARAMETER")
 object CrashlyticsProxy {

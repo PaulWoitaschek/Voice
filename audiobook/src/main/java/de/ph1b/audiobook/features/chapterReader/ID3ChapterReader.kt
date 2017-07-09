@@ -22,8 +22,6 @@ private const val FRAME_ID_TITLE = "TIT2"
  *
  * Original source from [AntennaPod](https://github.com/AntennaPod/AntennaPod/tree/develop/core/src/main/java/de/danoeh/antennapod/core/util/id3reader)
  * Licensed under Apache 2.0
- *
- * @author Paul Woitaschek
  */
 object ID3ChapterReader {
 

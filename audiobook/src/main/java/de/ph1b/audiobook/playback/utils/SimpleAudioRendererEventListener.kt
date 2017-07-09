@@ -6,8 +6,6 @@ import com.google.android.exoplayer2.decoder.DecoderCounters
 
 /**
  * Empty default callbacks for better readability
- *
- * @author Paul Woitaschek
  */
 interface SimpleAudioRendererEventListener : AudioRendererEventListener {
   override fun onAudioEnabled(p0: DecoderCounters?) {}

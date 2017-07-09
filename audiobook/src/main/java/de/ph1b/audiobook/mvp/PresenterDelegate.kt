@@ -4,8 +4,6 @@ import android.os.Bundle
 
 /**
  * Delegates lifecycle methods to the presenter.
- *
- * @author Paul Woitaschek
  */
 class PresenterDelegate<V, out P>(private val newPresenter: () -> P, private val getView: () -> V)  where P : Presenter<V> {
 

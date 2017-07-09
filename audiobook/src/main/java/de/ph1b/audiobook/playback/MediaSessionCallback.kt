@@ -15,8 +15,6 @@ import javax.inject.Inject
 
 /**
  * Media session callback that handles playback controls.
- *
- * @author Paul Woitaschek
  */
 class MediaSessionCallback @Inject constructor(
     private val bookUriConverter: BookUriConverter,

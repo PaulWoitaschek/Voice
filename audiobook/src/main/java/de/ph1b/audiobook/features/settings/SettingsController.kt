@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 /**
  * Controller for the user settings
- *
- * @author Paul Woitaschek
  */
 class SettingsController : BaseController<SettingsBinding>() {
 

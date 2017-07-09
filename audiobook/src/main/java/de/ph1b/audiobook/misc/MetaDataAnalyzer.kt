@@ -6,8 +6,6 @@ import javax.inject.Inject
 
 /**
  * Extracts meta data from media files. This class is thread safe.
- *
- * @author Paul Woitaschek
  */
 class MetaDataAnalyzer @Inject constructor() {
 

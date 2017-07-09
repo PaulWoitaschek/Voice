@@ -13,8 +13,6 @@ import javax.inject.Inject
 
 /**
  * Simple dialog for changing the name of a book
- *
- * @author Paul Woitaschek
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 

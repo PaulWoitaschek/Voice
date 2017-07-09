@@ -8,8 +8,6 @@ import de.ph1b.audiobook.features.imagepicker.CropOverlay
 
 /**
  * Performs cropping based on the crop overlay
- *
- * @author Paul Woitaschek
  */
 class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) : Transformation {
 

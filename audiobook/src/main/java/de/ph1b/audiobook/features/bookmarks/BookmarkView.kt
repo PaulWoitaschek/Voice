@@ -5,8 +5,6 @@ import de.ph1b.audiobook.Chapter
 
 /**
  * View of the bookmarks
- *
- * @author Paul Woitaschek
  */
 interface BookmarkView {
   fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>)

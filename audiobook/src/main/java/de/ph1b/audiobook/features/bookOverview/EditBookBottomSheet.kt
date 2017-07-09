@@ -19,8 +19,6 @@ import javax.inject.Inject
 
 /**
  * Bottom sheet dialog fragment that will be displayed when a book edit was requested
- *
- * @author Paul Woitaschek
  */
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 

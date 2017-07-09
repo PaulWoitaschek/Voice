@@ -10,8 +10,6 @@ import org.junit.Test
 
 /**
  * Tests for the data base migration
- *
- * @author Paul Woitaschek
  */
 class DataBaseMigratorTest {
 

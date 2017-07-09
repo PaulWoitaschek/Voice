@@ -8,8 +8,6 @@ import io.fabric.sdk.android.Fabric
 
 /**
  * Proxy-class that forwards to crashlytics
- *
- * @author Paul Woitaschek
  */
 object CrashlyticsProxy {
 

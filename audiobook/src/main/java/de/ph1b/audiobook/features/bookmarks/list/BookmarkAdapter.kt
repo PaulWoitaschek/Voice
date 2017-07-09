@@ -8,8 +8,6 @@ import de.ph1b.audiobook.Chapter
 
 /**
  * Adapter for displaying a list of bookmarks.
- *
- * @author Paul Woitaschek
  */
 class BookmarkAdapter(
     private val listener: BookmarkClickListener

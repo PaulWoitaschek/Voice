@@ -8,8 +8,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
- *
- * @author Paul Woitaschek
  */
 abstract class Presenter<V> {
 

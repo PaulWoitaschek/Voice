@@ -24,8 +24,6 @@ import javax.inject.Inject
 
 /**
  * Activity that coordinates the book shelf and play screens.
- *
- * @author Paul Woitaschek
  */
 class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
 

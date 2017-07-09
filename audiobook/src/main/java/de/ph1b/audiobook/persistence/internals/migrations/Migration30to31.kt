@@ -6,8 +6,6 @@ import de.ph1b.audiobook.persistence.internals.moveToNextLoop
 
 /**
  * Queries through all books and removes the ones that were added empty by a bug.
- *
- * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
 class Migration30to31 : Migration {

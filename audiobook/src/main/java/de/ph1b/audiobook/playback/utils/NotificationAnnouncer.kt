@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 /**
  * Provides Notifications based on playing information.
- *
- * @author Paul Woitaschek
  */
 class NotificationAnnouncer
 @Inject constructor(private val context: Context, private val imageHelper: ImageHelper, private val serviceController: ServiceController) {

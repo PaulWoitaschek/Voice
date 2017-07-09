@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 /**
  * The Presenter for [FolderChooserView]
- *
- * @author Paul Woitaschek
  */
 class FolderChooserPresenter : Presenter<FolderChooserView>() {
 

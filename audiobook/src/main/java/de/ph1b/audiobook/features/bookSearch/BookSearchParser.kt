@@ -9,8 +9,6 @@ import javax.inject.Inject
 
 /**
  * Parse the book search
- *
- * @author Paul Woitaschek
  */
 @Reusable class BookSearchParser @Inject constructor() {
 

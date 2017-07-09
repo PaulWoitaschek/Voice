@@ -15,8 +15,6 @@ import org.robolectric.annotation.Config
 
 /**
  * Test for the internal bookmark register
- *
- * @author Paul Woitaschek
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)

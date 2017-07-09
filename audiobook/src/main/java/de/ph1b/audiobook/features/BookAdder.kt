@@ -28,8 +28,6 @@ import javax.inject.Singleton
 
 /**
  * Base class for adding new books.
- *
- * @author Paul Woitaschek
  */
 @Singleton class BookAdder
 @Inject constructor(

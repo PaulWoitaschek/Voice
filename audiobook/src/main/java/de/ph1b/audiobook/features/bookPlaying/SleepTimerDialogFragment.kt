@@ -23,8 +23,6 @@ import javax.inject.Inject
 
 /**
  * Simple dialog for activating the sleep timer
- *
- * @author Paul Woitaschek
  */
 class SleepTimerDialogFragment : AppCompatDialogFragment() {
 

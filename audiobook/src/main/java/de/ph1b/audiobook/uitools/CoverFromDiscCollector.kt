@@ -17,8 +17,6 @@ import javax.inject.Singleton
 
 /**
  * Class for retrieving covers from disc.
- *
- * @author Paul Woitaschek
  */
 @Singleton class CoverFromDiscCollector
 @Inject constructor(context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {

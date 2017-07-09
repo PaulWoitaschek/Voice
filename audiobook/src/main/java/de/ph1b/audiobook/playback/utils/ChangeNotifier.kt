@@ -20,8 +20,6 @@ import javax.inject.Inject
 
 /**
  * Sets updated metadata on the media session and sends broadcasts about meta changes
- *
- * @author Paul Woitaschek
  */
 class ChangeNotifier @Inject constructor(
     private val mediaSession: MediaSessionCompat,

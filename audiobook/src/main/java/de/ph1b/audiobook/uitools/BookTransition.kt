@@ -11,8 +11,6 @@ import de.ph1b.audiobook.R
 
 /**
  * Transition from book list to book details
- *
- * @author Paul Woitaschek
  */
 @TargetApi(21)
 class BookTransition : TransitionChangeHandler() {

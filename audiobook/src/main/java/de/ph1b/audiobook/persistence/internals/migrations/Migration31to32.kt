@@ -8,8 +8,6 @@ import java.util.*
 
 /**
  * Corrects media paths that have been falsely set.
- *
- * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
 class Migration31to32 : Migration {

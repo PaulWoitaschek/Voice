@@ -6,8 +6,6 @@ import javax.inject.Inject
 
 /**
  * Helper class for converting book and chapter ids to uris and back.
- *
- * @author Paul Woitaschek
  */
 class BookUriConverter
 @Inject constructor() {

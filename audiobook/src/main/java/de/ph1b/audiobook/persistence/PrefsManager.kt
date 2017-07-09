@@ -10,8 +10,6 @@ import javax.inject.Singleton
 /**
  *
  * Holds all preferences
- *
- * @author Paul Woitaschek
  */
 @Singleton class PrefsManager
 @Inject constructor(

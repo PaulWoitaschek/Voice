@@ -12,8 +12,6 @@ import javax.inject.Inject
 
 /**
  * The presenter for [FolderOverviewController]
- *
- * @author Paul Woitaschek
  */
 class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 

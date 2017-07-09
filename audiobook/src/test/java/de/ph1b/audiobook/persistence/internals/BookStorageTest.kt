@@ -18,8 +18,6 @@ import java.util.*
 
 /**
  * Simple test for book persistence.
- *
- * @author Paul Woitaschek
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)

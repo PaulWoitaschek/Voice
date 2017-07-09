@@ -7,8 +7,6 @@ import java.util.*
 
 /**
  * Simple class holding various static comparators.
- *
- * @author Paul Woitaschek
  */
 object NaturalOrderComparator {
 

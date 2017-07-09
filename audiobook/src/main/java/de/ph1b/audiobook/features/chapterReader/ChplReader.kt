@@ -7,8 +7,6 @@ import java.io.RandomAccessFile
 
 /**
  * Reads chapters from the chpl atom
- *
- * @author Paul Woitaschek
  */
 object ChplReader {
 

@@ -24,8 +24,6 @@ import javax.inject.Singleton
 
 /**
  * Base component that is the entry point for injection.
- *
- * @author Paul Woitaschek
  */
 @Singleton
 @Component(modules = arrayOf(AndroidModule::class, PrefsModule::class, BindingModule::class, AndroidSupportInjectionModule::class))

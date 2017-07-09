@@ -8,8 +8,6 @@ import java.util.*
 
 /**
  * Reads the chap atom to find associated chapters
- *
- * @author Paul Woitaschek
  */
 object ChapReader {
 

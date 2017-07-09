@@ -10,8 +10,6 @@ import javax.inject.Singleton
 
 /**
  * The equalizer. Delegates to the system integrated equalizer
- *
- * @author Paul Woitaschek
  */
 @Singleton class Equalizer @Inject constructor(
     private val context: Context

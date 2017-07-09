@@ -6,8 +6,6 @@ import io.reactivex.functions.BiFunction
 
 /**
  * Helper for failing sam conversions
- *
- * @author Paul Woitaschek
  */
 inline fun <T1 : Any, T2 : Any, R : Any> combineLatest(
     source1: ObservableSource<T1>,

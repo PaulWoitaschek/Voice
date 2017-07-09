@@ -4,8 +4,6 @@ import android.util.SparseArray
 
 /**
  * A immutable sparse array without any values
- *
- * @author Paul Woitaschek
  */
 class EmptySparseArray<E> private constructor() : SparseArray<E>() {
 

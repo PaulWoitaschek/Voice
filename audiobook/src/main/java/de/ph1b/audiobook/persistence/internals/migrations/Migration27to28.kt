@@ -4,8 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 
 /**
  * Deletes the table if that failed previously due to a bug in [.upgrade26]
- *
- * @author Paul Woitaschek
  */
 class Migration27to28 : Migration {
 

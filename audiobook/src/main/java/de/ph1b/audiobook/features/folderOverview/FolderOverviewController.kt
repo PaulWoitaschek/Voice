@@ -21,8 +21,6 @@ import de.ph1b.audiobook.uitools.visible
 
 /**
  * Activity that lets the user add, edit or remove the set audio book folders.
- *
- * @author Paul Woitaschek
  */
 class FolderOverviewController : MvpController<FolderOverviewController, FolderOverviewPresenter, FolderOverviewBinding>() {
 

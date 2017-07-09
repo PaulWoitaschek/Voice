@@ -15,8 +15,6 @@ import i
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
- *
- * @author Paul Woitaschek
  */
 class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 

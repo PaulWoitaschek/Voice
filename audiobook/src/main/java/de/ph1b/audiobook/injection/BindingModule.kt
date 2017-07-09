@@ -19,8 +19,6 @@ import de.ph1b.audiobook.playback.PlaybackService
 
 /**
  * Module for dagger bindings
- *
- * @author Paul Woitaschek
  */
 @Module
 abstract class BindingModule {

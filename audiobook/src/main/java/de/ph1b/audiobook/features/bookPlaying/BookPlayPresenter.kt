@@ -14,8 +14,6 @@ import javax.inject.Inject
 
 /**
  * Presenter for the book play screen
- *
- * @author Paul Woitaschek
  */
 class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
 

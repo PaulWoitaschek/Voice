@@ -4,8 +4,6 @@ import android.support.v7.util.DiffUtil
 
 /**
  * Calculate a diff between the two lists
- *
- * @author Paul Woitaschek
  */
 object FolderOverviewDiffHelper {
 

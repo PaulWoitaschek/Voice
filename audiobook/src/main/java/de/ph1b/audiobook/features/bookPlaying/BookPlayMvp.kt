@@ -5,8 +5,6 @@ import java.io.File
 
 /**
  * MVP for the book detail screen
- *
- * @author Paul Woitaschek
  */
 interface BookPlayMvp {
 

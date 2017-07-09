@@ -7,8 +7,6 @@ import com.squareup.moshi.JsonWriter
 
 /**
  * JsonAdapter for a sparse array
- *
- * @author Paul Woitaschek
  */
 class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<SparseArray<T>>() {
 

@@ -17,8 +17,6 @@ import javax.inject.Inject
 
 /**
  * Presenter for [BookShelfController].
- *
- * @author Paul Woitaschek
  */
 class BookShelfPresenter
 @Inject

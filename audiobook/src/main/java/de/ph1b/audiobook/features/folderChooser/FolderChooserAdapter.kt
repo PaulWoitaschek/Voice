@@ -14,8 +14,6 @@ import java.io.File
  *
  * @param c    The context
  * @param mode The operation mode which defines the interaction.
- *
- * @author Paul Woitaschek
  */
 class FolderChooserAdapter(private val c: Context,
                            private val mode: FolderChooserActivity.OperationMode,

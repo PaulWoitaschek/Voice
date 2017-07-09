@@ -24,8 +24,6 @@ fun Cursor.toBookmark(): Bookmark {
 
 /**
  * Represents an sql table for bookmarks
- *
- * @author Paul Woitaschek
  */
 object BookmarkTable {
 

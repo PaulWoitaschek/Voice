@@ -7,8 +7,6 @@ import de.ph1b.audiobook.persistence.internals.update
 /**
  * From DB version 39, the position of a book must no longer be negative. So all negative positions
  * get set to 0.
- *
- * @author Paul Woitaschek
  */
 class Migration39to40 : Migration {
 

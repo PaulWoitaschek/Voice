@@ -8,8 +8,6 @@ import javax.inject.Inject
 
 /**
  * Providing intents that can be sent to the playback service.
- *
- * @author Paul Woitaschek
  */
 class ServiceController @Inject constructor(private val context: Context) {
 

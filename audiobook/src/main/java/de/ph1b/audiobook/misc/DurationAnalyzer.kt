@@ -17,8 +17,6 @@ import javax.inject.Inject
 
 /**
  * Analyzes the duration of a file
- *
- * @author Paul Woitaschek
  */
 class DurationAnalyzer
 @Inject constructor(

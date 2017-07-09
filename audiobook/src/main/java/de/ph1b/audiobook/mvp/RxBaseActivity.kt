@@ -7,8 +7,6 @@ import i
 
 /**
  * Base activity that provides a convenient way for binding a view to a presenter
- *
- * @author Paul Woitaschek
  */
 abstract class RxBaseActivity<V, out P> : BaseActivity() where P : Presenter<V> {
 

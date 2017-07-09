@@ -16,8 +16,6 @@ import javax.inject.Singleton
 
 /**
  * Provides access to all books.
- *
- * @author Paul Woitaschek
  */
 @Singleton class BookRepository
 @Inject constructor(private val storage: BookStorage) {

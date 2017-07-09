@@ -4,8 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 
 /**
  * Drops all tables and creates new ones.
- *
- * @author Paul Woitaschek
  */
 class Migration23to24 : Migration {
 

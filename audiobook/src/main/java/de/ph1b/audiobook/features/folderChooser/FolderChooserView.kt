@@ -4,8 +4,6 @@ import java.io.File
 
 /**
  * The view for choosing a root folder.
- *
- * @author Paul Woitaschek
  */
 interface FolderChooserView {
 

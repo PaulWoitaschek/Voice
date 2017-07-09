@@ -14,8 +14,6 @@ import javax.inject.Inject
 
 /**
  * Presenter for the bookmark MVP
- *
- * @author Paul Woitaschek
  */
 class BookmarkPresenter @Inject constructor(
     private val prefs: PrefsManager,

@@ -21,8 +21,6 @@ import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 
 /**
  * Dialog for creating a bookmark
- *
- * @author Paul Woitaschek
  */
 class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(args), BookmarkView, BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
 

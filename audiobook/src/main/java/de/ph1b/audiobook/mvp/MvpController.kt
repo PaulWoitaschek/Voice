@@ -8,8 +8,6 @@ import de.ph1b.audiobook.features.BaseController
 
 /**
  * Base fragment that provides a convenient way for binding a view to a presenter
- *
- * @author Paul Woitaschek
  */
 abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 

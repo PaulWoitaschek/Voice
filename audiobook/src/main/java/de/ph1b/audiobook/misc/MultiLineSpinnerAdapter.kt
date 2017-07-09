@@ -15,8 +15,6 @@ import java.util.*
 
 /**
  * Adapter fror [Spinner] that highlights the current selection and shows multiple lines of text.
- *
- * @author Paul Woitaschek
  */
 class MultiLineSpinnerAdapter<Type>(
     private val spinner: Spinner,

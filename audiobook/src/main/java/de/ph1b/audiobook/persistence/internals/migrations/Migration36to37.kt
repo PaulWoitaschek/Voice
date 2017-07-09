@@ -6,8 +6,6 @@ import de.ph1b.audiobook.persistence.internals.*
 
 /**
  * The field LAST_MODIFIED was added to the chapters
- *
- * @author Paul Woitaschek
  */
 class Migration36to37 : Migration {
 

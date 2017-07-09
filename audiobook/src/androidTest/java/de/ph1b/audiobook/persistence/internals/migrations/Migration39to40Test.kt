@@ -15,8 +15,6 @@ import org.junit.Test
 
 /**
  * Test for the database 39->40 version migration
- *
- * @author Paul Woitaschek
  */
 class Migration39to40Test {
 

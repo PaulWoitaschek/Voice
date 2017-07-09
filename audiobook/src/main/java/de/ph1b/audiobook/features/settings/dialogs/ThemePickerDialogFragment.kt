@@ -16,8 +16,6 @@ import javax.inject.Inject
 
 /**
  * Dialog for picking the UI theme.
- *
- * @author Paul Woitaschek
  */
 class ThemePickerDialogFragment : DialogFragment() {
 

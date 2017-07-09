@@ -9,8 +9,6 @@ import kotlin.properties.Delegates
 
 /**
  * Handles the the loudness gain.
- *
- * @author Paul Woitaschek
  */
 @Singleton class LoudnessGain @Inject constructor() {
 

@@ -34,8 +34,6 @@ import javax.inject.Inject
 
 /**
  * Service that hosts the longtime playback and handles its controls.
- *
- * @author Paul Woitaschek
  */
 class PlaybackService : MediaBrowserServiceCompat() {
 

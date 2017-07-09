@@ -18,8 +18,6 @@ import javax.inject.Singleton
 
 /**
  * Finder for external storages.
- *
- * @author Paul Woitaschek
  */
 @Singleton class StorageDirFinder @Inject constructor(private val context: Context) {
 

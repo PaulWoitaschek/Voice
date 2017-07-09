@@ -11,8 +11,6 @@ import de.ph1b.audiobook.misc.DialogController
 
 /**
  * Dialog for chosing a title for a new bookmark.
- *
- * @author Paul Woitaschek
  */
 class AddBookmarkDialog : DialogController() {
 

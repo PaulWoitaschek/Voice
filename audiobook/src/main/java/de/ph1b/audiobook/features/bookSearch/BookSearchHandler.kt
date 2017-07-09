@@ -12,9 +12,6 @@ import javax.inject.Inject
 
 /**
  * This class provides a single point of entry to find and play a book by a search query
- *
- * @author Matthias Kutscheid
- * @author Paul Woitaschek
  */
 @Reusable class BookSearchHandler
 @Inject constructor(

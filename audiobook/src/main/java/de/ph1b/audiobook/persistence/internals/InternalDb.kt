@@ -8,8 +8,6 @@ import javax.inject.Singleton
 
 /**
  * Helper class that manages the underlying the database.
- *
- * @author Paul Woitaschek
  */
 @Singleton class InternalDb
 @Inject constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {

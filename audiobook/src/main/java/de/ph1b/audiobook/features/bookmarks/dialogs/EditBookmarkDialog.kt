@@ -12,8 +12,6 @@ import de.ph1b.audiobook.misc.DialogController
 
 /**
  * Dialog for changing the bookmark title.
- *
- * @author Paul Woitaschek
  */
 class EditBookmarkDialog : DialogController() {
 

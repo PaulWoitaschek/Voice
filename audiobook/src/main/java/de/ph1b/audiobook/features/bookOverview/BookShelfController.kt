@@ -33,8 +33,6 @@ import javax.inject.Inject
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
- *
- * @author Paul Woitaschek
  */
 class BookShelfController : MvpController<BookShelfController, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 

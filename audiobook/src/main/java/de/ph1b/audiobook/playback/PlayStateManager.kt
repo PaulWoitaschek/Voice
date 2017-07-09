@@ -10,8 +10,6 @@ import javax.inject.Singleton
 /**
  * Manages the playback state and is able to inform subscriber.
  * Also manages the reason for pausing and sets it to none if the state gets stopped is playing.
- *
- * @author Paul Woitaschek
  */
 @Singleton
 class PlayStateManager

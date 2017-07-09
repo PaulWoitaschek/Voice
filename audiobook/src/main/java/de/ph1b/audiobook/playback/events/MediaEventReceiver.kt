@@ -8,8 +8,6 @@ import de.ph1b.audiobook.playback.PlaybackService
 
 /**
  * Forwards intents to [PlaybackService]
- *
- * @author Paul Woitaschek
  */
 class MediaEventReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context?, intent: Intent?) {

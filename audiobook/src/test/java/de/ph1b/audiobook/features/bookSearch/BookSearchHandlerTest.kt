@@ -22,9 +22,6 @@ import java.io.File
 
 /**
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
- *
- *  @author Matthias Kutscheid
- *  @author Paul Woitaschek
  */
 @SuppressLint("SdCardPath")
 class BookSearchHandlerTest {

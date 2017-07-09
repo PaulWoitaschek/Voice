@@ -12,8 +12,6 @@ import de.ph1b.audiobook.playback.events.MediaEventReceiver
 
 /**
  * Module for playback related classes
- *
- * @author Paul Woitaschek
  */
 @Module
 class PlaybackModule {

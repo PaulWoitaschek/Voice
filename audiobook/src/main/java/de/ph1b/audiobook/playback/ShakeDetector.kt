@@ -12,8 +12,6 @@ import javax.inject.Inject
  * Observable for detecting shakes. The onSensorChanged formula was taken from
  * https://github.com/AntennaPod/AntennaPod/blob/8d2ec19cbe05297afa887cc2263347f112aae3e6/core/src/main/java/de/danoeh/antennapod/core/service/playback/ShakeListener.java
  * And is licensesd as apache 2
- *
- * @author Paul Woitaschek
  */
 @Reusable class ShakeDetector
 @Inject constructor(private val sensorManager: SensorManager?) {

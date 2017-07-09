@@ -16,8 +16,6 @@ import java.util.*
 
 /**
  * Migrate the database so they will be stored as json objects
- *
- * @author Paul Woitaschek
  */
 @SuppressLint("Recycle")
 class Migration24to25 : Migration {

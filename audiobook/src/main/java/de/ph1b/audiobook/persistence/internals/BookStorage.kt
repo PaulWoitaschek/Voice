@@ -14,8 +14,6 @@ import javax.inject.Inject
 
 /**
  * Provides access to the persistent storage for bookmarks.
- *
- * @author Paul Woitaschek
  */
 class BookStorage
 @Inject constructor(

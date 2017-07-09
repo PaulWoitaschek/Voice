@@ -11,8 +11,6 @@ import java.util.*
 
 /**
  * A simple test for the file comparator that sorts in a 'natural' way.
- *
- * @author Paul Woitaschek
  */
 class NaturalOrderComparatorTest : TestCase() {
 

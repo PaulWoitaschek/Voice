@@ -18,8 +18,6 @@ import org.robolectric.shadows.ShadowLog
 
 /**
  * Test for the book repository.
- *
- * @author Paul Woitaschek
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)

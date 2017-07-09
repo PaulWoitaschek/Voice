@@ -18,8 +18,6 @@ import javax.inject.Singleton
 
 /**
  * Module providing Android SDK Related instances.
- *
- * @author Paul Woitaschek
  */
 @Module class AndroidModule {
   @Provides fun provideContext(app: Application): Context = app

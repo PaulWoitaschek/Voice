@@ -9,8 +9,6 @@ import io.reactivex.Observable
 
 /**
  * Simple receiver wrapper which holds a [android.content.BroadcastReceiver] that notifies on headset changes.
- *
- * @author Paul Woitaschek
  */
 object HeadsetPlugReceiver {
 

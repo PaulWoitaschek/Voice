@@ -7,8 +7,6 @@ import java.util.*
 
 /**
  * Mock provider for mocking objects and injecting them.
- *
- * @author Paul Woitaschek
  */
 object BookMocker {
 

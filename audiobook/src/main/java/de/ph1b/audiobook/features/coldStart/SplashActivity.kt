@@ -6,8 +6,6 @@ import de.ph1b.audiobook.features.MainActivity
 
 /**
  * Activity that just exists to fake a toolbar through its windowbackground upon start
- *
- * @author Paul Woitaschek
  */
 class SplashActivity : AppCompatActivity() {
 

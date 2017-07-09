@@ -9,8 +9,6 @@ import javax.inject.Singleton
 
 /**
  * Provides access to bookmarks.
- *
- * @author Paul Woitaschek
  */
 @Singleton
 class BookmarkProvider

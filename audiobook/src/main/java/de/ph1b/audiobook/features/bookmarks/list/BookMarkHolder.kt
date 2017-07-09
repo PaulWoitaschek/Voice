@@ -5,8 +5,6 @@ import de.ph1b.audiobook.misc.layoutInflater
 
 /**
  * ViewHolder for displaying a Bookmark
- *
- * @author Paul Woitaschek
  */
 class BookMarkHolder private constructor(
     private val binding: de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding,

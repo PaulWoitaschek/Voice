@@ -4,8 +4,6 @@ import javax.inject.Scope
 
 /**
  * Custom scope for a service lifetime
- *
- * @author Paul Woitaschek
  */
 @Scope
 @Retention(AnnotationRetention.RUNTIME)

@@ -19,8 +19,6 @@ import javax.inject.Inject
 
 /**
  * Dialog for controlling the loudness.
- *
- * @author Paul Woitaschek
  */
 class LoudnessDialog(args: Bundle) : DialogController(args) {
 

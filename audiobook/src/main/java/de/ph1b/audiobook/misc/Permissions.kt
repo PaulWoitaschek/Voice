@@ -9,8 +9,6 @@ import io.reactivex.subjects.PublishSubject
 
 /**
  * Class that simplifies the permission requesting
- *
- * @author Paul Woitaschek
  */
 class Permissions(private val activity: Activity) {
 

@@ -10,8 +10,6 @@ import de.ph1b.audiobook.misc.DialogController
 
 /**
  * Dialog for confirming bookmark deletion.
- *
- * @author Paul Woitaschek
  */
 class DeleteBookmarkDialog : DialogController() {
 

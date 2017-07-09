@@ -9,8 +9,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
 /**
  * Empty default callbacks for better readability
- *
- * @author Paul Woitaschek
  */
 interface SimpleEventListener : ExoPlayer.EventListener {
   override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {}

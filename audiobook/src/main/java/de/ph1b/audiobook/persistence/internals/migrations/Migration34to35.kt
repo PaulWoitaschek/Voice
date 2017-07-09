@@ -4,8 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 
 /**
  * Due to a bug negative book ids were inserted
- *
- * @author Paul Woitaschek
  */
 class Migration34to35 : Migration {
 

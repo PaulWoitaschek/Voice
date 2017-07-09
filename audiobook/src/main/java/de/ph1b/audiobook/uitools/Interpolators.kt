@@ -6,8 +6,6 @@ import android.view.animation.Interpolator
 
 /**
  * Collection of interpolators
- *
- * @author Paul Woitaschek
  */
 object Interpolators {
   val fastOutSlowIn: Interpolator = FastOutSlowInInterpolator()

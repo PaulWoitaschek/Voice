@@ -28,8 +28,6 @@ import java.io.File
  *
  * Use [newInstanceIntent] to get a new intent with the necessary
  * values.
- *
- * @author Paul Woitaschek
  */
 class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView {
 

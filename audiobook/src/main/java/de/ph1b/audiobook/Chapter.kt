@@ -8,8 +8,6 @@ import java.io.File
 
 /**
  * Represents a chapter in a book.
- *
- * @author Paul Woitaschek
  */
 data class Chapter(
     val file: File,

@@ -13,8 +13,6 @@ import java.io.File
  *
  * @param id the book id
  * @param author the author of the book.
- *
- * @author Paul Woitaschek
  */
 data class Book(
     val id: Long,

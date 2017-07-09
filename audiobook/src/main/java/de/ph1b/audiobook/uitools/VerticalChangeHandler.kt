@@ -8,8 +8,6 @@ import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
 
 /**
  * Change handler that animates vertically
- *
- * @author Paul Woitaschek
  */
 class VerticalChangeHandler : AnimatorChangeHandler() {
 

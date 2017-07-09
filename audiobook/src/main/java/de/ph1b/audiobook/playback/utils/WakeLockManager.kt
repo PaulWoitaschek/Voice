@@ -6,8 +6,6 @@ import javax.inject.Inject
 
 /**
  * Simple wrapper for the wakelock
- *
- * @author Paul Woitaschek
  */
 class WakeLockManager @Inject constructor(powerManager: PowerManager) {
 

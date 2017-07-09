@@ -10,8 +10,6 @@ import org.robolectric.RobolectricTestRunner
 
 /**
  * Test for the id3 chapter reader
- *
- * @author Paul Woitaschek
  */
 @RunWith(RobolectricTestRunner::class)
 class ID3ChapterReaderTest {

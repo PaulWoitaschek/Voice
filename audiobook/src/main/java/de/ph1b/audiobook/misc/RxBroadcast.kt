@@ -8,8 +8,6 @@ import io.reactivex.Observable
 
 /**
  * Wraps a broadcast receiver in an observable that registers and unregisters based on the subscription.
- *
- * @author Paul Woitaschek
  */
 object RxBroadcast {
   fun register(c: Context, filter: IntentFilter): Observable<Intent> = Observable.create {
