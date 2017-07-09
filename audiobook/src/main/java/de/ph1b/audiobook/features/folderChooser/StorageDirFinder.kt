@@ -82,6 +82,8 @@ import javax.inject.Singleton
     rv.add("/storage/ext_sd")
     rv.add("/storage/sdcard0")
     rv.add("/mnt/external_sd")
+    rv.add("/mnt/external_sd1")
+    rv.add("/mnt/external_sd2")
 
     // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
     // if one of the files in the fallback dir has contents we add it to the list.
