@@ -21,7 +21,7 @@ object ChplReader {
         ?: return emptySparseArray()
     raf.seek(chplAtom.position + 8)
     raf.skipBytes(8)
-    val count = raf.readByte().toUnsignedInt()
+    val count = raf.readByte().toUInt()
 
     val array = SparseArray<String>(count)
     repeat(count) {

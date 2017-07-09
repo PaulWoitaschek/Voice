@@ -26,6 +26,13 @@ class BinaryStreamExtensionsTest {
   }
 
   @Test
+  fun toUIntExtension() {
+    assertThat(2.toByte().toUInt()).isEqualTo(2)
+    assertThat((-2).toByte().toUInt()).isEqualTo(254)
+    assertThat(254.toByte().toUInt()).isEqualTo(254)
+  }
+
+  @Test
   fun toUlongExtension() {
     assertThat(2.toByte().toULong()).isEqualTo(2L)
     assertThat((-2).toByte().toULong()).isEqualTo(254L)

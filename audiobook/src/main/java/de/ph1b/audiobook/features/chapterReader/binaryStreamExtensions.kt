@@ -36,10 +36,10 @@ fun InputStream.readLeUInt32(): Long {
 
 fun InputStream.readLeInt32(): Int {
   val buf = readBytes(4)
-  return buf[0].toUnsignedInt() or
-      (buf[1].toUnsignedInt() shl 8) or
-      (buf[2].toUnsignedInt() shl 16) or
-      (buf[3].toUnsignedInt() shl 24)
+  return buf[0].toUInt() or
+      (buf[1].toUInt() shl 8) or
+      (buf[2].toUInt() shl 16) or
+      (buf[3].toUInt() shl 24)
 }
 
 fun InputStream.readLeInt64(): Long {
@@ -58,5 +58,7 @@ fun ByteArray.startsWith(prefix: ByteArray): Boolean {
   if (this.size < prefix.size) return false
   return prefix.withIndex().all { (i, v) -> v == this[i] }
 }
+
+fun Byte.toUInt(): Int = toInt() and 0xFF
 
 fun Byte.toULong() = toLong() and 0xFFL

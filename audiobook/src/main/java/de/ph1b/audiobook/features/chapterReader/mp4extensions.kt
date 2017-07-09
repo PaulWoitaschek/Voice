@@ -68,5 +68,3 @@ fun RandomAccessFile.readBoxHeader(): String {
 }
 
 fun RandomAccessFile.readUInt64(): Long = (readUnsignedInt() shl 32) + readUnsignedInt()
-
-fun Byte.toUnsignedInt(): Int = toInt() and 0xFF
