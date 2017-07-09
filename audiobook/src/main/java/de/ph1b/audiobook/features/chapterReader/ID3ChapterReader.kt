@@ -110,7 +110,7 @@ object ID3ChapterReader {
   @Throws(IOException::class)
   private fun skipBytes(input: InputStream, number: Int) {
     val numberCorrected = number.coerceAtLeast(1)
-    IOUtils.skipFully(input, numberCorrected.toLong())
+    input.skipBytes(numberCorrected)
     readerPosition += numberCorrected
   }
 
