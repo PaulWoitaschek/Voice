@@ -1,7 +1,9 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import android.util.SparseArray
 import java.io.EOFException
 import java.io.InputStream
+import java.util.ArrayDeque
 
 private val OGG_PAGE_MAGIC = "OggS".toByteArray()
 
@@ -83,4 +85,81 @@ internal fun readOggPages(stream: InputStream): Sequence<OggPage> {
       throw OGGPageParseException("Unexpected end of stream")
     }
   }
+}
+
+internal fun Iterable<ByteArray>.concat(): ByteArray {
+  val res = ByteArray(this.sumBy { it.size })
+  var idx = 0
+  for (part in this) {
+    System.arraycopy(part, 0, res, idx, part.size)
+    idx += part.size
+  }
+  return res
+}
+
+internal class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<ByteArray> {
+  private val packetsQue = ArrayDeque<ByteArray>()
+  private val packetBuffer = mutableListOf<ByteArray>()
+  private var isDone = false
+
+  internal fun pushPage(page: OggPage) {
+    if (isDone) return
+    val start = if (page.continuedPacket) {
+      if (page.packets.size > 1 || page.finishedPacket) {
+        packetBuffer.add(page.packets[0])
+        packetsQue.add(packetBuffer.concat())
+        packetBuffer.clear()
+      }
+      1
+    } else 0
+    val end = page.packets.lastIndex - if (page.finishedPacket) 0 else {
+      packetBuffer.add(page.packets[page.packets.lastIndex])
+      1
+    }
+    (start..end).mapTo(packetsQue) { page.packets[it] }
+    if (page.lastPageOfStream) isDone = true
+  }
+
+  override fun hasNext(): Boolean {
+    while (packetsQue.isEmpty()) {
+      if (isDone) return false
+      pullPage()
+    }
+    return true
+  }
+
+  override fun next(): ByteArray {
+    if (!hasNext()) throw NoSuchElementException()
+    return packetsQue.poll()
+  }
+
+  fun peek(): ByteArray {
+    if (!hasNext()) throw NoSuchElementException()
+    return packetsQue.peek()
+  }
+}
+
+internal fun demuxOggStreams(oggPages: Sequence<OggPage>): SparseArray<OggStream> {
+  val it = oggPages.iterator()
+  val streamMap = SparseArray<OggStream>()
+
+  fun pushToStream(page: OggPage) {
+    streamMap[page.streamSerialNumber].pushPage(page)
+  }
+
+  while (it.hasNext()) {
+    val page = it.next()
+    if (page.firstPageOfStream) {
+      val stream = OggStream({
+        pushToStream(it.next())
+      })
+      stream.pushPage(page)
+      streamMap.put(page.streamSerialNumber, stream)
+    } else {
+      pushToStream(page)
+      break
+    }
+  }
+
+  return streamMap
 }
