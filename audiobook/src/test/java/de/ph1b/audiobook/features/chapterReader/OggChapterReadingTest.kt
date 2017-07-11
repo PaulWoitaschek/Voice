@@ -23,4 +23,18 @@ class OggChapterReadingTest {
         3000 to "Chapter 4"
     ))
   }
+
+  @Test
+  fun readChaptersFromOggVorbisTest() {
+    val simpleOpusResource = javaClass.classLoader.getResource("oggChapterReader/simple_vorbis.ogg")
+    val chapters = File(simpleOpusResource.path).inputStream().use {
+      readChaptersFromOgg(it)
+    }.toMap()
+
+    assertThat(chapters).isEqualTo(mapOf(
+        0 to "Part 1",
+        20 to "Part 2",
+        2000 to "Part 3"
+    ))
+  }
 }
