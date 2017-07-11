@@ -98,6 +98,9 @@ fun <T> SparseArray<T>.toMap(): Map<Int, T> {
   return res
 }
 
+val <T> SparseArray<T>.values
+  get() = (0..size() - 1).map { valueAt(it) }
+
 fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
 
 fun SparseArray<*>.isNotEmpty() = size() > 0
