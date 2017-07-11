@@ -10,6 +10,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.Mp4ChapterReader
+import de.ph1b.audiobook.features.chapterReader.readChaptersFromOgg
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -314,11 +315,12 @@ import javax.inject.Singleton
       val result = mediaAnalyzer.analyze(f)
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
-        val marks = if (f.extension == "mp3") {
-          f.inputStream().use { ID3ChapterReader.readInputStream(it) }
-        } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {
-          Mp4ChapterReader.readChapters(f)
-        } else emptySparseArray<String>()
+        val marks = when (f.extension) {
+          "mp3" -> f.inputStream().use { ID3ChapterReader.readInputStream(it) }
+          "mp4", "m4a", "m4b", "aac" -> Mp4ChapterReader.readChapters(f)
+          "opus", "ogg" -> f.inputStream().use { readChaptersFromOgg(it) }
+          else -> emptySparseArray<String>()
+        }
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()
