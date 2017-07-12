@@ -8,11 +8,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.ByteArrayInputStream
 import java.io.EOFException
+import java.io.InputStream
 
 @RunWith(RobolectricTestRunner::class)
 class BinaryStreamExtensionsTest {
   private val binaryData = Hex.decode("6c6f6cffd7904df58a9e4e0c2582390eb2")
-  private var stream = ByteArrayInputStream(ByteArray(0))
+  lateinit private var stream: InputStream
 
   @Before
   fun setUp() {
@@ -77,12 +78,8 @@ class BinaryStreamExtensionsTest {
     assertThat(stream.readUInt8()).isEqualTo(0x4e)
   }
 
-  @Test
+  @Test(expected = EOFException::class)
   fun endOfBinaryStreamException() {
-    stream.readBytes(10)
-    try {
-      stream.readBytes(100)
-      failBecauseExceptionWasNotThrown(EOFException::class.java)
-    } catch (_: EOFException) {}
+    stream.readBytes(100)
   }
 }

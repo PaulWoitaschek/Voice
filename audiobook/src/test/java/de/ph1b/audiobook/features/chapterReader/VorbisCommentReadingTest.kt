@@ -15,7 +15,7 @@ class VorbisCommentReadingTest {
     assertThat(parseVorbisCommentChapterTime("10:02:10.231")).isEqualTo(36130231)
     assertThat(parseVorbisCommentChapterTime("110:2:10.23")).isEqualTo(396130230)
     assertThat(parseVorbisCommentChapterTime("0:0:0.11111")).isEqualTo(111)
-    assertThat(parseVorbisCommentChapterTime("asdasd")).isEqualTo(null)
+    assertThat(parseVorbisCommentChapterTime("asdasd")).isNull()
   }
 
   @Test

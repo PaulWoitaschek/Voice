@@ -9,11 +9,12 @@ import java.util.*
 
 private fun unsignedByteArrayOf(vararg values: Int) = values.map { it.toByte() }.toByteArray()
 
-private fun <T> Iterable<T>.shuffle(random: Random? = null): List<T> {
-  val r = random ?: Random()
+private val shuffleRandom = Random()
+
+private fun <T> Iterable<T>.shuffle(): List<T> {
   val res = this.toMutableList()
   res.forEachIndexed { i, v ->
-    val pos = r.nextInt(res.size)
+    val pos = shuffleRandom.nextInt(res.size)
     res[i] = res[pos]
     res[pos] = v
   }
@@ -217,7 +218,7 @@ class OggReadingTest {
     val firstPages = streamIds
         .map { genPage(it) }
         .map { it.copy(firstPageOfStream = true) }
-        .shuffle(random)
+        .shuffle()
 
     val pages = (1..numStreams * 30)
         .map { genPage(random.nextInt(numStreams)) }
@@ -225,7 +226,7 @@ class OggReadingTest {
     val lastPages = streamIds
         .map { genPage(it) }
         .map { it.copy(lastPageOfStream = true) }
-        .shuffle(random)
+        .shuffle()
 
     val allPages = listOf(firstPages, pages, lastPages).flatten()
 

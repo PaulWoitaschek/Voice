@@ -14,9 +14,6 @@ private val OPUS_TAGS_MAGIC = "OpusTags".toByteArray()
 private val VORBIS_HEAD_MAGIC = "${1.toChar()}vorbis".toByteArray()
 private val VORBIS_TAGS_MAGIC = "${3.toChar()}vorbis".toByteArray()
 
-/**
- * Reads chapters from ogg files.
- */
 fun readChaptersFromOgg(inputStream: InputStream): SparseArray<String> {
   try {
     val oggPages = readOggPages(BufferedInputStream(inputStream))
