@@ -11,6 +11,7 @@ ext.versions = [
     fabric              : "1.23.0",
     floatingActionButton: "1.10.1",
     gradleVersionsPlugin: "0.15.0",
+    jebml               : "2.3",
     jsr250              : "1.0",
     junit               : "4.12",
     kotlin              : "1.1.3-2",
@@ -26,6 +27,7 @@ ext.versions = [
     rxJava2             : "2.1.1",
     rxJavaInterop       : "0.10.1",
     rxPreferences       : "1.0.2",
+    slf4jAndroid        : "1.7.25",
     slimber             : "1.0.6",
     support             : "25.4.0",
     targetSdk           : 25,
@@ -59,6 +61,7 @@ ext.libraries = [
     daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:$versions.dagger",
     daggerCompiler        : "com.google.dagger:dagger-compiler:$versions.dagger",
     exoPlayerCore         : "com.google.android.exoplayer:exoplayer-core:r$versions.exoPlayer",
+    jebml                 : "com.github.kokorin:jebml:$versions.jebml",
     jsr250                : "javax.annotation:jsr250-api:$versions.jsr250",
     kotlinStdLib          : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
     moshi                 : "com.squareup.moshi:moshi:$versions.moshi",
@@ -66,6 +69,7 @@ ext.libraries = [
     rxInterop              : "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
     rxJava                 : "io.reactivex.rxjava2:rxjava:$versions.rxJava2",
     rxPreferences          : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
+    slf4jAndroid           : "org.slf4j:slf4j-android:$versions.slf4jAndroid",
     slimber                : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
 
     // testing
