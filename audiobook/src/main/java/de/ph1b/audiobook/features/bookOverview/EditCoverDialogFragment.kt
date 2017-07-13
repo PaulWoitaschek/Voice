@@ -29,8 +29,8 @@ import com.squareup.picasso.Callback as PicassoCallback
  */
 class EditCoverDialogFragment : DialogFragment() {
 
-  @Inject internal lateinit var repo: BookRepository
-  @Inject internal lateinit var imageHelper: ImageHelper
+  @Inject lateinit var repo: BookRepository
+  @Inject lateinit var imageHelper: ImageHelper
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

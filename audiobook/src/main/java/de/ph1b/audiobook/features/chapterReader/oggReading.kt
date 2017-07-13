@@ -3,11 +3,12 @@ package de.ph1b.audiobook.features.chapterReader
 import android.util.SparseArray
 import java.io.EOFException
 import java.io.InputStream
-import java.util.ArrayDeque
+import java.util.*
+import kotlin.NoSuchElementException
 
 private val OGG_PAGE_MAGIC = "OggS".toByteArray()
 
-internal data class OggPage(
+data class OggPage(
     val continuedPacket: Boolean,
     val finishedPacket: Boolean,
     val firstPageOfStream: Boolean,
@@ -16,30 +17,40 @@ internal data class OggPage(
     val streamSerialNumber: Int,
     val pageSequenceNumber: Long,
     val packets: List<ByteArray>) {
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is OggPage) return false
-    return continuedPacket == other.continuedPacket &&
-        finishedPacket == other.finishedPacket &&
-        firstPageOfStream == other.firstPageOfStream &&
-        lastPageOfStream == other.lastPageOfStream &&
-        absoluteGranulePosition == other.absoluteGranulePosition &&
-        streamSerialNumber == other.streamSerialNumber &&
-        pageSequenceNumber == other.pageSequenceNumber &&
-        packets.size == other.packets.size &&
-        packets.indices.all { packets[it] contentEquals other.packets[it] }
+    return continuedPacket == other.continuedPacket
+        && finishedPacket == other.finishedPacket
+        && firstPageOfStream == other.firstPageOfStream
+        && lastPageOfStream == other.lastPageOfStream
+        && absoluteGranulePosition == other.absoluteGranulePosition
+        && streamSerialNumber == other.streamSerialNumber
+        && pageSequenceNumber == other.pageSequenceNumber
+        && packets.size == other.packets.size
+        && packets.indices.all { packets[it] contentEquals other.packets[it] }
   }
 
-  override fun hashCode()
-      = listOf(continuedPacket.hashCode(), finishedPacket.hashCode(), firstPageOfStream.hashCode(),
-          lastPageOfStream.hashCode(), absoluteGranulePosition.hashCode(),
-          streamSerialNumber.hashCode(), pageSequenceNumber.hashCode(),
-          packets.map { it.contentHashCode() }.hashCode()).hashCode()
+  override fun hashCode(): Int {
+    var hashCode = 17
+    hashCode = 31 * hashCode + continuedPacket.hashCode()
+    hashCode = 31 * hashCode + finishedPacket.hashCode()
+    hashCode = 31 * hashCode + firstPageOfStream.hashCode()
+    hashCode = 31 * hashCode + lastPageOfStream.hashCode()
+    hashCode = 31 * hashCode + absoluteGranulePosition.hashCode()
+    hashCode = 31 * hashCode + streamSerialNumber.hashCode()
+    hashCode = 31 * hashCode + pageSequenceNumber.hashCode()
+    packets.forEach {
+      hashCode = 31 * hashCode + it.contentHashCode()
+    }
+    return hashCode
+  }
 }
 
 class OGGPageParseException(message: String) : Exception(message)
 
-internal fun computePacketSizesFromSegmentTable(segmentTable: ByteArray): List<Int>
+fun computePacketSizesFromSegmentTable(segmentTable: ByteArray): List<Int>
     = segmentTable.map { it.toUInt() }.fold(mutableListOf(0), { acc, e ->
   acc[acc.lastIndex] += e
   if (e != 255)
@@ -47,7 +58,7 @@ internal fun computePacketSizesFromSegmentTable(segmentTable: ByteArray): List<I
   acc
 }).filter { it != 0 }
 
-internal fun readOggPages(stream: InputStream): Sequence<OggPage> {
+fun readOggPages(stream: InputStream): Sequence<OggPage> {
   return generateSequence gen@ {
     // https://www.ietf.org/rfc/rfc3533.txt
     val capturePattern = try {
@@ -87,7 +98,7 @@ internal fun readOggPages(stream: InputStream): Sequence<OggPage> {
   }
 }
 
-internal fun Iterable<ByteArray>.concat(): ByteArray {
+fun Iterable<ByteArray>.concat(): ByteArray {
   val res = ByteArray(this.sumBy { it.size })
   var idx = 0
   for (part in this) {
@@ -97,12 +108,12 @@ internal fun Iterable<ByteArray>.concat(): ByteArray {
   return res
 }
 
-internal class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<ByteArray> {
+class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<ByteArray> {
   private val packetsQue = ArrayDeque<ByteArray>()
   private val packetBuffer = mutableListOf<ByteArray>()
   private var isDone = false
 
-  internal fun pushPage(page: OggPage) {
+  fun pushPage(page: OggPage) {
     if (isDone) return
     val start = if (page.continuedPacket) {
       if (page.packets.size > 1 || page.finishedPacket) {
@@ -139,7 +150,7 @@ internal class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<
   }
 }
 
-internal fun demuxOggStreams(oggPages: Sequence<OggPage>): SparseArray<OggStream> {
+fun demuxOggStreams(oggPages: Sequence<OggPage>): SparseArray<OggStream> {
   val it = oggPages.iterator()
   val streamMap = SparseArray<OggStream>()
 

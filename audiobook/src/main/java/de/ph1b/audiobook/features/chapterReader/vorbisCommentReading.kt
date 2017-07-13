@@ -45,7 +45,7 @@ data class VorbisComment(val vendor: String, val comments: Map<String, String>) 
 
 private val VORBIS_COMMENT_CHAPTER_TIME_REGEX = Regex("""(\d+):(\d+):(\d+).(\d+)""")
 
-internal fun parseVorbisCommentChapterTime(timeStr: String): Int? {
+fun parseVorbisCommentChapterTime(timeStr: String): Int? {
   val matchResult = VORBIS_COMMENT_CHAPTER_TIME_REGEX.matchEntire(timeStr) ?: return null
   val hours = matchResult.groups[1]!!.value.toInt()
   val minutes = hours * 60 + matchResult.groups[2]!!.value.toInt()

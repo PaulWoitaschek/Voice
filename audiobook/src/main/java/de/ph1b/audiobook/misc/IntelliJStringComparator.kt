@@ -5,7 +5,6 @@ import java.util.*
 /**
  * Simple copy of IntelliJs-Community naturalCompare.
  * Licensed as Apache v2.
- *
  */
 class IntelliJStringComparator : Comparator<String> {
 
