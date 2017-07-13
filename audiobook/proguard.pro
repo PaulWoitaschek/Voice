@@ -26,3 +26,6 @@
 -keep class ** implements com.coremedia.iso.boxes.Box { *; }
 -dontwarn okio.**
 -dontwarn com.googlecode.mp4parser.**
+
+# dagger
+-dontwarn com.google.errorprone.annotations.*
