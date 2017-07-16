@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
+import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class MatroskaChapterReadingTest {
@@ -59,5 +60,11 @@ class MatroskaChapterReadingTest {
     assertThat(testFileMatroskaChapters
         .flattenToSparseArray("pol", "eng")
         .toMap()).isEqualTo(testFileChapters)
+  }
+
+  @Test
+  fun readChapters() {
+    Locale.setDefault(Locale("pol", "PL", "Polish"))
+    assertThat(readChaptersFromMatroska(testFile).toMap()).isEqualTo(testFileChapters)
   }
 }
