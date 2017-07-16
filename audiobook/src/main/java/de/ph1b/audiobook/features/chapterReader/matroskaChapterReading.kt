@@ -1,11 +1,30 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import android.util.SparseArray
 import i
 import org.ebml.*
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
 import java.io.File
 import java.lang.RuntimeException
+
+internal fun List<MatroskaChapter>.flattenToSparseArray(
+    vararg preferredLanguages: String): SparseArray<String> {
+  val res = SparseArray<String>()
+
+  fun addChapter(chapters: List<MatroskaChapter>, depth: Int) {
+    chapters.forEachIndexed { i, chapter ->
+      res.put(
+          (chapter.startTime / 1000000).toInt() + if (i == 0) depth else 0,
+          "+ ".repeat(depth) + (chapter.getName(*preferredLanguages) ?: "Chapter ${i + 1}"))
+      addChapter(chapter.children, depth + 1)
+    }
+  }
+
+  addChapter(this, 0)
+
+  return res
+}
 
 internal fun readMatroskaChapters(file: File): List<MatroskaChapter> {
   // Reference MatroskaDocTypes to force static init of its members which
