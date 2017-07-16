@@ -161,4 +161,12 @@ internal data class MatroskaChapterName(val name: String, val languages: Set<Str
 internal data class MatroskaChapter(
     val startTime: Long,
     val names: List<MatroskaChapterName>,
-    val children: List<MatroskaChapter>)
+    val children: List<MatroskaChapter>) {
+  fun getName(vararg preferredLanguages: String): String?
+      = preferredLanguages
+      .map { language ->
+          names.find { language in it.languages }?.name
+      }
+      .filterNotNull()
+      .firstOrNull() ?: names.firstOrNull()?.name
+}
