@@ -12,7 +12,7 @@ object MatroskaChapterReader {
   fun read(file: File): SparseArray<String> {
     try {
       val chapters = ReadAsMatroskaChapters.read(file)
-      return MatroskaChapterFlattener.toSparseArray(chapters, Locale.getDefault().isO3Language, "eng")
+      return MatroskaChapterFlattener.toSparseArray(chapters, listOf(Locale.getDefault().isO3Language, "eng"))
     } catch (ex: RuntimeException) {
       // JEBML documentation just say's that it throws RuntimeException.
       // For example NullPointerException is thrown if unknown EBML Element

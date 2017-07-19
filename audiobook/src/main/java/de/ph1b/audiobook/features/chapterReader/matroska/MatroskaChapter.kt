@@ -6,7 +6,7 @@ data class MatroskaChapter(
     val children: List<MatroskaChapter>
 ) {
 
-  fun getName(vararg preferredLanguages: String): String? = preferredLanguages
+  fun getName(preferredLanguages: List<String> = emptyList<String>()): String? = preferredLanguages
       .mapNotNull { language ->
         names.find { language in it.languages }
             ?.name

@@ -56,13 +56,13 @@ class MatroskaChapterReadingTest {
         MatroskaChapterName("サブパート1", setOf("jpn"))
     ), listOf())
     assertThat(chapter.getName()).isEqualTo("Podczęść 1")
-    assertThat(chapter.getName("ger", "jpn")).isEqualTo("Subpart 1")
-    assertThat(chapter.getName("ind", "kac", "jpn", "eng")).isEqualTo("サブパート1")
+    assertThat(chapter.getName(listOf("ger", "jpn"))).isEqualTo("Subpart 1")
+    assertThat(chapter.getName(listOf("ind", "kac", "jpn", "eng"))).isEqualTo("サブパート1")
   }
 
   @Test
   fun flattenMatroskaChapterListTest() {
-    assertThat(MatroskaChapterFlattener.toSparseArray(testFileMatroskaChapters, "pol", "eng")
+    assertThat(MatroskaChapterFlattener.toSparseArray(testFileMatroskaChapters, listOf("pol", "eng"))
         .toMap()).isEqualTo(testFileChapters)
   }
 
