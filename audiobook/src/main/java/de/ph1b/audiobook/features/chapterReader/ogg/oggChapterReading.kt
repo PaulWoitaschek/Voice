@@ -1,6 +1,9 @@
 package de.ph1b.audiobook.features.chapterReader.ogg
 
 import android.util.SparseArray
+import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisComment
+import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisCommentParseException
+import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisCommentReader
 import de.ph1b.audiobook.features.chapterReader.readBytes
 import de.ph1b.audiobook.features.chapterReader.startsWith
 import de.ph1b.audiobook.misc.emptySparseArray
@@ -52,7 +55,7 @@ private fun readVorbisCommentFromOpusStream(stream: OggStream): VorbisComment {
   val capturePattern = packetStream.readBytes(OPUS_TAGS_MAGIC.size)
   if (!(capturePattern contentEquals OPUS_TAGS_MAGIC))
     throw OpusStreamParseException("Invalid opus tags capture pattern")
-  return readVorbisComment(packetStream)
+  return VorbisCommentReader.readComment(packetStream)
 }
 
 class VorbisStreamParseException(message: String) : Exception(message)
@@ -66,5 +69,5 @@ private fun readVorbisCommentFromVorbisStream(stream: OggStream): VorbisComment 
   val capturePattern = packetStream.readBytes(VORBIS_TAGS_MAGIC.size)
   if (!(capturePattern contentEquals VORBIS_TAGS_MAGIC))
     throw VorbisStreamParseException("Invalid vorbis comment header capture pattern")
-  return readVorbisComment(packetStream)
+  return VorbisCommentReader.readComment(packetStream)
 }
