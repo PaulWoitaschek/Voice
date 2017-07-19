@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.persistence.internals.moveToNextLoop
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Corrects media paths that have been falsely set.

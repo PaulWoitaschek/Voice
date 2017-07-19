@@ -14,13 +14,18 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.onFirstPreDraw
+import de.ph1b.audiobook.misc.supportTransitionName
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import i
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

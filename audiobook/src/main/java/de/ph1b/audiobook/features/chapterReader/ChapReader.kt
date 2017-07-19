@@ -4,7 +4,7 @@ import android.util.SparseArray
 import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.File
 import java.io.RandomAccessFile
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Reads the chap atom to find associated chapters

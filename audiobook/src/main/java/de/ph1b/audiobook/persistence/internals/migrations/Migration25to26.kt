@@ -2,7 +2,7 @@ package de.ph1b.audiobook.persistence.internals.migrations
 
 import android.database.sqlite.SQLiteDatabase
 import org.json.JSONObject
-import java.util.*
+import java.util.ArrayList
 
 /**
  * A previous version caused empty books to be added. So we delete them now.

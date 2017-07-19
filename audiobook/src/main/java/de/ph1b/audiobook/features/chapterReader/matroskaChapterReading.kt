@@ -4,12 +4,17 @@ import android.util.SparseArray
 import de.ph1b.audiobook.misc.emptySparseArray
 import e
 import i
-import org.ebml.*
+import org.ebml.EBMLReader
+import org.ebml.Element
+import org.ebml.MasterElement
+import org.ebml.ProtoType
+import org.ebml.StringElement
+import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
 import java.io.File
 import java.lang.RuntimeException
-import java.util.*
+import java.util.Locale
 
 fun readChaptersFromMatroska(file: File): SparseArray<String> {
   try {
@@ -189,7 +194,7 @@ internal fun readMatroskaChapters(file: File): List<MatroskaChapter> {
   return chapters
 }
 
-class MatroskaParseException(message: String): RuntimeException(message)
+class MatroskaParseException(message: String) : RuntimeException(message)
 
 private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 
@@ -202,7 +207,7 @@ internal data class MatroskaChapter(
   fun getName(vararg preferredLanguages: String): String?
       = preferredLanguages
       .map { language ->
-          names.find { language in it.languages }?.name
+        names.find { language in it.languages }?.name
       }
       .filterNotNull()
       .firstOrNull() ?: names.firstOrNull()?.name

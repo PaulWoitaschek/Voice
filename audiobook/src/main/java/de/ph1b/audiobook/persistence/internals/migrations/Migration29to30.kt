@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.persistence.internals.moveToNextLoop
 import org.json.JSONObject
-import java.util.*
+import java.util.ArrayList
 
 @SuppressLint("Recycle")
 class Migration29to30 : Migration {

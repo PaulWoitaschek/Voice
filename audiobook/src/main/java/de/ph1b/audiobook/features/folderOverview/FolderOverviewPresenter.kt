@@ -7,7 +7,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import io.reactivex.disposables.CompositeDisposable
-import java.util.*
+import java.util.HashSet
 import javax.inject.Inject
 
 /**

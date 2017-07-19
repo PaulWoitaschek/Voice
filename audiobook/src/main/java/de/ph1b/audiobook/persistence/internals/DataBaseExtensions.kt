@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import java.util.*
+import java.util.ArrayList
 import javax.annotation.WillClose
 
 fun Cursor.string(columnName: String): String {

@@ -2,7 +2,14 @@ package de.ph1b.audiobook.persistence.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.persistence.internals.*
+import de.ph1b.audiobook.persistence.internals.asTransaction
+import de.ph1b.audiobook.persistence.internals.float
+import de.ph1b.audiobook.persistence.internals.int
+import de.ph1b.audiobook.persistence.internals.long
+import de.ph1b.audiobook.persistence.internals.mapRows
+import de.ph1b.audiobook.persistence.internals.query
+import de.ph1b.audiobook.persistence.internals.string
+import de.ph1b.audiobook.persistence.internals.stringNullable
 
 
 class Migration35to36 : Migration {

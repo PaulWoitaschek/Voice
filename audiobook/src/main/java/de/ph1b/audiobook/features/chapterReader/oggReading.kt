@@ -3,8 +3,7 @@ package de.ph1b.audiobook.features.chapterReader
 import android.util.SparseArray
 import java.io.EOFException
 import java.io.InputStream
-import java.util.*
-import kotlin.NoSuchElementException
+import java.util.ArrayDeque
 
 private val OGG_PAGE_MAGIC = "OggS".toByteArray()
 

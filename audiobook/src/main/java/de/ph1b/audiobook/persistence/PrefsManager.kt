@@ -2,7 +2,16 @@ package de.ph1b.audiobook.persistence
 
 import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
-import de.ph1b.audiobook.injection.*
+import de.ph1b.audiobook.injection.AutoRewindAmount
+import de.ph1b.audiobook.injection.BookmarkOnSleepTimer
+import de.ph1b.audiobook.injection.CollectionFolders
+import de.ph1b.audiobook.injection.CurrentBookId
+import de.ph1b.audiobook.injection.PrefResumeAfterCall
+import de.ph1b.audiobook.injection.ResumeOnReplug
+import de.ph1b.audiobook.injection.SeekTime
+import de.ph1b.audiobook.injection.ShakeToReset
+import de.ph1b.audiobook.injection.SingleBookFolders
+import de.ph1b.audiobook.injection.SleepTime
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
 import javax.inject.Singleton

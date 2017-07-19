@@ -12,7 +12,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.ArrayList
+import java.util.InvalidPropertiesFormatException
 
 /**
  * Migrate the database so they will be stored as json objects

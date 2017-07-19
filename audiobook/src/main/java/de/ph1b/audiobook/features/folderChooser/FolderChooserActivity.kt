@@ -14,7 +14,11 @@ import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityFolderChooserBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.visible
 import i

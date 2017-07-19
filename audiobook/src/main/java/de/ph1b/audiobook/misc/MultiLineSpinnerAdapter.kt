@@ -11,7 +11,7 @@ import android.widget.SpinnerAdapter
 import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.ThemeUtil
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Adapter fror [Spinner] that highlights the current selection and shows multiple lines of text.

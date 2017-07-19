@@ -5,7 +5,11 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.*
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Controller
+import com.bluelinelabs.conductor.ControllerChangeHandler
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityBookBinding
@@ -15,7 +19,11 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.asTransaction
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController

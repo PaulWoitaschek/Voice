@@ -10,7 +10,9 @@ import android.text.TextUtils
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.HashSet
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton

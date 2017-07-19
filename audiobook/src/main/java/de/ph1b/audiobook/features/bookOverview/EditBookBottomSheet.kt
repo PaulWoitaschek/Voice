@@ -12,7 +12,15 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.asTransaction
+import de.ph1b.audiobook.misc.bottomCompoundDrawable
+import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.findCallback
+import de.ph1b.audiobook.misc.leftCompoundDrawable
+import de.ph1b.audiobook.misc.rightCompoundDrawable
+import de.ph1b.audiobook.misc.tinted
+import de.ph1b.audiobook.misc.topCompoundDrawable
 import de.ph1b.audiobook.persistence.BookRepository
 import e
 import javax.inject.Inject

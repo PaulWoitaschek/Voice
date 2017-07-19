@@ -11,7 +11,11 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.playback.*
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_PREVIOUS
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
