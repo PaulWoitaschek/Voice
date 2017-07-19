@@ -10,7 +10,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.Mp4ChapterReader
-import de.ph1b.audiobook.features.chapterReader.readChaptersFromMatroska
+import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterReader
 import de.ph1b.audiobook.features.chapterReader.readChaptersFromOgg
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
@@ -327,7 +327,7 @@ import javax.inject.Singleton
           "mp3" -> f.inputStream().use { ID3ChapterReader.readInputStream(it) }
           "mp4", "m4a", "m4b", "aac" -> Mp4ChapterReader.readChapters(f)
           "opus", "ogg", "oga" -> f.inputStream().use { readChaptersFromOgg(it) }
-          "mka", "mkv", "webm" -> readChaptersFromMatroska(f)
+          "mka", "mkv", "webm" -> MatroskaChapterReader.readChapters(f)
           else -> emptySparseArray<String>()
         }
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))

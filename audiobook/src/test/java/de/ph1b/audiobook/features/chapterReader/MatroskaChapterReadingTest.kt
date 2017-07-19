@@ -1,12 +1,17 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapter
+import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterName
+import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterReader
+import de.ph1b.audiobook.features.chapterReader.matroska.flattenToSparseArray
+import de.ph1b.audiobook.features.chapterReader.matroska.readMatroskaChapters
 import de.ph1b.audiobook.misc.toMap
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 class MatroskaChapterReadingTest {
@@ -65,6 +70,6 @@ class MatroskaChapterReadingTest {
   @Test
   fun readChapters() {
     Locale.setDefault(Locale("pol", "PL", "Polish"))
-    assertThat(readChaptersFromMatroska(testFile).toMap()).isEqualTo(testFileChapters)
+    assertThat(MatroskaChapterReader.readChapters(testFile).toMap()).isEqualTo(testFileChapters)
   }
 }
