@@ -4,6 +4,7 @@ import i
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.MasterElement
+import org.ebml.ProtoType
 import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
@@ -151,10 +152,11 @@ object ReadAsMatroskaChapters {
         }
       }
     } else {
-      throw MatroskaParseException(
-          "Segment not the second element in the file: was ${segment.elementType.name} instead")
+      throw MatroskaParseException("Segment not the second element in the file: was ${segment.elementType.name} instead")
     }
 
     return chapters
   }
+
+  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 }

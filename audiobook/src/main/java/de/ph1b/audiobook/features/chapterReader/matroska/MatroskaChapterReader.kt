@@ -3,8 +3,6 @@ package de.ph1b.audiobook.features.chapterReader.matroska
 import android.util.SparseArray
 import de.ph1b.audiobook.misc.emptySparseArray
 import e
-import org.ebml.Element
-import org.ebml.ProtoType
 import java.io.File
 import java.lang.RuntimeException
 import java.util.Locale
@@ -24,6 +22,4 @@ object MatroskaChapterReader {
     return emptySparseArray()
   }
 }
-
-infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 
