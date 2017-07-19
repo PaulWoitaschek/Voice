@@ -1,11 +1,5 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.ogg
 
-import de.ph1b.audiobook.features.chapterReader.ogg.OggPage
-import de.ph1b.audiobook.features.chapterReader.ogg.OggStream
-import de.ph1b.audiobook.features.chapterReader.ogg.computePacketSizesFromSegmentTable
-import de.ph1b.audiobook.features.chapterReader.ogg.concat
-import de.ph1b.audiobook.features.chapterReader.ogg.demuxOggStreams
-import de.ph1b.audiobook.features.chapterReader.ogg.readOggPages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

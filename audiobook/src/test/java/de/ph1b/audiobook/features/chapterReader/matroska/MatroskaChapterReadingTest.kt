@@ -1,10 +1,5 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.matroska
 
-import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapter
-import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterFlattener
-import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterName
-import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterReader
-import de.ph1b.audiobook.features.chapterReader.matroska.ReadAsMatroskaChapters
 import de.ph1b.audiobook.misc.toMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

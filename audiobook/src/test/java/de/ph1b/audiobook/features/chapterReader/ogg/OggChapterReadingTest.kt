@@ -1,6 +1,5 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.ogg
 
-import de.ph1b.audiobook.features.chapterReader.ogg.readChaptersFromOgg
 import de.ph1b.audiobook.misc.toMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

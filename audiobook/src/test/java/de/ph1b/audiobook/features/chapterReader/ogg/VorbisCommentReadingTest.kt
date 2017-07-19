@@ -1,9 +1,5 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.ogg
 
-import de.ph1b.audiobook.features.chapterReader.ogg.VorbisComment
-import de.ph1b.audiobook.features.chapterReader.ogg.VorbisCommentParseException
-import de.ph1b.audiobook.features.chapterReader.ogg.parseVorbisCommentChapterTime
-import de.ph1b.audiobook.features.chapterReader.ogg.readVorbisComment
 import de.ph1b.audiobook.misc.toMap
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown
@@ -71,6 +67,7 @@ class VorbisCommentReadingTest {
     try {
       readVorbisComment(stream2)
       failBecauseExceptionWasNotThrown(VorbisCommentParseException::class.java)
-    } catch (_: VorbisCommentParseException) {}
+    } catch (_: VorbisCommentParseException) {
+    }
   }
 }
