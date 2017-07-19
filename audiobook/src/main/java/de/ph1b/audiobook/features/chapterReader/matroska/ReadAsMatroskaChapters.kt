@@ -69,11 +69,11 @@ object ReadAsMatroskaChapters {
     reader = EBMLReader(dataSource)
   }
 
-  private fun Element.forEachChild(f: (Element) -> Unit) {
+  private inline fun Element.forEachChild(action: (Element) -> Unit) {
     this as MasterElement
     var child = readNextChild(reader)
     while (child != null) {
-      f(child)
+      action(child)
       // Calling skipData is a nop after calling readData/skipData.
       child.skipData(dataSource)
       child = readNextChild(reader)
