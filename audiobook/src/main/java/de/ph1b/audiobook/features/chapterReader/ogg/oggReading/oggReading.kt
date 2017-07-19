@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.ogg
+package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
 
 import android.util.SparseArray
 import de.ph1b.audiobook.features.chapterReader.readBytes
@@ -30,10 +30,10 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
       return@gen null
     }
     if (!(capturePattern contentEquals OGG_PAGE_MAGIC))
-      throw OGGPageParseException("Invalid capture pattern")
+      throw OggPageParseException("Invalid capture pattern")
     try {
       if (stream.readUInt8() != 0)
-        throw OGGPageParseException("Expected stream structure version 0")
+        throw OggPageParseException("Expected stream structure version 0")
       val headerTypeFlag = stream.readUInt8()
       val absoluteGranulePosition = stream.readLeInt64()
       val streamSerialNumber = stream.readLeInt32()
@@ -56,7 +56,7 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
           packets = packets
       )
     } catch (_: EOFException) {
-      throw OGGPageParseException("Unexpected end of stream")
+      throw OggPageParseException("Unexpected end of stream")
     }
   }
 }

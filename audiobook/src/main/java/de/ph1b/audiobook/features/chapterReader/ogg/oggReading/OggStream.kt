@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.ogg
+package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
 
 import java.util.ArrayDeque
 

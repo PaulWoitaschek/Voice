@@ -1,6 +1,10 @@
 package de.ph1b.audiobook.features.chapterReader.ogg
 
 import android.util.SparseArray
+import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggPageParseException
+import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggStream
+import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.demuxOggStreams
+import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.readOggPages
 import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisComment
 import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisCommentParseException
 import de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment.VorbisCommentReader
@@ -32,7 +36,7 @@ fun readChaptersFromOgg(inputStream: InputStream): SparseArray<String> {
     }
   } catch (ex: IOException) {
     e(ex)
-  } catch (ex: OGGPageParseException) {
+  } catch (ex: OggPageParseException) {
     e(ex)
   } catch (ex: OpusStreamParseException) {
     e(ex)
