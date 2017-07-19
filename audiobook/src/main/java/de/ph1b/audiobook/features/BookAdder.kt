@@ -8,10 +8,10 @@ import android.support.v4.content.ContextCompat
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
-import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
-import de.ph1b.audiobook.features.chapterReader.Mp4ChapterReader
+import de.ph1b.audiobook.features.chapterReader.id3.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterReader
-import de.ph1b.audiobook.features.chapterReader.readChaptersFromOgg
+import de.ph1b.audiobook.features.chapterReader.mp4.Mp4ChapterReader
+import de.ph1b.audiobook.features.chapterReader.ogg.readChaptersFromOgg
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator

@@ -1,11 +1,17 @@
 package de.ph1b.audiobook.features.chapterReader
 
-import org.assertj.core.api.Assertions.*
+import de.ph1b.audiobook.features.chapterReader.ogg.OggPage
+import de.ph1b.audiobook.features.chapterReader.ogg.OggStream
+import de.ph1b.audiobook.features.chapterReader.ogg.computePacketSizesFromSegmentTable
+import de.ph1b.audiobook.features.chapterReader.ogg.concat
+import de.ph1b.audiobook.features.chapterReader.ogg.demuxOggStreams
+import de.ph1b.audiobook.features.chapterReader.ogg.readOggPages
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
-import java.util.*
+import java.util.Random
 
 private fun unsignedByteArrayOf(vararg values: Int) = values.map { it.toByte() }.toByteArray()
 
@@ -203,15 +209,15 @@ class OggReadingTest {
     val random = Random()
 
     fun genPage(id: Int) = OggPage(
-          continuedPacket = false,
-          finishedPacket = true,
-          firstPageOfStream = false,
-          lastPageOfStream = false,
-          absoluteGranulePosition = 0,
-          streamSerialNumber = id,
-          pageSequenceNumber = 0,
-          packets = listOf("v".toByteArray())
-      )
+        continuedPacket = false,
+        finishedPacket = true,
+        firstPageOfStream = false,
+        lastPageOfStream = false,
+        absoluteGranulePosition = 0,
+        streamSerialNumber = id,
+        pageSequenceNumber = 0,
+        packets = listOf("v".toByteArray())
+    )
 
     val numStreams = 10
     val streamIds = (0..numStreams - 1)

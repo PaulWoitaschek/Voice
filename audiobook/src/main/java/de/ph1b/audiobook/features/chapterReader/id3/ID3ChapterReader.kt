@@ -1,6 +1,7 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.id3
 
 import android.util.SparseArray
+import de.ph1b.audiobook.features.chapterReader.skipBytes
 import e
 import java.io.IOException
 import java.io.InputStream

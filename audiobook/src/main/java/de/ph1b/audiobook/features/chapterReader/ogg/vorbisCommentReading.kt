@@ -1,6 +1,8 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.ogg
 
 import android.util.SparseArray
+import de.ph1b.audiobook.features.chapterReader.readBytes
+import de.ph1b.audiobook.features.chapterReader.readLeUInt32
 import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.InputStream
 

@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.mp4
 
 import java.io.EOFException
 import java.io.RandomAccessFile

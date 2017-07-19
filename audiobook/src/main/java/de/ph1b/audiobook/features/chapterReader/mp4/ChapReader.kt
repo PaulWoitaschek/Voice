@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader
+package de.ph1b.audiobook.features.chapterReader.mp4
 
 import android.util.SparseArray
 import de.ph1b.audiobook.misc.emptySparseArray

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import de.ph1b.audiobook.features.chapterReader.id3.ID3ChapterReader
 import de.ph1b.audiobook.misc.toMap
 import okhttp3.OkHttpClient
 import okhttp3.Request
