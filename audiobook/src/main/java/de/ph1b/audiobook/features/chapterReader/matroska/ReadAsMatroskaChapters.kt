@@ -28,18 +28,9 @@ object ReadAsMatroskaChapters {
     Timber.i("read $file")
     init(file)
 
-    val ebmlHeader = reader.readNextElement()
-    if (ebmlHeader isType MatroskaDocTypes.EBML) {
-      ebmlHeader.forEachChild {
-        if (it isType MatroskaDocTypes.DocType) {
-          val docType = it.readString()
-          if (docType != "matroska" && docType != "webm") {
-            throw MatroskaParseException("DocType is not matroska, \"$docType\"")
-          }
-        }
-      }
-    } else {
-      throw MatroskaParseException("EBML Header not the first element in the file")
+    val firstElement = reader.readNextElement()
+    if (!isValidEbmlHeader(firstElement)) {
+      throw MatroskaParseException("Invalid ebml header")
     }
 
     var chapters = listOf<MatroskaChapter>()
@@ -50,8 +41,9 @@ object ReadAsMatroskaChapters {
           it.forEachChild {
             if (it isType MatroskaDocTypes.EditionEntry) {
               val (default, chaptersCandidate) = it.readEditionEntry()
-              if (chaptersCandidate != null && (chapters.isEmpty() || default))
+              if (chaptersCandidate != null && (chapters.isEmpty() || default)) {
                 chapters = chaptersCandidate
+              }
             }
           }
         }
@@ -63,6 +55,24 @@ object ReadAsMatroskaChapters {
     close()
 
     return chapters
+  }
+
+  private fun isValidEbmlHeader(element: Element): Boolean {
+    if (element isType MatroskaDocTypes.EBML) {
+      element.forEachChild {
+        if (it isType MatroskaDocTypes.DocType) {
+          val docType = it.readString()
+          if (docType != "matroska" && docType != "webm") {
+            Timber.e("DocType $docType is not matroska")
+            return false
+          }
+        }
+      }
+      return true
+    } else {
+      Timber.e("EBML Header not the first element in the file")
+      return false
+    }
   }
 
   private fun init(file: File) {
@@ -111,7 +121,6 @@ object ReadAsMatroskaChapters {
     }
     return MatroskaChapterName(name!!, languages)
   }
-
 
   private fun Element.readChapterAtom(): MatroskaChapter? {
     var startTime: Long? = null
@@ -169,8 +178,8 @@ object ReadAsMatroskaChapters {
         }
       }
     }
-    if (hidden) return Pair(false, null)
-    return Pair(default, chapters)
+    if (hidden) return false to null
+    return default to chapters
   }
 
   private fun close() {
