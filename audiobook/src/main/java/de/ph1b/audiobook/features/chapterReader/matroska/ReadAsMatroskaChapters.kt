@@ -14,11 +14,13 @@ import java.io.File
 
 object ReadAsMatroskaChapters {
 
-  fun read(file: File): List<MatroskaChapter> {
+  init {
     // Reference MatroskaDocTypes to force static init of its members which
     // register in static map used when identifying EBML Element types.
     MatroskaDocTypes.Void.level
+  }
 
+  fun read(file: File): List<MatroskaChapter> {
     val dataSource = FileDataSource(file.path)
     val reader = EBMLReader(dataSource)
 
