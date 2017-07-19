@@ -10,11 +10,12 @@ object MatroskaChapterFlattener {
 
     fun addChapter(chapters: List<MatroskaChapter>, depth: Int) {
       chapters.forEachIndexed { i, chapter ->
-        res.put(
-            // Simple hack with adding depth is needed because chapter
-            // and it's first sub-chapter have usually the same starting time.
-            (chapter.startTime / 1000000).toInt() + if (i == 0) depth else 0,
-            "+ ".repeat(depth) + (chapter.getName(*preferredLanguages) ?: "Chapter ${i + 1}"))
+        val duration = (chapter.startTime / 1000000).toInt() +
+            if (i == 0) depth else 0
+        // Simple hack with adding depth is needed because chapter
+        // and it's first sub-chapter have usually the same starting time.
+        val name = "+ ".repeat(depth) + (chapter.getName(*preferredLanguages) ?: "Chapter ${i + 1}")
+        res.put(duration, name)
         addChapter(chapter.children, depth + 1)
       }
     }
