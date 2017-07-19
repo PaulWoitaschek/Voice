@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.chapterReader.ogg
 
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggPage
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggStream
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.computePacketSizesFromSegmentTable
+import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.PackageSizeParser
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.concat
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.demuxOggStreams
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.readOggPages
@@ -31,10 +31,10 @@ private fun <T> Iterable<T>.shuffle(): List<T> {
 class OggReadingTest {
   @Test
   fun computePacketSizesFromSegmentTableTest() {
-    assertThat(computePacketSizesFromSegmentTable(unsignedByteArrayOf(
+    assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
         255, 255, 14, 255, 0, 255, 255, 17)))
         .isEqualTo(listOf(2*255 + 14, 255, 2*255 + 17))
-    assertThat(computePacketSizesFromSegmentTable(unsignedByteArrayOf(
+    assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
         255, 255, 255, 255, 70, 255, 255)))
         .isEqualTo(listOf(4*255 + 70, 2*255))
   }

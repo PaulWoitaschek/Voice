@@ -13,14 +13,6 @@ import java.io.InputStream
 
 private val OGG_PAGE_MAGIC = "OggS".toByteArray()
 
-fun computePacketSizesFromSegmentTable(segmentTable: ByteArray): List<Int>
-    = segmentTable.map { it.toUInt() }.fold(mutableListOf(0), { acc, e ->
-  acc[acc.lastIndex] += e
-  if (e != 255)
-    acc.add(0)
-  acc
-}).filter { it != 0 }
-
 fun readOggPages(stream: InputStream): Sequence<OggPage> {
   return generateSequence gen@ {
     // https://www.ietf.org/rfc/rfc3533.txt
@@ -41,7 +33,7 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
       stream.skipBytes(4)  // checksum
       val numberPageSegments = stream.readUInt8()
       val segmentTable = stream.readBytes(numberPageSegments)
-      val packets = computePacketSizesFromSegmentTable(segmentTable).map {
+      val packets = PackageSizeParser.fromSegmentTable(segmentTable).map {
         stream.readBytes(it)
       }
 
