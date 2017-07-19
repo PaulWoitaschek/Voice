@@ -175,7 +175,6 @@ import javax.inject.Singleton
             }
           }
         }
-        else -> throw AssertionError("We added somewhere a non valid type=" + book.type)
       }
 
       if (!bookExists) {
@@ -327,7 +326,7 @@ import javax.inject.Singleton
           "mp3" -> f.inputStream().use { ID3ChapterReader.readInputStream(it) }
           "mp4", "m4a", "m4b", "aac" -> Mp4ChapterReader.readChapters(f)
           "opus", "ogg", "oga" -> f.inputStream().use { readChaptersFromOgg(it) }
-          "mka", "mkv", "webm" -> MatroskaChapterReader.readChapters(f)
+          "mka", "mkv", "webm" -> MatroskaChapterReader.read(f)
           else -> emptySparseArray<String>()
         }
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))

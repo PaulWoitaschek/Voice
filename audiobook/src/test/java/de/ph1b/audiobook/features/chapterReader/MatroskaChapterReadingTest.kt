@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features.chapterReader
 import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapter
 import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterName
 import de.ph1b.audiobook.features.chapterReader.matroska.MatroskaChapterReader
+import de.ph1b.audiobook.features.chapterReader.matroska.ReadAsMatroskaChapters
 import de.ph1b.audiobook.features.chapterReader.matroska.flattenToSparseArray
-import de.ph1b.audiobook.features.chapterReader.matroska.readMatroskaChapters
 import de.ph1b.audiobook.misc.toMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -43,7 +43,7 @@ class MatroskaChapterReadingTest {
 
   @Test
   fun readMatroskaChaptersTest() {
-    val chapters = readMatroskaChapters(testFile)
+    val chapters = ReadAsMatroskaChapters.read(testFile)
     assertThat(chapters).isEqualTo(testFileMatroskaChapters)
   }
 
@@ -70,6 +70,6 @@ class MatroskaChapterReadingTest {
   @Test
   fun readChapters() {
     Locale.setDefault(Locale("pol", "PL", "Polish"))
-    assertThat(MatroskaChapterReader.readChapters(testFile).toMap()).isEqualTo(testFileChapters)
+    assertThat(MatroskaChapterReader.read(testFile).toMap()).isEqualTo(testFileChapters)
   }
 }
