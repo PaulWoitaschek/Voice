@@ -7,7 +7,6 @@ import org.ebml.MasterElement
 import org.ebml.ProtoType
 import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
-import org.ebml.io.DataSource
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
 import timber.log.Timber
@@ -16,7 +15,7 @@ import java.io.File
 
 object ReadAsMatroskaChapters {
 
-  private lateinit var dataSource: DataSource
+  private lateinit var dataSource: FileDataSource
   private lateinit var reader: EBMLReader
 
   init {
@@ -60,6 +59,8 @@ object ReadAsMatroskaChapters {
     } else {
       throw MatroskaParseException("Segment not the second element in the file: was ${segment.elementType.name} instead")
     }
+
+    close()
 
     return chapters
   }
@@ -170,6 +171,10 @@ object ReadAsMatroskaChapters {
     }
     if (hidden) return Pair(false, null)
     return Pair(default, chapters)
+  }
+
+  private fun close() {
+    dataSource.close()
   }
 
   private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
