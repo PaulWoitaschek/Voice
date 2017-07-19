@@ -7,12 +7,17 @@ import org.ebml.MasterElement
 import org.ebml.ProtoType
 import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
+import org.ebml.io.DataSource
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
+import timber.log.Timber
 import java.io.File
 
 
 object ReadAsMatroskaChapters {
+
+  private lateinit var dataSource: DataSource
+  private lateinit var reader: EBMLReader
 
   init {
     // Reference MatroskaDocTypes to force static init of its members which
@@ -20,110 +25,9 @@ object ReadAsMatroskaChapters {
     MatroskaDocTypes.Void.level
   }
 
-  fun read(file: File): List<MatroskaChapter> {
-    val dataSource = FileDataSource(file.path)
-    val reader = EBMLReader(dataSource)
-
-    fun Element.forEachChild(f: (Element) -> Unit) {
-      this as MasterElement
-      var child = readNextChild(reader)
-      while (child != null) {
-        f(child)
-        // Calling skipData is a nop after calling readData/skipData.
-        child.skipData(dataSource)
-        child = readNextChild(reader)
-      }
-    }
-
-    fun Element.readString(): String {
-      this as StringElement
-      readData(dataSource)
-      return value
-    }
-
-    fun Element.readUnsignedInteger(): Long {
-      this as UnsignedIntegerElement
-      readData(dataSource)
-      return value
-    }
-
-    fun Element.readChapterDisplay(): MatroskaChapterName {
-      var name: String? = null
-      val languages = mutableSetOf<String>()
-      forEachChild {
-        when {
-          it isType MatroskaDocTypes.ChapString -> {
-            name = it.readString()
-          }
-          it isType MatroskaDocTypes.ChapLanguage -> {
-            languages.add(it.readString())
-          }
-        }
-      }
-      if (name == null) {
-        throw MatroskaParseException("Missing mandatory ChapterString in ChapterDisplay")
-      }
-      return MatroskaChapterName(name!!, languages)
-    }
-
-    fun Element.readChapterAtom(): MatroskaChapter? {
-      var startTime: Long? = null
-      val names = mutableListOf<MatroskaChapterName>()
-      val children = mutableListOf<MatroskaChapter>()
-      var hidden = false
-      forEachChild {
-        when {
-          it isType MatroskaDocTypes.ChapterTimeStart -> {
-            startTime = it.readUnsignedInteger()
-          }
-          it isType MatroskaDocTypes.ChapterAtom -> {
-            val chapter = it.readChapterAtom()
-            if (chapter != null) children.add(chapter)
-          }
-          it isType MatroskaDocTypes.ChapterDisplay -> {
-            names.add(it.readChapterDisplay())
-          }
-          it isType MatroskaDocTypes.ChapterFlagHidden -> {
-            hidden = it.readUnsignedInteger() == 1L
-          }
-        }
-      }
-      if (hidden) return null
-      if (startTime == null) {
-        throw MatroskaParseException("Missing mandatory ChapterTimeStart element in ChapterAtom")
-      }
-      return MatroskaChapter(startTime!!, names, children)
-    }
-
-    fun Element.readEditionEntry(): Pair<Boolean, List<MatroskaChapter>?> {
-      val chapters = mutableListOf<MatroskaChapter>()
-      var hidden = false
-      var default = false
-      forEachChild {
-        when {
-          it isType MatroskaDocTypes.ChapterAtom -> {
-            val chapter = it.readChapterAtom()
-            if (chapter != null) chapters.add(chapter)
-          }
-          it isType MatroskaDocTypes.EditionFlagHidden -> {
-            hidden = it.readUnsignedInteger() == 1L
-          }
-          it isType MatroskaDocTypes.EditionFlagOrdered -> {
-            if (it.readUnsignedInteger() == 1L) {
-              // Ordered chapters support is problematic,
-              // it varies across players so lets ignore them.
-              hidden = true
-              i { "Ordered chapters in file \"${file.path}\", ignoring affected edition" }
-            }
-          }
-          it isType MatroskaDocTypes.EditionFlagDefault -> {
-            default = it.readUnsignedInteger() == 1L
-          }
-        }
-      }
-      if (hidden) return Pair(false, null)
-      return Pair(default, chapters)
-    }
+  @Synchronized fun read(file: File): List<MatroskaChapter> {
+    Timber.i("read $file")
+    init(file)
 
     val ebmlHeader = reader.readNextElement()
     if (ebmlHeader isType MatroskaDocTypes.EBML) {
@@ -158,6 +62,114 @@ object ReadAsMatroskaChapters {
     }
 
     return chapters
+  }
+
+  private fun init(file: File) {
+    dataSource = FileDataSource(file.path)
+    reader = EBMLReader(dataSource)
+  }
+
+  private fun Element.forEachChild(f: (Element) -> Unit) {
+    this as MasterElement
+    var child = readNextChild(reader)
+    while (child != null) {
+      f(child)
+      // Calling skipData is a nop after calling readData/skipData.
+      child.skipData(dataSource)
+      child = readNextChild(reader)
+    }
+  }
+
+  private fun Element.readString(): String {
+    this as StringElement
+    readData(dataSource)
+    return value
+  }
+
+  private fun Element.readUnsignedInteger(): Long {
+    this as UnsignedIntegerElement
+    readData(dataSource)
+    return value
+  }
+
+  private fun Element.readChapterDisplay(): MatroskaChapterName {
+    var name: String? = null
+    val languages = mutableSetOf<String>()
+    forEachChild {
+      when {
+        it isType MatroskaDocTypes.ChapString -> {
+          name = it.readString()
+        }
+        it isType MatroskaDocTypes.ChapLanguage -> {
+          languages.add(it.readString())
+        }
+      }
+    }
+    if (name == null) {
+      throw MatroskaParseException("Missing mandatory ChapterString in ChapterDisplay")
+    }
+    return MatroskaChapterName(name!!, languages)
+  }
+
+
+  private fun Element.readChapterAtom(): MatroskaChapter? {
+    var startTime: Long? = null
+    val names = mutableListOf<MatroskaChapterName>()
+    val children = mutableListOf<MatroskaChapter>()
+    var hidden = false
+    forEachChild {
+      when {
+        it isType MatroskaDocTypes.ChapterTimeStart -> {
+          startTime = it.readUnsignedInteger()
+        }
+        it isType MatroskaDocTypes.ChapterAtom -> {
+          val chapter = it.readChapterAtom()
+          if (chapter != null) children.add(chapter)
+        }
+        it isType MatroskaDocTypes.ChapterDisplay -> {
+          names.add(it.readChapterDisplay())
+        }
+        it isType MatroskaDocTypes.ChapterFlagHidden -> {
+          hidden = it.readUnsignedInteger() == 1L
+        }
+      }
+    }
+    if (hidden) return null
+    if (startTime == null) {
+      throw MatroskaParseException("Missing mandatory ChapterTimeStart element in ChapterAtom")
+    }
+    return MatroskaChapter(startTime!!, names, children)
+  }
+
+  private fun Element.readEditionEntry(): Pair<Boolean, List<MatroskaChapter>?> {
+    val chapters = mutableListOf<MatroskaChapter>()
+    var hidden = false
+    var default = false
+    forEachChild {
+      when {
+        it isType MatroskaDocTypes.ChapterAtom -> {
+          val chapter = it.readChapterAtom()
+          if (chapter != null) chapters.add(chapter)
+        }
+        it isType MatroskaDocTypes.EditionFlagHidden -> {
+          hidden = it.readUnsignedInteger() == 1L
+        }
+        it isType MatroskaDocTypes.EditionFlagOrdered -> {
+          if (it.readUnsignedInteger() == 1L) {
+            // Ordered chapters support is problematic,
+            // it varies across players so lets ignore them.
+            hidden = true
+            dataSource
+            i { "Ordered chapters. Ignoring affected edition" }
+          }
+        }
+        it isType MatroskaDocTypes.EditionFlagDefault -> {
+          default = it.readUnsignedInteger() == 1L
+        }
+      }
+    }
+    if (hidden) return Pair(false, null)
+    return Pair(default, chapters)
   }
 
   private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
