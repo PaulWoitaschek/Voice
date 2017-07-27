@@ -113,7 +113,6 @@ dependencies {
   testCompile libraries.robolectric
   testCompile libraries.assertJ
   testCompile libraries.mockito
-  testCompile libraries.okHttp
 
   androidTestCompile libraries.supportTestRunner
   androidTestCompile libraries.assertJ

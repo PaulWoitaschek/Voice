@@ -8,9 +8,9 @@ import android.support.v4.content.ContextCompat
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.chapterreader.id3.ID3ChapterReader
 import de.ph1b.audiobook.chapterreader.matroska.MatroskaChapterReader
 import de.ph1b.audiobook.chapterreader.mp4.Mp4ChapterReader
-import de.ph1b.audiobook.features.chapterReader.id3.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.ogg.readChaptersFromOgg
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
@@ -47,7 +47,8 @@ import javax.inject.Singleton
     private val coverCollector: CoverFromDiscCollector,
     private val mediaAnalyzer: MediaAnalyzer,
     private val mp4ChapterReader: Mp4ChapterReader,
-    private val matroskaChapterReader: MatroskaChapterReader
+    private val matroskaChapterReader: MatroskaChapterReader,
+    private val iD3ChapterReader: ID3ChapterReader
 ) {
 
   private val executor = Executors.newSingleThreadExecutor()
@@ -326,7 +327,7 @@ import javax.inject.Singleton
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
         val marks = when (f.extension) {
-          "mp3" -> f.inputStream().use { ID3ChapterReader.readInputStream(it) }
+          "mp3" -> f.inputStream().use { iD3ChapterReader.readInputStream(it).toSparseArray() }
           "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f).toSparseArray()
           "opus", "ogg", "oga" -> f.inputStream().use { readChaptersFromOgg(it) }
           "mka", "mkv", "webm" -> matroskaChapterReader.read(f).toSparseArray()

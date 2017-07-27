@@ -1,13 +1,14 @@
-package de.ph1b.audiobook.features.chapterReader.id3
+package de.ph1b.audiobook.chapterreader.id3
 
-import android.util.SparseArray
+import dagger.Reusable
+import de.ph1b.audiobook.common.Logger
 import de.ph1b.audiobook.common.skipBytes
-import e
 import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.ArrayList
+import javax.inject.Inject
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3
@@ -24,13 +25,13 @@ private const val FRAME_ID_TITLE = "TIT2"
  * Original source from [AntennaPod](https://github.com/AntennaPod/AntennaPod/tree/develop/core/src/main/java/de/danoeh/antennapod/core/util/id3reader)
  * Licensed under Apache 2.0
  */
-object ID3ChapterReader {
+@Reusable class ID3ChapterReader @Inject constructor(private val logger: Logger) {
 
   private val chapters = ArrayList<ChapterMetaData>()
   private var readerPosition: Int = 0
   private var currentChapter: ChapterMetaData? = null
 
-  @Synchronized fun readInputStream(input: InputStream): SparseArray<String> {
+  @Synchronized fun readInputStream(input: InputStream): Map<Int, String> {
     chapters.clear()
 
     try {
@@ -55,12 +56,12 @@ object ID3ChapterReader {
         onEndTag()
       }
     } catch (exception: ID3ReaderException) {
-      e(exception)
+      logger.e(exception)
     } catch (exception: IOException) {
-      e(exception)
+      logger.e(exception)
     }
 
-    val array = SparseArray<String>(chapters.size)
+    val array = HashMap<Int, String>(chapters.size)
     chapters.forEach { (_, start, title) ->
       if (title != null) array.put(start, title)
     }

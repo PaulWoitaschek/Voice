@@ -1,18 +1,17 @@
-package de.ph1b.audiobook.features.chapterReader.id3
+package de.ph1b.audiobook.chapterreader.id3
 
-import de.ph1b.audiobook.misc.toMap
+import de.ph1b.audiobook.chapterreader.matroska.NoOpLogger
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 /**
  * Test for the id3 chapter reader
  */
-@RunWith(RobolectricTestRunner::class)
 class ID3ChapterReaderTest {
+
+  private val id3ChapterReader = ID3ChapterReader(NoOpLogger)
 
   @Test
   fun readInputStream() {
@@ -22,7 +21,7 @@ class ID3ChapterReaderTest {
         .build()
     val call = client.newCall(request)
     val inputStream = call.execute().body()!!.byteStream()
-    val chapters = ID3ChapterReader.readInputStream(inputStream)
+    val chapters = id3ChapterReader.readInputStream(inputStream)
 
     assertThat(chapters.toMap()).isEqualTo(mapOf(
         0 to "Intro",

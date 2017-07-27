@@ -12,6 +12,7 @@ dependencies {
 
   testCompile libraries.assertJ
   testCompile libraries.junit
+  testCompile libraries.okHttp
 }
 
 sourceSets {

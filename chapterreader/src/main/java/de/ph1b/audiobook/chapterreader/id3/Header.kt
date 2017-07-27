@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.id3
+package de.ph1b.audiobook.chapterreader.id3
 
 
 sealed class Header {
