@@ -136,9 +136,6 @@ dependencies {
   compile libraries.conductorLifecycle
 
   compile libraries.moshi
-
-  compile libraries.jebml
-  compile libraries.slf4jAndroid
 }
 
 // task that is an alias for f-droid

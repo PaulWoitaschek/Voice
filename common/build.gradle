@@ -5,7 +5,6 @@ dependencies {
   compile libraries.kotlinStdLib
   testCompile libraries.assertJ
   testCompile libraries.junit
-  compile "javax.inject:javax.inject:1"
 }
 
 targetCompatibility = '1.7'

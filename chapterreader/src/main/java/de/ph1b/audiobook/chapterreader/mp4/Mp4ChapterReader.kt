@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.chapterReader.mp4
+package de.ph1b.audiobook.chapterreader.mp4
 
 import dagger.Reusable
 import de.ph1b.audiobook.common.ErrorReporter

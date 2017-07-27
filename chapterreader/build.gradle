@@ -7,6 +7,17 @@ dependencies {
 
   compile libraries.kotlinStdLib
   compile libraries.dagger
+  compile libraries.jebml
+  compile libraries.slf4
+
+  testCompile libraries.assertJ
+  testCompile libraries.junit
+}
+
+sourceSets {
+  test {
+    output.resourcesDir = output.classesDir
+  }
 }
 
 targetCompatibility = '1.7'

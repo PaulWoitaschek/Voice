@@ -1,17 +1,15 @@
-package de.ph1b.audiobook.features.chapterReader.matroska
-
-import android.util.SparseArray
+package de.ph1b.audiobook.chapterreader.matroska
 
 
 object MatroskaChapterFlattener {
 
-  private lateinit var target: SparseArray<String>
+  private lateinit var target: MutableMap<Int, String>
   private lateinit var preferredLanguages: List<String>
 
   @Synchronized
-  fun toSparseArray(list: List<MatroskaChapter>, preferredLanguages: List<String>): SparseArray<String> {
-    target = SparseArray()
-    this.preferredLanguages = preferredLanguages
+  fun toMap(list: List<MatroskaChapter>, preferredLanguages: List<String>): Map<Int, String> {
+    target = HashMap()
+    MatroskaChapterFlattener.preferredLanguages = preferredLanguages
     addChapter(list, 0)
     return target
   }

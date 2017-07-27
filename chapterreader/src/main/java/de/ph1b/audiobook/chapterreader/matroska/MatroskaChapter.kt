@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.matroska
+package de.ph1b.audiobook.chapterreader.matroska
 
 data class MatroskaChapter(
     val startTime: Long,

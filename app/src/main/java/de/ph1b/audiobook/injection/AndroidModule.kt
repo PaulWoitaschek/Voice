@@ -14,7 +14,9 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import de.ph1b.audiobook.common.ErrorReporter
+import de.ph1b.audiobook.common.Logger
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
+import de.ph1b.audiobook.misc.TimberLogger
 import javax.inject.Singleton
 
 
@@ -33,4 +35,5 @@ import javax.inject.Singleton
   @Provides @Singleton fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
   @Provides @Singleton fun provideMoshi(): Moshi = Moshi.Builder().build()
   @Provides @Singleton fun provideErrorReporter(): ErrorReporter = CrashlyticsProxy
+  @Provides @Singleton fun providerLogger(): Logger = TimberLogger
 }

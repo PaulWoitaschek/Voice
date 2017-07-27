@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.chapterReader.mp4
+package de.ph1b.audiobook.chapterreader.mp4
 
 import de.ph1b.audiobook.common.toUInt
 import java.io.File

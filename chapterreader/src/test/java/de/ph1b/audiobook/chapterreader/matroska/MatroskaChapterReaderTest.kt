@@ -1,19 +1,18 @@
-package de.ph1b.audiobook.features.chapterReader.matroska
+package de.ph1b.audiobook.chapterreader.matroska
 
-import de.ph1b.audiobook.misc.toMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
-@RunWith(RobolectricTestRunner::class)
 class MatroskaChapterReaderTest {
+
+  private val readMatroskaChapters = ReadAsMatroskaChapters(NoOpLogger)
+  private val matroskaChapterReader = MatroskaChapterReader(NoOpLogger, readMatroskaChapters)
 
   @Test
   fun readChapters() {
     Locale.setDefault(Locale("pol", "PL", "Polish"))
-    val actual = MatroskaChapterReader.read(MatroskaTestFileProvider.testFile).toMap()
+    val actual = matroskaChapterReader.read(MatroskaTestFileProvider.testFile)
     assertThat(actual).isEqualTo(MatroskaTestFileProvider.testFileChapters)
   }
 }

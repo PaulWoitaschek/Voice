@@ -1,6 +1,7 @@
-package de.ph1b.audiobook.features.chapterReader.matroska
+package de.ph1b.audiobook.chapterreader.matroska
 
-import i
+import dagger.Reusable
+import de.ph1b.audiobook.common.Logger
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.MasterElement
@@ -9,11 +10,11 @@ import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
-import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
 
-object ReadAsMatroskaChapters {
+@Reusable class ReadAsMatroskaChapters @Inject constructor(private val logger: Logger) {
 
   private lateinit var dataSource: FileDataSource
   private lateinit var reader: EBMLReader
@@ -24,8 +25,9 @@ object ReadAsMatroskaChapters {
     MatroskaDocTypes.Void.level
   }
 
-  @Synchronized fun read(file: File): List<MatroskaChapter> {
-    Timber.i("read $file")
+  @Synchronized
+  fun read(file: File): List<MatroskaChapter> {
+    logger.i("read $file")
     init(file)
 
     val firstElement = reader.readNextElement()
@@ -63,14 +65,14 @@ object ReadAsMatroskaChapters {
         if (it isType MatroskaDocTypes.DocType) {
           val docType = it.readString()
           if (docType != "matroska" && docType != "webm") {
-            Timber.e("DocType $docType is not matroska")
+            logger.e("DocType $docType is not de.ph1b.audiobook.chapterreader.de.ph1b.audiobook.chapterreader.matroska")
             return false
           }
         }
       }
       return true
     } else {
-      Timber.e("EBML Header not the first element in the file")
+      logger.e("EBML Header not the first element in the file")
       return false
     }
   }
@@ -169,8 +171,7 @@ object ReadAsMatroskaChapters {
             // Ordered chapters support is problematic,
             // it varies across players so lets ignore them.
             hidden = true
-            dataSource
-            i { "Ordered chapters. Ignoring affected edition" }
+            logger.i("Ordered chapters. Ignoring affected edition")
           }
         }
         it isType MatroskaDocTypes.EditionFlagDefault -> {

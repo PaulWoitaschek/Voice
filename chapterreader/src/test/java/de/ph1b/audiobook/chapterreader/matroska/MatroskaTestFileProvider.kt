@@ -1,11 +1,12 @@
-package de.ph1b.audiobook.features.chapterReader.matroska
+package de.ph1b.audiobook.chapterreader.matroska
 
 import java.io.File
 
 
 object MatroskaTestFileProvider {
 
-  val testFile = File(javaClass.classLoader.getResource("matroskaChapterReader/simple.mka").path)
+  val file = javaClass.classLoader.getResource("matroska/simple.mka").file
+  val testFile = File(file)
   val testFileMatroskaChapters = listOf(
       MatroskaChapter(0, listOf(
           MatroskaChapterName("Part 1", setOf("eng"))
