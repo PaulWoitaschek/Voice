@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
 
 import android.util.SparseArray
+import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.readLeInt32
 import de.ph1b.audiobook.common.readLeInt64
 import de.ph1b.audiobook.common.readLeUInt32
@@ -16,7 +17,7 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
   return generateSequence gen@ {
     // https://www.ietf.org/rfc/rfc3533.txt
     val capturePattern = try {
-      stream.readBytes(4)
+      stream.readAmountOfBytes(4)
     } catch (_: EOFException) {
       return@gen null
     }
@@ -31,9 +32,9 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
       val pageSequenceNumber = stream.readLeUInt32()
       stream.skipBytes(4)  // checksum
       val numberPageSegments = stream.readUInt8()
-      val segmentTable = stream.readBytes(numberPageSegments)
+      val segmentTable = stream.readAmountOfBytes(numberPageSegments)
       val packets = PackageSizeParser.fromSegmentTable(segmentTable).map {
-        stream.readBytes(it)
+        stream.readAmountOfBytes(it)
       }
 
       OggPage(

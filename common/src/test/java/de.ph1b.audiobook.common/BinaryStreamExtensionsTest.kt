@@ -66,8 +66,8 @@ class BinaryStreamExtensionsTest {
 
   @Test
   fun readBytes() {
-    assertThat(stream.readBytes(4)).isEqualTo(DatatypeConverter.parseHexBinary("6c6f6cff"))
-    assertThat(stream.readBytes(3)).isEqualTo(DatatypeConverter.parseHexBinary("d7904d"))
+    assertThat(stream.readAmountOfBytes(4)).isEqualTo(DatatypeConverter.parseHexBinary("6c6f6cff"))
+    assertThat(stream.readAmountOfBytes(3)).isEqualTo(DatatypeConverter.parseHexBinary("d7904d"))
   }
 
   @Test
@@ -78,6 +78,6 @@ class BinaryStreamExtensionsTest {
 
   @Test(expected = EOFException::class)
   fun endOfBinaryStreamException() {
-    stream.readBytes(100)
+    stream.readAmountOfBytes(100)
   }
 }

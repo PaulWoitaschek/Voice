@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.chapterReader.ogg
 
 import android.util.SparseArray
+import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.startsWith
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggPageParseException
 import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggStream
@@ -55,7 +56,7 @@ private fun readVorbisCommentFromOpusStream(stream: OggStream): VorbisComment {
     throw OpusStreamParseException("Opus tags packet not present")
   val tagsPacket = stream.next()
   val packetStream = ByteArrayInputStream(tagsPacket)
-  val capturePattern = packetStream.readBytes(OPUS_TAGS_MAGIC.size)
+  val capturePattern = packetStream.readAmountOfBytes(OPUS_TAGS_MAGIC.size)
   if (!(capturePattern contentEquals OPUS_TAGS_MAGIC))
     throw OpusStreamParseException("Invalid opus tags capture pattern")
   return VorbisCommentReader.readComment(packetStream)
@@ -69,7 +70,7 @@ private fun readVorbisCommentFromVorbisStream(stream: OggStream): VorbisComment 
     throw VorbisStreamParseException("Vorbis comment header packet not present")
   val tagsPacket = stream.next()
   val packetStream = ByteArrayInputStream(tagsPacket)
-  val capturePattern = packetStream.readBytes(VORBIS_TAGS_MAGIC.size)
+  val capturePattern = packetStream.readAmountOfBytes(VORBIS_TAGS_MAGIC.size)
   if (!(capturePattern contentEquals VORBIS_TAGS_MAGIC))
     throw VorbisStreamParseException("Invalid vorbis comment header capture pattern")
   return VorbisCommentReader.readComment(packetStream)

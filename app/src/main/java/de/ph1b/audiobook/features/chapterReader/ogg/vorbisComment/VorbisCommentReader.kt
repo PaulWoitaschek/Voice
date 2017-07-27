@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment
 
+import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.readLeUInt32
 import java.io.InputStream
 
@@ -12,11 +13,11 @@ object VorbisCommentReader {
    */
   fun readComment(stream: InputStream): VorbisComment {
     val vendorLength = stream.readLeUInt32()
-    val vendor = stream.readBytes(vendorLength.toInt()).toString(Charsets.UTF_8)
+    val vendor = stream.readAmountOfBytes(vendorLength.toInt()).toString(Charsets.UTF_8)
     val numberComments = stream.readLeUInt32()
     val comments = (1..numberComments).map {
       val length = stream.readLeUInt32()
-      val comment = stream.readBytes(length.toInt()).toString(Charsets.UTF_8)
+      val comment = stream.readAmountOfBytes(length.toInt()).toString(Charsets.UTF_8)
       val parts = comment.split("=", limit = 2)
       if (parts.size != 2) throw VorbisCommentParseException("Expected TAG=value comment format")
       Pair(parts[0].toUpperCase(), parts[1])

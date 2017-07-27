@@ -9,7 +9,7 @@ import java.io.InputStream
 
 fun InputStream.skipBytes(number: Int) = IOUtils.skipFully(this, number.toLong())
 
-fun InputStream.readBytes(number: Int): ByteArray {
+fun InputStream.readAmountOfBytes(number: Int): ByteArray {
   val buf = ByteArray(number)
   var index = 0
   while (index < number) {
@@ -27,7 +27,7 @@ fun InputStream.readUInt8(): Int {
 }
 
 fun InputStream.readLeUInt32(): Long {
-  val buf = readBytes(4)
+  val buf = readAmountOfBytes(4)
   return buf[0].toULong() or
       (buf[1].toULong() shl 8) or
       (buf[2].toULong() shl 16) or
@@ -35,7 +35,7 @@ fun InputStream.readLeUInt32(): Long {
 }
 
 fun InputStream.readLeInt32(): Int {
-  val buf = readBytes(4)
+  val buf = readAmountOfBytes(4)
   return buf[0].toUInt() or
       (buf[1].toUInt() shl 8) or
       (buf[2].toUInt() shl 16) or
@@ -43,7 +43,7 @@ fun InputStream.readLeInt32(): Int {
 }
 
 fun InputStream.readLeInt64(): Long {
-  val buf = readBytes(8)
+  val buf = readAmountOfBytes(8)
   return buf[0].toULong() or
       (buf[1].toULong() shl 8) or
       (buf[2].toULong() shl 16) or
@@ -60,5 +60,4 @@ fun ByteArray.startsWith(prefix: ByteArray): Boolean {
 }
 
 fun Byte.toUInt(): Int = toInt() and 0xFF
-
 fun Byte.toULong() = toLong() and 0xFFL
