@@ -1,3 +1,8 @@
+# 3.4.0
+* Ogg chapter marks. Thanks to Marek Rusinowski!
+* Better Android Auto controls + Covers. Thanks to Matthias Kutscheid
+* Chapter fixes
+
 # 3.0.9
 * Update audio-focus correctly so we pause correctly when another app requests audio-focus
 * Replaced firebase with crashlytics
