@@ -24,7 +24,7 @@ open class PrepareFlac : DefaultTask() {
 
     val dstFile = File(jniDir, "flac-$flacVersion.tar.xz")
     if (!dstFile.exists()) {
-      val uri = URI.create("http://downloads.xiph.org/releases/flac/flac-$flacVersion.tar.xz")
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/flac/flac-$flacVersion.tar.xz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
