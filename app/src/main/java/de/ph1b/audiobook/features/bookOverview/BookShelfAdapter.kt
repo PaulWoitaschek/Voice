@@ -15,7 +15,6 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.misc.supportTransitionName
@@ -116,9 +115,9 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
 
   inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
-    private val progressBar = find<ProgressBar>(R.id.progressBar)
-    private val leftTime: TextView = find(R.id.leftTime)
-    private val rightTime: TextView = find(R.id.rightTime)
+    private val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
+    private val leftTime: TextView = itemView.findViewById<TextView>(R.id.leftTime)
+    private val rightTime: TextView = itemView.findViewById<TextView>(R.id.rightTime)
 
     init {
       MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
@@ -144,10 +143,10 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
 
   /** ViewHolder base class **/
   abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val coverView: ImageView = itemView.find(R.id.coverView)
-    private val currentPlayingIndicator: ImageView = itemView.find(R.id.currentPlayingIndicator)
-    private val titleView: TextView = itemView.find(R.id.title)
-    private val editBook: View = itemView.find(R.id.editBook)
+    val coverView: ImageView = itemView.findViewById<ImageView>(R.id.coverView)
+    private val currentPlayingIndicator: ImageView = itemView.findViewById<ImageView>(R.id.currentPlayingIndicator)
+    private val titleView: TextView = itemView.findViewById<TextView>(R.id.title)
+    private val editBook: View = itemView.findViewById<View>(R.id.editBook)
     var indicatorVisible = false
       private set
 

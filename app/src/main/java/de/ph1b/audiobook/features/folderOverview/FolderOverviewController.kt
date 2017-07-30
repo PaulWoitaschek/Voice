@@ -14,7 +14,6 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.FolderOverviewBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
-import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
@@ -29,7 +28,7 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
   override val layoutRes = R.layout.folder_overview
 
   override fun onBindingCreated(binding: FolderOverviewBinding) {
-    buttonRepresentingTheFam = binding.root.find(R.id.fab_expand_menu_button)
+    buttonRepresentingTheFam = binding.root.findViewById<View>(R.id.fab_expand_menu_button)
 
     binding.addAsSingle.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)

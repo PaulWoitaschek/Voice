@@ -75,7 +75,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     binding.eight.setOnClickListener { appendNumber(8) }
     binding.nine.setOnClickListener { appendNumber(9) }
     binding.zero.setOnClickListener { appendNumber(0) }
-    val delete = binding.root.findViewById(R.id.delete)
+    val delete = binding.root.findViewById<View>(R.id.delete)
     // upon delete remove the last number
     delete.setOnClickListener {
       selectedMinutes /= 10

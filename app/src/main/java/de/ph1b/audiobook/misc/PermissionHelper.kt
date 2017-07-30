@@ -19,7 +19,7 @@ class PermissionHelper(private val activity: Activity, private val permissions: 
   private val permissionDialogConfirmed = PublishSubject.create<Unit>()
 
   fun storagePermission(gotPermission: () -> Unit = {}) {
-    val root = activity.findViewById(android.R.id.content)
+    val root = activity.findViewById<View>(android.R.id.content)
     permissions.request(PERMISSION)
         .toObservable()
         .repeatWhen { it.flatMap { permissionDialogConfirmed } }

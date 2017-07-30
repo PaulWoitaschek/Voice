@@ -113,7 +113,7 @@ constructor(
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
-            .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
+            .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
       // update the book
