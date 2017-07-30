@@ -31,7 +31,7 @@ open class PrepareOpus : DefaultTask() {
 
     val dstFile = File(jniDir, "opus-$opusVersion.tar.gz")
     if (!dstFile.exists()) {
-      val uri = URI.create("http://downloads.xiph.org/releases/opus/opus-$opusVersion.tar.gz")
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$opusVersion.tar.gz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
