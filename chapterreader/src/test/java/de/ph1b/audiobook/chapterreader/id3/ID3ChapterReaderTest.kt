@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.chapterreader.id3
 
 import de.ph1b.audiobook.chapterreader.matroska.NoOpLogger
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -15,13 +13,9 @@ class ID3ChapterReaderTest {
 
   @Test
   fun readInputStream() {
-    val client = OkHttpClient.Builder().build()
-    val request = Request.Builder()
-        .url("https://auphonic.com/media/blog/auphonic_chapters_demo.mp3")
-        .build()
-    val call = client.newCall(request)
-    val inputStream = call.execute().body()!!.byteStream()
-    val chapters = id3ChapterReader.readInputStream(inputStream)
+    val file = javaClass.classLoader.getResource("id3/simple.mp3")
+
+    val chapters = id3ChapterReader.readInputStream(file.openStream())
 
     assertThat(chapters).isEqualTo(mapOf(
         0 to "Intro",
