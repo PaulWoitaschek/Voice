@@ -7,11 +7,12 @@ ext.versions = [
     constraintLayout    : "1.0.2",
     crashlytics         : "2.6.8",
     dagger              : "2.11",
-    exoPlayer           : "2.4.3",
+    exoPlayer           : "2.4.4",
     fabric              : "1.23.0",
     floatingActionButton: "1.10.1",
     gradleVersionsPlugin: "0.15.0",
     jebml               : "2.3",
+    supportTestRunner   : "1.0.0",
     jsr250              : "1.0",
     junit               : "4.12",
     kotlin              : "1.1.3-2",
@@ -22,14 +23,14 @@ ext.versions = [
     moshi               : "1.5.0",
     okHttp              : "3.8.1",
     picasso             : "2.5.2",
-    robolectric         : "3.3.2",
+    robolectric         : "3.4",
     rxAndroid           : "2.0.1",
-    rxJava2             : "2.1.1",
-    rxJavaInterop       : "0.10.1",
+    rxJava2             : "2.1.2",
+    rxJavaInterop       : "0.10.2",
     rxPreferences       : "1.0.2",
     slf4                : "1.7.25",
     slimber             : "1.0.6",
-    support             : "25.4.0",
+    support             : "26.0.0",
     targetSdk           : 25,
 ]
 
@@ -78,5 +79,5 @@ ext.libraries = [
     mockito                : "org.mockito:mockito-core:$versions.mockito",
     okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
     robolectric            : "org.robolectric:robolectric:$versions.robolectric",
-    supportTestRunner      : "com.android.support.test:runner:0.5"
+    supportTestRunner      : "com.android.support.test:runner:$versions.supportTestRunner"
 ]
