@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.chapterreader.ogg.vorbisComment
 
-data class VorbisComment(val vendor: String, val comments: Map<String, String>) {
+internal data class VorbisComment(val vendor: String, val comments: Map<String, String>) {
   /**
    * Chapters extracted according to https://wiki.xiph.org/Chapter_Extension
    */

@@ -2,12 +2,12 @@ package de.ph1b.audiobook.chapterreader.mp4
 
 import java.io.EOFException
 import java.io.RandomAccessFile
-import java.util.ArrayList
+import java.util.*
 
 
-data class Mp4Atom(val name: String, val position: Long, val length: Long, val children: List<Mp4Atom>)
+internal data class Mp4Atom(val name: String, val position: Long, val length: Long, val children: List<Mp4Atom>)
 
-fun RandomAccessFile.atoms(toVisit: List<String>, endOfAtom: Long? = null): List<Mp4Atom> {
+internal fun RandomAccessFile.atoms(toVisit: List<String>, endOfAtom: Long? = null): List<Mp4Atom> {
   val atoms = ArrayList<Mp4Atom>()
   while (true) {
     if (filePointer >= length()) break
@@ -33,7 +33,7 @@ fun RandomAccessFile.atoms(toVisit: List<String>, endOfAtom: Long? = null): List
   return atoms
 }
 
-fun List<Mp4Atom>.findAtom(vararg path: String): Mp4Atom? {
+internal fun List<Mp4Atom>.findAtom(vararg path: String): Mp4Atom? {
   if (path.isEmpty()) return null
 
   forEach { root ->
@@ -52,7 +52,7 @@ fun List<Mp4Atom>.findAtom(vararg path: String): Mp4Atom? {
   return firstOrNull { it.name == path.first() }
 }
 
-fun RandomAccessFile.readUnsignedInt(): Long =
+internal fun RandomAccessFile.readUnsignedInt(): Long =
     (read().toLong() and 0xFFL shl 24) or
         (read().toLong() and 0xFFL shl 16) or
         (read().toLong() and 0xFFL shl 8) or
@@ -61,10 +61,10 @@ fun RandomAccessFile.readUnsignedInt(): Long =
 private val boxHeaderBuffer = ByteArray(4)
 
 @Synchronized
-fun RandomAccessFile.readBoxHeader(): String {
+internal fun RandomAccessFile.readBoxHeader(): String {
   val result = read(boxHeaderBuffer)
   if (result == -1) throw EOFException("Can't read box header")
   return String(boxHeaderBuffer)
 }
 
-fun RandomAccessFile.readUInt64(): Long = (readUnsignedInt() shl 32) + readUnsignedInt()
+internal fun RandomAccessFile.readUInt64(): Long = (readUnsignedInt() shl 32) + readUnsignedInt()

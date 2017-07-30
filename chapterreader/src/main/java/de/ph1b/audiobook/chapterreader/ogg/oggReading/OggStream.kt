@@ -1,12 +1,9 @@
 package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
 import java.util.ArrayDeque
-import kotlin.Boolean
-import kotlin.ByteArray
 import kotlin.NoSuchElementException
-import kotlin.Unit
 
-class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<ByteArray> {
+internal class OggStream(private val pullPage: OggStream.() -> Unit) : Iterator<ByteArray> {
   private val packetsQue = ArrayDeque<ByteArray>()
   private val packetBuffer = mutableListOf<ByteArray>()
   private var isDone = false

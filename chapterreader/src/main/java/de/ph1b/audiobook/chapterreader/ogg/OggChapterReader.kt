@@ -13,7 +13,7 @@ import java.io.*
 import javax.inject.Inject
 
 
-@Reusable class OggChapterReader @Inject constructor(
+@Reusable internal class OggChapterReader @Inject constructor(
     private val logger: Logger
 ) {
 

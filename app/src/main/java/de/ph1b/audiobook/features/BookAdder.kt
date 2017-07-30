@@ -8,10 +8,7 @@ import android.support.v4.content.ContextCompat
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
-import de.ph1b.audiobook.chapterreader.id3.ID3ChapterReader
-import de.ph1b.audiobook.chapterreader.matroska.MatroskaChapterReader
-import de.ph1b.audiobook.chapterreader.mp4.Mp4ChapterReader
-import de.ph1b.audiobook.chapterreader.ogg.OggChapterReader
+import de.ph1b.audiobook.chapterreader.ChapterReader
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -38,10 +35,7 @@ import javax.inject.Singleton
     private val repo: BookRepository,
     private val coverCollector: CoverFromDiscCollector,
     private val mediaAnalyzer: MediaAnalyzer,
-    private val mp4ChapterReader: Mp4ChapterReader,
-    private val matroskaChapterReader: MatroskaChapterReader,
-    private val iD3ChapterReader: ID3ChapterReader,
-    private val oggChapterReader: OggChapterReader
+    private val chapterReader: ChapterReader
 ) {
 
   private val executor = Executors.newSingleThreadExecutor()
@@ -319,13 +313,7 @@ import javax.inject.Singleton
       val result = mediaAnalyzer.analyze(f)
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
-        val marks = when (f.extension) {
-          "mp3" -> iD3ChapterReader.read(f)
-          "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f)
-          "opus", "ogg", "oga" -> oggChapterReader.read(f)
-          "mka", "mkv", "webm" -> matroskaChapterReader.read(f)
-          else -> emptyMap()
-        }.toSparseArray()
+        val marks = chapterReader.read(f).toSparseArray()
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()

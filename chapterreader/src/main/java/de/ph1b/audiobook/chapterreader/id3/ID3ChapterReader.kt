@@ -27,7 +27,7 @@ private const val FRAME_ID_TITLE = "TIT2"
  * Original source from [AntennaPod](https://github.com/AntennaPod/AntennaPod/tree/develop/core/src/main/java/de/danoeh/antennapod/core/util/id3reader)
  * Licensed under Apache 2.0
  */
-@Reusable class ID3ChapterReader @Inject constructor(private val logger: Logger) {
+@Reusable internal class ID3ChapterReader @Inject constructor(private val logger: Logger) {
 
   private val chapters = ArrayList<ChapterMetaData>()
   private var readerPosition: Int = 0
@@ -268,5 +268,4 @@ private const val FRAME_ID_TITLE = "TIT2"
     }
   }
 
-  data class ChapterMetaData(var id3ID: String, var start: Int, var title: String? = null)
 }

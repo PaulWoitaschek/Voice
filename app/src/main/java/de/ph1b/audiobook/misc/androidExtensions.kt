@@ -93,6 +93,9 @@ fun <T> SparseArray<T>.equalsTo(other: SparseArray<T>): Boolean {
 }
 
 fun <T> Map<Int, T>.toSparseArray(): SparseArray<T> {
+  if (isEmpty())
+    return emptySparseArray()
+
   val array = SparseArray<T>(size)
   forEach { (key, value) ->
     array.put(key, value)
@@ -100,9 +103,4 @@ fun <T> Map<Int, T>.toSparseArray(): SparseArray<T> {
   return array
 }
 
-val <T> SparseArray<T>.values
-  get() = (0..size() - 1).map { valueAt(it) }
-
 fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
-
-fun SparseArray<*>.isNotEmpty() = size() > 0

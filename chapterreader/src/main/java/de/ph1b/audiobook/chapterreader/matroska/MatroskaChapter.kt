@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.chapterreader.matroska
 
-data class MatroskaChapter(
+internal data class MatroskaChapter(
     val startTime: Long,
     val names: List<MatroskaChapterName>,
     val children: List<MatroskaChapter>

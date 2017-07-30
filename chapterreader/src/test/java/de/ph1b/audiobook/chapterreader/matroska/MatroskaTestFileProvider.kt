@@ -7,7 +7,7 @@ object MatroskaTestFileProvider {
 
   val file = javaClass.classLoader.getResource("matroska/simple.mka").file
   val testFile = File(file)
-  val testFileMatroskaChapters = listOf(
+  internal val testFileMatroskaChapters = listOf(
       MatroskaChapter(0, listOf(
           MatroskaChapterName("Part 1", setOf("eng"))
       ), listOf()),

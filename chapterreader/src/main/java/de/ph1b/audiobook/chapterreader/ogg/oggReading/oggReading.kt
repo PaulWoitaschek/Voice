@@ -6,7 +6,7 @@ import java.io.InputStream
 
 private val OGG_PAGE_MAGIC = "OggS".toByteArray()
 
-fun readOggPages(stream: InputStream): Sequence<OggPage> {
+internal fun readOggPages(stream: InputStream): Sequence<OggPage> {
   return generateSequence gen@ {
     // https://www.ietf.org/rfc/rfc3533.txt
     val capturePattern = try {
@@ -46,7 +46,7 @@ fun readOggPages(stream: InputStream): Sequence<OggPage> {
   }
 }
 
-fun Iterable<ByteArray>.concat(): ByteArray {
+internal fun Iterable<ByteArray>.concat(): ByteArray {
   val res = ByteArray(this.sumBy { it.size })
   var idx = 0
   for (part in this) {
@@ -56,7 +56,7 @@ fun Iterable<ByteArray>.concat(): ByteArray {
   return res
 }
 
-fun demuxOggStreams(oggPages: Sequence<OggPage>): Map<Int, OggStream> {
+internal fun demuxOggStreams(oggPages: Sequence<OggPage>): Map<Int, OggStream> {
   val it = oggPages.iterator()
   val streamMap = HashMap<Int, OggStream>()
 

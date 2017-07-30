@@ -4,10 +4,10 @@ import dagger.Reusable
 import de.ph1b.audiobook.common.Logger
 import java.io.File
 import java.lang.RuntimeException
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
-@Reusable class MatroskaChapterReader @Inject constructor(
+@Reusable internal class MatroskaChapterReader @Inject constructor(
     private val logger: Logger,
     private val readAsMatroskaChapters: ReadAsMatroskaChapters
 ) {

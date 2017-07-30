@@ -3,11 +3,22 @@ package de.ph1b.audiobook.chapterreader.mp4
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.emptyList
+import kotlin.collections.emptyMap
+import kotlin.collections.filter
+import kotlin.collections.firstOrNull
+import kotlin.collections.forEachIndexed
+import kotlin.collections.getOrNull
+import kotlin.collections.listOf
+import kotlin.collections.map
 
 /**
  * Reads the chap atom to find associated chapters
  */
-object ChapReader {
+internal object ChapReader {
 
   fun read(file: File): Map<Int, String> {
     val raf = RandomAccessFile(file, "r")

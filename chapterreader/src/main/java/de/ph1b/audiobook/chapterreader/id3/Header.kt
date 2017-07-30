@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.chapterreader.id3
 
 
-sealed class Header {
+internal sealed class Header {
 
   abstract val id: String
   abstract val size: Int

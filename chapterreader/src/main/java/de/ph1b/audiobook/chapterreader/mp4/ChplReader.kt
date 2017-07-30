@@ -7,7 +7,7 @@ import java.io.RandomAccessFile
 /**
  * Reads chapters from the chpl atom
  */
-object ChplReader {
+internal object ChplReader {
 
   fun read(file: File): Map<Int, String> {
     val raf = RandomAccessFile(file, "r")

@@ -3,7 +3,7 @@ package de.ph1b.audiobook.chapterreader.ogg.oggReading
 import de.ph1b.audiobook.common.toUInt
 
 
-object PackageSizeParser {
+internal object PackageSizeParser {
 
   fun fromSegmentTable(segmentTable: ByteArray): List<Int> = segmentTable
       .map { it.toUInt() }

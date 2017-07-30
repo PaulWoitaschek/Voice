@@ -4,7 +4,7 @@ import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.readLeUInt32
 import java.io.InputStream
 
-object VorbisCommentReader {
+internal object VorbisCommentReader {
 
   private val VORBIS_COMMENT_CHAPTER_TIME_REGEX = Regex("""(\d+):(\d+):(\d+).(\d+)""")
 

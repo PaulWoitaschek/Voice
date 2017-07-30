@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * Reads mp4 chapters
  */
-@Reusable class Mp4ChapterReader @Inject constructor(private val errorReporter: ErrorReporter) {
+@Reusable internal class Mp4ChapterReader @Inject constructor(private val errorReporter: ErrorReporter) {
 
   fun readChapters(file: File): Map<Int, String> {
     val fromChap: Map<Int, String> = try {

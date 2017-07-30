@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
-data class OggPage(
+internal data class OggPage(
     val continuedPacket: Boolean,
     val finishedPacket: Boolean,
     val firstPageOfStream: Boolean,
