@@ -1,6 +1,8 @@
 general:
   artifacts:
     - app/build/outputs/apk
+    - app/build/test-results
+    - app/build/reports
 machine:
   environment:
     GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx4048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -30,5 +32,3 @@ test:
   override:
     - ./gradlew test connectedAndroidTest:
         timeout: 720
-    - cp -r audiobook/build/outputs $CIRCLE_ARTIFACTS
-    - cp -r audiobook/build/test-results/* $CIRCLE_TEST_REPORTS
