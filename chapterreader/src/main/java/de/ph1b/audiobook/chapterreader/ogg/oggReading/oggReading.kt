@@ -1,13 +1,6 @@
-package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
+package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
-import android.util.SparseArray
-import de.ph1b.audiobook.common.readAmountOfBytes
-import de.ph1b.audiobook.common.readLeInt32
-import de.ph1b.audiobook.common.readLeInt64
-import de.ph1b.audiobook.common.readLeUInt32
-import de.ph1b.audiobook.common.readUInt8
-import de.ph1b.audiobook.common.skipBytes
-import de.ph1b.audiobook.common.toUInt
+import de.ph1b.audiobook.common.*
 import java.io.EOFException
 import java.io.InputStream
 
@@ -63,12 +56,12 @@ fun Iterable<ByteArray>.concat(): ByteArray {
   return res
 }
 
-fun demuxOggStreams(oggPages: Sequence<OggPage>): SparseArray<OggStream> {
+fun demuxOggStreams(oggPages: Sequence<OggPage>): Map<Int, OggStream> {
   val it = oggPages.iterator()
-  val streamMap = SparseArray<OggStream>()
+  val streamMap = HashMap<Int, OggStream>()
 
   fun pushToStream(page: OggPage) {
-    streamMap[page.streamSerialNumber].pushPage(page)
+    streamMap[page.streamSerialNumber]!!.pushPage(page)
   }
 
   while (it.hasNext()) {

@@ -23,7 +23,7 @@ class ID3ChapterReaderTest {
     val inputStream = call.execute().body()!!.byteStream()
     val chapters = id3ChapterReader.readInputStream(inputStream)
 
-    assertThat(chapters.toMap()).isEqualTo(mapOf(
+    assertThat(chapters).isEqualTo(mapOf(
         0 to "Intro",
         15000 to "Creating a new production",
         22000 to "Sound analysis",

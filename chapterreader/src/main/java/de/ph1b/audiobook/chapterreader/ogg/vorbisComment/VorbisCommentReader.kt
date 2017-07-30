@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.ogg.vorbisComment
+package de.ph1b.audiobook.chapterreader.ogg.vorbisComment
 
 import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.readLeUInt32

@@ -1,47 +1,41 @@
-package de.ph1b.audiobook.features.chapterReader.ogg
+package de.ph1b.audiobook.chapterreader.ogg
 
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggPage
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.OggStream
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.PackageSizeParser
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.concat
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.demuxOggStreams
-import de.ph1b.audiobook.features.chapterReader.ogg.oggReading.readOggPages
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
-import java.util.Random
+import java.util.*
 
-private fun unsignedByteArrayOf(vararg values: Int) = values.map { it.toByte() }.toByteArray()
 
-private val shuffleRandom = Random()
-
-private fun <T> Iterable<T>.shuffle(): List<T> {
-  val res = this.toMutableList()
-  res.forEachIndexed { i, v ->
-    val pos = shuffleRandom.nextInt(res.size)
-    res[i] = res[pos]
-    res[pos] = v
-  }
-  return res
-}
-
-@RunWith(RobolectricTestRunner::class)
 class OggReadingTest {
+
+  private fun unsignedByteArrayOf(vararg values: Int) = values.map { it.toByte() }.toByteArray()
+
+  private val shuffleRandom = Random()
+
+  private fun <T> Iterable<T>.shuffle(): List<T> {
+    val res = this.toMutableList()
+    res.forEachIndexed { i, v ->
+      val pos = shuffleRandom.nextInt(res.size)
+      res[i] = res[pos]
+      res[pos] = v
+    }
+    return res
+  }
+
   @Test
   fun computePacketSizesFromSegmentTableTest() {
     assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
         255, 255, 14, 255, 0, 255, 255, 17)))
-        .isEqualTo(listOf(2*255 + 14, 255, 2*255 + 17))
+        .isEqualTo(listOf(2 * 255 + 14, 255, 2 * 255 + 17))
     assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
         255, 255, 255, 255, 70, 255, 255)))
-        .isEqualTo(listOf(4*255 + 70, 2*255))
+        .isEqualTo(listOf(4 * 255 + 70, 2 * 255))
   }
 
   @Test
   fun readOggPagesTest() {
-    val oggPagesResource = javaClass.classLoader.getResource("oggChapterReader/ogg_pages.ogg")
+    val oggPagesResource = javaClass.classLoader.getResource("ogg/ogg_pages.ogg")
     val pages = File(oggPagesResource.path).inputStream().use {
       readOggPages(it).toList()
     }
@@ -246,15 +240,15 @@ class OggReadingTest {
     while (!left.isEmpty()) {
       val id = random.nextInt(numStreams)
       if (!left.contains(id)) continue
-      if (oggStreams[id].hasNext()) {
-        oggStreams[id].next()
+      if (oggStreams[id]!!.hasNext()) {
+        oggStreams[id]!!.next()
         ++result[id]
       } else {
         left.remove(id)
       }
     }
 
-    assertThat(result.mapIndexed { i, v -> i to v}.toMap())
+    assertThat(result.mapIndexed { i, v -> i to v }.toMap())
         .isEqualTo(expectedResults)
   }
 }

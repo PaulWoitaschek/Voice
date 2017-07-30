@@ -11,16 +11,8 @@ import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.id3.ID3ChapterReader
 import de.ph1b.audiobook.chapterreader.matroska.MatroskaChapterReader
 import de.ph1b.audiobook.chapterreader.mp4.Mp4ChapterReader
-import de.ph1b.audiobook.features.chapterReader.ogg.readChaptersFromOgg
-import de.ph1b.audiobook.misc.FileRecognition
-import de.ph1b.audiobook.misc.MediaAnalyzer
-import de.ph1b.audiobook.misc.NaturalOrderComparator
-import de.ph1b.audiobook.misc.asV2Observable
-import de.ph1b.audiobook.misc.combineLatest
-import de.ph1b.audiobook.misc.emptySparseArray
-import de.ph1b.audiobook.misc.listFilesSafely
-import de.ph1b.audiobook.misc.toSparseArray
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.chapterreader.ogg.OggChapterReader
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -28,7 +20,7 @@ import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -48,7 +40,8 @@ import javax.inject.Singleton
     private val mediaAnalyzer: MediaAnalyzer,
     private val mp4ChapterReader: Mp4ChapterReader,
     private val matroskaChapterReader: MatroskaChapterReader,
-    private val iD3ChapterReader: ID3ChapterReader
+    private val iD3ChapterReader: ID3ChapterReader,
+    private val oggChapterReader: OggChapterReader
 ) {
 
   private val executor = Executors.newSingleThreadExecutor()
@@ -327,12 +320,12 @@ import javax.inject.Singleton
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
         val marks = when (f.extension) {
-          "mp3" -> f.inputStream().use { iD3ChapterReader.readInputStream(it).toSparseArray() }
-          "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f).toSparseArray()
-          "opus", "ogg", "oga" -> f.inputStream().use { readChaptersFromOgg(it) }
-          "mka", "mkv", "webm" -> matroskaChapterReader.read(f).toSparseArray()
-          else -> emptySparseArray<String>()
-        }
+          "mp3" -> f.inputStream().use { iD3ChapterReader.readInputStream(it) }
+          "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f)
+          "opus", "ogg", "oga" -> f.inputStream().use { oggChapterReader.read(it) }
+          "mka", "mkv", "webm" -> matroskaChapterReader.read(f)
+          else -> emptyMap()
+        }.toSparseArray()
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()

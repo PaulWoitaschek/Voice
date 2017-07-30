@@ -92,12 +92,6 @@ fun <T> SparseArray<T>.equalsTo(other: SparseArray<T>): Boolean {
   }
 }
 
-fun <T> SparseArray<T>.toMap(): Map<Int, T> {
-  val res = HashMap<Int, T>(size())
-  forEachIndexed { _, key, value -> res.put(key, value) }
-  return res
-}
-
 fun <T> Map<Int, T>.toSparseArray(): SparseArray<T> {
   val array = SparseArray<T>(size)
   forEach { (key, value) ->

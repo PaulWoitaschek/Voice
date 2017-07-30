@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
+package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
 data class OggPage(
     val continuedPacket: Boolean,

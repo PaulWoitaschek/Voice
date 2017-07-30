@@ -1,3 +1,3 @@
-package de.ph1b.audiobook.features.chapterReader.ogg.oggReading
+package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
 class OggPageParseException(message: String) : Exception(message)
