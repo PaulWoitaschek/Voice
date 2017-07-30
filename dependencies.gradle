@@ -1,8 +1,8 @@
 ext.versions = [
     androidPlugin       : "2.3.3",
     assertJ             : "1.7.1",
-    buildTools          : "25.0.3",
-    compileSdk          : 25,
+    buildTools          : "26.0.1",
+    compileSdk          : 26,
     conductor           : "2.1.4",
     constraintLayout    : "1.0.2",
     crashlytics         : "2.6.8",
