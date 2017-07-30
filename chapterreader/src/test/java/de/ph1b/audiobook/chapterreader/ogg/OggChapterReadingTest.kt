@@ -17,10 +17,8 @@ class OggChapterReadingTest {
 
   @Test
   fun readChaptersFromOggOpusTest() {
-    val simpleOpusResource = javaClass.classLoader.getResource("ogg/simple.opus")
-    val chapters = File(simpleOpusResource.path).inputStream().use {
-      oggChapterReader.read(it)
-    }
+    val file = File(javaClass.classLoader.getResource("ogg/simple.opus").file)
+    val chapters = oggChapterReader.read(file)
 
     assertThat(chapters).isEqualTo(mapOf(
         0 to "Chapter 1",
@@ -32,10 +30,8 @@ class OggChapterReadingTest {
 
   @Test
   fun readChaptersFromOggVorbisTest() {
-    val simpleOpusResource = javaClass.classLoader.getResource("ogg/simple_vorbis.ogg")
-    val chapters = File(simpleOpusResource.path).inputStream().use {
-      oggChapterReader.read(it)
-    }
+    val file = File(javaClass.classLoader.getResource("ogg/simple_vorbis.ogg").file)
+    val chapters = oggChapterReader.read(file)
 
     assertThat(chapters).isEqualTo(mapOf(
         0 to "Part 1",

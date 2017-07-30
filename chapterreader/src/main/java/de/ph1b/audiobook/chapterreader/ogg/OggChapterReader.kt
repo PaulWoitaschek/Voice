@@ -9,10 +9,7 @@ import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.*
 import de.ph1b.audiobook.common.Logger
 import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.startsWith
-import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 import javax.inject.Inject
 
 
@@ -25,7 +22,11 @@ import javax.inject.Inject
   private val VORBIS_HEAD_MAGIC = "${1.toChar()}vorbis".toByteArray()
   private val VORBIS_TAGS_MAGIC = "${3.toChar()}vorbis".toByteArray()
 
-  fun read(inputStream: InputStream): Map<Int, String> {
+  fun read(file: File) = file.inputStream().use {
+    read(it)
+  }
+
+  private fun read(inputStream: InputStream): Map<Int, String> {
     try {
       val oggPages = readOggPages(BufferedInputStream(inputStream))
       val streams = demuxOggStreams(oggPages).values

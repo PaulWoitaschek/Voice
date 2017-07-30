@@ -322,7 +322,7 @@ import javax.inject.Singleton
         val marks = when (f.extension) {
           "mp3" -> iD3ChapterReader.read(f)
           "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f)
-          "opus", "ogg", "oga" -> f.inputStream().use { oggChapterReader.read(it) }
+          "opus", "ogg", "oga" -> oggChapterReader.read(f)
           "mka", "mkv", "webm" -> matroskaChapterReader.read(f)
           else -> emptyMap()
         }.toSparseArray()
