@@ -320,7 +320,7 @@ import javax.inject.Singleton
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
         val marks = when (f.extension) {
-          "mp3" -> f.inputStream().use { iD3ChapterReader.readInputStream(it) }
+          "mp3" -> iD3ChapterReader.read(f)
           "mp4", "m4a", "m4b", "aac" -> mp4ChapterReader.readChapters(f)
           "opus", "ogg", "oga" -> f.inputStream().use { oggChapterReader.read(it) }
           "mka", "mkv", "webm" -> matroskaChapterReader.read(f)

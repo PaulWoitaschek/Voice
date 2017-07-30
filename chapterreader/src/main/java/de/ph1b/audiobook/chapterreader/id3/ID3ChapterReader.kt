@@ -3,12 +3,14 @@ package de.ph1b.audiobook.chapterreader.id3
 import dagger.Reusable
 import de.ph1b.audiobook.common.Logger
 import de.ph1b.audiobook.common.skipBytes
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.ArrayList
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3
@@ -31,7 +33,11 @@ private const val FRAME_ID_TITLE = "TIT2"
   private var readerPosition: Int = 0
   private var currentChapter: ChapterMetaData? = null
 
-  @Synchronized fun readInputStream(input: InputStream): Map<Int, String> {
+  fun read(file: File): Map<Int, String> = file.inputStream().use {
+    readInputStream(it)
+  }
+
+  @Synchronized private fun readInputStream(input: InputStream): Map<Int, String> {
     chapters.clear()
 
     try {

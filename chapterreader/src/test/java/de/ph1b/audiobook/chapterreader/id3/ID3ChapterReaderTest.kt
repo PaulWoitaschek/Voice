@@ -3,19 +3,18 @@ package de.ph1b.audiobook.chapterreader.id3
 import de.ph1b.audiobook.chapterreader.matroska.NoOpLogger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import java.io.File
 
-/**
- * Test for the id3 chapter reader
- */
+
 class ID3ChapterReaderTest {
 
   private val id3ChapterReader = ID3ChapterReader(NoOpLogger)
 
   @Test
-  fun readInputStream() {
-    val file = javaClass.classLoader.getResource("id3/simple.mp3")
+  fun testRead() {
+    val file = File(javaClass.classLoader.getResource("id3/simple.mp3").file)
 
-    val chapters = id3ChapterReader.readInputStream(file.openStream())
+    val chapters = id3ChapterReader.read(file)
 
     assertThat(chapters).isEqualTo(mapOf(
         0 to "Intro",
