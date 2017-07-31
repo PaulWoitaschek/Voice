@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.imagepicker
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v4.view.MenuItemCompat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -192,7 +191,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
         binding.webView.loadUrl(originalUrl)
       } else binding.webView.reload()
     }
-    MenuItemCompat.setActionView(refreshItem, rotateView)
+    refreshItem.actionView = rotateView
 
     webViewIsLoading
         .filter { it }
