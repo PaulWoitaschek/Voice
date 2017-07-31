@@ -31,7 +31,7 @@ ext.versions = [
     slf4                : "1.7.25",
     slimber             : "1.0.6",
     support             : "26.0.0",
-    targetSdk           : 25,
+    targetSdk           : 26,
 ]
 
 ext.libraries = [

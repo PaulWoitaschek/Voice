@@ -4,8 +4,9 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
+import android.support.v4.app.NotificationCompat
+import android.support.v4.media.app.NotificationCompat.MediaStyle
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v7.app.NotificationCompat
 import android.view.KeyEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
@@ -23,7 +24,12 @@ import javax.inject.Inject
  * Provides Notifications based on playing information.
  */
 class NotificationAnnouncer
-@Inject constructor(private val context: Context, private val imageHelper: ImageHelper, private val serviceController: ServiceController) {
+@Inject constructor(
+    private val context: Context,
+    private val imageHelper: ImageHelper,
+    private val serviceController: ServiceController,
+    private val notificationChannelCreator: NotificationChannelCreator
+) {
 
   var cachedImage: CachedImage? = null
 
@@ -56,7 +62,7 @@ class NotificationAnnouncer
   }
 
   fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
-    val notificationBuilder = NotificationCompat.Builder(context)
+    val notificationBuilder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
     val chapter = book.currentChapter()
 
     val chapters = book.chapters
@@ -94,7 +100,7 @@ class NotificationAnnouncer
     val contentPI = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
     return notificationBuilder
-        .setStyle(NotificationCompat.MediaStyle()
+        .setStyle(MediaStyle()
             .setShowActionsInCompactView(0, 1, 2)
             .setCancelButtonIntent(stopPI)
             .setShowCancelButton(true)
