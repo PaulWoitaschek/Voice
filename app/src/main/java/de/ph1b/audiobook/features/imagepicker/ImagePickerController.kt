@@ -107,7 +107,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     }
     // necessary, else the image capturing does not include the web view. Very performance costly.
     binding.webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-    binding.webView.setWebViewClient(object : WebViewClient() {
+    binding.webView.webViewClient = object : WebViewClient() {
 
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
@@ -131,7 +131,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
         binding.noNetwork.visible = true
         binding.webViewContainer.visible = false
       }
-    })
+    }
 
     // after first successful load set visibilities
     webViewIsLoading
