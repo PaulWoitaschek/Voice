@@ -20,18 +20,16 @@ open class PrepareFlac : DefaultTask() {
       return
     flacDir.delete()
 
-    val flacVersion = "1.3.1"
-
-    val dstFile = File(jniDir, "flac-$flacVersion.tar.xz")
+    val dstFile = File(jniDir, "flac-$VERSION_FLAC.tar.xz")
     if (!dstFile.exists()) {
-      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/flac/flac-$flacVersion.tar.xz")
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/flac/flac-$VERSION_FLAC.tar.xz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
 
     // extract and rename it
     execute("tar -xvf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\"")
-    val extractedFolder = File(jniDir, "flac-$flacVersion")
+    val extractedFolder = File(jniDir, "flac-$VERSION_FLAC")
     extractedFolder.renameTo(flacDir)
     if (flacDir.listFiles()?.size ?: 0 <= 0)
       throw IllegalStateException("FlacDir is empty")
