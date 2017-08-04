@@ -29,13 +29,12 @@ Some rules for coding:
 ### Building the project on windows
 If you want to build the project on windows you will run into some issues since the pre-build scripts use linux specific commands. 
 
-To fix the build you'll have to download the libraries necessary for ExoPlayer from 
-[here (opus)](https://ftp.osuosl.org/pub/xiph/releases/opus/) and 
-[here (flac)](https://ftp.osuosl.org/pub/xiph/releases/flac/)
- and unzip those files to the exoplayer-flac and exoplayer-opus submodules' `src/main/jni` folders.
- This step has to be done only once and only has to be repeated when the referenced versions change.
- 
- The current versions can be found [here](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/blob/master/buildSrc/src/main/java/de/ph1b/audiobook/ndkGen/dependencyVersions.kt).
+To prepare the build you have to download [Opus](https://ftp.osuosl.org/pub/xiph/releases/opus/) and 
+[Flac](https://ftp.osuosl.org/pub/xiph/releases/flac/) and unzip those files to the `exoplayer-flac` and `exoplayer-opus` submodules' `src/main/jni` folders.
+
+The current versions can be found [here](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/blob/master/buildSrc/src/main/java/de/ph1b/audiobook/ndkGen/dependencyVersions.kt).
+
+This step has to be done only once and has to be repeated when a referenced version change.
 
 ## <a name="trans">Translations</a>
 The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
