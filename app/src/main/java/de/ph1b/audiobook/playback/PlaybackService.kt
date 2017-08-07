@@ -138,7 +138,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             d { "onPlayStateManager.PlayStateChanged:$it" }
             val controllerBook = player.book()
             if (controllerBook != null) {
-              when (it) {
+              when (it!!) {
                 PlayState.PLAYING -> {
                   if (!currentlyHasFocus) {
                     d { "we don't have focus so we request it now" }
