@@ -21,14 +21,8 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:clipToPadding="false"
             android:paddingBottom="100dp"
-            android:paddingTop="2dp"/>
-
-        <de.ph1b.audiobook.uitools.Scroller
-            android:id="@+id/scroller"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_marginTop="?attr/actionBarSize"/>
+            android:paddingTop="2dp"
+            android:scrollbars="vertical"/>
 
         <ProgressBar
             android:id="@+id/loadingProgress"

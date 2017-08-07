@@ -93,8 +93,6 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
     linearLayoutManager = LinearLayoutManager(activity)
 
-    binding.scroller.attachTo(binding.recyclerView)
-
     updateDisplayMode()
   }
 
