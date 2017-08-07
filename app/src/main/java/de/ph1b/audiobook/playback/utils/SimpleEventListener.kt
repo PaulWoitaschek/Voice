@@ -18,4 +18,5 @@ interface SimpleEventListener : ExoPlayer.EventListener {
   override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) {}
   override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {}
   override fun onPlaybackParametersChanged(p0: PlaybackParameters?) {}
+  override fun onRepeatModeChanged(p0: Int) {}
 }
