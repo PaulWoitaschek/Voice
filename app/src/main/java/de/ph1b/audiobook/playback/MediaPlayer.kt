@@ -1,10 +1,11 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
-import android.media.AudioManager
-import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import d
 import de.ph1b.audiobook.Book
@@ -65,7 +66,10 @@ constructor(
   val bookStream = bookSubject.hide()!!
 
   init {
-    player.audioStreamType = AudioManager.STREAM_MUSIC
+    player.audioAttributes = AudioAttributes.Builder()
+        .setContentType(C.CONTENT_TYPE_SPEECH)
+        .setUsage(C.USAGE_MEDIA)
+        .build()
 
     // delegate player state changes
     player.onStateChanged { state = it }
@@ -129,7 +133,7 @@ constructor(
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
-    if (player.playbackState == ExoPlayer.STATE_IDLE || bookSubject.value != book) {
+    if (player.playbackState == Player.STATE_IDLE || bookSubject.value != book) {
       i { "init called with ${book.name}" }
       bookSubject.onNext(book)
       player.playWhenReady = false
