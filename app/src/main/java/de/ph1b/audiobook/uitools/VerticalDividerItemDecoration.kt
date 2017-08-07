@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.Px
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ItemDecoration
 import android.support.v7.widget.RecyclerView.State
@@ -33,7 +32,7 @@ class VerticalDividerItemDecoration(context: Context, @Px private val leftMargin
     for (i in 0 until childCount - 1) {
       val child = parent.getChildAt(i)
       parent.getDecoratedBoundsWithMargins(child, bounds)
-      val bottom = bounds.bottom + Math.round(ViewCompat.getTranslationY(child))
+      val bottom = bounds.bottom + Math.round(child.translationY)
       val top = bottom - divider.intrinsicHeight
       divider.setBounds(leftMargin, top, right, bottom)
       divider.draw(c)
