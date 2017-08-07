@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.audio.AudioDecoderException;
 /**
  * Thrown when an Opus decoder error occurs.
  */
-public final class OpusDecoderException extends AudioDecoderException {
+@SuppressWarnings("ALL") public final class OpusDecoderException extends AudioDecoderException {
 
   /* package */ OpusDecoderException(String message) {
     super(message);

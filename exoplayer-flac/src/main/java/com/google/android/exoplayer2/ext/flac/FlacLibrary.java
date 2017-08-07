@@ -15,6 +15,7 @@
  */
 package com.google.android.exoplayer2.ext.flac;
 
+import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.util.LibraryLoader;
 
 /**
@@ -24,12 +25,18 @@ import com.google.android.exoplayer2.util.LibraryLoader;
 
   private static final LibraryLoader LOADER = new LibraryLoader("flacJNI");
 
+  static {
+    ExoPlayerLibraryInfo.registerModule("goog.exo.flac");
+  }
+
   private FlacLibrary() {}
 
   /**
    * Override the names of the Flac native libraries. If an application wishes to call this method,
    * it must do so before calling any other method defined by this class, and before instantiating
    * any {@link LibflacAudioRenderer} and {@link FlacExtractor} instances.
+   *
+   * @param libraries The names of the Flac native libraries.
    */
   public static void setLibraries(String... libraries) {
     LOADER.setLibraries(libraries);

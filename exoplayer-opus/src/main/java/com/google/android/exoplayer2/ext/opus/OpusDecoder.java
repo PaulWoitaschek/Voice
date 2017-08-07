@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Opus decoder.
  */
-/* package */ final class OpusDecoder extends
+/* package */ @SuppressWarnings("ALL") final class OpusDecoder extends
     SimpleDecoder<DecoderInputBuffer, SimpleOutputBuffer, OpusDecoderException> {
 
   private static final int DEFAULT_SEEK_PRE_ROLL_SAMPLES = 3840;
@@ -206,6 +206,20 @@ import java.util.List;
   public void release() {
     super.release();
     opusClose(nativeDecoderContext);
+  }
+
+  /**
+   * Returns the channel count of output audio.
+   */
+  public int getChannelCount() {
+    return channelCount;
+  }
+
+  /**
+   * Returns the sample rate of output audio.
+   */
+  public int getSampleRate() {
+    return SAMPLE_RATE;
   }
 
   private native long opusInit(int sampleRate, int channelCount, int numStreams, int numCoupled,
