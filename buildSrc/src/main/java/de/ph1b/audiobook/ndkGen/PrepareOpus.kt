@@ -27,11 +27,9 @@ open class PrepareOpus : DefaultTask() {
       return
     opusDir.delete()
 
-    val opusVersion = "1.1.4"
-
-    val dstFile = File(jniDir, "opus-$opusVersion.tar.gz")
+    val dstFile = File(jniDir, "opus-$VERSION_OPUS.tar.gz")
     if (!dstFile.exists()) {
-      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$opusVersion.tar.gz")
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$VERSION_OPUS.tar.gz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
@@ -40,7 +38,7 @@ open class PrepareOpus : DefaultTask() {
     execute(
         command = "tar -xzf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\""
     )
-    val extractedFolder = File(jniDir, "opus-$opusVersion")
+    val extractedFolder = File(jniDir, "opus-$VERSION_OPUS")
     extractedFolder.renameTo(opusDir)
 
     execute(

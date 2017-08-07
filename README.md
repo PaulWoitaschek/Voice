@@ -24,7 +24,17 @@ Its always a good idea to talk about what are going to do before you actually st
 Some rules for coding:
 * Use the code style the project uses
 * For each feature, make a seperate branch, so it can be reviewed separately
-* Use commits with a good description, so one can see, what you did
+* Use commits with a good description, so everyone can see, what you did
+
+### Building the project on windows
+If you want to build the project on windows you will run into some issues since the pre-build scripts use linux specific commands. 
+
+To prepare the build you have to download [Opus](https://ftp.osuosl.org/pub/xiph/releases/opus/) and 
+[Flac](https://ftp.osuosl.org/pub/xiph/releases/flac/) and unzip those files to the `exoplayer-flac` and `exoplayer-opus` submodules' `src/main/jni` folders.
+
+The current versions can be found [here](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/blob/master/buildSrc/src/main/java/de/ph1b/audiobook/ndkGen/dependencyVersions.kt).
+
+This step has to be done only once and has to be repeated when a referenced version change.
 
 ## <a name="trans">Translations</a>
 The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
@@ -32,6 +42,6 @@ The project page is on [transifex](https://www.transifex.com/projects/p/material
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2014 [Paul Woitaschek](http://www.paul-woitaschek.de/)
+Copyright (C) 2017 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
