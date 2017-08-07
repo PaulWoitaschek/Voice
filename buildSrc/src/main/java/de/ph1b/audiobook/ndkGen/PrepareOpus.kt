@@ -10,37 +10,25 @@ open class PrepareOpus : DefaultTask() {
 
   var ndkDir: String = ""
 
+  private val jniDir = File(project.projectDir, "src/main/jni")
+  private val version = VERSION_OPUS
+
   @TaskAction
   fun prepare() {
-    logger.error("###")
-    logger.error(ndkDir)
-    if (!File(ndkDir).exists())
-      throw IllegalArgumentException("Invalid ndkDir $ndkDir")
-
-    val jniDir = File(project.projectDir, "src/main/jni")
-
-    // if the opus sources already exist, skip
+    check(ndkDirExists()) { "Invalid ndkDir=$ndkDir" }
     val opusDir = File(jniDir, "libopus")
-
-    d(opusDir.absolutePath)
-    if (opusDir.listFilesSafely().isNotEmpty())
+    if (validateLibrary(opusDir, version)) {
+      logger.debug("Opus exists already.")
       return
-    opusDir.delete()
-
-    val dstFile = File(jniDir, "opus-$VERSION_OPUS.tar.gz")
-    if (!dstFile.exists()) {
-      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$VERSION_OPUS.tar.gz")
-      download(uri, dstFile)
     }
-    d("downloaded to $dstFile")
-
-    // extract and rename it
-    execute(
-        command = "tar -xzf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\""
-    )
-    val extractedFolder = File(jniDir, "opus-$VERSION_OPUS")
+    opusDir.deleteRecursively()
+    val dstFile = downloadArchive()
+    val extractedFolder = extractArchive(dstFile)
     extractedFolder.renameTo(opusDir)
+    build()
+  }
 
+  private fun build() {
     execute(
         command = "./convert_android_asm.sh",
         directory = jniDir
@@ -50,5 +38,32 @@ open class PrepareOpus : DefaultTask() {
         command = "$ndkDir/ndk-build APP_ABI=\"mips64 mips x86_64 x86 arm64-v8a armeabi-v7a\" -j4",
         directory = jniDir
     )
+
+    logger.debug("Pre-Build success")
+  }
+
+  private fun extractArchive(dstFile: File): File {
+    execute(
+        command = "tar -xzf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\""
+    )
+    val extractedFolder = File(jniDir, "opus-$version")
+    createVersionFile(extractedFolder, version)
+    logger.debug("Extracted successfully")
+    return extractedFolder
+  }
+
+  private fun downloadArchive(): File {
+    logger.debug("Download")
+    val dstFile = File(jniDir, "opus-$version.tar.gz")
+    if (!dstFile.exists()) {
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$version.tar.gz")
+      download(uri, dstFile)
+    }
+    d("downloaded to $dstFile")
+    return dstFile
+  }
+
+  private fun ndkDirExists(): Boolean {
+    return File(ndkDir).exists()
   }
 }

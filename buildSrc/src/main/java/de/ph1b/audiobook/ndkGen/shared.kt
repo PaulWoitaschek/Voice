@@ -47,6 +47,20 @@ fun download(what: URI, to: File) {
   tmpFile.renameTo(to)
 }
 
+fun validateLibrary(file: File, version: String): Boolean {
+  val hasContents = file.listFilesSafely().isNotEmpty()
+  val hasVersionFile = versionFile(file, version).exists()
+  return hasContents && hasVersionFile
+}
+
+fun createVersionFile(parent: File, version: String) {
+  val versionFile = versionFile(parent, version)
+  versionFile.createNewFile()
+  check(versionFile.exists())
+}
+
+private fun versionFile(parent: File, version: String) = File(parent, "VERSION_$version")
+
 fun Task.d(message: Any?) {
   logger.debug(message.toString())
 }

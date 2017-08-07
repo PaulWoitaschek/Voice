@@ -9,27 +9,34 @@ import java.net.URI
 @Suppress("unused")
 open class PrepareFlac : DefaultTask() {
 
+  private val jniDir = File(project.projectDir, "src/main/jni")
+  private val version: String = VERSION_FLAC
+
   @TaskAction
   fun prepare() {
-
-    val jniDir = File(project.projectDir, "src/main/jni/")
-
-    // if the flac sources already exist, skip
     val flacDir = File(jniDir, "flac")
-    if (flacDir.listFilesSafely().isNotEmpty())
+    if (validateLibrary(flacDir, version)) {
       return
-    flacDir.delete()
+    }
+    flacDir.deleteRecursively()
+    val dstFile = downloadArchive()
+    extractArchive(dstFile, flacDir)
+  }
 
-    val dstFile = File(jniDir, "flac-$VERSION_FLAC.tar.xz")
+  private fun downloadArchive(): File {
+    val dstFile = File(jniDir, "flac-$version.tar.xz")
     if (!dstFile.exists()) {
-      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/flac/flac-$VERSION_FLAC.tar.xz")
+      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/flac/flac-$version.tar.xz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
+    return dstFile
+  }
 
-    // extract and rename it
+  private fun extractArchive(dstFile: File, flacDir: File) {
     execute("tar -xvf \"${dstFile.absolutePath}\" -C \"${dstFile.parentFile.absolutePath}\"")
-    val extractedFolder = File(jniDir, "flac-$VERSION_FLAC")
+    val extractedFolder = File(jniDir, "flac-$version")
+    createVersionFile(extractedFolder, version)
     extractedFolder.renameTo(flacDir)
     if (flacDir.listFiles()?.size ?: 0 <= 0)
       throw IllegalStateException("FlacDir is empty")
