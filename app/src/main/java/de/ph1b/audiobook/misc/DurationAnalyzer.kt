@@ -2,8 +2,8 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import d
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
@@ -42,9 +42,9 @@ class DurationAnalyzer
 
   private fun waitForIdle() = playbackStateSubject
       .doOnSubscribe {
-        if (playbackStateSubject.value != ExoPlayer.STATE_IDLE) exoPlayer.stop()
+        if (playbackStateSubject.value != Player.STATE_IDLE) exoPlayer.stop()
       }
-      .filter { it == ExoPlayer.STATE_IDLE }
+      .filter { it == Player.STATE_IDLE }
       .firstOrError()
 
   private fun scan(file: File) = playbackStateSubject
@@ -54,8 +54,8 @@ class DurationAnalyzer
       }
       .filter {
         when (it) {
-          ExoPlayer.STATE_READY -> true
-          ExoPlayer.STATE_BUFFERING, ExoPlayer.STATE_IDLE -> false
+          Player.STATE_READY -> true
+          Player.STATE_BUFFERING, Player.STATE_IDLE -> false
           else -> throw IOException()
         }
       }

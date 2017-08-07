@@ -3,6 +3,7 @@ package de.ph1b.audiobook.playback.utils
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import de.ph1b.audiobook.playback.PlayerState
 
@@ -14,9 +15,9 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(object : SimpleEventListener {
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
       val state = when (playbackState) {
-        ExoPlayer.STATE_ENDED -> PlayerState.ENDED
-        ExoPlayer.STATE_IDLE -> PlayerState.IDLE
-        ExoPlayer.STATE_READY, ExoPlayer.STATE_BUFFERING -> {
+        Player.STATE_ENDED -> PlayerState.ENDED
+        Player.STATE_IDLE -> PlayerState.IDLE
+        Player.STATE_READY, Player.STATE_BUFFERING -> {
           if (playWhenReady) PlayerState.PLAYING
           else PlayerState.PAUSED
         }
