@@ -10,7 +10,6 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
-import android.telephony.TelephonyManager
 import d
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.misc.RxBroadcast
@@ -25,7 +24,7 @@ import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
-import i
+import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import v
@@ -42,7 +41,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
   private val disposables = CompositeDisposable()
-  private var currentlyHasFocus = false
 
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
@@ -53,52 +51,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
-  @Inject lateinit var telephonyManager: TelephonyManager
   @Inject lateinit var mediaSession: MediaSessionCompat
   @Inject lateinit var changeNotifier: ChangeNotifier
   @Inject lateinit var autoConnected: AndroidAutoConnection
-
-  private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-    i { "audio focus listener got focus $focusChange" }
-
-    currentlyHasFocus = focusChange == AudioManager.AUDIOFOCUS_GAIN
-
-    val callState = telephonyManager.callState
-    if (callState != TelephonyManager.CALL_STATE_IDLE) {
-      d { "Call state is $callState. Pausing now" }
-      val wasPlaying = playStateManager.playState == PlayState.PLAYING
-      player.pause(true)
-      playStateManager.pauseReason = if (wasPlaying) PauseReason.CALL else PauseReason.NONE
-    } else {
-      when (focusChange) {
-        AudioManager.AUDIOFOCUS_GAIN -> {
-          d { "gain" }
-          val pauseReason = playStateManager.pauseReason
-          if (pauseReason == PauseReason.LOSS_TRANSIENT) {
-            d { "loss was transient so start playback" }
-            player.play()
-          } else if (pauseReason == PauseReason.CALL && prefs.resumeAfterCall.value) {
-            d { "we were paused because of a call and we should resume after a call. Start playback" }
-            player.play()
-          }
-        }
-        AudioManager.AUDIOFOCUS_LOSS -> {
-          d { "paused by audioFocus loss" }
-          player.pause(rewind = true)
-          playStateManager.pauseReason = PauseReason.NONE
-        }
-        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-          if (playStateManager.playState == PlayState.PLAYING) {
-            d { "Paused by audio-focus loss transient." }
-            // Pause is temporary, don't rewind
-            player.pause(rewind = false)
-            playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-          }
-        }
-        else -> d { "ignore audioFocus=$focusChange" }
-      }
-    }
-  }
+  @Inject lateinit var audioFocusHelper: AudioFocusHandler
 
   override fun onCreate() {
     AndroidInjection.inject(this)
@@ -134,43 +90,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       // handle changes on the play state
       add(playStateManager.playStateStream()
           .observeOn(Schedulers.io())
-          .subscribe {
-            d { "onPlayStateManager.PlayStateChanged:$it" }
-            val controllerBook = player.book()
-            if (controllerBook != null) {
-              when (it!!) {
-                PlayState.PLAYING -> {
-                  if (!currentlyHasFocus) {
-                    d { "we don't have focus so we request it now" }
-                    val grantResult = audioManager.requestAudioFocus(audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-                    currentlyHasFocus = grantResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
-                    d { "request granted=$currentlyHasFocus" }
-                  }
-
-                  mediaSession.isActive = true
-                  d { "set mediaSession to active" }
-                  val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
-                  startForeground(NOTIFICATION_ID, notification)
-                }
-                PlayState.PAUSED -> {
-                  stopForeground(false)
-                  val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
-                  notificationManager.notify(NOTIFICATION_ID, notification)
-                }
-                PlayState.STOPPED -> {
-                  mediaSession.isActive = false
-                  d { "Set mediaSession to inactive" }
-
-                  audioManager.abandonAudioFocus(audioFocusListener)
-                  currentlyHasFocus = false
-                  notificationManager.cancel(NOTIFICATION_ID)
-                  stopForeground(true)
-                }
-              }
-
-              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook, autoConnected.connected)
-            }
-          })
+          .subscribe { handlePlaybackState(it) })
 
       // resume playback when headset is reconnected. (if settings are set)
       add(HeadsetPlugReceiver.events(this@PlaybackService)
@@ -200,6 +120,44 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
           })
     }
+  }
+
+  private fun handlePlaybackState(state: PlayState) {
+    d { "handlePlaybackState $state" }
+    when (state) {
+      PlayState.PLAYING -> handlePlaybackStatePlaying()
+      PlayState.PAUSED -> handlePlaybackStatePaused()
+      PlayState.STOPPED -> handlePlaybackStateStopped()
+    }
+    player.book()?.let {
+      changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
+    }
+  }
+
+  private fun handlePlaybackStateStopped() {
+    d { "Set mediaSession to inactive" }
+    mediaSession.isActive = false
+    audioFocusHelper.abandon()
+    notificationManager.cancel(NOTIFICATION_ID)
+    stopForeground(true)
+  }
+
+  private fun handlePlaybackStatePaused() {
+    stopForeground(false)
+    val book = player.book()
+        ?: return
+    val notification = notificationAnnouncer.getNotification(book, PlayState.PAUSED, mediaSession.sessionToken)
+    notificationManager.notify(NOTIFICATION_ID, notification)
+  }
+
+  private fun handlePlaybackStatePlaying() {
+    audioFocusHelper.request()
+    d { "set mediaSession to active" }
+    mediaSession.isActive = true
+    val book = player.book()
+        ?: return
+    val notification = notificationAnnouncer.getNotification(book, PlayState.PLAYING, mediaSession.sessionToken)
+    startForeground(NOTIFICATION_ID, notification)
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
