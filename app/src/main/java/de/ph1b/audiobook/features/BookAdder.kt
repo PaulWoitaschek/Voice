@@ -9,7 +9,14 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.ChapterReader
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.FileRecognition
+import de.ph1b.audiobook.misc.MediaAnalyzer
+import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.asV2Observable
+import de.ph1b.audiobook.misc.combineLatest
+import de.ph1b.audiobook.misc.listFilesSafely
+import de.ph1b.audiobook.misc.toSparseArray
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -17,13 +24,12 @@ import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-
 
 /**
  * Base class for adding new books.
@@ -328,7 +334,6 @@ import javax.inject.Singleton
       throw InterruptedException("Interruption requested")
     }
   }
-
 
   /**
    * Gets a book from the database matching to a defines mask.

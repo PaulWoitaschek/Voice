@@ -60,7 +60,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     parentFile
   }
 
-
   /** Call this when a file was selected by the user or the root folder has changed */
   fun fileSelected(selectedFile: File?) {
     chosenFile = selectedFile

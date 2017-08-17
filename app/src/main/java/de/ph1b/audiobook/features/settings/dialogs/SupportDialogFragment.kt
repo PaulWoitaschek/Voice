@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
-
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -12,7 +11,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 
 import de.ph1b.audiobook.R
 import e
-
 
 class SupportDialogFragment : DialogFragment() {
 

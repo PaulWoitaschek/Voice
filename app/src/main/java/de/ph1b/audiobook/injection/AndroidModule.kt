@@ -19,21 +19,54 @@ import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.TimberLogger
 import javax.inject.Singleton
 
-
 /**
  * Module providing Android SDK Related instances.
  */
 @Module class AndroidModule {
-  @Provides fun provideContext(app: Application): Context = app
-  @Provides @Singleton fun provideAudioManager(context: Context) = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-  @Provides @Singleton fun provideActivityManager(context: Context) = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-  @Provides @Singleton fun provideTelephonyManager(context: Context) = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-  @Provides @Singleton fun provideConnectivityManager(context: Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-  @Provides @Singleton fun provideWindowManager(context: Context) = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-  @Provides @Singleton fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-  @Provides @Singleton fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
-  @Provides @Singleton fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-  @Provides @Singleton fun provideMoshi(): Moshi = Moshi.Builder().build()
-  @Provides @Singleton fun provideErrorReporter(): ErrorReporter = CrashlyticsProxy
-  @Provides @Singleton fun providerLogger(): Logger = TimberLogger
+  @Provides
+  fun provideContext(app: Application): Context = app
+
+  @Provides
+  @Singleton
+  fun provideAudioManager(context: Context) = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+  @Provides
+  @Singleton
+  fun provideActivityManager(context: Context) = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+  @Provides
+  @Singleton
+  fun provideTelephonyManager(context: Context) = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+  @Provides
+  @Singleton
+  fun provideConnectivityManager(context: Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+  @Provides
+  @Singleton
+  fun provideWindowManager(context: Context) = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+  @Provides
+  @Singleton
+  fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+  @Provides
+  @Singleton
+  fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+
+  @Provides
+  @Singleton
+  fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+
+  @Provides
+  @Singleton
+  fun provideMoshi(): Moshi = Moshi.Builder().build()
+
+  @Provides
+  @Singleton
+  fun provideErrorReporter(): ErrorReporter = CrashlyticsProxy
+
+  @Provides
+  @Singleton
+  fun providerLogger(): Logger = TimberLogger
 }

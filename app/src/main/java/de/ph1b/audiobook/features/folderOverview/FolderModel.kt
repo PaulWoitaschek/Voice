@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.folderOverview
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import java.io.File
 
-
 data class FolderModel(val folder: String, val isCollection: Boolean) : Comparable<FolderModel> {
   override fun compareTo(other: FolderModel): Int {
     val isCollectionCompare = other.isCollection.compareTo(isCollection)

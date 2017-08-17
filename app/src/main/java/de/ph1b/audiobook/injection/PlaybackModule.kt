@@ -16,18 +16,23 @@ import de.ph1b.audiobook.playback.events.MediaEventReceiver
 @Module
 class PlaybackModule {
 
-  @Provides fun provideMediaButtonReceiverComponentName(service: PlaybackService): ComponentName {
+  @Provides
+  fun provideMediaButtonReceiverComponentName(service: PlaybackService): ComponentName {
     return ComponentName(service.packageName, MediaEventReceiver::class.java.name)
   }
 
-  @Provides @PerService fun provideButtonRecieverPendingIntent(service: PlaybackService, mbrComponentName: ComponentName): PendingIntent {
+  @Provides
+  @PerService
+  fun provideButtonRecieverPendingIntent(service: PlaybackService, mbrComponentName: ComponentName): PendingIntent {
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
       component = mbrComponentName
     }
     return PendingIntent.getBroadcast(service, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT)
   }
 
-  @Provides @PerService fun provideMediaSession(
+  @Provides
+  @PerService
+  fun provideMediaSession(
       service: PlaybackService,
       callback: MediaSessionCallback,
       mbrComponentName: ComponentName,

@@ -12,7 +12,8 @@ class MetaDataAnalyzer @Inject constructor() {
   private val mmr = MediaMetadataRetriever()
   private var file: File? = null
 
-  @Synchronized fun parse(file: File): MetaData {
+  @Synchronized
+  fun parse(file: File): MetaData {
     this.file = file
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
     val fallback = chapterNameFallback()
@@ -73,7 +74,7 @@ class MetaDataAnalyzer @Inject constructor() {
    */
   private fun MediaMetadataRetriever.safeExtract(key: Int) = try {
     extractMetadata(key)
-  } catch(ignored: Exception) {
+  } catch (ignored: Exception) {
     null
   }
 

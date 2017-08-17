@@ -5,7 +5,6 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.uitools.VerticalChangeHandler
 
-
 // convenient way to setup a router transaction
 fun Controller.asTransaction(
     pushChangeHandler: ControllerChangeHandler? = VerticalChangeHandler(),

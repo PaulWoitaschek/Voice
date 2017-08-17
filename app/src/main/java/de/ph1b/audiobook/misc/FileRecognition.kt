@@ -3,7 +3,6 @@ package de.ph1b.audiobook.misc
 import java.io.FileFilter
 import java.util.Arrays
 
-
 /**
  * Class containing methods for recognizing different file types by their file ending.
  */
@@ -39,21 +38,21 @@ object FileRecognition {
 
   val imageFilter = FileFilter {
     val extension = it.extension.toLowerCase()
-    return@FileFilter imageTypes.contains(extension)
+    imageTypes.contains(extension)
   }
 
   val musicFilter = FileFilter {
     val extension = it.extension.toLowerCase()
-    return@FileFilter audioTypes.contains(extension)
+    audioTypes.contains(extension)
   }
 
   val folderAndMusicFilter = FileFilter {
     if (it.isDirectory) {
-      return@FileFilter true
+      true
     } else {
       val extension = it.extension
           .toLowerCase()
-      return@FileFilter audioTypes.contains(extension)
+      audioTypes.contains(extension)
     }
   }
 }

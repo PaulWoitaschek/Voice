@@ -5,7 +5,6 @@ import d
 import i
 import io.reactivex.disposables.CompositeDisposable
 
-
 /**
  * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
  */

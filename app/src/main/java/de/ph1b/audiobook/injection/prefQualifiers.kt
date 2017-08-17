@@ -3,7 +3,6 @@ package de.ph1b.audiobook.injection
 import javax.inject.Qualifier
 import kotlin.annotation.AnnotationRetention.RUNTIME
 
-
 @Qualifier @Retention(RUNTIME)
 annotation class ResumeOnReplug
 

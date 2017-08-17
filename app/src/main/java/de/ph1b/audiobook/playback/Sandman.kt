@@ -107,7 +107,6 @@ import javax.inject.Singleton
       shakeDisposable?.dispose()
     }
 
-
     shakeTimeoutDisposable?.dispose()
     if (stopAfter != null) {
       shakeTimeoutDisposable = Observable.timer(stopAfter, TimeUnit.MINUTES)

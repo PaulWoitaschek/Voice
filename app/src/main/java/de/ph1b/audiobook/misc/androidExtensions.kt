@@ -22,7 +22,8 @@ fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 
 fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)
 
-@ColorInt fun Context.color(@ColorRes id: Int): Int {
+@ColorInt
+fun Context.color(@ColorRes id: Int): Int {
   return ContextCompat.getColor(this, id)
 }
 

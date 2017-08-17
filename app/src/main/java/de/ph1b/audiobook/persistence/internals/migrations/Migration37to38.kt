@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.persistence.internals.asTransaction
 
-
 class Migration37to38 : Migration {
   override fun migrate(db: SQLiteDatabase) {
     db.asTransaction {

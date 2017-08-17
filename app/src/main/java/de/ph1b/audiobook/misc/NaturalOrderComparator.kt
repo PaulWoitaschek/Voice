@@ -1,10 +1,8 @@
 package de.ph1b.audiobook.misc
 
-
 import java.io.File
 import java.util.ArrayList
 import java.util.Comparator
-
 
 /**
  * Simple class holding various static comparators.
@@ -42,9 +40,9 @@ object NaturalOrderComparator {
 
     // if sizes are the same
     if (leftSize == rightSize) {
-      return@Comparator stringComparator.compare(lhs.name, rhs.name)
+      stringComparator.compare(lhs.name, rhs.name)
     } else {
-      return@Comparator rightSize - leftSize
+      rightSize - leftSize
     }
   }
 

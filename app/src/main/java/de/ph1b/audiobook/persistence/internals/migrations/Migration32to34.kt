@@ -10,7 +10,6 @@ import de.ph1b.audiobook.persistence.internals.mapRows
 import de.ph1b.audiobook.persistence.internals.string
 import i
 
-
 class Migration32to34 : Migration {
 
   private val BOOKMARK_TABLE_NAME = "tableBookmarks"

@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.bookmarks.list
 
 import de.ph1b.audiobook.misc.layoutInflater
 
-
 /**
  * ViewHolder for displaying a Bookmark
  */

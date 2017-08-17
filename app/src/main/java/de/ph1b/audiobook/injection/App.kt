@@ -20,7 +20,6 @@ import de.ph1b.audiobook.playback.PlaybackService
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector {
 
   @Inject lateinit var bookAdder: BookAdder

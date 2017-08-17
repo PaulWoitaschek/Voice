@@ -13,7 +13,6 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
-
 class AutoRewindDialogFragment : DialogFragment() {
 
   @Inject lateinit var prefs: PrefsManager

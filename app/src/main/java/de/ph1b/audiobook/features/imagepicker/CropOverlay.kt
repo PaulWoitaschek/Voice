@@ -93,7 +93,6 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
   }
 
-
   private fun RectF.squareInset(value: Float) {
     inset(value, value)
   }

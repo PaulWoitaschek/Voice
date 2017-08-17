@@ -29,7 +29,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
 import javax.inject.Inject
 
-
 /**
  * Activity that coordinates the book shelf and play screens.
  */

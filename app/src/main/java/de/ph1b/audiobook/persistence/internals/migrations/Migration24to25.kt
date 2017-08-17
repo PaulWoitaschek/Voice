@@ -63,7 +63,6 @@ class Migration24to25 : Migration {
       val configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0
       val backupFileValid = backupFile.exists() && backupFile.canRead() && backupFile.length() > 0
 
-
       var playingInformation: JSONObject? = null
       try {
         if (configFileValid) {
@@ -221,7 +220,6 @@ class Migration24to25 : Migration {
         cv.put("BOOK_JSON", book.toString())
         val newBookId = db.insert(newBookTable, null, cv)
         book.put("id", newBookId)
-
 
         // move cover file if possible
         val coverFile = if (chapterPaths.size == 1) {

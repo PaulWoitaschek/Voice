@@ -138,7 +138,6 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
   inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
       .inflate(R.layout.book_shelf_grid_layout, parent, false))
 
-
   /** ViewHolder base class **/
   abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val coverView: ImageView = itemView.findViewById(R.id.coverView)
@@ -147,7 +146,6 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
     private val editBook: View = itemView.findViewById<View>(R.id.editBook)
     var indicatorVisible = false
       private set
-
 
     /** Binds the ViewHolder to a book */
     @CallSuper

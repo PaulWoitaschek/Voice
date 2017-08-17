@@ -22,7 +22,6 @@ import de.ph1b.audiobook.persistence.internals.migrations.Migration41to42
 import de.ph1b.audiobook.persistence.internals.migrations.Migration42to43
 import i
 
-
 class DataBaseMigrator(private val db: SQLiteDatabase) {
 
   private fun migration(fromVersion: Int) = when (fromVersion) {

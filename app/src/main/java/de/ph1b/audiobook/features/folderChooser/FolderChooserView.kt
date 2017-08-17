@@ -44,7 +44,6 @@ interface FolderChooserView {
    */
   fun getMode(): FolderChooserActivity.OperationMode
 
-
   /**
    * Shows a warning that the selected folders are sub-folders of each other.
    */

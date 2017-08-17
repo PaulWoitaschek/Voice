@@ -70,7 +70,6 @@ class Migration29to30 : Migration {
     )
   """
 
-
   override fun migrate(db: SQLiteDatabase) {
     // fetching old contents
     val cursor = db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
@@ -119,7 +118,6 @@ class Migration29to30 : Migration {
       bookCV.put(BOOK_ACTIVE, if (bookActive) 1 else 0)
 
       val bookId = db.insert(TABLE_BOOK, null, bookCV)
-
 
       for (j in 0 until chapters.length()) {
         val chapter = chapters.getJSONObject(j)

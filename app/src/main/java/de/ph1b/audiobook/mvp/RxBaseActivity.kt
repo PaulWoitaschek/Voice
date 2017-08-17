@@ -4,7 +4,6 @@ import android.os.Bundle
 import de.ph1b.audiobook.features.BaseActivity
 import i
 
-
 /**
  * Base activity that provides a convenient way for binding a view to a presenter
  */

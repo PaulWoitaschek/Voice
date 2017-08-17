@@ -21,7 +21,6 @@ import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import javax.inject.Singleton
 
-
 /**
  * Base component that is the entry point for injection.
  */
@@ -38,7 +37,9 @@ interface AppComponent {
 
   @Component.Builder
   interface Builder {
-    @BindsInstance fun application(application: Application): Builder
+    @BindsInstance
+    fun application(application: Application): Builder
+
     fun build(): AppComponent
   }
 

@@ -16,18 +16,68 @@ import de.ph1b.audiobook.uitools.ThemeUtil
  * Module for preferences
  */
 @Module class PrefsModule {
-  @Provides fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)!!
-  @Provides @Reusable fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
-  @Provides @Reusable fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum("THEME2_KEY", ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
-  @Provides @Reusable fun provideDisplayModePreference(prefs: RxSharedPreferences) = prefs.getEnum("displayMode", DisplayMode.GRID, DisplayMode::class.java)
-  @Provides @Reusable @ResumeOnReplug fun provideResumeOnReplugPreference(prefs: RxSharedPreferences) = prefs.getBoolean("RESUME_ON_REPLUG", true)
-  @Provides @Reusable @BookmarkOnSleepTimer fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences) = prefs.getBoolean("BOOKMARK_ON_SLEEP", false)
-  @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHAKE_TO_RESET_SLEEP_TIMER", false)
-  @Provides @Reusable @AutoRewindAmount fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences) = prefs.getInteger("AUTO_REWIND", 2)
-  @Provides @Reusable @SeekTime fun provideSeekTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SEEK_TIME", 20)
-  @Provides @Reusable @SleepTime fun provideSleepTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SLEEP_TIME", 20)
-  @Provides @Reusable @SingleBookFolders fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
-  @Provides @Reusable @CollectionFolders fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> = prefs.getStringSet("folders", emptySet())
-  @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(prefs: RxSharedPreferences) = prefs.getLong("currentBook", Book.ID_UNKNOWN)
-  @Provides @Reusable @PrefResumeAfterCall fun provideResumeAfterCallPreference(prefs: RxSharedPreferences) = prefs.getBoolean("resumeAfterCall", false)
+  @Provides
+  fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)!!
+
+  @Provides
+  @Reusable
+  fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
+
+  @Provides
+  @Reusable
+  fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum("THEME2_KEY", ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
+
+  @Provides
+  @Reusable
+  fun provideDisplayModePreference(prefs: RxSharedPreferences) = prefs.getEnum("displayMode", DisplayMode.GRID, DisplayMode::class.java)
+
+  @Provides
+  @Reusable
+  @ResumeOnReplug
+  fun provideResumeOnReplugPreference(prefs: RxSharedPreferences) = prefs.getBoolean("RESUME_ON_REPLUG", true)
+
+  @Provides
+  @Reusable
+  @BookmarkOnSleepTimer
+  fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences) = prefs.getBoolean("BOOKMARK_ON_SLEEP", false)
+
+  @Provides
+  @Reusable
+  @ShakeToReset
+  fun provideShakeToResetPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHAKE_TO_RESET_SLEEP_TIMER", false)
+
+  @Provides
+  @Reusable
+  @AutoRewindAmount
+  fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences) = prefs.getInteger("AUTO_REWIND", 2)
+
+  @Provides
+  @Reusable
+  @SeekTime
+  fun provideSeekTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SEEK_TIME", 20)
+
+  @Provides
+  @Reusable
+  @SleepTime
+  fun provideSleepTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SLEEP_TIME", 20)
+
+  @Provides
+  @Reusable
+  @SingleBookFolders
+  fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
+
+  @Provides
+  @Reusable
+  @CollectionFolders
+  fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> = prefs.getStringSet("folders", emptySet())
+
+  @Provides
+  @Reusable
+  @CurrentBookId
+  fun provideCurrentBookIdPreference(prefs: RxSharedPreferences) = prefs.getLong("currentBook", Book.ID_UNKNOWN)
+
+  @Provides
+  @Reusable
+  @PrefResumeAfterCall
+  fun provideResumeAfterCallPreference(prefs: RxSharedPreferences) = prefs.getBoolean("resumeAfterCall", false)
 }

@@ -58,7 +58,6 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         .build()
   }
 
-
   companion object {
     val TAG: String = PlaybackSpeedDialogFragment::class.java.simpleName
     private val MAX = Book.SPEED_MAX

@@ -17,7 +17,6 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 /**
  * Finder for external storages.
  */

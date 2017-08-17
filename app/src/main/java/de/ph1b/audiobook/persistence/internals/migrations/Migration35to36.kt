@@ -11,7 +11,6 @@ import de.ph1b.audiobook.persistence.internals.query
 import de.ph1b.audiobook.persistence.internals.string
 import de.ph1b.audiobook.persistence.internals.stringNullable
 
-
 class Migration35to36 : Migration {
 
   private val ID = "bookId"

@@ -109,7 +109,6 @@ class WidgetUpdateService : Service() {
 
           initElements(remoteViews = remoteViews, book = book, coverSize = useHeight)
 
-
           if (useWidth > 0 && useHeight > 0) {
             setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
           }
@@ -212,11 +211,11 @@ class WidgetUpdateService : Service() {
   /**
    * Sets visibilities on widgets element, depending on the size of the widget
 
-   * @param remoteViews   the widget the widget RemoteViews
+   * @param remoteViews the widget the widget RemoteViews
    * *
-   * @param width         the width of the widget
+   * @param width the width of the widget
    * *
-   * @param height        the height of the widget
+   * @param height the height of the widget
    * *
    * @param singleChapter if true if the book has only one chapter
    */
@@ -233,7 +232,7 @@ class WidgetUpdateService : Service() {
    * *
    * @param widgetWidth The widget width
    * *
-   * @param coverSize   The cover size
+   * @param coverSize The cover size
    */
   private fun setXVisibility(remoteViews: RemoteViews, widgetWidth: Int,
                              coverSize: Int) {
@@ -267,9 +266,9 @@ class WidgetUpdateService : Service() {
   /**
    * Sets visibilities dependent on widget height.
 
-   * @param remoteViews   The Widget RemoteViews
+   * @param remoteViews The Widget RemoteViews
    * *
-   * @param widgetHeight  The widget height
+   * @param widgetHeight The widget height
    * *
    * @param singleChapter true if the book has only one chapter
    */

@@ -3,7 +3,6 @@ package de.ph1b.audiobook.misc
 import de.ph1b.audiobook.common.Logger
 import timber.log.Timber
 
-
 object TimberLogger : Logger {
 
   override fun i(message: String) {

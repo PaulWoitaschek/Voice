@@ -3,7 +3,6 @@ package de.ph1b.audiobook.playback.utils.audioFocus
 import android.media.AudioManager
 import android.os.Build
 
-
 class CompatAudioFocusRequester(
     private val audioFocusListener: AudioManager.OnAudioFocusChangeListener,
     private val audioManager: AudioManager

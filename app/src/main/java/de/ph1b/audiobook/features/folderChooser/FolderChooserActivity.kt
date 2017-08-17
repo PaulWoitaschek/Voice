@@ -139,7 +139,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     spinnerAdapter.setData(newFolders)
   }
 
-
   /**
    * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
    */
@@ -161,7 +160,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     /**
      * Generates a new intent with the necessary extras
 
-     * @param c             The context
+     * @param c The context
      * *
      * @param operationMode The operation mode for the activity
      * *

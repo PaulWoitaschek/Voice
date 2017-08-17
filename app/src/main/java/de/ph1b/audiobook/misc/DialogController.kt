@@ -12,7 +12,6 @@ import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
 
 private const val SI_DIALOG = "android:savedDialogState"
 
-
 /**
  * A wrapper that wraps a dialog in a controller
  */

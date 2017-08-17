@@ -48,13 +48,13 @@ constructor(private val windowManager: WindowManager) {
     return bitmap
   }
 
-
   /**
    * Saves a bitmap as a file to the personal directory.
 
    * @param bitmap The bitmap to be saved
    */
-  @Synchronized fun saveCover(bitmap: Bitmap, destination: File) {
+  @Synchronized
+  fun saveCover(bitmap: Bitmap, destination: File) {
     var bitmapToSave = bitmap
     // make bitmap square
     val width = bitmapToSave.width

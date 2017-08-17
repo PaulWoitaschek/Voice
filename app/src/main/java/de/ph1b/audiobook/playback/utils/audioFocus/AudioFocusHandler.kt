@@ -12,7 +12,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-
 class AudioFocusHandler @Inject constructor(
     audioManager: AudioManager,
     private val telephonyManager: TelephonyManager,
@@ -77,7 +76,6 @@ class AudioFocusHandler @Inject constructor(
       player.play()
     }
   }
-
 
   @Synchronized
   fun request() {

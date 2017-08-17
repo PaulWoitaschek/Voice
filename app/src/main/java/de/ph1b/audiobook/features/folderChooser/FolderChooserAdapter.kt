@@ -7,12 +7,11 @@ import de.ph1b.audiobook.databinding.ActivityFolderChooserAdapterRowLayoutBindin
 import de.ph1b.audiobook.misc.layoutInflater
 import java.io.File
 
-
 /**
  * Adapter for displaying files and folders.
  * Constructor that initializes the class with the necessary values
  *
- * @param c    The context
+ * @param c The context
  * @param mode The operation mode which defines the interaction.
  */
 class FolderChooserAdapter(private val c: Context,

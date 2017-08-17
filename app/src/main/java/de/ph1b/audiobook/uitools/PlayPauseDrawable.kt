@@ -14,7 +14,6 @@ import android.graphics.drawable.Drawable
 import android.util.Property
 import android.view.animation.DecelerateInterpolator
 
-
 /**
  * This code was modified by me, Paul Woitaschek. All these changes are licensed under GPLv3. The
  * original source can be found here: {@see https://github.com/alexjlockwood/material-pause-play-

@@ -25,11 +25,13 @@ class BookUriConverterTest {
     ShadowLog.stream = System.out
   }
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     converter = BookUriConverter()
   }
 
-  @Test fun testAllBooks() {
+  @Test
+  fun testAllBooks() {
     val uri = converter.allBooks()
 
     println(uri)
@@ -39,7 +41,8 @@ class BookUriConverterTest {
     assertThat(match).isEqualTo(BookUriConverter.ROOT)
   }
 
-  @Test fun testSingleBook() {
+  @Test
+  fun testSingleBook() {
     val uri = converter.book(1)
 
     val match = converter.match(uri)
@@ -47,7 +50,8 @@ class BookUriConverterTest {
     assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
   }
 
-  @Test fun testExtractBookOnly() {
+  @Test
+  fun testExtractBookOnly() {
     val bookId = 153L
 
     val uri = converter.book(bookId)

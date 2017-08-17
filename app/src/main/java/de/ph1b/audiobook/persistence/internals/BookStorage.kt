@@ -11,7 +11,6 @@ import e
 import java.io.File
 import javax.inject.Inject
 
-
 /**
  * Provides access to the persistent storage for bookmarks.
  */

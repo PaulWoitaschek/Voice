@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback.utils.audioFocus
 
 import android.media.AudioManager
 
-
 class AudioFocusRequesterBelow26(
     private val audioFocusListener: AudioManager.OnAudioFocusChangeListener,
     private val audioManager: AudioManager

@@ -1,10 +1,22 @@
 import de.ph1b.audiobook.signing.SigningDetailsProvider
 
+plugins {
+  id "io.gitlab.arturbosch.detekt" version "1.0.0.RC2"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply from: "../artifacts.gradle"
+
+detekt {
+  profile("main") {
+    input = "$projectDir/src/main/java"
+    config = "$projectDir/detekt.yml"
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+  }
+}
 
 android {
 

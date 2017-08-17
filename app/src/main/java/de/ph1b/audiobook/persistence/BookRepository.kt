@@ -13,7 +13,6 @@ import java.util.ArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 /**
  * Provides access to all books.
  */
@@ -36,7 +35,8 @@ import javax.inject.Singleton
     all.onNext(active)
   }
 
-  @Synchronized fun addBook(book: Book) {
+  @Synchronized
+  fun addBook(book: Book) {
     v { "addBook=${book.name}" }
 
     val bookWithId = storage.addBook(book)
@@ -48,11 +48,14 @@ import javax.inject.Singleton
   val activeBooks: List<Book>
     get() = synchronized(this) { ArrayList(active) }
 
-  @Synchronized fun bookById(id: Long) = active.firstOrNull { it.id == id }
+  @Synchronized
+  fun bookById(id: Long) = active.firstOrNull { it.id == id }
 
-  @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
+  @Synchronized
+  fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
-  @Synchronized fun updateBook(book: Book) {
+  @Synchronized
+  fun updateBook(book: Book) {
     require(book.id != -1L)
 
     val index = active.indexOfFirst { it.id == book.id }
@@ -64,7 +67,8 @@ import javax.inject.Singleton
     } else e { "update failed as there was no book" }
   }
 
-  @Synchronized fun hideBook(toDelete: List<Book>) {
+  @Synchronized
+  fun hideBook(toDelete: List<Book>) {
     v { "hideBooks=${toDelete.size}" }
     if (toDelete.isEmpty()) return
 
@@ -75,7 +79,8 @@ import javax.inject.Singleton
     sortBooksAndNotifySubject()
   }
 
-  @Synchronized fun revealBook(book: Book) {
+  @Synchronized
+  fun revealBook(book: Book) {
     v { "Called revealBook=$book" }
 
     orphaned.removeAll { it.id == book.id }
@@ -84,7 +89,8 @@ import javax.inject.Singleton
     sortBooksAndNotifySubject()
   }
 
-  @Synchronized fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
+  @Synchronized
+  fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
 
   private fun chapterByFile(file: File, books: List<Book>): Chapter? {
     books.forEach {

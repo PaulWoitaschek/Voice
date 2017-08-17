@@ -11,7 +11,6 @@ import android.text.TextPaint
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.color
 
-
 class CoverReplacement(private val text: String, c: Context) : Drawable() {
 
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {

@@ -258,7 +258,6 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
     firstPlayStateChange = false
   }
 
-
   override fun onAttach(view: View) {
     firstPlayStateChange = true
   }

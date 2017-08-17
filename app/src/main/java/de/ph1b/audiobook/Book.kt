@@ -1,12 +1,10 @@
 package de.ph1b.audiobook
 
-
 import android.os.Environment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.forEachIndexed
 import java.io.File
-
 
 /**
  * Represents a playable book.

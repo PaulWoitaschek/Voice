@@ -9,7 +9,6 @@ import android.widget.SeekBar
 import android.widget.TextView
 import io.reactivex.Observable
 
-
 fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
   val listener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

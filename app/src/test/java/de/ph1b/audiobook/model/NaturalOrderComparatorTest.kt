@@ -16,14 +16,16 @@ import java.util.Collections
 class NaturalOrderComparatorTest : TestCase() {
 
   val testFolder = TemporaryFolder()
-  @Rule fun testFolder() = testFolder
+  @Rule
+  fun testFolder() = testFolder
 
   override fun setUp() {
     super.setUp()
     testFolder.create()
   }
 
-  @Test fun testFileComparator() {
+  @Test
+  fun testFileComparator() {
     testFolder.newFolder("folder", "subfolder", "subsubfolder")
     testFolder.newFolder("storage", "emulated", "0")
     testFolder.newFolder("xFolder")
@@ -47,7 +49,8 @@ class NaturalOrderComparatorTest : TestCase() {
     assertThat(desiredOrder).isEqualTo(sorted)
   }
 
-  @Test fun testStringComparator() {
+  @Test
+  fun testStringComparator() {
     val desiredOrder = listOf(
         "00 I",
         "00 Introduction",

@@ -6,7 +6,6 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 
-
 @TargetApi(Build.VERSION_CODES.O)
 class AudioFocusRequesterApi26(
     audioFocusListener: AudioManager.OnAudioFocusChangeListener,
