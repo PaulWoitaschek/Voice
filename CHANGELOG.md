@@ -1,3 +1,7 @@
+# 3.4.1
+* Matroska chapter marks. Thanks to Marek Rusinowski!
+* Android O support
+
 # 3.4.0
 * Ogg chapter marks. Thanks to Marek Rusinowski!
 * Better Android Auto controls + Covers. Thanks to Matthias Kutscheid
