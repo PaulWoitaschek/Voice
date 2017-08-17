@@ -64,8 +64,6 @@ android {
       shrinkResources false
       ext.enableCrashlytics = false
       multiDexEnabled true
-
-      applicationIdSuffix ".debug"
     }
   }
 
