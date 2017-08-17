@@ -38,15 +38,19 @@ import javax.inject.Singleton
         }
 
     internalSleepSand.subscribe {
-      if (it > 0) {
-        // enable shake timer
-        resetTimerOnShake(true)
-      } else if (it == NOT_ACTIVE) {
-        // if the track ended by the user, disable the shake detector
-        resetTimerOnShake(false)
-      } else if (it == 0) {
-        // if the timer stopped normally, setup a timer of 5 minutes to resume playback
-        resetTimerOnShake(true, 5)
+      when {
+        it > 0 -> {
+          // enable shake timer
+          resetTimerOnShake(true)
+        }
+        it == NOT_ACTIVE -> {
+          // if the track ended by the user, disable the shake detector
+          resetTimerOnShake(false)
+        }
+        it == 0 -> {
+          // if the timer stopped normally, setup a timer of 5 minutes to resume playback
+          resetTimerOnShake(true, 5)
+        }
       }
     }
 
@@ -84,7 +88,7 @@ import javax.inject.Singleton
 
   private fun resetTimerOnShake(enable: Boolean, stopAfter: Long? = null) {
     if (enable) {
-      val shouldSubscribe = shakeDisposable?.isDisposed ?: true
+      val shouldSubscribe = shakeDisposable?.isDisposed != false
       if (shouldSubscribe) {
         // setup shake detection if requested
         if (prefsManager.shakeToReset.value) {

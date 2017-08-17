@@ -5,6 +5,7 @@
              android:layout_height="wrap_content"
              android:layout_margin="2dp"
              android:clickable="true"
+             android:focusable="true"
              android:foreground="?attr/selectableItemBackground">
 
     <de.ph1b.audiobook.uitools.SquareImageView

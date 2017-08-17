@@ -130,7 +130,7 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   override fun onBindingCreated(binding: BookPlayBinding) {
     setupClicks()
     setupFab()
-    setupSeekbar()
+    setupSeekBar()
     setupSpinner()
     setupToolbar()
   }
@@ -160,7 +160,7 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
     binding.play.setIconDrawable(playPauseDrawable)
   }
 
-  private fun setupSeekbar() {
+  private fun setupSeekBar() {
     binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
         //sets text to adjust while using seekBar
@@ -286,10 +286,10 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
     val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
     val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
 
-    if (TimeUnit.MILLISECONDS.toHours(duration.toLong()) == 0L) {
-      return "$m:$s"
+    return if (TimeUnit.MILLISECONDS.toHours(duration.toLong()) == 0L) {
+      "$m:$s"
     } else {
-      return "$h:$m:$s"
+      "$h:$m:$s"
     }
   }
 }

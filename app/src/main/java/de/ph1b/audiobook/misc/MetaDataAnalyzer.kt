@@ -16,15 +16,15 @@ class MetaDataAnalyzer @Inject constructor() {
     this.file = file
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
     val fallback = chapterNameFallback()
-    if (prepare() || prepare()) {
+    return if (prepare() || prepare()) {
       val chapterName = parseChapterName()
           ?: fallback
       val duration = parseDuration()
       val bookName = parseBookName()
       val author = parseAuthor()
-      return MetaData(chapterName, duration, bookName, author)
+      MetaData(chapterName, duration, bookName, author)
     } else {
-      return MetaData(fallback, null, null, null)
+      MetaData(fallback, null, null, null)
     }
   }
 

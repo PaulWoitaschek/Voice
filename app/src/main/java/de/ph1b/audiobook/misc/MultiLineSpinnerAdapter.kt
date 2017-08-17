@@ -14,7 +14,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 import java.util.ArrayList
 
 /**
- * Adapter fror [Spinner] that highlights the current selection and shows multiple lines of text.
+ * Adapter for [Spinner] that highlights the current selection and shows multiple lines of text.
  */
 class MultiLineSpinnerAdapter<Type>(
     private val spinner: Spinner,
@@ -37,15 +37,19 @@ class MultiLineSpinnerAdapter<Type>(
     val selected = position == spinner.selectedItemPosition
     textView.text = resolveName(getItem(position), position)
 
-    if (parent == spinner) {
-      textView.setBackgroundResource(0)
-      textView.setTextColor(unselectedTextColor)
-    } else if (selected) {
-      textView.setBackgroundResource(R.drawable.spinner_selected_background)
-      textView.setTextColor(Color.WHITE)
-    } else {
-      textView.setBackgroundResource(ThemeUtil.getResourceId(context, android.R.attr.windowBackground))
-      textView.setTextColor(context.color(ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
+    when {
+      parent == spinner -> {
+        textView.setBackgroundResource(0)
+        textView.setTextColor(unselectedTextColor)
+      }
+      selected -> {
+        textView.setBackgroundResource(R.drawable.spinner_selected_background)
+        textView.setTextColor(Color.WHITE)
+      }
+      else -> {
+        textView.setBackgroundResource(ThemeUtil.getResourceId(context, android.R.attr.windowBackground))
+        textView.setTextColor(context.color(ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
+      }
     }
 
     return textView

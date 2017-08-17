@@ -13,14 +13,12 @@ abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseControl
 
   private var internalPresenter: P? = null
   val presenter: P
-    get() {
-      if (isDestroyed) throw IllegalStateException("Must not call presenter when destroyed!")
-      else {
-        if (internalPresenter == null) {
-          internalPresenter = createPresenter()
-        }
-        return internalPresenter!!
+    get() = if (isDestroyed) throw IllegalStateException("Must not call presenter when destroyed!")
+    else {
+      if (internalPresenter == null) {
+        internalPresenter = createPresenter()
       }
+      internalPresenter!!
     }
 
   init {

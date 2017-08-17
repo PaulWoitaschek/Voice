@@ -121,7 +121,7 @@ class Migration29to30 : Migration {
       val bookId = db.insert(TABLE_BOOK, null, bookCV)
 
 
-      for (j in 0..chapters.length() - 1) {
+      for (j in 0 until chapters.length()) {
         val chapter = chapters.getJSONObject(j)
         val chapterDuration = chapter.getInt("duration")
         val chapterName = chapter.getString("name")
@@ -136,7 +136,7 @@ class Migration29to30 : Migration {
         db.insert(TABLE_CHAPTERS, null, chapterCV)
       }
 
-      for (j in 0..bookmarks.length() - 1) {
+      for (j in 0 until bookmarks.length()) {
         val bookmark = bookmarks.getJSONObject(j)
         val bookmarkTime = bookmark.getInt("time")
         val bookmarkPath = bookmark.getString("mediaPath")

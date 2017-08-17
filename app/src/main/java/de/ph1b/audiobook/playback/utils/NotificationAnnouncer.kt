@@ -31,7 +31,7 @@ class NotificationAnnouncer
     private val notificationChannelCreator: NotificationChannelCreator
 ) {
 
-  var cachedImage: CachedImage? = null
+  private var cachedImage: CachedImage? = null
 
   private fun cover(book: Book): Bitmap {
     // first try to get use a cached image

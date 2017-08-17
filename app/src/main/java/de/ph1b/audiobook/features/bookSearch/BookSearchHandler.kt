@@ -79,11 +79,11 @@ import javax.inject.Inject
   // Play the first book that matches to a selector. Returns if a book is being played
   private inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
     val book = repo.activeBooks.firstOrNull(selector)
-    if (book != null) {
+    return if (book != null) {
       i { "found a match ${book.name}" }
       prefs.currentBookId.value = book.id
       player.play()
-      return true
-    } else return false
+      true
+    } else false
   }
 }

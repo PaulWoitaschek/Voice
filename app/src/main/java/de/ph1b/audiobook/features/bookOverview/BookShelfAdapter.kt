@@ -94,12 +94,10 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
       }
     }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-    when (viewType) {
-      1 -> return GridViewHolder(parent)
-      0 -> return ListViewHolder(parent)
-      else -> throw IllegalStateException("Illegal viewType=" + viewType)
-    }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder = when (viewType) {
+    1 -> GridViewHolder(parent)
+    0 -> ListViewHolder(parent)
+    else -> throw IllegalStateException("Illegal viewType=" + viewType)
   }
 
   override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
@@ -116,8 +114,8 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
   inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
     private val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
-    private val leftTime: TextView = itemView.findViewById<TextView>(R.id.leftTime)
-    private val rightTime: TextView = itemView.findViewById<TextView>(R.id.rightTime)
+    private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
+    private val rightTime: TextView = itemView.findViewById(R.id.rightTime)
 
     init {
       MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
@@ -143,9 +141,9 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
 
   /** ViewHolder base class **/
   abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val coverView: ImageView = itemView.findViewById<ImageView>(R.id.coverView)
-    private val currentPlayingIndicator: ImageView = itemView.findViewById<ImageView>(R.id.currentPlayingIndicator)
-    private val titleView: TextView = itemView.findViewById<TextView>(R.id.title)
+    val coverView: ImageView = itemView.findViewById(R.id.coverView)
+    private val currentPlayingIndicator: ImageView = itemView.findViewById(R.id.currentPlayingIndicator)
+    private val titleView: TextView = itemView.findViewById(R.id.title)
     private val editBook: View = itemView.findViewById<View>(R.id.editBook)
     var indicatorVisible = false
       private set

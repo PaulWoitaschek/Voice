@@ -36,10 +36,10 @@ fun Cursor.intNullable(columnName: String): Int? {
 
 inline fun <T> SQLiteDatabase.asTransaction(func: SQLiteDatabase.() -> T): T {
   beginTransaction()
-  try {
+  return try {
     val result = func()
     setTransactionSuccessful()
-    return result
+    result
   } finally {
     endTransaction()
   }

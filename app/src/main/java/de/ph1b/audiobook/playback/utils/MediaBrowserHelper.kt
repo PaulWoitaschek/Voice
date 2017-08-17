@@ -47,10 +47,10 @@ import javax.inject.Inject
           .filter { it != currentBook }
           .map { it.toMediaDescription() }
 
-      if (current == null) {
-        return all
+      return if (current == null) {
+        all
       } else {
-        return listOf(current) + all
+        listOf(current) + all
       }
     } else {
       return null

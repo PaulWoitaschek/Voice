@@ -13,15 +13,14 @@ class Migration28to29 : Migration {
       while (cursor.moveToNext()) {
         val book = JSONObject(cursor.getString(0))
         val chapters = book.getJSONArray("chapters")
-        for (i in 0..chapters.length() - 1) {
+        for (i in 0 until chapters.length()) {
           val chapter = chapters.getJSONObject(i)
           val fileName = File(chapter.getString("path")).name
           val dotIndex = fileName.lastIndexOf(".")
-          val chapterName: String
-          if (dotIndex > 0) {
-            chapterName = fileName.substring(0, dotIndex)
+          val chapterName = if (dotIndex > 0) {
+            fileName.substring(0, dotIndex)
           } else {
-            chapterName = fileName
+            fileName
           }
           chapter.put("name", chapterName)
         }

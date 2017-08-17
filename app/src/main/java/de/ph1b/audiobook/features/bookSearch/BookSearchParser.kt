@@ -20,11 +20,9 @@ import javax.inject.Inject
     return BookSearch(query, mediaFocus, album, artist, playlist)
   }
 
-  fun parse(intent: Intent?): BookSearch? {
-    if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
-      val query: String? = intent.getStringExtra(SearchManager.QUERY)
-      val extras: Bundle? = intent.extras
-      return parse(query, extras)
-    } else return null
-  }
+  fun parse(intent: Intent?): BookSearch? = if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
+    val query: String? = intent.getStringExtra(SearchManager.QUERY)
+    val extras: Bundle? = intent.extras
+    parse(query, extras)
+  } else null
 }

@@ -23,9 +23,11 @@ class Permissions(private val activity: Activity) {
           .filter { it.contains(permission) }
           .firstOrError()
           .map {
-            if (hasPermission(permission)) PermissionResult.GRANTED
-            else if (showRationale(permission)) PermissionResult.DENIED_ASK_AGAIN
-            else PermissionResult.DENIED_FOREVER
+            when {
+              hasPermission(permission) -> PermissionResult.GRANTED
+              showRationale(permission) -> PermissionResult.DENIED_ASK_AGAIN
+              else -> PermissionResult.DENIED_FOREVER
+            }
           }
 
   @Suppress("UNUSED_PARAMETER")

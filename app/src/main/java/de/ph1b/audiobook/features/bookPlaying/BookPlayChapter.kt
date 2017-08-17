@@ -20,12 +20,12 @@ data class BookPlayChapter(
     // desired format is "1 - Title"
     if (!chapterName.startsWith(number + " - ")) {
       // if getTitle does not match desired format
-      if (chapterName.startsWith(number)) {
+      chapterName = if (chapterName.startsWith(number)) {
         // if it starts with a number, a " - " should follow
-        chapterName = number + " - " + chapterName.substring(chapterName.indexOf(number) + number.length)
+        number + " - " + chapterName.substring(chapterName.indexOf(number) + number.length)
       } else {
         // if the name does not match at all, set the correct format
-        chapterName = number + " - " + chapterName
+        number + " - " + chapterName
       }
     }
     return chapterName

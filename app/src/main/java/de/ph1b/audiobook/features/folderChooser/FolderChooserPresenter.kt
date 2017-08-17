@@ -54,12 +54,10 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   /**
    * Returns the closest folder. If this is a folder return itself. Else return the parent.
    */
-  private fun File.closestFolder(): File {
-    if (isDirectory) {
-      return this
-    } else {
-      return parentFile
-    }
+  private fun File.closestFolder(): File = if (isDirectory) {
+    this
+  } else {
+    parentFile
   }
 
 
@@ -89,11 +87,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    */
   fun backConsumed(): Boolean {
     d { "up called. currentFolder=$chosenFile" }
-    if (canGoBack()) {
+    return if (canGoBack()) {
       fileSelected(chosenFile!!.closestFolder().parentFile)
-      return true
+      true
     } else {
-      return false
+      false
     }
   }
 
@@ -164,12 +162,10 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     view.newRootFolders(rootDirs)
     view.setChooseButtonEnabled(rootDirs.isNotEmpty())
 
-    if (chosenFile != null) {
-      fileSelected(chosenFile)
-    } else if (rootDirs.isNotEmpty()) {
-      fileSelected(rootDirs.first())
-    } else {
-      fileSelected(null)
+    when {
+      chosenFile != null -> fileSelected(chosenFile)
+      rootDirs.isNotEmpty() -> fileSelected(rootDirs.first())
+      else -> fileSelected(null)
     }
   }
 

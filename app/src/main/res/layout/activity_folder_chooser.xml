@@ -62,6 +62,7 @@
                 android:layout_marginStart="16dp"
                 android:clickable="true"
                 android:contentDescription="@string/content_navigate_up"
+                android:focusable="true"
                 android:scaleType="fitStart"
                 tools:src="@drawable/ic_arrow_upward"/>
 

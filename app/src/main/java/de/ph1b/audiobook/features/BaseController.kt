@@ -33,7 +33,7 @@ abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : Rx
     get() = internalBinding!!
 
   override final fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    internalBinding = DataBindingUtil.inflate<B>(inflater, layoutRes, container, false)
+    internalBinding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
     onBindingCreated(internalBinding!!)
     return internalBinding!!.root
   }

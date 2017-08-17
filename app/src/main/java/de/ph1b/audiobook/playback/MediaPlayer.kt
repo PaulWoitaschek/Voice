@@ -187,12 +187,10 @@ constructor(
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
-      if (seekTo < 0) {
-        previous(false)
-      } else if (seekTo > duration) {
-        next()
-      } else {
-        changePosition(seekTo.toInt())
+      when {
+        seekTo < 0 -> previous(false)
+        seekTo > duration -> next()
+        else -> changePosition(seekTo.toInt())
       }
     }
   }

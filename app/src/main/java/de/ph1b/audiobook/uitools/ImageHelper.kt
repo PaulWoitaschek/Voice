@@ -120,10 +120,10 @@ constructor(private val windowManager: WindowManager) {
     var reqLength = smallerScreenSize
 
     //setting reqWidth matching to desired 1:1 ratio and screen-size
-    if (width < height) {
-      reqLength *= (height / width)
+    reqLength *= if (width < height) {
+      (height / width)
     } else {
-      reqLength *= (width / height)
+      (width / height)
     }
 
     var inSampleSize = 1

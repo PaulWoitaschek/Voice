@@ -157,12 +157,10 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
     startActivity(intent)
   }
 
-  override fun handleBack(): Boolean {
-    if (binding.fam.isExpanded) {
-      binding.fam.collapse()
-      return true
-    } else return false
-  }
+  override fun handleBack(): Boolean = if (binding.fam.isExpanded) {
+    binding.fam.collapse()
+    true
+  } else false
 
   /** Updates the adapter with new contents. **/
   fun newData(models: Collection<FolderModel>) {

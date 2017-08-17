@@ -121,14 +121,16 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
         MotionEvent.ACTION_DOWN -> {
           // prepare operation
           resizeType = event.asResizeType()
-          if (resizeType != null) {
-            eventType = EventType.RESIZE
-            lastTouchPoint.set(x, y)
-          } else if (dragRect.contains(x, y)) {
-            lastTouchPoint.set(x, y)
-            eventType = EventType.DRAG
-          } else {
-            eventType = null
+          when {
+            resizeType != null -> {
+              eventType = EventType.RESIZE
+              lastTouchPoint.set(x, y)
+            }
+            dragRect.contains(x, y) -> {
+              lastTouchPoint.set(x, y)
+              eventType = EventType.DRAG
+            }
+            else -> eventType = null
           }
         }
         MotionEvent.ACTION_MOVE -> {

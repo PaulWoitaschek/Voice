@@ -212,7 +212,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     i { "updateCurrentBook: ${currentBook?.name}" }
     this.currentBook = currentBook
 
-    for (i in 0..adapter.itemCount - 1) {
+    for (i in 0 until adapter.itemCount) {
       val itemId = adapter.getItemId(i)
       val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
       if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
@@ -239,7 +239,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   /** Show a warning that no audiobook folder was chosen */
   fun showNoFolderWarning() {
     // show dialog if no folders are set
-    val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
+    val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing == true
     if (!noFolderWarningIsShowing) {
       val warning = NoFolderWarningDialogFragment()
       warning.show(fragmentManager, FM_NO_FOLDER_WARNING)

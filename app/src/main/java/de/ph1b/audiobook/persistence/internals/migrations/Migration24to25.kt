@@ -53,10 +53,9 @@ class Migration24to25 : Migration {
         chapterNames.add(mediaCursor.getString(2))
       }
 
-      val configFile: File
-      when (type) {
-        "COLLECTION_FILE", "SINGLE_FILE" -> configFile = File(root, "." + chapterNames[0] + "-map.json")
-        "COLLECTION_FOLDER", "SINGLE_FOLDER" -> configFile = File(root, "." + (File(root).name) + "-map.json")
+      val configFile = when (type) {
+        "COLLECTION_FILE", "SINGLE_FILE" -> File(root, "." + chapterNames[0] + "-map.json")
+        "COLLECTION_FOLDER", "SINGLE_FOLDER" -> File(root, "." + (File(root).name) + "-map.json")
         else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type)
       }
       val backupFile = File(configFile.absolutePath + ".backup")
@@ -117,7 +116,7 @@ class Migration24to25 : Migration {
       val bookmarkTimesUnsafe = ArrayList<Int>()
       try {
         val bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS)
-        for (i in 0..bookmarksJ.length() - 1) {
+        for (i in 0 until bookmarksJ.length()) {
           val bookmarkJ = bookmarksJ.get(i) as JSONObject
           bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME))
           bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE))
@@ -173,11 +172,11 @@ class Migration24to25 : Migration {
       }
 
       if (name.isEmpty()) {
-        if (chapterPaths.size == 1) {
+        name = if (chapterPaths.size == 1) {
           val chapterPath = chapterPaths.first()
-          name = chapterPath.substring(0, chapterPath.lastIndexOf("."))
+          chapterPath.substring(0, chapterPath.lastIndexOf("."))
         } else {
-          name = File(root).name
+          File(root).name
         }
       }
 
@@ -225,13 +224,12 @@ class Migration24to25 : Migration {
 
 
         // move cover file if possible
-        val coverFile: File
-        if (chapterPaths.size == 1) {
+        val coverFile = if (chapterPaths.size == 1) {
           val fileName = "." + chapterNames.first() + ".jpg"
-          coverFile = File(root, fileName)
+          File(root, fileName)
         } else {
           val fileName = "." + (File(root).name) + ".jpg"
-          coverFile = File(root, fileName)
+          File(root, fileName)
         }
         if (coverFile.exists() && coverFile.canWrite()) {
           try {
