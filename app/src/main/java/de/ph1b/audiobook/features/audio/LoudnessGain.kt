@@ -53,8 +53,10 @@ import kotlin.properties.Delegates
   }
 
   private fun detachEffect() {
-    effectWithSessionId?.loudnessEnhancer?.release()
-    effectWithSessionId = null
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      effectWithSessionId?.loudnessEnhancer?.release()
+      effectWithSessionId = null
+    }
   }
 
   private data class LoudnessEnhancerWithAudioSessionId(
