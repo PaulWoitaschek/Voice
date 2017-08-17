@@ -21,8 +21,7 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:clipToPadding="false"
             android:paddingBottom="100dp"
-            android:paddingTop="2dp"
-            android:scrollbars="vertical"/>
+            android:paddingTop="2dp"/>
 
         <ProgressBar
             android:id="@+id/loadingProgress"
