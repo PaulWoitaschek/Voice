@@ -9,11 +9,13 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.ChapterReader
+import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.combineLatest
+import de.ph1b.audiobook.misc.emptySparseArray
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.toSparseArray
 import de.ph1b.audiobook.misc.value
@@ -319,7 +321,12 @@ import javax.inject.Singleton
       val result = mediaAnalyzer.analyze(f)
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
-        val marks = chapterReader.read(f).toSparseArray()
+        val marks = try {
+          chapterReader.read(f).toSparseArray()
+        } catch (e: Exception) {
+          CrashlyticsProxy.logException(e)
+          emptySparseArray<String>()
+        }
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()
