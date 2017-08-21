@@ -20,7 +20,7 @@ class BookmarkAdapter(
     this.chapters.clear()
     this.chapters.addAll(chapters)
 
-    val newBookmarks = bookmarks.sorted()
+    val newBookmarks = bookmarks.sorted().reversed()
     val callback = BookmarkDiffUtilCallback(this.bookmarks, newBookmarks)
     val diff = DiffUtil.calculateDiff(callback)
     this.bookmarks.clear()
