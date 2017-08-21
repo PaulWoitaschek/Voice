@@ -17,7 +17,7 @@ import javax.inject.Singleton
     context: Context
 ) {
 
-  val musicChannel = "musicChannel"
+  val musicChannel = "musicChannel4"
 
   init {
     createChannel(context, notificationManager)
@@ -26,7 +26,7 @@ import javax.inject.Singleton
   private fun createChannel(context: Context, notificationManager: NotificationManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val name = context.getString(R.string.music_notification)
-      val channel = NotificationChannel(musicChannel, name, NotificationManager.IMPORTANCE_DEFAULT).apply {
+      val channel = NotificationChannel(musicChannel, name, NotificationManager.IMPORTANCE_LOW).apply {
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         setShowBadge(false)
       }
