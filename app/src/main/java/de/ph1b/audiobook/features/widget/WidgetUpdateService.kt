@@ -192,9 +192,11 @@ class WidgetUpdateService : Service() {
     try {
       val coverFile = book.coverFile()
       if (coverFile.canRead() && coverFile.length() < maxImageSize) {
+        val sizeForPicasso = coverSize.takeIf { it > 0 }
+            ?: dpToPxRounded(56F)
         cover = Picasso.with(this@WidgetUpdateService)
             .load(coverFile)
-            .resize(coverSize, coverSize)
+            .resize(sizeForPicasso, sizeForPicasso)
             .get()
       }
     } catch (ex: IOException) {
