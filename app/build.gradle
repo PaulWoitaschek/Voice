@@ -148,5 +148,5 @@ dependencies {
 }
 
 // task that is an alias for f-droid
-task fdroid(dependsOn: ':audiobook:assembleOpensourceRelease')
-task release(dependsOn: ':audiobook:assembleProprietaryRelease')
+task fdroid(dependsOn: ':app:assembleOpensourceRelease')
+task release(dependsOn: ':app:assembleProprietaryRelease')
