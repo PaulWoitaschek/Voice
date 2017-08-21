@@ -19,6 +19,8 @@ class AudioFocusRequesterApi26(
 
   private var focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
       .setAudioAttributes(audioAttributes)
+      .setWillPauseWhenDucked(true)
+      .setAcceptsDelayedFocusGain(false)
       .setOnAudioFocusChangeListener(audioFocusListener)
       .build()!!
 
