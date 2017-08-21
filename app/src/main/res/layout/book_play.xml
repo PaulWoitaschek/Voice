@@ -129,6 +129,14 @@
             tools:ignore="UnusedAttribute"
             tools:src="@android:color/darker_gray"/>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:background="@drawable/gradient_shadow"
+            app:layout_constraintBottom_toBottomOf="@+id/cover"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
         <TextView
             android:id="@+id/timerCountdownView"
             style="@style/timer_text_view_style"
