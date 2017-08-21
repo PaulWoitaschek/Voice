@@ -109,4 +109,5 @@
     <string name="no_network">ネットワークなし?</string>
     <string name="network_top">うまく動作しませんでした…</string>
     <string name="cover_crop">カバーをトリミング</string>
+    <string name="music_notification">再生</string>
 </resources>

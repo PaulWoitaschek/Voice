@@ -112,4 +112,5 @@
     <string name="no_network">Inget Nätverk?</string>
     <string name="network_top">Detta fungerade inte alltför väl ..</string>
     <string name="cover_crop">Beskär omslag</string>
+    <string name="music_notification">Uppspelning</string>
 </resources>

@@ -104,7 +104,7 @@
     <string name="play_current">Huidig boek afspelen</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Map verbergen</string>
-    <string name="hide_folder_content">Wilt u de map verbergen voor muziekspelers, zodat zij uw boek niet herkennen als zijnde muziek?</string>
+    <string name="hide_folder_content">Wilt u de map verbergen voor muziekspelers zodat ze uw boek niet opvatten als muziekbestand?</string>
     <string name="hide_confirm">Verbergen</string>
     <!--license activity-->
     <string name="refresh">Verversen</string>
@@ -112,4 +112,5 @@
     <string name="no_network">Geen netwerkverbinding?</string>
     <string name="network_top">Dit ging niet zo goed…</string>
     <string name="cover_crop">Omslag bijsnijden</string>
+    <string name="music_notification">Afspelen</string>
 </resources>
