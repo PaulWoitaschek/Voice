@@ -16,20 +16,9 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.asTransaction
-import de.ph1b.audiobook.misc.clicks
-import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.misc.forEachIndexed
-import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.keyAtOrNull
-import de.ph1b.audiobook.misc.supportTransitionName
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.maxImageSize
-import de.ph1b.audiobook.uitools.visible
+import de.ph1b.audiobook.uitools.*
 import i
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -55,8 +44,8 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   override val layoutRes = R.layout.book_play
   override fun createPresenter() = BookPlayPresenter(bookId)
 
-  private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter>
-  private lateinit var sleepTimerItem: MenuItem
+  private var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter>  by clearAfterDestroyView()
+  private var sleepTimerItem: MenuItem  by clearAfterDestroyView()
 
   init {
     App.component.inject(this)
@@ -278,6 +267,11 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   override fun openSleepTimeDialog() {
     SleepTimerDialogFragment.newInstance(bookId)
         .show(fragmentManager, "fmSleepTimer")
+  }
+
+  override fun onDestroyBinding(binding: BookPlayBinding) {
+    super.onDestroyBinding(binding)
+    binding.bookSpinner.adapter = null
   }
 
   private fun formatTime(ms: Int, duration: Int): String {
