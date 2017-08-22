@@ -18,6 +18,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector {
 
@@ -36,15 +37,16 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
 
-    CrashlyticsProxy.init(this)
+    thread {
+      CrashlyticsProxy.init(this)
+      if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+      else Timber.plant(CrashLoggingTree())
+    }
 
     component = DaggerAppComponent.builder()
         .application(this)
         .build()
     component.inject(this)
-
-    if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-    else Timber.plant(CrashLoggingTree())
 
     bookAdder.scanForFiles()
 
