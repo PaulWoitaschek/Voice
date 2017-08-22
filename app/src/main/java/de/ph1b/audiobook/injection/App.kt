@@ -43,8 +43,8 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
 
+    CrashlyticsProxy.init(this)
     thread {
-      CrashlyticsProxy.init(this)
       if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
       else Timber.plant(CrashLoggingTree())
     }
