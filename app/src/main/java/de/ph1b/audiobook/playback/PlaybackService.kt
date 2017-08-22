@@ -26,6 +26,7 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
 import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import v
 import java.io.File
@@ -46,7 +47,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var notificationManager: NotificationManager
-  @Inject lateinit var audioManager: AudioManager
   @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var bookUriConverter: BookUriConverter
@@ -63,62 +63,69 @@ class PlaybackService : MediaBrowserServiceCompat() {
     sessionToken = mediaSession.sessionToken
 
     // update book when changed by player
-    player.bookStream.distinctUntilChanged().subscribe {
-      repo.updateBook(it)
-    }
+    player.bookStream.distinctUntilChanged()
+        .subscribe {
+          repo.updateBook(it)
+        }
 
     autoConnected.register(this)
 
-    disposables.apply {
-      // re-init controller when there is a new book set as the current book
-      add(prefs.currentBookId.asV2Observable()
-          .subscribe {
-            if (player.book()?.id != it) {
-              player.stop()
-              repo.bookById(it)?.let { player.init(it) }
-            }
-          })
+    prefs.currentBookId.asV2Observable()
+        .subscribe { currentBookIdChanged(it) }
+        .disposeOnDestroy()
 
-      // notify player about changes in the current book
-      add(repo.updateObservable()
-          .filter { it.id == prefs.currentBookId.value }
-          .subscribe {
-            player.init(it)
-            changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
-          })
+    repo.updateObservable()
+        .filter { it.id == prefs.currentBookId.value }
+        .subscribe {
+          player.init(it)
+          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+        }
+        .disposeOnDestroy()
 
-      // handle changes on the play state
-      add(playStateManager.playStateStream()
-          .observeOn(Schedulers.io())
-          .subscribe { handlePlaybackState(it) })
+    playStateManager.playStateStream()
+        .observeOn(Schedulers.io())
+        .subscribe { handlePlaybackState(it) }
+        .disposeOnDestroy()
 
-      // resume playback when headset is reconnected. (if settings are set)
-      add(HeadsetPlugReceiver.events(this@PlaybackService)
-          .subscribe { headsetState ->
-            if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
-              if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
-                if (prefs.resumeOnReplug.value) {
-                  player.play()
-                }
-              }
-            }
-          })
+    HeadsetPlugReceiver.events(this@PlaybackService)
+        .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
+        .subscribe { headsetPlugged() }
+        .disposeOnDestroy()
 
-      // notifies the media service about added or removed books
-      add(repo.booksStream().map { it.size }.distinctUntilChanged()
-          .subscribe {
-            notifyChildrenChanged(bookUriConverter.allBooks().toString())
-          })
+    repo.booksStream()
+        .map { it.size }
+        .distinctUntilChanged()
+        .subscribe {
+          notifyChildrenChanged(bookUriConverter.allBooks().toString())
+        }
+        .disposeOnDestroy()
 
-      // pause when audio is becoming noisy.
-      add(RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-          .subscribe {
-            d { "audio becoming noisy. playState=${playStateManager.playState}" }
-            if (playStateManager.playState === PlayState.PLAYING) {
-              playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
-              player.pause(true)
-            }
-          })
+    // pause when audio is becoming noisy.
+    RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+        .subscribe { audioBecomingNoisy() }
+        .disposeOnDestroy()
+  }
+
+  private fun currentBookIdChanged(it: Long) {
+    if (player.book()?.id != it) {
+      player.stop()
+      repo.bookById(it)?.let { player.init(it) }
+    }
+  }
+
+  private fun headsetPlugged() {
+    if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
+      if (prefs.resumeOnReplug.value) {
+        player.play()
+      }
+    }
+  }
+
+  private fun audioBecomingNoisy() {
+    d { "audio becoming noisy. playState=${playStateManager.playState}" }
+    if (playStateManager.playState === PlayState.PLAYING) {
+      playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
+      player.pause(true)
     }
   }
 
@@ -180,6 +187,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     return Service.START_STICKY
+  }
+
+  private fun Disposable.disposeOnDestroy() {
+    disposables.add(this)
   }
 
   override fun onDestroy() {
