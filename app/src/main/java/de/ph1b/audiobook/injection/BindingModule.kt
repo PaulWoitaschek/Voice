@@ -14,7 +14,7 @@ import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
-import de.ph1b.audiobook.features.widget.WidgetUpdateService
+import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.PlaybackService
 
 /**
@@ -58,7 +58,7 @@ abstract class BindingModule {
   abstract fun themePickerDialogFragment(): ThemePickerDialogFragment
 
   @ContributesAndroidInjector
-  abstract fun widgetUpdateService(): WidgetUpdateService
+  abstract fun baseWidgetProvider(): BaseWidgetProvider
 
   @ContributesAndroidInjector
   abstract fun editBookBottomSheet(): EditBookBottomSheet

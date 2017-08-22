@@ -85,8 +85,6 @@
 
         </service>
 
-        <service android:name=".features.widget.WidgetUpdateService"/>
-
         <receiver android:name=".playback.events.MediaEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>

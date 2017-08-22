@@ -27,6 +27,7 @@ import de.ph1b.audiobook.playback.utils.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.maxImageSize
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -44,6 +45,7 @@ class WidgetUpdater @Inject constructor(
 
   fun update() {
     val book = repo.bookById(prefs.currentBookId.value)
+    Timber.i("update with book ${book?.name}")
     val componentName = ComponentName(context, BaseWidgetProvider::class.java)
     val ids = appWidgetManager.getAppWidgetIds(componentName)
 
