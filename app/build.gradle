@@ -96,11 +96,11 @@ dependencies {
 
   kapt libraries.dataBindingCompiler
 
-  compile libraries.supportAppCompat
-  compile libraries.supportRecyclerView
-  compile libraries.supportDesign
-  compile libraries.supportTransitions
-  compile libraries.supportConstraintLayout
+  compile libraries.support.appCompat
+  compile libraries.support.recyclerView
+  compile libraries.support.design
+  compile libraries.support.transitions
+  compile libraries.support.constraintLayout
 
   compile libraries.picasso
 
@@ -124,7 +124,7 @@ dependencies {
   testCompile libraries.assertJ
   testCompile libraries.mockito
 
-  androidTestCompile libraries.supportTestRunner
+  androidTestCompile libraries.support.testRunner
   androidTestCompile libraries.assertJ
 
   compile libraries.rxJava
@@ -140,9 +140,9 @@ dependencies {
   compile project(":exoplayer-flac")
   compile project(":exoplayer-opus")
 
-  compile libraries.conductor
-  compile libraries.conductorSupport
-  compile libraries.conductorLifecycle
+  compile libraries.conductor.base
+  compile libraries.conductor.support
+  compile libraries.conductor.lifecycle
 
   compile libraries.moshi
 }
