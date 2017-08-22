@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.Service
 import android.content.Intent
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startForegroundService
 import android.support.v7.app.AppCompatDelegate
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -46,7 +47,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     else Timber.plant(CrashLoggingTree())
 
     bookAdder.scanForFiles()
-    startService(Intent(this, PlaybackService::class.java))
+    startForegroundService(this, Intent(this, PlaybackService::class.java))
 
     AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)
   }

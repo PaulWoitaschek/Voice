@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat.startForegroundService
 import android.view.KeyEvent
 import java.io.File
 import javax.inject.Inject
@@ -39,7 +40,7 @@ import javax.inject.Singleton
   fun fastForward() = fire(fastForwardIntent)
 
   private fun fire(intent: Intent) {
-    context.startService(intent)
+    startForegroundService(context, intent)
   }
 
   fun previous() = fire(previousIntent)
