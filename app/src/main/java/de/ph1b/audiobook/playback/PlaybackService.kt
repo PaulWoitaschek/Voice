@@ -32,6 +32,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import v
 import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -107,6 +108,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .disposeOnDestroy()
 
     setupInitialNotificationForO()
+    tearDownAutomatically()
   }
 
   // on android O the service always needs to bee started as foreground, else it crashes.
@@ -121,6 +123,19 @@ class PlaybackService : MediaBrowserServiceCompat() {
         stopSelf()
       }
     }
+  }
+
+  private fun tearDownAutomatically() {
+    val idleTimeOutInSeconds: Long = 30
+    playStateManager.playStateStream()
+        .distinctUntilChanged()
+        .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
+        .filter { it == PlayState.STOPPED }
+        .subscribe {
+          Timber.d("STOPPED for $idleTimeOutInSeconds. Stop self")
+          stopSelf()
+        }
+        .disposeOnDestroy()
   }
 
   private fun currentBookIdChanged(it: Long) {
