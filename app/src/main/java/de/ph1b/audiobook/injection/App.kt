@@ -13,6 +13,7 @@ import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
+import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import timber.log.Timber
@@ -32,6 +33,8 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
 
   override fun onCreate() {
     super.onCreate()
+
+    if (BuildConfig.DEBUG) StrictModeInit.init()
 
     CrashlyticsProxy.init(this)
 
