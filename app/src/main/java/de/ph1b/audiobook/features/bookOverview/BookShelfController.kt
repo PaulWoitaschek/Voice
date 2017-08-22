@@ -21,11 +21,7 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.asTransaction
-import de.ph1b.audiobook.misc.dpToPxRounded
-import de.ph1b.audiobook.misc.postedIfComputingLayout
-import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
@@ -53,19 +49,20 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   @Inject lateinit var prefs: PrefsManager
 
-  private val playPauseDrawable = PlayPauseDrawable()
-  private lateinit var adapter: BookShelfAdapter
-  private lateinit var listDecoration: RecyclerView.ItemDecoration
-  private lateinit var gridLayoutManager: GridLayoutManager
-  private lateinit var linearLayoutManager: RecyclerView.LayoutManager
+  private var playPauseDrawable: PlayPauseDrawable  by clearAfterDestroyView()
+  private var adapter: BookShelfAdapter  by clearAfterDestroyView()
+  private var listDecoration: RecyclerView.ItemDecoration by clearAfterDestroyView()
+  private var gridLayoutManager: GridLayoutManager by clearAfterDestroyView()
+  private var linearLayoutManager: RecyclerView.LayoutManager by clearAfterDestroyView()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
   private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
 
-  private lateinit var currentPlaying: MenuItem
+  private var currentPlaying: MenuItem by clearAfterDestroyView()
 
   override fun onBindingCreated(binding: BookShelfBinding) {
+    playPauseDrawable = PlayPauseDrawable()
     setupFab()
     setupRecyclerView()
     setupToolbar()
@@ -276,6 +273,11 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     LIST(R.drawable.ic_view_list);
 
     operator fun not(): DisplayMode = if (this == GRID) LIST else GRID
+  }
+
+  override fun onDestroyBinding(binding: BookShelfBinding) {
+    super.onDestroyBinding(binding)
+    binding.recyclerView.adapter = null
   }
 
   companion object {
