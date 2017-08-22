@@ -3,9 +3,7 @@ package de.ph1b.audiobook.injection
 import android.app.Activity
 import android.app.Application
 import android.app.Service
-import android.content.Intent
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startForegroundService
 import android.support.v7.app.AppCompatDelegate
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -17,7 +15,6 @@ import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlaybackService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +44,6 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     else Timber.plant(CrashLoggingTree())
 
     bookAdder.scanForFiles()
-    startForegroundService(this, Intent(this, PlaybackService::class.java))
 
     AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)
   }

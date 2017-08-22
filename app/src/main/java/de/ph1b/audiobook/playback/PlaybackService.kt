@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
@@ -28,6 +29,7 @@ import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import v
 import java.io.File
 import javax.inject.Inject
@@ -100,10 +102,25 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
         .disposeOnDestroy()
 
-    // pause when audio is becoming noisy.
     RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         .subscribe { audioBecomingNoisy() }
         .disposeOnDestroy()
+
+    setupInitialNotificationForO()
+  }
+
+  // on android O the service always needs to bee started as foreground, else it crashes.
+  private fun setupInitialNotificationForO() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val book = player.book()
+      Timber.i("start foreground immediately for O with book ${book?.name}")
+      val notification = notificationAnnouncer.getNotification(book, PlayState.PLAYING, mediaSession.sessionToken)
+      startForeground(NOTIFICATION_ID, notification)
+      if (book == null) {
+        Timber.d("there is no book. Stop self.")
+        stopSelf()
+      }
+    }
   }
 
   private fun currentBookIdChanged(it: Long) {
@@ -142,7 +159,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun handlePlaybackStateStopped() {
-    d { "Set mediaSession to inactive" }
     mediaSession.isActive = false
     audioFocusHelper.abandon()
     notificationManager.cancel(NOTIFICATION_ID)
@@ -186,7 +202,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
     }
 
-    return Service.START_STICKY
+    return Service.START_NOT_STICKY
   }
 
   private fun Disposable.disposeOnDestroy() {
