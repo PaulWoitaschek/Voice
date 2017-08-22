@@ -1,7 +1,7 @@
 import de.ph1b.audiobook.signing.SigningDetailsProvider
 
 plugins {
-  id "io.gitlab.arturbosch.detekt" version "1.0.0.RC2"
+  id "io.gitlab.arturbosch.detekt" version "1.0.0.RC3"
 }
 
 apply plugin: 'com.android.application'
