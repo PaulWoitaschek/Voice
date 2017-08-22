@@ -10,7 +10,6 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import io.reactivex.Observable
 import javax.inject.Inject
 
-
 @Reusable
 class TriggerWidgetOnChange @Inject constructor(
     private val prefs: PrefsManager,

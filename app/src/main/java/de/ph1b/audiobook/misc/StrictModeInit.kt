@@ -3,7 +3,6 @@ package de.ph1b.audiobook.misc
 import android.os.Build
 import android.os.StrictMode
 
-
 object StrictModeInit {
 
   fun init() {

@@ -49,8 +49,8 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   @Inject lateinit var prefs: PrefsManager
 
-  private var playPauseDrawable: PlayPauseDrawable  by clearAfterDestroyView()
-  private var adapter: BookShelfAdapter  by clearAfterDestroyView()
+  private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
+  private var adapter: BookShelfAdapter by clearAfterDestroyView()
   private var listDecoration: RecyclerView.ItemDecoration by clearAfterDestroyView()
   private var gridLayoutManager: GridLayoutManager by clearAfterDestroyView()
   private var linearLayoutManager: RecyclerView.LayoutManager by clearAfterDestroyView()

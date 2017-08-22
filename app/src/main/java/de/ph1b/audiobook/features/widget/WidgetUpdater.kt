@@ -30,7 +30,6 @@ import de.ph1b.audiobook.uitools.maxImageSize
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @Reusable
 class WidgetUpdater @Inject constructor(
     private val context: Context,
@@ -166,7 +165,6 @@ class WidgetUpdater @Inject constructor(
           .resize(sizeForPicasso, sizeForPicasso)
           .getOnUiThread()
     } else null
-
 
     if (cover == null) {
       val coverReplacement = CoverReplacement(book.name, context)

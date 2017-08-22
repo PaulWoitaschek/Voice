@@ -44,8 +44,8 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   override val layoutRes = R.layout.book_play
   override fun createPresenter() = BookPlayPresenter(bookId)
 
-  private var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter>  by clearAfterDestroyView()
-  private var sleepTimerItem: MenuItem  by clearAfterDestroyView()
+  private var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter> by clearAfterDestroyView()
+  private var sleepTimerItem: MenuItem by clearAfterDestroyView()
 
   init {
     App.component.inject(this)
