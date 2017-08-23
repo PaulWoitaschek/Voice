@@ -8,9 +8,9 @@
     <!-- ## text colors -->
 
     <!-- indigo 500 -->
-    <color name="primary">#ff3f51b5</color>
+    <color name="primary">#01579b</color>
     <!-- indigo 700 -->
-    <color name="primaryDark">#ff303f9f</color>
+    <color name="primaryDark">#002f6c</color>
 
     <color name="navbarColor">@color/primaryDark</color>
     <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>

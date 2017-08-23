@@ -1,4 +1,4 @@
-MaterialAudiobookPlayer
+Voice
 =======================
 [![CI Status](https://circleci.com/gh/PaulWoitaschek/MaterialAudiobookPlayer.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)](https://circleci.com/gh/PaulWoitaschek/MaterialAudiobookPlayer)
 
@@ -12,13 +12,13 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/Images/map-port.jpg" width="400" ></a>
 
 [![Download from Google Play](http://www.android.com/images/brand/android_app_on_play_large.png "Download from Google Play")](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
-[![Material Audiobook Player on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/repository/browse/?fdfilter=material&fdid=de.ph1b.audiobook)
+[![Voice on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/repository/browse/?fdfilter=material&fdid=de.ph1b.audiobook)
 
 # <a name="contrib">Contribution</a>
 
 ## Development
 
-If you wan to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22). 
+If you wan to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22).
 Its always a good idea to talk about what are going to do before you actually start it, so frustration can be avoided.
 
 Some rules for coding:
@@ -27,9 +27,9 @@ Some rules for coding:
 * Use commits with a good description, so everyone can see, what you did
 
 ### Building the project on windows
-If you want to build the project on windows you will run into some issues since the pre-build scripts use linux specific commands. 
+If you want to build the project on windows you will run into some issues since the pre-build scripts use linux specific commands.
 
-To prepare the build you have to download [Opus](https://ftp.osuosl.org/pub/xiph/releases/opus/) and 
+To prepare the build you have to download [Opus](https://ftp.osuosl.org/pub/xiph/releases/opus/) and
 [Flac](https://ftp.osuosl.org/pub/xiph/releases/flac/) and unzip those files to the `exoplayer-flac` and `exoplayer-opus` submodules' `src/main/jni` folders.
 
 The current versions can be found [here](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/blob/master/buildSrc/src/main/java/de/ph1b/audiobook/ndkGen/dependencyVersions.kt).
@@ -37,7 +37,7 @@ The current versions can be found [here](https://github.com/PaulWoitaschek/Mater
 This step has to be done only once and has to be repeated when a referenced version change.
 
 ## <a name="trans">Translations</a>
-The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
+The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
 
 Or you can start translating a new language if you speak it ;-)
 
