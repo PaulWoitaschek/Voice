@@ -1,46 +1,64 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
-import d
+import android.os.Looper
+import android.support.annotation.CallSuper
 import i
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
  */
-abstract class Presenter<V> {
+abstract class Presenter<V : Any> {
 
   val view: V
-    get() = internalView!!
+    get() {
+      checkMainThread()
+      return internalView!!
+    }
   private var internalView: V? = null
 
-  private var compositeDisposable: CompositeDisposable? = null
+  private val compositeDisposable = CompositeDisposable()
 
+  @CallSuper
   open fun onRestore(savedState: Bundle) {
-
+    checkMainThread()
   }
 
-  fun bind(view: V) {
-    if (internalView == null) {
-      i { "binding $view" }
-      internalView = view
+  fun attach(view: V) {
+    checkMainThread()
+    check(internalView == null) {
+      "$internalView already bound."
+    }
 
-      compositeDisposable = CompositeDisposable()
-      onBind(view, compositeDisposable!!)
-    } else {
-      d { "$view already bound" }
+    i { "binding $view" }
+    internalView = view
+    onAttach(view)
+  }
+
+  fun detach() {
+    checkMainThread()
+    i { "Unbinding $view" }
+    compositeDisposable.clear()
+    internalView = null
+  }
+
+  @CallSuper
+  open fun onSave(state: Bundle) {
+    checkMainThread()
+  }
+
+  open fun onAttach(view: V) {}
+
+  fun Disposable.disposeOnDetach() {
+    checkMainThread()
+    compositeDisposable.add(this)
+  }
+
+  private fun checkMainThread() {
+    check(Looper.getMainLooper() == Looper.myLooper()) {
+      "Is not on ui thread!"
     }
   }
-
-  fun unbind() {
-    i { "Unbinding $view" }
-    internalView = null
-    compositeDisposable?.dispose()
-  }
-
-  open fun onSave(state: Bundle) {
-
-  }
-
-  abstract fun onBind(view: V, disposables: CompositeDisposable)
 }

@@ -7,7 +7,7 @@ import i
 /**
  * Base activity that provides a convenient way for binding a view to a presenter
  */
-abstract class RxBaseActivity<V, out P> : BaseActivity() where P : Presenter<V> {
+abstract class RxBaseActivity<V : Any, out P> : BaseActivity() where P : Presenter<V> {
 
   private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 

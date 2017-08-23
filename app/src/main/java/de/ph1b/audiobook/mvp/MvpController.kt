@@ -9,7 +9,7 @@ import de.ph1b.audiobook.features.BaseController
 /**
  * Base fragment that provides a convenient way for binding a view to a presenter
  */
-abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
+abstract class MvpController<V : Any, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
   private var internalPresenter: P? = null
   val presenter: P
@@ -29,11 +29,11 @@ abstract class MvpController<V, out P, B>(args: Bundle = Bundle()) : BaseControl
       }
 
       override fun postAttach(controller: Controller, view: View) {
-        presenter.bind(provideView())
+        presenter.attach(provideView())
       }
 
       override fun postDetach(controller: Controller, view: View) {
-        presenter.unbind()
+        presenter.detach()
       }
 
       override fun onSaveInstanceState(controller: Controller, outState: Bundle) {

@@ -9,7 +9,6 @@ import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -27,7 +26,7 @@ class BookmarkPresenter @Inject constructor(
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
 
-  override fun onBind(view: BookmarkView, disposables: CompositeDisposable) {
+  override fun onAttach(view: BookmarkView) {
     check(bookId != -1L) { "You must initialize the bookId" }
 
     val book = repo.bookById(bookId) ?: return

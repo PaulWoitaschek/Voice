@@ -6,7 +6,6 @@ import de.ph1b.audiobook.misc.combineLatest
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
-import io.reactivex.disposables.CompositeDisposable
 import java.util.HashSet
 import javax.inject.Inject
 
@@ -21,15 +20,15 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   @Inject lateinit var prefsManager: PrefsManager
 
-  override fun onBind(view: FolderOverviewController, disposables: CompositeDisposable) {
+  override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = prefsManager.collectionFolders.asV2Observable()
         .map { it.map { FolderModel(it, true) } }
     val singleFolderStream = prefsManager.singleBookFolders.asV2Observable()
         .map { it.map { FolderModel(it, false) } }
 
-    val combined = combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
-    disposables.add(combined
-        .subscribe { view.newData(it) })
+    combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
+        .subscribe { view.newData(it) }
+        .disposeOnDetach()
   }
 
   /** removes a selected folder **/

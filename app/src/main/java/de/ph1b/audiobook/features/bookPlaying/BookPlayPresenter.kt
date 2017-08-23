@@ -1,14 +1,12 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.addTo
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.Sandman
 import i
-import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import javax.inject.Inject
 
@@ -26,27 +24,27 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
     App.component.inject(this)
   }
 
-  override fun onBind(view: BookPlayMvp.View, disposables: CompositeDisposable) {
-    // current book
-    bookRepository.booksStream().subscribe {
-      val book = it.firstOrNull { it.id == bookId }
-      if (book == null) {
-        view.finish()
-      } else view.render(book)
-    }.addTo(disposables)
+  override fun onAttach(view: BookPlayMvp.View) {
+    bookRepository.booksStream()
+        .subscribe {
+          val book = it.firstOrNull { it.id == bookId }
+          if (book == null) {
+            view.finish()
+          } else view.render(book)
+        }
+        .disposeOnDetach()
 
-    // play state
-    playStateManager.playStateStream().subscribe {
-      // animate only if this is not the first run
-      i { "onNext with playState $it" }
-      val playing = it == PlayState.PLAYING
-      view.showPlaying(playing)
-    }.addTo(disposables)
+    playStateManager.playStateStream()
+        .subscribe {
+          i { "onNext with playState $it" }
+          val playing = it == PlayState.PLAYING
+          view.showPlaying(playing)
+        }
+        .disposeOnDetach()
 
-    // update sleep timer state
     sandman.sleepSand
         .subscribe { view.showLeftSleepTime(it) }
-        .addTo(disposables)
+        .disposeOnDetach()
   }
 
   override fun playPause() {

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.folderChooser
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import d
 import de.ph1b.audiobook.injection.App
@@ -10,7 +11,6 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
-import io.reactivex.disposables.CompositeDisposable
 import v
 import java.io.File
 import java.util.ArrayList
@@ -33,7 +33,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   private val SI_CHOSEN_FILE = "siChosenFile"
   private var chosenFile: File? = null
 
-  override fun onBind(view: FolderChooserView, disposables: CompositeDisposable) {
+  override fun onAttach(view: FolderChooserView) {
     refreshRootDirs()
   }
 
@@ -155,6 +155,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     return true
   }
 
+  @SuppressLint("MissingPermission")
   private fun refreshRootDirs() {
     rootDirs.clear()
     rootDirs.addAll(storageDirFinder.storageDirs())

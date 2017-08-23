@@ -12,7 +12,6 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import i
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -29,44 +28,44 @@ constructor(
     private val coverFromDiscCollector: CoverFromDiscCollector)
   : Presenter<BookShelfController>() {
 
-  override fun onBind(view: BookShelfController, disposables: CompositeDisposable) {
+  override fun onAttach(view: BookShelfController) {
     i { "onBind Called for $view" }
 
     val audioFoldersEmpty = prefsManager.collectionFolders.value.isEmpty() && prefsManager.singleBookFolders.value.isEmpty()
     if (audioFoldersEmpty) view.showNoFolderWarning()
 
-    // scan for files
     bookAdder.scanForFiles()
 
-    disposables.apply {
-      // update books when they changed
-      add(repo.booksStream().subscribe {
-        view.displayNewBooks(it)
-      })
+    repo.booksStream()
+        .subscribe {
+          view.displayNewBooks(it)
+        }
+        .disposeOnDetach()
 
-      // Subscription that notifies the adapter when the current book has changed. It also notifies
-      // the item with the old indicator now falsely showing.
-      add(prefsManager.currentBookId.asV2Observable()
-          .subscribe {
-            val book = repo.bookById(it)
-            view.updateCurrentBook(book)
-          })
+    prefsManager.currentBookId.asV2Observable()
+        .subscribe {
+          val book = repo.bookById(it)
+          view.updateCurrentBook(book)
+        }
+        .disposeOnDetach()
 
-      // if there are no books and the scanner is active, show loading
-      add(combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }) { active, booksEmpty ->
-        if (booksEmpty) active else false
-      }.subscribe { view.showLoading(it) })
-
-      // Subscription that updates the UI based on the play state.
-      add(playStateManager.playStateStream().subscribe {
-        val playing = it == PlayState.PLAYING
-        view.showPlaying(playing)
-      })
-
-      // notify view when a book cover changed
-      add(coverFromDiscCollector.coverChanged()
-          .subscribe { view.bookCoverChanged(it) })
+    val noBooks = repo.booksStream().map { it.isEmpty() }
+    val showLoading = combineLatest(bookAdder.scannerActive, noBooks) { active, booksEmpty ->
+      if (booksEmpty) active else false
     }
+    showLoading.subscribe { view.showLoading(it) }
+        .disposeOnDetach()
+
+    playStateManager.playStateStream()
+        .subscribe {
+          val playing = it == PlayState.PLAYING
+          view.showPlaying(playing)
+        }
+        .disposeOnDetach()
+
+    coverFromDiscCollector.coverChanged()
+        .subscribe { view.bookCoverChanged(it) }
+        .disposeOnDetach()
   }
 
   fun playPauseRequested() = playerController.playPause()

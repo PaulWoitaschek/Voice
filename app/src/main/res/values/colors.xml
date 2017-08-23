@@ -7,9 +7,7 @@
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
 
-    <!-- indigo 500 -->
     <color name="primary">#01579b</color>
-    <!-- indigo 700 -->
     <color name="primaryDark">#002f6c</color>
 
     <color name="navbarColor">@color/primaryDark</color>
