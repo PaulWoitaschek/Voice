@@ -52,6 +52,7 @@ abstract class Presenter<V : Any> {
   open fun onAttach(view: V) {}
 
   fun Disposable.disposeOnDetach() {
+    check(internalView != null) { "Must only be called in attached state." }
     checkMainThread()
     compositeDisposable.add(this)
   }
