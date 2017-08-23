@@ -13,17 +13,17 @@ abstract class MvpController<V : Any, out P, B>(args: Bundle = Bundle()) : BaseC
 
   private var internalPresenter: P? = null
   val presenter: P
-    get() = if (isDestroyed) throw IllegalStateException("Must not call presenter when destroyed!")
-    else {
+    get() {
+      check(!isDestroyed) { "Must not call presenter when destroyed!" }
       if (internalPresenter == null) {
         internalPresenter = createPresenter()
       }
-      internalPresenter!!
+      return internalPresenter!!
     }
 
   init {
-    @Suppress("LeakingThis")
     addLifecycleListener(object : LifecycleListener() {
+
       override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
         presenter.onRestore(savedInstanceState)
       }
@@ -32,7 +32,7 @@ abstract class MvpController<V : Any, out P, B>(args: Bundle = Bundle()) : BaseC
         presenter.attach(provideView())
       }
 
-      override fun postDetach(controller: Controller, view: View) {
+      override fun preDetach(controller: Controller, view: View) {
         presenter.detach()
       }
 
