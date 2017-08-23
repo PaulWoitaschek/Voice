@@ -7,9 +7,6 @@ import i
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-/**
- * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
- */
 abstract class Presenter<V : Any> {
 
   val view: V
@@ -27,19 +24,19 @@ abstract class Presenter<V : Any> {
   }
 
   fun attach(view: V) {
+    i { "attach $view" }
     checkMainThread()
     check(internalView == null) {
       "$internalView already bound."
     }
 
-    i { "binding $view" }
     internalView = view
     onAttach(view)
   }
 
   fun detach() {
+    i { "detach $view" }
     checkMainThread()
-    i { "Unbinding $view" }
     compositeDisposable.clear()
     internalView = null
   }
