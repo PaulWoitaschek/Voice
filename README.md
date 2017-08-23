@@ -42,6 +42,6 @@ The project page is on [transifex](https://www.transifex.com/projects/p/material
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2017 [Paul Woitaschek](http://www.paul-woitaschek.de/)
+Copyright (C) 2014-2017 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
