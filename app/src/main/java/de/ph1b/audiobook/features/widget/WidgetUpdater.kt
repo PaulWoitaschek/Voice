@@ -16,6 +16,7 @@ import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.MainActivity
+import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.getOnUiThread
@@ -124,23 +125,21 @@ class WidgetUpdater @Inject constructor(
 
   private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPauseI = serviceController.getPlayPauseIntent()
-    val playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val playPausePI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
     val fastForwardI = serviceController.getFastForwardIntent()
-    val fastForwardPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val fastForwardPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
     val rewindI = serviceController.getRewindIntent()
-    val rewindPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_REWIND,
-        rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val rewindPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
-    if (playStateManager.playState === PlayStateManager.PlayState.PLAYING) {
-      remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp)
-    } else {
-      remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_white_36dp)
-    }
+    val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {
+      R.drawable.ic_pause_white_36dp
+    } else R.drawable.ic_play_white_36dp
+    remoteViews.setImageViewResource(R.id.playPause, playIcon)
 
     // if we have any book, init the views and have a click on the whole widget start BookPlay.
     // if we have no book, simply have a click on the whole widget start BookChoose.
