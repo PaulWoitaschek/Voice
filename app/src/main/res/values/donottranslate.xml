@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Voice</string>
+    <string name="app_name" translatable="false">Material Player</string>
     <string name="zeroTime" translatable="false">0:00:00</string>
 
     <string-array name="pref_support_values">
