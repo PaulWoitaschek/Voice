@@ -14,8 +14,8 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.asTransaction
 import de.ph1b.audiobook.misc.asV2Observable
+import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 

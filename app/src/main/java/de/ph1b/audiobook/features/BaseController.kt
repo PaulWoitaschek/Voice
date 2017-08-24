@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.annotation.CallSuper
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.rxlifecycle2.RxController
 import io.reactivex.Observable
+import timber.log.Timber
 
 abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : RxController(args) {
 
@@ -40,7 +42,19 @@ abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : Rx
   override final fun onDestroyView(view: View) {
     super.onDestroyView(view)
     onDestroyBinding(binding)
-    internalBinding!!.unbind()
+    if (isDestroyed || isBeingDestroyed) {
+      Timber.d("we are tearing down. defer clearBinding")
+    } else clearBinding()
+  }
+
+  @CallSuper
+  override fun onDestroy() {
+    super.onDestroy()
+    clearBinding()
+  }
+
+  private fun clearBinding() {
+    internalBinding?.unbind()
     internalBinding = null
   }
 

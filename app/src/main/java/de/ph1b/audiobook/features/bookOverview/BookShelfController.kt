@@ -21,8 +21,8 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.asTransaction
-import de.ph1b.audiobook.misc.clearAfterDestroyView
+import de.ph1b.audiobook.misc.conductor.asTransaction
+import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.misc.supportTransitionName

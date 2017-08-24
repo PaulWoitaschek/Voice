@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.misc.conductor
 
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler

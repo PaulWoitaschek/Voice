@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.misc.conductor
 
 import com.bluelinelabs.conductor.Controller
 import kotlin.properties.ReadWriteProperty
@@ -27,4 +27,6 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
   }
 }
 
-fun <T : Any> Controller.clearAfterDestroyView(): ReadWriteProperty<Controller, T> = ClearAfterDestroyView(this)
+fun <T : Any> Controller.clearAfterDestroyView(): ReadWriteProperty<Controller, T> = ClearAfterDestroyView(
+    this
+)

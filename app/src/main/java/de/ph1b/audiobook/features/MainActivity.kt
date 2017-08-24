@@ -22,7 +22,7 @@ import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
-import de.ph1b.audiobook.misc.asTransaction
+import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
