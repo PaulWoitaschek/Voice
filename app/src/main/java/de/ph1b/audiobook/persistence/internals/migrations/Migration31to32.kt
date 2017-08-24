@@ -19,17 +19,21 @@ class Migration31to32 : Migration {
   private val CHAPTER_PATH = "chapterPath"
 
   override fun migrate(db: SQLiteDatabase) {
-    db.query(TABLE_BOOK,
+    db.query(
+        TABLE_BOOK,
         arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
-        null, null, null, null, null).moveToNextLoop {
+        null, null, null, null, null
+    ).moveToNextLoop {
       val bookId = getLong(0)
       val bookmarkCurrentMediaPath = getString(1)
 
-      val chapterCursor = db.query(TABLE_CHAPTERS,
+      val chapterCursor = db.query(
+          TABLE_CHAPTERS,
           arrayOf(CHAPTER_PATH),
           BOOK_ID + "=?",
           arrayOf(bookId.toString()),
-          null, null, null)
+          null, null, null
+      )
       val chapterPaths = ArrayList<String>(chapterCursor.count)
       chapterCursor.moveToNextLoop {
         val chapterPath = chapterCursor.getString(0)

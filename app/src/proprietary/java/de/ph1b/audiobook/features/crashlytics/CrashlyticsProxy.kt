@@ -22,9 +22,11 @@ object CrashlyticsProxy : ErrorReporter {
 
   fun init(app: Application) {
     val crashlytics = Crashlytics.Builder()
-        .core(CrashlyticsCore.Builder()
-            .disabled(BuildConfig.DEBUG)
-            .build())
+        .core(
+            CrashlyticsCore.Builder()
+                .disabled(BuildConfig.DEBUG)
+                .build()
+        )
         .build()
     Fabric.with(app, crashlytics)
   }

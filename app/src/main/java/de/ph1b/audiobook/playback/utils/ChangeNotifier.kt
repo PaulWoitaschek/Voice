@@ -36,27 +36,31 @@ class ChangeNotifier @Inject constructor(
   @Volatile private var lastFileForMetaData = File("")
 
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
-      .setActions(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-          PlaybackStateCompat.ACTION_REWIND or
-          PlaybackStateCompat.ACTION_PLAY or
-          PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
-          PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-          PlaybackStateCompat.ACTION_PAUSE or
-          PlaybackStateCompat.ACTION_PLAY_PAUSE or
-          PlaybackStateCompat.ACTION_STOP or
-          PlaybackStateCompat.ACTION_FAST_FORWARD or
-          PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-          PlaybackStateCompat.ACTION_SEEK_TO)
+      .setActions(
+          PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+              PlaybackStateCompat.ACTION_REWIND or
+              PlaybackStateCompat.ACTION_PLAY or
+              PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
+              PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
+              PlaybackStateCompat.ACTION_PAUSE or
+              PlaybackStateCompat.ACTION_PLAY_PAUSE or
+              PlaybackStateCompat.ACTION_STOP or
+              PlaybackStateCompat.ACTION_FAST_FORWARD or
+              PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+              PlaybackStateCompat.ACTION_SEEK_TO
+      )
 
   //use a different feature set for Android Auto
   private val playbackStateBuilderForAuto = PlaybackStateCompat.Builder()
-      .setActions(PlaybackStateCompat.ACTION_PLAY or
-          PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
-          PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-          PlaybackStateCompat.ACTION_PAUSE or
-          PlaybackStateCompat.ACTION_PLAY_PAUSE or
-          PlaybackStateCompat.ACTION_STOP or
-          PlaybackStateCompat.ACTION_SEEK_TO)
+      .setActions(
+          PlaybackStateCompat.ACTION_PLAY or
+              PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
+              PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
+              PlaybackStateCompat.ACTION_PAUSE or
+              PlaybackStateCompat.ACTION_PLAY_PAUSE or
+              PlaybackStateCompat.ACTION_STOP or
+              PlaybackStateCompat.ACTION_SEEK_TO
+      )
       .addCustomAction(ANDROID_AUTO_ACTION_PREVIOUS, context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
       .addCustomAction(ANDROID_AUTO_ACTION_REWIND, context.getString(R.string.rewind), R.drawable.ic_fast_rewind)
       .addCustomAction(ANDROID_AUTO_ACTION_FAST_FORWARD, context.getString(R.string.fast_forward), R.drawable.ic_fast_forward)
@@ -121,11 +125,12 @@ class ChangeNotifier @Inject constructor(
     METADATA("com.android.music.metachanged"),
     PLAY_STATE("com.android.music.playstatechange");
 
-    fun broadcastIntent(author: String?,
-                        bookName: String,
-                        chapterName: String,
-                        playState: PlayStateManager.PlayState,
-                        time: Int) =
+    fun broadcastIntent(
+        author: String?,
+        bookName: String,
+        chapterName: String,
+        playState: PlayStateManager.PlayState,
+        time: Int) =
         Intent(intentUrl).apply {
           putExtra("id", 1)
           if (author != null) {

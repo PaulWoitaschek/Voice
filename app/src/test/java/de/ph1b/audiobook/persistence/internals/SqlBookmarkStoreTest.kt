@@ -17,17 +17,24 @@ import org.robolectric.annotation.Config
  * Test for the internal bookmark register
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
+@Config(
+    constants = BuildConfig::class,
+    sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP),
+    manifest = "src/main/AndroidManifest.xml",
+    application = TestApp::class
+)
 class SqlBookmarkStoreTest {
 
   lateinit var register: SqlBookmarkStore
 
-  @Before fun setup() {
+  @Before
+  fun setup() {
     val internalDb = InternalDb(RuntimeEnvironment.application)
     register = SqlBookmarkStore(internalDb)
   }
 
-  @Test fun test() {
+  @Test
+  fun test() {
     // test adding
     val book = BookFactory.create()
     val added = (0..2000).map {

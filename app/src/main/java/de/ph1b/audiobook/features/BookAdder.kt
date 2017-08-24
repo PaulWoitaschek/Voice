@@ -55,7 +55,8 @@ import javax.inject.Singleton
   init {
     val folderChanged = combineLatest(
         prefs.collectionFolders.asV2Observable(),
-        prefs.singleBookFolders.asV2Observable()) { _, _ -> Unit }
+        prefs.singleBookFolders.asV2Observable()
+    ) { _, _ -> Unit }
     folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
   }
 
@@ -263,7 +264,8 @@ import javax.inject.Singleton
       bookToUpdate = bookToUpdate.copy(
           chapters = newChapters,
           currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
-          time = if (currentPathIsGone) 0 else bookToUpdate.time)
+          time = if (currentPathIsGone) 0 else bookToUpdate.time
+      )
 
       handler.postBlocking { repo.updateBook(bookToUpdate) }
     }

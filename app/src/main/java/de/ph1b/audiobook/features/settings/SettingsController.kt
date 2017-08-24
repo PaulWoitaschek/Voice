@@ -39,7 +39,8 @@ class SettingsController : BaseController<SettingsBinding>() {
     setupTextSetting(
         binding = binding.audiobookFolder,
         titleRes = R.string.pref_root_folder_title,
-        contentRes = R.string.pref_root_folder_summary) {
+        contentRes = R.string.pref_root_folder_summary
+    ) {
       val transaction = FolderOverviewController().asTransaction()
       router.pushController(transaction)
     }
@@ -47,7 +48,8 @@ class SettingsController : BaseController<SettingsBinding>() {
     // theme
     val themeDescription = setupTextSetting(
         binding = binding.theme,
-        titleRes = R.string.pref_theme_title) {
+        titleRes = R.string.pref_theme_title
+    ) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
     prefs.theme.asV2Observable()
@@ -85,7 +87,8 @@ class SettingsController : BaseController<SettingsBinding>() {
     // auto rewind
     val autoRewindDescription = setupTextSetting(
         binding = binding.autoRewind,
-        titleRes = R.string.pref_auto_rewind_title) {
+        titleRes = R.string.pref_auto_rewind_title
+    ) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
     prefs.autoRewindAmount.asV2Observable()
@@ -110,7 +113,9 @@ class SettingsController : BaseController<SettingsBinding>() {
     binding.toolbar.title = getString(R.string.action_settings)
   }
 
-  private inline fun setupTextSetting(binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {
+  private inline fun setupTextSetting(
+      binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null,
+      crossinline onClick: () -> Unit): TextView {
     val title: TextView = binding.title
     val description: TextView = binding.description
     if (contentRes != null) description.setText(contentRes)
@@ -121,7 +126,9 @@ class SettingsController : BaseController<SettingsBinding>() {
     return description
   }
 
-  private fun setupSwitchSetting(binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int, pref: Preference<Boolean>) {
+  private fun setupSwitchSetting(
+      binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int,
+      pref: Preference<Boolean>) {
     binding.switchTitle.setText(titleRes)
     binding.switchDescription.setText(contentRes)
 

@@ -20,12 +20,14 @@ class OggChapterReadingTest {
     val file = File(javaClass.classLoader.getResource("ogg/simple.opus").file)
     val chapters = oggChapterReader.read(file)
 
-    assertThat(chapters).isEqualTo(mapOf(
-        0 to "Chapter 1",
-        1000 to "Chapter 2",
-        2000 to "Chapter 3",
-        3000 to "Chapter 4"
-    ))
+    assertThat(chapters).isEqualTo(
+        mapOf(
+            0 to "Chapter 1",
+            1000 to "Chapter 2",
+            2000 to "Chapter 3",
+            3000 to "Chapter 4"
+        )
+    )
   }
 
   @Test
@@ -33,10 +35,12 @@ class OggChapterReadingTest {
     val file = File(javaClass.classLoader.getResource("ogg/simple_vorbis.ogg").file)
     val chapters = oggChapterReader.read(file)
 
-    assertThat(chapters).isEqualTo(mapOf(
-        0 to "Part 1",
-        20 to "Part 2",
-        2000 to "Part 3"
-    ))
+    assertThat(chapters).isEqualTo(
+        mapOf(
+            0 to "Part 1",
+            20 to "Part 2",
+            2000 to "Part 3"
+        )
+    )
   }
 }

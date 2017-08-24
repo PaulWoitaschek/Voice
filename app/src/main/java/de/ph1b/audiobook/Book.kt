@@ -97,8 +97,10 @@ data class Book(
       root.replace(separator, "")
     } + ".jpg"
 
-    val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component.context.packageName}",
-        name)
+    val coverFile = File(
+        "${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component.context.packageName}",
+        name
+    )
     if (!coverFile.parentFile.exists()) {
       //noinspection ResultOfMethodCallIgnored
       coverFile.parentFile.mkdirs()

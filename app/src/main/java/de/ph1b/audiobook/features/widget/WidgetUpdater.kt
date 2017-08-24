@@ -99,8 +99,10 @@ class WidgetUpdater @Inject constructor(
     // directly going back to bookChoose
     val wholeWidgetClickI = Intent(context, MainActivity::class.java)
     wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-    val wholeWidgetClickPI = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(),
-        wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val wholeWidgetClickPI = PendingIntent.getActivity(
+        context, System.currentTimeMillis().toInt(),
+        wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT
+    )
     val cover = imageHelper.drawableToBitmap(
         drawable = context.drawable(R.drawable.icon_108dp),
         width = imageHelper.smallerScreenSize,
@@ -127,15 +129,30 @@ class WidgetUpdater @Inject constructor(
 
   private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPauseI = serviceController.getPlayPauseIntent()
-    val playPausePI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val playPausePI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+        playPauseI,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
     val fastForwardI = serviceController.getFastForwardIntent()
-    val fastForwardPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val fastForwardPI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
+        fastForwardI,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
     val rewindI = serviceController.getRewindIntent()
-    val rewindPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
+    val rewindPI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_REWIND,
+        rewindI,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {

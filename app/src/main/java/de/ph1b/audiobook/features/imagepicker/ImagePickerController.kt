@@ -32,9 +32,11 @@ import javax.inject.Inject
  */
 class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>(bundle) {
 
-  constructor(book: Book) : this(Bundle().apply {
-    putLong(NI_BOOK_ID, book.id)
-  })
+  constructor(book: Book) : this(
+      Bundle().apply {
+        putLong(NI_BOOK_ID, book.id)
+      }
+  )
 
   init {
     App.component.inject(this)
@@ -200,21 +202,23 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
           rotation.start()
         }
 
-    rotation.setAnimationListener(object : Animation.AnimationListener {
-      override fun onAnimationRepeat(p0: Animation?) {
-        if (webViewIsLoading.value == false) {
-          Timber.i("we are in the refresh round. cancel now.")
-          rotation.cancel()
-          rotation.reset()
+    rotation.setAnimationListener(
+        object : Animation.AnimationListener {
+          override fun onAnimationRepeat(p0: Animation?) {
+            if (webViewIsLoading.value == false) {
+              Timber.i("we are in the refresh round. cancel now.")
+              rotation.cancel()
+              rotation.reset()
+            }
+          }
+
+          override fun onAnimationEnd(p0: Animation?) {
+          }
+
+          override fun onAnimationStart(p0: Animation?) {
+          }
         }
-      }
-
-      override fun onAnimationEnd(p0: Animation?) {
-      }
-
-      override fun onAnimationStart(p0: Animation?) {
-      }
-    })
+    )
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {

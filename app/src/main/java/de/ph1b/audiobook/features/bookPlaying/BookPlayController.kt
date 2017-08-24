@@ -161,22 +161,24 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   }
 
   private fun setupSeekBar() {
-    binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-      override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
-        //sets text to adjust while using seekBar
-        binding.playedTime.text = formatTime(progress, binding.seekBar.max)
-      }
+    binding.seekBar.setOnSeekBarChangeListener(
+        object : SeekBar.OnSeekBarChangeListener {
+          override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
+            //sets text to adjust while using seekBar
+            binding.playedTime.text = formatTime(progress, binding.seekBar.max)
+          }
 
-      override fun onStartTrackingTouch(view: SeekBar?) {
-      }
+          override fun onStartTrackingTouch(view: SeekBar?) {
+          }
 
-      override fun onStopTrackingTouch(view: SeekBar?) {
-        currentChapter?.let {
-          val progress = binding.seekBar.progress
-          presenter.seekTo(it.start + progress, it.file)
+          override fun onStopTrackingTouch(view: SeekBar?) {
+            currentChapter?.let {
+              val progress = binding.seekBar.progress
+              presenter.seekTo(it.start + progress, it.file)
+            }
+          }
         }
-      }
-    })
+    )
   }
 
   private fun setupSpinner() {
@@ -225,8 +227,10 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
           true
         }
         R.id.action_time_lapse -> {
-          PlaybackSpeedDialogFragment().show(fragmentManager,
-              PlaybackSpeedDialogFragment.TAG)
+          PlaybackSpeedDialogFragment().show(
+              fragmentManager,
+              PlaybackSpeedDialogFragment.TAG
+          )
           true
         }
         R.id.action_bookmark -> {

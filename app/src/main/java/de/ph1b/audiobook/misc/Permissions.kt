@@ -37,7 +37,10 @@ class Permissions(private val activity: Activity) {
     }
   }
 
-  private fun hasPermission(permission: String) = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
+  private fun hasPermission(permission: String) = ContextCompat.checkSelfPermission(
+      activity,
+      permission
+  ) == PackageManager.PERMISSION_GRANTED
 
   private fun showRationale(permission: String) = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
 

@@ -48,7 +48,8 @@ class EditCoverDialogFragment : DialogFragment() {
     binding.coverReplacement.visible = true
     binding.cropOverlay.selectionOn = false
     picasso.load(uri)
-        .into(binding.coverImage, object : PicassoCallback {
+        .into(
+            binding.coverImage, object : PicassoCallback {
           override fun onError() {
             dismiss()
           }
@@ -57,7 +58,8 @@ class EditCoverDialogFragment : DialogFragment() {
             binding.cropOverlay.selectionOn = true
             binding.coverReplacement.visible = false
           }
-        })
+        }
+        )
 
     val dialog = MaterialDialog.Builder(context)
         .customView(binding.root, false)

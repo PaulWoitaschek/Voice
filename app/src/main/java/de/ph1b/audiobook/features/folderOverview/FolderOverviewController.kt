@@ -96,8 +96,10 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
         val finalRadius = Math.max(binding.overlay.width, binding.overlay.height)
 
         // create the animator for this view (the start radius is zero)
-        val anim = ViewAnimationUtils.createCircularReveal(binding.overlay,
-            famCenter.x, famCenter.y, 0f, finalRadius.toFloat())
+        val anim = ViewAnimationUtils.createCircularReveal(
+            binding.overlay,
+            famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
+        )
 
         // make the view visible and start the animation
         binding.overlay.visible = true
@@ -114,16 +116,20 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
         val initialRadius = Math.max(binding.overlay.height, binding.overlay.width)
 
         // create the animation (the final radius is zero)
-        val anim = ViewAnimationUtils.createCircularReveal(binding.overlay,
-            famCenter.x, famCenter.y, initialRadius.toFloat(), 0f)
+        val anim = ViewAnimationUtils.createCircularReveal(
+            binding.overlay,
+            famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
+        )
 
         // make the view invisible when the animation is done
-        anim.addListener(object : AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator) {
-            super.onAnimationEnd(animation)
-            binding.overlay.setVisibleWeak()
-          }
-        })
+        anim.addListener(
+            object : AnimatorListenerAdapter() {
+              override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                binding.overlay.setVisibleWeak()
+              }
+            }
+        )
 
         // start the animation
         anim.start()

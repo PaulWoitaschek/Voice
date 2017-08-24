@@ -32,13 +32,15 @@ class IntelliJStringComparator : Comparator<String> {
       var ch2 = rhs[j]
       if ((isDecimalDigit(ch1) || ch1 == ' ') && (isDecimalDigit(ch2) || ch2 == ' ')) {
         var startNum1 = i
-        while (ch1 == ' ' || ch1 == '0') { // skip leading spaces and zeros
+        while (ch1 == ' ' || ch1 == '0') {
+          // skip leading spaces and zeros
           startNum1++
           if (startNum1 >= string1Length) break
           ch1 = lhs[startNum1]
         }
         var startNum2 = j
-        while (ch2 == ' ' || ch2 == '0') { // skip leading spaces and zeros
+        while (ch2 == ' ' || ch2 == '0') {
+          // skip leading spaces and zeros
           startNum2++
           if (startNum2 >= string2Length) break
           ch2 = rhs[startNum2]

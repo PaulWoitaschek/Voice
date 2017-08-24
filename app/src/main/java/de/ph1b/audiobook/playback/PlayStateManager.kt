@@ -39,6 +39,7 @@ constructor() {
 
   /** Represents the play states for the playback.  */
   enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
+
     PLAYING(PlaybackStateCompat.STATE_PLAYING),
     PAUSED(PlaybackStateCompat.STATE_PAUSED),
     STOPPED(PlaybackStateCompat.STATE_STOPPED)

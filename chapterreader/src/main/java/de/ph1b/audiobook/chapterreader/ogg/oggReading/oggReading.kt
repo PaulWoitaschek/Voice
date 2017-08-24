@@ -1,6 +1,12 @@
 package de.ph1b.audiobook.chapterreader.ogg.oggReading
 
-import de.ph1b.audiobook.common.*
+import de.ph1b.audiobook.common.readAmountOfBytes
+import de.ph1b.audiobook.common.readLeInt32
+import de.ph1b.audiobook.common.readLeInt64
+import de.ph1b.audiobook.common.readLeUInt32
+import de.ph1b.audiobook.common.readUInt8
+import de.ph1b.audiobook.common.skipBytes
+import de.ph1b.audiobook.common.toUInt
 import java.io.EOFException
 import java.io.InputStream
 
@@ -67,9 +73,11 @@ internal fun demuxOggStreams(oggPages: Sequence<OggPage>): Map<Int, OggStream> {
   while (it.hasNext()) {
     val page = it.next()
     if (page.firstPageOfStream) {
-      val stream = OggStream({
-        pushToStream(it.next())
-      })
+      val stream = OggStream(
+          {
+            pushToStream(it.next())
+          }
+      )
       stream.pushPage(page)
       streamMap.put(page.streamSerialNumber, stream)
     } else {

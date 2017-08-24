@@ -11,9 +11,11 @@ class Migration25to26 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     // get all books
-    val cursor = db.query("TABLE_BOOK",
+    val cursor = db.query(
+        "TABLE_BOOK",
         arrayOf("BOOK_ID", "BOOK_JSON"),
-        null, null, null, null, null)
+        null, null, null, null, null
+    )
     val allBooks = ArrayList<JSONObject>(cursor.count)
     cursor.use {
       while (it.moveToNext()) {

@@ -16,6 +16,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
  * Module for preferences
  */
 @Module class PrefsModule {
+
   @Provides
   fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)!!
 
@@ -25,7 +26,11 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 
   @Provides
   @Reusable
-  fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum("THEME2_KEY", ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
+  fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum(
+      "THEME2_KEY",
+      ThemeUtil.Theme.DAY_NIGHT,
+      ThemeUtil.Theme::class.java
+  )
 
   @Provides
   @Reusable

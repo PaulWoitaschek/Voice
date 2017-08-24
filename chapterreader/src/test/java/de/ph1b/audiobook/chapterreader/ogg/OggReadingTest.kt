@@ -1,11 +1,15 @@
 package de.ph1b.audiobook.chapterreader.ogg
 
-import de.ph1b.audiobook.chapterreader.ogg.oggReading.*
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggPage
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggStream
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.PackageSizeParser
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.concat
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.demuxOggStreams
+import de.ph1b.audiobook.chapterreader.ogg.oggReading.readOggPages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.io.File
-import java.util.*
-
+import java.util.Random
 
 class OggReadingTest {
 
@@ -25,11 +29,21 @@ class OggReadingTest {
 
   @Test
   fun computePacketSizesFromSegmentTableTest() {
-    assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
-        255, 255, 14, 255, 0, 255, 255, 17)))
+    assertThat(
+        PackageSizeParser.fromSegmentTable(
+            unsignedByteArrayOf(
+                255, 255, 14, 255, 0, 255, 255, 17
+            )
+        )
+    )
         .isEqualTo(listOf(2 * 255 + 14, 255, 2 * 255 + 17))
-    assertThat(PackageSizeParser.fromSegmentTable(unsignedByteArrayOf(
-        255, 255, 255, 255, 70, 255, 255)))
+    assertThat(
+        PackageSizeParser.fromSegmentTable(
+            unsignedByteArrayOf(
+                255, 255, 255, 255, 70, 255, 255
+            )
+        )
+    )
         .isEqualTo(listOf(4 * 255 + 70, 2 * 255))
   }
 
@@ -40,53 +54,58 @@ class OggReadingTest {
       readOggPages(it).toList()
     }
 
-    assertThat(pages).isEqualTo(listOf(
-        OggPage(
-            continuedPacket = false,
-            finishedPacket = true,
-            firstPageOfStream = true,
-            lastPageOfStream = false,
-            absoluteGranulePosition = 0,
-            streamSerialNumber = 7891011,
-            pageSequenceNumber = 0,
-            packets = listOf(
-                "asdeceq".toByteArray()
-            )
-        ),
-        OggPage(
-            continuedPacket = false,
-            finishedPacket = false,
-            firstPageOfStream = false,
-            lastPageOfStream = false,
-            absoluteGranulePosition = -1,
-            streamSerialNumber = 7891011,
-            pageSequenceNumber = 1,
-            packets = listOf(
-                "b".repeat(255).toByteArray()
-            )
-        ),
-        OggPage(
-            continuedPacket = true,
-            finishedPacket = true,
-            firstPageOfStream = false,
-            lastPageOfStream = true,
-            absoluteGranulePosition = 123459,
-            streamSerialNumber = 7891011,
-            pageSequenceNumber = 2,
-            packets = listOf(
-                "bbb".toByteArray(),
-                "ae".toByteArray()
+    assertThat(pages).isEqualTo(
+        listOf(
+            OggPage(
+                continuedPacket = false,
+                finishedPacket = true,
+                firstPageOfStream = true,
+                lastPageOfStream = false,
+                absoluteGranulePosition = 0,
+                streamSerialNumber = 7891011,
+                pageSequenceNumber = 0,
+                packets = listOf(
+                    "asdeceq".toByteArray()
+                )
+            ),
+            OggPage(
+                continuedPacket = false,
+                finishedPacket = false,
+                firstPageOfStream = false,
+                lastPageOfStream = false,
+                absoluteGranulePosition = -1,
+                streamSerialNumber = 7891011,
+                pageSequenceNumber = 1,
+                packets = listOf(
+                    "b".repeat(255).toByteArray()
+                )
+            ),
+            OggPage(
+                continuedPacket = true,
+                finishedPacket = true,
+                firstPageOfStream = false,
+                lastPageOfStream = true,
+                absoluteGranulePosition = 123459,
+                streamSerialNumber = 7891011,
+                pageSequenceNumber = 2,
+                packets = listOf(
+                    "bbb".toByteArray(),
+                    "ae".toByteArray()
+                )
             )
         )
-    ))
+    )
   }
 
   @Test
   fun byteArrayConcatTest() {
-    assertThat(listOf(
-        "asd".toByteArray(),
-        "hhh".toByteArray(),
-        "oiwpier".toByteArray()).concat())
+    assertThat(
+        listOf(
+            "asd".toByteArray(),
+            "hhh".toByteArray(),
+            "oiwpier".toByteArray()
+        ).concat()
+    )
         .isEqualTo("asdhhhoiwpier".toByteArray())
   }
 
@@ -175,10 +194,12 @@ class OggReadingTest {
     )
     val pagesIt = pages.iterator()
     var numPulled = 0
-    val stream = OggStream({
-      ++numPulled
-      pushPage(pagesIt.next())
-    })
+    val stream = OggStream(
+        {
+          ++numPulled
+          pushPage(pagesIt.next())
+        }
+    )
     val streamIt = stream.iterator()
     assertThat(numPulled).isEqualTo(0)
     for ((packetStr, expectedNumPulled) in listOf(

@@ -36,24 +36,30 @@ class DataBaseMigratorTest {
 
   class TestSQLiteHelper(context: Context) : SQLiteOpenHelper(context, "testDb", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
-      db.execSQL("""
+      db.execSQL(
+          """
       CREATE TABLE TABLE_BOOK (
         RANDOM INTEGER PRIMARY KEY AUTOINCREMENT,
         TYPE TEXT NOT NULL,
         NOBODY TEXT NOT NULL
       )
-    """)
-      db.insertOrThrow("TABLE_BOOK", null, ContentValues().apply {
+    """
+      )
+      db.insertOrThrow(
+          "TABLE_BOOK", null, ContentValues().apply {
         put("TYPE", "trashType")
         put("NOBODY", "someText")
-      })
-      db.execSQL("""
+      }
+      )
+      db.execSQL(
+          """
       CREATE TABLE TABLE_CHAPTERS (
         PETER INTEGER PRIMARY KEY AUTOINCREMENT,
         BOB TEXT NOT NULL,
         AUGUST INTEGER NOT NULL
     )
-    """)
+    """
+      )
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

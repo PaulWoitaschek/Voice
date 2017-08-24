@@ -33,9 +33,11 @@ abstract class BaseActivity : AppCompatActivity() {
       val serviceIntent = Intent(this, PlaybackService::class.java)
       stopService(serviceIntent)
 
-      startActivity(Intent(this, NoExternalStorageActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      })
+      startActivity(
+          Intent(this, NoExternalStorageActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+          }
+      )
       return
     }
 

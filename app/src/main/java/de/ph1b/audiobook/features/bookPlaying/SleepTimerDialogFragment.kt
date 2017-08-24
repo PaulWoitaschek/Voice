@@ -98,7 +98,11 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
       prefs.bookmarkOnSleepTimer.value = binding.bookmarkSwitch.isChecked
       if (prefs.bookmarkOnSleepTimer.value) {
-        val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
+        val date = DateUtils.formatDateTime(
+            context,
+            System.currentTimeMillis(),
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
+        )
         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
       }
 

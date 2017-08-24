@@ -39,7 +39,8 @@ class PermissionHelper(private val activity: Activity, private val permissions: 
         root = root,
         text = root.context.getString(R.string.permission_external_new_explanation),
         action = root.context.getString(R.string.permission_retry),
-        listener = listener)
+        listener = listener
+    )
   }
 
   private fun handleDeniedForever(root: View) {
@@ -47,7 +48,8 @@ class PermissionHelper(private val activity: Activity, private val permissions: 
     BetterSnack.make(
         root = root,
         text = context.getString(R.string.permission_external_new_explanation),
-        action = context.getString(R.string.permission_goto_settings)) {
+        action = context.getString(R.string.permission_goto_settings)
+    ) {
       val intent = Intent()
       intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
       val uri = Uri.fromParts("package", context.packageName, null)

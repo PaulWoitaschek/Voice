@@ -129,8 +129,10 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
 
     private const val NI_BOOK_ID = "ni#bookId"
 
-    fun newInstance(bookId: Long) = BookmarkController(Bundle().apply {
-      putLong(NI_BOOK_ID, bookId)
-    })
+    fun newInstance(bookId: Long) = BookmarkController(
+        Bundle().apply {
+          putLong(NI_BOOK_ID, bookId)
+        }
+    )
   }
 }

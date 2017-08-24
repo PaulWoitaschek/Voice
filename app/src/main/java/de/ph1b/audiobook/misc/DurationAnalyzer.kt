@@ -28,11 +28,13 @@ class DurationAnalyzer
   private val playbackStateSubject = BehaviorSubject.createDefault(exoPlayer.playbackState)
 
   init {
-    exoPlayer.addListener(object : SimpleEventListener {
-      override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-        playbackStateSubject.onNext(playbackState)
-      }
-    })
+    exoPlayer.addListener(
+        object : SimpleEventListener {
+          override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            playbackStateSubject.onNext(playbackState)
+          }
+        }
+    )
   }
 
   fun duration(file: File): Single<Int> = waitForIdle()

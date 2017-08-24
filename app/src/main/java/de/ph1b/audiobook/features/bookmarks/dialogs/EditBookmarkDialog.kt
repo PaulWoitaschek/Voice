@@ -51,7 +51,9 @@ class EditBookmarkDialog : DialogController() {
     private const val NI_BOOK_ID = "ni#bookId"
     private const val NI_BOOKMARK_TITLE = "ni#bookmarkTitle"
 
-    operator fun <T> invoke(target: T, bookmark: Bookmark) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
+    operator fun <T> invoke(
+        target: T,
+        bookmark: Bookmark) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
       targetController = target
       args.putLong(NI_BOOK_ID, bookmark.id)
       args.putString(NI_BOOKMARK_TITLE, bookmark.title)

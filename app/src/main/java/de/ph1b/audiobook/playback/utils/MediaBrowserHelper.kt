@@ -21,9 +21,16 @@ import javax.inject.Inject
  * Helper class for MediaBrowserServiceCompat handling
  */
 @Reusable class MediaBrowserHelper
-@Inject constructor(private val bookUriConverter: BookUriConverter, private val repo: BookRepository, private val prefs: PrefsManager, private val context: Context) {
+@Inject constructor(
+    private val bookUriConverter: BookUriConverter,
+    private val repo: BookRepository,
+    private val prefs: PrefsManager,
+    private val context: Context) {
 
-  fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(bookUriConverter.allBooks().toString(), null)
+  fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(
+      bookUriConverter.allBooks().toString(),
+      null
+  )
 
   fun onLoadChildren(parentId: String, result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>) {
     Timber.d("onLoadChildren $parentId, $result")

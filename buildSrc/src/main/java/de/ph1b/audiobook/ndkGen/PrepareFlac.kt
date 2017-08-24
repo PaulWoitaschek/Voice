@@ -5,7 +5,6 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.net.URI
 
-
 @Suppress("unused")
 open class PrepareFlac : DefaultTask() {
 

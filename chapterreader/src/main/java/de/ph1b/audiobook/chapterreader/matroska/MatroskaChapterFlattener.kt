@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.chapterreader.matroska
 
-
 internal object MatroskaChapterFlattener {
 
   private lateinit var target: MutableMap<Int, String>

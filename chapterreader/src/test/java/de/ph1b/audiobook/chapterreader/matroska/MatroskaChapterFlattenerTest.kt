@@ -1,9 +1,7 @@
 package de.ph1b.audiobook.chapterreader.matroska
 
-
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-
 
 class MatroskaChapterFlattenerTest {
 

@@ -72,8 +72,10 @@ class Migration29to30 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     // fetching old contents
-    val cursor = db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
-        null, null, null, null, null)
+    val cursor = db.query(
+        "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
+        null, null, null, null, null
+    )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)
     cursor.moveToNextLoop {

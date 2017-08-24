@@ -34,8 +34,10 @@ class BookMarkHolder private constructor(
     val index = chapters.indexOf(currentChapter)
 
     binding.summary.text = itemView.context.getString(de.ph1b.audiobook.R.string.format_bookmarks_n_of, index + 1, size)
-    binding.time.text = itemView.context.getString(de.ph1b.audiobook.R.string.format_bookmarks_time, formatTime(bookmark.time),
-        formatTime(currentChapter.duration))
+    binding.time.text = itemView.context.getString(
+        de.ph1b.audiobook.R.string.format_bookmarks_time, formatTime(bookmark.time),
+        formatTime(currentChapter.duration)
+    )
   }
 
   private fun formatTime(ms: Int): String {
@@ -52,7 +54,9 @@ class BookMarkHolder private constructor(
 
   companion object {
 
-    operator fun invoke(parent: android.view.ViewGroup, listener: BookmarkClickListener): de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder {
+    operator fun invoke(
+        parent: android.view.ViewGroup,
+        listener: BookmarkClickListener): de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder {
       val layoutInflater = parent.layoutInflater()
       val binding = de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding.inflate(layoutInflater, parent, false)
       return de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder(binding, listener)

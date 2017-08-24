@@ -6,5 +6,6 @@ import android.database.sqlite.SQLiteDatabase
  * A database migration
  */
 interface Migration {
+
   fun migrate(db: SQLiteDatabase)
 }

@@ -21,7 +21,6 @@ import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
 import java.io.File
 
-
 /**
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
  */
@@ -38,13 +37,36 @@ class BookSearchHandlerTest {
 
   private val anotherBookChapter1 = Chapter(File("/sdcard/AnotherBook/chapter1.mp3"), "anotherBookChapter1", 5000, 0, emptySparseArray())
   private val anotherBookChapter2 = Chapter(File("/sdcard/AnotherBook/chapter2.mp3"), "anotherBookChapter2", 10000, 0, emptySparseArray())
-  private val anotherBook = Book(2, Book.Type.SINGLE_FOLDER, "AnotherBookAuthor", anotherBookChapter1.file, 3000, "AnotherBook", listOf(anotherBookChapter1, anotherBookChapter2), 1F, "/sdcard/AnotherBook", 0)
+  private val anotherBook = Book(
+      2,
+      Book.Type.SINGLE_FOLDER,
+      "AnotherBookAuthor",
+      anotherBookChapter1.file,
+      3000,
+      "AnotherBook",
+      listOf(anotherBookChapter1, anotherBookChapter2),
+      1F,
+      "/sdcard/AnotherBook",
+      0
+  )
 
   private val bookToFindChapter1 = Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
   private val bookToFindChapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
-  private val bookToFind = Book(1, Book.Type.SINGLE_FOLDER, "Book1Author", bookToFindChapter2.file, 3000, "Book1", listOf(bookToFindChapter1, bookToFindChapter2), 1F, "/sdcard/Book1", 0)
+  private val bookToFind = Book(
+      1,
+      Book.Type.SINGLE_FOLDER,
+      "Book1Author",
+      bookToFindChapter2.file,
+      3000,
+      "Book1",
+      listOf(bookToFindChapter1, bookToFindChapter2),
+      1F,
+      "/sdcard/Book1",
+      0
+  )
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     MockitoAnnotations.initMocks(this)
 
     given { repo.activeBooks }.thenReturn(listOf(anotherBook, bookToFind))
@@ -53,7 +75,8 @@ class BookSearchHandlerTest {
     searchHandler = BookSearchHandler(repo, prefs, player)
   }
 
-  @Test fun testUnstructuredSearchByBook() {
+  @Test
+  fun testUnstructuredSearchByBook() {
     val bookSearch = BookSearch(query = bookToFind.name)
     searchHandler.handle(bookSearch)
 
@@ -66,7 +89,8 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test fun testUnstructuredSearchByArtist() {
+  @Test
+  fun testUnstructuredSearchByArtist() {
     val bookSearch = BookSearch(query = bookToFind.author)
     searchHandler.handle(bookSearch)
 
@@ -79,7 +103,8 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test fun testUnstructuredSearchByChapter() {
+  @Test
+  fun testUnstructuredSearchByChapter() {
     val bookSearch = BookSearch(query = bookToFindChapter1.name)
     searchHandler.handle(bookSearch)
 
@@ -92,7 +117,8 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test fun testMediaFocusAnyNoneFoundButPlayed() {
+  @Test
+  fun testMediaFocusAnyNoneFoundButPlayed() {
     given { currentBookIdPref.get() }.thenReturn(-1)
 
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
@@ -102,7 +128,8 @@ class BookSearchHandlerTest {
     verify(player).play()
   }
 
-  @Test fun testMediaFocusArtist() {
+  @Test
+  fun testMediaFocusArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author
@@ -118,7 +145,8 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test fun testMediaFocusArtistInTitleNoArtistInBook() {
+  @Test
+  fun testMediaFocusArtistInTitleNoArtistInBook() {
     val bookToFind = this.bookToFind.copy(author = null, name = "The book of Tim")
     given { repo.activeBooks }.thenReturn(listOf(bookToFind))
 
@@ -138,7 +166,8 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @Test fun testMediaFocusAlbum() {
+  @Test
+  fun testMediaFocusAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author,

@@ -26,9 +26,11 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
   }
 
   private fun scaleRect(rect: Rect, scaleFactor: Float) =
-      rect.set((rect.left * scaleFactor).toInt(),
+      rect.set(
+          (rect.left * scaleFactor).toInt(),
           (rect.top * scaleFactor).toInt(),
           (rect.right * scaleFactor).toInt(),
-          (rect.bottom * scaleFactor).toInt())
+          (rect.bottom * scaleFactor).toInt()
+      )
 
 }

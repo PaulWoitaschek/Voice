@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
  * Collection of strings representing the book table
  */
 object BookTable {
+
   const val ID = "bookId"
   const val NAME = "bookName"
   const val AUTHOR = "bookAuthor"

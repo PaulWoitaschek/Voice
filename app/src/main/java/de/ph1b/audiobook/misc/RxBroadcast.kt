@@ -10,6 +10,7 @@ import io.reactivex.Observable
  * Wraps a broadcast receiver in an observable that registers and unregisters based on the subscription.
  */
 object RxBroadcast {
+
   fun register(c: Context, filter: IntentFilter): Observable<Intent> = Observable.create {
     val receiver = object : BroadcastReceiver() {
       override fun onReceive(context: Context?, intent: Intent) {

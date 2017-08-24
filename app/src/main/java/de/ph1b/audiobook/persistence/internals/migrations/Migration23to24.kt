@@ -11,14 +11,17 @@ class Migration23to24 : Migration {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK")
     db.execSQL("DROP TABLE IF EXISTS TABLE_CHAPTERS")
 
-    db.execSQL("""
+    db.execSQL(
+        """
       CREATE TABLE TABLE_BOOK (
         BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT,
         BOOK_TYPE TEXT NOT NULL,
         BOOK_ROOT TEXT NOT NULL
       )
-    """)
-    db.execSQL("""
+    """
+    )
+    db.execSQL(
+        """
       CREATE TABLE TABLE_CHAPTERS (
         CHAPTER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
         CHAPTER_PATH TEXT NOT NULL,
@@ -27,6 +30,7 @@ class Migration23to24 : Migration {
         BOOK_ID INTEGER NOT NULL,
         FOREIGN KEY(BOOK_ID) REFERENCES TABLE_BOOK(BOOK_ID)
     )
-    """)
+    """
+    )
   }
 }

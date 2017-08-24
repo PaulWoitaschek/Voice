@@ -2,8 +2,7 @@ package de.ph1b.audiobook.chapterreader.mp4
 
 import java.io.EOFException
 import java.io.RandomAccessFile
-import java.util.*
-
+import java.util.ArrayList
 
 internal data class Mp4Atom(val name: String, val position: Long, val length: Long, val children: List<Mp4Atom>)
 

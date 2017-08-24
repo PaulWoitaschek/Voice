@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.model
 
-
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import junit.framework.TestCase
 import org.assertj.core.api.Assertions.assertThat
@@ -42,7 +41,8 @@ class NaturalOrderComparatorTest : TestCase() {
         testFolder.newFile("storage/emulated/0/2.ogg"),
         testFolder.newFile("xFolder/d.jpg"),
         testFolder.newFile("1.mp3"),
-        testFolder.newFile("a.jpg"))
+        testFolder.newFile("a.jpg")
+    )
 
     val sorted = ArrayList(desiredOrder)
     Collections.sort(sorted, NaturalOrderComparator.fileComparator)
@@ -66,7 +66,8 @@ class NaturalOrderComparatorTest : TestCase() {
         "Ba",
         "cA",
         "D",
-        "e")
+        "e"
+    )
 
     val sorted = ArrayList(desiredOrder)
     Collections.sort(sorted, NaturalOrderComparator.stringComparator)

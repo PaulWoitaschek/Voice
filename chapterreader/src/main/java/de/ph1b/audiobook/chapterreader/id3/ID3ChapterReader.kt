@@ -10,7 +10,6 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.collections.HashMap
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3

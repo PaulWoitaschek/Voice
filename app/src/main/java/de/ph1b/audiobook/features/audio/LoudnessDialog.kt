@@ -59,8 +59,10 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
   companion object {
     private const val NI_BOOK_ID = "ni#bookId"
-    operator fun invoke(bookId: Long) = LoudnessDialog(Bundle().apply {
-      putLong(NI_BOOK_ID, bookId)
-    })
+    operator fun invoke(bookId: Long) = LoudnessDialog(
+        Bundle().apply {
+          putLong(NI_BOOK_ID, bookId)
+        }
+    )
   }
 }

@@ -5,7 +5,9 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityFolderOverviewRowLayoutBinding
 import de.ph1b.audiobook.misc.drawable
 
-class FolderOverviewHolder(private val binding: ActivityFolderOverviewRowLayoutBinding, itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+class FolderOverviewHolder(
+    private val binding: ActivityFolderOverviewRowLayoutBinding,
+    itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(binding.root) {
 
   init {
     binding.remove.setOnClickListener { itemClicked(adapterPosition) }

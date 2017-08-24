@@ -29,7 +29,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 // display all the books
-class BookShelfAdapter(private val context: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+class BookShelfAdapter(
+    private val context: Context,
+    private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
   private val books = ArrayList<Book>()
 
@@ -49,24 +51,26 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
 
   /** Adds a new set of books and removes the ones that do not exist any longer **/
   fun newDataSet(newBooks: List<Book>) {
-    val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+    val diffResult = DiffUtil.calculateDiff(
+        object : DiffUtil.Callback() {
 
-      override fun getOldListSize(): Int = books.size
+          override fun getOldListSize(): Int = books.size
 
-      override fun getNewListSize(): Int = newBooks.size
+          override fun getNewListSize(): Int = newBooks.size
 
-      override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = books[oldItemPosition]
-        val newItem = newBooks[newItemPosition]
-        return oldItem.id == newItem.id && oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
-      }
+          override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = books[oldItemPosition]
+            val newItem = newBooks[newItemPosition]
+            return oldItem.id == newItem.id && oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
+          }
 
-      override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = books[oldItemPosition]
-        val newItem = newBooks[newItemPosition]
-        return oldItem.id == newItem.id
-      }
-    }, false) // no need to detect moves as the list is sorted
+          override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = books[oldItemPosition]
+            val newItem = newBooks[newItemPosition]
+            return oldItem.id == newItem.id
+          }
+        }, false
+    ) // no need to detect moves as the list is sorted
 
     books.clear()
     books.addAll(newBooks)
@@ -111,7 +115,13 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
 
   override fun getItemViewType(position: Int): Int = if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
 
-  inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
+  inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
+      parent.layoutInflater().inflate(
+          R.layout.book_shelf_list_layout,
+          parent,
+          false
+      )
+  ) {
 
     private val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
     private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
@@ -135,11 +145,14 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
   }
 
   /** ViewHolder for the grid **/
-  inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
-      .inflate(R.layout.book_shelf_grid_layout, parent, false))
+  inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(
+      parent.layoutInflater()
+          .inflate(R.layout.book_shelf_grid_layout, parent, false)
+  )
 
   /** ViewHolder base class **/
   abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     val coverView: ImageView = itemView.findViewById(R.id.coverView)
     private val currentPlayingIndicator: ImageView = itemView.findViewById(R.id.currentPlayingIndicator)
     private val titleView: TextView = itemView.findViewById(R.id.title)

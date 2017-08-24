@@ -176,12 +176,14 @@ class PlayPauseDrawable : Drawable() {
 
     animator = ObjectAnimator.ofFloat(this, androidProperty, if (isPlay) 1.0f else 0.0f, if (isPlay) 0.0f else 1.0f)
     animator!!.apply {
-      addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator) {
-          super.onAnimationEnd(animation)
-          isPlay = !isPlay
-        }
-      })
+      addListener(
+          object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+              super.onAnimationEnd(animation)
+              isPlay = !isPlay
+            }
+          }
+      )
       interpolator = DecelerateInterpolator()
       duration = 275
       start()

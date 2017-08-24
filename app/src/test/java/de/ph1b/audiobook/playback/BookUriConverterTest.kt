@@ -16,7 +16,12 @@ import org.robolectric.shadows.ShadowLog
  * Test for the book uri spec
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
+@Config(
+    constants = BuildConfig::class,
+    sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP),
+    manifest = "src/main/AndroidManifest.xml",
+    application = TestApp::class
+)
 class BookUriConverterTest {
 
   lateinit var converter: BookUriConverter

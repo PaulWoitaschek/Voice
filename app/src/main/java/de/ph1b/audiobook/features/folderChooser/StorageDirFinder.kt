@@ -107,7 +107,8 @@ import javax.inject.Singleton
 
     val results = ArrayList<String>()
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //Method 1 for KitKat & above
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      //Method 1 for KitKat & above
       val externalDirs: Array<File?>? = context.getExternalFilesDirs(null)
       externalDirs?.forEach {
         if (it != null) {

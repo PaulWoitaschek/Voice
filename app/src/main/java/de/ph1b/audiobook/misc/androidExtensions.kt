@@ -67,13 +67,15 @@ fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
 }
 
 inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
-  viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-    override fun onPreDraw(): Boolean {
-      viewTreeObserver.removeOnPreDrawListener(this)
-      action()
-      return true
-    }
-  })
+  viewTreeObserver.addOnPreDrawListener(
+      object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+          viewTreeObserver.removeOnPreDrawListener(this)
+          action()
+          return true
+        }
+      }
+  )
 }
 
 inline fun <E> SparseArray<E>.forEachIndexed(reversed: Boolean = false, action: (index: Int, key: Int, value: E) -> Unit) {

@@ -21,7 +21,11 @@ import timber.log.Timber
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
  */
-class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(
+    context,
+    attrs,
+    defStyleAttr
+) {
 
   private val leftCircle = newCircle()
   private val topCircle = newCircle()
@@ -44,7 +48,8 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     addView(bottomCircle)
   }
 
-  private val scaleGestureDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+  private val scaleGestureDetector = ScaleGestureDetector(
+      context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
     override fun onScale(detector: ScaleGestureDetector): Boolean {
       val dx = detector.currentSpanX - detector.previousSpanX
       val dy = detector.currentSpanY - detector.previousSpanY
@@ -52,7 +57,8 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
       dragRect.squareInset(-max)
       return max != 0f
     }
-  })
+  }
+  )
 
   var selectionOn = false
     set(value) {

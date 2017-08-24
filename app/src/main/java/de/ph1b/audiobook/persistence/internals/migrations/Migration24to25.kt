@@ -32,18 +32,22 @@ class Migration24to25 : Migration {
     val CREATE_TABLE_BOOK = "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
     db.execSQL(CREATE_TABLE_BOOK)
 
-    val bookCursor = db.query(copyBookTableName,
+    val bookCursor = db.query(
+        copyBookTableName,
         arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
-        null, null, null, null, null)
+        null, null, null, null, null
+    )
 
     bookCursor.moveToNextLoop {
       val bookId = bookCursor.getLong(0)
       val root = bookCursor.getString(1)
       val type = bookCursor.getString(2)
 
-      val mediaCursor = db.query(copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
+      val mediaCursor = db.query(
+          copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
           "BOOK_ID" + "=?", arrayOf(bookId.toString()),
-          null, null, null)
+          null, null, null
+      )
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)
       val chapterPaths = ArrayList<String>(mediaCursor.count)
@@ -231,8 +235,10 @@ class Migration24to25 : Migration {
         }
         if (coverFile.exists() && coverFile.canWrite()) {
           try {
-            val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component.context.packageName,
-                newBookId.toString() + ".jpg")
+            val newCoverFile = File(
+                Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component.context.packageName,
+                newBookId.toString() + ".jpg"
+            )
             if (!coverFile.parentFile.exists()) {
               //noinspection ResultOfMethodCallIgnored
               coverFile.parentFile.mkdirs()

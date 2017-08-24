@@ -4,7 +4,7 @@ import dagger.Reusable
 import de.ph1b.audiobook.common.Logger
 import java.io.File
 import java.lang.RuntimeException
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 @Reusable internal class MatroskaChapterReader @Inject constructor(

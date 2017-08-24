@@ -5,13 +5,20 @@ import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggPageParseException
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggStream
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.demuxOggStreams
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.readOggPages
-import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.*
+import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.OpusStreamParseException
+import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisComment
+import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisCommentParseException
+import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisCommentReader
+import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisStreamParseException
 import de.ph1b.audiobook.common.Logger
 import de.ph1b.audiobook.common.readAmountOfBytes
 import de.ph1b.audiobook.common.startsWith
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
-
 
 @Reusable internal class OggChapterReader @Inject constructor(
     private val logger: Logger

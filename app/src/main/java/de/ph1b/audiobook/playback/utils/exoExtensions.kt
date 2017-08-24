@@ -12,42 +12,50 @@ fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
 }
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
-  addListener(object : SimpleEventListener {
-    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-      val state = when (playbackState) {
-        Player.STATE_ENDED -> PlayerState.ENDED
-        Player.STATE_IDLE -> PlayerState.IDLE
-        Player.STATE_READY, Player.STATE_BUFFERING -> {
-          if (playWhenReady) PlayerState.PLAYING
-          else PlayerState.PAUSED
+  addListener(
+      object : SimpleEventListener {
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+          val state = when (playbackState) {
+            Player.STATE_ENDED -> PlayerState.ENDED
+            Player.STATE_IDLE -> PlayerState.IDLE
+            Player.STATE_READY, Player.STATE_BUFFERING -> {
+              if (playWhenReady) PlayerState.PLAYING
+              else PlayerState.PAUSED
+            }
+            else -> null
+          }
+          if (state != null) action(state)
         }
-        else -> null
       }
-      if (state != null) action(state)
-    }
-  })
+  )
 }
 
 inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
-  addListener(object : SimpleEventListener {
-    override fun onPlayerError(error: ExoPlaybackException) {
-      action(error)
-    }
-  })
+  addListener(
+      object : SimpleEventListener {
+        override fun onPlayerError(error: ExoPlaybackException) {
+          action(error)
+        }
+      }
+  )
 }
 
 inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
-  setAudioDebugListener(object : SimpleAudioRendererEventListener {
-    override fun onAudioSessionId(audioSessionId: Int) {
-      action(audioSessionId)
-    }
-  })
+  setAudioDebugListener(
+      object : SimpleAudioRendererEventListener {
+        override fun onAudioSessionId(audioSessionId: Int) {
+          action(audioSessionId)
+        }
+      }
+  )
 }
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
-  addListener(object : SimpleEventListener {
-    override fun onPositionDiscontinuity() {
-      action()
-    }
-  })
+  addListener(
+      object : SimpleEventListener {
+        override fun onPositionDiscontinuity() {
+          action()
+        }
+      }
+  )
 }

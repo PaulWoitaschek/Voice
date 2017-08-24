@@ -73,7 +73,6 @@ class Migration40to41Test {
     context.deleteDatabase(dbHelper.databaseName)
   }
 
-
   class DBHelper(context: Context) : SQLiteOpenHelper(context, "testDb", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {

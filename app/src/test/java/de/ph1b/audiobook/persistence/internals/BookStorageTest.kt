@@ -19,12 +19,16 @@ import org.robolectric.shadows.ShadowLog
 import java.io.File
 import java.util.Random
 
-
 /**
  * Simple test for book persistence.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
+@Config(
+    constants = BuildConfig::class,
+    sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP),
+    manifest = "src/main/AndroidManifest.xml",
+    application = TestApp::class
+)
 class BookStorageTest {
 
   init {
@@ -39,7 +43,8 @@ class BookStorageTest {
     register = BookStorage(internalDb, Moshi.Builder().build())
   }
 
-  @Test fun testHideRevealBook() {
+  @Test
+  fun testHideRevealBook() {
     val mock = BookFactory.create()
     register.addBook(mock)
 
@@ -65,7 +70,8 @@ class BookStorageTest {
   /**
    * Tests that the returned book matches the retrieved one
    */
-  @Test fun testAddBookReturn() {
+  @Test
+  fun testAddBookReturn() {
     val mock = BookFactory.create()
     val inserted = register.addBook(mock)
     val retrieved = register.activeBooks().single()
@@ -73,7 +79,8 @@ class BookStorageTest {
     assertThat(inserted).isEqualTo(retrieved)
   }
 
-  @Test fun testAddBook() {
+  @Test
+  fun testAddBook() {
     val mock1 = BookFactory.create()
     val mock2 = BookFactory.create()
     val firstInserted = register.addBook(mock1)
@@ -90,7 +97,8 @@ class BookStorageTest {
     assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
   }
 
-  @Test fun testAddBookWithNullableAuthor() {
+  @Test
+  fun testAddBookWithNullableAuthor() {
     val mock = BookFactory.create()
     val withNullableAuthor = mock.copy(author = null)
     val inserted = register.addBook(withNullableAuthor)
@@ -104,8 +112,8 @@ class BookStorageTest {
     assertThat(retrieved).isEqualTo(withNullableAuthor.copy(id = retrieved.id))
   }
 
-
-  @Test fun testUpdateBook() {
+  @Test
+  fun testUpdateBook() {
     val mock = BookFactory.create()
     val inserted = register.addBook(mock)
 
@@ -125,7 +133,8 @@ class BookStorageTest {
         name = "252587245",
         chapters = newChapters,
         playbackSpeed = 1.7f,
-        root = "slksjdglkjgaölskjdf")
+        root = "slksjdglkjgaölskjdf"
+    )
 
     register.updateBook(changed)
 

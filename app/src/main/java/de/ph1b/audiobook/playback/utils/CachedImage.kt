@@ -7,5 +7,6 @@ import de.ph1b.audiobook.Book
  * A cache entry for a bitmap
  */
 data class CachedImage(val bookId: Long, val cover: Bitmap) {
+
   fun matches(book: Book) = book.id == bookId
 }

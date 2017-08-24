@@ -123,19 +123,34 @@ class NotificationAnnouncer
 
   private fun NotificationCompat.Builder.addFastForwardAction(): NotificationCompat.Builder {
     val fastForwardIntent = serviceController.getFastForwardIntent()
-    val fastForwardPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val fastForwardPI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
+        fastForwardIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     return addAction(R.drawable.ic_fast_forward_white_36dp, context.getString(R.string.fast_forward), fastForwardPI)
   }
 
   private fun NotificationCompat.Builder.addRewindAction(): NotificationCompat.Builder {
     val rewindIntent = serviceController.getRewindIntent()
-    val rewindPI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val rewindPI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_REWIND,
+        rewindIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
   }
 
   private fun NotificationCompat.Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): NotificationCompat.Builder {
     val playPauseIntent = serviceController.getPlayPauseIntent()
-    val playPausePI = PendingIntentCompat.getForegroundService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val playPausePI = PendingIntentCompat.getForegroundService(
+        context,
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+        playPauseIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
     return if (playState == PlayStateManager.PlayState.PLAYING) {
       addAction(R.drawable.ic_pause_white_36dp, context.getString(R.string.pause), playPausePI)
     } else {

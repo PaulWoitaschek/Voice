@@ -30,7 +30,8 @@ class SqlBookmarkStore
         BookmarkTable.TABLE_NAME,
         listOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
         "${BookmarkTable.PATH} IN $pathWhere",
-        pathArgs)
+        pathArgs
+    )
     return query.mapRows { toBookmark() }
   }
 }

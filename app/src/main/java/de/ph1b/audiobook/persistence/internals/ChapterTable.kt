@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
  * Collection of strings representing the chapters table
  */
 object ChapterTable {
+
   const val DURATION = "chapterDuration"
   const val NAME = "chapterName"
   const val PATH = "chapterPath"
