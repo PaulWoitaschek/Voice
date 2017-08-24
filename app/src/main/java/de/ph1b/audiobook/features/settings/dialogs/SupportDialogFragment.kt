@@ -10,7 +10,7 @@ import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 
 import de.ph1b.audiobook.R
-import e
+import timber.log.Timber
 
 class SupportDialogFragment : DialogFragment() {
 
@@ -34,7 +34,7 @@ class SupportDialogFragment : DialogFragment() {
     try {
       startActivity(Intent(Intent.ACTION_VIEW, uri))
     } catch (exception: ActivityNotFoundException) {
-      e(exception)
+      Timber.e(exception)
     }
   }
 

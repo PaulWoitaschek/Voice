@@ -9,8 +9,7 @@ import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.utils.BookUriConverter
-import e
-import i
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -26,7 +25,7 @@ class MediaSessionCallback @Inject constructor(
 ) : MediaSessionCompat.Callback() {
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-    i { "onPlayFromMediaId $mediaId" }
+    Timber.i("onPlayFromMediaId $mediaId")
     val uri = Uri.parse(mediaId)
     val type = bookUriConverter.match(uri)
     if (type == BookUriConverter.BOOK_ID) {
@@ -34,18 +33,18 @@ class MediaSessionCallback @Inject constructor(
       prefs.currentBookId.value = id
       onPlay()
     } else {
-      e { "Invalid mediaId $mediaId" }
+      Timber.e("Invalid mediaId $mediaId")
     }
   }
 
   override fun onPlayFromSearch(query: String?, extras: Bundle?) {
-    i { "onPlayFromSearch $query" }
+    Timber.i("onPlayFromSearch $query")
     val bookSearch = bookSearchParser.parse(query, extras)
     bookSearchHandler.handle(bookSearch)
   }
 
   override fun onSkipToNext() {
-    i { "onSkipToNext" }
+    Timber.i("onSkipToNext")
     if (autoConnection.get().connected) {
       player.next()
     } else {
@@ -54,12 +53,12 @@ class MediaSessionCallback @Inject constructor(
   }
 
   override fun onRewind() {
-    i { "onRewind" }
+    Timber.i("onRewind")
     player.skip(MediaPlayer.Direction.BACKWARD)
   }
 
   override fun onSkipToPrevious() {
-    i { "onSkipToPrevious" }
+    Timber.i("onSkipToPrevious")
     if (autoConnection.get().connected) {
       player.previous(toNullOfNewTrack = true)
     } else {
@@ -68,27 +67,27 @@ class MediaSessionCallback @Inject constructor(
   }
 
   override fun onFastForward() {
-    i { "onFastForward" }
+    Timber.i("onFastForward")
     player.skip(MediaPlayer.Direction.FORWARD)
   }
 
   override fun onStop() {
-    i { "onStop" }
+    Timber.i("onStop")
     player.stop()
   }
 
   override fun onPause() {
-    i { "onPause" }
+    Timber.i("onPause")
     player.pause(true)
   }
 
   override fun onPlay() {
-    i { "onPlay" }
+    Timber.i("onPlay")
     player.play()
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {
-    i { "onCustomAction $action" }
+    Timber.i("onCustomAction $action")
     when (action) {
       ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
       ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()

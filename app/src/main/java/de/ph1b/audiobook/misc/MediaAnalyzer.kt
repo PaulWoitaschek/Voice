@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.misc
 
-import d
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -20,11 +20,11 @@ class MediaAnalyzer @Inject constructor(
         } else {
           exoPlayerDurationParser.duration(file)
               .map { exoDuration ->
-                d { "Invalid duration from meta data for $file. Try exoPlayer" }
+                Timber.d("Invalid duration from meta data for $file. Try exoPlayer")
                 if (exoDuration > 0) {
                   Result.Success(exoDuration, metaData.chapterName, metaData.author, metaData.bookName)
                 } else {
-                  d { "ExoPlayer failed to parse $file too." }
+                  Timber.d("ExoPlayer failed to parse $file too.")
                   Result.Failure
                 }
               }

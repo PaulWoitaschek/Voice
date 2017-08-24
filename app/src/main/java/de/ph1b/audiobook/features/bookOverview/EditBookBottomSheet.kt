@@ -22,7 +22,7 @@ import de.ph1b.audiobook.misc.rightCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
 import de.ph1b.audiobook.persistence.BookRepository
-import e
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -43,7 +43,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     // if there is no book, skip here
     val book = repo.bookById(bookId())
     if (book == null) {
-      e { "book is null. Return early" }
+      Timber.e("book is null. Return early")
       return dialog
     }
 
@@ -82,7 +82,12 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   private fun tintLeftDrawable(textView: TextView) {
     val left = textView.leftCompoundDrawable()!!
     val tinted = left.tinted(context.color(R.color.icon_color))
-    textView.setCompoundDrawables(tinted, textView.topCompoundDrawable(), textView.rightCompoundDrawable(), textView.bottomCompoundDrawable())
+    textView.setCompoundDrawables(
+        tinted,
+        textView.topCompoundDrawable(),
+        textView.rightCompoundDrawable(),
+        textView.bottomCompoundDrawable()
+    )
   }
 
   private fun bookId() = arguments.getLong(NI_BOOK)

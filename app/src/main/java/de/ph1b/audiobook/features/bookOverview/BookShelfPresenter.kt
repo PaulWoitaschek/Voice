@@ -11,7 +11,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import i
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -29,7 +29,7 @@ constructor(
   : Presenter<BookShelfController>() {
 
   override fun onAttach(view: BookShelfController) {
-    i { "onBind Called for $view" }
+    Timber.i("onBind Called for $view")
 
     val audioFoldersEmpty = prefsManager.collectionFolders.value.isEmpty() && prefsManager.singleBookFolders.value.isEmpty()
     if (audioFoldersEmpty) view.showNoFolderWarning()

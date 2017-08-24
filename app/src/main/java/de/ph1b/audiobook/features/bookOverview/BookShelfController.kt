@@ -34,7 +34,7 @@ import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import de.ph1b.audiobook.uitools.visible
-import i
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -204,13 +204,13 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   /** Display a new set of books */
   fun displayNewBooks(books: List<Book>) {
-    i { "${books.size} displayNewBooks" }
+    Timber.i("${books.size} displayNewBooks")
     adapter.newDataSet(books)
   }
 
   /** The book marked as current was changed. Updates the adapter and fab accordingly. */
   fun updateCurrentBook(currentBook: Book?) {
-    i { "updateCurrentBook: ${currentBook?.name}" }
+    Timber.i("updateCurrentBook: ${currentBook?.name}")
     this.currentBook = currentBook
 
     for (i in 0 until adapter.itemCount) {
@@ -228,7 +228,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
   /** Sets the fab icon correctly accordingly to the new play state. */
   fun showPlaying(playing: Boolean) {
-    i { "Called showPlaying $playing" }
+    Timber.i("Called showPlaying $playing")
     val laidOut = ViewCompat.isLaidOut(binding.fab)
     if (playing) {
       playPauseDrawable.transformToPause(laidOut)

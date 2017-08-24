@@ -7,7 +7,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.SparseArrayAdapter
 import de.ph1b.audiobook.misc.emptySparseArray
-import e
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -25,7 +25,8 @@ class BookStorage
   private val db by lazy { internalDb.writableDatabase }
 
   private fun books(active: Boolean) = db.asTransaction {
-    return@asTransaction db.query(table = BookTable.TABLE_NAME,
+    return@asTransaction db.query(
+        table = BookTable.TABLE_NAME,
         columns = listOf(
             BookTable.ID,
             BookTable.NAME,
@@ -35,7 +36,8 @@ class BookStorage
             BookTable.ROOT,
             BookTable.TIME,
             BookTable.TYPE,
-            BookTable.LOUDNESS_GAIN),
+            BookTable.LOUDNESS_GAIN
+        ),
         selection = "${BookTable.ACTIVE} =?",
         selectionArgs = listOf(if (active) 1 else 0)
     ).mapRows {
@@ -49,10 +51,12 @@ class BookStorage
       val bookType: String = string(BookTable.TYPE)
       val loudnessGain = intNullable(BookTable.LOUDNESS_GAIN) ?: 0
 
-      val chapters = db.query(table = ChapterTable.TABLE_NAME,
+      val chapters = db.query(
+          table = ChapterTable.TABLE_NAME,
           columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED, ChapterTable.MARKS),
           selection = "${ChapterTable.BOOK_ID} =?",
-          selectionArgs = listOf(bookId))
+          selectionArgs = listOf(bookId)
+      )
           .mapRows {
             val name: String = string(ChapterTable.NAME)
             val duration: Int = int(ChapterTable.DURATION)
@@ -65,7 +69,7 @@ class BookStorage
           }
 
       if (chapters.find { it.file == currentFile } == null) {
-        e { "Couldn't get current file. Return first file" }
+        Timber.e("Couldn't get current file. Return first file")
         currentFile = chapters[0].file
       }
 

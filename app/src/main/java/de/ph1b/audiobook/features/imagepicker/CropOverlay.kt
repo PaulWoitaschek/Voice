@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.imagepicker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -15,7 +16,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.uitools.visible
-import i
+import timber.log.Timber
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
@@ -97,6 +98,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     inset(value, value)
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     if (!selectionOn) return super.onTouchEvent(event)
 
@@ -105,7 +107,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     scaleGestureDetector.onTouchEvent(event)
     val gestureDetectorIsHandling = scaleGestureDetector.isInProgress
-    i { "Gesture detector is handling=$gestureDetectorIsHandling" }
+    Timber.i("Gesture detector is handling=$gestureDetectorIsHandling")
     if (gestureDetectorIsHandling) {
       // pinch handles this
       resizeType = null
@@ -148,7 +150,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
               Resize.BOTTOM -> dragRect.bottom - y
               Resize.LEFT -> x - dragRect.left
             }
-            i { "inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y" }
+            Timber.i("inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y")
             dragRect.squareInset(inset)
           }
 
@@ -199,7 +201,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     if (w < minSize) {
       val diff = minSize - w
       dragRect.squareInset(-diff / 2f)
-      i { "preserving min size with diff=$diff" }
+      Timber.i("preserving min size with diff=$diff")
     }
 
     // preserve max size
@@ -208,7 +210,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     val diff = dragW - boundsSize
     if (diff > 0) {
       dragRect.squareInset(diff / 2f)
-      i { "preserve max size, insetting with diff=$diff, dragW=$dragW, boundsSize=$boundsSize" }
+      Timber.i("preserve max size, insetting with diff=$diff, dragW=$dragW, boundsSize=$boundsSize")
     }
   }
 

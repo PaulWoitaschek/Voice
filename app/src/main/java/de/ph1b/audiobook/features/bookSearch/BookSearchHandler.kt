@@ -7,7 +7,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
-import i
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -20,7 +20,7 @@ import javax.inject.Inject
     private val player: PlayerController) {
 
   fun handle(search: BookSearch) {
-    i { "handle $search" }
+    Timber.i("handle $search")
     when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
@@ -59,7 +59,7 @@ import javax.inject.Inject
     }
 
     //continue playback
-    i { "continuing from search without query" }
+    Timber.i("continuing from search without query")
     if (prefs.currentBookId.value == -1L) {
       repo.activeBooks.firstOrNull()?.id?.let { prefs.currentBookId.set(it) }
     }
@@ -67,7 +67,7 @@ import javax.inject.Inject
   }
 
   private fun playArtist(search: BookSearch) {
-    i { "playArtist" }
+    Timber.i("playArtist")
     if (search.artist != null) {
       val foundMatch = findAndPlayFirstMatch { it.author?.contains(search.artist, ignoreCase = true) == true }
       if (foundMatch) return
@@ -80,7 +80,7 @@ import javax.inject.Inject
   private inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
     val book = repo.activeBooks.firstOrNull(selector)
     return if (book != null) {
-      i { "found a match ${book.name}" }
+      Timber.i("found a match ${book.name}")
       prefs.currentBookId.value = book.id
       player.play()
       true

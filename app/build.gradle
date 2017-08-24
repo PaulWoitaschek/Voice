@@ -135,7 +135,7 @@ dependencies {
 
   compile libraries.kotlinStdLib
 
-  compile libraries.slimber
+  compile libraries.timber
 
   compile libraries.exoPlayerCore
   compile project(":exoplayer-flac")

@@ -5,11 +5,11 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import d
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import de.ph1b.audiobook.playback.utils.SimpleEventListener
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -62,7 +62,7 @@ class DurationAnalyzer
       .firstOrError()
       .map {
         if (!exoPlayer.isCurrentWindowSeekable)
-          d { "file $file is not seekable" }
+          Timber.d("file $file is not seekable")
         val duration = exoPlayer.duration
         if (duration == C.TIME_UNSET) -1
         else duration.toInt()

@@ -3,7 +3,7 @@ package de.ph1b.audiobook.persistence
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.persistence.internals.SqlBookmarkStore
-import v
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class BookmarkProvider
 
   fun addBookmarkAtBookPosition(book: Book, title: String): Bookmark {
     val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
-    v { "Added bookmark=$addedBookmark" }
+    Timber.v("Added bookmark=$addedBookmark")
     return addBookmark(addedBookmark)
   }
 

@@ -13,7 +13,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
-import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ImagePickerBinding
@@ -23,8 +22,8 @@ import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
-import i
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -111,20 +110,20 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
-        i { "page started with $url" }
+        Timber.i("page started with $url")
         webViewIsLoading.onNext(true)
       }
 
       override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
 
-        i { "page stopped with $url" }
+        Timber.i("page stopped with $url")
         webViewIsLoading.onNext(false)
       }
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
-        d { "received webViewError. Set webView invisible" }
+        Timber.d("received webViewError. Set webView invisible")
         view.loadUrl(ABOUT_BLANK)
         binding.progressBar.visible = false
         binding.noNetwork.visible = true
@@ -138,7 +137,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
         .filter { it }
         .subscribe {
           // sets progressbar and webviews visibilities correctly once the page is loaded
-          i { "WebView is now loading. Set webView visible" }
+          Timber.i("WebView is now loading. Set webView visible")
           binding.progressBar.visible = false
           binding.noNetwork.visible = false
           binding.webViewContainer.visible = true
@@ -196,7 +195,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     webViewIsLoading
         .filter { it }
         .filter { !rotation.hasStarted() }
-        .doOnNext { i { "is loading. Start animation" } }
+        .doOnNext { Timber.i("is loading. Start animation") }
         .subscribe {
           rotation.start()
         }
@@ -204,7 +203,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     rotation.setAnimationListener(object : Animation.AnimationListener {
       override fun onAnimationRepeat(p0: Animation?) {
         if (webViewIsLoading.value == false) {
-          i { "we are in the refresh round. cancel now." }
+          Timber.i("we are in the refresh round. cancel now.")
           rotation.cancel()
           rotation.reset()
         }

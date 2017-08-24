@@ -3,9 +3,9 @@ package de.ph1b.audiobook.mvp
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import de.ph1b.audiobook.misc.checkMainThread
-import i
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 
 abstract class Presenter<V : Any> {
 
@@ -24,7 +24,7 @@ abstract class Presenter<V : Any> {
   }
 
   fun attach(view: V) {
-    i { "attach $view" }
+    Timber.i("attach $view")
     checkMainThread()
     check(internalView == null) {
       "$internalView already bound."
@@ -35,7 +35,7 @@ abstract class Presenter<V : Any> {
   }
 
   fun detach() {
-    i { "detach $view" }
+    Timber.i("detach $view")
     checkMainThread()
     compositeDisposable.clear()
     internalView = null

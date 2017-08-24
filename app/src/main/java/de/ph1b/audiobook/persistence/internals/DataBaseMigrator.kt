@@ -20,7 +20,7 @@ import de.ph1b.audiobook.persistence.internals.migrations.Migration39to40
 import de.ph1b.audiobook.persistence.internals.migrations.Migration40to41
 import de.ph1b.audiobook.persistence.internals.migrations.Migration41to42
 import de.ph1b.audiobook.persistence.internals.migrations.Migration42to43
-import i
+import timber.log.Timber
 
 class DataBaseMigrator(private val db: SQLiteDatabase) {
 
@@ -51,7 +51,7 @@ class DataBaseMigrator(private val db: SQLiteDatabase) {
     for (from in oldVersion..newVersion) {
       val migration = migration(from)
       if (migration != null) {
-        i { "upgrade fromVersion=$from" }
+        Timber.i("upgrade fromVersion=$from")
         migration.migrate(db)
       }
     }

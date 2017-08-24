@@ -1,13 +1,12 @@
 package de.ph1b.audiobook.playback
 
-import d
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import i
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -67,14 +66,14 @@ import javax.inject.Singleton
 
   /** turns the sleep timer on or off **/
   fun setActive(enable: Boolean) {
-    i { "toggleSleepSand. Left sleepTime is ${leftSleepTimeSubject.value}" }
+    Timber.i("toggleSleepSand. Left sleepTime is ${leftSleepTimeSubject.value}")
 
     if (enable) {
-      i { "Starting sleepTimer" }
+      Timber.i("Starting sleepTimer")
       val minutes = prefsManager.sleepTime.value
       leftSleepTimeSubject.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()).toInt())
     } else {
-      i { "Cancelling sleepTimer" }
+      Timber.i("Cancelling sleepTimer")
       leftSleepTimeSubject.onNext(NOT_ACTIVE)
     }
   }
@@ -87,11 +86,11 @@ import javax.inject.Singleton
         if (prefsManager.shakeToReset.value) {
           shakeDisposable = shakeObservable.subscribe {
             if (leftSleepTimeSubject.value == 0) {
-              d { "detected shake while sleepSand==0. Resume playback" }
+              Timber.d("detected shake while sleepSand==0. Resume playback")
               playerController.play()
             }
 
-            d { "reset now by shake" }
+            Timber.d("reset now by shake")
             setActive(true)
           }
         }
@@ -104,7 +103,7 @@ import javax.inject.Singleton
     if (stopAfter != null) {
       shakeTimeoutDisposable = Observable.timer(stopAfter, TimeUnit.MINUTES)
           .subscribe {
-            d { "disabling pauseOnShake through timeout" }
+            Timber.d("disabling pauseOnShake through timeout")
             resetTimerOnShake(false)
           }
     }

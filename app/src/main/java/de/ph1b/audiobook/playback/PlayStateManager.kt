@@ -1,9 +1,9 @@
 package de.ph1b.audiobook.playback
 
 import android.support.v4.media.session.PlaybackStateCompat
-import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +32,7 @@ constructor() {
 
   var playState: PlayState
     set(value) {
-      i { "playState set to $value" }
+      Timber.i("playState set to $value")
       playStateSubject.onNext(value)
     }
     get() = playStateSubject.value

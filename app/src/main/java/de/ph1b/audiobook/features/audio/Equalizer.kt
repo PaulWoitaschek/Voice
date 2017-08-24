@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
-import i
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,7 +31,7 @@ import javax.inject.Singleton
   }
 
   fun update(audioSessionId: Int) {
-    i { "update to $audioSessionId" }
+    Timber.i("update to $audioSessionId")
     if (audioSessionId == -1)
       return
     updateIntent.putAudioSessionId(audioSessionId)
@@ -40,7 +40,7 @@ import javax.inject.Singleton
   }
 
   fun launch(activity: Activity) {
-    i { "launch" }
+    Timber.i("launch")
     activity.startActivityForResult(launchIntent, 12)
   }
 }

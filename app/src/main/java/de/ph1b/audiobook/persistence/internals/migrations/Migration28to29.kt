@@ -2,8 +2,8 @@ package de.ph1b.audiobook.persistence.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import d
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.File
 
 class Migration28to29 : Migration {
@@ -25,7 +25,7 @@ class Migration28to29 : Migration {
           chapter.put("name", chapterName)
         }
         val cv = ContentValues()
-        d { "so saving book=$book" }
+        Timber.d("so saving book=$book")
         cv.put("BOOK_JSON", book.toString())
         db.update("TABLE_BOOK", cv, "BOOK_ID" + "=?", arrayOf(cursor.getLong(1).toString()))
       }

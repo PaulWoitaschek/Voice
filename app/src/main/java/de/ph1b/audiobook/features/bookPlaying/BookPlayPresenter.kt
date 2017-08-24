@@ -7,7 +7,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
-import i
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
         .map { it == PlayState.PLAYING }
         .distinctUntilChanged()
         .subscribe {
-          i { "onNext with playing=$it" }
+          Timber.i("onNext with playing=$it")
           view.showPlaying(it)
         }
         .disposeOnDetach()
@@ -72,7 +72,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   }
 
   override fun seekTo(position: Int, file: File?) {
-    i { "seekTo position$position, file$file" }
+    Timber.i("seekTo position$position, file$file")
     val book = bookRepository.bookById(bookId)
         ?: return
     playerController.changePosition(position, file ?: book.currentFile)

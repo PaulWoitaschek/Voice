@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
-import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.internals.moveToNextLoop
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
@@ -215,7 +215,7 @@ class Migration24to25 : Migration {
         book.put("time", currentTime)
         book.put("playbackSpeed", speed.toDouble())
 
-        d { "upgrade24 restored book=$book" }
+        Timber.d("upgrade24 restored book=$book")
         val cv = ContentValues()
         cv.put("BOOK_JSON", book.toString())
         val newBookId = db.insert(newBookTable, null, cv)

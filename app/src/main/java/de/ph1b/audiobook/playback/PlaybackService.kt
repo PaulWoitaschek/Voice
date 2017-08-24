@@ -11,7 +11,6 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
-import d
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
@@ -30,7 +29,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import v
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -154,7 +152,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun audioBecomingNoisy() {
-    d { "audio becoming noisy. playState=${playStateManager.playState}" }
+    Timber.d("audio becoming noisy. playState=${playStateManager.playState}")
     if (playStateManager.playState === PlayState.PLAYING) {
       playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
       player.pause(true)
@@ -162,7 +160,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun handlePlaybackState(state: PlayState) {
-    d { "handlePlaybackState $state" }
+    Timber.d("handlePlaybackState $state")
     when (state) {
       PlayState.PLAYING -> handlePlaybackStatePlaying()
       PlayState.PAUSED -> handlePlaybackStatePaused()
@@ -190,7 +188,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun handlePlaybackStatePlaying() {
     audioFocusHelper.request()
-    d { "set mediaSession to active" }
+    Timber.d("set mediaSession to active")
     mediaSession.isActive = true
     val book = player.book()
         ?: return
@@ -199,7 +197,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
+    Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
     when (intent?.action) {
       Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
@@ -225,7 +223,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   override fun onDestroy() {
-    v { "onDestroy called" }
+    Timber.v("onDestroy called")
     player.stop()
 
     mediaSession.release()

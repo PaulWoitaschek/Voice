@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.folderChooser
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
@@ -10,8 +9,7 @@ import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
-import i
-import v
+import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.HashSet
@@ -85,7 +83,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    * @return true if the presenter handled the back command.
    */
   fun backConsumed(): Boolean {
-    d { "up called. currentFolder=$chosenFile" }
+    Timber.d("up called. currentFolder=$chosenFile")
     return if (canGoBack()) {
       fileSelected(chosenFile!!.closestFolder().parentFile)
       true
@@ -103,7 +101,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
           prefsManager.collectionFolders.value = collections
         }
         view.finish()
-        v { "chosenCollection = $chosen" }
+        Timber.v("chosenCollection = $chosen")
       }
       FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
@@ -112,7 +110,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
           prefsManager.singleBookFolders.value = singleBooks
         }
         view.finish()
-        v { "chosenSingleBook = $chosen" }
+        Timber.v("chosenSingleBook = $chosen")
       }
     }
   }
@@ -124,7 +122,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    * * book folder
    */
   private fun canAddNewFolder(newFile: String): Boolean {
-    v { "canAddNewFolder called with $newFile" }
+    Timber.v("canAddNewFolder called with $newFile")
     val folders = HashSet(prefsManager.collectionFolders.value)
     folders.addAll(prefsManager.singleBookFolders.value)
 
@@ -137,7 +135,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     for (s in folders) {
 
       if (newFile == s) {
-        i { "file is already in the list." }
+        Timber.i("file is already in the list.")
         // same folder, this should not be added
         return false
       }
@@ -146,7 +144,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
       val max = Math.min(oldParts.size, newParts.size) - 1
       val filesAreSubsets = (0..max).none { oldParts[it] != newParts[it] }
       if (filesAreSubsets) {
-        i { "the files are sub folders of each other." }
+        Timber.i("the files are sub folders of each other.")
         view.showSubFolderWarning(s, newFile)
         return false
       }

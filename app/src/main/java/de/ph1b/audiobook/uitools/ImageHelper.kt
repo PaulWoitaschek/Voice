@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
-import e
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -22,7 +22,7 @@ fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
     try {
       bitmap[0] = this.getter()
     } catch (ex: IOException) {
-      e(ex) { "Exception at retrieving." }
+      Timber.e(ex, "Exception at retrieving.")
     } finally {
       latch.countDown()
     }
@@ -77,7 +77,7 @@ constructor(private val windowManager: WindowManager) {
         it.flush()
       }
     } catch (e: IOException) {
-      e(e) { "Error at saving image with destination=$destination" }
+      Timber.e(e, "Error at saving image with destination=$destination")
     }
 
   }

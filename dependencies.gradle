@@ -30,7 +30,7 @@ ext.versions = [
     rxJavaInterop       : "0.10.3",
     rxPreferences       : "1.0.2",
     slf4                : "1.7.25",
-    slimber             : "1.0.6",
+    timber              : "4.5.1",
     support             : "26.0.1",
     targetSdk           : 26,
 ]
@@ -77,7 +77,7 @@ ext.libraries = [
     rxJava                : "io.reactivex.rxjava2:rxjava:$versions.rxJava2",
     rxPreferences         : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
     slf4                  : "org.slf4j:slf4j-nop:$versions.slf4",
-    slimber               : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
+    timber                : "com.jakewharton.timber:timber:$versions.timber",
 
     // testing
     assertJ               : "org.assertj:assertj-core:$versions.assertJ",

@@ -23,7 +23,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
-import i
+import timber.log.Timber
 import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
   @Inject lateinit var prefs: PrefsManager
 
   init {
-    i { "A new adapter was created." }
+    Timber.i("A new adapter was created.")
     App.component.inject(this)
     setHasStableIds(true)
   }
@@ -89,7 +89,7 @@ class BookShelfAdapter(private val context: Context, private val bookClicked: (B
     set(value) {
       if (value != field) {
         field = value
-        i { "displayMode changed to $field" }
+        Timber.i("displayMode changed to $field")
         notifyDataSetChanged()
       }
     }

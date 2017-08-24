@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
-import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.ChapterReader
@@ -22,9 +21,9 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
@@ -84,7 +83,7 @@ import javax.inject.Singleton
 
   /** Restarts the scanner **/
   fun scanForFiles(restartIfScanning: Boolean = false) {
-    i { "scanForFiles with restartIfScanning=$restartIfScanning" }
+    Timber.i("scanForFiles with restartIfScanning=$restartIfScanning")
     if (isScanning && !restartIfScanning)
       return
 
@@ -112,7 +111,7 @@ import javax.inject.Singleton
   private inline fun profile(taskName: String, task: () -> Unit) {
     val start = System.nanoTime()
     task()
-    d { "$taskName took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start)}" }
+    Timber.d("$taskName took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start)}")
   }
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */

@@ -2,12 +2,10 @@ package de.ph1b.audiobook.playback.utils.audioFocus
 
 import android.media.AudioManager
 import android.telephony.TelephonyManager
-import d
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
-import i
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -31,7 +29,7 @@ class AudioFocusHandler @Inject constructor(
   }
 
   @Synchronized private fun handleFocusChange(focusChange: Int) {
-    i { "handleFocusChange $focusChange" }
+    Timber.i("handleFocusChange $focusChange")
     currentlyHasFocus = focusChange == AudioManager.AUDIOFOCUS_GAIN
     val callState = telephonyManager.callState
     if (callState != TelephonyManager.CALL_STATE_IDLE) {
@@ -40,12 +38,12 @@ class AudioFocusHandler @Inject constructor(
       AudioManager.AUDIOFOCUS_GAIN -> handleGain()
       AudioManager.AUDIOFOCUS_LOSS -> handleLoss()
       AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> handleTemporaryLoss()
-      else -> d { "ignore audioFocus=$focusChange" }
+      else -> Timber.d("ignore audioFocus=$focusChange")
     }
   }
 
   private fun handlePhoneNotIdle(callState: Int) {
-    d { "Call state is $callState. Pausing now" }
+    Timber.d("Call state is $callState. Pausing now")
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
     player.pause(true)
     playStateManager.pauseReason = if (wasPlaying) PlayStateManager.PauseReason.CALL else PlayStateManager.PauseReason.NONE
@@ -53,26 +51,26 @@ class AudioFocusHandler @Inject constructor(
 
   private fun handleTemporaryLoss() {
     if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {
-      d { "Paused by audio-focus loss transient." }
+      Timber.d("Paused by audio-focus loss transient.")
       player.pause(rewind = false)
       playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
     }
   }
 
   private fun handleLoss() {
-    d { "paused by audioFocus loss" }
+    Timber.d("paused by audioFocus loss")
     player.pause(rewind = true)
     playStateManager.pauseReason = PlayStateManager.PauseReason.NONE
   }
 
   private fun handleGain() {
-    d { "gain" }
+    Timber.d("gain")
     val pauseReason = playStateManager.pauseReason
     if (pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
-      d { "loss was transient so start playback" }
+      Timber.d("loss was transient so start playback")
       player.play()
     } else if (pauseReason == PlayStateManager.PauseReason.CALL && prefs.resumeAfterCall.value) {
-      d { "we were paused because of a call and we should resume after a call. Start playback" }
+      Timber.d("we were paused because of a call and we should resume after a call. Start playback")
       player.play()
     }
   }

@@ -8,7 +8,7 @@ import de.ph1b.audiobook.persistence.internals.asTransaction
 import de.ph1b.audiobook.persistence.internals.long
 import de.ph1b.audiobook.persistence.internals.mapRows
 import de.ph1b.audiobook.persistence.internals.string
-import i
+import timber.log.Timber
 
 class Migration32to34 : Migration {
 
@@ -41,14 +41,14 @@ class Migration32to34 : Migration {
       val time = long(BM_TIME)
       Holder(path, title, time)
     }
-    i { "Restored bookmarks=$entries" }
+    Timber.i("Restored bookmarks=$entries")
 
     // delete table
     db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
 
     // create new bookmark scheme
     db.execSQL(CREATE_TABLE_BOOKMARKS)
-    i { "Created $CREATE_TABLE_BOOKMARKS" }
+    Timber.i("Created $CREATE_TABLE_BOOKMARKS")
 
     // add old bookmarks to new bookmark scheme
     db.asTransaction {
@@ -59,7 +59,7 @@ class Migration32to34 : Migration {
           put(TIME, it.time)
         }
         db.insertOrThrow(TABLE_NAME, null, cv)
-        i { "Inserted $cv to $TABLE_NAME" }
+        Timber.i("Inserted $cv to $TABLE_NAME")
       }
     }
   }

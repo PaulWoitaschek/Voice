@@ -7,13 +7,13 @@ import android.support.v4.content.FileProvider
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
-import d
 import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -26,10 +26,10 @@ import javax.inject.Inject
   fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(bookUriConverter.allBooks().toString(), null)
 
   fun onLoadChildren(parentId: String, result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>) {
-    d { "onLoadChildren $parentId, $result" }
+    Timber.d("onLoadChildren $parentId, $result")
     val uri = Uri.parse(parentId)
     val items = mediaItems(uri)
-    d { "sending result $items" }
+    Timber.d("sending result $items")
     result.sendResult(items)
   }
 

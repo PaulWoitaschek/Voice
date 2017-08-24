@@ -7,9 +7,9 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
-import e
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -79,7 +79,7 @@ import javax.inject.Singleton
             .centerCrop()
             .get()
       } catch (ex: IOException) {
-        e(ex) { "Error when saving cover $it" }
+        Timber.e(ex, "Error when saving cover $it")
       }
     }
     return null

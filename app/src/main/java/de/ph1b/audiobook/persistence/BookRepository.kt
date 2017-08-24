@@ -3,11 +3,10 @@ package de.ph1b.audiobook.persistence
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.persistence.internals.BookStorage
-import e
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import v
+import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import javax.inject.Inject
@@ -37,7 +36,7 @@ import javax.inject.Singleton
 
   @Synchronized
   fun addBook(book: Book) {
-    v { "addBook=${book.name}" }
+    Timber.v("addBook=${book.name}")
 
     val bookWithId = storage.addBook(book)
     active.add(bookWithId)
@@ -64,12 +63,12 @@ import javax.inject.Singleton
       storage.updateBook(book)
       updated.onNext(book)
       sortBooksAndNotifySubject()
-    } else e { "update failed as there was no book" }
+    } else Timber.e("update failed as there was no book")
   }
 
   @Synchronized
   fun hideBook(toDelete: List<Book>) {
-    v { "hideBooks=${toDelete.size}" }
+    Timber.v("hideBooks=${toDelete.size}")
     if (toDelete.isEmpty()) return
 
     val idsToDelete = toDelete.map(Book::id)
@@ -81,7 +80,7 @@ import javax.inject.Singleton
 
   @Synchronized
   fun revealBook(book: Book) {
-    v { "Called revealBook=$book" }
+    Timber.v("Called revealBook=$book")
 
     orphaned.removeAll { it.id == book.id }
     active.add(book)

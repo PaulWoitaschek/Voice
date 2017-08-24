@@ -31,7 +31,7 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
-import i
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -189,7 +189,7 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
     binding.bookSpinner.adapter = spinnerAdapter
 
     binding.bookSpinner.itemSelections {
-      i { "spinner: onItemSelected. firing: $it" }
+      Timber.i("spinner: onItemSelected. firing: $it")
       val item = data[it]
       presenter.seekTo(item.start, item.file)
     }

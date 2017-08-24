@@ -14,10 +14,14 @@ import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityFolderChooserBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.visible
-import i
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -86,7 +90,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     binding.toolSpinner.adapter = spinnerAdapter
     binding.toolSpinner.itemSelections {
       if (it != AdapterView.INVALID_POSITION) {
-        i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
+        Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
         val item = spinnerAdapter.getItem(it)
         presenter().fileSelected(item)
       }
@@ -130,7 +134,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   override fun newRootFolders(newFolders: List<File>) {
-    i { "newRootFolders called with $newFolders" }
+    Timber.i("newRootFolders called with $newFolders")
     binding.spinnerGroup.visible = newFolders.size > 1
     spinnerAdapter.setData(newFolders)
   }
