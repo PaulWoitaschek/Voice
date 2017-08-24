@@ -65,12 +65,13 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   private var currentBook: Book? = null
 
   private var currentPlaying: MenuItem by clearAfterDestroyView()
+  private var displayModeItem: MenuItem by clearAfterDestroyView()
 
   override fun onBindingCreated(binding: BookShelfBinding) {
     playPauseDrawable = PlayPauseDrawable()
+    setupToolbar()
     setupFab()
     setupRecyclerView()
-    setupToolbar()
   }
 
   private fun setupFab() {
@@ -101,15 +102,9 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   private fun setupToolbar() {
     binding.toolbar.inflateMenu(R.menu.book_shelf)
     val menu = binding.toolbar.menu
-
     currentPlaying = menu.findItem(R.id.action_current)
-
-    // sets the grid / list toggle icon
-    val displayModeItem = menu.findItem(R.id.action_change_layout)
-    displayModeItem.setIcon((!prefs.displayMode.value).icon)
-
+    displayModeItem = menu.findItem(R.id.action_change_layout)
     binding.toolbar.title = getString(R.string.app_name)
-
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
@@ -186,6 +181,8 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     layoutParams.leftMargin = margin
     layoutParams.rightMargin = margin
     adapter.displayMode = defaultDisplayMode
+
+    displayModeItem.setIcon((!prefs.displayMode.value).icon)
   }
 
   private fun invokeBookSelectionCallback(bookId: Long) {
