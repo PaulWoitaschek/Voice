@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.misc.conductor
 
 import com.bluelinelabs.conductor.Controller
+import timber.log.Timber
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -10,11 +11,20 @@ import kotlin.reflect.KProperty
 class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty<Controller, T> {
 
   init {
-    controller.addLifecycleListener(object : Controller.LifecycleListener() {
-      override fun postDestroyView(controller: Controller) {
-        value = null
-      }
-    })
+    controller.addLifecycleListener(
+        object : Controller.LifecycleListener() {
+
+          override fun postDestroyView(controller: Controller) {
+            if (controller.isDestroyed || controller.isBeingDestroyed) {
+              Timber.d("We are in teardown. Defer releasing the reference.")
+            } else value = null
+          }
+
+          override fun postDestroy(controller: Controller) {
+            value = null
+          }
+        }
+    )
   }
 
   private var value: T? = null
