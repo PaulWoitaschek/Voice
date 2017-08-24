@@ -30,6 +30,7 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.maxImageSize
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 @Reusable
 class WidgetUpdater @Inject constructor(
@@ -38,7 +39,8 @@ class WidgetUpdater @Inject constructor(
     private val prefs: PrefsManager,
     private val imageHelper: ImageHelper,
     private val serviceController: ServiceController,
-    private val playStateManager: PlayStateManager
+    private val playStateManager: PlayStateManager,
+    private val windowManager: Provider<WindowManager>
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -112,7 +114,7 @@ class WidgetUpdater @Inject constructor(
   private val isPortrait: Boolean
     get() {
       val orientation = context.resources.configuration.orientation
-      val window = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+      val window = windowManager.get()
       val display = window.defaultDisplay
 
       @Suppress("DEPRECATION")

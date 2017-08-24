@@ -43,7 +43,6 @@ import javax.inject.Singleton
   fun provideConnectivityManager(context: Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
   @Provides
-  @Singleton
   fun provideWindowManager(context: Context) = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
   @Provides

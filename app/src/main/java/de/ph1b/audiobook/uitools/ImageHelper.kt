@@ -13,20 +13,23 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
   val latch = CountDownLatch(1)
   val bitmap = arrayOfNulls<Bitmap>(1)
-  Thread(Runnable {
-    try {
-      bitmap[0] = this.getter()
-    } catch (ex: IOException) {
-      Timber.e(ex, "Exception at retrieving.")
-    } finally {
-      latch.countDown()
-    }
-  }).start()
+  Thread(
+      Runnable {
+        try {
+          bitmap[0] = this.getter()
+        } catch (ex: IOException) {
+          Timber.e(ex, "Exception at retrieving.")
+        } finally {
+          latch.countDown()
+        }
+      }
+  ).start()
 
   latch.await()
   return bitmap.first()
@@ -38,7 +41,7 @@ val maxImageSize = 500 * 1024
 @Singleton
 class ImageHelper
 @Inject
-constructor(private val windowManager: WindowManager) {
+constructor(private val windowManager: Provider<WindowManager>) {
 
   fun drawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -85,7 +88,7 @@ constructor(private val windowManager: WindowManager) {
   val smallerScreenSize: Int
     @Suppress("deprecation")
     get() {
-      val display = windowManager.defaultDisplay
+      val display = windowManager.get().defaultDisplay
       val displayWidth = display.width
       val displayHeight = display.height
       return if (displayWidth < displayHeight) displayWidth else displayHeight
