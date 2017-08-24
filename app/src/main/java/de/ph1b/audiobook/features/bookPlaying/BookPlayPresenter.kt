@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.Optional
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -10,9 +11,6 @@ import i
 import java.io.File
 import javax.inject.Inject
 
-/**
- * Presenter for the book play screen
- */
 class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
 
   @Inject lateinit var bookRepository: BookRepository
@@ -26,19 +24,25 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
 
   override fun onAttach(view: BookPlayMvp.View) {
     bookRepository.booksStream()
+        .map {
+          val currentBook = it.firstOrNull { it.id == bookId }
+          Optional.of(currentBook)
+        }
+        .distinctUntilChanged()
         .subscribe {
-          val book = it.firstOrNull { it.id == bookId }
-          if (book == null) {
-            view.finish()
-          } else view.render(book)
+          when (it) {
+            is Optional.Present -> view.render(it.value)
+            is Optional.Absent -> view.finish()
+          }
         }
         .disposeOnDetach()
 
     playStateManager.playStateStream()
+        .map { it == PlayState.PLAYING }
+        .distinctUntilChanged()
         .subscribe {
-          i { "onNext with playState $it" }
-          val playing = it == PlayState.PLAYING
-          view.showPlaying(playing)
+          i { "onNext with playing=$it" }
+          view.showPlaying(it)
         }
         .disposeOnDetach()
 

@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.view.View
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.misc.checkMainThread
 
 /**
  * Base fragment that provides a convenient way for binding a view to a presenter
  */
-abstract class MvpController<V : Any, out P, B>(args: Bundle = Bundle()) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
+abstract class MvpController<V : Any, out P, B>(
+    args: Bundle = Bundle()
+) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
   private var internalPresenter: P? = null
   val presenter: P
     get() {
+      checkMainThread()
       check(!isDestroyed) { "Must not call presenter when destroyed!" }
       if (internalPresenter == null) {
         internalPresenter = createPresenter()
@@ -22,28 +26,30 @@ abstract class MvpController<V : Any, out P, B>(args: Bundle = Bundle()) : BaseC
     }
 
   init {
-    addLifecycleListener(object : LifecycleListener() {
+    addLifecycleListener(
+        object : LifecycleListener() {
 
-      override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
-        presenter.onRestore(savedInstanceState)
-      }
+          override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+            presenter.onRestore(savedInstanceState)
+          }
 
-      override fun postAttach(controller: Controller, view: View) {
-        presenter.attach(provideView())
-      }
+          override fun postAttach(controller: Controller, view: View) {
+            presenter.attach(provideView())
+          }
 
-      override fun preDetach(controller: Controller, view: View) {
-        presenter.detach()
-      }
+          override fun preDetach(controller: Controller, view: View) {
+            presenter.detach()
+          }
 
-      override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
-        presenter.onSave(outState)
-      }
+          override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
+            presenter.onSave(outState)
+          }
 
-      override fun postDestroy(controller: Controller) {
-        internalPresenter = null
-      }
-    })
+          override fun postDestroy(controller: Controller) {
+            internalPresenter = null
+          }
+        }
+    )
   }
 
   @Suppress("UNCHECKED_CAST")

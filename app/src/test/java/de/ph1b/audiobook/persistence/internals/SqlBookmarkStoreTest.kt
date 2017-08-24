@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
-import de.ph1b.audiobook.BookMocker
+import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
@@ -29,7 +29,7 @@ class SqlBookmarkStoreTest {
 
   @Test fun test() {
     // test adding
-    val book = BookMocker.mock()
+    val book = BookFactory.create()
     val added = (0..2000).map {
       register.addBookmark(Bookmark(book.chapters.first().file, "my title", System.currentTimeMillis().toInt()))
     }

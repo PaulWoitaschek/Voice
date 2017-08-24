@@ -5,19 +5,16 @@ import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.File
 import java.util.Random
 
-/**
- * Mock provider for mocking objects and injecting them.
- */
-object BookMocker {
+object BookFactory {
 
   private val rnd = Random()
 
-  fun mock(): Book {
+  fun create(): Book {
     val root = "/root/"
-    return mock(File(root, "First.mp3"), File(root, "/second.mp3"))
+    return create(File(root, "First.mp3"), File(root, "/second.mp3"))
   }
 
-  fun mock(file1: File, file2: File): Book {
+  fun create(file1: File, file2: File): Book {
     val type = Book.Type.SINGLE_FOLDER
     val author = "TestAuthor"
     val time = 0

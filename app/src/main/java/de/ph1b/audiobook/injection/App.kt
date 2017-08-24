@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDelegate
 import dagger.android.DispatchingAndroidInjector
@@ -64,6 +65,6 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
   companion object {
 
     lateinit var component: AppComponent
-      private set
+      @VisibleForTesting set
   }
 }

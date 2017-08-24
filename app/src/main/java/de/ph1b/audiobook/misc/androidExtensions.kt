@@ -2,6 +2,7 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Looper
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -105,3 +106,9 @@ fun <T> Map<Int, T>.toSparseArray(): SparseArray<T> {
 }
 
 fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
+
+fun checkMainThread() {
+  check(Looper.getMainLooper() == Looper.myLooper()) {
+    "Is not on ui thread!"
+  }
+}

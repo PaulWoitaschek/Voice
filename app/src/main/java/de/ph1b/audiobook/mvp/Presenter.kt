@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
-import android.os.Looper
 import android.support.annotation.CallSuper
+import de.ph1b.audiobook.misc.checkMainThread
 import i
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -52,11 +52,5 @@ abstract class Presenter<V : Any> {
     check(internalView != null) { "Must only be called in attached state." }
     checkMainThread()
     compositeDisposable.add(this)
-  }
-
-  private fun checkMainThread() {
-    check(Looper.getMainLooper() == Looper.myLooper()) {
-      "Is not on ui thread!"
-    }
   }
 }

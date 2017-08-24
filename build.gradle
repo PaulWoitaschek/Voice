@@ -40,6 +40,7 @@ allprojects {
       force libraries.support.v13
       force "com.squareup.okio:okio:1.13.0"
       force libraries.support.annotations
+      force libraries.kotlinStdLib
     }
   }
 }

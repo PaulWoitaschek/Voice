@@ -123,6 +123,7 @@ dependencies {
   testCompile libraries.robolectric
   testCompile libraries.assertJ
   testCompile libraries.mockito
+  testCompile libraries.mockitoKotlin
 
   androidTestCompile libraries.support.testRunner
   androidTestCompile libraries.assertJ

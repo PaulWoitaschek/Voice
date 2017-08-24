@@ -20,6 +20,7 @@ ext.versions = [
     materialCab         : "0.1.12",
     minSdk              : 16,
     mockito             : "2.8.47",
+    mockitoKotlin       : "1.5.0",
     moshi               : "1.5.0",
     okHttp              : "3.8.1",
     picasso             : "2.5.2",
@@ -82,6 +83,7 @@ ext.libraries = [
     assertJ               : "org.assertj:assertj-core:$versions.assertJ",
     junit                 : "junit:junit:$versions.junit",
     mockito               : "org.mockito:mockito-core:$versions.mockito",
+    mockitoKotlin         : "com.nhaarman:mockito-kotlin-kt1.1:$versions.mockitoKotlin",
     okHttp                : "com.squareup.okhttp3:okhttp:$versions.okHttp",
     robolectric           : "org.robolectric:robolectric:$versions.robolectric",
 ]

@@ -2,7 +2,7 @@ package de.ph1b.audiobook.persistence
 
 import android.os.Build
 import com.squareup.moshi.Moshi
-import de.ph1b.audiobook.BookMocker
+import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
 import de.ph1b.audiobook.persistence.internals.BookStorage
@@ -39,7 +39,7 @@ class BookRepositoryTest {
 
   @Test
   fun testInOut() {
-    val dummy = BookMocker.mock()
+    val dummy = BookFactory.create()
     repo.addBook(dummy)
     val firstBook = repo.activeBooks.first()
     val dummyWithUpdatedId = dummy.copy(id = firstBook.id)

@@ -4,7 +4,7 @@ import android.os.Build
 import android.util.SparseArray
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.BookMocker
+import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.TestApp
@@ -40,7 +40,7 @@ class BookStorageTest {
   }
 
   @Test fun testHideRevealBook() {
-    val mock = BookMocker.mock()
+    val mock = BookFactory.create()
     register.addBook(mock)
 
     val activeBooks = register.activeBooks()
@@ -66,7 +66,7 @@ class BookStorageTest {
    * Tests that the returned book matches the retrieved one
    */
   @Test fun testAddBookReturn() {
-    val mock = BookMocker.mock()
+    val mock = BookFactory.create()
     val inserted = register.addBook(mock)
     val retrieved = register.activeBooks().single()
 
@@ -74,8 +74,8 @@ class BookStorageTest {
   }
 
   @Test fun testAddBook() {
-    val mock1 = BookMocker.mock()
-    val mock2 = BookMocker.mock()
+    val mock1 = BookFactory.create()
+    val mock2 = BookFactory.create()
     val firstInserted = register.addBook(mock1)
     val secondInserted = register.addBook(mock2)
 
@@ -91,7 +91,7 @@ class BookStorageTest {
   }
 
   @Test fun testAddBookWithNullableAuthor() {
-    val mock = BookMocker.mock()
+    val mock = BookFactory.create()
     val withNullableAuthor = mock.copy(author = null)
     val inserted = register.addBook(withNullableAuthor)
 
@@ -106,7 +106,7 @@ class BookStorageTest {
 
 
   @Test fun testUpdateBook() {
-    val mock = BookMocker.mock()
+    val mock = BookFactory.create()
     val inserted = register.addBook(mock)
 
     val oldChapters = inserted.chapters
