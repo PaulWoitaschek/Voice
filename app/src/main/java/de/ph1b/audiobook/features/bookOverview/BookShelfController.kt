@@ -21,7 +21,12 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.asTransaction
+import de.ph1b.audiobook.misc.clearAfterDestroyView
+import de.ph1b.audiobook.misc.dpToPxRounded
+import de.ph1b.audiobook.misc.postedIfComputingLayout
+import de.ph1b.audiobook.misc.supportTransitionName
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
@@ -145,8 +150,10 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
 
           @SuppressLint("CommitTransaction")
           pendingTransaction = fragmentManager.beginTransaction()
-              .add(EditCoverDialogFragment.newInstance(this, book, imageUri),
-                  EditCoverDialogFragment.TAG)
+              .add(
+                  EditCoverDialogFragment.newInstance(this, book, imageUri),
+                  EditCoverDialogFragment.TAG
+              )
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
@@ -255,7 +262,11 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     }
   }
 
-  override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
+  override fun onBookCoverChanged(book: Book) {
+    binding.recyclerView.postedIfComputingLayout {
+      adapter.reloadBookCover(book.id)
+    }
+  }
 
   override fun onInternetCoverRequested(book: Book) {
     router.pushController(ImagePickerController(book).asTransaction())
