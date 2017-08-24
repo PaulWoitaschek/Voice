@@ -57,15 +57,27 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
       setupRouter()
     }
 
-    router.addChangeListener(object : ControllerChangeHandler.ControllerChangeListener {
-      override fun onChangeStarted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
-        from?.setOptionsMenuHidden(true)
-      }
+    router.addChangeListener(
+        object : ControllerChangeHandler.ControllerChangeListener {
+          override fun onChangeStarted(
+              to: Controller?,
+              from: Controller?,
+              isPush: Boolean,
+              container: ViewGroup,
+              handler: ControllerChangeHandler) {
+            from?.setOptionsMenuHidden(true)
+          }
 
-      override fun onChangeCompleted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
-        from?.setOptionsMenuHidden(false)
-      }
-    })
+          override fun onChangeCompleted(
+              to: Controller?,
+              from: Controller?,
+              isPush: Boolean,
+              container: ViewGroup,
+              handler: ControllerChangeHandler) {
+            from?.setOptionsMenuHidden(false)
+          }
+        }
+    )
 
     setupFromIntent(intent)
   }
@@ -120,7 +132,9 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   }
 
   override fun onBackPressed() {
-    if (!router.handleBack()) super.onBackPressed()
+    if (router.backstackSize == 1) {
+      super.onBackPressed()
+    } else router.handleBack()
   }
 
   companion object {
