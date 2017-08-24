@@ -16,8 +16,8 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.Sandman
 import de.ph1b.audiobook.playback.ShakeDetector
+import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.uitools.visible
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
   @Inject lateinit var bookmarkProvider: BookmarkProvider
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var sandMan: Sandman
+  @Inject lateinit var sleepTimer: SleepTimer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var shakeDetector: ShakeDetector
 
@@ -104,7 +104,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
       prefs.shakeToReset.value = binding.shakeToResetSwitch.isChecked
 
-      sandMan.setActive(true)
+      sleepTimer.setActive(true)
       dismiss()
     }
 

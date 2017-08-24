@@ -6,7 +6,7 @@ import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.Sandman
+import de.ph1b.audiobook.playback.SleepTimer
 import i
 import java.io.File
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   @Inject lateinit var bookRepository: BookRepository
   @Inject lateinit var playerController: PlayerController
   @Inject lateinit var playStateManager: PlayStateManager
-  @Inject lateinit var sandman: Sandman
+  @Inject lateinit var sleepTimer: SleepTimer
 
   init {
     App.component.inject(this)
@@ -46,7 +46,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
         }
         .disposeOnDetach()
 
-    sandman.sleepSand
+    sleepTimer.leftSleepTimeInMs
         .subscribe { view.showLeftSleepTime(it) }
         .disposeOnDetach()
   }
@@ -79,7 +79,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   }
 
   override fun toggleSleepTimer() {
-    if (sandman.sleepTimerActive()) sandman.setActive(false)
+    if (sleepTimer.sleepTimerActive()) sleepTimer.setActive(false)
     else {
       view.openSleepTimeDialog()
     }

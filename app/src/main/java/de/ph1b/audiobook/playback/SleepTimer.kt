@@ -12,35 +12,28 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manages everything sleep related.
- */
-@Singleton class Sandman
-@Inject constructor(private val playerController: PlayerController, playStateManager: PlayStateManager, private val prefsManager: PrefsManager, shakeDetector: ShakeDetector) {
+@Singleton class SleepTimer
+@Inject constructor(
+    private val playerController: PlayerController,
+    playStateManager: PlayStateManager,
+    private val prefsManager: PrefsManager,
+    shakeDetector: ShakeDetector
+) {
 
-  /**
-   * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
-   * If this is 0 the timer simple counted down.
-   */
   private val NOT_ACTIVE = -1
-  private val internalSleepSand = BehaviorSubject.createDefault<Int>(NOT_ACTIVE)
+  private val leftSleepTimeSubject = BehaviorSubject.createDefault<Int>(NOT_ACTIVE)
   private var sleepDisposable: Disposable? = null
   private var shakeDisposable: Disposable? = null
   private var shakeTimeoutDisposable: Disposable? = null
   private val shakeObservable = shakeDetector.detect()
 
   init {
-    // stops the player when the timer reaches 0
-    internalSleepSand.filter { it == 0 } // when this reaches 0
-        .subscribe {
-          // stop the player
-          playerController.stop()
-        }
+    leftSleepTimeSubject.filter { it == 0 }
+        .subscribe { playerController.stop() }
 
-    internalSleepSand.subscribe {
+    leftSleepTimeSubject.subscribe {
       when {
         it > 0 -> {
-          // enable shake timer
           resetTimerOnShake(true)
         }
         it == NOT_ACTIVE -> {
@@ -62,10 +55,10 @@ import javax.inject.Singleton
         .subscribe { playing ->
           if (playing) {
             sleepDisposable = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .filter { internalSleepSand.value > 0 } // only notify if there is still time left
-                .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
+                .filter { leftSleepTimeSubject.value > 0 } // only notify if there is still time left
+                .map { leftSleepTimeSubject.value - sleepUpdateInterval } // calculate the new time
                 .map { it.coerceAtLeast(0) } // but keep at least 0
-                .subscribe { internalSleepSand.onNext(it.toInt()) }
+                .subscribe { leftSleepTimeSubject.onNext(it.toInt()) }
           } else {
             sleepDisposable?.dispose()
           }
@@ -74,15 +67,15 @@ import javax.inject.Singleton
 
   /** turns the sleep timer on or off **/
   fun setActive(enable: Boolean) {
-    i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
+    i { "toggleSleepSand. Left sleepTime is ${leftSleepTimeSubject.value}" }
 
     if (enable) {
       i { "Starting sleepTimer" }
       val minutes = prefsManager.sleepTime.value
-      internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()).toInt())
+      leftSleepTimeSubject.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()).toInt())
     } else {
       i { "Cancelling sleepTimer" }
-      internalSleepSand.onNext(NOT_ACTIVE)
+      leftSleepTimeSubject.onNext(NOT_ACTIVE)
     }
   }
 
@@ -93,7 +86,7 @@ import javax.inject.Singleton
         // setup shake detection if requested
         if (prefsManager.shakeToReset.value) {
           shakeDisposable = shakeObservable.subscribe {
-            if (internalSleepSand.value == 0) {
+            if (leftSleepTimeSubject.value == 0) {
               d { "detected shake while sleepSand==0. Resume playback" }
               playerController.play()
             }
@@ -111,17 +104,13 @@ import javax.inject.Singleton
     if (stopAfter != null) {
       shakeTimeoutDisposable = Observable.timer(stopAfter, TimeUnit.MINUTES)
           .subscribe {
-            d { "disabling pauseOnShake through timout" }
+            d { "disabling pauseOnShake through timeout" }
             resetTimerOnShake(false)
           }
     }
   }
 
-  /**
-   * This observable holds the time in ms left that the sleep timer has left. This is updated
-   * periodically
-   */
-  val sleepSand: Observable<Int> = internalSleepSand
+  val leftSleepTimeInMs: Observable<Int> = leftSleepTimeSubject
 
-  fun sleepTimerActive(): Boolean = internalSleepSand.value > 0
+  fun sleepTimerActive(): Boolean = leftSleepTimeSubject.value > 0
 }

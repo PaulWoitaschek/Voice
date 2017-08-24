@@ -15,7 +15,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.Sandman
+import de.ph1b.audiobook.playback.SleepTimer
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -36,7 +36,7 @@ class BookPlayPresenterTest {
   @Mock lateinit var mockBookRepository: BookRepository
   @Mock lateinit var mockPlayerController: PlayerController
   @Mock lateinit var mockPlayStateManager: PlayStateManager
-  @Mock lateinit var mockSandman: Sandman
+  @Mock lateinit var mockSleepTimer: SleepTimer
   @Mock lateinit var mockView: BookPlayMvp.View
 
   @Before
@@ -46,17 +46,17 @@ class BookPlayPresenterTest {
       bookRepository = mockBookRepository
       playerController = mockPlayerController
       playStateManager = mockPlayStateManager
-      sandman = mockSandman
+      sleepTimer = mockSleepTimer
     }
 
     given { mockBookRepository.booksStream() }.thenReturn(Observable.empty())
     given { mockPlayStateManager.playStateStream() }.thenReturn(Observable.empty())
-    given { mockSandman.sleepSand }.thenReturn(Observable.empty())
+    given { mockSleepTimer.leftSleepTimeInMs }.thenReturn(Observable.empty())
   }
 
   @Test
   fun sleepTimberShowsTime() {
-    given { mockSandman.sleepSand }.thenReturn(Observable.just(3, 2, 1))
+    given { mockSleepTimer.leftSleepTimeInMs }.thenReturn(Observable.just(3, 2, 1))
     bookPlayPresenter.attach(mockView)
 
     inOrder(mockView).apply {
@@ -69,7 +69,7 @@ class BookPlayPresenterTest {
   @Test
   fun sleepTimberStopsAfterDetach() {
     val sleepSand = PublishSubject.create<Int>()
-    given { mockSandman.sleepSand }.thenReturn(sleepSand)
+    given { mockSleepTimer.leftSleepTimeInMs }.thenReturn(sleepSand)
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
     sleepSand.onNext(1)
@@ -189,17 +189,17 @@ class BookPlayPresenterTest {
   @Test
   fun toggleActiveSleepTimberCancels() {
     bookPlayPresenter.attach(mockView)
-    given { mockSandman.sleepTimerActive() }.thenReturn(true)
+    given { mockSleepTimer.sleepTimerActive() }.thenReturn(true)
     bookPlayPresenter.toggleSleepTimer()
-    verify(mockSandman).setActive(false)
+    verify(mockSleepTimer).setActive(false)
     verify(mockView, never()).openSleepTimeDialog()
   }
 
   @Test
   fun toggleSleepTimberInInactiveStateOpensMenu() {
     bookPlayPresenter.attach(mockView)
-    given { mockSandman.sleepTimerActive() }.thenReturn(false)
+    given { mockSleepTimer.sleepTimerActive() }.thenReturn(false)
     bookPlayPresenter.toggleSleepTimer()
-    verify(mockSandman, never()).setActive(any())
+    verify(mockSleepTimer, never()).setActive(any())
   }
 }
