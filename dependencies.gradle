@@ -11,7 +11,7 @@ ext.versions = [
     fabric              : "1.24.1",
     floatingActionButton: "1.10.1",
     gradleVersionsPlugin: "0.15.0",
-    jebml               : "2.3",
+    jebml               : "2.3.1",
     supportTestRunner   : "1.0.0",
     jsr250              : "1.0",
     junit               : "4.12",

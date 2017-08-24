@@ -2,12 +2,16 @@ package de.ph1b.audiobook.chapterreader.matroska
 
 import dagger.Reusable
 import de.ph1b.audiobook.common.Logger
-import org.ebml.*
+import org.ebml.EBMLReader
+import org.ebml.Element
+import org.ebml.MasterElement
+import org.ebml.ProtoType
+import org.ebml.StringElement
+import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
 import java.io.File
 import javax.inject.Inject
-
 
 @Reusable internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Logger) {
 
