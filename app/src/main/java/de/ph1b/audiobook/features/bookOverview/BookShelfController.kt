@@ -7,6 +7,7 @@ import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -61,7 +62,6 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   private var linearLayoutManager: RecyclerView.LayoutManager by clearAfterDestroyView()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
-  private var firstPlayStateUpdate = true
   private var currentBook: Book? = null
 
   private var currentPlaying: MenuItem by clearAfterDestroyView()
@@ -229,18 +229,19 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   /** Sets the fab icon correctly accordingly to the new play state. */
   fun showPlaying(playing: Boolean) {
     i { "Called showPlaying $playing" }
+    val laidOut = ViewCompat.isLaidOut(binding.fab)
     if (playing) {
-      playPauseDrawable.transformToPause(!firstPlayStateUpdate)
+      playPauseDrawable.transformToPause(laidOut)
     } else {
-      playPauseDrawable.transformToPlay(!firstPlayStateUpdate)
+      playPauseDrawable.transformToPlay(laidOut)
     }
-    firstPlayStateUpdate = false
   }
 
   /** Show a warning that no audiobook folder was chosen */
   fun showNoFolderWarning() {
     // show dialog if no folders are set
-    val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing == true
+    val noFolderWarningDialog = fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?
+    val noFolderWarningIsShowing = noFolderWarningDialog?.dialog?.isShowing == true
     if (!noFolderWarningIsShowing) {
       val warning = NoFolderWarningDialogFragment()
       warning.show(fragmentManager, FM_NO_FOLDER_WARNING)

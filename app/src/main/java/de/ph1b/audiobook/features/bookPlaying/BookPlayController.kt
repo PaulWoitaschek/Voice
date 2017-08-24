@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
@@ -51,7 +51,6 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   private val bookId = bundle.getLong(NI_BOOK_ID)
   private val playPauseDrawable = PlayPauseDrawable()
   private var currentChapter: BookPlayChapter? = null
-  private var firstPlayStateChange = true
 
   override val layoutRes = R.layout.book_play
   override fun createPresenter() = BookPlayPresenter(bookId)
@@ -250,17 +249,12 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   }
 
   override fun showPlaying(playing: Boolean) {
+    val laidOut = ViewCompat.isLaidOut(binding.play)
     if (playing) {
-      playPauseDrawable.transformToPause(!firstPlayStateChange)
+      playPauseDrawable.transformToPause(animated = laidOut)
     } else {
-      playPauseDrawable.transformToPlay(!firstPlayStateChange)
+      playPauseDrawable.transformToPlay(animated = laidOut)
     }
-
-    firstPlayStateChange = false
-  }
-
-  override fun onAttach(view: View) {
-    firstPlayStateChange = true
   }
 
   private fun launchJumpToPositionDialog() {
