@@ -45,7 +45,6 @@ import javax.inject.Singleton
     leftSleepTimeSubject.filter { it in 1..fadeStart}
         .subscribe {
           val percentVolume = it.toFloat()/fadeStart
-          Timber.i("The volume is at ${100*percentVolume}% of $startVolume = ${startVolume * percentVolume}")
           mediaPlayer.setSleepVolume(startVolume * percentVolume)
         }
 
