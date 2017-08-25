@@ -16,7 +16,8 @@ import javax.inject.Singleton
     private val playerController: PlayerController,
     playStateManager: PlayStateManager,
     private val prefsManager: PrefsManager,
-    shakeDetector: ShakeDetector
+    shakeDetector: ShakeDetector,
+    mediaPlayer: MediaPlayer
 ) {
 
   private val NOT_ACTIVE = -1
@@ -25,10 +26,27 @@ import javax.inject.Singleton
   private var shakeDisposable: Disposable? = null
   private var shakeTimeoutDisposable: Disposable? = null
   private val shakeObservable = shakeDetector.detect()
+  private val startVolume = mediaPlayer.getVolume()
+  private val fadeStart = 10000L
 
   init {
     leftSleepTimeSubject.filter { it == 0 }
-        .subscribe { playerController.stop() }
+        .subscribe {
+          val book = mediaPlayer.book()
+          if (book != null ) {
+            val newTime = book.time - fadeStart.toInt()
+            playerController.changePosition(if (newTime > 0) newTime else 0, book.currentFile)
+          }
+          playerController.stop()
+          mediaPlayer.setSleepVolume(startVolume)
+        }
+
+    // Fades the volume out when the timer approaches 0
+    leftSleepTimeSubject.filter { it in 1..fadeStart}
+        .subscribe {
+          val percentVolume = it.toFloat()/fadeStart
+          mediaPlayer.setSleepVolume(startVolume * percentVolume)
+        }
 
     leftSleepTimeSubject.subscribe {
       when {
@@ -38,6 +56,7 @@ import javax.inject.Singleton
         it == NOT_ACTIVE -> {
           // if the track ended by the user, disable the shake detector
           resetTimerOnShake(false)
+          mediaPlayer.setSleepVolume(startVolume)
         }
         it == 0 -> {
           // if the timer stopped normally, setup a timer of 5 minutes to resume playback
@@ -47,7 +66,7 @@ import javax.inject.Singleton
     }
 
     // counts down the sleep sand
-    val sleepUpdateInterval = 1000L
+    val sleepUpdateInterval = 250L
     playStateManager.playStateStream()
         .map { it == PlayStateManager.PlayState.PLAYING }
         .distinctUntilChanged()
