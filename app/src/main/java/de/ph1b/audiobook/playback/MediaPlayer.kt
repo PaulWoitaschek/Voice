@@ -152,6 +152,12 @@ constructor(
     }
   }
 
+  fun setSleepVolume(volume: Float) {
+    player.volume = volume
+  }
+
+  fun getVolume():Float = player.volume
+
   fun play() {
     Timber.v("play called in state $state")
     prepareIfIdle()
