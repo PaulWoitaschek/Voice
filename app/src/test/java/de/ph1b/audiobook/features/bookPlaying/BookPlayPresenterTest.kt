@@ -99,9 +99,9 @@ class BookPlayPresenterTest {
 
   @Test
   fun bookStream() {
-    val bookWithCorrectId = BookFactory.create().copy(id = bookId, time = 0)
+    val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
     val bookWithCorrectIdAndChangedTime = bookWithCorrectId.copy(time = 123)
-    val bookWithFalseId = BookFactory.create().copy(id = 50)
+    val bookWithFalseId = BookFactory.create(id = 50)
     val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
     val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
     given { mockBookRepository.booksStream() }.thenReturn(Observable.just(firstEmission, secondEmission))
@@ -118,14 +118,14 @@ class BookPlayPresenterTest {
     given { mockBookRepository.booksStream() }.thenReturn(bookStream)
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
-    val bookWithCorrectId = BookFactory.create().copy(id = bookId, time = 0)
+    val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
     bookStream.onNext(listOf(bookWithCorrectId))
     verify(mockView, never()).render(any())
   }
 
   @Test
   fun absentBookFinishes() {
-    val bookWithFalseId = BookFactory.create().copy(id = 50)
+    val bookWithFalseId = BookFactory.create(id = 50)
     given { mockBookRepository.booksStream() }.thenReturn(Observable.just(listOf(bookWithFalseId)))
     bookPlayPresenter.attach(mockView)
     verify(mockView, never()).render(any())
@@ -170,8 +170,8 @@ class BookPlayPresenterTest {
   @Test
   fun seekToWithoutFileUsesBookFile() {
     bookPlayPresenter.attach(mockView)
-    val book = BookFactory.create()
-    given { mockBookRepository.bookById(bookId) }.thenReturn(book.copy(id = bookId))
+    val book = BookFactory.create(id = bookId)
+    given { mockBookRepository.bookById(bookId) }.thenReturn(book)
     bookPlayPresenter.seekTo(100, null)
     verify(mockPlayerController).changePosition(100, book.currentFile)
   }
@@ -179,8 +179,8 @@ class BookPlayPresenterTest {
   @Test
   fun seeToWithFile() {
     bookPlayPresenter.attach(mockView)
-    val book = BookFactory.create()
-    given { mockBookRepository.bookById(bookId) }.thenReturn(book.copy(id = bookId))
+    val book = BookFactory.create(id = bookId)
+    given { mockBookRepository.bookById(bookId) }.thenReturn(book)
     val lastFile = book.chapters.last().file
     bookPlayPresenter.seekTo(100, lastFile)
     verify(mockPlayerController).changePosition(100, lastFile)

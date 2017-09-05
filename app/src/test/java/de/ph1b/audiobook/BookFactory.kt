@@ -12,11 +12,11 @@ object BookFactory {
   fun create(
       file1: File = File("/root/", "First.mp3"),
       file2: File = File("/root/", "/second.mp3"),
-      id: Long = -1
+      id: Long = -1,
+      time: Int = 0
   ): Book {
     val type = Book.Type.SINGLE_FOLDER
     val author = "TestAuthor"
-    val time = 0
     val name = "TestBook"
     val marks1 = SparseArray<String>().apply {
       put(0, "first")
