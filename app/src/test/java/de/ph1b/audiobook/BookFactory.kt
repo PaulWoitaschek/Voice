@@ -3,18 +3,17 @@ package de.ph1b.audiobook
 import android.util.SparseArray
 import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.File
-import java.util.Random
+import java.util.*
 
 object BookFactory {
 
   private val rnd = Random()
 
-  fun create(): Book {
-    val root = "/root/"
-    return create(File(root, "First.mp3"), File(root, "/second.mp3"))
-  }
-
-  fun create(file1: File, file2: File): Book {
+  fun create(
+      file1: File = File("/root/", "First.mp3"),
+      file2: File = File("/root/", "/second.mp3"),
+      id: Long = -1
+  ): Book {
     val type = Book.Type.SINGLE_FOLDER
     val author = "TestAuthor"
     val time = 0
@@ -32,7 +31,7 @@ object BookFactory {
       root = "fakeRoot"
     }
     return Book(
-        id = -1,
+        id = id,
         type = type,
         author = author,
         currentFile = file1,

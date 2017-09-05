@@ -38,10 +38,27 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
+interface BookShelfView {
+  /** Display a new set of books */
+  fun displayNewBooks(books: List<Book>)
+
+  /** The book marked as current was changed. Updates the adapter and fab accordingly. */
+  fun updateCurrentBook(currentBook: Book?)
+
+  /** Sets the fab icon correctly accordingly to the new play state. */
+  fun showPlaying(playing: Boolean)
+
+  /** Show a warning that no audiobook folder was chosen */
+  fun showNoFolderWarning()
+
+  fun showLoading(loading: Boolean)
+  fun bookCoverChanged(bookId: Long)
+}
+
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookShelfController : MvpController<BookShelfController, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
+class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback, BookShelfView {
 
   override fun createPresenter() = App.component.bookShelfPresenter
   override val layoutRes = R.layout.book_shelf
@@ -207,13 +224,13 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   }
 
   /** Display a new set of books */
-  fun displayNewBooks(books: List<Book>) {
+  override fun displayNewBooks(books: List<Book>) {
     Timber.i("${books.size} displayNewBooks")
     adapter.newDataSet(books)
   }
 
   /** The book marked as current was changed. Updates the adapter and fab accordingly. */
-  fun updateCurrentBook(currentBook: Book?) {
+  override fun updateCurrentBook(currentBook: Book?) {
     Timber.i("updateCurrentBook: ${currentBook?.name}")
     this.currentBook = currentBook
 
@@ -231,7 +248,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   }
 
   /** Sets the fab icon correctly accordingly to the new play state. */
-  fun showPlaying(playing: Boolean) {
+  override fun showPlaying(playing: Boolean) {
     Timber.i("Called showPlaying $playing")
     val laidOut = ViewCompat.isLaidOut(binding.fab)
     if (playing) {
@@ -242,7 +259,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   }
 
   /** Show a warning that no audiobook folder was chosen */
-  fun showNoFolderWarning() {
+  override fun showNoFolderWarning() {
     // show dialog if no folders are set
     val noFolderWarningDialog = fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?
     val noFolderWarningIsShowing = noFolderWarningDialog?.dialog?.isShowing == true
@@ -252,11 +269,11 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     }
   }
 
-  fun showLoading(loading: Boolean) {
+  override fun showLoading(loading: Boolean) {
     binding.loadingProgress.visible = loading
   }
 
-  fun bookCoverChanged(bookId: Long) {
+  override fun bookCoverChanged(bookId: Long) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     binding.recyclerView.postedIfComputingLayout {

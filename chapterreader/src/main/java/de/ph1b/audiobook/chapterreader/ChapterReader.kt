@@ -8,7 +8,8 @@ import de.ph1b.audiobook.chapterreader.ogg.OggChapterReader
 import java.io.File
 import javax.inject.Inject
 
-@Reusable class ChapterReader @Inject internal constructor(
+@Reusable
+class ChapterReader @Inject internal constructor(
     private val oggReader: OggChapterReader,
     private val mp4Reader: Mp4ChapterReader,
     private val matroskaReader: MatroskaChapterReader,

@@ -13,9 +13,7 @@ import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import javax.inject.Inject
 import javax.inject.Named
 
-/**
- * Presenter for [BookShelfController].
- */
+
 class BookShelfPresenter
 @Inject
 constructor(
@@ -30,44 +28,59 @@ constructor(
     private val singleBookFolderPref: Pref<Set<String>>,
     @Named(PrefKeys.CURRENT_BOOK)
     private val currentBookIdPref: Pref<Long>
-) : Presenter<BookShelfController>() {
+) : Presenter<BookShelfView>() {
 
-  override fun onAttach(view: BookShelfController) {
-    val audioFoldersEmpty = collectionBookFolderPref.value.isEmpty() && singleBookFolderPref.value.isEmpty()
-    if (audioFoldersEmpty) view.showNoFolderWarning()
-
+  override fun onAttach(view: BookShelfView) {
     bookAdder.scanForFiles()
+    handleFolderWarning()
+    setupBookStream()
+    setupCurrentBookStream()
+    setupLoadingState()
+    setupPlayState()
+    setupCoverChanged()
+  }
 
-    repo.booksStream()
-        .subscribe {
-          view.displayNewBooks(it)
-        }
-        .disposeOnDetach()
-
+  private fun setupCurrentBookStream() {
     currentBookIdPref.stream
         .subscribe {
           val book = repo.bookById(it)
           view.updateCurrentBook(book)
         }
         .disposeOnDetach()
+  }
 
+  private fun setupBookStream() {
+    repo.booksStream()
+        .subscribe { view.displayNewBooks(it) }
+        .disposeOnDetach()
+  }
+
+  private fun setupLoadingState() {
     val noBooks = repo.booksStream().map { it.isEmpty() }
     val showLoading = combineLatest(bookAdder.scannerActive, noBooks) { active, booksEmpty ->
       if (booksEmpty) active else false
     }
     showLoading.subscribe { view.showLoading(it) }
         .disposeOnDetach()
+  }
 
-    playStateManager.playStateStream()
-        .subscribe {
-          val playing = it == PlayState.PLAYING
-          view.showPlaying(playing)
-        }
-        .disposeOnDetach()
-
+  private fun setupCoverChanged() {
     coverFromDiscCollector.coverChanged()
         .subscribe { view.bookCoverChanged(it) }
         .disposeOnDetach()
+  }
+
+  private fun setupPlayState() {
+    playStateManager.playStateStream()
+        .map { it == PlayState.PLAYING }
+        .distinctUntilChanged()
+        .subscribe { view.showPlaying(it) }
+        .disposeOnDetach()
+  }
+
+  private fun handleFolderWarning() {
+    val audioFoldersEmpty = collectionBookFolderPref.value.isEmpty() && singleBookFolderPref.value.isEmpty()
+    if (audioFoldersEmpty) view.showNoFolderWarning()
   }
 
   fun playPauseRequested() = playerController.playPause()
