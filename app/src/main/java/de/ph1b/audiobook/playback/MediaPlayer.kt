@@ -10,18 +10,12 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessGain
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.keyAtOrNull
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.utils.DataSourceConverter
-import de.ph1b.audiobook.playback.utils.WakeLockManager
-import de.ph1b.audiobook.playback.utils.onAudioSessionId
-import de.ph1b.audiobook.playback.utils.onError
-import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
-import de.ph1b.audiobook.playback.utils.onStateChanged
-import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
+import de.ph1b.audiobook.playback.utils.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -29,6 +23,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -37,7 +32,10 @@ class MediaPlayer
 constructor(
     context: Context,
     private val playStateManager: PlayStateManager,
-    private val prefs: PrefsManager,
+    @Named(PrefKeys.AUTO_REWIND_AMOUNT)
+    private val autoRewindAmountPref: Pref<Int>,
+    @Named(PrefKeys.SEEK_TIME)
+    private val seekTimePref: Pref<Int>,
     private val equalizer: Equalizer,
     private val loudnessGain: LoudnessGain,
     private val wakeLockManager: WakeLockManager,
@@ -54,10 +52,8 @@ constructor(
       if (stateSubject.value != value) stateSubject.onNext(value)
     }
 
-  private val seekTime: Int
-    get() = prefs.seekTime.value
-  private val autoRewindAmount: Int
-    get() = prefs.autoRewindAmount.value
+  private val seekTime by seekTimePref
+  private var autoRewindAmount by autoRewindAmountPref
 
   fun book(): Book? = bookSubject.value
   val bookStream = bookSubject.hide()!!

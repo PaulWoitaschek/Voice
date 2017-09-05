@@ -10,22 +10,26 @@ import android.support.v4.media.MediaDescriptionCompat
 import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Helper class for MediaBrowserServiceCompat handling
  */
-@Reusable class MediaBrowserHelper
+@Reusable
+class MediaBrowserHelper
 @Inject constructor(
     private val bookUriConverter: BookUriConverter,
     private val repo: BookRepository,
-    private val prefs: PrefsManager,
-    private val context: Context) {
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>,
+    private val context: Context
+) {
 
   fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(
       bookUriConverter.allBooks().toString(),
@@ -44,7 +48,7 @@ import javax.inject.Inject
     val match = bookUriConverter.match(uri)
 
     if (match == BookUriConverter.ROOT) {
-      val currentBook = repo.bookById(prefs.currentBookId.value)
+      val currentBook = repo.bookById(currentBookIdPref.value)
       val current = currentBook?.toMediaDescription(
           titlePrefix = "${context.getString(R.string.current_book)}: "
       )

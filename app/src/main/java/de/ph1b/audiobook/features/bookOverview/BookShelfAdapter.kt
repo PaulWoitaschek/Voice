@@ -14,28 +14,30 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
-// display all the books
 class BookShelfAdapter(
     private val context: Context,
-    private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+    private val bookClicked: (Book, ClickType) -> Unit
+) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
   private val books = ArrayList<Book>()
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
 
   init {
     Timber.i("A new adapter was created.")
@@ -170,7 +172,7 @@ class BookShelfAdapter(
 
       bindCover(book)
 
-      indicatorVisible = book.id == prefs.currentBookId.value
+      indicatorVisible = book.id == currentBookIdPref.value
       currentPlayingIndicator.visible = indicatorVisible
 
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }

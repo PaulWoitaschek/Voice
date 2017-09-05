@@ -16,7 +16,6 @@ import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import javax.inject.Singleton
@@ -33,7 +32,6 @@ interface AppComponent {
   val context: Context
   val player: MediaPlayer
   val playStateManager: PlayStateManager
-  val prefsManager: PrefsManager
 
   @Component.Builder
   interface Builder {

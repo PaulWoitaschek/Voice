@@ -7,9 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
-import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlaybackService
-import javax.inject.Inject
 
 /**
  * Base class for all Activities which checks in onResume, if the storage
@@ -17,7 +15,6 @@ import javax.inject.Inject
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-  @Inject lateinit var prefsManager: PrefsManager
   private var nightModeAtCreation: Int? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {

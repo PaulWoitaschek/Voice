@@ -22,20 +22,21 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import de.ph1b.audiobook.uitools.visible
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
@@ -53,7 +54,10 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     App.component.inject(this)
   }
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
+  @field:[Inject Named(PrefKeys.DISPLAY_MODE)]
+  lateinit var displayModePref: Pref<DisplayMode>
 
   private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
   private var adapter: BookShelfAdapter by clearAfterDestroyView()
@@ -113,11 +117,11 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
           true
         }
         R.id.action_current -> {
-          invokeBookSelectionCallback(prefs.currentBookId.value)
+          invokeBookSelectionCallback(currentBookIdPref.value)
           true
         }
         R.id.action_change_layout -> {
-          prefs.displayMode.value = !prefs.displayMode.value
+          displayModePref.value = !displayModePref.value
           updateDisplayMode()
           true
         }
@@ -166,7 +170,7 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
   }
 
   private fun updateDisplayMode() {
-    val defaultDisplayMode = prefs.displayMode.value
+    val defaultDisplayMode = displayModePref.value
     val margin: Int
     if (defaultDisplayMode == DisplayMode.GRID) {
       binding.recyclerView.removeItemDecoration(listDecoration)
@@ -182,11 +186,11 @@ class BookShelfController : MvpController<BookShelfController, BookShelfPresente
     layoutParams.rightMargin = margin
     adapter.displayMode = defaultDisplayMode
 
-    displayModeItem.setIcon((!prefs.displayMode.value).icon)
+    displayModeItem.setIcon((!displayModePref.value).icon)
   }
 
   private fun invokeBookSelectionCallback(bookId: Long) {
-    prefs.currentBookId.value = bookId
+    currentBookIdPref.value = bookId
 
     val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))

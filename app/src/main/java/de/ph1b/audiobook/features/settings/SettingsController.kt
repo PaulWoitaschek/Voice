@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.settings
 
 import android.support.annotation.StringRes
 import android.widget.TextView
-import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.SettingRowDoubleBinding
 import de.ph1b.audiobook.databinding.SettingRowSwitchBinding
@@ -14,17 +13,28 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.asV2Observable
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Controller for the user settings
  */
 class SettingsController : BaseController<SettingsBinding>() {
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.THEME)]
+  lateinit var themePref: Pref<ThemeUtil.Theme>
+  @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
+  lateinit var resumeOnReplugPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.RESUME_AFTER_CALL)]
+  lateinit var resumeAfterCallPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]
+  lateinit var autoRewindAmountPref: Pref<Int>
+  @field:[Inject Named(PrefKeys.SEEK_TIME)]
+  lateinit var seekTimePref: Pref<Int>
 
   init {
     App.component.inject(this)
@@ -52,7 +62,7 @@ class SettingsController : BaseController<SettingsBinding>() {
     ) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
-    prefs.theme.asV2Observable()
+    themePref.stream
         .bindToLifeCycle()
         .subscribe { themeDescription.setText(it.nameId) }
 
@@ -61,7 +71,7 @@ class SettingsController : BaseController<SettingsBinding>() {
         binding = binding.resumePlayback,
         titleRes = R.string.pref_resume_on_replug,
         contentRes = R.string.pref_resume_on_replug_hint,
-        pref = prefs.resumeOnReplug
+        pref = resumeOnReplugPref
     )
 
     // resume on playback
@@ -69,7 +79,7 @@ class SettingsController : BaseController<SettingsBinding>() {
         binding = binding.resumeAfterCall,
         titleRes = R.string.pref_resume_after_call,
         contentRes = R.string.pref_resume_after_call_hint,
-        pref = prefs.resumeAfterCall
+        pref = resumeAfterCallPref
     )
 
     // skip amount
@@ -79,7 +89,7 @@ class SettingsController : BaseController<SettingsBinding>() {
     ) {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
-    prefs.seekTime.asV2Observable()
+    seekTimePref.stream
         .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
         .bindToLifeCycle()
         .subscribe { skipAmountDescription.text = it }
@@ -91,7 +101,7 @@ class SettingsController : BaseController<SettingsBinding>() {
     ) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
-    prefs.autoRewindAmount.asV2Observable()
+    autoRewindAmountPref.stream
         .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
         .bindToLifeCycle()
         .subscribe { autoRewindDescription.text = it }
@@ -128,14 +138,14 @@ class SettingsController : BaseController<SettingsBinding>() {
 
   private fun setupSwitchSetting(
       binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int,
-      pref: Preference<Boolean>) {
+      pref: Pref<Boolean>) {
     binding.switchTitle.setText(titleRes)
     binding.switchDescription.setText(contentRes)
 
     binding.switchSetting.setOnCheckedChangeListener { _, checked ->
-      pref.set(checked)
+      pref.value = checked
     }
-    pref.asV2Observable()
+    pref.stream
         .bindToLifeCycle()
         .subscribe { binding.switchSetting.isChecked = it }
 

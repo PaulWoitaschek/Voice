@@ -5,11 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import de.ph1b.audiobook.injection.PerService
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Holds the current connection status and notifies about
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @PerService class AndroidAutoConnection @Inject constructor(
     private val changeNotifier: ChangeNotifier,
     private val repo: BookRepository,
-    private val prefs: PrefsManager
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>
 ) {
 
   var connected = false
@@ -33,7 +35,7 @@ import javax.inject.Inject
 
       if (connected) {
         // display the current book but don't play it
-        repo.bookById(prefs.currentBookId.value)?.let {
+        repo.bookById(currentBookIdPref.value)?.let {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, connected)
         }
       }

@@ -18,21 +18,23 @@ import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.StrictModeInit
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.uitools.ThemeUtil
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.concurrent.thread
 
 class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector, HasBroadcastReceiverInjector {
 
   @Inject lateinit var bookAdder: BookAdder
-  @Inject lateinit var prefsManager: PrefsManager
   @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
   @Inject lateinit var serviceInjector: DispatchingAndroidInjector<Service>
   @Inject lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
   @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
   @Inject lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+  @field:[Inject Named(PrefKeys.THEME)]
+  lateinit var themePref: Pref<ThemeUtil.Theme>
 
   override fun activityInjector() = activityInjector
   override fun serviceInjector() = serviceInjector
@@ -57,7 +59,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
 
     bookAdder.scanForFiles()
 
-    AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)
+    AppCompatDelegate.setDefaultNightMode(themePref.value.nightMode)
 
     triggerWidgetOnChange.init()
   }

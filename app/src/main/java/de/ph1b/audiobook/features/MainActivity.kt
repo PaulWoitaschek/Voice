@@ -5,11 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.*
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityBookBinding
@@ -19,15 +15,16 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Activity that coordinates the book shelf and play screens.
@@ -36,7 +33,12 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
+  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
+  lateinit var singleBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
+  lateinit var collectionBookFolderPref: Pref<Set<String>>
   @Inject lateinit var playerController: PlayerController
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var bookSearchParser: BookSearchParser
@@ -102,7 +104,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
     // if we should play the current book, set the backstack and return early
     if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {
-      repo.bookById(prefs.currentBookId.get()!!)?.let {
+      repo.bookById(currentBookIdPref.value)?.let {
         val bookShelf = RouterTransaction.with(BookShelfController())
         val bookPlay = BookPlayController(it.id).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
@@ -125,7 +127,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   override fun onStart() {
     super.onStart()
 
-    val anyFolderSet = prefs.collectionFolders.value.size + prefs.singleBookFolders.value.size > 0
+    val anyFolderSet = collectionBookFolderPref.value.size + singleBookFolderPref.value.size > 0
     if (anyFolderSet) {
       permissionHelper.storagePermission()
     }

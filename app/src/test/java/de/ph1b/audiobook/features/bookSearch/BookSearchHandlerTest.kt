@@ -4,22 +4,23 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
-import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.given
 import de.ph1b.audiobook.misc.emptySparseArray
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
 import java.io.File
+
 
 /**
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
@@ -30,39 +31,38 @@ class BookSearchHandlerTest {
   lateinit var searchHandler: BookSearchHandler
 
   @Mock lateinit var repo: BookRepository
-  @Mock lateinit var prefs: PrefsManager
   @Mock lateinit var player: PlayerController
 
-  @Mock lateinit var currentBookIdPref: Preference<Long>
+  private lateinit var currentBookIdPref: Pref<Long>
 
   private val anotherBookChapter1 = Chapter(File("/sdcard/AnotherBook/chapter1.mp3"), "anotherBookChapter1", 5000, 0, emptySparseArray())
   private val anotherBookChapter2 = Chapter(File("/sdcard/AnotherBook/chapter2.mp3"), "anotherBookChapter2", 10000, 0, emptySparseArray())
   private val anotherBook = Book(
-      2,
-      Book.Type.SINGLE_FOLDER,
-      "AnotherBookAuthor",
-      anotherBookChapter1.file,
-      3000,
-      "AnotherBook",
-      listOf(anotherBookChapter1, anotherBookChapter2),
-      1F,
-      "/sdcard/AnotherBook",
-      0
+      id = 2,
+      type = Book.Type.SINGLE_FOLDER,
+      author = "AnotherBookAuthor",
+      currentFile = anotherBookChapter1.file,
+      time = 3000,
+      name = "AnotherBook",
+      chapters = listOf(anotherBookChapter1, anotherBookChapter2),
+      playbackSpeed = 1F,
+      root = "/sdcard/AnotherBook",
+      loudnessGain = 0
   )
 
   private val bookToFindChapter1 = Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
   private val bookToFindChapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
   private val bookToFind = Book(
-      1,
-      Book.Type.SINGLE_FOLDER,
-      "Book1Author",
-      bookToFindChapter2.file,
-      3000,
-      "Book1",
-      listOf(bookToFindChapter1, bookToFindChapter2),
-      1F,
-      "/sdcard/Book1",
-      0
+      id = 1,
+      type = Book.Type.SINGLE_FOLDER,
+      author = "Book1Author",
+      currentFile = bookToFindChapter2.file,
+      time = 3000,
+      name = "Book1",
+      chapters = listOf(bookToFindChapter1, bookToFindChapter2),
+      playbackSpeed = 1F,
+      root = "/sdcard/Book1",
+      loudnessGain = 0
   )
 
   @Before
@@ -70,9 +70,9 @@ class BookSearchHandlerTest {
     MockitoAnnotations.initMocks(this)
 
     given { repo.activeBooks }.thenReturn(listOf(anotherBook, bookToFind))
-    given { prefs.currentBookId }.thenReturn(currentBookIdPref)
+    currentBookIdPref = MemoryPref(-1)
 
-    searchHandler = BookSearchHandler(repo, prefs, player)
+    searchHandler = BookSearchHandler(repo, player, currentBookIdPref)
   }
 
   @Test
@@ -80,12 +80,8 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(query = bookToFind.name)
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 
@@ -94,12 +90,8 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(query = bookToFind.author)
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 
@@ -108,23 +100,17 @@ class BookSearchHandlerTest {
     val bookSearch = BookSearch(query = bookToFindChapter1.name)
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 
   @Test
   fun testMediaFocusAnyNoneFoundButPlayed() {
-    given { currentBookIdPref.get() }.thenReturn(-1)
-
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
 
-    verify(currentBookIdPref).set(anotherBook.id)
+    assertThat(currentBookIdPref.value).isEqualTo(anotherBook.id)
     verify(player).play()
   }
 
@@ -136,12 +122,9 @@ class BookSearchHandlerTest {
     )
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
 
-    verifyNoMoreInteractions(currentBookIdPref)
     verifyNoMoreInteractions(player)
   }
 
@@ -157,12 +140,8 @@ class BookSearchHandlerTest {
     )
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 
@@ -175,12 +154,8 @@ class BookSearchHandlerTest {
     )
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 
@@ -195,12 +170,8 @@ class BookSearchHandlerTest {
     )
     searchHandler.handle(bookSearch)
 
-    inOrder(currentBookIdPref, player).apply {
-      verify(currentBookIdPref).set(bookToFind.id)
-      verify(player).play()
-    }
-
-    verifyNoMoreInteractions(currentBookIdPref)
+    assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
+    verify(player).play()
     verifyNoMoreInteractions(player)
   }
 }

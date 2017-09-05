@@ -12,11 +12,10 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import dagger.android.AndroidInjection
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.RxBroadcast
-import de.ph1b.audiobook.misc.asV2Observable
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
@@ -32,6 +31,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Service that hosts the longtime playback and handles its controls.
@@ -47,7 +47,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val disposables = CompositeDisposable()
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var notificationManager: NotificationManager
@@ -59,6 +60,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var changeNotifier: ChangeNotifier
   @Inject lateinit var autoConnected: AndroidAutoConnection
   @Inject lateinit var audioFocusHelper: AudioFocusHandler
+  @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
+  lateinit var resumeOnReplugPref: Pref<Boolean>
 
   override fun onCreate() {
     AndroidInjection.inject(this)
@@ -74,12 +77,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     autoConnected.register(this)
 
-    prefs.currentBookId.asV2Observable()
+    currentBookIdPref.stream
         .subscribe { currentBookIdChanged(it) }
         .disposeOnDestroy()
 
     repo.updateObservable()
-        .filter { it.id == prefs.currentBookId.value }
+        .filter { it.id == currentBookIdPref.value }
         .subscribe {
           player.init(it)
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
@@ -148,7 +151,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun headsetPlugged() {
     if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
-      if (prefs.resumeOnReplug.value) {
+      if (resumeOnReplugPref.value) {
         player.play()
       }
     }

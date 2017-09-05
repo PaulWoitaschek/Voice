@@ -3,17 +3,17 @@ package de.ph1b.audiobook.features.folderChooser
 import android.annotation.SuppressLint
 import android.os.Bundle
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.listFilesSafely
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
-import java.util.HashSet
+import java.util.*
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * The Presenter for [FolderChooserView]
@@ -24,7 +24,10 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     App.component.inject(this)
   }
 
-  @Inject lateinit var prefsManager: PrefsManager
+  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
+  lateinit var singleBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
+  lateinit var collectionBookFolderPref: Pref<Set<String>>
   @Inject lateinit var storageDirFinder: StorageDirFinder
 
   private val rootDirs = ArrayList<File>()
@@ -96,18 +99,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     when (view.getMode()) {
       FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
-          val collections = HashSet(prefsManager.collectionFolders.value)
+          val collections = HashSet(collectionBookFolderPref.value)
           collections.add(chosen.absolutePath)
-          prefsManager.collectionFolders.value = collections
+          collectionBookFolderPref.value = collections
         }
         view.finish()
         Timber.v("chosenCollection = $chosen")
       }
       FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
-          val singleBooks = HashSet(prefsManager.singleBookFolders.value)
+          val singleBooks = HashSet(singleBookFolderPref.value)
           singleBooks.add(chosen.absolutePath)
-          prefsManager.singleBookFolders.value = singleBooks
+          singleBookFolderPref.value = singleBooks
         }
         view.finish()
         Timber.v("chosenSingleBook = $chosen")
@@ -123,8 +126,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    */
   private fun canAddNewFolder(newFile: String): Boolean {
     Timber.v("canAddNewFolder called with $newFile")
-    val folders = HashSet(prefsManager.collectionFolders.value)
-    folders.addAll(prefsManager.singleBookFolders.value)
+    val folders = HashSet(collectionBookFolderPref.value)
+    folders.addAll(singleBookFolderPref.value)
 
     // if this is the first folder adding is always allowed
     if (folders.isEmpty()) {

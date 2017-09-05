@@ -7,18 +7,20 @@ import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogTimePickerBinding
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.theme
 import de.ph1b.audiobook.uitools.visible
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 class JumpToPositionDialogFragment : DialogFragment() {
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var playerController: PlayerController
 
@@ -27,7 +29,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     val binding = DialogTimePickerBinding.inflate(activity.layoutInflater)
 
     // init
-    val book = repo.bookById(prefs.currentBookId.value)!!
+    val book = repo.bookById(currentBookIdPref.value)!!
     val duration = book.currentChapter().duration
     val position = book.time
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()

@@ -12,14 +12,15 @@ import android.widget.FrameLayout
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogSleepBinding
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.uitools.visible
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Simple dialog for activating the sleep timer
@@ -27,10 +28,15 @@ import javax.inject.Inject
 class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
   @Inject lateinit var bookmarkProvider: BookmarkProvider
-  @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var sleepTimer: SleepTimer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var shakeDetector: ShakeDetector
+  @field:[Inject Named(PrefKeys.SHAKE_TO_RESET)]
+  lateinit var shakeToResetPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
+  lateinit var bookmarkOnSleepTimerPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.SLEEP_TIME)]
+  lateinit var sleepTimePref: Pref<Int>
 
   private lateinit var binding: DialogSleepBinding
   private var selectedMinutes = 0
@@ -61,7 +67,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     binding = DialogSleepBinding.inflate(activity.layoutInflater)
 
     // restore or get fresh
-    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.sleepTime.value
+    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: sleepTimePref.value
     updateTimeState()
 
     // find views and prepare clicks
@@ -94,10 +100,10 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     binding.fab.setOnClickListener {
       // should be hidden if
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
-      prefs.sleepTime.value = selectedMinutes
+      sleepTimePref.value = selectedMinutes
 
-      prefs.bookmarkOnSleepTimer.value = binding.bookmarkSwitch.isChecked
-      if (prefs.bookmarkOnSleepTimer.value) {
+      bookmarkOnSleepTimerPref.value = binding.bookmarkSwitch.isChecked
+      if (bookmarkOnSleepTimerPref.value) {
         val date = DateUtils.formatDateTime(
             context,
             System.currentTimeMillis(),
@@ -106,17 +112,17 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
       }
 
-      prefs.shakeToReset.value = binding.shakeToResetSwitch.isChecked
+      shakeToResetPref.value = binding.shakeToResetSwitch.isChecked
 
       sleepTimer.setActive(true)
       dismiss()
     }
 
     // setup bookmark toggle
-    binding.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value
+    binding.bookmarkSwitch.isChecked = bookmarkOnSleepTimerPref.value
 
     // setup shake to reset setting
-    binding.shakeToResetSwitch.isChecked = prefs.shakeToReset.value
+    binding.shakeToResetSwitch.isChecked = shakeToResetPref.value
     val shakeSupported = shakeDetector.shakeSupported()
     if (!shakeSupported) {
       binding.shakeToResetSwitch.visible = false

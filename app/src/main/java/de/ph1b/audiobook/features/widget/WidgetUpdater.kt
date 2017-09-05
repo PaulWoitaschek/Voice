@@ -16,13 +16,13 @@ import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.MainActivity
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.getOnUiThread
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.utils.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -30,13 +30,15 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.maxImageSize
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Provider
 
 @Reusable
 class WidgetUpdater @Inject constructor(
     private val context: Context,
     private val repo: BookRepository,
-    private val prefs: PrefsManager,
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>,
     private val imageHelper: ImageHelper,
     private val serviceController: ServiceController,
     private val playStateManager: PlayStateManager,
@@ -46,7 +48,7 @@ class WidgetUpdater @Inject constructor(
   private val appWidgetManager = AppWidgetManager.getInstance(context)
 
   fun update() {
-    val book = repo.bookById(prefs.currentBookId.value)
+    val book = repo.bookById(currentBookIdPref.value)
     Timber.i("update with book ${book?.name}")
     val componentName = ComponentName(context, BaseWidgetProvider::class.java)
     val ids = appWidgetManager.getAppWidgetIds(componentName)

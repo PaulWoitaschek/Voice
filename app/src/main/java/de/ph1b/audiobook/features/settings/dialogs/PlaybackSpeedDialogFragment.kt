@@ -9,23 +9,25 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.progressChangedStream
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Dialog for setting the playback speed of the current book.
  */
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
-  @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var repo: BookRepository
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<Long>
   @Inject lateinit var playerController: PlayerController
 
   @SuppressLint("InflateParams")
@@ -36,7 +38,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
 
     // setting current speed
-    val book = repo.bookById(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+    val book = repo.bookById(currentBookIdPref.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
     val speed = book.playbackSpeed
     binding.seekBar.max = ((MAX - MIN) * FACTOR).toInt()
     binding.seekBar.progress = ((speed - MIN) * FACTOR).toInt()

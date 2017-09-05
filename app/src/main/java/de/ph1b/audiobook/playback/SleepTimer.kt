@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.persistence.pref.Pref
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -9,14 +9,19 @@ import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
-@Singleton class SleepTimer
+@Singleton
+class SleepTimer
 @Inject constructor(
     private val playerController: PlayerController,
     playStateManager: PlayStateManager,
-    private val prefsManager: PrefsManager,
-    shakeDetector: ShakeDetector
+    shakeDetector: ShakeDetector,
+    @Named(PrefKeys.SHAKE_TO_RESET)
+    private val shakeToResetPref: Pref<Boolean>,
+    @Named(PrefKeys.SLEEP_TIME)
+    private val sleepTimePref: Pref<Int>
 ) {
 
   private val NOT_ACTIVE = -1
@@ -70,7 +75,7 @@ import javax.inject.Singleton
 
     if (enable) {
       Timber.i("Starting sleepTimer")
-      val minutes = prefsManager.sleepTime.value
+      val minutes = sleepTimePref.value
       leftSleepTimeSubject.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()).toInt())
     } else {
       Timber.i("Cancelling sleepTimer")
@@ -83,7 +88,7 @@ import javax.inject.Singleton
       val shouldSubscribe = shakeDisposable?.isDisposed != false
       if (shouldSubscribe) {
         // setup shake detection if requested
-        if (prefsManager.shakeToReset.value) {
+        if (shakeToResetPref.value) {
           shakeDisposable = shakeObservable.subscribe {
             if (leftSleepTimeSubject.value == 0) {
               Timber.d("detected shake while sleepSand==0. Resume playback")

@@ -2,12 +2,13 @@ package de.ph1b.audiobook.playback.utils.audioFocus
 
 import android.media.AudioManager
 import android.telephony.TelephonyManager
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.properties.Delegates
 
 class AudioFocusHandler @Inject constructor(
@@ -15,7 +16,8 @@ class AudioFocusHandler @Inject constructor(
     private val telephonyManager: TelephonyManager,
     private val player: MediaPlayer,
     private val playStateManager: PlayStateManager,
-    private val prefs: PrefsManager
+    @Named(PrefKeys.RESUME_AFTER_CALL)
+    private val resumeAfterCallPref: Pref<Boolean>
 ) {
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
@@ -69,7 +71,7 @@ class AudioFocusHandler @Inject constructor(
     if (pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
       Timber.d("loss was transient so start playback")
       player.play()
-    } else if (pauseReason == PlayStateManager.PauseReason.CALL && prefs.resumeAfterCall.value) {
+    } else if (pauseReason == PlayStateManager.PauseReason.CALL && resumeAfterCallPref.value) {
       Timber.d("we were paused because of a call and we should resume after a call. Start playback")
       player.play()
     }

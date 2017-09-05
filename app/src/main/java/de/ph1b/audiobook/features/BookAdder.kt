@@ -9,40 +9,38 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.ChapterReader
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
-import de.ph1b.audiobook.misc.FileRecognition
-import de.ph1b.audiobook.misc.MediaAnalyzer
-import de.ph1b.audiobook.misc.NaturalOrderComparator
-import de.ph1b.audiobook.misc.asV2Observable
-import de.ph1b.audiobook.misc.combineLatest
-import de.ph1b.audiobook.misc.emptySparseArray
-import de.ph1b.audiobook.misc.listFilesSafely
-import de.ph1b.audiobook.misc.toSparseArray
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
  * Base class for adding new books.
  */
-@Singleton class BookAdder
+@Singleton
+class BookAdder
 @Inject constructor(
     private val context: Context,
-    private val prefs: PrefsManager,
     private val repo: BookRepository,
     private val coverCollector: CoverFromDiscCollector,
     private val mediaAnalyzer: MediaAnalyzer,
-    private val chapterReader: ChapterReader
+    private val chapterReader: ChapterReader,
+    @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
+    private val singleBookFolderPref: Pref<Set<String>>,
+    @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
+    private val collectionBookFolderPref: Pref<Set<String>>
 ) {
 
   private val executor = Executors.newSingleThreadExecutor()
@@ -54,8 +52,8 @@ import javax.inject.Singleton
 
   init {
     val folderChanged = combineLatest(
-        prefs.collectionFolders.asV2Observable(),
-        prefs.singleBookFolders.asV2Observable()
+        collectionBookFolderPref.stream,
+        singleBookFolderPref.stream
     ) { _, _ -> Unit }
     folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
   }
@@ -117,13 +115,13 @@ import javax.inject.Singleton
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
-    get() = prefs.singleBookFolders.value
+    get() = singleBookFolderPref.value
         .map(::File)
         .sortedWith(NaturalOrderComparator.fileComparator)
 
   // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
-    get() = prefs.collectionFolders.value
+    get() = collectionBookFolderPref.value
         .map(::File)
         .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
         .sortedWith(NaturalOrderComparator.fileComparator)

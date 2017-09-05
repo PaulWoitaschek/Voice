@@ -2,20 +2,22 @@ package de.ph1b.audiobook.features.bookmarks
 
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Presenter for the bookmark MVP
  */
 class BookmarkPresenter @Inject constructor(
-    private val prefs: PrefsManager,
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>,
     private val repo: BookRepository,
     private val bookmarkProvider: BookmarkProvider,
     private val playStateManager: PlayStateManager,
@@ -50,7 +52,7 @@ class BookmarkPresenter @Inject constructor(
 
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
 
-    prefs.currentBookId.value = bookId
+    currentBookIdPref.value = bookId
     playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
     if (wasPlaying) {

@@ -8,14 +8,16 @@ import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.onProgressChanged
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import javax.inject.Inject
+import javax.inject.Named
 
 class AutoRewindDialogFragment : DialogFragment() {
 
-  @Inject lateinit var prefs: PrefsManager
+  @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]
+  lateinit var autoRewindAmountPref: Pref<Int>
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -23,7 +25,7 @@ class AutoRewindDialogFragment : DialogFragment() {
 
     val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
 
-    val oldRewindAmount = prefs.autoRewindAmount.value
+    val oldRewindAmount = autoRewindAmountPref.value
     binding.seekBar.max = (MAX - MIN) * FACTOR
     binding.seekBar.progress = (oldRewindAmount - MIN) * FACTOR
     binding.seekBar.onProgressChanged(initialNotification = true) {
@@ -39,7 +41,7 @@ class AutoRewindDialogFragment : DialogFragment() {
         .negativeText(R.string.dialog_cancel)
         .onPositive { _, _ ->
           val newRewindAmount = binding.seekBar.progress / FACTOR + MIN
-          prefs.autoRewindAmount.value = newRewindAmount
+          autoRewindAmountPref.value = newRewindAmount
         }
         .build()
   }

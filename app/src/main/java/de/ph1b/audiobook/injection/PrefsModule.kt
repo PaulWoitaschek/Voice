@@ -3,86 +3,124 @@ package de.ph1b.audiobook.injection
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.f2prateek.rx.preferences.Preference
 import com.f2prateek.rx.preferences.RxSharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.features.bookOverview.BookShelfController.DisplayMode
+import de.ph1b.audiobook.persistence.pref.PersistentPref
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
+import javax.inject.Named
+import javax.inject.Singleton
 
-/**
- * Module for preferences
- */
-@Module class PrefsModule {
 
-  @Provides
-  fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)!!
+@Module
+class PrefsModule {
 
   @Provides
-  @Reusable
-  fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
+  fun provideSharedPreferences(context: Context): SharedPreferences =
+      PreferenceManager.getDefaultSharedPreferences(context)
 
   @Provides
-  @Reusable
-  fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum(
-      "THEME2_KEY",
-      ThemeUtil.Theme.DAY_NIGHT,
-      ThemeUtil.Theme::class.java
-  )
+  @Singleton
+  fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
+      RxSharedPreferences.create(sharedPreferences)
 
   @Provides
   @Reusable
-  fun provideDisplayModePreference(prefs: RxSharedPreferences) = prefs.getEnum("displayMode", DisplayMode.GRID, DisplayMode::class.java)
+  @Named(PrefKeys.THEME)
+  fun provideThemePreference(prefs: RxSharedPreferences): Pref<ThemeUtil.Theme> {
+    val pref = prefs.getEnum(PrefKeys.THEME, ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @ResumeOnReplug
-  fun provideResumeOnReplugPreference(prefs: RxSharedPreferences) = prefs.getBoolean("RESUME_ON_REPLUG", true)
+  @Named(PrefKeys.DISPLAY_MODE)
+  fun provideDisplayModePreference(prefs: RxSharedPreferences): Pref<DisplayMode> {
+    val pref = prefs.getEnum(PrefKeys.DISPLAY_MODE, DisplayMode.GRID, DisplayMode::class.java)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @BookmarkOnSleepTimer
-  fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences) = prefs.getBoolean("BOOKMARK_ON_SLEEP", false)
+  @Named(PrefKeys.RESUME_ON_REPLUG)
+  fun provideResumeOnReplugPreference(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.RESUME_ON_REPLUG, true)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @ShakeToReset
-  fun provideShakeToResetPreference(prefs: RxSharedPreferences) = prefs.getBoolean("SHAKE_TO_RESET_SLEEP_TIMER", false)
+  @Named(PrefKeys.BOOKMARK_ON_SLEEP)
+  fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.BOOKMARK_ON_SLEEP, false)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @AutoRewindAmount
-  fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences) = prefs.getInteger("AUTO_REWIND", 2)
+  @Named(PrefKeys.SHAKE_TO_RESET)
+  fun provideShakeToResetPreference(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.SHAKE_TO_RESET, false)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @SeekTime
-  fun provideSeekTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SEEK_TIME", 20)
+  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
+  fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences): Pref<Int> {
+    val pref = prefs.getInteger(PrefKeys.AUTO_REWIND_AMOUNT, 2)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @SleepTime
-  fun provideSleepTimePreference(prefs: RxSharedPreferences) = prefs.getInteger("SLEEP_TIME", 20)
+  @Named(PrefKeys.SEEK_TIME)
+  fun provideSeekTimePreference(prefs: RxSharedPreferences): Pref<Int> {
+    val pref = prefs.getInteger(PrefKeys.SEEK_TIME, 20)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @SingleBookFolders
-  fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
+  @Named(PrefKeys.SLEEP_TIME)
+  fun provideSleepTimePreference(prefs: RxSharedPreferences): Pref<Int> {
+    val pref = prefs.getInteger(PrefKeys.SLEEP_TIME, 20)
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @CollectionFolders
-  fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> = prefs.getStringSet("folders", emptySet())
+  @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
+  fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences): Pref<Set<String>> {
+    val pref = prefs.getStringSet(PrefKeys.SINGLE_BOOK_FOLDERS, emptySet())
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @CurrentBookId
-  fun provideCurrentBookIdPreference(prefs: RxSharedPreferences) = prefs.getLong("currentBook", Book.ID_UNKNOWN)
+  @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
+  fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Pref<Set<String>> {
+    val pref = prefs.getStringSet(PrefKeys.COLLECTION_BOOK_FOLDERS, emptySet())
+    return PersistentPref(pref)
+  }
 
   @Provides
   @Reusable
-  @PrefResumeAfterCall
-  fun provideResumeAfterCallPreference(prefs: RxSharedPreferences) = prefs.getBoolean("resumeAfterCall", false)
+  @Named(PrefKeys.CURRENT_BOOK)
+  fun provideCurrentBookIdPreference(prefs: RxSharedPreferences): Pref<Long> {
+    val pref = prefs.getLong(PrefKeys.CURRENT_BOOK, Book.ID_UNKNOWN)
+    return PersistentPref(pref)
+  }
+
+  @Provides
+  @Reusable
+  @Named(PrefKeys.RESUME_AFTER_CALL)
+  fun provideResumeAfterCallPreference(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.RESUME_AFTER_CALL, false)
+    return PersistentPref(pref)
+  }
 }

@@ -3,21 +3,25 @@ package de.ph1b.audiobook.features.bookSearch
 import android.provider.MediaStore
 import dagger.Reusable
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * This class provides a single point of entry to find and play a book by a search query
  */
-@Reusable class BookSearchHandler
+@Reusable
+class BookSearchHandler
 @Inject constructor(
     private val repo: BookRepository,
-    private val prefs: PrefsManager,
-    private val player: PlayerController) {
+    private val player: PlayerController,
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>
+) {
 
   fun handle(search: BookSearch) {
     Timber.i("handle $search")
@@ -60,8 +64,10 @@ import javax.inject.Inject
 
     //continue playback
     Timber.i("continuing from search without query")
-    if (prefs.currentBookId.value == -1L) {
-      repo.activeBooks.firstOrNull()?.id?.let { prefs.currentBookId.set(it) }
+    if (currentBookIdPref.value == -1L) {
+      repo.activeBooks.firstOrNull()?.id?.let {
+        currentBookIdPref.value = it
+      }
     }
     player.play()
   }
@@ -81,7 +87,7 @@ import javax.inject.Inject
     val book = repo.activeBooks.firstOrNull(selector)
     return if (book != null) {
       Timber.i("found a match ${book.name}")
-      prefs.currentBookId.value = book.id
+      currentBookIdPref.value = book.id
       player.play()
       true
     } else false

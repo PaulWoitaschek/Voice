@@ -6,18 +6,20 @@ import android.support.v4.media.session.MediaSessionCompat
 import dagger.Lazy
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
-import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Media session callback that handles playback controls.
  */
 class MediaSessionCallback @Inject constructor(
     private val bookUriConverter: BookUriConverter,
-    private val prefs: PrefsManager,
+    @Named(PrefKeys.CURRENT_BOOK)
+    private val currentBookIdPref: Pref<Long>,
     private val bookSearchHandler: BookSearchHandler,
     private val autoConnection: Lazy<AndroidAutoConnection>,
     private val player: MediaPlayer,
@@ -30,7 +32,7 @@ class MediaSessionCallback @Inject constructor(
     val type = bookUriConverter.match(uri)
     if (type == BookUriConverter.BOOK_ID) {
       val id = bookUriConverter.extractBook(uri)
-      prefs.currentBookId.value = id
+      currentBookIdPref.value = id
       onPlay()
     } else {
       Timber.e("Invalid mediaId $mediaId")
