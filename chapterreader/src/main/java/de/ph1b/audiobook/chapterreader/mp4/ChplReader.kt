@@ -9,8 +9,8 @@ import java.io.RandomAccessFile
  */
 internal object ChplReader {
 
-  fun read(file: File): Map<Int, String> {
-    val raf = RandomAccessFile(file, "r")
+  fun read(file: File): Map<Int, String> = RandomAccessFile(file, "r").use { raf ->
+
     val atoms = raf.atoms(listOf("moov", "udta"))
 
     val timeScale = readTimeScale(raf, atoms)
@@ -33,7 +33,7 @@ internal object ChplReader {
 
       map.put(duration.toInt(), title)
     }
-    return map
+    map
   }
 
   private fun readTimeScale(raf: RandomAccessFile, atoms: List<Mp4Atom>): Int? {

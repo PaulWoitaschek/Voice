@@ -3,15 +3,14 @@ package de.ph1b.audiobook.chapterreader.mp4
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Reads the chap atom to find associated chapters
  */
 internal object ChapReader {
 
-  fun read(file: File): Map<Int, String> {
-    val raf = RandomAccessFile(file, "r")
-
+  fun read(file: File): Map<Int, String> = RandomAccessFile(file, "r").use { raf ->
     val atoms = raf.atoms(listOf("moov", "trak", "tref", "mdia", "minf", "stbl"))
 
     val chapterTrackId = findChapterTrackId(raf, atoms)
@@ -32,7 +31,7 @@ internal object ChapReader {
       map.put(position.toInt(), name)
       position += durations[index]
     }
-    return map
+    map
   }
 
   private fun findChapterTrackAtom(raf: RandomAccessFile, atoms: List<Mp4Atom>, chapterTrackId: Int): Mp4Atom? {
