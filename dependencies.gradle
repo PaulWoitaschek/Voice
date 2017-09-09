@@ -31,7 +31,7 @@ ext.versions = [
     rxPreferences       : "1.0.2",
     slf4                : "1.7.25",
     timber              : "4.5.1",
-    support             : "26.0.1",
+    support             : "26.0.2",
     targetSdk           : 26,
 ]
 
