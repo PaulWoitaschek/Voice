@@ -49,6 +49,7 @@ class NotificationAnnouncer
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         .setChapterInfo(book)
         .setShowWhen(false)
+        .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentTitle(book)
         .setContentIntent(contentIntent(book))

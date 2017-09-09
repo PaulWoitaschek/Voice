@@ -46,6 +46,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
   private val disposables = CompositeDisposable()
+  private var isForeground = false
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<Long>
@@ -111,17 +112,17 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .subscribe { audioBecomingNoisy() }
         .disposeOnDestroy()
 
-    setupInitialNotificationForO()
     tearDownAutomatically()
   }
 
   // on android O the service always needs to bee started as foreground, else it crashes.
   private fun setupInitialNotificationForO() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isForeground) {
       val book = player.book()
       Timber.i("start foreground immediately for O with book ${book?.name}")
-      val notification = notificationAnnouncer.getNotification(book, PlayState.PLAYING, mediaSession.sessionToken)
+      val notification = notificationAnnouncer.getNotification(book, playStateManager.playState, mediaSession.sessionToken)
       startForeground(NOTIFICATION_ID, notification)
+      isForeground = true
       if (book == null) {
         Timber.d("there is no book. Stop self.")
         stopSelf()
@@ -130,7 +131,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun tearDownAutomatically() {
-    val idleTimeOutInSeconds: Long = 30
+    val idleTimeOutInSeconds: Long = 7
     playStateManager.playStateStream()
         .distinctUntilChanged()
         .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
@@ -182,10 +183,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
     audioFocusHelper.abandon()
     notificationManager.cancel(NOTIFICATION_ID)
     stopForeground(true)
+    isForeground = false
   }
 
   private fun handlePlaybackStatePaused() {
     stopForeground(false)
+    isForeground = false
     val book = player.book()
         ?: return
     val notification = notificationAnnouncer.getNotification(book, PlayState.PAUSED, mediaSession.sessionToken)
@@ -200,6 +203,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         ?: return
     val notification = notificationAnnouncer.getNotification(book, PlayState.PLAYING, mediaSession.sessionToken)
     startForeground(NOTIFICATION_ID, notification)
+    isForeground = true
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -220,6 +224,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
         player.setLoudnessGain(loudness)
       }
     }
+
+    setupInitialNotificationForO()
 
     return Service.START_NOT_STICKY
   }
