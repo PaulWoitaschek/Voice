@@ -2,7 +2,7 @@
            xmlns:tools="http://schemas.android.com/tools"
            tools:targetApi="n_mr1">
     <shortcut
-        android:icon="@drawable/ic_shortcut_play_circle_filled"
+        android:icon="@mipmap/ic_shortcut_play"
         android:shortcutId="playCurrent"
         android:shortcutShortLabel="@string/play_current">
         <intent
