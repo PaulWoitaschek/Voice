@@ -118,4 +118,5 @@
     <string name="no_network">Нет сети?</string>
     <string name="network_top">Что-то пошло не так…</string>
     <string name="cover_crop">Обрезать обложку</string>
+    <string name="music_notification">Воспроизведение</string>
 </resources>

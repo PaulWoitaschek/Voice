@@ -7,7 +7,7 @@
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
-    <string name="action_sleep">Sov-Timer</string>
+    <string name="action_sleep">Insomningstimer</string>
     <plurals name="pauses_after">
         <item quantity="one">Pausar efter %d minut.</item>
         <item quantity="other">Pausar efter %d minuter.</item>
@@ -109,8 +109,8 @@
     <!--license activity-->
     <string name="refresh">Uppdatera</string>
     <string name="reset">Återställ</string>
-    <string name="no_network">Inget Nätverk?</string>
-    <string name="network_top">Detta fungerade inte alltför väl ..</string>
+    <string name="no_network">Inget nätverk?</string>
+    <string name="network_top">Detta fungerade inte alltför väl…</string>
     <string name="cover_crop">Beskär omslag</string>
     <string name="music_notification">Uppspelning</string>
 </resources>
