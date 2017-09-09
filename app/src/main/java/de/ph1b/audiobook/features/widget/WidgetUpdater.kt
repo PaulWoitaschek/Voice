@@ -19,7 +19,6 @@ import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.dpToPxRounded
-import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.getOnUiThread
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -105,11 +104,8 @@ class WidgetUpdater @Inject constructor(
         context, System.currentTimeMillis().toInt(),
         wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT
     )
-    val cover = imageHelper.drawableToBitmap(
-        drawable = context.drawable(R.drawable.icon_108dp),
-        width = imageHelper.smallerScreenSize,
-        height = imageHelper.smallerScreenSize
-    )
+    val coverReplacement = CoverReplacement("V", context)
+    val cover = imageHelper.drawableToBitmap(coverReplacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
     remoteViews.setImageViewBitmap(R.id.imageView, cover)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
