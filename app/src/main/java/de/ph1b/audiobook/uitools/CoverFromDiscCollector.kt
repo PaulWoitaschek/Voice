@@ -8,6 +8,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
@@ -19,42 +20,64 @@ import javax.inject.Singleton
  * Class for retrieving covers from disc.
  */
 @Singleton class CoverFromDiscCollector
-@Inject constructor(context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {
+@Inject constructor(
+    context: Context,
+    private val activityManager: ActivityManager,
+    private val imageHelper: ImageHelper
+) {
 
   private val picasso = Picasso.with(context)
   private val coverChangedSubject = PublishSubject.create<Long>()
 
   /** Find and stores covers for each book */
   fun findCovers(books: List<Book>) {
-    books.forEach { book ->
+    books.forEach { findCoverForBook(it) }
+  }
+
+  private fun findCoverForBook(book: Book) {
+    val coverFile = book.coverFile()
+    if (coverFile.exists())
+      return
+
+    val foundOnDisc = findAndSaveCoverFromDisc(book)
+    if (foundOnDisc)
+      return
+
+    findAndSaveCoverEmbedded(book)
+  }
+
+  private fun findAndSaveCoverEmbedded(book: Book) {
+    getEmbeddedCover(book.chapters)?.let {
       val coverFile = book.coverFile()
-      if (!coverFile.exists()) {
-        if (book.type === Book.Type.COLLECTION_FOLDER || book.type === Book.Type.SINGLE_FOLDER) {
-          val root = File(book.root)
-          if (root.exists()) {
-            val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
-            getCoverFromDisk(images.toList())?.let {
-              imageHelper.saveCover(it, coverFile)
-              picasso.invalidate(coverFile)
-              coverChangedSubject.onNext(book.id)
-              return@forEach
-            }
-          }
-        }
-        getEmbeddedCover(book.chapters)?.let {
-          imageHelper.saveCover(it, coverFile)
-          picasso.invalidate(coverFile)
-          coverChangedSubject.onNext(book.id)
-        }
-      }
+      imageHelper.saveCover(it, coverFile)
+      picasso.invalidate(coverFile)
+      coverChangedSubject.onNext(book.id)
     }
   }
 
+  private fun findAndSaveCoverFromDisc(book: Book): Boolean {
+    if (book.type === Book.Type.COLLECTION_FOLDER || book.type === Book.Type.SINGLE_FOLDER) {
+      val root = File(book.root)
+      if (root.exists()) {
+        val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
+        getCoverFromDisk(images.toList())?.let {
+          val coverFile = book.coverFile()
+          imageHelper.saveCover(it, coverFile)
+          picasso.invalidate(coverFile)
+          coverChangedSubject.onNext(book.id)
+          return true
+        }
+      }
+    }
+    return false
+  }
+
   /** emits the bookId of a cover that has changed */
-  fun coverChanged(): Observable<Long> = coverChangedSubject.hide()
+  fun coverChanged(): Observable<Long> = coverChangedSubject
+      .hide()
+      .observeOn(AndroidSchedulers.mainThread())
 
   /** Find the embedded cover of a chapter */
-  @Throws(InterruptedException::class)
   private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
     chapters.forEachIndexed { index, (file) ->
       val cover = imageHelper.getEmbeddedCover(file)
@@ -64,7 +87,6 @@ import javax.inject.Singleton
   }
 
   /** Returns the first bitmap that could be parsed from an image file */
-  @Throws(InterruptedException::class)
   private fun getCoverFromDisk(coverFiles: List<File>): Bitmap? {
     // if there are images, get the first one.
     val mi = ActivityManager.MemoryInfo()
