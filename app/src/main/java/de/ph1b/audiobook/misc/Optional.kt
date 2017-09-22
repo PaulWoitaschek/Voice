@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.misc
 
+@Suppress("Unused")
 sealed class Optional<T : Any> {
 
   data class Present<T : Any>(val value: T) : Optional<T>()

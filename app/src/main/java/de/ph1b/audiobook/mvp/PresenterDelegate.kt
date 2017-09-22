@@ -8,7 +8,6 @@ import android.os.Bundle
 class PresenterDelegate<V : Any, out P>(private val newPresenter: () -> P, private val getView: () -> V) where P : Presenter<V> {
 
   private var presenter: P? = null
-    private set
 
   fun presenter() = presenter!!
 
