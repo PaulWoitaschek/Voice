@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
-  private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList() }
+  private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList().apply { sort() } }
   private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
 
   private val updated = PublishSubject.create<Book>()

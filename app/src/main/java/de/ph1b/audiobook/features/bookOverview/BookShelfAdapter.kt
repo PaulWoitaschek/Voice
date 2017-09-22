@@ -24,7 +24,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import timber.log.Timber
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -40,7 +40,6 @@ class BookShelfAdapter(
   lateinit var currentBookIdPref: Pref<Long>
 
   init {
-    Timber.i("A new adapter was created.")
     App.component.inject(this)
     setHasStableIds(true)
   }
