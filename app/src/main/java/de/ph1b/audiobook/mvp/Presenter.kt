@@ -35,7 +35,7 @@ abstract class Presenter<V : Any> {
   }
 
   fun detach() {
-    Timber.i("detach $view")
+    Timber.i("detach $internalView")
     checkMainThread()
     compositeDisposable.clear()
     internalView = null
