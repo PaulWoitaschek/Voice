@@ -29,8 +29,8 @@ class Migration24to25 : Migration {
     db.execSQL("ALTER TABLE TABLE_CHAPTERS RENAME TO $copyChapterTableName")
 
     val newBookTable = "TABLE_BOOK"
-    val CREATE_TABLE_BOOK = "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
-    db.execSQL(CREATE_TABLE_BOOK)
+    val createBookTable = "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
+    db.execSQL(createBookTable)
 
     val bookCursor = db.query(
         copyBookTableName,
@@ -97,19 +97,19 @@ class Migration24to25 : Migration {
         throw InvalidPropertiesFormatException("Could not fetch information")
       }
 
-      val JSON_TIME = "time"
-      val JSON_BOOKMARK_TIME = "time"
-      val JSON_BOOKMARK_TITLE = "title"
-      val JSON_SPEED = "speed"
-      val JSON_NAME = "name"
-      val JSON_BOOKMARKS = "bookmarks"
-      val JSON_REL_PATH = "relPath"
-      val JSON_BOOKMARK_REL_PATH = "relPath"
-      val JSON_USE_COVER_REPLACEMENT = "useCoverReplacement"
+      val jsonTime = "time"
+      val jsonBookmarkTime = "time"
+      val jsonBookmarkTitle = "title"
+      val jsonSpeed = "speed"
+      val jsonName = "name"
+      val jsonBookmarks = "bookmarks"
+      val jsonRelPath = "relPath"
+      val jsonBookmarkRelPath = "relPath"
+      val jsonUseCoverReplacement = "useCoverReplacement"
 
       var currentTime = 0
       try {
-        currentTime = playingInformation.getInt(JSON_TIME)
+        currentTime = playingInformation.getInt(jsonTime)
       } catch (e: JSONException) {
         e.printStackTrace()
       }
@@ -118,12 +118,12 @@ class Migration24to25 : Migration {
       val bookmarkTitlesUnsafe = ArrayList<String>()
       val bookmarkTimesUnsafe = ArrayList<Int>()
       try {
-        val bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS)
+        val bookmarksJ = playingInformation.getJSONArray(jsonBookmarks)
         for (i in 0 until bookmarksJ.length()) {
           val bookmarkJ = bookmarksJ.get(i) as JSONObject
-          bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME))
-          bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE))
-          bookmarkRelPathsUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_REL_PATH))
+          bookmarkTimesUnsafe.add(bookmarkJ.getInt(jsonBookmarkTime))
+          bookmarkTitlesUnsafe.add(bookmarkJ.getString(jsonBookmarkTitle))
+          bookmarkRelPathsUnsafe.add(bookmarkJ.getString(jsonBookmarkRelPath))
         }
       } catch (e: JSONException) {
         e.printStackTrace()
@@ -147,7 +147,7 @@ class Migration24to25 : Migration {
 
       var currentPath = ""
       try {
-        currentPath = playingInformation.getString(JSON_REL_PATH)
+        currentPath = playingInformation.getString(jsonRelPath)
       } catch (e: JSONException) {
         e.printStackTrace()
       }
@@ -160,7 +160,7 @@ class Migration24to25 : Migration {
 
       var speed = 1.0f
       try {
-        speed = java.lang.Float.valueOf(playingInformation.getString(JSON_SPEED))
+        speed = java.lang.Float.valueOf(playingInformation.getString(jsonSpeed))
       } catch (e: JSONException) {
         e.printStackTrace()
       } catch (e: NumberFormatException) {
@@ -169,7 +169,7 @@ class Migration24to25 : Migration {
 
       var name = ""
       try {
-        name = playingInformation.getString(JSON_NAME)
+        name = playingInformation.getString(jsonName)
       } catch (e: JSONException) {
         e.printStackTrace()
       }
@@ -185,7 +185,7 @@ class Migration24to25 : Migration {
 
       var useCoverReplacement = false
       try {
-        useCoverReplacement = playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT)
+        useCoverReplacement = playingInformation.getBoolean(jsonUseCoverReplacement)
       } catch (e: JSONException) {
         e.printStackTrace()
       }

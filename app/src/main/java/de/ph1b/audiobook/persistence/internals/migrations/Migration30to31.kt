@@ -12,18 +12,18 @@ class Migration30to31 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     // book keys
-    val BOOK_ID = "bookId"
-    val TABLE_BOOK = "tableBooks"
-    val TABLE_CHAPTERS = "tableChapters"
+    val bookIdColumn = "bookId"
+    val tableBook = "tableBooks"
+    val tableChapters = "tableChapters"
 
-    db.query(TABLE_BOOK, arrayOf(BOOK_ID), null, null, null, null, null).moveToNextLoop {
+    db.query(tableBook, arrayOf(bookIdColumn), null, null, null, null, null).moveToNextLoop {
       val bookId = getLong(0)
 
       var chapterCount = 0
       val chapterCursor = db.query(
-          TABLE_CHAPTERS,
+          tableChapters,
           null,
-          BOOK_ID + "=?",
+          bookIdColumn + "=?",
           arrayOf(bookId.toString()),
           null, null, null
       )
@@ -31,7 +31,7 @@ class Migration30to31 : Migration {
         chapterCount++
       }
       if (chapterCount == 0) {
-        db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
+        db.delete(tableBook, bookIdColumn + "=?", arrayOf(bookId.toString()))
       }
     }
   }
