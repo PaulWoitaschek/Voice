@@ -2,7 +2,6 @@ package de.ph1b.audiobook.uitools
 
 import android.animation.Animator
 import android.animation.AnimatorSet
-import android.support.annotation.RequiresApi
 import android.transition.Transition
 import android.transition.TransitionValues
 import android.view.View
@@ -12,7 +11,6 @@ import de.ph1b.audiobook.R
 
 private const val VISIBILITIES = "de.ph1b.audiobook#circularRevealTransition#visibilities"
 
-@RequiresApi(21)
 class CircularRevealBookPlayTransition : Transition() {
 
   override fun captureStartValues(values: TransitionValues) {}

@@ -29,8 +29,7 @@
             app:fab_colorPressed="?attr/colorAccentDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:targetApi="lollipop"/>
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <ImageButton
             android:id="@+id/rewind"
