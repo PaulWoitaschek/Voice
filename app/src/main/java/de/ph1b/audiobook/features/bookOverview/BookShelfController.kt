@@ -30,7 +30,7 @@ import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.uitools.BookTransition
+import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import de.ph1b.audiobook.uitools.visible
@@ -212,7 +212,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      val transition = BookTransition()
+      val transition = BookChangeHandler()
       if (viewHolder != null) {
         val transitionName = viewHolder.coverView.supportTransitionName
         transition.transitionName = transitionName

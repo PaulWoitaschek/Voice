@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/bookPlayRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -130,6 +131,7 @@
             tools:src="@android:color/darker_gray"/>
 
         <View
+            android:id="@+id/gradientShadow"
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:background="@drawable/gradient_shadow"

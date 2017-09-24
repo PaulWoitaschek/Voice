@@ -4,7 +4,7 @@ ext.versions = [
     buildTools          : "26.0.1",
     compileSdk          : 26,
     conductor           : "2.1.4",
-    constraintLayout    : "1.0.2",
+    constraintLayout    : "1.1.0-beta1",
     crashlytics         : "2.6.8",
     dagger              : "2.11",
     exoPlayer           : "2.5.3",

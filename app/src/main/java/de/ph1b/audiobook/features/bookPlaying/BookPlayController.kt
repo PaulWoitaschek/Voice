@@ -63,7 +63,6 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   }
 
   override fun render(book: Book) {
-    // adapter
     data.clear()
     book.chapters.forEach {
       if (it.marks.size() > 1) {
