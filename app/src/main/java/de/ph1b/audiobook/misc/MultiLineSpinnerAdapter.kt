@@ -43,7 +43,7 @@ class MultiLineSpinnerAdapter<Type>(
         textView.setTextColor(unselectedTextColor)
       }
       selected -> {
-        textView.setBackgroundResource(R.drawable.spinner_selected_background)
+        textView.setBackgroundResource(R.drawable.selected_spinner_background)
         textView.setTextColor(Color.WHITE)
       }
       else -> {

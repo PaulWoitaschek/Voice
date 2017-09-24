@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.features.folderChooser
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.support.annotation.RequiresPermission
-import android.support.v4.os.EnvironmentCompat
 import android.text.TextUtils
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import timber.log.Timber
@@ -27,6 +27,7 @@ import javax.inject.Singleton
    *
    * @return the list of storages.
    */
+  @SuppressLint("MissingPermission")
   @RequiresPermission(value = Manifest.permission.READ_EXTERNAL_STORAGE)
   fun storageDirs(): List<File> {
     val dirSeparator = Pattern.compile("/")
@@ -107,27 +108,19 @@ import javax.inject.Singleton
 
     val results = ArrayList<String>()
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      //Method 1 for KitKat & above
-      val externalDirs: Array<File?>? = context.getExternalFilesDirs(null)
-      externalDirs?.forEach {
-        if (it != null) {
-          val path = it.path.split("/Android")[0]
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val externalStorageRemovable = try {
-              Environment.isExternalStorageRemovable(it)
-            } catch (e: IllegalArgumentException) {
-              Timber.e(e, "Error in isExternalStorageRemovable")
-              false
-            }
-            if (externalStorageRemovable) {
-              results.add(path)
-            }
-          } else {
-            if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(it)) {
-              results.add(path)
-            }
-          }
+    //Method 1 for KitKat & above
+    val externalDirs: Array<File?>? = context.getExternalFilesDirs(null)
+    externalDirs?.forEach {
+      if (it != null) {
+        val path = it.path.split("/Android")[0]
+        val externalStorageRemovable = try {
+          Environment.isExternalStorageRemovable(it)
+        } catch (e: IllegalArgumentException) {
+          Timber.e(e, "Error in isExternalStorageRemovable")
+          false
+        }
+        if (externalStorageRemovable) {
+          results.add(path)
         }
       }
     }

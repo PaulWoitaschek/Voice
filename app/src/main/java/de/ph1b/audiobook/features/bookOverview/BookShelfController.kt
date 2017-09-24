@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookOverview
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
@@ -211,15 +210,13 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
     val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      val transition = BookChangeHandler()
-      if (viewHolder != null) {
-        val transitionName = viewHolder.coverView.supportTransitionName
-        transition.transitionName = transitionName
-      }
-      transaction.pushChangeHandler(transition)
-          .popChangeHandler(transition)
+    val transition = BookChangeHandler()
+    if (viewHolder != null) {
+      val transitionName = viewHolder.coverView.supportTransitionName
+      transition.transitionName = transitionName
     }
+    transaction.pushChangeHandler(transition)
+        .popChangeHandler(transition)
     router.pushController(transaction)
   }
 

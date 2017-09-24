@@ -206,9 +206,6 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
     val equalizerItem = menu.findItem(R.id.action_equalizer)
     equalizerItem.isVisible = equalizer.exists
 
-    // hide loudness gain item if not supported
-    menu.findItem(R.id.loudness).isVisible = loudnessGain.supported
-
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {

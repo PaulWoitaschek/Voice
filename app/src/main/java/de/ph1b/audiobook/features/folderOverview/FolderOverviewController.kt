@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.folderOverview
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Point
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -18,8 +17,10 @@ import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
 
+private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
+
 /**
- * Activity that lets the user add, edit or remove the set audio book folders.
+ * Controller that lets the user add, edit or remove the set audio book folders.
  */
 class FolderOverviewController : MvpController<FolderOverviewController, FolderOverviewPresenter, FolderOverviewBinding>() {
 
@@ -78,8 +79,6 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
 
   override fun provideView() = this
 
-  private val BACKGROUND_VISIBILITY = "overlayVisibility"
-
   private lateinit var buttonRepresentingTheFam: View
 
   private lateinit var adapter: FolderOverviewAdapter
@@ -89,51 +88,47 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
     private val famCenter = Point()
 
     override fun onMenuExpanded() {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        getFamCenter(famCenter)
+      getFamCenter(famCenter)
 
-        // get the final radius for the clipping circle
-        val finalRadius = Math.max(binding.overlay.width, binding.overlay.height)
+      // get the final radius for the clipping circle
+      val finalRadius = Math.max(binding.overlay.width, binding.overlay.height)
 
-        // create the animator for this view (the start radius is zero)
-        val anim = ViewAnimationUtils.createCircularReveal(
-            binding.overlay,
-            famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
-        )
+      // create the animator for this view (the start radius is zero)
+      val anim = ViewAnimationUtils.createCircularReveal(
+          binding.overlay,
+          famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
+      )
 
-        // make the view visible and start the animation
-        binding.overlay.visible = true
-        anim.start()
-      } else binding.overlay.visible = true
+      // make the view visible and start the animation
+      binding.overlay.visible = true
+      anim.start()
     }
 
     override fun onMenuCollapsed() {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        // get the center for the clipping circle
-        getFamCenter(famCenter)
+      // get the center for the clipping circle
+      getFamCenter(famCenter)
 
-        // get the initial radius for the clipping circle
-        val initialRadius = Math.max(binding.overlay.height, binding.overlay.width)
+      // get the initial radius for the clipping circle
+      val initialRadius = Math.max(binding.overlay.height, binding.overlay.width)
 
-        // create the animation (the final radius is zero)
-        val anim = ViewAnimationUtils.createCircularReveal(
-            binding.overlay,
-            famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
-        )
+      // create the animation (the final radius is zero)
+      val anim = ViewAnimationUtils.createCircularReveal(
+          binding.overlay,
+          famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
+      )
 
-        // make the view invisible when the animation is done
-        anim.addListener(
-            object : AnimatorListenerAdapter() {
-              override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                binding.overlay.setVisibleWeak()
-              }
+      // make the view invisible when the animation is done
+      anim.addListener(
+          object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+              super.onAnimationEnd(animation)
+              binding.overlay.setVisibleWeak()
             }
-        )
+          }
+      )
 
-        // start the animation
-        anim.start()
-      } else binding.overlay.setVisibleWeak()
+      // start the animation
+      anim.start()
     }
   }
 
@@ -149,7 +144,7 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // restoring overlay
-    binding.overlay.visibility = savedViewState.getInt(BACKGROUND_VISIBILITY)
+    binding.overlay.visibility = savedViewState.getInt(SI_BACKGROUND_VISIBILITY)
   }
 
   private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
@@ -175,6 +170,6 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
 
   override fun onSaveViewState(view: View, outState: Bundle) {
     super.onSaveViewState(view, outState)
-    outState.putInt(BACKGROUND_VISIBILITY, binding.overlay.visibility)
+    outState.putInt(SI_BACKGROUND_VISIBILITY, binding.overlay.visibility)
   }
 }

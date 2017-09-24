@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.audio
 
 import android.media.audiofx.LoudnessEnhancer
-import android.os.Build
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,7 +11,6 @@ import kotlin.properties.Delegates
  */
 @Singleton class LoudnessGain @Inject constructor() {
 
-  val supported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
   var gainmB by Delegates.observable(0) { _, _, _ -> updateLoudnessEnhancer() }
   private var audioSessionId = -1
 
@@ -32,8 +30,6 @@ import kotlin.properties.Delegates
   }
 
   private fun attachEffect() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-      return
     if (audioSessionId == -1)
       return
 
@@ -53,10 +49,8 @@ import kotlin.properties.Delegates
   }
 
   private fun detachEffect() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      effectWithSessionId?.loudnessEnhancer?.release()
-      effectWithSessionId = null
-    }
+    effectWithSessionId?.loudnessEnhancer?.release()
+    effectWithSessionId = null
   }
 
   private data class LoudnessEnhancerWithAudioSessionId(

@@ -1,55 +1,12 @@
 package de.ph1b.audiobook.uitools
 
 import android.content.Context
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.support.annotation.AnyRes
 import android.support.annotation.AttrRes
 import android.support.annotation.StringRes
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
-import android.widget.EditText
-import android.widget.NumberPicker
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.color
-
-fun NumberPicker.theme() {
-  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-    val colorAccent = context.color(R.color.accent)
-    var i = 0
-    val count = childCount
-    while (i < count) {
-      val child = getChildAt(i)
-      try {
-        val selectorWheelPaintField = this::class.java.getDeclaredField("mSelectorWheelPaint")
-        selectorWheelPaintField.isAccessible = true
-        (selectorWheelPaintField.get(this) as Paint).color = colorAccent
-        (child as EditText?)?.setTextColor(colorAccent)
-        invalidate()
-      } catch (e: NoSuchFieldException) {
-        e.printStackTrace()
-      } catch (e: IllegalAccessException) {
-        e.printStackTrace()
-      } catch (e: IllegalArgumentException) {
-        e.printStackTrace()
-      }
-
-      try {
-        val f1 = Class.forName("android.widget.NumberPicker").getDeclaredField("mSelectionDivider")
-        f1.isAccessible = true
-        val dividerDrawable = DrawableCompat.wrap(f1.get(this) as Drawable)
-        DrawableCompat.setTint(dividerDrawable, colorAccent)
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
-
-      i++
-    }
-    invalidate()
-  }
-}
 
 var View.visible: Boolean
   get() = visibility == View.VISIBLE

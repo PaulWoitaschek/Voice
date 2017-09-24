@@ -12,9 +12,7 @@ object StrictModeInit {
 
   private fun vmPolicy(): StrictMode.VmPolicy {
     val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      vmPolicyBuilder.detectFileUriExposure()
-    }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       vmPolicyBuilder.detectCleartextNetwork()
     }
@@ -23,6 +21,7 @@ object StrictModeInit {
     }
     return vmPolicyBuilder
         .detectActivityLeaks()
+        .detectFileUriExposure()
         .detectLeakedClosableObjects()
         .detectLeakedRegistrationObjects()
         .detectLeakedSqlLiteObjects()

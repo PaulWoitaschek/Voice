@@ -11,7 +11,6 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.uitools.theme
 import de.ph1b.audiobook.uitools.visible
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -74,9 +73,6 @@ class JumpToPositionDialogFragment : DialogFragment() {
         binding.numberHour.value = --hValue
       }
     }
-
-    binding.numberMinute.theme()
-    binding.numberHour.theme()
 
     return MaterialDialog.Builder(context)
         .customView(binding.root, true)

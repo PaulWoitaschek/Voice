@@ -1,9 +1,7 @@
 package de.ph1b.audiobook.features.bookSearch
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.provider.MediaStore
-import android.support.annotation.RequiresApi
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.MemoryPref
@@ -20,7 +18,6 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
 import java.io.File
-
 
 /**
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
@@ -159,7 +156,6 @@ class BookSearchHandlerTest {
     verifyNoMoreInteractions(player)
   }
 
-  @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
   @Test
   fun testMediaFocusPlaylist() {
     val bookSearch = BookSearch(

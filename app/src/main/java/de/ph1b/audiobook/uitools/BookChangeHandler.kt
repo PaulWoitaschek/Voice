@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.uitools
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.ChangeClipBounds
@@ -20,7 +18,6 @@ import de.ph1b.audiobook.R
  */
 private const val SI_TRANSITION_NAME = "niTransitionName"
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class BookChangeHandler : TransitionChangeHandler() {
 
   var transitionName: String? = null
