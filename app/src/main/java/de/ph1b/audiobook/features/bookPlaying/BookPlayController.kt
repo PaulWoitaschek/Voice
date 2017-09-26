@@ -40,7 +40,9 @@ private const val NI_BOOK_ID = "niBookId"
 /**
  * Base class for book playing interaction.
  */
-class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle), BookPlayMvp.View {
+class BookPlayController(
+    bundle: Bundle
+) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle), BookPlayMvp.View {
 
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
@@ -123,7 +125,9 @@ class BookPlayController(bundle: Bundle) : MvpController<BookPlayMvp.View, BookP
   }
 
   override fun finish() {
-    router.popController(this)
+    view?.post {
+      router.popController(this)
+    }
   }
 
   override fun onBindingCreated(binding: BookPlayBinding) {
