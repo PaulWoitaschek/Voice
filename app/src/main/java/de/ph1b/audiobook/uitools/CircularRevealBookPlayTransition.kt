@@ -7,6 +7,7 @@ import android.transition.Visibility
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import de.ph1b.audiobook.uitools.noPauseAnimator.noPause
 
 class CircularRevealBookPlayTransition : Visibility() {
 
@@ -22,7 +23,9 @@ class CircularRevealBookPlayTransition : Visibility() {
     val parentWidth = parent.width
     val circularReveal = circularRevealAnimator(target = endValues.view, cx = parentWidth / 2, finalRadius = parentWidth.toFloat())
         .apply {
-          startDelay = 150
+          startDelay = 200
+          duration = 400
+          interpolator = Interpolators.fastOutSlowIn
           addListener(object : DefaultAnimatorListener {
             override fun onAnimationStart(animator: Animator) {
               view.visibility = endVisibility
@@ -44,5 +47,5 @@ class CircularRevealBookPlayTransition : Visibility() {
           target.height / 2,
           0f,
           finalRadius
-      )
+      ).noPause()
 }
