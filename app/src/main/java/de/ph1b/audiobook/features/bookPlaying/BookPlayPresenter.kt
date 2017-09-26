@@ -23,6 +23,19 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   }
 
   override fun onAttach(view: BookPlayMvp.View) {
+    playStateManager.playStateStream()
+        .map { it == PlayState.PLAYING }
+        .distinctUntilChanged()
+        .subscribe {
+          Timber.i("onNext with playing=$it")
+          view.showPlaying(it)
+        }
+        .disposeOnDetach()
+
+    sleepTimer.leftSleepTimeInMs
+        .subscribe { view.showLeftSleepTime(it) }
+        .disposeOnDetach()
+
     bookRepository.booksStream()
         .map {
           val currentBook = it.firstOrNull { it.id == bookId }
@@ -35,19 +48,6 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
             is Optional.Absent -> view.finish()
           }
         }
-        .disposeOnDetach()
-
-    playStateManager.playStateStream()
-        .map { it == PlayState.PLAYING }
-        .distinctUntilChanged()
-        .subscribe {
-          Timber.i("onNext with playing=$it")
-          view.showPlaying(it)
-        }
-        .disposeOnDetach()
-
-    sleepTimer.leftSleepTimeInMs
-        .subscribe { view.showLeftSleepTime(it) }
         .disposeOnDetach()
   }
 
