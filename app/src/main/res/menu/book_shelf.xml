@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_current"
         android:icon="@drawable/ic_play_circle_outline"
         android:orderInCategory="90"
         android:title="@string/current_book"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
+
+    <item
+        android:id="@+id/library"
+        android:icon="@drawable/audiobook"
+        android:orderInCategory="97"
+        android:title="@string/pref_root_folder_title"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_change_layout"
         android:icon="@drawable/view_grid"
-        android:orderInCategory="95"
+        android:orderInCategory="98"
         android:title="@string/change_layout_type"
         app:showAsAction="ifRoom"/>
 

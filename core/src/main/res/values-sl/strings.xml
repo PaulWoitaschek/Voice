@@ -41,9 +41,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Mape ne smejo biti podmape samih sebe.</string>
     <string name="audiobook_folders_title">Mape zvočnih knjig</string>
-    <string name="no_audiobook_folders_title">Izberi mapo</string>
-    <string name="no_audiobook_folders_summary_start">Prosim, izberite mapo(e) zvočnih knjig.</string>
-    <string name="no_audiobook_folders_end">Lahko izberete svojo domačo mapo, ki vsebuje različne knjige. Imate pa tudi možnost izbrati le eno knjigo.</string>
     <string name="chosen_folder_description">Izbrana mapa:</string>
     <string name="delete_folder">Odstranitev iz knjižnice?</string>
     <string name="delete_folder_content">Želite odstraniti to mapo iz knjižnice?</string>
@@ -108,9 +105,6 @@
     <string name="remove">Odstrani</string>
     <string name="play_current">Predvajaj trenutno</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Skrij mapo</string>
-    <string name="hide_folder_content">Ali želite skriti mapo pred predvajalniki glasbe? Tako ne bodo prepoznali zvočnih knjig kot glasbe.</string>
-    <string name="hide_confirm">Skrij</string>
     <!--license activity-->
     <string name="refresh">Osveži</string>
     <string name="reset">Ponastavi</string>

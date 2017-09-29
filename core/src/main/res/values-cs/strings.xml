@@ -41,9 +41,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Adresáře nesmí být podadresáři sebe samých:</string>
     <string name="audiobook_folders_title">Adresáře s audioknihami</string>
-    <string name="no_audiobook_folders_title">Vybrat adresář</string>
-    <string name="no_audiobook_folders_summary_start">Zvolte adresář(e) s audioknihami.</string>
-    <string name="no_audiobook_folders_end">Můžete zvolit hlavní adresář s několika knihami. Nebo vybrat pouze samostatnou knihu.</string>
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
@@ -102,9 +99,6 @@
     <string name="popup_edit">Upravit</string>
     <string name="remove">Smazat</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Skrýt adresář</string>
-    <string name="hide_folder_content">Chcete skrýt tento adresář před hudebními přehrávači aby nerozpoznávaly tuto audioknihu jako hudební sbírku?</string>
-    <string name="hide_confirm">Skrýt</string>
     <!--license activity-->
     <string name="refresh">Obnovit</string>
     <string name="reset">Reset</string>

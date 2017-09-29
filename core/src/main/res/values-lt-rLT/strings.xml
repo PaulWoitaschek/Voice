@@ -41,9 +41,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Aplankai negali būti vienas kito poaplankiai:</string>
     <string name="audiobook_folders_title">Audioknygų aplankai</string>
-    <string name="no_audiobook_folders_title">Pasirinkti aplanką</string>
-    <string name="no_audiobook_folders_summary_start">Nustatykite audioknygų aplankus.</string>
-    <string name="no_audiobook_folders_end">Galite pasirinkti pagrindinį aplanką su keliomis skirtingomis knygomis. Arba galite pasirinkti tiesiog vieną knygą. </string>
     <string name="chosen_folder_description">Pasirinktas aplankas:</string>
     <string name="delete_folder">Pašalinti iš bibliotekos?</string>
     <string name="delete_folder_content">Norite pašalinti šį aplanką iš bibliotekos?</string>
@@ -106,9 +103,6 @@
     <string name="remove">Pašalinti</string>
     <string name="play_current">Atkurti dabartinę</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Slėpti aplanką</string>
-    <string name="hide_folder_content">Ar norėtumėte paslėpti šį aplanką nuo muzikos leistuvių, jog šios nepalaikytų jūsų knygų muzika?</string>
-    <string name="hide_confirm">Slėpti</string>
     <!--license activity-->
     <string name="refresh">Atnaujinti</string>
     <string name="reset">Nustatyti iš naujo</string>

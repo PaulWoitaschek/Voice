@@ -40,9 +40,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Mapparna får inte vara en undermapp till varandra:</string>
     <string name="audiobook_folders_title">Ljudboksmappar</string>
-    <string name="no_audiobook_folders_title">Välj mapp nu</string>
-    <string name="no_audiobook_folders_summary_start">Välj din(a) ljudboksmapp(ar) nu.</string>
-    <string name="no_audiobook_folders_end">Du kan välja din huvudsakliga mapp som innehåller olika böcker. Eller så kan du välja bara en enda bok.</string>
     <string name="chosen_folder_description">Vald mapp:</string>
     <string name="delete_folder">Ta bort från bibliotek?</string>
     <string name="delete_folder_content">Vill du ta bort följande mappen från biblioteket?</string>
@@ -103,9 +100,6 @@
     <string name="remove">Ta bort</string>
     <string name="play_current">Spela aktuell</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Göm mapp</string>
-    <string name="hide_folder_content">Vill du dölja mappen från musikspelare, så att de inte känner igen din bok som musik?</string>
-    <string name="hide_confirm">Göm</string>
     <!--license activity-->
     <string name="refresh">Uppdatera</string>
     <string name="reset">Återställ</string>

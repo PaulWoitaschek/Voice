@@ -40,9 +40,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">As pastas não devem estar em uma subpasta de outra:</string>
     <string name="audiobook_folders_title">Pastas de Audiolivros</string>
-    <string name="no_audiobook_folders_title">Escolha pasta agora</string>
-    <string name="no_audiobook_folders_summary_start">Por favor escolha a sua pasta(s) de audiolivros agora.</string>
-    <string name="no_audiobook_folders_end">Você pode escolher sua pasta principal contendo diferentes livros. Ou você pode escolher apenas um único livro.</string>
     <string name="chosen_folder_description">Pasta escolhida:</string>
     <string name="delete_folder">Remover da Biblioteca?</string>
     <string name="delete_folder_content">Você quer remover a seguinte pasta da biblioteca?</string>
@@ -103,9 +100,6 @@
     <string name="remove">Remover</string>
     <string name="play_current">Reproduzir o atual</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Esconder pasta</string>
-    <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
-    <string name="hide_confirm">Esconder</string>
     <!--license activity-->
     <string name="refresh">Atualizar</string>
     <string name="reset">Reiniciar</string>

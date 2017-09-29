@@ -39,9 +39,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Klasörler birbirinin alt klasörü olmamalıdır:</string>
     <string name="audiobook_folders_title">Sesli kitap klasörleri</string>
-    <string name="no_audiobook_folders_title">Şimdi klasörü seçin</string>
-    <string name="no_audiobook_folders_summary_start">Lütfen şimdi sesli kitap klasör(ler)i seçin.</string>
-    <string name="no_audiobook_folders_end">Farklı kitapları içeren ana klasörünüzü seçebilirsiniz. Ya da sadece tek bir kitap seçebilirsiniz.</string>
     <string name="chosen_folder_description">Seçilen klasör:</string>
     <string name="delete_folder">Kütüphaneden kaldırılsın mı?</string>
     <string name="delete_folder_content">Aşağıdaki klasörü kitaplığınızdan kaldırmak istiyor musunuz?</string>
@@ -102,9 +99,6 @@
     <string name="remove">Kaldır</string>
     <string name="play_current">Geçerli oynatma</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Klasörü gizle</string>
-    <string name="hide_folder_content">Klasörü müzik çalarlardan gizlemek mi istiyorsunuz, bu nedenle kitabınızı müzik olarak tanımıyorlar mı?</string>
-    <string name="hide_confirm">Gizle</string>
     <!--license activity-->
     <string name="refresh">Yenile</string>
     <string name="reset">Sıfırla</string>

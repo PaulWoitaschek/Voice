@@ -40,9 +40,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">De mappen mogen geen submap van elkaar zijn:</string>
     <string name="audiobook_folders_title">Audioboek-mappen</string>
-    <string name="no_audiobook_folders_title">Map nu kiezen</string>
-    <string name="no_audiobook_folders_summary_start">Kies nu uw audioboek-map(pen).</string>
-    <string name="no_audiobook_folders_end">U kunt kiezen voor de hoofdmap, waar alle boeken staan, of gewoon voor een los boek.</string>
     <string name="chosen_folder_description">Gekozen map:</string>
     <string name="delete_folder">Verwijderen uit bibliotheek?</string>
     <string name="delete_folder_content">Wilt u de volgende map verwijderen uit uw bibliotheek?</string>
@@ -103,9 +100,6 @@
     <string name="remove">Verwijderen</string>
     <string name="play_current">Huidig boek afspelen</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Map verbergen</string>
-    <string name="hide_folder_content">Wilt u de map verbergen voor muziekspelers zodat ze uw boek niet opvatten als muziekbestand?</string>
-    <string name="hide_confirm">Verbergen</string>
     <!--license activity-->
     <string name="refresh">Verversen</string>
     <string name="reset">Herstellen</string>

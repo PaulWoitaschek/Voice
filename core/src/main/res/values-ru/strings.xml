@@ -42,9 +42,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-    <string name="no_audiobook_folders_title">Выбор папки</string>
-    <string name="no_audiobook_folders_summary_start">Выберите папку(и) с аудиокнигами.</string>
-    <string name="no_audiobook_folders_end">Вы можете выбрать папку, в которой содержится одна или несколько книг.</string>
     <string name="chosen_folder_description">Выбранная папка:</string>
     <string name="delete_folder">Удалить из библиотеки?</string>
     <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
@@ -109,9 +106,6 @@
     <string name="remove">Удалить</string>
     <string name="play_current">Играть текущую книгу</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Скрыть папку</string>
-    <string name="hide_folder_content">Хотите ли вы скрыть папку от музыкальных проигрывателей так, чтобы они не идентифицировали вашу книгу как музыку?</string>
-    <string name="hide_confirm">Скрыть</string>
     <!--license activity-->
     <string name="refresh">Обновить</string>
     <string name="reset">Сброс</string>

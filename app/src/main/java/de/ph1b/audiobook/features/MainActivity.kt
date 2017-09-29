@@ -5,16 +5,18 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.*
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Controller
+import com.bluelinelabs.conductor.ControllerChangeHandler
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
-import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
-import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
@@ -29,7 +31,7 @@ import javax.inject.Named
 /**
  * Activity that coordinates the book shelf and play screens.
  */
-class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
+class MainActivity : BaseActivity(), RouterProvider {
 
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
@@ -66,7 +68,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
               from: Controller?,
               isPush: Boolean,
               container: ViewGroup,
-              handler: ControllerChangeHandler) {
+              handler: ControllerChangeHandler
+          ) {
             from?.setOptionsMenuHidden(true)
           }
 
@@ -75,7 +78,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
               from: Controller?,
               isPush: Boolean,
               container: ViewGroup,
-              handler: ControllerChangeHandler) {
+              handler: ControllerChangeHandler
+          ) {
             from?.setOptionsMenuHidden(false)
           }
         }
@@ -152,10 +156,5 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     fun newIntent(context: Context, playCurrentBookImmediately: Boolean) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, playCurrentBookImmediately)
     }
-  }
-
-  override fun onNoFolderWarningConfirmed() {
-    val transaction = FolderOverviewController().asTransaction()
-    router.pushController(transaction)
   }
 }

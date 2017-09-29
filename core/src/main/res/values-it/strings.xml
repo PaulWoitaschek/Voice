@@ -39,9 +39,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Le cartelle non possono essere sottocartelle fra di loro:</string>
     <string name="audiobook_folders_title">Cartelle audiolibro</string>
-    <string name="no_audiobook_folders_title">Ora scegli la cartella</string>
-    <string name="no_audiobook_folders_summary_start">Per favore, scegliere la/e cartella(e) dell\'audiolibro</string>
-    <string name="no_audiobook_folders_end">Puoi scegliere una cartella contenente più libri. O puoi scegliere un libro singolo.</string>
     <string name="chosen_folder_description">Cartella scelta:</string>
     <string name="delete_folder">Rimuovere dalla Libreria?</string>
     <string name="delete_folder_content">Vuoi rimuovere la seguente cartella dalla libreria?</string>
@@ -102,9 +99,6 @@
     <string name="remove">Rimuovi</string>
     <string name="play_current">Riproduci corrente</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Nascondi cartella</string>
-    <string name="hide_folder_content">Vuoi nascondere la cartella dai player musicali, così che non riconoscano i libri come fossero musica?</string>
-    <string name="hide_confirm">Nascondi</string>
     <!--license activity-->
     <string name="refresh">Aggiorna</string>
     <string name="reset">Resetta</string>

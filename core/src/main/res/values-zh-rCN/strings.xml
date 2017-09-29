@@ -38,9 +38,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">目录不应该互为子目录：</string>
     <string name="audiobook_folders_title">有声书目录</string>
-    <string name="no_audiobook_folders_title">现在选择目录</string>
-    <string name="no_audiobook_folders_summary_start">请现在选择你的有声书目录</string>
-    <string name="no_audiobook_folders_end">可以选择包含多本书籍的主目录，或者只选一本书。</string>
     <string name="chosen_folder_description">选择目录：</string>
     <string name="delete_folder">从书库中删除吗？</string>
     <string name="delete_folder_content">要从书库中删除以下目录吗？</string>
@@ -99,9 +96,6 @@
     <string name="remove">删除</string>
     <string name="play_current">播放当前书籍</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">隐藏目录</string>
-    <string name="hide_folder_content">为避免有声书被识别为音乐， 针对音乐播放器隐藏目录？</string>
-    <string name="hide_confirm">隐藏</string>
     <!--license activity-->
     <string name="refresh">刷新</string>
     <string name="reset">重置</string>

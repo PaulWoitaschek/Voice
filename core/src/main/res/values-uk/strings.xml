@@ -41,9 +41,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Папки не повинні бути підпапками одна одної:</string>
     <string name="audiobook_folders_title">Папки з аудіокнигами</string>
-    <string name="no_audiobook_folders_title">Обрати папку</string>
-    <string name="no_audiobook_folders_summary_start">Будь ласка, оберіть папку(и) з аудіокнигами.</string>
-    <string name="no_audiobook_folders_end">Ви можете обрати основну папку з різними книгами. Або ж ви можете обрати тільки одну книгу.</string>
     <string name="chosen_folder_description">Обрати папку:</string>
     <string name="delete_folder">Видалити із бібліотеки?</string>
     <string name="delete_folder_content">Ви хочете видалити наступну папку із бібліотеки?</string>
@@ -106,9 +103,6 @@
     <string name="remove">Видалити</string>
     <string name="play_current">Програти поточну</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Приховати папку</string>
-    <string name="hide_folder_content">Чи хочете ви приховати папку від музичних програвачів, щоб вони не розпізнавали вашу книгу як музику?</string>
-    <string name="hide_confirm">Приховати</string>
     <!--license activity-->
     <string name="refresh">Оновити</string>
     <string name="reset">Скинути</string>

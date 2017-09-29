@@ -39,9 +39,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">フォルダーを、互いのサブフォルダーにすることはできません:</string>
     <string name="audiobook_folders_title">オーディオブック フォルダー</string>
-    <string name="no_audiobook_folders_title">今すぐフォルダーを選択</string>
-    <string name="no_audiobook_folders_summary_start">今すぐオーディオブックのフォルダーを選択してください。</string>
-    <string name="no_audiobook_folders_end">異なる本を含む主なフォルダーを選択することができます。または、一冊のブックだけを選ぶこともできます。</string>
     <string name="chosen_folder_description">選択したフォルダー:</string>
     <string name="delete_folder">ライブラリーから削除しますか?</string>
     <string name="delete_folder_content">ライブラリーから次のフォルダーを削除しますか?</string>
@@ -100,9 +97,6 @@
     <string name="remove">削除</string>
     <string name="play_current">現在を再生</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">フォルダーを非表示</string>
-    <string name="hide_folder_content">音楽プレーヤーからフォルダーを非表示にしてもよろしいですか? ブックを音楽と認識しなくなります。</string>
-    <string name="hide_confirm">非表示</string>
     <!--license activity-->
     <string name="refresh">更新</string>
     <string name="reset">リセット</string>

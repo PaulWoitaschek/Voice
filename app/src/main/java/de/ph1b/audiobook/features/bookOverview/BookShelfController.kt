@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features.bookOverview
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.support.annotation.DrawableRes
-import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
@@ -14,16 +14,20 @@ import android.support.v7.widget.SimpleItemAnimator
 import android.view.MenuItem
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookShelfBinding
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
+import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
+import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.misc.supportTransitionName
@@ -54,6 +58,8 @@ interface BookShelfView {
   fun bookCoverChanged(bookId: Long)
 }
 
+private const val COVER_FROM_GALLERY = 1
+
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
@@ -61,8 +67,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   override fun createPresenter() = App.component.bookShelfPresenter
   override val layoutRes = R.layout.book_shelf
-
-  private val COVER_FROM_GALLERY = 1
 
   override fun provideView() = this
 
@@ -80,6 +84,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   private var listDecoration: RecyclerView.ItemDecoration by clearAfterDestroyView()
   private var gridLayoutManager: GridLayoutManager by clearAfterDestroyView()
   private var linearLayoutManager: RecyclerView.LayoutManager by clearAfterDestroyView()
+  private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
   private var currentBook: Book? = null
@@ -141,9 +146,18 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
           updateDisplayMode()
           true
         }
+        R.id.library -> {
+          toFolderOverview()
+          true
+        }
         else -> false
       }
     }
+  }
+
+  private fun toFolderOverview() {
+    val controller = FolderOverviewController()
+    router.pushController(controller.asTransaction())
   }
 
   override fun onActivityResumed(activity: Activity) {
@@ -240,7 +254,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     }
 
     binding.fab.visible = currentBook != null
-
     currentPlaying.isVisible = currentBook != null
   }
 
@@ -257,13 +270,24 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   /** Show a warning that no audiobook folder was chosen */
   override fun showNoFolderWarning() {
-    // show dialog if no folders are set
-    val noFolderWarningDialog = fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?
-    val noFolderWarningIsShowing = noFolderWarningDialog?.dialog?.isShowing == true
-    if (!noFolderWarningIsShowing) {
-      val warning = NoFolderWarningDialogFragment()
-      warning.show(fragmentManager, FM_NO_FOLDER_WARNING)
-    }
+    if (currentTapTarget?.isVisible == true)
+      return
+
+    val target = TapTarget.forToolbarMenuItem(
+        binding.toolbar, R.id.library, getString(R.string.onboarding_title), getString(R.string.onboarding_content))
+        .cancelable(false)
+        .tintTarget(false)
+        .outerCircleColor(R.color.accentDark)
+        .descriptionTextColorInt(Color.WHITE)
+        .textColorInt(Color.WHITE)
+        .targetCircleColorInt(Color.BLACK)
+        .transparentTarget(true)
+    currentTapTarget = TapTargetView.showFor(activity, target, object : TapTargetView.Listener() {
+      override fun onTargetClick(view: TapTargetView?) {
+        super.onTargetClick(view)
+        toFolderOverview()
+      }
+    })
   }
 
   override fun showLoading(loading: Boolean) {
@@ -305,10 +329,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   override fun onDestroyBinding(binding: BookShelfBinding) {
     super.onDestroyBinding(binding)
     binding.recyclerView.adapter = null
-  }
-
-  companion object {
-    val TAG: String = BookShelfController::class.java.simpleName
-    val FM_NO_FOLDER_WARNING = TAG + NoFolderWarningDialogFragment.TAG
+    //   currentTapTarget?.dismiss(false)
   }
 }

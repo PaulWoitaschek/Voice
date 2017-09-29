@@ -2,10 +2,10 @@ package de.ph1b.audiobook.features.folderOverview
 
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.combineLatest
+import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
-import java.util.*
+import java.util.HashSet
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,7 +29,7 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
     val singleFolderStream = singleBookFolderPref.stream
         .map { it.map { FolderModel(it, false) } }
 
-    combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
+    Observables.combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
         .subscribe { view.newData(it) }
         .disposeOnDetach()
   }

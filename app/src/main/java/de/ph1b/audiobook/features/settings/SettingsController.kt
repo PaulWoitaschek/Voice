@@ -8,13 +8,11 @@ import de.ph1b.audiobook.databinding.SettingRowSwitchBinding
 import de.ph1b.audiobook.databinding.SettingsBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
-import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
@@ -44,16 +42,6 @@ class SettingsController : BaseController<SettingsBinding>() {
 
   override fun onBindingCreated(binding: SettingsBinding) {
     setupToolbar()
-
-    // audio book folders
-    setupTextSetting(
-        binding = binding.audiobookFolder,
-        titleRes = R.string.pref_root_folder_title,
-        contentRes = R.string.pref_root_folder_summary
-    ) {
-      val transaction = FolderOverviewController().asTransaction()
-      router.pushController(transaction)
-    }
 
     // theme
     val themeDescription = setupTextSetting(

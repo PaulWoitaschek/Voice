@@ -34,9 +34,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Die gidse moet nie /\'n subgids van mekaar wees nie:</string>
     <string name="audiobook_folders_title">Klankboekgids</string>
-    <string name="no_audiobook_folders_title">Kies gids</string>
-    <string name="no_audiobook_folders_summary_start">Kies asseblief die klankboek gids(e) nou.</string>
-    <string name="no_audiobook_folders_end">Jy kan nou jou hoofgids kies wat verskillende boeke bevat of jy kan /\'n enkele boek kies.</string>
     <string name="chosen_folder_description">Verkose gids:</string>
     <string name="delete_folder">Verwyder uit biblioteek?</string>
     <string name="delete_folder_content">Wil jy die volgende gids verwyder uit die biblioteek?</string>
@@ -83,8 +80,5 @@
     <string name="popup_edit">Wysig</string>
     <string name="remove">Verwyder</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Steek gids weg</string>
-    <string name="hide_folder_content">Wil jy die gids wegsteek van musiek spelers, sodat dit nie erken word as musiek nie?</string>
-    <string name="hide_confirm">Steek weg</string>
     <!--license activity-->
 </resources>

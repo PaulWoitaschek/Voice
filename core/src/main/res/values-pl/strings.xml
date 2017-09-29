@@ -42,9 +42,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Te foldery nie mogą być swoimi podfolderami:</string>
     <string name="audiobook_folders_title">Foldery audiobooków</string>
-    <string name="no_audiobook_folders_title">Wybierz folder</string>
-    <string name="no_audiobook_folders_summary_start">Proszę wybrać folder(y) dla twoich audiobooków.</string>
-    <string name="no_audiobook_folders_end">Można wybrać główny folder zawierający różne książki. Możesz też wybrać jedna książkę.</string>
     <string name="chosen_folder_description">Wybrany folder: </string>
     <string name="delete_folder">Usunąć z Biblioteki?</string>
     <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
@@ -109,9 +106,6 @@
     <string name="remove">Usuń</string>
     <string name="play_current">Odtwórz aktualne</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Ukryj folder</string>
-    <string name="hide_folder_content">Czy chcesz ukryć ten folder tak, że programy do odtwarzania muzyki nie będą rozpoznawały książki jako muzyki?</string>
-    <string name="hide_confirm">Ukryj</string>
     <!--license activity-->
     <string name="refresh">Odśwież</string>
     <string name="reset">Reset</string>

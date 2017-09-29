@@ -37,9 +37,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">پوشه‌ها نباید داخل یکدیگر باشند:</string>
     <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
-    <string name="no_audiobook_folders_title">حالا پوشه را تعیین کنید</string>
-    <string name="no_audiobook_folders_summary_start">لطفا حالا پوشه(های) کتاب صوتی خود را تعیین کنید.</string>
-    <string name="no_audiobook_folders_end">شما می‌توانید یک پوشه‌ی اصلی حاوی چند کتاب، و یا یک کتاب تکی را انتخاب کنید.</string>
     <string name="chosen_folder_description">پوشه را انتخاب کنید:</string>
     <string name="delete_folder">از کتابخانه حذف شود؟</string>
     <string name="delete_folder_content">آیا می‌خواهید این پوشه از کتابخانه حذف شود؟</string>
@@ -93,9 +90,6 @@
     <string name="popup_edit">ویرایش</string>
     <string name="remove">حذف</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">پوشه را پنهان کن</string>
-    <string name="hide_folder_content">آیا می‌خواهید که پوشه را پنهان کنید تا پخش‌کننده‌های موسیقی آن‌ها را به عنوان موسیقی تشخیص ندهند؟</string>
-    <string name="hide_confirm">پنهان کردن</string>
     <!--license activity-->
     <string name="refresh">تازه سازی</string>
     <string name="reset">باز نشانی</string>

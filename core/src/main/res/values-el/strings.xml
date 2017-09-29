@@ -34,9 +34,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Οι φάκελοι δεν πρέπει να είναι ένας υποφάκελος του άλλου:</string>
     <string name="audiobook_folders_title">Φάκελοι Audiobook</string>
-    <string name="no_audiobook_folders_title">Επιλογή φακέλου τώρα</string>
-    <string name="no_audiobook_folders_summary_start">Παρακαλούμε επιλέξτε τον φάκελο(οι) του ηχητικού βιβλίου σας τωρα.</string>
-    <string name="no_audiobook_folders_end">Μπορείτε να επιλέξετε κύριο φάκελο που περιέχει διάφορα βιβλία. Ή μπορείτε να επιλέξετε ένα μόνο βιβλίο.</string>
     <string name="chosen_folder_description">Επιλεγμένος φάκελος:</string>
     <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
     <string name="delete_folder_content">Θέλετε να αφαιρέσετε τον ακόλουθο φάκελο από τη βιβλιοθήκη;</string>
@@ -85,9 +82,6 @@
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Απόκρυψη φακέλου</string>
-    <string name="hide_folder_content">Θέλετε να κρύψετε το φάκελο από τα προγράμματα αναπαραγωγής μουσικής, ώστε να μην αναγνωρίζουν το βιβλίο σας σαν μουσική;</string>
-    <string name="hide_confirm">Απόκρυψη</string>
     <!--license activity-->
     <string name="refresh">Ανανέωση</string>
     <string name="reset">Επαναφορά</string>

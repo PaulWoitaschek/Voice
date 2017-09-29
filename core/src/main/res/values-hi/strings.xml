@@ -39,9 +39,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">फोल्डर एक दुसरे के अंदर नहीं हो सकते</string>
     <string name="audiobook_folders_title">ऑडिओबुक के फोल्डर</string>
-    <string name="no_audiobook_folders_title">फोल्डर चुनें</string>
-    <string name="no_audiobook_folders_summary_start">अपने ऑडियोबुक के फोल्डर(स) चुनें।</string>
-    <string name="no_audiobook_folders_end">आप अलग-अलग किताबों का फोल्डर चुन सकते हैं या फिर एक अकेली किताब वाला फोल्डर चुन सकते हैं।</string>
     <string name="chosen_folder_description">चुना गया फोल्डर :</string>
     <string name="delete_folder">लाइब्रेरी से हटाएं ?</string>
     <string name="delete_folder_content">क्या आप यह फोल्डर लाइब्रेरी से हटाना चाहते हैं ?</string>
@@ -102,9 +99,6 @@
     <string name="remove">हटाएं</string>
     <string name="play_current">मौजूदा चलायें</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">फोल्डर छिपाएं</string>
-    <string name="hide_folder_content">क्या आप इस फोल्डर को म्यूजिक प्लेयरओं से छिपाना चाहते हैं? ऐसा करने से आपकी किताबों को संगीत वाली ऐप्प में नहीं दिखेंगीं।</string>
-    <string name="hide_confirm">छिपाएं</string>
     <!--license activity-->
     <string name="refresh">ताज़ा करें</string>
     <string name="reset">रिसेट करें</string>

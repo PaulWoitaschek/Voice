@@ -36,9 +36,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Los directorios no deben ser subdirectorios del mismo:</string>
     <string name="audiobook_folders_title">Directorios de audiolibros</string>
-    <string name="no_audiobook_folders_title">Selecciona el folder ahora</string>
-    <string name="no_audiobook_folders_summary_start">Por favor selecciona tu(s) directorio(s) de audiolibros ahora.</string>
-    <string name="no_audiobook_folders_end">Puedes seleccionar tu directorio principal con diferentes libros. O puedes seleccionar un libro individual.</string>
     <string name="chosen_folder_description">Directorio seleccionado:</string>
     <string name="delete_folder">¿Eliminar de Libreria?</string>
     <string name="delete_folder_content">¿Quieres eliminar el siguiente directorio de tu librería?</string>
@@ -94,9 +91,6 @@
     <string name="popup_edit">Editar</string>
     <string name="remove">Eliminar</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Ocultar directorio</string>
-    <string name="hide_folder_content">¿Quieres ocultar el directorio de otros reproductores para que no reconozcan tu libro como archivo de música?</string>
-    <string name="hide_confirm">Ocultar</string>
     <!--license activity-->
     <string name="refresh">Actualizar</string>
     <string name="reset">Reiniciar</string>

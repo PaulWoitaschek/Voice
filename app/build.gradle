@@ -146,6 +146,9 @@ dependencies {
   compile libraries.conductor.lifecycle
 
   compile libraries.moshi
+
+  // todo move to dependencies.gradle
+  compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
 }
 
 // task that is an alias for f-droid

@@ -40,9 +40,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Les dossiers ne doivent pas être des sous-dossiers l\'un de l\'autre :</string>
     <string name="audiobook_folders_title">Dossiers de livres audio</string>
-    <string name="no_audiobook_folders_title">Choisissez un dossier maintenant</string>
-    <string name="no_audiobook_folders_summary_start">Veuillez choisir le(s) dossier(s) des livres audio maintenant.</string>
-    <string name="no_audiobook_folders_end">Vous pouvez choisir un dossier principal contenant des livres différents. Ou vous pouvez ne choisir qu\'un seul livre.</string>
     <string name="chosen_folder_description">Dossier choisi :</string>
     <string name="delete_folder">Enlever de la bibliothèque ?</string>
     <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque ?</string>
@@ -103,9 +100,6 @@
     <string name="remove">Enlever</string>
     <string name="play_current">Lire l\'actuel</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Masquer le dossier</string>
-    <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livres comme de la musique ?</string>
-    <string name="hide_confirm">Masquer</string>
     <!--license activity-->
     <string name="refresh">Rafraîchir</string>
     <string name="reset">Réinitialiser</string>

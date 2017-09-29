@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
 /**
  * A property that clears the reference upon postDestroyView
  */
-class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty<Controller, T> {
+class ClearAfterDestroyViewNullable<T>(controller: Controller) : ReadWriteProperty<Controller, T?> {
 
   init {
     controller.addLifecycleListener(
@@ -28,14 +28,13 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
 
   private var value: T? = null
 
-  override fun getValue(thisRef: Controller, property: KProperty<*>): T =
-      value ?: throw UninitializedPropertyAccessException("Property ${property.name} is not initialized.")
+  override fun getValue(thisRef: Controller, property: KProperty<*>): T? = value
 
-  override fun setValue(thisRef: Controller, property: KProperty<*>, value: T) {
+  override fun setValue(thisRef: Controller, property: KProperty<*>, value: T?) {
     this.value = value
   }
 }
 
-fun <T : Any> Controller.clearAfterDestroyView(): ReadWriteProperty<Controller, T> = ClearAfterDestroyView(
+fun <T> Controller.clearAfterDestroyViewNullable(): ReadWriteProperty<Controller, T?> = ClearAfterDestroyViewNullable(
     this
 )

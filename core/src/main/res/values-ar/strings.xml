@@ -43,8 +43,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">المجلد يجب أن لا يكون مجلد فرعي لكلاً منهما:</string>
     <string name="audiobook_folders_title">مجلد الكتب الصوتية</string>
-    <string name="no_audiobook_folders_title">أختر المجلد الأن</string>
-    <string name="no_audiobook_folders_summary_start">من فضلك أختر مجلد(مجلدات) الكتب الصوتية.</string>
     <!--PlaybackSpeed-->
     <!--Bookmarks-->
     <!--Settings-->
@@ -60,8 +58,6 @@
     <string name="remove">إمسح</string>
     <string name="play_current">شغل الحالي</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">إخفاء المجلد</string>
-    <string name="hide_confirm">إخفاء</string>
     <!--license activity-->
     <string name="refresh">تحديث</string>
     <string name="reset">أعادة</string>

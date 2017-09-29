@@ -41,9 +41,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">The folders must not be a subfolder of each other:</string>
     <string name="audiobook_folders_title">Audiobook folders</string>
-    <string name="no_audiobook_folders_title">Choose folder now</string>
-    <string name="no_audiobook_folders_summary_start">Please choose your audiobook folder(s) now.</string>
-    <string name="no_audiobook_folders_end">You can choose your main folder containing different books. Or you can choose just a single book.</string>
     <string name="chosen_folder_description">Chosen folder:</string>
     <string name="delete_folder">Remove from Library?</string>
     <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
@@ -104,9 +101,6 @@
     <string name="remove">Remove</string>
     <string name="play_current">Play current</string>
     <!-- hide folder dialog -->
-    <string name="hide_folder_title">Hide folder</string>
-    <string name="hide_folder_content">Do you want to hide the folder from music players, so they don\'t recognize your book as music?</string>
-    <string name="hide_confirm">Hide</string>
     <!-- license activity -->
     <string name="refresh">Refresh</string>
     <string name="reset">Reset</string>
@@ -114,4 +108,7 @@
     <string name="network_top">This didn\'t work too well…</string>
     <string name="cover_crop">Crop cover</string>
     <string name="music_notification">Playback</string>
+
+    <string name="onboarding_title">Welcome!</string>
+    <string name="onboarding_content">Let\'s get started by adding your first audio book.</string>
 </resources>

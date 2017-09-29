@@ -10,7 +10,13 @@ import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.chapterreader.ChapterReader
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.FileRecognition
+import de.ph1b.audiobook.misc.MediaAnalyzer
+import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.Observables
+import de.ph1b.audiobook.misc.emptySparseArray
+import de.ph1b.audiobook.misc.listFilesSafely
+import de.ph1b.audiobook.misc.toSparseArray
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -18,7 +24,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -51,7 +57,7 @@ class BookAdder
   @Volatile private var isScanning = false
 
   init {
-    val folderChanged = combineLatest(
+    val folderChanged = Observables.combineLatest(
         collectionBookFolderPref.stream,
         singleBookFolderPref.stream
     ) { _, _ -> Unit }

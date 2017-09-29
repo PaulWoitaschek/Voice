@@ -40,9 +40,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Папките не могат да бъдат подпапки една на друга</string>
     <string name="audiobook_folders_title">Папка за аудио книги</string>
-    <string name="no_audiobook_folders_title">Избиране на папка сега</string>
-    <string name="no_audiobook_folders_summary_start">Моля изберете папката Ви за аудио книги сега</string>
-    <string name="no_audiobook_folders_end">Може да изберете главната Ви папка, съдържаща множество книги. Може и да изберете само една книга.</string>
     <string name="chosen_folder_description">Избрана папка:</string>
     <string name="delete_folder">Отстраняване от Библиотеката?</string>
     <string name="delete_folder_content">Желаете ли да премахнете следната папка от Библиотеката?</string>
@@ -103,9 +100,6 @@
     <string name="remove">Премахване</string>
     <string name="play_current">Възпроизвеждане на текущата</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Скриване на папката</string>
-    <string name="hide_folder_content">Желаете ли да скриете папката от музикални плеъри, за да не разпознават книгите Ви като музика?</string>
-    <string name="hide_confirm">Да</string>
     <!--license activity-->
     <string name="refresh">Опресняване</string>
     <string name="reset">Нулиране</string>

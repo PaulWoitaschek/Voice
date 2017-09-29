@@ -28,10 +28,6 @@
                 android:showDividers="middle">
 
                 <include
-                    android:id="@+id/audiobookFolder"
-                    layout="@layout/setting_row_double"/>
-
-                <include
                     android:id="@+id/theme"
                     layout="@layout/setting_row_double"/>
 

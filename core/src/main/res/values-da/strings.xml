@@ -39,9 +39,6 @@
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Mapperne må ikke være undermapper af hinanden:</string>
     <string name="audiobook_folders_title">Lydbogs mapper</string>
-    <string name="no_audiobook_folders_title">Vælg mappe nu</string>
-    <string name="no_audiobook_folders_summary_start">Vælg venligst din lydbogs mappe(r) nu</string>
-    <string name="no_audiobook_folders_end">Du kan vælge din hovedmappe der indeholder forskellige bøger. Eller du kan vælge en enkelt bog.</string>
     <string name="chosen_folder_description">Valgte mappe:</string>
     <string name="delete_folder">Fjern fra biblioteket?</string>
     <string name="delete_folder_content">Vil du fjerne den følgende mappe fra biblioteket?</string>
@@ -97,9 +94,6 @@
     <string name="popup_edit">Rediger</string>
     <string name="remove">Fjern</string>
     <!--hide folder dialog-->
-    <string name="hide_folder_title">Skjul mappe</string>
-    <string name="hide_folder_content">Vil du skjule mappen fra musikafspillere, så du ikke ser dine lydbøger som musik?</string>
-    <string name="hide_confirm">Skjul</string>
     <!--license activity-->
     <string name="refresh">Opfrisk</string>
     <string name="reset">Nulstil</string>
