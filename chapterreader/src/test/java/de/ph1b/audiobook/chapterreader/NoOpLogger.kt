@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.chapterreader.matroska
+package de.ph1b.audiobook.chapterreader
 
 import de.ph1b.audiobook.common.Logger
 
