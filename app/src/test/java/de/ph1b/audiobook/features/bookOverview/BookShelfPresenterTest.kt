@@ -41,14 +41,10 @@ class BookShelfPresenterTest {
 
   @Mock lateinit var view: BookShelfView
 
-  private lateinit var collectionBookFolderPref: Pref<Set<String>>
-  private lateinit var singleBookFolderPref: Pref<Set<String>>
   private lateinit var currentBookIdPref: Pref<Long>
 
   @Before
   fun setUp() {
-    collectionBookFolderPref = MemoryPref(emptySet())
-    singleBookFolderPref = MemoryPref(emptySet())
     currentBookIdPref = MemoryPref(-1L)
     presenter = BookShelfPresenter(
         repo = repo,
@@ -59,7 +55,7 @@ class BookShelfPresenterTest {
         currentBookIdPref = currentBookIdPref
     )
 
-    given { repo.booksStream() }.willReturn(Observable.empty())
+    given { repo.booksStream() }.willReturn(Observable.just(emptyList()))
     given { bookAdder.scannerActive }.willReturn(Observable.just(false))
     given { playStateManager.playStateStream() }
         .willReturn(Observable.just(PAUSED))
@@ -80,17 +76,10 @@ class BookShelfPresenterTest {
     verify(view).showNoFolderWarning()
   }
 
-
   @Test
-  fun noFolderWarningNotShownWithSingleBook() {
-    singleBookFolderPref.value = setOf("/")
-    presenter.attach(view)
-    verify(view, never()).showNoFolderWarning()
-  }
-
-  @Test
-  fun noFolderWarningNotShownWithCollectionBook() {
-    collectionBookFolderPref.value = setOf("/")
+  fun noFolderWarningNotShownWithBooks() {
+    given { repo.booksStream() }
+        .willReturn(Observable.just(listOf(BookFactory.create(id = 1))))
     presenter.attach(view)
     verify(view, never()).showNoFolderWarning()
   }
