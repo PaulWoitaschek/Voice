@@ -4,20 +4,19 @@ ext.versions = [
     buildTools          : "26.0.1",
     compileSdk          : 26,
     conductor           : "2.1.4",
-    constraintLayout    : "1.1.0-beta1",
-    crashlytics         : "2.6.8",
-    dagger              : "2.11",
+    constraintLayout    : "1.1.0-beta3",
+    crashlytics         : "2.7.0",
+    dagger              : "2.12",
     exoPlayer           : "2.5.3",
     fabric              : "1.24.2",
     floatingActionButton: "1.10.1",
     gradleVersionsPlugin: "0.15.0",
     jebml               : "2.3.1",
-    supportTestRunner   : "1.0.1",
     jsr250              : "1.0",
     junit               : "4.12",
     kotlin              : "1.1.51",
-    materialDialogs     : "0.9.4.7",
     materialCab         : "0.1.12",
+    materialDialogs     : "0.9.4.7",
     minSdk              : 21,
     mockito             : "2.9.0",
     mockitoKotlin       : "1.5.0",
@@ -30,9 +29,11 @@ ext.versions = [
     rxJavaInterop       : "0.10.7",
     rxPreferences       : "1.0.2",
     slf4                : "1.7.25",
-    timber              : "4.5.1",
     support             : "26.1.0",
+    supportTestRunner   : "1.0.1",
+    tapTarget           : "1.9.1",
     targetSdk           : 26,
+    timber              : "4.5.1",
 ]
 
 ext.libraries = [
@@ -55,6 +56,7 @@ ext.libraries = [
     materialDialogs       : "com.afollestad.material-dialogs:core:$versions.materialDialogs",
     materialCab           : "com.afollestad:material-cab:$versions.materialCab",
     picasso               : "com.squareup.picasso:picasso:$versions.picasso",
+    tapTarget             : "com.getkeepsafe.taptargetview:taptargetview:$versions.tapTarget",
 
     // base
     conductor             : [
