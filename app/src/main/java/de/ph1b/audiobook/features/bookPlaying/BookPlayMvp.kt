@@ -14,6 +14,7 @@ interface BookPlayMvp {
     fun showPlaying(playing: Boolean)
     fun showLeftSleepTime(ms: Int)
     fun openSleepTimeDialog()
+    fun showBookmarkAdded()
   }
 
   abstract class Presenter : de.ph1b.audiobook.mvp.Presenter<View>() {
@@ -24,5 +25,6 @@ interface BookPlayMvp {
     abstract fun previous()
     abstract fun seekTo(position: Int, file: File? = null)
     abstract fun toggleSleepTimer()
+    abstract fun addBookmark()
   }
 }

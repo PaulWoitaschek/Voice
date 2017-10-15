@@ -1,8 +1,10 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewCompat
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
@@ -197,6 +199,12 @@ class BookPlayController(
     val equalizerItem = menu.findItem(R.id.action_equalizer)
     equalizerItem.isVisible = equalizer.exists
 
+    binding.toolbar.findViewById<View>(R.id.action_bookmark)
+        .setOnLongClickListener {
+          presenter.addBookmark()
+          true
+        }
+
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
@@ -269,6 +277,11 @@ class BookPlayController(
   override fun onDestroyBinding(binding: BookPlayBinding) {
     super.onDestroyBinding(binding)
     binding.bookSpinner.adapter = null
+  }
+
+  override fun showBookmarkAdded() {
+    Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
+        .show()
   }
 
   private fun formatTime(ms: Int, duration: Int): String {

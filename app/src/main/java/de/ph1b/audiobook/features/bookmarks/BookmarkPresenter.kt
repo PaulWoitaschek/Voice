@@ -5,7 +5,7 @@ import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.BookmarkProvider
+import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -19,7 +19,7 @@ class BookmarkPresenter @Inject constructor(
     @Named(PrefKeys.CURRENT_BOOK)
     private val currentBookIdPref: Pref<Long>,
     private val repo: BookRepository,
-    private val bookmarkProvider: BookmarkProvider,
+    private val bookmarkRepo: BookmarkRepo,
     private val playStateManager: PlayStateManager,
     private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
@@ -33,7 +33,7 @@ class BookmarkPresenter @Inject constructor(
 
     val book = repo.bookById(bookId) ?: return
     bookmarks.clear()
-    bookmarks.addAll(bookmarkProvider.bookmarks(book))
+    bookmarks.addAll(bookmarkRepo.bookmarks(book))
     chapters.clear()
     chapters.addAll(book.chapters)
 
@@ -41,7 +41,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun deleteBookmark(id: Long) {
-    bookmarkProvider.deleteBookmark(id)
+    bookmarkRepo.deleteBookmark(id)
     bookmarks.removeAll { it.id == id }
     renderView()
   }
@@ -68,8 +68,8 @@ class BookmarkPresenter @Inject constructor(
           title = newTitle,
           id = Bookmark.ID_UNKNOWN
       )
-      bookmarkProvider.deleteBookmark(it.id)
-      val newBookmark = bookmarkProvider.addBookmark(withNewTitle)
+      bookmarkRepo.deleteBookmark(it.id)
+      val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
       val index = bookmarks.indexOfFirst { it.id == id }
       bookmarks[index] = newBookmark
       renderView()
@@ -79,7 +79,7 @@ class BookmarkPresenter @Inject constructor(
   fun addBookmark(name: String) {
     val book = repo.bookById(bookId) ?: return
     val title = if (name.isEmpty()) book.currentChapter().name else name
-    val addedBookmark = bookmarkProvider.addBookmarkAtBookPosition(book, title)
+    val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
     bookmarks.add(addedBookmark)
     renderView()
   }

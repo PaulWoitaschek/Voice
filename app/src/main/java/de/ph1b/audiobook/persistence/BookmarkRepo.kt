@@ -11,7 +11,7 @@ import javax.inject.Singleton
  * Provides access to bookmarks.
  */
 @Singleton
-class BookmarkProvider
+class BookmarkRepo
 @Inject constructor(private val store: SqlBookmarkStore) {
 
   fun deleteBookmark(id: Long) = store.deleteBookmark(id)

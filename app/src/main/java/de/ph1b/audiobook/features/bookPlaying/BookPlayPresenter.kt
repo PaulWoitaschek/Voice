@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookPlaying
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.Optional
 import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
@@ -17,6 +18,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   @Inject lateinit var playerController: PlayerController
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var sleepTimer: SleepTimer
+  @Inject lateinit var bookmarkRepo: BookmarkRepo
 
   init {
     App.component.inject(this)
@@ -83,5 +85,12 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
     else {
       view.openSleepTimeDialog()
     }
+  }
+
+  override fun addBookmark() {
+    val book = bookRepository.bookById(bookId) ?: return
+    val title = book.currentChapter().name
+    bookmarkRepo.addBookmarkAtBookPosition(book, title)
+    view.showBookmarkAdded()
   }
 }

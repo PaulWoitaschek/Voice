@@ -14,7 +14,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.DialogSleepBinding
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.BookmarkProvider
+import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
@@ -27,7 +27,7 @@ import javax.inject.Named
  */
 class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
-  @Inject lateinit var bookmarkProvider: BookmarkProvider
+  @Inject lateinit var bookmarkRepo: BookmarkRepo
   @Inject lateinit var sleepTimer: SleepTimer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var shakeDetector: ShakeDetector
@@ -109,7 +109,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
             System.currentTimeMillis(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
-        bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
+        bookmarkRepo.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
       }
 
       shakeToResetPref.value = binding.shakeToResetSwitch.isChecked
