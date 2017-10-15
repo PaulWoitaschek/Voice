@@ -19,6 +19,7 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.uitools.visible
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -109,7 +110,9 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
             System.currentTimeMillis(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
-        bookmarkRepo.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
+        launch {
+          bookmarkRepo.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
+        }
       }
 
       shakeToResetPref.value = binding.shakeToResetSwitch.isChecked

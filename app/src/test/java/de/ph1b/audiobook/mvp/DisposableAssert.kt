@@ -20,4 +20,4 @@ class DisposableAssert(actual: Disposable) : AbstractAssert<DisposableAssert, Di
   }
 }
 
-fun assertThat(actual: Disposable) = DisposableAssert(actual)
+fun assertThatDisposable(actual: Disposable) = DisposableAssert(actual)

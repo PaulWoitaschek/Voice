@@ -8,6 +8,8 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -88,9 +90,11 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   }
 
   override fun addBookmark() {
-    val book = bookRepository.bookById(bookId) ?: return
-    val title = book.currentChapter().name
-    bookmarkRepo.addBookmarkAtBookPosition(book, title)
-    view.showBookmarkAdded()
+    launch(UI) {
+      val book = bookRepository.bookById(bookId) ?: return@launch
+      val title = book.currentChapter().name
+      bookmarkRepo.addBookmarkAtBookPosition(book, title)
+      view.showBookmarkAdded()
+    }
   }
 }

@@ -134,6 +134,8 @@ dependencies {
   compile libraries.rxPreferences
 
   compile libraries.kotlinStdLib
+  compile libraries.kotlinCoroutines
+  compile libraries.kotlinCoroutinesAndroid
 
   compile libraries.timber
 
@@ -153,3 +155,9 @@ dependencies {
 // task that is an alias for f-droid
 task fdroid(dependsOn: ':app:assembleOpensourceRelease')
 task release(dependsOn: ':app:assembleProprietaryRelease')
+
+kotlin {
+  experimental {
+    coroutines "enable"
+  }
+}

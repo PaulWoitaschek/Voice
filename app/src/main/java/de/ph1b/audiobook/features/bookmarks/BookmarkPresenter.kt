@@ -9,6 +9,8 @@ import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -32,18 +34,24 @@ class BookmarkPresenter @Inject constructor(
     check(bookId != -1L) { "You must initialize the bookId" }
 
     val book = repo.bookById(bookId) ?: return
-    bookmarks.clear()
-    bookmarks.addAll(bookmarkRepo.bookmarks(book))
-    chapters.clear()
-    chapters.addAll(book.chapters)
 
-    renderView()
+    launch(UI) {
+      bookmarks.clear()
+      bookmarks.addAll(bookmarkRepo.bookmarks(book))
+      chapters.clear()
+      chapters.addAll(book.chapters)
+
+      if (attached) renderView()
+    }
   }
 
   fun deleteBookmark(id: Long) {
-    bookmarkRepo.deleteBookmark(id)
-    bookmarks.removeAll { it.id == id }
-    renderView()
+    launch(UI) {
+      bookmarkRepo.deleteBookmark(id)
+      bookmarks.removeAll { it.id == id }
+
+      renderView()
+    }
   }
 
   fun selectBookmark(id: Long) {
@@ -63,25 +71,29 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun editBookmark(id: Long, newTitle: String) {
-    bookmarks.find { it.id == id }?.let {
-      val withNewTitle = it.copy(
-          title = newTitle,
-          id = Bookmark.ID_UNKNOWN
-      )
-      bookmarkRepo.deleteBookmark(it.id)
-      val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
-      val index = bookmarks.indexOfFirst { it.id == id }
-      bookmarks[index] = newBookmark
-      renderView()
+    launch(UI) {
+      bookmarks.find { it.id == id }?.let {
+        val withNewTitle = it.copy(
+            title = newTitle,
+            id = Bookmark.ID_UNKNOWN
+        )
+        bookmarkRepo.deleteBookmark(it.id)
+        val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
+        val index = bookmarks.indexOfFirst { it.id == id }
+        bookmarks[index] = newBookmark
+        if (attached) renderView()
+      }
     }
   }
 
   fun addBookmark(name: String) {
-    val book = repo.bookById(bookId) ?: return
-    val title = if (name.isEmpty()) book.currentChapter().name else name
-    val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
-    bookmarks.add(addedBookmark)
-    renderView()
+    launch(UI) {
+      val book = repo.bookById(bookId) ?: return@launch
+      val title = if (name.isEmpty()) book.currentChapter().name else name
+      val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
+      bookmarks.add(addedBookmark)
+      if (attached) renderView()
+    }
   }
 
   private fun renderView() {

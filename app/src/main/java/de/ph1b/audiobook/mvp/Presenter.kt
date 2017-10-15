@@ -14,6 +14,12 @@ abstract class Presenter<V : Any> {
       checkMainThread()
       return internalView!!
     }
+  val attached: Boolean
+    get() {
+      checkMainThread()
+      return internalView != null
+    }
+
   private var internalView: V? = null
 
   private val compositeDisposable = CompositeDisposable()
