@@ -8,7 +8,7 @@ ext.versions = [
     crashlytics         : "2.7.0",
     dagger              : "2.12",
     exoPlayer           : "2.5.3",
-    fabric              : "1.24.2",
+    fabric              : "1.24.3",
     floatingActionButton: "1.10.1",
     gradleVersionsPlugin: "0.15.0",
     jebml               : "2.3.1",
