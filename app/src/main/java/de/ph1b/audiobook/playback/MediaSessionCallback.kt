@@ -39,12 +39,7 @@ class MediaSessionCallback @Inject constructor(
     val uri = Uri.parse(mediaId)
     val type = bookUriConverter.type(uri)
     when (type) {
-      BookUriConverter.BOOK_ID -> {
-        val id = bookUriConverter.extractBook(uri)
-        currentBookIdPref.value = id
-        onPlay()
-      }
-      BookUriConverter.CHAPTER_ID -> {
+      BookUriConverter.BOOK_ID, BookUriConverter.CHAPTER_ID -> {
         val id = bookUriConverter.extractBook(uri)
         currentBookIdPref.value = id
         onPlay()
