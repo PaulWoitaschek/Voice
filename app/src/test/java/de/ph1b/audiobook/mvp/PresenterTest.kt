@@ -22,24 +22,27 @@ class PresenterTest {
     assertThat(disposable).isNotDisposed()
   }
 
-  @Test(expected = IllegalStateException::class)
-  fun addAfterDetachThrows() {
+  @Test
+  fun addAfterDetachDisposes() {
     presenter.attach(View)
     presenter.detach()
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
+    assertThat(disposable).isDisposed()
   }
 
-  @Test(expected = IllegalStateException::class)
-  fun addBeforeAttachThrows() {
+  @Test
+  fun addBeforeAttachDisposes() {
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
+    assertThat(disposable).isDisposed()
   }
 
-  @Test(expected = IllegalStateException::class)
-  fun replaceBeforeAttachThrows() {
+  @Test
+  fun replaceBeforeAttachDisposes() {
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
+    assertThat(disposable).isDisposed()
   }
 
   @Test
