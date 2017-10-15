@@ -24,7 +24,7 @@ import org.robolectric.shadows.ShadowLog
 )
 class BookUriConverterTest {
 
-  lateinit var converter: BookUriConverter
+  private lateinit var converter: BookUriConverter
 
   init {
     ShadowLog.stream = System.out
@@ -36,33 +36,32 @@ class BookUriConverterTest {
   }
 
   @Test
-  fun testAllBooks() {
+  fun allBooksType() {
     val uri = converter.allBooks()
-
-    println(uri)
-
-    val match = converter.match(uri)
-
+    val match = converter.type(uri)
     assertThat(match).isEqualTo(BookUriConverter.ROOT)
   }
 
   @Test
-  fun testSingleBook() {
+  fun singleBookType() {
     val uri = converter.book(1)
-
-    val match = converter.match(uri)
-
+    val match = converter.type(uri)
     assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
   }
 
   @Test
-  fun testExtractBookOnly() {
+  fun chapterType() {
+    val uri = converter.chapter(5, 9)
+    println(uri)
+    val match = converter.type(uri)
+    assertThat(match).isEqualTo(BookUriConverter.CHAPTER_ID)
+  }
+
+  @Test
+  fun extractBookOnly() {
     val bookId = 153L
-
     val uri = converter.book(bookId)
-
     val extracted = converter.extractBook(uri)
-
-    assertThat(bookId).isEqualTo(extracted)
+    assertThat(extracted).isEqualTo(bookId)
   }
 }

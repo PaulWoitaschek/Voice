@@ -37,7 +37,7 @@ class MediaSessionCallback @Inject constructor(
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
     Timber.i("onPlayFromMediaId $mediaId")
     val uri = Uri.parse(mediaId)
-    val type = bookUriConverter.match(uri)
+    val type = bookUriConverter.type(uri)
     when (type) {
       BookUriConverter.BOOK_ID -> {
         val id = bookUriConverter.extractBook(uri)

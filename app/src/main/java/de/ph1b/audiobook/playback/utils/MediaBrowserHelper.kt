@@ -45,9 +45,9 @@ class MediaBrowserHelper
   }
 
   private fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
-    val match = bookUriConverter.match(uri)
+    val type = bookUriConverter.type(uri)
 
-    if (match == BookUriConverter.ROOT) {
+    if (type == BookUriConverter.ROOT) {
       val currentBook = repo.bookById(currentBookIdPref.value)
       val current = currentBook?.toMediaDescription(
           titlePrefix = "${context.getString(R.string.current_book)}: "
