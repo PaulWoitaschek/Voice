@@ -26,6 +26,14 @@ class MediaSessionCallback @Inject constructor(
     private val bookSearchParser: BookSearchParser
 ) : MediaSessionCompat.Callback() {
 
+  override fun onSkipToQueueItem(id: Long) {
+    super.onSkipToQueueItem(id)
+    player.book()?.chaptersAsBookPlayChapters()?.get(id.toInt())?.let {
+      player.changePosition(time = it.start, changedFile = it.file)
+      player.play()
+    }
+  }
+
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
     Timber.i("onPlayFromMediaId $mediaId")
     val uri = Uri.parse(mediaId)
@@ -33,6 +41,11 @@ class MediaSessionCallback @Inject constructor(
     if (type == BookUriConverter.BOOK_ID) {
       val id = bookUriConverter.extractBook(uri)
       currentBookIdPref.value = id
+      onPlay()
+    }  else if  (type == BookUriConverter.CHAPTER_ID) {
+      val id = bookUriConverter.extractBook(uri)
+      currentBookIdPref.value = id
+
       onPlay()
     } else {
       Timber.e("Invalid mediaId $mediaId")

@@ -66,18 +66,7 @@ class BookPlayController(
 
   override fun render(book: Book) {
     data.clear()
-    book.chapters.forEach {
-      if (it.marks.size() > 1) {
-        it.marks.forEachIndexed { index, position, name ->
-          val start = if (index == 0) 0 else position
-          val nextPosition = it.marks.keyAtOrNull(index + 1)
-          val stop = if (nextPosition == null) it.duration else nextPosition - 1
-          data.add(BookPlayChapter(it.file, start, stop, name))
-        }
-      } else {
-        data.add(BookPlayChapter(it.file, 0, it.duration, it.name))
-      }
-    }
+    data.addAll(book.chaptersAsBookPlayChapters())
     spinnerAdapter.setData(data)
 
     val dataForCurrentFile = data.filter { it.file == book.currentFile }
