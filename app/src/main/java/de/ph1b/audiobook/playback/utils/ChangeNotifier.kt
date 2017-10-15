@@ -3,18 +3,16 @@ package de.ph1b.audiobook.playback.utils
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
-import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
-import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_PREVIOUS
-import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
-import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.*
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
@@ -26,6 +24,7 @@ import javax.inject.Inject
  * Sets updated metadata on the media session and sends broadcasts about meta changes
  */
 class ChangeNotifier @Inject constructor(
+    private val bookUriConverter: BookUriConverter,
     private val mediaSession: MediaSessionCompat,
     private val imageHelper: ImageHelper,
     private val context: Context,
@@ -47,7 +46,8 @@ class ChangeNotifier @Inject constructor(
               PlaybackStateCompat.ACTION_STOP or
               PlaybackStateCompat.ACTION_FAST_FORWARD or
               PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-              PlaybackStateCompat.ACTION_SEEK_TO
+              PlaybackStateCompat.ACTION_SEEK_TO or
+              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM
       )
 
   //use a different feature set for Android Auto
@@ -59,11 +59,12 @@ class ChangeNotifier @Inject constructor(
               PlaybackStateCompat.ACTION_PAUSE or
               PlaybackStateCompat.ACTION_PLAY_PAUSE or
               PlaybackStateCompat.ACTION_STOP or
-              PlaybackStateCompat.ACTION_SEEK_TO
+              PlaybackStateCompat.ACTION_SEEK_TO or
+              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM
       )
-      .addCustomAction(ANDROID_AUTO_ACTION_PREVIOUS, context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
       .addCustomAction(ANDROID_AUTO_ACTION_REWIND, context.getString(R.string.rewind), R.drawable.ic_fast_rewind)
       .addCustomAction(ANDROID_AUTO_ACTION_FAST_FORWARD, context.getString(R.string.fast_forward), R.drawable.ic_fast_forward)
+      .addCustomAction(ANDROID_AUTO_ACTION_PREVIOUS, context.getString(R.string.previous_track), R.drawable.ic_skip_previous)
       .addCustomAction(ANDROID_AUTO_ACTION_NEXT, context.getString(R.string.next_track), R.drawable.ic_skip_next)
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
@@ -81,7 +82,18 @@ class ChangeNotifier @Inject constructor(
 
     val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
         .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
+        .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
         .build()
+
+    // build a chapter queue
+    var chapterId : Long = 0
+    val queue = book.chapters.map {
+      MediaSessionCompat.QueueItem(it.toMediaDescription(book), chapterId++)}
+
+    if (queue.isNotEmpty()) {
+      mediaSession.setQueue(queue)
+      mediaSession.setQueueTitle(bookName)
+    }
     mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
@@ -142,5 +154,12 @@ class ChangeNotifier @Inject constructor(
           putExtra("position", time)
           putExtra("package", BuildConfig.APPLICATION_ID)
         }
+  }
+
+  private fun Chapter.toMediaDescription(book : Book): MediaDescriptionCompat {
+    return MediaDescriptionCompat.Builder()
+        .setTitle(name)
+        .setMediaId(bookUriConverter.chapter(book.id, book.chapters.indexOf(this)).toString())
+        .build()
   }
 }

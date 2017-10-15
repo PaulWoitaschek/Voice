@@ -7,10 +7,7 @@ import android.content.BroadcastReceiver
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDelegate
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
-import dagger.android.HasServiceInjector
+import dagger.android.*
 import dagger.android.support.HasSupportFragmentInjector
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.BookAdder
@@ -19,6 +16,7 @@ import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.AndroidAutoConnection
 import de.ph1b.audiobook.uitools.ThemeUtil
 import timber.log.Timber
 import javax.inject.Inject

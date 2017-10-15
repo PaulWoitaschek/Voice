@@ -1,9 +1,11 @@
 package de.ph1b.audiobook
 
 import android.os.Environment
+import de.ph1b.audiobook.features.bookPlaying.BookPlayChapter
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.forEachIndexed
+import de.ph1b.audiobook.misc.keyAtOrNull
 import java.io.File
 
 /**
@@ -106,6 +108,23 @@ data class Book(
       coverFile.parentFile.mkdirs()
     }
     return coverFile
+  }
+
+  fun chaptersAsBookPlayChapters(): ArrayList<BookPlayChapter> {
+    val data = ArrayList<BookPlayChapter>()
+    chapters.forEach {
+      if (it.marks.size() > 1) {
+        it.marks.forEachIndexed { index, position, name ->
+          val start = if (index == 0) 0 else position
+          val nextPosition = it.marks.keyAtOrNull(index + 1)
+          val stop = if (nextPosition == null) it.duration else nextPosition - 1
+          data.add(BookPlayChapter(it.file, start, stop, name))
+        }
+      } else {
+        data.add(BookPlayChapter(it.file, 0, it.duration, it.name))
+      }
+    }
+    return data
   }
 
   enum class Type {

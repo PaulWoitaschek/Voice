@@ -56,8 +56,6 @@ class BookShelfPresenterTest {
         playStateManager = playStateManager,
         playerController = playerController,
         coverFromDiscCollector = coverFromDiscCollector,
-        collectionBookFolderPref = collectionBookFolderPref,
-        singleBookFolderPref = singleBookFolderPref,
         currentBookIdPref = currentBookIdPref
     )
 
