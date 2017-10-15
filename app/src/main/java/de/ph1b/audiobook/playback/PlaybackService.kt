@@ -59,7 +59,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var mediaSession: MediaSessionCompat
   @Inject lateinit var changeNotifier: ChangeNotifier
-  @Inject lateinit var autoConnected: AndroidAutoConnection
+  @Inject lateinit var autoConnected: AndroidAutoConnectedReceiver
+  @Inject lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
   @Inject lateinit var audioFocusHelper: AudioFocusHandler
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
@@ -76,7 +77,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           repo.updateBook(it)
         }
 
-    autoConnected.register(this)
+    notifyOnAutoConnectionChange.listen()
 
     currentBookIdPref.stream
         .subscribe { currentBookIdChanged(it) }
@@ -250,7 +251,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.release()
     disposables.dispose()
 
-    autoConnected.unregister(this)
+    notifyOnAutoConnectionChange.unregister()
     super.onDestroy()
   }
 

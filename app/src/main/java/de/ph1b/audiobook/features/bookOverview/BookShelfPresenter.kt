@@ -79,7 +79,7 @@ constructor(
     }.filter { it }
         .firstOrError()
     showFolderWarning
-        .subscribe { it -> view.showNoFolderWarning() }
+        .subscribe { _ -> view.showNoFolderWarning() }
         .disposeOnDetach()
   }
 

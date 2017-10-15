@@ -3,7 +3,6 @@ package de.ph1b.audiobook.playback
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
-import dagger.Lazy
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.injection.PrefKeys
@@ -21,7 +20,7 @@ class MediaSessionCallback @Inject constructor(
     @Named(PrefKeys.CURRENT_BOOK)
     private val currentBookIdPref: Pref<Long>,
     private val bookSearchHandler: BookSearchHandler,
-    private val autoConnection: Lazy<AndroidAutoConnection>,
+    private val autoConnection: AndroidAutoConnectedReceiver,
     private val player: MediaPlayer,
     private val bookSearchParser: BookSearchParser
 ) : MediaSessionCompat.Callback() {
@@ -56,7 +55,7 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onSkipToNext() {
     Timber.i("onSkipToNext")
-    if (autoConnection.get().connected) {
+    if (autoConnection.connected) {
       player.next()
     } else {
       onFastForward()
@@ -70,7 +69,7 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onSkipToPrevious() {
     Timber.i("onSkipToPrevious")
-    if (autoConnection.get().connected) {
+    if (autoConnection.connected) {
       player.previous(toNullOfNewTrack = true)
     } else {
       onRewind()

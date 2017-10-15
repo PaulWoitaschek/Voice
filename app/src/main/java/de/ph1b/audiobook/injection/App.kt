@@ -19,6 +19,7 @@ import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,6 +34,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
   @Inject lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
   @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
   @Inject lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+  @Inject lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
 
@@ -60,6 +62,8 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     bookAdder.scanForFiles()
 
     AppCompatDelegate.setDefaultNightMode(themePref.value.nightMode)
+
+    autoConnectedReceiver.register(this)
 
     triggerWidgetOnChange.init()
   }
