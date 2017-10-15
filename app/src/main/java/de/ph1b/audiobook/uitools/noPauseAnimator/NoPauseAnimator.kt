@@ -46,8 +46,8 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     return animator.startDelay
   }
 
-  override fun setStartDelay(delayMS: Long) {
-    animator.startDelay = delayMS
+  override fun setStartDelay(startDelay: Long) {
+    animator.startDelay = startDelay
   }
 
   override fun isPaused(): Boolean {
@@ -76,8 +76,8 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     }
   }
 
-  override fun setDuration(durationMS: Long): Animator {
-    animator.duration = durationMS
+  override fun setDuration(duration: Long): Animator {
+    animator.duration = duration
     return this
   }
 

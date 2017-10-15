@@ -53,12 +53,13 @@ class BookChangeHandler : TransitionChangeHandler() {
         .apply {
           if (isPush && to != null) {
             val circularTransition = CircularRevealBookPlayTransition()
-            circularTransition
-                .setDuration(350)
-                .addTarget(R.id.previous)
-                .addTarget(R.id.next)
-                .addTarget(R.id.fastForward)
-                .addTarget(R.id.rewind)
+                .apply {
+                  duration = 700
+                  addTarget(R.id.previous)
+                  addTarget(R.id.next)
+                  addTarget(R.id.fastForward)
+                  addTarget(R.id.rewind)
+                }
 
             addTransition(circularTransition)
           }

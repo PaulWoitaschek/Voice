@@ -23,8 +23,7 @@ class CircularRevealBookPlayTransition : Visibility() {
     val parentWidth = parent.width
     val circularReveal = circularRevealAnimator(target = endValues.view, cx = parentWidth / 2, finalRadius = parentWidth.toFloat())
         .apply {
-          startDelay = 200
-          duration = 400
+          startDelay = 100
           interpolator = Interpolators.fastOutSlowIn
           addListener(object : DefaultAnimatorListener {
             override fun onAnimationStart(animator: Animator) {
