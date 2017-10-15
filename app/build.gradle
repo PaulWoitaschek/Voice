@@ -24,7 +24,7 @@ android {
   buildToolsVersion versions.buildTools
 
   defaultConfig {
-    applicationId "de.ph1b.audiobook.matthias"
+    applicationId "de.ph1b.audiobook"
     minSdkVersion versions.minSdk
     targetSdkVersion versions.targetSdk
     versionCode 210
