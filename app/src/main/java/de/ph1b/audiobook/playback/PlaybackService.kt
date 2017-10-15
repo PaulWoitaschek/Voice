@@ -223,6 +223,15 @@ class PlaybackService : MediaBrowserServiceCompat() {
         val loudness = intent.getIntExtra(PlayerController.CHANGE_LOUDNESS, 0)
         player.setLoudnessGain(loudness)
       }
+      PlayerController.ACTION_PLAY_PAUSE -> {
+        if (playStateManager.playState == PlayState.PLAYING) {
+          player.pause(true)
+        } else player.play()
+      }
+      PlayerController.ACTION_STOP -> player.stop()
+      PlayerController.ACTION_PLAY -> player.play()
+      PlayerController.ACTION_REWIND -> player.skip(forward = false)
+      PlayerController.ACTION_FAST_FORWARD -> player.skip(forward = true)
     }
 
     setupInitialNotificationForO()

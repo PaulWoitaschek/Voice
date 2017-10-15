@@ -3,7 +3,6 @@ package de.ph1b.audiobook.playback
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startForegroundService
-import android.view.KeyEvent
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,24 +10,20 @@ import javax.inject.Singleton
 /**
  * Class for controlling the player through the service
  */
-@Singleton class PlayerController
+@Singleton
+class PlayerController
 @Inject constructor(val context: Context) {
 
-  private val playPauseIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
-  private val playIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PLAY)
-  private val stopIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_STOP)
+  private val playPauseIntent = intent(ACTION_PLAY_PAUSE)
+  private val playIntent = intent(ACTION_PLAY)
+  private val stopIntent = intent(ACTION_STOP)
   private val nextIntent = intent(ACTION_FORCE_NEXT)
   private val previousIntent = intent(ACTION_FORCE_PREVIOUS)
-  private val rewindIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_REWIND)
-  private val fastForwardIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
+  private val rewindIntent = intent(ACTION_REWIND)
+  private val fastForwardIntent = intent(ACTION_FAST_FORWARD)
 
   private fun intent(action: String) = Intent(context, PlaybackService::class.java).apply {
     setAction(action)
-  }
-
-  private fun keyEventIntent(keyCode: Int) = intent(Intent.ACTION_MEDIA_BUTTON).apply {
-    val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
-    putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
   }
 
   fun stop() = fire(stopIntent)
@@ -75,16 +70,22 @@ import javax.inject.Singleton
   }
 
   companion object {
-    const val ACTION_SPEED = "action#setSpeed"
-    const val ACTION_LOUDNESS = "action#setLoudnessGain"
-    const val EXTRA_SPEED = "extra#speed"
 
-    const val ACTION_CHANGE = "action#change"
-    const val CHANGE_TIME = "changeTime"
-    const val CHANGE_LOUDNESS = "changeLoudness"
-    const val CHANGE_FILE = "changeFile"
+    const val ACTION_SPEED = "de.ph1b.audiobook.ACTION_SPEED"
+    const val ACTION_STOP = "de.ph1b.audiobook.ACTION_STOP"
+    const val ACTION_PLAY = "de.ph1b.audiobook.ACTION_PLAY"
+    const val ACTION_REWIND = "de.ph1b.audiobook.ACTION_REWIND"
 
-    const val ACTION_FORCE_NEXT = "actionForceNext"
-    const val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
+    const val ACTION_FORCE_NEXT = "de.ph1b.audiobook.ACTION_FORCE_NEXT"
+    const val ACTION_FORCE_PREVIOUS = "de.ph1b.audiobook.ACTION_FORCE_PREVIOUS"
+    const val ACTION_PLAY_PAUSE = "de.ph1b.audiobook.ACTION_PLAY_PAUSE"
+    const val ACTION_FAST_FORWARD = "de.ph1b.audiobook.ACTION_FAST_FORWARD"
+
+    const val ACTION_LOUDNESS = "de.ph1b.audiobook.ACTION_LOUDNESS"
+    const val EXTRA_SPEED = "de.ph1b.audiobook.EXTRA_SPEED"
+    const val ACTION_CHANGE = "de.ph1b.audiobook.ACTION_CHANGE"
+    const val CHANGE_TIME = "de.ph1b.audiobook.CHANGE_TIME"
+    const val CHANGE_LOUDNESS = "de.ph1b.audiobook.CHANGE_LOUDNESS"
+    const val CHANGE_FILE = "de.ph1b.audiobook.CHANGE_FILE"
   }
 }

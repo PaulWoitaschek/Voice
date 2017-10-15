@@ -15,7 +15,13 @@ import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.utils.*
+import de.ph1b.audiobook.playback.utils.DataSourceConverter
+import de.ph1b.audiobook.playback.utils.WakeLockManager
+import de.ph1b.audiobook.playback.utils.onAudioSessionId
+import de.ph1b.audiobook.playback.utils.onError
+import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
+import de.ph1b.audiobook.playback.utils.onStateChanged
+import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -164,8 +170,8 @@ constructor(
     }
   }
 
-  fun skip(direction: Direction) {
-    Timber.v("direction=$direction")
+  fun skip(forward: Boolean) {
+    Timber.v("skip forward=$forward")
 
     prepareIfIdle()
     if (state == PlayerState.IDLE)
@@ -177,7 +183,7 @@ constructor(
       val duration = player.duration
       val delta = seekTime * 1000
 
-      val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
+      val seekTo = if (forward) currentPos + delta else currentPos - delta
       Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
 
       when {
@@ -324,11 +330,5 @@ constructor(
       bookSubject.onNext(copy)
       player.setPlaybackSpeed(speed)
     }
-  }
-
-  /** The direction to skip. */
-  enum class Direction {
-
-    FORWARD, BACKWARD
   }
 }

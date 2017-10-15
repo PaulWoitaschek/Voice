@@ -56,7 +56,7 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onRewind() {
     Timber.i("onRewind")
-    player.skip(MediaPlayer.Direction.BACKWARD)
+    player.skip(forward = false)
   }
 
   override fun onSkipToPrevious() {
@@ -70,7 +70,7 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onFastForward() {
     Timber.i("onFastForward")
-    player.skip(MediaPlayer.Direction.FORWARD)
+    player.skip(forward = true)
   }
 
   override fun onStop() {
