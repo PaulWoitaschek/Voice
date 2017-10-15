@@ -21,9 +21,7 @@ import de.ph1b.audiobook.misc.clicks
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
-import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement

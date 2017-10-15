@@ -110,7 +110,7 @@ data class Book(
     return coverFile
   }
 
-  fun chaptersAsBookPlayChapters(): ArrayList<BookPlayChapter> {
+  fun chaptersAsBookPlayChapters(): List<BookPlayChapter> {
     val data = ArrayList<BookPlayChapter>()
     chapters.forEach {
       if (it.marks.size() > 1) {

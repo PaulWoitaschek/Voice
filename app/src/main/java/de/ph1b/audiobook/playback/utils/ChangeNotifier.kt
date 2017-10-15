@@ -12,7 +12,11 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.playback.*
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_PREVIOUS
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
@@ -36,31 +40,31 @@ class ChangeNotifier @Inject constructor(
 
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
       .setActions(
-          PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-              PlaybackStateCompat.ACTION_REWIND or
+          PlaybackStateCompat.ACTION_FAST_FORWARD or
+              PlaybackStateCompat.ACTION_PAUSE or
               PlaybackStateCompat.ACTION_PLAY or
               PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
               PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-              PlaybackStateCompat.ACTION_PAUSE or
               PlaybackStateCompat.ACTION_PLAY_PAUSE or
-              PlaybackStateCompat.ACTION_STOP or
-              PlaybackStateCompat.ACTION_FAST_FORWARD or
-              PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+              PlaybackStateCompat.ACTION_REWIND or
               PlaybackStateCompat.ACTION_SEEK_TO or
-              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM
+              PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+              PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
+              PlaybackStateCompat.ACTION_STOP
       )
 
   //use a different feature set for Android Auto
   private val playbackStateBuilderForAuto = PlaybackStateCompat.Builder()
       .setActions(
-          PlaybackStateCompat.ACTION_PLAY or
+          PlaybackStateCompat.ACTION_PAUSE or
+              PlaybackStateCompat.ACTION_PLAY or
               PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
               PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-              PlaybackStateCompat.ACTION_PAUSE or
               PlaybackStateCompat.ACTION_PLAY_PAUSE or
-              PlaybackStateCompat.ACTION_STOP or
               PlaybackStateCompat.ACTION_SEEK_TO or
-              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM
+              PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
+              PlaybackStateCompat.ACTION_STOP
       )
       .addCustomAction(ANDROID_AUTO_ACTION_REWIND, context.getString(R.string.rewind), R.drawable.ic_fast_rewind)
       .addCustomAction(ANDROID_AUTO_ACTION_FAST_FORWARD, context.getString(R.string.fast_forward), R.drawable.ic_fast_forward)
@@ -70,11 +74,11 @@ class ChangeNotifier @Inject constructor(
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   fun notify(what: Type, book: Book, forAuto: Boolean = false) {
-    val chapter = book.currentChapter()
+    val currentChapter = book.currentChapter()
     val playState = playStateManager.playState
 
     val bookName = book.name
-    val chapterName = chapter.name
+    val chapterName = currentChapter.name
     val author = book.author
     val position = book.time
 
@@ -85,15 +89,7 @@ class ChangeNotifier @Inject constructor(
         .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
         .build()
 
-    // build a chapter queue
-    var chapterId : Long = 0
-    val queue = book.chapters.map {
-      MediaSessionCompat.QueueItem(it.toMediaDescription(book), chapterId++)}
-
-    if (queue.isNotEmpty()) {
-      mediaSession.setQueue(queue)
-      mediaSession.setQueueTitle(bookName)
-    }
+    appendQueue(book)
     mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
@@ -117,7 +113,7 @@ class ChangeNotifier @Inject constructor(
       mediaMetaDataBuilder
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-          .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, chapter.duration.toLong())
+          .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
           .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
@@ -133,16 +129,22 @@ class ChangeNotifier @Inject constructor(
     }
   }
 
+  private fun appendQueue(book: Book) {
+    val queue = book.chapters.mapIndexed { index, chapter ->
+      MediaSessionCompat.QueueItem(chapter.toMediaDescription(book), index.toLong())
+    }
+
+    if (queue.isNotEmpty()) {
+      mediaSession.setQueue(queue)
+      mediaSession.setQueueTitle(book.name)
+    }
+  }
+
   enum class Type(private val intentUrl: String) {
     METADATA("com.android.music.metachanged"),
     PLAY_STATE("com.android.music.playstatechange");
 
-    fun broadcastIntent(
-        author: String?,
-        bookName: String,
-        chapterName: String,
-        playState: PlayStateManager.PlayState,
-        time: Int) =
+    fun broadcastIntent(author: String?, bookName: String, chapterName: String, playState: PlayStateManager.PlayState, time: Int) =
         Intent(intentUrl).apply {
           putExtra("id", 1)
           if (author != null) {
@@ -156,10 +158,11 @@ class ChangeNotifier @Inject constructor(
         }
   }
 
-  private fun Chapter.toMediaDescription(book : Book): MediaDescriptionCompat {
+  private fun Chapter.toMediaDescription(book: Book): MediaDescriptionCompat {
+    val index = book.chapters.indexOf(this)
     return MediaDescriptionCompat.Builder()
         .setTitle(name)
-        .setMediaId(bookUriConverter.chapter(book.id, book.chapters.indexOf(this)).toString())
+        .setMediaId(bookUriConverter.chapter(book.id, index).toString())
         .build()
   }
 }

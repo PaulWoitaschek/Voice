@@ -38,17 +38,18 @@ class MediaSessionCallback @Inject constructor(
     Timber.i("onPlayFromMediaId $mediaId")
     val uri = Uri.parse(mediaId)
     val type = bookUriConverter.match(uri)
-    if (type == BookUriConverter.BOOK_ID) {
-      val id = bookUriConverter.extractBook(uri)
-      currentBookIdPref.value = id
-      onPlay()
-    }  else if  (type == BookUriConverter.CHAPTER_ID) {
-      val id = bookUriConverter.extractBook(uri)
-      currentBookIdPref.value = id
-
-      onPlay()
-    } else {
-      Timber.e("Invalid mediaId $mediaId")
+    when (type) {
+      BookUriConverter.BOOK_ID -> {
+        val id = bookUriConverter.extractBook(uri)
+        currentBookIdPref.value = id
+        onPlay()
+      }
+      BookUriConverter.CHAPTER_ID -> {
+        val id = bookUriConverter.extractBook(uri)
+        currentBookIdPref.value = id
+        onPlay()
+      }
+      else -> Timber.e("Invalid mediaId $mediaId")
     }
   }
 
