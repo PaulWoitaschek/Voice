@@ -39,7 +39,6 @@ class BookChangeHandler : TransitionChangeHandler() {
 
     val fadeGradient = Fade()
         .addTarget(R.id.gradientShadow)
-        .setStartDelay(250)
         .setDuration(100)
 
     if (!isPush && from != null) {
@@ -47,23 +46,25 @@ class BookChangeHandler : TransitionChangeHandler() {
       gradient?.visible = false
     }
 
-    return TransitionSet()
+    val moveFade = TransitionSet()
         .addTransition(moveFabAndCover)
         .addTransition(fadeGradient)
-        .apply {
-          if (isPush && to != null) {
-            val circularTransition = CircularRevealBookPlayTransition()
-                .apply {
-                  duration = 700
-                  addTarget(R.id.previous)
-                  addTarget(R.id.next)
-                  addTarget(R.id.fastForward)
-                  addTarget(R.id.rewind)
-                }
 
-            addTransition(circularTransition)
+    return if (isPush && to != null) {
+      val circularTransition = CircularRevealBookPlayTransition()
+          .apply {
+            duration = 450
+            addTarget(R.id.previous)
+            addTarget(R.id.next)
+            addTarget(R.id.fastForward)
+            addTarget(R.id.rewind)
           }
-        }
+
+      TransitionSet()
+          .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+          .addTransition(moveFade)
+          .addTransition(circularTransition)
+    } else moveFade
   }
 
   override fun saveToBundle(bundle: Bundle) {
