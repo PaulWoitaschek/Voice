@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.PopupMenu
 import de.ph1b.audiobook.Bookmark
@@ -13,6 +15,7 @@ import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
+import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
@@ -92,6 +95,18 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
     binding.recycler.adapter = adapter
     val itemAnimator = binding.recycler.itemAnimator as DefaultItemAnimator
     itemAnimator.supportsChangeAnimations = false
+
+    val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+      override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
+        return false
+      }
+
+      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val boundBookmark = (viewHolder as BookMarkHolder).boundBookmark
+        boundBookmark?.let { presenter.deleteBookmark(it.id) }
+      }
+    }
+    ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.recycler)
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {

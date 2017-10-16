@@ -1,16 +1,28 @@
 package de.ph1b.audiobook.features.bookmarks.list
 
+import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
+import de.ph1b.audiobook.Bookmark
+import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
+import java.util.concurrent.TimeUnit.MILLISECONDS
 
 /**
  * ViewHolder for displaying a Bookmark
  */
 class BookMarkHolder private constructor(
-    private val binding: de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding,
+    private val binding: BookmarkRowLayoutBinding,
     private val listener: BookmarkClickListener
-) : android.support.v7.widget.RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
-  private var boundBookmark: de.ph1b.audiobook.Bookmark? = null
+  constructor(parent: ViewGroup, listener: BookmarkClickListener) : this(
+      binding = BookmarkRowLayoutBinding.inflate(parent.layoutInflater(), parent, false),
+      listener = listener
+  )
+
+  var boundBookmark: Bookmark? = null
+    private set
 
   init {
     binding.edit.setOnClickListener { view ->
@@ -25,7 +37,7 @@ class BookMarkHolder private constructor(
     }
   }
 
-  fun bind(bookmark: de.ph1b.audiobook.Bookmark, chapters: List<de.ph1b.audiobook.Chapter>) {
+  fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
     boundBookmark = bookmark
     binding.title.text = bookmark.title
 
@@ -41,25 +53,13 @@ class BookMarkHolder private constructor(
   }
 
   private fun formatTime(ms: Int): String {
-    val h = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
-    val m = "%02d".format((java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
-    val s = "%02d".format((java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
+    val h = MILLISECONDS.toHours(ms.toLong()).toString()
+    val m = "%02d".format((MILLISECONDS.toMinutes(ms.toLong()) % 60))
+    val s = "%02d".format((MILLISECONDS.toSeconds(ms.toLong()) % 60))
     var returnString = ""
     if (h != "0") {
       returnString += h + ":"
     }
-    returnString += m + ":" + s
-    return returnString
-  }
-
-  companion object {
-
-    operator fun invoke(
-        parent: android.view.ViewGroup,
-        listener: BookmarkClickListener): de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder {
-      val layoutInflater = parent.layoutInflater()
-      val binding = de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding.inflate(layoutInflater, parent, false)
-      return de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder(binding, listener)
-    }
+    return "$returnString$m:$s"
   }
 }
