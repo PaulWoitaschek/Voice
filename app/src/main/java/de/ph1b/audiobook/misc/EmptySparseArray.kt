@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.misc
 
-import android.util.SparseArray
+import android.support.v4.util.SparseArrayCompat
 
 /**
  * A immutable sparse array without any values
  */
-class EmptySparseArray<E> private constructor() : SparseArray<E>() {
+class EmptySparseArray<E> private constructor() : SparseArrayCompat<E>() {
 
   override fun remove(key: Int) = throw UnsupportedOperationException()
 

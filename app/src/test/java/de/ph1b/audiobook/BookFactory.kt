@@ -1,9 +1,9 @@
 package de.ph1b.audiobook
 
-import android.util.SparseArray
+import android.support.v4.util.SparseArrayCompat
 import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.File
-import java.util.*
+import java.util.Random
 
 object BookFactory {
 
@@ -18,7 +18,7 @@ object BookFactory {
     val type = Book.Type.SINGLE_FOLDER
     val author = "TestAuthor"
     val name = "TestBook"
-    val marks1 = SparseArray<String>().apply {
+    val marks1 = SparseArrayCompat<String>().apply {
       put(0, "first")
       put(5000, "second")
     }

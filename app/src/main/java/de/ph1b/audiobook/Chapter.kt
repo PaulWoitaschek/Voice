@@ -1,6 +1,6 @@
 package de.ph1b.audiobook
 
-import android.util.SparseArray
+import android.support.v4.util.SparseArrayCompat
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.equalsTo
 import de.ph1b.audiobook.misc.forEachIndexed
@@ -14,7 +14,7 @@ data class Chapter(
     val name: String,
     val duration: Int,
     val fileLastModified: Long,
-    val marks: SparseArray<String>
+    val marks: SparseArrayCompat<String>
 ) : Comparable<Chapter> {
 
   init {

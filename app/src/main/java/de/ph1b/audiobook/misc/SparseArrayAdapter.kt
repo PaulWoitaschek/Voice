@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.misc
 
-import android.util.SparseArray
+import android.support.v4.util.SparseArrayCompat
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -8,9 +8,9 @@ import com.squareup.moshi.JsonWriter
 /**
  * JsonAdapter for a sparse array
  */
-class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<SparseArray<T>>() {
+class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<SparseArrayCompat<T>>() {
 
-  override fun toJson(writer: JsonWriter, sparseArray: SparseArray<T>?) {
+  override fun toJson(writer: JsonWriter, sparseArray: SparseArrayCompat<T>?) {
     writer.writeObject {
       sparseArray?.forEachIndexed { _, key, value ->
         writer.name(key.toString())
@@ -19,8 +19,8 @@ class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<S
     }
   }
 
-  override fun fromJson(reader: JsonReader): SparseArray<T> {
-    val sparseArray = SparseArray<T>()
+  override fun fromJson(reader: JsonReader): SparseArrayCompat<T> {
+    val sparseArray = SparseArrayCompat<T>()
 
     reader.readObject {
       val key = it.toInt()

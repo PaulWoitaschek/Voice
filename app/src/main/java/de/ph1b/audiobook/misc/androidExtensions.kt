@@ -9,8 +9,8 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.util.SparseArrayCompat
 import android.support.v4.view.ViewCompat
-import android.util.SparseArray
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -78,7 +78,7 @@ inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   )
 }
 
-inline fun <E> SparseArray<E>.forEachIndexed(reversed: Boolean = false, action: (index: Int, key: Int, value: E) -> Unit) {
+inline fun <E> SparseArrayCompat<E>.forEachIndexed(reversed: Boolean = false, action: (index: Int, key: Int, value: E) -> Unit) {
   val size = size()
   val range = 0 until size
   for (index in if (reversed) range.reversed() else range) {
@@ -88,7 +88,7 @@ inline fun <E> SparseArray<E>.forEachIndexed(reversed: Boolean = false, action: 
   }
 }
 
-fun <T> SparseArray<T>.equalsTo(other: SparseArray<T>): Boolean {
+fun <T> SparseArrayCompat<T>.equalsTo(other: SparseArrayCompat<T>): Boolean {
   val size = this.size()
   if (size != other.size()) return false
   return (0 until size).none {
@@ -96,18 +96,18 @@ fun <T> SparseArray<T>.equalsTo(other: SparseArray<T>): Boolean {
   }
 }
 
-fun <T> Map<Int, T>.toSparseArray(): SparseArray<T> {
+fun <T> Map<Int, T>.toSparseArray(): SparseArrayCompat<T> {
   if (isEmpty())
     return emptySparseArray()
 
-  val array = SparseArray<T>(size)
+  val array = SparseArrayCompat<T>(size)
   forEach { (key, value) ->
     array.put(key, value)
   }
   return array
 }
 
-fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
+fun SparseArrayCompat<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
 
 fun checkMainThread() {
   check(Looper.getMainLooper() == Looper.myLooper()) {
