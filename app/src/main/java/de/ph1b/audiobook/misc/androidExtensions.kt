@@ -88,7 +88,7 @@ inline fun <E> SparseArrayCompat<E>.forEachIndexed(reversed: Boolean = false, ac
   }
 }
 
-fun <T> SparseArrayCompat<T>.equalsTo(other: SparseArrayCompat<T>): Boolean {
+fun <T> SparseArrayCompat<T>.contentEquals(other: SparseArrayCompat<T>): Boolean {
   val size = this.size()
   if (size != other.size()) return false
   return (0 until size).none {

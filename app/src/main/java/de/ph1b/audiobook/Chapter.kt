@@ -2,7 +2,7 @@ package de.ph1b.audiobook
 
 import android.support.v4.util.SparseArrayCompat
 import de.ph1b.audiobook.misc.NaturalOrderComparator
-import de.ph1b.audiobook.misc.equalsTo
+import de.ph1b.audiobook.misc.contentEquals
 import de.ph1b.audiobook.misc.forEachIndexed
 import java.io.File
 
@@ -30,7 +30,7 @@ data class Chapter(
         this.name == other.name &&
         this.duration == other.duration &&
         this.fileLastModified == other.fileLastModified &&
-        this.marks.equalsTo(other.marks)
+        this.marks.contentEquals(other.marks)
   }
 
   override fun hashCode(): Int {
