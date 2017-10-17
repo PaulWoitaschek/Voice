@@ -7,7 +7,7 @@
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
-    <string name="action_sleep">Insomningstimer</string>
+    <string name="action_sleep">Insomningstidtagare</string>
     <plurals name="pauses_after">
         <item quantity="one">Pausar efter %d minut.</item>
         <item quantity="other">Pausar efter %d minuter.</item>
@@ -80,7 +80,7 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
-    <string name="pref_seek_time">Hoppa mängd</string>
+    <string name="pref_seek_time">Skippa mängd</string>
     <string name="pref_root_folder_title">Ljudboksmapp</string>
     <string name="pref_root_folder_summary">Valda ljudboksmapparna.</string>
     <string name="pref_theme_title">Tema</string>
@@ -107,4 +107,6 @@
     <string name="network_top">Detta fungerade inte alltför väl…</string>
     <string name="cover_crop">Beskär omslag</string>
     <string name="music_notification">Uppspelning</string>
+    <string name="onboarding_title">Välkommen!</string>
+    <string name="onboarding_content">Låt oss börja med att lägga till din första ljudbok.</string>
 </resources>

@@ -106,4 +106,7 @@
     <string name="no_network">Няма връзка с интернет?</string>
     <string name="network_top">Това май не проработи…</string>
     <string name="cover_crop">Изрязване на обложката</string>
+    <string name="music_notification">Възпроизвеждане</string>
+    <string name="onboarding_title">Добре дошли!</string>
+    <string name="onboarding_content">Нека започнем като добавим първата Ви аудиокнига.</string>
 </resources>

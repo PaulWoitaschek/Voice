@@ -107,4 +107,6 @@
     <string name="network_top">Dit ging niet zo goed…</string>
     <string name="cover_crop">Omslag bijsnijden</string>
     <string name="music_notification">Afspelen</string>
+    <string name="onboarding_title">Welkom!</string>
+    <string name="onboarding_content">Laten we beginnen met het toevoegen van uw eerste audioboek.</string>
 </resources>
