@@ -12,8 +12,8 @@ import io.fabric.sdk.android.Fabric
  */
 object CrashlyticsProxy : ErrorReporter {
 
-  override fun log(priority: Int, tag: String?, message: String?) {
-    Crashlytics.log(priority, tag, message)
+  override fun log(message: String) {
+    Crashlytics.log(message)
   }
 
   override fun logException(throwable: Throwable) {

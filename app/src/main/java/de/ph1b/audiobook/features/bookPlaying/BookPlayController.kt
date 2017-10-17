@@ -13,7 +13,6 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
-import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
@@ -48,7 +47,6 @@ class BookPlayController(
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
   @Inject lateinit var equalizer: Equalizer
-  @Inject lateinit var loudnessGain: LoudnessGain
 
   private val data = ArrayList<BookPlayChapter>()
   private val bookId = bundle.getLong(NI_BOOK_ID)

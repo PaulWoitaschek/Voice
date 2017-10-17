@@ -9,7 +9,7 @@ import de.ph1b.audiobook.common.ErrorReporter
 @Suppress("UNUSED_PARAMETER")
 object CrashlyticsProxy : ErrorReporter {
 
-  override fun log(priority: Int, tag: String?, message: String?) {}
+  override fun log(message: String) {}
 
   override fun logException(throwable: Throwable) {}
 
