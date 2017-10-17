@@ -12,11 +12,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.findCallback
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
@@ -73,8 +74,9 @@ class EditCoverDialogFragment : DialogFragment() {
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-            imageHelper.saveCover(bitmap, book.coverFile())
-            picasso.invalidate(book.coverFile())
+            val coverFile = book.coverFile()
+            imageHelper.saveCover(bitmap, coverFile)
+            picasso.invalidate(coverFile)
             findCallback<Callback>(NI_TARGET).onBookCoverChanged(book)
             dismiss()
           }

@@ -1,7 +1,9 @@
 package de.ph1b.audiobook.features.bookmarks.list
 
+import de.ph1b.audiobook.data.Bookmark
+
 interface BookmarkClickListener {
 
-  fun onOptionsMenuClicked(bookmark: de.ph1b.audiobook.Bookmark, v: android.view.View)
-  fun onBookmarkClicked(bookmark: de.ph1b.audiobook.Bookmark)
+  fun onOptionsMenuClicked(bookmark: Bookmark, v: android.view.View)
+  fun onBookmarkClicked(bookmark: Bookmark)
 }

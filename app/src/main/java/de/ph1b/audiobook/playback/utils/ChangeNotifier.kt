@@ -8,11 +8,12 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.injection.PerService
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_PREVIOUS

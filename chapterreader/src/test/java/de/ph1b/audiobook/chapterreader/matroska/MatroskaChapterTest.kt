@@ -6,7 +6,7 @@ import org.junit.Test
 class MatroskaChapterTest {
 
   @Test
-  fun testGetName() {
+  fun getName() {
     val chapter = MatroskaChapter(
         0L, listOf(
         MatroskaChapterName("Podczęść 1", setOf("pol")),
@@ -20,7 +20,7 @@ class MatroskaChapterTest {
   }
 
   @Test
-  fun testNoContentsLeadsToNull() {
+  fun noContentsLeadsToNull() {
     val actual = MatroskaChapter(0L, listOf(), listOf()).getName()
     assertThat(actual).isNull()
   }

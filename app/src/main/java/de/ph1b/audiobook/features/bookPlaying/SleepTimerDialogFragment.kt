@@ -11,10 +11,10 @@ import android.view.View
 import android.widget.FrameLayout
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.databinding.DialogSleepBinding
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer

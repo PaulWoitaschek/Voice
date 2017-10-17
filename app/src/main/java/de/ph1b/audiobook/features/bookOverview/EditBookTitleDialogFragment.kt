@@ -6,9 +6,9 @@ import android.support.v4.app.DialogFragment
 import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import javax.inject.Inject
 
 /**

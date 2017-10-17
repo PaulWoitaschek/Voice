@@ -9,8 +9,8 @@ import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.Reusable
-import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import java.io.File
 import javax.inject.Inject
 

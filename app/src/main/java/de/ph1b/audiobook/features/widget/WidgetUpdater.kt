@@ -13,14 +13,15 @@ import android.view.WindowManager
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
 import dagger.Reusable
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PendingIntentCompat
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.getOnUiThread
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.utils.ServiceController
@@ -173,11 +174,12 @@ class WidgetUpdater @Inject constructor(
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    var cover = if (book.coverFile().canRead() && book.coverFile().length() < maxImageSize) {
+    val coverFile = book.coverFile()
+    var cover = if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       val sizeForPicasso = coverSize.takeIf { it > 0 }
           ?: context.dpToPxRounded(56F)
       Picasso.with(context)
-          .load(book.coverFile())
+          .load(coverFile)
           .resize(sizeForPicasso, sizeForPicasso)
           .getOnUiThread()
     } else null

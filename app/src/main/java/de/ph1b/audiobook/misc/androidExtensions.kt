@@ -9,13 +9,14 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.util.SparseArrayCompat
 import android.support.v4.view.ViewCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
 import com.f2prateek.rx.preferences.Preference
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.injection.App
 import java.io.File
 import java.io.FileFilter
 
@@ -78,39 +79,10 @@ inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   )
 }
 
-inline fun <E> SparseArrayCompat<E>.forEachIndexed(reversed: Boolean = false, action: (index: Int, key: Int, value: E) -> Unit) {
-  val size = size()
-  val range = 0 until size
-  for (index in if (reversed) range.reversed() else range) {
-    val key = keyAt(index)
-    val value = valueAt(index)
-    action(index, key, value)
-  }
-}
-
-fun <T> SparseArrayCompat<T>.contentEquals(other: SparseArrayCompat<T>): Boolean {
-  val size = this.size()
-  if (size != other.size()) return false
-  return (0 until size).none {
-    keyAt(it) != other.keyAt(it) || valueAt(it) != other.valueAt(it)
-  }
-}
-
-fun <T> Map<Int, T>.toSparseArray(): SparseArrayCompat<T> {
-  if (isEmpty())
-    return emptySparseArray()
-
-  val array = SparseArrayCompat<T>(size)
-  forEach { (key, value) ->
-    array.put(key, value)
-  }
-  return array
-}
-
-fun SparseArrayCompat<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
-
 fun checkMainThread() {
   check(Looper.getMainLooper() == Looper.myLooper()) {
     "Is not on ui thread!"
   }
 }
+
+fun Book.coverFile(): File = coverFile(App.component.context)

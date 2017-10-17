@@ -8,8 +8,9 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
 import dagger.android.support.AndroidSupportInjection
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.misc.RouterProvider
@@ -21,7 +22,6 @@ import de.ph1b.audiobook.misc.leftCompoundDrawable
 import de.ph1b.audiobook.misc.rightCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
-import de.ph1b.audiobook.persistence.BookRepository
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -93,6 +93,7 @@ dependencies {
   compile project(":core")
   compile project(":common")
   compile project(":chapterreader")
+  compile project(":data")
 
   kapt libraries.dataBindingCompiler
 
@@ -120,7 +121,6 @@ dependencies {
   provided libraries.jsr250
 
   testCompile libraries.junit
-  testCompile libraries.robolectric
   testCompile libraries.assertJ
   testCompile libraries.mockito
   testCompile libraries.mockitoKotlin

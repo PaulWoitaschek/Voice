@@ -4,9 +4,10 @@ import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
+import de.ph1b.audiobook.misc.coverFile
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject

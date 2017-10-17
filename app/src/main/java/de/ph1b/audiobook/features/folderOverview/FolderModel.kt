@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.io.File
 
 data class FolderModel(val folder: String, val isCollection: Boolean) : Comparable<FolderModel> {

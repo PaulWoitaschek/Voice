@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.data.Book
 
 interface BookShelfView {
   /** Display a new set of books */

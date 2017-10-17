@@ -1,7 +1,9 @@
 package de.ph1b.audiobook
 
 import android.support.v4.util.SparseArrayCompat
-import de.ph1b.audiobook.misc.emptySparseArray
+import de.ph1b.audiobook.common.sparseArray.emptySparseArray
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import java.io.File
 import java.util.Random
 

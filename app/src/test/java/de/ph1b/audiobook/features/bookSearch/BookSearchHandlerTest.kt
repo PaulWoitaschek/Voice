@@ -2,12 +2,12 @@ package de.ph1b.audiobook.features.bookSearch
 
 import android.annotation.SuppressLint
 import android.provider.MediaStore
-import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.MemoryPref
+import de.ph1b.audiobook.common.sparseArray.emptySparseArray
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
-import de.ph1b.audiobook.misc.emptySparseArray
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import org.assertj.core.api.Assertions.assertThat
@@ -73,7 +73,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testUnstructuredSearchByBook() {
+  fun unstructuredSearchByBook() {
     val bookSearch = BookSearch(query = bookToFind.name)
     searchHandler.handle(bookSearch)
 
@@ -83,7 +83,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testUnstructuredSearchByArtist() {
+  fun unstructuredSearchByArtist() {
     val bookSearch = BookSearch(query = bookToFind.author)
     searchHandler.handle(bookSearch)
 
@@ -93,7 +93,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testUnstructuredSearchByChapter() {
+  fun unstructuredSearchByChapter() {
     val bookSearch = BookSearch(query = bookToFindChapter1.name)
     searchHandler.handle(bookSearch)
 
@@ -103,7 +103,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusAnyNoneFoundButPlayed() {
+  fun mediaFocusAnyNoneFoundButPlayed() {
     val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
 
@@ -112,7 +112,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusArtist() {
+  fun mediaFocusArtist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author
@@ -126,7 +126,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusArtistInTitleNoArtistInBook() {
+  fun mediaFocusArtistInTitleNoArtistInBook() {
     val bookToFind = this.bookToFind.copy(author = null, name = "The book of Tim")
     given { repo.activeBooks }.thenReturn(listOf(bookToFind))
 
@@ -143,7 +143,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusAlbum() {
+  fun mediaFocusAlbum() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author,
@@ -157,7 +157,7 @@ class BookSearchHandlerTest {
   }
 
   @Test
-  fun testMediaFocusPlaylist() {
+  fun mediaFocusPlaylist() {
     val bookSearch = BookSearch(
         mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
         artist = bookToFind.author,

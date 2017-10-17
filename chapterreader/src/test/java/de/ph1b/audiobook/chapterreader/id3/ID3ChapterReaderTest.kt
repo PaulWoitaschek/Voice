@@ -10,7 +10,7 @@ class ID3ChapterReaderTest {
   private val id3ChapterReader = ID3ChapterReader(NoOpLogger)
 
   @Test
-  fun testRead() {
+  fun read() {
     val file = File(javaClass.classLoader.getResource("id3/simple.mp3").file)
 
     val chapters = id3ChapterReader.read(file)

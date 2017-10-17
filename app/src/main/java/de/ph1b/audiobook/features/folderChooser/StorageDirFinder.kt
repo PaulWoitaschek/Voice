@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Environment
 import android.support.annotation.RequiresPermission
 import android.text.TextUtils
-import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList

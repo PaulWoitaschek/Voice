@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.data.Book
 import java.io.File
 
 /**

@@ -12,6 +12,7 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
@@ -22,7 +23,6 @@ import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import javax.inject.Inject

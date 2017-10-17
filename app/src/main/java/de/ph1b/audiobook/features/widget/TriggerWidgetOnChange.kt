@@ -1,9 +1,9 @@
 package de.ph1b.audiobook.features.widget
 
 import dagger.Reusable
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import io.reactivex.Observable

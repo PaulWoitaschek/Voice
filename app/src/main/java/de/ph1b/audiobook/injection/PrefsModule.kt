@@ -7,7 +7,7 @@ import com.f2prateek.rx.preferences.RxSharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.BookShelfController.DisplayMode
 import de.ph1b.audiobook.persistence.pref.PersistentPref
 import de.ph1b.audiobook.persistence.pref.Pref

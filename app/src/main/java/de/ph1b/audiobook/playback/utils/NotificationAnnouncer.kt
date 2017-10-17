@@ -9,10 +9,11 @@ import android.support.v4.media.app.NotificationCompat.MediaStyle
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.misc.PendingIntentCompat
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getOnUiThread
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -71,9 +72,10 @@ class NotificationAnnouncer
     val height = imageHelper.smallerScreenSize
 
     // get the cover or fallback to a replacement
-    val picassoCover = if (book.coverFile().canRead() && book.coverFile().length() < maxImageSize) {
+    val coverFile = book.coverFile()
+    val picassoCover = if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(context)
-          .load(book.coverFile())
+          .load(coverFile)
           .resize(width, height)
           .getOnUiThread()
     } else null

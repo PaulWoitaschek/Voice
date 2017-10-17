@@ -7,9 +7,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown
 import org.junit.Test
 import java.io.ByteArrayInputStream
-import javax.xml.bind.DatatypeConverter
 
 class VorbisCommentReadingTest {
+
   @Test
   fun parseChapterTime() {
     assertThat(VorbisCommentReader.parseChapterTime("10:02:10.231")).isEqualTo(36130231)

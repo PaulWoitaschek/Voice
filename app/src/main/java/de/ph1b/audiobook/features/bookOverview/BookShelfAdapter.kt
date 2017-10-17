@@ -11,11 +11,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.misc.supportTransitionName

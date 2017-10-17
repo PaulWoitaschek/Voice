@@ -5,11 +5,11 @@ import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BookFactory
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING

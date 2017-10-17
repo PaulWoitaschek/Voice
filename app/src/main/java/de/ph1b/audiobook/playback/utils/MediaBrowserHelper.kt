@@ -8,10 +8,11 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
 import dagger.Reusable
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.persistence.pref.Pref
 import timber.log.Timber
 import java.io.File

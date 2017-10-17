@@ -7,12 +7,12 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.common.sparseArray.forEachIndexed
+import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.forEachIndexed
-import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.utils.DataSourceConverter

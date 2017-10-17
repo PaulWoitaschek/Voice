@@ -6,7 +6,6 @@ import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.EOFException
 import java.io.InputStream
-import javax.xml.bind.DatatypeConverter
 
 class BinaryStreamExtensionsTest {
 

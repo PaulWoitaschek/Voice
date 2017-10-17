@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback.utils
 
 import android.graphics.Bitmap
-import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.data.Book
 
 /**
  * A cache entry for a bitmap

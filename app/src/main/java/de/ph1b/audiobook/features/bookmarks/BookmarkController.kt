@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.PopupMenu
-import de.ph1b.audiobook.Bookmark
-import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog

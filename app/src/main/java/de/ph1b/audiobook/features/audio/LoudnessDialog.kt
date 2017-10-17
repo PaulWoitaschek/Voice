@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.LoudnessBinding
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.progressChangedStream
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DecimalFormat

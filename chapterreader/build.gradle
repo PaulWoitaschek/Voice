@@ -1,7 +1,26 @@
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: "kotlin-kapt"
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
+android {
+
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
+    versionCode 1
+    versionName "1.0"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
 
 dependencies {
   compile project(":common")
@@ -15,15 +34,6 @@ dependencies {
 
   testCompile libraries.assertJ
   testCompile libraries.junit
-}
-
-sourceSets {
-  test {
-    output.resourcesDir = output.classesDir
-  }
-  main {
-    java.srcDirs += "build/generated/source/kapt/"
-  }
 }
 
 targetCompatibility = '1.7'

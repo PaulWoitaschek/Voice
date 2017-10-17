@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
@@ -23,6 +23,7 @@ import de.ph1b.audiobook.misc.clicks
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.mvp.MvpController
@@ -103,9 +104,10 @@ class BookPlayController(
 
     // (Cover)
     val coverReplacement = CoverReplacement(book.name, activity)
-    if (book.coverFile().canRead() && book.coverFile().length() < maxImageSize) {
+    val coverFile = book.coverFile()
+    if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(activity)
-          .load(book.coverFile())
+          .load(coverFile)
           .placeholder(coverReplacement)
           .into(binding.cover)
     } else {

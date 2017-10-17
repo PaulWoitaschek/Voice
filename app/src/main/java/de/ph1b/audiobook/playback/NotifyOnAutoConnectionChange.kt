@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.playback
 
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import io.reactivex.disposables.Disposable

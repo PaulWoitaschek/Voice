@@ -2,8 +2,8 @@ package de.ph1b.audiobook.features.bookmarks.list
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import de.ph1b.audiobook.Bookmark
-import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
 import java.util.concurrent.TimeUnit.MILLISECONDS

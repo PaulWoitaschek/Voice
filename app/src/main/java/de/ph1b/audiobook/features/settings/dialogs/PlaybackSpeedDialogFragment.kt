@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.progressChangedStream
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers

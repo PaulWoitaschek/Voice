@@ -24,7 +24,6 @@ ext.versions = [
     moshi               : "1.5.0",
     okHttp              : "3.8.1",
     picasso             : "2.5.2",
-    robolectric         : "3.4.2",
     rxAndroid           : "2.0.1",
     rxJava2             : "2.1.5",
     rxJavaInterop       : "0.10.7",
@@ -89,6 +88,5 @@ ext.libraries = [
     junit                  : "junit:junit:$versions.junit",
     mockito                : "org.mockito:mockito-core:$versions.mockito",
     mockitoKotlin          : "com.nhaarman:mockito-kotlin-kt1.1:$versions.mockitoKotlin",
-    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
-    robolectric            : "org.robolectric:robolectric:$versions.robolectric",
+    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp"
 ]

@@ -6,8 +6,8 @@ import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
-import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.misc.DialogController
 
 /**

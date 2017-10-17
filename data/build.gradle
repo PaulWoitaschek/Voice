@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile project(":common")
+  compile libraries.support.appCompat
+  compile libraries.timber
+  compile libraries.kotlinCoroutines
+  compile libraries.rxJava
+  compile libraries.moshi
+
+  compile libraries.dagger
+  kapt libraries.daggerCompiler
+
+  androidTestCompile libraries.support.testRunner
+  androidTestCompile libraries.assertJ
+}
+
+
+kotlin {
+  experimental {
+    coroutines "enable"
+  }
+}

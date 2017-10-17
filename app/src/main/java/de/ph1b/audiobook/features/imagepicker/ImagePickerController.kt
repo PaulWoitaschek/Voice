@@ -13,13 +13,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.conductor.popOrBack
-import de.ph1b.audiobook.persistence.BookRepository
+import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import io.reactivex.subjects.BehaviorSubject

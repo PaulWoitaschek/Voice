@@ -1,9 +1,9 @@
 package de.ph1b.audiobook.features.bookPlaying
 
+import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.Optional
-import de.ph1b.audiobook.persistence.BookRepository
-import de.ph1b.audiobook.persistence.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController

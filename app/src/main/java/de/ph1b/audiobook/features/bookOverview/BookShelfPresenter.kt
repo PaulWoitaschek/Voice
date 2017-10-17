@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState

@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.bookmarks
 
-import de.ph1b.audiobook.Bookmark
-import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 
 /**
  * View of the bookmarks
