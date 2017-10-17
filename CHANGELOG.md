@@ -1,3 +1,15 @@
+# 3.5.0
+* Player stability
+* Fixed Book sorting
+* Min-Sdk 21
+* WebP images
+* Book transition improved
+* On-boarding experience improved
+* Dedicated Library menu
+* Android Auto & Wear Playlists
+* Bookmarks persistence now off the UI thread
+* Swipe-to-delete bookmarks
+
 # 3.4.1
 * Matroska chapter marks. Thanks to Marek Rusinowski!
 * Android O support
@@ -318,7 +330,7 @@ No changelog
 * Bookmark icon on higher priority
 * Replaced miniplayer widget with fab
 * Improved transitions
-* 
+*
 ## Fixes
 * Shows correct error message on corrupt files
 * Threading issues fixed
@@ -399,7 +411,7 @@ So we write back to db.
 
 ## Fixes
 * Fixed threading issue on MediaPlayer
-* Fixed rare race condition error at BookShelf and BookPlay fragment 
+* Fixed rare race condition error at BookShelf and BookPlay fragment
 
 # v2.0.6 Finetuning
 
