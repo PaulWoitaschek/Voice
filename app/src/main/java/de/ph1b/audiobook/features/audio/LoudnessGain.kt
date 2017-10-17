@@ -9,7 +9,8 @@ import kotlin.properties.Delegates
 /**
  * Handles the the loudness gain.
  */
-@Singleton class LoudnessGain @Inject constructor() {
+@Singleton
+class LoudnessGain @Inject constructor() {
 
   var gainmB by Delegates.observable(0) { _, _, _ -> updateLoudnessEnhancer() }
   private var audioSessionId = -1

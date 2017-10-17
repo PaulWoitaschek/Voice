@@ -17,7 +17,8 @@ import javax.inject.Inject
 /**
  * Converts books to media sources.
  */
-@Reusable class DataSourceConverter
+@Reusable
+class DataSourceConverter
 @Inject constructor(context: Context) {
 
   private val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)

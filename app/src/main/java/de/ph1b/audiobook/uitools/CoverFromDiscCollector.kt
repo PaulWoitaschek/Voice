@@ -20,7 +20,8 @@ import javax.inject.Singleton
 /**
  * Class for retrieving covers from disc.
  */
-@Singleton class CoverFromDiscCollector
+@Singleton
+class CoverFromDiscCollector
 @Inject constructor(
     context: Context,
     private val activityManager: ActivityManager,

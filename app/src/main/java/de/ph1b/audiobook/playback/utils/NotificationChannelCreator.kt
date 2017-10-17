@@ -12,7 +12,8 @@ import javax.inject.Singleton
 /**
  * Creates the notification channel and exposes the channel name.
  */
-@Singleton class NotificationChannelCreator @Inject constructor(
+@Singleton
+class NotificationChannelCreator @Inject constructor(
     notificationManager: NotificationManager,
     context: Context
 ) {

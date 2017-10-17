@@ -11,7 +11,8 @@ import javax.inject.Singleton
 /**
  * The equalizer. Delegates to the system integrated equalizer
  */
-@Singleton class Equalizer @Inject constructor(
+@Singleton
+class Equalizer @Inject constructor(
     private val context: Context
 ) {
 

@@ -10,7 +10,8 @@ import javax.inject.Inject
 /**
  * Parse the book search
  */
-@Reusable class BookSearchParser @Inject constructor() {
+@Reusable
+class BookSearchParser @Inject constructor() {
 
   fun parse(query: String?, extras: Bundle?): BookSearch {
     val mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS)

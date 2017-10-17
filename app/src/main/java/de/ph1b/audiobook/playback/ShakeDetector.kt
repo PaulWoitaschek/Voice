@@ -13,7 +13,8 @@ import javax.inject.Inject
  * https://github.com/AntennaPod/AntennaPod/blob/8d2ec19cbe05297afa887cc2263347f112aae3e6/core/src/main/java/de/danoeh/antennapod/core/service/playback/ShakeListener.java
  * And is licensesd as apache 2
  */
-@Reusable class ShakeDetector
+@Reusable
+class ShakeDetector
 @Inject constructor(private val sensorManager: SensorManager?) {
 
   fun shakeSupported() = sensorManager != null

@@ -15,7 +15,8 @@ import javax.inject.Singleton
 /**
  * Provides access to all books.
  */
-@Singleton class BookRepository
+@Singleton
+class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
   private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList().apply { sort() } }

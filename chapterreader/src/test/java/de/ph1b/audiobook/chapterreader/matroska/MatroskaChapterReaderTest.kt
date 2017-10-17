@@ -3,7 +3,7 @@ package de.ph1b.audiobook.chapterreader.matroska
 import de.ph1b.audiobook.chapterreader.NoOpLogger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import java.util.*
+import java.util.Locale
 
 class MatroskaChapterReaderTest {
 

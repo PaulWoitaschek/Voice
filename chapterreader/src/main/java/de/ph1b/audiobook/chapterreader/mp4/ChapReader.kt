@@ -3,7 +3,6 @@ package de.ph1b.audiobook.chapterreader.mp4
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Reads the chap atom to find associated chapters

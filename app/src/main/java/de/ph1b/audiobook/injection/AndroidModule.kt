@@ -24,7 +24,8 @@ import javax.inject.Singleton
 /**
  * Module providing Android SDK Related instances.
  */
-@Module class AndroidModule {
+@Module
+class AndroidModule {
 
   @Provides
   fun provideContext(app: Application): Context = app

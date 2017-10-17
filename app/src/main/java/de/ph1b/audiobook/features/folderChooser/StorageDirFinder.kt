@@ -20,7 +20,8 @@ import javax.inject.Singleton
 /**
  * Finder for external storages.
  */
-@Singleton class StorageDirFinder @Inject constructor(private val context: Context) {
+@Singleton
+class StorageDirFinder @Inject constructor(private val context: Context) {
 
   /**
    * Collects the storage dirs of the device.
