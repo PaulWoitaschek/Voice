@@ -91,8 +91,7 @@ class ChangeNotifier @Inject constructor(
         .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
         .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
         .build()
-
-//    appendQueue(book)
+    
     mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
