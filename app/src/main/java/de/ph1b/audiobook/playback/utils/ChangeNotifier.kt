@@ -91,7 +91,7 @@ class ChangeNotifier @Inject constructor(
         .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
         .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
         .build()
-    
+
     mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
@@ -143,16 +143,18 @@ class ChangeNotifier @Inject constructor(
     }
   }
 
-  enum class Type(private val intentUrl: String) {
+  enum class Type(intentUrl: String) {
     METADATA("com.android.music.metachanged"),
     PLAY_STATE("com.android.music.playstatechange");
 
+    private val intent = Intent(intentUrl)
+
     fun broadcastIntent(author: String?, bookName: String, chapterName: String, playState: PlayStateManager.PlayState, time: Int) =
-        Intent(intentUrl).apply {
+        intent.apply {
           putExtra("id", 1)
           if (author != null) {
             putExtra("artist", author)
-          }
+          } else removeExtra("artist")
           putExtra("album", bookName)
           putExtra("track", chapterName)
           putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
