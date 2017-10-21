@@ -1,4 +1,4 @@
-# 3.5.0
+# 3.6.0
 * Player stability
 * Fixed Book sorting
 * Min-Sdk 21
