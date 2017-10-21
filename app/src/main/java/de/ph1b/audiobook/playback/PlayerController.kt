@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startForegroundService
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,13 +13,16 @@ import javax.inject.Singleton
 class PlayerController
 @Inject constructor(val context: Context) {
 
-  private val playPauseIntent = intent(ACTION_PLAY_PAUSE)
+  val playPauseIntent = intent(ACTION_PLAY_PAUSE)
+  val rewindAutoPlayerIntent = intent(ACTION_REWIND_AUTO_PLAY)
+  val stopIntent = intent(ACTION_STOP)
+  val fastForwardAutoPlayIntent = intent(ACTION_FAST_FORWARD_AUTO_PLAY)
+
+  private val fastForwardIntent = intent(ACTION_FAST_FORWARD)
+  private val rewindIntent = intent(ACTION_REWIND)
   private val playIntent = intent(ACTION_PLAY)
-  private val stopIntent = intent(ACTION_STOP)
   private val nextIntent = intent(ACTION_FORCE_NEXT)
   private val previousIntent = intent(ACTION_FORCE_PREVIOUS)
-  private val rewindIntent = intent(ACTION_REWIND)
-  private val fastForwardIntent = intent(ACTION_FAST_FORWARD)
 
   private fun intent(action: String) = Intent(context, PlaybackService::class.java).apply {
     setAction(action)
@@ -35,7 +37,7 @@ class PlayerController
   fun fastForward() = fire(fastForwardIntent)
 
   private fun fire(intent: Intent) {
-    startForegroundService(context, intent)
+    context.startService(intent)
   }
 
   fun previous() = fire(previousIntent)
@@ -75,12 +77,12 @@ class PlayerController
     const val ACTION_STOP = "de.ph1b.audiobook.ACTION_STOP"
     const val ACTION_PLAY = "de.ph1b.audiobook.ACTION_PLAY"
     const val ACTION_REWIND = "de.ph1b.audiobook.ACTION_REWIND"
-
+    const val ACTION_REWIND_AUTO_PLAY = "de.ph1b.audiobook.ACTION_REWIND_AUTO_PLAY"
+    const val ACTION_FAST_FORWARD = "de.ph1b.audiobook.ACTION_FAST_FORWARD"
+    const val ACTION_FAST_FORWARD_AUTO_PLAY = "de.ph1b.audiobook.ACTION_FAST_FORWARD_AUTO_PLAY"
     const val ACTION_FORCE_NEXT = "de.ph1b.audiobook.ACTION_FORCE_NEXT"
     const val ACTION_FORCE_PREVIOUS = "de.ph1b.audiobook.ACTION_FORCE_PREVIOUS"
     const val ACTION_PLAY_PAUSE = "de.ph1b.audiobook.ACTION_PLAY_PAUSE"
-    const val ACTION_FAST_FORWARD = "de.ph1b.audiobook.ACTION_FAST_FORWARD"
-
     const val ACTION_LOUDNESS = "de.ph1b.audiobook.ACTION_LOUDNESS"
     const val EXTRA_SPEED = "de.ph1b.audiobook.EXTRA_SPEED"
     const val ACTION_CHANGE = "de.ph1b.audiobook.ACTION_CHANGE"

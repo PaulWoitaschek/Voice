@@ -5,7 +5,6 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
@@ -116,21 +115,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     tearDownAutomatically()
   }
 
-  // on android O the service always needs to bee started as foreground, else it crashes.
-  private fun setupInitialNotificationForO() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isForeground) {
-      val book = player.book()
-      Timber.i("start foreground immediately for O with book ${book?.name}")
-      val notification = notificationAnnouncer.getNotification(book, playStateManager.playState, mediaSession.sessionToken)
-      startForeground(NOTIFICATION_ID, notification)
-      isForeground = true
-      if (book == null) {
-        Timber.d("there is no book. Stop self.")
-        stopSelf()
-      }
-    }
-  }
-
   private fun tearDownAutomatically() {
     val idleTimeOutInSeconds: Long = 7
     playStateManager.playStateStream()
@@ -232,10 +216,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
       PlayerController.ACTION_STOP -> player.stop()
       PlayerController.ACTION_PLAY -> player.play()
       PlayerController.ACTION_REWIND -> player.skip(forward = false)
+      PlayerController.ACTION_REWIND_AUTO_PLAY -> {
+        player.skip(forward = false)
+        player.play()
+      }
       PlayerController.ACTION_FAST_FORWARD -> player.skip(forward = true)
+      PlayerController.ACTION_FAST_FORWARD_AUTO_PLAY -> {
+        player.skip(forward = true)
+        player.play()
+      }
     }
-
-    setupInitialNotificationForO()
 
     return Service.START_NOT_STICKY
   }

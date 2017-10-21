@@ -24,7 +24,7 @@ import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.getOnUiThread
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.utils.ServiceController
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.maxImageSize
@@ -40,7 +40,7 @@ class WidgetUpdater @Inject constructor(
     @Named(PrefKeys.CURRENT_BOOK)
     private val currentBookIdPref: Pref<Long>,
     private val imageHelper: ImageHelper,
-    private val serviceController: ServiceController,
+    private val playerController: PlayerController,
     private val playStateManager: PlayStateManager,
     private val windowManager: Provider<WindowManager>
 ) {
@@ -127,29 +127,26 @@ class WidgetUpdater @Inject constructor(
     }
 
   private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
-    val playPauseI = serviceController.getPlayPauseIntent()
     val playPausePI = PendingIntentCompat.getForegroundService(
         context,
         KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-        playPauseI,
+        playerController.playPauseIntent,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
-    val fastForwardI = serviceController.getFastForwardIntent()
     val fastForwardPI = PendingIntentCompat.getForegroundService(
         context,
         KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-        fastForwardI,
+        playerController.fastForwardAutoPlayIntent,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
-    val rewindI = serviceController.getRewindIntent()
     val rewindPI = PendingIntentCompat.getForegroundService(
         context,
         KeyEvent.KEYCODE_MEDIA_REWIND,
-        rewindI,
+        playerController.rewindAutoPlayerIntent,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
