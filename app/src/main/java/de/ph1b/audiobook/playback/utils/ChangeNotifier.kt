@@ -91,11 +91,11 @@ class ChangeNotifier @Inject constructor(
         .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
         .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
         .build()
-
-    appendQueue(book)
+    
     mediaSession.setPlaybackState(playbackState)
 
     if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
+      appendQueue(book)
       // this check is necessary. Else the lockscreen controls will flicker due to
       // an updated picture
       var bitmap: Bitmap? = null
