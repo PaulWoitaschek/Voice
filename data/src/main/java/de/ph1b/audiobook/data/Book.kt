@@ -53,18 +53,8 @@ data class Book(
    * @return the global position. It sums up the duration of all elapsed chapters plus the position
    * in the current chapter.
    */
-  fun globalPosition(): Int {
-    var globalPosition = 0
-    chapters.forEach {
-      if (it == currentChapter()) {
-        globalPosition += time
-        return globalPosition
-      } else {
-        globalPosition += it.duration
-      }
-    }
-    throw IllegalStateException("Current chapter was not found while looking up the global position")
-  }
+  fun globalPosition(): Int =
+      chapters.takeWhile { it != currentChapter() }.sumBy { it.duration } + time
 
   fun currentChapter() = chapters.first { it.file == currentFile }
 

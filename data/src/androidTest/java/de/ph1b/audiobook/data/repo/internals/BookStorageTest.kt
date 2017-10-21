@@ -3,6 +3,7 @@ package de.ph1b.audiobook.data.repo.internals
 import android.support.test.InstrumentationRegistry
 import android.support.v4.util.SparseArrayCompat
 import com.squareup.moshi.Moshi
+import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.ClearDbRule

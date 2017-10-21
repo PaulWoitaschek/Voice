@@ -36,6 +36,9 @@ dependencies {
 
   androidTestCompile libraries.support.testRunner
   androidTestCompile libraries.assertJ
+
+  testCompile libraries.assertJ
+  testCompile libraries.junit
 }
 
 
