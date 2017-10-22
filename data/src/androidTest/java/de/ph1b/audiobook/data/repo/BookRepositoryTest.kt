@@ -5,7 +5,7 @@ import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.InternalDb
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,6 +34,6 @@ class BookRepositoryTest {
     val firstBook = repo.activeBooks.first()
     val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
-    Assertions.assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
+    assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
   }
 }
