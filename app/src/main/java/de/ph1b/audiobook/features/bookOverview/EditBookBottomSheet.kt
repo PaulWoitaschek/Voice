@@ -17,9 +17,9 @@ import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.bottomCompoundDrawable
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
+import de.ph1b.audiobook.misc.endCompoundDrawable
 import de.ph1b.audiobook.misc.findCallback
-import de.ph1b.audiobook.misc.leftCompoundDrawable
-import de.ph1b.audiobook.misc.rightCompoundDrawable
+import de.ph1b.audiobook.misc.startCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
 import timber.log.Timber
@@ -80,12 +80,12 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   }
 
   private fun tintLeftDrawable(textView: TextView) {
-    val left = textView.leftCompoundDrawable()!!
+    val left = textView.startCompoundDrawable()!!
     val tinted = left.tinted(context.color(R.color.icon_color))
-    textView.setCompoundDrawables(
+    textView.setCompoundDrawablesRelative(
         tinted,
         textView.topCompoundDrawable(),
-        textView.rightCompoundDrawable(),
+        textView.endCompoundDrawable(),
         textView.bottomCompoundDrawable()
     )
   }

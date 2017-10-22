@@ -57,10 +57,10 @@ inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (In
   }
 }
 
-fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
-fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
-fun TextView.rightCompoundDrawable(): Drawable? = compoundDrawables[2]
-fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawables[3]
+fun TextView.startCompoundDrawable(): Drawable? = compoundDrawablesRelative[0]
+fun TextView.topCompoundDrawable(): Drawable? = compoundDrawablesRelative[1]
+fun TextView.endCompoundDrawable(): Drawable? = compoundDrawablesRelative[2]
+fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawablesRelative[3]
 
 /** if the recyclerview is computing layout, post the action. else just execute it */
 inline fun RecyclerView.postedIfComputingLayout(crossinline action: () -> Unit) {
