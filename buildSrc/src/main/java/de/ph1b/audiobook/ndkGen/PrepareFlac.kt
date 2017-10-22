@@ -9,7 +9,7 @@ import java.net.URI
 open class PrepareFlac : DefaultTask() {
 
   private val jniDir = File(project.projectDir, "src/main/jni")
-  private val version: String = VERSION_FLAC
+  private val version: String = DependencyVersions.VERSION_FLAC
 
   @TaskAction
   fun prepare() {

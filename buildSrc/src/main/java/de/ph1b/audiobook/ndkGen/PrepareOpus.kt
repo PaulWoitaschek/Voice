@@ -11,7 +11,7 @@ open class PrepareOpus : DefaultTask() {
   var ndkDir: String = ""
 
   private val jniDir = File(project.projectDir, "src/main/jni")
-  private val version = VERSION_OPUS
+  private val version = DependencyVersions.VERSION_OPUS
 
   @TaskAction
   fun prepare() {
@@ -56,7 +56,7 @@ open class PrepareOpus : DefaultTask() {
     logger.debug("Download")
     val dstFile = File(jniDir, "opus-$version.tar.gz")
     if (!dstFile.exists()) {
-      val uri = URI.create("https://ftp.osuosl.org/pub/xiph/releases/opus/opus-$version.tar.gz")
+      val uri = URI.create("https://archive.mozilla.org/pub/opus/opus-$version.tar.gz")
       download(uri, dstFile)
     }
     d("downloaded to $dstFile")
