@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.chapterreader.matroska
 
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class MatroskaChapterFlattenerTest {

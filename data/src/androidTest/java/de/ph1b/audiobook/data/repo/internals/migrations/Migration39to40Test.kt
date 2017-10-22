@@ -6,9 +6,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.query
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,7 +46,7 @@ class Migration39to40Test {
     Migration39to40().migrate(db)
 
     val times = db.query(BookTable.TABLE_NAME, listOf(BookTable.TIME)).mapRows { getInt(getColumnIndexOrThrow(BookTable.TIME)) }
-    assertThat(times).containsOnly(0, 5000)
+    assertThat(times).containsExactly(0, 5000)
   }
 
   @SuppressLint("SdCardPath")
@@ -80,16 +80,16 @@ class Migration39to40Test {
     const val ACTIVE = "BOOK_ACTIVE"
     const val TABLE_NAME = "tableBooks"
     private const val CREATE_TABLE = """
-      CREATE TABLE ${TABLE_NAME} (
-        ${ID} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${NAME} TEXT NOT NULL,
-        ${AUTHOR} TEXT,
-        ${CURRENT_MEDIA_PATH} TEXT NOT NULL,
-        ${PLAYBACK_SPEED} REAL NOT NULL,
-        ${ROOT} TEXT NOT NULL,
-        ${TIME} INTEGER NOT NULL,
-        ${TYPE} TEXT NOT NULL,
-        ${ACTIVE} INTEGER NOT NULL DEFAULT 1
+      CREATE TABLE $TABLE_NAME (
+        $ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $NAME TEXT NOT NULL,
+        $AUTHOR TEXT,
+        $CURRENT_MEDIA_PATH TEXT NOT NULL,
+        $PLAYBACK_SPEED REAL NOT NULL,
+        $ROOT TEXT NOT NULL,
+        $TIME INTEGER NOT NULL,
+        $TYPE TEXT NOT NULL,
+        $ACTIVE INTEGER NOT NULL DEFAULT 1
       )
     """
 

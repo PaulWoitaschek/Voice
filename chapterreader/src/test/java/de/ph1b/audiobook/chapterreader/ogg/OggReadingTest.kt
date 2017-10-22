@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.chapterreader.ogg
 
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggPage
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.OggStream
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.PackageSizeParser
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.concat
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.demuxOggStreams
 import de.ph1b.audiobook.chapterreader.ogg.oggReading.readOggPages
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.io.File
 import java.util.Random

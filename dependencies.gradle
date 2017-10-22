@@ -1,6 +1,5 @@
 ext.versions = [
     androidPlugin       : "2.3.3",
-    assertJ             : "1.7.1",
     buildTools          : "26.0.1",
     compileSdk          : 26,
     conductor           : "2.1.4",
@@ -33,6 +32,7 @@ ext.versions = [
     tapTarget           : "1.9.1",
     targetSdk           : 26,
     timber              : "4.5.1",
+    truth               : "0.36",
 ]
 
 ext.libraries = [
@@ -83,9 +83,9 @@ ext.libraries = [
     kotlinCoroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlinCoroutines",
 
     // testing
-    assertJ                : "org.assertj:assertj-core:$versions.assertJ",
     junit                  : "junit:junit:$versions.junit",
     mockito                : "org.mockito:mockito-core:$versions.mockito",
     mockitoKotlin          : "com.nhaarman:mockito-kotlin-kt1.1:$versions.mockitoKotlin",
-    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp"
+    okHttp                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
+    truth                  : "com.google.truth:truth:$versions.truth"
 ]

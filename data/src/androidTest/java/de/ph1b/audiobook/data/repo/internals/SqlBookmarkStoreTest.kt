@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import android.support.test.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.repo.ClearDbRule
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

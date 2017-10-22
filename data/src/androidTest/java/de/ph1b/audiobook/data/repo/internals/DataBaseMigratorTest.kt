@@ -5,12 +5,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import de.ph1b.audiobook.data.repo.internals.tables.BookmarkTable
 import de.ph1b.audiobook.data.repo.internals.tables.ChapterTable
-import org.assertj.core.api.Assertions
 import org.junit.Test
-
 
 class DataBaseMigratorTest {
 
@@ -25,13 +24,13 @@ class DataBaseMigratorTest {
     upgrade.upgrade(1, currentVersion)
 
     val bookTableQuery = helper.writableDatabase.query(BookTable.TABLE_NAME)
-    Assertions.assertThat(bookTableQuery.count).isEqualTo(0)
+    assertThat(bookTableQuery.count).isEqualTo(0)
 
     val bookmarkTableQuery = helper.writableDatabase.query(BookmarkTable.TABLE_NAME)
-    Assertions.assertThat(bookmarkTableQuery.count).isEqualTo(0)
+    assertThat(bookmarkTableQuery.count).isEqualTo(0)
 
     val chapterTableQuery = helper.writableDatabase.query(ChapterTable.TABLE_NAME)
-    Assertions.assertThat(chapterTableQuery.count).isEqualTo(0)
+    assertThat(chapterTableQuery.count).isEqualTo(0)
   }
 
   class TestSQLiteHelper(context: Context) : SQLiteOpenHelper(context, "testDb", null, 1) {

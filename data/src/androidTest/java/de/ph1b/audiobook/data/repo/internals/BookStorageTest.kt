@@ -2,12 +2,12 @@ package de.ph1b.audiobook.data.repo.internals
 
 import android.support.test.InstrumentationRegistry
 import android.support.v4.util.SparseArrayCompat
+import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.ClearDbRule
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -80,8 +80,10 @@ class BookStorageTest {
     val mock1WithUpdatedId = mock1.copy(id = firstInserted.id)
     val mock2WithUpdatedId = mock2.copy(id = secondInserted.id)
 
-    assertThat(containing).doesNotContain(mock1, mock2)
-    assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
+    assertThat(containing).doesNotContain(mock1)
+    assertThat(containing).doesNotContain(mock2)
+    assertThat(containing).contains(mock1WithUpdatedId)
+    assertThat(containing).contains(mock2WithUpdatedId)
   }
 
   @Test

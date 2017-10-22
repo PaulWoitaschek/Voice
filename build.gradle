@@ -33,7 +33,6 @@ allprojects {
     componentSelection { rules ->
       rules.all { ComponentSelection selection ->
         def candidate = selection.candidate
-        if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
         if (['rc', 'beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
         if (candidate.group == 'javax.annotation' && candidate.version == '1.0-20050927.133100') selection.reject()
       }
@@ -45,6 +44,7 @@ allprojects {
       force "com.squareup.okio:okio:1.13.0"
       force libraries.support.annotations
       force libraries.kotlinStdLib
+      force 'com.google.code.findbugs:jsr305:3.0.1'
     }
   }
 }

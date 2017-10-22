@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data
 
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.ChapterFactory
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class BookTest {
@@ -14,7 +14,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.globalPosition()).isEqualTo(0)
+    assertThat(book.globalPosition).isEqualTo(0)
   }
 
   @Test
@@ -24,7 +24,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.globalPosition()).isEqualTo(23)
+    assertThat(book.globalPosition).isEqualTo(23)
   }
 
   @Test
@@ -39,7 +39,7 @@ class BookTest {
         ),
         currentFileIndex = 3
     )
-    assertThat(book.globalPosition()).isEqualTo(123 + 234 + 345)
+    assertThat(book.globalPosition).isEqualTo(123 + 234 + 345)
   }
 
   @Test
@@ -54,6 +54,6 @@ class BookTest {
         ),
         currentFileIndex = 2
     )
-    assertThat(book.globalPosition()).isEqualTo(123 + 234 + 23)
+    assertThat(book.globalPosition).isEqualTo(123 + 234 + 23)
   }
 }

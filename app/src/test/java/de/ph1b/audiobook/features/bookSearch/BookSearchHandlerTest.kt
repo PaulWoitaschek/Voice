@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookSearch
 
 import android.annotation.SuppressLint
 import android.provider.MediaStore
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
@@ -10,7 +11,6 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

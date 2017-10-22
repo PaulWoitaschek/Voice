@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.chapterreader.mp4
 
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.io.File
 

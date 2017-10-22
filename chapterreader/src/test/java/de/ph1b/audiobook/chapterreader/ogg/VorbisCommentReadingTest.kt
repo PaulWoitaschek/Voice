@@ -1,10 +1,9 @@
 package de.ph1b.audiobook.chapterreader.ogg
 
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisComment
 import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisCommentParseException
 import de.ph1b.audiobook.chapterreader.ogg.vorbisComment.VorbisCommentReader
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown
 import org.junit.Test
 import java.io.ByteArrayInputStream
 
@@ -85,10 +84,12 @@ class VorbisCommentReadingTest {
     )
 
     val stream2 = ByteArrayInputStream(decodeHex("000000000200000005000000613d61736406000000617364617364"))
-    try {
+    val thrown = try {
       VorbisCommentReader.readComment(stream2)
-      failBecauseExceptionWasNotThrown(VorbisCommentParseException::class.java)
+      false
     } catch (_: VorbisCommentParseException) {
+      true
     }
+    assertThat(thrown).isTrue()
   }
 }

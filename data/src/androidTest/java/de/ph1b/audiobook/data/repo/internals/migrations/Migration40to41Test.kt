@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.int
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.query
 import de.ph1b.audiobook.data.repo.internals.update
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

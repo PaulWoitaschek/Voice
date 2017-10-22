@@ -109,12 +109,12 @@ dependencies {
   provided libraries.jsr250
 
   testCompile libraries.junit
-  testCompile libraries.assertJ
+  testCompile libraries.truth
   testCompile libraries.mockito
   testCompile libraries.mockitoKotlin
 
   androidTestCompile libraries.support.testRunner
-  androidTestCompile libraries.assertJ
+  androidTestCompile libraries.truth
 
   compile libraries.rxJava
   compile libraries.rxAndroid

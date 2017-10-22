@@ -32,7 +32,7 @@ dependencies {
 
   kapt libraries.daggerCompiler
 
-  testCompile libraries.assertJ
+  testCompile libraries.truth
   testCompile libraries.junit
 }
 

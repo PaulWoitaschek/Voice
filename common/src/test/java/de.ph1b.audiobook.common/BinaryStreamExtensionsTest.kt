@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.common
 
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream

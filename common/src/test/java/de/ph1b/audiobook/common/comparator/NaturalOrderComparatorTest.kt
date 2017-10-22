@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.common.comparator
 
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

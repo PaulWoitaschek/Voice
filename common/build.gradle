@@ -26,7 +26,7 @@ dependencies {
   compile libraries.kotlinStdLib
   compile libraries.support.appCompat
 
-  testCompile libraries.assertJ
+  testCompile libraries.truth
   testCompile libraries.junit
 }
 

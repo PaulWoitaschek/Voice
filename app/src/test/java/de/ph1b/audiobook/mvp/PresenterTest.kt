@@ -1,12 +1,10 @@
 package de.ph1b.audiobook.mvp
 
+import com.google.common.truth.Truth.assertThat
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-
-//import org.assertj.core.api.Assertions.assertThat
 
 
 class PresenterTest {
@@ -23,7 +21,7 @@ class PresenterTest {
     presenter.attach(View)
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
-    assertThatDisposable(disposable).isNotDisposed()
+    disposable.assert().isNotDisposed()
   }
 
   @Test
@@ -32,21 +30,21 @@ class PresenterTest {
     presenter.detach()
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
-    assertThatDisposable(disposable).isDisposed()
+    disposable.assert().isDisposed()
   }
 
   @Test
   fun addBeforeAttachDisposes() {
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
-    assertThatDisposable(disposable).isDisposed()
+    disposable.assert().isDisposed()
   }
 
   @Test
   fun replaceBeforeAttachDisposes() {
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
-    assertThatDisposable(disposable).isDisposed()
+    disposable.assert().isDisposed()
   }
 
   @Test
@@ -55,7 +53,7 @@ class PresenterTest {
     val disposable = Disposables.empty()
     presenter.disposeOnDetach(disposable)
     presenter.detach()
-    assertThatDisposable(disposable).isDisposed()
+    disposable.assert().isDisposed()
   }
 
   @Test

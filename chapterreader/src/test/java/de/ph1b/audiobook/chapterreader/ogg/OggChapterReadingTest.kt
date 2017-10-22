@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.chapterreader.ogg
 
+import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.chapterreader.NoOpLogger
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.io.File

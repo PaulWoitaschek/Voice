@@ -35,9 +35,9 @@ dependencies {
   kapt libraries.daggerCompiler
 
   androidTestCompile libraries.support.testRunner
-  androidTestCompile libraries.assertJ
+  androidTestCompile libraries.truth
 
-  testCompile libraries.assertJ
+  testCompile libraries.truth
   testCompile libraries.junit
 }
 
