@@ -77,7 +77,7 @@ constructor(
     val showFolderWarning = Observables.combineLatest(bookAdder.scannerActive, repo.booksStream()) { scannerActive, books ->
       books.isEmpty() && !scannerActive
     }.filter { it }
-        .firstOrError()
+        .take(1)
     showFolderWarning
         .subscribe { _ -> view.showNoFolderWarning() }
         .disposeOnDetach()
