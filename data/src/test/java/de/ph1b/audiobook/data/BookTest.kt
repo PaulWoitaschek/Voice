@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data
 
-import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.ChapterFactory
 import org.junit.Test
@@ -14,7 +13,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.position).isEqualTo(0)
+    book.assertThat().positionIs(0)
   }
 
   @Test
@@ -24,7 +23,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.position).isEqualTo(23)
+    book.assertThat().positionIs(23)
   }
 
   @Test
@@ -39,7 +38,7 @@ class BookTest {
         ),
         currentFileIndex = 3
     )
-    assertThat(book.position).isEqualTo(123 + 234 + 345)
+    book.assertThat().positionIs(123 + 234 + 345)
   }
 
   @Test
@@ -54,7 +53,7 @@ class BookTest {
         ),
         currentFileIndex = 2
     )
-    assertThat(book.position).isEqualTo(123 + 234 + 23)
+    book.assertThat().positionIs(123 + 234 + 23)
   }
 
   @Test
@@ -68,7 +67,7 @@ class BookTest {
         )
     )
 
-    assertThat(book.duration).isEqualTo(123 + 234 + 345 + 456)
+    book.assertThat().durationIs(123 + 234 + 345 + 456)
   }
 
   @Test
@@ -80,8 +79,7 @@ class BookTest {
         chapters = listOf(ch1, ch2, ch3),
         currentFileIndex = 1
     )
-
-    assertThat(book.currentChapter).isEqualTo(ch2)
+    book.assertThat().currentChapterIs(ch2)
   }
 
   @Test
@@ -94,7 +92,7 @@ class BookTest {
         currentFileIndex = 1
     )
 
-    assertThat(book.currentChapterIndex).isEqualTo(1)
+    book.assertThat().currentChapterIndexIs(1)
   }
 
   @Test
@@ -107,7 +105,7 @@ class BookTest {
         currentFileIndex = 1
     )
 
-    assertThat(book.nextChapter).isEqualTo(ch3)
+    book.assertThat().nextChapterIs(ch3)
   }
 
   @Test
@@ -120,7 +118,7 @@ class BookTest {
         currentFileIndex = 2
     )
 
-    assertThat(book.nextChapter).isNull()
+    book.assertThat().nextChapterIs(null)
   }
 
   @Test
@@ -132,7 +130,7 @@ class BookTest {
         chapters = listOf(ch1, ch2, ch3),
         currentFileIndex = 1
     )
-    assertThat(book.previousChapter).isEqualTo(ch1)
+    book.assertThat().previousChapterIs(ch1)
   }
 
   @Test
@@ -144,7 +142,6 @@ class BookTest {
         chapters = listOf(ch1, ch2, ch3),
         currentFileIndex = 0
     )
-
-    assertThat(book.previousChapter).isNull()
+    book.assertThat().previousChapterIs(null)
   }
 }
