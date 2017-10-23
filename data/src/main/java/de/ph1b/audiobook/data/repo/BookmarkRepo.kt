@@ -25,7 +25,7 @@ class BookmarkRepo
   }
 
   suspend fun addBookmarkAtBookPosition(book: Book, title: String): Bookmark = run(IO) {
-    val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
+    val addedBookmark = Bookmark(book.currentChapter.file, title, book.time)
     Timber.v("Added bookmark=$addedBookmark")
     addBookmark(addedBookmark)
   }

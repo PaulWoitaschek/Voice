@@ -137,12 +137,12 @@ class BookShelfAdapter(
       super.bind(book)
 
       val globalPosition = book.globalPosition
-      val globalDuration = book.globalDuration
-      val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
+      val totalDuration = book.totalDuration
+      val progress = Math.round(100f * globalPosition.toFloat() / totalDuration.toFloat())
 
       leftTime.text = formatTime(globalPosition)
       progressBar.progress = progress
-      rightTime.text = formatTime(globalDuration)
+      rightTime.text = formatTime(totalDuration)
     }
   }
 

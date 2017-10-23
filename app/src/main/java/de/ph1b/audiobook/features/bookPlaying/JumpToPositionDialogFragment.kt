@@ -29,7 +29,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
     // init
     val book = repo.bookById(currentBookIdPref.value)!!
-    val duration = book.currentChapter().duration
+    val duration = book.currentChapter.duration
     val position = book.time
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()
     val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
@@ -81,7 +81,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
           val h = binding.numberHour.value
           val m = binding.numberMinute.value
           val newPosition = (m + 60 * h) * 60 * 1000
-          playerController.changePosition(newPosition, book.currentChapter().file)
+          playerController.changePosition(newPosition, book.currentChapter.file)
         }
         .positiveText(R.string.dialog_confirm)
         .negativeText(R.string.dialog_cancel)
