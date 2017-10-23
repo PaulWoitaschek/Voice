@@ -89,7 +89,7 @@ class BookmarkPresenter @Inject constructor(
   fun addBookmark(name: String) {
     launch(UI) {
       val book = repo.bookById(bookId) ?: return@launch
-      val title = if (name.isEmpty()) book.currentChapter().name else name
+      val title = if (name.isEmpty()) book.currentChapter.name else name
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
       bookmarks.add(addedBookmark)
       if (attached) renderView()

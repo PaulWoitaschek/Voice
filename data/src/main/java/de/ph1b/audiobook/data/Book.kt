@@ -44,8 +44,23 @@ data class Book(
   /** The transition name for the cover transition. */
   val coverTransitionName = COVER_TRANSITION_PREFIX + id
 
-  /** The global duration. It sums up the duration of all chapters. */
-  val globalDuration: Int by lazy {
+  val currentChapter = chapters.first { it.file == currentFile }
+
+  val currentChapterIndex = chapters.indexOf(currentChapter)
+
+  val nextChapter = chapters.getOrNull(currentChapterIndex + 1)
+
+  val previousChapter = chapters.getOrNull(currentChapterIndex - 1)
+
+  fun nextChapterMarkPosition(): Int? {
+    currentChapter.marks.forEachIndexed { _, start, _ ->
+      if (start > time) return start
+    }
+    return null
+  }
+
+  /** The total duration. It sums up the duration of all chapters. */
+  val totalDuration: Int by lazy {
     chapters.sumBy { it.duration }
   }
 
@@ -53,22 +68,7 @@ data class Book(
    * @return the global position. It sums up the duration of all elapsed chapters plus the position
    * in the current chapter.
    */
-  val globalPosition: Int = chapters.takeWhile { it != currentChapter() }.sumBy { it.duration } + time
-
-  fun currentChapter() = chapters.first { it.file == currentFile }
-
-  fun nextChapterMarkPosition(): Int? {
-    currentChapter().marks.forEachIndexed { _, start, _ ->
-      if (start > time) return start
-    }
-    return null
-  }
-
-  fun nextChapter() = chapters.getOrNull(currentChapterIndex() + 1)
-
-  fun currentChapterIndex() = chapters.indexOf(currentChapter())
-
-  fun previousChapter() = chapters.getOrNull(currentChapterIndex() - 1)
+  val globalPosition: Int = chapters.takeWhile { it != currentChapter }.sumBy { it.duration } + time
 
   fun coverFile(context: Context): File {
     val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {

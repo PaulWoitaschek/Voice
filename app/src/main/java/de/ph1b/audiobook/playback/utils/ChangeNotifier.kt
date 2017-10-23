@@ -77,7 +77,7 @@ class ChangeNotifier @Inject constructor(
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   fun notify(what: Type, book: Book, forAuto: Boolean = false) {
-    val currentChapter = book.currentChapter()
+    val currentChapter = book.currentChapter
     val playState = playStateManager.playState
 
     val bookName = book.name
@@ -89,7 +89,7 @@ class ChangeNotifier @Inject constructor(
 
     val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
         .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
-        .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter()).toLong())
+        .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter).toLong())
         .build()
 
     mediaSession.setPlaybackState(playbackState)
@@ -117,7 +117,7 @@ class ChangeNotifier @Inject constructor(
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
           .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
           .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
-          .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
+          .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.currentChapterIndex + 1).toLong())
           .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
           .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
           .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)

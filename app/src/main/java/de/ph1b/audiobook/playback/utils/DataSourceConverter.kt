@@ -36,5 +36,5 @@ class DataSourceConverter
       it.toMediaSource()
     }
     ConcatenatingMediaSource(*allSources.toTypedArray())
-  } else book.currentChapter().toMediaSource()
+  } else book.currentChapter.toMediaSource()
 }

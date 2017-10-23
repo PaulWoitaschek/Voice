@@ -137,7 +137,7 @@ constructor(
       bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
-      player.seekTo(book.currentChapterIndex(), book.time.toLong())
+      player.seekTo(book.currentChapterIndex, book.time.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
       loudnessGain.gainmB = book.loudnessGain
       state = PlayerState.PAUSED
@@ -208,7 +208,7 @@ constructor(
   }
 
   private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
-    val previousChapter = book.previousChapter()
+    val previousChapter = book.previousChapter
     if (player.currentPosition > 2000 || previousChapter == null) {
       Timber.i("seekTo beginning")
       changePosition(0)
@@ -224,7 +224,7 @@ constructor(
   }
 
   private fun previousByMarks(book: Book): Boolean {
-    val marks = book.currentChapter().marks
+    val marks = book.currentChapter.marks
     marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
@@ -277,7 +277,7 @@ constructor(
 
               // now try to find the current chapter mark and make sure we don't auto-rewind
               // to a previous mark
-              val chapterMarks = it.currentChapter().marks
+              val chapterMarks = it.currentChapter.marks
               chapterMarks.forEachIndexed(reversed = true) findStartOfMark@ { index, startOfMark, _ ->
                 if (startOfMark <= currentPosition) {
                   val next = chapterMarks.keyAtOrNull(index + 1)
@@ -306,7 +306,7 @@ constructor(
 
     val nextChapterMarkPosition = book.nextChapterMarkPosition()
     if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)
-    else book.nextChapter()?.let { changePosition(0, it.file) }
+    else book.nextChapter?.let { changePosition(0, it.file) }
   }
 
   /** Changes the current position in book. */
@@ -319,7 +319,7 @@ constructor(
     bookSubject.value?.let {
       val copy = it.copy(time = time, currentFile = changedFile ?: it.currentFile)
       bookSubject.onNext(copy)
-      player.seekTo(copy.currentChapterIndex(), time.toLong())
+      player.seekTo(copy.currentChapterIndex, time.toLong())
     }
   }
 

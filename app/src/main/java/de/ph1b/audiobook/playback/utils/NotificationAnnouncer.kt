@@ -111,11 +111,10 @@ class NotificationAnnouncer
     if (book == null) return this
 
     val chapters = book.chapters
-    val currentChapter = book.currentChapter()
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.
-      setContentInfo("${(chapters.indexOf(currentChapter) + 1)}/${chapters.size}")
-      setContentText(currentChapter.name)
+      setContentInfo("${(book.currentChapterIndex + 1)}/${chapters.size}")
+      setContentText(book.currentChapter.name)
     }
     return this
   }
