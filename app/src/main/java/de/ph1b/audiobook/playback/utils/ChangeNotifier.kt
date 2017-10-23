@@ -83,7 +83,7 @@ class ChangeNotifier @Inject constructor(
     val bookName = book.name
     val chapterName = currentChapter.name
     val author = book.author
-    val position = book.time
+    val position = book.positionInChapter
 
     context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 

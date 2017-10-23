@@ -30,7 +30,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     // init
     val book = repo.bookById(currentBookIdPref.value)!!
     val duration = book.currentChapter.duration
-    val position = book.time
+    val position = book.positionInChapter
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()
     val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
     if (biggestHour == 0) {

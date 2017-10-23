@@ -71,8 +71,8 @@ class BookPlayController(
     val dataForCurrentFile = data.filter { it.file == book.currentFile }
 
     // find closest position
-    val currentChapter = dataForCurrentFile.firstOrNull { book.time >= it.start && book.time < it.stop }
-        ?: dataForCurrentFile.firstOrNull { book.time == it.stop }
+    val currentChapter = dataForCurrentFile.firstOrNull { book.positionInChapter >= it.start && book.positionInChapter < it.stop }
+        ?: dataForCurrentFile.firstOrNull { book.positionInChapter == it.stop }
         ?: dataForCurrentFile.first()
     this.currentChapter = currentChapter
 
@@ -83,7 +83,7 @@ class BookPlayController(
     binding.maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
-    val progress = book.time - currentChapter.start
+    val progress = book.positionInChapter - currentChapter.start
     if (!binding.seekBar.isPressed) {
       binding.seekBar.progress = progress
       binding.playedTime.text = formatTime(progress, duration)

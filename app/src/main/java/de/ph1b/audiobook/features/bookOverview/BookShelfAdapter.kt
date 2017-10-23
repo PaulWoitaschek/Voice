@@ -63,7 +63,7 @@ class BookShelfAdapter(
           override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = books[oldItemPosition]
             val newItem = newBooks[newItemPosition]
-            return oldItem.id == newItem.id && oldItem.globalPosition == newItem.globalPosition && oldItem.name == newItem.name
+            return oldItem.id == newItem.id && oldItem.position == newItem.position && oldItem.name == newItem.name
           }
 
           override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -136,8 +136,8 @@ class BookShelfAdapter(
     override fun bind(book: Book) {
       super.bind(book)
 
-      val globalPosition = book.globalPosition
-      val totalDuration = book.totalDuration
+      val globalPosition = book.position
+      val totalDuration = book.duration
       val progress = Math.round(100f * globalPosition.toFloat() / totalDuration.toFloat())
 
       leftTime.text = formatTime(globalPosition)

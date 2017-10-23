@@ -14,7 +14,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.globalPosition).isEqualTo(0)
+    assertThat(book.position).isEqualTo(0)
   }
 
   @Test
@@ -24,7 +24,7 @@ class BookTest {
         chapters = listOf(ChapterFactory.create(duration = 12345)),
         currentFileIndex = 0
     )
-    assertThat(book.globalPosition).isEqualTo(23)
+    assertThat(book.position).isEqualTo(23)
   }
 
   @Test
@@ -39,7 +39,7 @@ class BookTest {
         ),
         currentFileIndex = 3
     )
-    assertThat(book.globalPosition).isEqualTo(123 + 234 + 345)
+    assertThat(book.position).isEqualTo(123 + 234 + 345)
   }
 
   @Test
@@ -54,7 +54,7 @@ class BookTest {
         ),
         currentFileIndex = 2
     )
-    assertThat(book.globalPosition).isEqualTo(123 + 234 + 23)
+    assertThat(book.position).isEqualTo(123 + 234 + 23)
   }
 
   @Test
@@ -68,7 +68,7 @@ class BookTest {
         )
     )
 
-    assertThat(book.totalDuration).isEqualTo(123 + 234 + 345 + 456)
+    assertThat(book.duration).isEqualTo(123 + 234 + 345 + 456)
   }
 
   @Test
@@ -132,7 +132,6 @@ class BookTest {
         chapters = listOf(ch1, ch2, ch3),
         currentFileIndex = 1
     )
-
     assertThat(book.previousChapter).isEqualTo(ch1)
   }
 
@@ -148,5 +147,4 @@ class BookTest {
 
     assertThat(book.previousChapter).isNull()
   }
-
 }

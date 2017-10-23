@@ -221,7 +221,7 @@ class BookAdder
           type = type,
           author = result.author,
           currentFile = firstChapterFile,
-          time = 0,
+          positionInChapter = 0,
           name = bookName,
           chapters = newChapters,
           root = bookRoot
@@ -233,10 +233,10 @@ class BookAdder
       val oldCurrentFileValid = newChapters.any { it.file == oldCurrentFile }
 
       // if the file is not valid, update time and position
-      val time = if (oldCurrentFileValid) orphanedBook.time else 0
+      val time = if (oldCurrentFileValid) orphanedBook.positionInChapter else 0
       val currentFile = if (oldCurrentFileValid) orphanedBook.currentFile else newChapters.first().file
 
-      orphanedBook = orphanedBook.copy(time = time, currentFile = currentFile, chapters = newChapters)
+      orphanedBook = orphanedBook.copy(positionInChapter = time, currentFile = currentFile, chapters = newChapters)
 
       // now finally un-hide this book
       handler.postBlocking { repo.revealBook(orphanedBook as Book) }
@@ -244,7 +244,7 @@ class BookAdder
   }
 
   /** Updates a book. Adds the new chapters to the book and corrects the
-   * [Book.currentFile] and [Book.time]. **/
+   * [Book.currentFile] and [Book.positionInChapter]. **/
   private fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
     var bookToUpdate = bookExisting
     val bookHasChanged = bookToUpdate.chapters != newChapters
@@ -253,11 +253,11 @@ class BookAdder
       // check if the chapter set as the current still exists
       var currentPathIsGone = true
       val currentFile = bookToUpdate.currentFile
-      val currentTime = bookToUpdate.time
+      val currentTime = bookToUpdate.positionInChapter
       newChapters.forEach {
         if (it.file == currentFile) {
           if (it.duration < currentTime) {
-            bookToUpdate = bookToUpdate.copy(time = 0)
+            bookToUpdate = bookToUpdate.copy(positionInChapter = 0)
           }
           currentPathIsGone = false
         }
@@ -268,7 +268,7 @@ class BookAdder
       bookToUpdate = bookToUpdate.copy(
           chapters = newChapters,
           currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
-          time = if (currentPathIsGone) 0 else bookToUpdate.time
+          positionInChapter = if (currentPathIsGone) 0 else bookToUpdate.positionInChapter
       )
 
       handler.postBlocking { repo.updateBook(bookToUpdate) }

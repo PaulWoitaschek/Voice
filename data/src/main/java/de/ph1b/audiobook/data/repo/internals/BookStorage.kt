@@ -117,7 +117,7 @@ class BookStorage
     put(BookTable.CURRENT_MEDIA_PATH, currentFile.absolutePath)
     put(BookTable.PLAYBACK_SPEED, playbackSpeed)
     put(BookTable.ROOT, root)
-    put(BookTable.TIME, time)
+    put(BookTable.TIME, positionInChapter)
     put(BookTable.TYPE, type.name)
     put(BookTable.LOUDNESS_GAIN, loudnessGain)
   }

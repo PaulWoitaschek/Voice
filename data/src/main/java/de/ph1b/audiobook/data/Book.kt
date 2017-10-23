@@ -12,7 +12,7 @@ data class Book(
     val type: Type,
     val author: String?,
     val currentFile: File,
-    val time: Int,
+    val positionInChapter: Int,
     val name: String,
     val chapters: List<Chapter>,
     val playbackSpeed: Float = 1F,
@@ -20,55 +20,29 @@ data class Book(
     val loudnessGain: Int = 0
 ) : Comparable<Book> {
 
-  override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
-
-  companion object {
-    const val ID_UNKNOWN = -1L
-    const val SPEED_MAX = 2.5F
-    const val SPEED_MIN = 0.5F
-  }
-
-  private val COVER_TRANSITION_PREFIX = "bookCoverTransition_"
-
   init {
-    require(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= ${SPEED_MIN}" })
-    require(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= ${SPEED_MAX}" }
-    require(chapters.isNotEmpty(), { "chapters must not be empty" })
-    require(chapters.find { it.file == currentFile } != null, { "$chapters must contain current $currentFile" })
+    require(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
+    require(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
     require(name.isNotEmpty(), { "name must not be empty" })
     require(root.isNotEmpty(), { "root must not be empty" })
-    require(time >= 0) { "time must not be negative" }
+    require(positionInChapter >= 0) { "positionInChapter must not be negative" }
     require(loudnessGain >= 0) { "loudnessGain must not be negative" }
   }
 
-  /** The transition name for the cover transition. */
-  val coverTransitionName = COVER_TRANSITION_PREFIX + id
-
+  val coverTransitionName = "bookCoverTransition_$id"
   val currentChapter = chapters.first { it.file == currentFile }
-
   val currentChapterIndex = chapters.indexOf(currentChapter)
-
   val nextChapter = chapters.getOrNull(currentChapterIndex + 1)
-
   val previousChapter = chapters.getOrNull(currentChapterIndex - 1)
+  val position: Int = chapters.takeWhile { it != currentChapter }.sumBy { it.duration } + positionInChapter
+  val duration = chapters.sumBy { it.duration }
 
-  fun nextChapterMarkPosition(): Int? {
+  val nextChapterMarkPosition: Int? by lazy {
     currentChapter.marks.forEachIndexed { _, start, _ ->
-      if (start > time) return start
+      if (start > positionInChapter) return@lazy start
     }
-    return null
+    null
   }
-
-  /** The total duration. It sums up the duration of all chapters. */
-  val totalDuration: Int by lazy {
-    chapters.sumBy { it.duration }
-  }
-
-  /**
-   * @return the global position. It sums up the duration of all elapsed chapters plus the position
-   * in the current chapter.
-   */
-  val globalPosition: Int = chapters.takeWhile { it != currentChapter }.sumBy { it.duration } + time
 
   fun coverFile(context: Context): File {
     val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
@@ -91,10 +65,18 @@ data class Book(
     return coverFile
   }
 
+  override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
+
   enum class Type {
     COLLECTION_FOLDER,
     COLLECTION_FILE,
     SINGLE_FOLDER,
     SINGLE_FILE
+  }
+
+  companion object {
+    const val ID_UNKNOWN = -1L
+    const val SPEED_MAX = 2.5F
+    const val SPEED_MIN = 0.5F
   }
 }

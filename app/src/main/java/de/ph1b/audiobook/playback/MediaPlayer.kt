@@ -88,7 +88,7 @@ constructor(
       Timber.i("onPositionDiscontinuity with currentPos=$position")
       bookSubject.value?.let {
         val index = player.currentWindowIndex
-        bookSubject.onNext(it.copy(time = position, currentFile = it.chapters[index].file))
+        bookSubject.onNext(it.copy(positionInChapter = position, currentFile = it.chapters[index].file))
       }
     }
 
@@ -124,7 +124,7 @@ constructor(
         val index = player.currentWindowIndex
         val time = it.coerceAtLeast(0)
             .toInt()
-        val copy = book.copy(time = time, currentFile = book.chapters[index].file)
+        val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
         bookSubject.onNext(copy)
       }
     }
@@ -137,7 +137,7 @@ constructor(
       bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
-      player.seekTo(book.currentChapterIndex, book.time.toLong())
+      player.seekTo(book.currentChapterIndex, book.positionInChapter.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
       loudnessGain.gainmB = book.loudnessGain
       state = PlayerState.PAUSED
@@ -226,8 +226,8 @@ constructor(
   private fun previousByMarks(book: Book): Boolean {
     val marks = book.currentChapter.marks
     marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
-      if (book.time >= startOfMark) {
-        val diff = book.time - startOfMark
+      if (book.positionInChapter >= startOfMark) {
+        val diff = book.positionInChapter - startOfMark
         if (diff > 2000) {
           changePosition(startOfMark)
           return true
@@ -304,7 +304,7 @@ constructor(
     val book = bookSubject.value
         ?: return
 
-    val nextChapterMarkPosition = book.nextChapterMarkPosition()
+    val nextChapterMarkPosition = book.nextChapterMarkPosition
     if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)
     else book.nextChapter?.let { changePosition(0, it.file) }
   }
@@ -317,7 +317,7 @@ constructor(
       return
 
     bookSubject.value?.let {
-      val copy = it.copy(time = time, currentFile = changedFile ?: it.currentFile)
+      val copy = it.copy(positionInChapter = time, currentFile = changedFile ?: it.currentFile)
       bookSubject.onNext(copy)
       player.seekTo(copy.currentChapterIndex, time.toLong())
     }

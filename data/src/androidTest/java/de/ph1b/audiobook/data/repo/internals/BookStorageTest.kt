@@ -118,7 +118,7 @@ class BookStorageTest {
         type = Book.Type.SINGLE_FILE,
         author = if (Random().nextBoolean()) "lkajsdflkj" else null,
         currentFile = newChapters.last().file,
-        time = 135135135,
+        positionInChapter = 135135135,
         name = "252587245",
         chapters = newChapters,
         playbackSpeed = 1.7f,

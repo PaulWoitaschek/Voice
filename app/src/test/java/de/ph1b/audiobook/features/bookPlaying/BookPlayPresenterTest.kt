@@ -100,7 +100,7 @@ class BookPlayPresenterTest {
   @Test
   fun bookStream() {
     val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
-    val bookWithCorrectIdAndChangedTime = bookWithCorrectId.copy(time = 123)
+    val bookWithCorrectIdAndChangedTime = bookWithCorrectId.copy(positionInChapter = 123)
     val bookWithFalseId = BookFactory.create(id = 50)
     val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
     val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
