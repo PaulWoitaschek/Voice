@@ -34,7 +34,7 @@ data class Book(
   val currentChapterIndex = chapters.indexOf(currentChapter)
   val nextChapter = chapters.getOrNull(currentChapterIndex + 1)
   val previousChapter = chapters.getOrNull(currentChapterIndex - 1)
-  val position: Int = chapters.takeWhile { it != currentChapter }.sumBy { it.duration } + positionInChapter
+  val position: Int = chapters.take(currentChapterIndex).sumBy { it.duration } + positionInChapter
   val duration = chapters.sumBy { it.duration }
 
   val nextChapterMarkPosition: Int? by lazy {
