@@ -25,7 +25,7 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-  compile libraries.exoPlayerCore
+  implementation libraries.exoPlayerCore
 }
 
 task(prepareFlac, type: PrepareFlac)

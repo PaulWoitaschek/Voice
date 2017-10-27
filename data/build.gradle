@@ -24,21 +24,21 @@ android {
 }
 
 dependencies {
-  compile project(":common")
-  compile libraries.support.appCompat
-  compile libraries.timber
-  compile libraries.kotlinCoroutines
-  compile libraries.rxJava
-  compile libraries.moshi
+  implementation project(":common")
+  implementation libraries.support.appCompat
+  implementation libraries.timber
+  implementation libraries.kotlinCoroutines
+  implementation libraries.rxJava
+  implementation libraries.moshi
 
-  compile libraries.dagger
+  implementation libraries.dagger
   kapt libraries.daggerCompiler
 
-  androidTestCompile libraries.support.testRunner
-  androidTestCompile libraries.truth
+  androidTestImplementation libraries.support.testRunner
+  androidTestImplementation libraries.truth
 
-  testCompile libraries.truth
-  testCompile libraries.junit
+  testImplementation libraries.truth
+  testImplementation libraries.junit
 }
 
 

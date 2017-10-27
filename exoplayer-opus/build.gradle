@@ -37,7 +37,7 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-  compile libraries.exoPlayerCore
+  implementation libraries.exoPlayerCore
 }
 
 task(prepareOpus, type: PrepareOpus) {

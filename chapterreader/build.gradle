@@ -23,17 +23,17 @@ android {
 }
 
 dependencies {
-  compile project(":common")
+  implementation project(":common")
 
-  compile libraries.kotlinStdLib
-  compile libraries.dagger
-  compile libraries.jebml
-  compile libraries.slf4
+  implementation libraries.kotlinStdLib
+  implementation libraries.dagger
+  implementation libraries.jebml
+  implementation libraries.slf4
 
   kapt libraries.daggerCompiler
 
-  testCompile libraries.truth
-  testCompile libraries.junit
+  testImplementation libraries.truth
+  testImplementation libraries.junit
 }
 
 targetCompatibility = '1.7'

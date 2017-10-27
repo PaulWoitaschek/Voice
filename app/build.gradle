@@ -83,66 +83,66 @@ android {
 }
 
 dependencies {
-  compile project(":core")
-  compile project(":common")
-  compile project(":chapterreader")
-  compile project(":data")
+  implementation project(":core")
+  implementation project(":common")
+  implementation project(":chapterreader")
+  implementation project(":data")
 
   kapt libraries.dataBindingCompiler
 
-  compile libraries.support.appCompat
-  compile libraries.support.recyclerView
-  compile libraries.support.design
-  compile libraries.support.transitions
-  compile libraries.support.constraintLayout
+  implementation libraries.support.appCompat
+  implementation libraries.support.recyclerView
+  implementation libraries.support.design
+  implementation libraries.support.transitions
+  implementation libraries.support.constraintLayout
 
-  compile libraries.picasso
+  implementation libraries.picasso
 
-  compile libraries.materialDialogs
-  compile libraries.materialCab
+  implementation libraries.materialDialogs
+  implementation libraries.materialCab
 
-  compile libraries.floatingActionButton
+  implementation libraries.floatingActionButton
 
   proprietaryCompile(libraries.crashlytics) {
     transitive = true
   }
 
-  compile libraries.dagger
-  compile libraries.daggerAndroidSupport
+  implementation libraries.dagger
+  implementation libraries.daggerAndroidSupport
   kapt libraries.daggerCompiler
   kapt libraries.daggerAndroidProcessor
   provided libraries.jsr250
 
-  testCompile libraries.junit
-  testCompile libraries.truth
-  testCompile libraries.mockito
-  testCompile libraries.mockitoKotlin
+  testImplementation libraries.junit
+  testImplementation libraries.truth
+  testImplementation libraries.mockito
+  testImplementation libraries.mockitoKotlin
 
-  androidTestCompile libraries.support.testRunner
-  androidTestCompile libraries.truth
+  androidTestImplementation libraries.support.testRunner
+  androidTestImplementation libraries.truth
 
-  compile libraries.rxJava
-  compile libraries.rxAndroid
-  compile libraries.rxInterop
-  compile libraries.rxPreferences
+  implementation libraries.rxJava
+  implementation libraries.rxAndroid
+  implementation libraries.rxInterop
+  implementation libraries.rxPreferences
 
-  compile libraries.kotlinStdLib
-  compile libraries.kotlinCoroutines
-  compile libraries.kotlinCoroutinesAndroid
+  implementation libraries.kotlinStdLib
+  implementation libraries.kotlinCoroutines
+  implementation libraries.kotlinCoroutinesAndroid
 
-  compile libraries.timber
+  implementation libraries.timber
 
-  compile libraries.exoPlayerCore
-  compile project(":exoplayer-flac")
-  compile project(":exoplayer-opus")
+  implementation libraries.exoPlayerCore
+  implementation project(":exoplayer-flac")
+  implementation project(":exoplayer-opus")
 
-  compile libraries.conductor.base
-  compile libraries.conductor.support
-  compile libraries.conductor.lifecycle
+  implementation libraries.conductor.base
+  implementation libraries.conductor.support
+  implementation libraries.conductor.lifecycle
 
-  compile libraries.moshi
+  implementation libraries.moshi
 
-  compile libraries.tapTarget
+  implementation libraries.tapTarget
 }
 
 // task that is an alias for f-droid

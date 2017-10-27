@@ -23,11 +23,11 @@ android {
 
 
 dependencies {
-  compile libraries.kotlinStdLib
-  compile libraries.support.appCompat
+  implementation libraries.kotlinStdLib
+  implementation libraries.support.appCompat
 
-  testCompile libraries.truth
-  testCompile libraries.junit
+  testImplementation libraries.truth
+  testImplementation libraries.junit
 }
 
 targetCompatibility = '1.7'

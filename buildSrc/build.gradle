@@ -11,14 +11,13 @@ buildscript {
   }
 }
 
-
 repositories {
   jcenter()
 }
 
 dependencies {
-  compile libraries.okHttp
-  compile libraries.kotlinStdLib
+  implementation libraries.okHttp
+  implementation libraries.kotlinStdLib
 }
 
 apply plugin: "kotlin"
