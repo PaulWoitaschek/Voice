@@ -39,11 +39,11 @@ class EditCoverDialogFragment : DialogFragment() {
 
     val picasso = Picasso.with(context)
 
-    val binding = DialogCoverEditBinding.inflate(activity.layoutInflater)
+    val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
 
     // init values
-    val bookId = arguments.getLong(NI_BOOK_ID)
-    val uri = Uri.parse(arguments.getString(NI_COVER_URI))
+    val bookId = arguments!!.getLong(NI_BOOK_ID)
+    val uri = Uri.parse(arguments!!.getString(NI_COVER_URI))
     val book = repo.bookById(bookId)!!
 
     binding.coverReplacement.visible = true
@@ -62,7 +62,7 @@ class EditCoverDialogFragment : DialogFragment() {
         }
         )
 
-    val dialog = MaterialDialog.Builder(context)
+    val dialog = MaterialDialog.Builder(context!!)
         .customView(binding.root, false)
         .title(R.string.cover)
         .positiveText(R.string.dialog_confirm)

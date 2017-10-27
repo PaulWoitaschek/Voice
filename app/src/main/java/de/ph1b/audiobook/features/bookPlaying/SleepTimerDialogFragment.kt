@@ -65,7 +65,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    binding = DialogSleepBinding.inflate(activity.layoutInflater)
+    binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
 
     // restore or get fresh
     selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: sleepTimePref.value
@@ -95,7 +95,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
       true
     }
 
-    val bookId = arguments.getLong(NI_BOOK_ID)
+    val bookId = arguments!!.getLong(NI_BOOK_ID)
     val book = repo.bookById(bookId) ?: return super.onCreateDialog(savedInstanceState)
 
     binding.fab.setOnClickListener {
@@ -131,7 +131,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
       binding.shakeToResetSwitch.visible = false
     }
 
-    return BottomSheetDialog(context, R.style.BottomSheetStyle).apply {
+    return BottomSheetDialog(context!!, R.style.BottomSheetStyle).apply {
       setContentView(binding.root)
       // hide the background so the fab looks overlapping
       setOnShowListener {

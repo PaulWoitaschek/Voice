@@ -23,7 +23,7 @@ class SupportDialogFragment : DialogFragment() {
       }
     }
 
-    return MaterialDialog.Builder(activity)
+    return MaterialDialog.Builder(activity!!)
         .title(R.string.pref_support_title)
         .items(R.array.pref_support_values)
         .itemsCallback(onSupportListItemClicked)

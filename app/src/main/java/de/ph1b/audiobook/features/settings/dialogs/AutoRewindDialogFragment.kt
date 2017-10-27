@@ -23,18 +23,18 @@ class AutoRewindDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     val oldRewindAmount = autoRewindAmountPref.value
     binding.seekBar.max = (MAX - MIN) * FACTOR
     binding.seekBar.progress = (oldRewindAmount - MIN) * FACTOR
     binding.seekBar.onProgressChanged(initialNotification = true) {
       val progress = it / FACTOR
-      val autoRewindSummary = context.resources.getQuantityString(R.plurals.pref_auto_rewind_summary, progress, progress)
+      val autoRewindSummary = context!!.resources.getQuantityString(R.plurals.pref_auto_rewind_summary, progress, progress)
       binding.textView.text = autoRewindSummary
     }
 
-    return MaterialDialog.Builder(context)
+    return MaterialDialog.Builder(context!!)
         .title(R.string.pref_auto_rewind_title)
         .customView(binding.root, true)
         .positiveText(R.string.dialog_confirm)

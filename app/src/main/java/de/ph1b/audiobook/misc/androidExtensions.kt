@@ -22,7 +22,7 @@ import java.io.FileFilter
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 
-fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)
+fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)!!
 
 @ColorInt
 fun Context.color(@ColorRes id: Int): Int {
@@ -62,7 +62,7 @@ fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
 fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
   val routerProvider = activity as RouterProvider
   val router = routerProvider.provideRouter()
-  val controllerId: String = arguments.getString(controllerBundleKey)
+  val controllerId: String = arguments!!.getString(controllerBundleKey)
   @Suppress("UNCHECKED_CAST")
   return router.getControllerWithInstanceId(controllerId) as T
 }

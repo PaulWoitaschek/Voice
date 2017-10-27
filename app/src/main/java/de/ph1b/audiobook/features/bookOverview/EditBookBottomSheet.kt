@@ -38,7 +38,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val dialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
+    val dialog = BottomSheetDialog(context!!, R.style.BottomSheetStyle)
 
     // if there is no book, skip here
     val book = repo.bookById(bookId())
@@ -47,7 +47,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    val binding = BookMoreBottomSheetBinding.inflate(activity.layoutInflater)
+    val binding = BookMoreBottomSheetBinding.inflate(activity!!.layoutInflater)
     dialog.setContentView(binding.root)
 
     binding.title.setOnClickListener {
@@ -81,7 +81,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
   private fun tintLeftDrawable(textView: TextView) {
     val left = textView.startCompoundDrawable()!!
-    val tinted = left.tinted(context.color(R.color.icon_color))
+    val tinted = left.tinted(context!!.color(R.color.icon_color))
     textView.setCompoundDrawablesRelative(
         tinted,
         textView.topCompoundDrawable(),
@@ -90,7 +90,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     )
   }
 
-  private fun bookId() = arguments.getLong(NI_BOOK)
+  private fun bookId() = arguments!!.getLong(NI_BOOK)
 
   companion object {
     private const val NI_BOOK = "ni#book"

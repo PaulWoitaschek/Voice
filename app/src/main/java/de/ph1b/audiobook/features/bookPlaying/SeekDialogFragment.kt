@@ -24,18 +24,18 @@ class SeekDialogFragment : DialogFragment() {
     AndroidSupportInjection.inject(this)
 
     // find views
-    val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     // init
     val oldSeekTime = seekTimePref.value
     binding.seekBar.max = (MAX - MIN) * FACTOR
     binding.seekBar.onProgressChanged(initialNotification = true) {
       val value = it / FACTOR + MIN
-      binding.textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
+      binding.textView.text = context!!.resources.getQuantityString(R.plurals.seconds, value, value)
     }
     binding.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
-    return MaterialDialog.Builder(context)
+    return MaterialDialog.Builder(context!!)
         .title(R.string.pref_seek_time)
         .customView(binding.root, true)
         .positiveText(R.string.dialog_confirm)

@@ -72,9 +72,11 @@ class FolderOverviewController : MvpController<FolderOverviewController, FolderO
   }
 
   private fun setupToolbar() {
-    binding.toolbarInclude.toolbar.setTitle(R.string.audiobook_folders_title)
-    binding.toolbarInclude.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbarInclude.toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+    binding.toolbarInclude!!.toolbar.apply {
+      setTitle(R.string.audiobook_folders_title)
+      setNavigationIcon(R.drawable.close)
+      setNavigationOnClickListener { activity.onBackPressed() }
+    }
   }
 
   override fun provideView() = this

@@ -35,7 +35,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     AndroidSupportInjection.inject(this)
 
     // init views
-    val binding = DialogAmountChooserBinding.inflate(activity.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     // setting current speed
     val book = repo.bookById(currentBookIdPref.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
@@ -54,7 +54,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
         .subscribe { playerController.setSpeed(it) } // update speed after debounce
 
-    return MaterialDialog.Builder(activity)
+    return MaterialDialog.Builder(activity!!)
         .title(R.string.playback_speed)
         .customView(binding.root, true)
         .build()

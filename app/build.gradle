@@ -69,9 +69,14 @@ android {
     exclude 'META-INF/rxjava.properties'
   }
 
+  flavorDimensions "free"
   productFlavors {
-    opensource {}
-    proprietary {}
+    opensource {
+      dimension "free"
+    }
+    proprietary {
+      dimension "free"
+    }
   }
 
   dataBinding.enabled = true

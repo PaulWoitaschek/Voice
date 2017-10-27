@@ -7,9 +7,7 @@ android.applicationVariants.all { variant ->
     appName = parent.name
   }
 
-  variant.outputs.each { output ->
-    def base = "${variant.versionCode}-${appName}-${output.baseName}-${variant.versionName}"
-    def newApkName = base + ".apk"
-    output.outputFile = new File(output.outputFile.parent, newApkName)
+  variant.outputs.all { output ->
+    outputFileName = "${variant.versionCode}-${appName}-${output.baseName}-${variant.versionName}.apk"
   }
 }

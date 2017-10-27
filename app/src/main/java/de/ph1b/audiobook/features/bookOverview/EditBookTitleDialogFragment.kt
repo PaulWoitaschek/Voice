@@ -21,10 +21,10 @@ class EditBookTitleDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val presetName = arguments.getString(NI_PRESET_NAME)
-    val bookId = arguments.getLong(NI_BOOK_ID)
+    val presetName = arguments!!.getString(NI_PRESET_NAME)
+    val bookId = arguments!!.getLong(NI_BOOK_ID)
 
-    return MaterialDialog.Builder(activity)
+    return MaterialDialog.Builder(activity!!)
         .title(R.string.edit_book_title)
         .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
         .input(getString(R.string.bookmark_edit_hint), presetName, false) { _, charSequence ->

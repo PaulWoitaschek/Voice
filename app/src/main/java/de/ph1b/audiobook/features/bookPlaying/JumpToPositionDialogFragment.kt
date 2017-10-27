@@ -25,7 +25,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
-    val binding = DialogTimePickerBinding.inflate(activity.layoutInflater)
+    val binding = DialogTimePickerBinding.inflate(activity!!.layoutInflater)
 
     // init
     val book = repo.bookById(currentBookIdPref.value)!!
@@ -74,7 +74,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
       }
     }
 
-    return MaterialDialog.Builder(context)
+    return MaterialDialog.Builder(context!!)
         .customView(binding.root, true)
         .title(R.string.action_time_change)
         .onPositive { _, _ ->

@@ -30,7 +30,7 @@ class ThemePickerDialogFragment : DialogFragment() {
     val existingThemes = ThemeUtil.Theme.values()
     val names = existingThemes.map { getString(it.nameId) }
 
-    return MaterialDialog.Builder(context)
+    return MaterialDialog.Builder(context!!)
         .items(*names.toTypedArray())
         .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
           val newTheme = existingThemes[i]
