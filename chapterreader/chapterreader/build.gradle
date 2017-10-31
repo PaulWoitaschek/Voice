@@ -25,13 +25,17 @@ idea {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    compile "com.google.dagger:dagger:2.12"
-    kapt "com.google.dagger:dagger-compiler:2.12"
-    compile "com.github.kokorin:jebml:2.3.1"
-    compile "org.slf4j:slf4j-nop:1.7.25"
-    testCompile "com.google.truth:truth:0.36"
-    testCompile "junit:junit:4.1.2"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
+    def versionDagger = "2.12"
+    implementation "com.google.dagger:dagger:$versionDagger"
+    kapt "com.google.dagger:dagger-compiler:$versionDagger"
+
+    implementation "com.github.kokorin:jebml:2.3.1"
+    implementation "org.slf4j:slf4j-nop:1.7.25"
+
+    testImplementation "com.google.truth:truth:0.36"
+    testImplementation "junit:junit:4.1.2"
 }
 
 compileKotlin {
