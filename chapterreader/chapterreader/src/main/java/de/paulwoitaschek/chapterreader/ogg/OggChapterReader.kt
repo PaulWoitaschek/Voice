@@ -1,6 +1,5 @@
 package de.paulwoitaschek.chapterreader.ogg
 
-import de.paulwoitaschek.chapterreader.misc.Logger
 import de.paulwoitaschek.chapterreader.misc.readAmountOfBytes
 import de.paulwoitaschek.chapterreader.misc.startsWith
 import de.paulwoitaschek.chapterreader.ogg.oggReading.OggPageParseException
@@ -12,6 +11,7 @@ import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisComment
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentParseException
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentReader
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisStreamParseException
+import org.slf4j.LoggerFactory
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -19,9 +19,9 @@ import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 
-internal class OggChapterReader @Inject constructor(
-  private val logger: Logger
-) {
+internal class OggChapterReader @Inject constructor() {
+
+  private val logger = LoggerFactory.getLogger(javaClass)
 
   private val OPUS_HEAD_MAGIC = "OpusHead".toByteArray()
   private val OPUS_TAGS_MAGIC = "OpusTags".toByteArray()
@@ -44,15 +44,15 @@ internal class OggChapterReader @Inject constructor(
           return readVorbisCommentFromVorbisStream(stream).chapters
       }
     } catch (ex: IOException) {
-      logger.e(ex)
+      logger.error("Error in read", ex)
     } catch (ex: OggPageParseException) {
-      logger.e(ex)
+      logger.error("Error in read", ex)
     } catch (ex: OpusStreamParseException) {
-      logger.e(ex)
+      logger.error("Error in read", ex)
     } catch (ex: VorbisStreamParseException) {
-      logger.e(ex)
+      logger.error("Error in read", ex)
     } catch (ex: VorbisCommentParseException) {
-      logger.e(ex)
+      logger.error("Error in read", ex)
     }
     return emptyMap()
   }

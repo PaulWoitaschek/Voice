@@ -1,7 +1,7 @@
 package de.paulwoitaschek.chapterreader.id3
 
-import de.paulwoitaschek.chapterreader.misc.Logger
 import de.paulwoitaschek.chapterreader.misc.skipBytes
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -25,7 +25,9 @@ private const val FRAME_ID_TITLE = "TIT2"
  * Original source from [AntennaPod](https://github.com/AntennaPod/AntennaPod/tree/develop/core/src/main/java/de/danoeh/antennapod/core/util/id3reader)
  * Licensed under Apache 2.0
  */
-internal class ID3ChapterReader @Inject constructor(private val logger: Logger) {
+internal class ID3ChapterReader @Inject constructor() {
+
+  private val logger = LoggerFactory.getLogger(javaClass)
 
   private val chapters = ArrayList<ChapterMetaData>()
   private var readerPosition: Int = 0
@@ -60,9 +62,9 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
         onEndTag()
       }
     } catch (exception: ID3ReaderException) {
-      logger.e(exception)
+      logger.error("Error in readInputStream", exception)
     } catch (exception: IOException) {
-      logger.e(exception)
+      logger.error("Error in readInputStream", exception)
     }
 
     val array = HashMap<Int, String>(chapters.size)

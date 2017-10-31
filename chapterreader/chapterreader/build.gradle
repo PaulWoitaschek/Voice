@@ -32,7 +32,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$versionDagger"
 
     implementation "com.github.kokorin:jebml:2.3.1"
-    implementation "org.slf4j:slf4j-nop:1.7.25"
+    implementation "org.slf4j:slf4j-api:1.7.25"
 
     testImplementation "com.google.truth:truth:0.36"
     testImplementation "junit:junit:4.1.2"

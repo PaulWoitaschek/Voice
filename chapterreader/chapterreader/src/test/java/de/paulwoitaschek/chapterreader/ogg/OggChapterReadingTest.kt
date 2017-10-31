@@ -1,7 +1,6 @@
 package de.paulwoitaschek.chapterreader.ogg
 
 import com.google.common.truth.Truth.assertThat
-import de.paulwoitaschek.chapterreader.NoOpLogger
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -12,7 +11,7 @@ class OggChapterReadingTest {
 
   @Before
   fun setUp() {
-    oggChapterReader = OggChapterReader(NoOpLogger)
+    oggChapterReader = OggChapterReader()
   }
 
   @Test

@@ -1,12 +1,11 @@
 package de.paulwoitaschek.chapterreader.matroska
 
 import com.google.common.truth.Truth.assertThat
-import de.paulwoitaschek.chapterreader.NoOpLogger
 import org.junit.Test
 
 class ReadAsMatroskaChaptersTest {
 
-  private val readMatroskaChapters = ReadAsMatroskaChapters(NoOpLogger)
+  private val readMatroskaChapters = ReadAsMatroskaChapters()
 
   @Test
   fun readMatroskaChaptersTest() {

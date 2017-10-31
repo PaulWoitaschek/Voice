@@ -1,6 +1,5 @@
 package de.paulwoitaschek.chapterreader.matroska
 
-import de.paulwoitaschek.chapterreader.misc.Logger
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.MasterElement
@@ -9,10 +8,13 @@ import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
+import org.slf4j.LoggerFactory
 import java.io.File
 import javax.inject.Inject
 
-internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Logger) {
+internal class ReadAsMatroskaChapters @Inject constructor() {
+
+  private val logger = LoggerFactory.getLogger(javaClass)
 
   private lateinit var dataSource: FileDataSource
   private lateinit var reader: EBMLReader
@@ -25,7 +27,7 @@ internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Lo
 
   @Synchronized
   fun read(file: File): List<MatroskaChapter> {
-    logger.i("read $file")
+    logger.info("read $file")
     init(file)
 
     val firstElement = reader.readNextElement()
@@ -63,14 +65,14 @@ internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Lo
         if (it isType MatroskaDocTypes.DocType) {
           val docType = it.readString()
           if (docType != "matroska" && docType != "webm") {
-            logger.e("DocType $docType is not de.ph1b.audiobook.chapterreader.de.ph1b.audiobook.chapterreader.matroska")
+            logger.error("DocType $docType is not de.ph1b.audiobook.chapterreader.de.ph1b.audiobook.chapterreader.matroska")
             return false
           }
         }
       }
       true
     } else {
-      logger.e("EBML Header not the first element in the file")
+      logger.error("EBML Header not the first element in the file")
       false
     }
 
@@ -168,7 +170,7 @@ internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Lo
             // Ordered chapters support is problematic,
             // it varies across players so lets ignore them.
             hidden = true
-            logger.i("Ordered chapters. Ignoring affected edition")
+            logger.info("Ordered chapters. Ignoring affected edition")
           }
         }
         it isType MatroskaDocTypes.EditionFlagDefault -> {

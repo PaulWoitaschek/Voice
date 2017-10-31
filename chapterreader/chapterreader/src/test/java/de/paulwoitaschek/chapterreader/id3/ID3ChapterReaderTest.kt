@@ -1,13 +1,12 @@
 package de.paulwoitaschek.chapterreader.id3
 
 import com.google.common.truth.Truth.assertThat
-import de.paulwoitaschek.chapterreader.NoOpLogger
 import org.junit.Test
 import java.io.File
 
 class ID3ChapterReaderTest {
 
-  private val id3ChapterReader = ID3ChapterReader(NoOpLogger)
+  private val id3ChapterReader = ID3ChapterReader()
 
   @Test
   fun read() {

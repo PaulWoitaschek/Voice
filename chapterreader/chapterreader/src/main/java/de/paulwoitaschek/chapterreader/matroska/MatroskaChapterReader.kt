@@ -1,15 +1,16 @@
 package de.paulwoitaschek.chapterreader.matroska
 
-import de.paulwoitaschek.chapterreader.misc.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.lang.RuntimeException
 import java.util.Locale
 import javax.inject.Inject
 
 internal class MatroskaChapterReader @Inject constructor(
-  private val logger: Logger,
   private val readAsMatroskaChapters: ReadAsMatroskaChapters
 ) {
+
+  private val logger = LoggerFactory.getLogger(javaClass)
 
   fun read(file: File): Map<Int, String> {
     try {
@@ -20,7 +21,7 @@ internal class MatroskaChapterReader @Inject constructor(
       // JEBML documentation just say's that it throws RuntimeException.
       // For example NullPointerException is thrown if unknown EBML Element
       // type is encountered when calling EBMLReader.readNextElement.
-      logger.e(ex)
+      logger.error("Error while reading $file", ex)
     }
     return emptyMap()
   }

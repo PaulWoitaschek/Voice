@@ -1,13 +1,19 @@
 package de.paulwoitaschek.chapterreader
 
 import de.paulwoitaschek.chapterreader.di.DaggerChapterReaderComponent
-import de.paulwoitaschek.chapterreader.misc.Logger
 
+/**
+ * Factory class for creating the chapter reader
+ */
 object ChapterReaderFactory {
 
-  fun create(logger: Logger): ChapterReader =
+  /**
+   * Creates a new [ChapterReader].
+   *
+   * @return The created chapter reader
+   */
+  fun create(): ChapterReader =
     DaggerChapterReaderComponent.builder()
-      .logger(logger)
       .build()
       .chapterReader()
 }
