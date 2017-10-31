@@ -1,7 +1,12 @@
 package de.paulwoitaschek.chapterreader.matroska
 
 import de.paulwoitaschek.chapterreader.misc.Logger
-import org.ebml.*
+import org.ebml.EBMLReader
+import org.ebml.Element
+import org.ebml.MasterElement
+import org.ebml.ProtoType
+import org.ebml.StringElement
+import org.ebml.UnsignedIntegerElement
 import org.ebml.io.FileDataSource
 import org.ebml.matroska.MatroskaDocTypes
 import java.io.File

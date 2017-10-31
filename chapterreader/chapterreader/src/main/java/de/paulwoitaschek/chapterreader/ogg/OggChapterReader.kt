@@ -1,6 +1,5 @@
 package de.paulwoitaschek.chapterreader.ogg
 
-import dagger.Reusable
 import de.paulwoitaschek.chapterreader.misc.Logger
 import de.paulwoitaschek.chapterreader.misc.readAmountOfBytes
 import de.paulwoitaschek.chapterreader.misc.startsWith
@@ -8,11 +7,19 @@ import de.paulwoitaschek.chapterreader.ogg.oggReading.OggPageParseException
 import de.paulwoitaschek.chapterreader.ogg.oggReading.OggStream
 import de.paulwoitaschek.chapterreader.ogg.oggReading.demuxOggStreams
 import de.paulwoitaschek.chapterreader.ogg.oggReading.readOggPages
-import de.paulwoitaschek.chapterreader.ogg.vorbisComment.*
-import java.io.*
+import de.paulwoitaschek.chapterreader.ogg.vorbisComment.OpusStreamParseException
+import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisComment
+import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentParseException
+import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentReader
+import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisStreamParseException
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
 
-@Reusable internal class OggChapterReader @Inject constructor(
+internal class OggChapterReader @Inject constructor(
   private val logger: Logger
 ) {
 

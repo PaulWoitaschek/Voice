@@ -3,7 +3,7 @@ package de.paulwoitaschek.chapterreader.matroska
 import de.paulwoitaschek.chapterreader.misc.Logger
 import java.io.File
 import java.lang.RuntimeException
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class MatroskaChapterReader @Inject constructor(

@@ -3,7 +3,6 @@ package de.paulwoitaschek.chapterreader.mp4
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Reads the chap atom to find associated chapters

@@ -1,6 +1,5 @@
 package de.paulwoitaschek.chapterreader.id3
 
-import dagger.Reusable
 import de.paulwoitaschek.chapterreader.misc.Logger
 import de.paulwoitaschek.chapterreader.misc.skipBytes
 import java.io.File
@@ -10,7 +9,6 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.collections.HashMap
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3
@@ -27,7 +25,7 @@ private const val FRAME_ID_TITLE = "TIT2"
  * Original source from [AntennaPod](https://github.com/AntennaPod/AntennaPod/tree/develop/core/src/main/java/de/danoeh/antennapod/core/util/id3reader)
  * Licensed under Apache 2.0
  */
-@Reusable internal class ID3ChapterReader @Inject constructor(private val logger: Logger) {
+internal class ID3ChapterReader @Inject constructor(private val logger: Logger) {
 
   private val chapters = ArrayList<ChapterMetaData>()
   private var readerPosition: Int = 0

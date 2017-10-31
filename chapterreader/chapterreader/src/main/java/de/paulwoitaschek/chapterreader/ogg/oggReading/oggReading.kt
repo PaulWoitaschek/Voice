@@ -1,7 +1,13 @@
 package de.paulwoitaschek.chapterreader.ogg.oggReading
 
 
-import de.paulwoitaschek.chapterreader.misc.*
+import de.paulwoitaschek.chapterreader.misc.readAmountOfBytes
+import de.paulwoitaschek.chapterreader.misc.readLeInt32
+import de.paulwoitaschek.chapterreader.misc.readLeInt64
+import de.paulwoitaschek.chapterreader.misc.readLeUInt32
+import de.paulwoitaschek.chapterreader.misc.readUInt8
+import de.paulwoitaschek.chapterreader.misc.skipBytes
+import de.paulwoitaschek.chapterreader.misc.toUInt
 import java.io.EOFException
 import java.io.InputStream
 

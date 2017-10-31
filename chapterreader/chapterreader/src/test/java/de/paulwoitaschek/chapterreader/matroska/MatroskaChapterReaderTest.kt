@@ -3,7 +3,7 @@ package de.paulwoitaschek.chapterreader.matroska
 import com.google.common.truth.Truth.assertThat
 import de.paulwoitaschek.chapterreader.NoOpLogger
 import org.junit.Test
-import java.util.*
+import java.util.Locale
 
 class MatroskaChapterReaderTest {
 
