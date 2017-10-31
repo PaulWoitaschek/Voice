@@ -17,6 +17,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation "com.github.PaulWoitaschek:ChapterReader:0.1.0"
+    implementation "com.github.PaulWoitaschek:ChapterReader:X.Y.Z"
 }
 ```
