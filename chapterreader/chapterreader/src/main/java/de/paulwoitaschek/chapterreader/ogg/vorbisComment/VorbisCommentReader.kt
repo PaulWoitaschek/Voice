@@ -32,8 +32,7 @@ internal object VorbisCommentReader {
     val hours = matchResult.groups[1]!!.value.toInt()
     val minutes = hours * 60 + matchResult.groups[2]!!.value.toInt()
     val seconds = minutes * 60 + matchResult.groups[3]!!.value.toInt()
-    val milliseconds = seconds * 1000 + matchResult.groups[4]!!.value.take(3).padEnd(3, '0').toInt()
-    return milliseconds
+    return seconds * 1000 + matchResult.groups[4]!!.value.take(3).padEnd(3, '0').toInt()
   }
 }
 

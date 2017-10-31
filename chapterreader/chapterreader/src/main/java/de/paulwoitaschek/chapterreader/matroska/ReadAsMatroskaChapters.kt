@@ -57,7 +57,7 @@ internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Lo
     return chapters
   }
 
-  private fun isValidEbmlHeader(element: Element): Boolean {
+  private fun isValidEbmlHeader(element: Element): Boolean =
     if (element isType MatroskaDocTypes.EBML) {
       element.forEachChild {
         if (it isType MatroskaDocTypes.DocType) {
@@ -68,12 +68,11 @@ internal class ReadAsMatroskaChapters @Inject constructor(private val logger: Lo
           }
         }
       }
-      return true
+      true
     } else {
       logger.e("EBML Header not the first element in the file")
-      return false
+      false
     }
-  }
 
   private fun init(file: File) {
     dataSource = FileDataSource(file.path)

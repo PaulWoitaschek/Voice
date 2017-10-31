@@ -19,7 +19,7 @@ internal object MatroskaChapterFlattener {
         if (i == 0) depth else 0
       // Simple hack with adding depth is needed because chapter
       // and it's first sub-chapter have usually the same starting time.
-      val name = "+ ".repeat(depth) + (chapter.getName(preferredLanguages) ?: "Chapter ${i + 1}")
+      val name = "+ ".repeat(depth) + (chapter.name(preferredLanguages) ?: "Chapter ${i + 1}")
       target.put(duration, name)
       addChapter(chapter.children, depth + 1)
     }

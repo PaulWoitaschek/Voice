@@ -2,11 +2,11 @@ package de.paulwoitaschek.chapterreader.matroska
 
 internal data class MatroskaChapter(
   val startTime: Long,
-  val names: List<MatroskaChapterName>,
+  private val names: List<MatroskaChapterName>,
   val children: List<MatroskaChapter>
 ) {
 
-  fun getName(preferredLanguages: List<String> = emptyList<String>()): String? = preferredLanguages
+  fun name(preferredLanguages: List<String> = emptyList()): String? = preferredLanguages
     .mapNotNull { language ->
       names.find { language in it.languages }
         ?.name

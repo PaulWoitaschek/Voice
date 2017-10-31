@@ -74,7 +74,7 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
 
   /** Returns true if string only contains null-bytes.  */
   private fun checkForNullString(s: String): Boolean {
-    if (!s.isEmpty()) {
+    return if (!s.isEmpty()) {
       var i = 0
       if (s[i].toInt() == 0) {
         i = 1
@@ -86,8 +86,8 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
         }
         return true
       }
-      return false
-    } else return true
+      false
+    } else true
   }
 
   /**
@@ -126,14 +126,14 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
     if (source.size != HEADER_LENGTH) {
       throw ID3ReaderException("Length of header must be " + HEADER_LENGTH)
     }
-    if (hasTag) {
+    return if (hasTag) {
       val id = String(source, 0, ID3_LENGTH)
       val version = (source[3].toInt() shl 8 or source[4].toInt()).toChar()
       var size = source[6].toInt() shl 24 or (source[7].toInt() shl 16) or (source[8].toInt() shl 8) or source[9].toInt()
       size = unsynchsafe(size)
-      return Header.TagHeader(id, size, version)
+      Header.TagHeader(id, size, version)
     } else {
-      return null
+      null
     }
   }
 
@@ -164,23 +164,22 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
   }
 
   @Throws(IOException::class, ID3ReaderException::class)
-  private fun readString(buffer: StringBuffer, input: InputStream, max: Int): Int {
+  private fun readString(buffer: StringBuffer, input: InputStream, max: Int): Int =
     if (max > 0) {
       val encoding = readBytes(input, 1)
       val maxCorrected = max - 1
 
       if (encoding[0].toByte() == ENCODING_UTF16_WITH_BOM || encoding[0].toByte() == ENCODING_UTF16_WITHOUT_BOM) {
-        return readUnicodeString(buffer, input, maxCorrected, Charset.forName("UTF-16")) + 1 // take encoding byte into account
+        readUnicodeString(buffer, input, maxCorrected, Charset.forName("UTF-16")) + 1 // take encoding byte into account
       } else if (encoding[0].toByte() == ENCODING_UTF8) {
-        return readUnicodeString(buffer, input, maxCorrected, Charset.forName("UTF-8")) + 1 // take encoding byte into account
+        readUnicodeString(buffer, input, maxCorrected, Charset.forName("UTF-8")) + 1 // take encoding byte into account
       } else {
-        return readISOString(buffer, input, maxCorrected) + 1 // take encoding byte into account
+        readISOString(buffer, input, maxCorrected) + 1 // take encoding byte into account
       }
     } else {
       buffer.append("")
-      return 0
+      0
     }
-  }
 
   @Throws(IOException::class, ID3ReaderException::class)
   private fun readISOString(buffer: StringBuffer, input: InputStream, max: Int): Int {
@@ -211,11 +210,11 @@ internal class ID3ChapterReader @Inject constructor(private val logger: Logger) 
       if (c == -1) {
         break
       } else if (c == 0) {
-        if (cZero == 0) {
+        cZero = if (cZero == 0) {
           // termination character found
           break
         } else {
-          cZero = 0
+          0
         }
       } else {
         buffer[i] = c.toByte()

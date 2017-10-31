@@ -14,14 +14,14 @@ class MatroskaChapterTest {
       MatroskaChapterName("サブパート1", setOf("jpn"))
     ), listOf()
     )
-    assertThat(chapter.getName()).isEqualTo("Podczęść 1")
-    assertThat(chapter.getName(listOf("ger", "jpn"))).isEqualTo("Subpart 1")
-    assertThat(chapter.getName(listOf("ind", "kac", "jpn", "eng"))).isEqualTo("サブパート1")
+    assertThat(chapter.name()).isEqualTo("Podczęść 1")
+    assertThat(chapter.name(listOf("ger", "jpn"))).isEqualTo("Subpart 1")
+    assertThat(chapter.name(listOf("ind", "kac", "jpn", "eng"))).isEqualTo("サブパート1")
   }
 
   @Test
   fun noContentsLeadsToNull() {
-    val actual = MatroskaChapter(0L, listOf(), listOf()).getName()
+    val actual = MatroskaChapter(0L, listOf(), listOf()).name()
     assertThat(actual).isNull()
   }
 }
