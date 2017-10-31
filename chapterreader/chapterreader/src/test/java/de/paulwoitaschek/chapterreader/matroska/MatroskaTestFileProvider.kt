@@ -4,7 +4,7 @@ import java.io.File
 
 object MatroskaTestFileProvider {
 
-  val file = javaClass.classLoader.getResource("matroska/simple.mka").file
+  private val file = javaClass.classLoader.getResource("matroska/simple.mka").file!!
   val testFile = File(file)
   internal val testFileMatroskaChapters = listOf(
     MatroskaChapter(

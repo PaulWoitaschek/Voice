@@ -235,7 +235,7 @@ class OggReadingTest {
     )
 
     val numStreams = 10
-    val streamIds = (0..numStreams - 1)
+    val streamIds = (0 until numStreams)
     val firstPages = streamIds
       .map { genPage(it) }
       .map { it.copy(firstPageOfStream = true) }
