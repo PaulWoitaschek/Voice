@@ -12,6 +12,7 @@ object ChapterReaderFactory {
    *
    * @return The created chapter reader
    */
+  @JvmStatic
   fun create(): ChapterReader =
     DaggerChapterReaderComponent.builder()
       .build()
