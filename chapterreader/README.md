@@ -1,3 +1,4 @@
+# ChapterReader [![CI Status](https://circleci.com/gh/PaulWoitaschek/ChapterReader.svg?&style=shield&circle-token=459db1375fb03763704edb88afc36136c091c33a)](https://circleci.com/gh/PaulWoitaschek/ChapterReader)
 This library is the chapter reader for [Voice](https://github.com/PaulWoitaschek/Voice/).
 
 # Usage
