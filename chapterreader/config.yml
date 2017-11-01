@@ -31,3 +31,6 @@ jobs:
         
       # run tests!
       - run: ./gradlew test
+
+      - store_artifacts:
+          path: ~/chapterreader/build/reports
