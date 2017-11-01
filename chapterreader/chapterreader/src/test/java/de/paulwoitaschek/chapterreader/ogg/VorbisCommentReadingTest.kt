@@ -1,6 +1,7 @@
 package de.paulwoitaschek.chapterreader.ogg
 
 import com.google.common.truth.Truth.assertThat
+import de.paulwoitaschek.chapterreader.Chapter
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisComment
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentParseException
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentReader
@@ -24,7 +25,7 @@ class VorbisCommentReadingTest {
         "", mapOf(
         "lala" to "asdasd"
       )
-      ).chapters.size
+      ).asChapters().size
     ).isEqualTo(0)
 
     assertThat(
@@ -37,13 +38,8 @@ class VorbisCommentReadingTest {
         "CHAPTER004" to "00:00:04.000",
         "CHAPTER004NAME" to "C4"
       )
-      ).chapters
-    ).isEqualTo(
-      mapOf(
-        1000 to "C1",
-        2000 to "C2"
-      )
-    )
+      ).asChapters()
+    ).containsExactly(Chapter(1000L, "C1"), Chapter(2000L, "C2"))
 
     assertThat(
       VorbisComment(
@@ -52,7 +48,7 @@ class VorbisCommentReadingTest {
         "CHAPTER001NAME" to "C1",
         "CHAPTER002" to "00:00:02.000"
       )
-      ).chapters.size
+      ).asChapters().size
     ).isEqualTo(0)
 
     assertThat(
@@ -63,7 +59,7 @@ class VorbisCommentReadingTest {
         "CHAPTER002" to "00:00:02.00d0",
         "CHAPTER002NAME" to "C2"
       )
-      ).chapters.size
+      ).asChapters().size
     ).isEqualTo(0)
   }
 

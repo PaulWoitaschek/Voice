@@ -1,5 +1,6 @@
 package de.paulwoitaschek.chapterreader.mp4
 
+import de.paulwoitaschek.chapterreader.Chapter
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.ArrayList
@@ -9,28 +10,28 @@ import java.util.ArrayList
  */
 internal object ChapReader {
 
-  fun read(file: File): Map<Int, String> = RandomAccessFile(file, "r").use { raf ->
+  fun read(file: File): List<Chapter> = RandomAccessFile(file, "r").use { raf ->
     val atoms = raf.atoms(listOf("moov", "trak", "tref", "mdia", "minf", "stbl"))
 
     val chapterTrackId = findChapterTrackId(raf, atoms)
-      ?: return emptyMap()
+      ?: return emptyList()
     val chapterTrackAtom = findChapterTrackAtom(raf, atoms, chapterTrackId)
-      ?: return emptyMap()
+      ?: return emptyList()
     val timeScale = readTimeScale(raf, chapterTrackAtom)
-      ?: return emptyMap()
+      ?: return emptyList()
     val names = readNames(raf, atoms, chapterTrackId)
     val durations = readDurations(raf, chapterTrackAtom, timeScale)
 
     if (names.size != durations.size || names.isEmpty())
-      return emptyMap()
+      return emptyList()
 
-    val map = HashMap<Int, String>(names.size)
+    val chapters = ArrayList<Chapter>(names.size)
     var position = 0L
     names.forEachIndexed { index, name ->
-      map.put(position.toInt(), name)
+      chapters.add(Chapter(position, name))
       position += durations[index]
     }
-    map
+    chapters
   }
 
   private fun findChapterTrackAtom(raf: RandomAccessFile, atoms: List<Mp4Atom>, chapterTrackId: Int): Mp4Atom? {

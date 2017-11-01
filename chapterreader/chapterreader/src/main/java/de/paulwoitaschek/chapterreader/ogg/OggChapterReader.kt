@@ -1,5 +1,6 @@
 package de.paulwoitaschek.chapterreader.ogg
 
+import de.paulwoitaschek.chapterreader.Chapter
 import de.paulwoitaschek.chapterreader.misc.readAmountOfBytes
 import de.paulwoitaschek.chapterreader.misc.startsWith
 import de.paulwoitaschek.chapterreader.ogg.oggReading.OggPageParseException
@@ -32,16 +33,16 @@ internal class OggChapterReader @Inject constructor() {
     read(it)
   }
 
-  private fun read(inputStream: InputStream): Map<Int, String> {
+  private fun read(inputStream: InputStream): List<Chapter> {
     try {
       val oggPages = readOggPages(BufferedInputStream(inputStream))
       val streams = demuxOggStreams(oggPages).values
 
       for (stream in streams) {
         if (stream.peek().startsWith(OPUS_HEAD_MAGIC))
-          return readVorbisCommentFromOpusStream(stream).chapters
+          return readVorbisCommentFromOpusStream(stream).asChapters()
         if (stream.peek().startsWith(VORBIS_HEAD_MAGIC))
-          return readVorbisCommentFromVorbisStream(stream).chapters
+          return readVorbisCommentFromVorbisStream(stream).asChapters()
       }
     } catch (ex: IOException) {
       logger.error("Error in read", ex)
@@ -54,7 +55,7 @@ internal class OggChapterReader @Inject constructor() {
     } catch (ex: VorbisCommentParseException) {
       logger.error("Error in read", ex)
     }
-    return emptyMap()
+    return emptyList()
   }
 
   private fun readVorbisCommentFromOpusStream(stream: OggStream): VorbisComment {

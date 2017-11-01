@@ -1,6 +1,7 @@
 package de.paulwoitaschek.chapterreader.ogg
 
 import com.google.common.truth.Truth.assertThat
+import de.paulwoitaschek.chapterreader.Chapter
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -19,13 +20,11 @@ class OggChapterReadingTest {
     val file = File(javaClass.classLoader.getResource("ogg/simple.opus").file)
     val chapters = oggChapterReader.read(file)
 
-    assertThat(chapters).isEqualTo(
-      mapOf(
-        0 to "Chapter 1",
-        1000 to "Chapter 2",
-        2000 to "Chapter 3",
-        3000 to "Chapter 4"
-      )
+    assertThat(chapters).containsExactly(
+      Chapter(0, "Chapter 1"),
+      Chapter(1000, "Chapter 2"),
+      Chapter(2000, "Chapter 3"),
+      Chapter(3000, "Chapter 4")
     )
   }
 
@@ -34,12 +33,10 @@ class OggChapterReadingTest {
     val file = File(javaClass.classLoader.getResource("ogg/simple_vorbis.ogg").file)
     val chapters = oggChapterReader.read(file)
 
-    assertThat(chapters).isEqualTo(
-      mapOf(
-        0 to "Part 1",
-        20 to "Part 2",
-        2000 to "Part 3"
-      )
+    assertThat(chapters).containsExactly(
+      Chapter(0, "Part 1"),
+      Chapter(20, "Part 2"),
+      Chapter(2000, "Part 3")
     )
   }
 }

@@ -1,5 +1,6 @@
 package de.paulwoitaschek.chapterreader.id3
 
+import de.paulwoitaschek.chapterreader.Chapter
 import de.paulwoitaschek.chapterreader.misc.skipBytes
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -33,11 +34,11 @@ internal class ID3ChapterReader @Inject constructor() {
   private var readerPosition: Int = 0
   private var currentChapter: ChapterMetaData? = null
 
-  fun read(file: File): Map<Int, String> = file.inputStream().use {
+  fun read(file: File) = file.inputStream().use {
     readInputStream(it)
   }
 
-  @Synchronized private fun readInputStream(input: InputStream): Map<Int, String> {
+  @Synchronized private fun readInputStream(input: InputStream): List<Chapter> {
     chapters.clear()
 
     try {
@@ -67,11 +68,10 @@ internal class ID3ChapterReader @Inject constructor() {
       logger.error("Error in readInputStream", exception)
     }
 
-    val array = HashMap<Int, String>(chapters.size)
-    chapters.forEach { (_, start, title) ->
-      if (title != null) array.put(start, title)
+    return chapters.mapNotNull {
+      val title = it.title ?: return@mapNotNull null
+      Chapter(it.start, title)
     }
-    return array
   }
 
   /** Returns true if string only contains null-bytes.  */
@@ -242,7 +242,7 @@ internal class ID3ChapterReader @Inject constructor() {
         readISOString(elementId, input, Integer.MAX_VALUE)
         val startTimeSource = readBytes(input, 4)
         val startTime = (startTimeSource[0].toInt() shl 24 or (startTimeSource[1].toInt() shl 16) or (startTimeSource[2].toInt() shl 8) or startTimeSource[3].toInt())
-        currentChapter = ChapterMetaData(elementId.toString(), startTime, null)
+        currentChapter = ChapterMetaData(elementId.toString(), startTime.toLong(), null)
         skipBytes(input, 12)
         return true
       }

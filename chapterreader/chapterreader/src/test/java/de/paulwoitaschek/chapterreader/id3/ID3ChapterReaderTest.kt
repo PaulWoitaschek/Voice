@@ -1,6 +1,7 @@
 package de.paulwoitaschek.chapterreader.id3
 
 import com.google.common.truth.Truth.assertThat
+import de.paulwoitaschek.chapterreader.Chapter
 import org.junit.Test
 import java.io.File
 
@@ -14,18 +15,16 @@ class ID3ChapterReaderTest {
 
     val chapters = id3ChapterReader.read(file)
 
-    assertThat(chapters).isEqualTo(
-      mapOf(
-        0 to "Intro",
-        15000 to "Creating a new production",
-        22000 to "Sound analysis",
-        34000 to "Adaptive leveler",
-        45000 to "Global loudness normalization",
-        60000 to "Audio restoration algorithms",
-        76000 to "Output file formats",
-        94000 to "External services",
-        111500 to "Get a free account!"
-      )
+    assertThat(chapters).containsExactly(
+      Chapter(0L, "Intro"),
+      Chapter(15000L, "Creating a new production"),
+      Chapter(22000, "Sound analysis"),
+      Chapter(34000, "Adaptive leveler"),
+      Chapter(45000, "Global loudness normalization"),
+      Chapter(60000, "Audio restoration algorithms"),
+      Chapter(76000, "Output file formats"),
+      Chapter(94000, "External services"),
+      Chapter(111500, "Get a free account!")
     )
   }
 }

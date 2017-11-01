@@ -1,5 +1,6 @@
 package de.paulwoitaschek.chapterreader.matroska
 
+import de.paulwoitaschek.chapterreader.Chapter
 import java.io.File
 
 object MatroskaTestFileProvider {
@@ -31,11 +32,11 @@ object MatroskaTestFileProvider {
     )
     )
   )
-  val testFileChapters = mapOf(
-    0 to "Part 1",
-    2000 to "Part 2",
-    2001 to "+ Podczęść 1",
-    3000 to "+ Subpart 2",
-    4000 to "+ Chapter 3"
+  val testFileChapters = listOf(
+    Chapter(0, "Part 1"),
+    Chapter(2000, "Part 2"),
+    Chapter(2001, "+ Podczęść 1"),
+    Chapter(3000, "+ Subpart 2"),
+    Chapter(4000, "+ Chapter 3")
   )
 }

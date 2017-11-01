@@ -19,17 +19,19 @@ class ChapterReader @Inject internal constructor(
 ) {
 
   /**
-   * Read the chapters for a file. The resulting map has the start of each chapter as the key
-   * and it's name as the value.
+   * Read the chapters for a file. The result is sorted by the start of the chapters.
    *
    * @param file the file to read
-   * @return the resulting map
+   * @return the parsed chapters
    */
-  fun read(file: File): Map<Int, String> = when (file.extension) {
-    "mp3" -> id3Reader.read(file)
-    "mp4", "m4a", "m4b", "aac" -> mp4Reader.readChapters(file)
-    "opus", "ogg", "oga" -> oggReader.read(file)
-    "mka", "mkv", "webm" -> matroskaReader.read(file)
-    else -> emptyMap()
+  fun read(file: File): List<Chapter> {
+    val chapters = when (file.extension) {
+      "mp3" -> id3Reader.read(file)
+      "mp4", "m4a", "m4b", "aac" -> mp4Reader.readChapters(file)
+      "opus", "ogg", "oga" -> oggReader.read(file)
+      "mka", "mkv", "webm" -> matroskaReader.read(file)
+      else -> emptyList()
+    }
+    return chapters.sorted()
   }
 }

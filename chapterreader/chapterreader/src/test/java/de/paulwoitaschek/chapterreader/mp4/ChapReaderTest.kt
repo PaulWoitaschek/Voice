@@ -1,6 +1,7 @@
 package de.paulwoitaschek.chapterreader.mp4
 
 import com.google.common.truth.Truth.assertThat
+import de.paulwoitaschek.chapterreader.Chapter
 import org.junit.Test
 import java.io.File
 
@@ -10,21 +11,18 @@ class ChapReaderTest {
   fun parse() {
     val file = File(javaClass.classLoader.getResource("mp4/test.m4b").file)
     val actual = ChapReader.read(file)
-      .toSortedMap()
-      .toList()
-      .sortedBy { it.first }
 
     assertThat(actual).containsExactly(
-      0 to "01",
-      1316 to "02",
-      2710 to "03",
-      4103 to "04",
-      5748 to "05",
-      7362 to "06",
-      8913 to "07",
-      10527 to "08",
-      12109 to "09",
-      13503 to "10"
+      Chapter(0L, "01"),
+      Chapter(1316L, "02"),
+      Chapter(2710L, "03"),
+      Chapter(4103L, "04"),
+      Chapter(5748L, "05"),
+      Chapter(7362L, "06"),
+      Chapter(8913L, "07"),
+      Chapter(10527L, "08"),
+      Chapter(12109L, "09"),
+      Chapter(13503L, "10")
     )
   }
 }
