@@ -4,7 +4,7 @@ This library is the chapter reader for [Voice](https://github.com/PaulWoitaschek
 Create a chapter reader and let it parse a file.
 
 ```kotlin
-val chapterReader = ChapterReaderFactory.create(logger)
+val chapterReader = ChapterReaderFactory.create()
 val result: Map<Int, String> = chapterReader.read(file)
 ```
 
@@ -17,6 +17,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation "com.github.PaulWoitaschek:ChapterReader:0.1.0"
+    implementation "com.github.PaulWoitaschek:ChapterReader:X.Y.Z"
 }
 ```
