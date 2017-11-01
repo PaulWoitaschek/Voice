@@ -5,10 +5,8 @@ Create a chapter reader and let it parse a file.
 
 ```kotlin
 val chapterReader = ChapterReaderFactory.create()
-val result: Map<Int, String> = chapterReader.read(file)
+val result: List<Chapter> = chapterReader.read(file)
 ```
-
-The resulting Map has the start of each chapter as the key (in ms) and the chapter title as the value.
 
 # Install
 
