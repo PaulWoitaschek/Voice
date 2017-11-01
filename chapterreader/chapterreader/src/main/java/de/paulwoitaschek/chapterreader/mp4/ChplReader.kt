@@ -25,14 +25,14 @@ internal object ChplReader {
 
     val chapters = ArrayList<Chapter>(count)
     repeat(count) {
-      val duration = raf.readUInt64() / timeScale / 10
+      val position = raf.readUInt64() / timeScale / 10
       val titleSize = raf.readByte().toInt()
 
       val titleBytes = ByteArray(titleSize)
       raf.read(titleBytes)
       val title = String(titleBytes)
 
-      chapters.add(Chapter(duration, title))
+      chapters.add(Chapter(position, title))
     }
     chapters
   }
