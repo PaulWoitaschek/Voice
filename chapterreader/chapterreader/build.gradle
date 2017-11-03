@@ -35,7 +35,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:1.7.25"
 
     testImplementation "com.google.truth:truth:0.36"
-    testImplementation "junit:junit:4.1.2"
+    testImplementation "junit:junit:4.12"
 }
 
 compileKotlin {
