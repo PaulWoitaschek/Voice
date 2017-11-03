@@ -119,7 +119,7 @@ class NotificationAnnouncer
     return this
   }
 
-  private fun stopIntent(): PendingIntent = PendingIntentCompat.getForegroundService(
+  private fun stopIntent(): PendingIntent = PendingIntent.getService(
       context,
       KeyEvent.KEYCODE_MEDIA_STOP,
       playerController.stopIntent,
