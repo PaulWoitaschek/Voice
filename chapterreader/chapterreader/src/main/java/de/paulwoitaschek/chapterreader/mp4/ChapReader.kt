@@ -3,7 +3,6 @@ package de.paulwoitaschek.chapterreader.mp4
 import de.paulwoitaschek.chapterreader.Chapter
 import java.io.File
 import java.io.RandomAccessFile
-import java.util.ArrayList
 
 /**
  * Reads the chap atom to find associated chapters
@@ -25,13 +24,12 @@ internal object ChapReader {
     if (names.size != durations.size || names.isEmpty())
       return emptyList()
 
-    val chapters = ArrayList<Chapter>(names.size)
-    var position = 0L
-    names.forEachIndexed { index, name ->
-      chapters.add(Chapter(position, name))
+    var position = 0.0
+    names.mapIndexed { index, name ->
+      val chapterPosition = Math.round(position)
       position += durations[index]
+      Chapter(chapterPosition, name)
     }
-    chapters
   }
 
   private fun findChapterTrackAtom(raf: RandomAccessFile, atoms: List<Mp4Atom>, chapterTrackId: Int): Mp4Atom? {
@@ -99,21 +97,20 @@ internal object ChapReader {
     }
     raf.skipBytes(3)
     val entryCount = raf.readUnsignedInt().toInt()
-    val chunkOffsets = ArrayList<Long>(entryCount)
-    repeat(entryCount) {
-      chunkOffsets.add(raf.readUnsignedInt())
-    }
+    val chunkOffsets = (0 until entryCount).map { raf.readUnsignedInt() }
+    return namesByChunkOffsets(raf, chunkOffsets)
+  }
 
-    return chunkOffsets.map {
+  private fun namesByChunkOffsets(raf: RandomAccessFile, chunkOffsets: List<Long>) =
+    chunkOffsets.map {
       raf.seek(it)
       val textLength = raf.readShort().toInt()
       val textBytes = ByteArray(textLength)
       raf.read(textBytes)
       String(textBytes)
     }
-  }
 
-  private fun readDurations(raf: RandomAccessFile, chapterTrakAtom: Mp4Atom, timeScale: Int): List<Long> {
+  private fun readDurations(raf: RandomAccessFile, chapterTrakAtom: Mp4Atom, timeScale: Int): List<Double> {
     val stts = chapterTrakAtom.children.findAtom("mdia", "minf", "stbl", "stts")
       ?: return emptyList()
     raf.seek(stts.position + 8)
@@ -121,14 +118,12 @@ internal object ChapReader {
     if (version != 0)
       return emptyList()
     raf.skipBytes(3) // flags
-    val numberOfEntries = raf.readInt()
 
-    val durations = ArrayList<Long>(numberOfEntries)
-    repeat(numberOfEntries) {
+    val numberOfEntries = raf.readInt()
+    return (0 until numberOfEntries).map {
       val count = raf.readUnsignedInt()
       val delta = raf.readUnsignedInt()
-      durations.add(count * 1000 / timeScale * delta)
+      1000.0 * count * delta / timeScale
     }
-    return durations
   }
 }

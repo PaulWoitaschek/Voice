@@ -13,16 +13,16 @@ class ChapReaderTest {
     val actual = ChapReader.read(file)
 
     assertThat(actual).containsExactly(
-      Chapter(0L, "01"),
-      Chapter(1316L, "02"),
-      Chapter(2710L, "03"),
-      Chapter(4103L, "04"),
-      Chapter(5748L, "05"),
-      Chapter(7362L, "06"),
-      Chapter(8913L, "07"),
-      Chapter(10527L, "08"),
-      Chapter(12109L, "09"),
-      Chapter(13503L, "10")
+      Chapter(0, "01"),
+      Chapter(2193, "02"),
+      Chapter(4517, "03"),
+      Chapter(6838, "04"),
+      Chapter(9580, "05"),
+      Chapter(12270, "06"),
+      Chapter(14855, "07"),
+      Chapter(17545, "08"),
+      Chapter(20182, "09"),
+      Chapter(22505, "10")
     )
   }
 }
