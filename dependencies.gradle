@@ -31,7 +31,7 @@ ext.versions = [
     supportTestRunner   : "1.0.1",
     tapTarget           : "1.9.1",
     targetSdk           : 26,
-    timber              : "4.5.1",
+    timber              : "4.6.0",
     truth               : "0.36",
 ]
 

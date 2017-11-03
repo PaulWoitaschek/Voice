@@ -7,9 +7,7 @@ import timber.log.Timber
  */
 class CrashLoggingTree : Timber.Tree() {
 
-  override fun log(priority: Int, tag: String?, message: String?, t: Throwable?) {
-    message?.let {
-      CrashlyticsProxy.log(it)
-    }
+  override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+    CrashlyticsProxy.log(message)
   }
 }
