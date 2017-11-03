@@ -85,8 +85,9 @@ android {
 dependencies {
   implementation project(":core")
   implementation project(":common")
-  implementation project(":chapterreader")
   implementation project(":data")
+
+  implementation "com.github.PaulWoitaschek:ChapterReader:0.1.3"
 
   kapt libraries.dataBindingCompiler
 
@@ -103,15 +104,14 @@ dependencies {
 
   implementation libraries.floatingActionButton
 
-  proprietaryCompile(libraries.crashlytics) {
+  proprietaryImplementation(libraries.crashlytics) {
     transitive = true
   }
 
-  implementation libraries.dagger
-  implementation libraries.daggerAndroidSupport
-  kapt libraries.daggerCompiler
-  kapt libraries.daggerAndroidProcessor
-  provided libraries.jsr250
+  implementation libraries.dagger.core
+  implementation libraries.dagger.android
+  kapt libraries.dagger.compiler
+  kapt libraries.dagger.androidProcessor
 
   testImplementation libraries.junit
   testImplementation libraries.truth

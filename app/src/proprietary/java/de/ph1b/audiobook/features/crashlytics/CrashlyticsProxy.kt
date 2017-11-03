@@ -4,7 +4,7 @@ import android.app.Application
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.common.ErrorReporter
+import de.ph1b.audiobook.misc.ErrorReporter
 import io.fabric.sdk.android.Fabric
 
 /**

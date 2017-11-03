@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
-import de.ph1b.audiobook.chapterreader.ChapterReader
+import android.support.v4.util.SparseArrayCompat
+import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
-import de.ph1b.audiobook.common.sparseArray.toSparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -24,7 +24,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -327,7 +327,13 @@ class BookAdder
           .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {
-          chapterReader.read(f).toSparseArray()
+          val chapters = chapterReader.read(f)
+          SparseArrayCompat<String>(chapters.size)
+              .apply {
+                chapters.forEach {
+                  put(it.startInMs.toInt(), it.title)
+                }
+              }
         } catch (e: Exception) {
           CrashlyticsProxy.logException(e)
           emptySparseArray<String>()

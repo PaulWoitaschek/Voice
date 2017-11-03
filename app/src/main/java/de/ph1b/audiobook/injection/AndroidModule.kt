@@ -13,12 +13,10 @@ import android.view.WindowManager
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import de.ph1b.audiobook.chapterreader.ChapterReader
-import de.ph1b.audiobook.chapterreader.ChapterReaderFactory
-import de.ph1b.audiobook.common.ErrorReporter
-import de.ph1b.audiobook.common.Logger
+import de.paulwoitaschek.chapterreader.ChapterReader
+import de.paulwoitaschek.chapterreader.ChapterReaderFactory
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
-import de.ph1b.audiobook.misc.TimberLogger
+import de.ph1b.audiobook.misc.ErrorReporter
 import javax.inject.Singleton
 
 /**
@@ -71,9 +69,5 @@ class AndroidModule {
 
   @Provides
   @Singleton
-  fun providerLogger(): Logger = TimberLogger
-
-  @Provides
-  @Singleton
-  fun provideChapterReader(errorReporter: ErrorReporter, logger: Logger): ChapterReader = ChapterReaderFactory.create(logger, errorReporter)
+  fun provideChapterReader(): ChapterReader = ChapterReaderFactory.create()
 }

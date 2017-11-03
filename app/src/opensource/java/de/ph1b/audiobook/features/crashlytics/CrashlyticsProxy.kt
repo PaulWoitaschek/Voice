@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.crashlytics
 
 import android.app.Application
-import de.ph1b.audiobook.common.ErrorReporter
+import de.ph1b.audiobook.misc.ErrorReporter
 
 /**
  * No-Op proxy for crashlytics
