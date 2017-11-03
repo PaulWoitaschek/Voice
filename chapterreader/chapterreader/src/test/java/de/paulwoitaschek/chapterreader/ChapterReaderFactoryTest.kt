@@ -1,6 +1,6 @@
 package de.paulwoitaschek.chapterreader
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ChapterReaderFactoryTest {
 

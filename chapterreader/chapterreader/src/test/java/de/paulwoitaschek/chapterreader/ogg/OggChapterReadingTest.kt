@@ -2,15 +2,15 @@ package de.paulwoitaschek.chapterreader.ogg
 
 import com.google.common.truth.Truth.assertThat
 import de.paulwoitaschek.chapterreader.Chapter
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.io.File
 
 class OggChapterReadingTest {
 
   private lateinit var oggChapterReader: OggChapterReader
 
-  @Before
+  @BeforeEach
   fun setUp() {
     oggChapterReader = OggChapterReader()
   }

@@ -7,7 +7,7 @@ import de.paulwoitaschek.chapterreader.ogg.oggReading.PackageSizeParser
 import de.paulwoitaschek.chapterreader.ogg.oggReading.concat
 import de.paulwoitaschek.chapterreader.ogg.oggReading.demuxOggStreams
 import de.paulwoitaschek.chapterreader.ogg.oggReading.readOggPages
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 import java.util.Random
 

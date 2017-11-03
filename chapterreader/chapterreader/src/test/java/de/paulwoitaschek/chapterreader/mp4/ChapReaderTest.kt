@@ -2,7 +2,7 @@ package de.paulwoitaschek.chapterreader.mp4
 
 import com.google.common.truth.Truth.assertThat
 import de.paulwoitaschek.chapterreader.Chapter
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 
 class ChapReaderTest {

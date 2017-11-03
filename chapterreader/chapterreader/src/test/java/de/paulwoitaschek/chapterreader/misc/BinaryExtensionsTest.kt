@@ -2,8 +2,9 @@ package de.paulwoitaschek.chapterreader.misc
 
 import com.google.common.truth.Truth.assertThat
 import de.paulwoitaschek.chapterreader.ogg.DatatypeConverter
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
 import java.io.EOFException
 import java.io.InputStream
@@ -13,7 +14,7 @@ class BinaryStreamExtensionsTest {
   private val binaryData = DatatypeConverter.parseHexBinary("6c6f6cffd7904df58a9e4e0c2582390eb2")
   private lateinit var stream: InputStream
 
-  @Before
+  @BeforeEach
   fun setUp() {
     stream = ByteArrayInputStream(binaryData)
   }
@@ -76,8 +77,10 @@ class BinaryStreamExtensionsTest {
     assertThat(stream.readUInt8()).isEqualTo(0x4e)
   }
 
-  @Test(expected = EOFException::class)
+  @Test
   fun endOfBinaryStreamException() {
-    stream.readAmountOfBytes(100)
+    assertThrows(EOFException::class.java) {
+      stream.readAmountOfBytes(100)
+    }
   }
 }

@@ -5,7 +5,7 @@ import de.paulwoitaschek.chapterreader.Chapter
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisComment
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentParseException
 import de.paulwoitaschek.chapterreader.ogg.vorbisComment.VorbisCommentReader
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
 
 class VorbisCommentReadingTest {
