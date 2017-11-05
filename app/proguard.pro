@@ -3,9 +3,7 @@
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.Unsafe
 -dontnote
-
-# Retrolambda
--dontwarn java.lang.invoke.*
+-dontwarn okio.**
 
 # rxJava
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
@@ -22,10 +20,8 @@
 # picasso
 -dontwarn com.squareup.picasso.OkHttpDownloader
 
-# mp4parser
--keep class ** implements com.coremedia.iso.boxes.Box { *; }
--dontwarn okio.**
--dontwarn com.googlecode.mp4parser.**
+# chapterreader
+-dontwarn org.slf4j.**
 
 # dagger
 -dontwarn com.google.errorprone.annotations.*
