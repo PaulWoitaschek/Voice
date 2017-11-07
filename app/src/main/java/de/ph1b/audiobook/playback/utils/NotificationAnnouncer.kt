@@ -30,36 +30,39 @@ class NotificationAnnouncer
     private val context: Context,
     private val imageHelper: ImageHelper,
     private val playerController: PlayerController,
-    private val notificationChannelCreator: NotificationChannelCreator
+    notificationChannelCreator: NotificationChannelCreator
 ) {
 
   private var cachedImage: CachedImage? = null
 
-  fun getNotification(book: Book?, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
-    val stopPI = stopIntent()
-    val mediaStyle = MediaStyle()
-        .setShowActionsInCompactView(0, 1, 2)
-        .setCancelButtonIntent(stopPI)
-        .setShowCancelButton(true)
-        .setMediaSession(sessionToken)
-    return NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
+  private val mediaStyle = MediaStyle()
+      .setShowActionsInCompactView(0, 1, 2)
+      .setCancelButtonIntent(stopIntent())
+      .setShowCancelButton(true)
+
+  private val notificationBuilder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
+      .setAutoCancel(true)
+      .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+      .setDeleteIntent(stopIntent())
+      .setPriority(NotificationCompat.PRIORITY_HIGH)
+      .setShowWhen(false)
+      .setSmallIcon(R.drawable.ic_notification)
+      .setStyle(mediaStyle)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+      .setWhen(0)
+
+  fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
+    mediaStyle.setMediaSession(sessionToken)
+    notificationBuilder.mActions.clear()
+    return notificationBuilder
         .addRewindAction()
         .addPlayPauseAction(playState)
         .addFastForwardAction()
-        .setStyle(mediaStyle)
-        .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
-        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         .setChapterInfo(book)
-        .setShowWhen(false)
-        .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setContentTitle(book)
         .setContentIntent(contentIntent(book))
-        .setSmallIcon(R.drawable.ic_notification)
+        .setContentTitle(book)
         .setLargeIcon(book)
-        .setWhen(0)
-        .setDeleteIntent(stopPI)
-        .setAutoCancel(true)
+        .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
         .build()
   }
 
@@ -88,33 +91,30 @@ class NotificationAnnouncer
     return cover
   }
 
-  private fun NotificationCompat.Builder.setLargeIcon(book: Book?): NotificationCompat.Builder {
-    book?.let {
-      setLargeIcon(cover(book))
-    }
+  private fun NotificationCompat.Builder.setLargeIcon(book: Book): NotificationCompat.Builder {
+    setLargeIcon(cover(book))
     return this
   }
 
-  private fun NotificationCompat.Builder.setContentTitle(book: Book?): NotificationCompat.Builder {
-    book?.let { setContentTitle(it.name) }
+  private fun NotificationCompat.Builder.setContentTitle(book: Book): NotificationCompat.Builder {
+    setContentTitle(book.name)
     return this
   }
 
-  private fun contentIntent(book: Book?): PendingIntent {
-    val contentIntent = if (book != null) {
-      MainActivity.goToBookIntent(context, book.id)
-    } else MainActivity.newIntent(context, false)
+  private fun contentIntent(book: Book): PendingIntent {
+    val contentIntent = MainActivity.goToBookIntent(context, book.id)
     return PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
   }
 
-  private fun NotificationCompat.Builder.setChapterInfo(book: Book?): NotificationCompat.Builder {
-    if (book == null) return this
-
+  private fun NotificationCompat.Builder.setChapterInfo(book: Book): NotificationCompat.Builder {
     val chapters = book.chapters
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.
       setContentInfo("${(book.currentChapterIndex + 1)}/${chapters.size}")
       setContentText(book.currentChapter.name)
+    } else {
+      setContentInfo(null)
+      setContentText(null)
     }
     return this
   }
