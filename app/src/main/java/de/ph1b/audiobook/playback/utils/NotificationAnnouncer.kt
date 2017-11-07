@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.MainActivity
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getOnUiThread
@@ -25,11 +26,14 @@ import javax.inject.Inject
 /**
  * Provides Notifications based on playing information.
  */
+@PerService
 class NotificationAnnouncer
 @Inject constructor(
     private val context: Context,
     private val imageHelper: ImageHelper,
     private val playerController: PlayerController,
+    private val playStateManager: PlayStateManager,
+    private val mediaSession: MediaSessionCompat,
     notificationChannelCreator: NotificationChannelCreator
 ) {
 
@@ -51,9 +55,10 @@ class NotificationAnnouncer
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
 
-  fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
-    mediaStyle.setMediaSession(sessionToken)
+  fun createNotification(book: Book): Notification {
+    mediaStyle.setMediaSession(mediaSession.sessionToken)
     notificationBuilder.mActions.clear()
+    val playState = playStateManager.playState
     return notificationBuilder
         .addRewindAction()
         .addPlayPauseAction(playState)

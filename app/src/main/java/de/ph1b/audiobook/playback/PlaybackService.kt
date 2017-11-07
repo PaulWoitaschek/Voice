@@ -176,7 +176,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     isForeground = false
     val book = player.book()
         ?: return
-    val notification = notificationAnnouncer.getNotification(book, PlayState.PAUSED, mediaSession.sessionToken)
+    val notification = notificationAnnouncer.createNotification(book)
     notificationManager.notify(NOTIFICATION_ID, notification)
   }
 
@@ -186,7 +186,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.isActive = true
     val book = player.book()
         ?: return
-    val notification = notificationAnnouncer.getNotification(book, PlayState.PLAYING, mediaSession.sessionToken)
+    val notification = notificationAnnouncer.createNotification(book)
     startForeground(NOTIFICATION_ID, notification)
     isForeground = true
   }
