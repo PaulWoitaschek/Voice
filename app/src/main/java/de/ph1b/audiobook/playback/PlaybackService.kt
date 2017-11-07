@@ -11,6 +11,7 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import dagger.android.AndroidInjection
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.RxBroadcast
@@ -21,7 +22,7 @@ import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
-import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
+import de.ph1b.audiobook.playback.utils.NotificationCreator
 import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -52,7 +53,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var notificationManager: NotificationManager
-  @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
+  @Inject lateinit var notificationCreator: NotificationCreator
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
@@ -82,13 +83,22 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .subscribe { currentBookIdChanged(it) }
         .disposeOnDestroy()
 
-    repo.updateObservable()
+    val bookUpdated = repo.updateObservable()
         .filter { it.id == currentBookIdPref.value }
+    bookUpdated
         .subscribe {
           player.init(it)
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
         .disposeOnDestroy()
+
+    bookUpdated
+        .distinctUntilChanged { book -> book.currentChapter }
+        .subscribe {
+          if (isForeground) {
+            updateNotification(it)
+          }
+        }
 
     playStateManager.playStateStream()
         .observeOn(Schedulers.io())
@@ -113,6 +123,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .disposeOnDestroy()
 
     tearDownAutomatically()
+  }
+
+  private fun updateNotification(book: Book) {
+    val notification = notificationCreator.createNotification(book)
+    notificationManager.notify(NOTIFICATION_ID, notification)
   }
 
   private fun tearDownAutomatically() {
@@ -176,8 +191,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     isForeground = false
     val book = player.book()
         ?: return
-    val notification = notificationAnnouncer.createNotification(book)
-    notificationManager.notify(NOTIFICATION_ID, notification)
+    updateNotification(book)
   }
 
   private fun handlePlaybackStatePlaying() {
@@ -186,7 +200,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.isActive = true
     val book = player.book()
         ?: return
-    val notification = notificationAnnouncer.createNotification(book)
+    val notification = notificationCreator.createNotification(book)
     startForeground(NOTIFICATION_ID, notification)
     isForeground = true
   }
