@@ -48,6 +48,9 @@ allprojects {
       force 'com.google.code.findbugs:jsr305:3.0.1'
     }
   }
+
+  apply from: "$rootProject.projectDir/versioning.gradle"
+  apply from: "$rootProject.projectDir/dependencies.gradle"
 }
 
 apply from: "predexDisabler.gradle"

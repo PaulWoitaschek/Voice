@@ -1,0 +1,17 @@
+int major = 3
+int minor = 6
+int patch = 2
+int build = 0
+String type = ""
+
+def versionName = "$major.$minor.$patch"
+boolean appendBuild = build != 0
+if (appendBuild || !type.empty) {
+  versionName += "-$type"
+  if (appendBuild) {
+    versionName += build
+  }
+}
+
+project.ext.versionName = versionName
+project.ext.versionCode = 1_000_000 * major + 10_000 * minor + 100 * patch + build
