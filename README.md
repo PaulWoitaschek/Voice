@@ -26,16 +26,6 @@ Some rules for coding:
 * For each feature, make a seperate branch, so it can be reviewed separately
 * Use commits with a good description, so everyone can see, what you did
 
-### Building the project on windows
-If you want to build the project on windows you will run into some issues since the pre-build scripts use linux specific commands.
-
-To prepare the build you have to download [Opus](https://ftp.osuosl.org/pub/xiph/releases/opus/) and
-[Flac](https://ftp.osuosl.org/pub/xiph/releases/flac/) and unzip those files to the `exoplayer-flac` and `exoplayer-opus` submodules' `src/main/jni` folders.
-
-The current versions can be found [here](https://github.com/PaulWoitaschek/Voice/blob/master/buildSrc/src/main/java/de/ph1b/audiobook/ndkGen/dependencyVersions.kt).
-
-This step has to be done only once and has to be repeated when a referenced version change.
-
 ## <a name="trans">Translations</a>
 The project page is on [transifex](https://www.transifex.com/PaulWoitaschek/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
 

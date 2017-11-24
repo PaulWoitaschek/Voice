@@ -1,1 +1,1 @@
-include ':app', ':core', ':exoplayer-flac', ':exoplayer-opus', ':common', ':data'
+include ':app', ':core', ':common', ':data'

@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
-import de.ph1b.audiobook.playback.utils.SimpleEventListener
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
@@ -29,7 +28,7 @@ class DurationAnalyzer
 
   init {
     exoPlayer.addListener(
-        object : SimpleEventListener {
+        object : Player.DefaultEventListener() {
           override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             playbackStateSubject.onNext(playbackState)
           }

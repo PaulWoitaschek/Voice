@@ -132,9 +132,9 @@ dependencies {
 
   implementation libraries.timber
 
-  implementation libraries.exoPlayerCore
-  implementation project(":exoplayer-flac")
-  implementation project(":exoplayer-opus")
+  implementation libraries.exoPlayer.core
+  implementation libraries.exoPlayer.flac
+  implementation libraries.exoPlayer.opus
 
   implementation libraries.conductor.base
   implementation libraries.conductor.support

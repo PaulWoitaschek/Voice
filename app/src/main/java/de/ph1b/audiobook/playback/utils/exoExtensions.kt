@@ -13,7 +13,7 @@ fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(
-      object : SimpleEventListener {
+      object : Player.DefaultEventListener() {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
           val state = when (playbackState) {
             Player.STATE_ENDED -> PlayerState.ENDED
@@ -32,7 +32,7 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
 
 inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
   addListener(
-      object : SimpleEventListener {
+      object : Player.DefaultEventListener() {
         override fun onPlayerError(error: ExoPlaybackException) {
           action(error)
         }
@@ -52,8 +52,8 @@ inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(
-      object : SimpleEventListener {
-        override fun onPositionDiscontinuity() {
+      object : Player.DefaultEventListener() {
+        override fun onPositionDiscontinuity(reason: Int) {
           action()
         }
       }
