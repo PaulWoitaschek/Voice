@@ -1,6 +1,6 @@
 int major = 3
 int minor = 6
-int patch = 2
+int patch = 3
 int build = 0
 String type = ""
 
