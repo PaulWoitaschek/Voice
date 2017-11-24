@@ -3,7 +3,7 @@
     <!--BookShelf-->
     <string name="content_current_book">Detta är den aktuella boken</string>
     <string name="current_book">Aktuella boken</string>
-    <string name="change_layout_type">Byt layout</string>
+    <string name="change_layout_type">Ändra layout</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
@@ -71,7 +71,7 @@
     <!--Settings-->
     <string name="action_settings">Inställningar</string>
     <string name="pref_resume_on_replug">Återuppta uppspelning</string>
-    <string name="pref_resume_on_replug_hint">Om du pausade genom att plugga ut hörlurarna, kommer det att återupptas vid anslutning.</string>
+    <string name="pref_resume_on_replug_hint">Om du pausade genom att koppla ur hörlurarna, återupptas det vid inkoppling.</string>
     <string name="pref_resume_after_call">Återuppta efter samtal</string>
     <string name="pref_resume_after_call_hint">Återupptar uppspelningen efter ett samtal.</string>
     <string name="min">%s min</string>

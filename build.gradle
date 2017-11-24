@@ -55,7 +55,7 @@ allprojects {
 
 apply from: "predexDisabler.gradle"
 
-task updateTranslations(type: Exec) {
+task importStrings(type: Exec) {
   executable 'sh'
   args "-c", "tx pull -af --minimum-perc=5"
 }

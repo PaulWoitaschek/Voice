@@ -113,4 +113,6 @@
     <string name="network_top">To nie zadziałało…</string>
     <string name="cover_crop">Przytnij okładkę</string>
     <string name="music_notification">Odtwarzanie</string>
+    <string name="onboarding_title">Witaj!</string>
+    <string name="onboarding_content">Zacznijmy od dodania twojego pierwszego audiobooka.</string>
 </resources>
