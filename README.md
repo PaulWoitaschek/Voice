@@ -11,8 +11,17 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/master/Images/map-port.jpg" width="400" ></a>
 
-[![Download from Google Play](http://www.android.com/images/brand/android_app_on_play_large.png "Download from Google Play")](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
-[![Voice on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/packages/de.ph1b.audiobook/)
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>  
+<a href="https://f-droid.org/packages/de.ph1b.audiobook/">
+    <img alt="Get it on F-Droid"
+        height="80"
+        src="https://f-droid.org/badge/get-it-on.png" />
+        </a>
+        </p>
 
 # <a name="contrib">Contribution</a>
 
