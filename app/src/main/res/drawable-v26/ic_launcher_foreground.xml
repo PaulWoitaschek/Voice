@@ -4,24 +4,15 @@
         android:height="108dp"
         android:viewportHeight="108"
         android:viewportWidth="108">
-
     <path
         android:fillColor="@color/gradient_launcher_shadow"
-        android:pathData="M89.05,39.17 A12.59,12.59,0,0,0,81.35,35.53 S71.08,38.44,68.89,44 L61,64
-A11.93,11.93,0,0,1,41.48,68 L41,67.79 L40.89,67.42
-A12.15,12.15,0,0,1,38.89,64.02 L37.96,64.39 A13,13,0,0,0,41.21,69.18 L80,108
-L108,108 L108,58.11 Z"/>
-
+        android:pathData="M89.05 39.17a12.59 12.59 0 0 0-7.7-3.64S71.08 38.44 68.89 44L61 64a11.93 11.93 0 0 1-19.52 4L41 67.79l-0.11-0.37a12.15 12.15 0 0 1-2-3.4l-0.93 0.37a13 13 0 0 0 3.25 4.79L80 108h28V58.11z"/>
     <path
-        android:pathData="M-21.26,64 A11.9,11.9,0,0,0,0.87,64 L8.79,44 A11.9,11.9,0,0,1,30.91,44 L38.83,64
-A11.9,11.9,0,0,0,61,64 L68.93,44 A11.9,11.9,0,0,1,91,44 L98.93,64
-A11.9,11.9,0,0,0,121.05,64"
+        android:pathData="M-21.26 64a11.9 11.9 0 0 0 22.13 0l7.92-20a11.9 11.9 0 0 1 22.12 0l7.92 20A11.9 11.9 0 0 0 61 64l7.93-20A11.9 11.9 0 0 1 91 44l7.93 20a11.9 11.9 0 0 0 22.12 0"
         android:strokeColor="#fff"
         android:strokeMiterLimit="10"
         android:strokeWidth="2"/>
-
     <path
         android:fillColor="@color/gradient_launcher_finish"
-        android:pathData="M0,0 L108,0 L108,108 L0,108 L0,0 Z"/>
-
+        android:pathData="M0 0h108v108H0V0z"/>
 </vector>

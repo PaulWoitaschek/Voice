@@ -9,7 +9,6 @@
         android:title="@string/current_book"
         app:showAsAction="always"/>
 
-
     <item
         android:id="@+id/library"
         android:icon="@drawable/audiobook"
