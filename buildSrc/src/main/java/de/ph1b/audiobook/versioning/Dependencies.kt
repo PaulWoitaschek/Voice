@@ -36,10 +36,10 @@ object Versions {
 object Dependencies {
 
   object Support {
-    private val version = "27.0.1"
+    private val version = "27.0.2"
     val supportAnnotations = "com.android.support:support-annotations:$version"
     val appCompat = "com.android.support:appcompat-v7:$version"
-    val constraintLayout = "com.android.support.constraint:constraint-layout:1.1.0-beta3"
+    val constraintLayout = "com.android.support.constraint:constraint-layout:1.1.0-beta4"
     val design = "com.android.support:design:$version"
     val recyclerView = "com.android.support:recyclerview-v7:$version"
     val transitions = "com.android.support:transition:$version"
@@ -51,7 +51,7 @@ object Dependencies {
   val dataBindingCompiler = "com.android.databinding:compiler:$androidPlugin"
   val androidGradlePlugin = "com.android.tools.build:gradle:$androidPlugin"
   val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
-  val materialDialogs = "com.afollestad.material-dialogs:core:0.9.5.0"
+  val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
   val materialCab = "com.afollestad:material-cab:0.1.12"
   val picasso = "com.squareup.picasso:picasso:2.5.2"
   val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.9.1"
@@ -64,11 +64,11 @@ object Dependencies {
     val support = "com.bluelinelabs:conductor-support:$version"
   }
 
-  val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.7.1@aar"
-  val fabricGradlePlugin = "io.fabric.tools:gradle:1.24.5"
+  val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.8.0@aar"
+  val fabricGradlePlugin = "io.fabric.tools:gradle:1.25.1"
 
   object Dagger {
-    private val version = "2.13"
+    private val version = "2.14.1"
     val core = "com.google.dagger:dagger:$version"
     val android = "com.google.dagger:dagger-android-support:$version"
     val androidProcessor = "com.google.dagger:dagger-android-processor:$version"
@@ -84,14 +84,14 @@ object Dependencies {
 
   val moshi = "com.squareup.moshi:moshi:1.5.0"
   val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.0.1"
-  val rxInterop = "com.github.akarnokd:rxjava2-interop:0.11.1"
-  val rxJava = "io.reactivex.rxjava2:rxjava:2.1.6"
+  val rxInterop = "com.github.akarnokd:rxjava2-interop:0.11.2"
+  val rxJava = "io.reactivex.rxjava2:rxjava:2.1.8"
   val rxPreferences = "com.f2prateek.rx.preferences:rx-preferences:1.0.2"
   val timber = "com.jakewharton.timber:timber:4.6.0"
 
   object Kotlin {
-    private val coroutineVersion = "0.19.3"
-    private val kotlinVersion = "1.1.60"
+    private val coroutineVersion = "0.21"
+    private val kotlinVersion = "1.2.10"
     val std = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
@@ -99,7 +99,7 @@ object Dependencies {
   }
 
   val junit = "junit:junit:4.12"
-  val mockito = "org.mockito:mockito-core:2.12.0"
+  val mockito = "org.mockito:mockito-core:2.13.0"
   val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
-  val truth = "com.google.truth:truth:0.36"
+  val truth = "com.google.truth:truth:0.37"
 }
