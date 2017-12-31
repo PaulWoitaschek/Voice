@@ -1,5 +1,6 @@
+import de.ph1b.audiobook.versioning.Dependencies
+
 buildscript {
-  apply from: 'dependencies.gradle'
 
   repositories {
     jcenter()
@@ -8,9 +9,9 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:$versions.androidPlugin"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-    classpath "io.fabric.tools:gradle:$versions.fabric"
+    classpath Dependencies.androidGradlePlugin
+    classpath Dependencies.Kotlin.gradlePlugin
+    classpath Dependencies.fabricGradlePlugin
   }
 }
 
@@ -41,16 +42,12 @@ allprojects {
   }
   configurations.all {
     resolutionStrategy {
-      force libraries.support.v13
-      force "com.squareup.okio:okio:1.13.0"
-      force libraries.support.annotations
-      force libraries.kotlinStdLib
+      force Dependencies.Support.v13
+      force Dependencies.Support.supportAnnotations
+      force Dependencies.Kotlin.std
       force 'com.google.code.findbugs:jsr305:3.0.1'
     }
   }
-
-  apply from: "$rootProject.projectDir/versioning.gradle"
-  apply from: "$rootProject.projectDir/dependencies.gradle"
 }
 
 apply from: "predexDisabler.gradle"

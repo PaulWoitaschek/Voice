@@ -1,13 +1,11 @@
-apply from: '../dependencies.gradle'
 apply plugin: 'java'
 
 buildscript {
-  apply from: '../dependencies.gradle'
   repositories {
     mavenCentral()
   }
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.10"
   }
 }
 
@@ -16,7 +14,7 @@ repositories {
 }
 
 dependencies {
-  implementation libraries.kotlinStdLib
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:1.2.10"
 }
 
 apply plugin: "kotlin"
