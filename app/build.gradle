@@ -3,9 +3,10 @@ import de.ph1b.audiobook.versioning.Dependencies
 import de.ph1b.audiobook.versioning.Versions
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply from: "../artifacts.gradle"
 
 android {
@@ -82,6 +83,10 @@ android {
   }
 
   dataBinding.enabled = true
+}
+
+androidExtensions {
+  experimental = true
 }
 
 dependencies {

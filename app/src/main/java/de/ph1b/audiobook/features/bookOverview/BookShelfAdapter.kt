@@ -6,15 +6,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
-import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
@@ -23,6 +20,8 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.book_shelf_row.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -102,35 +101,35 @@ class BookShelfAdapter(
 
   inner class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
       parent.layoutInflater().inflate(
-          R.layout.book_shelf_list_layout,
+          R.layout.book_shelf_row,
           parent,
           false
       )
-  ) {
+  ), LayoutContainer {
 
-    private val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
-    private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
-    private val rightTime: TextView = itemView.findViewById(R.id.rightTime)
-    val coverView: ImageView = itemView.findViewById(R.id.coverView)
-    private val currentPlayingIndicator: ImageView = itemView.findViewById(R.id.currentPlayingIndicator)
-    private val titleView: TextView = itemView.findViewById(R.id.title)
-    private val editBook: View = itemView.findViewById<View>(R.id.editBook)
+    override val containerView: View? get() = itemView
+
+    private val progressBar = progress
+    // private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
+    // private val rightTime: TextView = itemView.findViewById(R.id.rightTime)
+    val coverView: ImageView = cover
+    private val currentPlayingIndicator: ImageView = playingIndicator
+    private val titleView: TextView = title
+    private val editBook: View = edit
     var indicatorVisible: Boolean = false
       private set
-
-    init {
-      MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
-    }
 
     fun bind(book: Book) {
       //setting text
       val name = book.name
       titleView.text = name
-
+      author.text = book.author
+      author.visible = book.author != null
+      titleView.maxLines = if (book.author == null) 2 else 1
       bindCover(book)
 
       indicatorVisible = book.id == currentBookIdPref.value
-      currentPlayingIndicator.visible = indicatorVisible
+      currentPlayingIndicator.visible = false
 
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
       editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
@@ -139,11 +138,11 @@ class BookShelfAdapter(
 
       val globalPosition = book.position
       val totalDuration = book.duration
-      val progress = Math.round(100f * globalPosition.toFloat() / totalDuration.toFloat())
+      val progress = globalPosition.toFloat() / totalDuration.toFloat()
 
-      leftTime.text = formatTime(globalPosition)
+      //    leftTime.text = formatTime(globalPosition)
       progressBar.progress = progress
-      rightTime.text = formatTime(totalDuration)
+      //  rightTime.text = formatTime(totalDuration)
     }
 
     private fun bindCover(book: Book) {
