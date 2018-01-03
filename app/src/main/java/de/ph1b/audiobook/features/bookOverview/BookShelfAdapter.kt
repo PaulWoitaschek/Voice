@@ -1,6 +1,10 @@
 package de.ph1b.audiobook.features.bookOverview
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.support.v7.graphics.Palette
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -8,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
@@ -154,7 +159,25 @@ class BookShelfAdapter(
         Picasso.with(context)
             .load(coverFile)
             .placeholder(coverReplacement)
-            .into(coverView)
+            .into(object : Target {
+              override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+              }
+
+              override fun onBitmapFailed(errorDrawable: Drawable?) {
+              }
+
+              override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                bitmap?.let {
+                  coverView.setImageBitmap(it)
+                  Palette.from(it)
+                      .generate {
+                        val color = it.getVibrantColor(Color.BLACK)
+                        progressBar.color = color
+                      }
+                }
+              }
+            })
       } else {
         Picasso.with(context)
             .cancelRequest(coverView)

@@ -44,6 +44,7 @@ object Dependencies {
     val recyclerView = "com.android.support:recyclerview-v7:$version"
     val transitions = "com.android.support:transition:$version"
     val v13 = "com.android.support:support-v13:$version"
+    val palette = "com.android.support:palette-v7:$version"
     val testRunner = "com.android.support.test:runner:1.0.1"
   }
 

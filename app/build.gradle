@@ -103,6 +103,7 @@ dependencies {
   implementation Dependencies.Support.design
   implementation Dependencies.Support.transitions
   implementation Dependencies.Support.constraintLayout
+  implementation Dependencies.Support.palette
 
   implementation Dependencies.picasso
 
