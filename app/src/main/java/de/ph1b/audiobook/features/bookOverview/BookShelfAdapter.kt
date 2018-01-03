@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import de.ph1b.audiobook.R
@@ -28,7 +27,6 @@ import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.book_shelf_row.*
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -47,37 +45,12 @@ class BookShelfAdapter(
     setHasStableIds(true)
   }
 
-  private fun formatTime(ms: Int): String {
-    val h = "%02d".format((TimeUnit.MILLISECONDS.toHours(ms.toLong())))
-    val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
-    return h + ":" + m
-  }
-
-  /** Adds a new set of books and removes the ones that do not exist any longer **/
   fun newDataSet(newBooks: List<Book>) {
-    val diffResult = DiffUtil.calculateDiff(
-        object : DiffUtil.Callback() {
-
-          override fun getOldListSize(): Int = books.size
-
-          override fun getNewListSize(): Int = newBooks.size
-
-          override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = books[oldItemPosition]
-            val newItem = newBooks[newItemPosition]
-            return oldItem.id == newItem.id && oldItem.position == newItem.position && oldItem.name == newItem.name
-          }
-
-          override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = books[oldItemPosition]
-            val newItem = newBooks[newItemPosition]
-            return oldItem.id == newItem.id
-          }
-        }, false
-    ) // no need to detect moves as the list is sorted
-
+    val oldBooks = books.toList()
     books.clear()
     books.addAll(newBooks)
+    val callback = BookShelfDiffCallback(oldBooks = oldBooks, newBooks = books)
+    val diffResult = DiffUtil.calculateDiff(callback, false)
 
     diffResult.dispatchUpdatesTo(this)
   }
@@ -114,30 +87,24 @@ class BookShelfAdapter(
 
     override val containerView: View? get() = itemView
 
-    private val progressBar = progress
-    // private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
-    // private val rightTime: TextView = itemView.findViewById(R.id.rightTime)
     val coverView: ImageView = cover
-    private val currentPlayingIndicator: ImageView = playingIndicator
-    private val titleView: TextView = title
-    private val editBook: View = edit
     var indicatorVisible: Boolean = false
       private set
 
     fun bind(book: Book) {
       //setting text
       val name = book.name
-      titleView.text = name
+      title.text = name
       author.text = book.author
       author.visible = book.author != null
-      titleView.maxLines = if (book.author == null) 2 else 1
+      title.maxLines = if (book.author == null) 2 else 1
       bindCover(book)
 
       indicatorVisible = book.id == currentBookIdPref.value
-      currentPlayingIndicator.visible = false
+      playingIndicator.visible = false
 
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
-      editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
+      edit.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
       coverView.supportTransitionName = book.coverTransitionName
 
@@ -145,9 +112,7 @@ class BookShelfAdapter(
       val totalDuration = book.duration
       val progress = globalPosition.toFloat() / totalDuration.toFloat()
 
-      //    leftTime.text = formatTime(globalPosition)
-      progressBar.progress = progress
-      //  rightTime.text = formatTime(totalDuration)
+      this.progress.progress = progress
     }
 
     private fun bindCover(book: Book) {
@@ -173,7 +138,7 @@ class BookShelfAdapter(
                   Palette.from(it)
                       .generate {
                         val color = it.getVibrantColor(Color.BLACK)
-                        progressBar.color = color
+                        progress.color = color
                       }
                 }
               }
