@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Detta är den aktuella boken</string>
     <string name="current_book">Aktuella boken</string>
-    <string name="change_layout_type">Ändra layout</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="desired_medium_cover">180dp</dimen>
-
     <!-- material specs -->
     <dimen name="list_text_primary_size">16sp</dimen>
     <dimen name="list_text_secondary_size">14sp</dimen>

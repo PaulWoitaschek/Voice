@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Dit is die huidige boek</string>
     <string name="current_book">Huidige boek</string>
-    <string name="change_layout_type">Verander uitleg</string>
     <!--BookPlayFragment-->
     <string name="cover">Voorblad</string>
     <string name="play_pause">Speel / Breek</string>

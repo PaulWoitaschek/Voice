@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Este es tu libro actual</string>
     <string name="current_book">Libro actual</string>
-    <string name="change_layout_type">Cambiar diseño</string>
     <!--BookPlayFragment-->
     <string name="cover">Cubierta</string>
     <string name="play_pause">Reproducir / Pausar</string>

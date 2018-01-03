@@ -4,15 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.support.annotation.DrawableRes
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.MenuItem
-import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -59,21 +55,15 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<Long>
-  @field:[Inject Named(PrefKeys.DISPLAY_MODE)]
-  lateinit var displayModePref: Pref<DisplayMode>
 
   private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
   private var adapter: BookShelfAdapter by clearAfterDestroyView()
-  private var listDecoration: RecyclerView.ItemDecoration by clearAfterDestroyView()
-  private var gridLayoutManager: GridLayoutManager by clearAfterDestroyView()
-  private var linearLayoutManager: RecyclerView.LayoutManager by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
   private var currentBook: Book? = null
 
   private var currentPlaying: MenuItem by clearAfterDestroyView()
-  private var displayModeItem: MenuItem by clearAfterDestroyView()
 
   override fun onBindingCreated(binding: BookShelfBinding) {
     playPauseDrawable = PlayPauseDrawable()
@@ -100,18 +90,15 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     // without this the item would blink on every change
     val anim = binding.recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    listDecoration = VerticalDividerItemDecoration(activity, activity.dpToPxRounded(72F))
-    gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
-    linearLayoutManager = LinearLayoutManager(activity)
-
-    updateDisplayMode()
+    val listDecoration = VerticalDividerItemDecoration(activity, activity.dpToPxRounded(72F))
+    binding.recyclerView.addItemDecoration(listDecoration)
+    binding.recyclerView.layoutManager = LinearLayoutManager(activity)
   }
 
   private fun setupToolbar() {
     binding.toolbar.inflateMenu(R.menu.book_shelf)
     val menu = binding.toolbar.menu
     currentPlaying = menu.findItem(R.id.action_current)
-    displayModeItem = menu.findItem(R.id.action_change_layout)
     binding.toolbar.title = getString(R.string.app_name)
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
@@ -122,11 +109,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
         }
         R.id.action_current -> {
           invokeBookSelectionCallback(currentBookIdPref.value)
-          true
-        }
-        R.id.action_change_layout -> {
-          displayModePref.value = !displayModePref.value
-          updateDisplayMode()
           true
         }
         R.id.library -> {
@@ -172,40 +154,10 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     }
   }
 
-  // Returns the amount of columns the main-grid will need
-  private fun amountOfColumns(): Int {
-    val r = binding.recyclerView.resources
-    val displayMetrics = r.displayMetrics
-    val widthPx = displayMetrics.widthPixels.toFloat()
-    val desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover).toFloat()
-    val columns = Math.round(widthPx / desiredPx)
-    return Math.max(columns, 2)
-  }
-
-  private fun updateDisplayMode() {
-    val defaultDisplayMode = displayModePref.value
-    val margin: Int
-    if (defaultDisplayMode == DisplayMode.GRID) {
-      binding.recyclerView.removeItemDecoration(listDecoration)
-      binding.recyclerView.layoutManager = gridLayoutManager
-      margin = activity.dpToPxRounded(2F)
-    } else {
-      binding.recyclerView.addItemDecoration(listDecoration, 0)
-      binding.recyclerView.layoutManager = linearLayoutManager
-      margin = 0
-    }
-    val layoutParams = binding.recyclerView.layoutParams as ViewGroup.MarginLayoutParams
-    layoutParams.leftMargin = margin
-    layoutParams.rightMargin = margin
-    adapter.displayMode = defaultDisplayMode
-
-    displayModeItem.setIcon((!displayModePref.value).icon)
-  }
-
   private fun invokeBookSelectionCallback(bookId: Long) {
     currentBookIdPref.value = bookId
 
-    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
+    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.ViewHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))
     val transition = BookChangeHandler()
     if (viewHolder != null) {
@@ -230,7 +182,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
     for (i in 0 until adapter.itemCount) {
       val itemId = adapter.getItemId(i)
-      val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
+      val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.ViewHolder?
       if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
         adapter.notifyItemChanged(i)
       }
@@ -302,16 +254,8 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
   }
 
-  enum class DisplayMode(@DrawableRes val icon: Int) {
-    GRID(R.drawable.view_grid),
-    LIST(R.drawable.ic_view_list);
-
-    operator fun not(): DisplayMode = if (this == GRID) LIST else GRID
-  }
-
   override fun onDestroyBinding(binding: BookShelfBinding) {
     super.onDestroyBinding(binding)
     binding.recyclerView.adapter = null
-    //   currentTapTarget?.dismiss(false)
   }
 }

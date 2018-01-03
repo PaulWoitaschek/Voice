@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">هذا الكتاب الحالي</string>
     <string name="current_book">الكتاب الحالي</string>
-    <string name="change_layout_type">غير النسق</string>
     <!--BookPlayFragment-->
     <string name="cover">الغطاء</string>
     <string name="play_pause">العب / توقف</string>

@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Книга, которую вы сейчас слушаете</string>
     <string name="current_book">Текущая книга</string>
-    <string name="change_layout_type">Изменить макет</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>

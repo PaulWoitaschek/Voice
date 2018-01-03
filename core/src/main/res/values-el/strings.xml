@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Αυτό είναι το τρέχον βιβλίο</string>
     <string name="current_book">Τρέχον βιβλίο</string>
-    <string name="change_layout_type">Αλλαγή διάταξης</string>
     <!--BookPlayFragment-->
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>

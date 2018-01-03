@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
-    <string name="change_layout_type">Modifier la disposition</string>
     <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lecture / Pause</string>

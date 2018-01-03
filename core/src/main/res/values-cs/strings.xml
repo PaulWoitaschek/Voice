@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Toto je aktuální kniha</string>
     <string name="current_book">Aktuální kniha</string>
-    <string name="change_layout_type">Změnit vzhled</string>
     <!--BookPlayFragment-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>

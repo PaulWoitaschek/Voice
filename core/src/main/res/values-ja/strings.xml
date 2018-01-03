@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">これは現在のブックです</string>
     <string name="current_book">現在のブック</string>
-    <string name="change_layout_type">レイアウトを変更</string>
     <!--BookPlayFragment-->
     <string name="cover">カバー</string>
     <string name="play_pause">再生 / 一時停止</string>

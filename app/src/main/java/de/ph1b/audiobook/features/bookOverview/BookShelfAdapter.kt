@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
 import android.content.Context
-import android.support.annotation.CallSuper
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -24,8 +23,7 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
-import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -33,7 +31,7 @@ import javax.inject.Named
 class BookShelfAdapter(
     private val context: Context,
     private val bookClicked: (Book, ClickType) -> Unit
-) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+) : RecyclerView.Adapter<BookShelfAdapter.ViewHolder>() {
 
   private val books = ArrayList<Book>()
 
@@ -91,33 +89,18 @@ class BookShelfAdapter(
 
   fun getItem(position: Int): Book = books[position]
 
-  var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
-    set(value) {
-      if (value != field) {
-        field = value
-        Timber.i("displayMode changed to $field")
-        notifyDataSetChanged()
-      }
-    }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder = when (viewType) {
-    1 -> GridViewHolder(parent)
-    0 -> ListViewHolder(parent)
-    else -> throw IllegalStateException("Illegal viewType=" + viewType)
-  }
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(books[position])
 
-  override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
-
-  override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) = when {
+  override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) = when {
     payloads.isEmpty() -> onBindViewHolder(holder, position)
     else -> holder.bind(books[position])
   }
 
   override fun getItemCount(): Int = books.size
 
-  override fun getItemViewType(position: Int): Int = if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
-
-  inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
+  inner class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
       parent.layoutInflater().inflate(
           R.layout.book_shelf_list_layout,
           parent,
@@ -128,44 +111,18 @@ class BookShelfAdapter(
     private val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
     private val leftTime: TextView = itemView.findViewById(R.id.leftTime)
     private val rightTime: TextView = itemView.findViewById(R.id.rightTime)
+    val coverView: ImageView = itemView.findViewById(R.id.coverView)
+    private val currentPlayingIndicator: ImageView = itemView.findViewById(R.id.currentPlayingIndicator)
+    private val titleView: TextView = itemView.findViewById(R.id.title)
+    private val editBook: View = itemView.findViewById<View>(R.id.editBook)
+    var indicatorVisible: Boolean = false
+      private set
 
     init {
       MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
     }
 
-    override fun bind(book: Book) {
-      super.bind(book)
-
-      val globalPosition = book.position
-      val totalDuration = book.duration
-      val progress = Math.round(100f * globalPosition.toFloat() / totalDuration.toFloat())
-
-      leftTime.text = formatTime(globalPosition)
-      progressBar.progress = progress
-      rightTime.text = formatTime(totalDuration)
-    }
-  }
-
-  /** ViewHolder for the grid **/
-  inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(
-      parent.layoutInflater()
-          .inflate(R.layout.book_shelf_grid_layout, parent, false)
-  )
-
-  /** ViewHolder base class **/
-  abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    val coverView: ImageView = itemView.findViewById(R.id.coverView)
-    private val currentPlayingIndicator: ImageView = itemView.findViewById(R.id.currentPlayingIndicator)
-    private val titleView: TextView = itemView.findViewById(R.id.title)
-    private val editBook: View = itemView.findViewById<View>(R.id.editBook)
-    var indicatorVisible = false
-      private set
-
-    /** Binds the ViewHolder to a book */
-    @CallSuper
-    open fun bind(book: Book) {
-
+    fun bind(book: Book) {
       //setting text
       val name = book.name
       titleView.text = name
@@ -179,6 +136,14 @@ class BookShelfAdapter(
       editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
       coverView.supportTransitionName = book.coverTransitionName
+
+      val globalPosition = book.position
+      val totalDuration = book.duration
+      val progress = Math.round(100f * globalPosition.toFloat() / totalDuration.toFloat())
+
+      leftTime.text = formatTime(globalPosition)
+      progressBar.progress = progress
+      rightTime.text = formatTime(totalDuration)
     }
 
     private fun bindCover(book: Book) {

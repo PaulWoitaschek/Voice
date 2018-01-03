@@ -12,6 +12,5 @@ object PrefKeys {
   const val COLLECTION_BOOK_FOLDERS = "folders"
   const val CURRENT_BOOK = "currentBook"
   const val RESUME_AFTER_CALL = "resumeAfterCall"
-  const val DISPLAY_MODE = "displayMode"
   const val THEME = "THEME2_KEY"
 }

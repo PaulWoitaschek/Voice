@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">यह वर्तमान किताब है</string>
     <string name="current_book">वर्तमान किताब</string>
-    <string name="change_layout_type">लेआउट बदलें</string>
     <!--BookPlayFragment-->
     <string name="cover">कवर</string>
     <string name="play_pause">चलायें / रोकें</string>

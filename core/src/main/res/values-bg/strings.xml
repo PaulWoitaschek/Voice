@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Това е текущата книга</string>
     <string name="current_book">Текуща книга</string>
-    <string name="change_layout_type">Промяна на изгледа</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Възпроизвеждане / Пауза</string>

@@ -8,7 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.features.bookOverview.BookShelfController.DisplayMode
 import de.ph1b.audiobook.persistence.pref.PersistentPref
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -33,14 +32,6 @@ class PrefsModule {
   @Named(PrefKeys.THEME)
   fun provideThemePreference(prefs: RxSharedPreferences): Pref<ThemeUtil.Theme> {
     val pref = prefs.getEnum(PrefKeys.THEME, ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
-    return PersistentPref(pref)
-  }
-
-  @Provides
-  @Reusable
-  @Named(PrefKeys.DISPLAY_MODE)
-  fun provideDisplayModePreference(prefs: RxSharedPreferences): Pref<DisplayMode> {
-    val pref = prefs.getEnum(PrefKeys.DISPLAY_MODE, DisplayMode.GRID, DisplayMode::class.java)
     return PersistentPref(pref)
   }
 

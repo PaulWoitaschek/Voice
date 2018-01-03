@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">这是当前书籍</string>
     <string name="current_book">当前书籍</string>
-    <string name="change_layout_type">改变布局</string>
     <!--BookPlayFragment-->
     <string name="cover">封面</string>
     <string name="play_pause">播放 / 暂停</string>

@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Bu kitap şu anki kitap</string>
     <string name="current_book">Şu anki kitap</string>
-    <string name="change_layout_type">Düzeni değiştir</string>
     <!--BookPlayFragment-->
     <string name="cover">Kapak</string>
     <string name="play_pause">Oynat / Durdur</string>

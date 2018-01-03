@@ -3,7 +3,6 @@
     <!--BookShelf-->
     <string name="content_current_book">Wagi d adlis amiran</string>
     <string name="current_book">Adlis amiran</string>
-    <string name="change_layout_type">Snifel taneɣruft</string>
     <!--BookPlayFragment-->
     <string name="cover">Taduli</string>
     <string name="play_pause">Play / Rǧu</string>
