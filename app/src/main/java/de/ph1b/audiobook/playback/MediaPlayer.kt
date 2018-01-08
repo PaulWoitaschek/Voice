@@ -1,12 +1,21 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Renderer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
+import com.google.android.exoplayer2.drm.DrmSessionManager
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
+import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.video.VideoRendererEventListener
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
 import de.ph1b.audiobook.data.Book
@@ -27,6 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -47,7 +57,7 @@ constructor(
     private val wakeLockManager: WakeLockManager,
     private val dataSourceConverter: DataSourceConverter) {
 
-  private val player: SimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
+  private val player: SimpleExoPlayer
 
   private var bookSubject = BehaviorSubject.create<Book>()
 
@@ -64,14 +74,39 @@ constructor(
   fun book(): Book? = bookSubject.value
   val bookStream = bookSubject.hide()!!
 
+  private val trackSelector = DefaultTrackSelector(
+  )
+
   init {
+    val factory = object : DefaultRenderersFactory(context) {
+      override fun buildVideoRenderers(
+          context: Context?,
+          drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
+          allowedVideoJoiningTimeMs: Long,
+          eventHandler: Handler?,
+          eventListener: VideoRendererEventListener?,
+          extensionRendererMode: Int,
+          out: ArrayList<Renderer>?
+      ) {
+
+      }
+
+      override fun buildTextRenderers(context: Context?, output: TextOutput?, outputLooper: Looper?, extensionRendererMode: Int, out: ArrayList<Renderer>?) {
+
+      }
+    }
+    player = ExoPlayerFactory.newSimpleInstance(factory, DefaultTrackSelector())
+
     player.audioAttributes = AudioAttributes.Builder()
         .setContentType(C.CONTENT_TYPE_SPEECH)
         .setUsage(C.USAGE_MEDIA)
         .build()
 
     // delegate player state changes
-    player.onStateChanged { state = it }
+    player.onStateChanged {
+      state = it
+      disableVideoTracks()
+    }
 
     // on error reset the playback
     player.onError {
@@ -138,9 +173,18 @@ constructor(
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex, book.positionInChapter.toLong())
+      disableVideoTracks()
       player.setPlaybackSpeed(book.playbackSpeed)
       loudnessGain.gainmB = book.loudnessGain
       state = PlayerState.PAUSED
+    }
+  }
+
+  private fun disableVideoTracks() {}
+  private fun disableVideoTracks(player: ExoPlayer, trackSelector: DefaultTrackSelector) {
+    for (i in 0 until player.rendererCount) {
+      val isVideo = player.getRendererType(i) == C.TRACK_TYPE_VIDEO
+      trackSelector.setRendererDisabled(i, isVideo)
     }
   }
 
@@ -320,6 +364,7 @@ constructor(
       val copy = it.copy(positionInChapter = time, currentFile = changedFile ?: it.currentFile)
       bookSubject.onNext(copy)
       player.seekTo(copy.currentChapterIndex, time.toLong())
+      disableVideoTracks()
     }
   }
 

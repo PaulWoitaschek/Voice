@@ -72,7 +72,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   private fun setupFab() {
     binding.fab.setIconDrawable(playPauseDrawable)
-    binding.fab.setOnClickListener { presenter.playPauseRequested() }
+    binding.fab.setOnClickListener { presenter.playPause() }
   }
 
   private fun setupRecyclerView() {
@@ -167,31 +167,35 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     router.pushController(transaction)
   }
 
-  /** Display a new set of books */
-  override fun displayNewBooks(books: List<Book>) {
-    Timber.i("${books.size} displayNewBooks")
-    adapter.newDataSet(books)
-  }
+  override fun render(state: BookShelfState) {
+    Timber.i("render ${state.javaClass.simpleName}")
+    when (state) {
+      is BookShelfState.Content -> {
+        adapter.newDataSet(state.books)
+        currentBook = state.currentBook
 
-  /** The book marked as current was changed. Updates the adapter and fab accordingly. */
-  override fun updateCurrentBook(currentBook: Book?) {
-    Timber.i("updateCurrentBook: ${currentBook?.name}")
-    this.currentBook = currentBook
+        currentBook?.let {
+          for (i in 0 until adapter.itemCount) {
+            val itemId = adapter.getItemId(i)
+            val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.ViewHolder?
+            if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
+              adapter.notifyItemChanged(i)
+            }
+          }
+        }
 
-    for (i in 0 until adapter.itemCount) {
-      val itemId = adapter.getItemId(i)
-      val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.ViewHolder?
-      if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
-        adapter.notifyItemChanged(i)
+        binding.fab.visible = currentBook != null
+        currentPlaying.isVisible = currentBook != null
+        showPlaying(state.playing)
+      }
+      is BookShelfState.NoFolderSet -> {
+        showNoFolderWarning()
       }
     }
-
-    binding.fab.visible = currentBook != null
-    currentPlaying.isVisible = currentBook != null
+    binding.loadingProgress.visible = state is BookShelfState.Loading
   }
 
-  /** Sets the fab icon correctly accordingly to the new play state. */
-  override fun showPlaying(playing: Boolean) {
+  private fun showPlaying(playing: Boolean) {
     Timber.i("Called showPlaying $playing")
     val laidOut = ViewCompat.isLaidOut(binding.fab)
     if (playing) {
@@ -202,7 +206,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   }
 
   /** Show a warning that no audiobook folder was chosen */
-  override fun showNoFolderWarning() {
+  private fun showNoFolderWarning() {
     if (currentTapTarget?.isVisible == true)
       return
 
@@ -221,10 +225,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
         toFolderOverview()
       }
     })
-  }
-
-  override fun showLoading(loading: Boolean) {
-    binding.loadingProgress.visible = loading
   }
 
   override fun bookCoverChanged(bookId: Long) {

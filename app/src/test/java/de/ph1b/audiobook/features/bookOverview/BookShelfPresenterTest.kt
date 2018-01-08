@@ -1,6 +1,9 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import com.nhaarman.mockito_kotlin.any
+import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockito_kotlin.argThat
+import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.atLeastOnce
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.never
@@ -8,6 +11,7 @@ import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.MemoryPref
+import de.ph1b.audiobook.RxMainThreadTrampolineRule
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
@@ -15,7 +19,6 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
@@ -30,6 +33,10 @@ class BookShelfPresenterTest {
   @Rule
   @JvmField
   val mockitoRule = MockitoJUnit.rule()!!
+
+  @Rule
+  @JvmField
+  val trampolineRule = RxMainThreadTrampolineRule()
 
   private lateinit var presenter: BookShelfPresenter
 
@@ -73,7 +80,7 @@ class BookShelfPresenterTest {
   @Test
   fun noFolderWarningShownWithoutBooks() {
     presenter.attach(view)
-    verify(view).showNoFolderWarning()
+    verify(view).render(BookShelfState.NoFolderSet)
   }
 
   @Test
@@ -81,7 +88,7 @@ class BookShelfPresenterTest {
     given { repo.booksStream() }
         .willReturn(Observable.just(listOf(BookFactory.create(id = 1))))
     presenter.attach(view)
-    verify(view, never()).showNoFolderWarning()
+    verify(view, never()).render(BookShelfState.NoFolderSet)
   }
 
   @Test
@@ -91,26 +98,35 @@ class BookShelfPresenterTest {
     given { repo.booksStream() }
         .willReturn(Observable.just(firstEmission, secondEmission))
     presenter.attach(view)
-    inOrder(view) {
-      verify(view).displayNewBooks(firstEmission)
-      verify(view).displayNewBooks(secondEmission)
-    }
+    val captor = argumentCaptor<BookShelfState>()
+    verify(view).render(captor.capture())
+    val lastValue = captor.lastValue
+    assertThat(lastValue is BookShelfState.Content && lastValue.books == secondEmission)
   }
 
   @Test
   fun currentBook() {
     val firstBook = BookFactory.create(id = 1)
-    given { repo.bookById(firstBook.id) }.willReturn(firstBook)
     val secondBook = BookFactory.create(id = 2)
-    given { repo.bookById(secondBook.id) }.willReturn(secondBook)
+    given { repo.booksStream() }
+        .willReturn(Observable.just(listOf(firstBook, secondBook)))
 
     presenter.attach(view)
     currentBookIdPref.value = 0
-    verify(view, never()).updateCurrentBook(any())
     currentBookIdPref.value = 1
-    verify(view).updateCurrentBook(firstBook)
     currentBookIdPref.value = 2
-    verify(view).updateCurrentBook(secondBook)
+
+    inOrder(view) {
+      verify(view, atLeastOnce()).render(
+          argThat { this is BookShelfState.Content && currentBook == null }
+      )
+      verify(view).render(
+          argThat { this is BookShelfState.Content && currentBook == firstBook }
+      )
+      verify(view).render(
+          argThat { this is BookShelfState.Content && currentBook == secondBook }
+      )
+    }
   }
 
   @Test
@@ -121,7 +137,9 @@ class BookShelfPresenterTest {
 
     presenter.attach(view)
 
-    verify(view).showLoading(false)
+    verify(view, never()).render(
+        argThat { this is BookShelfState.Loading }
+    )
   }
 
   @Test
@@ -130,7 +148,7 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(true))
 
     presenter.attach(view)
-    verify(view).showLoading(true)
+    verify(view).render(BookShelfState.Loading)
   }
 
   @Test
@@ -139,7 +157,7 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(true, false))
 
     presenter.attach(view)
-    verify(view).showLoading(false)
+    verify(view, never()).render(BookShelfState.Loading)
   }
 
   @Test
@@ -148,23 +166,43 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(false))
 
     presenter.attach(view)
-    verify(view).showLoading(false)
+    verify(view, never()).render(BookShelfState.Loading)
   }
 
   @Test
-  fun playState() {
+  fun playStatePlaying() {
+    given { repo.booksStream() }.willReturn(Observable.just(listOf(BookFactory.create())))
     given {
       playStateManager.playStateStream()
-    }.willReturn(Observable.just(PLAYING, PAUSED, STOPPED, PLAYING, STOPPED, PAUSED, PLAYING))
+    }.willReturn(Observable.just(PLAYING))
     presenter.attach(view)
-    inOrder(view) {
-      verify(view).showPlaying(true)
-      verify(view).showPlaying(false)
-      verify(view).showPlaying(true)
-      verify(view).showPlaying(false)
-      verify(view).showPlaying(true)
-    }
+
+    verify(view).render(argThat { this is BookShelfState.Content && playing })
   }
+
+  @Test
+  fun playStatePaused() {
+    given { repo.booksStream() }.willReturn(Observable.just(listOf(BookFactory.create())))
+    given {
+      playStateManager.playStateStream()
+    }.willReturn(Observable.just(PAUSED))
+    presenter.attach(view)
+
+    verify(view).render(argThat { this is BookShelfState.Content && !playing })
+  }
+
+
+  @Test
+  fun playStateStopped() {
+    given { repo.booksStream() }.willReturn(Observable.just(listOf(BookFactory.create())))
+    given {
+      playStateManager.playStateStream()
+    }.willReturn(Observable.just(PAUSED))
+    presenter.attach(view)
+
+    verify(view).render(argThat { this is BookShelfState.Content && !playing })
+  }
+
 
   @Test
   fun coverChanged() {

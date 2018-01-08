@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.uitools
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.Canvas
 import android.graphics.Color
@@ -51,6 +50,7 @@ class PlayPauseDrawable : Drawable() {
   private var pauseBarDistance = 0F
   private val leftPauseBar = Path()
   private val rightPauseBar = Path()
+  private val interpolator = DecelerateInterpolator()
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
     color = Color.WHITE
@@ -60,11 +60,8 @@ class PlayPauseDrawable : Drawable() {
       field = progress
       invalidateSelf()
     }
-  private val androidProperty = object : Property<PlayPauseDrawable, Float>(Float::class.java, "progress") {
-    override fun get(d: PlayPauseDrawable): Float? {
-      return d.progress
-    }
-
+  private val progressProperty = object : Property<PlayPauseDrawable, Float>(Float::class.java, "progress") {
+    override fun get(d: PlayPauseDrawable) = d.progress
     override fun set(d: PlayPauseDrawable, value: Float) {
       d.progress = value
     }
@@ -73,9 +70,7 @@ class PlayPauseDrawable : Drawable() {
   private var animator: Animator? = null
 
   /** Linear interpolate between a and b with parameter t.  */
-  private fun interpolate(a: Float, b: Float, t: Float): Float {
-    return a + (b - a) * t
-  }
+  private fun interpolate(a: Float, b: Float, t: Float) = a + (b - a) * t
 
   override fun onBoundsChange(bounds: Rect) {
     super.onBoundsChange(bounds)
@@ -141,13 +136,27 @@ class PlayPauseDrawable : Drawable() {
   }
 
   fun transformToPause(animated: Boolean) {
-    jumpToCurrentState()
     if (isPlay) {
+      jumpToCurrentState()
       if (animated) {
         toggle()
       } else {
         isPlay = false
         progress = 0.0f
+        invalidateSelf()
+      }
+    }
+  }
+
+  fun transformToPlay(animated: Boolean) {
+    if (!isPlay) {
+      jumpToCurrentState()
+      if (animated) {
+        toggle()
+      } else {
+        isPlay = true
+        progress = 1.0f
+        invalidateSelf()
       }
     }
   }
@@ -157,37 +166,17 @@ class PlayPauseDrawable : Drawable() {
     progress = if (isPlay) 1.0f else 0.0f
   }
 
-  fun transformToPlay(animated: Boolean) {
-    jumpToCurrentState()
-    if (!isPlay) {
-      if (animated) {
-        toggle()
-      } else {
-        isPlay = true
-        progress = 1.0f
-      }
-    }
-  }
-
   private fun toggle() {
-    if (animator != null) {
-      animator!!.cancel()
-    }
-
-    animator = ObjectAnimator.ofFloat(this, androidProperty, if (isPlay) 1.0f else 0.0f, if (isPlay) 0.0f else 1.0f)
-    animator!!.apply {
-      addListener(
-          object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-              super.onAnimationEnd(animation)
-              isPlay = !isPlay
-            }
-          }
-      )
-      interpolator = DecelerateInterpolator()
-      duration = 275
-      start()
-    }
+    animator?.cancel()
+    val from = if (isPlay) 1.0f else 0.0f
+    val to = if (isPlay) 0.0f else 1.0f
+    isPlay = !isPlay
+    animator = ObjectAnimator.ofFloat(this, progressProperty, from, to)
+        .also {
+          it.interpolator = interpolator
+          it.duration = 275
+          it.start()
+        }
   }
 
   override fun setAlpha(alpha: Int) {
@@ -200,7 +189,5 @@ class PlayPauseDrawable : Drawable() {
     invalidateSelf()
   }
 
-  override fun getOpacity(): Int {
-    return PixelFormat.TRANSLUCENT
-  }
+  override fun getOpacity() = PixelFormat.TRANSLUCENT
 }

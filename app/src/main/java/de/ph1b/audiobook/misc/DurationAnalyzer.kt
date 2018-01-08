@@ -2,6 +2,7 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -23,7 +24,18 @@ class DurationAnalyzer
     context: Context
 ) {
 
-  private val exoPlayer = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
+  private val exoPlayer: ExoPlayer
+
+  init {
+    val trackSelector = DefaultTrackSelector()
+    exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+    for (i in 0 until exoPlayer.rendererCount) {
+      if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_VIDEO) {
+        trackSelector.setRendererDisabled(i, true)
+      }
+    }
+  }
+
   private val playbackStateSubject = BehaviorSubject.createDefault(exoPlayer.playbackState)
 
   init {

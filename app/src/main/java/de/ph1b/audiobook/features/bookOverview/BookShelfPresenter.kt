@@ -27,35 +27,29 @@ constructor(
 
   override fun onAttach(view: BookShelfView) {
     bookAdder.scanForFiles()
-    setupBookStream()
-    setupCurrentBookStream()
-    setupLoadingState()
-    setupPlayState()
+    setupStateStream()
     setupCoverChanged()
-    handleFolderWarning()
   }
 
-  private fun setupCurrentBookStream() {
-    currentBookIdPref.stream
-        .subscribe {
-          val book = repo.bookById(it)
-          view.updateCurrentBook(book)
+  private fun setupStateStream() {
+    val bookStream = repo.booksStream()
+    val currentBookIdStream = currentBookIdPref.stream
+    val playingStream = playStateManager.playStateStream()
+        .map { it == PlayState.PLAYING }
+        .distinctUntilChanged()
+    val scannerActiveStream = bookAdder.scannerActive
+    Observables
+        .combineLatest(bookStream, currentBookIdStream, playingStream, scannerActiveStream) { books, currentBookId, playing, scannerActive ->
+          when {
+            books.isEmpty() && !scannerActive -> BookShelfState.NoFolderSet
+            if (books.isEmpty()) scannerActive else false -> BookShelfState.Loading
+            else -> {
+              val currentBook = books.find { it.id == currentBookId }
+              BookShelfState.Content(books = books, currentBook = currentBook, playing = playing)
+            }
+          }
         }
-        .disposeOnDetach()
-  }
-
-  private fun setupBookStream() {
-    repo.booksStream()
-        .subscribe { view.displayNewBooks(it) }
-        .disposeOnDetach()
-  }
-
-  private fun setupLoadingState() {
-    val noBooks = repo.booksStream().map { it.isEmpty() }
-    val showLoading = Observables.combineLatest(bookAdder.scannerActive, noBooks) { active, booksEmpty ->
-      if (booksEmpty) active else false
-    }
-    showLoading.subscribe { view.showLoading(it) }
+        .subscribe { view.render(it) }
         .disposeOnDetach()
   }
 
@@ -65,23 +59,5 @@ constructor(
         .disposeOnDetach()
   }
 
-  private fun setupPlayState() {
-    playStateManager.playStateStream()
-        .map { it == PlayState.PLAYING }
-        .distinctUntilChanged()
-        .subscribe { view.showPlaying(it) }
-        .disposeOnDetach()
-  }
-
-  private fun handleFolderWarning() {
-    val showFolderWarning = Observables.combineLatest(bookAdder.scannerActive, repo.booksStream()) { scannerActive, books ->
-      books.isEmpty() && !scannerActive
-    }.filter { it }
-        .take(1)
-    showFolderWarning
-        .subscribe { _ -> view.showNoFolderWarning() }
-        .disposeOnDetach()
-  }
-
-  fun playPauseRequested() = playerController.playPause()
+  fun playPause() = playerController.playPause()
 }
