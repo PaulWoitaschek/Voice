@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Card"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="#FFF">
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/cover"

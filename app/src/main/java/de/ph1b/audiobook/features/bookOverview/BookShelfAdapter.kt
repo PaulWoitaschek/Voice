@@ -87,6 +87,10 @@ class BookShelfAdapter(
 
     override val containerView: View? get() = itemView
 
+    init {
+      itemView.clipToOutline = true
+    }
+
     val coverView: ImageView = cover
     var indicatorVisible: Boolean = false
       private set
@@ -126,7 +130,7 @@ class BookShelfAdapter(
             .placeholder(coverReplacement)
             .into(object : Target {
               override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
+                coverView.setImageDrawable(placeHolderDrawable)
               }
 
               override fun onBitmapFailed(errorDrawable: Drawable?) {

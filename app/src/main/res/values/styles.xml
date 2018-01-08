@@ -15,6 +15,11 @@
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/navbarColor</item>
     </style>
 
+    <style name="Card">
+        <item name="android:background">@drawable/card_background</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
     <style name="AppToolbar" parent="Base.Widget.AppCompat.Toolbar">
         <item name="popupTheme">@style/ToolbarPopup</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
