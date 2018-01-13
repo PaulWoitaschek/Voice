@@ -74,7 +74,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   private fun setupRecyclerView() {
     binding.recyclerView.setHasFixedSize(true)
-    adapter = BookShelfAdapter(activity) { book, clickType ->
+    adapter = BookShelfAdapter { book, clickType ->
       if (clickType == BookShelfAdapter.ClickType.REGULAR) {
         invokeBookSelectionCallback(book.id)
       } else {
@@ -152,7 +152,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   private fun invokeBookSelectionCallback(bookId: Long) {
     currentBookIdPref.value = bookId
 
-    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.ViewHolder?
+    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfHolder?
     val transaction = RouterTransaction.with(BookPlayController(bookId))
     val transition = BookChangeHandler()
     if (viewHolder != null) {
