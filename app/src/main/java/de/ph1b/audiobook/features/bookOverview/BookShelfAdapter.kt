@@ -14,21 +14,16 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.book_shelf_row.*
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Named
 
 class BookShelfAdapter(
     private val context: Context,
@@ -37,11 +32,7 @@ class BookShelfAdapter(
 
   private val books = ArrayList<Book>()
 
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
-
   init {
-    App.component.inject(this)
     setHasStableIds(true)
   }
 
@@ -51,7 +42,6 @@ class BookShelfAdapter(
     books.addAll(newBooks)
     val callback = BookShelfDiffCallback(oldBooks = oldBooks, newBooks = books)
     val diffResult = DiffUtil.calculateDiff(callback, false)
-
     diffResult.dispatchUpdatesTo(this)
   }
 
@@ -92,20 +82,14 @@ class BookShelfAdapter(
     }
 
     val coverView: ImageView = cover
-    var indicatorVisible: Boolean = false
-      private set
 
     fun bind(book: Book) {
-      //setting text
       val name = book.name
       title.text = name
       author.text = book.author
       author.visible = book.author != null
       title.maxLines = if (book.author == null) 2 else 1
       bindCover(book)
-
-      indicatorVisible = book.id == currentBookIdPref.value
-      playingIndicator.visible = false
 
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
       edit.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }

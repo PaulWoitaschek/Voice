@@ -6,7 +6,6 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import de.ph1b.audiobook.features.audio.LoudnessDialog
-import de.ph1b.audiobook.features.bookOverview.BookShelfAdapter
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.BookShelfPresenter
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
@@ -45,7 +44,6 @@ interface AppComponent {
   fun inject(target: App)
   fun inject(target: BookPlayController)
   fun inject(target: BookPlayPresenter)
-  fun inject(target: BookShelfAdapter)
   fun inject(target: BookShelfController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)

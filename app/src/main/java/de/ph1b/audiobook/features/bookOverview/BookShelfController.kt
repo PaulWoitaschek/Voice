@@ -59,8 +59,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
-  private var currentBook: Book? = null
-
   private var currentPlaying: MenuItem by clearAfterDestroyView()
 
   override fun onBindingCreated(binding: BookShelfBinding) {
@@ -172,17 +170,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     when (state) {
       is BookShelfState.Content -> {
         adapter.newDataSet(state.books)
-        currentBook = state.currentBook
-
-        currentBook?.let {
-          for (i in 0 until adapter.itemCount) {
-            val itemId = adapter.getItemId(i)
-            val vh = binding.recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.ViewHolder?
-            if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
-              adapter.notifyItemChanged(i)
-            }
-          }
-        }
+        val currentBook = state.currentBook
 
         binding.fab.visible = currentBook != null
         currentPlaying.isVisible = currentBook != null
