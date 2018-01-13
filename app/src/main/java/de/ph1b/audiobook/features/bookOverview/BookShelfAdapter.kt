@@ -17,7 +17,6 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
-import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
@@ -94,7 +93,7 @@ class BookShelfAdapter(
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
       edit.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
-      coverView.supportTransitionName = book.coverTransitionName
+      coverView.transitionName = book.coverTransitionName
 
       val globalPosition = book.position
       val totalDuration = book.duration

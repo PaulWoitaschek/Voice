@@ -24,7 +24,6 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
@@ -98,7 +97,7 @@ class BookPlayController(
     binding.previous.visible = multipleChapters
     binding.bookSpinner.visible = multipleChapters
 
-    binding.cover.supportTransitionName = book.coverTransitionName
+    binding.cover.transitionName = book.coverTransitionName
 
     // (Cover)
     val coverReplacement = CoverReplacement(book.name, activity)

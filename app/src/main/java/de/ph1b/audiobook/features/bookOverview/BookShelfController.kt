@@ -25,7 +25,6 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
-import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
@@ -157,7 +156,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     val transaction = RouterTransaction.with(BookPlayController(bookId))
     val transition = BookChangeHandler()
     if (viewHolder != null) {
-      val transitionName = viewHolder.coverView.supportTransitionName
+      val transitionName = viewHolder.coverView.transitionName
       transition.transitionName = transitionName
     }
     transaction.pushChangeHandler(transition)

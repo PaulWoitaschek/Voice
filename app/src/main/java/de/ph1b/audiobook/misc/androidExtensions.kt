@@ -9,7 +9,6 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.view.ViewCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +27,6 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 fun Context.color(@ColorRes id: Int): Int {
   return ContextCompat.getColor(this, id)
 }
-
-var View.supportTransitionName: String?
-  get() = ViewCompat.getTransitionName(this)
-  set(value) = ViewCompat.setTransitionName(this, value)
 
 fun View.layoutInflater() = context.layoutInflater()
 
