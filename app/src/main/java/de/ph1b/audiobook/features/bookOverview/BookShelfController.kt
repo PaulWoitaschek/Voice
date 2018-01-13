@@ -8,13 +8,15 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
-import android.view.MenuItem
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookShelfBinding
+import de.ph1b.audiobook.features.bookOverview.list.BookShelfAdapter
+import de.ph1b.audiobook.features.bookOverview.list.BookShelfClick
+import de.ph1b.audiobook.features.bookOverview.list.BookShelfItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
@@ -58,7 +60,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
-  private var currentPlaying: MenuItem by clearAfterDestroyView()
 
   override fun onBindingCreated(binding: BookShelfBinding) {
     playPauseDrawable = PlayPauseDrawable()
@@ -75,10 +76,12 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
   private fun setupRecyclerView() {
     binding.recyclerView.setHasFixedSize(true)
     adapter = BookShelfAdapter { book, clickType ->
-      if (clickType == BookShelfAdapter.ClickType.REGULAR) {
-        invokeBookSelectionCallback(book.id)
-      } else {
-        EditBookBottomSheet.newInstance(this, book).show(fragmentManager, "editBottomSheet")
+      when (clickType) {
+        BookShelfClick.REGULAR -> invokeBookSelectionCallback(book)
+        BookShelfClick.MENU -> {
+          val editDialog = EditBookBottomSheet.newInstance(this, book)
+          editDialog.show(fragmentManager, "editBottomSheet")
+        }
       }
     }
     binding.recyclerView.adapter = adapter
@@ -92,18 +95,12 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
   private fun setupToolbar() {
     binding.toolbar.inflateMenu(R.menu.book_shelf)
-    val menu = binding.toolbar.menu
-    currentPlaying = menu.findItem(R.id.action_current)
     binding.toolbar.title = getString(R.string.app_name)
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
           router.pushController(transaction)
-          true
-        }
-        R.id.action_current -> {
-          invokeBookSelectionCallback(currentBookIdPref.value)
           true
         }
         R.id.library -> {
@@ -149,16 +146,11 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     }
   }
 
-  private fun invokeBookSelectionCallback(bookId: Long) {
-    currentBookIdPref.value = bookId
-
-    val viewHolder = binding.recyclerView.findViewHolderForItemId(bookId) as BookShelfHolder?
-    val transaction = RouterTransaction.with(BookPlayController(bookId))
+  private fun invokeBookSelectionCallback(book: Book) {
+    currentBookIdPref.value = book.id
+    val transaction = RouterTransaction.with(BookPlayController(book.id))
     val transition = BookChangeHandler()
-    if (viewHolder != null) {
-      val transitionName = viewHolder.coverView.transitionName
-      transition.transitionName = transitionName
-    }
+    transition.transitionName = book.coverTransitionName
     transaction.pushChangeHandler(transition)
         .popChangeHandler(transition)
     router.pushController(transaction)
@@ -172,7 +164,6 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
         val currentBook = state.currentBook
 
         binding.fab.visible = currentBook != null
-        currentPlaying.isVisible = currentBook != null
         showPlaying(state.playing)
       }
       is BookShelfState.NoFolderSet -> {

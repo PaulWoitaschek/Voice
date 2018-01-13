@@ -4,12 +4,6 @@
       xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/action_current"
-        android:icon="@drawable/ic_play_circle_outline"
-        android:title="@string/current_book"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/library"
         android:icon="@drawable/audiobook"
         android:title="@string/pref_root_folder_title"

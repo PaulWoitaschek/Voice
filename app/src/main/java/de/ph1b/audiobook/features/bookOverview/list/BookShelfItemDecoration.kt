@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookOverview
+package de.ph1b.audiobook.features.bookOverview.list
 
 import android.content.Context
 import android.graphics.Rect

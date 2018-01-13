@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookOverview
+package de.ph1b.audiobook.features.bookOverview.list
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,7 +7,6 @@ import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import de.ph1b.audiobook.R
@@ -21,7 +20,7 @@ import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.book_shelf_row.*
 
-class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.ClickType) -> Unit) : RecyclerView.ViewHolder(
+class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) : RecyclerView.ViewHolder(
     parent.layoutInflater().inflate(
         R.layout.book_shelf_row,
         parent,
@@ -30,16 +29,15 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
 ), LayoutContainer {
 
   override val containerView: View? get() = itemView
-  val coverView: ImageView = cover
   private var boundBook: Book? = null
 
   init {
     itemView.clipToOutline = true
     itemView.setOnClickListener {
-      boundBook?.let { listener(it, BookShelfAdapter.ClickType.REGULAR) }
+      boundBook?.let { listener(it, BookShelfClick.REGULAR) }
     }
     edit.setOnClickListener {
-      boundBook?.let { listener(it, BookShelfAdapter.ClickType.MENU) }
+      boundBook?.let { listener(it, BookShelfClick.MENU) }
     }
   }
 
@@ -52,7 +50,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
     title.maxLines = if (book.author == null) 2 else 1
     bindCover(book)
 
-    coverView.transitionName = book.coverTransitionName
+    cover.transitionName = book.coverTransitionName
 
     val globalPosition = book.position
     val totalDuration = book.duration
@@ -62,7 +60,6 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
   }
 
   private fun bindCover(book: Book) {
-    // (Cover)
     val coverFile = book.coverFile()
     val coverReplacement = CoverReplacement(book.name, itemView.context)
 
@@ -72,7 +69,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
           .placeholder(coverReplacement)
           .into(object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-              coverView.setImageDrawable(placeHolderDrawable)
+              cover.setImageDrawable(placeHolderDrawable)
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
@@ -80,7 +77,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
               bitmap?.let {
-                coverView.setImageBitmap(it)
+                cover.setImageBitmap(it)
                 Palette.from(it)
                     .generate {
                       val color = it.getVibrantColor(Color.BLACK)
@@ -91,9 +88,9 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfAdapter.Click
           })
     } else {
       Picasso.with(itemView.context)
-          .cancelRequest(coverView)
+          .cancelRequest(cover)
       // we have to set the replacement in onPreDraw, else the transition will fail.
-      coverView.onFirstPreDraw { coverView.setImageDrawable(coverReplacement) }
+      cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
     }
   }
 }

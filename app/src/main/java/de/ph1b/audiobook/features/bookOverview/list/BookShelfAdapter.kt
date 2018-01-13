@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookOverview
+package de.ph1b.audiobook.features.bookOverview.list
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -7,7 +7,7 @@ import de.ph1b.audiobook.data.Book
 import java.util.ArrayList
 
 class BookShelfAdapter(
-    private val bookClicked: (Book, ClickType) -> Unit
+    private val bookClicked: (Book, BookShelfClick) -> Unit
 ) : RecyclerView.Adapter<BookShelfHolder>() {
 
   private val books = ArrayList<Book>()
@@ -40,8 +40,4 @@ class BookShelfAdapter(
 
   override fun getItemCount(): Int = books.size
 
-  enum class ClickType {
-    REGULAR,
-    MENU
-  }
 }

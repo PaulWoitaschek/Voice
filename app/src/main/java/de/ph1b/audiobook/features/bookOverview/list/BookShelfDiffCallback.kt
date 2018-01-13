@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookOverview
+package de.ph1b.audiobook.features.bookOverview.list
 
 import android.support.v7.util.DiffUtil
 import de.ph1b.audiobook.data.Book
