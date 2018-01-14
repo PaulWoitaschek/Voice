@@ -13,6 +13,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.databinding.DialogSleepBinding
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -23,10 +24,20 @@ import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Named
 
+private const val NI_BOOK_ID = "ni#bookId"
+private const val SI_MINUTES = "si#time"
+
 /**
  * Simple dialog for activating the sleep timer
  */
-class SleepTimerDialogFragment : AppCompatDialogFragment() {
+class SleepTimerDialogFragment() : AppCompatDialogFragment() {
+
+  @SuppressLint("ValidFragment")
+  constructor(bookId: Long) : this() {
+    arguments = Bundle().apply {
+      putLong(NI_BOOK_ID, bookId)
+    }
+  }
 
   @Inject lateinit var bookmarkRepo: BookmarkRepo
   @Inject lateinit var sleepTimer: SleepTimer
@@ -39,7 +50,8 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
   @field:[Inject Named(PrefKeys.SLEEP_TIME)]
   lateinit var sleepTimePref: Pref<Int>
 
-  private lateinit var binding: DialogSleepBinding
+  private val binding: DialogSleepBinding get() = _binding!!
+  private var _binding: DialogSleepBinding? = null
   private var selectedMinutes = 0
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -65,7 +77,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
+    _binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
 
     // restore or get fresh
     selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: sleepTimePref.value
@@ -110,7 +122,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
             System.currentTimeMillis(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
-        launch {
+        launch(IO) {
           bookmarkRepo.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
         }
       }
@@ -145,13 +157,8 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     }
   }
 
-  companion object {
-    private val NI_BOOK_ID = "ni#bookId"
-    private val SI_MINUTES = "si#time"
-    fun newInstance(bookId: Long) = SleepTimerDialogFragment().apply {
-      arguments = Bundle().apply {
-        putLong(NI_BOOK_ID, bookId)
-      }
-    }
+  override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
   }
 }

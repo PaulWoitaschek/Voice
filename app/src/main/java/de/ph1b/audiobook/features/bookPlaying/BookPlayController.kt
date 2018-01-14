@@ -269,7 +269,7 @@ class BookPlayController(
   }
 
   override fun openSleepTimeDialog() {
-    SleepTimerDialogFragment.newInstance(bookId)
+    SleepTimerDialogFragment(bookId)
         .show(fragmentManager, "fmSleepTimer")
   }
 
