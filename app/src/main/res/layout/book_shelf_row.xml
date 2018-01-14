@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Card"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="@dimen/book_shelf_list_height"
     android:foreground="?attr/selectableItemBackground">
 
     <ImageView

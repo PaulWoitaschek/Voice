@@ -30,6 +30,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
 
   override val containerView: View? get() = itemView
   private var boundBook: Book? = null
+  private val coverSize = itemView.resources.getDimensionPixelSize(R.dimen.book_shelf_list_height)
 
   init {
     itemView.clipToOutline = true
@@ -66,6 +67,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(itemView.context)
           .load(coverFile)
+          .resize(coverSize, coverSize)
           .placeholder(coverReplacement)
           .into(object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
