@@ -1,1 +1,1 @@
-include ':app', ':core', ':common', ':data'
+include ':app', ':core', ':common', ':data', ':covercolorextractor'

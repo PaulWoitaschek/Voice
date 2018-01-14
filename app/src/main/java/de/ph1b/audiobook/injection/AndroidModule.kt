@@ -11,10 +11,12 @@ import android.os.PowerManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
 import com.squareup.moshi.Moshi
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.paulwoitaschek.chapterreader.ChapterReaderFactory
+import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.ErrorReporter
 import javax.inject.Singleton
@@ -70,4 +72,11 @@ class AndroidModule {
   @Provides
   @Singleton
   fun provideChapterReader(): ChapterReader = ChapterReaderFactory.create()
+
+  @Provides
+  @Singleton
+  fun provideCoverColorExtractor(context: Context): CoverColorExtractor {
+    val picasso = Picasso.with(context)
+    return CoverColorExtractor(picasso)
+  }
 }

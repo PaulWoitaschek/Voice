@@ -18,6 +18,7 @@
     <style name="Card">
         <item name="android:background">@drawable/card_background</item>
         <item name="android:elevation">2dp</item>
+        <item name="android:outlineProvider">background</item>
     </style>
 
     <style name="AppToolbar" parent="Base.Widget.AppCompat.Toolbar">

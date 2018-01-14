@@ -93,6 +93,7 @@ dependencies {
   implementation project(":core")
   implementation project(":common")
   implementation project(":data")
+  implementation project(":covercolorextractor")
 
   implementation "com.github.PaulWoitaschek:ChapterReader:0.1.3"
 
@@ -103,7 +104,6 @@ dependencies {
   implementation Dependencies.Support.design
   implementation Dependencies.Support.transitions
   implementation Dependencies.Support.constraintLayout
-  implementation Dependencies.Support.palette
 
   implementation Dependencies.picasso
 

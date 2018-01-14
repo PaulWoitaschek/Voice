@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/covercolorextractor" />
             <option value="$PROJECT_DIR$/data" />
           </set>
         </option>

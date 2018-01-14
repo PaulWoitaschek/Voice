@@ -1,16 +1,14 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
@@ -19,6 +17,10 @@ import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.book_shelf_row.*
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import javax.inject.Inject
 
 class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) : RecyclerView.ViewHolder(
     parent.layoutInflater().inflate(
@@ -28,11 +30,16 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     )
 ), LayoutContainer {
 
+  @Inject lateinit var coverColorExtractor: CoverColorExtractor
+
   override val containerView: View? get() = itemView
   private var boundBook: Book? = null
   private val coverSize = itemView.resources.getDimensionPixelSize(R.dimen.book_shelf_list_height)
+  private val defaultProgressColor = itemView.context.color(R.color.primaryDark)
 
   init {
+    App.component.inject(this)
+
     itemView.clipToOutline = true
     itemView.setOnClickListener {
       boundBook?.let { listener(it, BookShelfClick.REGULAR) }
@@ -60,34 +67,26 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     this.progress.progress = progress
   }
 
+  private var colorExtractionJob: Job? = null
+
   private fun bindCover(book: Book) {
     val coverFile = book.coverFile()
     val coverReplacement = CoverReplacement(book.name, itemView.context)
+
+
+    progress.color = defaultProgressColor
+    colorExtractionJob?.cancel()
+    colorExtractionJob = launch(UI) {
+      val extractedColor = coverColorExtractor.extract(coverFile)
+      progress.color = extractedColor ?: itemView.context.color(R.color.primaryDark)
+    }
 
     if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(itemView.context)
           .load(coverFile)
           .resize(coverSize, coverSize)
           .placeholder(coverReplacement)
-          .into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-              cover.setImageDrawable(placeHolderDrawable)
-            }
-
-            override fun onBitmapFailed(errorDrawable: Drawable?) {
-            }
-
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-              bitmap?.let {
-                cover.setImageBitmap(it)
-                Palette.from(it)
-                    .generate {
-                      val color = it.getVibrantColor(Color.BLACK)
-                      progress.color = color
-                    }
-              }
-            }
-          })
+          .into(cover)
     } else {
       Picasso.with(itemView.context)
           .cancelRequest(cover)

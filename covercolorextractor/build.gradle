@@ -1,0 +1,32 @@
+import de.ph1b.audiobook.versioning.Dependencies
+import de.ph1b.audiobook.versioning.Versions
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+
+  compileSdkVersion Versions.compileSdk
+
+  defaultConfig {
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
+    versionCode Versions.versionCode
+    versionName Versions.versionName
+  }
+}
+
+dependencies {
+  implementation Dependencies.picasso
+  implementation Dependencies.Kotlin.std
+  implementation Dependencies.Support.palette
+  implementation Dependencies.Kotlin.coroutines
+  implementation Dependencies.Kotlin.coroutinesAndroid
+  implementation Dependencies.timber
+}
+
+kotlin {
+  experimental {
+    coroutines "enable"
+  }
+}
