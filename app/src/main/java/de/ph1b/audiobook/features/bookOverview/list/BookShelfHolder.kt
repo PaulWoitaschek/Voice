@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.book_shelf_row.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.io.File
 import javax.inject.Inject
 
 class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) : RecyclerView.ViewHolder(
@@ -69,10 +70,21 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
 
   private var colorExtractionJob: Job? = null
 
+
+  private var boundFile: File? = null
+  private var boundName: String? = null
+
   private fun bindCover(book: Book) {
     val coverFile = book.coverFile()
-    val coverReplacement = CoverReplacement(book.name, itemView.context)
+    val bookName = book.name
 
+    if (boundName == book.name && boundFile?.length() == coverFile.length()) {
+      return
+    }
+    boundFile = coverFile
+    boundName = bookName
+
+    val coverReplacement = CoverReplacement(bookName, itemView.context)
 
     progress.color = defaultProgressColor
     colorExtractionJob?.cancel()
