@@ -84,7 +84,6 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(itemView.context)
           .load(coverFile)
-          .resize(coverSize, coverSize)
           .placeholder(coverReplacement)
           .into(cover)
     } else {
