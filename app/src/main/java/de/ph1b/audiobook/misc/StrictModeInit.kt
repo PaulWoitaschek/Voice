@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.misc
 
-import android.os.Build
 import android.os.StrictMode
 
 object StrictModeInit {
@@ -10,27 +9,14 @@ object StrictModeInit {
     StrictMode.setVmPolicy(vmPolicy())
   }
 
-  private fun vmPolicy(): StrictMode.VmPolicy {
-    val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      vmPolicyBuilder.detectCleartextNetwork()
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      vmPolicyBuilder.detectContentUriWithoutPermission()
-    }
-    return vmPolicyBuilder
-        .detectActivityLeaks()
-        .detectFileUriExposure()
-        .detectLeakedClosableObjects()
-        .detectLeakedRegistrationObjects()
-        .detectLeakedSqlLiteObjects()
-        .penaltyLog()
-        .build()
-  }
+  private fun vmPolicy(): StrictMode.VmPolicy = StrictMode.VmPolicy.Builder()
+      .detectAll()
+      .penaltyLog()
+      .build()
 
   private fun threadPolicy(): StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder()
       .detectAll()
       .penaltyLog()
+      .penaltyFlashScreen()
       .build()
 }
