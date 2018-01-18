@@ -1,6 +1,16 @@
-Voice
+Voice [![CI Status](https://circleci.com/gh/PaulWoitaschek/Voice.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)](https://circleci.com/gh/PaulWoitaschek/Voice)
 =======================
-[![CI Status](https://circleci.com/gh/PaulWoitaschek/Voice.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)](https://circleci.com/gh/PaulWoitaschek/Voice)
+
+<a href="https://f-droid.org/packages/de.ph1b.audiobook/">
+  <img alt="Get it on F-Droid"
+       height="80"
+       src="https://f-droid.org/badge/get-it-on.png" />
+</a>
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">
+  <img alt="Get it on Google Play"
+       height="80"
+       src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>  
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
@@ -10,18 +20,6 @@ There are still some components outdated.
 If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
 
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/master/Images/map-port.jpg" width="400" ></a>
-
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">
-    <img alt="Get it on Google Play"
-        height="80"
-        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
-</a>  
-<a href="https://f-droid.org/packages/de.ph1b.audiobook/">
-    <img alt="Get it on F-Droid"
-        height="80"
-        src="https://f-droid.org/badge/get-it-on.png" />
-        </a>
-        </p>
 
 # <a name="contrib">Contribution</a>
 
@@ -41,6 +39,6 @@ The project page is on [transifex](https://www.transifex.com/PaulWoitaschek/voic
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2014-2017 [Paul Woitaschek](http://www.paul-woitaschek.de/)
+Copyright (C) 2014-2018 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/PaulWoitaschek/Voice/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
