@@ -38,7 +38,8 @@ internal class ID3ChapterReader @Inject constructor() {
     readInputStream(it)
   }
 
-  @Synchronized private fun readInputStream(input: InputStream): List<Chapter> {
+  @Synchronized
+  private fun readInputStream(input: InputStream): List<Chapter> {
     chapters.clear()
 
     try {
@@ -131,7 +132,8 @@ internal class ID3ChapterReader @Inject constructor() {
     return if (hasTag) {
       val id = String(source, 0, ID3_LENGTH)
       val version = (source[3].toInt() shl 8 or source[4].toInt()).toChar()
-      var size = source[6].toInt() shl 24 or (source[7].toInt() shl 16) or (source[8].toInt() shl 8) or source[9].toInt()
+      var size =
+        source[6].toInt() shl 24 or (source[7].toInt() shl 16) or (source[8].toInt() shl 8) or source[9].toInt()
       size = unsynchsafe(size)
       Header.TagHeader(id, size, version)
     } else {
@@ -241,7 +243,8 @@ internal class ID3ChapterReader @Inject constructor() {
         val elementId = StringBuffer()
         readISOString(elementId, input, Integer.MAX_VALUE)
         val startTimeSource = readBytes(input, 4)
-        val startTime = (startTimeSource[0].toInt() shl 24 or (startTimeSource[1].toInt() shl 16) or (startTimeSource[2].toInt() shl 8) or startTimeSource[3].toInt())
+        val startTime =
+          (startTimeSource[0].toInt() shl 24 or (startTimeSource[1].toInt() shl 16) or (startTimeSource[2].toInt() shl 8) or startTimeSource[3].toInt())
         currentChapter = ChapterMetaData(elementId.toString(), startTime.toLong(), null)
         skipBytes(input, 12)
         return true

@@ -28,7 +28,7 @@ internal object VorbisCommentReader {
 
   fun parseChapterTime(timeStr: String): Int? {
     val matchResult = VORBIS_COMMENT_CHAPTER_TIME_REGEX.matchEntire(timeStr)
-      ?: return null
+        ?: return null
     val hours = matchResult.groups[1]!!.value.toInt()
     val minutes = hours * 60 + matchResult.groups[2]!!.value.toInt()
     val seconds = minutes * 60 + matchResult.groups[3]!!.value.toInt()

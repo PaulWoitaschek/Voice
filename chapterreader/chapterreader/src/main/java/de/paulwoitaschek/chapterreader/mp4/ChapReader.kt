@@ -13,11 +13,11 @@ internal object ChapReader {
     val atoms = raf.atoms(listOf("moov", "trak", "tref", "mdia", "minf", "stbl"))
 
     val chapterTrackId = findChapterTrackId(raf, atoms)
-      ?: return emptyList()
+        ?: return emptyList()
     val chapterTrackAtom = findChapterTrackAtom(raf, atoms, chapterTrackId)
-      ?: return emptyList()
+        ?: return emptyList()
     val timeScale = readTimeScale(raf, chapterTrackAtom)
-      ?: return emptyList()
+        ?: return emptyList()
     val names = readNames(raf, atoms, chapterTrackId)
     val durations = readDurations(raf, chapterTrackAtom, timeScale)
 
@@ -35,7 +35,7 @@ internal object ChapReader {
   private fun findChapterTrackAtom(raf: RandomAccessFile, atoms: List<Mp4Atom>, chapterTrackId: Int): Mp4Atom? {
     val trackAtoms = atoms.firstOrNull { it.name == "moov" }
       ?.children?.filter { it.name == "trak" }
-      ?: return null
+        ?: return null
 
     return trackAtoms.firstOrNull {
       val tkhd = it.children.firstOrNull { it.name == "tkhd" }
@@ -59,7 +59,7 @@ internal object ChapReader {
 
   private fun findChapterTrackId(raf: RandomAccessFile, atoms: List<Mp4Atom>): Int? {
     val chapAtom = atoms.findAtom("moov", "trak", "tref", "chap")
-      ?: return null
+        ?: return null
 
     raf.seek(chapAtom.position + 8)
     return raf.readInt()
@@ -68,7 +68,7 @@ internal object ChapReader {
   private fun readTimeScale(raf: RandomAccessFile, chapterTrakAtom: Mp4Atom): Int? {
     val mdhdAtom = chapterTrakAtom.children.firstOrNull { it.name == "mdia" }
       ?.children?.firstOrNull { it.name == "mdhd" }
-      ?: return null
+        ?: return null
     raf.seek(mdhdAtom.position + 8)
     val version = raf.readByte().toInt()
     if (version != 0 && version != 1)
@@ -88,7 +88,7 @@ internal object ChapReader {
       ?.firstOrNull { it.name == "minf" }?.children
       ?.firstOrNull { it.name == "stbl" }?.children
       ?.firstOrNull { it.name == "stco" }
-      ?: return emptyList()
+        ?: return emptyList()
 
     raf.seek(stco.position + 8)
     val version = raf.readByte().toInt()
@@ -112,7 +112,7 @@ internal object ChapReader {
 
   private fun readDurations(raf: RandomAccessFile, chapterTrakAtom: Mp4Atom, timeScale: Int): List<Double> {
     val stts = chapterTrakAtom.children.findAtom("mdia", "minf", "stbl", "stts")
-      ?: return emptyList()
+        ?: return emptyList()
     raf.seek(stts.position + 8)
     val version = raf.readByte().toInt()
     if (version != 0)

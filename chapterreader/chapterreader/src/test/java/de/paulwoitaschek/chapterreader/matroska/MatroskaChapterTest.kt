@@ -9,10 +9,10 @@ class MatroskaChapterTest {
   fun getName() {
     val chapter = MatroskaChapter(
       0L, listOf(
-      MatroskaChapterName("Podczęść 1", setOf("pol")),
-      MatroskaChapterName("Subpart 1", setOf("eng", "ger")),
-      MatroskaChapterName("サブパート1", setOf("jpn"))
-    ), listOf()
+        MatroskaChapterName("Podczęść 1", setOf("pol")),
+        MatroskaChapterName("Subpart 1", setOf("eng", "ger")),
+        MatroskaChapterName("サブパート1", setOf("jpn"))
+      ), listOf()
     )
     assertThat(chapter.name()).isEqualTo("Podczęść 1")
     assertThat(chapter.name(listOf("ger", "jpn"))).isEqualTo("Subpart 1")

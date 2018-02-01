@@ -10,26 +10,26 @@ object MatroskaTestFileProvider {
   internal val testFileMatroskaChapters = listOf(
     MatroskaChapter(
       0, listOf(
-      MatroskaChapterName("Part 1", setOf("eng"))
-    ), listOf()
+        MatroskaChapterName("Part 1", setOf("eng"))
+      ), listOf()
     ),
     MatroskaChapter(
       2000000000L, listOf(
-      MatroskaChapterName("Part 2", setOf("eng"))
-    ), listOf(
-      MatroskaChapter(
-        2000000000L, listOf(
-        MatroskaChapterName("Podczęść 1", setOf("pol")),
-        MatroskaChapterName("Subpart 1", setOf("eng", "ger"))
-      ), listOf()
-      ),
-      MatroskaChapter(
-        3000000000L, listOf(
-        MatroskaChapterName("Subpart 2", setOf("eng"))
-      ), listOf()
-      ),
-      MatroskaChapter(4000000000L, listOf(), listOf())
-    )
+        MatroskaChapterName("Part 2", setOf("eng"))
+      ), listOf(
+        MatroskaChapter(
+          2000000000L, listOf(
+            MatroskaChapterName("Podczęść 1", setOf("pol")),
+            MatroskaChapterName("Subpart 1", setOf("eng", "ger"))
+          ), listOf()
+        ),
+        MatroskaChapter(
+          3000000000L, listOf(
+            MatroskaChapterName("Subpart 2", setOf("eng"))
+          ), listOf()
+        ),
+        MatroskaChapter(4000000000L, listOf(), listOf())
+      )
     )
   )
   val testFileChapters = listOf(

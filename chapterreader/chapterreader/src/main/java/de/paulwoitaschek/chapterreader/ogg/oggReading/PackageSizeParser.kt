@@ -8,12 +8,12 @@ internal object PackageSizeParser {
     .map { it.toUInt() }
     .fold(
       mutableListOf(0), { acc, e ->
-      acc[acc.lastIndex] += e
-      if (e != 255) {
-        acc.add(0)
+        acc[acc.lastIndex] += e
+        if (e != 255) {
+          acc.add(0)
+        }
+        acc
       }
-      acc
-    }
     )
     .filter { it != 0 }
 }

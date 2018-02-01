@@ -8,7 +8,8 @@ class MatroskaChapterFlattenerTest {
   @Test
   fun test() {
     val preferredLanguages = listOf("pol", "eng")
-    val actual = MatroskaChapterFlattener.toChapters(MatroskaTestFileProvider.testFileMatroskaChapters, preferredLanguages)
+    val actual =
+      MatroskaChapterFlattener.toChapters(MatroskaTestFileProvider.testFileMatroskaChapters, preferredLanguages)
     assertThat(actual).isEqualTo(MatroskaTestFileProvider.testFileChapters)
   }
 }

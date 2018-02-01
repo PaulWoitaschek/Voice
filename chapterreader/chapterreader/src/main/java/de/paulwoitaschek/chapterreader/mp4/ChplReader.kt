@@ -15,10 +15,10 @@ internal object ChplReader {
     val atoms = raf.atoms(listOf("moov", "udta"))
 
     val timeScale = readTimeScale(raf, atoms)
-      ?: return emptyList()
+        ?: return emptyList()
 
     val chplAtom = atoms.findAtom("moov", "udta", "chpl")
-      ?: return emptyList()
+        ?: return emptyList()
     raf.seek(chplAtom.position + 8)
     raf.skipBytes(8)
     val count = raf.readByte().toUInt()
@@ -39,7 +39,7 @@ internal object ChplReader {
 
   private fun readTimeScale(raf: RandomAccessFile, atoms: List<Mp4Atom>): Int? {
     val movieHeaderAtom = atoms.findAtom("moov", "mvhd")
-      ?: return null
+        ?: return null
     raf.seek(movieHeaderAtom.position + 8)
     val version = raf.readByte().toInt()
     if (version != 0 && version != 1) return null

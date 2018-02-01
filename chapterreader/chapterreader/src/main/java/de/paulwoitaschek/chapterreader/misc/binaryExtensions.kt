@@ -25,29 +25,29 @@ internal fun InputStream.readUInt8(): Int {
 internal fun InputStream.readLeUInt32(): Long {
   val buf = readAmountOfBytes(4)
   return buf[0].toULong() or
-    (buf[1].toULong() shl 8) or
-    (buf[2].toULong() shl 16) or
-    (buf[3].toULong() shl 24)
+      (buf[1].toULong() shl 8) or
+      (buf[2].toULong() shl 16) or
+      (buf[3].toULong() shl 24)
 }
 
 internal fun InputStream.readLeInt32(): Int {
   val buf = readAmountOfBytes(4)
   return buf[0].toUInt() or
-    (buf[1].toUInt() shl 8) or
-    (buf[2].toUInt() shl 16) or
-    (buf[3].toUInt() shl 24)
+      (buf[1].toUInt() shl 8) or
+      (buf[2].toUInt() shl 16) or
+      (buf[3].toUInt() shl 24)
 }
 
 internal fun InputStream.readLeInt64(): Long {
   val buf = readAmountOfBytes(8)
   return buf[0].toULong() or
-    (buf[1].toULong() shl 8) or
-    (buf[2].toULong() shl 16) or
-    (buf[3].toULong() shl 24) or
-    (buf[4].toULong() shl 32) or
-    (buf[5].toULong() shl 40) or
-    (buf[6].toULong() shl 48) or
-    (buf[7].toULong() shl 56)
+      (buf[1].toULong() shl 8) or
+      (buf[2].toULong() shl 16) or
+      (buf[3].toULong() shl 24) or
+      (buf[4].toULong() shl 32) or
+      (buf[5].toULong() shl 40) or
+      (buf[6].toULong() shl 48) or
+      (buf[7].toULong() shl 56)
 }
 
 internal fun ByteArray.startsWith(prefix: ByteArray): Boolean {

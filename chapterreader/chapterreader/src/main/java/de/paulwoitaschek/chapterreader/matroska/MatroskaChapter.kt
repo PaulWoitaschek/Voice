@@ -12,5 +12,5 @@ internal data class MatroskaChapter(
         ?.name
     }
     .firstOrNull()
-    ?: names.firstOrNull()?.name
+      ?: names.firstOrNull()?.name
 }

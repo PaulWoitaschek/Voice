@@ -8,20 +8,21 @@ internal data class OggPage(
   val absoluteGranulePosition: Long,
   val streamSerialNumber: Int,
   val pageSequenceNumber: Long,
-  val packets: List<ByteArray>) {
+  val packets: List<ByteArray>
+) {
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is OggPage) return false
     return continuedPacket == other.continuedPacket
-      && finishedPacket == other.finishedPacket
-      && firstPageOfStream == other.firstPageOfStream
-      && lastPageOfStream == other.lastPageOfStream
-      && absoluteGranulePosition == other.absoluteGranulePosition
-      && streamSerialNumber == other.streamSerialNumber
-      && pageSequenceNumber == other.pageSequenceNumber
-      && packets.size == other.packets.size
-      && packets.indices.all { packets[it] contentEquals other.packets[it] }
+        && finishedPacket == other.finishedPacket
+        && firstPageOfStream == other.firstPageOfStream
+        && lastPageOfStream == other.lastPageOfStream
+        && absoluteGranulePosition == other.absoluteGranulePosition
+        && streamSerialNumber == other.streamSerialNumber
+        && pageSequenceNumber == other.pageSequenceNumber
+        && packets.size == other.packets.size
+        && packets.indices.all { packets[it] contentEquals other.packets[it] }
   }
 
   override fun hashCode(): Int {

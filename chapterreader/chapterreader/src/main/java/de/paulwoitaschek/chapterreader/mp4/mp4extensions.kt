@@ -53,9 +53,9 @@ internal fun List<Mp4Atom>.findAtom(vararg path: String): Mp4Atom? {
 
 internal fun RandomAccessFile.readUnsignedInt(): Long =
   (read().toLong() and 0xFFL shl 24) or
-    (read().toLong() and 0xFFL shl 16) or
-    (read().toLong() and 0xFFL shl 8) or
-    (read().toLong() and 0xFFL)
+      (read().toLong() and 0xFFL shl 16) or
+      (read().toLong() and 0xFFL shl 8) or
+      (read().toLong() and 0xFFL)
 
 private val boxHeaderBuffer = ByteArray(4)
 

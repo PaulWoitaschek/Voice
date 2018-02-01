@@ -23,42 +23,42 @@ class VorbisCommentReadingTest {
     assertThat(
       VorbisComment(
         "", mapOf(
-        "lala" to "asdasd"
-      )
+          "lala" to "asdasd"
+        )
       ).asChapters().size
     ).isEqualTo(0)
 
     assertThat(
       VorbisComment(
         "", mapOf(
-        "CHAPTER001" to "00:00:01.000",
-        "CHAPTER001NAME" to "C1",
-        "CHAPTER002" to "00:00:02.000",
-        "CHAPTER002NAME" to "C2",
-        "CHAPTER004" to "00:00:04.000",
-        "CHAPTER004NAME" to "C4"
-      )
+          "CHAPTER001" to "00:00:01.000",
+          "CHAPTER001NAME" to "C1",
+          "CHAPTER002" to "00:00:02.000",
+          "CHAPTER002NAME" to "C2",
+          "CHAPTER004" to "00:00:04.000",
+          "CHAPTER004NAME" to "C4"
+        )
       ).asChapters()
     ).containsExactly(Chapter(1000L, "C1"), Chapter(2000L, "C2"))
 
     assertThat(
       VorbisComment(
         "", mapOf(
-        "CHAPTER001" to "00:00:01.000",
-        "CHAPTER001NAME" to "C1",
-        "CHAPTER002" to "00:00:02.000"
-      )
+          "CHAPTER001" to "00:00:01.000",
+          "CHAPTER001NAME" to "C1",
+          "CHAPTER002" to "00:00:02.000"
+        )
       ).asChapters().size
     ).isEqualTo(0)
 
     assertThat(
       VorbisComment(
         "", mapOf(
-        "CHAPTER001" to "00:00:01.000",
-        "CHAPTER001NAME" to "C1",
-        "CHAPTER002" to "00:00:02.00d0",
-        "CHAPTER002NAME" to "C2"
-      )
+          "CHAPTER001" to "00:00:01.000",
+          "CHAPTER001NAME" to "C1",
+          "CHAPTER002" to "00:00:02.00d0",
+          "CHAPTER002NAME" to "C2"
+        )
       ).asChapters().size
     ).isEqualTo(0)
   }
@@ -67,7 +67,8 @@ class VorbisCommentReadingTest {
 
   @Test
   fun parseVorbisComment() {
-    val stream1 = ByteArrayInputStream(decodeHex("0d00000076656e646f7220737472696e670300000005000000613d6173640a0000005449544c453d7465787407000000757466383dcf80"))
+    val stream1 =
+      ByteArrayInputStream(decodeHex("0d00000076656e646f7220737472696e670300000005000000613d6173640a0000005449544c453d7465787407000000757466383dcf80"))
     assertThat(VorbisCommentReader.readComment(stream1)).isEqualTo(
       VorbisComment(
         vendor = "vendor string",
