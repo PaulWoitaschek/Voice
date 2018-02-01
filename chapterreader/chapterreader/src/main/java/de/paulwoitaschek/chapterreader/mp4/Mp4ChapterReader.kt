@@ -14,18 +14,28 @@ internal class Mp4ChapterReader @Inject constructor() {
   private val logger = LoggerFactory.getLogger(javaClass)
 
   fun readChapters(file: File): List<Chapter> {
-    try {
-      return ChapReader.read(file)
-    } catch (e: IOException) {
-      logger.error("Error while parsing as chap from $file", e)
+    val chapResult = fromChapAtom(file)
+    if (chapResult.isNotEmpty()) {
+      return chapResult
     }
+    return fromChplAtom(file)
+  }
 
-    try {
-      return ChplReader.read(file)
+  private fun fromChplAtom(file: File): List<Chapter> {
+    return try {
+      ChplReader.read(file)
     } catch (e: IOException) {
       logger.error("Error while parsing as chpl from $file", e)
+      emptyList()
     }
+  }
 
-    return emptyList()
+  private fun fromChapAtom(file: File): List<Chapter> {
+    return try {
+      ChapReader.read(file)
+    } catch (e: IOException) {
+      logger.error("Error while parsing as chap from $file", e)
+      emptyList()
+    }
   }
 }
