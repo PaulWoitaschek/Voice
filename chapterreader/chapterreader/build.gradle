@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
 
 buildscript {
-    ext.kotlin_version = '1.1.51'
+    ext.kotlin_version = '1.2.21'
     repositories {
         mavenCentral()
     }
@@ -27,15 +27,15 @@ idea {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
-    def versionDagger = "2.12"
+    def versionDagger = "2.14.1"
     implementation "com.google.dagger:dagger:$versionDagger"
     kapt "com.google.dagger:dagger-compiler:$versionDagger"
 
     implementation "com.github.kokorin:jebml:2.3.1"
     implementation "org.slf4j:slf4j-api:1.7.25"
 
-    testImplementation "com.google.truth:truth:0.36"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.0.1"
+    testImplementation "com.google.truth:truth:0.39"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.0.3"
 }
 
 compileKotlin {
