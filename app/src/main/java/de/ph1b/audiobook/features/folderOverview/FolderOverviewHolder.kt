@@ -11,7 +11,11 @@ class FolderOverviewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
   init {
-    binding.remove.setOnClickListener { itemClicked(adapterPosition) }
+    binding.remove.setOnClickListener {
+      if (adapterPosition != -1) {
+        itemClicked(adapterPosition)
+      }
+    }
   }
 
   fun bind(model: FolderModel) {
