@@ -37,7 +37,7 @@ inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit)
 }
 
 inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
-  setAudioDebugListener(
+  addAudioDebugListener(
     object : SimpleAudioRendererEventListener {
       override fun onAudioSessionId(audioSessionId: Int) {
         action(audioSessionId)

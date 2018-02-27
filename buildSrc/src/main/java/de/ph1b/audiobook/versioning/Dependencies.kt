@@ -36,7 +36,7 @@ object Versions {
 object Dependencies {
 
   object Support {
-    private val version = "27.0.2"
+    private val version = "27.1.0"
     val supportAnnotations = "com.android.support:support-annotations:$version"
     val appCompat = "com.android.support:appcompat-v7:$version"
     val constraintLayout = "com.android.support.constraint:constraint-layout:1.1.0-beta4"
@@ -55,8 +55,8 @@ object Dependencies {
   val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
   val materialCab = "com.afollestad:material-cab:0.1.12"
   val picasso = "com.squareup.picasso:picasso:2.5.2"
-  val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.9.1"
-  val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.3"
+  val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.11.0"
+  val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
 
   object Conductor {
     private val version = "2.1.4"
@@ -65,7 +65,7 @@ object Dependencies {
     val support = "com.bluelinelabs:conductor-support:$version"
   }
 
-  val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.8.0@aar"
+  val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.0@aar"
   val fabricGradlePlugin = "io.fabric.tools:gradle:1.25.1"
 
   object Dagger {
@@ -77,22 +77,22 @@ object Dependencies {
   }
 
   object ExoPlayer {
-    private val version = "2.6.0"
+    private val version = "2.7.0"
     val core = "com.google.android.exoplayer:exoplayer-core:$version"
-    val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$version"
-    val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$version"
+    val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:2.7.0-1"
+    val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:2.7.0-1"
   }
 
   val moshi = "com.squareup.moshi:moshi:1.5.0"
-  val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.0.1"
-  val rxInterop = "com.github.akarnokd:rxjava2-interop:0.11.2"
-  val rxJava = "io.reactivex.rxjava2:rxjava:2.1.8"
+  val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.0.2"
+  val rxInterop = "com.github.akarnokd:rxjava2-interop:0.12.3"
+  val rxJava = "io.reactivex.rxjava2:rxjava:2.1.10"
   val rxPreferences = "com.f2prateek.rx.preferences:rx-preferences:1.0.2"
-  val timber = "com.jakewharton.timber:timber:4.6.0"
+  val timber = "com.jakewharton.timber:timber:4.6.1"
 
   object Kotlin {
-    private val coroutineVersion = "0.21"
-    private val kotlinVersion = "1.2.10"
+    private val coroutineVersion = "0.22.3"
+    private val kotlinVersion = "1.2.21"
     val std = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
@@ -100,7 +100,7 @@ object Dependencies {
   }
 
   val junit = "junit:junit:4.12"
-  val mockito = "org.mockito:mockito-core:2.13.0"
+  val mockito = "org.mockito:mockito-core:2.15.0"
   val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
-  val truth = "com.google.truth:truth:0.37"
+  val truth = "com.google.truth:truth:0.39"
 }

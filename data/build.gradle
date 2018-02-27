@@ -3,6 +3,7 @@ import de.ph1b.audiobook.versioning.Versions
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
 

@@ -21,15 +21,22 @@ import javax.inject.Inject
 class DataSourceConverter
 @Inject constructor(context: Context) {
 
-  private val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
-  private val extractorsFactory = DefaultExtractorsFactory()
-    .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
-    .setTsExtractorFlags(TsExtractor.MODE_SINGLE_PMT)
+  private val mediaSourceFactory: ExtractorMediaSource.Factory
+
+  init {
+    val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
+    val extractorsFactory = DefaultExtractorsFactory()
+      .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
+      .setTsExtractorFlags(TsExtractor.MODE_SINGLE_PMT)
+    mediaSourceFactory = ExtractorMediaSource.Factory(dataSourceFactory)
+      .setExtractorsFactory(extractorsFactory)
+  }
+
 
   private fun Chapter.toMediaSource() = toMediaSource(file)
 
-  fun toMediaSource(file: File) =
-    ExtractorMediaSource(Uri.fromFile(file), dataSourceFactory, extractorsFactory, null, null)
+  fun toMediaSource(file: File): ExtractorMediaSource =
+    mediaSourceFactory.createMediaSource(Uri.fromFile(file))
 
   /** convert a book to a media source. If the size is > 1 use a concat media source, else a regular */
   fun toMediaSource(book: Book) = if (book.chapters.size > 1) {
