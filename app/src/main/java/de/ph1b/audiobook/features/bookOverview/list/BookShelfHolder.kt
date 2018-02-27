@@ -37,7 +37,6 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
 
   override val containerView: View? get() = itemView
   private var boundBook: Book? = null
-  private val coverSize = itemView.resources.getDimensionPixelSize(R.dimen.book_shelf_list_height)
   private val defaultProgressColor = itemView.context.color(R.color.primaryDark)
 
   init {

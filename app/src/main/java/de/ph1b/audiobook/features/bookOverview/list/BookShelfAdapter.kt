@@ -1,45 +1,32 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.ViewGroup
 import de.ph1b.audiobook.data.Book
-import java.util.*
 
 class BookShelfAdapter(
   private val bookClicked: (Book, BookShelfClick) -> Unit
-) : RecyclerView.Adapter<BookShelfHolder>() {
-
-  private val books = ArrayList<Book>()
+) : ListAdapter<Book, BookShelfHolder>(BookShelfDiffCallback()) {
 
   init {
     setHasStableIds(true)
   }
 
-  fun newDataSet(newBooks: List<Book>) {
-    val oldBooks = books.toList()
-    books.clear()
-    books.addAll(newBooks)
-    val callback = BookShelfDiffCallback(oldBooks = oldBooks, newBooks = books)
-    val diffResult = DiffUtil.calculateDiff(callback, false)
-    diffResult.dispatchUpdatesTo(this)
-  }
-
   fun reloadBookCover(bookId: Long) {
-    val index = books.indexOfFirst { it.id == bookId }
-    if (index >= 0) {
-      notifyItemChanged(index)
+    for (i in 0 until itemCount) {
+      if (getItem(i).id == bookId) {
+        notifyItemChanged(i)
+        break
+      }
     }
   }
 
-  override fun getItemId(position: Int) = books[position].id
+  override fun getItemId(position: Int) = getItem(position).id
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     BookShelfHolder(parent, bookClicked)
 
-  override fun onBindViewHolder(holder: BookShelfHolder, position: Int) =
-    holder.bind(books[position])
-
-  override fun getItemCount(): Int = books.size
-
+  override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
+    holder.bind(getItem(position))
+  }
 }

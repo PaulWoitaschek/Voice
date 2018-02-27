@@ -161,7 +161,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     Timber.i("render ${state.javaClass.simpleName}")
     when (state) {
       is BookShelfState.Content -> {
-        adapter.newDataSet(state.books)
+        adapter.submitList(state.books)
         val currentBook = state.currentBook
 
         binding.fab.visible = currentBook != null

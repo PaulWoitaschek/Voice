@@ -38,7 +38,7 @@ class BookRepository
 
   private fun sortBooksAndNotifySubject() {
     active.sort()
-    all.onNext(active)
+    all.onNext(active.toList())
   }
 
   @Synchronized
