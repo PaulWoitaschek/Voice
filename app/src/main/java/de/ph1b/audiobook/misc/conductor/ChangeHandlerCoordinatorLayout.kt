@@ -11,31 +11,39 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 /**
  * Like [com.bluelinelabs.conductor.ChangeHandlerFrameLayout], but as a CoordinatorLayout
  */
-class ChangeHandlerCoordinatorLayout : CoordinatorLayout, ControllerChangeHandler.ControllerChangeListener {
+class ChangeHandlerCoordinatorLayout : CoordinatorLayout,
+  ControllerChangeHandler.ControllerChangeListener {
 
   private var inProgressTransactionCount: Int = 0
 
   constructor(context: Context) : super(context)
   constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-  constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+  constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+    context,
+    attrs,
+    defStyleAttr
+  )
 
-  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean = inProgressTransactionCount > 0 || super.onInterceptTouchEvent(ev)
+  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean =
+    inProgressTransactionCount > 0 || super.onInterceptTouchEvent(ev)
 
   override fun onChangeStarted(
-      to: Controller?,
-      from: Controller?,
-      isPush: Boolean,
-      container: ViewGroup,
-      handler: ControllerChangeHandler) {
+    to: Controller?,
+    from: Controller?,
+    isPush: Boolean,
+    container: ViewGroup,
+    handler: ControllerChangeHandler
+  ) {
     inProgressTransactionCount++
   }
 
   override fun onChangeCompleted(
-      to: Controller?,
-      from: Controller?,
-      isPush: Boolean,
-      container: ViewGroup,
-      handler: ControllerChangeHandler) {
+    to: Controller?,
+    from: Controller?,
+    isPush: Boolean,
+    container: ViewGroup,
+    handler: ControllerChangeHandler
+  ) {
     inProgressTransactionCount--
   }
 }

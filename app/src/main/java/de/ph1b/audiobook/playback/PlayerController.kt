@@ -48,26 +48,26 @@ class PlayerController
 
   fun setSpeed(speed: Float) {
     fire(
-        intent(ACTION_SPEED).apply {
-          putExtra(EXTRA_SPEED, speed)
-        }
+      intent(ACTION_SPEED).apply {
+        putExtra(EXTRA_SPEED, speed)
+      }
     )
   }
 
   fun changePosition(time: Int, file: File) {
     fire(
-        intent(ACTION_CHANGE).apply {
-          putExtra(CHANGE_TIME, time)
-          putExtra(CHANGE_FILE, file.absolutePath)
-        }
+      intent(ACTION_CHANGE).apply {
+        putExtra(CHANGE_TIME, time)
+        putExtra(CHANGE_FILE, file.absolutePath)
+      }
     )
   }
 
   fun setLoudnessGain(mB: Int) {
     fire(
-        intent(ACTION_LOUDNESS).apply {
-          putExtra(CHANGE_LOUDNESS, mB)
-        }
+      intent(ACTION_LOUDNESS).apply {
+        putExtra(CHANGE_LOUDNESS, mB)
+      }
     )
   }
 

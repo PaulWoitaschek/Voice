@@ -3,13 +3,7 @@ package de.ph1b.audiobook.playback
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Renderer
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
@@ -24,13 +18,7 @@ import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.utils.DataSourceConverter
-import de.ph1b.audiobook.playback.utils.WakeLockManager
-import de.ph1b.audiobook.playback.utils.onAudioSessionId
-import de.ph1b.audiobook.playback.utils.onError
-import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
-import de.ph1b.audiobook.playback.utils.onStateChanged
-import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
+import de.ph1b.audiobook.playback.utils.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -46,16 +34,17 @@ import javax.inject.Singleton
 class MediaPlayer
 @Inject
 constructor(
-    context: Context,
-    private val playStateManager: PlayStateManager,
-    @Named(PrefKeys.AUTO_REWIND_AMOUNT)
-    private val autoRewindAmountPref: Pref<Int>,
-    @Named(PrefKeys.SEEK_TIME)
-    private val seekTimePref: Pref<Int>,
-    private val equalizer: Equalizer,
-    private val loudnessGain: LoudnessGain,
-    private val wakeLockManager: WakeLockManager,
-    private val dataSourceConverter: DataSourceConverter) {
+  context: Context,
+  private val playStateManager: PlayStateManager,
+  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
+  private val autoRewindAmountPref: Pref<Int>,
+  @Named(PrefKeys.SEEK_TIME)
+  private val seekTimePref: Pref<Int>,
+  private val equalizer: Equalizer,
+  private val loudnessGain: LoudnessGain,
+  private val wakeLockManager: WakeLockManager,
+  private val dataSourceConverter: DataSourceConverter
+) {
 
   private val player: SimpleExoPlayer
 
@@ -80,27 +69,33 @@ constructor(
   init {
     val factory = object : DefaultRenderersFactory(context) {
       override fun buildVideoRenderers(
-          context: Context?,
-          drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
-          allowedVideoJoiningTimeMs: Long,
-          eventHandler: Handler?,
-          eventListener: VideoRendererEventListener?,
-          extensionRendererMode: Int,
-          out: ArrayList<Renderer>?
+        context: Context?,
+        drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
+        allowedVideoJoiningTimeMs: Long,
+        eventHandler: Handler?,
+        eventListener: VideoRendererEventListener?,
+        extensionRendererMode: Int,
+        out: ArrayList<Renderer>?
       ) {
 
       }
 
-      override fun buildTextRenderers(context: Context?, output: TextOutput?, outputLooper: Looper?, extensionRendererMode: Int, out: ArrayList<Renderer>?) {
+      override fun buildTextRenderers(
+        context: Context?,
+        output: TextOutput?,
+        outputLooper: Looper?,
+        extensionRendererMode: Int,
+        out: ArrayList<Renderer>?
+      ) {
 
       }
     }
     player = ExoPlayerFactory.newSimpleInstance(factory, DefaultTrackSelector())
 
     player.audioAttributes = AudioAttributes.Builder()
-        .setContentType(C.CONTENT_TYPE_SPEECH)
-        .setUsage(C.USAGE_MEDIA)
-        .build()
+      .setContentType(C.CONTENT_TYPE_SPEECH)
+      .setUsage(C.USAGE_MEDIA)
+      .build()
 
     // delegate player state changes
     player.onStateChanged {
@@ -118,12 +113,17 @@ constructor(
     // upon position change update the book
     player.onPositionDiscontinuity {
       val position = player.currentPosition
-          .coerceAtLeast(0)
-          .toInt()
+        .coerceAtLeast(0)
+        .toInt()
       Timber.i("onPositionDiscontinuity with currentPos=$position")
       bookSubject.value?.let {
         val index = player.currentWindowIndex
-        bookSubject.onNext(it.copy(positionInChapter = position, currentFile = it.chapters[index].file))
+        bookSubject.onNext(
+          it.copy(
+            positionInChapter = position,
+            currentFile = it.chapters[index].file
+          )
+        )
       }
     }
 
@@ -150,19 +150,19 @@ constructor(
     stateSubject.switchMap {
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map { player.currentPosition }
-            .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
+          .map { player.currentPosition }
+          .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
-      // update the book
-      bookSubject.value?.let { book ->
-        val index = player.currentWindowIndex
-        val time = it.coerceAtLeast(0)
+        // update the book
+        bookSubject.value?.let { book ->
+          val index = player.currentWindowIndex
+          val time = it.coerceAtLeast(0)
             .toInt()
-        val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
-        bookSubject.onNext(copy)
+          val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
+          bookSubject.onNext(copy)
+        }
       }
-    }
   }
 
   /** Initializes a new book. After this, a call to play can be made. */
@@ -223,7 +223,7 @@ constructor(
 
     bookSubject.value?.let {
       val currentPos = player.currentPosition
-          .coerceAtLeast(0)
+        .coerceAtLeast(0)
       val duration = player.duration
       val delta = seekTime * 1000
 
@@ -261,7 +261,7 @@ constructor(
         changePosition(0, previousChapter.file)
       } else {
         val time = (previousChapter.duration - (seekTime * 1000))
-            .coerceAtLeast(0)
+          .coerceAtLeast(0)
         changePosition(time, previousChapter.file)
       }
     }
@@ -315,9 +315,9 @@ constructor(
             if (autoRewind != 0) {
               // get the raw rewinded position
               val currentPosition = player.currentPosition
-                  .coerceAtLeast(0)
+                .coerceAtLeast(0)
               var maybeSeekTo = (currentPosition - autoRewind)
-                  .coerceAtLeast(0) // make sure not to get into negative time
+                .coerceAtLeast(0) // make sure not to get into negative time
 
               // now try to find the current chapter mark and make sure we don't auto-rewind
               // to a previous mark

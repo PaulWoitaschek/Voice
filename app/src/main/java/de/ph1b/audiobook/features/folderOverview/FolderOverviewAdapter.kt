@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import de.ph1b.audiobook.databinding.ActivityFolderOverviewRowLayoutBinding
 import de.ph1b.audiobook.misc.layoutInflater
-import java.util.ArrayList
+import java.util.*
 
 class FolderOverviewAdapter(private val deleteClicked: (toDelete: FolderModel) -> Unit) :
-    RecyclerView.Adapter<FolderOverviewHolder>() {
+  RecyclerView.Adapter<FolderOverviewHolder>() {
 
   private val items = ArrayList<FolderModel>()
 

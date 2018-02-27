@@ -21,11 +21,11 @@ class Migration30to31 : Migration {
 
       var chapterCount = 0
       val chapterCursor = db.query(
-          tableChapters,
-          null,
-          bookIdColumn + "=?",
-          arrayOf(bookId.toString()),
-          null, null, null
+        tableChapters,
+        null,
+        bookIdColumn + "=?",
+        arrayOf(bookId.toString()),
+        null, null, null
       )
       chapterCursor.moveToNextLoop {
         chapterCount++

@@ -4,10 +4,10 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import de.ph1b.audiobook.data.Book
-import java.util.ArrayList
+import java.util.*
 
 class BookShelfAdapter(
-    private val bookClicked: (Book, BookShelfClick) -> Unit
+  private val bookClicked: (Book, BookShelfClick) -> Unit
 ) : RecyclerView.Adapter<BookShelfHolder>() {
 
   private val books = ArrayList<Book>()
@@ -34,9 +34,11 @@ class BookShelfAdapter(
 
   override fun getItemId(position: Int) = books[position].id
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BookShelfHolder(parent, bookClicked)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+    BookShelfHolder(parent, bookClicked)
 
-  override fun onBindViewHolder(holder: BookShelfHolder, position: Int) = holder.bind(books[position])
+  override fun onBindViewHolder(holder: BookShelfHolder, position: Int) =
+    holder.bind(books[position])
 
   override fun getItemCount(): Int = books.size
 

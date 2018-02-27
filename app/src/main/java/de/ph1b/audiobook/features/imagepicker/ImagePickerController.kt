@@ -34,17 +34,19 @@ import javax.inject.Inject
 class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>(bundle) {
 
   constructor(book: Book) : this(
-      Bundle().apply {
-        putLong(NI_BOOK_ID, book.id)
-      }
+    Bundle().apply {
+      putLong(NI_BOOK_ID, book.id)
+    }
   )
 
   init {
     App.component.inject(this)
   }
 
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var imageHelper: ImageHelper
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var imageHelper: ImageHelper
 
   private var cab: MaterialCab? = null
 
@@ -65,7 +67,13 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
         binding.webViewContainer.isDrawingCacheEnabled = true
         binding.webViewContainer.buildDrawingCache()
         val cache: Bitmap = binding.webViewContainer.drawingCache
-        val screenShot = Bitmap.createBitmap(cache, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
+        val screenShot = Bitmap.createBitmap(
+          cache,
+          cropRect.left,
+          cropRect.top,
+          cropRect.width(),
+          cropRect.height()
+        )
         binding.webViewContainer.isDrawingCacheEnabled = false
         cache.recycle()
 
@@ -104,7 +112,8 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
       builtInZoomControls = true
       displayZoomControls = false
       javaScriptEnabled = true
-      userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+      userAgentString =
+          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     // necessary, else the image capturing does not include the web view. Very performance costly.
     binding.webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
@@ -125,7 +134,12 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
       }
 
       @Suppress("OverridingDeprecatedMember")
-      override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
+      override fun onReceivedError(
+        view: WebView,
+        errorCode: Int,
+        description: String?,
+        failingUrl: String?
+      ) {
         Timber.d("received webViewError. Set webView invisible")
         view.loadUrl(ABOUT_BLANK)
         binding.progressBar.visible = false
@@ -136,15 +150,15 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
 
     // after first successful load set visibilities
     webViewIsLoading
-        .distinctUntilChanged()
-        .filter { it }
-        .subscribe {
-          // sets progressbar and webviews visibilities correctly once the page is loaded
-          Timber.i("WebView is now loading. Set webView visible")
-          binding.progressBar.visible = false
-          binding.noNetwork.visible = false
-          binding.webViewContainer.visible = true
-        }
+      .distinctUntilChanged()
+      .filter { it }
+      .subscribe {
+        // sets progressbar and webviews visibilities correctly once the page is loaded
+        Timber.i("WebView is now loading. Set webView visible")
+        binding.progressBar.visible = false
+        binding.noNetwork.visible = false
+        binding.webViewContainer.visible = true
+      }
 
     binding.webView.loadUrl(originalUrl)
 
@@ -176,7 +190,7 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     }
 
     cab = MaterialCab(activity, R.id.cabStub)
-        .setMenu(R.menu.crop_menu)
+      .setMenu(R.menu.crop_menu)
 
     // set the rotating icon
     val menu = binding.toolbar.menu
@@ -196,29 +210,29 @@ class ImagePickerController(bundle: Bundle) : BaseController<ImagePickerBinding>
     refreshItem.actionView = rotateView
 
     webViewIsLoading
-        .filter { it }
-        .filter { !rotation.hasStarted() }
-        .doOnNext { Timber.i("is loading. Start animation") }
-        .subscribe {
-          rotation.start()
-        }
+      .filter { it }
+      .filter { !rotation.hasStarted() }
+      .doOnNext { Timber.i("is loading. Start animation") }
+      .subscribe {
+        rotation.start()
+      }
 
     rotation.setAnimationListener(
-        object : Animation.AnimationListener {
-          override fun onAnimationRepeat(p0: Animation?) {
-            if (webViewIsLoading.value == false) {
-              Timber.i("we are in the refresh round. cancel now.")
-              rotation.cancel()
-              rotation.reset()
-            }
-          }
-
-          override fun onAnimationEnd(p0: Animation?) {
-          }
-
-          override fun onAnimationStart(p0: Animation?) {
+      object : Animation.AnimationListener {
+        override fun onAnimationRepeat(p0: Animation?) {
+          if (webViewIsLoading.value == false) {
+            Timber.i("we are in the refresh round. cancel now.")
+            rotation.cancel()
+            rotation.reset()
           }
         }
+
+        override fun onAnimationEnd(p0: Animation?) {
+        }
+
+        override fun onAnimationStart(p0: Animation?) {
+        }
+      }
     )
   }
 

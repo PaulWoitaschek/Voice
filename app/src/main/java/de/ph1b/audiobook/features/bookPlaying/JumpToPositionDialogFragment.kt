@@ -20,8 +20,10 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<Long>
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var playerController: PlayerController
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var playerController: PlayerController
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
@@ -75,17 +77,17 @@ class JumpToPositionDialogFragment : DialogFragment() {
     }
 
     return MaterialDialog.Builder(context!!)
-        .customView(binding.root, true)
-        .title(R.string.action_time_change)
-        .onPositive { _, _ ->
-          val h = binding.numberHour.value
-          val m = binding.numberMinute.value
-          val newPosition = (m + 60 * h) * 60 * 1000
-          playerController.changePosition(newPosition, book.currentChapter.file)
-        }
-        .positiveText(R.string.dialog_confirm)
-        .negativeText(R.string.dialog_cancel)
-        .build()
+      .customView(binding.root, true)
+      .title(R.string.action_time_change)
+      .onPositive { _, _ ->
+        val h = binding.numberHour.value
+        val m = binding.numberMinute.value
+        val newPosition = (m + 60 * h) * 60 * 1000
+        playerController.changePosition(newPosition, book.currentChapter.file)
+      }
+      .positiveText(R.string.dialog_confirm)
+      .negativeText(R.string.dialog_cancel)
+      .build()
   }
 
   companion object {

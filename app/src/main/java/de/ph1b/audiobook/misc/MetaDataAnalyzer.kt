@@ -51,12 +51,12 @@ class MetaDataAnalyzer @Inject constructor() {
   private fun chapterNameFallback(): String {
     val file = file ?: error("No file prepared")
     val withoutExtension = file.nameWithoutExtension
-        .trim()
+      .trim()
     return if (withoutExtension.isEmpty()) file.name else withoutExtension
   }
 
   private fun parseDuration() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)
-      ?.toIntOrNull()
+    ?.toIntOrNull()
       ?: 0
 
   private fun parseBookName() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
@@ -79,8 +79,9 @@ class MetaDataAnalyzer @Inject constructor() {
   }
 
   data class MetaData(
-      val chapterName: String,
-      val duration: Int?,
-      val bookName: String?,
-      val author: String?)
+    val chapterName: String,
+    val duration: Int?,
+    val bookName: String?,
+    val author: String?
+  )
 }

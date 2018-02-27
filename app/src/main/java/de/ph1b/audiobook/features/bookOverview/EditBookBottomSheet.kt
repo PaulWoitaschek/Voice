@@ -13,15 +13,8 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.misc.RouterProvider
-import de.ph1b.audiobook.misc.bottomCompoundDrawable
-import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.misc.endCompoundDrawable
-import de.ph1b.audiobook.misc.findCallback
-import de.ph1b.audiobook.misc.startCompoundDrawable
-import de.ph1b.audiobook.misc.tinted
-import de.ph1b.audiobook.misc.topCompoundDrawable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,7 +23,8 @@ import javax.inject.Inject
  */
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
-  @Inject lateinit var repo: BookRepository
+  @Inject
+  lateinit var repo: BookRepository
 
   private fun callback() = findCallback<Callback>(NI_TARGET)
 
@@ -52,7 +46,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
     binding.title.setOnClickListener {
       EditBookTitleDialogFragment.newInstance(book)
-          .show(fragmentManager, EditBookTitleDialogFragment.TAG)
+        .show(fragmentManager, EditBookTitleDialogFragment.TAG)
       dismiss()
     }
     binding.internetCover.setOnClickListener {
@@ -83,10 +77,10 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     val left = textView.startCompoundDrawable()!!
     val tinted = left.tinted(context!!.color(R.color.icon_color))
     textView.setCompoundDrawablesRelative(
-        tinted,
-        textView.topCompoundDrawable(),
-        textView.endCompoundDrawable(),
-        textView.bottomCompoundDrawable()
+      tinted,
+      textView.topCompoundDrawable(),
+      textView.endCompoundDrawable(),
+      textView.bottomCompoundDrawable()
     )
   }
 
@@ -95,12 +89,13 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   companion object {
     private const val NI_BOOK = "ni#book"
     private const val NI_TARGET = "ni#target"
-    fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback = EditBookBottomSheet().apply {
-      arguments = Bundle().apply {
-        putLong(NI_BOOK, book.id)
-        putString(NI_TARGET, target.instanceId)
+    fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback =
+      EditBookBottomSheet().apply {
+        arguments = Bundle().apply {
+          putLong(NI_BOOK, book.id)
+          putString(NI_TARGET, target.instanceId)
+        }
       }
-    }
   }
 
   interface Callback {

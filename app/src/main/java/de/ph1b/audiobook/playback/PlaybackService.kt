@@ -38,30 +38,49 @@ import javax.inject.Named
  */
 class PlaybackService : MediaBrowserServiceCompat() {
 
-  override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) = mediaBrowserHelper.onLoadChildren(
-      parentId,
-      result
+  override fun onLoadChildren(
+    parentId: String,
+    result: Result<List<MediaBrowserCompat.MediaItem>>
+  ) = mediaBrowserHelper.onLoadChildren(
+    parentId,
+    result
   )
 
-  override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
+  override fun onGetRoot(
+    clientPackageName: String,
+    clientUid: Int,
+    rootHints: Bundle?
+  ): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
   private val disposables = CompositeDisposable()
   private var isForeground = false
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<Long>
-  @Inject lateinit var player: MediaPlayer
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var notificationManager: NotificationManager
-  @Inject lateinit var notificationCreator: NotificationCreator
-  @Inject lateinit var playStateManager: PlayStateManager
-  @Inject lateinit var bookUriConverter: BookUriConverter
-  @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
-  @Inject lateinit var mediaSession: MediaSessionCompat
-  @Inject lateinit var changeNotifier: ChangeNotifier
-  @Inject lateinit var autoConnected: AndroidAutoConnectedReceiver
-  @Inject lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
-  @Inject lateinit var audioFocusHelper: AudioFocusHandler
+  @Inject
+  lateinit var player: MediaPlayer
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var notificationManager: NotificationManager
+  @Inject
+  lateinit var notificationCreator: NotificationCreator
+  @Inject
+  lateinit var playStateManager: PlayStateManager
+  @Inject
+  lateinit var bookUriConverter: BookUriConverter
+  @Inject
+  lateinit var mediaBrowserHelper: MediaBrowserHelper
+  @Inject
+  lateinit var mediaSession: MediaSessionCompat
+  @Inject
+  lateinit var changeNotifier: ChangeNotifier
+  @Inject
+  lateinit var autoConnected: AndroidAutoConnectedReceiver
+  @Inject
+  lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
+  @Inject
+  lateinit var audioFocusHelper: AudioFocusHandler
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
@@ -73,54 +92,57 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     // update book when changed by player
     player.bookStream.distinctUntilChanged()
-        .subscribe {
-          repo.updateBook(it)
-        }
+      .subscribe {
+        repo.updateBook(it)
+      }
 
     notifyOnAutoConnectionChange.listen()
 
     currentBookIdPref.stream
-        .subscribe { currentBookIdChanged(it) }
-        .disposeOnDestroy()
+      .subscribe { currentBookIdChanged(it) }
+      .disposeOnDestroy()
 
     val bookUpdated = repo.updateObservable()
-        .filter { it.id == currentBookIdPref.value }
+      .filter { it.id == currentBookIdPref.value }
     bookUpdated
-        .subscribe {
-          player.init(it)
-          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
-        }
-        .disposeOnDestroy()
+      .subscribe {
+        player.init(it)
+        changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+      }
+      .disposeOnDestroy()
 
     bookUpdated
-        .distinctUntilChanged { book -> book.currentChapter }
-        .subscribe {
-          if (isForeground) {
-            updateNotification(it)
-          }
+      .distinctUntilChanged { book -> book.currentChapter }
+      .subscribe {
+        if (isForeground) {
+          updateNotification(it)
         }
+      }
 
     playStateManager.playStateStream()
-        .observeOn(Schedulers.io())
-        .subscribe { handlePlaybackState(it) }
-        .disposeOnDestroy()
+      .observeOn(Schedulers.io())
+      .subscribe { handlePlaybackState(it) }
+      .disposeOnDestroy()
 
     HeadsetPlugReceiver.events(this@PlaybackService)
-        .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
-        .subscribe { headsetPlugged() }
-        .disposeOnDestroy()
+      .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
+      .subscribe { headsetPlugged() }
+      .disposeOnDestroy()
 
     repo.booksStream()
-        .map { it.size }
-        .distinctUntilChanged()
-        .subscribe {
-          notifyChildrenChanged(bookUriConverter.allBooks().toString())
-        }
-        .disposeOnDestroy()
+      .map { it.size }
+      .distinctUntilChanged()
+      .subscribe {
+        notifyChildrenChanged(bookUriConverter.allBooks().toString())
+      }
+      .disposeOnDestroy()
 
-    RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-        .subscribe { audioBecomingNoisy() }
-        .disposeOnDestroy()
+    RxBroadcast.register(
+      this@PlaybackService,
+      IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+    )
+      .subscribe { audioBecomingNoisy() }
+      .disposeOnDestroy()
 
     tearDownAutomatically()
   }
@@ -133,14 +155,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun tearDownAutomatically() {
     val idleTimeOutInSeconds: Long = 7
     playStateManager.playStateStream()
-        .distinctUntilChanged()
-        .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
-        .filter { it == PlayState.STOPPED }
-        .subscribe {
-          Timber.d("STOPPED for $idleTimeOutInSeconds. Stop self")
-          stopSelf()
-        }
-        .disposeOnDestroy()
+      .distinctUntilChanged()
+      .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
+      .filter { it == PlayState.STOPPED }
+      .subscribe {
+        Timber.d("STOPPED for $idleTimeOutInSeconds. Stop self")
+        stopSelf()
+      }
+      .disposeOnDestroy()
   }
 
   private fun currentBookIdChanged(it: Long) {
@@ -210,7 +232,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     when (intent?.action) {
       Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
-      PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
+      PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(
+        intent.getFloatExtra(
+          PlayerController.EXTRA_SPEED,
+          1F
+        )
+      )
       PlayerController.ACTION_CHANGE -> {
         val time = intent.getIntExtra(PlayerController.CHANGE_TIME, 0)
         val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))

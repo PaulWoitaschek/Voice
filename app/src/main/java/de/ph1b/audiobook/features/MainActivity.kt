@@ -5,11 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.*
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -41,10 +37,14 @@ class MainActivity : BaseActivity(), RouterProvider {
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
-  @Inject lateinit var playerController: PlayerController
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var bookSearchParser: BookSearchParser
-  @Inject lateinit var bookSearchHandler: BookSearchHandler
+  @Inject
+  lateinit var playerController: PlayerController
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var bookSearchParser: BookSearchParser
+  @Inject
+  lateinit var bookSearchHandler: BookSearchHandler
 
   private lateinit var router: Router
 
@@ -62,27 +62,27 @@ class MainActivity : BaseActivity(), RouterProvider {
     }
 
     router.addChangeListener(
-        object : ControllerChangeHandler.ControllerChangeListener {
-          override fun onChangeStarted(
-              to: Controller?,
-              from: Controller?,
-              isPush: Boolean,
-              container: ViewGroup,
-              handler: ControllerChangeHandler
-          ) {
-            from?.setOptionsMenuHidden(true)
-          }
-
-          override fun onChangeCompleted(
-              to: Controller?,
-              from: Controller?,
-              isPush: Boolean,
-              container: ViewGroup,
-              handler: ControllerChangeHandler
-          ) {
-            from?.setOptionsMenuHidden(false)
-          }
+      object : ControllerChangeHandler.ControllerChangeListener {
+        override fun onChangeStarted(
+          to: Controller?,
+          from: Controller?,
+          isPush: Boolean,
+          container: ViewGroup,
+          handler: ControllerChangeHandler
+        ) {
+          from?.setOptionsMenuHidden(true)
         }
+
+        override fun onChangeCompleted(
+          to: Controller?,
+          from: Controller?,
+          isPush: Boolean,
+          container: ViewGroup,
+          handler: ControllerChangeHandler
+        ) {
+          from?.setOptionsMenuHidden(false)
+        }
+      }
     )
 
     setupFromIntent(intent)
@@ -121,7 +121,11 @@ class MainActivity : BaseActivity(), RouterProvider {
     router.setRoot(rootTransaction)
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+  ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
   }
@@ -153,8 +157,9 @@ class MainActivity : BaseActivity(), RouterProvider {
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
 
-    fun newIntent(context: Context, playCurrentBookImmediately: Boolean) = Intent(context, MainActivity::class.java).apply {
-      putExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, playCurrentBookImmediately)
-    }
+    fun newIntent(context: Context, playCurrentBookImmediately: Boolean) =
+      Intent(context, MainActivity::class.java).apply {
+        putExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, playCurrentBookImmediately)
+      }
   }
 }

@@ -31,9 +31,9 @@ abstract class BaseActivity : AppCompatActivity() {
       stopService(serviceIntent)
 
       startActivity(
-          Intent(this, NoExternalStorageActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-          }
+        Intent(this, NoExternalStorageActivity::class.java).apply {
+          flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
       )
       return
     }

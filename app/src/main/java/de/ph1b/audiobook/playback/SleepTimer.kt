@@ -12,19 +12,20 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+private const val NOT_ACTIVE = -1
+
 @Singleton
 class SleepTimer
 @Inject constructor(
-    private val playerController: PlayerController,
-    playStateManager: PlayStateManager,
-    shakeDetector: ShakeDetector,
-    @Named(PrefKeys.SHAKE_TO_RESET)
-    private val shakeToResetPref: Pref<Boolean>,
-    @Named(PrefKeys.SLEEP_TIME)
-    private val sleepTimePref: Pref<Int>
+  private val playerController: PlayerController,
+  playStateManager: PlayStateManager,
+  shakeDetector: ShakeDetector,
+  @Named(PrefKeys.SHAKE_TO_RESET)
+  private val shakeToResetPref: Pref<Boolean>,
+  @Named(PrefKeys.SLEEP_TIME)
+  private val sleepTimePref: Pref<Int>
 ) {
 
-  private val NOT_ACTIVE = -1
   private val leftSleepTimeSubject = BehaviorSubject.createDefault<Int>(NOT_ACTIVE)
   private var sleepDisposable: Disposable? = null
   private var shakeDisposable: Disposable? = null
@@ -33,7 +34,7 @@ class SleepTimer
 
   init {
     leftSleepTimeSubject.filter { it == 0 }
-        .subscribe { playerController.stop() }
+      .subscribe { playerController.stop() }
 
     leftSleepTimeSubject.subscribe {
       when {
@@ -54,19 +55,23 @@ class SleepTimer
     // counts down the sleep sand
     val sleepUpdateInterval = 1000L
     playStateManager.playStateStream()
-        .map { it == PlayStateManager.PlayState.PLAYING }
-        .distinctUntilChanged()
-        .subscribe { playing ->
-          if (playing) {
-            sleepDisposable = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .filter { leftSleepTimeSubject.value > 0 } // only notify if there is still time left
-                .map { leftSleepTimeSubject.value - sleepUpdateInterval } // calculate the new time
-                .map { it.coerceAtLeast(0) } // but keep at least 0
-                .subscribe { leftSleepTimeSubject.onNext(it.toInt()) }
-          } else {
-            sleepDisposable?.dispose()
-          }
+      .map { it == PlayStateManager.PlayState.PLAYING }
+      .distinctUntilChanged()
+      .subscribe { playing ->
+        if (playing) {
+          sleepDisposable = Observable.interval(
+            sleepUpdateInterval,
+            TimeUnit.MILLISECONDS,
+            AndroidSchedulers.mainThread()
+          )
+            .filter { leftSleepTimeSubject.value > 0 } // only notify if there is still time left
+            .map { leftSleepTimeSubject.value - sleepUpdateInterval } // calculate the new time
+            .map { it.coerceAtLeast(0) } // but keep at least 0
+            .subscribe { leftSleepTimeSubject.onNext(it.toInt()) }
+        } else {
+          sleepDisposable?.dispose()
         }
+      }
   }
 
   /** turns the sleep timer on or off **/
@@ -107,10 +112,10 @@ class SleepTimer
     shakeTimeoutDisposable?.dispose()
     if (stopAfter != null) {
       shakeTimeoutDisposable = Observable.timer(stopAfter, TimeUnit.MINUTES)
-          .subscribe {
-            Timber.d("disabling pauseOnShake through timeout")
-            resetTimerOnShake(false)
-          }
+        .subscribe {
+          Timber.d("disabling pauseOnShake through timeout")
+          resetTimerOnShake(false)
+        }
     }
   }
 

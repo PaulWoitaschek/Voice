@@ -35,7 +35,9 @@ var <T> Preference<T>.value: T
   get() = get()!!
   set(value) = set(value!!)
 
-fun Context.dpToPx(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+fun Context.dpToPx(dp: Float) =
+  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+
 fun Context.dpToPxRounded(dp: Float) = Math.round(dpToPx(dp))
 
 fun Drawable.tinted(@ColorInt color: Int): Drawable {
@@ -64,13 +66,13 @@ fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
 
 inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   viewTreeObserver.addOnPreDrawListener(
-      object : ViewTreeObserver.OnPreDrawListener {
-        override fun onPreDraw(): Boolean {
-          viewTreeObserver.removeOnPreDrawListener(this)
-          action()
-          return true
-        }
+    object : ViewTreeObserver.OnPreDrawListener {
+      override fun onPreDraw(): Boolean {
+        viewTreeObserver.removeOnPreDrawListener(this)
+        action()
+        return true
       }
+    }
   )
 }
 

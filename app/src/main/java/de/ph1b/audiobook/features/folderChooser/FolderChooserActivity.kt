@@ -14,11 +14,7 @@ import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.ActivityFolderChooserBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.Permissions
-import de.ph1b.audiobook.misc.drawable
-import de.ph1b.audiobook.misc.itemSelections
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.visible
 import timber.log.Timber
@@ -33,7 +29,8 @@ import java.io.File
  * Use [newInstanceIntent] to get a new intent with the necessary
  * values.
  */
-class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView {
+class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(),
+  FolderChooserView {
 
   override fun newPresenter() = FolderChooserPresenter()
 
@@ -42,7 +39,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun showSubFolderWarning(first: String, second: String) {
     val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
     Toast.makeText(this, message, Toast.LENGTH_LONG)
-        .show()
+      .show()
   }
 
   private lateinit var binding: ActivityFolderChooserBinding
@@ -103,7 +100,11 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     binding.toolbar.setTitle(R.string.audiobook_folders_title)
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+  ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
   }

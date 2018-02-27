@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.util.Random
+import java.util.*
 
 
 class BookStorageTest {
@@ -93,10 +93,10 @@ class BookStorageTest {
     val inserted = register.addBook(withNullableAuthor)
 
     assertThat(inserted)
-        .isEqualTo(withNullableAuthor.copy(id = inserted.id))
+      .isEqualTo(withNullableAuthor.copy(id = inserted.id))
 
     val retrieved = register.activeBooks()
-        .single()
+      .single()
 
     assertThat(retrieved).isEqualTo(withNullableAuthor.copy(id = retrieved.id))
   }
@@ -112,17 +112,25 @@ class BookStorageTest {
       put(15114, "The time has come")
       put(2361341, "This is another chapter")
     }
-    val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516, 131351, marks1))
+    val newChapters = substracted.plus(
+      Chapter(
+        File("/root/", "salkjsdg.mp3"),
+        "askhsdglkjsdf",
+        113513516,
+        131351,
+        marks1
+      )
+    )
 
     val changed = inserted.copy(
-        type = Book.Type.SINGLE_FILE,
-        author = if (Random().nextBoolean()) "lkajsdflkj" else null,
-        currentFile = newChapters.last().file,
-        positionInChapter = 135135135,
-        name = "252587245",
-        chapters = newChapters,
-        playbackSpeed = 1.7f,
-        root = "slksjdglkjgaölskjdf"
+      type = Book.Type.SINGLE_FILE,
+      author = if (Random().nextBoolean()) "lkajsdflkj" else null,
+      currentFile = newChapters.last().file,
+      positionInChapter = 135135135,
+      name = "252587245",
+      chapters = newChapters,
+      playbackSpeed = 1.7f,
+      root = "slksjdglkjgaölskjdf"
     )
 
     register.updateBook(changed)

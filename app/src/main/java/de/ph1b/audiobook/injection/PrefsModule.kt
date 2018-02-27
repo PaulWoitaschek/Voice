@@ -20,12 +20,12 @@ class PrefsModule {
 
   @Provides
   fun provideSharedPreferences(context: Context): SharedPreferences =
-      PreferenceManager.getDefaultSharedPreferences(context)
+    PreferenceManager.getDefaultSharedPreferences(context)
 
   @Provides
   @Singleton
   fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
-      RxSharedPreferences.create(sharedPreferences)
+    RxSharedPreferences.create(sharedPreferences)
 
   @Provides
   @Reusable

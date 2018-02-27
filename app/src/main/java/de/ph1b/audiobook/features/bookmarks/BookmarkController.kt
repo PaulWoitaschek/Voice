@@ -25,7 +25,10 @@ import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 /**
  * Dialog for creating a bookmark
  */
-class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(args), BookmarkView, BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback, EditBookmarkDialog.Callback {
+class BookmarkController(args: Bundle) :
+  MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(args), BookmarkView,
+  BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
+  EditBookmarkDialog.Callback {
 
   private val bookId = args.getLong(NI_BOOK_ID)
   private val adapter = BookmarkAdapter(this)
@@ -43,7 +46,7 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
     val index = adapter.indexOf(bookmark)
     binding.recycler.smoothScrollToPosition(index)
     Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-        .show()
+      .show()
   }
 
   override fun onDeleteBookmarkConfirmed(id: Long) {
@@ -97,7 +100,11 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
     itemAnimator.supportsChangeAnimations = false
 
     val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-      override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
+      override fun onMove(
+        recyclerView: RecyclerView?,
+        viewHolder: RecyclerView.ViewHolder?,
+        target: RecyclerView.ViewHolder?
+      ): Boolean {
         return false
       }
 
@@ -145,9 +152,9 @@ class BookmarkController(args: Bundle) : MvpController<BookmarkView, BookmarkPre
     private const val NI_BOOK_ID = "ni#bookId"
 
     fun newInstance(bookId: Long) = BookmarkController(
-        Bundle().apply {
-          putLong(NI_BOOK_ID, bookId)
-        }
+      Bundle().apply {
+        putLong(NI_BOOK_ID, bookId)
+      }
     )
   }
 }

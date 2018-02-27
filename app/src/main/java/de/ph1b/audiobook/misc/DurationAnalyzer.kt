@@ -20,8 +20,8 @@ import javax.inject.Inject
  */
 class DurationAnalyzer
 @Inject constructor(
-    private val dataSourceConverter: DataSourceConverter,
-    context: Context
+  private val dataSourceConverter: DataSourceConverter,
+  context: Context
 ) {
 
   private val exoPlayer: ExoPlayer
@@ -40,45 +40,45 @@ class DurationAnalyzer
 
   init {
     exoPlayer.addListener(
-        object : Player.DefaultEventListener() {
-          override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            playbackStateSubject.onNext(playbackState)
-          }
+      object : Player.DefaultEventListener() {
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+          playbackStateSubject.onNext(playbackState)
         }
+      }
     )
   }
 
   fun duration(file: File): Single<Int> = waitForIdle()
-      .flatMap { scan(file) }
-      .timeout(3, TimeUnit.SECONDS)
-      .onErrorReturnItem(-1)
+    .flatMap { scan(file) }
+    .timeout(3, TimeUnit.SECONDS)
+    .onErrorReturnItem(-1)
 
   private fun waitForIdle() = playbackStateSubject
-      .doOnSubscribe {
-        if (playbackStateSubject.value != Player.STATE_IDLE) exoPlayer.stop()
-      }
-      .filter { it == Player.STATE_IDLE }
-      .firstOrError()
+    .doOnSubscribe {
+      if (playbackStateSubject.value != Player.STATE_IDLE) exoPlayer.stop()
+    }
+    .filter { it == Player.STATE_IDLE }
+    .firstOrError()
 
   private fun scan(file: File) = playbackStateSubject
-      .doOnSubscribe {
-        val mediaSource = dataSourceConverter.toMediaSource(file)
-        exoPlayer.prepare(mediaSource)
+    .doOnSubscribe {
+      val mediaSource = dataSourceConverter.toMediaSource(file)
+      exoPlayer.prepare(mediaSource)
+    }
+    .filter {
+      when (it) {
+        Player.STATE_READY -> true
+        Player.STATE_BUFFERING, Player.STATE_IDLE -> false
+        else -> throw IOException()
       }
-      .filter {
-        when (it) {
-          Player.STATE_READY -> true
-          Player.STATE_BUFFERING, Player.STATE_IDLE -> false
-          else -> throw IOException()
-        }
-      }
-      .firstOrError()
-      .map {
-        if (!exoPlayer.isCurrentWindowSeekable)
-          Timber.d("file $file is not seekable")
-        val duration = exoPlayer.duration
-        if (duration == C.TIME_UNSET) -1
-        else duration.toInt()
-      }
-      .doFinally { exoPlayer.stop() }
+    }
+    .firstOrError()
+    .map {
+      if (!exoPlayer.isCurrentWindowSeekable)
+        Timber.d("file $file is not seekable")
+      val duration = exoPlayer.duration
+      if (duration == C.TIME_UNSET) -1
+      else duration.toInt()
+    }
+    .doFinally { exoPlayer.stop() }
 }

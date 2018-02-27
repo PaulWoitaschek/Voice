@@ -28,17 +28,17 @@ class NaturalOrderComparatorTest {
 
     val alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms")
     val expected = listOf(
-        alarmsFolder,
-        testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
-        testFolder.newFile("folder/subfolder/test.mp3"),
-        testFolder.newFile("folder/subfolder/test2.mp3"),
-        testFolder.newFile("folder/a.jpg"),
-        testFolder.newFile("folder/aC.jpg"),
-        testFolder.newFile("storage/emulated/0/1.ogg"),
-        testFolder.newFile("storage/emulated/0/2.ogg"),
-        testFolder.newFile("xFolder/d.jpg"),
-        testFolder.newFile("1.mp3"),
-        testFolder.newFile("a.jpg")
+      alarmsFolder,
+      testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
+      testFolder.newFile("folder/subfolder/test.mp3"),
+      testFolder.newFile("folder/subfolder/test2.mp3"),
+      testFolder.newFile("folder/a.jpg"),
+      testFolder.newFile("folder/aC.jpg"),
+      testFolder.newFile("storage/emulated/0/1.ogg"),
+      testFolder.newFile("storage/emulated/0/2.ogg"),
+      testFolder.newFile("xFolder/d.jpg"),
+      testFolder.newFile("1.mp3"),
+      testFolder.newFile("a.jpg")
     )
 
     val sorted = expected.sortedWith(NaturalOrderComparator.fileComparator)
@@ -48,21 +48,21 @@ class NaturalOrderComparatorTest {
   @Test
   fun stringComparator() {
     val expected = listOf(
-        "00 I",
-        "00 Introduction",
-        "1",
-        "01 How to build a universe",
-        "01 I",
-        "2",
-        "9",
-        "10",
-        "a",
-        "Ab",
-        "aC",
-        "Ba",
-        "cA",
-        "D",
-        "e"
+      "00 I",
+      "00 Introduction",
+      "1",
+      "01 How to build a universe",
+      "01 I",
+      "2",
+      "9",
+      "10",
+      "a",
+      "Ab",
+      "aC",
+      "Ba",
+      "cA",
+      "D",
+      "e"
     )
 
     val sorted = expected.sortedWith(NaturalOrderComparator.stringComparator)

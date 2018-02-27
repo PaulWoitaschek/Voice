@@ -45,7 +45,8 @@ class Migration39to40Test {
 
     Migration39to40().migrate(db)
 
-    val times = db.query(BookTable.TABLE_NAME, listOf(BookTable.TIME)).mapRows { getInt(getColumnIndexOrThrow(BookTable.TIME)) }
+    val times = db.query(BookTable.TABLE_NAME, listOf(BookTable.TIME))
+      .mapRows { getInt(getColumnIndexOrThrow(BookTable.TIME)) }
     assertThat(times).containsExactly(0, 5000)
   }
 

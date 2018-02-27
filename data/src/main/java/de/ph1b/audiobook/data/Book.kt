@@ -8,16 +8,16 @@ import java.io.File
 
 
 data class Book(
-    val id: Long,
-    val type: Type,
-    val author: String?,
-    val currentFile: File,
-    val positionInChapter: Int,
-    val name: String,
-    val chapters: List<Chapter>,
-    val playbackSpeed: Float = 1F,
-    val root: String,
-    val loudnessGain: Int = 0
+  val id: Long,
+  val type: Type,
+  val author: String?,
+  val currentFile: File,
+  val positionInChapter: Int,
+  val name: String,
+  val chapters: List<Chapter>,
+  val playbackSpeed: Float = 1F,
+  val root: String,
+  val loudnessGain: Int = 0
 ) : Comparable<Book> {
 
   init {
@@ -55,8 +55,8 @@ data class Book(
 
     val externalStoragePath = Environment.getExternalStorageDirectory().absolutePath
     val coverFile = File(
-        "$externalStoragePath/Android/data/${context.packageName}",
-        name
+      "$externalStoragePath/Android/data/${context.packageName}",
+      name
     )
     if (!coverFile.parentFile.exists()) {
       //noinspection ResultOfMethodCallIgnored
@@ -65,7 +65,8 @@ data class Book(
     return coverFile
   }
 
-  override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
+  override fun compareTo(other: Book) =
+    NaturalOrderComparator.stringComparator.compare(name, other.name)
 
   enum class Type {
     COLLECTION_FOLDER,

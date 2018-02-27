@@ -3,7 +3,10 @@ package de.ph1b.audiobook.uitools
 import android.animation.ValueAnimator
 
 /** simplifies value animation */
-fun animateFloat(vararg values: Float, action: (value: Float, fraction: Float) -> Unit): ValueAnimator {
+fun animateFloat(
+  vararg values: Float,
+  action: (value: Float, fraction: Float) -> Unit
+): ValueAnimator {
   val valueAnimator = ValueAnimator()
   valueAnimator.setFloatValues(*values)
   valueAnimator.addUpdateListener {

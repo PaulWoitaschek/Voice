@@ -5,7 +5,7 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
-import java.util.HashSet
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -25,31 +25,31 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.stream
-        .map { it.map { FolderModel(it, true) } }
+      .map { it.map { FolderModel(it, true) } }
     val singleFolderStream = singleBookFolderPref.stream
-        .map { it.map { FolderModel(it, false) } }
+      .map { it.map { FolderModel(it, false) } }
 
     Observables.combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
-        .subscribe { view.newData(it) }
-        .disposeOnDetach()
+      .subscribe { view.newData(it) }
+      .disposeOnDetach()
   }
 
   /** removes a selected folder **/
   fun removeFolder(folder: FolderModel) {
     collectionBookFolderPref.stream
-        .map { HashSet(it) }
-        .firstOrError()
-        .subscribe { it ->
-          val removed = it.remove(folder.folder)
-          if (removed) collectionBookFolderPref.value = it
-        }
+      .map { HashSet(it) }
+      .firstOrError()
+      .subscribe { it ->
+        val removed = it.remove(folder.folder)
+        if (removed) collectionBookFolderPref.value = it
+      }
 
     singleBookFolderPref.stream
-        .map { HashSet(it) }
-        .firstOrError()
-        .subscribe { it ->
-          val removed = it.remove(folder.folder)
-          if (removed) singleBookFolderPref.value = it
-        }
+      .map { HashSet(it) }
+      .firstOrError()
+      .subscribe { it ->
+        val removed = it.remove(folder.folder)
+        if (removed) singleBookFolderPref.value = it
+      }
   }
 }

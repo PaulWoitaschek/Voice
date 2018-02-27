@@ -20,15 +20,15 @@ fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
   val latch = CountDownLatch(1)
   val bitmap = arrayOfNulls<Bitmap>(1)
   Thread(
-      Runnable {
-        try {
-          bitmap[0] = this.getter()
-        } catch (ex: IOException) {
-          Timber.e(ex, "Exception at retrieving.")
-        } finally {
-          latch.countDown()
-        }
+    Runnable {
+      try {
+        bitmap[0] = this.getter()
+      } catch (ex: IOException) {
+        Timber.e(ex, "Exception at retrieving.")
+      } finally {
+        latch.countDown()
       }
+    }
   ).start()
 
   latch.await()

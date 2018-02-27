@@ -9,7 +9,10 @@ import android.widget.SeekBar
 import android.widget.TextView
 import io.reactivex.Observable
 
-fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
+fun SeekBar.onProgressChanged(
+  initialNotification: Boolean = false,
+  progressChanged: (Int) -> Unit
+) {
   val listener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
       progressChanged(progress)
@@ -26,10 +29,11 @@ fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChan
   if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
-fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.create {
-  onProgressChanged(initialNotification) { position -> it.onNext(position) }
-  it.setCancellable { setOnSeekBarChangeListener(null) }
-}
+fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> =
+  Observable.create {
+    onProgressChanged(initialNotification) { position -> it.onNext(position) }
+    it.setCancellable { setOnSeekBarChangeListener(null) }
+  }
 
 fun <T : View> T.clicks(): Observable<T> = Observable.create { emitter ->
   setOnClickListener { emitter.onNext(this) }

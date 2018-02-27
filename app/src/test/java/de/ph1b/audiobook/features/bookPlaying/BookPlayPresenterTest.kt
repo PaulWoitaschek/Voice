@@ -1,19 +1,13 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.*
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.reactivex.Observable
@@ -33,11 +27,16 @@ class BookPlayPresenterTest {
   private lateinit var bookPlayPresenter: BookPlayPresenter
   private val bookId = 5L
 
-  @Mock lateinit var mockBookRepository: BookRepository
-  @Mock lateinit var mockPlayerController: PlayerController
-  @Mock lateinit var mockPlayStateManager: PlayStateManager
-  @Mock lateinit var mockSleepTimer: SleepTimer
-  @Mock lateinit var mockView: BookPlayMvp.View
+  @Mock
+  lateinit var mockBookRepository: BookRepository
+  @Mock
+  lateinit var mockPlayerController: PlayerController
+  @Mock
+  lateinit var mockPlayStateManager: PlayStateManager
+  @Mock
+  lateinit var mockSleepTimer: SleepTimer
+  @Mock
+  lateinit var mockView: BookPlayMvp.View
 
   @Before
   fun setUp() {
@@ -78,7 +77,16 @@ class BookPlayPresenterTest {
 
   @Test
   fun playState() {
-    given { mockPlayStateManager.playStateStream() }.thenReturn(Observable.just(PLAYING, STOPPED, STOPPED, PLAYING, PAUSED, STOPPED))
+    given { mockPlayStateManager.playStateStream() }.thenReturn(
+      Observable.just(
+        PLAYING,
+        STOPPED,
+        STOPPED,
+        PLAYING,
+        PAUSED,
+        STOPPED
+      )
+    )
     bookPlayPresenter.attach(mockView)
     inOrder(mockView) {
       verify(mockView).showPlaying(true)
@@ -104,7 +112,12 @@ class BookPlayPresenterTest {
     val bookWithFalseId = BookFactory.create(id = 50)
     val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
     val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
-    given { mockBookRepository.booksStream() }.thenReturn(Observable.just(firstEmission, secondEmission))
+    given { mockBookRepository.booksStream() }.thenReturn(
+      Observable.just(
+        firstEmission,
+        secondEmission
+      )
+    )
     bookPlayPresenter.attach(mockView)
     inOrder(mockView) {
       verify(mockView).render(bookWithCorrectId)

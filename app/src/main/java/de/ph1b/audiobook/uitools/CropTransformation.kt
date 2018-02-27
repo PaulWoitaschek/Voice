@@ -9,7 +9,8 @@ import de.ph1b.audiobook.features.imagepicker.CropOverlay
 /**
  * Performs cropping based on the crop overlay
  */
-class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) : Transformation {
+class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) :
+  Transformation {
 
   private val rect = cropOverlay.selectedRect
 
@@ -26,11 +27,11 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
   }
 
   private fun scaleRect(rect: Rect, scaleFactor: Float) =
-      rect.set(
-          (rect.left * scaleFactor).toInt(),
-          (rect.top * scaleFactor).toInt(),
-          (rect.right * scaleFactor).toInt(),
-          (rect.bottom * scaleFactor).toInt()
-      )
+    rect.set(
+      (rect.left * scaleFactor).toInt(),
+      (rect.top * scaleFactor).toInt(),
+      (rect.right * scaleFactor).toInt(),
+      (rect.bottom * scaleFactor).toInt()
+    )
 
 }

@@ -17,8 +17,8 @@ import javax.inject.Inject
  */
 class BookStorage
 @Inject constructor(
-    internalDb: InternalDb,
-    moshi: Moshi
+  internalDb: InternalDb,
+  moshi: Moshi
 ) {
 
   private val chapterMarkAdapter = SparseArrayAdapter<String>(moshi.adapter(String::class.java))
@@ -27,20 +27,20 @@ class BookStorage
 
   private fun books(active: Boolean) = db.asTransaction {
     return@asTransaction db.query(
-        table = BookTable.TABLE_NAME,
-        columns = listOf(
-            BookTable.ID,
-            BookTable.NAME,
-            BookTable.AUTHOR,
-            BookTable.CURRENT_MEDIA_PATH,
-            BookTable.PLAYBACK_SPEED,
-            BookTable.ROOT,
-            BookTable.TIME,
-            BookTable.TYPE,
-            BookTable.LOUDNESS_GAIN
-        ),
-        selection = "${BookTable.ACTIVE} =?",
-        selectionArgs = listOf(if (active) 1 else 0)
+      table = BookTable.TABLE_NAME,
+      columns = listOf(
+        BookTable.ID,
+        BookTable.NAME,
+        BookTable.AUTHOR,
+        BookTable.CURRENT_MEDIA_PATH,
+        BookTable.PLAYBACK_SPEED,
+        BookTable.ROOT,
+        BookTable.TIME,
+        BookTable.TYPE,
+        BookTable.LOUDNESS_GAIN
+      ),
+      selection = "${BookTable.ACTIVE} =?",
+      selectionArgs = listOf(if (active) 1 else 0)
     ).mapRows {
       val bookId: Long = long(BookTable.ID)
       val bookName: String = string(BookTable.NAME)
@@ -53,28 +53,45 @@ class BookStorage
       val loudnessGain = intNullable(BookTable.LOUDNESS_GAIN) ?: 0
 
       val chapters = db.query(
-          table = ChapterTable.TABLE_NAME,
-          columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED, ChapterTable.MARKS),
-          selection = "${ChapterTable.BOOK_ID} =?",
-          selectionArgs = listOf(bookId)
+        table = ChapterTable.TABLE_NAME,
+        columns = listOf(
+          ChapterTable.NAME,
+          ChapterTable.DURATION,
+          ChapterTable.PATH,
+          ChapterTable.LAST_MODIFIED,
+          ChapterTable.MARKS
+        ),
+        selection = "${ChapterTable.BOOK_ID} =?",
+        selectionArgs = listOf(bookId)
       )
-          .mapRows {
-            val name: String = string(ChapterTable.NAME)
-            val duration: Int = int(ChapterTable.DURATION)
-            val path: String = string(ChapterTable.PATH)
-            val lastModified = long(ChapterTable.LAST_MODIFIED)
-            val chapterMarks = stringNullable(ChapterTable.MARKS)?.let {
-              chapterMarkAdapter.fromJson(it)!!
-            } ?: emptySparseArray()
-            Chapter(File(path), name, duration, lastModified, chapterMarks)
-          }
+        .mapRows {
+          val name: String = string(ChapterTable.NAME)
+          val duration: Int = int(ChapterTable.DURATION)
+          val path: String = string(ChapterTable.PATH)
+          val lastModified = long(ChapterTable.LAST_MODIFIED)
+          val chapterMarks = stringNullable(ChapterTable.MARKS)?.let {
+            chapterMarkAdapter.fromJson(it)!!
+          } ?: emptySparseArray()
+          Chapter(File(path), name, duration, lastModified, chapterMarks)
+        }
 
       if (chapters.find { it.file == currentFile } == null) {
         Timber.e("Couldn't get current file. Return first file")
         currentFile = chapters[0].file
       }
 
-      Book(bookId, Book.Type.valueOf(bookType), bookAuthor, currentFile, bookTime, bookName, chapters, bookSpeed, bookRoot, loudnessGain)
+      Book(
+        bookId,
+        Book.Type.valueOf(bookType),
+        bookAuthor,
+        currentFile,
+        bookTime,
+        bookName,
+        chapters,
+        bookSpeed,
+        bookRoot,
+        loudnessGain
+      )
     }
   }
 
@@ -98,7 +115,7 @@ class BookStorage
   }
 
   private fun SQLiteDatabase.insert(chapter: Chapter, bookId: Long) =
-      insertOrThrow(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
+    insertOrThrow(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
 
   private fun Chapter.toContentValues(bookId: Long) = ContentValues().apply {
     put(ChapterTable.DURATION, duration)

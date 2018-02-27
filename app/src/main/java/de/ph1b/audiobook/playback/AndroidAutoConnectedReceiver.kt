@@ -15,20 +15,21 @@ import javax.inject.Singleton
 @Singleton
 class AndroidAutoConnectedReceiver @Inject constructor() {
 
-  private val connectedRelay = BehaviorSubject.createDefault(false)
-  val stream = connectedRelay.hide()!!
-  val connected = connectedRelay.value!!
+  private val _connected = BehaviorSubject.createDefault(false)
+  val stream = _connected.hide()!!
+  val connected: Boolean
+    get() = _connected.value!!
 
   private val receiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       when (intent?.getStringExtra("media_connection_status")) {
         "media_connected" -> {
           Timber.i("connected")
-          connectedRelay.onNext(true)
+          _connected.onNext(true)
         }
         "media_disconnected" -> {
           Timber.i("disconnected")
-          connectedRelay.onNext(false)
+          _connected.onNext(false)
         }
       }
     }

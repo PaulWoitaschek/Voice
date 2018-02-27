@@ -19,15 +19,15 @@ class AddBookmarkDialog : DialogController() {
         InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
         InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
     val dialog = MaterialDialog.Builder(activity!!)
-        .title(R.string.bookmark)
-        .inputType(inputType)
-        .input(activity!!.getString(R.string.bookmark_edit_hint), null, true) { _, charSequence ->
-          val title = charSequence.toString()
-          val callback = targetController as AddBookmarkDialog.Callback
-          callback.onBookmarkNameChosen(title)
-        }
-        .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
-        .build()
+      .title(R.string.bookmark)
+      .inputType(inputType)
+      .input(activity!!.getString(R.string.bookmark_edit_hint), null, true) { _, charSequence ->
+        val title = charSequence.toString()
+        val callback = targetController as AddBookmarkDialog.Callback
+        callback.onBookmarkNameChosen(title)
+      }
+      .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
+      .build()
     val editText = dialog.inputEditText!!
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -46,8 +46,9 @@ class AddBookmarkDialog : DialogController() {
   }
 
   companion object {
-    operator fun <T> invoke(target: T) where T : Controller, T : AddBookmarkDialog.Callback = AddBookmarkDialog().apply {
-      targetController = target
-    }
+    operator fun <T> invoke(target: T) where T : Controller, T : AddBookmarkDialog.Callback =
+      AddBookmarkDialog().apply {
+        targetController = target
+      }
   }
 }

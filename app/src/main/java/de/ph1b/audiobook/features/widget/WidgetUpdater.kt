@@ -35,14 +35,14 @@ import javax.inject.Provider
 
 @Reusable
 class WidgetUpdater @Inject constructor(
-    private val context: Context,
-    private val repo: BookRepository,
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>,
-    private val imageHelper: ImageHelper,
-    private val playerController: PlayerController,
-    private val playStateManager: PlayStateManager,
-    private val windowManager: Provider<WindowManager>
+  private val context: Context,
+  private val repo: BookRepository,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>,
+  private val imageHelper: ImageHelper,
+  private val playerController: PlayerController,
+  private val playStateManager: PlayStateManager,
+  private val windowManager: Provider<WindowManager>
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -102,11 +102,15 @@ class WidgetUpdater @Inject constructor(
     val wholeWidgetClickI = Intent(context, MainActivity::class.java)
     wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     val wholeWidgetClickPI = PendingIntent.getActivity(
-        context, System.currentTimeMillis().toInt(),
-        wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT
+      context, System.currentTimeMillis().toInt(),
+      wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT
     )
     val coverReplacement = CoverReplacement("V", context)
-    val cover = imageHelper.drawableToBitmap(coverReplacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
+    val cover = imageHelper.drawableToBitmap(
+      coverReplacement,
+      imageHelper.smallerScreenSize,
+      imageHelper.smallerScreenSize
+    )
     remoteViews.setImageViewBitmap(R.id.imageView, cover)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
@@ -128,26 +132,26 @@ class WidgetUpdater @Inject constructor(
 
   private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPausePI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-        playerController.playPauseIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+      playerController.playPauseIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
     val fastForwardPI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-        playerController.fastForwardAutoPlayIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
+      playerController.fastForwardAutoPlayIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
     val rewindPI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_REWIND,
-        playerController.rewindAutoPlayerIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_REWIND,
+      playerController.rewindAutoPlayerIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
@@ -165,10 +169,10 @@ class WidgetUpdater @Inject constructor(
 
     val wholeWidgetClickI = MainActivity.goToBookIntent(context, book.id)
     val wholeWidgetClickPI = PendingIntent.getActivity(
-        context,
-        System.currentTimeMillis().toInt(),
-        wholeWidgetClickI,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      System.currentTimeMillis().toInt(),
+      wholeWidgetClickI,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
 
     val coverFile = book.coverFile()
@@ -176,21 +180,30 @@ class WidgetUpdater @Inject constructor(
       val sizeForPicasso = coverSize.takeIf { it > 0 }
           ?: context.dpToPxRounded(56F)
       Picasso.with(context)
-          .load(coverFile)
-          .resize(sizeForPicasso, sizeForPicasso)
-          .getOnUiThread()
+        .load(coverFile)
+        .resize(sizeForPicasso, sizeForPicasso)
+        .getOnUiThread()
     } else null
 
     if (cover == null) {
       val coverReplacement = CoverReplacement(book.name, context)
-      cover = imageHelper.drawableToBitmap(coverReplacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
+      cover = imageHelper.drawableToBitmap(
+        coverReplacement,
+        imageHelper.smallerScreenSize,
+        imageHelper.smallerScreenSize
+      )
     }
 
     remoteViews.setImageViewBitmap(R.id.imageView, cover)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
   }
 
-  private fun setVisibilities(remoteViews: RemoteViews, width: Int, height: Int, singleChapter: Boolean) {
+  private fun setVisibilities(
+    remoteViews: RemoteViews,
+    width: Int,
+    height: Int,
+    singleChapter: Boolean
+  ) {
     setHorizontalVisibility(remoteViews, width, height)
     setVerticalVisibility(remoteViews, height, singleChapter)
   }
@@ -223,7 +236,11 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private fun setVerticalVisibility(remoteViews: RemoteViews, widgetHeight: Int, singleChapter: Boolean) {
+  private fun setVerticalVisibility(
+    remoteViews: RemoteViews,
+    widgetHeight: Int,
+    singleChapter: Boolean
+  ) {
     val buttonSize = context.dpToPxRounded(8F + 36F + 8F)
     val titleSize = context.resources.getDimensionPixelSize(R.dimen.list_text_primary_size)
     val summarySize = context.resources.getDimensionPixelSize(R.dimen.list_text_secondary_size)

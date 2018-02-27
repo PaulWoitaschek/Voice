@@ -6,8 +6,9 @@ import de.ph1b.audiobook.databinding.ActivityFolderOverviewRowLayoutBinding
 import de.ph1b.audiobook.misc.drawable
 
 class FolderOverviewHolder(
-    private val binding: ActivityFolderOverviewRowLayoutBinding,
-    itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+  private val binding: ActivityFolderOverviewRowLayoutBinding,
+  itemClicked: (position: Int) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
   init {
     binding.remove.setOnClickListener { itemClicked(adapterPosition) }
@@ -23,7 +24,8 @@ class FolderOverviewHolder(
     binding.icon.setImageDrawable(drawable)
 
     // set content description
-    val contentDescriptionId = if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
+    val contentDescriptionId =
+      if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
     val contentDescription = itemView.context.getString(contentDescriptionId)
     binding.icon.contentDescription = contentDescription
   }

@@ -23,15 +23,17 @@ import kotlinx.coroutines.experimental.launch
 import java.io.File
 import javax.inject.Inject
 
-class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) : RecyclerView.ViewHolder(
+class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) :
+  RecyclerView.ViewHolder(
     parent.layoutInflater().inflate(
-        R.layout.book_shelf_row,
-        parent,
-        false
+      R.layout.book_shelf_row,
+      parent,
+      false
     )
-), LayoutContainer {
+  ), LayoutContainer {
 
-  @Inject lateinit var coverColorExtractor: CoverColorExtractor
+  @Inject
+  lateinit var coverColorExtractor: CoverColorExtractor
 
   override val containerView: View? get() = itemView
   private var boundBook: Book? = null
@@ -95,12 +97,12 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
 
     if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(itemView.context)
-          .load(coverFile)
-          .placeholder(coverReplacement)
-          .into(cover)
+        .load(coverFile)
+        .placeholder(coverReplacement)
+        .into(cover)
     } else {
       Picasso.with(itemView.context)
-          .cancelRequest(cover)
+        .cancelRequest(cover)
       // we have to set the replacement in onPreDraw, else the transition will fail.
       cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
     }

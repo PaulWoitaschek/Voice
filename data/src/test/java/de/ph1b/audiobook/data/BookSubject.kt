@@ -6,7 +6,8 @@ import com.google.common.truth.Subject.Factory
 import com.google.common.truth.Truth.assertAbout
 
 
-class BookSubject private constructor(failureMetaData: FailureMetadata, actual: Book?) : Subject<BookSubject, Book?>(failureMetaData, actual) {
+class BookSubject private constructor(failureMetaData: FailureMetadata, actual: Book?) :
+  Subject<BookSubject, Book?>(failureMetaData, actual) {
 
   fun positionIs(position: Int) {
     if (actual()?.position != position) {

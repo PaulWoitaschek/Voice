@@ -36,14 +36,14 @@ class SeekDialogFragment : DialogFragment() {
     binding.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
     return MaterialDialog.Builder(context!!)
-        .title(R.string.pref_seek_time)
-        .customView(binding.root, true)
-        .positiveText(R.string.dialog_confirm)
-        .negativeText(R.string.dialog_cancel)
-        .onPositive { _, _ ->
-          val newSeekTime = binding.seekBar.progress / FACTOR + MIN
-          seekTimePref.value = newSeekTime
-        }.build()
+      .title(R.string.pref_seek_time)
+      .customView(binding.root, true)
+      .positiveText(R.string.dialog_confirm)
+      .negativeText(R.string.dialog_cancel)
+      .onPositive { _, _ ->
+        val newSeekTime = binding.seekBar.progress / FACTOR + MIN
+        seekTimePref.value = newSeekTime
+      }.build()
   }
 
   companion object {

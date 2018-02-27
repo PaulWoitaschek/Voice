@@ -30,8 +30,10 @@ import com.squareup.picasso.Callback as PicassoCallback
  */
 class EditCoverDialogFragment : DialogFragment() {
 
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var imageHelper: ImageHelper
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var imageHelper: ImageHelper
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,8 +51,8 @@ class EditCoverDialogFragment : DialogFragment() {
     binding.coverReplacement.visible = true
     binding.cropOverlay.selectionOn = false
     picasso.load(uri)
-        .into(
-            binding.coverImage, object : PicassoCallback {
+      .into(
+        binding.coverImage, object : PicassoCallback {
           override fun onError() {
             dismiss()
           }
@@ -60,13 +62,13 @@ class EditCoverDialogFragment : DialogFragment() {
             binding.coverReplacement.visible = false
           }
         }
-        )
+      )
 
     val dialog = MaterialDialog.Builder(context!!)
-        .customView(binding.root, false)
-        .title(R.string.cover)
-        .positiveText(R.string.dialog_confirm)
-        .build()
+      .customView(binding.root, false)
+      .title(R.string.cover)
+      .positiveText(R.string.dialog_confirm)
+      .build()
 
     // use a click listener so the dialog stays open till the image was saved
     dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
@@ -88,8 +90,8 @@ class EditCoverDialogFragment : DialogFragment() {
         // picasso only holds a weak reference so we have to protect against gc
         binding.coverImage.tag = target
         picasso.load(uri)
-            .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
-            .into(target)
+          .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
+          .into(target)
       } else dismiss()
     }
     return dialog
@@ -106,12 +108,13 @@ class EditCoverDialogFragment : DialogFragment() {
     private val NI_BOOK_ID = "ni#id"
     private val NI_TARGET = "ni#target"
 
-    fun <T> newInstance(target: T, book: Book, uri: Uri) where T : Controller, T : Callback = EditCoverDialogFragment().apply {
-      arguments = Bundle().apply {
-        putString(NI_COVER_URI, uri.toString())
-        putLong(NI_BOOK_ID, book.id)
-        putString(NI_TARGET, target.instanceId)
+    fun <T> newInstance(target: T, book: Book, uri: Uri) where T : Controller, T : Callback =
+      EditCoverDialogFragment().apply {
+        arguments = Bundle().apply {
+          putString(NI_COVER_URI, uri.toString())
+          putLong(NI_BOOK_ID, book.id)
+          putString(NI_TARGET, target.instanceId)
+        }
       }
-    }
   }
 }

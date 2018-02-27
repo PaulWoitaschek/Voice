@@ -11,7 +11,7 @@ import de.ph1b.audiobook.misc.checkMainThread
  * Base fragment that provides a convenient way for binding a view to a presenter
  */
 abstract class MvpController<V : Any, out P, B>(
-    args: Bundle = Bundle()
+  args: Bundle = Bundle()
 ) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
 
   private var internalPresenter: P? = null
@@ -27,28 +27,28 @@ abstract class MvpController<V : Any, out P, B>(
 
   init {
     addLifecycleListener(
-        object : LifecycleListener() {
+      object : LifecycleListener() {
 
-          override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
-            presenter.onRestore(savedInstanceState)
-          }
-
-          override fun postAttach(controller: Controller, view: View) {
-            presenter.attach(provideView())
-          }
-
-          override fun preDetach(controller: Controller, view: View) {
-            presenter.detach()
-          }
-
-          override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
-            presenter.onSave(outState)
-          }
-
-          override fun postDestroy(controller: Controller) {
-            internalPresenter = null
-          }
+        override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+          presenter.onRestore(savedInstanceState)
         }
+
+        override fun postAttach(controller: Controller, view: View) {
+          presenter.attach(provideView())
+        }
+
+        override fun preDetach(controller: Controller, view: View) {
+          presenter.detach()
+        }
+
+        override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
+          presenter.onSave(outState)
+        }
+
+        override fun postDestroy(controller: Controller) {
+          internalPresenter = null
+        }
+      }
     )
   }
 

@@ -30,7 +30,13 @@ class SqlBookmarkStoreTest {
     // test adding
     val book = BookFactory.create()
     val added = (0..2000).map {
-      register.addBookmark(Bookmark(book.chapters.first().file, "my title", System.currentTimeMillis().toInt()))
+      register.addBookmark(
+        Bookmark(
+          book.chapters.first().file,
+          "my title",
+          System.currentTimeMillis().toInt()
+        )
+      )
     }
 
     // test inserted match

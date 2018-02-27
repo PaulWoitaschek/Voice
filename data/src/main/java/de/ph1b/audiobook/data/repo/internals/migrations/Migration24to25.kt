@@ -12,15 +12,14 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
-import java.util.InvalidPropertiesFormatException
+import java.util.*
 
 /**
  * Migrate the database so they will be stored as json objects
  */
 @SuppressLint("Recycle")
 class Migration24to25(
-    private val context: Context
+  private val context: Context
 ) : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
@@ -31,13 +30,14 @@ class Migration24to25(
     db.execSQL("ALTER TABLE TABLE_CHAPTERS RENAME TO $copyChapterTableName")
 
     val newBookTable = "TABLE_BOOK"
-    val createBookTable = "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
+    val createBookTable =
+      "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
     db.execSQL(createBookTable)
 
     val bookCursor = db.query(
-        copyBookTableName,
-        arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
-        null, null, null, null, null
+      copyBookTableName,
+      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
+      null, null, null, null, null
     )
 
     bookCursor.moveToNextLoop {
@@ -46,9 +46,9 @@ class Migration24to25(
       val type = bookCursor.getString(2)
 
       val mediaCursor = db.query(
-          copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
-          "BOOK_ID" + "=?", arrayOf(bookId.toString()),
-          null, null, null
+        copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
+        "BOOK_ID" + "=?", arrayOf(bookId.toString()),
+        null, null, null
       )
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)
@@ -239,8 +239,8 @@ class Migration24to25(
           try {
             val externalStoragePath = Environment.getExternalStorageDirectory().absolutePath
             val newCoverFile = File(
-                "$externalStoragePath/Android/data/${context.packageName}",
-                "$newBookId.jpg"
+              "$externalStoragePath/Android/data/${context.packageName}",
+              "$newBookId.jpg"
             )
             if (!coverFile.parentFile.exists()) {
               //noinspection ResultOfMethodCallIgnored

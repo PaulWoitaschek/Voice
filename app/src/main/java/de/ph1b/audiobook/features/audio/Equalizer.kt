@@ -13,7 +13,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class Equalizer @Inject constructor(
-    private val context: Context
+  private val context: Context
 ) {
 
   private val launchIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL).apply {

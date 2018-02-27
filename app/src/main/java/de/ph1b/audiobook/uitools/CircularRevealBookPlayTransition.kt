@@ -30,7 +30,11 @@ class CircularRevealBookPlayTransition : Visibility() {
   }
 
   override fun onAppear(
-      sceneRoot: ViewGroup?, startValues: TransitionValues?, startVisibility: Int, endValues: TransitionValues?, endVisibility: Int
+    sceneRoot: ViewGroup?,
+    startValues: TransitionValues?,
+    startVisibility: Int,
+    endValues: TransitionValues?,
+    endVisibility: Int
   ): Animator? {
     if (endVisibility != View.VISIBLE || endValues == null)
       return null
@@ -43,29 +47,33 @@ class CircularRevealBookPlayTransition : Visibility() {
       parentWidth
     } as Int
 
-    val circularReveal = circularRevealAnimator(target = endValues.view, cx = parentWidth / 2, finalRadius = finalRadius.toFloat())
-        .apply {
-          interpolator = Interpolators.fastOutSlowIn
-          addListener(object : DefaultAnimatorListener {
-            override fun onAnimationStart(animator: Animator) {
-              view.visibility = endVisibility
-            }
-          })
-        }
+    val circularReveal = circularRevealAnimator(
+      target = endValues.view,
+      cx = parentWidth / 2,
+      finalRadius = finalRadius.toFloat()
+    )
+      .apply {
+        interpolator = Interpolators.fastOutSlowIn
+        addListener(object : DefaultAnimatorListener {
+          override fun onAnimationStart(animator: Animator) {
+            view.visibility = endVisibility
+          }
+        })
+      }
 
     return AnimatorSet()
-        .apply {
-          playTogether(circularReveal)
-          view.visibility = View.INVISIBLE
-        }
+      .apply {
+        playTogether(circularReveal)
+        view.visibility = View.INVISIBLE
+      }
   }
 
   private fun circularRevealAnimator(target: View, cx: Int, finalRadius: Float): Animator =
-      ViewAnimationUtils.createCircularReveal(
-          target,
-          cx - target.left,
-          target.height / 2,
-          0f,
-          finalRadius
-      ).noPause()
+    ViewAnimationUtils.createCircularReveal(
+      target,
+      cx - target.left,
+      target.height / 2,
+      0f,
+      finalRadius
+    ).noPause()
 }

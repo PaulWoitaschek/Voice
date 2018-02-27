@@ -9,9 +9,9 @@ class BookTest {
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsFirst() {
     val book = BookFactory.create(
-        time = 0,
-        chapters = listOf(ChapterFactory.create(duration = 12345)),
-        currentFileIndex = 0
+      time = 0,
+      chapters = listOf(ChapterFactory.create(duration = 12345)),
+      currentFileIndex = 0
     )
     book.assertThat().positionIs(0)
   }
@@ -19,9 +19,9 @@ class BookTest {
   @Test
   fun globalPositionWhenTimeIsNot0AndCurrentFileIsFirst() {
     val book = BookFactory.create(
-        time = 23,
-        chapters = listOf(ChapterFactory.create(duration = 12345)),
-        currentFileIndex = 0
+      time = 23,
+      chapters = listOf(ChapterFactory.create(duration = 12345)),
+      currentFileIndex = 0
     )
     book.assertThat().positionIs(23)
   }
@@ -29,14 +29,14 @@ class BookTest {
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsNotFirst() {
     val book = BookFactory.create(
-        time = 0,
-        chapters = listOf(
-            ChapterFactory.create(file = "ch1", duration = 123),
-            ChapterFactory.create(file = "ch2", duration = 234),
-            ChapterFactory.create(file = "ch3", duration = 345),
-            ChapterFactory.create(file = "ch4", duration = 456)
-        ),
-        currentFileIndex = 3
+      time = 0,
+      chapters = listOf(
+        ChapterFactory.create(file = "ch1", duration = 123),
+        ChapterFactory.create(file = "ch2", duration = 234),
+        ChapterFactory.create(file = "ch3", duration = 345),
+        ChapterFactory.create(file = "ch4", duration = 456)
+      ),
+      currentFileIndex = 3
     )
     book.assertThat().positionIs(123 + 234 + 345)
   }
@@ -44,14 +44,14 @@ class BookTest {
   @Test
   fun globalPositionWhenTimeIsNot0AndCurrentFileIsNotFirst() {
     val book = BookFactory.create(
-        time = 23,
-        chapters = listOf(
-            ChapterFactory.create(file = "ch1", duration = 123),
-            ChapterFactory.create(file = "ch2", duration = 234),
-            ChapterFactory.create(file = "ch3", duration = 345),
-            ChapterFactory.create(file = "ch4", duration = 456)
-        ),
-        currentFileIndex = 2
+      time = 23,
+      chapters = listOf(
+        ChapterFactory.create(file = "ch1", duration = 123),
+        ChapterFactory.create(file = "ch2", duration = 234),
+        ChapterFactory.create(file = "ch3", duration = 345),
+        ChapterFactory.create(file = "ch4", duration = 456)
+      ),
+      currentFileIndex = 2
     )
     book.assertThat().positionIs(123 + 234 + 23)
   }
@@ -59,12 +59,12 @@ class BookTest {
   @Test
   fun totalDuration() {
     val book = BookFactory.create(
-        chapters = listOf(
-            ChapterFactory.create(file = "ch1", duration = 123),
-            ChapterFactory.create(file = "ch2", duration = 234),
-            ChapterFactory.create(file = "ch3", duration = 345),
-            ChapterFactory.create(file = "ch4", duration = 456)
-        )
+      chapters = listOf(
+        ChapterFactory.create(file = "ch1", duration = 123),
+        ChapterFactory.create(file = "ch2", duration = 234),
+        ChapterFactory.create(file = "ch3", duration = 345),
+        ChapterFactory.create(file = "ch4", duration = 456)
+      )
     )
 
     book.assertThat().durationIs(123 + 234 + 345 + 456)
@@ -76,8 +76,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 1
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 1
     )
     book.assertThat().currentChapterIs(ch2)
   }
@@ -88,8 +88,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 1
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 1
     )
 
     book.assertThat().currentChapterIndexIs(1)
@@ -101,8 +101,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 1
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 1
     )
 
     book.assertThat().nextChapterIs(ch3)
@@ -114,8 +114,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 2
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 2
     )
 
     book.assertThat().nextChapterIs(null)
@@ -127,8 +127,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 1
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 1
     )
     book.assertThat().previousChapterIs(ch1)
   }
@@ -139,8 +139,8 @@ class BookTest {
     val ch2 = ChapterFactory.create(file = "ch2")
     val ch3 = ChapterFactory.create(file = "ch3")
     val book = BookFactory.create(
-        chapters = listOf(ch1, ch2, ch3),
-        currentFileIndex = 0
+      chapters = listOf(ch1, ch2, ch3),
+      currentFileIndex = 0
     )
     book.assertThat().previousChapterIs(null)
   }

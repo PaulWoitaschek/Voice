@@ -6,7 +6,12 @@ import java.io.File
 /**
  * Represents a bookmark in the book.
  */
-data class Bookmark(val mediaFile: File, val title: String, val time: Int, val id: Long = ID_UNKNOWN) : Comparable<Bookmark> {
+data class Bookmark(
+  val mediaFile: File,
+  val title: String,
+  val time: Int,
+  val id: Long = ID_UNKNOWN
+) : Comparable<Bookmark> {
 
   init {
     require(title.isNotEmpty())

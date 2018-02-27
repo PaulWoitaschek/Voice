@@ -24,10 +24,10 @@ class SupportDialogFragment : DialogFragment() {
     }
 
     return MaterialDialog.Builder(activity!!)
-        .title(R.string.pref_support_title)
-        .items(R.array.pref_support_values)
-        .itemsCallback(onSupportListItemClicked)
-        .build()
+      .title(R.string.pref_support_title)
+      .items(R.array.pref_support_values)
+      .itemsCallback(onSupportListItemClicked)
+      .build()
   }
 
   private fun visitUri(uri: Uri) {
@@ -41,6 +41,7 @@ class SupportDialogFragment : DialogFragment() {
   companion object {
     val TAG: String = SupportDialogFragment::class.java.simpleName
     private val GITHUB_URL = Uri.parse("https://github.com/Ph1b/MaterialAudiobookPlayer")!!
-    private val TRANSLATION_URL = Uri.parse("https://www.transifex.com/projects/p/material-audiobook-player")!!
+    private val TRANSLATION_URL =
+      Uri.parse("https://www.transifex.com/projects/p/material-audiobook-player")!!
   }
 }

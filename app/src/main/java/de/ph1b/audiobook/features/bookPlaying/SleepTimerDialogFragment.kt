@@ -39,10 +39,14 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     }
   }
 
-  @Inject lateinit var bookmarkRepo: BookmarkRepo
-  @Inject lateinit var sleepTimer: SleepTimer
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var shakeDetector: ShakeDetector
+  @Inject
+  lateinit var bookmarkRepo: BookmarkRepo
+  @Inject
+  lateinit var sleepTimer: SleepTimer
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var shakeDetector: ShakeDetector
   @field:[Inject Named(PrefKeys.SHAKE_TO_RESET)]
   lateinit var shakeToResetPref: Pref<Boolean>
   @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
@@ -118,12 +122,15 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       bookmarkOnSleepTimerPref.value = binding.bookmarkSwitch.isChecked
       if (bookmarkOnSleepTimerPref.value) {
         val date = DateUtils.formatDateTime(
-            context,
-            System.currentTimeMillis(),
-            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
+          context,
+          System.currentTimeMillis(),
+          DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
         launch(IO) {
-          bookmarkRepo.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
+          bookmarkRepo.addBookmarkAtBookPosition(
+            book,
+            date + ": " + getString(R.string.action_sleep)
+          )
         }
       }
 

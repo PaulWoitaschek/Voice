@@ -7,8 +7,8 @@ import de.ph1b.audiobook.data.Bookmark
  * Calculates the diff between two bookmark lists.
  */
 class BookmarkDiffUtilCallback(
-    private val oldItems: List<Bookmark>,
-    private val newItems: List<Bookmark>
+  private val oldItems: List<Bookmark>,
+  private val newItems: List<Bookmark>
 ) : DiffUtil.Callback() {
 
   override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -19,5 +19,6 @@ class BookmarkDiffUtilCallback(
 
   override fun getNewListSize() = newItems.size
 
-  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = areItemsTheSame(oldItemPosition, newItemPosition)
+  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+    areItemsTheSame(oldItemPosition, newItemPosition)
 }

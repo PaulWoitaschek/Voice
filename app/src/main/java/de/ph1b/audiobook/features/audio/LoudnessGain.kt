@@ -55,8 +55,8 @@ class LoudnessGain @Inject constructor() {
   }
 
   private data class LoudnessEnhancerWithAudioSessionId(
-      val loudnessEnhancer: LoudnessEnhancer,
-      val audioSessionId: Int
+    val loudnessEnhancer: LoudnessEnhancer,
+    val audioSessionId: Int
   )
 
   companion object {

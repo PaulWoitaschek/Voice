@@ -3,8 +3,8 @@ package de.ph1b.audiobook.uitools.noPauseAnimator
 import android.animation.Animator
 
 class AnimatorListenerWrapper(
-    private val animator: Animator,
-    private val listener: Animator.AnimatorListener
+  private val animator: Animator,
+  private val listener: Animator.AnimatorListener
 ) : Animator.AnimatorListener {
 
   override fun onAnimationStart(animator: Animator) {

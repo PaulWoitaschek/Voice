@@ -7,9 +7,6 @@ import android.provider.MediaStore
 import dagger.Reusable
 import javax.inject.Inject
 
-/**
- * Parse the book search
- */
 @Reusable
 class BookSearchParser @Inject constructor() {
 
@@ -21,9 +18,11 @@ class BookSearchParser @Inject constructor() {
     return BookSearch(query, mediaFocus, album, artist, playlist)
   }
 
-  fun parse(intent: Intent?): BookSearch? = if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
-    val query: String? = intent.getStringExtra(SearchManager.QUERY)
-    val extras: Bundle? = intent.extras
-    parse(query, extras)
-  } else null
+  fun parse(intent: Intent?): BookSearch? {
+    return if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
+      val query: String? = intent.getStringExtra(SearchManager.QUERY)
+      val extras: Bundle? = intent.extras
+      parse(query, extras)
+    } else null
+  }
 }

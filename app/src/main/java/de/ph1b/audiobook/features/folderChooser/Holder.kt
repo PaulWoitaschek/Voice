@@ -7,9 +7,10 @@ import de.ph1b.audiobook.misc.drawable
 import java.io.File
 
 class Holder(
-    private val binding: ActivityFolderChooserAdapterRowLayoutBinding,
-    private val mode: FolderChooserActivity.OperationMode,
-    private val listener: (selected: File) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+  private val binding: ActivityFolderChooserAdapterRowLayoutBinding,
+  private val mode: FolderChooserActivity.OperationMode,
+  private val listener: (selected: File) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
   private var boundFile: File? = null
 
@@ -35,6 +36,7 @@ class Holder(
     val context = itemView.context
     val icon = context.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
     binding.icon.setImageDrawable(icon)
-    binding.icon.contentDescription = context.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
+    binding.icon.contentDescription =
+        context.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
   }
 }

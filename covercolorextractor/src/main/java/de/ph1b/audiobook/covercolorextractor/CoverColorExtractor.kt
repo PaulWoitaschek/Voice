@@ -47,33 +47,34 @@ class CoverColorExtractor(private val picasso: Picasso) {
     suspendCoroutine<Bitmap?> { cont ->
       Timber.i("load cover for $file")
       picasso
-          .load(file)
-          .memoryPolicy(MemoryPolicy.NO_STORE)
-          .resize(500, 500)
-          .into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-            }
+        .load(file)
+        .memoryPolicy(MemoryPolicy.NO_STORE)
+        .resize(500, 500)
+        .into(object : Target {
+          override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+          }
 
-            override fun onBitmapFailed(errorDrawable: Drawable?) {
-              cont.resume(null)
-            }
+          override fun onBitmapFailed(errorDrawable: Drawable?) {
+            cont.resume(null)
+          }
 
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-              cont.resume(bitmap)
-            }
-          })
+          override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+            cont.resume(bitmap)
+          }
+        })
     }
   }
 
   private suspend fun extractColor(bitmap: Bitmap): Int? =
-      suspendCancellableCoroutine { cont ->
-        Palette.from(bitmap)
-            .generate {
-              val invalidColor = -1
-              val color = it.getVibrantColor(invalidColor)
-              cont.resume(color.takeUnless { it == invalidColor })
-            }
-      }
+    suspendCancellableCoroutine { cont ->
+      Palette.from(bitmap)
+        .generate {
+          val invalidColor = -1
+          val color = it.getVibrantColor(invalidColor)
+          cont.resume(color.takeUnless { it == invalidColor })
+        }
+    }
 
-  private fun fileHash(file: File) = file.absolutePath.hashCode() + file.lastModified() + file.length()
+  private fun fileHash(file: File) =
+    file.absolutePath.hashCode() + file.lastModified() + file.length()
 }

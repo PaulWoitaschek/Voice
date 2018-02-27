@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import java.util.ArrayList
+import java.util.*
 
 fun Cursor.string(columnName: String): String {
   return stringNullable(columnName)!!
@@ -67,20 +67,36 @@ inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
 
 @SuppressLint("Recycle")
 fun SQLiteDatabase.query(
-    table: String,
-    columns: List<String>? = null,
-    selection: String? = null,
-    selectionArgs: List<Any>? = null,
-    groupBy: String? = null,
-    having: String? = null,
-    orderBy: String? = null,
-    limit: String? = null,
-    distinct: Boolean = false): Cursor {
+  table: String,
+  columns: List<String>? = null,
+  selection: String? = null,
+  selectionArgs: List<Any>? = null,
+  groupBy: String? = null,
+  having: String? = null,
+  orderBy: String? = null,
+  limit: String? = null,
+  distinct: Boolean = false
+): Cursor {
   val argsAsString = selectionArgs?.map(Any::toString)?.toTypedArray()
-  return query(distinct, table, columns?.toTypedArray(), selection, argsAsString, groupBy, having, orderBy, limit)
+  return query(
+    distinct,
+    table,
+    columns?.toTypedArray(),
+    selection,
+    argsAsString,
+    groupBy,
+    having,
+    orderBy,
+    limit
+  )
 }
 
-fun SQLiteDatabase.update(table: String, values: ContentValues, whereClause: String, vararg whereArgs: Any): Int {
+fun SQLiteDatabase.update(
+  table: String,
+  values: ContentValues,
+  whereClause: String,
+  vararg whereArgs: Any
+): Int {
   val whereArgsMapped = whereArgs.map(Any::toString).toTypedArray()
   return update(table, values, whereClause, whereArgsMapped)
 }

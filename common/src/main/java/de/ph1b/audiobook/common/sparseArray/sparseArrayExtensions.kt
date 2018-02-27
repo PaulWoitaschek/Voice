@@ -10,7 +10,10 @@ fun <T> SparseArrayCompat<T>.contentEquals(other: SparseArrayCompat<T>): Boolean
   }
 }
 
-inline fun <E> SparseArrayCompat<E>.forEachIndexed(reversed: Boolean = false, action: (index: Int, key: Int, value: E) -> Unit) {
+inline fun <E> SparseArrayCompat<E>.forEachIndexed(
+  reversed: Boolean = false,
+  action: (index: Int, key: Int, value: E) -> Unit
+) {
   val size = size()
   val range = 0 until size
   for (index in if (reversed) range.reversed() else range) {

@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONObject
-import java.util.ArrayList
+import java.util.*
 
 @SuppressLint("Recycle")
 class Migration29to30 : Migration {
@@ -73,8 +73,8 @@ class Migration29to30 : Migration {
   override fun migrate(db: SQLiteDatabase) {
     // fetching old contents
     val cursor = db.query(
-        "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
-        null, null, null, null, null
+      "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
+      null, null, null, null, null
     )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)

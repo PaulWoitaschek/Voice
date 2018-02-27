@@ -23,9 +23,9 @@ import javax.inject.Singleton
 @Singleton
 class CoverFromDiscCollector
 @Inject constructor(
-    context: Context,
-    private val activityManager: ActivityManager,
-    private val imageHelper: ImageHelper
+  context: Context,
+  private val activityManager: ActivityManager,
+  private val imageHelper: ImageHelper
 ) {
 
   private val picasso = Picasso.with(context)
@@ -76,8 +76,8 @@ class CoverFromDiscCollector
 
   /** emits the bookId of a cover that has changed */
   fun coverChanged(): Observable<Long> = coverChangedSubject
-      .hide()
-      .observeOn(AndroidSchedulers.mainThread())
+    .hide()
+    .observeOn(AndroidSchedulers.mainThread())
 
   /** Find the embedded cover of a chapter */
   private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
@@ -98,10 +98,10 @@ class CoverFromDiscCollector
     coverFiles.filter { it.length() < (mi.availMem / 3L) }.forEach {
       try {
         return picasso.load(it)
-            .resize(dimen, dimen)
-            .onlyScaleDown()
-            .centerCrop()
-            .get()
+          .resize(dimen, dimen)
+          .onlyScaleDown()
+          .centerCrop()
+          .get()
       } catch (ex: IOException) {
         Timber.e(ex, "Error when saving cover $it")
       }

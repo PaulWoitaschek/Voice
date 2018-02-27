@@ -10,9 +10,7 @@ import android.text.TextUtils
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.HashSet
+import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -131,7 +129,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     var output = ""
     try {
       val process = ProcessBuilder().command("mount | grep /dev/block/vold")
-          .redirectErrorStream(true).start()
+        .redirectErrorStream(true).start()
       process.waitFor()
       val inputStream = process.inputStream
       val buffer = ByteArray(1024)

@@ -2,13 +2,7 @@ package de.ph1b.audiobook.uitools
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PixelFormat
-import android.graphics.Rect
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.Property
 import android.view.animation.DecelerateInterpolator
@@ -60,12 +54,13 @@ class PlayPauseDrawable : Drawable() {
       field = progress
       invalidateSelf()
     }
-  private val progressProperty = object : Property<PlayPauseDrawable, Float>(Float::class.java, "progress") {
-    override fun get(d: PlayPauseDrawable) = d.progress
-    override fun set(d: PlayPauseDrawable, value: Float) {
-      d.progress = value
+  private val progressProperty =
+    object : Property<PlayPauseDrawable, Float>(Float::class.java, "progress") {
+      override fun get(d: PlayPauseDrawable) = d.progress
+      override fun set(d: PlayPauseDrawable, value: Float) {
+        d.progress = value
+      }
     }
-  }
   private var isPlay: Boolean = false
   private var animator: Animator? = null
 
@@ -88,7 +83,11 @@ class PlayPauseDrawable : Drawable() {
     canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
 
     // The current distance between the two pause bars.
-    val barDist = interpolate(pauseBarDistance, 0.0f, progress) - 1 // -1 because else there is a small gap on some devices
+    val barDist = interpolate(
+      pauseBarDistance,
+      0.0f,
+      progress
+    ) - 1 // -1 because else there is a small gap on some devices
     // The current width of each pause bar.
     val barWidth = interpolate(pauseBarWidth, pauseBarHeight / 1.75f, progress)
     // The current position of the left pause bar's top left coordinate.
@@ -123,10 +122,17 @@ class PlayPauseDrawable : Drawable() {
     // (2) Play --> Pause: rotate 90 to 180 degrees clockwise.
     val rotationProgress = if (isPlay) 1.0f - progress else progress
     val startingRotation = if (isPlay) 90.0f else 0.0f
-    canvas.rotate(interpolate(startingRotation, startingRotation + 90.0f, rotationProgress), bounds.width() / 2.0f, bounds.height() / 2.0f)
+    canvas.rotate(
+      interpolate(startingRotation, startingRotation + 90.0f, rotationProgress),
+      bounds.width() / 2.0f,
+      bounds.height() / 2.0f
+    )
 
     // Position the pause/play button in the center of the drawable's bounds.
-    canvas.translate(bounds.width() / 2.0f - ((2.0f * barWidth + barDist) / 2.0f), bounds.height() / 2.0f + (pauseBarHeight / 2.0f))
+    canvas.translate(
+      bounds.width() / 2.0f - ((2.0f * barWidth + barDist) / 2.0f),
+      bounds.height() / 2.0f + (pauseBarHeight / 2.0f)
+    )
 
     // Draw the two bars that form the animated pause/play button.
     canvas.drawPath(leftPauseBar, paint)
@@ -172,11 +178,11 @@ class PlayPauseDrawable : Drawable() {
     val to = if (isPlay) 0.0f else 1.0f
     isPlay = !isPlay
     animator = ObjectAnimator.ofFloat(this, progressProperty, from, to)
-        .also {
-          it.interpolator = interpolator
-          it.duration = 275
-          it.start()
-        }
+      .also {
+        it.interpolator = interpolator
+        it.duration = 275
+        it.start()
+      }
   }
 
   override fun setAlpha(alpha: Int) {

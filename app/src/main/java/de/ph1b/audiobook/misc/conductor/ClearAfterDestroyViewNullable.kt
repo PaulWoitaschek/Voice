@@ -12,17 +12,17 @@ class ClearAfterDestroyViewNullable<T>(controller: Controller) : ReadWriteProper
 
   init {
     controller.addLifecycleListener(
-        object : Controller.LifecycleListener() {
-          override fun postDestroyView(controller: Controller) {
-            if (controller.isDestroyed || controller.isBeingDestroyed) {
-              Timber.d("We are in teardown. Defer releasing the reference.")
-            } else value = null
-          }
-
-          override fun postDestroy(controller: Controller) {
-            value = null
-          }
+      object : Controller.LifecycleListener() {
+        override fun postDestroyView(controller: Controller) {
+          if (controller.isDestroyed || controller.isBeingDestroyed) {
+            Timber.d("We are in teardown. Defer releasing the reference.")
+          } else value = null
         }
+
+        override fun postDestroy(controller: Controller) {
+          value = null
+        }
+      }
     )
   }
 
@@ -35,6 +35,7 @@ class ClearAfterDestroyViewNullable<T>(controller: Controller) : ReadWriteProper
   }
 }
 
-fun <T> Controller.clearAfterDestroyViewNullable(): ReadWriteProperty<Controller, T?> = ClearAfterDestroyViewNullable(
+fun <T> Controller.clearAfterDestroyViewNullable(): ReadWriteProperty<Controller, T?> =
+  ClearAfterDestroyViewNullable(
     this
-)
+  )

@@ -22,8 +22,10 @@ import javax.inject.Inject
  */
 class LoudnessDialog(args: Bundle) : DialogController(args) {
 
-  @Inject lateinit var repo: BookRepository
-  @Inject lateinit var player: PlayerController
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var player: PlayerController
 
   private val dbFormat = DecimalFormat("0.0 dB")
 
@@ -40,19 +42,19 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
     binding.seekBar.max = LoudnessGain.MAX_MB
     binding.seekBar.progress = book.loudnessGain
     binding.seekBar.progressChangedStream()
-        .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-        .subscribe {
-          player.setLoudnessGain(it)
-          binding.currentValue.text = format(it)
-        }
+      .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+      .subscribe {
+        player.setLoudnessGain(it)
+        binding.currentValue.text = format(it)
+      }
 
     binding.currentValue.text = format(book.loudnessGain)
     binding.maxValue.text = format(binding.seekBar.max)
 
     return MaterialDialog.Builder(activity!!)
-        .title(R.string.volume_boost)
-        .customView(binding.root, true)
-        .build()
+      .title(R.string.volume_boost)
+      .customView(binding.root, true)
+      .build()
   }
 
   private fun format(milliDb: Int) = dbFormat.format(milliDb / 100.0)
@@ -60,9 +62,9 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
   companion object {
     private const val NI_BOOK_ID = "ni#bookId"
     operator fun invoke(bookId: Long) = LoudnessDialog(
-        Bundle().apply {
-          putLong(NI_BOOK_ID, bookId)
-        }
+      Bundle().apply {
+        putLong(NI_BOOK_ID, bookId)
+      }
     )
   }
 }

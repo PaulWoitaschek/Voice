@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class InternalDb
 @Inject constructor(
-    private val context: Context
+  private val context: Context
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
   override fun onCreate(db: SQLiteDatabase) {

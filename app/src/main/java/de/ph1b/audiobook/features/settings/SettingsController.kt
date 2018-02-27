@@ -45,54 +45,54 @@ class SettingsController : BaseController<SettingsBinding>() {
 
     // theme
     val themeDescription = setupTextSetting(
-        binding = binding.theme!!,
-        titleRes = R.string.pref_theme_title
+      binding = binding.theme!!,
+      titleRes = R.string.pref_theme_title
     ) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
     themePref.stream
-        .bindToLifeCycle()
-        .subscribe { themeDescription.setText(it.nameId) }
+      .bindToLifeCycle()
+      .subscribe { themeDescription.setText(it.nameId) }
 
     // resume on playback
     setupSwitchSetting(
-        binding = binding.resumePlayback!!,
-        titleRes = R.string.pref_resume_on_replug,
-        contentRes = R.string.pref_resume_on_replug_hint,
-        pref = resumeOnReplugPref
+      binding = binding.resumePlayback!!,
+      titleRes = R.string.pref_resume_on_replug,
+      contentRes = R.string.pref_resume_on_replug_hint,
+      pref = resumeOnReplugPref
     )
 
     // resume on playback
     setupSwitchSetting(
-        binding = binding.resumeAfterCall!!,
-        titleRes = R.string.pref_resume_after_call,
-        contentRes = R.string.pref_resume_after_call_hint,
-        pref = resumeAfterCallPref
+      binding = binding.resumeAfterCall!!,
+      titleRes = R.string.pref_resume_after_call,
+      contentRes = R.string.pref_resume_after_call_hint,
+      pref = resumeAfterCallPref
     )
 
     // skip amount
     val skipAmountDescription = setupTextSetting(
-        binding = binding.skipAmount!!,
-        titleRes = R.string.pref_seek_time
+      binding = binding.skipAmount!!,
+      titleRes = R.string.pref_seek_time
     ) {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
     seekTimePref.stream
-        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-        .bindToLifeCycle()
-        .subscribe { skipAmountDescription.text = it }
+      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+      .bindToLifeCycle()
+      .subscribe { skipAmountDescription.text = it }
 
     // auto rewind
     val autoRewindDescription = setupTextSetting(
-        binding = binding.autoRewind!!,
-        titleRes = R.string.pref_auto_rewind_title
+      binding = binding.autoRewind!!,
+      titleRes = R.string.pref_auto_rewind_title
     ) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
     autoRewindAmountPref.stream
-        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-        .bindToLifeCycle()
-        .subscribe { autoRewindDescription.text = it }
+      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+      .bindToLifeCycle()
+      .subscribe { autoRewindDescription.text = it }
   }
 
   private fun setupToolbar() {
@@ -112,8 +112,9 @@ class SettingsController : BaseController<SettingsBinding>() {
   }
 
   private inline fun setupTextSetting(
-      binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null,
-      crossinline onClick: () -> Unit): TextView {
+    binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null,
+    crossinline onClick: () -> Unit
+  ): TextView {
     val title: TextView = binding.title
     val description: TextView = binding.description
     if (contentRes != null) description.setText(contentRes)
@@ -125,8 +126,9 @@ class SettingsController : BaseController<SettingsBinding>() {
   }
 
   private fun setupSwitchSetting(
-      binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int,
-      pref: Pref<Boolean>) {
+    binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int,
+    pref: Pref<Boolean>
+  ) {
     binding.switchTitle.setText(titleRes)
     binding.switchDescription.setText(contentRes)
 
@@ -134,8 +136,8 @@ class SettingsController : BaseController<SettingsBinding>() {
       pref.value = checked
     }
     pref.stream
-        .bindToLifeCycle()
-        .subscribe { binding.switchSetting.isChecked = it }
+      .bindToLifeCycle()
+      .subscribe { binding.switchSetting.isChecked = it }
 
     binding.root.setOnClickListener { binding.switchSetting.toggle() }
   }

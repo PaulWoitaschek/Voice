@@ -6,10 +6,11 @@ import de.ph1b.audiobook.data.Book
 import java.io.File
 
 data class BookPlayChapter(
-    val file: File,
-    val start: Int,
-    val stop: Int,
-    val name: String) {
+  val file: File,
+  val start: Int,
+  val stop: Int,
+  val name: String
+) {
 
   val duration = stop - start
 

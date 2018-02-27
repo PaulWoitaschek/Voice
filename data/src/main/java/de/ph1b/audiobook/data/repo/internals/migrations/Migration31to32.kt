@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Corrects media paths that have been falsely set.
@@ -20,19 +20,19 @@ class Migration31to32 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     db.query(
-        TABLE_BOOK,
-        arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
-        null, null, null, null, null
+      TABLE_BOOK,
+      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
+      null, null, null, null, null
     ).moveToNextLoop {
       val bookId = getLong(0)
       val bookmarkCurrentMediaPath = getString(1)
 
       val chapterCursor = db.query(
-          TABLE_CHAPTERS,
-          arrayOf(CHAPTER_PATH),
-          BOOK_ID + "=?",
-          arrayOf(bookId.toString()),
-          null, null, null
+        TABLE_CHAPTERS,
+        arrayOf(CHAPTER_PATH),
+        BOOK_ID + "=?",
+        arrayOf(bookId.toString()),
+        null, null, null
       )
       val chapterPaths = ArrayList<String>(chapterCursor.count)
       chapterCursor.moveToNextLoop {

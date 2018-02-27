@@ -17,19 +17,19 @@ import javax.inject.Named
  * Media session callback that handles playback controls.
  */
 class MediaSessionCallback @Inject constructor(
-    private val bookUriConverter: BookUriConverter,
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>,
-    private val bookSearchHandler: BookSearchHandler,
-    private val autoConnection: AndroidAutoConnectedReceiver,
-    private val player: MediaPlayer,
-    private val bookSearchParser: BookSearchParser
+  private val bookUriConverter: BookUriConverter,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>,
+  private val bookSearchHandler: BookSearchHandler,
+  private val autoConnection: AndroidAutoConnectedReceiver,
+  private val player: MediaPlayer,
+  private val bookSearchParser: BookSearchParser
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
     super.onSkipToQueueItem(id)
     val bookPlayChapters = player.book()
-        ?.chaptersAsBookPlayChapters()
+      ?.chaptersAsBookPlayChapters()
         ?: return
     val chapter = bookPlayChapters[id.toInt()]
     player.changePosition(time = chapter.start, changedFile = chapter.file)

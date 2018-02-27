@@ -30,10 +30,10 @@ class SqlBookmarkStore
     val pathArgs = book.chapters.map { it.file.absolutePath }
 
     val query = db.query(
-        BookmarkTable.TABLE_NAME,
-        listOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
-        "${BookmarkTable.PATH} IN $pathWhere",
-        pathArgs
+      BookmarkTable.TABLE_NAME,
+      listOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
+      "${BookmarkTable.PATH} IN $pathWhere",
+      pathArgs
     )
     return query.mapRows { toBookmark() }
   }

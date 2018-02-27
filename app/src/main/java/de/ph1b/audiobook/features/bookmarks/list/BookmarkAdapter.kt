@@ -10,7 +10,7 @@ import de.ph1b.audiobook.data.Chapter
  * Adapter for displaying a list of bookmarks.
  */
 class BookmarkAdapter(
-    private val listener: BookmarkClickListener
+  private val listener: BookmarkClickListener
 ) : RecyclerView.Adapter<BookMarkHolder>() {
 
   private val bookmarks = ArrayList<Bookmark>()
@@ -30,7 +30,8 @@ class BookmarkAdapter(
 
   fun indexOf(bookmark: Bookmark) = bookmarks.indexOf(bookmark)
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BookMarkHolder(parent, listener)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+    BookMarkHolder(parent, listener)
 
   override fun onBindViewHolder(holder: BookMarkHolder, position: Int) {
     val bookMark = bookmarks[position]

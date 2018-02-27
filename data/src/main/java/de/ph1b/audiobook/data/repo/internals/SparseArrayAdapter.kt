@@ -9,7 +9,8 @@ import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 /**
  * JsonAdapter for a sparse array
  */
-class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) : JsonAdapter<SparseArrayCompat<T>>() {
+class SparseArrayAdapter<T>(private val adapter: JsonAdapter<T>) :
+  JsonAdapter<SparseArrayCompat<T>>() {
 
   override fun toJson(writer: JsonWriter, sparseArray: SparseArrayCompat<T>?) {
     writer.writeObject {

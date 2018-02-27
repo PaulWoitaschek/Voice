@@ -20,15 +20,19 @@ class EditBookmarkDialog : DialogController() {
     val bookmarkId = args.getLong(NI_BOOK_ID)
 
     val dialog = MaterialDialog.Builder(activity!!)
-        .title(de.ph1b.audiobook.R.string.bookmark_edit_title)
-        .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-        .input(activity!!.getString(R.string.bookmark_edit_hint), bookmarkTitle, false) { _, charSequence ->
-          val callback = targetController as EditBookmarkDialog.Callback
-          val newTitle = charSequence.toString()
-          callback.onEditBookmark(bookmarkId, newTitle)
-        }
-        .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
-        .build()
+      .title(de.ph1b.audiobook.R.string.bookmark_edit_title)
+      .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+      .input(
+        activity!!.getString(R.string.bookmark_edit_hint),
+        bookmarkTitle,
+        false
+      ) { _, charSequence ->
+        val callback = targetController as EditBookmarkDialog.Callback
+        val newTitle = charSequence.toString()
+        callback.onEditBookmark(bookmarkId, newTitle)
+      }
+      .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
+      .build()
     val editText = dialog.inputEditText!!
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -52,8 +56,9 @@ class EditBookmarkDialog : DialogController() {
     private const val NI_BOOKMARK_TITLE = "ni#bookmarkTitle"
 
     operator fun <T> invoke(
-        target: T,
-        bookmark: Bookmark) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
+      target: T,
+      bookmark: Bookmark
+    ) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
       targetController = target
       args.putLong(NI_BOOK_ID, bookmark.id)
       args.putString(NI_BOOKMARK_TITLE, bookmark.title)

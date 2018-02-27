@@ -32,34 +32,42 @@ class AndroidModule {
 
   @Provides
   @Singleton
-  fun provideAudioManager(context: Context) = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+  fun provideAudioManager(context: Context) =
+    context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
   @Provides
   @Singleton
-  fun provideActivityManager(context: Context) = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+  fun provideActivityManager(context: Context) =
+    context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
   @Provides
   @Singleton
-  fun provideTelephonyManager(context: Context) = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+  fun provideTelephonyManager(context: Context) =
+    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
   @Provides
   @Singleton
-  fun provideConnectivityManager(context: Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+  fun provideConnectivityManager(context: Context) =
+    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
   @Provides
-  fun provideWindowManager(context: Context) = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-  @Provides
-  @Singleton
-  fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-  @Provides
-  @Singleton
-  fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+  fun provideWindowManager(context: Context) =
+    context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
   @Provides
   @Singleton
-  fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+  fun provideNotificationManager(context: Context) =
+    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+  @Provides
+  @Singleton
+  fun provideSensorManager(context: Context) =
+    context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+
+  @Provides
+  @Singleton
+  fun providePowerManager(context: Context) =
+    context.getSystemService(Context.POWER_SERVICE) as PowerManager
 
   @Provides
   @Singleton

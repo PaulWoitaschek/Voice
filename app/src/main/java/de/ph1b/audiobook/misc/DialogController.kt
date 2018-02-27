@@ -20,7 +20,11 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
   private var dialog: Dialog? = null
   private var dismissed = false
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup,
+    savedViewState: Bundle?
+  ): View {
     dialog = onCreateDialog(savedViewState).apply {
       ownerActivity = activity!!
       setOnDismissListener { dismissDialog() }
@@ -61,9 +65,9 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
   fun showDialog(router: Router, tag: String? = null) {
     dismissed = false
     router.pushController(
-        RouterTransaction.with(this)
-            .pushChangeHandler(SimpleSwapChangeHandler(false))
-            .tag(tag)
+      RouterTransaction.with(this)
+        .pushChangeHandler(SimpleSwapChangeHandler(false))
+        .tag(tag)
     )
   }
 

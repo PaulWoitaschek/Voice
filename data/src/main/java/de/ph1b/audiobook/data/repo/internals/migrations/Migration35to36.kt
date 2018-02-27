@@ -2,14 +2,7 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.data.repo.internals.asTransaction
-import de.ph1b.audiobook.data.repo.internals.float
-import de.ph1b.audiobook.data.repo.internals.int
-import de.ph1b.audiobook.data.repo.internals.long
-import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.query
-import de.ph1b.audiobook.data.repo.internals.string
-import de.ph1b.audiobook.data.repo.internals.stringNullable
+import de.ph1b.audiobook.data.repo.internals.*
 
 class Migration35to36 : Migration {
 
@@ -39,19 +32,19 @@ class Migration35to36 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     val entries = db.query(TABLE_NAME)
-        .mapRows {
-          Holder(
-              long(ID),
-              string(NAME),
-              stringNullable(AUTHOR),
-              string(CURRENT_MEDIA_PATH),
-              float(PLAYBACK_SPEED),
-              string(ROOT),
-              long(TIME),
-              string(TYPE),
-              int(ACTIVE)
-          )
-        }
+      .mapRows {
+        Holder(
+          long(ID),
+          string(NAME),
+          stringNullable(AUTHOR),
+          string(CURRENT_MEDIA_PATH),
+          float(PLAYBACK_SPEED),
+          string(ROOT),
+          long(TIME),
+          string(TYPE),
+          int(ACTIVE)
+        )
+      }
     db.asTransaction {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
@@ -73,13 +66,14 @@ class Migration35to36 : Migration {
   }
 
   data class Holder(
-      val id: Long,
-      val name: String,
-      val author: String?,
-      val path: String,
-      val speed: Float,
-      val root: String,
-      val time: Long,
-      val type: String,
-      val active: Int)
+    val id: Long,
+    val name: String,
+    val author: String?,
+    val path: String,
+    val speed: Float,
+    val root: String,
+    val time: Long,
+    val type: String,
+    val active: Int
+  )
 }

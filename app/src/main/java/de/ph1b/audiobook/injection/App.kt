@@ -26,15 +26,23 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.concurrent.thread
 
-class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector, HasBroadcastReceiverInjector {
+class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector,
+  HasBroadcastReceiverInjector {
 
-  @Inject lateinit var bookAdder: BookAdder
-  @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
-  @Inject lateinit var serviceInjector: DispatchingAndroidInjector<Service>
-  @Inject lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
-  @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-  @Inject lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
-  @Inject lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
+  @Inject
+  lateinit var bookAdder: BookAdder
+  @Inject
+  lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+  @Inject
+  lateinit var serviceInjector: DispatchingAndroidInjector<Service>
+  @Inject
+  lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
+  @Inject
+  lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+  @Inject
+  lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+  @Inject
+  lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
 
@@ -55,8 +63,8 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     }
 
     component = DaggerAppComponent.builder()
-        .application(this)
-        .build()
+      .application(this)
+      .build()
     component.inject(this)
 
     bookAdder.scanForFiles()

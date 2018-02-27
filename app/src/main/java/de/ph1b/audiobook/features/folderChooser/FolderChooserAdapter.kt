@@ -15,10 +15,10 @@ import java.io.File
  * @param mode The operation mode which defines the interaction.
  */
 class FolderChooserAdapter(
-    private val c: Context,
-    private val mode: FolderChooserActivity.OperationMode,
-    private val listener: (selected: File) -> Unit)
-  : RecyclerView.Adapter<Holder>() {
+  private val c: Context,
+  private val mode: FolderChooserActivity.OperationMode,
+  private val listener: (selected: File) -> Unit
+) : RecyclerView.Adapter<Holder>() {
 
   override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(data[position])
 

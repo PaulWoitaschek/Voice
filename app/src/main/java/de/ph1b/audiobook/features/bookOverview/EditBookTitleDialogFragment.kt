@@ -16,7 +16,8 @@ import javax.inject.Inject
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-  @Inject lateinit var repo: BookRepository
+  @Inject
+  lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
@@ -25,18 +26,18 @@ class EditBookTitleDialogFragment : DialogFragment() {
     val bookId = arguments!!.getLong(NI_BOOK_ID)
 
     return MaterialDialog.Builder(activity!!)
-        .title(R.string.edit_book_title)
-        .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-        .input(getString(R.string.bookmark_edit_hint), presetName, false) { _, charSequence ->
-          val newText = charSequence.toString()
-          if (newText != presetName) {
-            repo.bookById(bookId)?.copy(name = newText)?.let {
-              repo.updateBook(it)
-            }
+      .title(R.string.edit_book_title)
+      .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+      .input(getString(R.string.bookmark_edit_hint), presetName, false) { _, charSequence ->
+        val newText = charSequence.toString()
+        if (newText != presetName) {
+          repo.bookById(bookId)?.copy(name = newText)?.let {
+            repo.updateBook(it)
           }
         }
-        .positiveText(R.string.dialog_confirm)
-        .build()
+      }
+      .positiveText(R.string.dialog_confirm)
+      .build()
   }
 
   companion object {

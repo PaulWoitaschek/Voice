@@ -17,10 +17,10 @@ import javax.inject.Named
 @Reusable
 class BookSearchHandler
 @Inject constructor(
-    private val repo: BookRepository,
-    private val player: PlayerController,
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>
+  private val repo: BookRepository,
+  private val player: PlayerController,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>
 ) {
 
   fun handle(search: BookSearch) {
@@ -39,7 +39,8 @@ class BookSearchHandler
     if (search.album != null) {
       val foundMatch = findAndPlayFirstMatch {
         val nameMatches = it.name.contains(search.album, ignoreCase = true)
-        val artistMatches = search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
+        val artistMatches =
+          search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
         nameMatches && artistMatches
       }
       if (foundMatch) return
@@ -75,7 +76,8 @@ class BookSearchHandler
   private fun playArtist(search: BookSearch) {
     Timber.i("playArtist")
     if (search.artist != null) {
-      val foundMatch = findAndPlayFirstMatch { it.author?.contains(search.artist, ignoreCase = true) == true }
+      val foundMatch =
+        findAndPlayFirstMatch { it.author?.contains(search.artist, ignoreCase = true) == true }
       if (foundMatch) return
     }
 

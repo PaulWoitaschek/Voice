@@ -29,22 +29,23 @@ import javax.inject.Inject
 @PerService
 class NotificationCreator
 @Inject constructor(
-    private val context: Context,
-    private val imageHelper: ImageHelper,
-    private val playerController: PlayerController,
-    private val playStateManager: PlayStateManager,
-    private val mediaSession: MediaSessionCompat,
-    notificationChannelCreator: NotificationChannelCreator
+  private val context: Context,
+  private val imageHelper: ImageHelper,
+  private val playerController: PlayerController,
+  private val playStateManager: PlayStateManager,
+  private val mediaSession: MediaSessionCompat,
+  notificationChannelCreator: NotificationChannelCreator
 ) {
 
   private var cachedImage: CachedImage? = null
 
   private val mediaStyle = MediaStyle()
-      .setShowActionsInCompactView(0, 1, 2)
-      .setCancelButtonIntent(stopIntent())
-      .setShowCancelButton(true)
+    .setShowActionsInCompactView(0, 1, 2)
+    .setCancelButtonIntent(stopIntent())
+    .setShowCancelButton(true)
 
-  private val notificationBuilder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
+  private val notificationBuilder =
+    NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
       .setAutoCancel(true)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
       .setDeleteIntent(stopIntent())
@@ -60,15 +61,15 @@ class NotificationCreator
     notificationBuilder.mActions.clear()
     val playState = playStateManager.playState
     return notificationBuilder
-        .addRewindAction()
-        .addPlayPauseAction(playState)
-        .addFastForwardAction()
-        .setChapterInfo(book)
-        .setContentIntent(contentIntent(book))
-        .setContentTitle(book)
-        .setLargeIcon(book)
-        .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
-        .build()
+      .addRewindAction()
+      .addPlayPauseAction(playState)
+      .addFastForwardAction()
+      .setChapterInfo(book)
+      .setContentIntent(contentIntent(book))
+      .setContentTitle(book)
+      .setLargeIcon(book)
+      .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
+      .build()
   }
 
   private fun cover(book: Book): Bitmap {
@@ -84,12 +85,16 @@ class NotificationCreator
     val coverFile = book.coverFile()
     val picassoCover = if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(context)
-          .load(coverFile)
-          .resize(width, height)
-          .getOnUiThread()
+        .load(coverFile)
+        .resize(width, height)
+        .getOnUiThread()
     } else null
 
-    val cover = picassoCover ?: imageHelper.drawableToBitmap(CoverReplacement(book.name, context), width, height)
+    val cover = picassoCover ?: imageHelper.drawableToBitmap(
+      CoverReplacement(book.name, context),
+      width,
+      height
+    )
 
     // add a cache entry
     cachedImage = CachedImage(book.id, cover)
@@ -125,38 +130,42 @@ class NotificationCreator
   }
 
   private fun stopIntent(): PendingIntent = PendingIntent.getService(
-      context,
-      KeyEvent.KEYCODE_MEDIA_STOP,
-      playerController.stopIntent,
-      PendingIntent.FLAG_UPDATE_CURRENT
+    context,
+    KeyEvent.KEYCODE_MEDIA_STOP,
+    playerController.stopIntent,
+    PendingIntent.FLAG_UPDATE_CURRENT
   )
 
   private fun NotificationCompat.Builder.addFastForwardAction(): NotificationCompat.Builder {
     val fastForwardPI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-        playerController.fastForwardAutoPlayIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
+      playerController.fastForwardAutoPlayIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
-    return addAction(R.drawable.ic_fast_forward_white_36dp, context.getString(R.string.fast_forward), fastForwardPI)
+    return addAction(
+      R.drawable.ic_fast_forward_white_36dp,
+      context.getString(R.string.fast_forward),
+      fastForwardPI
+    )
   }
 
   private fun NotificationCompat.Builder.addRewindAction(): NotificationCompat.Builder {
     val rewindPI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_REWIND,
-        playerController.rewindAutoPlayerIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_REWIND,
+      playerController.rewindAutoPlayerIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
   }
 
   private fun NotificationCompat.Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): NotificationCompat.Builder {
     val playPausePI = PendingIntentCompat.getForegroundService(
-        context,
-        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-        playerController.playPauseIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+      playerController.playPauseIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
     return if (playState == PlayStateManager.PlayState.PLAYING) {
       addAction(R.drawable.ic_pause_white_36dp, context.getString(R.string.pause), playPausePI)

@@ -18,12 +18,12 @@ import javax.inject.Named
  * Presenter for the bookmark MVP
  */
 class BookmarkPresenter @Inject constructor(
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>,
-    private val repo: BookRepository,
-    private val bookmarkRepo: BookmarkRepo,
-    private val playStateManager: PlayStateManager,
-    private val playerController: PlayerController
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>,
+  private val repo: BookRepository,
+  private val bookmarkRepo: BookmarkRepo,
+  private val playStateManager: PlayStateManager,
+  private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
   var bookId = -1L
@@ -74,8 +74,8 @@ class BookmarkPresenter @Inject constructor(
     launch(UI) {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(
-            title = newTitle,
-            id = Bookmark.ID_UNKNOWN
+          title = newTitle,
+          id = Bookmark.ID_UNKNOWN
         )
         bookmarkRepo.deleteBookmark(it.id)
         val newBookmark = bookmarkRepo.addBookmark(withNewTitle)

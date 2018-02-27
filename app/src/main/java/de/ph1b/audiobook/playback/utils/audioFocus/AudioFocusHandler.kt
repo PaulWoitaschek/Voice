@@ -12,12 +12,12 @@ import javax.inject.Named
 import kotlin.properties.Delegates
 
 class AudioFocusHandler @Inject constructor(
-    audioManager: AudioManager,
-    private val telephonyManager: TelephonyManager,
-    private val player: MediaPlayer,
-    private val playStateManager: PlayStateManager,
-    @Named(PrefKeys.RESUME_AFTER_CALL)
-    private val resumeAfterCallPref: Pref<Boolean>
+  audioManager: AudioManager,
+  private val telephonyManager: TelephonyManager,
+  private val player: MediaPlayer,
+  private val playStateManager: PlayStateManager,
+  @Named(PrefKeys.RESUME_AFTER_CALL)
+  private val resumeAfterCallPref: Pref<Boolean>
 ) {
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
@@ -30,7 +30,8 @@ class AudioFocusHandler @Inject constructor(
     Timber.i("currentlyHasFocus $value")
   }
 
-  @Synchronized private fun handleFocusChange(focusChange: Int) {
+  @Synchronized
+  private fun handleFocusChange(focusChange: Int) {
     Timber.i("handleFocusChange $focusChange")
     currentlyHasFocus = focusChange == AudioManager.AUDIOFOCUS_GAIN
     val callState = telephonyManager.callState
@@ -48,7 +49,8 @@ class AudioFocusHandler @Inject constructor(
     Timber.d("Call state is $callState. Pausing now")
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
     player.pause(true)
-    playStateManager.pauseReason = if (wasPlaying) PlayStateManager.PauseReason.CALL else PlayStateManager.PauseReason.NONE
+    playStateManager.pauseReason =
+        if (wasPlaying) PlayStateManager.PauseReason.CALL else PlayStateManager.PauseReason.NONE
   }
 
   private fun handleTemporaryLoss() {

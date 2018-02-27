@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
  * ViewHolder for displaying a Bookmark
  */
 class BookMarkHolder private constructor(
-    private val binding: BookmarkRowLayoutBinding,
-    private val listener: BookmarkClickListener
+  private val binding: BookmarkRowLayoutBinding,
+  private val listener: BookmarkClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
   constructor(parent: ViewGroup, listener: BookmarkClickListener) : this(
-      binding = BookmarkRowLayoutBinding.inflate(parent.layoutInflater(), parent, false),
-      listener = listener
+    binding = BookmarkRowLayoutBinding.inflate(parent.layoutInflater(), parent, false),
+    listener = listener
   )
 
   var boundBookmark: Bookmark? = null
@@ -45,10 +45,14 @@ class BookMarkHolder private constructor(
     val currentChapter = chapters.single { it.file == bookmark.mediaFile }
     val index = chapters.indexOf(currentChapter)
 
-    binding.summary.text = itemView.context.getString(de.ph1b.audiobook.R.string.format_bookmarks_n_of, index + 1, size)
+    binding.summary.text = itemView.context.getString(
+      de.ph1b.audiobook.R.string.format_bookmarks_n_of,
+      index + 1,
+      size
+    )
     binding.time.text = itemView.context.getString(
-        de.ph1b.audiobook.R.string.format_bookmarks_time, formatTime(bookmark.time),
-        formatTime(currentChapter.duration)
+      de.ph1b.audiobook.R.string.format_bookmarks_time, formatTime(bookmark.time),
+      formatTime(currentChapter.duration)
     )
   }
 

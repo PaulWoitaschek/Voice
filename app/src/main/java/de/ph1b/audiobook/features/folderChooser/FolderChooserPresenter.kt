@@ -11,8 +11,7 @@ import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
-import java.util.HashSet
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,7 +28,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
-  @Inject lateinit var storageDirFinder: StorageDirFinder
+  @Inject
+  lateinit var storageDirFinder: StorageDirFinder
 
   private val rootDirs = ArrayList<File>()
   private val SI_CHOSEN_FILE = "siChosenFile"
@@ -173,7 +173,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
   /** Gets the containing files of a folder (restricted to music and folders) in a naturally sorted order.  */
   private fun File.getContentsSorted() = listFilesSafely(FileRecognition.folderAndMusicFilter)
-      .sortedWith(NaturalOrderComparator.fileComparator)
+    .sortedWith(NaturalOrderComparator.fileComparator)
 
   override fun onRestore(savedState: Bundle) {
     super.onRestore(savedState)

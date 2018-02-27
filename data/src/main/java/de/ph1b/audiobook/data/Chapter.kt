@@ -10,18 +10,19 @@ import java.io.File
  * Represents a chapter in a book.
  */
 data class Chapter(
-    val file: File,
-    val name: String,
-    val duration: Int,
-    val fileLastModified: Long,
-    val marks: SparseArrayCompat<String>
+  val file: File,
+  val name: String,
+  val duration: Int,
+  val fileLastModified: Long,
+  val marks: SparseArrayCompat<String>
 ) : Comparable<Chapter> {
 
   init {
     require(name.isNotEmpty())
   }
 
-  override fun compareTo(other: Chapter) = NaturalOrderComparator.fileComparator.compare(file, other.file)
+  override fun compareTo(other: Chapter) =
+    NaturalOrderComparator.fileComparator.compare(file, other.file)
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

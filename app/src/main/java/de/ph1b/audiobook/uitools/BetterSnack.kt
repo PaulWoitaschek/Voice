@@ -19,21 +19,22 @@ object BetterSnack {
    * @param listener the listener that should be invoked when an action was made
    */
   fun make(
-      root: View,
-      text: String,
-      duration: Duration = Duration.INDEFINITE_NO_DISMISS,
-      action: String? = null,
-      listener: (() -> Unit)? = null) {
+    root: View,
+    text: String,
+    duration: Duration = Duration.INDEFINITE_NO_DISMISS,
+    action: String? = null,
+    listener: (() -> Unit)? = null
+  ) {
     val bar = Snackbar.make(root, text, duration.internalDuration)
     bar.addCallback(
-        object : Snackbar.Callback() {
-          override fun onDismissed(snackbar: Snackbar?, event: Int) {
-            if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE && duration == Duration.INDEFINITE_NO_DISMISS) {
-              // show again to enforce a decision
-              make(root, text, duration, action, listener)
-            }
+      object : Snackbar.Callback() {
+        override fun onDismissed(snackbar: Snackbar?, event: Int) {
+          if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE && duration == Duration.INDEFINITE_NO_DISMISS) {
+            // show again to enforce a decision
+            make(root, text, duration, action, listener)
           }
         }
+      }
     )
 
     // set action if set

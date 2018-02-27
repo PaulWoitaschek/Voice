@@ -8,7 +8,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,12 +19,18 @@ import javax.inject.Singleton
 class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
-  private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList().apply { sort() } }
+  private val active: MutableList<Book> by lazy {
+    storage.activeBooks().toMutableList().apply { sort() }
+  }
   private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
 
   private val updated = PublishSubject.create<Book>()
 
-  private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.createDefault<List<Book>>(active) }
+  private val all: BehaviorSubject<List<Book>> by lazy {
+    BehaviorSubject.createDefault<List<Book>>(
+      active
+    )
+  }
 
   fun updateObservable(): Observable<Book> = updated
 

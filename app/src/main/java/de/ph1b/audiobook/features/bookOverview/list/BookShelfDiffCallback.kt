@@ -4,8 +4,8 @@ import android.support.v7.util.DiffUtil
 import de.ph1b.audiobook.data.Book
 
 class BookShelfDiffCallback(
-    private val oldBooks: List<Book>,
-    private val newBooks: List<Book>
+  private val oldBooks: List<Book>,
+  private val newBooks: List<Book>
 ) : DiffUtil.Callback() {
 
   override fun getOldListSize(): Int = oldBooks.size

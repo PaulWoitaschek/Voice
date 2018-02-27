@@ -23,12 +23,13 @@ class DataSourceConverter
 
   private val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
   private val extractorsFactory = DefaultExtractorsFactory()
-      .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
-      .setTsExtractorFlags(TsExtractor.MODE_SINGLE_PMT)
+    .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
+    .setTsExtractorFlags(TsExtractor.MODE_SINGLE_PMT)
 
   private fun Chapter.toMediaSource() = toMediaSource(file)
 
-  fun toMediaSource(file: File) = ExtractorMediaSource(Uri.fromFile(file), dataSourceFactory, extractorsFactory, null, null)
+  fun toMediaSource(file: File) =
+    ExtractorMediaSource(Uri.fromFile(file), dataSourceFactory, extractorsFactory, null, null)
 
   /** convert a book to a media source. If the size is > 1 use a concat media source, else a regular */
   fun toMediaSource(book: Book) = if (book.chapters.size > 1) {

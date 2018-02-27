@@ -17,7 +17,7 @@ sealed class Optional<T : Any> {
 
   companion object {
     fun <T : Any> of(value: T?): Optional<T> =
-        if (value == null) Absent()
-        else Present(value)
+      if (value == null) Absent()
+      else Present(value)
   }
 }

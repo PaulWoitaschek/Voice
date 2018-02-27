@@ -1,14 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview
 
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockito_kotlin.argThat
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.atLeastOnce
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.RxMainThreadTrampolineRule
@@ -40,13 +33,19 @@ class BookShelfPresenterTest {
 
   private lateinit var presenter: BookShelfPresenter
 
-  @Mock lateinit var repo: BookRepository
-  @Mock lateinit var bookAdder: BookAdder
-  @Mock lateinit var playStateManager: PlayStateManager
-  @Mock lateinit var playerController: PlayerController
-  @Mock lateinit var coverFromDiscCollector: CoverFromDiscCollector
+  @Mock
+  lateinit var repo: BookRepository
+  @Mock
+  lateinit var bookAdder: BookAdder
+  @Mock
+  lateinit var playStateManager: PlayStateManager
+  @Mock
+  lateinit var playerController: PlayerController
+  @Mock
+  lateinit var coverFromDiscCollector: CoverFromDiscCollector
 
-  @Mock lateinit var view: BookShelfView
+  @Mock
+  lateinit var view: BookShelfView
 
   private lateinit var currentBookIdPref: Pref<Long>
 
@@ -54,18 +53,18 @@ class BookShelfPresenterTest {
   fun setUp() {
     currentBookIdPref = MemoryPref(-1L)
     presenter = BookShelfPresenter(
-        repo = repo,
-        bookAdder = bookAdder,
-        playStateManager = playStateManager,
-        playerController = playerController,
-        coverFromDiscCollector = coverFromDiscCollector,
-        currentBookIdPref = currentBookIdPref
+      repo = repo,
+      bookAdder = bookAdder,
+      playStateManager = playStateManager,
+      playerController = playerController,
+      coverFromDiscCollector = coverFromDiscCollector,
+      currentBookIdPref = currentBookIdPref
     )
 
     given { repo.booksStream() }.willReturn(Observable.just(emptyList()))
     given { bookAdder.scannerActive }.willReturn(Observable.just(false))
     given { playStateManager.playStateStream() }
-        .willReturn(Observable.just(PAUSED))
+      .willReturn(Observable.just(PAUSED))
     given {
       coverFromDiscCollector.coverChanged()
     }.willReturn(Observable.never())
@@ -86,7 +85,7 @@ class BookShelfPresenterTest {
   @Test
   fun noFolderWarningNotShownWithBooks() {
     given { repo.booksStream() }
-        .willReturn(Observable.just(listOf(BookFactory.create(id = 1))))
+      .willReturn(Observable.just(listOf(BookFactory.create(id = 1))))
     presenter.attach(view)
     verify(view, never()).render(BookShelfState.NoFolderSet)
   }
@@ -96,7 +95,7 @@ class BookShelfPresenterTest {
     val firstEmission = listOf(BookFactory.create(id = 1))
     val secondEmission = firstEmission + BookFactory.create(id = 2)
     given { repo.booksStream() }
-        .willReturn(Observable.just(firstEmission, secondEmission))
+      .willReturn(Observable.just(firstEmission, secondEmission))
     presenter.attach(view)
     val captor = argumentCaptor<BookShelfState>()
     verify(view).render(captor.capture())
@@ -109,7 +108,7 @@ class BookShelfPresenterTest {
     val firstBook = BookFactory.create(id = 1)
     val secondBook = BookFactory.create(id = 2)
     given { repo.booksStream() }
-        .willReturn(Observable.just(listOf(firstBook, secondBook)))
+      .willReturn(Observable.just(listOf(firstBook, secondBook)))
 
     presenter.attach(view)
     currentBookIdPref.value = 0
@@ -118,13 +117,13 @@ class BookShelfPresenterTest {
 
     inOrder(view) {
       verify(view, atLeastOnce()).render(
-          argThat { this is BookShelfState.Content && currentBook == null }
+        argThat { this is BookShelfState.Content && currentBook == null }
       )
       verify(view).render(
-          argThat { this is BookShelfState.Content && currentBook == firstBook }
+        argThat { this is BookShelfState.Content && currentBook == firstBook }
       )
       verify(view).render(
-          argThat { this is BookShelfState.Content && currentBook == secondBook }
+        argThat { this is BookShelfState.Content && currentBook == secondBook }
       )
     }
   }
@@ -138,7 +137,7 @@ class BookShelfPresenterTest {
     presenter.attach(view)
 
     verify(view, never()).render(
-        argThat { this is BookShelfState.Loading }
+      argThat { this is BookShelfState.Loading }
     )
   }
 

@@ -5,7 +5,10 @@ import android.os.Bundle
 /**
  * Delegates lifecycle methods to the presenter.
  */
-class PresenterDelegate<V : Any, out P>(private val newPresenter: () -> P, private val getView: () -> V) where P : Presenter<V> {
+class PresenterDelegate<V : Any, out P>(
+  private val newPresenter: () -> P,
+  private val getView: () -> V
+) where P : Presenter<V> {
 
   private var presenter: P? = null
 

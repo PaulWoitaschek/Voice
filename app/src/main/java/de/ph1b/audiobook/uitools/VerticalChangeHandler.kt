@@ -14,7 +14,13 @@ class VerticalChangeHandler : AnimatorChangeHandler() {
   override fun resetFromView(from: View) {
   }
 
-  override fun getAnimator(container: ViewGroup, from: View?, to: View?, isPush: Boolean, toAddedToContainer: Boolean): Animator {
+  override fun getAnimator(
+    container: ViewGroup,
+    from: View?,
+    to: View?,
+    isPush: Boolean,
+    toAddedToContainer: Boolean
+  ): Animator {
     return if (isPush && to != null) {
       animateFloat(to.height / 2F, 0F) { value, fraction ->
         to.translationY = value
@@ -26,7 +32,8 @@ class VerticalChangeHandler : AnimatorChangeHandler() {
         from.alpha = 1 - fraction
       }.apply {
         interpolator = Interpolators.accelerate
-        duration = from.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        duration =
+            from.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
       }
     } else AnimatorSet()
   }

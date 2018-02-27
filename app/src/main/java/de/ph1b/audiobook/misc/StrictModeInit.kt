@@ -10,13 +10,13 @@ object StrictModeInit {
   }
 
   private fun vmPolicy(): StrictMode.VmPolicy = StrictMode.VmPolicy.Builder()
-      .detectAll()
-      .penaltyLog()
-      .build()
+    .detectAll()
+    .penaltyLog()
+    .build()
 
   private fun threadPolicy(): StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder()
-      .detectAll()
-      .penaltyLog()
-      .penaltyFlashScreen()
-      .build()
+    .detectAll()
+    .penaltyLog()
+    .penaltyFlashScreen()
+    .build()
 }

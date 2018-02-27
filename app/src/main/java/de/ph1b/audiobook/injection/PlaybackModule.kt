@@ -23,22 +23,35 @@ class PlaybackModule {
 
   @Provides
   @PerService
-  fun provideButtonRecieverPendingIntent(service: PlaybackService, mbrComponentName: ComponentName): PendingIntent {
+  fun provideButtonRecieverPendingIntent(
+    service: PlaybackService,
+    mbrComponentName: ComponentName
+  ): PendingIntent {
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
       component = mbrComponentName
     }
-    return PendingIntent.getBroadcast(service, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    return PendingIntent.getBroadcast(
+      service,
+      0,
+      mediaButtonIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
+    )
   }
 
   @Provides
   @PerService
   fun provideMediaSession(
-      service: PlaybackService,
-      callback: MediaSessionCallback,
-      mbrComponentName: ComponentName,
-      buttonReceiverPendingIntent: PendingIntent
+    service: PlaybackService,
+    callback: MediaSessionCallback,
+    mbrComponentName: ComponentName,
+    buttonReceiverPendingIntent: PendingIntent
   ): MediaSessionCompat {
-    return MediaSessionCompat(service, PlaybackService::class.java.name, mbrComponentName, buttonReceiverPendingIntent).apply {
+    return MediaSessionCompat(
+      service,
+      PlaybackService::class.java.name,
+      mbrComponentName,
+      buttonReceiverPendingIntent
+    ).apply {
       setCallback(callback)
       setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }

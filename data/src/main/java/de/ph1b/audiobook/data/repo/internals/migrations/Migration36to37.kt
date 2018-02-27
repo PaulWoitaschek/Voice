@@ -2,11 +2,7 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.data.repo.internals.asTransaction
-import de.ph1b.audiobook.data.repo.internals.long
-import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.query
-import de.ph1b.audiobook.data.repo.internals.string
+import de.ph1b.audiobook.data.repo.internals.*
 
 /**
  * The field LAST_MODIFIED was added to the chapters

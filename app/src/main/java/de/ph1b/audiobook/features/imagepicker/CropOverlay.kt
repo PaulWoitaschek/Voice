@@ -2,11 +2,7 @@ package de.ph1b.audiobook.features.imagepicker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PointF
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -21,10 +17,14 @@ import timber.log.Timber
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
  */
-class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(
-    context,
-    attrs,
-    defStyleAttr
+class CropOverlay @JvmOverloads constructor(
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : FrameLayout(
+  context,
+  attrs,
+  defStyleAttr
 ) {
 
   private val leftCircle = newCircle()
@@ -49,15 +49,15 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
   }
 
   private val scaleGestureDetector = ScaleGestureDetector(
-      context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-    override fun onScale(detector: ScaleGestureDetector): Boolean {
-      val dx = detector.currentSpanX - detector.previousSpanX
-      val dy = detector.currentSpanY - detector.previousSpanY
-      val max = Math.max(dx, dy)
-      dragRect.squareInset(-max)
-      return max != 0f
+    context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+      override fun onScale(detector: ScaleGestureDetector): Boolean {
+        val dx = detector.currentSpanX - detector.previousSpanX
+        val dy = detector.currentSpanY - detector.previousSpanY
+        val max = Math.max(dx, dy)
+        dragRect.squareInset(-max)
+        return max != 0f
+      }
     }
-  }
   )
 
   var selectionOn = false
@@ -78,13 +78,15 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
   private var resizeType: Resize? = null
   private val touchOffset = context.dpToPxRounded(16F)
 
-  private fun newCircle() = context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
-    visible = false
-  }
+  private fun newCircle() =
+    context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
+      visible = false
+    }
 
   private fun minRectSize() = Math.min(bounds.width(), bounds.height()) / 3f
 
-  private infix fun Float.inRangeOf(target: Float) = this >= (target - touchOffset) && this <= (target + touchOffset)
+  private infix fun Float.inRangeOf(target: Float) =
+    this >= (target - touchOffset) && this <= (target + touchOffset)
 
   private fun MotionEvent.asResizeType(): Resize? {
     val x = x

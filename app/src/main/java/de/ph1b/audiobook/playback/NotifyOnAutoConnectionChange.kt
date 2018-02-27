@@ -14,11 +14,11 @@ import javax.inject.Named
  */
 @PerService
 class NotifyOnAutoConnectionChange @Inject constructor(
-    private val changeNotifier: ChangeNotifier,
-    private val repo: BookRepository,
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>,
-    private val autoConnection: AndroidAutoConnectedReceiver
+  private val changeNotifier: ChangeNotifier,
+  private val repo: BookRepository,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>,
+  private val autoConnection: AndroidAutoConnectedReceiver
 ) {
 
   private var listeningDisposable: Disposable? = null
@@ -26,13 +26,13 @@ class NotifyOnAutoConnectionChange @Inject constructor(
   fun listen() {
     if (listeningDisposable?.isDisposed != false) {
       listeningDisposable = autoConnection.stream
-          .filter { it }
-          .subscribe {
-            // display the current book but don't play it
-            repo.bookById(currentBookIdPref.value)?.let {
-              changeNotifier.notify(ChangeNotifier.Type.METADATA, it, true)
-            }
+        .filter { it }
+        .subscribe {
+          // display the current book but don't play it
+          repo.bookById(currentBookIdPref.value)?.let {
+            changeNotifier.notify(ChangeNotifier.Type.METADATA, it, true)
           }
+        }
     }
   }
 

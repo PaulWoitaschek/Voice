@@ -8,21 +8,21 @@ import android.os.Build
 
 @TargetApi(Build.VERSION_CODES.O)
 class AudioFocusRequesterApi26(
-    audioFocusListener: AudioManager.OnAudioFocusChangeListener,
-    private val audioManager: AudioManager
+  audioFocusListener: AudioManager.OnAudioFocusChangeListener,
+  private val audioManager: AudioManager
 ) : AudioFocusRequester {
 
   private val audioAttributes = AudioAttributes.Builder()
-      .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-      .setUsage(AudioAttributes.USAGE_MEDIA)
-      .build()!!
+    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+    .setUsage(AudioAttributes.USAGE_MEDIA)
+    .build()!!
 
   private var focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-      .setAudioAttributes(audioAttributes)
-      .setWillPauseWhenDucked(true)
-      .setAcceptsDelayedFocusGain(false)
-      .setOnAudioFocusChangeListener(audioFocusListener)
-      .build()!!
+    .setAudioAttributes(audioAttributes)
+    .setWillPauseWhenDucked(true)
+    .setAcceptsDelayedFocusGain(false)
+    .setOnAudioFocusChangeListener(audioFocusListener)
+    .build()!!
 
   override fun request() = audioManager.requestAudioFocus(focusRequest)
 

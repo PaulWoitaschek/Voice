@@ -24,7 +24,14 @@ import javax.inject.Singleton
  * Base component that is the entry point for injection.
  */
 @Singleton
-@Component(modules = arrayOf(AndroidModule::class, PrefsModule::class, BindingModule::class, AndroidSupportInjectionModule::class))
+@Component(
+  modules = arrayOf(
+    AndroidModule::class,
+    PrefsModule::class,
+    BindingModule::class,
+    AndroidSupportInjectionModule::class
+  )
+)
 interface AppComponent {
 
   val bookmarkPresenter: BookmarkPresenter

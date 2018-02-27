@@ -41,7 +41,8 @@ private const val COVER_FROM_GALLERY = 1
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, BookShelfBinding>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback, BookShelfView {
+class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, BookShelfBinding>(),
+  EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback, BookShelfView {
 
   override fun createPresenter() = App.component.bookShelfPresenter
   override val layoutRes = R.layout.book_shelf
@@ -136,10 +137,10 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
 
           @SuppressLint("CommitTransaction")
           pendingTransaction = fragmentManager.beginTransaction()
-              .add(
-                  EditCoverDialogFragment.newInstance(this, book, imageUri),
-                  EditCoverDialogFragment.TAG
-              )
+            .add(
+              EditCoverDialogFragment.newInstance(this, book, imageUri),
+              EditCoverDialogFragment.TAG
+            )
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
@@ -152,7 +153,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
     val transition = BookChangeHandler()
     transition.transitionName = book.coverTransitionName
     transaction.pushChangeHandler(transition)
-        .popChangeHandler(transition)
+      .popChangeHandler(transition)
     router.pushController(transaction)
   }
 
@@ -189,14 +190,18 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter, Boo
       return
 
     val target = TapTarget.forToolbarMenuItem(
-        binding.toolbar, R.id.library, getString(R.string.onboarding_title), getString(R.string.onboarding_content))
-        .cancelable(false)
-        .tintTarget(false)
-        .outerCircleColor(R.color.accentDark)
-        .descriptionTextColorInt(Color.WHITE)
-        .textColorInt(Color.WHITE)
-        .targetCircleColorInt(Color.BLACK)
-        .transparentTarget(true)
+      binding.toolbar,
+      R.id.library,
+      getString(R.string.onboarding_title),
+      getString(R.string.onboarding_content)
+    )
+      .cancelable(false)
+      .tintTarget(false)
+      .outerCircleColor(R.color.accentDark)
+      .descriptionTextColorInt(Color.WHITE)
+      .textColorInt(Color.WHITE)
+      .targetCircleColorInt(Color.BLACK)
+      .transparentTarget(true)
     currentTapTarget = TapTargetView.showFor(activity, target, object : TapTargetView.Listener() {
       override fun onTargetClick(view: TapTargetView?) {
         super.onTargetClick(view)

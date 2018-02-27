@@ -20,7 +20,6 @@ import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
@@ -38,28 +37,30 @@ import javax.inject.Singleton
 @Singleton
 class BookAdder
 @Inject constructor(
-    private val context: Context,
-    private val repo: BookRepository,
-    private val coverCollector: CoverFromDiscCollector,
-    private val mediaAnalyzer: MediaAnalyzer,
-    private val chapterReader: ChapterReader,
-    @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
-    private val singleBookFolderPref: Pref<Set<String>>,
-    @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-    private val collectionBookFolderPref: Pref<Set<String>>
+  private val context: Context,
+  private val repo: BookRepository,
+  private val coverCollector: CoverFromDiscCollector,
+  private val mediaAnalyzer: MediaAnalyzer,
+  private val chapterReader: ChapterReader,
+  @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
+  private val singleBookFolderPref: Pref<Set<String>>,
+  @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
+  private val collectionBookFolderPref: Pref<Set<String>>
 ) {
 
   private val executor = Executors.newSingleThreadExecutor()
-  private val scannerActiveSubject = BehaviorSubject.createDefault(false)
-  val scannerActive: Observable<Boolean> = scannerActiveSubject
+  private val _scannerActive = BehaviorSubject.createDefault(false)
+  val scannerActive = _scannerActive.hide()!!
   private val handler = Handler(context.mainLooper)
-  @Volatile private var stopScanner = false
-  @Volatile private var isScanning = false
+  @Volatile
+  private var stopScanner = false
+  @Volatile
+  private var isScanning = false
 
   init {
     val folderChanged = Observables.combineLatest(
-        collectionBookFolderPref.stream,
-        singleBookFolderPref.stream
+      collectionBookFolderPref.stream,
+      singleBookFolderPref.stream
     ) { _, _ -> Unit }
     folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
   }
@@ -95,7 +96,7 @@ class BookAdder
     stopScanner = true
     executor.execute {
       isScanning = true
-      handler.postBlocking { scannerActiveSubject.onNext(true) }
+      handler.postBlocking { _scannerActive.onNext(true) }
       stopScanner = false
 
       try {
@@ -108,7 +109,7 @@ class BookAdder
       }
 
       stopScanner = false
-      handler.postBlocking { scannerActiveSubject.onNext(false) }
+      handler.postBlocking { _scannerActive.onNext(false) }
       isScanning = false
     }
   }
@@ -122,15 +123,15 @@ class BookAdder
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
     get() = singleBookFolderPref.value
-        .map(::File)
-        .sortedWith(NaturalOrderComparator.fileComparator)
+      .map(::File)
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
     get() = collectionBookFolderPref.value
-        .map(::File)
-        .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
-        .sortedWith(NaturalOrderComparator.fileComparator)
+      .map(::File)
+      .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
@@ -188,7 +189,10 @@ class BookAdder
     if (!BaseActivity.storageMounted()) {
       throw InterruptedException("Storage is not mounted")
     }
-    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+    if (ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED) {
       throw InterruptedException("Does not have external storage permission")
     }
 
@@ -201,7 +205,7 @@ class BookAdder
 
     val firstChapterFile = newChapters.first().file
     val result = mediaAnalyzer.analyze(firstChapterFile)
-        .blockingGet() as? MediaAnalyzer.Result.Success
+      .blockingGet() as? MediaAnalyzer.Result.Success
         ?: return
 
     var bookName = result.bookName
@@ -217,14 +221,14 @@ class BookAdder
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
-          id = Book.ID_UNKNOWN,
-          type = type,
-          author = result.author,
-          currentFile = firstChapterFile,
-          positionInChapter = 0,
-          name = bookName,
-          chapters = newChapters,
-          root = bookRoot
+        id = Book.ID_UNKNOWN,
+        type = type,
+        author = result.author,
+        currentFile = firstChapterFile,
+        positionInChapter = 0,
+        name = bookName,
+        chapters = newChapters,
+        root = bookRoot
       )
       handler.postBlocking { repo.addBook(newBook) }
     } else {
@@ -234,12 +238,17 @@ class BookAdder
 
       // if the file is not valid, update time and position
       val time = if (oldCurrentFileValid) orphanedBook.positionInChapter else 0
-      val currentFile = if (oldCurrentFileValid) orphanedBook.currentFile else newChapters.first().file
+      val currentFile =
+        if (oldCurrentFileValid) orphanedBook.currentFile else newChapters.first().file
 
-      orphanedBook = orphanedBook.copy(positionInChapter = time, currentFile = currentFile, chapters = newChapters)
+      orphanedBook = orphanedBook.copy(
+        positionInChapter = time,
+        currentFile = currentFile,
+        chapters = newChapters
+      )
 
       // now finally un-hide this book
-      handler.postBlocking { repo.revealBook(orphanedBook as Book) }
+      handler.postBlocking { repo.revealBook(orphanedBook) }
     }
   }
 
@@ -266,9 +275,9 @@ class BookAdder
       //set new bookmarks and chapters.
       // if the current path is gone, reset it correctly.
       bookToUpdate = bookToUpdate.copy(
-          chapters = newChapters,
-          currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
-          positionInChapter = if (currentPathIsGone) 0 else bookToUpdate.positionInChapter
+        chapters = newChapters,
+        currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
+        positionInChapter = if (currentPathIsGone) 0 else bookToUpdate.positionInChapter
       )
 
       handler.postBlocking { repo.updateBook(bookToUpdate) }
@@ -308,9 +317,9 @@ class BookAdder
   @Throws(InterruptedException::class)
   private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
     val containingFiles = rootFile.walk()
-        .filter { FileRecognition.musicFilter.accept(it) }
-        .sortedWith(NaturalOrderComparator.fileComparator)
-        .toList()
+      .filter { FileRecognition.musicFilter.accept(it) }
+      .sortedWith(NaturalOrderComparator.fileComparator)
+      .toList()
 
     val containingMedia = ArrayList<Chapter>(containingFiles.size)
     for (f in containingFiles) {
@@ -324,16 +333,16 @@ class BookAdder
 
       // else parse and add
       val result = mediaAnalyzer.analyze(f)
-          .blockingGet()
+        .blockingGet()
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {
           val chapters = chapterReader.read(f)
           SparseArrayCompat<String>(chapters.size)
-              .apply {
-                chapters.forEach {
-                  put(it.startInMs.toInt(), it.title)
-                }
+            .apply {
+              chapters.forEach {
+                put(it.startInMs.toInt(), it.title)
               }
+            }
         } catch (e: Exception) {
           CrashlyticsProxy.logException(e)
           emptySparseArray<String>()
@@ -360,11 +369,11 @@ class BookAdder
    */
   private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
     val books: List<Book> =
-        if (orphaned) {
-          repo.getOrphanedBooks()
-        } else {
-          repo.activeBooks
-        }
+      if (orphaned) {
+        repo.getOrphanedBooks()
+      } else {
+        repo.activeBooks
+      }
     if (rootFile.isDirectory) {
       return books.firstOrNull {
         rootFile.absolutePath == it.root && type === it.type

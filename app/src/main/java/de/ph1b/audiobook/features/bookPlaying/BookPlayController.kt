@@ -17,19 +17,11 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.clicks
-import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
-import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.maxImageSize
-import de.ph1b.audiobook.uitools.visible
+import de.ph1b.audiobook.uitools.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -40,12 +32,14 @@ private const val NI_BOOK_ID = "niBookId"
  * Base class for book playing interaction.
  */
 class BookPlayController(
-    bundle: Bundle
-) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle), BookPlayMvp.View {
+  bundle: Bundle
+) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle),
+  BookPlayMvp.View {
 
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
-  @Inject lateinit var equalizer: Equalizer
+  @Inject
+  lateinit var equalizer: Equalizer
 
   private val data = ArrayList<BookPlayChapter>()
   private val bookId = bundle.getLong(NI_BOOK_ID)
@@ -70,9 +64,10 @@ class BookPlayController(
     val dataForCurrentFile = data.filter { it.file == book.currentFile }
 
     // find closest position
-    val currentChapter = dataForCurrentFile.firstOrNull { book.positionInChapter >= it.start && book.positionInChapter < it.stop }
-        ?: dataForCurrentFile.firstOrNull { book.positionInChapter == it.stop }
-        ?: dataForCurrentFile.first()
+    val currentChapter =
+      dataForCurrentFile.firstOrNull { book.positionInChapter >= it.start && book.positionInChapter < it.stop }
+          ?: dataForCurrentFile.firstOrNull { book.positionInChapter == it.stop }
+          ?: dataForCurrentFile.first()
     this.currentChapter = currentChapter
 
     val chapterIndex = data.indexOf(currentChapter)
@@ -104,9 +99,9 @@ class BookPlayController(
     val coverFile = book.coverFile()
     if (coverFile.canRead() && coverFile.length() < maxImageSize) {
       Picasso.with(activity)
-          .load(coverFile)
-          .placeholder(coverReplacement)
-          .into(binding.cover)
+        .load(coverFile)
+        .placeholder(coverReplacement)
+        .into(binding.cover)
     } else {
       binding.cover.setImageDrawable(coverReplacement)
     }
@@ -137,14 +132,14 @@ class BookPlayController(
     var lastClick = 0L
     val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
     binding.cover.clicks()
-        .filter {
-          val currentTime = System.currentTimeMillis()
-          val doubleClick = currentTime - lastClick < doubleClickTime
-          lastClick = currentTime
-          doubleClick
-        }
-        .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
-        .subscribe { presenter.playPause() }
+      .filter {
+        val currentTime = System.currentTimeMillis()
+        val doubleClick = currentTime - lastClick < doubleClickTime
+        lastClick = currentTime
+        doubleClick
+      }
+      .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
+      .subscribe { presenter.playPause() }
   }
 
   private fun setupFab() {
@@ -153,31 +148,36 @@ class BookPlayController(
 
   private fun setupSeekBar() {
     binding.seekBar.setOnSeekBarChangeListener(
-        object : SeekBar.OnSeekBarChangeListener {
-          override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
-            //sets text to adjust while using seekBar
-            binding.playedTime.text = formatTime(progress, binding.seekBar.max)
-          }
+      object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
+          //sets text to adjust while using seekBar
+          binding.playedTime.text = formatTime(progress, binding.seekBar.max)
+        }
 
-          override fun onStartTrackingTouch(view: SeekBar?) {
-          }
+        override fun onStartTrackingTouch(view: SeekBar?) {
+        }
 
-          override fun onStopTrackingTouch(view: SeekBar?) {
-            currentChapter?.let {
-              val progress = binding.seekBar.progress
-              presenter.seekTo(it.start + progress, it.file)
-            }
+        override fun onStopTrackingTouch(view: SeekBar?) {
+          currentChapter?.let {
+            val progress = binding.seekBar.progress
+            presenter.seekTo(it.start + progress, it.file)
           }
         }
+      }
     )
   }
 
   private fun setupSpinner() {
     spinnerAdapter = MultiLineSpinnerAdapter(
-        spinner = binding.bookSpinner,
-        context = activity,
-        unselectedTextColor = activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)),
-        resolveName = BookPlayChapter::correctedName
+      spinner = binding.bookSpinner,
+      context = activity,
+      unselectedTextColor = activity.color(
+        ThemeUtil.getResourceId(
+          activity,
+          android.R.attr.textColorPrimary
+        )
+      ),
+      resolveName = BookPlayChapter::correctedName
     )
     binding.bookSpinner.adapter = spinnerAdapter
 
@@ -199,10 +199,10 @@ class BookPlayController(
     equalizerItem.isVisible = equalizer.exists
 
     binding.toolbar.findViewById<View>(R.id.action_bookmark)
-        .setOnLongClickListener {
-          presenter.addBookmark()
-          true
-        }
+      .setOnLongClickListener {
+        presenter.addBookmark()
+        true
+      }
 
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
@@ -222,14 +222,14 @@ class BookPlayController(
         }
         R.id.action_time_lapse -> {
           PlaybackSpeedDialogFragment().show(
-              fragmentManager,
-              PlaybackSpeedDialogFragment.TAG
+            fragmentManager,
+            PlaybackSpeedDialogFragment.TAG
           )
           true
         }
         R.id.action_bookmark -> {
           val bookmarkController = BookmarkController.newInstance(bookId)
-              .asTransaction()
+            .asTransaction()
           router.pushController(bookmarkController)
           true
         }
@@ -270,7 +270,7 @@ class BookPlayController(
 
   override fun openSleepTimeDialog() {
     SleepTimerDialogFragment(bookId)
-        .show(fragmentManager, "fmSleepTimer")
+      .show(fragmentManager, "fmSleepTimer")
   }
 
   override fun onDestroyBinding(binding: BookPlayBinding) {
@@ -280,7 +280,7 @@ class BookPlayController(
 
   override fun showBookmarkAdded() {
     Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-        .show()
+      .show()
   }
 
   private fun formatTime(ms: Int, duration: Int): String {

@@ -27,39 +27,55 @@ class BookSearchHandlerTest {
 
   lateinit var searchHandler: BookSearchHandler
 
-  @Mock lateinit var repo: BookRepository
-  @Mock lateinit var player: PlayerController
+  @Mock
+  lateinit var repo: BookRepository
+  @Mock
+  lateinit var player: PlayerController
 
   private lateinit var currentBookIdPref: Pref<Long>
 
-  private val anotherBookChapter1 = Chapter(File("/sdcard/AnotherBook/chapter1.mp3"), "anotherBookChapter1", 5000, 0, emptySparseArray())
-  private val anotherBookChapter2 = Chapter(File("/sdcard/AnotherBook/chapter2.mp3"), "anotherBookChapter2", 10000, 0, emptySparseArray())
+  private val anotherBookChapter1 = Chapter(
+    File("/sdcard/AnotherBook/chapter1.mp3"),
+    "anotherBookChapter1",
+    5000,
+    0,
+    emptySparseArray()
+  )
+  private val anotherBookChapter2 = Chapter(
+    File("/sdcard/AnotherBook/chapter2.mp3"),
+    "anotherBookChapter2",
+    10000,
+    0,
+    emptySparseArray()
+  )
   private val anotherBook = Book(
-      id = 2,
-      type = Book.Type.SINGLE_FOLDER,
-      author = "AnotherBookAuthor",
-      currentFile = anotherBookChapter1.file,
-      positionInChapter = 3000,
-      name = "AnotherBook",
-      chapters = listOf(anotherBookChapter1, anotherBookChapter2),
-      playbackSpeed = 1F,
-      root = "/sdcard/AnotherBook",
-      loudnessGain = 0
+    id = 2,
+    type = Book.Type.SINGLE_FOLDER,
+    author = "AnotherBookAuthor",
+    currentFile = anotherBookChapter1.file,
+    positionInChapter = 3000,
+    name = "AnotherBook",
+    chapters = listOf(anotherBookChapter1, anotherBookChapter2),
+    playbackSpeed = 1F,
+    root = "/sdcard/AnotherBook",
+    loudnessGain = 0
   )
 
-  private val bookToFindChapter1 = Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
-  private val bookToFindChapter2 = Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
+  private val bookToFindChapter1 =
+    Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
+  private val bookToFindChapter2 =
+    Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
   private val bookToFind = Book(
-      id = 1,
-      type = Book.Type.SINGLE_FOLDER,
-      author = "Book1Author",
-      currentFile = bookToFindChapter2.file,
-      positionInChapter = 3000,
-      name = "Book1",
-      chapters = listOf(bookToFindChapter1, bookToFindChapter2),
-      playbackSpeed = 1F,
-      root = "/sdcard/Book1",
-      loudnessGain = 0
+    id = 1,
+    type = Book.Type.SINGLE_FOLDER,
+    author = "Book1Author",
+    currentFile = bookToFindChapter2.file,
+    positionInChapter = 3000,
+    name = "Book1",
+    chapters = listOf(bookToFindChapter1, bookToFindChapter2),
+    playbackSpeed = 1F,
+    root = "/sdcard/Book1",
+    loudnessGain = 0
   )
 
   @Before
@@ -114,8 +130,8 @@ class BookSearchHandlerTest {
   @Test
   fun mediaFocusArtist() {
     val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author
+      mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
+      artist = bookToFind.author
     )
     searchHandler.handle(bookSearch)
 
@@ -131,9 +147,9 @@ class BookSearchHandlerTest {
     given { repo.activeBooks }.thenReturn(listOf(bookToFind))
 
     val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-        query = "Tim",
-        artist = "Tim"
+      mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
+      query = "Tim",
+      artist = "Tim"
     )
     searchHandler.handle(bookSearch)
 
@@ -145,9 +161,9 @@ class BookSearchHandlerTest {
   @Test
   fun mediaFocusAlbum() {
     val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author,
-        album = bookToFind.name
+      mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
+      artist = bookToFind.author,
+      album = bookToFind.name
     )
     searchHandler.handle(bookSearch)
 
@@ -159,10 +175,10 @@ class BookSearchHandlerTest {
   @Test
   fun mediaFocusPlaylist() {
     val bookSearch = BookSearch(
-        mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
-        artist = bookToFind.author,
-        playList = bookToFind.name,
-        album = bookToFind.name
+      mediaFocus = MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE,
+      artist = bookToFind.author,
+      playList = bookToFind.name,
+      album = bookToFind.name
     )
     searchHandler.handle(bookSearch)
 

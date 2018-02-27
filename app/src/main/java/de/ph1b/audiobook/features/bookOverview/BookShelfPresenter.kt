@@ -16,13 +16,13 @@ import javax.inject.Named
 class BookShelfPresenter
 @Inject
 constructor(
-    private val repo: BookRepository,
-    private val bookAdder: BookAdder,
-    private val playStateManager: PlayStateManager,
-    private val playerController: PlayerController,
-    private val coverFromDiscCollector: CoverFromDiscCollector,
-    @Named(PrefKeys.CURRENT_BOOK)
-    private val currentBookIdPref: Pref<Long>
+  private val repo: BookRepository,
+  private val bookAdder: BookAdder,
+  private val playStateManager: PlayStateManager,
+  private val playerController: PlayerController,
+  private val coverFromDiscCollector: CoverFromDiscCollector,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<Long>
 ) : Presenter<BookShelfView>() {
 
   override fun onAttach(view: BookShelfView) {
@@ -35,28 +35,33 @@ constructor(
     val bookStream = repo.booksStream()
     val currentBookIdStream = currentBookIdPref.stream
     val playingStream = playStateManager.playStateStream()
-        .map { it == PlayState.PLAYING }
-        .distinctUntilChanged()
+      .map { it == PlayState.PLAYING }
+      .distinctUntilChanged()
     val scannerActiveStream = bookAdder.scannerActive
     Observables
-        .combineLatest(bookStream, currentBookIdStream, playingStream, scannerActiveStream) { books, currentBookId, playing, scannerActive ->
-          when {
-            books.isEmpty() && !scannerActive -> BookShelfState.NoFolderSet
-            if (books.isEmpty()) scannerActive else false -> BookShelfState.Loading
-            else -> {
-              val currentBook = books.find { it.id == currentBookId }
-              BookShelfState.Content(books = books, currentBook = currentBook, playing = playing)
-            }
+      .combineLatest(
+        bookStream,
+        currentBookIdStream,
+        playingStream,
+        scannerActiveStream
+      ) { books, currentBookId, playing, scannerActive ->
+        when {
+          books.isEmpty() && !scannerActive -> BookShelfState.NoFolderSet
+          if (books.isEmpty()) scannerActive else false -> BookShelfState.Loading
+          else -> {
+            val currentBook = books.find { it.id == currentBookId }
+            BookShelfState.Content(books = books, currentBook = currentBook, playing = playing)
           }
         }
-        .subscribe { view.render(it) }
-        .disposeOnDetach()
+      }
+      .subscribe { view.render(it) }
+      .disposeOnDetach()
   }
 
   private fun setupCoverChanged() {
     coverFromDiscCollector.coverChanged()
-        .subscribe { view.bookCoverChanged(it) }
-        .disposeOnDetach()
+      .subscribe { view.bookCoverChanged(it) }
+      .disposeOnDetach()
   }
 
   fun playPause() = playerController.playPause()

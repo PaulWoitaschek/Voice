@@ -18,7 +18,7 @@ object Versions {
   val versionCode = versionCode(major, minor, patch, build)
 
   private fun versionCode(major: Int, minor: Int, patch: Int, build: Int) =
-      1_000_000 * major + 10_000 * minor + 100 * patch + build
+    1_000_000 * major + 10_000 * minor + 100 * patch + build
 
   private fun versionName(major: Int, minor: Int, patch: Int, build: Int, type: String): String {
     var versionName = "$major.$minor.$patch"
