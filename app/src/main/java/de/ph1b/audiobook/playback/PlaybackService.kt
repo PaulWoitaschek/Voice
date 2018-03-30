@@ -18,6 +18,7 @@ import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.playback.events.BluetoothDeviceConnectionReceiver
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
@@ -107,6 +108,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     HeadsetPlugReceiver.events(this@PlaybackService)
         .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
+        .subscribe { headsetPlugged() }
+        .disposeOnDestroy()
+
+    BluetoothDeviceConnectionReceiver.init()
+    BluetoothDeviceConnectionReceiver.events(this@PlaybackService)
+        .filter { it == BluetoothDeviceConnectionReceiver.BluetoothDeviceState.CONNECTED }
         .subscribe { headsetPlugged() }
         .disposeOnDestroy()
 
