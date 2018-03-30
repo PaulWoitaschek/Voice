@@ -120,7 +120,7 @@ class BookPlayController(
           cover.setImageDrawable(coverReplacement)
         }
       }
-    }
+    }.cancelOnDestroyView()
   }
 
   override fun finish() {
