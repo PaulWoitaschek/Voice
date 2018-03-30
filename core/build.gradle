@@ -1,16 +1,12 @@
-import de.ph1b.audiobook.versioning.Versions
-
 apply plugin: 'com.android.library'
 
 android {
 
-  compileSdkVersion Versions.compileSdk
+  compileSdkVersion buildConfig.compileSdk
 
   defaultConfig {
-    minSdkVersion Versions.minSdk
-    targetSdkVersion Versions.targetSdk
-    versionCode Versions.versionCode
-    versionName Versions.versionName
+    minSdkVersion buildConfig.minSdk
+    targetSdkVersion buildConfig.targetSdk
   }
 
   buildTypes {

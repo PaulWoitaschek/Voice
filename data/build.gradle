@@ -1,19 +1,14 @@
-import de.ph1b.audiobook.versioning.Dependencies
-import de.ph1b.audiobook.versioning.Versions
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
 
-  compileSdkVersion Versions.compileSdk
+  compileSdkVersion buildConfig.compileSdk
 
   defaultConfig {
-    minSdkVersion Versions.minSdk
-    targetSdkVersion Versions.targetSdk
-    versionCode Versions.versionCode
-    versionName Versions.versionName
+    minSdkVersion buildConfig.minSdk
+    targetSdkVersion buildConfig.targetSdk
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
@@ -28,20 +23,20 @@ android {
 
 dependencies {
   implementation project(":common")
-  implementation Dependencies.Support.appCompat
-  implementation Dependencies.timber
-  implementation Dependencies.Kotlin.coroutines
-  implementation Dependencies.rxJava
-  implementation Dependencies.moshi
+  implementation deps.Support.appCompat
+  implementation deps.timber
+  implementation deps.Kotlin.coroutines
+  implementation deps.rxJava
+  implementation deps.moshi
 
-  implementation Dependencies.Dagger.core
-  kapt Dependencies.Dagger.compiler
+  implementation deps.Dagger.core
+  kapt deps.Dagger.compiler
 
-  androidTestImplementation Dependencies.Support.testRunner
-  androidTestImplementation Dependencies.truth
+  androidTestImplementation deps.Support.testRunner
+  androidTestImplementation deps.truth
 
-  testImplementation Dependencies.truth
-  testImplementation Dependencies.junit
+  testImplementation deps.truth
+  testImplementation deps.junit
 }
 
 

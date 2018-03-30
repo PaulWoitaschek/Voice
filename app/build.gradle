@@ -1,6 +1,4 @@
 import de.ph1b.audiobook.signing.SigningDetailsProvider
-import de.ph1b.audiobook.versioning.Dependencies
-import de.ph1b.audiobook.versioning.Versions
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
@@ -11,15 +9,15 @@ apply from: "../artifacts.gradle"
 
 android {
 
-  compileSdkVersion Versions.compileSdk
-  buildToolsVersion Versions.buildTools
+  compileSdkVersion buildConfig.compileSdk
 
   defaultConfig {
     applicationId "de.ph1b.audiobook"
-    minSdkVersion Versions.minSdk
-    targetSdkVersion Versions.targetSdk
-    versionCode Versions.versionCode
-    versionName Versions.versionName
+    minSdkVersion buildConfig.minSdk
+    targetSdkVersion buildConfig.targetSdk
+
+    versionCode buildConfig.version.code
+    versionName buildConfig.version.name
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -97,60 +95,60 @@ dependencies {
 
   implementation "com.github.PaulWoitaschek:ChapterReader:0.1.3"
 
-  kapt Dependencies.dataBindingCompiler
+  kapt deps.dataBindingCompiler
 
-  implementation Dependencies.Support.appCompat
-  implementation Dependencies.Support.recyclerView
-  implementation Dependencies.Support.design
-  implementation Dependencies.Support.transitions
-  implementation Dependencies.Support.constraintLayout
+  implementation deps.Support.appCompat
+  implementation deps.Support.recyclerView
+  implementation deps.Support.design
+  implementation deps.Support.transitions
+  implementation deps.Support.constraintLayout
 
-  implementation Dependencies.picasso
+  implementation deps.picasso
 
-  implementation Dependencies.materialDialogs
-  implementation Dependencies.materialCab
+  implementation deps.materialDialogs
+  implementation deps.materialCab
 
-  implementation Dependencies.floatingActionButton
+  implementation deps.floatingActionButton
 
-  proprietaryImplementation(Dependencies.crashlytics) {
+  proprietaryImplementation(deps.crashlytics) {
     transitive = true
   }
 
-  implementation Dependencies.Dagger.core
-  implementation Dependencies.Dagger.android
-  kapt Dependencies.Dagger.compiler
-  kapt Dependencies.Dagger.androidProcessor
+  implementation deps.Dagger.core
+  implementation deps.Dagger.android
+  kapt deps.Dagger.compiler
+  kapt deps.Dagger.androidProcessor
 
-  testImplementation Dependencies.junit
-  testImplementation Dependencies.truth
-  testImplementation Dependencies.mockito
-  testImplementation Dependencies.mockitoKotlin
+  testImplementation deps.junit
+  testImplementation deps.truth
+  testImplementation deps.mockito
+  testImplementation deps.mockitoKotlin
 
-  androidTestImplementation Dependencies.Support.testRunner
-  androidTestImplementation Dependencies.truth
+  androidTestImplementation deps.Support.testRunner
+  androidTestImplementation deps.truth
 
-  implementation Dependencies.rxJava
-  implementation Dependencies.rxAndroid
-  implementation Dependencies.rxInterop
-  implementation Dependencies.rxPreferences
+  implementation deps.rxJava
+  implementation deps.rxAndroid
+  implementation deps.rxInterop
+  implementation deps.rxPreferences
 
-  implementation Dependencies.Kotlin.std
-  implementation Dependencies.Kotlin.coroutines
-  implementation Dependencies.Kotlin.coroutinesAndroid
+  implementation deps.Kotlin.std
+  implementation deps.Kotlin.coroutines
+  implementation deps.Kotlin.coroutinesAndroid
 
-  implementation Dependencies.timber
+  implementation deps.timber
 
-  implementation Dependencies.ExoPlayer.core
-  implementation Dependencies.ExoPlayer.flac
-  implementation Dependencies.ExoPlayer.opus
+  implementation deps.ExoPlayer.core
+  implementation deps.ExoPlayer.flac
+  implementation deps.ExoPlayer.opus
 
-  implementation Dependencies.Conductor.base
-  implementation Dependencies.Conductor.support
-  implementation Dependencies.Conductor.lifecycle
+  implementation deps.Conductor.base
+  implementation deps.Conductor.support
+  implementation deps.Conductor.lifecycle
 
-  implementation Dependencies.moshi
+  implementation deps.moshi
 
-  implementation Dependencies.tapTarget
+  implementation deps.tapTarget
 }
 
 // task that is an alias for f-droid

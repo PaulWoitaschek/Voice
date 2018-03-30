@@ -1,18 +1,13 @@
-import de.ph1b.audiobook.versioning.Dependencies
-import de.ph1b.audiobook.versioning.Versions
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
 
-  compileSdkVersion Versions.compileSdk
+  compileSdkVersion buildConfig.compileSdk
 
   defaultConfig {
-    minSdkVersion Versions.minSdk
-    targetSdkVersion Versions.targetSdk
-    versionCode Versions.versionCode
-    versionName Versions.versionName
+    minSdkVersion buildConfig.minSdk
+    targetSdkVersion buildConfig.targetSdk
   }
 
   buildTypes {
@@ -25,11 +20,11 @@ android {
 
 
 dependencies {
-  implementation Dependencies.Kotlin.std
-  implementation Dependencies.Support.appCompat
+  implementation deps.Kotlin.std
+  implementation deps.Support.appCompat
 
-  testImplementation Dependencies.truth
-  testImplementation Dependencies.junit
+  testImplementation deps.truth
+  testImplementation deps.junit
 }
 
 targetCompatibility = '1.7'

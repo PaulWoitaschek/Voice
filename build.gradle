@@ -1,6 +1,95 @@
-import de.ph1b.audiobook.versioning.Dependencies
-
 buildscript {
+
+  ext.buildConfig = [
+      version   : [
+          'major': 3,
+          'minor': 6,
+          'patch': 3,
+          'build': 0,
+      ],
+      compileSdk: 26,
+      minSdk    : 21,
+      targetSdk : 26
+  ]
+
+  def versionSuffix = ""
+  ext.buildConfig.version['name'] = "${buildConfig.version.major}.${buildConfig.version.minor}.${buildConfig.version.patch}$versionSuffix"
+  ext.buildConfig.version['code'] = buildConfig.version.major * 1_000_000 + buildConfig.version.minor * 10_000 + buildConfig.version.patch * 100 + buildConfig.version.build
+
+  ext.versions = [
+      support            : "27.1.0",
+      androidPlugin      : "3.0.1",
+      conductor          : "2.1.4",
+      dagger             : "2.14.1",
+      exoPlayer          : "2.7.0",
+      exoPlayerExtensions: "2.7.0-1",
+      coroutines         : "0.22.3",
+      kotlin             : "1.2.21"
+  ]
+
+  ext.deps = [
+      Support             : [
+          supportAnnotations: "com.android.support:support-annotations:${versions.support}",
+          appCompat         : "com.android.support:appcompat-v7:${versions.support}",
+          constraintLayout  : "com.android.support.constraint:constraint-layout:1.1.0-beta4",
+          design            : "com.android.support:design:${versions.support}",
+          recyclerView      : "com.android.support:recyclerview-v7:${versions.support}",
+          transitions       : "com.android.support:transition:${versions.support}",
+          v13               : "com.android.support:support-v13:${versions.support}",
+          palette           : "com.android.support:palette-v7:${versions.support}",
+          testRunner        : "com.android.support.test:runner:1.0.1"
+      ],
+
+      dataBindingCompiler : "com.android.databinding:compiler:${versions.androidPlugin}",
+      androidGradlePlugin : "com.android.tools.build:gradle:${versions.androidPlugin}",
+      floatingActionButton: "com.getbase:floatingactionbutton:1.10.1",
+      materialDialogs     : "com.afollestad.material-dialogs:core:0.9.6.0",
+      materialCab         : "com.afollestad:material-cab:0.1.12",
+      picasso             : "com.squareup.picasso:picasso:2.5.2",
+      tapTarget           : "com.getkeepsafe.taptargetview:taptargetview:1.11.0",
+      chapterReader       : "com.github.PaulWoitaschek:ChapterReader:0.1.4",
+
+      Conductor           : [
+          base     : "com.bluelinelabs:conductor:${versions.conductor}",
+          lifecycle: "com.bluelinelabs:conductor-rxlifecycle2:${versions.conductor}",
+          support  : "com.bluelinelabs:conductor-support:${versions.conductor}"
+      ],
+
+      crashlytics         : "com.crashlytics.sdk.android:crashlytics:2.9.0@aar",
+      fabricGradlePlugin  : "io.fabric.tools:gradle:1.25.1",
+
+      Dagger              : [
+          core            : "com.google.dagger:dagger:${versions.dagger}",
+          android         : "com.google.dagger:dagger-android-support:${versions.dagger}",
+          androidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
+          compiler        : "com.google.dagger:dagger-compiler:${versions.dagger}"
+      ],
+
+      ExoPlayer           : [
+          core: "com.google.android.exoplayer:exoplayer-core:${versions.exoPlayer}",
+          opus: "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:${versions.exoPlayerExtensions}",
+          flac: "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:${versions.exoPlayerExtensions}"
+      ],
+
+      moshi               : "com.squareup.moshi:moshi:1.5.0",
+      rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.0.2",
+      rxInterop           : "com.github.akarnokd:rxjava2-interop:0.12.3",
+      rxJava              : "io.reactivex.rxjava2:rxjava:2.1.10",
+      rxPreferences       : "com.f2prateek.rx.preferences:rx-preferences:1.0.2",
+      timber              : "com.jakewharton.timber:timber:4.6.1",
+
+      Kotlin              : [
+          std              : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+          coroutines       : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
+          coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
+          gradlePlugin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+      ],
+
+      junit               : "junit:junit:4.12",
+      mockito             : "org.mockito:mockito-core:2.15.0",
+      mockitoKotlin       : "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
+      truth               : "com.google.truth:truth:0.39"
+  ]
 
   repositories {
     jcenter()
@@ -9,9 +98,9 @@ buildscript {
   }
 
   dependencies {
-    classpath Dependencies.androidGradlePlugin
-    classpath Dependencies.Kotlin.gradlePlugin
-    classpath Dependencies.fabricGradlePlugin
+    classpath deps.androidGradlePlugin
+    classpath deps.Kotlin.gradlePlugin
+    classpath deps.fabricGradlePlugin
   }
 }
 
@@ -42,9 +131,9 @@ allprojects {
   }
   configurations.all {
     resolutionStrategy {
-      force Dependencies.Support.v13
-      force Dependencies.Support.supportAnnotations
-      force Dependencies.Kotlin.std
+      force deps.Support.v13
+      force deps.Support.supportAnnotations
+      force deps.Kotlin.std
       force 'com.google.code.findbugs:jsr305:3.0.1'
     }
   }
