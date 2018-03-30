@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.signing
 
 import java.io.File
-import java.util.*
+import java.util.Properties
 
 /**
  * Read the signing details from a properties file.
@@ -18,11 +18,7 @@ class SigningDetailsProvider {
     val props = Properties()
     if (propFile.canRead()) {
       props.load(propFile.inputStream())
-      if (props.containsKey(STORE_FILE) && props.containsKey(STORE_PASSWORD) && props.containsKey(
-          KEY_ALIAS
-        ) && props.containsKey(
-          KEY_PASSWORD
-        )) {
+      if (props.containsAllKeys(STORE_FILE, STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)) {
         val file = File(props[STORE_FILE].toString())
         val storePass = props[STORE_PASSWORD].toString()
         val keyAlias = props[KEY_ALIAS].toString()
@@ -33,5 +29,14 @@ class SigningDetailsProvider {
       println("signing.properties not found")
       return null
     }
+  }
+
+  private fun Properties.containsAllKeys(vararg keys: String): Boolean {
+    keys.forEach {
+      if (!containsKey(it)) {
+        return false
+      }
+    }
+    return false
   }
 }
