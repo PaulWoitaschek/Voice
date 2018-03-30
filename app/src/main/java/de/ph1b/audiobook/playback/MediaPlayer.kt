@@ -1,11 +1,8 @@
 package de.ph1b.audiobook.playback
 
-import android.content.Context
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
@@ -37,7 +34,6 @@ import javax.inject.Singleton
 class MediaPlayer
 @Inject
 constructor(
-  context: Context,
   private val playStateManager: PlayStateManager,
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   private val autoRewindAmountPref: Pref<Int>,
@@ -46,10 +42,13 @@ constructor(
   private val equalizer: Equalizer,
   private val loudnessGain: LoudnessGain,
   private val wakeLockManager: WakeLockManager,
-  private val dataSourceConverter: DataSourceConverter
+  private val dataSourceConverter: DataSourceConverter,
+  onlyAudioRenderersFactory: OnlyAudioRenderersFactory
 ) {
 
-  private val player: SimpleExoPlayer
+  private val player = ExoPlayerFactory.newSimpleInstance(
+    onlyAudioRenderersFactory, DefaultTrackSelector()
+  )
 
   private var bookSubject = BehaviorSubject.create<Book>()
 
@@ -67,9 +66,6 @@ constructor(
   val bookStream = bookSubject.hide()!!
 
   init {
-    val factory = DefaultRenderersFactory(context)
-    player = ExoPlayerFactory.newSimpleInstance(factory, DefaultTrackSelector())
-
     player.audioAttributes = AudioAttributes.Builder()
       .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
@@ -281,7 +277,7 @@ constructor(
           if (rewind) {
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
-              // get the raw rewinded position
+              // get the raw position with rewinding applied
               val currentPosition = player.currentPosition
                 .coerceAtLeast(0)
               var maybeSeekTo = (currentPosition - autoRewind)
