@@ -21,7 +21,7 @@ buildscript {
       androidPlugin      : "3.1.0",
       conductor          : "2.1.4",
       dagger             : "2.15",
-      exoPlayer          : "2.7.0",
+      exoPlayer          : "2.7.2",
       exoPlayerExtensions: "2.7.0-1",
       coroutines         : "0.22.5",
       kotlin             : "1.2.31"
