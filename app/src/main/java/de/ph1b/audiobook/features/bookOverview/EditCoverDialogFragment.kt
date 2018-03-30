@@ -23,6 +23,8 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
 import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -83,11 +85,13 @@ class EditCoverDialogFragment : DialogFragment() {
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-            val coverFile = book.coverFile()
-            imageHelper.saveCover(bitmap, coverFile)
-            picasso.invalidate(coverFile)
-            findCallback<Callback>(NI_TARGET).onBookCoverChanged(book)
-            dismiss()
+            launch(UI) {
+              val coverFile = book.coverFile()
+              imageHelper.saveCover(bitmap, coverFile)
+              picasso.invalidate(coverFile)
+              findCallback<Callback>(NI_TARGET).onBookCoverChanged(book)
+              dismiss()
+            }
           }
 
           override fun onBitmapFailed(errorDrawable: Drawable?) {

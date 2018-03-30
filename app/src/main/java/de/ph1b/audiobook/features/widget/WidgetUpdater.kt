@@ -16,6 +16,7 @@ import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PendingIntentCompat
@@ -27,7 +28,8 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.maxImageSize
+import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -48,17 +50,19 @@ class WidgetUpdater @Inject constructor(
   private val appWidgetManager = AppWidgetManager.getInstance(context)
 
   fun update() {
-    val book = repo.bookById(currentBookIdPref.value)
-    Timber.i("update with book ${book?.name}")
-    val componentName = ComponentName(context, BaseWidgetProvider::class.java)
-    val ids = appWidgetManager.getAppWidgetIds(componentName)
+    launch(IO) {
+      val book = repo.bookById(currentBookIdPref.value)
+      Timber.i("update with book ${book?.name}")
+      val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
+      val ids = appWidgetManager.getAppWidgetIds(componentName)
 
-    for (widgetId in ids) {
-      updateWidgetForId(book, widgetId)
+      for (widgetId in ids) {
+        updateWidgetForId(book, widgetId)
+      }
     }
   }
 
-  private fun updateWidgetForId(book: Book?, widgetId: Int) {
+  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -66,7 +70,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private fun initWidgetForPresentBook(widgetId: Int, book: Book) {
+  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -130,7 +134,7 @@ class WidgetUpdater @Inject constructor(
       return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
-  private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
+  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
@@ -176,7 +180,7 @@ class WidgetUpdater @Inject constructor(
     )
 
     val coverFile = book.coverFile()
-    var cover = if (coverFile.canRead() && coverFile.length() < maxImageSize) {
+    var cover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
       val sizeForPicasso = coverSize.takeIf { it > 0 }
           ?: context.dpToPxRounded(56F)
       Picasso.with(context)

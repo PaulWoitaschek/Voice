@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Environment
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
+import de.ph1b.audiobook.data.repo.internals.IO
+import kotlinx.coroutines.experimental.withContext
 import java.io.File
 
 
@@ -44,7 +46,7 @@ data class Book(
     null
   }
 
-  fun coverFile(context: Context): File {
+  suspend fun coverFile(context: Context): File = withContext(IO) {
     val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
       // if its part of a collection, take the first file
       chapters.first().file.absolutePath.replace("/", "")
@@ -62,7 +64,7 @@ data class Book(
       //noinspection ResultOfMethodCallIgnored
       coverFile.parentFile.mkdirs()
     }
-    return coverFile
+    coverFile
   }
 
   override fun compareTo(other: Book) =

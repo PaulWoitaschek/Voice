@@ -5,6 +5,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
@@ -12,12 +13,12 @@ import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ExtensionsHolder
-import de.ph1b.audiobook.uitools.maxImageSize
+import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.book_shelf_row.*
-import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -55,7 +56,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     author.text = book.author
     author.visible = book.author != null
     title.maxLines = if (book.author == null) 2 else 1
-    bindCover(book)
+    launch(UI) { bindCover(book) }
 
     cover.transitionName = book.coverTransitionName
 
@@ -66,41 +67,39 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     this.progress.progress = progress
   }
 
-  private var colorExtractionJob: Job? = null
-
-
   private var boundFile: File? = null
   private var boundName: String? = null
 
-  private fun bindCover(book: Book) {
-    val coverFile = book.coverFile()
-    val bookName = book.name
+  private suspend fun bindCover(book: Book) {
+    withContext(IO) {
+      val coverFile = book.coverFile()
+      val bookName = book.name
 
-    if (boundName == book.name && boundFile?.length() == coverFile.length()) {
-      return
-    }
-    boundFile = coverFile
-    boundName = bookName
+      if (boundName == book.name && boundFile?.length() == coverFile.length()) {
+        return@withContext
+      }
+      boundFile = coverFile
+      boundName = bookName
 
-    val coverReplacement = CoverReplacement(bookName, itemView.context)
+      val coverReplacement = CoverReplacement(bookName, itemView.context)
 
-    progress.color = defaultProgressColor
-    colorExtractionJob?.cancel()
-    colorExtractionJob = launch(UI) {
+      progress.color = defaultProgressColor
       val extractedColor = coverColorExtractor.extract(coverFile)
       progress.color = extractedColor ?: itemView.context.color(R.color.primaryDark)
-    }
-
-    if (coverFile.canRead() && coverFile.length() < maxImageSize) {
-      Picasso.with(itemView.context)
-        .load(coverFile)
-        .placeholder(coverReplacement)
-        .into(cover)
-    } else {
-      Picasso.with(itemView.context)
-        .cancelRequest(cover)
-      // we have to set the replacement in onPreDraw, else the transition will fail.
-      cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
+      val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
+      withContext(UI) {
+        if (shouldLoadImage) {
+          Picasso.with(itemView.context)
+            .load(coverFile)
+            .placeholder(coverReplacement)
+            .into(cover)
+        } else {
+          Picasso.with(itemView.context)
+            .cancelRequest(cover)
+          // we have to set the replacement in onPreDraw, else the transition will fail.
+          cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
+        }
+      }
     }
   }
 }

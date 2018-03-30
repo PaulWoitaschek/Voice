@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
+import de.ph1b.audiobook.data.repo.internals.IO
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -36,7 +38,7 @@ fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
 }
 
 // 500 kb
-val maxImageSize = 500 * 1024
+const val MAX_IMAGE_SIZE = 500 * 1024
 
 @Singleton
 class ImageHelper
@@ -57,7 +59,7 @@ constructor(private val windowManager: Provider<WindowManager>) {
    * @param bitmap The bitmap to be saved
    */
   @Synchronized
-  fun saveCover(bitmap: Bitmap, destination: File) {
+  suspend fun saveCover(bitmap: Bitmap, destination: File) = withContext(IO) {
     var bitmapToSave = bitmap
     // make bitmap square
     val width = bitmapToSave.width

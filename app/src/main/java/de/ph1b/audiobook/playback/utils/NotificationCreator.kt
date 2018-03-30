@@ -20,7 +20,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.maxImageSize
+import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import javax.inject.Inject
 
 /**
@@ -56,7 +56,7 @@ class NotificationCreator
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
 
-  fun createNotification(book: Book): Notification {
+  suspend fun createNotification(book: Book): Notification {
     mediaStyle.setMediaSession(mediaSession.sessionToken)
     notificationBuilder.mActions.clear()
     val playState = playStateManager.playState
@@ -72,7 +72,7 @@ class NotificationCreator
       .build()
   }
 
-  private fun cover(book: Book): Bitmap {
+  private suspend fun cover(book: Book): Bitmap {
     // first try to get use a cached image
     cachedImage?.let {
       if (it.matches(book)) return it.cover
@@ -83,7 +83,7 @@ class NotificationCreator
 
     // get the cover or fallback to a replacement
     val coverFile = book.coverFile()
-    val picassoCover = if (coverFile.canRead() && coverFile.length() < maxImageSize) {
+    val picassoCover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
       Picasso.with(context)
         .load(coverFile)
         .resize(width, height)
@@ -101,7 +101,7 @@ class NotificationCreator
     return cover
   }
 
-  private fun NotificationCompat.Builder.setLargeIcon(book: Book): NotificationCompat.Builder {
+  private suspend fun NotificationCompat.Builder.setLargeIcon(book: Book): NotificationCompat.Builder {
     setLargeIcon(cover(book))
     return this
   }

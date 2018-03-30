@@ -24,6 +24,8 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -78,11 +80,14 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         cache.recycle()
 
         // save screenshot
-        imageHelper.saveCover(screenShot, book.coverFile())
-        screenShot.recycle()
-        Picasso.with(activity).invalidate(book.coverFile())
-        cab?.finish()
-        router.popCurrentController()
+        launch(UI) {
+          val coverFile = book.coverFile()
+          imageHelper.saveCover(screenShot, coverFile)
+          screenShot.recycle()
+          Picasso.with(activity).invalidate(coverFile)
+          cab?.finish()
+          router.popCurrentController()
+        }
         return true
       }
       return false

@@ -10,6 +10,7 @@ import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
@@ -25,11 +26,14 @@ import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.book_play.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -102,16 +106,20 @@ class BookPlayController(
 
     cover.transitionName = book.coverTransitionName
 
-    // (Cover)
-    val coverReplacement = CoverReplacement(book.name, activity)
-    val coverFile = book.coverFile()
-    if (coverFile.canRead() && coverFile.length() < maxImageSize) {
-      Picasso.with(activity)
-        .load(coverFile)
-        .placeholder(coverReplacement)
-        .into(cover)
-    } else {
-      cover.setImageDrawable(coverReplacement)
+    launch(IO) {
+      val coverReplacement = CoverReplacement(book.name, activity)
+      val coverFile = book.coverFile()
+      val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
+      withContext(UI) {
+        if (shouldLoadCover) {
+          Picasso.with(activity)
+            .load(coverFile)
+            .placeholder(coverReplacement)
+            .into(cover)
+        } else {
+          cover.setImageDrawable(coverReplacement)
+        }
+      }
     }
   }
 

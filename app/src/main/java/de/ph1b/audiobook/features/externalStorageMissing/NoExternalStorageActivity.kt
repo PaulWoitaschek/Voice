@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import kotlinx.android.synthetic.main.activity_no_external.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 
 class NoExternalStorageActivity : AppCompatActivity() {
 
@@ -16,20 +19,24 @@ class NoExternalStorageActivity : AppCompatActivity() {
   }
 
   override fun onBackPressed() {
-    if (BaseActivity.storageMounted()) {
-      super.onBackPressed()
-    } else {
-      val i = Intent(Intent.ACTION_MAIN)
-      i.addCategory(Intent.CATEGORY_HOME)
-      i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-      startActivity(i)
+    runBlocking {
+      if (BaseActivity.storageMounted()) {
+        super.onBackPressed()
+      } else {
+        val i = Intent(Intent.ACTION_MAIN)
+        i.addCategory(Intent.CATEGORY_HOME)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(i)
+      }
     }
   }
 
   public override fun onResume() {
     super.onResume()
-    if (BaseActivity.storageMounted()) {
-      onBackPressed()
+    launch(UI) {
+      if (BaseActivity.storageMounted()) {
+        onBackPressed()
+      }
     }
   }
 }

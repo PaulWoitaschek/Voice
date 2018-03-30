@@ -32,11 +32,11 @@ class CoverFromDiscCollector
   private val coverChangedSubject = PublishSubject.create<Long>()
 
   /** Find and stores covers for each book */
-  fun findCovers(books: List<Book>) {
+  suspend fun findCovers(books: List<Book>) {
     books.forEach { findCoverForBook(it) }
   }
 
-  private fun findCoverForBook(book: Book) {
+  private suspend fun findCoverForBook(book: Book) {
     val coverFile = book.coverFile()
     if (coverFile.exists())
       return
@@ -48,7 +48,7 @@ class CoverFromDiscCollector
     findAndSaveCoverEmbedded(book)
   }
 
-  private fun findAndSaveCoverEmbedded(book: Book) {
+  private suspend fun findAndSaveCoverEmbedded(book: Book) {
     getEmbeddedCover(book.chapters)?.let {
       val coverFile = book.coverFile()
       imageHelper.saveCover(it, coverFile)
@@ -57,7 +57,7 @@ class CoverFromDiscCollector
     }
   }
 
-  private fun findAndSaveCoverFromDisc(book: Book): Boolean {
+  private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean {
     if (book.type === Book.Type.COLLECTION_FOLDER || book.type === Book.Type.SINGLE_FOLDER) {
       val root = File(book.root)
       if (root.exists()) {

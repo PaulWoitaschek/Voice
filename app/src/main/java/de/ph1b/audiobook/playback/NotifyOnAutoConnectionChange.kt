@@ -6,6 +6,7 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,8 +30,10 @@ class NotifyOnAutoConnectionChange @Inject constructor(
         .filter { it }
         .subscribe {
           // display the current book but don't play it
-          repo.bookById(currentBookIdPref.value)?.let {
-            changeNotifier.notify(ChangeNotifier.Type.METADATA, it, true)
+          launch {
+            repo.bookById(currentBookIdPref.value)?.let {
+              changeNotifier.notify(ChangeNotifier.Type.METADATA, it, true)
+            }
           }
         }
     }

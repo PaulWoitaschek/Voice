@@ -83,6 +83,6 @@ fun checkMainThread() {
   }
 }
 
-fun Book.coverFile(): File = coverFile(App.component.context)
+suspend fun Book.coverFile(): File = coverFile(App.component.context)
 
 fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)

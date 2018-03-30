@@ -14,7 +14,11 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.playback.*
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_PREVIOUS
+import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
@@ -89,7 +93,7 @@ class ChangeNotifier @Inject constructor(
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
-  fun notify(what: Type, book: Book, forAuto: Boolean = false) {
+  suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
     val currentChapter = book.currentChapter
     val playState = playStateManager.playState
 

@@ -3,12 +3,15 @@ package de.ph1b.audiobook.data.repo
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
+import de.ph1b.audiobook.data.repo.internals.IO
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +26,6 @@ class BookRepository
     storage.activeBooks().toMutableList().apply { sort() }
   }
   private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
-
   private val updated = PublishSubject.create<Book>()
 
   private val all: BehaviorSubject<List<Book>> by lazy {
@@ -36,18 +38,22 @@ class BookRepository
 
   fun booksStream(): Observable<List<Book>> = all
 
-  private fun sortBooksAndNotifySubject() {
+  private suspend fun sortBooksAndNotifySubject() {
     active.sort()
-    all.onNext(active.toList())
+    withContext(UI) {
+      all.onNext(active.toList())
+    }
   }
 
   @Synchronized
-  fun addBook(book: Book) {
-    Timber.v("addBook=${book.name}")
+  suspend fun addBook(book: Book) {
+    withContext(IO) {
+      Timber.v("addBook=${book.name}")
 
-    val bookWithId = storage.addBook(book)
-    active.add(bookWithId)
-    sortBooksAndNotifySubject()
+      val bookWithId = storage.addBook(book)
+      active.add(bookWithId)
+      sortBooksAndNotifySubject()
+    }
   }
 
   /** All active books. */
@@ -61,38 +67,46 @@ class BookRepository
   fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
   @Synchronized
-  fun updateBook(book: Book) {
-    require(book.id != -1L)
+  suspend fun updateBook(book: Book) {
+    withContext(IO) {
+      require(book.id != -1L)
 
-    val index = active.indexOfFirst { it.id == book.id }
-    if (index != -1) {
-      active[index] = book
-      storage.updateBook(book)
-      updated.onNext(book)
+      val index = active.indexOfFirst { it.id == book.id }
+      if (index != -1) {
+        active[index] = book
+        storage.updateBook(book)
+        withContext(UI) {
+          updated.onNext(book)
+          sortBooksAndNotifySubject()
+        }
+      } else Timber.e("update failed as there was no book")
+    }
+  }
+
+  @Synchronized
+  suspend fun hideBook(toDelete: List<Book>) {
+    withContext(IO) {
+      Timber.v("hideBooks=${toDelete.size}")
+      if (toDelete.isEmpty()) return@withContext
+
+      val idsToDelete = toDelete.map(Book::id)
+      active.removeAll { idsToDelete.contains(it.id) }
+      orphaned.addAll(toDelete)
+      toDelete.forEach { storage.hideBook(it.id) }
       sortBooksAndNotifySubject()
-    } else Timber.e("update failed as there was no book")
+    }
   }
 
   @Synchronized
-  fun hideBook(toDelete: List<Book>) {
-    Timber.v("hideBooks=${toDelete.size}")
-    if (toDelete.isEmpty()) return
+  suspend fun revealBook(book: Book) {
+    withContext(IO) {
+      Timber.v("Called revealBook=$book")
 
-    val idsToDelete = toDelete.map(Book::id)
-    active.removeAll { idsToDelete.contains(it.id) }
-    orphaned.addAll(toDelete)
-    toDelete.forEach { storage.hideBook(it.id) }
-    sortBooksAndNotifySubject()
-  }
-
-  @Synchronized
-  fun revealBook(book: Book) {
-    Timber.v("Called revealBook=$book")
-
-    orphaned.removeAll { it.id == book.id }
-    active.add(book)
-    storage.revealBook(book.id)
-    sortBooksAndNotifySubject()
+      orphaned.removeAll { it.id == book.id }
+      active.add(book)
+      storage.revealBook(book.id)
+      sortBooksAndNotifySubject()
+    }
   }
 
   @Synchronized

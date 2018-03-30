@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.util.SparseArrayCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
@@ -21,10 +20,12 @@ import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
-import java.util.*
-import java.util.concurrent.CountDownLatch
+import java.util.ArrayList
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -51,7 +52,6 @@ class BookAdder
   private val executor = Executors.newSingleThreadExecutor()
   private val _scannerActive = BehaviorSubject.createDefault(false)
   val scannerActive = _scannerActive.hide()!!
-  private val handler = Handler(context.mainLooper)
   @Volatile
   private var stopScanner = false
   @Volatile
@@ -67,7 +67,7 @@ class BookAdder
 
   // check for new books
   @Throws(InterruptedException::class)
-  private fun checkForBooks() {
+  private suspend fun checkForBooks() {
     val singleBooks = singleBookFiles
     for (f in singleBooks) {
       if (f.isFile && f.canRead()) {
@@ -95,22 +95,30 @@ class BookAdder
 
     stopScanner = true
     executor.execute {
-      isScanning = true
-      handler.postBlocking { _scannerActive.onNext(true) }
-      stopScanner = false
-
-      try {
-        deleteOldBooks()
-        profile("checkForBooks") {
-          checkForBooks()
+      runBlocking {
+        isScanning = true
+        withContext(UI) {
+          _scannerActive.onNext(true)
         }
-        coverCollector.findCovers(repo.activeBooks)
-      } catch (ignored: InterruptedException) {
-      }
+        stopScanner = false
 
-      stopScanner = false
-      handler.postBlocking { _scannerActive.onNext(false) }
-      isScanning = false
+        try {
+          deleteOldBooks()
+          profile("checkForBooks") {
+            checkForBooks()
+          }
+          runBlocking {
+            coverCollector.findCovers(repo.activeBooks)
+          }
+        } catch (ignored: InterruptedException) {
+        }
+
+        stopScanner = false
+        withContext(UI) {
+          _scannerActive.onNext(false)
+        }
+        isScanning = false
+      }
     }
   }
 
@@ -136,7 +144,7 @@ class BookAdder
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
   @Throws(InterruptedException::class)
-  private fun deleteOldBooks() {
+  private suspend fun deleteOldBooks() {
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
 
@@ -192,15 +200,16 @@ class BookAdder
     if (ContextCompat.checkSelfPermission(
         context,
         Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED) {
+      ) != PackageManager.PERMISSION_GRANTED
+    ) {
       throw InterruptedException("Does not have external storage permission")
     }
 
-    handler.postBlocking { repo.hideBook(booksToRemove) }
+    repo.hideBook(booksToRemove)
   }
 
   // adds a new book
-  private fun addNewBook(rootFile: File, newChapters: List<Chapter>, type: Book.Type) {
+  private suspend fun addNewBook(rootFile: File, newChapters: List<Chapter>, type: Book.Type) {
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
@@ -230,7 +239,7 @@ class BookAdder
         chapters = newChapters,
         root = bookRoot
       )
-      handler.postBlocking { repo.addBook(newBook) }
+      repo.addBook(newBook)
     } else {
       // checks if current path is still valid.
       val oldCurrentFile = orphanedBook.currentFile
@@ -248,13 +257,13 @@ class BookAdder
       )
 
       // now finally un-hide this book
-      handler.postBlocking { repo.revealBook(orphanedBook) }
+      repo.revealBook(orphanedBook)
     }
   }
 
   /** Updates a book. Adds the new chapters to the book and corrects the
    * [Book.currentFile] and [Book.positionInChapter]. **/
-  private fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
+  private suspend fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
     var bookToUpdate = bookExisting
     val bookHasChanged = bookToUpdate.chapters != newChapters
     // sort chapters
@@ -279,15 +288,14 @@ class BookAdder
         currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
         positionInChapter = if (currentPathIsGone) 0 else bookToUpdate.positionInChapter
       )
-
-      handler.postBlocking { repo.updateBook(bookToUpdate) }
+      repo.updateBook(bookToUpdate)
     }
   }
 
   /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
    * exist any longer **/
   @Throws(InterruptedException::class)
-  private fun checkBook(rootFile: File, type: Book.Type) {
+  private suspend fun checkBook(rootFile: File, type: Book.Type) {
     val newChapters = getChaptersByRootFile(rootFile)
     val bookExisting = getBookFromDb(rootFile, type, false)
 
@@ -299,7 +307,7 @@ class BookAdder
       // there are no chapters
       if (bookExisting != null) {
         //so delete book if available
-        handler.postBlocking { repo.hideBook(listOf(bookExisting)) }
+        repo.hideBook(listOf(bookExisting))
       }
     } else {
       // there are chapters
@@ -389,14 +397,5 @@ class BookAdder
       }
     }
     return null
-  }
-
-  private inline fun Handler.postBlocking(crossinline func: () -> Any) {
-    val cdl = CountDownLatch(1)
-    post {
-      func()
-      cdl.countDown()
-    }
-    cdl.await()
   }
 }

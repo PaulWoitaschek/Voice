@@ -9,6 +9,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 /**
@@ -32,7 +33,9 @@ class EditBookTitleDialogFragment : DialogFragment() {
         val newText = charSequence.toString()
         if (newText != presetName) {
           repo.bookById(bookId)?.copy(name = newText)?.let {
-            repo.updateBook(it)
+            launch {
+              repo.updateBook(it)
+            }
           }
         }
       }
@@ -43,8 +46,8 @@ class EditBookTitleDialogFragment : DialogFragment() {
   companion object {
 
     val TAG: String = EditBookTitleDialogFragment::class.java.simpleName
-    private val NI_PRESET_NAME = "niPresetName"
-    private val NI_BOOK_ID = "niBookId"
+    private const val NI_PRESET_NAME = "niPresetName"
+    private const val NI_BOOK_ID = "niBookId"
 
     fun newInstance(book: Book): EditBookTitleDialogFragment {
       val args = Bundle()

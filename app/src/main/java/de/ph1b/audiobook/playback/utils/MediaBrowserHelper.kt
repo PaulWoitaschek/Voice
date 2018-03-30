@@ -11,9 +11,12 @@ import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.persistence.pref.Pref
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -43,12 +46,14 @@ class MediaBrowserHelper
   ) {
     Timber.d("onLoadChildren $parentId, $result")
     val uri = Uri.parse(parentId)
-    val items = mediaItems(uri)
-    Timber.d("sending result $items")
-    result.sendResult(items)
+    launch {
+      val items = mediaItems(uri)
+      Timber.d("sending result $items")
+      result.sendResult(items)
+    }
   }
 
-  private fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
+  private suspend fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
     val type = bookUriConverter.type(uri)
 
     if (type == BookUriConverter.ROOT) {
@@ -72,7 +77,7 @@ class MediaBrowserHelper
     }
   }
 
-  private fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
+  private suspend fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
     val iconUri = fileProviderUri(coverFile())
     val mediaId = bookUriConverter.book(id).toString()
     val description = MediaDescriptionCompat.Builder()
@@ -83,21 +88,23 @@ class MediaBrowserHelper
     return MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
   }
 
-  private fun fileProviderUri(coverFile: File): Uri? {
-    return if (coverFile.exists()) {
-      FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
-        .apply {
-          context.grantUriPermission(
-            "com.google.android.wearable.app",
-            this,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-          )
-          context.grantUriPermission(
-            "com.google.android.projection.gearhead",
-            this,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-          )
-        }
-    } else null
+  private suspend fun fileProviderUri(coverFile: File): Uri? {
+    return withContext(IO) {
+      if (coverFile.exists()) {
+        FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
+          .apply {
+            context.grantUriPermission(
+              "com.google.android.wearable.app",
+              this,
+              Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            context.grantUriPermission(
+              "com.google.android.projection.gearhead",
+              this,
+              Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+          }
+      } else null
+    }
   }
 }

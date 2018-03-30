@@ -6,8 +6,12 @@ import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import dagger.android.AndroidInjection
+import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
 import de.ph1b.audiobook.playback.PlaybackService
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 
 /**
  * Base class for all Activities which checks in onResume, if the storage
@@ -26,25 +30,29 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun onResume() {
     super.onResume()
-    if (!storageMounted()) {
-      val serviceIntent = Intent(this, PlaybackService::class.java)
-      stopService(serviceIntent)
+    launch(UI) {
 
-      startActivity(
-        Intent(this, NoExternalStorageActivity::class.java).apply {
-          flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-      )
-      return
+      if (!storageMounted()) {
+        val serviceIntent = Intent(this@BaseActivity, PlaybackService::class.java)
+        stopService(serviceIntent)
+
+        startActivity(
+          Intent(this@BaseActivity, NoExternalStorageActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+          }
+        )
+        return@launch
+      }
+
+      val nightModesDistinct = AppCompatDelegate.getDefaultNightMode() != nightModeAtCreation
+      if (nightModesDistinct) recreate()
     }
-
-    val nightModesDistinct = AppCompatDelegate.getDefaultNightMode() != nightModeAtCreation
-    if (nightModesDistinct) recreate()
   }
 
+
   companion object {
-    fun storageMounted(): Boolean {
-      return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+    suspend fun storageMounted(): Boolean = withContext(IO) {
+      Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
     }
   }
 }

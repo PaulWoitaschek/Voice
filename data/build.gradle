@@ -26,6 +26,7 @@ dependencies {
   implementation deps.Support.appCompat
   implementation deps.timber
   implementation deps.Kotlin.coroutines
+  implementation deps.Kotlin.coroutinesAndroid
   implementation deps.rxJava
   implementation deps.moshi
 

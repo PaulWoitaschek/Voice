@@ -27,6 +27,8 @@ import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -92,8 +94,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     // update book when changed by player
     player.bookStream.distinctUntilChanged()
+      .observeOn(Schedulers.io())
       .subscribe {
-        repo.updateBook(it)
+        runBlocking {
+          repo.updateBook(it)
+        }
       }
 
     notifyOnAutoConnectionChange.listen()
@@ -107,7 +112,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
     bookUpdated
       .subscribe {
         player.init(it)
-        changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+        launch {
+          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+        }
       }
       .disposeOnDestroy()
 
@@ -115,13 +122,20 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .distinctUntilChanged { book -> book.currentChapter }
       .subscribe {
         if (isForeground) {
-          updateNotification(it)
+          runBlocking {
+            updateNotification(it)
+          }
         }
       }
+      .disposeOnDestroy()
 
     playStateManager.playStateStream()
       .observeOn(Schedulers.io())
-      .subscribe { handlePlaybackState(it) }
+      .subscribe {
+        runBlocking {
+          handlePlaybackState(it)
+        }
+      }
       .disposeOnDestroy()
 
     HeadsetPlugReceiver.events(this@PlaybackService)
@@ -137,17 +151,18 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       .disposeOnDestroy()
 
-    RxBroadcast.register(
-      this@PlaybackService,
-      IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-    )
+    RxBroadcast
+      .register(
+        this@PlaybackService,
+        IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+      )
       .subscribe { audioBecomingNoisy() }
       .disposeOnDestroy()
 
     tearDownAutomatically()
   }
 
-  private fun updateNotification(book: Book) {
+  private suspend fun updateNotification(book: Book) {
     val notification = notificationCreator.createNotification(book)
     notificationManager.notify(NOTIFICATION_ID, notification)
   }
@@ -188,7 +203,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-  private fun handlePlaybackState(state: PlayState) {
+  private suspend fun handlePlaybackState(state: PlayState) {
     Timber.d("handlePlaybackState $state")
     when (state) {
       PlayState.PLAYING -> handlePlaybackStatePlaying()
@@ -208,7 +223,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     isForeground = false
   }
 
-  private fun handlePlaybackStatePaused() {
+  private suspend fun handlePlaybackStatePaused() {
     stopForeground(false)
     isForeground = false
     val book = player.book()
@@ -216,7 +231,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     updateNotification(book)
   }
 
-  private fun handlePlaybackStatePlaying() {
+  private suspend fun handlePlaybackStatePlaying() {
     audioFocusHelper.request()
     Timber.d("set mediaSession to active")
     mediaSession.isActive = true
