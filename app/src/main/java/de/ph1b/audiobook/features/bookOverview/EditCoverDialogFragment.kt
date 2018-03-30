@@ -41,7 +41,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
     val picasso = Picasso.with(context)
 
-    val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
+    val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)!!
 
     // init values
     val bookId = arguments!!.getLong(NI_BOOK_ID)

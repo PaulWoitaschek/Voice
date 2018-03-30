@@ -37,7 +37,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     AndroidSupportInjection.inject(this)
 
     // init views
-    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)!!
 
     // setting current speed
     val book = repo.bookById(currentBookIdPref.value)

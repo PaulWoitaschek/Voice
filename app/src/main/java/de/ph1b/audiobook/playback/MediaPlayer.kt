@@ -3,7 +3,13 @@ package de.ph1b.audiobook.playback
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Renderer
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
@@ -18,13 +24,19 @@ import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.utils.*
+import de.ph1b.audiobook.playback.utils.DataSourceConverter
+import de.ph1b.audiobook.playback.utils.WakeLockManager
+import de.ph1b.audiobook.playback.utils.onAudioSessionId
+import de.ph1b.audiobook.playback.utils.onError
+import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
+import de.ph1b.audiobook.playback.utils.onStateChanged
+import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -52,7 +64,7 @@ constructor(
 
   private val stateSubject = BehaviorSubject.createDefault(PlayerState.IDLE)
   private var state: PlayerState
-    get() = stateSubject.value
+    get() = stateSubject.value!!
     set(value) {
       if (stateSubject.value != value) stateSubject.onNext(value)
     }

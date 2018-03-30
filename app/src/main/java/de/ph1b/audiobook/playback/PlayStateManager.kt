@@ -35,7 +35,7 @@ constructor() {
       Timber.i("playState set to $value")
       playStateSubject.onNext(value)
     }
-    get() = playStateSubject.value
+    get() = playStateSubject.value!!
 
   /** Represents the play states for the playback.  */
   enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {

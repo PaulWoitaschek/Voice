@@ -24,7 +24,7 @@ class FolderChooserAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
     val inflater = parent.layoutInflater()
-    val binding = ActivityFolderChooserAdapterRowLayoutBinding.inflate(inflater)
+    val binding = ActivityFolderChooserAdapterRowLayoutBinding.inflate(inflater)!!
     return Holder(binding, mode, listener)
   }
 

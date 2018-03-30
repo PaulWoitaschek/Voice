@@ -24,7 +24,7 @@ class SeekDialogFragment : DialogFragment() {
     AndroidSupportInjection.inject(this)
 
     // find views
-    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)!!
 
     // init
     val oldSeekTime = seekTimePref.value

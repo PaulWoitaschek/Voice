@@ -64,8 +64,8 @@ class SleepTimer
             TimeUnit.MILLISECONDS,
             AndroidSchedulers.mainThread()
           )
-            .filter { leftSleepTimeSubject.value > 0 } // only notify if there is still time left
-            .map { leftSleepTimeSubject.value - sleepUpdateInterval } // calculate the new time
+            .filter { leftSleepTimeSubject.value!! > 0 } // only notify if there is still time left
+            .map { leftSleepTimeSubject.value!! - sleepUpdateInterval } // calculate the new time
             .map { it.coerceAtLeast(0) } // but keep at least 0
             .subscribe { leftSleepTimeSubject.onNext(it.toInt()) }
         } else {
@@ -121,5 +121,5 @@ class SleepTimer
 
   val leftSleepTimeInMs: Observable<Int> = leftSleepTimeSubject
 
-  fun sleepTimerActive(): Boolean = leftSleepTimeSubject.value > 0
+  fun sleepTimerActive(): Boolean = leftSleepTimeSubject.value!! > 0
 }

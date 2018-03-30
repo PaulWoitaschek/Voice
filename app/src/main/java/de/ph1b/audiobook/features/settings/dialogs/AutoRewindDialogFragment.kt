@@ -23,7 +23,7 @@ class AutoRewindDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)!!
 
     val oldRewindAmount = autoRewindAmountPref.value
     binding.seekBar.max = (MAX - MIN) * FACTOR

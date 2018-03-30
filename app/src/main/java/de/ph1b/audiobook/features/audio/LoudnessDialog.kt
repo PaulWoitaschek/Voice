@@ -33,7 +33,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
-    val binding = LoudnessBinding.inflate(LayoutInflater.from(activity))
+    val binding = LoudnessBinding.inflate(LayoutInflater.from(activity))!!
 
     val bookId = args.getLong(NI_BOOK_ID)
     val book = repo.bookById(bookId)

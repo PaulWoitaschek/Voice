@@ -27,7 +27,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
-    val binding = DialogTimePickerBinding.inflate(activity!!.layoutInflater)
+    val binding = DialogTimePickerBinding.inflate(activity!!.layoutInflater)!!
 
     // init
     val book = repo.bookById(currentBookIdPref.value)!!

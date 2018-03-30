@@ -13,8 +13,15 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.bottomCompoundDrawable
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
+import de.ph1b.audiobook.misc.endCompoundDrawable
+import de.ph1b.audiobook.misc.findCallback
+import de.ph1b.audiobook.misc.startCompoundDrawable
+import de.ph1b.audiobook.misc.tinted
+import de.ph1b.audiobook.misc.topCompoundDrawable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,7 +48,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    val binding = BookMoreBottomSheetBinding.inflate(activity!!.layoutInflater)
+    val binding = BookMoreBottomSheetBinding.inflate(activity!!.layoutInflater)!!
     dialog.setContentView(binding.root)
 
     binding.title.setOnClickListener {

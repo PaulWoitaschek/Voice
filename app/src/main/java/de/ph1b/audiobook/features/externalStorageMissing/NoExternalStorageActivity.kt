@@ -15,7 +15,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
     val binding =
       DataBindingUtil.setContentView<ActivityNoExternalBinding>(this, R.layout.activity_no_external)
 
-    val toolbar = binding.toolbarInclude!!.toolbar
+    val toolbar = binding.toolbarInclude.toolbar
     toolbar.setTitle(R.string.no_external_storage_action_bar_title)
   }
 
