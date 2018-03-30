@@ -3,8 +3,6 @@ package de.ph1b.audiobook.features.folderChooser
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import de.ph1b.audiobook.databinding.ActivityFolderChooserAdapterRowLayoutBinding
-import de.ph1b.audiobook.misc.layoutInflater
 import java.io.File
 
 /**
@@ -22,11 +20,8 @@ class FolderChooserAdapter(
 
   override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(data[position])
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-    val inflater = parent.layoutInflater()
-    val binding = ActivityFolderChooserAdapterRowLayoutBinding.inflate(inflater)!!
-    return Holder(binding, mode, listener)
-  }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder =
+    Holder(parent, mode, listener)
 
   override fun getItemCount() = data.size
 

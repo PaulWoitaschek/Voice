@@ -1,236 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <android.support.constraint.Guideline
+        android:id="@+id/fabX"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="44dp" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/fabX"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="44dp"/>
+    <android.support.constraint.Guideline
+        android:id="@+id/fabY"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/fabY"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="28dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:textColor="#fff"
+        android:textSize="28sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fabY"
+        tools:text="64 Minuten" />
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:gravity="center"
-            android:maxLines="1"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:textColor="#fff"
-            android:textSize="28sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fabY"
-            tools:text="64 Minuten"/>
+    <View
+        android:id="@+id/lowerBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
-        <View
-            android:id="@+id/lowerBackground"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?android:attr/windowBackground"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time"/>
+    <TextView
+        android:id="@+id/one"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/two"
+        app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/one"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/two"
-            app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/two"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="2"
+        app:layout_constraintLeft_toRightOf="@+id/one"
+        app:layout_constraintRight_toLeftOf="@+id/three"
+        app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/two"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="2"
-            app:layout_constraintLeft_toRightOf="@+id/one"
-            app:layout_constraintRight_toLeftOf="@+id/three"
-            app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/three"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="3"
+        app:layout_constraintLeft_toRightOf="@+id/two"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/three"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="3"
-            app:layout_constraintLeft_toRightOf="@+id/two"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shakeToResetSwitch"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/four"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/five"
+        app:layout_constraintTop_toBottomOf="@+id/one"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/four"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="4"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/five"
-            app:layout_constraintTop_toBottomOf="@+id/one"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/five"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="5"
+        app:layout_constraintLeft_toRightOf="@+id/four"
+        app:layout_constraintRight_toLeftOf="@+id/six"
+        app:layout_constraintTop_toBottomOf="@+id/two"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/five"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="5"
-            app:layout_constraintLeft_toRightOf="@+id/four"
-            app:layout_constraintRight_toLeftOf="@+id/six"
-            app:layout_constraintTop_toBottomOf="@+id/two"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/six"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="6"
+        app:layout_constraintLeft_toRightOf="@+id/five"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/three"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/six"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="6"
-            app:layout_constraintLeft_toRightOf="@+id/five"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/three"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/seven"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/eight"
+        app:layout_constraintTop_toBottomOf="@+id/four"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/seven"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="7"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/eight"
-            app:layout_constraintTop_toBottomOf="@+id/four"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/eight"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="8"
+        app:layout_constraintLeft_toRightOf="@+id/seven"
+        app:layout_constraintRight_toLeftOf="@+id/nine"
+        app:layout_constraintTop_toBottomOf="@+id/five"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/eight"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="8"
-            app:layout_constraintLeft_toRightOf="@+id/seven"
-            app:layout_constraintRight_toLeftOf="@+id/nine"
-            app:layout_constraintTop_toBottomOf="@+id/five"
-            tools:ignore="HardcodedText"/>
+    <TextView
+        android:id="@+id/nine"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="9"
+        app:layout_constraintLeft_toRightOf="@+id/eight"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/six"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/nine"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="9"
-            app:layout_constraintLeft_toRightOf="@+id/eight"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/six"
-            tools:ignore="HardcodedText"/>
+    <android.support.v4.widget.Space
+        android:id="@+id/zeroSpace"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/zero"
+        app:layout_constraintTop_toBottomOf="@+id/nine" />
 
-        <android.support.v4.widget.Space
-            android:id="@+id/zeroSpace"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/zero"
-            app:layout_constraintTop_toBottomOf="@+id/nine"/>
+    <TextView
+        android:id="@+id/zero"
+        style="@style/sleep_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/zeroSpace"
+        app:layout_constraintRight_toLeftOf="@+id/delete"
+        app:layout_constraintTop_toBottomOf="@+id/eight"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/zero"
-            style="@style/sleep_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/zeroSpace"
-            app:layout_constraintRight_toLeftOf="@+id/delete"
-            app:layout_constraintTop_toBottomOf="@+id/eight"
-            tools:ignore="HardcodedText"/>
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/delete_last_number"
+        android:scaleType="center"
+        android:src="@drawable/backspace"
+        android:text="1"
+        android:tint="@color/icon_color"
+        app:layout_constraintBottom_toBottomOf="@+id/zero"
+        app:layout_constraintLeft_toRightOf="@+id/zero"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/zero"
+        tools:ignore="HardcodedText" />
 
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/delete_last_number"
-            android:scaleType="center"
-            android:src="@drawable/backspace"
-            android:text="1"
-            android:tint="@color/icon_color"
-            app:layout_constraintBottom_toBottomOf="@+id/zero"
-            app:layout_constraintLeft_toRightOf="@+id/zero"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/zero"
-            tools:ignore="HardcodedText"/>
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/bookmarkSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:minHeight="36dp"
+        android:text="@string/bookmark"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/bookmarkSwitch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:minHeight="36dp"
-            android:text="@string/bookmark"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time"/>
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/shakeToResetSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:minHeight="36dp"
+        android:text="@string/shake_to_reset"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookmarkSwitch" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/shakeToResetSwitch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:minHeight="36dp"
-            android:text="@string/shake_to_reset"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookmarkSwitch"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/check"
+        app:layout_constraintBottom_toBottomOf="@id/fabY"
+        app:layout_constraintLeft_toLeftOf="@id/fabX"
+        app:layout_constraintRight_toRightOf="@id/fabX"
+        app:layout_constraintTop_toTopOf="@id/fabY" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:src="@drawable/check"
-            app:layout_constraintBottom_toBottomOf="@id/fabY"
-            app:layout_constraintLeft_toLeftOf="@id/fabX"
-            app:layout_constraintRight_toRightOf="@id/fabX"
-            app:layout_constraintTop_toTopOf="@id/fabY"/>
-
-    </android.support.constraint.ConstraintLayout>
-
-</layout>
+</android.support.constraint.ConstraintLayout>

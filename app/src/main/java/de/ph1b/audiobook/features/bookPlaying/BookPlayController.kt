@@ -10,18 +10,26 @@ import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.clicks
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
+import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.*
+import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.maxImageSize
+import de.ph1b.audiobook.uitools.visible
+import kotlinx.android.synthetic.main.book_play.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -33,7 +41,7 @@ private const val NI_BOOK_ID = "niBookId"
  */
 class BookPlayController(
   bundle: Bundle
-) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter, BookPlayBinding>(bundle),
+) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter>(bundle),
   BookPlayMvp.View {
 
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
@@ -71,28 +79,28 @@ class BookPlayController(
     this.currentChapter = currentChapter
 
     val chapterIndex = data.indexOf(currentChapter)
-    binding.bookSpinner.setSelection(chapterIndex, true)
+    bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
-    binding.seekBar.max = duration
-    binding.maxTime.text = formatTime(duration, duration)
+    seekBar.max = duration
+    maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
     val progress = book.positionInChapter - currentChapter.start
-    if (!binding.seekBar.isPressed) {
-      binding.seekBar.progress = progress
-      binding.playedTime.text = formatTime(progress, duration)
+    if (!seekBar.isPressed) {
+      seekBar.progress = progress
+      playedTime.text = formatTime(progress, duration)
     }
 
     // name
-    binding.toolbar.title = book.name
+    toolbar.title = book.name
 
     // Next/Prev/spinner/book progress views hiding
     val multipleChapters = data.size > 1
-    binding.next.visible = multipleChapters
-    binding.previous.visible = multipleChapters
-    binding.bookSpinner.visible = multipleChapters
+    next.visible = multipleChapters
+    previous.visible = multipleChapters
+    bookSpinner.visible = multipleChapters
 
-    binding.cover.transitionName = book.coverTransitionName
+    cover.transitionName = book.coverTransitionName
 
     // (Cover)
     val coverReplacement = CoverReplacement(book.name, activity)
@@ -101,9 +109,9 @@ class BookPlayController(
       Picasso.with(activity)
         .load(coverFile)
         .placeholder(coverReplacement)
-        .into(binding.cover)
+        .into(cover)
     } else {
-      binding.cover.setImageDrawable(coverReplacement)
+      cover.setImageDrawable(coverReplacement)
     }
   }
 
@@ -113,7 +121,7 @@ class BookPlayController(
     }
   }
 
-  override fun onBindingCreated(binding: BookPlayBinding) {
+  override fun onViewCreated() {
     setupClicks()
     setupFab()
     setupSeekBar()
@@ -122,16 +130,16 @@ class BookPlayController(
   }
 
   private fun setupClicks() {
-    binding.play.setOnClickListener { presenter.playPause() }
-    binding.rewind.setOnClickListener { presenter.rewind() }
-    binding.fastForward.setOnClickListener { presenter.fastForward() }
-    binding.next.setOnClickListener { presenter.next() }
-    binding.previous.setOnClickListener { presenter.previous() }
-    binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
+    play.setOnClickListener { presenter.playPause() }
+    rewind.setOnClickListener { presenter.rewind() }
+    fastForward.setOnClickListener { presenter.fastForward() }
+    next.setOnClickListener { presenter.next() }
+    previous.setOnClickListener { presenter.previous() }
+    playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
     var lastClick = 0L
     val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
-    binding.cover.clicks()
+    cover.clicks()
       .filter {
         val currentTime = System.currentTimeMillis()
         val doubleClick = currentTime - lastClick < doubleClickTime
@@ -143,15 +151,15 @@ class BookPlayController(
   }
 
   private fun setupFab() {
-    binding.play.setIconDrawable(playPauseDrawable)
+    play.setIconDrawable(playPauseDrawable)
   }
 
   private fun setupSeekBar() {
-    binding.seekBar.setOnSeekBarChangeListener(
+    seekBar.setOnSeekBarChangeListener(
       object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
           //sets text to adjust while using seekBar
-          binding.playedTime.text = formatTime(progress, binding.seekBar.max)
+          playedTime.text = formatTime(progress, seekBar.max)
         }
 
         override fun onStartTrackingTouch(view: SeekBar?) {
@@ -159,7 +167,7 @@ class BookPlayController(
 
         override fun onStopTrackingTouch(view: SeekBar?) {
           currentChapter?.let {
-            val progress = binding.seekBar.progress
+            val progress = seekBar.progress
             presenter.seekTo(it.start + progress, it.file)
           }
         }
@@ -169,7 +177,7 @@ class BookPlayController(
 
   private fun setupSpinner() {
     spinnerAdapter = MultiLineSpinnerAdapter(
-      spinner = binding.bookSpinner,
+      spinner = bookSpinner,
       context = activity,
       unselectedTextColor = activity.color(
         ThemeUtil.getResourceId(
@@ -179,9 +187,9 @@ class BookPlayController(
       ),
       resolveName = BookPlayChapter::correctedName
     )
-    binding.bookSpinner.adapter = spinnerAdapter
+    bookSpinner.adapter = spinnerAdapter
 
-    binding.bookSpinner.itemSelections {
+    bookSpinner.itemSelections {
       Timber.i("spinner: onItemSelected. firing: $it")
       val item = data[it]
       presenter.seekTo(item.start, item.file)
@@ -189,23 +197,23 @@ class BookPlayController(
   }
 
   private fun setupToolbar() {
-    binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+    toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
 
-    binding.toolbar.inflateMenu(R.menu.book_play)
-    val menu = binding.toolbar.menu
+    toolbar.inflateMenu(R.menu.book_play)
+    val menu = toolbar.menu
 
     sleepTimerItem = menu.findItem(R.id.action_sleep)
     val equalizerItem = menu.findItem(R.id.action_equalizer)
     equalizerItem.isVisible = equalizer.exists
 
-    binding.toolbar.findViewById<View>(R.id.action_bookmark)
+    toolbar.findViewById<View>(R.id.action_bookmark)
       .setOnLongClickListener {
         presenter.addBookmark()
         true
       }
 
-    binding.toolbar.setNavigationOnClickListener { router.popController(this) }
-    binding.toolbar.setOnMenuItemClickListener {
+    toolbar.setNavigationOnClickListener { router.popController(this) }
+    toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -247,7 +255,7 @@ class BookPlayController(
   }
 
   override fun showPlaying(playing: Boolean) {
-    val laidOut = ViewCompat.isLaidOut(binding.play)
+    val laidOut = ViewCompat.isLaidOut(play)
     if (playing) {
       playPauseDrawable.transformToPause(animated = laidOut)
     } else {
@@ -264,8 +272,8 @@ class BookPlayController(
     // sets the correct sleep timer icon
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     // set text and visibility
-    binding.timerCountdownView.text = formatTime(ms, ms)
-    binding.timerCountdownView.visible = active
+    timerCountdownView.text = formatTime(ms, ms)
+    timerCountdownView.visible = active
   }
 
   override fun openSleepTimeDialog() {
@@ -273,13 +281,13 @@ class BookPlayController(
       .show(fragmentManager, "fmSleepTimer")
   }
 
-  override fun onDestroyBinding(binding: BookPlayBinding) {
-    super.onDestroyBinding(binding)
-    binding.bookSpinner.adapter = null
+  override fun onDestroyView() {
+    super.onDestroyView()
+    bookSpinner.adapter = null
   }
 
   override fun showBookmarkAdded() {
-    Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
+    Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
   }
 

@@ -11,17 +11,19 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
+import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.bottomCompoundDrawable
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.endCompoundDrawable
 import de.ph1b.audiobook.misc.findCallback
+import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.startCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
+import kotlinx.android.synthetic.main.book_more_bottom_sheet.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,23 +50,23 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    val binding = BookMoreBottomSheetBinding.inflate(activity!!.layoutInflater)!!
-    dialog.setContentView(binding.root)
+    val container = DialogLayoutContainer(layoutInflater.inflate(R.layout.book_more_bottom_sheet))
+    dialog.setContentView(container.containerView)
 
-    binding.title.setOnClickListener {
+    container.title.setOnClickListener {
       EditBookTitleDialogFragment.newInstance(book)
         .show(fragmentManager, EditBookTitleDialogFragment.TAG)
       dismiss()
     }
-    binding.internetCover.setOnClickListener {
+    container.internetCover.setOnClickListener {
       callback().onInternetCoverRequested(book)
       dismiss()
     }
-    binding.fileCover.setOnClickListener {
+    container.fileCover.setOnClickListener {
       callback().onFileCoverRequested(book)
       dismiss()
     }
-    binding.bookmark.setOnClickListener {
+    container.bookmark.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
       val controller = BookmarkController.newInstance(book.id)
       router.pushController(controller.asTransaction())
@@ -72,10 +74,10 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       dismiss()
     }
 
-    tintLeftDrawable(binding.title)
-    tintLeftDrawable(binding.internetCover)
-    tintLeftDrawable(binding.fileCover)
-    tintLeftDrawable(binding.bookmark)
+    tintLeftDrawable(container.title)
+    tintLeftDrawable(container.internetCover)
+    tintLeftDrawable(container.fileCover)
+    tintLeftDrawable(container.bookmark)
 
     return dialog
   }

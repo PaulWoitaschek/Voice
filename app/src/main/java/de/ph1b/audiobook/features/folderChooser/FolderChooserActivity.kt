@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.folderChooser
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -12,11 +11,15 @@ import android.widget.AdapterView
 import android.widget.Toast
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.ActivityFolderChooserBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.visible
+import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import timber.log.Timber
 import java.io.File
 
@@ -42,7 +45,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
       .show()
   }
 
-  private lateinit var binding: ActivityFolderChooserBinding
   private lateinit var adapter: FolderChooserAdapter
   private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
   private lateinit var permissions: Permissions
@@ -57,35 +59,35 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_folder_chooser)
+    setContentView(R.layout.activity_folder_chooser)
 
     setupToolbar()
 
     // listeners
-    binding.choose.setOnClickListener { presenter().chooseClicked() }
-    binding.abort.setOnClickListener { finish() }
-    binding.upButton.setOnClickListener { onBackPressed() }
+    choose.setOnClickListener { presenter().chooseClicked() }
+    abort.setOnClickListener { finish() }
+    upButton.setOnClickListener { onBackPressed() }
 
     //recycler
     adapter = FolderChooserAdapter(this, getMode()) {
       presenter().fileSelected(it)
     }
-    binding.recycler.layoutManager = LinearLayoutManager(this)
-    binding.recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-    binding.recycler.adapter = adapter
-    val itemAnimator = binding.recycler.itemAnimator as DefaultItemAnimator
+    recycler.layoutManager = LinearLayoutManager(this)
+    recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    recycler.adapter = adapter
+    val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
     itemAnimator.supportsChangeAnimations = false
 
     // spinner
-    spinnerAdapter = MultiLineSpinnerAdapter(binding.toolSpinner, this, Color.WHITE) { file, _ ->
+    spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE) { file, _ ->
       if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
         getString(R.string.storage_all)
       } else {
         file.name
       }
     }
-    binding.toolSpinner.adapter = spinnerAdapter
-    binding.toolSpinner.itemSelections {
+    toolSpinner.adapter = spinnerAdapter
+    toolSpinner.itemSelections {
       if (it != AdapterView.INVALID_POSITION) {
         Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
         val item = spinnerAdapter.getItem(it)
@@ -95,9 +97,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   private fun setupToolbar() {
-    binding.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbar.setNavigationOnClickListener { super.onBackPressed() }
-    binding.toolbar.setTitle(R.string.audiobook_folders_title)
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener { super.onBackPressed() }
+    toolbar.setTitle(R.string.audiobook_folders_title)
   }
 
   override fun onRequestPermissionsResult(
@@ -123,7 +125,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   override fun setCurrentFolderText(text: String) {
-    binding.currentFolder.text = text
+    currentFolder.text = text
   }
 
   override fun showNewData(newData: List<File>) {
@@ -131,12 +133,12 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   override fun setChooseButtonEnabled(chooseEnabled: Boolean) {
-    binding.choose.isEnabled = chooseEnabled
+    choose.isEnabled = chooseEnabled
   }
 
   override fun newRootFolders(newFolders: List<File>) {
     Timber.i("newRootFolders called with $newFolders")
-    binding.spinnerGroup.visible = newFolders.size > 1
+    spinnerGroup.visible = newFolders.size > 1
     spinnerAdapter.setData(newFolders)
   }
 
@@ -144,9 +146,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
    * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
    */
   override fun setUpButtonEnabled(upEnabled: Boolean) {
-    binding.upButton.isEnabled = upEnabled
+    upButton.isEnabled = upEnabled
     val upIcon = if (upEnabled) drawable(R.drawable.ic_arrow_upward) else null
-    binding.upButton.setImageDrawable(upIcon)
+    upButton.setImageDrawable(upIcon)
   }
 
   enum class OperationMode {

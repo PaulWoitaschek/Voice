@@ -79,8 +79,6 @@ android {
       dimension "free"
     }
   }
-
-  dataBinding.enabled = true
 }
 
 androidExtensions {

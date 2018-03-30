@@ -1,17 +1,18 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.ActivityFolderOverviewRowLayoutBinding
 import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.uitools.ExtensionsHolder
+import kotlinx.android.synthetic.main.activity_folder_overview_row_layout.*
 
 class FolderOverviewHolder(
-  private val binding: ActivityFolderOverviewRowLayoutBinding,
+  parent: ViewGroup,
   itemClicked: (position: Int) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : ExtensionsHolder(parent, R.layout.activity_folder_overview_row_layout) {
 
   init {
-    binding.remove.setOnClickListener {
+    remove.setOnClickListener {
       if (adapterPosition != -1) {
         itemClicked(adapterPosition)
       }
@@ -20,17 +21,17 @@ class FolderOverviewHolder(
 
   fun bind(model: FolderModel) {
     // set text
-    binding.textView.text = model.folder
+    textView.text = model.folder
 
     // set correct image
     val drawableId = if (model.isCollection) R.drawable.folder_multiple else R.drawable.ic_folder
     val drawable = itemView.context.drawable(drawableId)
-    binding.icon.setImageDrawable(drawable)
+    icon.setImageDrawable(drawable)
 
     // set content description
     val contentDescriptionId =
       if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
     val contentDescription = itemView.context.getString(contentDescriptionId)
-    binding.icon.contentDescription = contentDescription
+    icon.contentDescription = contentDescription
   }
 }

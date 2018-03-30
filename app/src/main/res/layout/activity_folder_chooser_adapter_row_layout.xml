@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_single_item_height"
+    android:background="?attr/selectableItemBackground">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/icon"
+        style="@style/TintedImageViewStyle"
+        android:layout_width="72dp"
         android:layout_height="@dimen/list_single_item_height"
-        android:background="?attr/selectableItemBackground">
+        android:layout_alignParentStart="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_folder"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_album"
+        tools:tint="@android:color/black" />
 
-        <ImageView
-            android:id="@+id/icon"
-            style="@style/TintedImageViewStyle"
-            android:layout_width="72dp"
-            android:layout_height="@dimen/list_single_item_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_folder"
-            tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_album"
-            tools:tint="@android:color/black"/>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/list_single_item_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="72dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textSize="@dimen/list_text_primary_size"
+        tools:text="ExampleFolder" />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/list_single_item_height"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="72dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textSize="@dimen/list_text_primary_size"
-            tools:text="ExampleFolder"/>
-
-    </RelativeLayout>
-
-</layout>
+</RelativeLayout>

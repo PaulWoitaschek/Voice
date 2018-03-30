@@ -11,7 +11,6 @@ import android.widget.PopupMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
-import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
@@ -21,12 +20,13 @@ import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
+import kotlinx.android.synthetic.main.bookmark.*
 
 /**
  * Dialog for creating a bookmark
  */
 class BookmarkController(args: Bundle) :
-  MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(args), BookmarkView,
+  MvpController<BookmarkView, BookmarkPresenter>(args), BookmarkView,
   BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
@@ -44,8 +44,8 @@ class BookmarkController(args: Bundle) :
 
   override fun showBookmarkAdded(bookmark: Bookmark) {
     val index = adapter.indexOf(bookmark)
-    binding.recycler.smoothScrollToPosition(index)
-    Snackbar.make(binding.root, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
+    recycler.smoothScrollToPosition(index)
+    Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
   }
 
@@ -70,33 +70,33 @@ class BookmarkController(args: Bundle) :
     router.popController(this)
   }
 
-  override fun onBindingCreated(binding: BookmarkBinding) {
+  override fun onViewCreated() {
     setupToolbar()
     setupList()
 
-    binding.addBookmarkFab.setOnClickListener {
+    addBookmarkFab.setOnClickListener {
       showAddBookmarkDialog()
     }
   }
 
-  override fun onDestroyBinding(binding: BookmarkBinding) {
-    binding.recycler.adapter = null
+  override fun onDestroyView() {
+    recycler.adapter = null
   }
 
   private fun setupToolbar() {
-    binding.toolbar.setTitle(R.string.bookmark)
-    binding.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbar.setNavigationOnClickListener {
+    toolbar.setTitle(R.string.bookmark)
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.setNavigationOnClickListener {
       router.popController(this)
     }
   }
 
   private fun setupList() {
     val layoutManager = LinearLayoutManager(activity)
-    binding.recycler.addItemDecoration(VerticalDividerItemDecoration(activity))
-    binding.recycler.layoutManager = layoutManager
-    binding.recycler.adapter = adapter
-    val itemAnimator = binding.recycler.itemAnimator as DefaultItemAnimator
+    recycler.addItemDecoration(VerticalDividerItemDecoration(activity))
+    recycler.layoutManager = layoutManager
+    recycler.adapter = adapter
+    val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
     itemAnimator.supportsChangeAnimations = false
 
     val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -113,7 +113,7 @@ class BookmarkController(args: Bundle) :
         boundBookmark?.let { presenter.deleteBookmark(it.id) }
       }
     }
-    ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.recycler)
+    ItemTouchHelper(swipeCallback).attachToRecyclerView(recycler)
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {

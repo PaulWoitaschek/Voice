@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+    <TextView
+        android:id="@+id/title"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/format_text"
+        android:text="@string/change_book_name" />
 
-        <TextView
-            android:id="@+id/title"
-            style="@style/BottomSheetRow"
-            android:drawableStart="@drawable/format_text"
-            android:text="@string/change_book_name"/>
+    <TextView
+        android:id="@+id/internetCover"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/ic_download"
+        android:text="@string/download_book_cover" />
 
-        <TextView
-            android:id="@+id/internetCover"
-            style="@style/BottomSheetRow"
-            android:drawableStart="@drawable/ic_download"
-            android:text="@string/download_book_cover"/>
+    <TextView
+        android:id="@+id/fileCover"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/ic_image"
+        android:text="@string/pick_book_cover" />
 
-        <TextView
-            android:id="@+id/fileCover"
-            style="@style/BottomSheetRow"
-            android:drawableStart="@drawable/ic_image"
-            android:text="@string/pick_book_cover"/>
+    <TextView
+        android:id="@+id/bookmark"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/bookmark"
+        android:text="@string/bookmark" />
 
-        <TextView
-            android:id="@+id/bookmark"
-            style="@style/BottomSheetRow"
-            android:drawableStart="@drawable/bookmark"
-            android:text="@string/bookmark"/>
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

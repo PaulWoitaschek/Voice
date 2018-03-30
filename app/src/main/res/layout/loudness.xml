@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/currentValue"
+        android:layout_width="48sp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="0 dp" />
 
-        <TextView
-            android:id="@+id/currentValue"
-            android:layout_width="48sp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="0 dp"/>
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/maxValue"
+        android:layout_width="48sp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="6.1 dB" />
 
-        <TextView
-            android:id="@+id/maxValue"
-            android:layout_width="48sp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="6.1 dB"/>
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

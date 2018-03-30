@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <!-- 88 dp bottom padding is the sum of the FAB + vertical margins.
+    that way, the controls for the last bookmark are always visible -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:windowBackground"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/AppToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addBookmarkFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/plus" />
 
-        <!-- 88 dp bottom padding is the sum of the FAB + vertical margins.
-        that way, the controls for the last bookmark are always visible -->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:clipToPadding="false"
-            android:paddingBottom="88dp"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addBookmarkFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:src="@drawable/plus"/>
-
-    </android.support.design.widget.CoordinatorLayout>
-
-</layout>
+</android.support.design.widget.CoordinatorLayout>

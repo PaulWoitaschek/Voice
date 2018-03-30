@@ -15,13 +15,14 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.databinding.DialogCoverEditBinding
+import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
 import de.ph1b.audiobook.uitools.visible
+import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -41,38 +42,44 @@ class EditCoverDialogFragment : DialogFragment() {
 
     val picasso = Picasso.with(context)
 
-    val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)!!
+    val container = DialogLayoutContainer(
+      activity!!.layoutInflater.inflate(
+        R.layout.dialog_cover_edit,
+        null,
+        false
+      )
+    )
 
     // init values
     val bookId = arguments!!.getLong(NI_BOOK_ID)
     val uri = Uri.parse(arguments!!.getString(NI_COVER_URI))
     val book = repo.bookById(bookId)!!
 
-    binding.coverReplacement.visible = true
-    binding.cropOverlay.selectionOn = false
+    container.coverReplacement.visible = true
+    container.cropOverlay.selectionOn = false
     picasso.load(uri)
       .into(
-        binding.coverImage, object : PicassoCallback {
+        container.coverImage, object : PicassoCallback {
           override fun onError() {
             dismiss()
           }
 
           override fun onSuccess() {
-            binding.cropOverlay.selectionOn = true
-            binding.coverReplacement.visible = false
+            container.cropOverlay.selectionOn = true
+            container.coverReplacement.visible = false
           }
         }
       )
 
     val dialog = MaterialDialog.Builder(context!!)
-      .customView(binding.root, false)
+      .customView(container.containerView, false)
       .title(R.string.cover)
       .positiveText(R.string.dialog_confirm)
       .build()
 
     // use a click listener so the dialog stays open till the image was saved
     dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
-      val r = binding.cropOverlay.selectedRect
+      val r = container.cropOverlay.selectedRect
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
@@ -88,9 +95,9 @@ class EditCoverDialogFragment : DialogFragment() {
           }
         }
         // picasso only holds a weak reference so we have to protect against gc
-        binding.coverImage.tag = target
+        container.coverImage.tag = target
         picasso.load(uri)
-          .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
+          .transform(CropTransformation(container.cropOverlay, container.coverImage))
           .into(target)
       } else dismiss()
     }
@@ -104,9 +111,9 @@ class EditCoverDialogFragment : DialogFragment() {
   companion object {
     val TAG = EditCoverDialogFragment::class.java.simpleName!!
 
-    private val NI_COVER_URI = "ni#coverPath"
-    private val NI_BOOK_ID = "ni#id"
-    private val NI_TARGET = "ni#target"
+    private const val NI_COVER_URI = "ni#coverPath"
+    private const val NI_BOOK_ID = "ni#id"
+    private const val NI_TARGET = "ni#target"
 
     fun <T> newInstance(target: T, book: Book, uri: Uri) where T : Controller, T : Callback =
       EditCoverDialogFragment().apply {

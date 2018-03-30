@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.mvp
 
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.view.View
 import com.bluelinelabs.conductor.Controller
@@ -8,11 +7,11 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.misc.checkMainThread
 
 /**
- * Base fragment that provides a convenient way for binding a view to a presenter
+ * Base controller that provides a convenient way for binding a view to a presenter
  */
-abstract class MvpController<V : Any, out P, B>(
+abstract class MvpController<V : Any, out P>(
   args: Bundle = Bundle()
-) : BaseController<B>(args) where P : Presenter<V>, B : ViewDataBinding {
+) : BaseController(args) where P : Presenter<V> {
 
   private var internalPresenter: P? = null
   val presenter: P

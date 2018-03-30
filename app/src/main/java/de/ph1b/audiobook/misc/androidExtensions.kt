@@ -6,6 +6,7 @@ import android.os.Looper
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
+import android.support.annotation.LayoutRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
@@ -83,3 +84,5 @@ fun checkMainThread() {
 }
 
 fun Book.coverFile(): File = coverFile(App.component.context)
+
+fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)

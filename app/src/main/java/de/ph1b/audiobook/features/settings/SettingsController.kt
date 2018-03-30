@@ -1,11 +1,7 @@
 package de.ph1b.audiobook.features.settings
 
 import android.support.annotation.StringRes
-import android.widget.TextView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.SettingRowDoubleBinding
-import de.ph1b.audiobook.databinding.SettingRowSwitchBinding
-import de.ph1b.audiobook.databinding.SettingsBinding
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
@@ -15,13 +11,14 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
+import kotlinx.android.synthetic.main.settings.*
 import javax.inject.Inject
 import javax.inject.Named
 
 /**
  * Controller for the user settings
  */
-class SettingsController : BaseController<SettingsBinding>() {
+class SettingsController : BaseController() {
 
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
@@ -40,23 +37,23 @@ class SettingsController : BaseController<SettingsBinding>() {
 
   override val layoutRes = R.layout.settings
 
-  override fun onBindingCreated(binding: SettingsBinding) {
+  override fun onViewCreated() {
     setupToolbar()
 
     // theme
-    val themeDescription = setupTextSetting(
-      binding = binding.theme,
+    setupTextSetting(
+      doubleSettingView = theme,
       titleRes = R.string.pref_theme_title
     ) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
     themePref.stream
-      .bindToLifeCycle()
-      .subscribe { themeDescription.setText(it.nameId) }
+      .subscribe { theme.setDescription(it.nameId) }
+      .disposeOnDestroyView()
 
     // resume on playback
     setupSwitchSetting(
-      binding = binding.resumePlayback,
+      settingView = resumePlayback,
       titleRes = R.string.pref_resume_on_replug,
       contentRes = R.string.pref_resume_on_replug_hint,
       pref = resumeOnReplugPref
@@ -64,81 +61,82 @@ class SettingsController : BaseController<SettingsBinding>() {
 
     // resume on playback
     setupSwitchSetting(
-      binding = binding.resumeAfterCall,
+      settingView = resumeAfterCall,
       titleRes = R.string.pref_resume_after_call,
       contentRes = R.string.pref_resume_after_call_hint,
       pref = resumeAfterCallPref
     )
 
     // skip amount
-    val skipAmountDescription = setupTextSetting(
-      binding = binding.skipAmount,
+    setupTextSetting(
+      doubleSettingView = skipAmount,
       titleRes = R.string.pref_seek_time
     ) {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
     seekTimePref.stream
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .bindToLifeCycle()
-      .subscribe { skipAmountDescription.text = it }
+      .subscribe { skipAmount.setDescription(it) }
+      .disposeOnDestroyView()
 
     // auto rewind
-    val autoRewindDescription = setupTextSetting(
-      binding = binding.autoRewind,
+    setupTextSetting(
+      doubleSettingView = autoRewind,
       titleRes = R.string.pref_auto_rewind_title
     ) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
     autoRewindAmountPref.stream
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .bindToLifeCycle()
-      .subscribe { autoRewindDescription.text = it }
+      .subscribe { autoRewind.setDescription(it) }
+      .disposeOnDestroyView()
   }
 
   private fun setupToolbar() {
-    binding.toolbar.setNavigationIcon(R.drawable.close)
-    binding.toolbar.inflateMenu(R.menu.menu_settings)
-    binding.toolbar.setOnMenuItemClickListener {
+    toolbar.setNavigationIcon(R.drawable.close)
+    toolbar.inflateMenu(R.menu.menu_settings)
+    toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
         SupportDialogFragment().show(fragmentManager, SupportDialogFragment.TAG)
         true
       } else
         false
     }
-    binding.toolbar.setNavigationOnClickListener {
+    toolbar.setNavigationOnClickListener {
       activity.onBackPressed()
     }
-    binding.toolbar.title = getString(R.string.action_settings)
+    toolbar.title = getString(R.string.action_settings)
   }
 
   private inline fun setupTextSetting(
-    binding: SettingRowDoubleBinding, @StringRes titleRes: Int, @StringRes contentRes: Int? = null,
+    doubleSettingView: DoubleSettingView,
+    @StringRes titleRes: Int,
+    @StringRes contentRes: Int? = null,
     crossinline onClick: () -> Unit
-  ): TextView {
-    val title: TextView = binding.title
-    val description: TextView = binding.description
-    if (contentRes != null) description.setText(contentRes)
-    title.setText(titleRes)
-    binding.root.setOnClickListener {
+  ) {
+    doubleSettingView.setTitle(titleRes)
+    if (contentRes != null) doubleSettingView.setDescription(contentRes)
+    doubleSettingView.setOnClickListener {
       onClick()
     }
-    return description
   }
 
   private fun setupSwitchSetting(
-    binding: SettingRowSwitchBinding, @StringRes titleRes: Int, @StringRes contentRes: Int,
+    settingView: SwitchSettingView,
+    @StringRes titleRes: Int,
+    @StringRes contentRes: Int,
     pref: Pref<Boolean>
   ) {
-    binding.switchTitle.setText(titleRes)
-    binding.switchDescription.setText(contentRes)
+    settingView.setTitle(titleRes)
+    settingView.setDescription(contentRes)
 
-    binding.switchSetting.setOnCheckedChangeListener { _, checked ->
-      pref.value = checked
+    settingView.onCheckedChanged {
+      pref.value = it
     }
     pref.stream
-      .bindToLifeCycle()
-      .subscribe { binding.switchSetting.isChecked = it }
+      .subscribe { settingView.setChecked(it) }
+      .disposeOnDestroyView()
 
-    binding.root.setOnClickListener { binding.switchSetting.toggle() }
+    settingView.setOnClickListener { settingView.toggle() }
   }
 }

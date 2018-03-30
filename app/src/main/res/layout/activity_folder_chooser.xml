@@ -1,135 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    style="?android:buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/root"
-        style="?android:buttonBarStyle"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/AppToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-
-            <RelativeLayout
-                android:id="@+id/spinnerGroup"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Spinner
-                    android:id="@+id/toolSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"/>
-
-                <TextView
-                    android:id="@+id/storageExplanation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/toolSpinner"
-                    android:layout_toStartOf="@id/toolSpinner"
-                    android:text="@string/storage_pre_device"
-                    android:textColor="@color/copy_primary_text_default_material_dark"
-                    android:textSize="16sp"/>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.Toolbar>
+        android:layout_height="?attr/actionBarSize">
 
         <RelativeLayout
+            android:id="@+id/spinnerGroup"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/upButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:clickable="true"
-                android:contentDescription="@string/content_navigate_up"
-                android:focusable="true"
-                android:scaleType="fitStart"
-                tools:src="@drawable/ic_arrow_upward"/>
-
-            <LinearLayout
+            <Spinner
+                android:id="@+id/toolSpinner"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="72dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_marginStart="16dp" />
 
-                <TextView
-                    android:id="@+id/twoline_text1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="@string/chosen_folder_description"
-                    android:textSize="@dimen/list_text_primary_size"
-                    tools:text="This is the primary text which is surprisingly too long long long"/>
-
-                <TextView
-                    android:id="@+id/currentFolder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="@dimen/list_text_secondary_size"
-                    tools:text="This is the secondary text which is surprisingly too long long long"/>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/storageExplanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/toolSpinner"
+                android:text="@string/storage_pre_device"
+                android:textColor="@color/copy_primary_text_default_material_dark"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/upButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:clickable="true"
+            android:contentDescription="@string/content_navigate_up"
+            android:focusable="true"
+            android:scaleType="fitStart"
+            tools:src="@drawable/ic_arrow_upward" />
 
         <LinearLayout
-            style="?android:buttonBarStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="72dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/abort"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/twoline_text1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/dialog_cancel"/>
+                android:maxLines="1"
+                android:text="@string/chosen_folder_description"
+                android:textSize="@dimen/list_text_primary_size"
+                tools:text="This is the primary text which is surprisingly too long long long" />
 
-            <Button
-                android:id="@+id/choose"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/currentFolder"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/dialog_confirm"/>
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/list_text_secondary_size"
+                tools:text="This is the secondary text which is surprisingly too long long long" />
 
         </LinearLayout>
 
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/activity_folder_chooser_adapter_row_layout" />
+
+    <LinearLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/abort"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dialog_cancel" />
+
+        <Button
+            android:id="@+id/choose"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dialog_confirm" />
+
     </LinearLayout>
 
-</layout>
+</LinearLayout>

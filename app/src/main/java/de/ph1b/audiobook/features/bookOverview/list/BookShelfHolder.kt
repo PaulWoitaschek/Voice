@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -13,9 +11,9 @@ import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.ExtensionsHolder
 import de.ph1b.audiobook.uitools.maxImageSize
 import de.ph1b.audiobook.uitools.visible
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.book_shelf_row.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
@@ -24,18 +22,17 @@ import java.io.File
 import javax.inject.Inject
 
 class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) :
-  RecyclerView.ViewHolder(
+  ExtensionsHolder(
     parent.layoutInflater().inflate(
       R.layout.book_shelf_row,
       parent,
       false
     )
-  ), LayoutContainer {
+  ) {
 
   @Inject
   lateinit var coverColorExtractor: CoverColorExtractor
 
-  override val containerView: View? get() = itemView
   private var boundBook: Book? = null
   private val defaultProgressColor = itemView.context.color(R.color.primaryDark)
 

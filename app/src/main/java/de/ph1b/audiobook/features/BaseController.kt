@@ -1,64 +1,59 @@
 package de.ph1b.audiobook.features
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.annotation.CallSuper
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.rxlifecycle2.RxController
-import io.reactivex.Observable
-import timber.log.Timber
+import com.bluelinelabs.conductor.RestoreViewOnCreateController
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 
-abstract class BaseController<B : ViewDataBinding>(args: Bundle = Bundle()) : RxController(args) {
+abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args),
+  LayoutContainer {
 
-  fun <T> Observable<T>.bindToLifeCycle(): Observable<T> = compose(bindToLifecycle<T>())
+  private val onCreateViewDisposables = CompositeDisposable()
 
-  val fragmentManager: FragmentManager
-    get() = activity.supportFragmentManager
+  fun Disposable.disposeOnDestroyView() {
+    onCreateViewDisposables.add(this)
+  }
+
+  val activity: AppCompatActivity get() = getActivity() as AppCompatActivity
+
+  val fragmentManager: FragmentManager get() = activity.supportFragmentManager
 
   fun getString(@StringRes resId: Int): String = activity.getString(resId)
 
-  val activity: AppCompatActivity
-    get() = getActivity() as AppCompatActivity
-
   abstract val layoutRes: Int
 
-  private var internalBinding: B? = null
+  private var _containerView: View? = null
+  override val containerView: View? get() = _containerView
 
-  val binding: B
-    get() = internalBinding!!
-
-  override final fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    internalBinding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-    onBindingCreated(internalBinding!!)
-    return internalBinding!!.root
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup,
+    savedViewState: Bundle?
+  ): View {
+    val view = inflater.inflate(layoutRes, container, false).also {
+      _containerView = it
+    }
+    onViewCreated()
+    return view
   }
 
-  override final fun onDestroyView(view: View) {
+  final override fun onDestroyView(view: View) {
     super.onDestroyView(view)
-    onDestroyBinding(binding)
-    if (isDestroyed || isBeingDestroyed) {
-      Timber.d("we are tearing down. defer clearBinding")
-    } else clearBinding()
+    onDestroyView()
+    onCreateViewDisposables.clear()
+    clearFindViewByIdCache()
+    _containerView = null
   }
 
-  @CallSuper
-  override fun onDestroy() {
-    super.onDestroy()
-    clearBinding()
-  }
+  open fun onViewCreated() {}
 
-  private fun clearBinding() {
-    internalBinding?.unbind()
-    internalBinding = null
-  }
-
-  open fun onBindingCreated(binding: B) {}
-
-  open fun onDestroyBinding(binding: B) {}
+  open fun onDestroyView() {}
 }

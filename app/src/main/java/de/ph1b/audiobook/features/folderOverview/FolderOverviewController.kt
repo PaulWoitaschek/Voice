@@ -11,11 +11,11 @@ import android.view.ViewAnimationUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.FolderOverviewBinding
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
+import kotlinx.android.synthetic.main.folder_overview.*
 
 private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
 
@@ -23,32 +23,32 @@ private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
  * Controller that lets the user add, edit or remove the set audio book folders.
  */
 class FolderOverviewController :
-  MvpController<FolderOverviewController, FolderOverviewPresenter, FolderOverviewBinding>() {
+  MvpController<FolderOverviewController, FolderOverviewPresenter>() {
 
   override fun createPresenter(): FolderOverviewPresenter = FolderOverviewPresenter()
 
   override val layoutRes = R.layout.folder_overview
 
-  override fun onBindingCreated(binding: FolderOverviewBinding) {
-    buttonRepresentingTheFam = binding.root.findViewById<View>(R.id.fab_expand_menu_button)
+  override fun onViewCreated() {
+    buttonRepresentingTheFam = containerView!!.findViewById<View>(R.id.fab_expand_menu_button)
 
-    binding.addAsSingle.setOnClickListener {
+    addAsSingle.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
     }
-    binding.addAsLibrary.setOnClickListener {
+    addAsLibrary.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
     }
 
-    binding.overlay.setVisibleWeak()
+    overlay.setVisibleWeak()
 
-    binding.overlay.setOnClickListener {
-      binding.fam.collapse()
+    overlay.setOnClickListener {
+      fam.collapse()
     }
 
     // preparing list
     val layoutManager = LinearLayoutManager(activity)
-    binding.recycler.layoutManager = layoutManager
-    binding.recycler.addItemDecoration(
+    recycler.layoutManager = layoutManager
+    recycler.addItemDecoration(
       DividerItemDecoration(
         activity,
         DividerItemDecoration.VERTICAL
@@ -67,20 +67,20 @@ class FolderOverviewController :
         }
         .show()
     }
-    binding.recycler.adapter = adapter
+    recycler.adapter = adapter
 
-    binding.fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
+    fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    binding.addAsSingle.title =
+    addAsSingle.title =
         "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
-    binding.addAsLibrary.title =
+    addAsLibrary.title =
         "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
 
     setupToolbar()
   }
 
   private fun setupToolbar() {
-    binding.toolbarInclude!!.toolbar.apply {
+    toolbar.apply {
       setTitle(R.string.audiobook_folders_title)
       setNavigationIcon(R.drawable.close)
       setNavigationOnClickListener { activity.onBackPressed() }
@@ -101,16 +101,16 @@ class FolderOverviewController :
       getFamCenter(famCenter)
 
       // get the final radius for the clipping circle
-      val finalRadius = Math.max(binding.overlay.width, binding.overlay.height)
+      val finalRadius = Math.max(overlay.width, overlay.height)
 
       // create the animator for this view (the start radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
-        binding.overlay,
+        overlay,
         famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
       )
 
       // make the view visible and start the animation
-      binding.overlay.visible = true
+      overlay.visible = true
       anim.start()
     }
 
@@ -119,11 +119,11 @@ class FolderOverviewController :
       getFamCenter(famCenter)
 
       // get the initial radius for the clipping circle
-      val initialRadius = Math.max(binding.overlay.height, binding.overlay.width)
+      val initialRadius = Math.max(overlay.height, overlay.width)
 
       // create the animation (the final radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
-        binding.overlay,
+        overlay,
         famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
       )
 
@@ -132,7 +132,7 @@ class FolderOverviewController :
         object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
-            binding.overlay.setVisibleWeak()
+            overlay.setVisibleWeak()
           }
         }
       )
@@ -148,29 +148,29 @@ class FolderOverviewController :
    */
   private fun getFamCenter(point: Point) {
     val x =
-      binding.fam.left + ((buttonRepresentingTheFam.left + buttonRepresentingTheFam.right) / 2)
-    val y = binding.fam.top + ((buttonRepresentingTheFam.top + buttonRepresentingTheFam.bottom) / 2)
+      fam.left + ((buttonRepresentingTheFam.left + buttonRepresentingTheFam.right) / 2)
+    val y = fam.top + ((buttonRepresentingTheFam.top + buttonRepresentingTheFam.bottom) / 2)
     point.set(x, y)
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // restoring overlay
-    binding.overlay.visibility = savedViewState.getInt(SI_BACKGROUND_VISIBILITY)
+    overlay.visibility = savedViewState.getInt(SI_BACKGROUND_VISIBILITY)
   }
 
   private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
     val intent = FolderChooserActivity.newInstanceIntent(activity, operationMode)
     // we don't want our listener be informed.
-    binding.fam.setOnFloatingActionsMenuUpdateListener(null)
-    binding.fam.collapseImmediately()
-    binding.fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
+    fam.setOnFloatingActionsMenuUpdateListener(null)
+    fam.collapseImmediately()
+    fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    binding.overlay.visible = false
+    overlay.visible = false
     startActivity(intent)
   }
 
-  override fun handleBack(): Boolean = if (binding.fam.isExpanded) {
-    binding.fam.collapse()
+  override fun handleBack(): Boolean = if (fam.isExpanded) {
+    fam.collapse()
     true
   } else false
 
@@ -181,6 +181,6 @@ class FolderOverviewController :
 
   override fun onSaveViewState(view: View, outState: Bundle) {
     super.onSaveViewState(view, outState)
-    outState.putInt(SI_BACKGROUND_VISIBILITY, binding.overlay.visibility)
+    outState.putInt(SI_BACKGROUND_VISIBILITY, overlay.visibility)
   }
 }

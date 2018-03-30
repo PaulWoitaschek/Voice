@@ -1,16 +1,17 @@
 package de.ph1b.audiobook.features.folderChooser
 
-import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.databinding.ActivityFolderChooserAdapterRowLayoutBinding
 import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.uitools.ExtensionsHolder
+import kotlinx.android.synthetic.main.activity_folder_chooser_adapter_row_layout.*
 import java.io.File
 
 class Holder(
-  private val binding: ActivityFolderChooserAdapterRowLayoutBinding,
+  parent: ViewGroup,
   private val mode: FolderChooserActivity.OperationMode,
   private val listener: (selected: File) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : ExtensionsHolder(parent, R.layout.activity_folder_chooser_adapter_row_layout) {
 
   private var boundFile: File? = null
 
@@ -26,17 +27,20 @@ class Holder(
     boundFile = selectedFile
     val isDirectory = selectedFile.isDirectory
 
-    binding.text.text = selectedFile.name
+    text.text = selectedFile.name
 
     // if its not a collection its also fine to pick a file
     if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
-      binding.text.isEnabled = isDirectory
+      text.isEnabled = isDirectory
     }
 
     val context = itemView.context
-    val icon = context.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
-    binding.icon.setImageDrawable(icon)
-    binding.icon.contentDescription =
-        context.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
+    val drawable = context.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
+    icon.setImageDrawable(drawable)
+    icon.contentDescription = context.getString(
+      if (isDirectory) {
+        R.string.content_is_folder
+      } else R.string.content_is_file
+    )
   }
 }
