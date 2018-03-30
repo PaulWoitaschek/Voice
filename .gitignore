@@ -1,5 +1,4 @@
 *.iml
-gradle.properties
 *.apk
 .DS_Store
 captures
