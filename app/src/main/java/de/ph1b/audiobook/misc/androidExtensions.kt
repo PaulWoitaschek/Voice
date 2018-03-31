@@ -13,7 +13,6 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
 import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
@@ -63,18 +62,6 @@ fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
   val controllerId: String = arguments!!.getString(controllerBundleKey)
   @Suppress("UNCHECKED_CAST")
   return router.getControllerWithInstanceId(controllerId) as T
-}
-
-inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
-  viewTreeObserver.addOnPreDrawListener(
-    object : ViewTreeObserver.OnPreDrawListener {
-      override fun onPreDraw(): Boolean {
-        viewTreeObserver.removeOnPreDrawListener(this)
-        action()
-        return true
-      }
-    }
-  )
 }
 
 fun checkMainThread() {

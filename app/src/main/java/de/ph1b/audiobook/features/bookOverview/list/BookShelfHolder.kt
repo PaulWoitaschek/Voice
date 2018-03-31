@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import android.view.ViewGroup
+import androidx.view.doOnPreDraw
 import androidx.view.isVisible
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -11,7 +12,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.layoutInflater
-import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -97,7 +97,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
           Picasso.with(itemView.context)
             .cancelRequest(cover)
           // we have to set the replacement in onPreDraw, else the transition will fail.
-          cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
+          cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
         }
       }
     }
