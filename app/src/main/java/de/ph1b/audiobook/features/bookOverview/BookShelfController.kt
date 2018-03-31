@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
+import androidx.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -30,7 +31,6 @@ import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.book_shelf.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -164,14 +164,14 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
         adapter.submitList(state.books)
         val currentBook = state.currentBook
 
-        fab.visible = currentBook != null
+        fab.isVisible = currentBook != null
         showPlaying(state.playing)
       }
       is BookShelfState.NoFolderSet -> {
         showNoFolderWarning()
       }
     }
-    loadingProgress.visible = state == BookShelfState.Loading
+    loadingProgress.isVisible = state == BookShelfState.Loading
   }
 
   private fun showPlaying(playing: Boolean) {

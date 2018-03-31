@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import androidx.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
@@ -12,7 +13,6 @@ import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.dialog_time_picker.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -40,8 +40,8 @@ class JumpToPositionDialogFragment : DialogFragment() {
     val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
     if (biggestHour == 0) {
       //sets visibility of hour related things to gone if max.hour is zero
-      container.colon.visible = false
-      container.numberHour.visible = false
+      container.colon.isVisible = false
+      container.numberHour.isVisible = false
     }
 
     //set maximum values

@@ -2,16 +2,20 @@ package de.ph1b.audiobook.features.imagepicker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PointF
+import android.graphics.Rect
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
+import androidx.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.layoutInflater
-import de.ph1b.audiobook.uitools.visible
 import timber.log.Timber
 
 /**
@@ -65,10 +69,10 @@ class CropOverlay @JvmOverloads constructor(
       if (value != field) {
         field = value
 
-        leftCircle.visible = value
-        rightCircle.visible = value
-        topCircle.visible = value
-        bottomCircle.visible = value
+        leftCircle.isVisible = value
+        rightCircle.isVisible = value
+        topCircle.isVisible = value
+        bottomCircle.isVisible = value
 
         invalidate()
       }
@@ -80,7 +84,7 @@ class CropOverlay @JvmOverloads constructor(
 
   private fun newCircle() =
     context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
-      visible = false
+      isVisible = false
     }
 
   private fun minRectSize() = Math.min(bounds.width(), bounds.height()) / 3f

@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import android.view.ViewGroup
+import androidx.view.isVisible
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
@@ -14,7 +15,6 @@ import de.ph1b.audiobook.misc.onFirstPreDraw
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.book_shelf_row.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -54,7 +54,7 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     val name = book.name
     title.text = name
     author.text = book.author
-    author.visible = book.author != null
+    author.isVisible = book.author != null
     title.maxLines = if (book.author == null) 2 else 1
     launch(UI) { bindCover(book) }
 

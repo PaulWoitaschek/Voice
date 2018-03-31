@@ -117,6 +117,8 @@ dependencies {
   kapt deps.Dagger.compiler
   kapt deps.Dagger.androidProcessor
 
+  implementation deps.androidKtx
+
   testImplementation deps.junit
   testImplementation deps.truth
   testImplementation deps.mockito

@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
+import androidx.view.isVisible
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -29,7 +30,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -100,9 +100,9 @@ class BookPlayController(
 
     // Next/Prev/spinner/book progress views hiding
     val multipleChapters = data.size > 1
-    next.visible = multipleChapters
-    previous.visible = multipleChapters
-    bookSpinner.visible = multipleChapters
+    next.isVisible = multipleChapters
+    previous.isVisible = multipleChapters
+    bookSpinner.isVisible = multipleChapters
 
     cover.transitionName = book.coverTransitionName
 
@@ -281,7 +281,7 @@ class BookPlayController(
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     // set text and visibility
     timerCountdownView.text = formatTime(ms, ms)
-    timerCountdownView.visible = active
+    timerCountdownView.isVisible = active
   }
 
   override fun openSleepTimeDialog() {

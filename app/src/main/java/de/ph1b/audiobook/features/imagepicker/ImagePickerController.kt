@@ -11,6 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.view.isVisible
 import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -21,7 +22,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.visible
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
 import kotlinx.coroutines.experimental.android.UI
@@ -147,9 +147,9 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       ) {
         Timber.d("received webViewError. Set webView invisible")
         view.loadUrl(ABOUT_BLANK)
-        progressBar.visible = false
-        noNetwork.visible = true
-        webViewContainer.visible = false
+        progressBar.isVisible = false
+        noNetwork.isVisible = true
+        webViewContainer.isVisible = false
       }
     }
 
@@ -160,9 +160,9 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       .subscribe {
         // sets progressbar and webviews visibilities correctly once the page is loaded
         Timber.i("WebView is now loading. Set webView visible")
-        progressBar.visible = false
-        noNetwork.visible = false
-        webViewContainer.visible = true
+        progressBar.isVisible = false
+        noNetwork.isVisible = false
+        webViewContainer.isVisible = true
       }
 
     webView.loadUrl(originalUrl)

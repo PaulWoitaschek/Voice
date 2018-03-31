@@ -1,9 +1,16 @@
 package de.ph1b.audiobook.uitools
 
 import android.os.Bundle
-import android.transition.*
+import android.transition.ChangeBounds
+import android.transition.ChangeClipBounds
+import android.transition.ChangeImageTransform
+import android.transition.ChangeTransform
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.TransitionSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.view.isVisible
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
 import de.ph1b.audiobook.R
 
@@ -42,7 +49,7 @@ class BookChangeHandler : TransitionChangeHandler() {
 
     if (!isPush && from != null) {
       val gradient = from.findViewById<View?>(R.id.gradientShadow)
-      gradient?.visible = false
+      gradient?.isVisible = false
     }
 
     val moveFade = TransitionSet()

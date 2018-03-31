@@ -5,18 +5,7 @@ import android.support.annotation.AnyRes
 import android.support.annotation.AttrRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatDelegate
-import android.view.View
 import de.ph1b.audiobook.R
-
-var View.visible: Boolean
-  get() = visibility == View.VISIBLE
-  set(value) {
-    visibility = if (value) View.VISIBLE else View.GONE
-  }
-
-fun View.setVisibleWeak() {
-  visibility = View.INVISIBLE
-}
 
 object ThemeUtil {
 

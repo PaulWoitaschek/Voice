@@ -8,13 +8,13 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
+import androidx.view.isInvisible
+import androidx.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.setVisibleWeak
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.folder_overview.*
 
 private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
@@ -39,7 +39,7 @@ class FolderOverviewController :
       startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
     }
 
-    overlay.setVisibleWeak()
+    overlay.isInvisible = true
 
     overlay.setOnClickListener {
       fam.collapse()
@@ -110,7 +110,7 @@ class FolderOverviewController :
       )
 
       // make the view visible and start the animation
-      overlay.visible = true
+      overlay.isVisible = true
       anim.start()
     }
 
@@ -132,7 +132,7 @@ class FolderOverviewController :
         object : AnimatorListenerAdapter() {
           override fun onAnimationEnd(animation: Animator) {
             super.onAnimationEnd(animation)
-            overlay.setVisibleWeak()
+            overlay.isInvisible = true
           }
         }
       )
@@ -165,7 +165,7 @@ class FolderOverviewController :
     fam.collapseImmediately()
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    overlay.visible = false
+    overlay.isVisible = false
     startActivity(intent)
   }
 

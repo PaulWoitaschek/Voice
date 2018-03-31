@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import androidx.view.isVisible
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
@@ -21,7 +22,6 @@ import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -57,7 +57,7 @@ class EditCoverDialogFragment : DialogFragment() {
     val uri = Uri.parse(arguments!!.getString(NI_COVER_URI))
     val book = repo.bookById(bookId)!!
 
-    container.coverReplacement.visible = true
+    container.coverReplacement.isVisible = true
     container.cropOverlay.selectionOn = false
     picasso.load(uri)
       .into(
@@ -68,7 +68,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
           override fun onSuccess() {
             container.cropOverlay.selectionOn = true
-            container.coverReplacement.visible = false
+            container.coverReplacement.isVisible = false
           }
         }
       )

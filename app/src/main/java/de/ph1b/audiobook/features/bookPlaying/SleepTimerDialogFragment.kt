@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
+import androidx.view.isVisible
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -20,7 +21,6 @@ import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.dialog_sleep.*
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
@@ -150,7 +150,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     layoutContainer.shakeToResetSwitch.isChecked = shakeToResetPref.value
     val shakeSupported = shakeDetector.shakeSupported()
     if (!shakeSupported) {
-      layoutContainer.shakeToResetSwitch.visible = false
+      layoutContainer.shakeToResetSwitch.isVisible = false
     }
 
     return BottomSheetDialog(context!!, R.style.BottomSheetStyle).apply {

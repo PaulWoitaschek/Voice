@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.view.isVisible
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
@@ -18,7 +19,6 @@ import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import de.ph1b.audiobook.uitools.visible
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import timber.log.Timber
 import java.io.File
@@ -138,7 +138,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
   override fun newRootFolders(newFolders: List<File>) {
     Timber.i("newRootFolders called with $newFolders")
-    spinnerGroup.visible = newFolders.size > 1
+    spinnerGroup.isVisible = newFolders.size > 1
     spinnerAdapter.setData(newFolders)
   }
 
