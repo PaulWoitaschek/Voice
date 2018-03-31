@@ -6,6 +6,7 @@ import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.InternalDb
+import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,11 +30,13 @@ class BookRepositoryTest {
 
   @Test
   fun inOut() {
-    val dummy = BookFactory.create()
+    runBlocking {
+      val dummy = BookFactory.create()
     repo.addBook(dummy)
     val firstBook = repo.activeBooks.first()
     val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
     assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
+    }
   }
 }

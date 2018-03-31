@@ -5,6 +5,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
+import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.BookShelfPresenter
@@ -25,12 +26,13 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(
-  modules = arrayOf(
+  modules = [
     AndroidModule::class,
     PrefsModule::class,
     BindingModule::class,
-    AndroidSupportInjectionModule::class
-  )
+    AndroidSupportInjectionModule::class,
+    PersistenceModule::class
+  ]
 )
 interface AppComponent {
 

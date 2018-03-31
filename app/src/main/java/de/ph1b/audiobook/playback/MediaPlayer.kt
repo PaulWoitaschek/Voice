@@ -52,11 +52,11 @@ constructor(
 
   private var bookSubject = BehaviorSubject.create<Book>()
 
-  private val stateSubject = BehaviorSubject.createDefault(PlayerState.IDLE)
+  private val _state = BehaviorSubject.createDefault(PlayerState.IDLE)
   private var state: PlayerState
-    get() = stateSubject.value!!
+    get() = _state.value!!
     set(value) {
-      if (stateSubject.value != value) stateSubject.onNext(value)
+      if (_state.value != value) _state.onNext(value)
     }
 
   private val seekTime by seekTimePref
@@ -71,12 +71,10 @@ constructor(
       .setUsage(C.USAGE_MEDIA)
       .build()
 
-    // delegate player state changes
     player.onStateChanged {
       state = it
     }
 
-    // on error reset the playback
     player.onError {
       Timber.e("onError")
       player.playWhenReady = false
@@ -106,7 +104,7 @@ constructor(
       loudnessGain.update(it)
     }
 
-    stateSubject.subscribe {
+    _state.subscribe {
       Timber.i("state changed to $it")
 
       // set the wake-lock based on the play state
@@ -120,22 +118,24 @@ constructor(
       }
     }
 
-    stateSubject.switchMap {
-      if (it == PlayerState.PLAYING) {
-        Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-          .map { player.currentPosition }
-          .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
-      } else Observable.empty()
-    }.subscribe {
-      // update the book
-      bookSubject.value?.let { book ->
-        val index = player.currentWindowIndex
-        val time = it.coerceAtLeast(0)
-          .toInt()
-        val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
-        bookSubject.onNext(copy)
+    _state
+      .switchMap {
+        if (it == PlayerState.PLAYING) {
+          Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .map { player.currentPosition }
+            .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
+        } else Observable.empty()
       }
-    }
+      .subscribe {
+        // update the book
+        bookSubject.value?.let { book ->
+          val index = player.currentWindowIndex
+          val time = it.coerceAtLeast(0)
+            .toInt()
+          val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
+          bookSubject.onNext(copy)
+        }
+      }
   }
 
   /** Initializes a new book. After this, a call to play can be made. */

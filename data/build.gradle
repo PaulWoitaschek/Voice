@@ -11,6 +11,12 @@ android {
     targetSdkVersion buildConfig.targetSdk
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+      }
+    }
   }
 
   buildTypes {
@@ -29,6 +35,10 @@ dependencies {
   implementation deps.Kotlin.coroutinesAndroid
   implementation deps.rxJava
   implementation deps.moshi
+
+  api deps.Arch.Room.runtime
+  implementation deps.Arch.Room.rxJava
+  kapt deps.Arch.Room.compiler
 
   implementation deps.Dagger.core
   kapt deps.Dagger.compiler

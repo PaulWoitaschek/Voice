@@ -24,7 +24,8 @@ buildscript {
       exoPlayer          : "2.7.2",
       exoPlayerExtensions: "2.7.0-1",
       coroutines         : "0.22.5",
-      kotlin             : "1.2.31"
+      kotlin             : "1.2.31",
+      room               : "1.1.0-beta1"
   ]
 
   ext.deps = [
@@ -53,6 +54,15 @@ buildscript {
           base     : "com.bluelinelabs:conductor:${versions.conductor}",
           lifecycle: "com.bluelinelabs:conductor-rxlifecycle2:${versions.conductor}",
           support  : "com.bluelinelabs:conductor-support:${versions.conductor}"
+      ],
+
+      Arch                : [
+          coreRuntime: "android.arch.core:runtime:1.1.1",
+          Room       : [
+              runtime : "android.arch.persistence.room:runtime:${versions.room}",
+              compiler: "android.arch.persistence.room:compiler:${versions.room}",
+              rxJava: "android.arch.persistence.room:rxjava2:${versions.room}"
+          ],
       ],
 
       crashlytics         : "com.crashlytics.sdk.android:crashlytics:2.9.1@aar",
@@ -135,6 +145,7 @@ allprojects {
       force deps.Support.supportAnnotations
       force deps.Kotlin.std
       force 'com.google.code.findbugs:jsr305:3.0.1'
+      force deps.Arch.coreRuntime
     }
   }
 }

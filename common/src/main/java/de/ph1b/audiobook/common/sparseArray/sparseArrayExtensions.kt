@@ -23,15 +23,4 @@ inline fun <E> SparseArrayCompat<E>.forEachIndexed(
   }
 }
 
-fun <T> Map<Int, T>.toSparseArray(): SparseArrayCompat<T> {
-  if (isEmpty())
-    return emptySparseArray()
-
-  val array = SparseArrayCompat<T>(size)
-  forEach { (key, value) ->
-    array.put(key, value)
-  }
-  return array
-}
-
 fun SparseArrayCompat<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)

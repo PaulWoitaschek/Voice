@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
-import de.ph1b.audiobook.data.repo.internals.tables.BookmarkTable
 import de.ph1b.audiobook.data.repo.internals.tables.ChapterTable
 import org.junit.Test
 
@@ -26,7 +25,7 @@ class DataBaseMigratorTest {
     val bookTableQuery = helper.writableDatabase.query(BookTable.TABLE_NAME)
     assertThat(bookTableQuery.count).isEqualTo(0)
 
-    val bookmarkTableQuery = helper.writableDatabase.query(BookmarkTable.TABLE_NAME)
+    val bookmarkTableQuery = helper.writableDatabase.query("tableBookmarks")
     assertThat(bookmarkTableQuery.count).isEqualTo(0)
 
     val chapterTableQuery = helper.writableDatabase.query(ChapterTable.TABLE_NAME)

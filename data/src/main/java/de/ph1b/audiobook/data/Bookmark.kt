@@ -1,15 +1,24 @@
 package de.ph1b.audiobook.data
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.io.File
 
 /**
  * Represents a bookmark in the book.
  */
+@Entity(tableName = "bookmark")
 data class Bookmark(
+  @ColumnInfo(name = "file")
   val mediaFile: File,
+  @ColumnInfo(name = "title")
   val title: String,
+  @ColumnInfo(name = "time")
   val time: Int,
+  @ColumnInfo(name = "id")
+  @PrimaryKey(autoGenerate = true)
   val id: Long = ID_UNKNOWN
 ) : Comparable<Bookmark> {
 
@@ -36,6 +45,6 @@ data class Bookmark(
   }
 
   companion object {
-    val ID_UNKNOWN = -1L
+    const val ID_UNKNOWN = 0L
   }
 }
