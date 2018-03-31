@@ -25,7 +25,8 @@ class SeekDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val container = DialogLayoutContainer(layoutInflater.inflate(R.layout.dialog_amount_chooser))
+    val container =
+      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
 
     // init
     val oldSeekTime = seekTimePref.value

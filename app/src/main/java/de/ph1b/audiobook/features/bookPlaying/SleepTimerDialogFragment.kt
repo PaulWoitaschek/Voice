@@ -84,7 +84,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     AndroidSupportInjection.inject(this)
 
     _layoutContainer = DialogLayoutContainer(
-      layoutInflater.inflate(R.layout.dialog_sleep)
+      activity!!.layoutInflater.inflate(R.layout.dialog_sleep)
     )
 
     // restore or get fresh

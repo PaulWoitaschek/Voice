@@ -50,7 +50,8 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       return dialog
     }
 
-    val container = DialogLayoutContainer(layoutInflater.inflate(R.layout.book_more_bottom_sheet))
+    val container =
+      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.book_more_bottom_sheet))
     dialog.setContentView(container.containerView)
 
     container.title.setOnClickListener {
