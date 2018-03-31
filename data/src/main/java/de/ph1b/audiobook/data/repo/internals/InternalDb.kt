@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
-import de.ph1b.audiobook.data.repo.internals.tables.BookmarkTable
 import de.ph1b.audiobook.data.repo.internals.tables.ChapterTable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,7 +21,6 @@ class InternalDb
   override fun onCreate(db: SQLiteDatabase) {
     BookTable.onCreate(db)
     ChapterTable.onCreate(db)
-    BookmarkTable.onCreate(db)
   }
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -32,7 +30,7 @@ class InternalDb
 
   companion object {
 
-    private const val DATABASE_VERSION = 43
+    private const val DATABASE_VERSION = 44
     @VisibleForTesting
     const val DATABASE_NAME = "autoBookDB"
   }
