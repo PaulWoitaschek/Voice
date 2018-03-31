@@ -143,9 +143,9 @@ constructor(
   fun init(book: Book) {
     val shouldInitialize = player.playbackState == Player.STATE_IDLE
         || !alreadyInitializedChapters(book)
+    bookSubject.onNext(book)
     Timber.i("init(${book.name}). Already initialized=${!shouldInitialize}")
     if (shouldInitialize) {
-      bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex, book.positionInChapter.toLong())
