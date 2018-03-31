@@ -140,8 +140,10 @@ constructor(
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
-    if (player.playbackState == Player.STATE_IDLE || bookSubject.value != book) {
-      Timber.i("init called with ${book.name}")
+    val shouldInitialize = player.playbackState == Player.STATE_IDLE
+        || !alreadyInitializedChapters(book)
+    Timber.i("init(${book.name}). Already initialized=${!shouldInitialize}")
+    if (shouldInitialize) {
       bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
@@ -150,6 +152,12 @@ constructor(
       loudnessGain.gainmB = book.loudnessGain
       state = PlayerState.PAUSED
     }
+  }
+
+  private fun alreadyInitializedChapters(book: Book): Boolean {
+    val currentBook = bookSubject.value
+        ?: return false
+    return currentBook.chapters == book.chapters
   }
 
   fun setLoudnessGain(mB: Int) {
