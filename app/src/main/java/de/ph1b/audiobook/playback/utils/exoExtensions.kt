@@ -1,10 +1,16 @@
 package de.ph1b.audiobook.playback.utils
 
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import de.ph1b.audiobook.playback.PlayerState
 
 fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
-  playbackParameters = PlaybackParameters(speed, 1F)
+  if (playbackParameters?.speed != speed) {
+    playbackParameters = PlaybackParameters(speed, 1F)
+  }
 }
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
