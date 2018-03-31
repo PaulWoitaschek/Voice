@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import de.ph1b.audiobook.data.repo.internals.asTransaction
-import de.ph1b.audiobook.data.repo.internals.long
+import androidx.database.getLong
+import androidx.database.getString
+import androidx.database.sqlite.transaction
 import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.string
 import timber.log.Timber
 
 class Migration32to34 : Migration {
@@ -36,9 +36,9 @@ class Migration32to34 : Migration {
     // retrieve old bookmarks
     val cursor = db.query(BOOKMARK_TABLE_NAME, null, null, null, null, null, null)
     val entries = cursor.mapRows {
-      val path = string(BM_PATH)
-      val title = string(BM_TITLE)
-      val time = long(BM_TIME)
+      val path = getString(BM_PATH)
+      val title = getString(BM_TITLE)
+      val time = getLong(BM_TIME)
       Holder(path, title, time)
     }
     Timber.i("Restored bookmarks=$entries")
@@ -51,7 +51,7 @@ class Migration32to34 : Migration {
     Timber.i("Created $CREATE_TABLE_BOOKMARKS")
 
     // add old bookmarks to new bookmark scheme
-    db.asTransaction {
+    db.transaction {
       entries.forEach {
         val cv = ContentValues().apply {
           put(PATH, it.path)

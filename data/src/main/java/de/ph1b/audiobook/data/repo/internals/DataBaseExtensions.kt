@@ -2,53 +2,10 @@ package de.ph1b.audiobook.data.repo.internals
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import java.util.*
+import java.util.ArrayList
 
-fun Cursor.string(columnName: String): String {
-  return stringNullable(columnName)!!
-}
-
-fun Cursor.stringNullable(columnName: String): String? {
-  return getString(getColumnIndexOrThrow(columnName))
-}
-
-fun Cursor.float(columnName: String): Float {
-  return getFloat(getColumnIndexOrThrow(columnName))
-}
-
-fun Cursor.long(columnName: String): Long {
-  return getLong(getColumnIndexOrThrow(columnName))
-}
-
-fun Cursor.int(columnName: String): Int {
-  return getInt(getColumnIndexOrThrow(columnName))
-}
-
-fun Cursor.intNullable(columnName: String): Int? {
-  val index = getColumnIndexOrThrow(columnName)
-  return if (isNull(index)) null
-  else getInt(index)
-}
-
-inline fun <T> SQLiteDatabase.asTransaction(func: SQLiteDatabase.() -> T): T {
-  beginTransaction()
-  return try {
-    val result = func()
-    setTransactionSuccessful()
-    result
-  } finally {
-    endTransaction()
-  }
-}
-
-inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
-  val editor = this.edit()
-  editor.func()
-  editor.apply()
-}
 
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   while (moveToNext()) {

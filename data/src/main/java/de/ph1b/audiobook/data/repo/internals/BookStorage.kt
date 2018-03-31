@@ -2,6 +2,13 @@ package de.ph1b.audiobook.data.repo.internals
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.database.getFloat
+import androidx.database.getInt
+import androidx.database.getIntOrNull
+import androidx.database.getLong
+import androidx.database.getString
+import androidx.database.getStringOrNull
+import androidx.database.sqlite.transaction
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
@@ -25,73 +32,75 @@ class BookStorage
 
   private val db by lazy { internalDb.writableDatabase }
 
-  private fun books(active: Boolean) = db.asTransaction {
-    return@asTransaction db.query(
-      table = BookTable.TABLE_NAME,
-      columns = listOf(
-        BookTable.ID,
-        BookTable.NAME,
-        BookTable.AUTHOR,
-        BookTable.CURRENT_MEDIA_PATH,
-        BookTable.PLAYBACK_SPEED,
-        BookTable.ROOT,
-        BookTable.TIME,
-        BookTable.TYPE,
-        BookTable.LOUDNESS_GAIN
-      ),
-      selection = "${BookTable.ACTIVE} =?",
-      selectionArgs = listOf(if (active) 1 else 0)
-    ).mapRows {
-      val bookId: Long = long(BookTable.ID)
-      val bookName: String = string(BookTable.NAME)
-      val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
-      var currentFile = File(string(BookTable.CURRENT_MEDIA_PATH))
-      val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
-      val bookRoot: String = string(BookTable.ROOT)
-      val bookTime: Int = int(BookTable.TIME)
-      val bookType: String = string(BookTable.TYPE)
-      val loudnessGain = intNullable(BookTable.LOUDNESS_GAIN) ?: 0
-
-      val chapters = db.query(
-        table = ChapterTable.TABLE_NAME,
+  private fun books(active: Boolean): List<Book> {
+    return db.transaction {
+      db.query(
+        table = BookTable.TABLE_NAME,
         columns = listOf(
-          ChapterTable.NAME,
-          ChapterTable.DURATION,
-          ChapterTable.PATH,
-          ChapterTable.LAST_MODIFIED,
-          ChapterTable.MARKS
+          BookTable.ID,
+          BookTable.NAME,
+          BookTable.AUTHOR,
+          BookTable.CURRENT_MEDIA_PATH,
+          BookTable.PLAYBACK_SPEED,
+          BookTable.ROOT,
+          BookTable.TIME,
+          BookTable.TYPE,
+          BookTable.LOUDNESS_GAIN
         ),
-        selection = "${ChapterTable.BOOK_ID} =?",
-        selectionArgs = listOf(bookId)
-      )
-        .mapRows {
-          val name: String = string(ChapterTable.NAME)
-          val duration: Int = int(ChapterTable.DURATION)
-          val path: String = string(ChapterTable.PATH)
-          val lastModified = long(ChapterTable.LAST_MODIFIED)
-          val chapterMarks = stringNullable(ChapterTable.MARKS)?.let {
-            chapterMarkAdapter.fromJson(it)!!
-          } ?: emptySparseArray()
-          Chapter(File(path), name, duration, lastModified, chapterMarks)
+        selection = "${BookTable.ACTIVE} =?",
+        selectionArgs = listOf(if (active) 1 else 0)
+      ).mapRows {
+        val bookId: Long = getLong(BookTable.ID)
+        val bookName: String = getString(BookTable.NAME)
+        val bookAuthor: String? = getStringOrNull(BookTable.AUTHOR)
+        var currentFile = File(getString(BookTable.CURRENT_MEDIA_PATH))
+        val bookSpeed: Float = getFloat(BookTable.PLAYBACK_SPEED)
+        val bookRoot: String = getString(BookTable.ROOT)
+        val bookTime: Int = getInt(BookTable.TIME)
+        val bookType: String = getString(BookTable.TYPE)
+        val loudnessGain = getIntOrNull(BookTable.LOUDNESS_GAIN) ?: 0
+
+        val chapters = db.query(
+          table = ChapterTable.TABLE_NAME,
+          columns = listOf(
+            ChapterTable.NAME,
+            ChapterTable.DURATION,
+            ChapterTable.PATH,
+            ChapterTable.LAST_MODIFIED,
+            ChapterTable.MARKS
+          ),
+          selection = "${ChapterTable.BOOK_ID} =?",
+          selectionArgs = listOf(bookId)
+        )
+          .mapRows {
+            val name: String = getString(ChapterTable.NAME)
+            val duration: Int = getInt(ChapterTable.DURATION)
+            val path: String = getString(ChapterTable.PATH)
+            val lastModified = getLong(ChapterTable.LAST_MODIFIED)
+            val chapterMarks = getStringOrNull(ChapterTable.MARKS)?.let {
+              chapterMarkAdapter.fromJson(it)!!
+            } ?: emptySparseArray()
+            Chapter(File(path), name, duration, lastModified, chapterMarks)
+          }
+
+        if (chapters.find { it.file == currentFile } == null) {
+          Timber.e("Couldn't get current file. Return first file")
+          currentFile = chapters[0].file
         }
 
-      if (chapters.find { it.file == currentFile } == null) {
-        Timber.e("Couldn't get current file. Return first file")
-        currentFile = chapters[0].file
+        Book(
+          id = bookId,
+          type = Book.Type.valueOf(bookType),
+          author = bookAuthor,
+          currentFile = currentFile,
+          positionInChapter = bookTime,
+          name = bookName,
+          chapters = chapters,
+          playbackSpeed = bookSpeed,
+          root = bookRoot,
+          loudnessGain = loudnessGain
+        )
       }
-
-      Book(
-        bookId,
-        Book.Type.valueOf(bookType),
-        bookAuthor,
-        currentFile,
-        bookTime,
-        bookName,
-        chapters,
-        bookSpeed,
-        bookRoot,
-        loudnessGain
-      )
     }
   }
 
@@ -139,23 +148,27 @@ class BookStorage
     put(BookTable.LOUDNESS_GAIN, loudnessGain)
   }
 
-  fun updateBook(book: Book) = db.asTransaction {
-    require(book.id != -1L) { "Book $book has an invalid id" }
+  fun updateBook(book: Book) {
+    db.transaction {
+      require(book.id != -1L) { "Book $book has an invalid id" }
 
-    // update book itself
-    val bookCv = book.toContentValues()
-    update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", book.id)
+      // update book itself
+      val bookCv = book.toContentValues()
+      update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", book.id)
 
-    // delete old chapters and replace them with new ones
-    delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", book.id)
-    book.chapters.forEach { insert(it, book.id) }
+      // delete old chapters and replace them with new ones
+      delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", book.id)
+      book.chapters.forEach { insert(it, book.id) }
+    }
   }
 
-  fun addBook(toAdd: Book) = db.asTransaction {
-    val bookCv = toAdd.toContentValues()
-    val bookId = insertOrThrow(BookTable.TABLE_NAME, null, bookCv)
-    val newBook = toAdd.copy(id = bookId)
-    newBook.chapters.forEach { insert(it, bookId) }
-    return@asTransaction newBook
+  fun addBook(toAdd: Book): Book {
+    return db.transaction {
+      val bookCv = toAdd.toContentValues()
+      val bookId = insertOrThrow(BookTable.TABLE_NAME, null, bookCv)
+      val newBook = toAdd.copy(id = bookId)
+      newBook.chapters.forEach { insert(it, bookId) }
+      return@transaction newBook
+    }
   }
 }

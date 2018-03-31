@@ -35,6 +35,7 @@ dependencies {
   implementation deps.Kotlin.coroutinesAndroid
   implementation deps.rxJava
   implementation deps.moshi
+  implementation deps.androidKtx
 
   api deps.Arch.Room.runtime
   implementation deps.Arch.Room.rxJava

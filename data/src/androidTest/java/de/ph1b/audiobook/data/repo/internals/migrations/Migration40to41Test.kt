@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
+import androidx.database.getInt
 import com.google.common.truth.Truth.assertThat
-import de.ph1b.audiobook.data.repo.internals.int
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.query
 import de.ph1b.audiobook.data.repo.internals.update
@@ -52,7 +52,7 @@ class Migration40to41Test {
     db.update(BookTable.TABLE_NAME, loudnessGainCv, "${BookTable.ID}=?", id)
 
     val loudnessGains = db.query(BookTable.TABLE_NAME, listOf("loudnessGain")).mapRows {
-      int("loudnessGain")
+      getInt("loudnessGain")
     }
     assertThat(loudnessGains).containsExactly(100)
   }

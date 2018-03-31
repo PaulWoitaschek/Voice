@@ -2,7 +2,14 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.data.repo.internals.*
+import androidx.database.getFloat
+import androidx.database.getInt
+import androidx.database.getLong
+import androidx.database.getString
+import androidx.database.getStringOrNull
+import androidx.database.sqlite.transaction
+import de.ph1b.audiobook.data.repo.internals.mapRows
+import de.ph1b.audiobook.data.repo.internals.query
 
 class Migration35to36 : Migration {
 
@@ -34,18 +41,18 @@ class Migration35to36 : Migration {
     val entries = db.query(TABLE_NAME)
       .mapRows {
         Holder(
-          long(ID),
-          string(NAME),
-          stringNullable(AUTHOR),
-          string(CURRENT_MEDIA_PATH),
-          float(PLAYBACK_SPEED),
-          string(ROOT),
-          long(TIME),
-          string(TYPE),
-          int(ACTIVE)
+          getLong(ID),
+          getString(NAME),
+          getStringOrNull(AUTHOR),
+          getString(CURRENT_MEDIA_PATH),
+          getFloat(PLAYBACK_SPEED),
+          getString(ROOT),
+          getLong(TIME),
+          getString(TYPE),
+          getInt(ACTIVE)
         )
       }
-    db.asTransaction {
+    db.transaction {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
       entries.forEach {

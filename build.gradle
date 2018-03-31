@@ -61,7 +61,7 @@ buildscript {
           Room       : [
               runtime : "android.arch.persistence.room:runtime:${versions.room}",
               compiler: "android.arch.persistence.room:compiler:${versions.room}",
-              rxJava: "android.arch.persistence.room:rxjava2:${versions.room}"
+              rxJava  : "android.arch.persistence.room:rxjava2:${versions.room}"
           ],
       ],
 
@@ -98,7 +98,8 @@ buildscript {
       junit               : "junit:junit:4.12",
       mockito             : "org.mockito:mockito-core:2.17.0",
       mockitoKotlin       : "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
-      truth               : "com.google.truth:truth:0.40"
+      truth               : "com.google.truth:truth:0.40",
+      androidKtx          : 'androidx.core:core-ktx:0.2'
   ]
 
   repositories {

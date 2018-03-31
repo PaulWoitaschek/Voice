@@ -2,7 +2,11 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.data.repo.internals.*
+import androidx.database.getLong
+import androidx.database.getString
+import androidx.database.sqlite.transaction
+import de.ph1b.audiobook.data.repo.internals.mapRows
+import de.ph1b.audiobook.data.repo.internals.query
 
 /**
  * The field LAST_MODIFIED was added to the chapters
@@ -28,10 +32,10 @@ class Migration36to37 : Migration {
 
   override fun migrate(db: SQLiteDatabase) {
     val data = db.query(TABLE_NAME).mapRows {
-      Holder(long(DURATION), string(NAME), string(PATH), long(BOOK_ID))
+      Holder(getLong(DURATION), getString(NAME), getString(PATH), getLong(BOOK_ID))
     }
 
-    db.asTransaction {
+    db.transaction {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
       data.forEach {
