@@ -62,7 +62,8 @@ constructor(
   private val seekTime by seekTimePref
   private var autoRewindAmount by autoRewindAmountPref
 
-  fun book(): Book? = bookSubject.value
+  val book: Book?
+    get() = bookSubject.value
   val bookStream = bookSubject.hide()!!
 
   init {
@@ -87,7 +88,7 @@ constructor(
         .coerceAtLeast(0)
         .toInt()
       Timber.i("onPositionDiscontinuity with currentPos=$position")
-      bookSubject.value?.let {
+      book?.let {
         val index = player.currentWindowIndex
         bookSubject.onNext(
           it.copy(
@@ -128,7 +129,7 @@ constructor(
       }
       .subscribe {
         // update the book
-        bookSubject.value?.let { book ->
+        book?.let { book ->
           val index = player.currentWindowIndex
           val time = it.coerceAtLeast(0)
             .toInt()
@@ -155,7 +156,7 @@ constructor(
   }
 
   private fun alreadyInitializedChapters(book: Book): Boolean {
-    val currentBook = bookSubject.value
+    val currentBook = this.book
         ?: return false
     return currentBook.chapters == book.chapters
   }
@@ -163,7 +164,7 @@ constructor(
   fun setLoudnessGain(mB: Int) {
     Timber.v("setLoudnessGain to $mB mB")
 
-    bookSubject.value?.let {
+    book?.let {
       val copy = it.copy(loudnessGain = mB)
       bookSubject.onNext(copy)
       loudnessGain.gainmB = mB
@@ -173,7 +174,7 @@ constructor(
   fun play() {
     Timber.v("play called in state $state")
     prepareIfIdle()
-    bookSubject.value?.let {
+    book?.let {
       if (state == PlayerState.ENDED) {
         Timber.i("play in state ended. Back to the beginning")
         changePosition(0, it.chapters.first().file)
@@ -193,7 +194,7 @@ constructor(
     if (state == PlayerState.IDLE)
       return
 
-    bookSubject.value?.let {
+    book?.let {
       val currentPos = player.currentPosition
         .coerceAtLeast(0)
       val duration = player.duration
@@ -217,7 +218,7 @@ constructor(
     if (state == PlayerState.IDLE)
       return
 
-    bookSubject.value?.let {
+    book?.let {
       val handled = previousByMarks(it)
       if (!handled) previousByFile(it, toNullOfNewTrack)
     }
@@ -260,7 +261,7 @@ constructor(
   private fun prepareIfIdle() {
     if (state == PlayerState.IDLE) {
       Timber.d("state is idle so ExoPlayer might have an error. Try to prepare it")
-      bookSubject.value?.let { init(it) }
+      book?.let { init(it) }
     }
   }
 
@@ -278,7 +279,7 @@ constructor(
     Timber.v("pause")
     when (state) {
       PlayerState.PLAYING -> {
-        bookSubject.value?.let {
+        book?.let {
           player.playWhenReady = false
           playStateManager.playState = PlayState.PAUSED
 
@@ -317,7 +318,7 @@ constructor(
   /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
     prepareIfIdle()
-    val book = bookSubject.value
+    val book = book
         ?: return
 
     val nextChapterMarkPosition = book.nextChapterMarkPosition
@@ -332,7 +333,7 @@ constructor(
     if (state == PlayerState.IDLE)
       return
 
-    bookSubject.value?.let {
+    book?.let {
       val copy = it.copy(positionInChapter = time, currentFile = changedFile ?: it.currentFile)
       bookSubject.onNext(copy)
       player.seekTo(copy.currentChapterIndex, time.toLong())
@@ -341,7 +342,7 @@ constructor(
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
-    bookSubject.value?.let {
+    book?.let {
       val copy = it.copy(playbackSpeed = speed)
       bookSubject.onNext(copy)
       player.setPlaybackSpeed(speed)
