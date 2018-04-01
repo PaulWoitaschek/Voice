@@ -20,6 +20,7 @@ data class Book(
   init {
     require(name.isNotEmpty(), { "name must not be empty" })
     require(root.isNotEmpty(), { "root must not be empty" })
+    require(content.id == id) { "wrong book content" }
   }
 
   val coverTransitionName = "bookCoverTransition_$id"
