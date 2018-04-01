@@ -68,6 +68,9 @@ class BookRepository
 
   @Synchronized
   suspend fun updateBook(book: Book) {
+    if (bookById(book.id) == book) {
+      return
+    }
     withContext(IO) {
       require(book.id != -1L)
 
