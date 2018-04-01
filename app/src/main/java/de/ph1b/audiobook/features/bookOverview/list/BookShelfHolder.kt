@@ -16,6 +16,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.android.synthetic.main.book_shelf_row.*
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
@@ -56,7 +57,6 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     author.text = book.author
     author.isVisible = book.author != null
     title.maxLines = if (book.author == null) 2 else 1
-    bindCover(book)
 
     cover.transitionName = book.coverTransitionName
 
@@ -66,21 +66,23 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
       .coerceAtMost(1F)
 
     this.progress.progress = progress
+
+    bindCover(book)
   }
 
   private var boundFile: File? = null
   private var boundName: String? = null
+  private var currentCoverBindingJob: Job? = null
 
   private fun bindCover(book: Book) {
-    launch(IO) {
+    currentCoverBindingJob?.cancel()
+    currentCoverBindingJob = launch(IO) {
       val coverFile = book.coverFile()
       val bookName = book.name
 
       if (boundName == book.name && boundFile?.length() == coverFile.length()) {
         return@launch
       }
-      boundFile = coverFile
-      boundName = bookName
 
       val coverReplacement = CoverReplacement(bookName, itemView.context)
 
@@ -101,6 +103,9 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
           cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
         }
       }
+
+      boundFile = coverFile
+      boundName = bookName
     }
   }
 }
