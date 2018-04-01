@@ -77,8 +77,13 @@ class BookStorageTest {
 
     assertThat(containing).hasSize(2)
 
-    val mock1WithUpdatedId = mock1.copy(id = firstInserted.id)
-    val mock2WithUpdatedId = mock2.copy(id = secondInserted.id)
+    val mock1WithUpdatedId = mock1.copy(
+      id = firstInserted.id, content = mock1.content.copy(id = firstInserted.id)
+    )
+    val mock2WithUpdatedId = mock2.copy(
+      id = secondInserted.id,
+      content = mock2.content.copy(id = secondInserted.id)
+    )
 
     assertThat(containing).doesNotContain(mock1)
     assertThat(containing).doesNotContain(mock2)
@@ -93,12 +98,22 @@ class BookStorageTest {
     val inserted = register.addBook(withNullableAuthor)
 
     assertThat(inserted)
-      .isEqualTo(withNullableAuthor.copy(id = inserted.id))
+      .isEqualTo(
+        withNullableAuthor.copy(
+          id = inserted.id,
+          content = withNullableAuthor.content.copy(id = inserted.id)
+        )
+      )
 
     val retrieved = register.activeBooks()
       .single()
 
-    assertThat(retrieved).isEqualTo(withNullableAuthor.copy(id = retrieved.id))
+    assertThat(retrieved).isEqualTo(
+      withNullableAuthor.copy(
+        id = retrieved.id,
+        content = withNullableAuthor.content.copy(id = retrieved.id)
+      )
+    )
   }
 
   @Test

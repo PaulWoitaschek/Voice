@@ -171,7 +171,7 @@ class BookStorage
     return db.transaction {
       val bookCv = toAdd.toContentValues()
       val bookId = insertOrThrow(BookTable.TABLE_NAME, null, bookCv)
-      val newBook = toAdd.copy(id = bookId)
+      val newBook = toAdd.copy(id = bookId, content = toAdd.content.copy(id = bookId))
       newBook.content.chapters.forEach { insert(it, bookId) }
       return@transaction newBook
     }
