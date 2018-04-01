@@ -143,7 +143,6 @@ constructor(
     if (player.playbackState == Player.STATE_IDLE || bookSubject.value != book) {
       Timber.i("init called with ${book.name}")
       bookSubject.onNext(book)
-      player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex, book.positionInChapter.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
