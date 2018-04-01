@@ -56,13 +56,14 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
     author.text = book.author
     author.isVisible = book.author != null
     title.maxLines = if (book.author == null) 2 else 1
-    launch(UI) { bindCover(book) }
+    bindCover(book)
 
     cover.transitionName = book.coverTransitionName
 
     val globalPosition = book.content.position
     val totalDuration = book.content.duration
-    val progress = globalPosition.toFloat() / totalDuration.toFloat()
+    val progress = (globalPosition.toFloat() / totalDuration.toFloat())
+      .coerceAtMost(1F)
 
     this.progress.progress = progress
   }
@@ -70,13 +71,13 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
   private var boundFile: File? = null
   private var boundName: String? = null
 
-  private suspend fun bindCover(book: Book) {
-    withContext(IO) {
+  private fun bindCover(book: Book) {
+    launch(IO) {
       val coverFile = book.coverFile()
       val bookName = book.name
 
       if (boundName == book.name && boundFile?.length() == coverFile.length()) {
-        return@withContext
+        return@launch
       }
       boundFile = coverFile
       boundName = bookName
