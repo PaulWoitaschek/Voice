@@ -49,7 +49,7 @@ class CoverFromDiscCollector
   }
 
   private suspend fun findAndSaveCoverEmbedded(book: Book) {
-    getEmbeddedCover(book.chapters)?.let {
+    getEmbeddedCover(book.content.chapters)?.let {
       val coverFile = book.coverFile()
       imageHelper.saveCover(it, coverFile)
       picasso.invalidate(coverFile)

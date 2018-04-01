@@ -38,7 +38,7 @@ class TriggerWidgetOnChange @Inject constructor(
     .filter { it.id == currentBookIdPref.value }
     .distinctUntilChanged { previous, current ->
       previous.id == current.id
-          && previous.chapters == current.chapters
-          && previous.currentFile == current.currentFile
+          && previous.content.chapters == current.content.chapters
+          && previous.content.currentFile == current.content.currentFile
     }
 }

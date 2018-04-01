@@ -7,7 +7,7 @@ class BookShelfDiffCallback : DiffUtil.ItemCallback<Book>() {
 
   override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
     return oldItem.id == newItem.id
-        && oldItem.position == newItem.position
+        && oldItem.content.position == newItem.content.position
         && oldItem.name == newItem.name
   }
 

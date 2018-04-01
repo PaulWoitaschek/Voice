@@ -7,9 +7,10 @@ import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor
 import com.google.android.exoplayer2.extractor.ts.TsExtractor
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.Reusable
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import java.io.File
 import javax.inject.Inject
@@ -38,11 +39,13 @@ class DataSourceConverter
   fun toMediaSource(file: File): ExtractorMediaSource =
     mediaSourceFactory.createMediaSource(Uri.fromFile(file))
 
-  /** convert a book to a media source. If the size is > 1 use a concat media source, else a regular */
-  fun toMediaSource(book: Book) = if (book.chapters.size > 1) {
-    val allSources = book.chapters.map {
-      it.toMediaSource()
-    }
-    ConcatenatingMediaSource(*allSources.toTypedArray())
-  } else book.currentChapter.toMediaSource()
+  /** convert a content to a media source. If the size is > 1 use a concat media source, else a regular */
+  fun toMediaSource(content: BookContent): MediaSource {
+    return if (content.chapters.size > 1) {
+      val allSources = content.chapters.map {
+        it.toMediaSource()
+      }
+      ConcatenatingMediaSource(*allSources.toTypedArray())
+    } else content.currentChapter.toMediaSource()
+  }
 }

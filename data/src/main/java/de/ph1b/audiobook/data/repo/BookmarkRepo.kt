@@ -33,7 +33,8 @@ class BookmarkRepo
 
   suspend fun addBookmarkAtBookPosition(book: Book, title: String): Bookmark {
     return withContext(IO) {
-      val addedBookmark = Bookmark(book.currentChapter.file, title, book.positionInChapter)
+      val addedBookmark =
+        Bookmark(book.content.currentChapter.file, title, book.content.positionInChapter)
       Timber.v("Added bookmark=$addedBookmark")
       addBookmark(addedBookmark)
     }
@@ -41,7 +42,7 @@ class BookmarkRepo
 
   suspend fun bookmarks(book: Book): List<Bookmark> {
     return withContext(IO) {
-      val files = book.chapters.map {
+      val files = book.content.chapters.map {
         it.file
       }
       dao.allForFiles(files)

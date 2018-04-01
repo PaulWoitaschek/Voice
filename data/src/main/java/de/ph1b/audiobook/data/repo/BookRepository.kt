@@ -114,7 +114,7 @@ class BookRepository
 
   private fun chapterByFile(file: File, books: List<Book>): Chapter? {
     books.forEach {
-      it.chapters.forEach {
+      it.content.chapters.forEach {
         if (it.file == file) return it
       }
     }

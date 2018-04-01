@@ -22,7 +22,7 @@ class BookmarkDaoTest {
     val book = BookFactory.create()
     val added = (0..10).map {
       Bookmark(
-        book.chapters.first().file,
+        book.content.chapters.first().file,
         "my title",
         System.currentTimeMillis().toInt()
       ).let {
@@ -46,5 +46,5 @@ class BookmarkDaoTest {
     assertThat(bookmarksForBook(book)).isEqualTo(notToDelete)
   }
 
-  private fun bookmarksForBook(book: Book) = dao.allForFiles(book.chapters.map { it.file })
+  private fun bookmarksForBook(book: Book) = dao.allForFiles(book.content.chapters.map { it.file })
 }

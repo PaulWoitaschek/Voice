@@ -12,6 +12,7 @@ import androidx.database.sqlite.transaction
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import de.ph1b.audiobook.data.repo.internals.tables.ChapterTable
@@ -92,13 +93,17 @@ class BookStorage
           id = bookId,
           type = Book.Type.valueOf(bookType),
           author = bookAuthor,
-          currentFile = currentFile,
-          positionInChapter = bookTime,
+          content = BookContent(
+            id = bookId,
+            currentFile = currentFile,
+            positionInChapter = bookTime,
+            chapters = chapters,
+            playbackSpeed = bookSpeed,
+            loudnessGain = loudnessGain
+          ),
           name = bookName,
-          chapters = chapters,
-          playbackSpeed = bookSpeed,
-          root = bookRoot,
-          loudnessGain = loudnessGain
+
+          root = bookRoot
         )
       }
     }
@@ -140,12 +145,12 @@ class BookStorage
     put(BookTable.NAME, name)
     put(BookTable.AUTHOR, author)
     put(BookTable.ACTIVE, 1)
-    put(BookTable.CURRENT_MEDIA_PATH, currentFile.absolutePath)
-    put(BookTable.PLAYBACK_SPEED, playbackSpeed)
+    put(BookTable.CURRENT_MEDIA_PATH, content.currentFile.absolutePath)
+    put(BookTable.PLAYBACK_SPEED, content.playbackSpeed)
     put(BookTable.ROOT, root)
-    put(BookTable.TIME, positionInChapter)
+    put(BookTable.TIME, content.positionInChapter)
     put(BookTable.TYPE, type.name)
-    put(BookTable.LOUDNESS_GAIN, loudnessGain)
+    put(BookTable.LOUDNESS_GAIN, content.loudnessGain)
   }
 
   fun updateBook(book: Book) {
@@ -158,7 +163,7 @@ class BookStorage
 
       // delete old chapters and replace them with new ones
       delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", book.id)
-      book.chapters.forEach { insert(it, book.id) }
+      book.content.chapters.forEach { insert(it, book.id) }
     }
   }
 
@@ -167,7 +172,7 @@ class BookStorage
       val bookCv = toAdd.toContentValues()
       val bookId = insertOrThrow(BookTable.TABLE_NAME, null, bookCv)
       val newBook = toAdd.copy(id = bookId)
-      newBook.chapters.forEach { insert(it, bookId) }
+      newBook.content.chapters.forEach { insert(it, bookId) }
       return@transaction newBook
     }
   }

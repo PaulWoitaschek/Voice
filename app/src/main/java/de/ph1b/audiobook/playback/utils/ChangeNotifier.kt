@@ -94,24 +94,24 @@ class ChangeNotifier @Inject constructor(
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
-    val currentChapter = book.currentChapter
+    val currentChapter = book.content.currentChapter
     val playState = playStateManager.playState
 
     val bookName = book.name
     val chapterName = currentChapter.name
     val author = book.author
-    val position = book.positionInChapter
+    val position = book.content.positionInChapter
 
     context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
     val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
-      .setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
-      .setActiveQueueItemId(book.chapters.indexOf(book.currentChapter).toLong())
+      .setState(playState.playbackStateCompat, position.toLong(), book.content.playbackSpeed)
+      .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
       .build()
 
     mediaSession.setPlaybackState(playbackState)
 
-    if (what == Type.METADATA && lastFileForMetaData != book.currentFile) {
+    if (what == Type.METADATA && lastFileForMetaData != book.content.currentFile) {
       appendQueue(book)
       // this check is necessary. Else the lockscreen controls will flicker due to
       // an updated picture
@@ -140,9 +140,9 @@ class ChangeNotifier @Inject constructor(
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
         .putLong(
           MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-          (book.currentChapterIndex + 1).toLong()
+          (book.content.currentChapterIndex + 1).toLong()
         )
-        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
+        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.content.chapters.size.toLong())
         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
@@ -152,12 +152,12 @@ class ChangeNotifier @Inject constructor(
         .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
       mediaSession.setMetadata(mediaMetaDataBuilder.build())
 
-      lastFileForMetaData = book.currentFile
+      lastFileForMetaData = book.content.currentFile
     }
   }
 
   private fun appendQueue(book: Book) {
-    val queue = book.chapters.mapIndexed { index, chapter ->
+    val queue = book.content.chapters.mapIndexed { index, chapter ->
       MediaSessionCompat.QueueItem(chapter.toMediaDescription(book), index.toLong())
     }
 
@@ -194,7 +194,7 @@ class ChangeNotifier @Inject constructor(
   }
 
   private fun Chapter.toMediaDescription(book: Book): MediaDescriptionCompat {
-    val index = book.chapters.indexOf(this)
+    val index = book.content.chapters.indexOf(this)
     return MediaDescriptionCompat.Builder()
       .setTitle(name)
       .setMediaId(bookUriConverter.chapter(book.id, index).toString())

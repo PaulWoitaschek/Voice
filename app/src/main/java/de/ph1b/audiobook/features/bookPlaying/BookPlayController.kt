@@ -70,15 +70,15 @@ class BookPlayController(
 
   override fun render(book: Book) {
     data.clear()
-    data.addAll(book.chaptersAsBookPlayChapters())
+    data.addAll(book.content.chapters.chaptersAsBookPlayChapters())
     spinnerAdapter.setData(data)
 
-    val dataForCurrentFile = data.filter { it.file == book.currentFile }
+    val dataForCurrentFile = data.filter { it.file == book.content.currentFile }
 
     // find closest position
     val currentChapter =
-      dataForCurrentFile.firstOrNull { book.positionInChapter >= it.start && book.positionInChapter < it.stop }
-          ?: dataForCurrentFile.firstOrNull { book.positionInChapter == it.stop }
+      dataForCurrentFile.firstOrNull { book.content.positionInChapter >= it.start && book.content.positionInChapter < it.stop }
+          ?: dataForCurrentFile.firstOrNull { book.content.positionInChapter == it.stop }
           ?: dataForCurrentFile.first()
     this.currentChapter = currentChapter
 
@@ -89,7 +89,7 @@ class BookPlayController(
     maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
-    val progress = book.positionInChapter - currentChapter.start
+    val progress = book.content.positionInChapter - currentChapter.start
     if (!seekBar.isPressed) {
       seekBar.progress = progress
       playedTime.text = formatTime(progress, duration)

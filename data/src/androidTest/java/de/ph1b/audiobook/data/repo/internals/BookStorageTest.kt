@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.util.*
+import java.util.Random
 
 
 class BookStorageTest {
@@ -106,7 +106,7 @@ class BookStorageTest {
     val mock = BookFactory.create()
     val inserted = register.addBook(mock)
 
-    val oldChapters = inserted.chapters
+    val oldChapters = inserted.content.chapters
     val substracted = oldChapters.minus(oldChapters.first())
     val marks1 = SparseArrayCompat<String>().apply {
       put(15114, "The time has come")
@@ -114,22 +114,24 @@ class BookStorageTest {
     }
     val newChapters = substracted.plus(
       Chapter(
-        File("/root/", "salkjsdg.mp3"),
-        "askhsdglkjsdf",
-        113513516,
-        131351,
-        marks1
+        file = File("/root/", "salkjsdg.mp3"),
+        name = "askhsdglkjsdf",
+        duration = 113513516,
+        fileLastModified = 131351,
+        marks = marks1
       )
     )
 
     val changed = inserted.copy(
       type = Book.Type.SINGLE_FILE,
       author = if (Random().nextBoolean()) "lkajsdflkj" else null,
-      currentFile = newChapters.last().file,
-      positionInChapter = 135135135,
+      content = inserted.content.copy(
+        currentFile = newChapters.last().file,
+        positionInChapter = 135135135,
+        chapters = newChapters,
+        playbackSpeed = 1.7f
+      ),
       name = "252587245",
-      chapters = newChapters,
-      playbackSpeed = 1.7f,
       root = "slksjdglkjgaölskjdf"
     )
 

@@ -93,11 +93,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
     sessionToken = mediaSession.sessionToken
 
     // update book when changed by player
-    player.bookStream.distinctUntilChanged()
+    player.bookContentStream.distinctUntilChanged()
       .observeOn(Schedulers.io())
       .subscribe {
         runBlocking {
-          repo.updateBook(it)
+          currentBook()
+            ?.copy(content = it)
+            ?.let { repo.updateBook(it) }
         }
       }
 
@@ -111,7 +113,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .filter { it.id == currentBookIdPref.value }
     bookUpdated
       .subscribe {
-        player.init(it)
+        Timber.i("init ${it.name}")
+        player.init(it.content)
         launch {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
@@ -119,7 +122,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .disposeOnDestroy()
 
     bookUpdated
-      .distinctUntilChanged { book -> book.currentChapter }
+      .distinctUntilChanged { book -> book.content.currentChapter }
       .subscribe {
         if (isForeground) {
           runBlocking {
@@ -181,9 +184,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun currentBookIdChanged(it: Long) {
-    if (player.book?.id != it) {
+    if (player.bookContent?.id != it) {
       player.stop()
-      repo.bookById(it)?.let { player.init(it) }
+      repo.bookById(it)?.let { player.init(it.content) }
     }
   }
 
@@ -210,9 +213,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
       PlayState.PAUSED -> handlePlaybackStatePaused()
       PlayState.STOPPED -> handlePlaybackStateStopped()
     }
-    player.book?.let {
+    currentBook()?.let {
       changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
     }
+  }
+
+  private fun currentBook(): Book? {
+    val id = currentBookIdPref.value
+    return repo.bookById(id)
   }
 
   private fun handlePlaybackStateStopped() {
@@ -226,20 +234,20 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private suspend fun handlePlaybackStatePaused() {
     stopForeground(false)
     isForeground = false
-    val book = player.book
-        ?: return
-    updateNotification(book)
+    currentBook()?.let {
+      updateNotification(it)
+    }
   }
 
   private suspend fun handlePlaybackStatePlaying() {
     audioFocusHelper.request()
     Timber.d("set mediaSession to active")
     mediaSession.isActive = true
-    val book = player.book
-        ?: return
-    val notification = notificationCreator.createNotification(book)
-    startForeground(NOTIFICATION_ID, notification)
-    isForeground = true
+    currentBook()?.let {
+      val notification = notificationCreator.createNotification(it)
+      startForeground(NOTIFICATION_ID, notification)
+      isForeground = true
+    }
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

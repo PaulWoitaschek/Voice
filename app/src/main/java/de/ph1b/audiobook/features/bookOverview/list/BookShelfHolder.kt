@@ -60,8 +60,8 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
 
     cover.transitionName = book.coverTransitionName
 
-    val globalPosition = book.position
-    val totalDuration = book.duration
+    val globalPosition = book.content.position
+    val totalDuration = book.content.duration
     val progress = globalPosition.toFloat() / totalDuration.toFloat()
 
     this.progress.progress = progress

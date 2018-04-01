@@ -9,6 +9,7 @@ import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
@@ -155,7 +156,7 @@ class BookAdder
       when (book.type) {
         Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
           if (it.isFile) {
-            val chapters = book.chapters
+            val chapters = book.content.chapters
             val singleBookChapterFile = chapters.first().file
             if (singleBookChapterFile == it) {
               bookExists = true
@@ -172,7 +173,7 @@ class BookAdder
         }
         Book.Type.SINGLE_FILE -> singleBookFiles.forEach {
           if (it.isFile) {
-            val chapters = book.chapters
+            val chapters = book.content.chapters
             val singleBookChapterFile = chapters.first().file
             if (singleBookChapterFile == it) {
               bookExists = true
@@ -233,49 +234,53 @@ class BookAdder
         id = Book.ID_UNKNOWN,
         type = type,
         author = result.author,
-        currentFile = firstChapterFile,
-        positionInChapter = 0,
+        content = BookContent(
+          id = Book.ID_UNKNOWN,
+          currentFile = firstChapterFile,
+          positionInChapter = 0,
+          chapters = newChapters
+        ),
         name = bookName,
-        chapters = newChapters,
         root = bookRoot
       )
       repo.addBook(newBook)
     } else {
       // checks if current path is still valid.
-      val oldCurrentFile = orphanedBook.currentFile
+      val oldCurrentFile = orphanedBook.content.currentFile
       val oldCurrentFileValid = newChapters.any { it.file == oldCurrentFile }
 
       // if the file is not valid, update time and position
-      val time = if (oldCurrentFileValid) orphanedBook.positionInChapter else 0
+      val time = if (oldCurrentFileValid) orphanedBook.content.positionInChapter else 0
       val currentFile =
-        if (oldCurrentFileValid) orphanedBook.currentFile else newChapters.first().file
+        if (oldCurrentFileValid) orphanedBook.content.currentFile else newChapters.first().file
 
-      orphanedBook = orphanedBook.copy(
-        positionInChapter = time,
-        currentFile = currentFile,
-        chapters = newChapters
-      )
-
+      orphanedBook = orphanedBook.updateContent {
+        copy(
+          positionInChapter = time,
+          currentFile = currentFile,
+          chapters = newChapters
+        )
+      }
       // now finally un-hide this book
       repo.revealBook(orphanedBook)
     }
   }
 
   /** Updates a book. Adds the new chapters to the book and corrects the
-   * [Book.currentFile] and [Book.positionInChapter]. **/
+   * [BookContent.currentFile] and [BookContent.positionInChapter]. **/
   private suspend fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
     var bookToUpdate = bookExisting
-    val bookHasChanged = bookToUpdate.chapters != newChapters
+    val bookHasChanged = bookToUpdate.content.chapters != newChapters
     // sort chapters
     if (bookHasChanged) {
       // check if the chapter set as the current still exists
       var currentPathIsGone = true
-      val currentFile = bookToUpdate.currentFile
-      val currentTime = bookToUpdate.positionInChapter
+      val currentFile = bookToUpdate.content.currentFile
+      val currentTime = bookToUpdate.content.positionInChapter
       newChapters.forEach {
         if (it.file == currentFile) {
           if (it.duration < currentTime) {
-            bookToUpdate = bookToUpdate.copy(positionInChapter = 0)
+            bookToUpdate = bookToUpdate.updateContent { copy(positionInChapter = 0) }
           }
           currentPathIsGone = false
         }
@@ -283,11 +288,13 @@ class BookAdder
 
       //set new bookmarks and chapters.
       // if the current path is gone, reset it correctly.
-      bookToUpdate = bookToUpdate.copy(
-        chapters = newChapters,
-        currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
-        positionInChapter = if (currentPathIsGone) 0 else bookToUpdate.positionInChapter
-      )
+      bookToUpdate = bookToUpdate.updateContent {
+        copy(
+          chapters = newChapters,
+          currentFile = if (currentPathIsGone) newChapters.first().file else currentFile,
+          positionInChapter = if (currentPathIsGone) 0 else positionInChapter
+        )
+      }
       repo.updateBook(bookToUpdate)
     }
   }
@@ -389,7 +396,7 @@ class BookAdder
     } else if (rootFile.isFile) {
       for (b in books) {
         if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
-          val singleChapter = b.chapters.first()
+          val singleChapter = b.content.chapters.first()
           if (singleChapter.file == rootFile) {
             return b
           }

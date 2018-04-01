@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import java.io.File
 
 data class BookPlayChapter(
@@ -29,16 +29,16 @@ data class BookPlayChapter(
         number + " - " + chapterName.substring(chapterName.indexOf(number) + number.length)
       } else {
         // if the name does not match at all, set the correct format
-        number + " - " + chapterName
+        "$number - $chapterName"
       }
     }
     return chapterName
   }
 }
 
-fun Book.chaptersAsBookPlayChapters(): List<BookPlayChapter> {
-  val data = ArrayList<BookPlayChapter>()
-  chapters.forEach {
+fun List<Chapter>.chaptersAsBookPlayChapters(): List<BookPlayChapter> {
+  val data = ArrayList<BookPlayChapter>(size)
+  forEach {
     if (it.marks.size() > 1) {
       it.marks.forEachIndexed { index, position, name ->
         val start = if (index == 0) 0 else position

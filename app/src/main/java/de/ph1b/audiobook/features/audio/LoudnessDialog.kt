@@ -42,7 +42,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
         ?: return MaterialDialog.Builder(activity!!).build()
 
     container.seekBar.max = LoudnessGain.MAX_MB
-    container.seekBar.progress = book.loudnessGain
+    container.seekBar.progress = book.content.loudnessGain
     container.seekBar.progressChangedStream()
       .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
       .subscribe {
@@ -50,7 +50,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
         container.currentValue.text = format(it)
       }
 
-    container.currentValue.text = format(book.loudnessGain)
+    container.currentValue.text = format(book.content.loudnessGain)
     container.maxValue.text = format(container.seekBar.max)
 
     return MaterialDialog.Builder(activity!!)

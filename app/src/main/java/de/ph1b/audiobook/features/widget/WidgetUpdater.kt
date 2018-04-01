@@ -79,7 +79,7 @@ class WidgetUpdater @Inject constructor(
     initElements(remoteViews = remoteViews, book = book, coverSize = useHeight)
 
     if (useWidth > 0 && useHeight > 0) {
-      setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
+      setVisibilities(remoteViews, useWidth, useHeight, book.content.chapters.size == 1)
     }
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
   }
@@ -167,7 +167,7 @@ class WidgetUpdater @Inject constructor(
     // if we have any book, init the views and have a click on the whole widget start BookPlay.
     // if we have no book, simply have a click on the whole widget start BookChoose.
     remoteViews.setTextViewText(R.id.title, book.name)
-    val name = book.currentChapter.name
+    val name = book.content.currentChapter.name
 
     remoteViews.setTextViewText(R.id.summary, name)
 

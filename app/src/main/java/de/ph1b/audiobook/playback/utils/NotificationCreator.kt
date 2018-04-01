@@ -117,11 +117,11 @@ class NotificationCreator
   }
 
   private fun NotificationCompat.Builder.setChapterInfo(book: Book): NotificationCompat.Builder {
-    val chapters = book.chapters
+    val chapters = book.content.chapters
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.
-      setContentInfo("${(book.currentChapterIndex + 1)}/${chapters.size}")
-      setContentText(book.currentChapter.name)
+      setContentInfo("${(book.content.currentChapterIndex + 1)}/${chapters.size}")
+      setContentText(book.content.currentChapter.name)
     } else {
       setContentInfo(null)
       setContentText(null)

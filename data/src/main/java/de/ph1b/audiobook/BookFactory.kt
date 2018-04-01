@@ -1,6 +1,7 @@
 package de.ph1b.audiobook
 
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 
 object BookFactory {
@@ -21,16 +22,19 @@ object BookFactory {
     val root = if (currentFile.parent != null) currentFile.parent else "fakeRoot"
 
     return Book(
-      id,
-      type,
-      author,
-      currentFile,
-      time,
-      name,
-      chapters,
-      playbackSpeed,
-      root,
-      loudnessGain
+      id = id,
+      type = type,
+      author = author,
+      content = BookContent(
+        id = id,
+        currentFile = currentFile,
+        positionInChapter = time,
+        chapters = chapters,
+        playbackSpeed = playbackSpeed,
+        loudnessGain = loudnessGain
+      ),
+      name = name,
+      root = root
     )
   }
 }

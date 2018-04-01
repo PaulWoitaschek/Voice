@@ -84,7 +84,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
     Timber.i("seekTo position$position, file$file")
     val book = bookRepository.bookById(bookId)
         ?: return
-    playerController.changePosition(position, file ?: book.currentFile)
+    playerController.changePosition(position, file ?: book.content.currentFile)
   }
 
   override fun toggleSleepTimer() {
@@ -97,7 +97,7 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
   override fun addBookmark() {
     launch(UI) {
       val book = bookRepository.bookById(bookId) ?: return@launch
-      val title = book.currentChapter.name
+      val title = book.content.currentChapter.name
       bookmarkRepo.addBookmarkAtBookPosition(book, title)
       view.showBookmarkAdded()
     }

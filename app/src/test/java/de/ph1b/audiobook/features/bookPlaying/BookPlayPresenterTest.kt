@@ -1,13 +1,19 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.inOrder
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.*
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.reactivex.Observable
@@ -108,7 +114,8 @@ class BookPlayPresenterTest {
   @Test
   fun bookStream() {
     val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
-    val bookWithCorrectIdAndChangedTime = bookWithCorrectId.copy(positionInChapter = 123)
+    val bookWithCorrectIdAndChangedTime =
+      bookWithCorrectId.updateContent { copy(positionInChapter = 123) }
     val bookWithFalseId = BookFactory.create(id = 50)
     val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
     val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
@@ -186,7 +193,7 @@ class BookPlayPresenterTest {
     val book = BookFactory.create(id = bookId)
     given { mockBookRepository.bookById(bookId) }.thenReturn(book)
     bookPlayPresenter.seekTo(100, null)
-    verify(mockPlayerController).changePosition(100, book.currentFile)
+    verify(mockPlayerController).changePosition(100, book.content.currentFile)
   }
 
   @Test
@@ -194,7 +201,7 @@ class BookPlayPresenterTest {
     bookPlayPresenter.attach(mockView)
     val book = BookFactory.create(id = bookId)
     given { mockBookRepository.bookById(bookId) }.thenReturn(book)
-    val lastFile = book.chapters.last().file
+    val lastFile = book.content.chapters.last().file
     bookPlayPresenter.seekTo(100, lastFile)
     verify(mockPlayerController).changePosition(100, lastFile)
   }

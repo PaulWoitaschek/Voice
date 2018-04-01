@@ -28,8 +28,8 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onSkipToQueueItem(id: Long) {
     super.onSkipToQueueItem(id)
-    val bookPlayChapters = player.book
-      ?.chaptersAsBookPlayChapters()
+    val bookPlayChapters = player.bookContent
+      ?.chapters?.chaptersAsBookPlayChapters()
         ?: return
     val chapter = bookPlayChapters[id.toInt()]
     player.changePosition(time = chapter.start, changedFile = chapter.file)
