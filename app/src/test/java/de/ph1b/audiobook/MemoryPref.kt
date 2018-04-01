@@ -11,7 +11,7 @@ class MemoryPref<T : Any>(default: T) : Pref<T>() {
 
   override val stream: Observable<T> = subject.hide()!!
 
-  override fun getValue(thisRef: Any, property: KProperty<*>): T = subject.value
+  override fun getValue(thisRef: Any, property: KProperty<*>): T = subject.value!!
 
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
     subject.onNext(value)

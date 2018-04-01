@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
@@ -52,13 +53,16 @@ class BookSearchHandlerTest {
     id = 2,
     type = Book.Type.SINGLE_FOLDER,
     author = "AnotherBookAuthor",
-    currentFile = anotherBookChapter1.file,
-    positionInChapter = 3000,
+    content = BookContent(
+      id = 2,
+      currentFile = anotherBookChapter1.file,
+      positionInChapter = 3000,
+      chapters = listOf(anotherBookChapter1, anotherBookChapter2),
+      playbackSpeed = 1F,
+      loudnessGain = 0
+    ),
     name = "AnotherBook",
-    chapters = listOf(anotherBookChapter1, anotherBookChapter2),
-    playbackSpeed = 1F,
-    root = "/sdcard/AnotherBook",
-    loudnessGain = 0
+    root = "/sdcard/AnotherBook"
   )
 
   private val bookToFindChapter1 =
@@ -69,13 +73,16 @@ class BookSearchHandlerTest {
     id = 1,
     type = Book.Type.SINGLE_FOLDER,
     author = "Book1Author",
-    currentFile = bookToFindChapter2.file,
-    positionInChapter = 3000,
+    content = BookContent(
+      id = 1,
+      currentFile = bookToFindChapter2.file,
+      positionInChapter = 3000,
+      chapters = listOf(bookToFindChapter1, bookToFindChapter2),
+      playbackSpeed = 1F,
+      loudnessGain = 0
+    ),
     name = "Book1",
-    chapters = listOf(bookToFindChapter1, bookToFindChapter2),
-    playbackSpeed = 1F,
-    root = "/sdcard/Book1",
-    loudnessGain = 0
+    root = "/sdcard/Book1"
   )
 
   @Before
