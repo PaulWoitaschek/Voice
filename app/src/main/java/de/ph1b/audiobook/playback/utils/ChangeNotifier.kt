@@ -22,7 +22,6 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -123,7 +122,6 @@ class ChangeNotifier @Inject constructor(
       }
       if (bitmap == null) {
         val replacement = CoverReplacement(book.name, context)
-        Timber.d("replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}")
         bitmap = imageHelper.drawableToBitmap(
           replacement,
           imageHelper.smallerScreenSize,
