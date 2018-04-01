@@ -95,10 +95,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     // update book when changed by player
     player.bookContentStream.distinctUntilChanged()
       .observeOn(Schedulers.io())
-      .subscribe {
+      .subscribe { content ->
         runBlocking {
-          currentBook()
-            ?.copy(content = it)
+          repo.bookById(content.id)
+            ?.copy(content = content)
             ?.let { repo.updateBook(it) }
         }
       }
@@ -111,6 +111,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     val bookUpdated = repo.updateObservable()
       .filter { it.id == currentBookIdPref.value }
+      .distinctUntilChanged { old, new ->
+        old.content == new.content
+      }
     bookUpdated
       .subscribe {
         Timber.i("init ${it.name}")
