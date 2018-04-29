@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.data.repo.internals
 
+import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.v4.util.SparseArrayCompat
 import com.google.common.truth.Truth.assertThat
@@ -26,8 +27,14 @@ class BookStorageTest {
   @Before
   fun setUp() {
     val context = InstrumentationRegistry.getTargetContext()
-    val internalDb = InternalDb(context)
-    register = BookStorage(internalDb, Moshi.Builder().build())
+    val helper = PersistenceModule()
+      .appDb(
+        builder = Room.inMemoryDatabaseBuilder(context, AppDb::class.java),
+        callback = InitialRoomCallback(),
+        migrations = PersistenceModule().migrations(context)
+      )
+      .openHelper
+    register = BookStorage(helper, Moshi.Builder().build())
   }
 
   @Test

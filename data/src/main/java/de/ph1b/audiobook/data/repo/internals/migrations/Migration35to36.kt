@@ -1,17 +1,17 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import androidx.database.getFloat
 import androidx.database.getInt
 import androidx.database.getLong
 import androidx.database.getString
 import androidx.database.getStringOrNull
-import androidx.database.sqlite.transaction
 import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.query
+import de.ph1b.audiobook.data.repo.internals.transaction
 
-class Migration35to36 : Migration {
+class Migration35to36 : IncrementalMigration(35) {
 
   private val ID = "bookId"
   private val NAME = "bookName"
@@ -37,7 +37,7 @@ class Migration35to36 : Migration {
     )
   """
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     val entries = db.query(TABLE_NAME)
       .mapRows {
         Holder(
@@ -67,7 +67,7 @@ class Migration35to36 : Migration {
           put(TYPE, it.type)
           put(ACTIVE, it.active)
         }
-        db.insert(TABLE_NAME, null, cv)
+        db.insert(TABLE_NAME, OnConflictStrategy.FAIL, cv)
       }
     }
   }

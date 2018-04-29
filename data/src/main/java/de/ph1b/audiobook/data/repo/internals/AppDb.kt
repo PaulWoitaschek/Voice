@@ -15,6 +15,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun bookmarkDao(): BookmarkDao
 
   companion object {
-    const val VERSION = 1
+    const val VERSION = 44
+    const val DATABASE_NAME = "autoBookDB"
   }
 }

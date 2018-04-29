@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo
 
 import android.support.test.InstrumentationRegistry
-import de.ph1b.audiobook.data.repo.internals.InternalDb
+import de.ph1b.audiobook.data.repo.internals.AppDb
 import org.junit.rules.ExternalResource
 
 
@@ -19,7 +19,7 @@ class ClearDbRule : ExternalResource() {
 
   private fun clearDb() {
     val context = InstrumentationRegistry.getTargetContext()
-    val dbName = InternalDb.DATABASE_NAME
+    val dbName = AppDb.DATABASE_NAME
     context.deleteDatabase(dbName)
   }
 }

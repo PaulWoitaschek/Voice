@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.data.repo.internals.tables
 
-import android.database.sqlite.SQLiteDatabase
-
 /**
  * Collection of strings representing the book table
  */
@@ -18,7 +16,7 @@ object BookTable {
   const val ACTIVE = "BOOK_ACTIVE"
   const val LOUDNESS_GAIN = "loudnessGain"
   const val TABLE_NAME = "tableBooks"
-  private const val CREATE_TABLE = """
+  const val CREATE_TABLE = """
     CREATE TABLE ${TABLE_NAME} (
       ${ID} INTEGER PRIMARY KEY AUTOINCREMENT,
       ${NAME} TEXT NOT NULL,
@@ -32,8 +30,4 @@ object BookTable {
       ${ACTIVE} INTEGER NOT NULL DEFAULT 1
     )
   """
-
-  fun onCreate(db: SQLiteDatabase) {
-    db.execSQL(CREATE_TABLE)
-  }
 }

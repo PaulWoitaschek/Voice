@@ -40,6 +40,7 @@ dependencies {
   api deps.Arch.Room.runtime
   implementation deps.Arch.Room.rxJava
   kapt deps.Arch.Room.compiler
+  androidTestImplementation deps.Arch.Room.testing
 
   implementation deps.Dagger.core
   kapt deps.Dagger.compiler

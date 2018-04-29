@@ -1,14 +1,16 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteOpenHelper
+import android.arch.persistence.db.SupportSQLiteQueryBuilder
+import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.support.test.InstrumentationRegistry
+import androidx.database.getInt
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.query
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -18,35 +20,47 @@ import org.junit.Test
  */
 class Migration39to40Test {
 
-  private lateinit var db: SQLiteDatabase
-  private lateinit var dbHelper: SQLiteOpenHelper
+  private lateinit var db: SupportSQLiteDatabase
+  private lateinit var helper: SupportSQLiteOpenHelper
 
   @Before
   fun setUp() {
     val context = InstrumentationRegistry.getTargetContext()
-    dbHelper = DBHelper(context)
-    context.deleteDatabase(dbHelper.databaseName)
-    db = dbHelper.writableDatabase
+    val config = SupportSQLiteOpenHelper.Configuration
+      .builder(context)
+      .callback(object : SupportSQLiteOpenHelper.Callback(39) {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+          db.execSQL(BookTable.CREATE_TABLE)
+        }
+
+        override fun onUpgrade(db: SupportSQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        }
+      })
+      .build()
+    helper = FrameworkSQLiteOpenHelperFactory().create(config)
+    db = helper.writableDatabase
   }
 
   @After
   fun tearDown() {
-    val context = InstrumentationRegistry.getTargetContext()
-    context.deleteDatabase(dbHelper.databaseName)
+    helper.close()
   }
 
   @Test
   fun negativeNumbersBecomeZero() {
     val bookCvWithNegativeTime = contentValuesForBookWithTime(-100)
-    db.insertOrThrow(BookTable.TABLE_NAME, null, bookCvWithNegativeTime)
+    db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCvWithNegativeTime)
 
     val bookCvWithPositiveTime = contentValuesForBookWithTime(5000)
-    db.insertOrThrow(BookTable.TABLE_NAME, null, bookCvWithPositiveTime)
+    db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCvWithPositiveTime)
 
     Migration39to40().migrate(db)
 
-    val times = db.query(BookTable.TABLE_NAME, listOf(BookTable.TIME))
-      .mapRows { getInt(getColumnIndexOrThrow(BookTable.TIME)) }
+    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
+      .columns(arrayOf(BookTable.TIME))
+      .create()
+    val times = db.query(query)
+      .mapRows { getInt(BookTable.TIME) }
     assertThat(times).containsExactly(0, 5000)
   }
 
@@ -60,15 +74,6 @@ class Migration39to40Test {
     put(BookTable.TYPE, "COLLECTION_FOLDER")
   }
 
-  class DBHelper(context: Context) : SQLiteOpenHelper(context, "testDb", null, 1) {
-
-    override fun onCreate(db: SQLiteDatabase) {
-      BookTable.onCreate(db)
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
-  }
-
   object BookTable {
     const val ID = "bookId"
     const val NAME = "bookName"
@@ -80,7 +85,7 @@ class Migration39to40Test {
     const val TYPE = "bookType"
     const val ACTIVE = "BOOK_ACTIVE"
     const val TABLE_NAME = "tableBooks"
-    private const val CREATE_TABLE = """
+    const val CREATE_TABLE = """
       CREATE TABLE $TABLE_NAME (
         $ID INTEGER PRIMARY KEY AUTOINCREMENT,
         $NAME TEXT NOT NULL,
@@ -93,9 +98,5 @@ class Migration39to40Test {
         $ACTIVE INTEGER NOT NULL DEFAULT 1
       )
     """
-
-    fun onCreate(db: SQLiteDatabase) {
-      db.execSQL(CREATE_TABLE)
-    }
   }
 }

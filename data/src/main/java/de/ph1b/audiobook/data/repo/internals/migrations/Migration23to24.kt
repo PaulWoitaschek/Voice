@@ -1,13 +1,13 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.database.sqlite.SQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteDatabase
 
 /**
  * Drops all tables and creates new ones.
  */
-class Migration23to24 : Migration {
+class Migration23to24 : IncrementalMigration(23) {
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK")
     db.execSQL("DROP TABLE IF EXISTS TABLE_CHAPTERS")
 

@@ -1,16 +1,18 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.migration.Migration
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import androidx.database.getLong
 import androidx.database.getString
-import androidx.database.sqlite.transaction
 import de.ph1b.audiobook.data.repo.internals.mapRows
+import de.ph1b.audiobook.data.repo.internals.transaction
 import timber.log.Timber
 
-class Migration32to34 : Migration {
+class Migration32to34 : Migration(32, 34) {
 
   private val BOOKMARK_TABLE_NAME = "tableBookmarks"
   private val BM_PATH = "bookmarkPath"
@@ -32,9 +34,9 @@ class Migration32to34 : Migration {
   """
 
   @SuppressLint("Recycle")
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     // retrieve old bookmarks
-    val cursor = db.query(BOOKMARK_TABLE_NAME, null, null, null, null, null, null)
+    val cursor = db.query("SELECT * FROM BOOKMARK_TABLE_NAME")
     val entries = cursor.mapRows {
       val path = getString(BM_PATH)
       val title = getString(BM_TITLE)
@@ -58,7 +60,7 @@ class Migration32to34 : Migration {
           put(TITLE, it.title)
           put(TIME, it.time)
         }
-        db.insertOrThrow(TABLE_NAME, null, cv)
+        db.insert(TABLE_NAME, OnConflictStrategy.FAIL, cv)
         Timber.i("Inserted $cv to $TABLE_NAME")
       }
     }

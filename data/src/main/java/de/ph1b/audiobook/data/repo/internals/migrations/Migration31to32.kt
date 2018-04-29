@@ -1,16 +1,18 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteQueryBuilder
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Corrects media paths that have been falsely set.
  */
 @SuppressLint("Recycle")
-class Migration31to32 : Migration {
+class Migration31to32 : IncrementalMigration(31) {
 
   private val BOOK_ID = "bookId"
   private val TABLE_BOOK = "tableBooks"
@@ -18,21 +20,19 @@ class Migration31to32 : Migration {
   private val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
   private val CHAPTER_PATH = "chapterPath"
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     db.query(
       TABLE_BOOK,
-      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
-      null, null, null, null, null
+      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH)
     ).moveToNextLoop {
       val bookId = getLong(0)
       val bookmarkCurrentMediaPath = getString(1)
 
       val chapterCursor = db.query(
-        TABLE_CHAPTERS,
-        arrayOf(CHAPTER_PATH),
-        BOOK_ID + "=?",
-        arrayOf(bookId.toString()),
-        null, null, null
+        SupportSQLiteQueryBuilder.builder(TABLE_CHAPTERS)
+          .columns(arrayOf(CHAPTER_PATH))
+          .selection(BOOK_ID + "=?", arrayOf(bookId))
+          .create()
       )
       val chapterPaths = ArrayList<String>(chapterCursor.count)
       chapterCursor.moveToNextLoop {
@@ -47,7 +47,13 @@ class Migration31to32 : Migration {
         if (!mediaPathValid) {
           val cv = ContentValues()
           cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())
-          db.update(TABLE_BOOK, cv, BOOK_ID + "=?", arrayOf(bookId.toString()))
+          db.update(
+            TABLE_BOOK,
+            OnConflictStrategy.FAIL,
+            cv,
+            "$BOOK_ID=?",
+            arrayOf(bookId.toString())
+          )
         }
       }
     }

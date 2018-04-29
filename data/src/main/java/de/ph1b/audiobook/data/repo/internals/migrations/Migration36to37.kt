@@ -1,17 +1,17 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import androidx.database.getLong
 import androidx.database.getString
-import androidx.database.sqlite.transaction
 import de.ph1b.audiobook.data.repo.internals.mapRows
-import de.ph1b.audiobook.data.repo.internals.query
+import de.ph1b.audiobook.data.repo.internals.transaction
 
 /**
  * The field LAST_MODIFIED was added to the chapters
  */
-class Migration36to37 : Migration {
+class Migration36to37 : IncrementalMigration(36) {
 
   private val TABLE_NAME = "tableChapters"
   private val DURATION = "chapterDuration"
@@ -30,7 +30,7 @@ class Migration36to37 : Migration {
       )
   """
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     val data = db.query(TABLE_NAME).mapRows {
       Holder(getLong(DURATION), getString(NAME), getString(PATH), getLong(BOOK_ID))
     }
@@ -46,7 +46,7 @@ class Migration36to37 : Migration {
           put(PATH, it.path)
           put(LAST_MODIFIED, 0L)
         }
-        db.insert(TABLE_NAME, null, cv)
+        db.insert(TABLE_NAME, OnConflictStrategy.FAIL, cv)
       }
     }
   }

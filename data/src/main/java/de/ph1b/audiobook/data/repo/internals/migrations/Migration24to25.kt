@@ -1,9 +1,11 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteQueryBuilder
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONArray
@@ -12,7 +14,8 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.ArrayList
+import java.util.InvalidPropertiesFormatException
 
 /**
  * Migrate the database so they will be stored as json objects
@@ -20,9 +23,9 @@ import java.util.*
 @SuppressLint("Recycle")
 class Migration24to25(
   private val context: Context
-) : Migration {
+) : IncrementalMigration(24) {
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"
     val copyChapterTableName = "TABLE_CHAPTERS_COPY"
 
@@ -36,8 +39,7 @@ class Migration24to25(
 
     val bookCursor = db.query(
       copyBookTableName,
-      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
-      null, null, null, null, null
+      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE")
     )
 
     bookCursor.moveToNextLoop {
@@ -46,9 +48,10 @@ class Migration24to25(
       val type = bookCursor.getString(2)
 
       val mediaCursor = db.query(
-        copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
-        "BOOK_ID" + "=?", arrayOf(bookId.toString()),
-        null, null, null
+        SupportSQLiteQueryBuilder.builder("copyChapterTableName")
+          .columns(arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"))
+          .selection("BOOK_ID" + "=?", arrayOf(bookId))
+          .create()
       )
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)
@@ -62,7 +65,7 @@ class Migration24to25(
       val configFile = when (type) {
         "COLLECTION_FILE", "SINGLE_FILE" -> File(root, "." + chapterNames[0] + "-map.json")
         "COLLECTION_FOLDER", "SINGLE_FOLDER" -> File(root, "." + (File(root).name) + "-map.json")
-        else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type)
+        else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=$type")
       }
       val backupFile = File(configFile.absolutePath + ".backup")
 
@@ -224,7 +227,7 @@ class Migration24to25(
         Timber.d("upgrade24 restored book=$book")
         val cv = ContentValues()
         cv.put("BOOK_JSON", book.toString())
-        val newBookId = db.insert(newBookTable, null, cv)
+        val newBookId = db.insert(newBookTable, OnConflictStrategy.FAIL, cv)
         book.put("id", newBookId)
 
         // move cover file if possible

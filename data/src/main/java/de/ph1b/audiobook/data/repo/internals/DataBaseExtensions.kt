@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -21,6 +22,25 @@ inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
   }
   list
 }
+
+inline fun <T> SupportSQLiteDatabase.transaction(
+  exclusive: Boolean = true,
+  body: SupportSQLiteDatabase.() -> T
+): T {
+  if (exclusive) {
+    beginTransaction()
+  } else {
+    beginTransactionNonExclusive()
+  }
+  try {
+    val result = body()
+    setTransactionSuccessful()
+    return result
+  } finally {
+    endTransaction()
+  }
+}
+
 
 @SuppressLint("Recycle")
 fun SQLiteDatabase.query(

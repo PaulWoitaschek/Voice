@@ -1,20 +1,19 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.database.sqlite.SQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteDatabase
 import org.json.JSONObject
-import java.util.*
+import java.util.ArrayList
 
 /**
  * A previous version caused empty books to be added. So we delete them now.
  */
-class Migration25to26 : Migration {
+class Migration25to26 : IncrementalMigration(25) {
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     // get all books
     val cursor = db.query(
       "TABLE_BOOK",
-      arrayOf("BOOK_ID", "BOOK_JSON"),
-      null, null, null, null, null
+      arrayOf("BOOK_ID", "BOOK_JSON")
     )
     val allBooks = ArrayList<JSONObject>(cursor.count)
     cursor.use {

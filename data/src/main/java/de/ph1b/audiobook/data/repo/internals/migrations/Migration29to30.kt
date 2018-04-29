@@ -1,14 +1,15 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONObject
-import java.util.*
+import java.util.ArrayList
 
 @SuppressLint("Recycle")
-class Migration29to30 : Migration {
+class Migration29to30 : IncrementalMigration(29) {
 
   // tables
   private val TABLE_BOOK = "tableBooks"
@@ -70,11 +71,10 @@ class Migration29to30 : Migration {
     )
   """
 
-  override fun migrate(db: SQLiteDatabase) {
+  override fun migrate(db: SupportSQLiteDatabase) {
     // fetching old contents
     val cursor = db.query(
-      "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
-      null, null, null, null, null
+      "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE")
     )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)
@@ -119,7 +119,7 @@ class Migration29to30 : Migration {
       bookCV.put(BOOK_USE_COVER_REPLACEMENT, if (useCoverReplacement) 1 else 0)
       bookCV.put(BOOK_ACTIVE, if (bookActive) 1 else 0)
 
-      val bookId = db.insert(TABLE_BOOK, null, bookCV)
+      val bookId = db.insert(TABLE_BOOK, OnConflictStrategy.FAIL, bookCV)
 
       for (j in 0 until chapters.length()) {
         val chapter = chapters.getJSONObject(j)
@@ -133,7 +133,7 @@ class Migration29to30 : Migration {
         chapterCV.put(CHAPTER_PATH, chapterPath)
         chapterCV.put(BOOK_ID, bookId)
 
-        db.insert(TABLE_CHAPTERS, null, chapterCV)
+        db.insert(TABLE_CHAPTERS, OnConflictStrategy.FAIL, chapterCV)
       }
 
       for (j in 0 until bookmarks.length()) {
@@ -148,7 +148,7 @@ class Migration29to30 : Migration {
         bookmarkCV.put(BOOKMARK_TIME, bookmarkTime)
         bookmarkCV.put(BOOK_ID, bookId)
 
-        db.insert(TABLE_BOOKMARKS, null, bookmarkCV)
+        db.insert(TABLE_BOOKMARKS, OnConflictStrategy.FAIL, bookmarkCV)
       }
     }
   }
