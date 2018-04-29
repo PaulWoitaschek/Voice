@@ -2,6 +2,7 @@ package de.ph1b.audiobook
 
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.Chapter
 
 object BookFactory {
@@ -23,8 +24,13 @@ object BookFactory {
 
     return Book(
       id = id,
-      type = type,
-      author = author,
+      metaData = BookMetaData(
+        id = id,
+        type = type,
+        author = author,
+        name = name,
+        root = root
+      ),
       content = BookContent(
         id = id,
         currentFile = currentFile,
@@ -32,9 +38,7 @@ object BookFactory {
         chapters = chapters,
         playbackSpeed = playbackSpeed,
         loudnessGain = loudnessGain
-      ),
-      name = name,
-      root = root
+      )
     )
   }
 }

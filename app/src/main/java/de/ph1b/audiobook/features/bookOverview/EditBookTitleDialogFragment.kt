@@ -32,7 +32,9 @@ class EditBookTitleDialogFragment : DialogFragment() {
       .input(getString(R.string.bookmark_edit_hint), presetName, false) { _, charSequence ->
         val newText = charSequence.toString()
         if (newText != presetName) {
-          repo.bookById(bookId)?.copy(name = newText)?.let {
+          repo.bookById(bookId)?.updateMetaData {
+            copy(name = newText)
+          }?.let {
             launch {
               repo.updateBook(it)
             }

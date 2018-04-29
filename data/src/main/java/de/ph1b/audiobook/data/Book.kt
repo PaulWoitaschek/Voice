@@ -9,19 +9,24 @@ import java.io.File
 
 
 data class Book(
-  val id: Long,
-  val type: Type,
-  val author: String?,
-  val name: String,
-  val root: String,
-  val content: BookContent
+  val id: Long = 0L,
+  val content: BookContent,
+  val metaData: BookMetaData
 ) : Comparable<Book> {
 
   init {
-    require(name.isNotEmpty(), { "name must not be empty" })
-    require(root.isNotEmpty(), { "root must not be empty" })
     require(content.id == id) { "wrong book content" }
+    require(metaData.id == id) { "Wrong metaData for $this" }
   }
+
+  val type = metaData.type
+  val author = metaData.author
+  val name = metaData.name
+  val root = metaData.root
+
+  fun updateMetaData(update: BookMetaData.() -> BookMetaData): Book = copy(
+    metaData = update(metaData)
+  )
 
   val coverTransitionName = "bookCoverTransition_$id"
 

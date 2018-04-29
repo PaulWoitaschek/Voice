@@ -12,6 +12,7 @@ import androidx.database.getString
 import androidx.database.getStringOrNull
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import timber.log.Timber
 import java.io.File
@@ -67,8 +68,13 @@ class BookStorage
 
           Book(
             id = bookId,
-            type = Book.Type.valueOf(bookType),
-            author = bookAuthor,
+            metaData = BookMetaData(
+              id = bookId,
+              type = Book.Type.valueOf(bookType),
+              author = bookAuthor,
+              name = bookName,
+              root = bookRoot
+            ),
             content = BookContent(
               id = bookId,
               currentFile = currentFile,
@@ -76,10 +82,7 @@ class BookStorage
               chapters = chapters,
               playbackSpeed = bookSpeed,
               loudnessGain = loudnessGain
-            ),
-            name = bookName,
-
-            root = bookRoot
+            )
           )
         }
     }

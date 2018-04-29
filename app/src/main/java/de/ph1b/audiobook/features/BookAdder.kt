@@ -10,6 +10,7 @@ import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
@@ -231,17 +232,17 @@ class BookAdder
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
-        id = Book.ID_UNKNOWN,
-        type = type,
-        author = result.author,
+        metaData = BookMetaData(
+          type = type,
+          author = result.author,
+          name = bookName,
+          root = bookRoot
+        ),
         content = BookContent(
-          id = Book.ID_UNKNOWN,
           currentFile = firstChapterFile,
           positionInChapter = 0,
           chapters = newChapters
-        ),
-        name = bookName,
-        root = bookRoot
+        )
       )
       repo.addBook(newBook)
     } else {

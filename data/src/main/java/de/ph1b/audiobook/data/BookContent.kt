@@ -4,7 +4,7 @@ import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import java.io.File
 
 data class BookContent(
-  val id: Long,
+  val id: Long = 0L,
   val currentFile: File,
   val positionInChapter: Int,
   val chapters: List<Chapter>,
