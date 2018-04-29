@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.db.SupportSQLiteQueryBuilder
 import android.arch.persistence.room.OnConflictStrategy
@@ -11,13 +10,9 @@ import androidx.database.getIntOrNull
 import androidx.database.getLong
 import androidx.database.getString
 import androidx.database.getStringOrNull
-import com.squareup.moshi.Moshi
-import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
-import de.ph1b.audiobook.data.repo.internals.tables.ChapterTable
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -28,10 +23,8 @@ import javax.inject.Inject
 class BookStorage
 @Inject constructor(
   helper: SupportSQLiteOpenHelper,
-  moshi: Moshi
+  private val chapterDao: ChapterDao
 ) {
-
-  private val chapterMarkAdapter = SparseArrayAdapter<String>(moshi.adapter(String::class.java))
 
   private val db by lazy { helper.writableDatabase }
 
@@ -65,29 +58,7 @@ class BookStorage
           val bookType: String = getString(BookTable.TYPE)
           val loudnessGain = getIntOrNull(BookTable.LOUDNESS_GAIN) ?: 0
 
-          val queryChapters = SupportSQLiteQueryBuilder.builder(ChapterTable.TABLE_NAME)
-            .columns(
-              arrayOf(
-                ChapterTable.NAME,
-                ChapterTable.DURATION,
-                ChapterTable.PATH,
-                ChapterTable.LAST_MODIFIED,
-                ChapterTable.MARKS
-              )
-            )
-            .selection("${ChapterTable.BOOK_ID} =?", arrayOf(bookId))
-            .create()
-          val chapters = db.query(queryChapters)
-            .mapRows {
-              val name: String = getString(ChapterTable.NAME)
-              val duration: Int = getInt(ChapterTable.DURATION)
-              val path: String = getString(ChapterTable.PATH)
-              val lastModified = getLong(ChapterTable.LAST_MODIFIED)
-              val chapterMarks = getStringOrNull(ChapterTable.MARKS)?.let {
-                chapterMarkAdapter.fromJson(it)!!
-              } ?: emptySparseArray()
-              Chapter(File(path), name, duration, lastModified, chapterMarks)
-            }
+          val chapters = chapterDao.byBookId(bookId)
 
           if (chapters.find { it.file == currentFile } == null) {
             Timber.e("Couldn't get current file. Return first file")
@@ -139,20 +110,6 @@ class BookStorage
     setBookVisible(bookId, false)
   }
 
-  private fun SupportSQLiteDatabase.insert(chapter: Chapter, bookId: Long): Long {
-    return insert(ChapterTable.TABLE_NAME, OnConflictStrategy.FAIL, chapter.toContentValues(bookId))
-  }
-
-  private fun Chapter.toContentValues(bookId: Long) = ContentValues().apply {
-    put(ChapterTable.DURATION, duration)
-    put(ChapterTable.NAME, name)
-    put(ChapterTable.PATH, file.absolutePath)
-    put(ChapterTable.BOOK_ID, bookId)
-    put(ChapterTable.LAST_MODIFIED, fileLastModified)
-    val markValue = chapterMarkAdapter.toJson(marks)
-    put(ChapterTable.MARKS, markValue)
-  }
-
   private fun Book.toContentValues() = ContentValues().apply {
     put(BookTable.NAME, name)
     put(BookTable.AUTHOR, author)
@@ -180,8 +137,8 @@ class BookStorage
       )
 
       // delete old chapters and replace them with new ones
-      delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id))
-      book.content.chapters.forEach { insert(it, book.id) }
+      chapterDao.deleteByBookId(book.id)
+      chapterDao.insert(book.content.chapters)
     }
   }
 
@@ -189,8 +146,17 @@ class BookStorage
     return db.transaction {
       val bookCv = toAdd.toContentValues()
       val bookId = insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
-      val newBook = toAdd.copy(id = bookId, content = toAdd.content.copy(id = bookId))
-      newBook.content.chapters.forEach { insert(it, bookId) }
+      val oldContent = toAdd.content
+      val newBook = toAdd.copy(
+        id = bookId,
+        content = oldContent.copy(
+          id = bookId,
+          chapters = oldContent.chapters.map {
+            it.copy(bookId = bookId)
+          }
+        )
+      )
+      chapterDao.insert(newBook.content.chapters)
       return@transaction newBook
     }
   }

@@ -1,5 +1,9 @@
 package de.ph1b.audiobook.data
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import android.support.v4.util.SparseArrayCompat
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.contentEquals
@@ -9,12 +13,26 @@ import java.io.File
 /**
  * Represents a chapter in a book.
  */
+@Entity(
+  tableName = "chapters",
+  indices = [(Index(value = ["bookId"]))]
+)
 data class Chapter(
+  @ColumnInfo(name = "file")
   val file: File,
+  @ColumnInfo(name = "name")
   val name: String,
+  @ColumnInfo(name = "duration")
   val duration: Int,
+  @ColumnInfo(name = "fileLastModified")
   val fileLastModified: Long,
-  val marks: SparseArrayCompat<String>
+  @ColumnInfo(name = "marks")
+  val marks: SparseArrayCompat<String>,
+  @ColumnInfo(name = "id")
+  @PrimaryKey(autoGenerate = true)
+  val id: Long = 0L,
+  @ColumnInfo(name = "bookId")
+  val bookId: Long = 0L
 ) : Comparable<Chapter> {
 
   init {

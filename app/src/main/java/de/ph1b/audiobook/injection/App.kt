@@ -13,6 +13,7 @@ import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
 import dagger.android.support.HasSupportFragmentInjector
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
@@ -65,6 +66,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     component = DaggerAppComponent.builder()
       .application(this)
       .build()
+    DataInjector.component = component
     component.inject(this)
 
     bookAdder.scanForFiles()

@@ -17,6 +17,11 @@ data class BookContent(
     require(playbackSpeed <= Book.SPEED_MAX) { "speed $playbackSpeed must be <= ${Book.SPEED_MAX}" }
     require(positionInChapter >= 0) { "positionInChapter must not be negative" }
     require(loudnessGain >= 0) { "loudnessGain must not be negative" }
+    if (BuildConfig.DEBUG) {
+      chapters.forEach {
+        require(it.bookId == id) { "Wrong chapter book id in $this" }
+      }
+    }
   }
 
   val currentChapter = chapters.first { it.file == currentFile }

@@ -5,6 +5,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
+import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
@@ -34,7 +35,7 @@ import javax.inject.Singleton
     PersistenceModule::class
   ]
 )
-interface AppComponent {
+interface AppComponent : DataComponent {
 
   val bookmarkPresenter: BookmarkPresenter
   val bookShelfPresenter: BookShelfPresenter
