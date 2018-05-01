@@ -19,7 +19,7 @@ There are still some components outdated.
 
 If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
 
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/master/Images/map-port.jpg" width="400" ></a>
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/master/Images/front.png" width="400" ></a>
 
 # <a name="contrib">Contribution</a>
 
