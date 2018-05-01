@@ -1,6 +1,0 @@
-Scaling: Center
-Trim: Dont trim
-Padding: -5%
-Shape: Square
-Background: 3f51b5
-Effect: Long Shadow
