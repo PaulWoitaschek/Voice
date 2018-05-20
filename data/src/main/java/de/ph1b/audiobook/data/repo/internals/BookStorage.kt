@@ -150,6 +150,7 @@ class BookStorage
       val bookCv = toAdd.toContentValues()
       val bookId = insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
       val oldContent = toAdd.content
+      val oldMetaData = toAdd.metaData
       val newBook = toAdd.copy(
         id = bookId,
         content = oldContent.copy(
@@ -157,6 +158,9 @@ class BookStorage
           chapters = oldContent.chapters.map {
             it.copy(bookId = bookId)
           }
+        ),
+        metaData = oldMetaData.copy(
+          id = bookId
         )
       )
       chapterDao.insert(newBook.content.chapters)
