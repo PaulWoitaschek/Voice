@@ -87,6 +87,12 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
     playerController.changePosition(position, file ?: book.content.currentFile)
   }
 
+  override fun toggleSkipSilence() {
+    val skipSilence = bookRepository.bookById(bookId)?.content?.skipSilence
+        ?: return
+    playerController.setSkipSilence(!skipSilence)
+  }
+
   override fun toggleSleepTimer() {
     if (sleepTimer.sleepTimerActive()) sleepTimer.setActive(false)
     else {

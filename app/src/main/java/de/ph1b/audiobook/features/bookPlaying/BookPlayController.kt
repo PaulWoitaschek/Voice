@@ -26,7 +26,6 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
@@ -50,9 +49,6 @@ class BookPlayController(
   BookPlayMvp.View {
 
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
-
-  @Inject
-  lateinit var playerController: PlayerController
 
   @Inject
   lateinit var equalizer: Equalizer
@@ -262,7 +258,7 @@ class BookPlayController(
           true
         }
         R.id.action_skip_silence -> {
-          toggleSkipSilenceState()
+          presenter.toggleSkipSilence()
           true
         }
         R.id.loudness -> {
@@ -285,11 +281,6 @@ class BookPlayController(
 
   private fun launchJumpToPositionDialog() {
     JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
-  }
-
-  private fun toggleSkipSilenceState() {
-    skipSilenceItem.isChecked = !skipSilenceItem.isChecked
-    playerController.setSkipSilence(skipSilenceItem.isChecked)
   }
 
   override fun showLeftSleepTime(ms: Int) {

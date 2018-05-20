@@ -26,5 +26,6 @@ interface BookPlayMvp {
     abstract fun seekTo(position: Int, file: File? = null)
     abstract fun toggleSleepTimer()
     abstract fun addBookmark()
+    abstract fun toggleSkipSilence()
   }
 }
