@@ -4,6 +4,7 @@ import android.arch.persistence.room.TypeConverter
 import android.support.v4.util.SparseArrayCompat
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.di.DataInjector
 import java.io.File
 import javax.inject.Inject
@@ -12,6 +13,7 @@ class Converters {
 
   @Inject
   lateinit var moshi: Moshi
+
   private val sparseStringArrayAdapter: JsonAdapter<SparseArrayCompat<String>>
 
   init {
@@ -35,4 +37,10 @@ class Converters {
   fun toSparseArrayCompat(json: String): SparseArrayCompat<String> {
     return sparseStringArrayAdapter.fromJson(json)!!
   }
+
+  @TypeConverter
+  fun fromBookType(type: Book.Type): String = type.name
+
+  @TypeConverter
+  fun toBookType(name: String): Book.Type = Book.Type.valueOf(name)
 }

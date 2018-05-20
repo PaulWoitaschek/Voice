@@ -40,6 +40,9 @@ class PersistenceModule {
   fun chapterDao(appDb: AppDb) = appDb.chapterDao()
 
   @Provides
+  fun metaDataDao(appDb: AppDb) = appDb.bookMetadataDao()
+
+  @Provides
   fun roomDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDb> {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
   }

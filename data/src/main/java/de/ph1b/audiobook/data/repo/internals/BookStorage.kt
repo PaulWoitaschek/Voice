@@ -9,10 +9,8 @@ import androidx.core.database.getInt
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLong
 import androidx.core.database.getString
-import androidx.core.database.getStringOrNull
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import timber.log.Timber
 import java.io.File
@@ -24,7 +22,8 @@ import javax.inject.Inject
 class BookStorage
 @Inject constructor(
   helper: SupportSQLiteOpenHelper,
-  private val chapterDao: ChapterDao
+  private val chapterDao: ChapterDao,
+  private val metaDataDao: BookMetaDataDao
 ) {
 
   private val db by lazy { helper.writableDatabase }
@@ -35,13 +34,9 @@ class BookStorage
         .columns(
           arrayOf(
             BookTable.ID,
-            BookTable.NAME,
-            BookTable.AUTHOR,
             BookTable.CURRENT_MEDIA_PATH,
             BookTable.PLAYBACK_SPEED,
-            BookTable.ROOT,
             BookTable.TIME,
-            BookTable.TYPE,
             BookTable.LOUDNESS_GAIN,
             BookTable.SKIP_SILENCE
           )
@@ -51,13 +46,9 @@ class BookStorage
       db.query(queryAllBooks)
         .mapRows {
           val bookId: Long = getLong(BookTable.ID)
-          val bookName: String = getString(BookTable.NAME)
-          val bookAuthor: String? = getStringOrNull(BookTable.AUTHOR)
           var currentFile = File(getString(BookTable.CURRENT_MEDIA_PATH))
           val bookSpeed: Float = getFloat(BookTable.PLAYBACK_SPEED)
-          val bookRoot: String = getString(BookTable.ROOT)
           val bookTime: Int = getInt(BookTable.TIME)
-          val bookType: String = getString(BookTable.TYPE)
           val loudnessGain = getIntOrNull(BookTable.LOUDNESS_GAIN) ?: 0
           val skipSilence = getIntOrNull(BookTable.SKIP_SILENCE) == 1
 
@@ -68,15 +59,11 @@ class BookStorage
             currentFile = chapters[0].file
           }
 
+          val metaData = metaDataDao.byId(bookId)
+
           Book(
             id = bookId,
-            metaData = BookMetaData(
-              id = bookId,
-              type = Book.Type.valueOf(bookType),
-              author = bookAuthor,
-              name = bookName,
-              root = bookRoot
-            ),
+            metaData = metaData,
             content = BookContent(
               id = bookId,
               currentFile = currentFile,
@@ -117,14 +104,10 @@ class BookStorage
   }
 
   private fun Book.toContentValues() = ContentValues().apply {
-    put(BookTable.NAME, name)
-    put(BookTable.AUTHOR, author)
     put(BookTable.ACTIVE, 1)
     put(BookTable.CURRENT_MEDIA_PATH, content.currentFile.absolutePath)
     put(BookTable.PLAYBACK_SPEED, content.playbackSpeed)
-    put(BookTable.ROOT, root)
     put(BookTable.TIME, content.positionInChapter)
-    put(BookTable.TYPE, type.name)
     put(BookTable.LOUDNESS_GAIN, content.loudnessGain)
     put(BookTable.SKIP_SILENCE, content.skipSilence)
   }
@@ -143,6 +126,8 @@ class BookStorage
         arrayOf(book.id)
       )
 
+      metaDataDao.insert(book.metaData)
+
       // delete old chapters and replace them with new ones
       chapterDao.deleteByBookId(book.id)
       chapterDao.insert(book.content.chapters)
@@ -154,7 +139,8 @@ class BookStorage
       val bookCv = toAdd.toContentValues()
       val bookId = insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
       val oldContent = toAdd.content
-      val oldMetaData = toAdd.metaData
+      val newMetaData = toAdd.metaData.copy(id = bookId)
+      metaDataDao.insert(newMetaData)
       val newBook = toAdd.copy(
         id = bookId,
         content = oldContent.copy(
@@ -163,9 +149,7 @@ class BookStorage
             it.copy(bookId = bookId)
           }
         ),
-        metaData = oldMetaData.copy(
-            id = bookId
-        )
+        metaData = newMetaData
       )
       chapterDao.insert(newBook.content.chapters)
       return@transaction newBook
