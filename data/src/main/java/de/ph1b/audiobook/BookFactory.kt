@@ -16,6 +16,7 @@ object BookFactory {
     name: String = "TestBook",
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,
+    skipSilence: Boolean = false,
     chapters: List<Chapter> = listOf(ChapterFactory.create())
   ): Book {
 
@@ -37,7 +38,8 @@ object BookFactory {
         positionInChapter = time,
         chapters = chapters,
         playbackSpeed = playbackSpeed,
-        loudnessGain = loudnessGain
+        loudnessGain = loudnessGain,
+        skipSilence = skipSilence
       )
     )
   }

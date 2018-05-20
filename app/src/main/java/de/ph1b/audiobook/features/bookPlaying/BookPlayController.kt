@@ -26,6 +26,7 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.MvpController
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
@@ -51,6 +52,9 @@ class BookPlayController(
   constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
 
   @Inject
+  lateinit var playerController: PlayerController
+
+  @Inject
   lateinit var equalizer: Equalizer
 
   private val data = ArrayList<BookPlayChapter>()
@@ -63,6 +67,7 @@ class BookPlayController(
 
   private var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter> by clearAfterDestroyView()
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()
+  private var skipSilenceItem: MenuItem by clearAfterDestroyView()
 
   init {
     App.component.inject(this)
@@ -105,6 +110,7 @@ class BookPlayController(
     bookSpinner.isVisible = multipleChapters
 
     cover.transitionName = book.coverTransitionName
+    skipSilenceItem.isChecked = book.content.skipSilence
 
     launch(IO) {
       val coverReplacement = CoverReplacement(book.name, activity)
@@ -214,6 +220,8 @@ class BookPlayController(
     val equalizerItem = menu.findItem(R.id.action_equalizer)
     equalizerItem.isVisible = equalizer.exists
 
+    skipSilenceItem = menu.findItem(R.id.action_skip_silence)
+
     toolbar.findViewById<View>(R.id.action_bookmark)
       .setOnLongClickListener {
         presenter.addBookmark()
@@ -253,6 +261,10 @@ class BookPlayController(
           equalizer.launch(activity)
           true
         }
+        R.id.action_skip_silence -> {
+          toggleSkipSilenceState()
+          true
+        }
         R.id.loudness -> {
           LoudnessDialog(bookId).showDialog(router)
           true
@@ -273,6 +285,11 @@ class BookPlayController(
 
   private fun launchJumpToPositionDialog() {
     JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
+  }
+
+  private fun toggleSkipSilenceState() {
+    skipSilenceItem.isChecked = !skipSilenceItem.isChecked
+    playerController.setSkipSilence(skipSilenceItem.isChecked)
   }
 
   override fun showLeftSleepTime(ms: Int) {

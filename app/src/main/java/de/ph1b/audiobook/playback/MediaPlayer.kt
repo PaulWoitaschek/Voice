@@ -19,7 +19,7 @@ import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onError
 import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
 import de.ph1b.audiobook.playback.utils.onStateChanged
-import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
+import de.ph1b.audiobook.playback.utils.setPlaybackParameters
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -146,7 +146,7 @@ constructor(
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(content))
       player.seekTo(content.currentChapterIndex, content.positionInChapter.toLong())
-      player.setPlaybackSpeed(content.playbackSpeed)
+      player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
       loudnessGain.gainmB = content.loudnessGain
       state = PlayerState.PAUSED
     }
@@ -342,7 +342,17 @@ constructor(
     bookContent?.let {
       val copy = it.copy(playbackSpeed = speed)
       _bookContent.onNext(copy)
-      player.setPlaybackSpeed(speed)
+      player.setPlaybackParameters(speed, it.skipSilence)
+    }
+  }
+
+  fun setSkipSilences(skip: Boolean) {
+    Timber.v("setSkipSilences to $skip")
+
+    bookContent?.let {
+      val copy = it.copy(skipSilence = skip)
+      _bookContent.onNext(copy)
+      player.setPlaybackParameters(it.playbackSpeed, skip)
     }
   }
 }
