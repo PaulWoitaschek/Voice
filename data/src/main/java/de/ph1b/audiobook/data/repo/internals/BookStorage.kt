@@ -42,7 +42,8 @@ class BookStorage
             BookTable.ROOT,
             BookTable.TIME,
             BookTable.TYPE,
-            BookTable.LOUDNESS_GAIN
+            BookTable.LOUDNESS_GAIN,
+            BookTable.SKIP_SILENCE
           )
         )
         .selection("${BookTable.ACTIVE} =?", arrayOf(if (active) 1 else 0))
@@ -58,6 +59,7 @@ class BookStorage
           val bookTime: Int = getInt(BookTable.TIME)
           val bookType: String = getString(BookTable.TYPE)
           val loudnessGain = getIntOrNull(BookTable.LOUDNESS_GAIN) ?: 0
+          val skipSilence = getIntOrNull(BookTable.SKIP_SILENCE) == 1
 
           val chapters = chapterDao.byBookId(bookId)
 
@@ -81,7 +83,8 @@ class BookStorage
               positionInChapter = bookTime,
               chapters = chapters,
               playbackSpeed = bookSpeed,
-              loudnessGain = loudnessGain
+              loudnessGain = loudnessGain,
+              skipSilence = skipSilence
             )
           )
         }
@@ -123,6 +126,7 @@ class BookStorage
     put(BookTable.TIME, content.positionInChapter)
     put(BookTable.TYPE, type.name)
     put(BookTable.LOUDNESS_GAIN, content.loudnessGain)
+    put(BookTable.SKIP_SILENCE, content.skipSilence)
   }
 
   fun updateBook(book: Book) {
@@ -160,7 +164,7 @@ class BookStorage
           }
         ),
         metaData = oldMetaData.copy(
-          id = bookId
+            id = bookId
         )
       )
       chapterDao.insert(newBook.content.chapters)

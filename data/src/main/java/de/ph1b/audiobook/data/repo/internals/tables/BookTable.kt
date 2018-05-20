@@ -15,6 +15,7 @@ object BookTable {
   const val TYPE = "bookType"
   const val ACTIVE = "BOOK_ACTIVE"
   const val LOUDNESS_GAIN = "loudnessGain"
+  const val SKIP_SILENCE = "skipSilence"
   const val TABLE_NAME = "tableBooks"
   const val CREATE_TABLE = """
     CREATE TABLE ${TABLE_NAME} (
@@ -27,6 +28,7 @@ object BookTable {
       ${TIME} INTEGER NOT NULL,
       ${TYPE} TEXT NOT NULL,
       ${LOUDNESS_GAIN} INTEGER,
+      ${SKIP_SILENCE} INTEGER DEFAULT 0,
       ${ACTIVE} INTEGER NOT NULL DEFAULT 1
     )
   """

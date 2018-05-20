@@ -71,6 +71,14 @@ class PlayerController
     )
   }
 
+  fun setSkipSilence(skip: Boolean) {
+    fire(
+        intent(ACTION_SKIP_SILENCE).apply {
+          putExtra(SKIP_SILENCE, skip)
+        }
+    )
+  }
+
   companion object {
 
     const val ACTION_SPEED = "de.ph1b.audiobook.ACTION_SPEED"
@@ -84,6 +92,8 @@ class PlayerController
     const val ACTION_FORCE_PREVIOUS = "de.ph1b.audiobook.ACTION_FORCE_PREVIOUS"
     const val ACTION_PLAY_PAUSE = "de.ph1b.audiobook.ACTION_PLAY_PAUSE"
     const val ACTION_LOUDNESS = "de.ph1b.audiobook.ACTION_LOUDNESS"
+    const val ACTION_SKIP_SILENCE = "de.ph1b.audiobook.ACTION_SKIP_SILENCE"
+    const val SKIP_SILENCE = "de.ph1b.audiobook.SKIP_SILENCE"
     const val EXTRA_SPEED = "de.ph1b.audiobook.EXTRA_SPEED"
     const val ACTION_CHANGE = "de.ph1b.audiobook.ACTION_CHANGE"
     const val CHANGE_TIME = "de.ph1b.audiobook.CHANGE_TIME"

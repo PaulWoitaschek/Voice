@@ -7,9 +7,9 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import de.ph1b.audiobook.playback.PlayerState
 
-fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
-  if (playbackParameters?.speed != speed) {
-    playbackParameters = PlaybackParameters(speed, 1F)
+fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
+  if (playbackParameters?.speed != speed || playbackParameters?.skipSilence != skipSilence) {
+    playbackParameters = PlaybackParameters(speed, 1F, skipSilence)
   }
 }
 

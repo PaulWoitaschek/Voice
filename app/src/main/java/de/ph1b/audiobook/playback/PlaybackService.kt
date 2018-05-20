@@ -275,6 +275,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
         val loudness = intent.getIntExtra(PlayerController.CHANGE_LOUDNESS, 0)
         player.setLoudnessGain(loudness)
       }
+      PlayerController.ACTION_SKIP_SILENCE -> {
+        val skipSilences = intent.getBooleanExtra(PlayerController.SKIP_SILENCE, false)
+        player.setSkipSilences(skipSilences)
+      }
       PlayerController.ACTION_PLAY_PAUSE -> {
         if (playStateManager.playState == PlayState.PLAYING) {
           player.pause(true)

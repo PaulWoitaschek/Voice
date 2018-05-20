@@ -20,6 +20,7 @@
     <string name="pause">Pause</string>
     <string name="equalizer">Equalizer</string>
     <string name="volume_boost">Volume Boost</string>
+    <string name="skip_silence">Skip Silence</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>

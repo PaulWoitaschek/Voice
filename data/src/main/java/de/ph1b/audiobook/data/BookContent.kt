@@ -9,7 +9,8 @@ data class BookContent(
   val positionInChapter: Int,
   val chapters: List<Chapter>,
   val playbackSpeed: Float = 1F,
-  val loudnessGain: Int = 0
+  val loudnessGain: Int = 0,
+  val skipSilence: Boolean = false
 ) {
 
   init {
