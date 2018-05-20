@@ -93,8 +93,6 @@ dependencies {
 
   implementation deps.chapterReader
 
-  kapt deps.dataBindingCompiler
-
   implementation deps.Support.appCompat
   implementation deps.Support.recyclerView
   implementation deps.Support.design

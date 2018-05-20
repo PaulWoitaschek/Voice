@@ -11,7 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -84,7 +84,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
           val coverFile = book.coverFile()
           imageHelper.saveCover(screenShot, coverFile)
           screenShot.recycle()
-          Picasso.with(activity).invalidate(coverFile)
+          Picasso.get().invalidate(coverFile)
           cab?.finish()
           router.popCurrentController()
         }

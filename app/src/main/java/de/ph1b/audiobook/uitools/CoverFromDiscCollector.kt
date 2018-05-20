@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.uitools
 
 import android.app.ActivityManager
-import android.content.Context
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.data.Book
@@ -23,12 +22,11 @@ import javax.inject.Singleton
 @Singleton
 class CoverFromDiscCollector
 @Inject constructor(
-  context: Context,
   private val activityManager: ActivityManager,
   private val imageHelper: ImageHelper
 ) {
 
-  private val picasso = Picasso.with(context)
+  private val picasso = Picasso.get()
   private val coverChangedSubject = PublishSubject.create<Long>()
 
   /** Find and stores covers for each book */

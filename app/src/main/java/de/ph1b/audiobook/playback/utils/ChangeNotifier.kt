@@ -117,7 +117,7 @@ class ChangeNotifier @Inject constructor(
       var bitmap: Bitmap? = null
       val coverFile = book.coverFile()
       if (coverFile.exists() && coverFile.canRead()) {
-        bitmap = Picasso.with(context)
+        bitmap = Picasso.get()
           .blocking { load(coverFile).get() }
       }
       if (bitmap == null) {

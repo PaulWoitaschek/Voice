@@ -3,8 +3,8 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import androidx.database.getLong
-import androidx.database.getString
+import androidx.core.database.getLong
+import androidx.core.database.getString
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.transaction
 

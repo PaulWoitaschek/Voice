@@ -84,7 +84,7 @@ class NotificationCreator
     // get the cover or fallback to a replacement
     val coverFile = book.coverFile()
     val picassoCover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
-      Picasso.with(context)
+      Picasso.get()
         .load(coverFile)
         .resize(width, height)
         .getOnUiThread()

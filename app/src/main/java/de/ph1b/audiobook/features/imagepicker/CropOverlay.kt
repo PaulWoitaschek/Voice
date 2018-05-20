@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.layoutInflater

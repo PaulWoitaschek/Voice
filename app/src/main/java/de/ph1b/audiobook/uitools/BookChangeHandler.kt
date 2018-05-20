@@ -10,7 +10,7 @@ import android.transition.Transition
 import android.transition.TransitionSet
 import android.view.View
 import android.view.ViewGroup
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
 import de.ph1b.audiobook.R
 

@@ -183,7 +183,7 @@ class WidgetUpdater @Inject constructor(
     var cover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
       val sizeForPicasso = coverSize.takeIf { it > 0 }
           ?: context.dpToPxRounded(56F)
-      Picasso.with(context)
+      Picasso.get()
         .load(coverFile)
         .resize(sizeForPicasso, sizeForPicasso)
         .getOnUiThread()

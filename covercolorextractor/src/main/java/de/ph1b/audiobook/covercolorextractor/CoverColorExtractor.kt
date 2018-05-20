@@ -13,6 +13,7 @@ import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
+import java.lang.Exception
 import kotlin.coroutines.experimental.suspendCoroutine
 
 class CoverColorExtractor(private val picasso: Picasso) {
@@ -38,7 +39,7 @@ class CoverColorExtractor(private val picasso: Picasso) {
       val extracted = extractColor(bitmap)
       bitmap.recycle()
       val hash = fileHash(file)
-      extractedColors.put(hash, extracted)
+      extractedColors[hash] = extracted
       extracted
     } else null
   }
@@ -51,13 +52,11 @@ class CoverColorExtractor(private val picasso: Picasso) {
         .memoryPolicy(MemoryPolicy.NO_STORE)
         .resize(500, 500)
         .into(object : Target {
-          override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-          }
-
-          override fun onBitmapFailed(errorDrawable: Drawable?) {
+          override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             cont.resume(null)
           }
-
+          override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+          }
           override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             cont.resume(bitmap)
           }

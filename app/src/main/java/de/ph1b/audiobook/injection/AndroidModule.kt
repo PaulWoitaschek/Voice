@@ -83,8 +83,8 @@ class AndroidModule {
 
   @Provides
   @Singleton
-  fun provideCoverColorExtractor(context: Context): CoverColorExtractor {
-    val picasso = Picasso.with(context)
+  fun provideCoverColorExtractor(): CoverColorExtractor {
+    val picasso = Picasso.get()
     return CoverColorExtractor(picasso)
   }
 }

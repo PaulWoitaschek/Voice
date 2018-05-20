@@ -9,7 +9,7 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
 import android.database.sqlite.SQLiteException
 import android.support.test.InstrumentationRegistry
-import androidx.database.getInt
+import androidx.core.database.getInt
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import org.junit.After

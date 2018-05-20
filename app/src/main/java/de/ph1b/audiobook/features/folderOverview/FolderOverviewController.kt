@@ -8,8 +8,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
-import androidx.view.isInvisible
-import androidx.view.isVisible
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R

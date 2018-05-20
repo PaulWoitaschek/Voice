@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -114,7 +114,7 @@ class BookPlayController(
       val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
       withContext(UI) {
         if (shouldLoadCover) {
-          Picasso.with(activity)
+          Picasso.get()
             .load(coverFile)
             .placeholder(coverReplacement)
             .into(cover)

@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository

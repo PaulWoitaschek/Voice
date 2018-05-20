@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import androidx.view.isVisible
+import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
@@ -25,6 +25,7 @@ import de.ph1b.audiobook.uitools.SimpleTarget
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.lang.Exception
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -42,7 +43,7 @@ class EditCoverDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val picasso = Picasso.with(context)
+    val picasso = Picasso.get()
 
     val container = DialogLayoutContainer(
       activity!!.layoutInflater.inflate(
@@ -62,10 +63,9 @@ class EditCoverDialogFragment : DialogFragment() {
     picasso.load(uri)
       .into(
         container.coverImage, object : PicassoCallback {
-          override fun onError() {
+          override fun onError(e: Exception?) {
             dismiss()
           }
-
           override fun onSuccess() {
             container.cropOverlay.selectionOn = true
             container.coverReplacement.isVisible = false
@@ -94,7 +94,7 @@ class EditCoverDialogFragment : DialogFragment() {
             }
           }
 
-          override fun onBitmapFailed(errorDrawable: Drawable?) {
+          override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             dismiss()
           }
         }

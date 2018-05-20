@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import android.view.ViewGroup
-import androidx.view.doOnPreDraw
-import androidx.view.isVisible
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
@@ -92,12 +92,12 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
       val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
       withContext(UI) {
         if (shouldLoadImage) {
-          Picasso.with(itemView.context)
+          Picasso.get()
             .load(coverFile)
             .placeholder(coverReplacement)
             .into(cover)
         } else {
-          Picasso.with(itemView.context)
+          Picasso.get()
             .cancelRequest(cover)
           // we have to set the replacement in onPreDraw, else the transition will fail.
           cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
