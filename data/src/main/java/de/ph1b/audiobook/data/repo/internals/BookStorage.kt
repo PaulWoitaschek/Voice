@@ -11,6 +11,7 @@ import androidx.core.database.getLong
 import androidx.core.database.getString
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import timber.log.Timber
 import java.io.File
@@ -66,12 +67,15 @@ class BookStorage
             metaData = metaData,
             content = BookContent(
               id = bookId,
-              currentFile = currentFile,
-              positionInChapter = bookTime,
-              chapters = chapters,
-              playbackSpeed = bookSpeed,
-              loudnessGain = loudnessGain,
-              skipSilence = skipSilence
+              settings = BookSettings(
+                id = bookId,
+                currentFile = currentFile,
+                positionInChapter = bookTime,
+                playbackSpeed = bookSpeed,
+                loudnessGain = loudnessGain,
+                skipSilence = skipSilence
+              ),
+              chapters = chapters
             )
           )
         }
@@ -106,10 +110,10 @@ class BookStorage
   private fun Book.toContentValues() = ContentValues().apply {
     put(BookTable.ACTIVE, 1)
     put(BookTable.CURRENT_MEDIA_PATH, content.currentFile.absolutePath)
-    put(BookTable.PLAYBACK_SPEED, content.playbackSpeed)
+    put(BookTable.PLAYBACK_SPEED, content.settings.playbackSpeed)
     put(BookTable.TIME, content.positionInChapter)
-    put(BookTable.LOUDNESS_GAIN, content.loudnessGain)
-    put(BookTable.SKIP_SILENCE, content.skipSilence)
+    put(BookTable.LOUDNESS_GAIN, content.settings.loudnessGain)
+    put(BookTable.SKIP_SILENCE, content.settings.skipSilence)
   }
 
   fun updateBook(book: Book) {

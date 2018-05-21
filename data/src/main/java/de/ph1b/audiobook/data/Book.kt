@@ -34,6 +34,24 @@ data class Book(
     content = update(content)
   )
 
+  inline fun update(
+    updateContent: BookContent.() -> BookContent = { this },
+    updateMetaData: BookMetaData.() -> BookMetaData = { this },
+    updateSettings: BookSettings.() -> BookSettings = { this }
+  ): Book {
+    val newSettings = updateSettings(content.settings)
+    val contentWithNewSettings = if (newSettings === content.settings) {
+      content
+    } else {
+      content.copy(
+        settings = newSettings
+      )
+    }
+    val newContent = updateContent(contentWithNewSettings)
+    val newMetaData = updateMetaData(metaData)
+    return copy(content = newContent, metaData = newMetaData)
+  }
+
   suspend fun coverFile(context: Context): File = withContext(IO) {
     val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
       // if its part of a collection, take the first file

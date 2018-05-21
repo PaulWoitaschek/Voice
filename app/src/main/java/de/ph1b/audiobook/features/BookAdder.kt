@@ -11,6 +11,7 @@ import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
+import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
@@ -239,8 +240,10 @@ class BookAdder
           root = bookRoot
         ),
         content = BookContent(
-          currentFile = firstChapterFile,
-          positionInChapter = 0,
+          settings = BookSettings(
+            currentFile = firstChapterFile,
+            positionInChapter = 0
+          ),
           chapters = newChapters
         )
       )
@@ -257,8 +260,10 @@ class BookAdder
 
       orphanedBook = orphanedBook.updateContent {
         copy(
-          positionInChapter = time,
-          currentFile = currentFile,
+          settings = settings.copy(
+            positionInChapter = time,
+            currentFile = currentFile
+          ),
           chapters = newChapters
         )
       }
@@ -281,7 +286,11 @@ class BookAdder
       newChapters.forEach {
         if (it.file == currentFile) {
           if (it.duration < currentTime) {
-            bookToUpdate = bookToUpdate.updateContent { copy(positionInChapter = 0) }
+            bookToUpdate = bookToUpdate.updateContent {
+              copy(
+                settings = settings.copy(positionInChapter = 0)
+              )
+            }
           }
           currentPathIsGone = false
         }
@@ -292,8 +301,10 @@ class BookAdder
       bookToUpdate = bookToUpdate.updateContent {
         copy(
           chapters = newChapters,
-          currentFile = if (currentPathIsGone) newChapters.first().file else currentFile,
-          positionInChapter = if (currentPathIsGone) 0 else positionInChapter
+          settings = settings.copy(
+            currentFile = if (currentPathIsGone) newChapters.first().file else currentFile,
+            positionInChapter = if (currentPathIsGone) 0 else positionInChapter
+          )
         )
       }
       repo.updateBook(bookToUpdate)

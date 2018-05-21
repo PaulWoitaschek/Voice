@@ -89,10 +89,12 @@ constructor(
       bookContent?.let {
         val index = player.currentWindowIndex
         _bookContent.onNext(
-          it.copy(
-            positionInChapter = position,
-            currentFile = it.chapters[index].file
-          )
+          it.updateSettings {
+            copy(
+              positionInChapter = position,
+              currentFile = it.chapters[index].file
+            )
+          }
         )
       }
     }
@@ -131,7 +133,9 @@ constructor(
           val index = player.currentWindowIndex
           val time = it.coerceAtLeast(0)
             .toInt()
-          val copy = book.copy(positionInChapter = time, currentFile = book.chapters[index].file)
+          val copy = book.updateSettings {
+            copy(positionInChapter = time, currentFile = book.chapters[index].file)
+          }
           _bookContent.onNext(copy)
         }
       }
@@ -162,7 +166,7 @@ constructor(
     Timber.v("setLoudnessGain to $mB mB")
 
     bookContent?.let {
-      val copy = it.copy(loudnessGain = mB)
+      val copy = it.updateSettings { copy(loudnessGain = mB) }
       _bookContent.onNext(copy)
       loudnessGain.gainmB = mB
     }
@@ -331,7 +335,9 @@ constructor(
       return
 
     bookContent?.let {
-      val copy = it.copy(positionInChapter = time, currentFile = changedFile ?: it.currentFile)
+      val copy = it.updateSettings {
+        copy(positionInChapter = time, currentFile = changedFile ?: currentFile)
+      }
       _bookContent.onNext(copy)
       player.seekTo(copy.currentChapterIndex, time.toLong())
     }
@@ -340,7 +346,7 @@ constructor(
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
     bookContent?.let {
-      val copy = it.copy(playbackSpeed = speed)
+      val copy = it.updateSettings { copy(playbackSpeed = speed) }
       _bookContent.onNext(copy)
       player.setPlaybackParameters(speed, it.skipSilence)
     }
@@ -350,7 +356,7 @@ constructor(
     Timber.v("setSkipSilences to $skip")
 
     bookContent?.let {
-      val copy = it.copy(skipSilence = skip)
+      val copy = it.updateSettings { copy(skipSilence = skip) }
       _bookContent.onNext(copy)
       player.setPlaybackParameters(it.playbackSpeed, skip)
     }

@@ -3,6 +3,7 @@ package de.ph1b.audiobook
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
+import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 
 object BookFactory {
@@ -34,12 +35,15 @@ object BookFactory {
       ),
       content = BookContent(
         id = id,
-        currentFile = currentFile,
-        positionInChapter = time,
-        chapters = chapters,
-        playbackSpeed = playbackSpeed,
-        loudnessGain = loudnessGain,
-        skipSilence = skipSilence
+        settings = BookSettings(
+          id = id,
+          currentFile = currentFile,
+          positionInChapter = time,
+          playbackSpeed = playbackSpeed,
+          loudnessGain = loudnessGain,
+          skipSilence = skipSilence
+        ),
+        chapters = chapters
       )
     )
   }
