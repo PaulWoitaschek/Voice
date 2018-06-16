@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.widget
 
 import dagger.Reusable
+import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -35,11 +36,15 @@ class TriggerWidgetOnChange @Inject constructor(
     playStateManager.playStateStream()
       .distinctUntilChanged()
 
-  private fun currentBookChanged(): Observable<Book> = repo.updateObservable()
-    .filter { it.id == currentBookIdPref.value }
-    .distinctUntilChanged { previous, current ->
-      previous.id == current.id
-          && previous.content.chapters == current.content.chapters
-          && previous.content.currentFile == current.content.currentFile
-    }
+  private fun currentBookChanged(): Observable<Book> {
+    return currentBookIdPref.stream
+      .switchMap {
+        repo.byId(it).getIfPresent()
+      }
+      .distinctUntilChanged { previous, current ->
+        previous.id == current.id
+            && previous.content.chapters == current.content.chapters
+            && previous.content.currentFile == current.content.currentFile
+      }
+  }
 }

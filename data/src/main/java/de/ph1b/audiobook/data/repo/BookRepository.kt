@@ -8,7 +8,6 @@ import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.IO
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -29,15 +28,12 @@ class BookRepository
     storage.activeBooks().toMutableList().apply { sort() }
   }
   private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
-  private val updated = PublishSubject.create<Book>()
 
   private val all: BehaviorSubject<List<Book>> by lazy {
     BehaviorSubject.createDefault<List<Book>>(
       active
     )
   }
-
-  fun updateObservable(): Observable<Book> = updated
 
   fun booksStream(): Observable<List<Book>> = all
 
@@ -86,7 +82,6 @@ class BookRepository
         active[index] = book
         storage.updateBook(book)
         withContext(UI) {
-          updated.onNext(book)
           sortBooksAndNotifySubject()
         }
       } else Timber.e("update failed as there was no book")

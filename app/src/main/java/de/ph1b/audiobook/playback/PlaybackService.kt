@@ -11,6 +11,7 @@ import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import dagger.android.AndroidInjection
+import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -110,8 +111,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .subscribe { currentBookIdChanged(it) }
       .disposeOnDestroy()
 
-    val bookUpdated = repo.updateObservable()
-      .filter { it.id == currentBookIdPref.value }
+    val bookUpdated = currentBookIdPref.stream
+      .switchMap { repo.byId(it).getIfPresent() }
       .distinctUntilChanged { old, new ->
         old.content == new.content
       }
