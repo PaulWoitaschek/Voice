@@ -127,7 +127,6 @@ dependencies {
 
   implementation deps.rxJava
   implementation deps.rxAndroid
-  implementation deps.rxInterop
   implementation deps.rxPreferences
 
   implementation deps.Kotlin.std

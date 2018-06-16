@@ -83,9 +83,8 @@ buildscript {
 
       moshi               : "com.squareup.moshi:moshi:1.6.0",
       rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.0.2",
-      rxInterop           : "com.github.akarnokd:rxjava2-interop:0.12.8",
       rxJava              : "io.reactivex.rxjava2:rxjava:2.1.14",
-      rxPreferences       : "com.f2prateek.rx.preferences:rx-preferences:1.0.2",
+      rxPreferences       : "com.f2prateek.rx.preferences2:rx-preferences:2.0.0",
       timber              : "com.jakewharton.timber:timber:4.7.0",
 
       Kotlin              : [

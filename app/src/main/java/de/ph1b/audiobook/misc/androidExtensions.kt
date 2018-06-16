@@ -13,7 +13,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import com.f2prateek.rx.preferences.Preference
+import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
 import java.io.File

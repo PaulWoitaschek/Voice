@@ -3,8 +3,8 @@ package de.ph1b.audiobook.injection
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.f2prateek.rx.preferences.Preference
-import com.f2prateek.rx.preferences.RxSharedPreferences
+import com.f2prateek.rx.preferences2.Preference
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -105,16 +105,13 @@ class PrefsModule {
   @Named(PrefKeys.CURRENT_BOOK)
   fun provideCurrentBookIdPreference(prefs: RxSharedPreferences): Pref<UUID> {
     val pref =
-      prefs.getObject(PrefKeys.CURRENT_BOOK, UUID.randomUUID(), object : Preference.Adapter<UUID> {
-        override fun get(key: String, preferences: SharedPreferences): UUID {
-          val value = preferences.getString(key, null)
-          return UUID.fromString(value)
-        }
-
-        override fun set(key: String, value: UUID, editor: SharedPreferences.Editor) {
-          editor.putString(key, value.toString())
-        }
-      })
+      prefs.getObject(
+        PrefKeys.CURRENT_BOOK,
+        UUID.randomUUID(),
+        object : Preference.Converter<UUID> {
+          override fun deserialize(serialized: String): UUID = UUID.fromString(serialized)
+          override fun serialize(value: UUID): String = value.toString()
+        })
     return PersistentPref(pref)
   }
 
