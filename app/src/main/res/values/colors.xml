@@ -28,4 +28,5 @@
     <color name="snackbar_text_color">@color/copy_primary_text_default_material_dark</color>
 
     <color name="ic_shortcut_play_background">#FFFFFF</color>
+    <color name="card_color">#FFFAFAFA</color>
 </resources>

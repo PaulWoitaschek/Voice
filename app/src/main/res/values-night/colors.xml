@@ -13,5 +13,5 @@
     <color name="snackbar_background_color">@color/background_material_light</color>
     <color name="snackbar_text_color">@color/copy_primary_text_default_material_light</color>
 
-    <color name="scroller_background">#bababa</color>
+    <color name="card_color">#292929</color>
 </resources>

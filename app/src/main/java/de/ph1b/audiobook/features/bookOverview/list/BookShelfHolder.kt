@@ -11,7 +11,6 @@ import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -24,13 +23,7 @@ import java.io.File
 import javax.inject.Inject
 
 class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) :
-  ExtensionsHolder(
-    parent.layoutInflater().inflate(
-      R.layout.book_shelf_row,
-      parent,
-      false
-    )
-  ) {
+  ExtensionsHolder(parent, R.layout.book_shelf_row) {
 
   @Inject
   lateinit var coverColorExtractor: CoverColorExtractor
