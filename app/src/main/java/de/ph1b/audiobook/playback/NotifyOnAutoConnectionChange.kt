@@ -7,6 +7,7 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.experimental.launch
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,7 +19,7 @@ class NotifyOnAutoConnectionChange @Inject constructor(
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>,
+  private val currentBookIdPref: Pref<UUID>,
   private val autoConnection: AndroidAutoConnectedReceiver
 ) {
 

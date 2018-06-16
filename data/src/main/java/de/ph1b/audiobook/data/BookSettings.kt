@@ -1,9 +1,10 @@
 package de.ph1b.audiobook.data
 
 import java.io.File
+import java.util.UUID
 
 data class BookSettings(
-  val id: Long = 0L,
+  val id: UUID,
   val currentFile: File,
   val positionInChapter: Int,
   val playbackSpeed: Float = 1F,

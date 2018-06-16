@@ -6,10 +6,11 @@ import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.data.repo.internals.IO
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
+import java.util.UUID
 
 
 data class Book(
-  val id: Long = 0L,
+  val id: UUID,
   val content: BookContent,
   val metaData: BookMetaData
 ) : Comparable<Book> {

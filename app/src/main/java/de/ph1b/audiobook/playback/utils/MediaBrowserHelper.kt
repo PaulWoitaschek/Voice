@@ -19,6 +19,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -31,7 +32,7 @@ class MediaBrowserHelper
   private val bookUriConverter: BookUriConverter,
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>,
+  private val currentBookIdPref: Pref<UUID>,
   private val context: Context
 ) {
 

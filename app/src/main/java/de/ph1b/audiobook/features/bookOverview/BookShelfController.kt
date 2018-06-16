@@ -33,6 +33,7 @@ import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import kotlinx.android.synthetic.main.book_shelf.*
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -54,7 +55,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
   }
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
+  lateinit var currentBookIdPref: Pref<UUID>
 
   private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
   private var adapter: BookShelfAdapter by clearAfterDestroyView()
@@ -210,7 +211,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
     })
   }
 
-  override fun bookCoverChanged(bookId: Long) {
+  override fun bookCoverChanged(bookId: UUID) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {

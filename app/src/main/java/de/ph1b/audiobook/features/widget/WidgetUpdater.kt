@@ -31,6 +31,7 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Provider
@@ -40,7 +41,7 @@ class WidgetUpdater @Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>,
+  private val currentBookIdPref: Pref<UUID>,
   private val imageHelper: ImageHelper,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,

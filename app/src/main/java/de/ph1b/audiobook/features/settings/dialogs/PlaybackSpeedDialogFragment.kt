@@ -18,6 +18,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.dialog_amount_chooser.*
 import java.text.DecimalFormat
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -30,7 +31,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
   @Inject
   lateinit var repo: BookRepository
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
+  lateinit var currentBookIdPref: Pref<UUID>
   @Inject
   lateinit var playerController: PlayerController
 

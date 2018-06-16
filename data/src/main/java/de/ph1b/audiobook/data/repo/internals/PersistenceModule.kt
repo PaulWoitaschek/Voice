@@ -61,6 +61,7 @@ class PersistenceModule {
   }
 
   @Provides
+  @Singleton
   fun sqlHelper(appDb: AppDb): SupportSQLiteOpenHelper = appDb.openHelper
 
   @Provides

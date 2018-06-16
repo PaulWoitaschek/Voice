@@ -7,7 +7,6 @@ import android.content.ContentValues
 import androidx.core.database.getFloat
 import androidx.core.database.getInt
 import androidx.core.database.getIntOrNull
-import androidx.core.database.getLong
 import androidx.core.database.getString
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
@@ -15,6 +14,7 @@ import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.repo.internals.tables.BookTable
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -46,7 +46,7 @@ class BookStorage
         .create()
       db.query(queryAllBooks)
         .mapRows {
-          val bookId: Long = getLong(BookTable.ID)
+          val bookId: UUID = UUID.fromString(getString(BookTable.ID))
           var currentFile = File(getString(BookTable.CURRENT_MEDIA_PATH))
           val bookSpeed: Float = getFloat(BookTable.PLAYBACK_SPEED)
           val bookTime: Int = getInt(BookTable.TIME)
@@ -86,7 +86,7 @@ class BookStorage
 
   fun orphanedBooks() = books(false)
 
-  private fun setBookVisible(bookId: Long, visible: Boolean): Int {
+  private fun setBookVisible(bookId: UUID, visible: Boolean): Int {
     val cv = ContentValues().apply {
       put(BookTable.ACTIVE, if (visible) 1 else 0)
     }
@@ -99,11 +99,11 @@ class BookStorage
     )
   }
 
-  fun revealBook(bookId: Long) {
+  fun revealBook(bookId: UUID) {
     setBookVisible(bookId, true)
   }
 
-  fun hideBook(bookId: Long) {
+  fun hideBook(bookId: UUID) {
     setBookVisible(bookId, false)
   }
 
@@ -114,12 +114,11 @@ class BookStorage
     put(BookTable.TIME, content.positionInChapter)
     put(BookTable.LOUDNESS_GAIN, content.settings.loudnessGain)
     put(BookTable.SKIP_SILENCE, content.settings.skipSilence)
+    put(BookTable.ID, id.toString())
   }
 
   fun updateBook(book: Book) {
     db.transaction {
-      require(book.id != -1L) { "Book $book has an invalid id" }
-
       // update book itself
       val bookCv = book.toContentValues()
       update(
@@ -127,7 +126,7 @@ class BookStorage
         OnConflictStrategy.FAIL,
         bookCv,
         "${BookTable.ID}=?",
-        arrayOf(book.id)
+        arrayOf(book.id.toString())
       )
 
       metaDataDao.insert(book.metaData)
@@ -141,22 +140,10 @@ class BookStorage
   fun addBook(toAdd: Book): Book {
     return db.transaction {
       val bookCv = toAdd.toContentValues()
-      val bookId = insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
-      val oldContent = toAdd.content
-      val newMetaData = toAdd.metaData.copy(id = bookId)
-      metaDataDao.insert(newMetaData)
-      val newBook = toAdd.copy(
-        id = bookId,
-        content = oldContent.copy(
-          id = bookId,
-          chapters = oldContent.chapters.map {
-            it.copy(bookId = bookId)
-          }
-        ),
-        metaData = newMetaData
-      )
-      chapterDao.insert(newBook.content.chapters)
-      return@transaction newBook
+      insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
+      metaDataDao.insert(toAdd.metaData)
+      chapterDao.insert(toAdd.content.chapters)
+      return@transaction toAdd
     }
   }
 }

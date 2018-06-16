@@ -19,7 +19,9 @@ import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.endCompoundDrawable
 import de.ph1b.audiobook.misc.findCallback
+import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.misc.startCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
@@ -94,7 +96,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     )
   }
 
-  private fun bookId() = arguments!!.getLong(NI_BOOK)
+  private fun bookId() = arguments!!.getUUID(NI_BOOK)
 
   companion object {
     private const val NI_BOOK = "ni#book"
@@ -102,7 +104,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback =
       EditBookBottomSheet().apply {
         arguments = Bundle().apply {
-          putLong(NI_BOOK, book.id)
+          putUUID(NI_BOOK, book.id)
           putString(NI_TARGET, target.instanceId)
         }
       }

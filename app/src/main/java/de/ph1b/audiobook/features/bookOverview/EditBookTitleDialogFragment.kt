@@ -9,6 +9,8 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.misc.getUUID
+import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
@@ -24,7 +26,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
     AndroidSupportInjection.inject(this)
 
     val presetName = arguments!!.getString(NI_PRESET_NAME)
-    val bookId = arguments!!.getLong(NI_BOOK_ID)
+    val bookId = arguments!!.getUUID(NI_BOOK_ID)
 
     return MaterialDialog.Builder(activity!!)
       .title(R.string.edit_book_title)
@@ -54,7 +56,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
     fun newInstance(book: Book): EditBookTitleDialogFragment {
       val args = Bundle()
       args.putString(NI_PRESET_NAME, book.name)
-      args.putLong(NI_BOOK_ID, book.id)
+      args.putUUID(NI_BOOK_ID, book.id)
 
       val dialog = EditBookTitleDialogFragment()
       dialog.arguments = args

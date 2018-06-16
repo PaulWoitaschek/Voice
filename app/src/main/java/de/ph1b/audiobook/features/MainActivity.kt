@@ -24,6 +24,7 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.activity_book.*
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,7 +36,7 @@ class MainActivity : BaseActivity(), RouterProvider {
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
+  lateinit var currentBookIdPref: Pref<UUID>
   @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
@@ -102,8 +103,11 @@ class MainActivity : BaseActivity(), RouterProvider {
 
   private fun setupRouter() {
     // if we should enter a book set the backstack and return early
-    repo.bookById(intent.getLongExtra(NI_GO_TO_BOOK, -1))?.let {
-      val bookShelf = RouterTransaction.with(BookShelfController())
+    intent.getStringExtra(NI_GO_TO_BOOK)
+      ?.let(UUID::fromString)
+      ?.let(repo::bookById)
+      ?.let {
+        val bookShelf = RouterTransaction.with(BookShelfController())
       val bookPlay = BookPlayController(it.id).asTransaction()
       router.setBackstack(listOf(bookShelf, bookPlay), null)
       return
@@ -155,8 +159,8 @@ class MainActivity : BaseActivity(), RouterProvider {
     private const val NI_PLAY_CURRENT_BOOK_IMMEDIATELY = "ni#playCurrentBookImmediately"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(c: Context, bookId: Long) = Intent(c, MainActivity::class.java).apply {
-      putExtra(NI_GO_TO_BOOK, bookId)
+    fun goToBookIntent(c: Context, bookId: UUID) = Intent(c, MainActivity::class.java).apply {
+      putExtra(NI_GO_TO_BOOK, bookId.toString())
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
 

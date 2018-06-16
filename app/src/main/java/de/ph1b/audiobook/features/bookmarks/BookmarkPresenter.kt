@@ -11,6 +11,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,20 +20,18 @@ import javax.inject.Named
  */
 class BookmarkPresenter @Inject constructor(
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>,
+  private val currentBookIdPref: Pref<UUID>,
   private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
-  var bookId = -1L
+  var bookId: UUID = UUID.randomUUID()
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
 
   override fun onAttach(view: BookmarkView) {
-    check(bookId != -1L) { "You must initialize the bookId" }
-
     val book = repo.bookById(bookId) ?: return
 
     launch(UI) {

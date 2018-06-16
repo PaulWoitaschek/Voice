@@ -31,6 +31,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -58,7 +59,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private var isForeground = false
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
+  lateinit var currentBookIdPref: Pref<UUID>
   @Inject
   lateinit var player: MediaPlayer
   @Inject
@@ -186,10 +187,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .disposeOnDestroy()
   }
 
-  private fun currentBookIdChanged(it: Long) {
-    if (player.bookContent?.id != it) {
+  private fun currentBookIdChanged(id: UUID) {
+    if (player.bookContent?.id != id) {
       player.stop()
-      repo.bookById(it)?.let { player.init(it.content) }
+      repo.bookById(id)?.let { player.init(it.content) }
     }
   }
 

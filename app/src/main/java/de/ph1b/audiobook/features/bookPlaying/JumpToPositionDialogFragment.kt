@@ -14,6 +14,7 @@ import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.dialog_time_picker.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,7 +22,7 @@ import javax.inject.Named
 class JumpToPositionDialogFragment : DialogFragment() {
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<Long>
+  lateinit var currentBookIdPref: Pref<UUID>
   @Inject
   lateinit var repo: BookRepository
   @Inject

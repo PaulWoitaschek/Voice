@@ -12,9 +12,10 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
-class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
+class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
 
   @Inject
   lateinit var bookRepository: BookRepository

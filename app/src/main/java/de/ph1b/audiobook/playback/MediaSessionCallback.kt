@@ -10,6 +10,7 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,7 +20,7 @@ import javax.inject.Named
 class MediaSessionCallback @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>,
+  private val currentBookIdPref: Pref<UUID>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val player: MediaPlayer,

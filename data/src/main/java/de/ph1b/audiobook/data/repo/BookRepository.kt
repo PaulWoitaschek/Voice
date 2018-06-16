@@ -12,6 +12,7 @@ import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -61,7 +62,7 @@ class BookRepository
     get() = synchronized(this) { ArrayList(active) }
 
   @Synchronized
-  fun bookById(id: Long) = active.firstOrNull { it.id == id }
+  fun bookById(id: UUID) = active.firstOrNull { it.id == id }
 
   @Synchronized
   fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
@@ -72,8 +73,6 @@ class BookRepository
       return
     }
     withContext(IO) {
-      require(book.id != -1L)
-
       val index = active.indexOfFirst { it.id == book.id }
       if (index != -1) {
         active[index] = book

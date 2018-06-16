@@ -8,6 +8,7 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -20,7 +21,7 @@ class BookSearchHandler
   private val repo: BookRepository,
   private val player: PlayerController,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>
+  private val currentBookIdPref: Pref<UUID>
 ) {
 
   fun handle(search: BookSearch) {
@@ -65,7 +66,9 @@ class BookSearchHandler
 
     //continue playback
     Timber.i("continuing from search without query")
-    if (currentBookIdPref.value == -1L) {
+    val currentId = currentBookIdPref.value
+    val noBookInitialized = repo.activeBooks.none { it.id == currentId }
+    if (noBookInitialized) {
       repo.activeBooks.firstOrNull()?.id?.let {
         currentBookIdPref.value = it
       }

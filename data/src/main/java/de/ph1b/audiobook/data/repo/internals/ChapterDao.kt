@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import de.ph1b.audiobook.data.Chapter
+import java.util.UUID
 
 @Dao
 interface ChapterDao {
@@ -13,8 +14,8 @@ interface ChapterDao {
   fun insert(chapters: List<Chapter>)
 
   @Query("SELECT * FROM chapters WHERE bookId = :bookId")
-  fun byBookId(bookId: Long): List<Chapter>
+  fun byBookId(bookId: UUID): List<Chapter>
 
   @Query("DELETE FROM chapters WHERE bookId = :bookId")
-  fun deleteByBookId(bookId: Long)
+  fun deleteByBookId(bookId: UUID)
 }

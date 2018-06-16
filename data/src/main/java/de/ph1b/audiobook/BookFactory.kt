@@ -5,11 +5,12 @@ import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
+import java.util.UUID
 
 object BookFactory {
 
   fun create(
-    id: Long = -1,
+    id: UUID = UUID.randomUUID(),
     type: Book.Type = Book.Type.SINGLE_FOLDER,
     author: String = "TestAuthor",
     currentFileIndex: Int = 0,
@@ -18,7 +19,7 @@ object BookFactory {
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,
     skipSilence: Boolean = false,
-    chapters: List<Chapter> = listOf(ChapterFactory.create())
+    chapters: List<Chapter> = listOf(ChapterFactory.create(bookId = id))
   ): Book {
 
     val currentFile = chapters[currentFileIndex].file

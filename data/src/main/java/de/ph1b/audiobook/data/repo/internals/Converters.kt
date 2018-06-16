@@ -7,6 +7,7 @@ import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.di.DataInjector
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 class Converters {
@@ -43,4 +44,10 @@ class Converters {
 
   @TypeConverter
   fun toBookType(name: String): Book.Type = Book.Type.valueOf(name)
+
+  @TypeConverter
+  fun fromUUID(uuid: UUID): String = uuid.toString()
+
+  @TypeConverter
+  fun toUUID(string: String): UUID = UUID.fromString(string)
 }

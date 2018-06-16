@@ -1,9 +1,10 @@
 package de.ph1b.audiobook.data
 
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
+import java.util.UUID
 
 data class BookContent(
-  val id: Long = 0L,
+  val id: UUID,
   val chapters: List<Chapter>,
   val settings: BookSettings
 ) {

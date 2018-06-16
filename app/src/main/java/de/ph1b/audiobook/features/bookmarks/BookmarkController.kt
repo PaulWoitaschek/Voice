@@ -18,9 +18,12 @@ import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.getUUID
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import kotlinx.android.synthetic.main.bookmark.*
+import java.util.UUID
 
 /**
  * Dialog for creating a bookmark
@@ -30,7 +33,7 @@ class BookmarkController(args: Bundle) :
   BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
-  private val bookId = args.getLong(NI_BOOK_ID)
+  private val bookId = args.getUUID(NI_BOOK_ID)
   private val adapter = BookmarkAdapter(this)
 
   override val layoutRes = R.layout.bookmark
@@ -151,9 +154,9 @@ class BookmarkController(args: Bundle) :
 
     private const val NI_BOOK_ID = "ni#bookId"
 
-    fun newInstance(bookId: Long) = BookmarkController(
+    fun newInstance(bookId: UUID) = BookmarkController(
       Bundle().apply {
-        putLong(NI_BOOK_ID, bookId)
+        putUUID(NI_BOOK_ID, bookId)
       }
     )
   }

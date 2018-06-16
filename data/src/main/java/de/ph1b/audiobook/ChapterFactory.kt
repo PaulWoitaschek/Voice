@@ -4,6 +4,7 @@ import android.support.v4.util.SparseArrayCompat
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Chapter
 import java.io.File
+import java.util.UUID
 
 object ChapterFactory {
 
@@ -12,12 +13,14 @@ object ChapterFactory {
     parent: String = "/root/",
     duration: Int = 100,
     lastModified: Long = 12345L,
+    bookId: UUID,
     marks: SparseArrayCompat<String> = emptySparseArray()
   ) = Chapter(
     file = File(parent, file),
     name = file,
     duration = duration,
     fileLastModified = lastModified,
-    marks = marks
+    marks = marks,
+    bookId = bookId
   )
 }

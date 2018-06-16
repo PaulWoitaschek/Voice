@@ -9,6 +9,7 @@ import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.contentEquals
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import java.io.File
+import java.util.UUID
 
 /**
  * Represents a chapter in a book.
@@ -28,11 +29,11 @@ data class Chapter(
   val fileLastModified: Long,
   @ColumnInfo(name = "marks")
   val marks: SparseArrayCompat<String>,
+  @ColumnInfo(name = "bookId")
+  val bookId: UUID,
   @ColumnInfo(name = "id")
   @PrimaryKey(autoGenerate = true)
-  val id: Long = 0L,
-  @ColumnInfo(name = "bookId")
-  val bookId: Long = 0L
+  val id: Long = 0L
 ) : Comparable<Chapter> {
 
   init {

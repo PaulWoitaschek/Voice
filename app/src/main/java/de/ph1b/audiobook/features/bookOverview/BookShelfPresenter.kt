@@ -10,6 +10,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,7 +23,7 @@ constructor(
   private val playerController: PlayerController,
   private val coverFromDiscCollector: CoverFromDiscCollector,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<Long>
+  private val currentBookIdPref: Pref<UUID>
 ) : Presenter<BookShelfView>() {
 
   override fun onAttach(view: BookShelfView) {

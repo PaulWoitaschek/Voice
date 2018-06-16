@@ -24,7 +24,9 @@ import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.itemSelections
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -35,6 +37,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -48,13 +51,13 @@ class BookPlayController(
 ) : MvpController<BookPlayMvp.View, BookPlayMvp.Presenter>(bundle),
   BookPlayMvp.View {
 
-  constructor(bookId: Long) : this(Bundle().apply { putLong(NI_BOOK_ID, bookId) })
+  constructor(bookId: UUID) : this(Bundle().apply { putUUID(NI_BOOK_ID, bookId) })
 
   @Inject
   lateinit var equalizer: Equalizer
 
   private val data = ArrayList<BookPlayChapter>()
-  private val bookId = bundle.getLong(NI_BOOK_ID)
+  private val bookId = bundle.getUUID(NI_BOOK_ID)
   private val playPauseDrawable = PlayPauseDrawable()
   private var currentChapter: BookPlayChapter? = null
 

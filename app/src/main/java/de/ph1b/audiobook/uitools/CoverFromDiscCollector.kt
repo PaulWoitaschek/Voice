@@ -13,6 +13,7 @@ import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +28,7 @@ class CoverFromDiscCollector
 ) {
 
   private val picasso = Picasso.get()
-  private val coverChangedSubject = PublishSubject.create<Long>()
+  private val coverChangedSubject = PublishSubject.create<UUID>()
 
   /** Find and stores covers for each book */
   suspend fun findCovers(books: List<Book>) {
@@ -73,7 +74,7 @@ class CoverFromDiscCollector
   }
 
   /** emits the bookId of a cover that has changed */
-  fun coverChanged(): Observable<Long> = coverChangedSubject
+  fun coverChanged(): Observable<UUID> = coverChangedSubject
     .hide()
     .observeOn(AndroidSchedulers.mainThread())
 

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.utils
 
 import android.content.UriMatcher
 import android.net.Uri
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -24,17 +25,17 @@ class BookUriConverter
 
   fun allBooks(): Uri = baseBuilder().build()
 
-  fun book(bookId: Long): Uri = baseBuilder()
+  fun book(bookId: UUID): Uri = baseBuilder()
     .appendPath(bookId.toString())
     .build()
 
-  fun chapter(bookId: Long, chapter: Int): Uri = baseBuilder()
+  fun chapter(bookId: UUID, chapter: Int): Uri = baseBuilder()
     .appendPath(bookId.toString())
     .appendPath(PATH_CHAPTERS)
     .appendPath(chapter.toString())
     .build()
 
-  fun extractBook(uri: Uri) = uri.pathSegments[1].toLong()
+  fun extractBook(uri: Uri) = UUID.fromString(uri.pathSegments[1].toString())!!
 
   companion object {
     private const val AUTHORITY = "books"

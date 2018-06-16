@@ -19,6 +19,8 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.findCallback
+import de.ph1b.audiobook.misc.getUUID
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
@@ -54,7 +56,7 @@ class EditCoverDialogFragment : DialogFragment() {
     )
 
     // init values
-    val bookId = arguments!!.getLong(NI_BOOK_ID)
+    val bookId = arguments!!.getUUID(NI_BOOK_ID)
     val uri = Uri.parse(arguments!!.getString(NI_COVER_URI))
     val book = repo.bookById(bookId)!!
 
@@ -123,7 +125,7 @@ class EditCoverDialogFragment : DialogFragment() {
       EditCoverDialogFragment().apply {
         arguments = Bundle().apply {
           putString(NI_COVER_URI, uri.toString())
-          putLong(NI_BOOK_ID, book.id)
+          putUUID(NI_BOOK_ID, book.id)
           putString(NI_TARGET, target.instanceId)
         }
       }

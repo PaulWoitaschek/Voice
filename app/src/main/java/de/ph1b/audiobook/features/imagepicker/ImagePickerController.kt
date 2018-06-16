@@ -21,6 +21,8 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.getUUID
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
@@ -37,7 +39,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   constructor(book: Book) : this(
     Bundle().apply {
-      putLong(NI_BOOK_ID, book.id)
+      putUUID(NI_BOOK_ID, book.id)
     }
   )
 
@@ -100,7 +102,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   private var webViewIsLoading = BehaviorSubject.createDefault(false)
   private val book by lazy {
-    val id = bundle.getLong(NI_BOOK_ID)
+    val id = bundle.getUUID(NI_BOOK_ID)
     repo.bookById(id)!!
   }
   private val originalUrl by lazy {

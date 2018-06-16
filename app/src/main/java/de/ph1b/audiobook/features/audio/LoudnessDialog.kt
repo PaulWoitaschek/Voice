@@ -9,11 +9,14 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
+import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.progressChangedStream
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.loudness.*
 import java.text.DecimalFormat
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -37,7 +40,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
       activity!!.layoutInflater.inflate(R.layout.loudness, null, false)
     )
 
-    val bookId = args.getLong(NI_BOOK_ID)
+    val bookId = args.getUUID(NI_BOOK_ID)
     val book = repo.bookById(bookId)
         ?: return MaterialDialog.Builder(activity!!).build()
 
@@ -63,9 +66,9 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
   companion object {
     private const val NI_BOOK_ID = "ni#bookId"
-    operator fun invoke(bookId: Long) = LoudnessDialog(
+    operator fun invoke(bookId: UUID) = LoudnessDialog(
       Bundle().apply {
-        putLong(NI_BOOK_ID, bookId)
+        putUUID(NI_BOOK_ID, bookId)
       }
     )
   }

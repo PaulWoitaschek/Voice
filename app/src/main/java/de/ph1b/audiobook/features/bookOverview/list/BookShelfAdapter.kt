@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookOverview.list
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.ViewGroup
 import de.ph1b.audiobook.data.Book
+import java.util.UUID
 
 class BookShelfAdapter(
   private val bookClicked: (Book, BookShelfClick) -> Unit
@@ -12,7 +13,7 @@ class BookShelfAdapter(
     setHasStableIds(true)
   }
 
-  fun reloadBookCover(bookId: Long) {
+  fun reloadBookCover(bookId: UUID) {
     for (i in 0 until itemCount) {
       if (getItem(i).id == bookId) {
         notifyItemChanged(i)
@@ -21,7 +22,7 @@ class BookShelfAdapter(
     }
   }
 
-  override fun getItemId(position: Int) = getItem(position).id
+  override fun getItemId(position: Int) = getItem(position).id.mostSignificantBits
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     BookShelfHolder(parent, bookClicked)

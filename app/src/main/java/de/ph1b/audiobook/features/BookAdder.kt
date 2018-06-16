@@ -29,6 +29,7 @@ import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
+import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -212,7 +213,12 @@ class BookAdder
   }
 
   // adds a new book
-  private suspend fun addNewBook(rootFile: File, newChapters: List<Chapter>, type: Book.Type) {
+  private suspend fun addNewBook(
+    rootFile: File,
+    bookId: UUID,
+    newChapters: List<Chapter>,
+    type: Book.Type
+  ) {
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
@@ -233,18 +239,22 @@ class BookAdder
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
+        id = bookId,
         metaData = BookMetaData(
           type = type,
           author = result.author,
           name = bookName,
-          root = bookRoot
+          root = bookRoot,
+          id = bookId
         ),
         content = BookContent(
           settings = BookSettings(
             currentFile = firstChapterFile,
-            positionInChapter = 0
+            positionInChapter = 0,
+            id = bookId
           ),
-          chapters = newChapters
+          chapters = newChapters,
+          id = bookId
         )
       )
       repo.addBook(newBook)
@@ -315,8 +325,9 @@ class BookAdder
    * exist any longer **/
   @Throws(InterruptedException::class)
   private suspend fun checkBook(rootFile: File, type: Book.Type) {
-    val newChapters = getChaptersByRootFile(rootFile)
     val bookExisting = getBookFromDb(rootFile, type, false)
+    val bookId = bookExisting?.id ?: UUID.randomUUID()
+    val newChapters = getChaptersByRootFile(bookId, rootFile)
 
     if (!BaseActivity.storageMounted()) {
       throw InterruptedException("Storage not mounted")
@@ -332,7 +343,7 @@ class BookAdder
       // there are chapters
       if (bookExisting == null) {
         //there is no active book.
-        addNewBook(rootFile, newChapters, type)
+        addNewBook(rootFile, bookId, newChapters, type)
       } else {
         //there is a book, so update it if necessary
         updateBook(bookExisting, newChapters)
@@ -342,7 +353,7 @@ class BookAdder
 
   // Returns all the chapters matching to a Book root
   @Throws(InterruptedException::class)
-  private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
+  private fun getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
     val containingFiles = rootFile.walk()
       .filter { FileRecognition.musicFilter.accept(it) }
       .sortedWith(NaturalOrderComparator.fileComparator)
@@ -374,7 +385,16 @@ class BookAdder
           CrashlyticsProxy.logException(e)
           emptySparseArray<String>()
         }
-        containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
+        containingMedia.add(
+          Chapter(
+            f,
+            result.chapterName,
+            result.duration,
+            lastModified,
+            marks,
+            bookId
+          )
+        )
       }
       throwIfStopRequested()
     }

@@ -7,6 +7,8 @@ import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookMetaData
+import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
@@ -19,6 +21,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.MockitoAnnotations
 import java.io.File
+import java.util.UUID
 
 /**
  * A test case to easily test the voice search functionality for Android auto (and OK google commands)
@@ -33,64 +36,103 @@ class BookSearchHandlerTest {
   @Mock
   lateinit var player: PlayerController
 
-  private lateinit var currentBookIdPref: Pref<Long>
+  private lateinit var currentBookIdPref: Pref<UUID>
 
   private val anotherBookChapter1 = Chapter(
     File("/sdcard/AnotherBook/chapter1.mp3"),
     "anotherBookChapter1",
     5000,
     0,
-    emptySparseArray()
+    emptySparseArray(),
+    bookId = UUID.randomUUID()
   )
   private val anotherBookChapter2 = Chapter(
     File("/sdcard/AnotherBook/chapter2.mp3"),
     "anotherBookChapter2",
     10000,
     0,
-    emptySparseArray()
-  )
-  private val anotherBook = Book(
-    id = 2,
-    type = Book.Type.SINGLE_FOLDER,
-    author = "AnotherBookAuthor",
-    content = BookContent(
-      id = 2,
-      currentFile = anotherBookChapter1.file,
-      positionInChapter = 3000,
-      chapters = listOf(anotherBookChapter1, anotherBookChapter2),
-      playbackSpeed = 1F,
-      loudnessGain = 0
-    ),
-    name = "AnotherBook",
-    root = "/sdcard/AnotherBook"
+    emptySparseArray(),
+    bookId = UUID.randomUUID()
   )
 
+  private val anotherBook = UUID.randomUUID().let { id ->
+    Book(
+      id = id,
+      metaData = BookMetaData(
+        id = id,
+        author = "AnotherBookAuthor",
+        type = Book.Type.SINGLE_FOLDER,
+        name = "AnotherBook",
+        root = "/sdcard/AnotherBook"
+      ),
+      content = BookContent(
+        id = id,
+        settings = BookSettings(
+          id = id,
+          currentFile = anotherBookChapter1.file,
+          positionInChapter = 3000,
+          playbackSpeed = 1F,
+          loudnessGain = 0
+        ),
+        chapters = listOf(
+          anotherBookChapter1.copy(bookId = id),
+          anotherBookChapter2.copy(bookId = id)
+        )
+      )
+    )
+  }
+
   private val bookToFindChapter1 =
-    Chapter(File("/sdcard/Book1/chapter1.mp3"), "bookToFindChapter1", 5000, 0, emptySparseArray())
+    Chapter(
+      File("/sdcard/Book1/chapter1.mp3"),
+      "bookToFindChapter1",
+      5000,
+      0,
+      emptySparseArray(),
+      UUID.randomUUID()
+    )
   private val bookToFindChapter2 =
-    Chapter(File("/sdcard/Book1/chapter2.mp3"), "bookToFindChapter2", 10000, 0, emptySparseArray())
-  private val bookToFind = Book(
-    id = 1,
-    type = Book.Type.SINGLE_FOLDER,
-    author = "Book1Author",
-    content = BookContent(
-      id = 1,
-      currentFile = bookToFindChapter2.file,
-      positionInChapter = 3000,
-      chapters = listOf(bookToFindChapter1, bookToFindChapter2),
-      playbackSpeed = 1F,
-      loudnessGain = 0
-    ),
-    name = "Book1",
-    root = "/sdcard/Book1"
-  )
+    Chapter(
+      File("/sdcard/Book1/chapter2.mp3"),
+      "bookToFindChapter2",
+      10000,
+      0,
+      emptySparseArray(),
+      bookId = UUID.randomUUID()
+    )
+  private val bookToFind = UUID.randomUUID().let { id ->
+    Book(
+      metaData = BookMetaData(
+        id = id,
+        type = Book.Type.SINGLE_FOLDER,
+        author = "Book1Author",
+        name = "Book1",
+        root = "/sdcard/Book1"
+      ),
+      id = id,
+      content = BookContent(
+        settings = BookSettings(
+          id = id,
+          currentFile = bookToFindChapter2.file,
+          positionInChapter = 3000,
+          playbackSpeed = 1F,
+          loudnessGain = 0
+        ),
+        id = id,
+        chapters = listOf(
+          bookToFindChapter1.copy(bookId = id),
+          bookToFindChapter2.copy(bookId = id)
+        )
+      )
+    )
+  }
 
   @Before
   fun setUp() {
     MockitoAnnotations.initMocks(this)
 
     given { repo.activeBooks }.thenReturn(listOf(anotherBook, bookToFind))
-    currentBookIdPref = MemoryPref(-1)
+    currentBookIdPref = MemoryPref(UUID.randomUUID())
 
     searchHandler = BookSearchHandler(repo, player, currentBookIdPref)
   }
@@ -150,7 +192,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun mediaFocusArtistInTitleNoArtistInBook() {
-    val bookToFind = this.bookToFind.copy(author = null, name = "The book of Tim")
+    val bookToFind = bookToFind.updateMetaData { copy(author = null, name = "The book of Tim") }
     given { repo.activeBooks }.thenReturn(listOf(bookToFind))
 
     val bookSearch = BookSearch(

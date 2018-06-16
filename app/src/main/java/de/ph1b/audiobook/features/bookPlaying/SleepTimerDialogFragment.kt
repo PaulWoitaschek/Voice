@@ -17,12 +17,15 @@ import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.DialogLayoutContainer
+import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
+import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import kotlinx.android.synthetic.main.dialog_sleep.*
 import kotlinx.coroutines.experimental.launch
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,9 +38,9 @@ private const val SI_MINUTES = "si#time"
 class SleepTimerDialogFragment() : AppCompatDialogFragment() {
 
   @SuppressLint("ValidFragment")
-  constructor(bookId: Long) : this() {
+  constructor(bookId: UUID) : this() {
     arguments = Bundle().apply {
-      putLong(NI_BOOK_ID, bookId)
+      putUUID(NI_BOOK_ID, bookId)
     }
   }
 
@@ -114,7 +117,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       true
     }
 
-    val bookId = arguments!!.getLong(NI_BOOK_ID)
+    val bookId = arguments!!.getUUID(NI_BOOK_ID)
     val book = repo.bookById(bookId) ?: return super.onCreateDialog(savedInstanceState)
 
     layoutContainer.fab.setOnClickListener {

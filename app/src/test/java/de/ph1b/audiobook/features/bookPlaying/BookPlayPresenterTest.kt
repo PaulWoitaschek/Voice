@@ -23,6 +23,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
+import java.util.UUID
 
 class BookPlayPresenterTest {
 
@@ -31,7 +32,7 @@ class BookPlayPresenterTest {
   val mockitoRule = MockitoJUnit.rule()!!
 
   private lateinit var bookPlayPresenter: BookPlayPresenter
-  private val bookId = 5L
+  private val bookId = UUID.randomUUID()
 
   @Mock
   lateinit var mockBookRepository: BookRepository
@@ -115,8 +116,8 @@ class BookPlayPresenterTest {
   fun bookStream() {
     val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
     val bookWithCorrectIdAndChangedTime =
-      bookWithCorrectId.updateContent { copy(positionInChapter = 123) }
-    val bookWithFalseId = BookFactory.create(id = 50)
+      bookWithCorrectId.update { copy(positionInChapter = 123) }
+    val bookWithFalseId = BookFactory.create(id = UUID.randomUUID())
     val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
     val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
     given { mockBookRepository.booksStream() }.thenReturn(
@@ -145,7 +146,7 @@ class BookPlayPresenterTest {
 
   @Test
   fun absentBookFinishes() {
-    val bookWithFalseId = BookFactory.create(id = 50)
+    val bookWithFalseId = BookFactory.create(id = UUID.randomUUID())
     given { mockBookRepository.booksStream() }.thenReturn(Observable.just(listOf(bookWithFalseId)))
     bookPlayPresenter.attach(mockView)
     verify(mockView, never()).render(any())
