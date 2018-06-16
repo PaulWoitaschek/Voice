@@ -137,13 +137,12 @@ class BookStorage
     }
   }
 
-  fun addBook(toAdd: Book): Book {
+  fun addBook(toAdd: Book) {
     return db.transaction {
       val bookCv = toAdd.toContentValues()
       insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
       metaDataDao.insert(toAdd.metaData)
       chapterDao.insert(toAdd.content.chapters)
-      return@transaction toAdd
     }
   }
 }

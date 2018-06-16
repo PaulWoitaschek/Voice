@@ -51,8 +51,8 @@ class BookRepository
     withContext(IO) {
       Timber.v("addBook=${book.name}")
 
-      val bookWithId = storage.addBook(book)
-      active.add(bookWithId)
+      storage.addBook(book)
+      active.add(book)
       sortBooksAndNotifySubject()
     }
   }
