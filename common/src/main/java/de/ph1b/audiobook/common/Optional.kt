@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.common
 
 @Suppress("Unused")
 sealed class Optional<T : Any> {
@@ -21,3 +21,5 @@ sealed class Optional<T : Any> {
       else Present(value)
   }
 }
+
+fun <T : Any> T?.toOptional(): Optional<T> = Optional.of(this)

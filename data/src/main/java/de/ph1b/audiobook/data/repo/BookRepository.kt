@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.data.repo
 
+import de.ph1b.audiobook.common.Optional
+import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
@@ -38,6 +40,12 @@ class BookRepository
   fun updateObservable(): Observable<Book> = updated
 
   fun booksStream(): Observable<List<Book>> = all
+
+  fun byId(id: UUID): Observable<Optional<Book>> {
+    return all.map {
+      it.find { it.id == id }.toOptional()
+    }
+  }
 
   private suspend fun sortBooksAndNotifySubject() {
     active.sort()
