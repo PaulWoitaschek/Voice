@@ -10,7 +10,7 @@ import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.BookShelfPresenter
-import de.ph1b.audiobook.features.bookOverview.list.BookShelfHolder
+import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayPresenter
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
@@ -54,8 +54,8 @@ interface AppComponent : DataComponent {
 
   fun inject(target: App)
   fun inject(target: BookPlayController)
+  fun inject(target: LoadBookCover)
   fun inject(target: BookPlayPresenter)
-  fun inject(target: BookShelfHolder)
   fun inject(target: BookShelfController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
