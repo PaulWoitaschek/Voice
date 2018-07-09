@@ -46,8 +46,9 @@ class MediaBrowserHelper
     result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>
   ) {
     Timber.d("onLoadChildren $parentId, $result")
-    val uri = Uri.parse(parentId)
+    result.detach()
     launch {
+      val uri = Uri.parse(parentId)
       val items = mediaItems(uri)
       Timber.d("sending result $items")
       result.sendResult(items)

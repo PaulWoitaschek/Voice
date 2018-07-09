@@ -45,10 +45,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onLoadChildren(
     parentId: String,
     result: Result<List<MediaBrowserCompat.MediaItem>>
-  ) = mediaBrowserHelper.onLoadChildren(
-    parentId,
-    result
-  )
+  ) {
+    mediaBrowserHelper.onLoadChildren(
+      parentId,
+      result
+    )
+  }
 
   override fun onGetRoot(
     clientPackageName: String,
@@ -104,6 +106,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             ?.let { repo.updateBook(it) }
         }
       }
+      .disposeOnDestroy()
 
     notifyOnAutoConnectionChange.listen()
 
