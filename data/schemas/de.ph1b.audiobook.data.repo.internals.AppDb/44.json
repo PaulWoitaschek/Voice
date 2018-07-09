@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 44,
-    "identityHash": "c9a3270d5a598d337157c078ee0c9656",
+    "identityHash": "93fe93191813c781fb0d7076f1cc77f6",
     "entities": [
       {
         "tableName": "bookmark",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "chapters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT NOT NULL, `duration` INTEGER NOT NULL, `fileLastModified` INTEGER NOT NULL, `marks` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT NOT NULL, `duration` INTEGER NOT NULL, `fileLastModified` INTEGER NOT NULL, `marks` TEXT NOT NULL, `bookId` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "file",
@@ -77,15 +77,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "bookId",
             "columnName": "bookId",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -150,11 +150,67 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "bookSettings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `currentFile` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `playbackSpeed` REAL NOT NULL, `loudnessGain` INTEGER NOT NULL, `skipSilence` INTEGER NOT NULL, `active` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentFile",
+            "columnName": "currentFile",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "positionInChapter",
+            "columnName": "positionInChapter",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playbackSpeed",
+            "columnName": "playbackSpeed",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loudnessGain",
+            "columnName": "loudnessGain",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "skipSilence",
+            "columnName": "skipSilence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c9a3270d5a598d337157c078ee0c9656\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"93fe93191813c781fb0d7076f1cc77f6\")"
     ]
   }
 }

@@ -72,7 +72,8 @@ class BookSearchHandlerTest {
           currentFile = anotherBookChapter1.file,
           positionInChapter = 3000,
           playbackSpeed = 1F,
-          loudnessGain = 0
+          loudnessGain = 0,
+          active = true
         ),
         chapters = listOf(
           anotherBookChapter1.copy(bookId = id),
@@ -116,7 +117,8 @@ class BookSearchHandlerTest {
           currentFile = bookToFindChapter2.file,
           positionInChapter = 3000,
           playbackSpeed = 1F,
-          loudnessGain = 0
+          loudnessGain = 0,
+          active = true
         ),
         id = id,
         chapters = listOf(

@@ -42,7 +42,8 @@ object BookFactory {
           positionInChapter = time,
           playbackSpeed = playbackSpeed,
           loudnessGain = loudnessGain,
-          skipSilence = skipSilence
+          skipSilence = skipSilence,
+          active = true
         ),
         chapters = chapters
       )

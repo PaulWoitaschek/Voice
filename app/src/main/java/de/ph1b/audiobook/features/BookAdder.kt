@@ -251,7 +251,8 @@ class BookAdder
           settings = BookSettings(
             currentFile = firstChapterFile,
             positionInChapter = 0,
-            id = bookId
+            id = bookId,
+            active = true
           ),
           chapters = newChapters,
           id = bookId

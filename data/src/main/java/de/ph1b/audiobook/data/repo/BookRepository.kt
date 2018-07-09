@@ -24,21 +24,27 @@ import javax.inject.Singleton
 class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
+  private val allBooks by lazy { storage.books() }
   private val active: MutableList<Book> by lazy {
-    storage.activeBooks().toMutableList().apply { sort() }
+    allBooks.filter { it.content.settings.active }
+      .toMutableList()
+      .apply { sort() }
   }
-  private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
+  private val orphaned: MutableList<Book> by lazy {
+    allBooks.filter { it.content.settings.active }
+      .toMutableList()
+  }
 
-  private val all: BehaviorSubject<List<Book>> by lazy {
+  private val activeBooksSubject: BehaviorSubject<List<Book>> by lazy {
     BehaviorSubject.createDefault<List<Book>>(
       active
     )
   }
 
-  fun booksStream(): Observable<List<Book>> = all
+  fun booksStream(): Observable<List<Book>> = activeBooksSubject
 
   fun byId(id: UUID): Observable<Optional<Book>> {
-    return all.map {
+    return activeBooksSubject.map {
       it.find { it.id == id }.toOptional()
     }
   }
@@ -46,7 +52,7 @@ class BookRepository
   private suspend fun sortBooksAndNotifySubject() {
     active.sort()
     withContext(UI) {
-      all.onNext(active.toList())
+      activeBooksSubject.onNext(active.toList())
     }
   }
 
@@ -55,7 +61,7 @@ class BookRepository
     withContext(IO) {
       Timber.v("addBook=${book.name}")
 
-      storage.addBook(book)
+      storage.addOrUpdate(book)
       active.add(book)
       sortBooksAndNotifySubject()
     }
@@ -80,7 +86,7 @@ class BookRepository
       val index = active.indexOfFirst { it.id == book.id }
       if (index != -1) {
         active[index] = book
-        storage.updateBook(book)
+        storage.addOrUpdate(book)
         withContext(UI) {
           sortBooksAndNotifySubject()
         }

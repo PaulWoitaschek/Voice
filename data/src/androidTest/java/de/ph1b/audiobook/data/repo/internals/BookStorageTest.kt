@@ -40,7 +40,7 @@ class BookStorageTest {
   @Test
   fun hideRevealBook() {
     val book = BookFactory.create()
-    register.addBook(book)
+    register.addOrUpdate(book)
 
     val activeBooks = register.activeBooks()
     val inactiveBooks = register.orphanedBooks()
@@ -67,7 +67,7 @@ class BookStorageTest {
   @Test
   fun addBookReturn() {
     val mock = BookFactory.create()
-    val inserted = register.addBook(mock)
+    val inserted = register.addOrUpdate(mock)
     val retrieved = register.activeBooks().single()
 
     assertThat(inserted).isEqualTo(retrieved)
@@ -77,8 +77,8 @@ class BookStorageTest {
   fun addBook() {
     val mock1 = BookFactory.create()
     val mock2 = BookFactory.create()
-    val firstInserted = register.addBook(mock1)
-    val secondInserted = register.addBook(mock2)
+    val firstInserted = register.addOrUpdate(mock1)
+    val secondInserted = register.addOrUpdate(mock2)
 
     val containing = register.activeBooks()
 
@@ -102,7 +102,7 @@ class BookStorageTest {
   fun addBookWithNullableAuthor() {
     val mock = BookFactory.create()
     val withNullableAuthor = mock.copy(author = null)
-    val inserted = register.addBook(withNullableAuthor)
+    val inserted = register.addOrUpdate(withNullableAuthor)
 
     assertThat(inserted)
       .isEqualTo(
@@ -126,7 +126,7 @@ class BookStorageTest {
   @Test
   fun updateBook() {
     val mock = BookFactory.create()
-    val inserted = register.addBook(mock)
+    val inserted = register.addOrUpdate(mock)
 
     val oldChapters = inserted.content.chapters
     val substracted = oldChapters.minus(oldChapters.first())

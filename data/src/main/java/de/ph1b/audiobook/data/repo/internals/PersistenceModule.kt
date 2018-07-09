@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
@@ -43,6 +42,9 @@ class PersistenceModule {
   fun metaDataDao(appDb: AppDb) = appDb.bookMetadataDao()
 
   @Provides
+  fun bookSettingsDao(appDb: AppDb) = appDb.bookSettingsDao()
+
+  @Provides
   fun roomDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDb> {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
       .allowMainThreadQueries()
@@ -52,18 +54,12 @@ class PersistenceModule {
   @Singleton
   fun appDb(
     builder: RoomDatabase.Builder<AppDb>,
-    migrations: Array<Migration>,
-    callback: InitialRoomCallback
+    migrations: Array<Migration>
   ): AppDb {
     return builder
       .addMigrations(*migrations)
-      .addCallback(callback)
       .build()
   }
-
-  @Provides
-  @Singleton
-  fun sqlHelper(appDb: AppDb): SupportSQLiteOpenHelper = appDb.openHelper
 
   @Provides
   fun migrations(context: Context): Array<Migration> {
