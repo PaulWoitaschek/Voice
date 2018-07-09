@@ -12,7 +12,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.bookOverview.BookShelfController
+import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), RouterProvider {
       ?.let(UUID::fromString)
       ?.let(repo::bookById)
       ?.let {
-        val bookShelf = RouterTransaction.with(BookShelfController())
+        val bookShelf = RouterTransaction.with(BookOverviewController())
       val bookPlay = BookPlayController(it.id).asTransaction()
       router.setBackstack(listOf(bookShelf, bookPlay), null)
       return
@@ -116,7 +116,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     // if we should play the current book, set the backstack and return early
     if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {
       repo.bookById(currentBookIdPref.value)?.let {
-        val bookShelf = RouterTransaction.with(BookShelfController())
+        val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(it.id).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         playerController.play()
@@ -124,7 +124,7 @@ class MainActivity : BaseActivity(), RouterProvider {
       }
     }
 
-    val rootTransaction = RouterTransaction.with(BookShelfController())
+    val rootTransaction = RouterTransaction.with(BookOverviewController())
     router.setRoot(rootTransaction)
   }
 

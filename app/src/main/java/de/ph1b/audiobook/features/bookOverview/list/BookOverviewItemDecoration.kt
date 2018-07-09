@@ -8,7 +8,7 @@ import android.view.View
 import de.ph1b.audiobook.misc.dpToPxRounded
 
 
-class BookShelfItemDecoration(context: Context) : ItemDecoration() {
+class BookOverviewItemDecoration(context: Context) : ItemDecoration() {
 
   private val margin = context.dpToPxRounded(8F)
 

@@ -8,8 +8,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.audio.LoudnessDialog
-import de.ph1b.audiobook.features.bookOverview.BookShelfController
-import de.ph1b.audiobook.features.bookOverview.BookShelfPresenter
+import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayPresenter
@@ -38,7 +37,6 @@ import javax.inject.Singleton
 interface AppComponent : DataComponent {
 
   val bookmarkPresenter: BookmarkPresenter
-  val bookShelfPresenter: BookShelfPresenter
   val context: Context
   val player: MediaPlayer
   val playStateManager: PlayStateManager
@@ -56,7 +54,7 @@ interface AppComponent : DataComponent {
   fun inject(target: BookPlayController)
   fun inject(target: LoadBookCover)
   fun inject(target: BookPlayPresenter)
-  fun inject(target: BookShelfController)
+  fun inject(target: BookOverviewController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
   fun inject(target: ImagePickerController)

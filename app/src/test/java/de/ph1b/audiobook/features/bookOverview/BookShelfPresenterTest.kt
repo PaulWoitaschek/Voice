@@ -38,7 +38,7 @@ class BookShelfPresenterTest {
   @JvmField
   val trampolineRule = RxMainThreadTrampolineRule()
 
-  private lateinit var presenter: BookShelfPresenter
+  private lateinit var presenter: BookOverviewViewModel
 
   @Mock
   lateinit var repo: BookRepository
@@ -59,7 +59,7 @@ class BookShelfPresenterTest {
   @Before
   fun setUp() {
     currentBookIdPref = MemoryPref(UUID.randomUUID())
-    presenter = BookShelfPresenter(
+    presenter = BookOverviewViewModel(
       repo = repo,
       bookAdder = bookAdder,
       playStateManager = playStateManager,
@@ -86,7 +86,7 @@ class BookShelfPresenterTest {
   @Test
   fun noFolderWarningShownWithoutBooks() {
     presenter.attach(view)
-    verify(view).render(BookShelfState.NoFolderSet)
+    verify(view).render(BookOverviewState.NoFolderSet)
   }
 
   @Test
@@ -94,7 +94,7 @@ class BookShelfPresenterTest {
     given { repo.booksStream() }
       .willReturn(Observable.just(listOf(BookFactory.create())))
     presenter.attach(view)
-    verify(view, never()).render(BookShelfState.NoFolderSet)
+    verify(view, never()).render(BookOverviewState.NoFolderSet)
   }
 
   @Test
@@ -104,10 +104,10 @@ class BookShelfPresenterTest {
     given { repo.booksStream() }
       .willReturn(Observable.just(firstEmission, secondEmission))
     presenter.attach(view)
-    val captor = argumentCaptor<BookShelfState>()
+    val captor = argumentCaptor<BookOverviewState>()
     verify(view).render(captor.capture())
     val lastValue = captor.lastValue
-    assertThat(lastValue is BookShelfState.Content && lastValue.books == secondEmission)
+    assertThat(lastValue is BookOverviewState.Content && lastValue.books == secondEmission)
   }
 
   @Test
@@ -124,13 +124,13 @@ class BookShelfPresenterTest {
 
     inOrder(view) {
       verify(view, atLeastOnce()).render(
-        argThat { this is BookShelfState.Content && currentBook == null }
+        argThat { this is BookOverviewState.Content && currentBook == null }
       )
       verify(view).render(
-        argThat { this is BookShelfState.Content && currentBook == firstBook }
+        argThat { this is BookOverviewState.Content && currentBook == firstBook }
       )
       verify(view).render(
-        argThat { this is BookShelfState.Content && currentBook == secondBook }
+        argThat { this is BookOverviewState.Content && currentBook == secondBook }
       )
     }
   }
@@ -144,7 +144,7 @@ class BookShelfPresenterTest {
     presenter.attach(view)
 
     verify(view, never()).render(
-      argThat { this is BookShelfState.Loading }
+      argThat { this is BookOverviewState.Loading }
     )
   }
 
@@ -154,7 +154,7 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(true))
 
     presenter.attach(view)
-    verify(view).render(BookShelfState.Loading)
+    verify(view).render(BookOverviewState.Loading)
   }
 
   @Test
@@ -163,7 +163,7 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(true, false))
 
     presenter.attach(view)
-    verify(view, never()).render(BookShelfState.Loading)
+    verify(view, never()).render(BookOverviewState.Loading)
   }
 
   @Test
@@ -172,7 +172,7 @@ class BookShelfPresenterTest {
     given { bookAdder.scannerActive }.willReturn(Observable.just(false))
 
     presenter.attach(view)
-    verify(view, never()).render(BookShelfState.Loading)
+    verify(view, never()).render(BookOverviewState.Loading)
   }
 
   @Test
@@ -183,7 +183,7 @@ class BookShelfPresenterTest {
     }.willReturn(Observable.just(PLAYING))
     presenter.attach(view)
 
-    verify(view).render(argThat { this is BookShelfState.Content && playing })
+    verify(view).render(argThat { this is BookOverviewState.Content && playing })
   }
 
   @Test
@@ -194,7 +194,7 @@ class BookShelfPresenterTest {
     }.willReturn(Observable.just(PAUSED))
     presenter.attach(view)
 
-    verify(view).render(argThat { this is BookShelfState.Content && !playing })
+    verify(view).render(argThat { this is BookOverviewState.Content && !playing })
   }
 
 
@@ -206,7 +206,7 @@ class BookShelfPresenterTest {
     }.willReturn(Observable.just(PAUSED))
     presenter.attach(view)
 
-    verify(view).render(argThat { this is BookShelfState.Content && !playing })
+    verify(view).render(argThat { this is BookOverviewState.Content && !playing })
   }
 
 

@@ -8,15 +8,17 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
+import android.view.View
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.features.bookOverview.list.BookShelfAdapter
-import de.ph1b.audiobook.features.bookOverview.list.BookShelfClick
-import de.ph1b.audiobook.features.bookOverview.list.BookShelfItemDecoration
+import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
@@ -27,7 +29,6 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
-import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
@@ -42,13 +43,10 @@ private const val COVER_FROM_GALLERY = 1
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
-  EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback, BookShelfView {
+class BookOverviewController : BaseController(),
+  EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 
-  override fun createPresenter() = App.component.bookShelfPresenter
   override val layoutRes = R.layout.book_shelf
-
-  override fun provideView() = this
 
   init {
     App.component.inject(this)
@@ -57,8 +55,11 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
 
+  @Inject
+  lateinit var viewModel: BookOverviewViewModel
+
   private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
-  private var adapter: BookShelfAdapter by clearAfterDestroyView()
+  private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
@@ -68,19 +69,26 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
     setupToolbar()
     setupFab()
     setupRecyclerView()
+
+    viewModel.state
+      .subscribe(::render)
+      .disposeOnDestroyView()
+    viewModel.coverChanged
+      .subscribe(::bookCoverChanged)
+      .disposeOnDestroyView()
   }
 
   private fun setupFab() {
     fab.setIconDrawable(playPauseDrawable)
-    fab.setOnClickListener { presenter.playPause() }
+    fab.setOnClickListener { viewModel.playPause() }
   }
 
   private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
-    adapter = BookShelfAdapter { book, clickType ->
+    adapter = BookOverviewAdapter { book, clickType ->
       when (clickType) {
-        BookShelfClick.REGULAR -> invokeBookSelectionCallback(book)
-        BookShelfClick.MENU -> {
+        BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
+        BookOverviewClick.MENU -> {
           val editDialog = EditBookBottomSheet.newInstance(this, book)
           editDialog.show(fragmentManager, "editBottomSheet")
         }
@@ -90,7 +98,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
     // without this the item would blink on every change
     val anim = recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    val listDecoration = BookShelfItemDecoration(activity)
+    val listDecoration = BookOverviewItemDecoration(activity)
     recyclerView.addItemDecoration(listDecoration)
     recyclerView.layoutManager = LinearLayoutManager(activity)
   }
@@ -158,21 +166,21 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
     router.pushController(transaction)
   }
 
-  override fun render(state: BookShelfState) {
+  private fun render(state: BookOverviewState) {
     Timber.i("render ${state.javaClass.simpleName}")
     when (state) {
-      is BookShelfState.Content -> {
+      is BookOverviewState.Content -> {
         adapter.submitList(state.books)
         val currentBook = state.currentBook
 
         fab.isVisible = currentBook != null
         showPlaying(state.playing)
       }
-      is BookShelfState.NoFolderSet -> {
+      is BookOverviewState.NoFolderSet -> {
         showNoFolderWarning()
       }
     }
-    loadingProgress.isVisible = state == BookShelfState.Loading
+    loadingProgress.isVisible = state == BookOverviewState.Loading
   }
 
   private fun showPlaying(playing: Boolean) {
@@ -211,7 +219,7 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
     })
   }
 
-  override fun bookCoverChanged(bookId: UUID) {
+  private fun bookCoverChanged(bookId: UUID) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {
@@ -239,5 +247,10 @@ class BookShelfController : MvpController<BookShelfView, BookShelfPresenter>(),
   override fun onDestroyView() {
     super.onDestroyView()
     recyclerView.adapter = null
+  }
+
+  override fun onAttach(view: View) {
+    super.onAttach(view)
+    viewModel.attach()
   }
 }

@@ -19,7 +19,7 @@ import kotlinx.coroutines.experimental.withContext
 import java.io.File
 import javax.inject.Inject
 
-class LoadBookCover(holder: BookShelfHolder) {
+class LoadBookCover(holder: BookOverviewHolder) {
 
   @Inject
   lateinit var coverColorExtractor: CoverColorExtractor

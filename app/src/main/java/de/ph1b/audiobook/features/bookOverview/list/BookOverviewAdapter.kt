@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import de.ph1b.audiobook.data.Book
 import java.util.UUID
 
-class BookShelfAdapter(
-  private val bookClicked: (Book, BookShelfClick) -> Unit
-) : ListAdapter<Book, BookShelfHolder>(BookShelfDiffCallback()) {
+class BookOverviewAdapter(
+  private val bookClicked: (Book, BookOverviewClick) -> Unit
+) : ListAdapter<Book, BookOverviewHolder>(BookOverviewDiff()) {
 
   init {
     setHasStableIds(true)
@@ -25,9 +25,9 @@ class BookShelfAdapter(
   override fun getItemId(position: Int) = getItem(position).id.mostSignificantBits
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-    BookShelfHolder(parent, bookClicked)
+    BookOverviewHolder(parent, bookClicked)
 
-  override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
+  override fun onBindViewHolder(holder: BookOverviewHolder, position: Int) {
     holder.bind(getItem(position))
   }
 }

@@ -7,7 +7,7 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_shelf_row.*
 
-class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Unit) :
+class BookOverviewHolder(parent: ViewGroup, listener: (Book, BookOverviewClick) -> Unit) :
   ExtensionsHolder(parent, R.layout.book_shelf_row) {
 
   private var boundBook: Book? = null
@@ -16,10 +16,10 @@ class BookShelfHolder(parent: ViewGroup, listener: (Book, BookShelfClick) -> Uni
   init {
     itemView.clipToOutline = true
     itemView.setOnClickListener {
-      boundBook?.let { listener(it, BookShelfClick.REGULAR) }
+      boundBook?.let { listener(it, BookOverviewClick.REGULAR) }
     }
     edit.setOnClickListener {
-      boundBook?.let { listener(it, BookShelfClick.MENU) }
+      boundBook?.let { listener(it, BookOverviewClick.MENU) }
     }
   }
 
