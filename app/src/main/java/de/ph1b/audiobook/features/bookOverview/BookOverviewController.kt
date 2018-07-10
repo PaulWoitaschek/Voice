@@ -19,6 +19,7 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
+import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderType
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
@@ -170,7 +171,21 @@ class BookOverviewController : BaseController(),
     Timber.i("render ${state.javaClass.simpleName}")
     when (state) {
       is BookOverviewState.Content -> {
-        adapter.submitList(state.books)
+        val content = ArrayList<Any>().apply {
+          if (state.currentBooks.isNotEmpty()) {
+            add(BookOverviewHeaderType.CURRENT)
+            addAll(state.currentBooks)
+          }
+          if (state.notStartedBooks.isNotEmpty()) {
+            add(BookOverviewHeaderType.NOT_STARTED)
+            addAll(state.notStartedBooks)
+          }
+          if (state.completedBooks.isNotEmpty()) {
+            add(BookOverviewHeaderType.FINISHED)
+            addAll(state.completedBooks)
+          }
+        }
+        adapter.submitList(content)
         val currentBook = state.currentBook
 
         fab.isVisible = currentBook != null

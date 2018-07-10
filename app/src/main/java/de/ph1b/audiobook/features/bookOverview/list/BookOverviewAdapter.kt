@@ -1,10 +1,11 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderComponent
 import de.ph1b.audiobook.misc.recyclerComponent.CompositeListAdapter
 import java.util.UUID
 
-typealias   BookClickListener = (Book, BookOverviewClick) -> Unit
+typealias BookClickListener = (Book, BookOverviewClick) -> Unit
 
 
 class BookOverviewAdapter(
@@ -12,7 +13,7 @@ class BookOverviewAdapter(
 ) : CompositeListAdapter<Any>(BookOverviewDiff()) {
 
   init {
-    addComponents(BookOverviewComponent(bookClickListener))
+    addComponents(BookOverviewComponent(bookClickListener), BookOverviewHeaderComponent())
   }
 
   fun reloadBookCover(bookId: UUID) {

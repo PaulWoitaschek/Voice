@@ -111,4 +111,8 @@
 
     <string name="onboarding_title">Welcome!</string>
     <string name="onboarding_content">Let\'s get started by adding your first audio book.</string>
+
+    <string name="book_header_current">Current</string>
+    <string name="book_header_not_started">Not started Yet</string>
+    <string name="book_header_completed">Completed</string>
 </resources>

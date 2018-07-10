@@ -67,10 +67,10 @@ class LoadBookCover(holder: BookOverviewHolder) {
           // we have to set the replacement in onPreDraw, else the transition will fail.
           cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
         }
-      }
 
-      boundFile = coverFile
-      boundName = bookName
+        boundFile = coverFile
+        boundName = bookName
+      }
     }
   }
 }
