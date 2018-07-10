@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.injection.PrefKeys
@@ -47,20 +48,62 @@ constructor(
           playingStream,
           scannerActiveStream
         ) { books, currentBookId, playing, scannerActive ->
-          when {
-            books.isEmpty() && !scannerActive -> BookOverviewState.NoFolderSet
-            if (books.isEmpty()) scannerActive else false -> BookOverviewState.Loading
-            else -> {
-              val currentBook = books.find { it.id == currentBookId }
-              BookOverviewState.Content(
-                books = books,
-                currentBook = currentBook,
-                playing = playing
-              )
-            }
-          }
+          state(
+            books = books,
+            scannerActive = scannerActive,
+            currentBookId = currentBookId,
+            playing = playing
+          )
         }
     }
+
+  private fun state(
+    books: List<Book>,
+    scannerActive: Boolean,
+    currentBookId: UUID?,
+    playing: Boolean
+  ): BookOverviewState {
+    if (books.isEmpty()) {
+      return if (scannerActive) {
+        BookOverviewState.Loading
+      } else {
+        BookOverviewState.NoFolderSet
+      }
+    }
+
+    return content(books = books, currentBookId = currentBookId, playing = playing)
+  }
+
+  private fun content(
+    books: List<Book>,
+    currentBookId: UUID?,
+    playing: Boolean
+  ): BookOverviewState.Content {
+    val currentBook = books.find { it.id == currentBookId }
+
+    val current = ArrayList<Book>()
+    val notStarted = ArrayList<Book>()
+    val completed = ArrayList<Book>()
+
+    books.forEach { book ->
+      val position = book.content.position
+      val duration = book.content.duration
+      val target = when {
+        position == 0 -> notStarted
+        position >= duration -> completed
+        else -> current
+      }
+      target += book
+    }
+
+    return BookOverviewState.Content(
+      currentBook = currentBook,
+      playing = playing,
+      completedBooks = completed,
+      currentBooks = current,
+      notStartedBooks = notStarted
+    )
+  }
 
   fun playPause() {
     playerController.playPause()
