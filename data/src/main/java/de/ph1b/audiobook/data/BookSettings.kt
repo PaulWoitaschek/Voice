@@ -22,7 +22,9 @@ data class BookSettings(
   @ColumnInfo(name = "skipSilence")
   val skipSilence: Boolean = false,
   @ColumnInfo(name = "active")
-  val active: Boolean
+  val active: Boolean,
+  @ColumnInfo(name = "lastPlayedAtMillis")
+  val lastPlayedAtMillis: Long
 ) {
 
   init {

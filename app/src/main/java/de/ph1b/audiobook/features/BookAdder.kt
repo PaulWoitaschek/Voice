@@ -62,11 +62,13 @@ class BookAdder
   private var isScanning = false
 
   init {
-    val folderChanged = Observables.combineLatest(
-      collectionBookFolderPref.stream,
-      singleBookFolderPref.stream
-    ) { _, _ -> Unit }
-    folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
+    @Suppress("CheckResult")
+    Observables
+      .combineLatest(
+        collectionBookFolderPref.stream,
+        singleBookFolderPref.stream
+      ) { _, _ -> Unit }
+      .subscribe { scanForFiles(restartIfScanning = true) }
   }
 
   // check for new books
@@ -252,7 +254,8 @@ class BookAdder
             currentFile = firstChapterFile,
             positionInChapter = 0,
             id = bookId,
-            active = true
+            active = true,
+            lastPlayedAtMillis = 0
           ),
           chapters = newChapters,
           id = bookId

@@ -201,7 +201,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun headsetPlugged() {
     if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
       if (resumeOnReplugPref.value) {
-        player.play()
+        play()
       }
     }
   }
@@ -287,23 +287,30 @@ class PlaybackService : MediaBrowserServiceCompat() {
       PlayerController.ACTION_PLAY_PAUSE -> {
         if (playStateManager.playState == PlayState.PLAYING) {
           player.pause(true)
-        } else player.play()
+        } else {
+          play()
+        }
       }
       PlayerController.ACTION_STOP -> player.stop()
-      PlayerController.ACTION_PLAY -> player.play()
+      PlayerController.ACTION_PLAY -> play()
       PlayerController.ACTION_REWIND -> player.skip(forward = false)
       PlayerController.ACTION_REWIND_AUTO_PLAY -> {
         player.skip(forward = false)
-        player.play()
+        play()
       }
       PlayerController.ACTION_FAST_FORWARD -> player.skip(forward = true)
       PlayerController.ACTION_FAST_FORWARD_AUTO_PLAY -> {
         player.skip(forward = true)
-        player.play()
+        play()
       }
     }
 
     return Service.START_NOT_STICKY
+  }
+
+  private fun play() {
+    launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+    player.play()
   }
 
   private fun Disposable.disposeOnDestroy() {

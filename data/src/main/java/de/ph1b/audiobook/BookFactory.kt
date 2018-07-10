@@ -43,7 +43,8 @@ object BookFactory {
           playbackSpeed = playbackSpeed,
           loudnessGain = loudnessGain,
           skipSilence = skipSilence,
-          active = true
+          active = true,
+          lastPlayedAtMillis = 0
         ),
         chapters = chapters
       )

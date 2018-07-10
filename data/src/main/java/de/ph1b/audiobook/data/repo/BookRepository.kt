@@ -94,6 +94,19 @@ class BookRepository
     }
   }
 
+  suspend fun markBookAsPlayedNow(id: UUID) {
+    withContext(IO) {
+      val book = bookById(id)
+          ?: return@withContext
+      val updatedBook = book.update(
+        updateSettings = {
+          copy(lastPlayedAtMillis = System.currentTimeMillis())
+        }
+      )
+      updateBook(updatedBook)
+    }
+  }
+
   @Synchronized
   suspend fun hideBook(toDelete: List<Book>) {
     withContext(IO) {

@@ -52,7 +52,11 @@ constructor(
             if (books.isEmpty()) scannerActive else false -> BookOverviewState.Loading
             else -> {
               val currentBook = books.find { it.id == currentBookId }
-              BookOverviewState.Content(books = books, currentBook = currentBook, playing = playing)
+              BookOverviewState.Content(
+                books = books,
+                currentBook = currentBook,
+                playing = playing
+              )
             }
           }
         }
