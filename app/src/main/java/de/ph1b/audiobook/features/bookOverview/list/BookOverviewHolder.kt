@@ -4,10 +4,23 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_shelf_row.*
 
-class BookOverviewHolder(parent: ViewGroup, listener: (Book, BookOverviewClick) -> Unit) :
+class BookOverviewComponent(private val listener: BookClickListener) :
+  AdapterComponent<Book, BookOverviewHolder>(Book::class) {
+
+  override fun onCreateViewHolder(parent: ViewGroup): BookOverviewHolder {
+    return BookOverviewHolder(parent, listener)
+  }
+
+  override fun onBindViewHolder(model: Book, holder: BookOverviewHolder) {
+    holder.bind(model)
+  }
+}
+
+class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListener) :
   ExtensionsHolder(parent, R.layout.book_shelf_row) {
 
   private var boundBook: Book? = null
