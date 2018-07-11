@@ -1,5 +1,3 @@
-import de.ph1b.audiobook.signing.SigningDetailsProvider
-
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
@@ -28,15 +26,13 @@ android {
 
   signingConfigs {
     release {
-      def signingPropFile = new File('signing.properties')
-      def signingDetailsProvider = new SigningDetailsProvider()
-      def signingDetails = signingDetailsProvider.provide(signingPropFile)
-      if (signingDetails != null) {
-        storeFile = signingDetails.storeFile
-        storePassword = signingDetails.storePassword
-        keyAlias = signingDetails.keyAlias
-        keyPassword = signingDetails.keyPassword
-      }
+      def props = new Properties()
+      def propsFile = rootProject.file('signing.properties')
+      props.load(new FileInputStream((propsFile)))
+      storeFile = rootProject.file(props['STORE_FILE'])
+      storePassword = props['STORE_PASSWORD']
+      keyAlias = props['KEY_ALIAS']
+      keyPassword = props['KEY_PASSWORD']
     }
   }
 
