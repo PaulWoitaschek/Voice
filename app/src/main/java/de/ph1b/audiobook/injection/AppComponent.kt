@@ -17,8 +17,10 @@ import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -40,6 +42,8 @@ interface AppComponent : DataComponent {
   val context: Context
   val player: MediaPlayer
   val playStateManager: PlayStateManager
+  @get:Named(PrefKeys.CRASH_REPORT_ENABLED)
+  val allowCrashReports: Pref<Boolean>
 
   @Component.Builder
   interface Builder {

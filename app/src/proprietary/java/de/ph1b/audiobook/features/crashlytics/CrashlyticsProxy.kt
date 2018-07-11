@@ -1,10 +1,12 @@
 package de.ph1b.audiobook.features.crashlytics
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.misc.ErrorReporter
+import de.ph1b.audiobook.persistence.pref.Pref
 import io.fabric.sdk.android.Fabric
 
 /**
@@ -12,19 +14,34 @@ import io.fabric.sdk.android.Fabric
  */
 object CrashlyticsProxy : ErrorReporter {
 
+  private var enabled = false
+
   override fun log(message: String) {
-    Crashlytics.log(message)
+    if (enabled) {
+      Crashlytics.log(message)
+    }
   }
 
   override fun logException(throwable: Throwable) {
-    Crashlytics.logException(throwable)
+    if (enabled) {
+      Crashlytics.logException(throwable)
+    }
   }
 
-  fun init(app: Application) {
+  @SuppressLint("CheckResult")
+  fun init(app: Application, enabled: Pref<Boolean>) {
+    enabled.stream
+      .distinctUntilChanged()
+      .subscribe { updateEnabledState(it, app) }
+
+  }
+
+  private fun updateEnabledState(enabled: Boolean, app: Application) {
+    this.enabled = enabled
     val crashlytics = Crashlytics.Builder()
       .core(
         CrashlyticsCore.Builder()
-          .disabled(BuildConfig.DEBUG)
+          .disabled(BuildConfig.DEBUG || enabled)
           .build()
       )
       .build()

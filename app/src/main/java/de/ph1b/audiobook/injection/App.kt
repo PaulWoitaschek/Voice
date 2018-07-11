@@ -22,10 +22,10 @@ import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.concurrent.thread
 
 class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector,
   HasBroadcastReceiverInjector {
@@ -57,10 +57,12 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
 
-    CrashlyticsProxy.init(this)
-    thread {
-      if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-      else Timber.plant(CrashLoggingTree())
+    launch {
+      if (BuildConfig.DEBUG) {
+        Timber.plant(Timber.DebugTree())
+      } else {
+        Timber.plant(CrashLoggingTree())
+      }
     }
 
     component = DaggerAppComponent.builder()
@@ -68,6 +70,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
       .build()
     DataInjector.component = component
     component.inject(this)
+    CrashlyticsProxy.init(this, component.allowCrashReports)
 
     bookAdder.scanForFiles()
 
