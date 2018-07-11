@@ -11,9 +11,4 @@
         <ignore regexp="BaseBundle#putString"/>
     </issue>
 
-    <issue id="WeakerAccess" severity="fatal">
-        <ignore regexp="@Inject"/>
-        <ignore regexp="@InjectMocks"/>
-    </issue>
-
 </lint>
