@@ -19,6 +19,7 @@
 
 # picasso
 -dontwarn com.squareup.picasso.OkHttpDownloader
+-dontwarn okhttp3.internal.platform.*
 
 # chapterreader
 -dontwarn org.slf4j.**
