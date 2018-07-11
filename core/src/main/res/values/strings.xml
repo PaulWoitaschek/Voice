@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
-           tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <!--BookShelf-->
     <string name="content_current_book">This is the current book</string>
     <string name="current_book">Current book</string>
@@ -115,4 +114,7 @@
     <string name="book_header_current">Current</string>
     <string name="book_header_not_started">Not started Yet</string>
     <string name="book_header_completed">Completed</string>
+
+    <string name="pref_allow_crash_report_title">Crash reports</string>
+    <string name="pref_allow_crash_report_content">Help the development by allowing to send anonymized crash reports.</string>
 </resources>

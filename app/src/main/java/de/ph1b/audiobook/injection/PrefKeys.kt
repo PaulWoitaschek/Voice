@@ -13,4 +13,5 @@ object PrefKeys {
   const val CURRENT_BOOK = "currentBook"
   const val RESUME_AFTER_CALL = "resumeAfterCall"
   const val THEME = "THEME2_KEY"
+  const val CRASH_REPORT_ENABLED = "allowCrashReports"
 }

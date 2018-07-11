@@ -30,6 +30,8 @@ class SettingsController : BaseController() {
   lateinit var autoRewindAmountPref: Pref<Int>
   @field:[Inject Named(PrefKeys.SEEK_TIME)]
   lateinit var seekTimePref: Pref<Int>
+  @field:[Inject Named(PrefKeys.CRASH_REPORT_ENABLED)]
+  lateinit var crashReportEnabledPref: Pref<Boolean>
 
   init {
     App.component.inject(this)
@@ -65,6 +67,13 @@ class SettingsController : BaseController() {
       titleRes = R.string.pref_resume_after_call,
       contentRes = R.string.pref_resume_after_call_hint,
       pref = resumeAfterCallPref
+    )
+
+    setupSwitchSetting(
+      settingView = crashReports,
+      titleRes = R.string.pref_allow_crash_report_title,
+      contentRes = R.string.pref_allow_crash_report_content,
+      pref = crashReportEnabledPref
     )
 
     // skip amount
