@@ -3,6 +3,8 @@ package de.ph1b.audiobook.features.bookOverview
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
+import de.ph1b.audiobook.features.bookOverview.list.BY_LAST_PLAYED_THEN_NAME
+import de.ph1b.audiobook.features.bookOverview.list.BY_NAME
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -95,6 +97,10 @@ constructor(
       }
       target += book
     }
+
+    current.sortWith(BY_LAST_PLAYED_THEN_NAME)
+    notStarted.sortWith(BY_NAME)
+    completed.sortWith(BY_NAME)
 
     return BookOverviewState.Content(
       currentBook = currentBook,
