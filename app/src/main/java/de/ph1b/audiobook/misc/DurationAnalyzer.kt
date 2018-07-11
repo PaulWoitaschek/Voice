@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import io.reactivex.Single
@@ -29,11 +30,18 @@ class DurationAnalyzer
   init {
     val trackSelector = DefaultTrackSelector()
     exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+    enableOnlyAudioRenderer(trackSelector, exoPlayer)
+  }
+
+  private fun enableOnlyAudioRenderer(
+    trackSelector: DefaultTrackSelector,
+    exoPlayer: SimpleExoPlayer
+  ) {
+    val builder = trackSelector.buildUponParameters()
     for (i in 0 until exoPlayer.rendererCount) {
-      if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_VIDEO) {
-        trackSelector.setRendererDisabled(i, true)
-      }
+      builder.setRendererDisabled(i, exoPlayer.getRendererType(i) != C.TRACK_TYPE_AUDIO)
     }
+    trackSelector.parameters = builder.build()
   }
 
   private val playbackStateSubject = BehaviorSubject.createDefault(exoPlayer.playbackState)
@@ -74,8 +82,9 @@ class DurationAnalyzer
     }
     .firstOrError()
     .map {
-      if (!exoPlayer.isCurrentWindowSeekable)
+      if (!exoPlayer.isCurrentWindowSeekable) {
         Timber.d("file $file is not seekable")
+      }
       val duration = exoPlayer.duration
       if (duration == C.TIME_UNSET) -1
       else duration.toInt()
