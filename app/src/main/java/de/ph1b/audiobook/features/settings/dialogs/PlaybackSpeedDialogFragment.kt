@@ -42,6 +42,8 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     // init views
     val container =
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
+    val seekBar = container.seekBar
+    val textView = container.textView
 
     // setting current speed
     val book = repo.bookById(currentBookIdPref.value)
