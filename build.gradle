@@ -21,7 +21,7 @@ buildscript {
       androidPlugin      : "3.2.0-beta03",
       conductor          : "2.1.4",
       dagger             : "2.16",
-      exoPlayer          : "2.8.2",
+      exoPlayer          : "2.8.4",
       exoPlayerExtensions: "2.7.0-1",
       coroutines         : "0.23.4",
       kotlin             : "1.2.51",
@@ -82,7 +82,7 @@ buildscript {
       ],
 
       moshi               : "com.squareup.moshi:moshi:1.6.0",
-      rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.0.2",
+      rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.1.0",
       rxJava              : "io.reactivex.rxjava2:rxjava:2.1.16",
       rxPreferences       : "com.f2prateek.rx.preferences2:rx-preferences:2.0.0",
       timber              : "com.jakewharton.timber:timber:4.7.1",
