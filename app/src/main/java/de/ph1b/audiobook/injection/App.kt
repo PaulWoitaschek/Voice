@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
+import android.os.Looper
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDelegate
@@ -22,6 +23,8 @@ import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,6 +59,10 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
     super.onCreate()
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
+
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler {
+      AndroidSchedulers.from(Looper.getMainLooper(), true)
+    }
 
     launch {
       if (BuildConfig.DEBUG) {
