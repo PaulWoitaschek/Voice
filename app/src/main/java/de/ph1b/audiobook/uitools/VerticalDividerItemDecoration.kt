@@ -21,11 +21,11 @@ class VerticalDividerItemDecoration(context: Context, @Px private val leftMargin
 
   init {
     val a = context.obtainStyledAttributes(ATTRS)
-    divider = a.getDrawable(0)
+    divider = a.getDrawable(0)!!
     a.recycle()
   }
 
-  override fun onDraw(c: Canvas, parent: RecyclerView, state: State?) {
+  override fun onDraw(c: Canvas, parent: RecyclerView, state: State) {
     val right = parent.width - parent.paddingRight
     val childCount = parent.childCount
 
@@ -40,7 +40,7 @@ class VerticalDividerItemDecoration(context: Context, @Px private val leftMargin
     }
   }
 
-  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State?) {
+  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
     outRect.set(0, 0, 0, divider.intrinsicHeight)
   }
 

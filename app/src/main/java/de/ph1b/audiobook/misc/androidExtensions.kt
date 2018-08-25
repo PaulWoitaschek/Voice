@@ -59,7 +59,7 @@ fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
 fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
   val routerProvider = activity as RouterProvider
   val router = routerProvider.provideRouter()
-  val controllerId: String = arguments!!.getString(controllerBundleKey)
+  val controllerId: String = arguments!!.getString(controllerBundleKey)!!
   @Suppress("UNCHECKED_CAST")
   return router.getControllerWithInstanceId(controllerId) as T
 }

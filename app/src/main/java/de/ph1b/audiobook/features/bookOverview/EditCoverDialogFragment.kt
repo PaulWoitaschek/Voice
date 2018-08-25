@@ -115,7 +115,7 @@ class EditCoverDialogFragment : DialogFragment() {
   }
 
   companion object {
-    val TAG = EditCoverDialogFragment::class.java.simpleName!!
+    val TAG: String = EditCoverDialogFragment::class.java.simpleName
 
     private const val NI_COVER_URI = "ni#coverPath"
     private const val NI_BOOK_ID = "ni#id"

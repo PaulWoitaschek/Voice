@@ -15,7 +15,7 @@ class DeleteBookmarkDialog : DialogController() {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val bookId = args.getLong(NI_BOOK_ID)
-    val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)
+    val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)!!
     return MaterialDialog.Builder(activity!!)
       .title(R.string.bookmark_delete_title)
       .content(bookmarkTitle)

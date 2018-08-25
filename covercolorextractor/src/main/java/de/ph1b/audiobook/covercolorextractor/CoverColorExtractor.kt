@@ -67,9 +67,9 @@ class CoverColorExtractor(private val picasso: Picasso) {
   private suspend fun extractColor(bitmap: Bitmap): Int? =
     suspendCancellableCoroutine { cont ->
       Palette.from(bitmap)
-        .generate {
+        .generate { palette ->
           val invalidColor = -1
-          val color = it.getVibrantColor(invalidColor)
+          val color = palette?.getVibrantColor(invalidColor)
           cont.resume(color.takeUnless { it == invalidColor })
         }
     }

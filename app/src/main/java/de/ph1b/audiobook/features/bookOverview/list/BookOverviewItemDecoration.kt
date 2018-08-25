@@ -14,9 +14,9 @@ class BookOverviewItemDecoration(context: Context) : ItemDecoration() {
 
   override fun getItemOffsets(
     outRect: Rect,
-    view: View?,
-    parent: RecyclerView?,
-    state: RecyclerView.State?
+    view: View,
+    parent: RecyclerView,
+    state: RecyclerView.State
   ) {
     outRect.set(margin, margin / 2, margin, margin / 2)
   }

@@ -7,7 +7,7 @@ buildscript {
           'patch': 3,
           'build': 0,
       ],
-      compileSdk: 27,
+      compileSdk: 28,
       minSdk    : 21,
       targetSdk : 27
   ]
@@ -17,8 +17,8 @@ buildscript {
   ext.buildConfig.version['code'] = buildConfig.version.major * 1_000_000 + buildConfig.version.minor * 10_000 + buildConfig.version.patch * 100 + buildConfig.version.build
 
   ext.versions = [
-      support            : "27.1.1",
-      androidPlugin      : "3.2.0-beta03",
+      support            : "28.0.0-beta01",
+      androidPlugin      : "3.2.0-rc02",
       conductor          : "2.1.4",
       dagger             : "2.16",
       exoPlayer          : "2.8.4",
@@ -38,7 +38,8 @@ buildscript {
           transitions       : "com.android.support:transition:${versions.support}",
           v13               : "com.android.support:support-v13:${versions.support}",
           palette           : "com.android.support:palette-v7:${versions.support}",
-          testRunner        : "com.android.support.test:runner:1.0.2"
+          testRunner        : "com.android.support.test:runner:1.0.2",
+          mediaCompat       : "com.android.support:support-media-compat:${versions.support}"
       ],
 
       androidGradlePlugin : "com.android.tools.build:gradle:${versions.androidPlugin}",

@@ -4,8 +4,8 @@ import android.support.v7.util.DiffUtil
 
 class EqualityItemCallback<T : Any> private constructor() : DiffUtil.ItemCallback<T>() {
 
-  override fun areItemsTheSame(oldItem: T?, newItem: T?): Boolean = oldItem == newItem
-  override fun areContentsTheSame(oldItem: T?, newItem: T?): Boolean = oldItem == newItem
+  override fun areItemsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
+  override fun areContentsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
 
   companion object {
 

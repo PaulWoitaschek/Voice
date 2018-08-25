@@ -10,7 +10,9 @@ import android.text.TextUtils
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.HashSet
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,7 +44,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
 
     if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
       // Device has physical external storage; use plain paths.
-      if (TextUtils.isEmpty(rawExternalStorage)) {
+      if (rawExternalStorage == null || rawExternalStorage.isEmpty()) {
         // EXTERNAL_STORAGE undefined; falling back to default.
       } else {
         rv.add(rawExternalStorage)
@@ -61,14 +63,16 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
       }
       val rawUserId = if (isDigit) lastFolder else ""
       // /storage/emulated/0[1,2,...]
-      if (TextUtils.isEmpty(rawUserId)) {
-        rv.add(rawEmulatedStorageTarget)
-      } else {
-        rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
+      if (rawEmulatedStorageTarget != null) {
+        if (TextUtils.isEmpty(rawUserId)) {
+          rv.add(rawEmulatedStorageTarget)
+        } else {
+          rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
+        }
       }
     }
     // Add all secondary storage
-    if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
+    if (rawSecondaryStorageStr != null && rawSecondaryStorageStr.isNotEmpty()) {
       // All Secondary SD-CARDs splitted into array
       val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
       rv.addAll(rawSecondaryStorage)
@@ -96,7 +100,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     // make sure they are unique by putting them with their canonical path as key
     val map = HashMap<String, File>()
     nonEmptyFiles.forEach {
-      map.put(it.canonicalPath, it)
+      map[it.canonicalPath] = it
     }
     // sort them
     return map.values.sortedWith(NaturalOrderComparator.fileComparator)
