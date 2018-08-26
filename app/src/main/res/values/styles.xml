@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
 
@@ -21,20 +21,20 @@
         <item name="android:outlineProvider">background</item>
     </style>
 
-    <style name="AppToolbar" parent="Base.Widget.AppCompat.Toolbar">
+    <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="popupTheme">@style/ToolbarPopup</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
         <item name="android:background">@color/primary</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="theme">@style/Base.Theme.MaterialComponents.Light.DarkActionBar</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorPrimaryInverse">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:textColorSecondaryInverse">@android:color/white</item>
     </style>
 
-    <style name="ToolbarPopup" parent="@style/ThemeOverlay.AppCompat.Light"/>
+    <style name="ToolbarPopup" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="BaseImageButtonStyle" parent="Base.Widget.AppCompat.ImageButton">
+    <style name="BaseImageButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:tint">@null</item>
     </style>
@@ -101,7 +101,7 @@
     </style>
 
     <!-- placeholder theme -->
-    <style name="CustomWindowTitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="CustomWindowTitleText" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
