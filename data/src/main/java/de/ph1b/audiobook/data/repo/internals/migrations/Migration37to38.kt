@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.transaction
 
 class Migration37to38 : IncrementalMigration(37) {

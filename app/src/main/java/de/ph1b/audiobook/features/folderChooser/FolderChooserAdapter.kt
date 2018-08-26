@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.folderChooser
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 
 /**

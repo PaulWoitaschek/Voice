@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.uitools
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import de.ph1b.audiobook.misc.layoutInflater
 import kotlinx.android.extensions.LayoutContainer
 

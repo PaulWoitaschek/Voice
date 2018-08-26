@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity

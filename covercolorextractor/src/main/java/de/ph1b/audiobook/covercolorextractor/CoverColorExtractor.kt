@@ -2,7 +2,7 @@ package de.ph1b.audiobook.covercolorextractor
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.support.v7.graphics.Palette
+import androidx.palette.graphics.Palette
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target

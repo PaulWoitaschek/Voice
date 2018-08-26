@@ -26,8 +26,8 @@ class BookMarkHolder(
       }
     }
     itemView.setOnClickListener {
-      boundBookmark?.let {
-        listener.onBookmarkClicked(it)
+      boundBookmark?.let { bookmark ->
+        listener.onBookmarkClicked(bookmark)
       }
     }
   }

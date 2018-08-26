@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.common.sparseArray
 
-import android.support.v4.util.SparseArrayCompat
+import androidx.collection.SparseArrayCompat
 
 fun <T> SparseArrayCompat<T>.contentEquals(other: SparseArrayCompat<T>): Boolean {
   val size = this.size()
@@ -23,4 +23,5 @@ inline fun <E> SparseArrayCompat<E>.forEachIndexed(
   }
 }
 
-fun SparseArrayCompat<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
+fun SparseArrayCompat<*>.keyAtOrNull(index: Int) =
+  if (index >= size()) null else keyAt(index)

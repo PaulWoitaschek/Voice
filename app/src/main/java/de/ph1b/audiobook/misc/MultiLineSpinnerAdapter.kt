@@ -2,16 +2,16 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import android.graphics.Color
-import android.support.annotation.ColorInt
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.ThemeUtil
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Adapter for [Spinner] that highlights the current selection and shows multiple lines of text.

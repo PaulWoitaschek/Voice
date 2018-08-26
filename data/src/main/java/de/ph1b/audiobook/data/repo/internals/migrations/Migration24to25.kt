@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteQueryBuilder
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
 import android.content.Context
 import android.os.Environment
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONArray
 import org.json.JSONException

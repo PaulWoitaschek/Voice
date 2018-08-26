@@ -4,12 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Point
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
@@ -49,10 +49,7 @@ class FolderOverviewController :
     val layoutManager = LinearLayoutManager(activity)
     recycler.layoutManager = layoutManager
     recycler.addItemDecoration(
-      DividerItemDecoration(
-        activity,
-        DividerItemDecoration.VERTICAL
-      )
+      DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
 
     adapter = FolderOverviewAdapter { toDelete ->

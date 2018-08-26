@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.coldStart
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.features.MainActivity
 
 /**

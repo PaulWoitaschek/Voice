@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.File

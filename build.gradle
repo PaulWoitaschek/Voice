@@ -17,29 +17,28 @@ buildscript {
   ext.buildConfig.version['code'] = buildConfig.version.major * 1_000_000 + buildConfig.version.minor * 10_000 + buildConfig.version.patch * 100 + buildConfig.version.build
 
   ext.versions = [
-      support            : "28.0.0-beta01",
       androidPlugin      : "3.2.0-rc02",
-      conductor          : "2.1.4",
+      conductor          : "2.1.5",
       dagger             : "2.16",
       exoPlayer          : "2.8.4",
       exoPlayerExtensions: "2.7.0-1",
-      coroutines         : "0.23.4",
+      coroutines         : "0.25.0",
       kotlin             : "1.2.51",
-      room               : "1.1.1"
+      room               : "2.0.0-rc01"
   ]
 
   ext.deps = [
       Support             : [
-          supportAnnotations: "com.android.support:support-annotations:${versions.support}",
-          appCompat         : "com.android.support:appcompat-v7:${versions.support}",
-          constraintLayout  : "com.android.support.constraint:constraint-layout:1.1.2",
-          design            : "com.android.support:design:${versions.support}",
-          recyclerView      : "com.android.support:recyclerview-v7:${versions.support}",
-          transitions       : "com.android.support:transition:${versions.support}",
-          v13               : "com.android.support:support-v13:${versions.support}",
-          palette           : "com.android.support:palette-v7:${versions.support}",
-          testRunner        : "com.android.support.test:runner:1.0.2",
-          mediaCompat       : "com.android.support:support-media-compat:${versions.support}"
+          supportAnnotations: "androidx.annotation:annotation:1.0.0-rc01",
+          appCompat         : "androidx.appcompat:appcompat:1.0.0-rc01",
+          constraintLayout  : "androidx.constraintlayout:constraintlayout:1.1.2",
+          recyclerView      : "androidx.recyclerview:recyclerview:1.0.0-rc01",
+          transitions       : "androidx.transition:transition:1.0.0-rc01",
+          palette           : "androidx.palette:palette:1.0.0-rc01",
+          testRunner        : "androidx.test:runner:1.1.0-alpha4",
+          mediaCompat       : "androidx.media:media:1.0.0-rc01",
+          design            : "com.google.android.material:material:1.0.0-rc01",
+          fragment : "androidx.fragment:fragment:1.0.0-rc01"
       ],
 
       androidGradlePlugin : "com.android.tools.build:gradle:${versions.androidPlugin}",
@@ -47,7 +46,7 @@ buildscript {
       materialDialogs     : "com.afollestad.material-dialogs:core:0.9.6.0",
       materialCab         : "com.afollestad:material-cab:0.1.12",
       picasso             : "com.squareup.picasso:picasso:2.71828",
-      tapTarget           : "com.getkeepsafe.taptargetview:taptargetview:1.11.0",
+      tapTarget           : "com.getkeepsafe.taptargetview:taptargetview:1.12.0",
       chapterReader       : "com.github.PaulWoitaschek:ChapterReader:0.1.4",
 
       Conductor           : [
@@ -59,14 +58,14 @@ buildscript {
       Arch                : [
           coreRuntime: "android.arch.core:runtime:1.1.1",
           Room       : [
-              runtime : "android.arch.persistence.room:runtime:${versions.room}",
-              compiler: "android.arch.persistence.room:compiler:${versions.room}",
-              testing : "android.arch.persistence.room:testing:${versions.room}",
-              rxJava  : "android.arch.persistence.room:rxjava2:${versions.room}"
+              runtime : "androidx.room:room-runtime:${versions.room}",
+              compiler: "androidx.room:room-compiler:${versions.room}",
+              testing : "androidx.room:room-testing:${versions.room}",
+              rxJava  : "androidx.room:room-rxjava2:${versions.room}"
           ],
       ],
 
-      crashlytics         : "com.crashlytics.sdk.android:crashlytics:2.9.4@aar",
+      crashlytics         : "com.crashlytics.sdk.android:crashlytics:2.9.5@aar",
       fabricGradlePlugin  : "io.fabric.tools:gradle:1.25.4",
 
       Dagger              : [
@@ -84,7 +83,7 @@ buildscript {
 
       moshi               : "com.squareup.moshi:moshi:1.6.0",
       rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.1.0",
-      rxJava              : "io.reactivex.rxjava2:rxjava:2.1.16",
+      rxJava              : "io.reactivex.rxjava2:rxjava:2.2.1",
       rxPreferences       : "com.f2prateek.rx.preferences2:rx-preferences:2.0.0",
       timber              : "com.jakewharton.timber:timber:4.7.1",
 
@@ -96,10 +95,10 @@ buildscript {
       ],
 
       junit               : "junit:junit:4.12",
-      mockito             : "org.mockito:mockito-core:2.19.0",
+      mockito             : "org.mockito:mockito-core:2.21.0",
       mockitoKotlin       : "com.nhaarman:mockito-kotlin-kt1.1:1.6.0",
-      truth               : "com.google.truth:truth:0.41",
-      androidKtx          : 'androidx.core:core-ktx:0.3'
+      truth               : "com.google.truth:truth:0.42",
+      androidKtx          : 'androidx.core:core-ktx:1.0.0-rc01'
   ]
 
   repositories {
@@ -118,7 +117,7 @@ buildscript {
 }
 
 plugins {
-  id 'com.gradle.build-scan' version '1.15.1'
+  id 'com.gradle.build-scan' version '1.16'
   id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
@@ -145,7 +144,6 @@ allprojects {
   }
   configurations.all {
     resolutionStrategy {
-      force deps.Support.v13
       force deps.Support.supportAnnotations
       force deps.Kotlin.std
       force 'com.google.code.findbugs:jsr305:3.0.1'

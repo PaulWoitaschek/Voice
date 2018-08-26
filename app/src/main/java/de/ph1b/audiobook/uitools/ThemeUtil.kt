@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.uitools
 
 import android.content.Context
-import android.support.annotation.AnyRes
-import android.support.annotation.AttrRes
-import android.support.annotation.StringRes
-import android.support.v7.app.AppCompatDelegate
+import androidx.annotation.AnyRes
+import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
 import de.ph1b.audiobook.R
 
 object ThemeUtil {

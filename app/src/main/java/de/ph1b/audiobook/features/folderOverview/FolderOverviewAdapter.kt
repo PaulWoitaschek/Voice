@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 class FolderOverviewAdapter(private val deleteClicked: (toDelete: FolderModel) -> Unit) :

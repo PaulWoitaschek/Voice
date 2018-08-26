@@ -1,8 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
-import android.support.v4.util.SparseArrayCompat
+import androidx.room.Room
+import androidx.test.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
@@ -130,7 +129,7 @@ class BookStorageTest {
 
     val oldChapters = inserted.content.chapters
     val substracted = oldChapters.minus(oldChapters.first())
-    val marks1 = SparseArrayCompat<String>().apply {
+    val marks1 = androidx.collection.SparseArrayCompat<String>().apply {
       put(15114, "The time has come")
       put(2361341, "This is another chapter")
     }

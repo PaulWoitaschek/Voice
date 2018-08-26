@@ -1,29 +1,28 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import androidx.core.database.getFloat
-import androidx.core.database.getInt
-import androidx.core.database.getLong
-import androidx.core.database.getString
-import androidx.core.database.getStringOrNull
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
+import de.ph1b.audiobook.data.repo.internals.getFloat
+import de.ph1b.audiobook.data.repo.internals.getInt
+import de.ph1b.audiobook.data.repo.internals.getLong
+import de.ph1b.audiobook.data.repo.internals.getString
+import de.ph1b.audiobook.data.repo.internals.getStringOrNull
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.transaction
 
-class Migration35to36 : IncrementalMigration(35) {
 
-  private val ID = "bookId"
-  private val NAME = "bookName"
-  private val AUTHOR = "bookAuthor"
-  private val CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
-  private val PLAYBACK_SPEED = "bookSpeed"
-  private val ROOT = "bookRoot"
-  private val TIME = "bookTime"
-  private val TYPE = "bookType"
-  private val ACTIVE = "BOOK_ACTIVE"
-  private val TABLE_NAME = "tableBooks"
-  private val CREATE_TABLE = """
+private const val ID = "bookId"
+private const val NAME = "bookName"
+private const val AUTHOR = "bookAuthor"
+private const val CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
+private const val PLAYBACK_SPEED = "bookSpeed"
+private const val ROOT = "bookRoot"
+private const val TIME = "bookTime"
+private const val TYPE = "bookType"
+private const val ACTIVE = "BOOK_ACTIVE"
+private const val TABLE_NAME = "tableBooks"
+private const val CREATE_TABLE = """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $NAME TEXT NOT NULL,
@@ -36,6 +35,9 @@ class Migration35to36 : IncrementalMigration(35) {
       $ACTIVE INTEGER NOT NULL DEFAULT 1
     )
   """
+
+
+class Migration35to36 : IncrementalMigration(35) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val entries = db.query(TABLE_NAME)

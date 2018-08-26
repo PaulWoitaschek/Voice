@@ -3,10 +3,10 @@ package de.ph1b.audiobook.playback.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.content.FileProvider
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaDescriptionCompat
+import androidx.core.content.FileProvider
+import androidx.media.MediaBrowserServiceCompat
 import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book

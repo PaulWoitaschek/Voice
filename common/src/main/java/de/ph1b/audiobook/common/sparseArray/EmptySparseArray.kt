@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.common.sparseArray
 
-import android.support.v4.util.SparseArrayCompat
+import androidx.collection.SparseArrayCompat
 
 /**
  * A immutable sparse array without any values

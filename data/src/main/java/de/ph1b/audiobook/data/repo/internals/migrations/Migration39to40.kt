@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * From DB version 39, the position of a book must no longer be negative. So all negative positions

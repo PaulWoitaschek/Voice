@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 /**
  * Calculate a diff between the two lists

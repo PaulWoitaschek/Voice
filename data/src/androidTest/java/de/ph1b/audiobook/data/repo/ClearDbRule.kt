@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.data.repo
 
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import de.ph1b.audiobook.data.repo.internals.AppDb
 import org.junit.rules.ExternalResource
 

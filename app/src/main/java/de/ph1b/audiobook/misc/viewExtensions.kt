@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.misc
 
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 
 fun SeekBar.onProgressChanged(

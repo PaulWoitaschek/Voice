@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 class EqualityItemCallback<T : Any> private constructor() : DiffUtil.ItemCallback<T>() {
 

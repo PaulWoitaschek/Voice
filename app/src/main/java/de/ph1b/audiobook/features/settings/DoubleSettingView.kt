@@ -2,11 +2,11 @@ package de.ph1b.audiobook.features.settings
 
 import android.content.Context
 import android.os.Build
-import android.support.annotation.StringRes
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.StringRes
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.uitools.drawableFromAttr

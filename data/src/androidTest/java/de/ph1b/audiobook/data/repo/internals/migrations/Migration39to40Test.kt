@@ -1,15 +1,15 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteOpenHelper
-import android.arch.persistence.db.SupportSQLiteQueryBuilder
-import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
-import android.support.test.InstrumentationRegistry
-import androidx.core.database.getInt
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
+import androidx.test.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import de.ph1b.audiobook.data.repo.internals.getInt
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import org.junit.After
 import org.junit.Before

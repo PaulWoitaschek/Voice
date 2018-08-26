@@ -3,13 +3,13 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.v7.app.AppCompatDialogFragment
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.isVisible
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -156,7 +156,10 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       layoutContainer.shakeToResetSwitch.isVisible = false
     }
 
-    return BottomSheetDialog(context!!, R.style.BottomSheetStyle).apply {
+    return BottomSheetDialog(
+      context!!,
+      R.style.BottomSheetStyle
+    ).apply {
       setContentView(layoutContainer.containerView)
       // hide the background so the fab looks overlapping
       setOnShowListener {

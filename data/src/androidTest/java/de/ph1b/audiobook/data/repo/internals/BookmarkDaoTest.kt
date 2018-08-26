@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
+import androidx.room.Room
+import androidx.test.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book

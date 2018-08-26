@@ -29,10 +29,10 @@ class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListe
   init {
     itemView.clipToOutline = true
     itemView.setOnClickListener {
-      boundBook?.let { listener(it, BookOverviewClick.REGULAR) }
+      boundBook?.let { book -> listener(book, BookOverviewClick.REGULAR) }
     }
     edit.setOnClickListener {
-      boundBook?.let { listener(it, BookOverviewClick.MENU) }
+      boundBook?.let { book -> listener(book, BookOverviewClick.MENU) }
     }
   }
 

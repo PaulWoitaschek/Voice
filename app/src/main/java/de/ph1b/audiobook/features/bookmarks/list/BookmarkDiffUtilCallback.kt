@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookmarks.list
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import de.ph1b.audiobook.data.Bookmark
 
 /**

@@ -2,10 +2,10 @@ package de.ph1b.audiobook.uitools
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.annotation.AnyRes
-import android.support.annotation.AttrRes
-import android.support.annotation.CheckResult
-import android.support.v4.content.ContextCompat
+import androidx.annotation.AnyRes
+import androidx.annotation.AttrRes
+import androidx.annotation.CheckResult
+import androidx.core.content.ContextCompat
 
 
 @AnyRes

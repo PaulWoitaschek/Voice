@@ -3,8 +3,7 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
-import android.support.v4.util.SparseArrayCompat
+import androidx.core.content.ContextCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
@@ -379,7 +378,7 @@ class BookAdder
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {
           val chapters = chapterReader.read(f)
-          SparseArrayCompat<String>(chapters.size)
+          androidx.collection.SparseArrayCompat<String>(chapters.size)
             .apply {
               chapters.forEach {
                 put(it.startInMs.toInt(), it.title)

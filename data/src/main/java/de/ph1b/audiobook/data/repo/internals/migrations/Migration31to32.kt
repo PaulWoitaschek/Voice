@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteQueryBuilder
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import java.util.ArrayList
 
@@ -31,7 +31,7 @@ class Migration31to32 : IncrementalMigration(31) {
       val chapterCursor = db.query(
         SupportSQLiteQueryBuilder.builder(TABLE_CHAPTERS)
           .columns(arrayOf(CHAPTER_PATH))
-          .selection(BOOK_ID + "=?", arrayOf(bookId))
+          .selection("$BOOK_ID=?", arrayOf(bookId))
           .create()
       )
       val chapterPaths = ArrayList<String>(chapterCursor.count)
@@ -41,7 +41,7 @@ class Migration31to32 : IncrementalMigration(31) {
       }
 
       if (chapterPaths.isEmpty()) {
-        db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
+        db.delete(TABLE_BOOK, "$BOOK_ID=?", arrayOf(bookId.toString()))
       } else {
         val mediaPathValid = chapterPaths.contains(bookmarkCurrentMediaPath)
         if (!mediaPathValid) {

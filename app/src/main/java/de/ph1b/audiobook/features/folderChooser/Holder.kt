@@ -17,9 +17,7 @@ class Holder(
 
   init {
     itemView.setOnClickListener {
-      boundFile?.let {
-        listener(it)
-      }
+      boundFile?.let(listener)
     }
   }
 

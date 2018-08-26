@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.ArrayList
 
 

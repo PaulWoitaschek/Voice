@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 class Migration42to43 : IncrementalMigration(42) {
   override fun migrate(db: SupportSQLiteDatabase) {

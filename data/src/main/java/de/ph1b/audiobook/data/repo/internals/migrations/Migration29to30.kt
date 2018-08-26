@@ -1,43 +1,40 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
 import android.content.ContentValues
+import androidx.room.OnConflictStrategy
+import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONObject
 import java.util.ArrayList
 
-@SuppressLint("Recycle")
-class Migration29to30 : IncrementalMigration(29) {
+// tables
+private const val TABLE_BOOK = "tableBooks"
+private const val TABLE_CHAPTERS = "tableChapters"
+private const val TABLE_BOOKMARKS = "tableBookmarks"
 
-  // tables
-  private val TABLE_BOOK = "tableBooks"
-  private val TABLE_CHAPTERS = "tableChapters"
-  private val TABLE_BOOKMARKS = "tableBookmarks"
+private const val BOOK_ID = "bookId"
+private const val BOOK_NAME = "bookName"
+private const val BOOK_AUTHOR = "bookAuthor"
+private const val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
+private const val BOOK_PLAYBACK_SPEED = "bookSpeed"
+private const val BOOK_ROOT = "bookRoot"
+private const val BOOK_TIME = "bookTime"
+private const val BOOK_TYPE = "bookType"
+private const val BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement"
+private const val BOOK_ACTIVE = "BOOK_ACTIVE"
 
-  private val BOOK_ID = "bookId"
-  private val BOOK_NAME = "bookName"
-  private val BOOK_AUTHOR = "bookAuthor"
-  private val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
-  private val BOOK_PLAYBACK_SPEED = "bookSpeed"
-  private val BOOK_ROOT = "bookRoot"
-  private val BOOK_TIME = "bookTime"
-  private val BOOK_TYPE = "bookType"
-  private val BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement"
-  private val BOOK_ACTIVE = "BOOK_ACTIVE"
+// chapter keys
+private const val CHAPTER_DURATION = "chapterDuration"
+private const val CHAPTER_NAME = "chapterName"
+private const val CHAPTER_PATH = "chapterPath"
 
-  // chapter keys
-  private val CHAPTER_DURATION = "chapterDuration"
-  private val CHAPTER_NAME = "chapterName"
-  private val CHAPTER_PATH = "chapterPath"
+// bookmark keys
+private const val BOOKMARK_TIME = "bookmarkTime"
+private const val BOOKMARK_PATH = "bookmarkPath"
+private const val BOOKMARK_TITLE = "bookmarkTitle"
 
-  // bookmark keys
-  private val BOOKMARK_TIME = "bookmarkTime"
-  private val BOOKMARK_PATH = "bookmarkPath"
-  private val BOOKMARK_TITLE = "bookmarkTitle"
-
-  private val CREATE_TABLE_BOOK = """
+private const val CREATE_TABLE_BOOK = """
     CREATE TABLE $TABLE_BOOK (
       $BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $BOOK_NAME TEXT NOT NULL, $BOOK_AUTHOR TEXT,
@@ -51,7 +48,7 @@ class Migration29to30 : IncrementalMigration(29) {
     )
   """
 
-  private val CREATE_TABLE_CHAPTERS = """
+private const val CREATE_TABLE_CHAPTERS = """
     CREATE TABLE $TABLE_CHAPTERS (
       $CHAPTER_DURATION INTEGER NOT NULL,
       $CHAPTER_NAME TEXT NOT NULL,
@@ -61,7 +58,7 @@ class Migration29to30 : IncrementalMigration(29) {
     )
   """
 
-  private val CREATE_TABLE_BOOKMARKS = """
+private const val CREATE_TABLE_BOOKMARKS = """
     CREATE TABLE $TABLE_BOOKMARKS (
       $BOOKMARK_PATH TEXT NOT NULL,
       $BOOKMARK_TITLE TEXT NOT NULL,
@@ -70,6 +67,10 @@ class Migration29to30 : IncrementalMigration(29) {
       FOREIGN KEY ($BOOK_ID) REFERENCES $TABLE_BOOK($BOOK_ID)
     )
   """
+
+@SuppressLint("Recycle")
+class Migration29to30 : IncrementalMigration(29) {
+
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // fetching old contents
@@ -85,9 +86,9 @@ class Migration29to30 : IncrementalMigration(29) {
     db.execSQL("DROP TABLE TABLE_BOOK")
 
     // drop tables in case they exist
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK)
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS)
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKMARKS)
+    db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOK")
+    db.execSQL("DROP TABLE IF EXISTS $TABLE_CHAPTERS")
+    db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOKMARKS")
 
     // create new tables
     db.execSQL(CREATE_TABLE_BOOK)

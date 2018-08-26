@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.settings
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment

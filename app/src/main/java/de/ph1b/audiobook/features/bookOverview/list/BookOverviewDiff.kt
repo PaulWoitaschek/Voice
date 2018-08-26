@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import de.ph1b.audiobook.data.Book
 
 class BookOverviewDiff : DiffUtil.ItemCallback<Any>() {

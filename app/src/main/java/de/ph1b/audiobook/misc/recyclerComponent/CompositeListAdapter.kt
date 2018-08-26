@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
 
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * An adapter that is designed for composition instead of inheritance.

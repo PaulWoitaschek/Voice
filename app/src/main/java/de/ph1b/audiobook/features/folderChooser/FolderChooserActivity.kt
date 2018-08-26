@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
@@ -73,7 +73,12 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
       presenter().fileSelected(it)
     }
     recycler.layoutManager = LinearLayoutManager(this)
-    recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    recycler.addItemDecoration(
+      DividerItemDecoration(
+        this,
+        DividerItemDecoration.VERTICAL
+      )
+    )
     recycler.adapter = adapter
     val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
     itemAnimator.supportsChangeAnimations = false

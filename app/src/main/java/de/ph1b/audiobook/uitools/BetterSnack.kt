@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.uitools
 
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.color
 
@@ -48,7 +48,7 @@ object BetterSnack {
     bar.view.setBackgroundColor(root.context.color(R.color.snackbar_background_color))
 
     // theme text color
-    val textView = bar.view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    val textView = bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
     textView.setTextColor(root.context.color(R.color.snackbar_text_color))
 
     bar.show()

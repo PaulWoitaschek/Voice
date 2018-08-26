@@ -2,10 +2,10 @@ package de.ph1b.audiobook.features.settings
 
 import android.content.Context
 import android.os.Build
-import android.support.annotation.StringRes
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.drawableFromAttr
 import kotlinx.android.synthetic.main.merge_setting_row_switch.view.*

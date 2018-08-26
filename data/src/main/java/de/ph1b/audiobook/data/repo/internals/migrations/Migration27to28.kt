@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
-import android.arch.persistence.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * Deletes the table if that failed previously due to a bug in [.upgrade26]

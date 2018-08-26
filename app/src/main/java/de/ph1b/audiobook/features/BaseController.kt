@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.features
 
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

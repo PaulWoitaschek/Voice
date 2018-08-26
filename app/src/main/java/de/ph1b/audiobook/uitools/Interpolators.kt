@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.uitools
 
-import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Interpolator
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
 /**
  * Collection of interpolators

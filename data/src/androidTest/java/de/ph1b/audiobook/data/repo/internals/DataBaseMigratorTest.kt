@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.room.Room
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.support.test.InstrumentationRegistry
+import androidx.room.Room
+import androidx.test.InstrumentationRegistry
 import org.junit.Test
 
 class DataBaseMigratorTest {

@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 class CompositeAdapterHelper(
   private val getItem: (position: Int) -> Any

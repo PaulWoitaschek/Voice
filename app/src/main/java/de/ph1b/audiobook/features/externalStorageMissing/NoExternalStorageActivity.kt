@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.externalStorageMissing
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import kotlinx.android.synthetic.main.activity_no_external.*

@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.data
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
-import android.support.v4.util.SparseArrayCompat
+import androidx.collection.SparseArrayCompat
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.contentEquals
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed

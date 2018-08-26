@@ -2,9 +2,9 @@ package de.ph1b.audiobook.features.bookOverview.list
 
 import android.content.Context
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ItemDecoration
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import de.ph1b.audiobook.misc.dpToPxRounded
 
 

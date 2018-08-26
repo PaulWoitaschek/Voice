@@ -7,9 +7,8 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaBrowserServiceCompat
-import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.media.MediaBrowserServiceCompat
 import dagger.android.AndroidInjection
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
@@ -262,7 +261,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
     when (intent?.action) {
-      Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
+      Intent.ACTION_MEDIA_BUTTON -> androidx.media.session.MediaButtonReceiver.handleIntent(
+        mediaSession,
+        intent
+      )
       PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(
         intent.getFloatExtra(
           PlayerController.EXTRA_SPEED,

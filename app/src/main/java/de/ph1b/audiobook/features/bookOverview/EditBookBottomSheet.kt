@@ -3,10 +3,10 @@ package de.ph1b.audiobook.features.bookOverview
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -43,7 +43,8 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     AndroidSupportInjection.inject(this)
 
-    val dialog = BottomSheetDialog(context!!, R.style.BottomSheetStyle)
+    val dialog =
+      BottomSheetDialog(context!!, R.style.BottomSheetStyle)
 
     // if there is no book, skip here
     val book = repo.bookById(bookId())

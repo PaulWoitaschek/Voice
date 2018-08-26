@@ -1,30 +1,28 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.migration.Migration
 import android.content.ContentValues
 import android.provider.BaseColumns
-import androidx.core.database.getLong
-import androidx.core.database.getString
+import androidx.room.OnConflictStrategy
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import de.ph1b.audiobook.data.repo.internals.getLong
+import de.ph1b.audiobook.data.repo.internals.getString
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.transaction
 import timber.log.Timber
 
-class Migration32to34 : Migration(32, 34) {
+private const val BOOKMARK_TABLE_NAME = "tableBookmarks"
+private const val BM_PATH = "bookmarkPath"
+private const val BM_TITLE = "bookmarkTitle"
+private const val BM_TIME = "bookmarkTime"
 
-  private val BOOKMARK_TABLE_NAME = "tableBookmarks"
-  private val BM_PATH = "bookmarkPath"
-  private val BM_TITLE = "bookmarkTitle"
-  private val BM_TIME = "bookmarkTime"
-
-  private val PATH = "bookmarkPath"
-  private val TITLE = "bookmarkTitle"
-  private val TABLE_NAME = "tableBookmarks"
-  private val TIME = "bookmarkTime"
-  private val ID = BaseColumns._ID
-  private val CREATE_TABLE_BOOKMARKS = """
+private const val PATH = "bookmarkPath"
+private const val TITLE = "bookmarkTitle"
+private const val TABLE_NAME = "tableBookmarks"
+private const val TIME = "bookmarkTime"
+private const val ID = BaseColumns._ID
+private const val CREATE_TABLE_BOOKMARKS = """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $PATH TEXT NOT NULL,
@@ -32,6 +30,8 @@ class Migration32to34 : Migration(32, 34) {
       $TIME INTEGER NOT NULL
     )
   """
+
+class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

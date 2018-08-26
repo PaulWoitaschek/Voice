@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.room.TypeConverter
-import android.support.v4.util.SparseArrayCompat
+import androidx.collection.SparseArrayCompat
+import androidx.room.TypeConverter
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.data.Book

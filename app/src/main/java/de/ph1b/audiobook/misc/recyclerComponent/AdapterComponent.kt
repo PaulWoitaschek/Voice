@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
 /**

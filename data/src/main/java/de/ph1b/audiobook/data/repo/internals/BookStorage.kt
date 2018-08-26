@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.RoomDatabase
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import java.util.UUID

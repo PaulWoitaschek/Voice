@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Environment
-import android.support.annotation.RequiresPermission
 import android.text.TextUtils
+import androidx.annotation.RequiresPermission
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import timber.log.Timber
 import java.io.File

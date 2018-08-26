@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import de.ph1b.audiobook.misc.checkMainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

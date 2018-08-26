@@ -1,13 +1,13 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.view.ViewCompat
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -161,6 +161,7 @@ class BookPlayController(
       }
       .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
       .subscribe { presenter.playPause() }
+      .disposeOnDestroyView()
   }
 
   private fun setupFab() {

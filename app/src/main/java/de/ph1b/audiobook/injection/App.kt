@@ -5,9 +5,8 @@ import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.os.Looper
-import android.support.annotation.VisibleForTesting
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatDelegate
+import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatDelegate
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
@@ -42,7 +41,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
   @Inject
   lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
   @Inject
-  lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+  lateinit var supportFragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
   @Inject

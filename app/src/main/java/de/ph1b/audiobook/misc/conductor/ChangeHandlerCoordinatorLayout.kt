@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.misc.conductor
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 /**
  * Like [com.bluelinelabs.conductor.ChangeHandlerFrameLayout], but as a CoordinatorLayout
  */
-class ChangeHandlerCoordinatorLayout : CoordinatorLayout,
+class ChangeHandlerCoordinatorLayout : androidx.coordinatorlayout.widget.CoordinatorLayout,
   ControllerChangeHandler.ControllerChangeListener {
 
   private var inProgressTransactionCount: Int = 0
