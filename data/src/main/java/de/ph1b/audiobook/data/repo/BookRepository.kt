@@ -13,26 +13,25 @@ import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
+import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Provides access to all books.
- */
+
 @Singleton
 class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
   private val allBooks by lazy { storage.books() }
   private val active: MutableList<Book> by lazy {
-    allBooks.filter { it.content.settings.active }
-      .toMutableList()
-      .apply { sort() }
+    val activeBooks = allBooks.filter { it.content.settings.active }
+    Collections.synchronizedList(activeBooks)
+      .also { it.sort() }
   }
   private val orphaned: MutableList<Book> by lazy {
-    allBooks.filter { it.content.settings.active }
-      .toMutableList()
+    val orphanedBooks = allBooks.filter { it.content.settings.active }
+    Collections.synchronizedList(orphanedBooks)
   }
 
   private val activeBooksSubject: BehaviorSubject<List<Book>> by lazy {
@@ -44,8 +43,8 @@ class BookRepository
   fun booksStream(): Observable<List<Book>> = activeBooksSubject
 
   fun byId(id: UUID): Observable<Optional<Book>> {
-    return activeBooksSubject.map {
-      it.find { it.id == id }.toOptional()
+    return activeBooksSubject.map { books ->
+      books.find { it.id == id }.toOptional()
     }
   }
 
@@ -56,7 +55,6 @@ class BookRepository
     }
   }
 
-  @Synchronized
   suspend fun addBook(book: Book) {
     withContext(IO) {
       Timber.v("addBook=${book.name}")
@@ -71,13 +69,10 @@ class BookRepository
   val activeBooks: List<Book>
     get() = synchronized(this) { ArrayList(active) }
 
-  @Synchronized
   fun bookById(id: UUID) = active.firstOrNull { it.id == id }
 
-  @Synchronized
   fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
-  @Synchronized
   suspend fun updateBook(book: Book) {
     if (bookById(book.id) == book) {
       return
@@ -97,7 +92,7 @@ class BookRepository
   suspend fun markBookAsPlayedNow(id: UUID) {
     withContext(IO) {
       val book = bookById(id)
-          ?: return@withContext
+        ?: return@withContext
       val updatedBook = book.update(
         updateSettings = {
           copy(lastPlayedAtMillis = System.currentTimeMillis())
@@ -107,7 +102,6 @@ class BookRepository
     }
   }
 
-  @Synchronized
   suspend fun hideBook(toDelete: List<Book>) {
     withContext(IO) {
       Timber.v("hideBooks=${toDelete.size}")
@@ -121,7 +115,6 @@ class BookRepository
     }
   }
 
-  @Synchronized
   suspend fun revealBook(book: Book) {
     withContext(IO) {
       Timber.v("Called revealBook=$book")
@@ -133,13 +126,12 @@ class BookRepository
     }
   }
 
-  @Synchronized
   fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
 
   private fun chapterByFile(file: File, books: List<Book>): Chapter? {
-    books.forEach {
-      it.content.chapters.forEach {
-        if (it.file == file) return it
+    books.forEach { book ->
+      book.content.chapters.forEach { chapter ->
+        if (chapter.file == file) return chapter
       }
     }
     return null
