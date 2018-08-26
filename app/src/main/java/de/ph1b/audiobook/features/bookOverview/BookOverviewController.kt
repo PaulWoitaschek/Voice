@@ -65,7 +65,7 @@ class BookOverviewController : BaseController(),
   private var pendingTransaction: FragmentTransaction? = null
 
   override fun onViewCreated() {
-    setupToolbar()
+    setupBottomAppBar()
     setupFab()
     setupRecyclerView()
 
@@ -102,10 +102,9 @@ class BookOverviewController : BaseController(),
     recyclerView.layoutManager = LinearLayoutManager(activity)
   }
 
-  private fun setupToolbar() {
-    toolbar.inflateMenu(R.menu.book_shelf)
-    toolbar.title = getString(R.string.app_name)
-    toolbar.setOnMenuItemClickListener {
+  private fun setupBottomAppBar() {
+    bottomAppBar.inflateMenu(R.menu.book_shelf)
+    bottomAppBar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -208,7 +207,7 @@ class BookOverviewController : BaseController(),
       return
 
     val target = TapTarget.forToolbarMenuItem(
-      toolbar,
+      bottomAppBar,
       R.id.library,
       getString(R.string.onboarding_title),
       getString(R.string.onboarding_content)
