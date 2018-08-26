@@ -36,15 +36,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
-        app:fab_colorNormal="?attr/colorAccent"
-        app:fab_colorPressed="?attr/colorAccentDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/x75"
         app:layout_constraintRight_toRightOf="@id/x75"

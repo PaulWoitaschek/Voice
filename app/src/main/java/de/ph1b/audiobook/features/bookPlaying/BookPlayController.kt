@@ -5,7 +5,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.SeekBar
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -30,7 +29,7 @@ import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.experimental.android.UI
@@ -58,7 +57,6 @@ class BookPlayController(
 
   private val data = ArrayList<BookPlayChapter>()
   private val bookId = bundle.getUUID(NI_BOOK_ID)
-  private val playPauseDrawable = PlayPauseDrawable()
   private var currentChapter: BookPlayChapter? = null
 
   override val layoutRes = R.layout.book_play
@@ -67,6 +65,8 @@ class BookPlayController(
   private var spinnerAdapter: MultiLineSpinnerAdapter<BookPlayChapter> by clearAfterDestroyView()
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()
   private var skipSilenceItem: MenuItem by clearAfterDestroyView()
+
+  private var playPauseDrawableSetter by clearAfterDestroyView<PlayPauseDrawableSetter>()
 
   init {
     App.component.inject(this)
@@ -135,8 +135,8 @@ class BookPlayController(
   }
 
   override fun onViewCreated() {
+    playPauseDrawableSetter = PlayPauseDrawableSetter(play)
     setupClicks()
-    setupFab()
     setupSeekBar()
     setupSpinner()
     setupToolbar()
@@ -162,10 +162,6 @@ class BookPlayController(
       .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
       .subscribe { presenter.playPause() }
       .disposeOnDestroyView()
-  }
-
-  private fun setupFab() {
-    play.setIconDrawable(playPauseDrawable)
   }
 
   private fun setupSeekBar() {
@@ -275,12 +271,8 @@ class BookPlayController(
   }
 
   override fun showPlaying(playing: Boolean) {
-    val laidOut = ViewCompat.isLaidOut(play)
-    if (playing) {
-      playPauseDrawable.transformToPause(animated = laidOut)
-    } else {
-      playPauseDrawable.transformToPlay(animated = laidOut)
-    }
+    val laidOut = play.isLaidOut
+    playPauseDrawableSetter.setPlaying(playing = playing, animated = laidOut)
   }
 
   private fun launchJumpToPositionDialog() {

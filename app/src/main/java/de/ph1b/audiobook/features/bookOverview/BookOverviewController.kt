@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +31,7 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_shelf.*
 import timber.log.Timber
 import java.util.UUID
@@ -59,14 +58,13 @@ class BookOverviewController : BaseController(),
   @Inject
   lateinit var viewModel: BookOverviewViewModel
 
-  private var playPauseDrawable: PlayPauseDrawable by clearAfterDestroyView()
+  private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var pendingTransaction: FragmentTransaction? = null
 
   override fun onViewCreated() {
-    playPauseDrawable = PlayPauseDrawable()
     setupToolbar()
     setupFab()
     setupRecyclerView()
@@ -80,8 +78,8 @@ class BookOverviewController : BaseController(),
   }
 
   private fun setupFab() {
-    fab.setIconDrawable(playPauseDrawable)
     fab.setOnClickListener { viewModel.playPause() }
+    playPauseDrawableSetter = PlayPauseDrawableSetter(fab)
   }
 
   private fun setupRecyclerView() {
@@ -200,12 +198,8 @@ class BookOverviewController : BaseController(),
 
   private fun showPlaying(playing: Boolean) {
     Timber.i("Called showPlaying $playing")
-    val laidOut = ViewCompat.isLaidOut(fab)
-    if (playing) {
-      playPauseDrawable.transformToPause(laidOut)
-    } else {
-      playPauseDrawable.transformToPlay(laidOut)
-    }
+    val laidOut = fab.isLaidOut
+    playPauseDrawableSetter.setPlaying(playing = playing, animated = laidOut)
   }
 
   /** Show a warning that no audiobook folder was chosen */
