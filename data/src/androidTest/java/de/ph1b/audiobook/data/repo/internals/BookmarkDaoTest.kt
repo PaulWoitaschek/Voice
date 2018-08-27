@@ -3,13 +3,24 @@ package de.ph1b.audiobook.data.repo.internals
 import androidx.room.Room
 import androidx.test.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.di.DataComponent
+import de.ph1b.audiobook.data.di.DataInjector
 import org.junit.Test
 
 
 class BookmarkDaoTest {
+
+  init {
+    DataInjector.component = object : DataComponent {
+      override fun inject(converters: Converters) {
+        converters.moshi = Moshi.Builder().build()
+      }
+    }
+  }
 
   private val dao =
     Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(), AppDb::class.java)
@@ -20,16 +31,18 @@ class BookmarkDaoTest {
   fun test() {
     // test adding
     val book = BookFactory.create()
-    val added = (0..10).map {
-      Bookmark(
-        book.content.chapters.first().file,
-        "my title",
-        System.currentTimeMillis().toInt()
-      ).let {
-        val id = dao.addBookmark(it)
-        it.copy(id = id)
+    val added = (0..10)
+      .map {
+        Bookmark(
+          book.content.chapters.first().file,
+          "my title",
+          System.currentTimeMillis().toInt()
+        )
       }
-    }
+      .map {
+        val addedId = dao.addBookmark(it)
+        it.copy(id = addedId)
+      }
 
     // test inserted match
     val bookmarks = bookmarksForBook(book)
