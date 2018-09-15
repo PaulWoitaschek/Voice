@@ -7,7 +7,7 @@
         android:shortcutShortLabel="@string/play_current">
         <intent
             android:action="playCurrent"
-            android:targetClass="de.ph1b.audiobook.features.coldStart.SplashActivity"
+            android:targetClass="de.ph1b.audiobook.features.MainActivity"
             android:targetPackage="de.ph1b.audiobook"/>
     </shortcut>
 </shortcuts>

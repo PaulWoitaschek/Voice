@@ -25,6 +25,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
+        app:fab_size="normal"
         android:layout_height="wrap_content"
         android:contentDescription="@string/play_pause"
         app:layout_anchor="@+id/bottomAppBar"
@@ -34,6 +35,7 @@
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
+        app:fabCradleMargin="8dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="?attr/colorPrimary"

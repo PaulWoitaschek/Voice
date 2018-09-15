@@ -1,6 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+
+    </style>
+
+
+    <style name="DayNightTheme" parent="LightTheme" />
+
+    <style name="BaseThemeDayNight" parent="DayNightTheme">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -12,6 +19,7 @@
         <item name="colorAccentDark">@color/accentDark</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/navbarColor</item>
     </style>
+
 
     <style name="Card">
         <item name="android:background">@drawable/card_background</item>
@@ -67,15 +75,6 @@
     </style>
 
     <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog"/>
-
-    <!-- PlaceHolder style for a cold start when no appbar can be shown yet. It mimics the appbar
-    so the subjective start time will be significantly faster -->
-    <style name="AppTheme.Splash">
-        <item name="android:windowTitleSize">?attr/actionBarSize</item>
-        <item name="android:windowTitleStyle">@style/CustomWindowTitle</item>
-        <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
-        <item name="android:windowNoTitle">false</item>
-    </style>
 
     <!-- placeholder theme -->
     <style name="CustomWindowTitleBackground">

@@ -16,7 +16,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/BaseThemeDayNight"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- crashlytics -->
@@ -40,10 +40,8 @@
             android:resource="@style/Theme.AppCompat.DayNight"/>
 
         <activity
-            android:name=".features.coldStart.SplashActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.Splash">
+            android:name=".features.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -51,11 +49,6 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts"/>
-        </activity>
-
-        <activity
-            android:name=".features.MainActivity"
-            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT"/>
