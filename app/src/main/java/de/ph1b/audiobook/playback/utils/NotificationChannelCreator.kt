@@ -7,14 +7,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import de.ph1b.audiobook.R
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Creates the notification channel and exposes the channel name.
  */
-@Singleton
-class NotificationChannelCreator @Inject constructor(
+class NotificationChannelCreator(
   notificationManager: NotificationManager,
   context: Context
 ) {

@@ -14,12 +14,9 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import java.util.UUID
-import javax.inject.Inject
 import javax.inject.Named
 
-class BookOverviewViewModel
-@Inject
-constructor(
+class BookOverviewViewModel(
   private val repo: BookRepository,
   private val bookAdder: BookAdder,
   private val playStateManager: PlayStateManager,

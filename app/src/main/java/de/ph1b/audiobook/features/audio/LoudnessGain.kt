@@ -2,15 +2,12 @@ package de.ph1b.audiobook.features.audio
 
 import android.media.audiofx.LoudnessEnhancer
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.properties.Delegates
 
 /**
  * Handles the the loudness gain.
  */
-@Singleton
-class LoudnessGain @Inject constructor() {
+class LoudnessGain {
 
   var gainmB by Delegates.observable(0) { _, _, _ -> updateLoudnessEnhancer() }
   private var audioSessionId = -1

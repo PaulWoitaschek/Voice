@@ -14,15 +14,11 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Class for retrieving covers from disc.
  */
-@Singleton
-class CoverFromDiscCollector
-@Inject constructor(
+class CoverFromDiscCollector(
   private val activityManager: ActivityManager,
   private val imageHelper: ImageHelper
 ) {

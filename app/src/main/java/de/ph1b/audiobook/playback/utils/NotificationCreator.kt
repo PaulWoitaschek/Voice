@@ -12,7 +12,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.MainActivity
-import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getOnUiThread
@@ -21,14 +20,11 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
-import javax.inject.Inject
 
 /**
  * Provides Notifications based on playing information.
  */
-@PerService
-class NotificationCreator
-@Inject constructor(
+class NotificationCreator(
   private val context: Context,
   private val imageHelper: ImageHelper,
   private val playerController: PlayerController,

@@ -3,13 +3,11 @@ package de.ph1b.audiobook.playback.utils
 import android.content.UriMatcher
 import android.net.Uri
 import java.util.UUID
-import javax.inject.Inject
 
 /**
  * Helper class for converting book and chapter ids to uris and back.
  */
-class BookUriConverter
-@Inject constructor() {
+class BookUriConverter {
 
   private fun baseBuilder() = Uri.Builder()
     .authority(AUTHORITY)

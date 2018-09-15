@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.bookSearch
 
 import android.provider.MediaStore
-import dagger.Reusable
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -9,15 +8,12 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import timber.log.Timber
 import java.util.UUID
-import javax.inject.Inject
 import javax.inject.Named
 
 /**
  * This class provides a single point of entry to find and play a book by a search query
  */
-@Reusable
-class BookSearchHandler
-@Inject constructor(
+class BookSearchHandler(
   private val repo: BookRepository,
   private val player: PlayerController,
   @Named(PrefKeys.CURRENT_BOOK)
@@ -53,10 +49,10 @@ class BookSearchHandler
   //Look for anything that might match the query
   private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
-      val foundMatch = findAndPlayFirstMatch {
-        val bookNameMatches = it.name.contains(query, ignoreCase = true)
-        val authorMatches = it.author?.contains(query, ignoreCase = true) == true
-        val chapterNameMatches = it.content.chapters.any {
+      val foundMatch = findAndPlayFirstMatch { book ->
+        val bookNameMatches = book.name.contains(query, ignoreCase = true)
+        val authorMatches = book.author?.contains(query, ignoreCase = true) == true
+        val chapterNameMatches = book.content.chapters.any {
           it.name.contains(query, ignoreCase = true)
         }
         bookNameMatches || authorMatches || chapterNameMatches

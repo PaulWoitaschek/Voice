@@ -22,7 +22,8 @@ import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -31,16 +32,12 @@ import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Singleton
 
 /**
  * Base class for adding new books.
  */
-@Singleton
-class BookAdder
-@Inject constructor(
+class BookAdder(
   private val context: Context,
   private val repo: BookRepository,
   private val coverCollector: CoverFromDiscCollector,
@@ -102,7 +99,7 @@ class BookAdder
     executor.execute {
       runBlocking {
         isScanning = true
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
           _scannerActive.onNext(true)
         }
         stopScanner = false
@@ -119,7 +116,7 @@ class BookAdder
         }
 
         stopScanner = false
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
           _scannerActive.onNext(false)
         }
         isScanning = false
@@ -225,7 +222,7 @@ class BookAdder
     val firstChapterFile = newChapters.first().file
     val result = mediaAnalyzer.analyze(firstChapterFile)
       .blockingGet() as? MediaAnalyzer.Result.Success
-        ?: return
+      ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {

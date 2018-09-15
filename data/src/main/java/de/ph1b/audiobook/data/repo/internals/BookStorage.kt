@@ -4,13 +4,11 @@ import androidx.room.RoomDatabase
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import java.util.UUID
-import javax.inject.Inject
 
 /**
  * Provides access to the persistent storage for bookmarks.
  */
-class BookStorage
-@Inject constructor(
+class BookStorage(
   private val chapterDao: ChapterDao,
   private val metaDataDao: BookMetaDataDao,
   private val bookSettingsDao: BookSettingsDao,

@@ -42,14 +42,13 @@ dependencies {
   kapt deps.Arch.Room.compiler
   androidTestImplementation deps.Arch.Room.testing
 
-  implementation deps.Dagger.core
-  kapt deps.Dagger.compiler
-
   androidTestImplementation deps.Support.testRunner
   androidTestImplementation deps.truth
 
   testImplementation deps.truth
   testImplementation deps.junit
+
+  implementation deps.koin
 }
 
 

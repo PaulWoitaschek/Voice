@@ -1,22 +1,20 @@
 package de.ph1b.audiobook.playback
 
+import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import dagger.Reusable
 import io.reactivex.Observable
-import javax.inject.Inject
 
 /**
  * Observable for detecting shakes. The onSensorChanged formula was taken from
  * https://github.com/AntennaPod/AntennaPod/blob/8d2ec19cbe05297afa887cc2263347f112aae3e6/core/src/main/java/de/danoeh/antennapod/core/service/playback/ShakeListener.java
  * And is licensesd as apache 2
  */
-@Reusable
-class ShakeDetector
-@Inject constructor(private val sensorManager: SensorManager?) {
+class ShakeDetector(context: Context) {
 
+  val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
   fun shakeSupported() = sensorManager != null
 
   fun detect(): Observable<Unit> = Observable.create {

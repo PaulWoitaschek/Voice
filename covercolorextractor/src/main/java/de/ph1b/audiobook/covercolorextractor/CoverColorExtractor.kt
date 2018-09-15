@@ -6,17 +6,18 @@ import androidx.palette.graphics.Palette
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 import kotlin.coroutines.experimental.suspendCoroutine
 
-class CoverColorExtractor(private val picasso: Picasso) {
+class CoverColorExtractor {
 
   private val tasks = HashMap<Long, Deferred<Int?>>()
   private val extractedColors = HashMap<Long, Int?>()
@@ -33,7 +34,7 @@ class CoverColorExtractor(private val picasso: Picasso) {
     } else extracted
   }
 
-  private suspend fun extractionTask(file: File): Deferred<Int?> = async {
+  private suspend fun CoroutineScope.extractionTask(file: File): Deferred<Int?> = async {
     val bitmap = bitmapByFile(file)
     if (bitmap != null) {
       val extracted = extractColor(bitmap)
@@ -44,10 +45,10 @@ class CoverColorExtractor(private val picasso: Picasso) {
     } else null
   }
 
-  private suspend fun bitmapByFile(file: File): Bitmap? = withContext(UI) {
+  private suspend fun bitmapByFile(file: File): Bitmap? = withContext(Dispatchers.Main) {
     suspendCoroutine<Bitmap?> { cont ->
       Timber.i("load cover for $file")
-      picasso
+      Picasso.get()
         .load(file)
         .memoryPolicy(MemoryPolicy.NO_STORE)
         .resize(500, 500)
@@ -55,8 +56,10 @@ class CoverColorExtractor(private val picasso: Picasso) {
           override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             cont.resume(null)
           }
+
           override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
           }
+
           override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             cont.resume(bitmap)
           }

@@ -4,21 +4,17 @@ import android.support.v4.media.session.PlaybackStateCompat
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Manages the playback state and is able to inform subscriber.
  * Also manages the reason for pausing and sets it to none if the state gets stopped is playing.
  */
-@Singleton
-class PlayStateManager
-@Inject
-constructor() {
+class PlayStateManager {
 
   private val playStateSubject = BehaviorSubject.createDefault(PlayState.STOPPED)
 
   init {
+    @Suppress("ImplicitThis")
     playStateSubject.subscribe {
       if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
         pauseReason = PauseReason.NONE

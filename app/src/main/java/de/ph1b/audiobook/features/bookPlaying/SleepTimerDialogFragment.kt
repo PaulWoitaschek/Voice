@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
@@ -24,10 +23,10 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import kotlinx.android.synthetic.main.dialog_sleep.*
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
+import org.koin.android.ext.android.inject
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Named
 
 private const val NI_BOOK_ID = "ni#bookId"
 private const val SI_MINUTES = "si#time"
@@ -44,20 +43,13 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     }
   }
 
-  @Inject
-  lateinit var bookmarkRepo: BookmarkRepo
-  @Inject
-  lateinit var sleepTimer: SleepTimer
-  @Inject
-  lateinit var repo: BookRepository
-  @Inject
-  lateinit var shakeDetector: ShakeDetector
-  @field:[Inject Named(PrefKeys.SHAKE_TO_RESET)]
-  lateinit var shakeToResetPref: Pref<Boolean>
-  @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
-  lateinit var bookmarkOnSleepTimerPref: Pref<Boolean>
-  @field:[Inject Named(PrefKeys.SLEEP_TIME)]
-  lateinit var sleepTimePref: Pref<Int>
+  private val bookmarkRepo: BookmarkRepo by inject()
+  private val sleepTimer: SleepTimer by inject()
+  private val repo: BookRepository by inject()
+  private val shakeDetector: ShakeDetector by inject()
+  private val shakeToResetPref: Pref<Boolean> by inject(PrefKeys.SHAKE_TO_RESET)
+  private val bookmarkOnSleepTimerPref: Pref<Boolean> by inject(PrefKeys.BOOKMARK_ON_SLEEP)
+  private val sleepTimePref: Pref<Int> by inject(PrefKeys.SLEEP_TIME)
 
   private var _layoutContainer: DialogLayoutContainer? = null
   private val layoutContainer: DialogLayoutContainer get() = _layoutContainer!!
@@ -84,8 +76,6 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    AndroidSupportInjection.inject(this)
-
     _layoutContainer = DialogLayoutContainer(
       activity!!.layoutInflater.inflate(R.layout.dialog_sleep)
     )
@@ -132,7 +122,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
           System.currentTimeMillis(),
           DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
-        launch(IO) {
+        GlobalScope.launch(IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
             book,
             date + ": " + getString(R.string.action_sleep)

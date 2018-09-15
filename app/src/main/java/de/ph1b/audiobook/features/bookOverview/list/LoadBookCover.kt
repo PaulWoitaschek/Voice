@@ -6,7 +6,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.internals.IO
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -19,17 +18,13 @@ import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.io.File
-import javax.inject.Inject
 
-class LoadBookCover(holder: BookOverviewHolder) {
+class LoadBookCover(holder: BookOverviewHolder) : KoinComponent {
 
-  @Inject
-  lateinit var coverColorExtractor: CoverColorExtractor
-
-  init {
-    App.component.inject(this)
-  }
+  private val coverColorExtractor: CoverColorExtractor by inject()
 
   private val context = holder.itemView.context
   private val progress = holder.progress

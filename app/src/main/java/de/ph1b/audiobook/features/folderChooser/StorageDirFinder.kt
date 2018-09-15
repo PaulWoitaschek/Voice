@@ -14,14 +14,11 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 import java.util.regex.Pattern
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Finder for external storages.
  */
-@Singleton
-class StorageDirFinder @Inject constructor(private val context: Context) {
+class StorageDirFinder(private val context: Context) {
 
   /**
    * Collects the storage dirs of the device.

@@ -18,7 +18,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
@@ -26,11 +25,13 @@ import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
+import org.koin.standalone.inject
 import timber.log.Timber
 import java.net.URLEncoder
-import javax.inject.Inject
 
 /**
  * Hosts the image picker.
@@ -43,14 +44,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     }
   )
 
-  init {
-    App.component.inject(this)
-  }
-
-  @Inject
-  lateinit var repo: BookRepository
-  @Inject
-  lateinit var imageHelper: ImageHelper
+  private val repo: BookRepository by inject()
+  private val imageHelper: ImageHelper by inject()
 
   private var cab: MaterialCab? = null
 
@@ -82,7 +77,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         cache.recycle()
 
         // save screenshot
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
           val coverFile = book.coverFile()
           imageHelper.saveCover(screenShot, coverFile)
           screenShot.recycle()

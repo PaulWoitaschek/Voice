@@ -9,16 +9,17 @@ import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import java.util.UUID
-import javax.inject.Inject
 import javax.inject.Named
 
 /**
  * Presenter for the bookmark MVP
  */
-class BookmarkPresenter @Inject constructor(
+class BookmarkPresenter(
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   private val repo: BookRepository,
@@ -34,7 +35,7 @@ class BookmarkPresenter @Inject constructor(
   override fun onAttach(view: BookmarkView) {
     val book = repo.bookById(bookId) ?: return
 
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       bookmarks.clear()
       bookmarks.addAll(bookmarkRepo.bookmarks(book))
       chapters.clear()
@@ -45,7 +46,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun deleteBookmark(id: Long) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       bookmarkRepo.deleteBookmark(id)
       bookmarks.removeAll { it.id == id }
 
@@ -55,7 +56,7 @@ class BookmarkPresenter @Inject constructor(
 
   fun selectBookmark(id: Long) {
     val bookmark = bookmarks.find { it.id == id }
-        ?: return
+      ?: return
 
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
 
@@ -70,13 +71,13 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun editBookmark(id: Long, newTitle: String) {
-    launch(UI) {
-      bookmarks.find { it.id == id }?.let {
-        val withNewTitle = it.copy(
+    GlobalScope.launch(Dispatchers.Main) {
+      bookmarks.find { it.id == id }?.let { bookmark ->
+        val withNewTitle = bookmark.copy(
           title = newTitle,
           id = Bookmark.ID_UNKNOWN
         )
-        bookmarkRepo.deleteBookmark(it.id)
+        bookmarkRepo.deleteBookmark(bookmark.id)
         val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
         val index = bookmarks.indexOfFirst { it.id == id }
         bookmarks[index] = newBookmark
@@ -86,7 +87,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun addBookmark(name: String) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       val book = repo.bookById(bookId) ?: return@launch
       val title = if (name.isEmpty()) book.content.currentChapter.name else name
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)

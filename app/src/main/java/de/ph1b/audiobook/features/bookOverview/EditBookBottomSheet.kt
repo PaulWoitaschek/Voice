@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -26,25 +25,21 @@ import de.ph1b.audiobook.misc.startCompoundDrawable
 import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.misc.topCompoundDrawable
 import kotlinx.android.synthetic.main.book_more_bottom_sheet.*
+import org.koin.android.ext.android.inject
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Bottom sheet dialog fragment that will be displayed when a book edit was requested
  */
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
-  @Inject
-  lateinit var repo: BookRepository
+  private val repo: BookRepository by inject()
 
   private fun callback() = findCallback<Callback>(NI_TARGET)
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    AndroidSupportInjection.inject(this)
-
-    val dialog =
-      BottomSheetDialog(context!!, R.style.BottomSheetStyle)
+    val dialog = BottomSheetDialog(context!!, R.style.BottomSheetStyle)
 
     // if there is no book, skip here
     val book = repo.bookById(bookId())

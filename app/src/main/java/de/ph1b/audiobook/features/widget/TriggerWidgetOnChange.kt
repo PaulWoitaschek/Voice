@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.widget
 
-import dagger.Reusable
+import android.annotation.SuppressLint
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -9,11 +9,9 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import io.reactivex.Observable
 import java.util.UUID
-import javax.inject.Inject
 import javax.inject.Named
 
-@Reusable
-class TriggerWidgetOnChange @Inject constructor(
+class TriggerWidgetOnChange(
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   private val repo: BookRepository,
@@ -21,6 +19,7 @@ class TriggerWidgetOnChange @Inject constructor(
   private val widgetUpdater: WidgetUpdater
 ) {
 
+  @SuppressLint("CheckResult")
   fun init() {
     val anythingChanged: Observable<Any> = anythingChanged()
     anythingChanged.subscribe { widgetUpdater.update() }

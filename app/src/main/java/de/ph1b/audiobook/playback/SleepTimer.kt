@@ -8,15 +8,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Singleton
 
 private const val NOT_ACTIVE = -1
 
-@Singleton
-class SleepTimer
-@Inject constructor(
+class SleepTimer(
   private val playerController: PlayerController,
   playStateManager: PlayStateManager,
   shakeDetector: ShakeDetector,
@@ -33,9 +29,11 @@ class SleepTimer
   private val shakeObservable = shakeDetector.detect()
 
   init {
+    @Suppress("CheckResult")
     leftSleepTimeSubject.filter { it == 0 }
       .subscribe { playerController.stop() }
 
+    @Suppress("CheckResult")
     leftSleepTimeSubject.subscribe {
       when {
         it > 0 -> {
@@ -54,6 +52,7 @@ class SleepTimer
 
     // counts down the sleep sand
     val sleepUpdateInterval = 1000L
+    @Suppress("CheckResult")
     playStateManager.playStateStream()
       .map { it == PlayStateManager.PlayState.PLAYING }
       .distinctUntilChanged()

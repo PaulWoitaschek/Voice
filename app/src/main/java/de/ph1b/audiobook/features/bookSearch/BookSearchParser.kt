@@ -4,11 +4,8 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import dagger.Reusable
-import javax.inject.Inject
 
-@Reusable
-class BookSearchParser @Inject constructor() {
+class BookSearchParser {
 
   fun parse(query: String?, extras: Bundle?): BookSearch {
     val mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS)

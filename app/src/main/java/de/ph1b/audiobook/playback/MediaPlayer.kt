@@ -26,14 +26,9 @@ import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Singleton
 
-@Singleton
-class MediaPlayer
-@Inject
-constructor(
+class MediaPlayer(
   private val playStateManager: PlayStateManager,
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   private val autoRewindAmountPref: Pref<Int>,
@@ -105,6 +100,7 @@ constructor(
       loudnessGain.update(it)
     }
 
+    @Suppress("CheckResult")
     _state.subscribe {
       Timber.i("state changed to $it")
 
@@ -119,9 +115,10 @@ constructor(
       }
     }
 
+    @Suppress("CheckResult")
     _state
-      .switchMap {
-        if (it == PlayerState.PLAYING) {
+      .switchMap { playState ->
+        if (playState == PlayerState.PLAYING) {
           Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
             .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
@@ -158,7 +155,7 @@ constructor(
 
   private fun alreadyInitializedChapters(content: BookContent): Boolean {
     val currentContent = this.bookContent
-        ?: return false
+      ?: return false
     return currentContent.chapters == content.chapters
   }
 
@@ -320,7 +317,7 @@ constructor(
   fun next() {
     prepareIfIdle()
     val content = bookContent
-        ?: return
+      ?: return
 
     val nextChapterMarkPosition = content.nextChapterMarkPosition
     if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)

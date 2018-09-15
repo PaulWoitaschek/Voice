@@ -11,13 +11,12 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import timber.log.Timber
 import java.util.UUID
-import javax.inject.Inject
 import javax.inject.Named
 
 /**
  * Media session callback that handles playback controls.
  */
-class MediaSessionCallback @Inject constructor(
+class MediaSessionCallback(
   private val bookUriConverter: BookUriConverter,
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
@@ -31,7 +30,7 @@ class MediaSessionCallback @Inject constructor(
     super.onSkipToQueueItem(id)
     val bookPlayChapters = player.bookContent
       ?.chapters?.chaptersAsBookPlayChapters()
-        ?: return
+      ?: return
     val chapter = bookPlayChapters[id.toInt()]
     player.changePosition(time = chapter.start, changedFile = chapter.file)
     player.play()

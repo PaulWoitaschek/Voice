@@ -6,17 +6,11 @@ import de.ph1b.audiobook.data.repo.internals.BookmarkDao
 import de.ph1b.audiobook.data.repo.internals.IO
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Provides access to bookmarks.
  */
-@Singleton
-class BookmarkRepo
-@Inject constructor(
-  private val dao: BookmarkDao
-) {
+class BookmarkRepo(private val dao: BookmarkDao) {
 
   suspend fun deleteBookmark(id: Long) {
     withContext(IO) {

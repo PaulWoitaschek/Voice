@@ -13,9 +13,10 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 import kotlinx.coroutines.experimental.Job
+import org.koin.standalone.KoinComponent
 
 abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args),
-  LayoutContainer {
+  LayoutContainer, KoinComponent {
 
   private val onCreateViewDisposables = CompositeDisposable()
   private val onCreateViewJobs = ArrayList<Job>()

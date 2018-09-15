@@ -7,11 +7,10 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import timber.log.Timber
-import javax.inject.Inject
 import javax.inject.Named
 import kotlin.properties.Delegates
 
-class AudioFocusHandler @Inject constructor(
+class AudioFocusHandler(
   audioManager: AudioManager,
   private val telephonyManager: TelephonyManager,
   private val player: MediaPlayer,

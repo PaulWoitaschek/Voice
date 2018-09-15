@@ -3,20 +3,13 @@ package de.ph1b.audiobook.features.widget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
-class BaseWidgetProvider : AppWidgetProvider() {
+class BaseWidgetProvider : AppWidgetProvider(), KoinComponent {
 
-  @Inject
-  lateinit var widgetUpdater: WidgetUpdater
-
-  override fun onReceive(context: Context, intent: Intent?) {
-    AndroidInjection.inject(this, context)
-    super.onReceive(context, intent)
-  }
+  private val widgetUpdater: WidgetUpdater by inject()
 
   override fun onUpdate(
     context: Context,

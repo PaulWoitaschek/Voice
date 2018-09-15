@@ -14,13 +14,11 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Analyzes the duration of a file
  */
-class DurationAnalyzer
-@Inject constructor(
+class DurationAnalyzer(
   private val dataSourceConverter: DataSourceConverter,
   context: Context
 ) {

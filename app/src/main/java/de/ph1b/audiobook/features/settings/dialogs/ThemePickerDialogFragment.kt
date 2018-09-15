@@ -7,25 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
-import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.android.ext.android.inject
 
 /**
  * Dialog for picking the UI theme.
  */
 class ThemePickerDialogFragment : DialogFragment() {
 
-  @field:[Inject Named(PrefKeys.THEME)]
-  lateinit var themePref: Pref<ThemeUtil.Theme>
+  private val themePref: Pref<ThemeUtil.Theme> by inject(PrefKeys.THEME)
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    AndroidSupportInjection.inject(this)
-
     val oldTheme = themePref.value
     val existingThemes = ThemeUtil.Theme.values()
     val names = existingThemes.map { getString(it.nameId) }

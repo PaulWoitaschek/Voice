@@ -2,12 +2,11 @@ package de.ph1b.audiobook.misc
 
 import android.media.MediaMetadataRetriever
 import java.io.File
-import javax.inject.Inject
 
 /**
  * Extracts meta data from media files. This class is thread safe.
  */
-class MetaDataAnalyzer @Inject constructor() {
+class MetaDataAnalyzer {
 
   private val mmr = MediaMetadataRetriever()
   private var file: File? = null
@@ -19,7 +18,7 @@ class MetaDataAnalyzer @Inject constructor() {
     val fallback = chapterNameFallback()
     return if (prepare() || prepare()) {
       val chapterName = parseChapterName()
-          ?: fallback
+        ?: fallback
       val duration = parseDuration()
       val bookName = parseBookName()
       val author = parseAuthor()
@@ -57,7 +56,7 @@ class MetaDataAnalyzer @Inject constructor() {
 
   private fun parseDuration() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)
     ?.toIntOrNull()
-      ?: 0
+    ?: 0
 
   private fun parseBookName() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
 

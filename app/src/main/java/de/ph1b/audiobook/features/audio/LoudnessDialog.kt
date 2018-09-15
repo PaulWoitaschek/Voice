@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
@@ -15,26 +14,23 @@ import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.loudness.*
+import org.koin.standalone.inject
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Dialog for controlling the loudness.
  */
 class LoudnessDialog(args: Bundle) : DialogController(args) {
 
-  @Inject
-  lateinit var repo: BookRepository
-  @Inject
-  lateinit var player: PlayerController
+  private val repo: BookRepository by inject()
+  private val player: PlayerController by inject()
 
   private val dbFormat = DecimalFormat("0.0 dB")
 
-  @SuppressLint("InflateParams")
+  @SuppressLint("InflateParams", "CheckResult")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
 
     val container = DialogLayoutContainer(
       activity!!.layoutInflater.inflate(R.layout.loudness, null, false)
@@ -42,7 +38,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
     val bookId = args.getUUID(NI_BOOK_ID)
     val book = repo.bookById(bookId)
-        ?: return MaterialDialog.Builder(activity!!).build()
+      ?: return MaterialDialog.Builder(activity!!).build()
 
     container.seekBar.max = LoudnessGain.MAX_MB
     container.seekBar.progress = book.content.loudnessGain

@@ -19,7 +19,6 @@ buildscript {
   ext.versions = [
       androidPlugin      : "3.2.0-rc03",
       conductor          : "2.1.5",
-      dagger             : "2.16",
       exoPlayer          : "2.8.4",
       exoPlayerExtensions: "2.7.0-1",
       coroutines         : "0.26.0",
@@ -68,18 +67,12 @@ buildscript {
       crashlytics         : "com.crashlytics.sdk.android:crashlytics:2.9.5@aar",
       fabricGradlePlugin  : "io.fabric.tools:gradle:1.25.4",
 
-      Dagger              : [
-          core            : "com.google.dagger:dagger:${versions.dagger}",
-          android         : "com.google.dagger:dagger-android-support:${versions.dagger}",
-          androidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
-          compiler        : "com.google.dagger:dagger-compiler:${versions.dagger}"
-      ],
-
       ExoPlayer           : [
           core: "com.google.android.exoplayer:exoplayer-core:${versions.exoPlayer}",
           opus: "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:${versions.exoPlayerExtensions}",
           flac: "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:${versions.exoPlayerExtensions}"
       ],
+      koin                : "org.koin:koin-android:1.0.0",
 
       moshi               : "com.squareup.moshi:moshi:1.6.0",
       rxAndroid           : "io.reactivex.rxjava2:rxandroid:2.1.0",

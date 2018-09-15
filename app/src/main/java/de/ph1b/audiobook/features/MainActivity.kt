@@ -9,7 +9,6 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
@@ -24,9 +23,8 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.activity_book.*
+import org.koin.android.ext.android.inject
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Activity that coordinates the book shelf and play screens.
@@ -35,25 +33,17 @@ class MainActivity : BaseActivity(), RouterProvider {
 
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<UUID>
-  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
-  lateinit var singleBookFolderPref: Pref<Set<String>>
-  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
-  lateinit var collectionBookFolderPref: Pref<Set<String>>
-  @Inject
-  lateinit var playerController: PlayerController
-  @Inject
-  lateinit var repo: BookRepository
-  @Inject
-  lateinit var bookSearchParser: BookSearchParser
-  @Inject
-  lateinit var bookSearchHandler: BookSearchHandler
+  private val currentBookIdPref: Pref<UUID> by inject(PrefKeys.CURRENT_BOOK)
+  private val singleBookFolderPref: Pref<Set<String>> by inject(PrefKeys.SINGLE_BOOK_FOLDERS)
+  private val collectionBookFolderPref: Pref<Set<String>> by inject(PrefKeys.COLLECTION_BOOK_FOLDERS)
+  private val playerController: PlayerController by inject()
+  private val repo: BookRepository by inject()
+  private val bookSearchParser: BookSearchParser by inject()
+  private val bookSearchHandler: BookSearchHandler by inject()
 
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
 
@@ -108,10 +98,10 @@ class MainActivity : BaseActivity(), RouterProvider {
       ?.let(repo::bookById)
       ?.let {
         val bookShelf = RouterTransaction.with(BookOverviewController())
-      val bookPlay = BookPlayController(it.id).asTransaction()
-      router.setBackstack(listOf(bookShelf, bookPlay), null)
-      return
-    }
+        val bookPlay = BookPlayController(it.id).asTransaction()
+        router.setBackstack(listOf(bookShelf, bookPlay), null)
+        return
+      }
 
     // if we should play the current book, set the backstack and return early
     if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {

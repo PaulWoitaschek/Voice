@@ -5,26 +5,23 @@ import android.os.Bundle
 import android.text.InputType
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
-import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 /**
  * Simple dialog for changing the name of a book
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-  @Inject
-  lateinit var repo: BookRepository
+  private val repo: BookRepository by inject()
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    AndroidSupportInjection.inject(this)
-
     val presetName = arguments!!.getString(NI_PRESET_NAME)
     val bookId = arguments!!.getUUID(NI_BOOK_ID)
 
@@ -37,7 +34,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
           repo.bookById(bookId)?.updateMetaData {
             copy(name = newText)
           }?.let {
-            launch {
+            GlobalScope.launch {
               repo.updateBook(it)
             }
           }
