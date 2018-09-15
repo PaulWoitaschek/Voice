@@ -12,8 +12,11 @@ import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.android.synthetic.main.book_shelf_row.*
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
@@ -40,7 +43,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
 
   fun load(book: Book) {
     currentCoverBindingJob?.cancel()
-    currentCoverBindingJob = launch(IO) {
+    currentCoverBindingJob = GlobalScope.launch(IO) {
       val coverFile = book.coverFile()
       val bookName = book.name
 
@@ -54,7 +57,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
       val extractedColor = coverColorExtractor.extract(coverFile)
       progress.color = extractedColor ?: context.color(R.color.primaryDark)
       val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
-      withContext(UI) {
+      withContext(Dispatchers.Main) {
         if (!isActive) return@withContext
         if (shouldLoadImage) {
           Picasso.get()
