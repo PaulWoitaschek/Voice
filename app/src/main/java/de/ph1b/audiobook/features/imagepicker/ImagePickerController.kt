@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.imagepicker
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,6 +12,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import com.afollestad.materialcab.MaterialCab
 import com.squareup.picasso.Picasso
@@ -44,6 +46,10 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     }
   )
 
+  init {
+    // WebView.enableSlowWholeDocumentDraw()
+  }
+
   private val repo: BookRepository by inject()
   private val imageHelper: ImageHelper by inject()
 
@@ -63,18 +69,20 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         val cropRect = cropOverlay.selectedRect
         cropOverlay.selectionOn = false
 
-        webViewContainer.isDrawingCacheEnabled = true
-        webViewContainer.buildDrawingCache()
-        val cache: Bitmap = webViewContainer.drawingCache
+        @Suppress("DEPRECATION")
+        val picture = webView.capturePicture()
+        val bitmap = createBitmap(picture.width, picture.height)
+        val canvas = Canvas(bitmap)
+        picture.draw(canvas)
+
         val screenShot = Bitmap.createBitmap(
-          cache,
+          bitmap,
           cropRect.left,
           cropRect.top,
           cropRect.width(),
           cropRect.height()
         )
-        webViewContainer.isDrawingCacheEnabled = false
-        cache.recycle()
+        bitmap.recycle()
 
         // save screenshot
         GlobalScope.launch(Dispatchers.Main) {
@@ -117,8 +125,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       userAgentString =
           "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
-    // necessary, else the image capturing does not include the web view. Very performance costly.
-    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     webView.webViewClient = object : WebViewClient() {
 
       override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -161,6 +167,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         noNetwork.isVisible = false
         webViewContainer.isVisible = true
       }
+      .disposeOnDestroyView()
 
     webView.loadUrl(originalUrl)
 
@@ -218,6 +225,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       .subscribe {
         rotation.start()
       }
+      .disposeOnDestroyView()
 
     rotation.setAnimationListener(
       object : Animation.AnimationListener {
