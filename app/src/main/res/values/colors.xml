@@ -29,4 +29,5 @@
 
     <color name="ic_shortcut_play_background">#FFFFFF</color>
     <color name="card_color">#FFFAFAFA</color>
+    <color name="white">#FFF</color>
 </resources>
