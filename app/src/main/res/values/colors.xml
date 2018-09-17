@@ -7,8 +7,8 @@
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
 
-    <color name="primary">#01579b</color>
-    <color name="primaryDark">#002f6c</color>
+    <color name="primary">@color/white</color>
+    <color name="primaryDark">#EEEEEE</color>
 
     <color name="navbarColor">@color/primaryDark</color>
     <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>
@@ -30,4 +30,5 @@
     <color name="ic_shortcut_play_background">#FFFFFF</color>
     <color name="card_color">#FFFAFAFA</color>
     <color name="white">#FFF</color>
+    <color name="progressColor">#E0E0E0</color>
 </resources>

@@ -8,12 +8,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
+        android:id="@+id/toolbar"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@color/white">
 
         <TextView
             android:id="@+id/toolbarTitle"
+            android:textSize="24sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,21 +45,12 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
         android:layout_height="wrap_content"
         android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
         app:fab_size="normal"
-        app:layout_anchor="@+id/bottomAppBar"
         tools:ignore="UnusedAttribute" />
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorPrimary"
-        app:fabAlignmentMode="end"
-        app:fabCradleMargin="8dp"
-        app:hideOnScroll="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

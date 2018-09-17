@@ -103,8 +103,8 @@ class BookOverviewController : BaseController(),
   }
 
   private fun setupBottomAppBar() {
-    bottomAppBar.inflateMenu(R.menu.book_shelf)
-    bottomAppBar.setOnMenuItemClickListener {
+    toolbar.inflateMenu(R.menu.book_shelf)
+    toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -207,7 +207,7 @@ class BookOverviewController : BaseController(),
       return
 
     val target = TapTarget.forToolbarMenuItem(
-      bottomAppBar,
+      toolbar,
       R.id.library,
       getString(R.string.onboarding_title),
       getString(R.string.onboarding_content)

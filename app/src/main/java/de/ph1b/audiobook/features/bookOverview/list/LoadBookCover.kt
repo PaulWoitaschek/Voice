@@ -34,7 +34,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
   private val context = holder.itemView.context
   private val progress = holder.progress
   private val cover = holder.cover
-  private val defaultProgressColor = context.color(R.color.primaryDark)
+  private val defaultProgressColor = context.color(R.color.progressColor)
 
   private var boundFile: File? = null
   private var boundName: String? = null
@@ -55,7 +55,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
 
       progress.color = defaultProgressColor
       val extractedColor = coverColorExtractor.extract(coverFile)
-      progress.color = extractedColor ?: context.color(R.color.primaryDark)
+      progress.color = extractedColor ?: defaultProgressColor
       val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
       withContext(Dispatchers.Main) {
         if (!isActive) return@withContext
