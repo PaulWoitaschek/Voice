@@ -12,6 +12,7 @@ import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
@@ -22,11 +23,13 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Sets updated metadata on the media session and sends broadcasts about meta changes
  */
-class ChangeNotifier(
+@PerService
+class ChangeNotifier @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   private val mediaSession: MediaSessionCompat,
   private val imageHelper: ImageHelper,

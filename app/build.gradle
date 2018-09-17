@@ -108,6 +108,11 @@ dependencies {
     transitive = true
   }
 
+  implementation deps.Dagger.core
+  implementation deps.Dagger.android
+  kapt deps.Dagger.compiler
+  kapt deps.Dagger.androidProcessor
+
   implementation deps.androidKtx
 
   testImplementation deps.junit
@@ -139,8 +144,6 @@ dependencies {
   implementation deps.moshi
 
   implementation deps.tapTarget
-
-  implementation deps.koin
 }
 
 // task that is an alias for f-droid

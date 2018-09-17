@@ -10,8 +10,11 @@ import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.video.VideoRendererEventListener
 import java.util.ArrayList
+import javax.inject.Inject
 
-class OnlyAudioRenderersFactory(context: Context) : DefaultRenderersFactory(context) {
+class OnlyAudioRenderersFactory @Inject constructor(
+  context: Context
+) : DefaultRenderersFactory(context) {
 
   override fun buildVideoRenderers(
     context: Context?,

@@ -12,6 +12,7 @@ import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -24,11 +25,9 @@ import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
 /**
@@ -36,11 +35,15 @@ import com.squareup.picasso.Callback as PicassoCallback
  */
 class EditCoverDialogFragment : DialogFragment() {
 
-  private val repo: BookRepository by inject()
-  private val imageHelper: ImageHelper by inject()
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var imageHelper: ImageHelper
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    AndroidSupportInjection.inject(this)
+
     val picasso = Picasso.get()
 
     val container = DialogLayoutContainer(
@@ -64,7 +67,6 @@ class EditCoverDialogFragment : DialogFragment() {
           override fun onError(e: Exception?) {
             dismiss()
           }
-
           override fun onSuccess() {
             container.cropOverlay.selectionOn = true
             container.coverReplacement.isVisible = false
@@ -84,7 +86,7 @@ class EditCoverDialogFragment : DialogFragment() {
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-            GlobalScope.launch(Dispatchers.Main) {
+            launch(UI) {
               val coverFile = book.coverFile()
               imageHelper.saveCover(bitmap, coverFile)
               picasso.invalidate(coverFile)

@@ -2,11 +2,12 @@ package de.ph1b.audiobook.misc
 
 import android.media.MediaMetadataRetriever
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Extracts meta data from media files. This class is thread safe.
  */
-class MetaDataAnalyzer {
+class MetaDataAnalyzer @Inject constructor() {
 
   private val mmr = MediaMetadataRetriever()
   private var file: File? = null

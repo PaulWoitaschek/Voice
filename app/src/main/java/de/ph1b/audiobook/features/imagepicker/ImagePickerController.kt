@@ -20,6 +20,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
@@ -31,9 +32,9 @@ import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
-import org.koin.standalone.inject
 import timber.log.Timber
 import java.net.URLEncoder
+import javax.inject.Inject
 
 /**
  * Hosts the image picker.
@@ -47,11 +48,13 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   )
 
   init {
-    // WebView.enableSlowWholeDocumentDraw()
+    App.component.inject(this)
   }
 
-  private val repo: BookRepository by inject()
-  private val imageHelper: ImageHelper by inject()
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var imageHelper: ImageHelper
 
   private var cab: MaterialCab? = null
 

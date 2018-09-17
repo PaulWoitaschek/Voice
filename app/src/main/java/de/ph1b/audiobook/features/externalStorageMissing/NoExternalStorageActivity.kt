@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import kotlinx.android.synthetic.main.activity_no_external.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 
@@ -35,7 +33,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
 
   public override fun onResume() {
     super.onResume()
-    GlobalScope.launch(Dispatchers.Main) {
+    launch(UI) {
       if (BaseActivity.storageMounted()) {
         onBackPressed()
       }

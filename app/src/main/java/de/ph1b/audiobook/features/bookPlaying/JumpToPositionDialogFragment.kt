@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -13,17 +14,23 @@ import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.dialog_time_picker.*
-import org.koin.android.ext.android.inject
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Named
 
 class JumpToPositionDialogFragment : DialogFragment() {
 
-  private val currentBookIdPref: Pref<UUID> by inject(PrefKeys.CURRENT_BOOK)
-  private val repo: BookRepository by inject()
-  private val playerController: PlayerController by inject()
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<UUID>
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var playerController: PlayerController
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    AndroidSupportInjection.inject(this)
+
     val container =
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_time_picker))
 

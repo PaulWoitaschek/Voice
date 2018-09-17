@@ -6,10 +6,8 @@ import androidx.palette.graphics.Palette
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlinx.coroutines.experimental.withContext
@@ -17,7 +15,7 @@ import timber.log.Timber
 import java.io.File
 import kotlin.coroutines.experimental.suspendCoroutine
 
-class CoverColorExtractor {
+class CoverColorExtractor(private val picasso: Picasso) {
 
   private val tasks = HashMap<Long, Deferred<Int?>>()
   private val extractedColors = HashMap<Long, Int?>()
@@ -34,7 +32,7 @@ class CoverColorExtractor {
     } else extracted
   }
 
-  private suspend fun CoroutineScope.extractionTask(file: File): Deferred<Int?> = async {
+  private suspend fun extractionTask(file: File): Deferred<Int?> = async {
     val bitmap = bitmapByFile(file)
     if (bitmap != null) {
       val extracted = extractColor(bitmap)
@@ -45,10 +43,10 @@ class CoverColorExtractor {
     } else null
   }
 
-  private suspend fun bitmapByFile(file: File): Bitmap? = withContext(Dispatchers.Main) {
+  private suspend fun bitmapByFile(file: File): Bitmap? = withContext(UI) {
     suspendCoroutine<Bitmap?> { cont ->
       Timber.i("load cover for $file")
-      Picasso.get()
+      picasso
         .load(file)
         .memoryPolicy(MemoryPolicy.NO_STORE)
         .resize(500, 500)
@@ -56,10 +54,8 @@ class CoverColorExtractor {
           override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             cont.resume(null)
           }
-
           override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
           }
-
           override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             cont.resume(bitmap)
           }

@@ -9,11 +9,11 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import dagger.android.AndroidInjection
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.koin.PLAYBACK_SERVICE_SCOPE
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
@@ -27,17 +27,14 @@ import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
-import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
-import org.koin.core.scope.Scope
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Service that hosts the longtime playback and handles its controls.
@@ -63,25 +60,37 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private val disposables = CompositeDisposable()
   private var isForeground = false
 
-  private val currentBookIdPref: Pref<UUID> by inject(PrefKeys.CURRENT_BOOK)
-  private val player: MediaPlayer by inject()
-  private val repo: BookRepository by inject()
-  private val notificationManager: NotificationManager by inject()
-  private val notificationCreator: NotificationCreator by inject()
-  private val playStateManager: PlayStateManager by inject()
-  private val bookUriConverter: BookUriConverter by inject()
-  private val mediaBrowserHelper: MediaBrowserHelper by inject()
-  private val mediaSession: MediaSessionCompat by inject { parametersOf(this) }
-  private val changeNotifier: ChangeNotifier by inject()
-  private val autoConnected: AndroidAutoConnectedReceiver by inject()
-  private val notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange by inject()
-  private val audioFocusHelper: AudioFocusHandler by inject()
-  private val resumeOnReplugPref: Pref<Boolean> by inject(PrefKeys.RESUME_ON_REPLUG)
-
-  private lateinit var koinScope: Scope
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<UUID>
+  @Inject
+  lateinit var player: MediaPlayer
+  @Inject
+  lateinit var repo: BookRepository
+  @Inject
+  lateinit var notificationManager: NotificationManager
+  @Inject
+  lateinit var notificationCreator: NotificationCreator
+  @Inject
+  lateinit var playStateManager: PlayStateManager
+  @Inject
+  lateinit var bookUriConverter: BookUriConverter
+  @Inject
+  lateinit var mediaBrowserHelper: MediaBrowserHelper
+  @Inject
+  lateinit var mediaSession: MediaSessionCompat
+  @Inject
+  lateinit var changeNotifier: ChangeNotifier
+  @Inject
+  lateinit var autoConnected: AndroidAutoConnectedReceiver
+  @Inject
+  lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
+  @Inject
+  lateinit var audioFocusHelper: AudioFocusHandler
+  @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
+  lateinit var resumeOnReplugPref: Pref<Boolean>
 
   override fun onCreate() {
-    koinScope = getKoin().createScope(PLAYBACK_SERVICE_SCOPE)
+    AndroidInjection.inject(this)
     super.onCreate()
 
     sessionToken = mediaSession.sessionToken
@@ -113,7 +122,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .subscribe {
         Timber.i("init ${it.name}")
         player.init(it.content)
-        GlobalScope.launch {
+        launch {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
       }
@@ -302,7 +311,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun play() {
-    GlobalScope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+    launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
     player.play()
   }
 
@@ -318,8 +327,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     disposables.dispose()
 
     notifyOnAutoConnectionChange.unregister()
-
-    koinScope.close()
     super.onDestroy()
   }
 

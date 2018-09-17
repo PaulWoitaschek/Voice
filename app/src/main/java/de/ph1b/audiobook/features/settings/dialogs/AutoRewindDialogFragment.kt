@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.DialogLayoutContainer
@@ -12,14 +13,18 @@ import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.persistence.pref.Pref
 import kotlinx.android.synthetic.main.dialog_amount_chooser.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
+import javax.inject.Named
 
 class AutoRewindDialogFragment : DialogFragment() {
 
-  private val autoRewindAmountPref: Pref<Int> by inject(PrefKeys.AUTO_REWIND_AMOUNT)
+  @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]
+  lateinit var autoRewindAmountPref: Pref<Int>
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    AndroidSupportInjection.inject(this)
+
     val container =
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
 

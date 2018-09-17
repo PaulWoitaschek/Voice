@@ -1,37 +1,58 @@
 package de.ph1b.audiobook.injection
 
+import android.app.Activity
 import android.app.Application
+import android.app.Service
+import android.content.BroadcastReceiver
 import android.os.Looper
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.HasBroadcastReceiverInjector
+import dagger.android.HasServiceInjector
+import dagger.android.support.HasSupportFragmentInjector
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
-import de.ph1b.audiobook.koin.AndroidModule
-import de.ph1b.audiobook.koin.AppModule
-import de.ph1b.audiobook.koin.PersistenceModule
-import de.ph1b.audiobook.koin.PlaybackModule
-import de.ph1b.audiobook.koin.PrefModule
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
-import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.startKoin
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Named
 
-class App : Application() {
+class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector,
+  HasBroadcastReceiverInjector {
 
-  private val bookAdder: BookAdder by inject()
-  private val triggerWidgetOnChange: TriggerWidgetOnChange by inject()
-  private val autoConnectedReceiver: AndroidAutoConnectedReceiver by inject()
-  private val themePref: Pref<ThemeUtil.Theme> by inject(PrefKeys.THEME)
-  private val allowCrashReports: Pref<Boolean> by inject(PrefKeys.CRASH_REPORT_ENABLED)
+  @Inject
+  lateinit var bookAdder: BookAdder
+  @Inject
+  lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+  @Inject
+  lateinit var serviceInjector: DispatchingAndroidInjector<Service>
+  @Inject
+  lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
+  @Inject
+  lateinit var supportFragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+  @Inject
+  lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+  @Inject
+  lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
+  @field:[Inject Named(PrefKeys.THEME)]
+  lateinit var themePref: Pref<ThemeUtil.Theme>
+
+  override fun activityInjector() = activityInjector
+  override fun serviceInjector() = serviceInjector
+  override fun supportFragmentInjector() = supportFragmentInjector
+  override fun broadcastReceiverInjector() = broadcastInjector
 
   override fun onCreate() {
     super.onCreate()
@@ -42,7 +63,7 @@ class App : Application() {
       AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
 
-    GlobalScope.launch {
+    launch {
       if (BuildConfig.DEBUG) {
         Timber.plant(Timber.DebugTree())
       } else {
@@ -50,9 +71,12 @@ class App : Application() {
       }
     }
 
-    startKoin(this, listOf(PersistenceModule, AppModule, AndroidModule, PrefModule, PlaybackModule))
-
-    CrashlyticsProxy.init(this, allowCrashReports)
+    component = DaggerAppComponent.builder()
+      .application(this)
+      .build()
+    DataInjector.component = component
+    component.inject(this)
+    CrashlyticsProxy.init(this, component.allowCrashReports)
 
     bookAdder.scanForFiles()
 
@@ -61,5 +85,11 @@ class App : Application() {
     autoConnectedReceiver.register(this)
 
     triggerWidgetOnChange.init()
+  }
+
+  companion object {
+
+    lateinit var component: AppComponent
+      @VisibleForTesting set
   }
 }

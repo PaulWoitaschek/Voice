@@ -3,27 +3,34 @@ package de.ph1b.audiobook.features.bookPlaying
 import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter(), KoinComponent {
+class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
 
-  private val bookRepository: BookRepository by inject()
-  private val playerController: PlayerController by inject()
-  private val playStateManager: PlayStateManager by inject()
-  private val sleepTimer: SleepTimer by inject()
-  private val bookmarkRepo: BookmarkRepo by inject()
+  @Inject
+  lateinit var bookRepository: BookRepository
+  @Inject
+  lateinit var playerController: PlayerController
+  @Inject
+  lateinit var playStateManager: PlayStateManager
+  @Inject
+  lateinit var sleepTimer: SleepTimer
+  @Inject
+  lateinit var bookmarkRepo: BookmarkRepo
+
+  init {
+    App.component.inject(this)
+  }
 
   override fun onAttach(view: BookPlayMvp.View) {
     playStateManager.playStateStream()
@@ -91,7 +98,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter(), Koi
   }
 
   override fun addBookmark() {
-    GlobalScope.launch(Dispatchers.Main) {
+    launch(UI) {
       val book = bookRepository.bookById(bookId) ?: return@launch
       val title = book.content.currentChapter.name
       bookmarkRepo.addBookmarkAtBookPosition(book, title)

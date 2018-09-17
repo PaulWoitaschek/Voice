@@ -3,26 +3,34 @@ package de.ph1b.audiobook.features.folderChooser
 import android.annotation.SuppressLint
 import android.os.Bundle
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.HashSet
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * The Presenter for [FolderChooserView]
  */
-class FolderChooserPresenter : Presenter<FolderChooserView>(), KoinComponent {
+class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
-  private val singleBookFolderPref: Pref<Set<String>>  by inject(PrefKeys.SINGLE_BOOK_FOLDERS)
-  private val collectionBookFolderPref: Pref<Set<String>> by inject(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  private val storageDirFinder: StorageDirFinder by inject()
+  init {
+    App.component.inject(this)
+  }
+
+  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
+  lateinit var singleBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
+  lateinit var collectionBookFolderPref: Pref<Set<String>>
+  @Inject
+  lateinit var storageDirFinder: StorageDirFinder
 
   private val rootDirs = ArrayList<File>()
   private val SI_CHOSEN_FILE = "siChosenFile"

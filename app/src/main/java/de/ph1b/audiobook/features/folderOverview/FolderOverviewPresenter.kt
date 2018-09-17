@@ -1,34 +1,40 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import android.annotation.SuppressLint
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import java.util.HashSet
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * The presenter for [FolderOverviewController]
  */
-class FolderOverviewPresenter : Presenter<FolderOverviewController>(), KoinComponent {
+class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
-  private val singleBookFolderPref: Pref<Set<String>> by inject(PrefKeys.SINGLE_BOOK_FOLDERS)
-  private val collectionBookFolderPref: Pref<Set<String>> by inject(PrefKeys.COLLECTION_BOOK_FOLDERS)
+  init {
+    App.component.inject(this)
+  }
+
+  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
+  lateinit var singleBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
+  lateinit var collectionBookFolderPref: Pref<Set<String>>
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.stream
-      .map { folders -> folders.map { FolderModel(it, true) } }
+      .map { it.map { FolderModel(it, true) } }
     val singleFolderStream = singleBookFolderPref.stream
-      .map { folders -> folders.map { FolderModel(it, false) } }
+      .map { it.map { FolderModel(it, false) } }
 
     Observables.combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
       .subscribe { view.newData(it) }
       .disposeOnDetach()
   }
 
-  @SuppressLint("CheckResult")
+  /** removes a selected folder **/
   fun removeFolder(folder: FolderModel) {
     collectionBookFolderPref.stream
       .map { HashSet(it) }

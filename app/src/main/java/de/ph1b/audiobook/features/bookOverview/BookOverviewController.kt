@@ -23,6 +23,7 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
@@ -32,9 +33,10 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_shelf.*
-import org.koin.standalone.inject
 import timber.log.Timber
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Named
 
 private const val COVER_FROM_GALLERY = 1
 
@@ -46,8 +48,15 @@ class BookOverviewController : BaseController(),
 
   override val layoutRes = R.layout.book_shelf
 
-  private val currentBookIdPref: Pref<UUID> by inject(PrefKeys.CURRENT_BOOK)
-  private val viewModel: BookOverviewViewModel by inject()
+  init {
+    App.component.inject(this)
+  }
+
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<UUID>
+
+  @Inject
+  lateinit var viewModel: BookOverviewViewModel
 
   private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()

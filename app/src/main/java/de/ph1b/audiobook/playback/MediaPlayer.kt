@@ -26,9 +26,14 @@ import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
-class MediaPlayer(
+@Singleton
+class MediaPlayer
+@Inject
+constructor(
   private val playStateManager: PlayStateManager,
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   private val autoRewindAmountPref: Pref<Int>,
@@ -100,7 +105,6 @@ class MediaPlayer(
       loudnessGain.update(it)
     }
 
-    @Suppress("CheckResult")
     _state.subscribe {
       Timber.i("state changed to $it")
 
@@ -115,10 +119,9 @@ class MediaPlayer(
       }
     }
 
-    @Suppress("CheckResult")
     _state
-      .switchMap { playState ->
-        if (playState == PlayerState.PLAYING) {
+      .switchMap {
+        if (it == PlayerState.PLAYING) {
           Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map { player.currentPosition }
             .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.

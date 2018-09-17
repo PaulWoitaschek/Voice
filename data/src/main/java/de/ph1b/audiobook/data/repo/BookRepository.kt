@@ -8,17 +8,20 @@ import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.IO
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.Collections
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class BookRepository(private val storage: BookStorage) {
+@Singleton
+class BookRepository
+@Inject constructor(private val storage: BookStorage) {
 
   private val allBooks by lazy { storage.books() }
   private val active: MutableList<Book> by lazy {
@@ -47,7 +50,7 @@ class BookRepository(private val storage: BookStorage) {
 
   private suspend fun sortBooksAndNotifySubject() {
     active.sort()
-    withContext(Dispatchers.Main) {
+    withContext(UI) {
       activeBooksSubject.onNext(active.toList())
     }
   }
@@ -79,7 +82,7 @@ class BookRepository(private val storage: BookStorage) {
       if (index != -1) {
         active[index] = book
         storage.addOrUpdate(book)
-        withContext(Dispatchers.Main) {
+        withContext(UI) {
           sortBooksAndNotifySubject()
         }
       } else Timber.e("update failed as there was no book")

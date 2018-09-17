@@ -5,11 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The equalizer. Delegates to the system integrated equalizer
  */
-class Equalizer(private val context: Context) {
+@Singleton
+class Equalizer @Inject constructor(
+  private val context: Context
+) {
 
   private val launchIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL).apply {
     putExtra(AudioEffect.EXTRA_PACKAGE_NAME, context.packageName)

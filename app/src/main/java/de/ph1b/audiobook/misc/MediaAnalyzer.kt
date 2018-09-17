@@ -3,11 +3,12 @@ package de.ph1b.audiobook.misc
 import io.reactivex.Single
 import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Analyzes media files for meta data and duration.
  */
-class MediaAnalyzer(
+class MediaAnalyzer @Inject constructor(
   private val exoPlayerDurationParser: DurationAnalyzer,
   private val metaDataAnalyzer: MetaDataAnalyzer
 ) {

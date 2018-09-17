@@ -3,11 +3,15 @@ package de.ph1b.audiobook.playback
 import android.content.Context
 import android.content.Intent
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class for controlling the player through the service
  */
-class PlayerController(val context: Context) {
+@Singleton
+class PlayerController
+@Inject constructor(val context: Context) {
 
   val playPauseIntent = intent(ACTION_PLAY_PAUSE)
   val rewindAutoPlayerIntent = intent(ACTION_REWIND_AUTO_PLAY)

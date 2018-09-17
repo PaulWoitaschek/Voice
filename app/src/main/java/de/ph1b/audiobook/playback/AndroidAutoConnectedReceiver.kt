@@ -6,11 +6,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Observes the android auto connection state.
  */
-class AndroidAutoConnectedReceiver {
+@Singleton
+class AndroidAutoConnectedReceiver @Inject constructor() {
 
   private val _connected = BehaviorSubject.createDefault(false)
   val stream = _connected.hide()!!

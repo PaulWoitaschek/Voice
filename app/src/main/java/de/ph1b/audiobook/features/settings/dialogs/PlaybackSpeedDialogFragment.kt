@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -16,22 +17,28 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.dialog_amount_chooser.*
-import org.koin.android.ext.android.inject
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Dialog for setting the playback speed of the current book.
  */
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
-  private val repo: BookRepository by inject()
-  private val currentBookIdPref: Pref<UUID> by inject(PrefKeys.CURRENT_BOOK)
-  private val playerController: PlayerController by inject()
+  @Inject
+  lateinit var repo: BookRepository
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<UUID>
+  @Inject
+  lateinit var playerController: PlayerController
 
-  @SuppressLint("InflateParams", "CheckResult")
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    AndroidSupportInjection.inject(this)
+
     // init views
     val container =
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))

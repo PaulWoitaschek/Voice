@@ -12,6 +12,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
+import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -28,14 +29,15 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
-import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.UUID
+import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Provider
 
-
-class WidgetUpdater(
+@Reusable
+class WidgetUpdater @Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
@@ -43,13 +45,13 @@ class WidgetUpdater(
   private val imageHelper: ImageHelper,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
-  private val windowManager: WindowManager
+  private val windowManager: Provider<WindowManager>
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
 
   fun update() {
-    GlobalScope.launch(IO) {
+    launch(IO) {
       val book = repo.bookById(currentBookIdPref.value)
       Timber.i("update with book ${book?.name}")
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
@@ -122,7 +124,8 @@ class WidgetUpdater(
   private val isPortrait: Boolean
     get() {
       val orientation = context.resources.configuration.orientation
-      val display = windowManager.defaultDisplay
+      val window = windowManager.get()
+      val display = window.defaultDisplay
 
       @Suppress("DEPRECATION")
       val displayWidth = display.width

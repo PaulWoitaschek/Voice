@@ -7,23 +7,35 @@ import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.settings.*
-import org.koin.standalone.inject
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Controller for the user settings
  */
 class SettingsController : BaseController() {
 
-  private val themePref: Pref<ThemeUtil.Theme> by inject(PrefKeys.THEME)
-  private val resumeOnReplugPref: Pref<Boolean> by inject(PrefKeys.RESUME_ON_REPLUG)
-  private val resumeAfterCallPref: Pref<Boolean> by inject(PrefKeys.RESUME_AFTER_CALL)
-  private val autoRewindAmountPref: Pref<Int> by inject(PrefKeys.AUTO_REWIND_AMOUNT)
-  private val seekTimePref: Pref<Int> by inject(PrefKeys.SEEK_TIME)
-  private val crashReportEnabledPref: Pref<Boolean> by inject(PrefKeys.CRASH_REPORT_ENABLED)
+  @field:[Inject Named(PrefKeys.THEME)]
+  lateinit var themePref: Pref<ThemeUtil.Theme>
+  @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
+  lateinit var resumeOnReplugPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.RESUME_AFTER_CALL)]
+  lateinit var resumeAfterCallPref: Pref<Boolean>
+  @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]
+  lateinit var autoRewindAmountPref: Pref<Int>
+  @field:[Inject Named(PrefKeys.SEEK_TIME)]
+  lateinit var seekTimePref: Pref<Int>
+  @field:[Inject Named(PrefKeys.CRASH_REPORT_ENABLED)]
+  lateinit var crashReportEnabledPref: Pref<Boolean>
+
+  init {
+    App.component.inject(this)
+  }
 
   override val layoutRes = R.layout.settings
 

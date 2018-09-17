@@ -16,6 +16,7 @@ import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.clicks
 import de.ph1b.audiobook.misc.color
@@ -31,15 +32,13 @@ import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
-import org.koin.standalone.inject
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 private const val NI_BOOK_ID = "niBookId"
 
@@ -53,7 +52,8 @@ class BookPlayController(
 
   constructor(bookId: UUID) : this(Bundle().apply { putUUID(NI_BOOK_ID, bookId) })
 
-  private val equalizer: Equalizer by inject()
+  @Inject
+  lateinit var equalizer: Equalizer
 
   private val data = ArrayList<BookPlayChapter>()
   private val bookId = bundle.getUUID(NI_BOOK_ID)
@@ -67,6 +67,10 @@ class BookPlayController(
   private var skipSilenceItem: MenuItem by clearAfterDestroyView()
 
   private var playPauseDrawableSetter by clearAfterDestroyView<PlayPauseDrawableSetter>()
+
+  init {
+    App.component.inject(this)
+  }
 
   override fun render(book: Book) {
     data.clear()
@@ -107,11 +111,11 @@ class BookPlayController(
     cover.transitionName = book.coverTransitionName
     skipSilenceItem.isChecked = book.content.skipSilence
 
-    GlobalScope.launch(IO) {
+    launch(IO) {
       val coverReplacement = CoverReplacement(book.name, activity)
       val coverFile = book.coverFile()
       val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
-      withContext(Dispatchers.Main) {
+      withContext(UI) {
         if (shouldLoadCover) {
           Picasso.get()
             .load(coverFile)

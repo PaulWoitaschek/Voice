@@ -5,18 +5,20 @@ import androidx.room.TypeConverter
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.data.Book
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import de.ph1b.audiobook.data.di.DataInjector
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class Converters : KoinComponent {
+class Converters {
 
-  private val moshi: Moshi by inject()
+  @Inject
+  lateinit var moshi: Moshi
 
   private val sparseStringArrayAdapter: JsonAdapter<SparseArrayCompat<String>>
 
   init {
+    DataInjector.component.inject(this)
     val stringAdapter = moshi.adapter(String::class.java)
     sparseStringArrayAdapter = SparseArrayAdapter(stringAdapter)
   }

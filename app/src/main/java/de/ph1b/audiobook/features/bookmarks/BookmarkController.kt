@@ -17,12 +17,12 @@ import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import kotlinx.android.synthetic.main.bookmark.*
-import org.koin.standalone.get
 import java.util.UUID
 
 /**
@@ -37,7 +37,7 @@ class BookmarkController(args: Bundle) :
   private val adapter = BookmarkAdapter(this)
 
   override val layoutRes = R.layout.bookmark
-  override fun createPresenter() = get<BookmarkPresenter>().apply {
+  override fun createPresenter() = App.component.bookmarkPresenter.apply {
     bookId = this@BookmarkController.bookId
   }
 

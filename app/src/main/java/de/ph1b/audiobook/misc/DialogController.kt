@@ -9,15 +9,13 @@ import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
-import org.koin.standalone.KoinComponent
 
 private const val SI_DIALOG = "android:savedDialogState"
 
 /**
  * A wrapper that wraps a dialog in a controller
  */
-abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args),
-  KoinComponent {
+abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args) {
 
   private var dialog: Dialog? = null
   private var dismissed = false
