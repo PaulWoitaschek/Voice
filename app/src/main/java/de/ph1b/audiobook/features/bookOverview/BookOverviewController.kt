@@ -25,6 +25,7 @@ import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.ElevateToolbarOnScroll
 import de.ph1b.audiobook.misc.applyTheme
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
@@ -101,6 +102,7 @@ class BookOverviewController : BaseController(),
     val listDecoration = BookOverviewItemDecoration(activity)
     recyclerView.addItemDecoration(listDecoration)
     recyclerView.layoutManager = LinearLayoutManager(activity)
+    recyclerView.addOnScrollListener(ElevateToolbarOnScroll(toolbar))
   }
 
   private fun setupBottomAppBar() {
