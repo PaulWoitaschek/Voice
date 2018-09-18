@@ -23,6 +23,7 @@ import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.putUUID
@@ -32,12 +33,13 @@ import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val NI_BOOK_ID = "niBookId"
@@ -90,13 +92,13 @@ class BookPlayController(
     bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
     seekBar.max = duration
-    maxTime.text = formatTime(duration, duration)
+    maxTime.text = formatTime(duration.toLong(), duration.toLong())
 
     // Setting seekBar and played getTime view
     val progress = book.content.positionInChapter - currentChapter.start
     if (!seekBar.isPressed) {
       seekBar.progress = progress
-      playedTime.text = formatTime(progress, duration)
+      playedTime.text = formatTime(progress.toLong(), duration.toLong())
     }
 
     // name
@@ -111,11 +113,11 @@ class BookPlayController(
     cover.transitionName = book.coverTransitionName
     skipSilenceItem.isChecked = book.content.skipSilence
 
-    launch(IO) {
+    GlobalScope.launch(IO) {
       val coverReplacement = CoverReplacement(book.name, activity)
       val coverFile = book.coverFile()
       val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
-      withContext(UI) {
+      withContext(Dispatchers.Main) {
         if (shouldLoadCover) {
           Picasso.get()
             .load(coverFile)
@@ -169,7 +171,7 @@ class BookPlayController(
       object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
           //sets text to adjust while using seekBar
-          playedTime.text = formatTime(progress, seekBar.max)
+          playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
         }
 
         override fun onStartTrackingTouch(view: SeekBar?) {
@@ -284,7 +286,7 @@ class BookPlayController(
     // sets the correct sleep timer icon
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     // set text and visibility
-    timerCountdownView.text = formatTime(ms, ms)
+    timerCountdownView.text = formatTime(ms.toLong(), ms.toLong())
     timerCountdownView.isVisible = active
   }
 
@@ -301,17 +303,5 @@ class BookPlayController(
   override fun showBookmarkAdded() {
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
-  }
-
-  private fun formatTime(ms: Int, duration: Int): String {
-    val h = TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
-    val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
-    val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
-
-    return if (TimeUnit.MILLISECONDS.toHours(duration.toLong()) == 0L) {
-      "$m:$s"
-    } else {
-      "$h:$m:$s"
-    }
   }
 }

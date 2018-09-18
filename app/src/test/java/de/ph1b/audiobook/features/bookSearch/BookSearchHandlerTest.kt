@@ -73,7 +73,8 @@ class BookSearchHandlerTest {
           positionInChapter = 3000,
           playbackSpeed = 1F,
           loudnessGain = 0,
-          active = true
+          active = true,
+          lastPlayedAtMillis = System.currentTimeMillis()
         ),
         chapters = listOf(
           anotherBookChapter1.copy(bookId = id),
@@ -118,7 +119,8 @@ class BookSearchHandlerTest {
           positionInChapter = 3000,
           playbackSpeed = 1F,
           loudnessGain = 0,
-          active = true
+          active = true,
+          lastPlayedAtMillis = System.currentTimeMillis()
         ),
         id = id,
         chapters = listOf(

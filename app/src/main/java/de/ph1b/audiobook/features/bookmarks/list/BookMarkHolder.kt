@@ -4,9 +4,9 @@ import android.view.ViewGroup
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.bookmark_row_layout.*
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 /**
  * ViewHolder for displaying a Bookmark
@@ -46,19 +46,9 @@ class BookMarkHolder(
       size
     )
     time.text = itemView.context.getString(
-      de.ph1b.audiobook.R.string.format_bookmarks_time, formatTime(bookmark.time),
-      formatTime(currentChapter.duration)
+      de.ph1b.audiobook.R.string.format_bookmarks_time,
+      formatTime(bookmark.time.toLong()),
+      formatTime(currentChapter.duration.toLong())
     )
-  }
-
-  private fun formatTime(ms: Int): String {
-    val h = MILLISECONDS.toHours(ms.toLong()).toString()
-    val m = "%02d".format((MILLISECONDS.toMinutes(ms.toLong()) % 60))
-    val s = "%02d".format((MILLISECONDS.toSeconds(ms.toLong()) % 60))
-    var returnString = ""
-    if (h != "0") {
-      returnString += "$h:"
-    }
-    return "$returnString$m:$s"
   }
 }
