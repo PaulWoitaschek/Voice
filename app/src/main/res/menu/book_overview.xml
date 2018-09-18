@@ -4,16 +4,16 @@
       xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/library"
         android:icon="@drawable/audiobook"
         android:title="@string/pref_root_folder_title"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="always" />
 
 </menu>
