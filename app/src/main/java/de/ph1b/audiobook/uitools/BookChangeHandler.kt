@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.uitools
 
 import android.os.Bundle
+import android.transition.ArcMotion
 import android.transition.ChangeBounds
 import android.transition.ChangeClipBounds
 import android.transition.ChangeImageTransform
@@ -30,7 +31,9 @@ class BookChangeHandler : TransitionChangeHandler() {
     isPush: Boolean
   ): Transition {
     val moveFabAndCover = TransitionSet()
-      .addTransition(ChangeBounds())
+      .addTransition(ChangeBounds().apply {
+        pathMotion = ArcMotion()
+      })
       .addTransition(ChangeTransform())
       .addTransition(ChangeClipBounds())
       .addTransition(ChangeImageTransform())
