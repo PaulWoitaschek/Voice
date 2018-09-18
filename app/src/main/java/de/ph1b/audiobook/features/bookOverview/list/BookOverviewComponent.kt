@@ -1,12 +1,10 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.graphics.Outline
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.misc.RoundRectOutlineProvider
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
@@ -31,13 +29,11 @@ class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListe
   private val loadBookCover = LoadBookCover(this)
 
   init {
+    val outlineProvider = RoundRectOutlineProvider(itemView.context.dpToPx(2F))
     itemView.clipToOutline = true
+    itemView.outlineProvider = outlineProvider
     cover.clipToOutline = true
-    cover.outlineProvider = object : ViewOutlineProvider() {
-      override fun getOutline(view: View, outline: Outline) {
-        outline.setRoundRect(0, 0, view.width, view.height, itemView.context.dpToPx(2F))
-      }
-    }
+    cover.outlineProvider = outlineProvider
     itemView.setOnClickListener {
       boundBook?.let { book ->
         listener(book, BookOverviewClick.REGULAR)
