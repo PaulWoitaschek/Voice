@@ -1,0 +1,11 @@
+default_platform(:android)
+
+platform :android do
+  lane :build_apks do
+    gradle(task: 'app:assembleProprietaryRelease -x lint -x lintVitalProprietaryRelease')
+    copy_artifacts(
+      target_path: 'artifacts' + '/app',
+      artifacts: ['app/build/outputs/apk/release/*.apk', 'app/build/outputs/mapping/release/mapping.txt']
+    )
+  end
+end
