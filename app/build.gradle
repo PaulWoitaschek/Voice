@@ -18,17 +18,17 @@ android {
     versionName buildConfig.version.name
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-    ndk {
-      abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
-    }
   }
 
   signingConfigs {
     release {
-      def props = new Properties()
-      def propsFile = rootProject.file('signing.properties')
-      props.load(new FileInputStream((propsFile)))
+      Properties props = new Properties()
+      File propsFile = rootProject.file('signing.properties')
+      if (!propsFile.canRead()) {
+        println("Use CI keystore.")
+        propsFile = rootProject.file('.circleci/signing/signing.properties')
+      }
+      props.load(new FileInputStream(propsFile))
       storeFile = rootProject.file(props['STORE_FILE'])
       storePassword = props['STORE_PASSWORD']
       keyAlias = props['KEY_ALIAS']
@@ -40,8 +40,6 @@ android {
     release {
       minifyEnabled true
       shrinkResources true
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
-      signingConfig signingConfigs.release
       multiDexEnabled false
     }
     debug {
@@ -49,6 +47,10 @@ android {
       shrinkResources false
       ext.enableCrashlytics = false
       multiDexEnabled true
+    }
+    all {
+      signingConfig signingConfigs.release
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
     }
   }
 
