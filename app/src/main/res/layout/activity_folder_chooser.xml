@@ -24,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
 
             <TextView
                 android:id="@+id/storageExplanation"
@@ -46,7 +46,7 @@
         android:layout_height="72dp"
         android:gravity="center_vertical">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/upButton"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -57,13 +57,14 @@
             android:contentDescription="@string/content_navigate_up"
             android:focusable="true"
             android:scaleType="fitStart"
+            android:tint="@color/icon_color"
             tools:src="@drawable/ic_arrow_upward" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="72dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -97,15 +98,19 @@
         android:layout_weight="1"
         tools:listitem="@layout/activity_folder_chooser_adapter_row_layout" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/gradient_shadow" />
+
     <LinearLayout
-        style="?android:buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/abort"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -113,7 +118,7 @@
 
         <Button
             android:id="@+id/choose"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

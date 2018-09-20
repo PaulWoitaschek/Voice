@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- blue grey 700 -->
-    <color name="primary">#ff455a64</color>
-    <!-- blue grey 900 -->
-    <color name="primaryDark">#ff263238</color>
+    <color name="primary">@color/grey900</color>
+    <color name="primaryDark">@color/black</color>
 
-    <color name="navbarColor">@android:color/black</color>
     <color name="background_overlay">@color/copy_primary_text_disabled_material_dark</color>
 
     <color name="icon_color">@color/secondary_text_default_material_dark</color>
@@ -13,5 +10,11 @@
     <color name="snackbar_background_color">@color/background_material_light</color>
     <color name="snackbar_text_color">@color/copy_primary_text_default_material_light</color>
 
-    <color name="card_color">#292929</color>
+    <color name="bookOverviewCardColor">@color/grey900</color>
+    <color name="windowBackgroundColor">@color/black</color>
+    <color name="navBarColor">@color/black</color>
+    <color name="toolbarIconColor">@color/white</color>
+    <color name="textColorPrimary">@color/abc_primary_text_material_dark</color>
+    <color name="textColorSecondary">@color/abc_secondary_text_material_dark</color>
+    <color name="placeholderCoverColor">@color/grey900</color>
 </resources>

@@ -1,13 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-
-    </style>
-
-
-    <style name="DayNightTheme" parent="LightTheme" />
-
-    <style name="BaseThemeDayNight" parent="DayNightTheme">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -17,11 +10,17 @@
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorAccentDark">@color/accentDark</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/white</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/navBarColor</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">@bool/use_light_status
+        </item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">
+            @bool/use_light_navigation
+        </item>
+        <item name="android:windowBackground">@color/windowBackgroundColor</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="toolbarStyle">@style/AppToolbar</item>
     </style>
-
 
     <style name="Card">
         <item name="android:background">@drawable/card_background</item>
@@ -30,21 +29,12 @@
     </style>
 
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="popupTheme">@style/ToolbarPopup</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
-        <item name="android:background">@color/primary</item>
-        <item name="theme">@style/Base.Theme.MaterialComponents.Light.DarkActionBar</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorPrimaryInverse">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="android:textColorSecondaryInverse">@android:color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="popupTheme">@style/Theme.MaterialComponents.Light</item>
     </style>
 
     <style name="ToolbarPopup" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="TintedImageViewStyle">
-        <item name="android:tint">@color/icon_color</item>
-    </style>
 
     <style name="fab_label_style">
         <item name="android:background">@drawable/fab_label_background</item>
@@ -76,7 +66,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog"/>
+    <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog" />
 
     <!-- placeholder theme -->
     <style name="CustomWindowTitleBackground">

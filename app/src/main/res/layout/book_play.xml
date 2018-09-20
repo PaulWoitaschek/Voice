@@ -19,53 +19,57 @@
         android:id="@+id/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/rewind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/rewind"
         android:padding="8dp"
         android:src="@drawable/ic_fast_rewind"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/previous_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_previous"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/rewind"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/fastForward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/fast_forward"
         android:padding="8dp"
         android:src="@drawable/ic_fast_forward"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/next_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_next"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/fastForward"
         app:layout_constraintTop_toTopOf="@id/play" />
@@ -76,8 +80,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/zeroTime"
-        app:layout_constraintBottom_toTopOf="@id/play"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
     <TextView
         android:id="@+id/maxTime"
@@ -85,8 +91,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/zeroTime"
-        app:layout_constraintBottom_toTopOf="@id/play"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
     <SeekBar
         android:id="@+id/seekBar"
@@ -94,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/playedTime"
         app:layout_constraintRight_toLeftOf="@id/maxTime" />
@@ -102,7 +111,7 @@
         android:id="@+id/bookSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/seekBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

@@ -41,8 +41,8 @@ fun Context.dpToPx(dp: Float) =
 fun Context.dpToPxRounded(dp: Float) = Math.round(dpToPx(dp))
 
 fun Drawable.tinted(@ColorInt color: Int): Drawable {
-  val wrapped = DrawableCompat.wrap(this)
-  DrawableCompat.setTint(wrapped, color)
+  val wrapped = DrawableCompat.wrap(mutate())
+  wrapped.setTint(color)
   return wrapped
 }
 

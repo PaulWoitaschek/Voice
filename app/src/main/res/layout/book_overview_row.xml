@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="92dp"
-    android:background="@color/white"
+    android:background="@color/bookOverviewCardColor"
     android:elevation="2dp"
     android:foreground="?attr/selectableItemBackground">
 

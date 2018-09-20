@@ -11,21 +11,21 @@ import android.text.TextPaint
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.color
 
-class CoverReplacement(private val text: String, c: Context) : Drawable() {
+class CoverReplacement(private val text: String, context: Context) : Drawable() {
 
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
     textAlign = Align.CENTER
   }
-  private val backgroundColor = c.color(R.color.primaryDark)
+  private val backgroundColor = context.color(R.color.placeholderCoverColor)
 
   init {
     require(text.isNotEmpty())
   }
 
   override fun draw(canvas: Canvas) {
-    val height = canvas.height
-    val width = canvas.width
+    val height = bounds.height()
+    val width = bounds.width()
 
     textPaint.textSize = 2f * width / 3f
 

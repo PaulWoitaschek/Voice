@@ -48,7 +48,8 @@
         app:layout_constraintRight_toRightOf="@id/x75"
         tools:ignore="UnusedAttribute" />
 
-    <ImageButton
+    <ImageView
+        android:tint="@color/icon_color"
         android:id="@+id/rewind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +60,8 @@
         app:layout_constraintRight_toLeftOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
+        android:tint="@color/icon_color"
         android:id="@+id/previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,7 +72,8 @@
         app:layout_constraintRight_toLeftOf="@id/rewind"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
+        android:tint="@color/icon_color"
         android:id="@+id/fastForward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,7 +84,8 @@
         app:layout_constraintLeft_toRightOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
-    <ImageButton
+    <ImageView
+        android:tint="@color/icon_color"
         android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

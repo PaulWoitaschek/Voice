@@ -5,4 +5,5 @@
     <dimen name="list_text_secondary_size">14sp</dimen>
     <dimen name="list_single_item_height">48dp</dimen>
     <dimen name="book_shelf_list_height">72dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 </resources>

@@ -20,6 +20,7 @@ import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import kotlinx.android.synthetic.main.bookmark.*
@@ -92,6 +93,7 @@ class BookmarkController(args: Bundle) :
     toolbar.setNavigationOnClickListener {
       router.popController(this)
     }
+    toolbar.tint()
   }
 
   private fun setupList() {

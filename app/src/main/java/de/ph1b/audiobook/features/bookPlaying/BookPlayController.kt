@@ -23,10 +23,13 @@ import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.putUUID
+import de.ph1b.audiobook.misc.tint
+import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -270,6 +273,8 @@ class BookPlayController(
         else -> false
       }
     }
+
+    toolbar.tint()
   }
 
   override fun showPlaying(playing: Boolean) {
@@ -283,9 +288,8 @@ class BookPlayController(
 
   override fun showLeftSleepTime(ms: Int) {
     val active = ms > 0
-    // sets the correct sleep timer icon
-    sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
-    // set text and visibility
+    sleepTimerItem.icon = activity.drawable(if (active) R.drawable.alarm_off else R.drawable.alarm)
+      .tinted(activity.color(R.color.toolbarIconColor))
     timerCountdownView.text = formatTime(ms.toLong(), ms.toLong())
     timerCountdownView.isVisible = active
   }

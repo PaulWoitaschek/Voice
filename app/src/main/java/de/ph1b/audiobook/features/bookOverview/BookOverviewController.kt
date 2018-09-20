@@ -26,11 +26,11 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.ElevateToolbarOnScroll
-import de.ph1b.audiobook.misc.applyTheme
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
@@ -121,7 +121,7 @@ class BookOverviewController : BaseController(),
         else -> false
       }
     }
-    toolbar.applyTheme()
+    toolbar.tint()
   }
 
   private fun toFolderOverview() {

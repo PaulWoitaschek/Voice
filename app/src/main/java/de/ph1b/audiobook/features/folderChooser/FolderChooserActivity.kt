@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.folderChooser
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.Toast
@@ -16,8 +15,10 @@ import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.itemSelections
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import timber.log.Timber
@@ -84,7 +85,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     itemAnimator.supportsChangeAnimations = false
 
     // spinner
-    spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE) { file, _ ->
+    spinnerAdapter =
+        MultiLineSpinnerAdapter(toolSpinner, this, color(R.color.textColorPrimary)) { file, _ ->
       if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
         getString(R.string.storage_all)
       } else {
@@ -105,6 +107,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     toolbar.setNavigationIcon(R.drawable.close)
     toolbar.setNavigationOnClickListener { super.onBackPressed() }
     toolbar.setTitle(R.string.audiobook_folders_title)
+    toolbar.tint()
   }
 
   override fun onRequestPermissionsResult(

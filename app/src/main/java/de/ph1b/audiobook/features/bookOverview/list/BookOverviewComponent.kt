@@ -8,7 +8,7 @@ import de.ph1b.audiobook.misc.RoundRectOutlineProvider
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
-import kotlinx.android.synthetic.main.book_shelf_row.*
+import kotlinx.android.synthetic.main.book_overview_row.*
 
 class BookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<Book, BookOverviewHolder>(Book::class) {
@@ -23,7 +23,7 @@ class BookOverviewComponent(private val listener: BookClickListener) :
 }
 
 class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListener) :
-  ExtensionsHolder(parent, R.layout.book_shelf_row) {
+  ExtensionsHolder(parent, R.layout.book_overview_row) {
 
   private var boundBook: Book? = null
   private val loadBookCover = LoadBookCover(this)

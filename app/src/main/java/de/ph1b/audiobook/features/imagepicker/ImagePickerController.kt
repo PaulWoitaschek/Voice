@@ -21,10 +21,12 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
@@ -101,7 +103,11 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       return false
     }
 
-    override fun onCabCreated(p0: MaterialCab?, p1: Menu?): Boolean {
+    override fun onCabCreated(cab: MaterialCab, menu: Menu): Boolean {
+      val confirmIcon = menu.findItem(R.id.confirm).icon
+      val tintColor = activity.color(R.color.toolbarIconColor)
+      confirmIcon.setTint(tintColor)
+      cab.toolbar.navigationIcon?.setTint(tintColor)
       return true
     }
   }
@@ -200,6 +206,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         else -> false
       }
     }
+    toolbar.tint()
 
     cab = MaterialCab(activity, R.id.cabStub)
       .setMenu(R.menu.crop_menu)

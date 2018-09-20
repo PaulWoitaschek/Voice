@@ -7,7 +7,6 @@
 
     <ImageView
         android:id="@+id/icon"
-        style="@style/TintedImageViewStyle"
         android:layout_width="72dp"
         android:layout_height="@dimen/list_single_item_height"
         android:layout_alignParentStart="true"

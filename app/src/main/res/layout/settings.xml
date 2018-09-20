@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/windowBackground">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
 
     <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/AppToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/close"
+        app:title="@string/action_settings" />
 
     <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_marginTop="4dp"
+            android:divider="?android:attr/listDivider"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
-            <LinearLayout
+            <de.ph1b.audiobook.features.settings.DoubleSettingView
+                android:id="@+id/theme"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:divider="?android:attr/listDivider"
-                android:orientation="vertical"
-                android:showDividers="middle">
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.DoubleSettingView
-                    android:id="@+id/theme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <de.ph1b.audiobook.features.settings.SwitchSettingView
+                android:id="@+id/resumePlayback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.SwitchSettingView
-                    android:id="@+id/resumePlayback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <de.ph1b.audiobook.features.settings.SwitchSettingView
+                android:id="@+id/resumeAfterCall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.SwitchSettingView
-                    android:id="@+id/resumeAfterCall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <de.ph1b.audiobook.features.settings.DoubleSettingView
+                android:id="@+id/skipAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.DoubleSettingView
-                    android:id="@+id/skipAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <de.ph1b.audiobook.features.settings.DoubleSettingView
+                android:id="@+id/autoRewind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.DoubleSettingView
-                    android:id="@+id/autoRewind"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <de.ph1b.audiobook.features.settings.SwitchSettingView
+                android:id="@+id/crashReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.ph1b.audiobook.features.settings.SwitchSettingView
-                    android:id="@+id/crashReports"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -4,23 +4,24 @@
     android:id="@+id/bookShelfRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="?android:attr/windowBackground">
 
     <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
         android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@color/white">
+        android:background="?attr/colorPrimary">
 
         <TextView
             android:id="@+id/toolbarTitle"
-            android:textSize="24sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/toolbarIconColor"
+            android:textSize="24sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -45,9 +46,9 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:layout_height="wrap_content"
         android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
         app:fab_size="normal"

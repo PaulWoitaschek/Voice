@@ -9,6 +9,7 @@ import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.settings.*
@@ -102,8 +103,8 @@ class SettingsController : BaseController() {
   }
 
   private fun setupToolbar() {
-    toolbar.setNavigationIcon(R.drawable.close)
     toolbar.inflateMenu(R.menu.menu_settings)
+    toolbar.tint()
     toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
         SupportDialogFragment().show(fragmentManager, SupportDialogFragment.TAG)
@@ -114,7 +115,6 @@ class SettingsController : BaseController() {
     toolbar.setNavigationOnClickListener {
       activity.onBackPressed()
     }
-    toolbar.title = getString(R.string.action_settings)
   }
 
   private inline fun setupTextSetting(

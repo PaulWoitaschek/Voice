@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/icon"
-        style="@style/TintedImageViewStyle"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentStart="true"
@@ -22,23 +21,24 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="56dp"
         android:layout_marginStart="72dp"
+        android:layout_marginEnd="56dp"
         android:ellipsize="marquee"
         android:maxLines="2"
         android:textSize="@dimen/list_text_primary_size"
         tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/remove"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/remove"
+        android:tint="@color/icon_color"
         android:padding="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/delete"

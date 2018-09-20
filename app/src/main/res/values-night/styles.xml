@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="ToolbarPopup" parent="@style/ThemeOverlay.MaterialComponents" />
-
     <style name="BottomSheetStyle" parent="Theme.Design.BottomSheetDialog" />
-
-    <style name="Base.Theme.YourApp.DayNight" parent="DarkTheme" />
-
-    <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
-
-    </style>
-
-    <style name="DayNightTheme" parent="DarkTheme">
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
-    </style>
 
 </resources>
