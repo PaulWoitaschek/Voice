@@ -4,7 +4,7 @@ platform :android do
   lane :build_apks do
     gradle(task: 'app:assembleProprietaryRelease -x lint -x lintVitalProprietaryRelease')
     copy_artifacts(
-      target_path: 'artifacts',
+      target_path: 'artifacts' + '/apk',
       artifacts: ['app/build/outputs/apk/release/*.apk', 'app/build/outputs/mapping/release/mapping.txt']
     )
   end
