@@ -1,11 +1,13 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doAnswer
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import de.ph1b.audiobook.BookFactory
+import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.given
@@ -18,35 +20,21 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnit
 import java.util.UUID
 
 class BookPlayPresenterTest {
 
-  @Rule
-  @JvmField
-  val mockitoRule = MockitoJUnit.rule()!!
-
-  private lateinit var bookPlayPresenter: BookPlayPresenter
+  private val bookPlayPresenter: BookPlayPresenter
   private val bookId = UUID.randomUUID()
 
-  @Mock
-  lateinit var mockBookRepository: BookRepository
-  @Mock
-  lateinit var mockPlayerController: PlayerController
-  @Mock
-  lateinit var mockPlayStateManager: PlayStateManager
-  @Mock
-  lateinit var mockSleepTimer: SleepTimer
-  @Mock
-  lateinit var mockView: BookPlayMvp.View
+  private val mockBookRepository: BookRepository = mock()
+  private val mockPlayerController: PlayerController = mock()
+  private val mockPlayStateManager: PlayStateManager = mock()
+  private val mockSleepTimer: SleepTimer = mock()
+  private val mockView: BookPlayMvp.View = mock()
 
-  @Before
-  fun setUp() {
+  init {
     App.component = mock()
     bookPlayPresenter = BookPlayPresenter(bookId).apply {
       bookRepository = mockBookRepository
@@ -56,6 +44,7 @@ class BookPlayPresenterTest {
     }
 
     given { mockBookRepository.booksStream() }.thenReturn(Observable.empty())
+    given { mockBookRepository.byId(any()) }.thenReturn(Observable.just(Optional.Absent()))
     given { mockPlayStateManager.playStateStream() }.thenReturn(Observable.empty())
     given { mockSleepTimer.leftSleepTimeInMs }.thenReturn(Observable.empty())
   }
@@ -113,27 +102,6 @@ class BookPlayPresenterTest {
   }
 
   @Test
-  fun bookStream() {
-    val bookWithCorrectId = BookFactory.create(id = bookId, time = 0)
-    val bookWithCorrectIdAndChangedTime =
-      bookWithCorrectId.update { copy(positionInChapter = 123) }
-    val bookWithFalseId = BookFactory.create(id = UUID.randomUUID())
-    val firstEmission = listOf(bookWithCorrectId, bookWithFalseId)
-    val secondEmission = listOf(bookWithCorrectIdAndChangedTime, bookWithFalseId)
-    given { mockBookRepository.booksStream() }.thenReturn(
-      Observable.just(
-        firstEmission,
-        secondEmission
-      )
-    )
-    bookPlayPresenter.attach(mockView)
-    inOrder(mockView) {
-      verify(mockView).render(bookWithCorrectId)
-      verify(mockView).render(bookWithCorrectIdAndChangedTime)
-    }
-  }
-
-  @Test
   fun bookStreamStopsAfterDetach() {
     val bookStream = PublishSubject.create<List<Book>>()
     given { mockBookRepository.booksStream() }.thenReturn(bookStream)
@@ -147,7 +115,7 @@ class BookPlayPresenterTest {
   @Test
   fun absentBookFinishes() {
     val bookWithFalseId = BookFactory.create(id = UUID.randomUUID())
-    given { mockBookRepository.booksStream() }.thenReturn(Observable.just(listOf(bookWithFalseId)))
+    bookRepoWillReturn(bookWithFalseId)
     bookPlayPresenter.attach(mockView)
     verify(mockView, never()).render(any())
     verify(mockView).finish()
@@ -190,18 +158,29 @@ class BookPlayPresenterTest {
 
   @Test
   fun seekToWithoutFileUsesBookFile() {
-    bookPlayPresenter.attach(mockView)
     val book = BookFactory.create(id = bookId)
-    given { mockBookRepository.bookById(bookId) }.thenReturn(book)
+    bookRepoWillReturn(book)
+    bookPlayPresenter.attach(mockView)
     bookPlayPresenter.seekTo(100, null)
     verify(mockPlayerController).changePosition(100, book.content.currentFile)
   }
 
+  private fun bookRepoWillReturn(book: Book) {
+    given { mockBookRepository.byId(bookId) }.doAnswer { invocation ->
+      val id = invocation.getArgument<UUID>(0)
+      Observable.just(Optional.of(book.takeIf { id == book.id }))
+    }
+    given { mockBookRepository.bookById(bookId) }.doAnswer { invocation ->
+      val id = invocation.getArgument<UUID>(0)
+      book.takeIf { book.id == id }
+    }
+  }
+
   @Test
   fun seeToWithFile() {
-    bookPlayPresenter.attach(mockView)
     val book = BookFactory.create(id = bookId)
     given { mockBookRepository.bookById(bookId) }.thenReturn(book)
+    bookPlayPresenter.attach(mockView)
     val lastFile = book.content.chapters.last().file
     bookPlayPresenter.seekTo(100, lastFile)
     verify(mockPlayerController).changePosition(100, lastFile)
@@ -209,8 +188,8 @@ class BookPlayPresenterTest {
 
   @Test
   fun toggleActiveSleepTimberCancels() {
-    bookPlayPresenter.attach(mockView)
     given { mockSleepTimer.sleepTimerActive() }.thenReturn(true)
+    bookPlayPresenter.attach(mockView)
     bookPlayPresenter.toggleSleepTimer()
     verify(mockSleepTimer).setActive(false)
     verify(mockView, never()).openSleepTimeDialog()
@@ -218,8 +197,8 @@ class BookPlayPresenterTest {
 
   @Test
   fun toggleSleepTimberInInactiveStateOpensMenu() {
-    bookPlayPresenter.attach(mockView)
     given { mockSleepTimer.sleepTimerActive() }.thenReturn(false)
+    bookPlayPresenter.attach(mockView)
     bookPlayPresenter.toggleSleepTimer()
     verify(mockSleepTimer, never()).setActive(any())
   }
