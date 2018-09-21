@@ -16,6 +16,6 @@ jobs:
             - vendor/bundle
       - run:
           name:    fastlane
-          command: bundle exec fastlane build_apks
+          command: bundle exec fastlane ci
       - store_artifacts:
           path:    artifacts
