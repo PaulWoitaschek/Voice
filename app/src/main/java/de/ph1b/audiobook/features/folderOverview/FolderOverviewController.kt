@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
+import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.mvp.MvpController
 import kotlinx.android.synthetic.main.folder_overview.*
 
@@ -78,9 +79,8 @@ class FolderOverviewController :
 
   private fun setupToolbar() {
     toolbar.apply {
-      setTitle(R.string.audiobook_folders_title)
-      setNavigationIcon(R.drawable.close)
       setNavigationOnClickListener { activity.onBackPressed() }
+      tint()
     }
   }
 

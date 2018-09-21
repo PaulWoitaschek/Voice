@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
@@ -8,6 +8,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        app:navigationIcon="@drawable/close"
+        app:title="@string/audiobook_folders_title"
         style="@style/AppToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
@@ -38,32 +40,32 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:contentDescription="@string/content_add_book"
-            fab:fab_addButtonColorNormal="?attr/colorAccent"
-            fab:fab_addButtonColorPressed="?attr/colorAccentDark"
-            fab:fab_labelStyle="@style/fab_label_style"
-            fab:fab_labelsPosition="left">
+            app:fab_addButtonColorNormal="?attr/colorAccent"
+            app:fab_addButtonColorPressed="?attr/colorAccentDark"
+            app:fab_labelStyle="@style/fab_label_style"
+            app:fab_labelsPosition="left">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/addAsSingle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/folder_add_single_book"
-                fab:fab_colorNormal="?attr/colorAccent"
-                fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder"
-                fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_single_book" />
+                app:fab_colorNormal="?attr/colorAccent"
+                app:fab_colorPressed="?attr/colorAccentDark"
+                app:fab_icon="@drawable/ic_folder"
+                app:fab_size="mini"
+                app:fab_title="@string/folder_add_single_book" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/addAsLibrary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/folder_add_collection"
-                fab:fab_colorNormal="?attr/colorAccent"
-                fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/folder_multiple"
-                fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_collection" />
+                app:fab_colorNormal="?attr/colorAccent"
+                app:fab_colorPressed="?attr/colorAccentDark"
+                app:fab_icon="@drawable/folder_multiple"
+                app:fab_size="mini"
+                app:fab_title="@string/folder_add_collection" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
