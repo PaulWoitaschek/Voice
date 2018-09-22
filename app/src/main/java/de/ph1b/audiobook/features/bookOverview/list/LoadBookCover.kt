@@ -16,6 +16,7 @@ import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
@@ -51,28 +52,29 @@ class LoadBookCover(holder: BookOverviewHolder) {
         return@launch
       }
 
-      val coverReplacement = CoverReplacement(bookName, context)
+      launch(UI) {
+        val coverReplacement = CoverReplacement(bookName, context)
+        progress.color = defaultProgressColor
+        val extractedColor = coverColorExtractor.extract(coverFile)
+        progress.color = extractedColor ?: defaultProgressColor
+        val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
+        withContext(Dispatchers.Main) {
+          if (!isActive) return@withContext
+          if (shouldLoadImage) {
+            Picasso.get()
+                .load(coverFile)
+                .placeholder(coverReplacement)
+                .into(cover)
+          } else {
+            Picasso.get()
+                .cancelRequest(cover)
+            // we have to set the replacement in onPreDraw, else the transition will fail.
+            cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
+          }
 
-      progress.color = defaultProgressColor
-      val extractedColor = coverColorExtractor.extract(coverFile)
-      progress.color = extractedColor ?: defaultProgressColor
-      val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
-      withContext(Dispatchers.Main) {
-        if (!isActive) return@withContext
-        if (shouldLoadImage) {
-          Picasso.get()
-            .load(coverFile)
-            .placeholder(coverReplacement)
-            .into(cover)
-        } else {
-          Picasso.get()
-            .cancelRequest(cover)
-          // we have to set the replacement in onPreDraw, else the transition will fail.
-          cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
+          boundFile = coverFile
+          boundName = bookName
         }
-
-        boundFile = coverFile
-        boundName = bookName
       }
     }
   }
