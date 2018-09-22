@@ -2,8 +2,8 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import androidx.room.OnConflictStrategy
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.getLong
@@ -60,7 +60,7 @@ class Migration32to34 : Migration(32, 34) {
           put(TITLE, it.title)
           put(TIME, it.time)
         }
-        db.insert(TABLE_NAME, OnConflictStrategy.FAIL, cv)
+        db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
         Timber.i("Inserted $cv to $TABLE_NAME")
       }
     }

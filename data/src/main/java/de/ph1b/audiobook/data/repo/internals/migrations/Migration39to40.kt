@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
@@ -19,7 +19,7 @@ class Migration39to40 : IncrementalMigration(39) {
     }
     db.update(
       BOOK_TABLE_NAME,
-      OnConflictStrategy.FAIL,
+      SQLiteDatabase.CONFLICT_FAIL,
       positionZeroContentValues,
       "$BOOK_TIME < ?",
       arrayOf(0)

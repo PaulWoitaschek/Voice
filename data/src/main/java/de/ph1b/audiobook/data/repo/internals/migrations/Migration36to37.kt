@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.getLong
 import de.ph1b.audiobook.data.repo.internals.getString
@@ -46,7 +46,7 @@ class Migration36to37 : IncrementalMigration(36) {
           put(PATH, it.path)
           put(LAST_MODIFIED, 0L)
         }
-        db.insert(TABLE_NAME, OnConflictStrategy.FAIL, cv)
+        db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
       }
     }
   }

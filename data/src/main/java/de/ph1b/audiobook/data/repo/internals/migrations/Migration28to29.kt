@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
 import timber.log.Timber
@@ -31,7 +31,7 @@ class Migration28to29 : IncrementalMigration(28) {
           cv.put("BOOK_JSON", book.toString())
           db.update(
             "TABLE_BOOK",
-            OnConflictStrategy.FAIL,
+            SQLiteDatabase.CONFLICT_FAIL,
             cv,
             "BOOK_ID" + "=?",
             arrayOf(cursor.getLong(1).toString())

@@ -2,7 +2,7 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
@@ -49,10 +49,10 @@ class Migration39to40Test {
   @Test
   fun negativeNumbersBecomeZero() {
     val bookCvWithNegativeTime = contentValuesForBookWithTime(-100)
-    db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCvWithNegativeTime)
+    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithNegativeTime)
 
     val bookCvWithPositiveTime = contentValuesForBookWithTime(5000)
-    db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCvWithPositiveTime)
+    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithPositiveTime)
 
     Migration39to40().migrate(db)
 

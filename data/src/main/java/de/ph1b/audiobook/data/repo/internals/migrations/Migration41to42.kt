@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 class Migration41to42 : IncrementalMigration(41) {
@@ -10,11 +10,11 @@ class Migration41to42 : IncrementalMigration(41) {
     val lastModifiedCv = ContentValues().apply {
       put("lastModified", 0)
     }
-    db.update("tableChapters", OnConflictStrategy.FAIL, lastModifiedCv, null, null)
+    db.update("tableChapters", SQLiteDatabase.CONFLICT_FAIL, lastModifiedCv, null, null)
 
     val marksCv = ContentValues().apply {
       put("marks", null as String?)
     }
-    db.update("tableChapters", OnConflictStrategy.FAIL, marksCv, null, null)
+    db.update("tableChapters", SQLiteDatabase.CONFLICT_FAIL, marksCv, null, null)
   }
 }

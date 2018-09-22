@@ -2,7 +2,7 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 
@@ -24,7 +24,7 @@ class Migration26to27 : IncrementalMigration(26) {
       cv.put("BOOK_JSON", getString(0))
       cv.put("BOOK_ACTIVE", 1)
       cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis())
-      db.insert("TABLE_BOOK", OnConflictStrategy.FAIL, cv)
+      db.insert("TABLE_BOOK", SQLiteDatabase.CONFLICT_FAIL, cv)
     }
   }
 }

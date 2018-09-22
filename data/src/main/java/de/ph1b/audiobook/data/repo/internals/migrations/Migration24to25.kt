@@ -3,8 +3,8 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
-import androidx.room.OnConflictStrategy
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
@@ -227,7 +227,7 @@ class Migration24to25(
         Timber.d("upgrade24 restored book=$book")
         val cv = ContentValues()
         cv.put("BOOK_JSON", book.toString())
-        val newBookId = db.insert(newBookTable, OnConflictStrategy.FAIL, cv)
+        val newBookId = db.insert(newBookTable, SQLiteDatabase.CONFLICT_FAIL, cv)
         book.put("id", newBookId)
 
         // move cover file if possible

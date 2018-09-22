@@ -2,7 +2,7 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import androidx.room.OnConflictStrategy
+import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
@@ -49,7 +49,7 @@ class Migration31to32 : IncrementalMigration(31) {
           cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())
           db.update(
             TABLE_BOOK,
-            OnConflictStrategy.FAIL,
+            SQLiteDatabase.CONFLICT_FAIL,
             cv,
             "$BOOK_ID=?",
             arrayOf(bookId.toString())

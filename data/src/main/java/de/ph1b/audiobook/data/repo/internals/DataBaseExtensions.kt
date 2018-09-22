@@ -9,13 +9,24 @@ import java.util.ArrayList
 
 
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
+  moveToPosition(-1)
   while (moveToNext()) {
     func()
   }
 }
 
+
+inline fun Cursor.consumeEach(consume: (Cursor) -> Unit) = use {
+  moveToPosition(-1)
+  while (moveToNext()) {
+    consume(it)
+  }
+}
+
+
 /** a function that iterates of the rows of a cursor and maps all using a supplied mapper function */
 inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
+  moveToPosition(-1)
   val list = ArrayList<T>(count)
   while (moveToNext()) {
     list.add(mapper())

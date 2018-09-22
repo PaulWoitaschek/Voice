@@ -2,8 +2,8 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import androidx.room.OnConflictStrategy
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
@@ -46,13 +46,13 @@ class Migration40to41Test {
   fun insertBeforeMigrationThrows() {
     val bookCv = bookContentValues()
     bookCv.put("loudnessGain", 100)
-    db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
+    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
   }
 
   @Test
   fun insert() {
     val bookCv = bookContentValues()
-    val id = db.insert(BookTable.TABLE_NAME, OnConflictStrategy.FAIL, bookCv)
+    val id = db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
 
     Migration40to41().migrate(db)
 
@@ -61,7 +61,7 @@ class Migration40to41Test {
     }
     db.update(
       BookTable.TABLE_NAME,
-      OnConflictStrategy.FAIL,
+      SQLiteDatabase.CONFLICT_FAIL,
       loudnessGainCv,
       "${BookTable.ID}=?",
       arrayOf(id)
