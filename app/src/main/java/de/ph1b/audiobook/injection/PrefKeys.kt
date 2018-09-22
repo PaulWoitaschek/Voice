@@ -10,7 +10,7 @@ object PrefKeys {
   const val SLEEP_TIME = "SLEEP_TIME"
   const val SINGLE_BOOK_FOLDERS = "singleBookFolders"
   const val COLLECTION_BOOK_FOLDERS = "folders"
-  const val CURRENT_BOOK = "currentBook"
+  const val CURRENT_BOOK = "currentBook2"
   const val RESUME_AFTER_CALL = "resumeAfterCall"
   const val THEME = "THEME2_KEY"
   const val CRASH_REPORT_ENABLED = "allowCrashReports"
