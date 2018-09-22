@@ -3,7 +3,8 @@ package de.ph1b.audiobook.data
 import android.content.Context
 import android.os.Environment
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.data.repo.internals.IO
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
 import java.util.UUID
@@ -53,7 +54,7 @@ data class Book(
     return copy(content = newContent, metaData = newMetaData)
   }
 
-  suspend fun coverFile(context: Context): File = withContext(IO) {
+  suspend fun coverFile(context: Context): File = withContext(Dispatchers.IO) {
     val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
       // if its part of a collection, take the first file
       content.chapters.first().file.absolutePath.replace("/", "")

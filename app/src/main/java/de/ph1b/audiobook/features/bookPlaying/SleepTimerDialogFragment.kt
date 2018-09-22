@@ -14,7 +14,6 @@ import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
@@ -24,6 +23,9 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import kotlinx.android.synthetic.main.dialog_sleep.*
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -132,7 +134,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
           System.currentTimeMillis(),
           DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
-        launch(IO) {
+        GlobalScope.launch(Dispatchers.IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
             book,
             date + ": " + getString(R.string.action_sleep)

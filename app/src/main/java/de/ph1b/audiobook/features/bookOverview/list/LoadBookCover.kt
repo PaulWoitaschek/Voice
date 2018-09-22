@@ -5,7 +5,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
@@ -14,6 +13,7 @@ import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.android.synthetic.main.book_overview_row.*
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.isActive
@@ -43,7 +43,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
 
   fun load(book: Book) {
     currentCoverBindingJob?.cancel()
-    currentCoverBindingJob = GlobalScope.launch(IO) {
+    currentCoverBindingJob = GlobalScope.launch(Dispatchers.IO) {
       val coverFile = book.coverFile()
       val bookName = book.name
 
@@ -51,13 +51,14 @@ class LoadBookCover(holder: BookOverviewHolder) {
         return@launch
       }
 
-      val coverReplacement = CoverReplacement(bookName, context)
-
-      progress.color = defaultProgressColor
+      withContext(Dispatchers.Main) {
+        progress.color = defaultProgressColor
+      }
       val extractedColor = coverColorExtractor.extract(coverFile)
-      progress.color = extractedColor ?: defaultProgressColor
       val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
       withContext(Dispatchers.Main) {
+        progress.color = extractedColor ?: defaultProgressColor
+        val coverReplacement = CoverReplacement(bookName, context)
         if (!isActive) return@withContext
         if (shouldLoadImage) {
           Picasso.get()
@@ -65,8 +66,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
             .placeholder(coverReplacement)
             .into(cover)
         } else {
-          Picasso.get()
-            .cancelRequest(cover)
+          Picasso.get().cancelRequest(cover)
           // we have to set the replacement in onPreDraw, else the transition will fail.
           cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
         }

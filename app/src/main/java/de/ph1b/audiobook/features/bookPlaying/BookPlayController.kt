@@ -10,7 +10,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
@@ -38,6 +37,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
@@ -116,7 +116,7 @@ class BookPlayController(
     cover.transitionName = book.coverTransitionName
     skipSilenceItem.isChecked = book.content.skipSilence
 
-    GlobalScope.launch(IO) {
+    GlobalScope.launch(Dispatchers.IO) {
       val coverReplacement = CoverReplacement(book.name, activity)
       val coverFile = book.coverFile()
       val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE

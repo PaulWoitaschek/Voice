@@ -7,7 +7,8 @@ import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.data.repo.internals.IO
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
@@ -59,7 +60,7 @@ constructor(private val windowManager: Provider<WindowManager>) {
    * @param bitmap The bitmap to be saved
    */
   @Synchronized
-  suspend fun saveCover(bitmap: Bitmap, destination: File) = withContext(IO) {
+  suspend fun saveCover(bitmap: Bitmap, destination: File) = withContext(Dispatchers.IO) {
     var bitmapToSave = bitmap
     // make bitmap square
     val width = bitmapToSave.width

@@ -11,7 +11,6 @@ import android.os.PowerManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
 import com.squareup.moshi.Moshi
-import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import de.paulwoitaschek.chapterreader.ChapterReader
@@ -84,7 +83,6 @@ class AndroidModule {
   @Provides
   @Singleton
   fun provideCoverColorExtractor(): CoverColorExtractor {
-    val picasso = Picasso.get()
-    return CoverColorExtractor(picasso)
+    return CoverColorExtractor()
   }
 }

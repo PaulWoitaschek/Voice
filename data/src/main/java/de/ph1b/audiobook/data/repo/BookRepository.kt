@@ -5,10 +5,11 @@ import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
-import de.ph1b.audiobook.data.repo.internals.IO
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.IO
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
@@ -50,13 +51,13 @@ class BookRepository
 
   private suspend fun sortBooksAndNotifySubject() {
     active.sort()
-    withContext(UI) {
+    withContext(Dispatchers.Main) {
       activeBooksSubject.onNext(active.toList())
     }
   }
 
   suspend fun addBook(book: Book) {
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       Timber.v("addBook=${book.name}")
 
       storage.addOrUpdate(book)
@@ -77,12 +78,12 @@ class BookRepository
     if (bookById(book.id) == book) {
       return
     }
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       val index = active.indexOfFirst { it.id == book.id }
       if (index != -1) {
         active[index] = book
         storage.addOrUpdate(book)
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
           sortBooksAndNotifySubject()
         }
       } else Timber.e("update failed as there was no book")
@@ -90,7 +91,7 @@ class BookRepository
   }
 
   suspend fun markBookAsPlayedNow(id: UUID) {
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       val book = bookById(id)
         ?: return@withContext
       val updatedBook = book.update(
@@ -103,7 +104,7 @@ class BookRepository
   }
 
   suspend fun hideBook(toDelete: List<Book>) {
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       Timber.v("hideBooks=${toDelete.size}")
       if (toDelete.isEmpty()) return@withContext
 
@@ -116,7 +117,7 @@ class BookRepository
   }
 
   suspend fun revealBook(book: Book) {
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       Timber.v("Called revealBook=$book")
 
       orphaned.removeAll { it.id == book.id }

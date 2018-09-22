@@ -11,10 +11,12 @@ import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.persistence.pref.Pref
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -47,7 +49,7 @@ class MediaBrowserHelper
   ) {
     Timber.d("onLoadChildren $parentId, $result")
     result.detach()
-    launch {
+    GlobalScope.launch {
       val uri = Uri.parse(parentId)
       val items = mediaItems(uri)
       Timber.d("sending result $items")
@@ -91,7 +93,7 @@ class MediaBrowserHelper
   }
 
   private suspend fun fileProviderUri(coverFile: File): Uri? {
-    return withContext(IO) {
+    return withContext(Dispatchers.IO) {
       if (coverFile.exists()) {
         FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
           .apply {

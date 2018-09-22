@@ -3,7 +3,8 @@ package de.ph1b.audiobook.data.repo
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.repo.internals.BookmarkDao
-import de.ph1b.audiobook.data.repo.internals.IO
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,20 +20,20 @@ class BookmarkRepo
 ) {
 
   suspend fun deleteBookmark(id: Long) {
-    withContext(IO) {
+    withContext(Dispatchers.IO) {
       dao.deleteBookmark(id)
     }
   }
 
   suspend fun addBookmark(bookmark: Bookmark): Bookmark {
-    return withContext(IO) {
+    return withContext(Dispatchers.IO) {
       val insertedId = dao.addBookmark(bookmark)
       bookmark.copy(id = insertedId)
     }
   }
 
   suspend fun addBookmarkAtBookPosition(book: Book, title: String): Bookmark {
-    return withContext(IO) {
+    return withContext(Dispatchers.IO) {
       val addedBookmark =
         Bookmark(book.content.currentChapter.file, title, book.content.positionInChapter)
       Timber.v("Added bookmark=$addedBookmark")
@@ -41,7 +42,7 @@ class BookmarkRepo
   }
 
   suspend fun bookmarks(book: Book): List<Bookmark> {
-    return withContext(IO) {
+    return withContext(Dispatchers.IO) {
       val files = book.content.chapters.map {
         it.file
       }

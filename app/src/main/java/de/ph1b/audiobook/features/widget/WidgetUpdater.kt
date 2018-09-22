@@ -16,7 +16,6 @@ import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.data.repo.internals.IO
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PendingIntentCompat
@@ -29,6 +28,9 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.UUID
@@ -51,7 +53,7 @@ class WidgetUpdater @Inject constructor(
   private val appWidgetManager = AppWidgetManager.getInstance(context)
 
   fun update() {
-    launch(IO) {
+    GlobalScope.launch(Dispatchers.IO) {
       val book = repo.bookById(currentBookIdPref.value)
       Timber.i("update with book ${book?.name}")
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
