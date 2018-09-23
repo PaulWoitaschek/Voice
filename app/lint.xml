@@ -2,13 +2,17 @@
 <lint>
 
     <issue id="NewApi" severity="fatal">
-        <ignore regexp="BaseBundle#getInt"/>
-        <ignore regexp="BaseBundle#getString"/>
-        <ignore regexp="BaseBundle#putBoolean"/>
-        <ignore regexp="BaseBundle#putDouble"/>
-        <ignore regexp="BaseBundle#putInt"/>
-        <ignore regexp="BaseBundle#putLong"/>
-        <ignore regexp="BaseBundle#putString"/>
+        <ignore regexp="BaseBundle#getInt" />
+        <ignore regexp="BaseBundle#getString" />
+        <ignore regexp="BaseBundle#putBoolean" />
+        <ignore regexp="BaseBundle#putDouble" />
+        <ignore regexp="BaseBundle#putInt" />
+        <ignore regexp="BaseBundle#putLong" />
+        <ignore regexp="BaseBundle#putString" />
     </issue>
 
+    <issue id="Typos" severity="ignore" />
+    <issue id="TypographyEllipsis" severity="ignore" />
+    <issue id="MissingTranslation" severity="ignore" />
+    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
 </lint>
