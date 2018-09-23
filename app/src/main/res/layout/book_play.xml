@@ -138,7 +138,8 @@
         android:background="@drawable/shadow_top"
         app:layout_constraintBottom_toBottomOf="@+id/cover"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="InconsistentLayout" />
 
     <TextView
         android:id="@+id/timerCountdownView"
