@@ -9,10 +9,10 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
-import dagger.android.AndroidInjection
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -91,7 +91,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
   override fun onCreate() {
-    AndroidInjection.inject(this)
+    App.component.playbackComponent()
+      .playbackService(this)
+      .build()
+      .inject(this)
     super.onCreate()
 
     sessionToken = mediaSession.sessionToken

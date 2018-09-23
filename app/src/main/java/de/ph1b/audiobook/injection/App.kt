@@ -1,12 +1,9 @@
 package de.ph1b.audiobook.injection
 
 import android.app.Application
-import android.app.Service
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasServiceInjector
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
@@ -25,20 +22,16 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-class App : Application(), HasServiceInjector {
+class App : Application() {
 
   @Inject
   lateinit var bookAdder: BookAdder
-  @Inject
-  lateinit var serviceInjector: DispatchingAndroidInjector<Service>
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
   @Inject
   lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
-
-  override fun serviceInjector() = serviceInjector
 
   override fun onCreate() {
     super.onCreate()

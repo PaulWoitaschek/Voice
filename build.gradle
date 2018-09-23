@@ -64,8 +64,6 @@ buildscript {
 
       Dagger              : [
           core            : "com.google.dagger:dagger:${versions.dagger}",
-          android         : "com.google.dagger:dagger-android-support:${versions.dagger}",
-          androidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
           compiler        : "com.google.dagger:dagger-compiler:${versions.dagger}"
       ],
 

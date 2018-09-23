@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.MainActivity
@@ -42,8 +41,6 @@ import javax.inject.Singleton
   modules = [
     AndroidModule::class,
     PrefsModule::class,
-    BindingModule::class,
-    AndroidSupportInjectionModule::class,
     PersistenceModule::class
   ]
 )
@@ -86,4 +83,6 @@ interface AppComponent : DataComponent {
   fun inject(target: SettingsController)
   fun inject(target: SleepTimerDialogFragment)
   fun inject(target: ThemePickerDialogFragment)
+
+  fun playbackComponent(): PlaybackComponent.Builder
 }
