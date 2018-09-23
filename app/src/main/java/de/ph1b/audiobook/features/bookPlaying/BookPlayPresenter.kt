@@ -8,7 +8,9 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.io.File
@@ -98,7 +100,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   }
 
   override fun addBookmark() {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       val book = bookRepository.bookById(bookId) ?: return@launch
       val title = book.content.currentChapter.name
       bookmarkRepo.addBookmarkAtBookPosition(book, title)

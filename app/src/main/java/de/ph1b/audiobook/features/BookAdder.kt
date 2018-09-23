@@ -22,7 +22,8 @@ import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -102,7 +103,7 @@ class BookAdder
     executor.execute {
       runBlocking {
         isScanning = true
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
           _scannerActive.onNext(true)
         }
         stopScanner = false
@@ -119,7 +120,7 @@ class BookAdder
         }
 
         stopScanner = false
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
           _scannerActive.onNext(false)
         }
         isScanning = false

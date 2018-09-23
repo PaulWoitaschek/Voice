@@ -27,6 +27,7 @@ import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import timber.log.Timber
@@ -122,7 +123,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .subscribe {
         Timber.i("init ${it.name}")
         player.init(it.content)
-        launch {
+        GlobalScope.launch {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
       }
@@ -311,7 +312,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun play() {
-    launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+    GlobalScope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
     player.play()
   }
 

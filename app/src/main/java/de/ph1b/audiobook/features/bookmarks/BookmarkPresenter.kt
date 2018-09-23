@@ -9,7 +9,9 @@ import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -34,7 +36,7 @@ class BookmarkPresenter @Inject constructor(
   override fun onAttach(view: BookmarkView) {
     val book = repo.bookById(bookId) ?: return
 
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       bookmarks.clear()
       bookmarks.addAll(bookmarkRepo.bookmarks(book))
       chapters.clear()
@@ -45,7 +47,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun deleteBookmark(id: Long) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       bookmarkRepo.deleteBookmark(id)
       bookmarks.removeAll { it.id == id }
 
@@ -70,7 +72,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun editBookmark(id: Long, newTitle: String) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(
           title = newTitle,
@@ -78,7 +80,7 @@ class BookmarkPresenter @Inject constructor(
         )
         bookmarkRepo.deleteBookmark(it.id)
         val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
-        val index = bookmarks.indexOfFirst { it.id == id }
+        val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
         bookmarks[index] = newBookmark
         if (attached) renderView()
       }
@@ -86,7 +88,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun addBookmark(name: String) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       val book = repo.bookById(bookId) ?: return@launch
       val title = if (name.isEmpty()) book.content.currentChapter.name else name
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
