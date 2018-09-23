@@ -10,19 +10,21 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.BetterSnack
 import io.reactivex.subjects.PublishSubject
 
+private const val PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
+
 /**
  * Simple helper for obtaining android api 23 permissions
  */
 class PermissionHelper(private val activity: Activity, private val permissions: Permissions) {
 
-  private val PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
   private val permissionDialogConfirmed = PublishSubject.create<Unit>()
 
   fun storagePermission(gotPermission: () -> Unit = {}) {
     val root = activity.findViewById<View>(android.R.id.content)
+    @Suppress("CheckResult")
     permissions.request(PERMISSION)
       .toObservable()
-      .repeatWhen { it.flatMap { permissionDialogConfirmed } }
+      .repeatWhen { upstream -> upstream.switchMap { permissionDialogConfirmed } }
       .subscribe {
         when (it!!) {
           Permissions.PermissionResult.GRANTED -> gotPermission()

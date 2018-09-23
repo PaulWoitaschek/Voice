@@ -19,6 +19,7 @@ constructor() {
   private val playStateSubject = BehaviorSubject.createDefault(PlayState.STOPPED)
 
   init {
+    @Suppress("CheckResult")
     playStateSubject.subscribe {
       if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
         pauseReason = PauseReason.NONE

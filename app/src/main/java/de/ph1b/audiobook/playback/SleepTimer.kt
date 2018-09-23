@@ -33,9 +33,11 @@ class SleepTimer
   private val shakeObservable = shakeDetector.detect()
 
   init {
+    @Suppress("CheckResult")
     leftSleepTimeSubject.filter { it == 0 }
       .subscribe { playerController.stop() }
 
+    @Suppress("CheckResult")
     leftSleepTimeSubject.subscribe {
       when {
         it > 0 -> {
@@ -54,6 +56,7 @@ class SleepTimer
 
     // counts down the sleep sand
     val sleepUpdateInterval = 1000L
+    @Suppress("CheckResult")
     playStateManager.playStateStream()
       .map { it == PlayStateManager.PlayState.PLAYING }
       .distinctUntilChanged()

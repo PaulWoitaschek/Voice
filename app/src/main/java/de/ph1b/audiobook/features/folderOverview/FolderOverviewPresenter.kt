@@ -25,9 +25,9 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.stream
-      .map { it.map { FolderModel(it, true) } }
+      .map { set -> set.map { FolderModel(it, true) } }
     val singleFolderStream = singleBookFolderPref.stream
-      .map { it.map { FolderModel(it, false) } }
+      .map { set -> set.map { FolderModel(it, false) } }
 
     Observables.combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
       .subscribe { view.newData(it) }
@@ -36,6 +36,7 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   /** removes a selected folder **/
   fun removeFolder(folder: FolderModel) {
+    @Suppress("CheckResult")
     collectionBookFolderPref.stream
       .map { HashSet(it) }
       .firstOrError()
@@ -43,7 +44,7 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
         val removed = it.remove(folder.folder)
         if (removed) collectionBookFolderPref.value = it
       }
-
+    @Suppress("CheckResult")
     singleBookFolderPref.stream
       .map { HashSet(it) }
       .firstOrError()

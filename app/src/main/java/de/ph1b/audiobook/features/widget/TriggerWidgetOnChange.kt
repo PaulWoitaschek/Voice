@@ -22,8 +22,8 @@ class TriggerWidgetOnChange @Inject constructor(
 ) {
 
   fun init() {
-    val anythingChanged: Observable<Any> = anythingChanged()
-    anythingChanged.subscribe { widgetUpdater.update() }
+    @Suppress("CheckResult")
+    anythingChanged().subscribe { widgetUpdater.update() }
   }
 
   private fun anythingChanged(): Observable<Any> =

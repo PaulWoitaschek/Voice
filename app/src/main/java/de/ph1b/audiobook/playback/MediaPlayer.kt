@@ -105,6 +105,7 @@ constructor(
       loudnessGain.update(it)
     }
 
+    @Suppress("CheckResult")
     _state.subscribe {
       Timber.i("state changed to $it")
 
@@ -119,11 +120,12 @@ constructor(
       }
     }
 
+    @Suppress("CheckResult")
     _state
       .switchMap {
         if (it == PlayerState.PLAYING) {
           Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map { player.currentPosition }
+            .map { _ -> player.currentPosition }
             .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
         } else Observable.empty()
       }
