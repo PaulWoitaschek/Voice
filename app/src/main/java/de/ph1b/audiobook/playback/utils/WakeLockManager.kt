@@ -16,7 +16,7 @@ class WakeLockManager @Inject constructor(powerManager: PowerManager) {
   )
     .apply { setReferenceCounted(false) }
 
-  @SuppressLint("WakelockTimeout") // audiobooks are potentially very long
+  @SuppressLint("WakelockTimeout", "Wakelock") // audiobooks are potentially very long
   fun stayAwake(stayAwake: Boolean) {
     if (stayAwake && !lock.isHeld) {
       lock.acquire()
