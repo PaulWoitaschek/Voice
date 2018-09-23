@@ -13,7 +13,7 @@ buildscript {
   ext.versions = [
       androidPlugin      : "3.2.0-rc03",
       conductor          : "2.1.5",
-      dagger             : "2.16",
+      dagger             : "2.17",
       exoPlayer          : "2.8.4",
       exoPlayerExtensions: "2.7.0-1",
       coroutines         : "0.26.1",
