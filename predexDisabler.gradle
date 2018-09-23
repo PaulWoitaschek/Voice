@@ -1,6 +1,5 @@
 project.ext {
   preDexEnabled = !(System.getenv('DISABLE_PREDEX') == "true")
-  println('PREDEX ' + (preDexEnabled ? 'ENABLED' : 'DISABLED'))
 }
 
 subprojects {

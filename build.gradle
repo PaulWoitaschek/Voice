@@ -112,6 +112,10 @@ plugins {
 
 buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
 
+task appVersion {
+  print buildConfig.version.name + '_' + buildConfig.version.code
+}
+
 allprojects {
   repositories {
     maven { url "https://maven.google.com" }
