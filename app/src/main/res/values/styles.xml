@@ -26,25 +26,16 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Card">
-        <item name="android:background">@drawable/card_background</item>
-        <item name="android:elevation">2dp</item>
-        <item name="android:outlineProvider">background</item>
-    </style>
-
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="popupTheme">@style/Theme.MaterialComponents.Light</item>
     </style>
 
-    <style name="ToolbarPopup" parent="ThemeOverlay.MaterialComponents.Light" />
-
     <style name="fab_label_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/copy_abc_primary_text_material_dark</item>
     </style>
-
 
     <style name="timer_text_view_style">
         <item name="android:layout_width">60dp</item>
@@ -71,23 +62,6 @@
     </style>
 
     <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog" />
-
-    <!-- placeholder theme -->
-    <style name="CustomWindowTitleBackground">
-        <item name="android:background">@color/primary</item>
-    </style>
-
-    <!-- placeholder theme -->
-    <style name="CustomWindowTitle">
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textAppearance">@style/CustomWindowTitleText</item>
-    </style>
-
-    <!-- placeholder theme -->
-    <style name="CustomWindowTitleText" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
 
     <style name="sleep_number">
         <item name="android:padding">4dp</item>

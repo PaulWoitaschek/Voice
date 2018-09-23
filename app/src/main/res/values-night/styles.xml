@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ToolbarPopup" parent="@style/ThemeOverlay.MaterialComponents" />
     <style name="BottomSheetStyle" parent="Theme.Design.BottomSheetDialog" />
 
 </resources>

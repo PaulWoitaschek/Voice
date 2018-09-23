@@ -9,5 +9,5 @@
     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
     android:ellipsize="end"
     android:maxLines="3"
-    android:minHeight="?android:attr/dropdownListPreferredItemHeight"
-    tools:text="Very very very long book name that definitely exceeds the display width width width width width width width width width width width width"/>
+    android:minHeight="56dp"
+    tools:text="Hello :)" />
