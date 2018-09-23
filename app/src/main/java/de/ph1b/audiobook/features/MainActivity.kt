@@ -114,7 +114,7 @@ class MainActivity : BaseActivity(), RouterProvider {
       }
 
     // if we should play the current book, set the backstack and return early
-    if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {
+    if (intent?.action == "playCurrent") {
       repo.bookById(currentBookIdPref.value)?.let {
         val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(it.id).asTransaction()
@@ -156,17 +156,11 @@ class MainActivity : BaseActivity(), RouterProvider {
 
   companion object {
     private const val NI_GO_TO_BOOK = "niGotoBook"
-    private const val NI_PLAY_CURRENT_BOOK_IMMEDIATELY = "ni#playCurrentBookImmediately"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
     fun goToBookIntent(c: Context, bookId: UUID) = Intent(c, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId.toString())
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
-
-    fun newIntent(context: Context, playCurrentBookImmediately: Boolean) =
-      Intent(context, MainActivity::class.java).apply {
-        putExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, playCurrentBookImmediately)
-      }
   }
 }
