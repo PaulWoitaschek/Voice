@@ -91,13 +91,13 @@ dependencies {
 
   implementation deps.chapterReader
 
-  implementation deps.Support.appCompat
-  implementation deps.Support.recyclerView
-  implementation deps.Support.design
-  implementation deps.Support.transitions
-  implementation deps.Support.constraintLayout
-  implementation deps.Support.mediaCompat
-  implementation deps.Support.fragment
+  implementation deps.AndroidX.appCompat
+  implementation deps.AndroidX.recyclerView
+  implementation deps.material
+  implementation deps.AndroidX.transitions
+  implementation deps.AndroidX.constraintLayout
+  implementation deps.AndroidX.mediaCompat
+  implementation deps.AndroidX.fragment
 
   implementation deps.picasso
 
@@ -113,14 +113,14 @@ dependencies {
   implementation deps.Dagger.core
   kapt deps.Dagger.compiler
 
-  implementation deps.androidKtx
+  implementation deps.AndroidX.ktx
 
   testImplementation deps.junit
   testImplementation deps.truth
   testImplementation deps.mockito
   testImplementation deps.mockitoKotlin
 
-  androidTestImplementation deps.Support.testRunner
+  androidTestImplementation deps.AndroidX.testRunner
   androidTestImplementation deps.truth
 
   implementation deps.rxJava

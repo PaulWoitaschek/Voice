@@ -21,7 +21,7 @@ android {
 
 dependencies {
   implementation deps.Kotlin.std
-  implementation deps.Support.appCompat
+  implementation deps.AndroidX.appCompat
   implementation deps.rxJava
 
   testImplementation deps.truth

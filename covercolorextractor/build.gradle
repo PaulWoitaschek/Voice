@@ -14,7 +14,7 @@ android {
 dependencies {
   implementation deps.picasso
   implementation deps.Kotlin.std
-  implementation deps.Support.palette
+  implementation deps.AndroidX.palette
   implementation deps.Kotlin.coroutines
   implementation deps.Kotlin.coroutinesAndroid
   implementation deps.timber

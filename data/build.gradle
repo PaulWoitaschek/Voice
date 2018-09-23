@@ -33,23 +33,23 @@ android {
 
 dependencies {
   implementation project(":common")
-  implementation deps.Support.appCompat
+  implementation deps.AndroidX.appCompat
   implementation deps.timber
   implementation deps.Kotlin.coroutines
   implementation deps.Kotlin.coroutinesAndroid
   implementation deps.rxJava
   implementation deps.moshi
-  implementation deps.androidKtx
+  implementation deps.AndroidX.ktx
 
-  api deps.Arch.Room.runtime
-  implementation deps.Arch.Room.rxJava
-  kapt deps.Arch.Room.compiler
-  androidTestImplementation deps.Arch.Room.testing
+  api deps.AndroidX.Room.runtime
+  implementation deps.AndroidX.Room.rxJava
+  kapt deps.AndroidX.Room.compiler
+  androidTestImplementation deps.AndroidX.Room.testing
 
   implementation deps.Dagger.core
   kapt deps.Dagger.compiler
 
-  androidTestImplementation deps.Support.testRunner
+  androidTestImplementation deps.AndroidX.testRunner
   androidTestImplementation deps.truth
 
   testImplementation deps.truth
