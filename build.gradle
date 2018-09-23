@@ -1,20 +1,14 @@
 buildscript {
 
   ext.buildConfig = [
-      version   : [
-          'major': 3,
-          'minor': 6,
-          'patch': 3,
-          'build': 0,
-      ],
       compileSdk: 28,
       minSdk    : 21,
-      targetSdk : 27
+      targetSdk : 27,
+      version   : [
+          code: 3060301,
+          name: '4.0.0-nightly'
+      ]
   ]
-
-  def versionSuffix = ""
-  ext.buildConfig.version['name'] = "${buildConfig.version.major}.${buildConfig.version.minor}.${buildConfig.version.patch}$versionSuffix"
-  ext.buildConfig.version['code'] = buildConfig.version.major * 1_000_000 + buildConfig.version.minor * 10_000 + buildConfig.version.patch * 100 + buildConfig.version.build
 
   ext.versions = [
       androidPlugin      : "3.2.0-rc03",
