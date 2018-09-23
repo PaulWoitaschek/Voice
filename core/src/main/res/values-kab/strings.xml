@@ -1,15 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Wagi d adlis amiran</string>
     <string name="current_book">Adlis amiran</string>
     <!--BookPlayFragment-->
     <string name="cover">Taduli</string>
     <string name="play_pause">Play / Rǧu</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Rǧu seld %d n tesdat.</item>
-        <item quantity="other">Rǧu seld %d n  tisdatin.</item>
-    </plurals>
     <string name="fast_forward">Ar zdat s zreb</string>
     <string name="previous_track">Tafuɣalt iɛeddan</string>
     <string name="next_track">Tafuɣalt d-iteddun</string>

@@ -1,15 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">재생 중인 책</string>
     <string name="current_book">재생 중인 책</string>
     <!--BookPlayFragment-->
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
     <string name="action_sleep">취침예약</string>
-    <plurals name="pauses_after">
-        <item quantity="other">%d분 후 일시정지</item>
-    </plurals>
     <string name="rewind">뒤로</string>
     <string name="fast_forward">빨리감기</string>
     <string name="previous_track">이전 트랙</string>
@@ -23,10 +19,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">결정</string>
     <string name="dialog_cancel">취소</string>
-    <string name="dialog_no">취소</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">전 표지 고르기</string>
-    <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
     <string name="change_book_name">제목</string>
     <string name="download_book_cover">검색된 앨범커버</string>
@@ -47,12 +40,9 @@
     <string name="content_is_folder">폴더</string>
     <string name="content_is_file">파일</string>
     <string name="content_navigate_up">윗 폴더로 가기</string>
-    <string name="permission_read_ext_explanation">오디오북을 재생하려면 기기의 저장공간을 인식해야 합니다.</string>
     <string name="permission_external_new_explanation">읽기 권한이 없습니다</string>
     <string name="permission_retry">재시도?</string>
     <string name="permission_goto_settings">설정</string>
-    <string name="permission_read_ext_request">나중에 또 물어볼까요?</string>
-    <string name="permission_rescan"> 물어봐</string>
     <string name="storage_pre_device">저장공간</string>
     <string name="storage_all">전부다</string>
     <!--PlaybackSpeed-->
@@ -61,7 +51,6 @@
     <string name="bookmark">책갈피</string>
     <string name="shake_to_reset">흔들어 초기화하기</string>
     <string name="bookmark_edit_title">책갈피 편집</string>
-    <string name="acc_button_add_bookmark">책갈피 추가</string>
     <string name="bookmark_edit_hint">책갈피 이름</string>
     <string name="bookmark_added">책갈피 추가됨</string>
     <string name="bookmark_delete_title">책갈피 제거할까요?</string>
@@ -78,7 +67,6 @@
     </plurals>
     <string name="pref_seek_time">건너뛸 시간</string>
     <string name="pref_root_folder_title">오디오북 폴더</string>
-    <string name="pref_root_folder_summary">선택한 폴더</string>
     <string name="pref_theme_title">테마</string>
     <string name="pref_theme_day"> 낮</string>
     <string name="pref_theme_night">밤</string>
@@ -99,6 +87,6 @@
     <string name="refresh">새로고침</string>
     <string name="reset">초기화</string>
     <string name="no_network">인터넷끊김?</string>
-    <string name="network_top">미안, 에러가 났어…</string>
+    <string name="network_top">미안, 에러가 났어...</string>
     <string name="cover_crop">책표지 자르기</string>
 </resources>

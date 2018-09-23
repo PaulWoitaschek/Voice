@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Detta är den aktuella boken</string>
     <string name="current_book">Aktuella boken</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
     <string name="action_sleep">Insomningstidtagare</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pausar efter %d minut.</item>
-        <item quantity="other">Pausar efter %d minuter.</item>
-    </plurals>
     <string name="rewind">Spola tillbaka</string>
     <string name="fast_forward">Snabbspola</string>
     <string name="previous_track">Föregående spår</string>
@@ -19,16 +14,14 @@
     <string name="pause">Pausa</string>
     <string name="equalizer">Utjämnare</string>
     <string name="volume_boost">Volymökning</string>
+    <string name="skip_silence">Hoppa över tystnad</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Extern lagring är inte tillgänglig. Se till att den är ansluten och inte inkopplad i datorn.</string>
     <string name="no_external_storage_action_bar_title">Extern lagring</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Ställ in</string>
     <string name="dialog_cancel">Avbryt</string>
-    <string name="dialog_no">Nej</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Väljer föregående omslag</string>
-    <string name="content_next_cover">Väljer nästa omslag</string>
     <string name="content_cover">Visa omslag att välja</string>
     <string name="change_book_name">Namn</string>
     <string name="download_book_cover">Omslag från Internet</string>
@@ -49,12 +42,9 @@
     <string name="content_is_folder">Mapp</string>
     <string name="content_is_file">Fil</string>
     <string name="content_navigate_up">Gå till överordnad mapp</string>
-    <string name="permission_read_ext_explanation">Appen måste läsa din lagring så att den kan hitta och spela upp ljudböcker.</string>
     <string name="permission_external_new_explanation">Det går inte att läsa böcker utan tillstånd</string>
     <string name="permission_retry">Nytt försök?</string>
     <string name="permission_goto_settings">Inställningar</string>
-    <string name="permission_read_ext_request">Ska vi fråga efter rättigheter igen?</string>
-    <string name="permission_rescan">Fråga igen</string>
     <string name="storage_pre_device">Lagring:</string>
     <string name="storage_all">Alla</string>
     <!--PlaybackSpeed-->
@@ -63,7 +53,6 @@
     <string name="bookmark">Bokmärke</string>
     <string name="shake_to_reset">Skaka för att nollställa</string>
     <string name="bookmark_edit_title">Ändra bokmärke</string>
-    <string name="acc_button_add_bookmark">Lägg till ett bokmärke vid nuvarande position</string>
     <string name="bookmark_edit_hint">Namn på bokmärket</string>
     <string name="bookmark_added">Bokmärket tillagt</string>
     <string name="bookmark_delete_title">Ta bort detta bokmärke?</string>
@@ -81,7 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Skippa mängd</string>
     <string name="pref_root_folder_title">Ljudboksmapp</string>
-    <string name="pref_root_folder_summary">Valda ljudboksmapparna.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Dag</string>
     <string name="pref_theme_night">Natt</string>
@@ -103,9 +91,14 @@
     <string name="refresh">Uppdatera</string>
     <string name="reset">Återställ</string>
     <string name="no_network">Inget nätverk?</string>
-    <string name="network_top">Detta fungerade inte alltför väl…</string>
+    <string name="network_top">Detta fungerade inte alltför väl...</string>
     <string name="cover_crop">Beskär omslag</string>
     <string name="music_notification">Uppspelning</string>
     <string name="onboarding_title">Välkommen!</string>
     <string name="onboarding_content">Låt oss börja med att lägga till din första ljudbok.</string>
+    <string name="book_header_current">Nuvarande</string>
+    <string name="book_header_not_started">Inte börjat ännu</string>
+    <string name="book_header_completed">Färdig</string>
+    <string name="pref_allow_crash_report_title">Kraschrapporter</string>
+    <string name="pref_allow_crash_report_content">Bidra till utvecklingen genom att skicka anonyma kraschrapporter.</string>
 </resources>

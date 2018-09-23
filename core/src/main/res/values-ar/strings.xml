@@ -1,20 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">هذا الكتاب الحالي</string>
     <string name="current_book">الكتاب الحالي</string>
     <!--BookPlayFragment-->
     <string name="cover">الغطاء</string>
     <string name="play_pause">العب / توقف</string>
     <string name="action_sleep">وقت النوم</string>
-    <plurals name="pauses_after">
-        <item quantity="zero">توقف بعد %d دقيقة.</item>
-        <item quantity="one">توقف بعد %d دقيقة.</item>
-        <item quantity="two">توقف بعد %d دقيقتين.</item>
-        <item quantity="few">توقف بعد %d دقائق.</item>
-        <item quantity="many">توقف بعد %d دقائق.</item>
-        <item quantity="other">توقف بعد %d دقائق.</item>
-    </plurals>
     <string name="rewind">إرجاع</string>
     <string name="fast_forward">بسرعة للأمام</string>
     <string name="previous_track">الشريط السابق</string>
@@ -28,20 +19,20 @@
     <!--Dialogs-->
     <string name="dialog_confirm">إعداد</string>
     <string name="dialog_cancel">إلغاء</string>
-    <string name="dialog_no">لا</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">إختر الغطاء السابق</string>
-    <string name="content_next_cover">إختر الغطاء التالي</string>
     <string name="content_cover">أظهر الغطاء للإختياره</string>
     <string name="change_book_name">الأسم</string>
-    <string name="download_book_cover">غطاء من الإنترنيت</string>
-    <string name="pick_book_cover">غطاء من ملف نظام</string>
+    <string name="download_book_cover">الغلاف من الإنترنت</string>
+    <string name="pick_book_cover">الغلاف من ملف نظام</string>
     <string name="edit_book_title">عدل الكتاب</string>
     <!--JumpToPosition-->
     <string name="action_time_change">إقفز إلي</string>
     <!--BookAdding-->
     <string name="adding_failed_subfolder">المجلد يجب أن لا يكون مجلد فرعي لكلاً منهما:</string>
     <string name="audiobook_folders_title">مجلد الكتب الصوتية</string>
+    <string name="content_add_book">إضافة كتاب</string>
+    <string name="content_is_folder">مجلد</string>
+    <string name="content_is_file">ملف</string>
     <!--PlaybackSpeed-->
     <!--Bookmarks-->
     <!--Settings-->
@@ -63,4 +54,5 @@
     <string name="no_network">لا شبكة؟</string>
     <string name="network_top">هذا لا يعمل بشكل جيد جداً</string>
     <string name="cover_crop">إقتصاص الغطاء</string>
+    <string name="onboarding_title">مرحباً!</string>
 </resources>

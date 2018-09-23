@@ -1,15 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">这是当前书籍</string>
     <string name="current_book">当前书籍</string>
     <!--BookPlayFragment-->
     <string name="cover">封面</string>
     <string name="play_pause">播放 / 暂停</string>
     <string name="action_sleep">睡眠定时器</string>
-    <plurals name="pauses_after">
-        <item quantity="other">%d 分钟后暂停。</item>
-    </plurals>
     <string name="rewind">倒回</string>
     <string name="fast_forward">快进</string>
     <string name="previous_track">上一节</string>
@@ -24,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">设定</string>
     <string name="dialog_cancel">取消</string>
-    <string name="dialog_no">否</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">选择上一个封面</string>
-    <string name="content_next_cover">选择下一个封面</string>
     <string name="content_cover">显示可选封面</string>
     <string name="change_book_name">名称</string>
     <string name="download_book_cover">从互联网寻找封面图片</string>
@@ -48,12 +41,9 @@
     <string name="content_is_folder">目录</string>
     <string name="content_is_file">文件</string>
     <string name="content_navigate_up">跳转到上级目录</string>
-    <string name="permission_read_ext_explanation">本应用需要读取存储卡以发现和播放有声书。</string>
     <string name="permission_external_new_explanation">权限不足，无法读取书籍</string>
     <string name="permission_retry">重试？</string>
     <string name="permission_goto_settings">配置选项</string>
-    <string name="permission_read_ext_request">要再次请求权限吗？</string>
-    <string name="permission_rescan">再次请求</string>
     <string name="storage_pre_device">内置存储：</string>
     <string name="storage_all">所有音频</string>
     <!--PlaybackSpeed-->
@@ -62,7 +52,6 @@
     <string name="bookmark">书签</string>
     <string name="shake_to_reset">摇一摇以重置</string>
     <string name="bookmark_edit_title">编辑书签</string>
-    <string name="acc_button_add_bookmark">在当前位置添加书签</string>
     <string name="bookmark_edit_hint">书签名</string>
     <string name="bookmark_added">书签已添加</string>
     <string name="bookmark_delete_title">删除书签吗？</string>
@@ -79,7 +68,6 @@
     </plurals>
     <string name="pref_seek_time">跳过时间</string>
     <string name="pref_root_folder_title">有声书目录</string>
-    <string name="pref_root_folder_summary">已选中的有声书目录。</string>
     <string name="pref_theme_title">主题</string>
     <string name="pref_theme_day">白昼</string>
     <string name="pref_theme_night">黑夜</string>
@@ -100,7 +88,7 @@
     <string name="refresh">刷新</string>
     <string name="reset">重置</string>
     <string name="no_network">没有网络连接？</string>
-    <string name="network_top">出了一些小问题…</string>
+    <string name="network_top">出了一些小问题...</string>
     <string name="cover_crop">封面裁剪</string>
     <string name="music_notification">播放</string>
 </resources>

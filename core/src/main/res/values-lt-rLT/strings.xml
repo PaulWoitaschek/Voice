@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Tai yra šiuo metu klausoma knyga.</string>
     <string name="current_book">Dabartinė knyga</string>
     <!--BookPlayFragment-->
     <string name="cover">Viršelis</string>
     <string name="play_pause">Atkurti / pristabdyti</string>
     <string name="action_sleep">Miego laikmatis</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pristabdyti po %d minutės.</item>
-        <item quantity="few">Pristabdyti po %d minučių.</item>
-        <item quantity="other">Pristabdyti po %d minučių.</item>
-    </plurals>
     <string name="rewind">Atsukti atgal</string>
     <string name="fast_forward">Persukimas į priekį</string>
     <string name="previous_track">Ankstesnis takelis</string>
@@ -26,17 +20,14 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Nustatyti</string>
     <string name="dialog_cancel">Atšaukti</string>
-    <string name="dialog_no">Ne</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Parenka ankstesnį viršelį</string>
-    <string name="content_next_cover">Parenka kitą viršelį</string>
     <string name="content_cover">Atvaizduoja viršelį pasirinkimui</string>
     <string name="change_book_name">Pavadinimas</string>
     <string name="download_book_cover">Viršelis iš interneto</string>
     <string name="pick_book_cover">Viršelis iš failų sistemos</string>
     <string name="edit_book_title">Redaguoti knygą</string>
     <!--JumpToPosition-->
-    <string name="action_time_change">Peršokti iki…</string>
+    <string name="action_time_change">Peršokti iki...</string>
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Aplankai negali būti vienas kito poaplankiai:</string>
     <string name="audiobook_folders_title">Audioknygų aplankai</string>
@@ -50,12 +41,9 @@
     <string name="content_is_folder">Aplankas</string>
     <string name="content_is_file">Failas</string>
     <string name="content_navigate_up">Eiti į viršaplankį</string>
-    <string name="permission_read_ext_explanation">Programėlei reikia skaityti iš atmintinių, jog galėtų surasti ir atkurti audio knygas. </string>
     <string name="permission_external_new_explanation">Neturint leidimo negalima nuskaityti knygų</string>
     <string name="permission_retry">Bandyti dar kartą?</string>
     <string name="permission_goto_settings">Nustatymai</string>
-    <string name="permission_read_ext_request">Prašyti leidimo dar kartą?</string>
-    <string name="permission_rescan">Prašyti dar kartą</string>
     <string name="storage_pre_device">Atmintinė:</string>
     <string name="storage_all">Visos</string>
     <!--PlaybackSpeed-->
@@ -64,7 +52,6 @@
     <string name="bookmark">Žymelės</string>
     <string name="shake_to_reset">Pakratykite, kad nustatyti iš naujo</string>
     <string name="bookmark_edit_title">Redaguoti žymelę</string>
-    <string name="acc_button_add_bookmark">Pridėti žymelę dabartinėje atkūrimo pozicijoje.</string>
     <string name="bookmark_edit_hint">Žymelės pavadinimas</string>
     <string name="bookmark_added">Žymelė išsaugota</string>
     <string name="bookmark_delete_title">Pašalinti šią žymelę?</string>
@@ -79,11 +66,11 @@
     <plurals name="seconds">
         <item quantity="one">%d sekundė</item>
         <item quantity="few">%d sekundės</item>
+        <item quantity="many">%d sekundės</item>
         <item quantity="other">%d sekundės</item>
     </plurals>
     <string name="pref_seek_time">Peršokimo trukmė</string>
     <string name="pref_root_folder_title">Audioknygų aplankas</string>
-    <string name="pref_root_folder_summary">Pasirinkti audioknygų aplankai.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Diena</string>
     <string name="pref_theme_night">Naktis</string>
@@ -92,6 +79,7 @@
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Po rankinio pristabdymo automatiškai atsukti kyngą %d sekundę atgal.</item>
         <item quantity="few">Po rankinio pristabdymo automatiškai atsukti kyngą %d sekundžių atgal.</item>
+        <item quantity="many">Po rankinio pristabdymo automatiškai atsukti knygą %d sekundžių atgal.</item>
         <item quantity="other">Po rankinio pristabdymo automatiškai atsukti knygą %d sekundžių atgal.</item>
     </plurals>
     <string name="pref_support_title">Palaikymas</string>
@@ -106,7 +94,9 @@
     <string name="refresh">Atnaujinti</string>
     <string name="reset">Nustatyti iš naujo</string>
     <string name="no_network">Nėra interneto ryšio?</string>
-    <string name="network_top">Kažkas nesuveikė…</string>
+    <string name="network_top">Kažkas nesuveikė...</string>
     <string name="cover_crop">Apkarpyti viršelį</string>
     <string name="music_notification">Atkūrimas</string>
+    <string name="onboarding_title">Sveiki!</string>
+    <string name="onboarding_content">Pradėkite pridėdami pirmąją audioknygą.</string>
 </resources>

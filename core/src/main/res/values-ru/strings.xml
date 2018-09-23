@@ -1,18 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Книга, которую вы сейчас слушаете</string>
     <string name="current_book">Текущая книга</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>
     <string name="action_sleep">Таймер сна</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Приостановить через %d минуту.</item>
-        <item quantity="few">Приостановить через %d минуты.</item>
-        <item quantity="many">Приостановить через %d минут.</item>
-        <item quantity="other">Приостановить через %d минут.</item>
-    </plurals>
     <string name="rewind">Перемотать назад</string>
     <string name="fast_forward">Перемотать вперёд</string>
     <string name="previous_track">Предыдущий файл</string>
@@ -27,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Установить</string>
     <string name="dialog_cancel">Отмена</string>
-    <string name="dialog_no">Нет</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Выбрать предыдущую обложку</string>
-    <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
     <string name="download_book_cover">Получить обложку из интернета</string>
@@ -51,12 +41,9 @@
     <string name="content_is_folder">Папка</string>
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Перейти на папку выше</string>
-    <string name="permission_read_ext_explanation">Приложению необходим доступ к хранилищу устройства, чтобы найти и воспроизвести аудиокниги.</string>
     <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
     <string name="permission_retry">Повторить?</string>
     <string name="permission_goto_settings">Настройки</string>
-    <string name="permission_read_ext_request">Спрашивать  разрешение повторно?</string>
-    <string name="permission_rescan">Запросить снова</string>
     <string name="storage_pre_device">Хранилище:</string>
     <string name="storage_all">Всё</string>
     <!--PlaybackSpeed-->
@@ -65,7 +52,6 @@
     <string name="bookmark">Закладки</string>
     <string name="shake_to_reset">Встряхнуть для сброса</string>
     <string name="bookmark_edit_title">Редактировать</string>
-    <string name="acc_button_add_bookmark">Добавляет закладку текущей позиции</string>
     <string name="bookmark_edit_hint">Название закладки</string>
     <string name="bookmark_added">Закладка добавлена</string>
     <string name="bookmark_delete_title">Удалить эту закладку?</string>
@@ -85,7 +71,6 @@
     </plurals>
     <string name="pref_seek_time">Ускоренная перемотка</string>
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
-    <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>
     <string name="pref_theme_title">Внешний вид</string>
     <string name="pref_theme_day">День</string>
     <string name="pref_theme_night">Ночь</string>
@@ -112,4 +97,6 @@
     <string name="network_top">Что-то пошло не так…</string>
     <string name="cover_crop">Обрезать обложку</string>
     <string name="music_notification">Воспроизведение</string>
+    <string name="onboarding_title">Добро пожаловать!</string>
+    <string name="onboarding_content">Давайте добавим вашу первую аудиокнигу.</string>
 </resources>

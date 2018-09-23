@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Книга, яку ви прослуховуєте</string>
     <string name="current_book">Поточна книга</string>
     <!--BookPlayFragment-->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Призупинити</string>
     <string name="action_sleep">Таймер сну</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Призупинити через %d хвилину.</item>
-        <item quantity="few">Призупинити через %d хвилин.</item>
-        <item quantity="other">Призупинити через %d хвилин.</item>
-    </plurals>
     <string name="rewind">Прокрутити назад</string>
     <string name="fast_forward">Прокрутити вперед</string>
     <string name="previous_track">Попередній файл</string>
@@ -26,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Встановити</string>
     <string name="dialog_cancel">Відмінити</string>
-    <string name="dialog_no">Немає</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Обрати попередню обкладинку</string>
-    <string name="content_next_cover">Обрати наступну обкладинку</string>
     <string name="content_cover">Показати обрану обкладинку</string>
     <string name="change_book_name">Назва</string>
     <string name="download_book_cover">Обкладинка з інтернету</string>
@@ -50,12 +41,9 @@
     <string name="content_is_folder">Папка</string>
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Перейти вверх</string>
-    <string name="permission_read_ext_explanation">Додатку необхідний дозвіл на читання вашого сховища даних для того, щоб шукати і відтворювати аудіокниги.</string>
     <string name="permission_external_new_explanation">Неможливо прочитати книги без дозволу</string>
     <string name="permission_retry">Спробувати ще раз?</string>
     <string name="permission_goto_settings">Налаштування</string>
-    <string name="permission_read_ext_request">Запитувати про дозволи знову?</string>
-    <string name="permission_rescan">Запитати знову</string>
     <string name="storage_pre_device">Пам\'ять</string>
     <string name="storage_all">Усі</string>
     <!--PlaybackSpeed-->
@@ -64,7 +52,6 @@
     <string name="bookmark">Закладка</string>
     <string name="shake_to_reset">Струсити, щоб скинути</string>
     <string name="bookmark_edit_title">Редагувати закладку</string>
-    <string name="acc_button_add_bookmark">Додати закладку на поточній позиції</string>
     <string name="bookmark_edit_hint">Назва закладки</string>
     <string name="bookmark_added">Закладка додана</string>
     <string name="bookmark_delete_title">Видалити цю закладку?</string>
@@ -79,11 +66,11 @@
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
         <item quantity="few">%d секунд</item>
+        <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
     <string name="pref_seek_time">Пропустити</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>
-    <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
     <string name="pref_theme_title">Тема</string>
     <string name="pref_theme_day">День</string>
     <string name="pref_theme_night">Ніч</string>
@@ -92,6 +79,7 @@
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>
         <item quantity="few">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
+        <item quantity="many">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
         <item quantity="other">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
     </plurals>
     <string name="pref_support_title">Підтримка</string>
@@ -106,6 +94,9 @@
     <string name="refresh">Оновити</string>
     <string name="reset">Скинути</string>
     <string name="no_network">Немає мережі?</string>
-    <string name="network_top">Не спрацювало…</string>
+    <string name="network_top">Не спрацювало...</string>
     <string name="cover_crop">Обкладинка</string>
+    <string name="music_notification">Відтворення</string>
+    <string name="onboarding_title">Ласкаво просимо!</string>
+    <string name="onboarding_content">Додайте вашу першу аудіокнигу!</string>
 </resources>

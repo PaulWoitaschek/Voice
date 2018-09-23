@@ -1,18 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">To je trenutna knjiga</string>
     <string name="current_book">Trenutna knjiga</string>
     <!--BookPlayFragment-->
     <string name="cover">Platnica</string>
     <string name="play_pause">Predvajaj / Ustavi</string>
     <string name="action_sleep">Odštevalnik za spanje</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Ustavi po %d minuti.</item>
-        <item quantity="two">Ustavi po %d minutah.</item>
-        <item quantity="few">Ustavi po %d minutah.</item>
-        <item quantity="other">Ustavi po %d minutah.</item>
-    </plurals>
     <string name="rewind">Previj nazaj</string>
     <string name="fast_forward">Previj naprej</string>
     <string name="previous_track">Prejšnji posnetek</string>
@@ -26,10 +19,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Nastavi</string>
     <string name="dialog_cancel">Prekliči</string>
-    <string name="dialog_no">Ne</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Izbere prejšnjo naslovnico</string>
-    <string name="content_next_cover">Izbere naslednjo naslovnico</string>
     <string name="content_cover">Prikaže naslednjo naslovnico</string>
     <string name="change_book_name">Ime</string>
     <string name="download_book_cover">Naslovnica s spleta</string>
@@ -50,12 +40,9 @@
     <string name="content_is_folder">Mapa</string>
     <string name="content_is_file">Datoteka</string>
     <string name="content_navigate_up">Pojdi v višjo mapo</string>
-    <string name="permission_read_ext_explanation">Aplikacija potrebuje dostop do pomnilnika, da lahko najde in predvaja zvočne knjige.</string>
     <string name="permission_external_new_explanation">Ni mogoče brati knjig brez dovoljenja.</string>
     <string name="permission_retry">Ponovno poskusi?</string>
     <string name="permission_goto_settings">Možnosti</string>
-    <string name="permission_read_ext_request">Ali naj ponovno prosimo za dovoljenje?</string>
-    <string name="permission_rescan">Zaprosi ponovno</string>
     <string name="storage_pre_device">Pomnilnik:</string>
     <string name="storage_all">Vse</string>
     <!--PlaybackSpeed-->
@@ -64,7 +51,6 @@
     <string name="bookmark">Zaznamek</string>
     <string name="shake_to_reset">Stresi za ponastavitev</string>
     <string name="bookmark_edit_title">Uredi zaznamek</string>
-    <string name="acc_button_add_bookmark">Dodaj zaznamek na trenutnem mestu</string>
     <string name="bookmark_edit_hint">Ime zaznamka</string>
     <string name="bookmark_added">Zaznamek dodan</string>
     <string name="bookmark_delete_title">Izbriši zaznamek?</string>
@@ -84,7 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Dolžina skoka</string>
     <string name="pref_root_folder_title">Mapa zvočnih knjig</string>
-    <string name="pref_root_folder_summary">Izbrane mape zvočnih knjig.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Dnevna</string>
     <string name="pref_theme_night">Nočna</string>
@@ -108,6 +93,6 @@
     <string name="refresh">Osveži</string>
     <string name="reset">Ponastavi</string>
     <string name="no_network">Ni povezave?</string>
-    <string name="network_top">To se ni izšlo…</string>
+    <string name="network_top">To se ni izšlo...</string>
     <string name="cover_crop">Prireži naslovnico</string>
 </resources>

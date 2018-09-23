@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Dette er den aktuelle bog</string>
     <string name="current_book">Aktuelle bog</string>
     <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Afspil / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pauser efter %d minut.</item>
-        <item quantity="other">Pauser efter %d minutter.</item>
-    </plurals>
     <string name="rewind">Spol tilbage</string>
     <string name="fast_forward">Spol fremad</string>
     <string name="previous_track">Forrige nummer</string>
@@ -24,10 +19,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Sæt</string>
     <string name="dialog_cancel">Annuller</string>
-    <string name="dialog_no">Nej</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Vælger forrige cover</string>
-    <string name="content_next_cover">Vælger næste cover</string>
     <string name="content_cover">Viser cover der kan vælges</string>
     <string name="change_book_name">Navn</string>
     <string name="download_book_cover">Cover fra internettet</string>
@@ -48,12 +40,9 @@
     <string name="content_is_folder">Mappe</string>
     <string name="content_is_file">Fil</string>
     <string name="content_navigate_up">Gå til overordnet mappe</string>
-    <string name="permission_read_ext_explanation">Appen har brug for at læse din hukommelse, så den kan finde og afspille lydbøgerne.</string>
     <string name="permission_external_new_explanation">Kan ikke læse bøger uden tilladelse</string>
     <string name="permission_retry">Prøv igen?</string>
     <string name="permission_goto_settings">Indstillinger</string>
-    <string name="permission_read_ext_request">Skal vi spørge efter tilladelse igen?</string>
-    <string name="permission_rescan">Anmod igen</string>
     <string name="storage_pre_device">Hukommelse:</string>
     <string name="storage_all">Alt</string>
     <!--PlaybackSpeed-->
@@ -62,7 +51,6 @@
     <string name="bookmark">Bogmærke</string>
     <string name="shake_to_reset">Ryst for at nulstille</string>
     <string name="bookmark_edit_title">Rediger bogmærke</string>
-    <string name="acc_button_add_bookmark">Tilføjer et bogmærke ved den nuværende position</string>
     <string name="bookmark_edit_hint">Bogmærke navn</string>
     <string name="bookmark_added">Bogmærke tilføjet</string>
     <string name="bookmark_delete_title">Fjern dette bogmærke?</string>
@@ -76,7 +64,6 @@
     </plurals>
     <string name="pref_seek_time">Spring over mængde</string>
     <string name="pref_root_folder_title">Lydbogs mappe</string>
-    <string name="pref_root_folder_summary">De valgte lydbogsmapper.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Dag</string>
     <string name="pref_theme_night">Nat</string>
@@ -97,6 +84,6 @@
     <string name="refresh">Opfrisk</string>
     <string name="reset">Nulstil</string>
     <string name="no_network">Ingen netværk?</string>
-    <string name="network_top">Dette fungerede ikke optimalt…</string>
+    <string name="network_top">Dette fungerede ikke optimalt...</string>
     <string name="cover_crop">Skær cover til</string>
 </resources>

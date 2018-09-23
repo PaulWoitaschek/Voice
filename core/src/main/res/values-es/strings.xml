@@ -1,34 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Este es tu libro actual</string>
     <string name="current_book">Libro actual</string>
     <!--BookPlayFragment-->
     <string name="cover">Cubierta</string>
     <string name="play_pause">Reproducir / Pausar</string>
     <string name="action_sleep">Temporizador</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pausar después de %d minuto</item>
-        <item quantity="other">Pausar después de %d minutos</item>
-    </plurals>
     <string name="rewind">Retrasar</string>
     <string name="fast_forward">Adelantar</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Pista siguiente</string>
     <string name="play">Reproducir</string>
     <string name="pause">Pausar</string>
+    <string name="equalizer">Ecualizador</string>
+    <string name="volume_boost">Aumentar el volumen</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">El dispositivo de Almacenamiento Externo no está disponible. Asegúrate de que esté conectado a tu computadora.</string>
     <string name="no_external_storage_action_bar_title">Almacenamiento Externo</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Establecer</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Selecciona la cubierta anterior</string>
-    <string name="content_next_cover">Selecciona la siguiente cubierta</string>
     <string name="content_cover">Muestra la cubierta seleccionada</string>
     <string name="change_book_name">Cambiar nombre del libro</string>
+    <string name="download_book_cover">Cubierta de Internet</string>
+    <string name="pick_book_cover">Cubierta desde el sistema de archivos</string>
     <string name="edit_book_title">Editar libro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Saltar a</string>
@@ -45,12 +41,9 @@
     <string name="content_is_folder">Directorio</string>
     <string name="content_is_file">Archivo</string>
     <string name="content_navigate_up">Ir un directorio arriba</string>
-    <string name="permission_read_ext_explanation">La aplicación necesita tener acceso a tu dispositivo de almacenamiento para poder reproducir los audio libros.</string>
     <string name="permission_external_new_explanation">No se puede acceder libros sin permiso</string>
     <string name="permission_retry">¿Reintentar?</string>
     <string name="permission_goto_settings">Configuraciónes</string>
-    <string name="permission_read_ext_request">¿Pedir permiso de nuevamente?</string>
-    <string name="permission_rescan">Pedir nuevamente</string>
     <string name="storage_pre_device">Almacenamiento:</string>
     <string name="storage_all">Todo</string>
     <!--PlaybackSpeed-->
@@ -59,7 +52,6 @@
     <string name="bookmark">Marcador</string>
     <string name="shake_to_reset">Agitar para restablecer</string>
     <string name="bookmark_edit_title">Editar marcador</string>
-    <string name="acc_button_add_bookmark">Añadir un marcador en la posición actual</string>
     <string name="bookmark_edit_hint">Nombre del marcador</string>
     <string name="bookmark_added">Marcador añadido</string>
     <string name="bookmark_delete_title">¿Eliminar marcador?</string>
@@ -67,13 +59,16 @@
     <string name="action_settings">Preferencias</string>
     <string name="pref_resume_on_replug">Reanudar</string>
     <string name="pref_resume_on_replug_hint">Si pausaste al desconectar tus audífonos, la reproducción continuará cuando los vuelvas a conectar.</string>
+    <string name="pref_resume_after_call">Reanudar tras una llamada</string>
+    <string name="pref_resume_after_call_hint">Reanudar la reproducción tras una llamada.</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Borra el último número introducido</string>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
     <string name="pref_seek_time">Omitir cantidad</string>
     <string name="pref_root_folder_title">Directorio de audiolibros</string>
-    <string name="pref_root_folder_summary">Los directorios de audiolibros seleccionados.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Día</string>
     <string name="pref_theme_night">Noche</string>
@@ -89,11 +84,15 @@
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Eliminar</string>
+    <string name="play_current">Reproducir actual</string>
     <!--hide folder dialog-->
     <!--license activity-->
     <string name="refresh">Actualizar</string>
     <string name="reset">Reiniciar</string>
     <string name="no_network">¿Sin red?</string>
-    <string name="network_top">Esto no funcionó del todo bien…</string>
+    <string name="network_top">Esto no funcionó del todo bien...</string>
     <string name="cover_crop">Recortar cubierta</string>
+    <string name="music_notification">Reproducir</string>
+    <string name="onboarding_title">¡Bienvenido!</string>
+    <string name="onboarding_content">Comencemos agregando su primer audiolibro.</string>
 </resources>

@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Dit is die huidige boek</string>
     <string name="current_book">Huidige boek</string>
     <!--BookPlayFragment-->
     <string name="cover">Voorblad</string>
     <string name="play_pause">Speel / Breek</string>
     <string name="action_sleep">Slaap-Timer</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Breek na %d minuut.</item>
-        <item quantity="other">Breek na %d minute.</item>
-    </plurals>
     <string name="rewind">Terugdraai</string>
     <string name="fast_forward">Vinnig vorentoe</string>
     <string name="previous_track">Vorige snit</string>
@@ -24,8 +19,6 @@
     <string name="dialog_confirm">Stel</string>
     <string name="dialog_cancel">Kanselleer</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Kies vorige voorblad</string>
-    <string name="content_next_cover">Kies volgende voorblad</string>
     <string name="content_cover">Wys voorblad om te kies</string>
     <string name="edit_book_title">Wysig boek</string>
     <!--JumpToPosition-->
@@ -43,15 +36,11 @@
     <string name="content_is_folder">Gids</string>
     <string name="content_is_file">Lêer</string>
     <string name="content_navigate_up">Gaan na ouer gids</string>
-    <string name="permission_read_ext_explanation">Die app moet jou stoor spasie lees, sodat dit klankboeke kan vind en speel.</string>
-    <string name="permission_read_ext_request">Moet ons weer vra vir toestemming?</string>
-    <string name="permission_rescan">Versoek weer</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Terugspeel spoed</string>
     <!--Bookmarks-->
     <string name="bookmark">Boekmerk</string>
     <string name="bookmark_edit_title">Wysig boekmerk</string>
-    <string name="acc_button_add_bookmark">Voeg /\'n boekmerk by huidige posisie</string>
     <string name="bookmark_edit_hint">Boekmerk naam</string>
     <string name="bookmark_added">Boekmerk bygevoeg</string>
     <string name="bookmark_delete_title">Verwyder die boekmerk?</string>
@@ -65,7 +54,6 @@
     </plurals>
     <string name="pref_seek_time">Skip hoeveelheid</string>
     <string name="pref_root_folder_title">Klankboek gids</string>
-    <string name="pref_root_folder_summary">Die geselekteerde klankboek gidse.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
     <plurals name="pref_auto_rewind_summary">

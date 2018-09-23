@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
     <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lecture / Pause</string>
     <string name="action_sleep">Minuteur</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Met en pause après %d minute.</item>
-        <item quantity="other">Met en pause après %d minutes.</item>
-    </plurals>
     <string name="rewind">Rembobiner</string>
     <string name="fast_forward">Avance rapide</string>
     <string name="previous_track">Piste précédente</string>
@@ -19,16 +14,14 @@
     <string name="pause">Pause</string>
     <string name="equalizer">Egaliseur</string>
     <string name="volume_boost">Booster le volume</string>
+    <string name="skip_silence">Sauter les silences</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Le stockage externe n\'est pas disponible. Assurez vous qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
     <string name="no_external_storage_action_bar_title">Stockage externe</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Définir</string>
     <string name="dialog_cancel">Annuler</string>
-    <string name="dialog_no">Non</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Choisis la couverture précédente</string>
-    <string name="content_next_cover">Choisis la couverture suivante</string>
     <string name="content_cover">Montre la couverture à choisir</string>
     <string name="change_book_name">Nom</string>
     <string name="download_book_cover">Couverture depuis internet</string>
@@ -49,12 +42,9 @@
     <string name="content_is_folder">Dossier</string>
     <string name="content_is_file">Fichier</string>
     <string name="content_navigate_up">Aller au dossier parent</string>
-    <string name="permission_read_ext_explanation">L\'application a besoin de pouvoir parcourir vos fichiers pour trouver et lire les livres audio.</string>
     <string name="permission_external_new_explanation">Impossible de lire des livres sans autorisation</string>
     <string name="permission_retry">Réessayer ?</string>
     <string name="permission_goto_settings">Paramètres</string>
-    <string name="permission_read_ext_request">Devons nous redemander la permission plus tard ?</string>
-    <string name="permission_rescan">Redemander plus tard</string>
     <string name="storage_pre_device">Stockage :</string>
     <string name="storage_all">Tous</string>
     <!--PlaybackSpeed-->
@@ -63,7 +53,6 @@
     <string name="bookmark">Marque-page</string>
     <string name="shake_to_reset">Agitez pour réinitialiser</string>
     <string name="bookmark_edit_title">Modifier le marque-page</string>
-    <string name="acc_button_add_bookmark">Ajouter un marque-page à la position actuelle</string>
     <string name="bookmark_edit_hint">Nom du marque-page</string>
     <string name="bookmark_added">Marque-page ajouté</string>
     <string name="bookmark_delete_title">Supprimer ce marque-page ?</string>
@@ -81,7 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Sauter de</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
-    <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
     <string name="pref_theme_title">Thème</string>
     <string name="pref_theme_day">Jour</string>
     <string name="pref_theme_night">Nuit</string>
@@ -103,6 +91,14 @@
     <string name="refresh">Rafraîchir</string>
     <string name="reset">Réinitialiser</string>
     <string name="no_network">Pas de connexion réseau ?</string>
-    <string name="network_top">Ca n\'a pas marché…</string>
+    <string name="network_top">Ca n\'a pas marché...</string>
     <string name="cover_crop">Recadrer la couverture</string>
+    <string name="music_notification">Lecture</string>
+    <string name="onboarding_title">Bienvenue</string>
+    <string name="onboarding_content">Commençons par ajouter votre premier livre audio.</string>
+    <string name="book_header_current">En cours</string>
+    <string name="book_header_not_started">Pas encore commencé</string>
+    <string name="book_header_completed">Complété</string>
+    <string name="pref_allow_crash_report_title">Rapports d\'échec</string>
+    <string name="pref_allow_crash_report_content">Aider le développement en permettant l’envoi de rapports anonymes en cas d\'échec</string>
 </resources>

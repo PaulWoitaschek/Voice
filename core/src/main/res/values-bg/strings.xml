@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Това е текущата книга</string>
     <string name="current_book">Текуща книга</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Възпроизвеждане / Пауза</string>
     <string name="action_sleep">Таймер за пауза</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Минава на паузла след %d минута.</item>
-        <item quantity="other">Минава на пауза след %d минути.</item>
-    </plurals>
     <string name="rewind">Пренавиване</string>
     <string name="fast_forward">Прескачане напред</string>
     <string name="previous_track">Предишен запис</string>
@@ -25,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Да</string>
     <string name="dialog_cancel">Не</string>
-    <string name="dialog_no">Не</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Избира предишната обложка</string>
-    <string name="content_next_cover">Избира следващата обложка</string>
     <string name="content_cover">Избор на обложка</string>
     <string name="change_book_name">Заглавие</string>
     <string name="download_book_cover">Обложка от интернет</string>
@@ -49,12 +41,9 @@
     <string name="content_is_folder">Папка</string>
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Към главната папка</string>
-    <string name="permission_read_ext_explanation">За да може това приложение да намери и възпроизведе аудио книги му е нужен достъп до хранилището Ви.</string>
     <string name="permission_external_new_explanation">Не могат да се разчитат книги без позволение</string>
     <string name="permission_retry">Повторен опит?</string>
     <string name="permission_goto_settings">Настройки</string>
-    <string name="permission_read_ext_request">Да помолим ли отново за Позволението?</string>
-    <string name="permission_rescan">Повторно поискване</string>
     <string name="storage_pre_device">Хранилище</string>
     <string name="storage_all">Всички</string>
     <!--PlaybackSpeed-->
@@ -63,7 +52,6 @@
     <string name="bookmark">Отметка</string>
     <string name="shake_to_reset">Разклатете за нулиране</string>
     <string name="bookmark_edit_title">Редактиране на отметка</string>
-    <string name="acc_button_add_bookmark">Добавя отметка на сегашното местоположение</string>
     <string name="bookmark_edit_hint">Име на отметката</string>
     <string name="bookmark_added">Отметката бе добавена</string>
     <string name="bookmark_delete_title">Да се изтрие ли тази отметка?</string>
@@ -81,7 +69,6 @@
     </plurals>
     <string name="pref_seek_time">Количестество на прескачане</string>
     <string name="pref_root_folder_title">Папка с аудио книги</string>
-    <string name="pref_root_folder_summary">Списък на папки с аудио книги.</string>
     <string name="pref_theme_title">Фон на приложението</string>
     <string name="pref_theme_day">Ден</string>
     <string name="pref_theme_night">Нощ</string>
@@ -103,7 +90,7 @@
     <string name="refresh">Опресняване</string>
     <string name="reset">Нулиране</string>
     <string name="no_network">Няма връзка с интернет?</string>
-    <string name="network_top">Това май не проработи…</string>
+    <string name="network_top">Това май не проработи...</string>
     <string name="cover_crop">Изрязване на обложката</string>
     <string name="music_notification">Възпроизвеждане</string>
     <string name="onboarding_title">Добре дошли!</string>

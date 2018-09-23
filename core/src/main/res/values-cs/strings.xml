@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Toto je aktuální kniha</string>
     <string name="current_book">Aktuální kniha</string>
     <!--BookPlayFragment-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
     <string name="action_sleep">Časovač vypnutí</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pozastavit po %d minutě.</item>
-        <item quantity="few">Pozastavit po %d minutách.</item>
-        <item quantity="other">Pozastavit po %d minutách.</item>
-    </plurals>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
     <string name="previous_track">Předchozí skladba</string>
@@ -26,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Nastavit</string>
     <string name="dialog_cancel">Ukončit</string>
-    <string name="dialog_no">Ne</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Vybere předchozí obal</string>
-    <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>
     <string name="change_book_name">Název</string>
     <string name="download_book_cover">Obal z internetu</string>
@@ -50,12 +41,9 @@
     <string name="content_is_folder">Adresář</string>
     <string name="content_is_file">Soubor</string>
     <string name="content_navigate_up">Přejít o adresář výše</string>
-    <string name="permission_read_ext_explanation">Aplikace musí mít povolení číst vaše úložiště aby bylo možno přehrávat audioknihy.</string>
     <string name="permission_external_new_explanation">Nelze načíst knihy bez oprávnění</string>
     <string name="permission_retry">Opakovat?</string>
     <string name="permission_goto_settings">Nastavení</string>
-    <string name="permission_read_ext_request">Znovu se dotázat na oprávnění?</string>
-    <string name="permission_rescan">Vyžádat znovu</string>
     <string name="storage_pre_device">Úložiště:</string>
     <string name="storage_all">Vše</string>
     <!--PlaybackSpeed-->
@@ -64,7 +52,6 @@
     <string name="bookmark">Záložka</string>
     <string name="shake_to_reset">Potřesením resetovat</string>
     <string name="bookmark_edit_title">Upravit záložku</string>
-    <string name="acc_button_add_bookmark">Přidá záložku na aktuální pozici</string>
     <string name="bookmark_edit_hint">Jméno záložky</string>
     <string name="bookmark_added">Záložka přidána</string>
     <string name="bookmark_delete_title">Smazat tuto záložku?</string>
@@ -76,11 +63,11 @@
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
-    <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>
     <string name="pref_theme_title">Vzhled</string>
     <string name="pref_theme_day">Den</string>
     <string name="pref_theme_night">Noc</string>
@@ -89,6 +76,7 @@
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automaticky přetočí o %d sekundu po ručním pozastavení.</item>
         <item quantity="few">Automaticky přetočí o %d sekundy po ručním pozastavení.</item>
+        <item quantity="many">Automaticky přetočí o %d sekund po ručním pozastavení.</item>
         <item quantity="other">Automaticky přetočí o %d sekund po ručním pozastavení.</item>
     </plurals>
     <string name="pref_support_title">Podpora</string>
@@ -102,6 +90,6 @@
     <string name="refresh">Obnovit</string>
     <string name="reset">Reset</string>
     <string name="no_network">Źádné připojení?</string>
-    <string name="network_top">Tak tohle moc dobře nedopadlo…</string>
+    <string name="network_top">Tak tohle moc dobře nedopadlo...</string>
     <string name="cover_crop">Oříznout obal</string>
 </resources>

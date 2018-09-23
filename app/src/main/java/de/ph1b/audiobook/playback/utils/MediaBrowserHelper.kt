@@ -63,7 +63,7 @@ class MediaBrowserHelper
     if (type == BookUriConverter.ROOT) {
       val currentBook = repo.bookById(currentBookIdPref.value)
       val current = currentBook?.toMediaDescription(
-        titlePrefix = "${context.getString(R.string.current_book)}: "
+        titlePrefix = currentBookTitlePrefix()
       )
 
       // do NOT return the current book twice as this will break the listing due to stable IDs
@@ -80,6 +80,8 @@ class MediaBrowserHelper
       return null
     }
   }
+
+  private fun currentBookTitlePrefix() = "${context.getString(R.string.current_book)}: "
 
   private suspend fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
     val iconUri = fileProviderUri(coverFile())

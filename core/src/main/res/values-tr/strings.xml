@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Bu kitap şu anki kitap</string>
     <string name="current_book">Şu anki kitap</string>
     <!--BookPlayFragment-->
     <string name="cover">Kapak</string>
     <string name="play_pause">Oynat / Durdur</string>
     <string name="action_sleep">Uyku zamanlama</string>
-    <plurals name="pauses_after">
-        <item quantity="one">%d dakika sonra duraklatır</item>
-        <item quantity="other">%d dakika sonra duraklatır</item>
-    </plurals>
     <string name="rewind">Geri sar</string>
     <string name="fast_forward">Hızlı ilerlet</string>
     <string name="previous_track">Önceki parça</string>
@@ -24,10 +19,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Kur</string>
     <string name="dialog_cancel">İptal</string>
-    <string name="dialog_no">Hayır</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Önceki kapağı seçer</string>
-    <string name="content_next_cover">Sonraki kapağı seçer</string>
     <string name="content_cover">Seçmek için kapak gösterir</string>
     <string name="change_book_name">Ad</string>
     <string name="download_book_cover">İnternetten kapak</string>
@@ -48,12 +40,9 @@
     <string name="content_is_folder">Klasör </string>
     <string name="content_is_file">Dosya</string>
     <string name="content_navigate_up">Üst klasöre gidin</string>
-    <string name="permission_read_ext_explanation">Uygulamanın, sesli kitapları bulabilmesi ve çalabilmesi için saklama alanınızı okuması gerekiyor.</string>
     <string name="permission_external_new_explanation">İzinsiz kitap okuyamıyor</string>
     <string name="permission_retry">Tekrar?</string>
     <string name="permission_goto_settings">Ayarlar</string>
-    <string name="permission_read_ext_request">Tekrar izin isteyebilir miyiz?</string>
-    <string name="permission_rescan">Tekrar isteyin</string>
     <string name="storage_pre_device">Depolama:</string>
     <string name="storage_all">Tümü</string>
     <!--PlaybackSpeed-->
@@ -62,7 +51,6 @@
     <string name="bookmark">Yerimi</string>
     <string name="shake_to_reset">Sıfırlamak için sallayın</string>
     <string name="bookmark_edit_title">Yerimini düzenle</string>
-    <string name="acc_button_add_bookmark">Geçerli konuma bir yer işareti ekler</string>
     <string name="bookmark_edit_hint">Yer imi adı</string>
     <string name="bookmark_added">Yer imi eklendi</string>
     <string name="bookmark_delete_title">Bu yer imi silinsin mi?</string>
@@ -80,7 +68,6 @@
     </plurals>
     <string name="pref_seek_time">Değeri atla</string>
     <string name="pref_root_folder_title">Sesli kitap klasörü</string>
-    <string name="pref_root_folder_summary">Seçilen sesli kitap klasörleri.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Gündüz</string>
     <string name="pref_theme_night">Gece</string>
@@ -102,6 +89,6 @@
     <string name="refresh">Yenile</string>
     <string name="reset">Sıfırla</string>
     <string name="no_network">Ağ yok?</string>
-    <string name="network_top">Bu iş çok iyi sonuç vermedi …</string>
+    <string name="network_top">Bu iş çok iyi sonuç vermedi ...</string>
     <string name="cover_crop">Kapağı kırp</string>
 </resources>

@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Este é o livro atual</string>
     <string name="current_book">Livro atual</string>
     <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="action_sleep">Desligamento automático</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pausa após %d minuto.</item>
-        <item quantity="other">Pausa após %d minutos.</item>
-    </plurals>
     <string name="rewind">Retroceder</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="previous_track">Capitulo anterior</string>
@@ -25,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Definir</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="dialog_no">Não</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Escolher capa anterior</string>
-    <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
     <string name="change_book_name">Nome</string>
     <string name="download_book_cover">Capa da internet</string>
@@ -49,12 +41,9 @@
     <string name="content_is_folder">Pasta</string>
     <string name="content_is_file">Arquivo</string>
     <string name="content_navigate_up">Vá para a pasta superior</string>
-    <string name="permission_read_ext_explanation">Esse aplicativo precisa ler seu armazenamento para poder encontrar e tocar os áudio livros.</string>
     <string name="permission_external_new_explanation">Não é possível ler os livros sem permissão.</string>
     <string name="permission_retry">Tentar novamente?</string>
     <string name="permission_goto_settings">Configurações</string>
-    <string name="permission_read_ext_request">Devemos pedir permissão novamente?</string>
-    <string name="permission_rescan">Solicitar novamente</string>
     <string name="storage_pre_device">Armazenamento:</string>
     <string name="storage_all">Todos</string>
     <!--PlaybackSpeed-->
@@ -63,7 +52,6 @@
     <string name="bookmark">Marcador</string>
     <string name="shake_to_reset">Agite para reiniciar</string>
     <string name="bookmark_edit_title">Editar marcador</string>
-    <string name="acc_button_add_bookmark">Adicionar um marcador na posição atual</string>
     <string name="bookmark_edit_hint">Nome do marcador</string>
     <string name="bookmark_added">Marcador adicionado</string>
     <string name="bookmark_delete_title">Apagar esse marcador?</string>
@@ -81,7 +69,6 @@
     </plurals>
     <string name="pref_seek_time">Pular para</string>
     <string name="pref_root_folder_title">Pasta de Audiolivros</string>
-    <string name="pref_root_folder_summary">As pastas de audiolivro selecionadas</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Dia</string>
     <string name="pref_theme_night">Noite</string>
@@ -103,7 +90,9 @@
     <string name="refresh">Atualizar</string>
     <string name="reset">Reiniciar</string>
     <string name="no_network">Sem rede?</string>
-    <string name="network_top">Isto não funcionou muito bem…</string>
+    <string name="network_top">Isto não funcionou muito bem...</string>
     <string name="cover_crop">Recortar capa</string>
     <string name="music_notification">Reprodução</string>
+    <string name="onboarding_title">Bem-vindo! </string>
+    <string name="onboarding_content">Vamos começar adicionando seu primeiro audio livro.</string>
 </resources>

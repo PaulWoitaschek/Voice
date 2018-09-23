@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <!--BookShelf-->
-    <string name="content_current_book">This is the current book</string>
     <string name="current_book">Current book</string>
     <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pauses after %d minute.</item>
-        <item quantity="other">Pauses after %d minutes.</item>
-    </plurals>
     <string name="rewind">Rewind</string>
     <string name="fast_forward">Fast forward</string>
     <string name="previous_track">Previous track</string>
@@ -26,10 +21,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Set</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Chooses previous cover</string>
-    <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
     <string name="change_book_name">Name</string>
     <string name="download_book_cover">Cover from internet</string>
@@ -50,12 +42,9 @@
     <string name="content_is_folder">Folder</string>
     <string name="content_is_file">File</string>
     <string name="content_navigate_up">Go to parent folder</string>
-    <string name="permission_read_ext_explanation">The app needs to read your storage so it can find and play the audio books.</string>
     <string name="permission_external_new_explanation">Can\'t read books without permission</string>
     <string name="permission_retry">Retry?</string>
     <string name="permission_goto_settings">Settings</string>
-    <string name="permission_read_ext_request">Should we ask for the permission again?</string>
-    <string name="permission_rescan">Request again</string>
     <string name="storage_pre_device">Storage:</string>
     <string name="storage_all">All</string>
     <!--PlaybackSpeed-->
@@ -64,7 +53,6 @@
     <string name="bookmark">Bookmark</string>
     <string name="shake_to_reset">Shake to reset</string>
     <string name="bookmark_edit_title">Edit bookmark</string>
-    <string name="acc_button_add_bookmark">Adds a bookmark at the current position</string>
     <string name="bookmark_edit_hint">Bookmark name</string>
     <string name="bookmark_added">Bookmark added</string>
     <string name="bookmark_delete_title">Delete this bookmark?</string>
@@ -82,7 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_root_folder_title">Audiobook folder</string>
-    <string name="pref_root_folder_summary">The selected audiobook folders.</string>
     <string name="pref_theme_title">Theme</string>
     <string name="pref_theme_day">Day</string>
     <string name="pref_theme_night">Night</string>

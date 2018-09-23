@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <!--BookPlayFragment-->
+    <string name="play">Lenn</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <!--EditBookDialog-->
+    <string name="change_book_name">Anv</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="content_is_folder">Teuliad</string>
+    <string name="content_is_file">Restr</string>
+    <string name="permission_goto_settings">Arventennoù</string>
+    <string name="storage_all">An holl</string>
+    <!--PlaybackSpeed-->
+    <!--Bookmarks-->
+    <!--Settings-->
+    <string name="min">%s mun</string>
+    <string name="pref_theme_day">Deiz</string>
+    <string name="pref_theme_night">Noz</string>
+    <string name="pref_theme_daynight">Deiz pe noz</string>
+    <string name="pref_support_translations">Troidigezioù</string>
+    <!--Misc-->
+    <!--hide folder dialog-->
+    <!--license activity-->
+    <string name="onboarding_title">Degemer mat ! </string>
+</resources>

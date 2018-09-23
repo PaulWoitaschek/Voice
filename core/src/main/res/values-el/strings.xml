@@ -1,22 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Αυτό είναι το τρέχον βιβλίο</string>
     <string name="current_book">Τρέχον βιβλίο</string>
     <!--BookPlayFragment-->
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>
     <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Κάνει παύση μετά από %d λεπτό.</item>
-        <item quantity="other">Κάνει παύση μετά από %d λεπτά.</item>
-    </plurals>
     <string name="rewind">Επανέλαση</string>
     <string name="fast_forward">Γρήγορη προώθηση</string>
     <string name="previous_track">Προηγούμενο τραγούδι</string>
     <string name="next_track">Επόμενο τραγούδι</string>
     <string name="play">Αναπαραγωγή</string>
     <string name="pause">Παύση</string>
+    <string name="equalizer">Ισοσταθμιστής</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Τα εξωτερικά μέσα αποθήκευσης δεν είναι διαθέσιμα. Παρακαλούμε βεβαιωθείτε ότι είναι συνδεδεμένα και όχι τοποθετημένα στον υπολογιστή σας.</string>
     <string name="no_external_storage_action_bar_title">Εξωτερικά μέσα αποθήκευσης</string>
@@ -24,9 +20,9 @@
     <string name="dialog_confirm">Ορισμός</string>
     <string name="dialog_cancel">Ακύρωση</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Επιλέγει τα προηγούμενα εξώφυλλα</string>
-    <string name="content_next_cover">Επιλέγει το επόμενο εξώφυλλο</string>
     <string name="content_cover">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
+    <string name="change_book_name">Όνομα</string>
+    <string name="download_book_cover">Εξώφυλλο από το Διαδίκτυο</string>
     <string name="edit_book_title">Επεξεργασία βιβλίου</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Μετάβαση σε</string>
@@ -43,9 +39,8 @@
     <string name="content_is_folder">Φάκελος</string>
     <string name="content_is_file">Αρχείο</string>
     <string name="content_navigate_up">Μετάβαση στον παραπάνω φάκελο</string>
-    <string name="permission_read_ext_explanation">Η εφαρμογή χρειάζεται να διαβάσει τον αποθηκευτικό χώρο σας ώστε να βρει και να παίξει τα ηχητικά βιβλία</string>
-    <string name="permission_read_ext_request">Να ξαναζητήσουμε την άδεια αργότερα;</string>
-    <string name="permission_rescan">Ζήτηση ξανά</string>
+    <string name="permission_external_new_explanation">Δεν είναι δυνατή η ανάγνωση βιβλίων χωρίς άδεια</string>
+    <string name="permission_goto_settings">Ρυθμίσεις</string>
     <string name="storage_pre_device">Αποθηκευτικός χώρος:</string>
     <string name="storage_all">Όλα</string>
     <!--PlaybackSpeed-->
@@ -53,7 +48,6 @@
     <!--Bookmarks-->
     <string name="bookmark">Σελιδοδείκτης</string>
     <string name="bookmark_edit_title">Επεξεργασία σελιδοδείκτη</string>
-    <string name="acc_button_add_bookmark">Προσθέτει ένα σελιδοδείκτη στην τρέχουσα θέση</string>
     <string name="bookmark_edit_hint">Ονομα του σελιδοδείκτη</string>
     <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
     <string name="bookmark_delete_title">Διαγραφή αυτου του σελιδοδείκτη;</string>
@@ -61,14 +55,17 @@
     <string name="action_settings">Προτιμήσεις</string>
     <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
     <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
+    <string name="min">%s λεπτά</string>
     <plurals name="seconds">
         <item quantity="one">%d δευτερόλεπτο</item>
         <item quantity="other">%d δευτερόλεπτα</item>
     </plurals>
     <string name="pref_seek_time">Μεταφορά ποσότητας</string>
     <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>
-    <string name="pref_root_folder_summary">Οι επιλεγμένοι φακέλοι ηχητικού βιβλίου.</string>
     <string name="pref_theme_title">Θέμα</string>
+    <string name="pref_theme_day">Μέρα</string>
+    <string name="pref_theme_night">Νύχτα</string>
+    <string name="pref_theme_daynight">Μέρα / Νύχτα</string>
     <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Ξαναγυρνάει αυτόματα %d δευτερόλεπτο πίσω μετά από μια χειροκίνητη παύση.</item>
@@ -80,11 +77,14 @@
     <!--Misc-->
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>
+    <string name="play_current">Αναπαραγωγή τρέχοντος</string>
     <!--hide folder dialog-->
     <!--license activity-->
     <string name="refresh">Ανανέωση</string>
     <string name="reset">Επαναφορά</string>
     <string name="no_network">Χωρίς δίκτυο;</string>
-    <string name="network_top">Αυτό δεν πέτυχε και πολύ…</string>
+    <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
     <string name="cover_crop">Περικοπή εξωφύλλου</string>
+    <string name="onboarding_title">Καλώς Ήλθατε!</string>
+    <string name="book_header_current">Τρέχον</string>
 </resources>

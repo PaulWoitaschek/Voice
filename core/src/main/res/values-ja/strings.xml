@@ -1,15 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">これは現在のブックです</string>
     <string name="current_book">現在のブック</string>
     <!--BookPlayFragment-->
     <string name="cover">カバー</string>
     <string name="play_pause">再生 / 一時停止</string>
     <string name="action_sleep">スリープタイマー</string>
-    <plurals name="pauses_after">
-        <item quantity="other">%d 分後に一時停止します。</item>
-    </plurals>
     <string name="rewind">巻き戻し</string>
     <string name="fast_forward">早送り</string>
     <string name="previous_track">前のトラック</string>
@@ -18,16 +14,14 @@
     <string name="pause">一時停止</string>
     <string name="equalizer">イコライザー</string>
     <string name="volume_boost">音量ブースト</string>
+    <string name="skip_silence">無音をスキップ</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">外部ストレージが使用できません。コンピュータに接続されていること、マウントされていないことを確認してください。</string>
     <string name="no_external_storage_action_bar_title">外部ストレージ</string>
     <!--Dialogs-->
     <string name="dialog_confirm">設定</string>
     <string name="dialog_cancel">キャンセル</string>
-    <string name="dialog_no">いいえ</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">前のカバーを選択</string>
-    <string name="content_next_cover">次のカバーを選択</string>
     <string name="content_cover">選択するカバーを表示</string>
     <string name="change_book_name">名前</string>
     <string name="download_book_cover">インターネットからのカバー</string>
@@ -48,12 +42,9 @@
     <string name="content_is_folder">フォルダー</string>
     <string name="content_is_file">ファイル</string>
     <string name="content_navigate_up">親のフォルダーに移動</string>
-    <string name="permission_read_ext_explanation">オーディオブックを探して、再生するため、このアプリはストレージを読み取る必要があります。</string>
     <string name="permission_external_new_explanation">アクセス許可がないとブックを読むことができません</string>
     <string name="permission_retry">再試行?</string>
     <string name="permission_goto_settings">設定</string>
-    <string name="permission_read_ext_request">もう一度、許可を求める必要がありますか?</string>
-    <string name="permission_rescan">再度要求する</string>
     <string name="storage_pre_device">ストレージ:</string>
     <string name="storage_all">すべて</string>
     <!--PlaybackSpeed-->
@@ -62,7 +53,6 @@
     <string name="bookmark">ブックマーク</string>
     <string name="shake_to_reset">シェイクしてリセット</string>
     <string name="bookmark_edit_title">ブックマークを編集</string>
-    <string name="acc_button_add_bookmark">現在の位置の後にブックマークを追加</string>
     <string name="bookmark_edit_hint">ブックマーク名</string>
     <string name="bookmark_added">ブックマークを追加しました</string>
     <string name="bookmark_delete_title">このブックマークを削除しますか?</string>
@@ -79,7 +69,6 @@
     </plurals>
     <string name="pref_seek_time">スキップ量</string>
     <string name="pref_root_folder_title">オーディオブック フォルダー</string>
-    <string name="pref_root_folder_summary">選択したオーディオブック フォルダー。</string>
     <string name="pref_theme_title">テーマ</string>
     <string name="pref_theme_day">日中</string>
     <string name="pref_theme_night">夜間</string>
@@ -103,4 +92,11 @@
     <string name="network_top">うまく動作しませんでした…</string>
     <string name="cover_crop">カバーをトリミング</string>
     <string name="music_notification">再生</string>
+    <string name="onboarding_title">ようこそ!</string>
+    <string name="onboarding_content">オーディオブックを追加して始めましょう。</string>
+    <string name="book_header_current">現在</string>
+    <string name="book_header_not_started">まだ開始していません</string>
+    <string name="book_header_completed">完了</string>
+    <string name="pref_allow_crash_report_title">クラッシュレポート</string>
+    <string name="pref_allow_crash_report_content">開発を支援するため匿名のクラッシュレポートを送信してください</string>
 </resources>

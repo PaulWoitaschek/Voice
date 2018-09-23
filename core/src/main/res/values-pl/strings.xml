@@ -1,18 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">To jest aktualna książka</string>
     <string name="current_book">Aktualna książka</string>
     <!--BookPlayFragment-->
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj/Pauza</string>
     <string name="action_sleep">Wyłącznik czasowy</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Zatrzymaj po %d minucie.</item>
-        <item quantity="few">Zatrzymaj po %d minutach.</item>
-        <item quantity="many">Zatrzymaj po %d minutach.</item>
-        <item quantity="other">Zatrzymaj po %d minutach.</item>
-    </plurals>
     <string name="rewind">Przewiń</string>
     <string name="fast_forward">Do przodu</string>
     <string name="previous_track">Poprzednia ścieżka</string>
@@ -27,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Wybierz</string>
     <string name="dialog_cancel">Anuluj</string>
-    <string name="dialog_no">Nie</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Wybiera poprzednią okładkę</string>
-    <string name="content_next_cover">Wybiera następną okładkę</string>
     <string name="content_cover">Pokazuje okładki do wyboru</string>
     <string name="change_book_name">Nazwa</string>
     <string name="download_book_cover">Okładka z internetu</string>
@@ -51,12 +41,9 @@
     <string name="content_is_folder">Folder</string>
     <string name="content_is_file">Plik</string>
     <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
-    <string name="permission_read_ext_explanation">Aplikacja musi posiadać dostęp do pamięci dyskowej, by móc znaleźć i odtwarzać audiobooki.</string>
     <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
     <string name="permission_retry">Powtórzyć?</string>
     <string name="permission_goto_settings">Ustawienia</string>
-    <string name="permission_read_ext_request">Czy powinniśmy pytać ponownie o nadanie uprawnień?</string>
-    <string name="permission_rescan">Zarządaj ponownie</string>
     <string name="storage_pre_device">Przestrzeń dyskowa:</string>
     <string name="storage_all">Wszystko</string>
     <!--PlaybackSpeed-->
@@ -65,7 +52,6 @@
     <string name="bookmark">Zakładki</string>
     <string name="shake_to_reset">Wstrząśnij by zrestartować</string>
     <string name="bookmark_edit_title">Edytuj zakładkę</string>
-    <string name="acc_button_add_bookmark">Dodaje zakładkę w tym miejscu.</string>
     <string name="bookmark_edit_hint">Nazwa zakładki</string>
     <string name="bookmark_added">Zakładka dodana</string>
     <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
@@ -85,7 +71,6 @@
     </plurals>
     <string name="pref_seek_time">Przewiń o</string>
     <string name="pref_root_folder_title">Folder audiobooków</string>
-    <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
     <string name="pref_theme_title">Motyw</string>
     <string name="pref_theme_day">Dzień</string>
     <string name="pref_theme_night">Noc</string>
@@ -109,7 +94,7 @@
     <string name="refresh">Odśwież</string>
     <string name="reset">Reset</string>
     <string name="no_network">Brak sieci?</string>
-    <string name="network_top">To nie zadziałało…</string>
+    <string name="network_top">To nie zadziałało...</string>
     <string name="cover_crop">Przytnij okładkę</string>
     <string name="music_notification">Odtwarzanie</string>
     <string name="onboarding_title">Witaj!</string>

@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Libro Corrente</string>
     <string name="current_book">Libro corrente</string>
     <!--BookPlayFragment-->
     <string name="cover">Copertina</string>
     <string name="play_pause">Play / Pausa</string>
     <string name="action_sleep">Timer standby</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Metti in pausa dopo %d minuto.</item>
-        <item quantity="other">Metti in pausa dopo %d minuti.</item>
-    </plurals>
     <string name="rewind">Riavvolgi</string>
     <string name="fast_forward">Avanti veloce</string>
     <string name="previous_track">Traccia precedente</string>
@@ -24,10 +19,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Imposta</string>
     <string name="dialog_cancel">Annulla</string>
-    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Sceglie la copertina precedente</string>
-    <string name="content_next_cover">Sceglie la copertina successiva</string>
     <string name="content_cover">Mostra la copertina da scegliere</string>
     <string name="change_book_name">Nome</string>
     <string name="download_book_cover">Copertina da Internet</string>
@@ -48,12 +40,9 @@
     <string name="content_is_folder">Cartella</string>
     <string name="content_is_file">File</string>
     <string name="content_navigate_up">Vai alla cartella superiore</string>
-    <string name="permission_read_ext_explanation">L\'app deve leggere la memoria del dispositivo per trovare e far partire gli audiolibri.</string>
     <string name="permission_external_new_explanation">Non puoi leggere libri senza permesso</string>
     <string name="permission_retry">Riprovare?</string>
     <string name="permission_goto_settings">Impostazioni</string>
-    <string name="permission_read_ext_request">Dovremo richiederti il permesso in futuro?</string>
-    <string name="permission_rescan">Richiedi ancora</string>
     <string name="storage_pre_device">Supporto di memoria:</string>
     <string name="storage_all">Tutti</string>
     <!--PlaybackSpeed-->
@@ -62,7 +51,6 @@
     <string name="bookmark">Segnalibro</string>
     <string name="shake_to_reset">Scuoti per resettare</string>
     <string name="bookmark_edit_title">Modifica segnalibro</string>
-    <string name="acc_button_add_bookmark">Aggiunge un segnalibro alla posizione corrente</string>
     <string name="bookmark_edit_hint">Nome segnalibro</string>
     <string name="bookmark_added">Segnalibro aggiunto</string>
     <string name="bookmark_delete_title">Eliminare questo segnalibro?</string>
@@ -80,7 +68,6 @@
     </plurals>
     <string name="pref_seek_time">Salta</string>
     <string name="pref_root_folder_title">Cartella audiolibro</string>
-    <string name="pref_root_folder_summary">Le cartelle audiolibro selezionate.</string>
     <string name="pref_theme_title">Tema</string>
     <string name="pref_theme_day">Giorno</string>
     <string name="pref_theme_night">Notte</string>
@@ -102,6 +89,6 @@
     <string name="refresh">Aggiorna</string>
     <string name="reset">Resetta</string>
     <string name="no_network">Nessuna connessione?</string>
-    <string name="network_top">Questo non ha funzionato motl bene…</string>
+    <string name="network_top">Questo non ha funzionato motl bene...</string>
     <string name="cover_crop">Taglia copertina</string>
 </resources>

@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Dit is het huidige boek</string>
     <string name="current_book">Huidig boek</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Afspelen / Pauzeren</string>
     <string name="action_sleep">Slaaptimer</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pauzeren na %d minuut.</item>
-        <item quantity="other">Pauzeren na %d minuten.</item>
-    </plurals>
     <string name="rewind">Terugspoelen</string>
     <string name="fast_forward">Vooruitspoelen</string>
     <string name="previous_track">Vorig gedeelte</string>
@@ -19,16 +14,14 @@
     <string name="pause">Pauzeren</string>
     <string name="equalizer">Equalizer</string>
     <string name="volume_boost">Volumeboost</string>
+    <string name="skip_silence">Stilte overslaan</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">De externe opslag is niet beschikbaar. Zorg ervoor dat deze verbonden is en niet is aangekoppeld aan uw computer.</string>
     <string name="no_external_storage_action_bar_title">Externe opslag</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Instellen</string>
     <string name="dialog_cancel">Annuleren</string>
-    <string name="dialog_no">Nee</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Kiest de vorige omslag</string>
-    <string name="content_next_cover">Kiest de volgende omslag</string>
     <string name="content_cover">Omslag zelf kiezen</string>
     <string name="change_book_name">Naam</string>
     <string name="download_book_cover">Omslag ophalen van internet</string>
@@ -49,12 +42,9 @@
     <string name="content_is_folder">Map</string>
     <string name="content_is_file">Bestand</string>
     <string name="content_navigate_up">Ga naar bovenliggende map</string>
-    <string name="permission_read_ext_explanation">Deze app vereist dat uw opslag kan worden gelezen, zodat boeken gevonden en afgespeeld kunnen worden.</string>
     <string name="permission_external_new_explanation">Boeken kunnen niet worden gelezen zonder uw toestemming</string>
     <string name="permission_retry">Opnieuw proberen?</string>
     <string name="permission_goto_settings">Instellingen</string>
-    <string name="permission_read_ext_request">Moet er opnieuw toestemming worden gevraagd?</string>
-    <string name="permission_rescan">Opnieuw vragen</string>
     <string name="storage_pre_device">Opslag:</string>
     <string name="storage_all">Alles</string>
     <!--PlaybackSpeed-->
@@ -63,7 +53,6 @@
     <string name="bookmark">Bladwijzer toevoegen</string>
     <string name="shake_to_reset">Schudden om te herstellen</string>
     <string name="bookmark_edit_title">Bladwijzer bewerken</string>
-    <string name="acc_button_add_bookmark">Voegt een bladwijzer toe op de huidige locatie</string>
     <string name="bookmark_edit_hint">Bladwijzernaam</string>
     <string name="bookmark_added">Bladwijzer is toegevoegd</string>
     <string name="bookmark_delete_title">Wilt u deze bladwijzer verwijderen?</string>
@@ -81,7 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Aantal overslaan</string>
     <string name="pref_root_folder_title">Audioboek-map</string>
-    <string name="pref_root_folder_summary">De geselecteerde audioboek-mappen.</string>
     <string name="pref_theme_title">Thema</string>
     <string name="pref_theme_day">Dag</string>
     <string name="pref_theme_night">Nacht</string>
@@ -103,9 +91,14 @@
     <string name="refresh">Verversen</string>
     <string name="reset">Herstellen</string>
     <string name="no_network">Geen netwerkverbinding?</string>
-    <string name="network_top">Dit ging niet zo goed…</string>
+    <string name="network_top">Dit ging niet zo goed...</string>
     <string name="cover_crop">Omslag bijsnijden</string>
     <string name="music_notification">Afspelen</string>
     <string name="onboarding_title">Welkom!</string>
     <string name="onboarding_content">Laten we beginnen met het toevoegen van uw eerste audioboek.</string>
+    <string name="book_header_current">Huidig</string>
+    <string name="book_header_not_started">Nog niet begonnen</string>
+    <string name="book_header_completed">Voltooid</string>
+    <string name="pref_allow_crash_report_title">Crashrapportages</string>
+    <string name="pref_allow_crash_report_content">Steun de ontwikkeling door geanonimiseerde crashrapportages te versturen.</string>
 </resources>

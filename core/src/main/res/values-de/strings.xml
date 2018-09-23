@@ -1,16 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="content_current_book">Dies ist das aktuelle Buch</string>
     <string name="current_book">Aktuelles Buch</string>
     <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Einschlaf-Timer</string>
-    <plurals name="pauses_after">
-        <item quantity="one">Pausiert nach %d Minute.</item>
-        <item quantity="other">Pausiert nach %d Minuten.</item>
-    </plurals>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
     <string name="previous_track">Voriger Song</string>
@@ -25,10 +20,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Okay</string>
     <string name="dialog_cancel">Abbrechen</string>
-    <string name="dialog_no">Nein</string>
     <!--EditBookDialog-->
-    <string name="content_previous_cover">Wählt voriges Cover</string>
-    <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
     <string name="change_book_name">Name</string>
     <string name="download_book_cover">Cover (Internet)</string>
@@ -49,12 +41,9 @@
     <string name="content_is_folder">Ordner</string>
     <string name="content_is_file">Datei</string>
     <string name="content_navigate_up">Zum übergeordneten Ordner</string>
-    <string name="permission_read_ext_explanation">Die App benötigt Zugriff auf den externen Speicher, um die Hörbücher finden und abspielen zu können.</string>
     <string name="permission_external_new_explanation">Kann keine Bücher lesen</string>
     <string name="permission_retry">Erneut versuchen?</string>
     <string name="permission_goto_settings">Einstellungen</string>
-    <string name="permission_read_ext_request">Erneut nach der Berechtigung fragen?</string>
-    <string name="permission_rescan">Erneut nachfragen?</string>
     <string name="storage_pre_device">Speicher:</string>
     <string name="storage_all">Alle</string>
     <!--PlaybackSpeed-->
@@ -63,7 +52,6 @@
     <string name="bookmark">Lesezeichen</string>
     <string name="shake_to_reset">Schütteln zum Zurücksetzen</string>
     <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
-    <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
     <string name="bookmark_edit_hint">Lesezeichenname</string>
     <string name="bookmark_added">Lesezeichen hinzugefügt</string>
     <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
@@ -81,7 +69,6 @@
     </plurals>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
-    <string name="pref_root_folder_summary">Die gewählten Hörbuchordner.</string>
     <string name="pref_theme_title">Thema</string>
     <string name="pref_theme_day">Tag</string>
     <string name="pref_theme_night">Nacht</string>
@@ -103,7 +90,7 @@
     <string name="refresh">Neu laden</string>
     <string name="reset">Zurücksetzen</string>
     <string name="no_network">Kein Internet?</string>
-    <string name="network_top">Das lief nicht besonders gut…</string>
+    <string name="network_top">Das lief nicht besonders gut...</string>
     <string name="cover_crop">Cover zurechtschneiden</string>
     <string name="music_notification">Musik</string>
     <string name="onboarding_title">Willkommen!</string>
