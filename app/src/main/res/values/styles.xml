@@ -22,6 +22,10 @@
         <item name="toolbarStyle">@style/AppToolbar</item>
     </style>
 
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.Light.PopupMenu">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Card">
         <item name="android:background">@drawable/card_background</item>
         <item name="android:elevation">2dp</item>
@@ -87,7 +91,9 @@
 
     <style name="sleep_number">
         <item name="android:padding">4dp</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline4
+        </item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:gravity">center</item>
     </style>

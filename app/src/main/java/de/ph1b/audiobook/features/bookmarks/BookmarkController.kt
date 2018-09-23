@@ -1,8 +1,9 @@
 package de.ph1b.audiobook.features.bookmarks
 
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
-import android.widget.PopupMenu
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -122,7 +123,8 @@ class BookmarkController(args: Bundle) :
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
-    val popup = PopupMenu(activity, v)
+    val themedContext = ContextThemeWrapper(activity, R.style.PopupMenuStyle)
+    val popup = PopupMenu(themedContext, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {
       when (it.itemId) {

@@ -34,8 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:maxLines="1"
-            android:textSize="@dimen/list_text_primary_size"
             tools:text="Fictive bookmark title that is possibly too long long long" />
 
         <LinearLayout
@@ -51,8 +51,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textSize="@dimen/list_text_secondary_size"
                 tools:text="(4/102)" />
 
@@ -62,8 +61,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textSize="@dimen/list_text_secondary_size"
                 tools:text="10:10:10 / 12:12:12" />
 

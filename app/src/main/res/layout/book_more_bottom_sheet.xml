@@ -3,31 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/title"
         style="@style/BottomSheetRow"
         android:drawableStart="@drawable/format_text"
-        android:text="@string/change_book_name" />
+        android:text="@string/change_book_name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <TextView
         android:id="@+id/internetCover"
         style="@style/BottomSheetRow"
         android:drawableStart="@drawable/ic_download"
-        android:text="@string/download_book_cover" />
+        android:text="@string/download_book_cover"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <TextView
         android:id="@+id/fileCover"
         style="@style/BottomSheetRow"
         android:drawableStart="@drawable/ic_image"
-        android:text="@string/pick_book_cover" />
+        android:text="@string/pick_book_cover"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <TextView
         android:id="@+id/bookmark"
         style="@style/BottomSheetRow"
         android:drawableStart="@drawable/bookmark"
-        android:text="@string/bookmark" />
+        android:text="@string/bookmark"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
 </LinearLayout>

@@ -25,10 +25,10 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="72dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_marginEnd="56dp"
         android:ellipsize="marquee"
         android:maxLines="2"
-        android:textSize="@dimen/list_text_primary_size"
         tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
 
     <ImageView

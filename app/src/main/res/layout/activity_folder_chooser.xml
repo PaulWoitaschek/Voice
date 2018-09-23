@@ -34,8 +34,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/toolSpinner"
                 android:text="@string/storage_pre_device"
-                android:textColor="@color/copy_primary_text_default_material_dark"
-                android:textSize="16sp" />
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         </RelativeLayout>
 
@@ -74,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="@string/chosen_folder_description"
-                android:textSize="@dimen/list_text_primary_size"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 tools:text="This is the primary text which is surprisingly too long long long" />
 
             <TextView
@@ -82,8 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="@dimen/list_text_secondary_size"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="This is the secondary text which is surprisingly too long long long" />
 
         </LinearLayout>

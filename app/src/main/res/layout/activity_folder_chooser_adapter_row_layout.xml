@@ -25,9 +25,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="72dp"
         android:ellipsize="end"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textSize="@dimen/list_text_primary_size"
         tools:text="ExampleFolder" />
 
 </RelativeLayout>
