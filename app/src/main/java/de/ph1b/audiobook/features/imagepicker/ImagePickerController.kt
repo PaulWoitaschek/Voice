@@ -5,8 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -30,17 +28,13 @@ import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
-import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
-/**
- * Hosts the image picker.
- */
+
 class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   constructor(book: Book) : this(
@@ -57,60 +51,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   lateinit var repo: BookRepository
   @Inject
   lateinit var imageHelper: ImageHelper
-
-  private var cab: MaterialCab? = null
-
-  private val cabCallback = object : MaterialCab.Callback {
-
-    override fun onCabFinished(p0: MaterialCab?): Boolean {
-      cropOverlay.selectionOn = false
-      fab.show()
-      return true
-    }
-
-    override fun onCabItemClicked(item: MenuItem): Boolean {
-      if (item.itemId == R.id.confirm) {
-        // obtain screenshot
-        val cropRect = cropOverlay.selectedRect
-        cropOverlay.selectionOn = false
-
-        @Suppress("DEPRECATION")
-        val picture = webView.capturePicture()
-        val bitmap = createBitmap(picture.width, picture.height)
-        val canvas = Canvas(bitmap)
-        picture.draw(canvas)
-
-        val screenShot = Bitmap.createBitmap(
-          bitmap,
-          cropRect.left,
-          cropRect.top,
-          cropRect.width(),
-          cropRect.height()
-        )
-        bitmap.recycle()
-
-        // save screenshot
-        GlobalScope.launch(Dispatchers.Main) {
-          val coverFile = book.coverFile()
-          imageHelper.saveCover(screenShot, coverFile)
-          screenShot.recycle()
-          Picasso.get().invalidate(coverFile)
-          cab?.finish()
-          router.popCurrentController()
-        }
-        return true
-      }
-      return false
-    }
-
-    override fun onCabCreated(cab: MaterialCab, menu: Menu): Boolean {
-      val confirmIcon = menu.findItem(R.id.confirm).icon
-      val tintColor = activity.color(R.color.toolbarIconColor)
-      confirmIcon.setTint(tintColor)
-      cab.toolbar.navigationIcon?.setTint(tintColor)
-      return true
-    }
-  }
 
   private var webViewIsLoading = BehaviorSubject.createDefault(false)
   private val book by lazy {
@@ -182,11 +122,68 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     fab.setOnClickListener {
       cropOverlay.selectionOn = true
-      cab!!.start(cabCallback)
+      showCab()
       fab.hide()
     }
 
     setupToolbar()
+  }
+
+  private fun showCab() {
+    MaterialCab.attach(activity, R.id.cabStub) {
+      menuRes = R.menu.crop_menu
+      val tintColor = activity.color(R.color.toolbarIconColor)
+      titleColor = tintColor
+      closeDrawableRes = R.drawable.close
+      onCreate { _, menu ->
+        val confirmIcon = menu.findItem(R.id.confirm).icon
+        confirmIcon.setTint(tintColor)
+      }
+      onSelection { item ->
+        if (item.itemId == R.id.confirm) {
+          cropOverlay.selectionOn = false
+          @Suppress("DEPRECATION")
+          val picture = webView.capturePicture()
+          val bitmap = createBitmap(picture.width, picture.height)
+          val canvas = Canvas(bitmap)
+          picture.draw(canvas)
+          saveCover(bitmap)
+          MaterialCab.destroy()
+          router.popCurrentController()
+          true
+        } else {
+          false
+        }
+      }
+      onDestroy {
+        cropOverlay.selectionOn = false
+        fab.show()
+        true
+      }
+    }
+  }
+
+  private fun saveCover(bitmap: Bitmap) {
+    val cropRect = cropOverlay.selectedRect
+    val left = cropRect.left
+    val top = cropRect.top
+    val width = cropRect.width()
+    val height = cropRect.height()
+
+    GlobalScope.launch {
+      val screenShot = Bitmap.createBitmap(
+        bitmap,
+        left,
+        top,
+        width,
+        height
+      )
+      bitmap.recycle()
+      val coverFile = book.coverFile()
+      imageHelper.saveCover(screenShot, coverFile)
+      screenShot.recycle()
+      Picasso.get().invalidate(coverFile)
+    }
   }
 
   @SuppressLint("InflateParams")
@@ -207,9 +204,6 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       }
     }
     toolbar.tint()
-
-    cab = MaterialCab(activity, R.id.cabStub)
-      .setMenu(R.menu.crop_menu)
 
     // set the rotating icon
     val menu = toolbar.menu
@@ -263,8 +257,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   }
 
   override fun handleBack(): Boolean {
-    if (cab!!.isActive) {
-      cab!!.finish()
+    if (MaterialCab.destroy()) {
       return true
     }
 

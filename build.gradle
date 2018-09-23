@@ -39,7 +39,7 @@ buildscript {
       androidGradlePlugin : "com.android.tools.build:gradle:${versions.androidPlugin}",
       floatingActionButton: "com.getbase:floatingactionbutton:1.10.1",
       materialDialogs     : "com.afollestad.material-dialogs:core:0.9.6.0",
-      materialCab         : "com.afollestad:material-cab:0.1.12",
+      materialCab         : "com.afollestad:material-cab:1.2.0",
       picasso             : "com.squareup.picasso:picasso:2.71828",
       tapTarget           : "com.getkeepsafe.taptargetview:taptargetview:1.12.0",
       chapterReader       : "com.github.PaulWoitaschek:ChapterReader:0.1.4",
