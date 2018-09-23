@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor
-import com.google.android.exoplayer2.extractor.ts.TsExtractor
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
@@ -28,7 +27,6 @@ class DataSourceConverter
     val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
     val extractorsFactory = DefaultExtractorsFactory()
       .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
-      .setTsExtractorFlags(TsExtractor.MODE_SINGLE_PMT)
     mediaSourceFactory = ExtractorMediaSource.Factory(dataSourceFactory)
       .setExtractorsFactory(extractorsFactory)
   }
