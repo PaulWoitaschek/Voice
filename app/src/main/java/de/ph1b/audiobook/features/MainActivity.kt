@@ -9,13 +9,13 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
@@ -53,7 +53,7 @@ class MainActivity : BaseActivity(), RouterProvider {
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
+    App.component.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
 

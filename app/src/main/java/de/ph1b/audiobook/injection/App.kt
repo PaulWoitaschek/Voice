@@ -1,17 +1,12 @@
 package de.ph1b.audiobook.injection
 
-import android.app.Activity
 import android.app.Application
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
-import dagger.android.support.HasSupportFragmentInjector
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
@@ -24,24 +19,18 @@ import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFragmentInjector,
-  HasBroadcastReceiverInjector {
+class App : Application(), HasServiceInjector {
 
   @Inject
   lateinit var bookAdder: BookAdder
   @Inject
-  lateinit var activityInjector: DispatchingAndroidInjector<Activity>
-  @Inject
   lateinit var serviceInjector: DispatchingAndroidInjector<Service>
-  @Inject
-  lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
-  @Inject
-  lateinit var supportFragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
   @Inject
@@ -49,10 +38,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
 
-  override fun activityInjector() = activityInjector
   override fun serviceInjector() = serviceInjector
-  override fun supportFragmentInjector() = supportFragmentInjector
-  override fun broadcastReceiverInjector() = broadcastInjector
 
   override fun onCreate() {
     super.onCreate()
@@ -63,7 +49,7 @@ class App : Application(), HasActivityInjector, HasServiceInjector, HasSupportFr
       AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
 
-    launch {
+    GlobalScope.launch {
       if (BuildConfig.DEBUG) {
         Timber.plant(Timber.DebugTree())
       } else {

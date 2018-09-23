@@ -5,10 +5,10 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
-import dagger.android.support.AndroidSupportInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
@@ -37,7 +37,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    AndroidSupportInjection.inject(this)
+    App.component.inject(this)
 
     // init views
     val container =
@@ -53,6 +53,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     seekBar.progress = ((speed - MIN) * FACTOR).toInt()
 
     // observable of seek bar, mapped to speed
+    @Suppress("CheckResult")
     seekBar.progressChangedStream(initialNotification = true)
       .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
       .doOnNext {

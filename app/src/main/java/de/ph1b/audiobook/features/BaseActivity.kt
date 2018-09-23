@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import dagger.android.AndroidInjection
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
 import de.ph1b.audiobook.playback.PlaybackService
 import kotlinx.coroutines.experimental.Dispatchers
@@ -24,7 +23,6 @@ abstract class BaseActivity : AppCompatActivity() {
   private var nightModeAtCreation: Int? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
 
     nightModeAtCreation = AppCompatDelegate.getDefaultNightMode()

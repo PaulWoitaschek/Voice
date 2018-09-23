@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.android.AndroidInjection
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
@@ -54,7 +53,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
 
     permissions = Permissions(this)
@@ -87,12 +85,12 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     // spinner
     spinnerAdapter =
         MultiLineSpinnerAdapter(toolSpinner, this, color(R.color.textColorPrimary)) { file, _ ->
-      if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
-        getString(R.string.storage_all)
-      } else {
-        file.name
-      }
-    }
+          if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
+            getString(R.string.storage_all)
+          } else {
+            file.name
+          }
+        }
     toolSpinner.adapter = spinnerAdapter
     toolSpinner.itemSelections {
       if (it != AdapterView.INVALID_POSITION) {
