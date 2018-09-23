@@ -4,6 +4,7 @@ platform :android do
   lane :ci do
     build_apks
     unit_tests
+    lint
   end
 
   lane :build_apks do
@@ -16,5 +17,13 @@ platform :android do
 
   lane :unit_tests do
     gradle(task: 'app:testProprietaryDebugUnitTest common:testDebugUnitTest data:testDebugUnitTest')
+  end
+
+  lane :lint do
+    gradle(task: 'app:lintProprietaryDebug')
+    copy_artifacts(
+      target_path: 'artifacts' + '/lint',
+      artifacts: ['app/build/reports/*.html']
+    )
   end
 end
