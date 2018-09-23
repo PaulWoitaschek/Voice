@@ -135,7 +135,7 @@
         android:id="@+id/gradientShadow"
         android:layout_width="0dp"
         android:layout_height="4dp"
-        android:background="@drawable/gradient_shadow"
+        android:background="@drawable/shadow_top"
         app:layout_constraintBottom_toBottomOf="@+id/cover"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
