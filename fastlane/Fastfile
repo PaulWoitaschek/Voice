@@ -39,7 +39,7 @@ platform :android do
   end
 
   def get_artifact_folder
-    app_version = gradle(task: 'appVersion', flags: '-q')
+    app_version = gradle(task: 'appVersion', flags: '-q').match('#BEGIN_VERSION#(.*?)#END_VERSION#')[-1]
     'artifacts/' + app_version
   end
 end
