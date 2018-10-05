@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">@color/grey900</color>
-    <color name="primaryDark">@color/black</color>
+    <color name="primary">#161920</color>
+    <color name="primaryDark">#0c0b10</color>
 
     <color name="background_overlay">@color/copy_primary_text_disabled_material_dark</color>
 
@@ -10,11 +10,11 @@
     <color name="snackbar_background_color">@color/background_material_light</color>
     <color name="snackbar_text_color">@color/copy_primary_text_default_material_light</color>
 
-    <color name="bookOverviewCardColor">@color/grey900</color>
-    <color name="windowBackgroundColor">@color/black</color>
-    <color name="navBarColor">@color/black</color>
+    <color name="bookOverviewCardColor">@color/primaryDark</color>
+    <color name="windowBackgroundColor">@color/primary</color>
+    <color name="navBarColor">@color/primaryDark</color>
     <color name="toolbarIconColor">@color/white</color>
     <color name="textColorPrimary">@color/abc_primary_text_material_dark</color>
     <color name="textColorSecondary">@color/abc_secondary_text_material_dark</color>
-    <color name="placeholderCoverColor">@color/grey900</color>
+    <color name="placeholderCoverColor">@color/primaryDark</color>
 </resources>
