@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsListener
-import com.google.android.exoplayer2.analytics.DefaultAnalyticsListener
 import de.ph1b.audiobook.playback.PlayerState
 
 fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
@@ -18,7 +17,7 @@ fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(
-    object : Player.DefaultEventListener() {
+    object : Player.EventListener {
       override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         val state = when (playbackState) {
           Player.STATE_ENDED -> PlayerState.ENDED
@@ -37,7 +36,7 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
 
 inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
   addListener(
-    object : Player.DefaultEventListener() {
+    object : Player.EventListener {
       override fun onPlayerError(error: ExoPlaybackException) {
         action(error)
       }
@@ -46,7 +45,7 @@ inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit)
 }
 
 inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
-  addAnalyticsListener(object : DefaultAnalyticsListener() {
+  addAnalyticsListener(object : AnalyticsListener {
     override fun onAudioSessionId(eventTime: AnalyticsListener.EventTime?, audioSessionId: Int) {
       action(audioSessionId)
     }
@@ -55,7 +54,7 @@ inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(
-    object : Player.DefaultEventListener() {
+    object : Player.EventListener {
       override fun onPositionDiscontinuity(reason: Int) {
         action()
       }

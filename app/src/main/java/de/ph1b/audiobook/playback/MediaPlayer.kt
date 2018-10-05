@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.playback
 
+import android.content.Context
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
@@ -43,12 +44,12 @@ constructor(
   private val loudnessGain: LoudnessGain,
   private val wakeLockManager: WakeLockManager,
   private val dataSourceConverter: DataSourceConverter,
-  onlyAudioRenderersFactory: OnlyAudioRenderersFactory
+  onlyAudioRenderersFactory: OnlyAudioRenderersFactory,
+  context: Context
 ) {
 
-  private val player = ExoPlayerFactory.newSimpleInstance(
-    onlyAudioRenderersFactory, DefaultTrackSelector()
-  )
+  private val player =
+    ExoPlayerFactory.newSimpleInstance(context, onlyAudioRenderersFactory, DefaultTrackSelector())
 
   private val _bookContent = BehaviorSubject.create<BookContent>()
   val bookContent: BookContent? get() = _bookContent.value

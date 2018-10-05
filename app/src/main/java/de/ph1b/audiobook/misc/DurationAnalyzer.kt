@@ -48,7 +48,7 @@ class DurationAnalyzer
 
   init {
     exoPlayer.addListener(
-      object : Player.DefaultEventListener() {
+      object : Player.EventListener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
           playbackStateSubject.onNext(playbackState)
         }
