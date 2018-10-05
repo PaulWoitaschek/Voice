@@ -9,6 +9,11 @@ android {
     minSdkVersion buildConfig.minSdk
     targetSdkVersion buildConfig.targetSdk
   }
+
+  compileOptions {
+    sourceCompatibility versions.sourceCompatibility
+    targetCompatibility versions.targetCompatibility
+  }
 }
 
 dependencies {

@@ -29,6 +29,11 @@ android {
   sourceSets {
     androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
   }
+
+  compileOptions {
+    sourceCompatibility versions.sourceCompatibility
+    targetCompatibility versions.targetCompatibility
+  }
 }
 
 dependencies {
