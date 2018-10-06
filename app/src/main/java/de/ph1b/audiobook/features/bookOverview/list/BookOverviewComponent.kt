@@ -6,6 +6,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.misc.RoundRectOutlineProvider
 import de.ph1b.audiobook.misc.dpToPx
+import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_overview_row.*
@@ -61,6 +62,9 @@ class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListe
     val totalDuration = book.content.duration
     val progress = (globalPosition.toFloat() / totalDuration.toFloat())
       .coerceAtMost(1F)
+
+    val remainingTimeMs = book.content.duration - book.content.position
+    remainingTime.text = formatTime(remainingTimeMs.toLong())
 
     this.progress.progress = progress
 

@@ -9,7 +9,7 @@
     <color name="red700">#D32F2F</color>
     <color name="red900">#B71C1C</color>
     <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>
-    <color name="icon_color">@color/secondary_text_default_material_light</color>
+    <color name="icon_color">@color/black</color>
     <!-- copied private resources from appcompat -->
     <color name="copy_primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="copy_primary_text_disabled_material_light">#39000000</color>
