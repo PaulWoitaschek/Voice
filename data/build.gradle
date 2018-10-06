@@ -1,14 +1,17 @@
+import deps.Deps
+import deps.Versions
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
 
-  compileSdkVersion buildConfig.compileSdk
+  compileSdkVersion Versions.compileSdk
 
   defaultConfig {
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -31,34 +34,34 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility Versions.sourceCompatibility
+    targetCompatibility Versions.targetCompatibility
   }
 }
 
 dependencies {
   implementation project(":common")
-  implementation deps.AndroidX.appCompat
-  implementation deps.timber
-  implementation deps.Kotlin.coroutines
-  implementation deps.Kotlin.coroutinesAndroid
-  implementation deps.rxJava
-  implementation deps.moshi
-  implementation deps.AndroidX.ktx
+  implementation Deps.AndroidX.appCompat
+  implementation Deps.timber
+  implementation Deps.Kotlin.coroutines
+  implementation Deps.Kotlin.coroutinesAndroid
+  implementation Deps.rxJava
+  implementation Deps.moshi
+  implementation Deps.AndroidX.ktx
 
-  api deps.AndroidX.Room.runtime
-  implementation deps.AndroidX.Room.rxJava
-  kapt deps.AndroidX.Room.compiler
-  androidTestImplementation deps.AndroidX.Room.testing
+  api Deps.AndroidX.Room.runtime
+  implementation Deps.AndroidX.Room.rxJava
+  kapt Deps.AndroidX.Room.compiler
+  androidTestImplementation Deps.AndroidX.Room.testing
 
-  implementation deps.Dagger.core
-  kapt deps.Dagger.compiler
+  implementation Deps.Dagger.core
+  kapt Deps.Dagger.compiler
 
-  androidTestImplementation deps.AndroidX.testRunner
-  androidTestImplementation deps.truth
+  androidTestImplementation Deps.AndroidX.testRunner
+  androidTestImplementation Deps.truth
 
-  testImplementation deps.truth
-  testImplementation deps.junit
+  testImplementation Deps.truth
+  testImplementation Deps.junit
 }
 
 

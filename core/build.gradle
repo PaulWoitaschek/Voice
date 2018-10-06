@@ -1,12 +1,14 @@
+import deps.Versions
+
 apply plugin: 'com.android.library'
 
 android {
 
-  compileSdkVersion buildConfig.compileSdk
+  compileSdkVersion Versions.compileSdk
 
   defaultConfig {
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
   }
 
   buildTypes {
@@ -17,7 +19,7 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility Versions.sourceCompatibility
+    targetCompatibility Versions.targetCompatibility
   }
 }

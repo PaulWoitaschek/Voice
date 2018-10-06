@@ -1,3 +1,6 @@
+import deps.Deps
+import deps.Versions
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
@@ -7,15 +10,15 @@ apply from: "../artifacts.gradle"
 
 android {
 
-  compileSdkVersion buildConfig.compileSdk
+  compileSdkVersion Versions.compileSdk
 
   defaultConfig {
     applicationId "de.ph1b.audiobook"
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
 
-    versionCode buildConfig.version.code
-    versionName buildConfig.version.name
+    versionCode Versions.versionCode
+    versionName Versions.versionName
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -62,8 +65,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility Versions.sourceCompatibility
+    targetCompatibility Versions.targetCompatibility
   }
 
   //noinspection GroovyMissingReturnStatement
@@ -92,61 +95,61 @@ dependencies {
   implementation project(":data")
   implementation project(":covercolorextractor")
 
-  implementation deps.chapterReader
+  implementation Deps.chapterReader
 
-  implementation deps.AndroidX.appCompat
-  implementation deps.AndroidX.recyclerView
-  implementation deps.material
-  implementation deps.AndroidX.transitions
-  implementation deps.AndroidX.constraintLayout
-  implementation deps.AndroidX.mediaCompat
-  implementation deps.AndroidX.fragment
+  implementation Deps.AndroidX.appCompat
+  implementation Deps.AndroidX.recyclerView
+  implementation Deps.material
+  implementation Deps.AndroidX.transitions
+  implementation Deps.AndroidX.constraintLayout
+  implementation Deps.AndroidX.mediaCompat
+  implementation Deps.AndroidX.fragment
 
-  implementation deps.picasso
+  implementation Deps.picasso
 
-  implementation deps.materialDialogs
-  implementation deps.materialCab
+  implementation Deps.materialDialogs
+  implementation Deps.materialCab
 
-  implementation deps.floatingActionButton
+  implementation Deps.floatingActionButton
 
-  proprietaryImplementation(deps.crashlytics) {
+  proprietaryImplementation(Deps.crashlytics) {
     transitive = true
   }
 
-  implementation deps.Dagger.core
-  kapt deps.Dagger.compiler
+  implementation Deps.Dagger.core
+  kapt Deps.Dagger.compiler
 
-  implementation deps.AndroidX.ktx
+  implementation Deps.AndroidX.ktx
 
-  testImplementation deps.junit
-  testImplementation deps.truth
-  testImplementation deps.mockito
-  testImplementation deps.mockitoKotlin
+  testImplementation Deps.junit
+  testImplementation Deps.truth
+  testImplementation Deps.mockito
+  testImplementation Deps.mockitoKotlin
 
-  androidTestImplementation deps.AndroidX.testRunner
-  androidTestImplementation deps.truth
+  androidTestImplementation Deps.AndroidX.testRunner
+  androidTestImplementation Deps.truth
 
-  implementation deps.rxJava
-  implementation deps.rxAndroid
-  implementation deps.rxPreferences
+  implementation Deps.rxJava
+  implementation Deps.rxAndroid
+  implementation Deps.rxPreferences
 
-  implementation deps.Kotlin.std
-  implementation deps.Kotlin.coroutines
-  implementation deps.Kotlin.coroutinesAndroid
+  implementation Deps.Kotlin.std
+  implementation Deps.Kotlin.coroutines
+  implementation Deps.Kotlin.coroutinesAndroid
 
-  implementation deps.timber
+  implementation Deps.timber
 
-  implementation deps.ExoPlayer.core
-  implementation deps.ExoPlayer.flac
-  implementation deps.ExoPlayer.opus
+  implementation Deps.ExoPlayer.core
+  implementation Deps.ExoPlayer.flac
+  implementation Deps.ExoPlayer.opus
 
-  implementation deps.Conductor.base
-  implementation deps.Conductor.support
-  implementation deps.Conductor.lifecycle
+  implementation Deps.Conductor.base
+  implementation Deps.Conductor.support
+  implementation Deps.Conductor.lifecycle
 
-  implementation deps.moshi
+  implementation Deps.moshi
 
-  implementation deps.tapTarget
+  implementation Deps.tapTarget
 }
 
 // task that is an alias for f-droid

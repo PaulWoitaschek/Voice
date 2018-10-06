@@ -1,13 +1,16 @@
+import deps.Deps
+import deps.Versions
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
 
-  compileSdkVersion buildConfig.compileSdk
+  compileSdkVersion Versions.compileSdk
 
   defaultConfig {
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
   }
 
   buildTypes {
@@ -18,17 +21,17 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility Versions.sourceCompatibility
+    targetCompatibility Versions.targetCompatibility
   }
 }
 
 
 dependencies {
-  implementation deps.Kotlin.std
-  implementation deps.AndroidX.appCompat
-  implementation deps.rxJava
+  implementation Deps.Kotlin.std
+  implementation Deps.AndroidX.appCompat
+  implementation Deps.rxJava
 
-  testImplementation deps.truth
-  testImplementation deps.junit
+  testImplementation Deps.truth
+  testImplementation Deps.junit
 }

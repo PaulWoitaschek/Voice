@@ -1,28 +1,31 @@
+import deps.Deps
+import deps.Versions
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
 
-  compileSdkVersion buildConfig.compileSdk
+  compileSdkVersion Versions.compileSdk
 
   defaultConfig {
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility Versions.sourceCompatibility
+    targetCompatibility Versions.targetCompatibility
   }
 }
 
 dependencies {
-  implementation deps.picasso
-  implementation deps.Kotlin.std
-  implementation deps.AndroidX.palette
-  implementation deps.Kotlin.coroutines
-  implementation deps.Kotlin.coroutinesAndroid
-  implementation deps.timber
+  implementation Deps.picasso
+  implementation Deps.Kotlin.std
+  implementation Deps.AndroidX.palette
+  implementation Deps.Kotlin.coroutines
+  implementation Deps.Kotlin.coroutinesAndroid
+  implementation Deps.timber
 }
 
 kotlin {
