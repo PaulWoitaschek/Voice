@@ -44,6 +44,7 @@ object Deps {
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.12.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
+  const val playPublisherPlugin = "com.github.triplet.gradle:play-publisher:2.0.0-beta1"
 
   object Conductor {
     private const val version = "2.1.5"

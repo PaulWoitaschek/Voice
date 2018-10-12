@@ -18,3 +18,4 @@ mainframer.sh
 *.keystore
 signing.properties
 artifacts
+play-publisher-key.json
