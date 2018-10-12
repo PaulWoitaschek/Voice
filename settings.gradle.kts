@@ -1,0 +1,5 @@
+include(":app")
+include(":core")
+include(":common")
+include(":data")
+include(":covercolorextractor")
