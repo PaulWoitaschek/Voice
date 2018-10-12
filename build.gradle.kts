@@ -1,4 +1,5 @@
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryPlugin
 import com.android.builder.model.AndroidProject
 import com.github.benmanes.gradle.versions.updates.DependencyUpdates
@@ -77,7 +78,15 @@ allprojects {
   }
 }
 
-apply(from = "predexDisabler.gradle")
+subprojects {
+  plugins.whenPluginAdded {
+    if (this is AppPlugin || this is LibraryPlugin) {
+      convention.findByType(BaseExtension::class)?.let {
+        it.dexOptions.preDexLibraries = System.getenv("DISABLE_PREDEX") != "true"
+      }
+    }
+  }
+}
 
 tasks.register<Exec>("importStrings") {
   executable = "sh"
