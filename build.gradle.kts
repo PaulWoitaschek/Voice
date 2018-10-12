@@ -21,7 +21,6 @@ buildscript {
     classpath(deps.Deps.androidGradlePlugin)
     classpath(deps.Deps.Kotlin.gradlePlugin)
     classpath(deps.Deps.fabricGradlePlugin)
-    classpath(deps.Deps.playPublisherPlugin)
   }
 }
 

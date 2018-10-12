@@ -11,17 +11,6 @@ plugins {
   id("kotlin-android")
   id("kotlin-android-extensions")
   id("kotlin-kapt")
-  id("com.github.triplet.play")
-}
-
-play {
-  serviceAccountCredentials = File(rootDir, "play-publisher-key.json")
-  track = "beta"
-  defaultToAppBundles = true
-  resolutionStrategy = "auto"
-  outputProcessor = {
-    versionNameOverride = "$versionNameOverride.$versionCode"
-  }
 }
 
 android {
@@ -33,7 +22,7 @@ android {
     minSdkVersion(Versions.minSdk)
     targetSdkVersion(Versions.targetSdk)
 
-    versionCode = 1
+    versionCode = Versions.versionCode
     versionName = Versions.versionName
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
