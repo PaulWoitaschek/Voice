@@ -10,8 +10,8 @@ object Versions {
   const val compileSdk = 28
   const val minSdk = 21
   const val targetSdk = 27
-  const val versionCode = 3060303
-  const val versionName = "4.0.0-rc1"
+  const val versionCode = 3060305
+  const val versionName = "4.0.0-rc2"
 }
 
 object Deps {
@@ -68,6 +68,7 @@ object Deps {
 
   object ExoPlayer {
     const val core = "com.google.android.exoplayer:exoplayer-core:2.9.0"
+    private const val extensionVersion = "2.9.0"
     const val opus =
       "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:2.7.0-1"
     const val flac =
