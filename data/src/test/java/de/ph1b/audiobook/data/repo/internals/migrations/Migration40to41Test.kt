@@ -3,31 +3,34 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.repo.internals.getInt
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
 /**
- * Test for the database 39->40 version migration
+ * Test the migration from 40 to 41
  */
-class Migration39to40Test {
+@RunWith(AndroidJUnit4::class)
+class Migration40to41Test {
 
   private lateinit var db: SupportSQLiteDatabase
   private lateinit var helper: SupportSQLiteOpenHelper
 
   @Before
   fun setUp() {
-    val context = InstrumentationRegistry.getTargetContext()
     val config = SupportSQLiteOpenHelper.Configuration
-      .builder(context)
+      .builder(getApplicationContext())
       .callback(object : SupportSQLiteOpenHelper.Callback(39) {
         override fun onCreate(db: SupportSQLiteDatabase) {
           db.execSQL(BookTable.CREATE_TABLE)
@@ -41,40 +44,57 @@ class Migration39to40Test {
     db = helper.writableDatabase
   }
 
+  @Test(expected = SQLiteException::class)
+  fun insertBeforeMigrationThrows() {
+    val bookCv = bookContentValues()
+    bookCv.put("loudnessGain", 100)
+    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
+  }
+
+  @Test
+  fun insert() {
+    val bookCv = bookContentValues()
+    val id = db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
+
+    Migration40to41().migrate(db)
+
+    val loudnessGainCv = ContentValues().apply {
+      put("loudnessGain", 100)
+    }
+    db.update(
+      BookTable.TABLE_NAME,
+      SQLiteDatabase.CONFLICT_FAIL,
+      loudnessGainCv,
+      "${BookTable.ID}=?",
+      arrayOf(id)
+    )
+
+    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
+      .columns(arrayOf("loudnessGain"))
+      .create()
+    val loudnessGains = db.query(query)
+      .mapRows {
+        getInt("loudnessGain")
+      }
+    assertThat(loudnessGains).containsExactly(100)
+  }
+
+  @SuppressLint("SdCardPath")
+  private fun bookContentValues() = ContentValues().apply {
+    put(BookTable.NAME, "firstBookName")
+    put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
+    put(BookTable.PLAYBACK_SPEED, 1F)
+    put(BookTable.ROOT, "/sdcard")
+    put(BookTable.TIME, 500)
+    put(BookTable.TYPE, "COLLECTION_FOLDER")
+  }
+
   @After
   fun tearDown() {
     helper.close()
   }
 
-  @Test
-  fun negativeNumbersBecomeZero() {
-    val bookCvWithNegativeTime = contentValuesForBookWithTime(-100)
-    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithNegativeTime)
-
-    val bookCvWithPositiveTime = contentValuesForBookWithTime(5000)
-    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithPositiveTime)
-
-    Migration39to40().migrate(db)
-
-    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
-      .columns(arrayOf(BookTable.TIME))
-      .create()
-    val times = db.query(query)
-      .mapRows { getInt(BookTable.TIME) }
-    assertThat(times).containsExactly(0, 5000)
-  }
-
-  @SuppressLint("SdCardPath")
-  private fun contentValuesForBookWithTime(time: Int) = ContentValues().apply {
-    put(BookTable.NAME, "firstBookName")
-    put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
-    put(BookTable.PLAYBACK_SPEED, 1F)
-    put(BookTable.ROOT, "/sdcard")
-    put(BookTable.TIME, time)
-    put(BookTable.TYPE, "COLLECTION_FOLDER")
-  }
-
-  object BookTable {
+  private object BookTable {
     const val ID = "bookId"
     const val NAME = "bookName"
     const val AUTHOR = "bookAuthor"

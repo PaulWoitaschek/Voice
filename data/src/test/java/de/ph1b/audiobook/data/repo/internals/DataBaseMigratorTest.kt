@@ -4,13 +4,17 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.Random
 import java.util.UUID
 
+@RunWith(AndroidJUnit4::class)
 class DataBaseMigratorTest {
 
   @Rule
@@ -23,7 +27,6 @@ class DataBaseMigratorTest {
 
   @Test
   fun emptyTableLeadsToCorrectSchema() {
-    val context = InstrumentationRegistry.getTargetContext()
     val dbName = "testDb"
     val db = helper.createDatabase(dbName, 43)
     db.execSQL(BookTable.CREATE_TABLE)
@@ -34,13 +37,12 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule().migrations(context)
+      *PersistenceModule().migrations(getApplicationContext())
     )
   }
 
   @Test
   fun migrate43() {
-    val context = InstrumentationRegistry.getTargetContext()
     val dbName = "testDb"
     val db = helper.createDatabase(dbName, 43)
     db.execSQL(BookTable.CREATE_TABLE)
@@ -157,7 +159,7 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule().migrations(context)
+      *PersistenceModule().migrations(getApplicationContext())
     )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")

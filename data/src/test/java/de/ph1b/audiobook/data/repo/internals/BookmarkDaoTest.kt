@@ -1,7 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import androidx.room.Room
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookFactory
@@ -10,8 +11,9 @@ import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.di.DataInjector
 import org.junit.Test
+import org.junit.runner.RunWith
 
-
+@RunWith(AndroidJUnit4::class)
 class BookmarkDaoTest {
 
   init {
@@ -23,7 +25,8 @@ class BookmarkDaoTest {
   }
 
   private val dao =
-    Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(), AppDb::class.java)
+    Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDb::class.java)
+      .allowMainThreadQueries()
       .build()
       .bookmarkDao()
 

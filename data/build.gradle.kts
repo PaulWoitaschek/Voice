@@ -26,7 +26,14 @@ android {
   }
 
   sourceSets {
-    getByName("androidTest").assets.srcDir(files("$projectDir/schemas"))
+    // debug as a workaround, see https://github.com/robolectric/robolectric/issues/3928
+    getByName("debug").assets.srcDir(files("$projectDir/schemas"))
+  }
+
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+    animationsDisabled = true
+    unitTests.isIncludeAndroidResources = true
   }
 
   compileOptions {
@@ -48,16 +55,17 @@ dependencies {
   api(Deps.AndroidX.Room.runtime)
   implementation(Deps.AndroidX.Room.rxJava)
   kapt(Deps.AndroidX.Room.compiler)
-  androidTestImplementation(Deps.AndroidX.Room.testing)
 
   implementation(Deps.Dagger.core)
   kapt(Deps.Dagger.compiler)
 
-  androidTestImplementation(Deps.AndroidX.Test.runner)
-  androidTestImplementation(Deps.truth)
-
-  testImplementation(Deps.truth)
+  testImplementation(Deps.AndroidX.Room.testing)
+  testImplementation(Deps.AndroidX.Test.core)
+  testImplementation(Deps.AndroidX.Test.junit)
+  testImplementation(Deps.AndroidX.Test.runner)
   testImplementation(Deps.junit)
+  testImplementation(Deps.robolectric)
+  testImplementation(Deps.truth)
 }
 
 
