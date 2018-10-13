@@ -31,6 +31,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.rx2.rxCompletable
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -108,13 +109,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
         old.content == new.content
       }
     bookUpdated
-      .subscribe {
+      .doOnNext {
         Timber.i("init ${it.name}")
         player.init(it.content)
-        GlobalScope.launch {
+      }
+      .switchMapCompletable {
+        GlobalScope.rxCompletable {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
       }
+      .subscribe()
       .disposeOnDestroy()
 
     bookUpdated

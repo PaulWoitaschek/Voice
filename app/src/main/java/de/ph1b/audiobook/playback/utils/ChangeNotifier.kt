@@ -92,6 +92,7 @@ class ChangeNotifier @Inject constructor(
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
+  @Synchronized
   suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
     val currentChapter = book.content.currentChapter
     val playState = playStateManager.playState

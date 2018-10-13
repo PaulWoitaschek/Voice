@@ -88,6 +88,7 @@ object Deps {
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
     const val coroutinesAndroid =
       "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
+    const val coroutinesRx = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$versionCoroutines"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionKotlin"
   }
 

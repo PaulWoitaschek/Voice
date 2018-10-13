@@ -150,6 +150,7 @@ dependencies {
   implementation(Deps.Kotlin.std)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
+  implementation(Deps.Kotlin.coroutinesRx)
 
   implementation(Deps.timber)
 
