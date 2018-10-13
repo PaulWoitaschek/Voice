@@ -16,19 +16,9 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.clicks
-import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
-import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.drawable
-import de.ph1b.audiobook.misc.formatTime
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.misc.tint
-import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -106,6 +96,7 @@ class BookPlayController(
 
     // name
     toolbar.title = book.name
+    TitleTextView.text = book.name
 
     // Next/Prev/spinner/book progress views hiding
     val multipleChapters = data.size > 1
@@ -118,7 +109,7 @@ class BookPlayController(
 
     GlobalScope.launch(Dispatchers.IO) {
       val coverReplacement = CoverReplacement(book.name, activity)
-      val coverFile = book.coverFile()
+      val coverFile = book.coverFileBlur()
       val shouldLoadCover = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
       withContext(Dispatchers.Main) {
         if (shouldLoadCover) {
