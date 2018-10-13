@@ -146,6 +146,22 @@ class BookPlayController(
     previous.setOnClickListener { presenter.previous() }
     playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
+
+    toolbar.setVisibility(View.INVISIBLE)
+    BackToMain.setOnClickListener { finish() }
+    ButtonTimer.setOnClickListener { presenter.toggleSleepTimer() }
+    ButtonBookmark.setOnClickListener {
+      val bookmarkController = BookmarkController.newInstance(bookId)
+          .asTransaction()
+      router.pushController(bookmarkController)
+    }
+    ButtonPlayback.setOnClickListener {
+      PlaybackSpeedDialogFragment().show(
+        fragmentManager,
+        PlaybackSpeedDialogFragment.TAG
+      )
+    }
+
     var lastClick = 0L
     val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
     cover.clicks()

@@ -3,6 +3,8 @@ package de.ph1b.audiobook.uitools;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -41,38 +43,71 @@ import java.io.IOException;
 //https://www.ssaurel.com/blog/create-a-blur-effect-on-android-with-renderscript/
 public class BlurFactory {
 
-    private static final float BITMAP_SCALE = 0.6f;
-    private static final float BLUR_RADIUS = 15f;
+  private static final float BITMAP_SCALE = 0.6f;
+  private static final float BLUR_RADIUS = 15f;
 
-    public static File blurBitmap(File file, Context context) {
+  public static File blurBitmap(File file, Context context) {
 
-      String filePath = file.getPath();
-      Bitmap image = BitmapFactory.decodeFile(filePath);
+    String filePath = file.getPath();
+    Bitmap image = BitmapFactory.decodeFile(filePath);
 
-      int width = Math.round(image.getWidth() * BITMAP_SCALE);
-      int height = Math.round(image.getHeight() * BITMAP_SCALE);
+    int width = Math.round(image.getWidth() * BITMAP_SCALE);
+    int height = Math.round(image.getHeight() * BITMAP_SCALE);
 
-      Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
-      Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+    Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
+    Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
 
-      RenderScript rs = RenderScript.create(context);
+    RenderScript rs = RenderScript.create(context);
 
-      ScriptIntrinsicBlur intrinsicBlur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-      Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
-      Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+    ScriptIntrinsicBlur intrinsicBlur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+    Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+    Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
 
-      intrinsicBlur.setRadius(BLUR_RADIUS);
-      intrinsicBlur.setInput(tmpIn);
-      intrinsicBlur.forEach(tmpOut);
-      tmpOut.copyTo(outputBitmap);
+    intrinsicBlur.setRadius(BLUR_RADIUS);
+    intrinsicBlur.setInput(tmpIn);
+    intrinsicBlur.forEach(tmpOut);
+    tmpOut.copyTo(outputBitmap);
 
-      return bitmapToFile(outputBitmap, context);
-    }
+    return bitmapToFile(makeBigBitmap(outputBitmap, inputBitmap), context);
+  }
 
+
+  private static Bitmap makeBigBitmap(Bitmap outer, Bitmap inner) {
+    Bitmap wideBmp;
+    Canvas wideBmpCanvas;
+    Rect src, dest;
+
+    // assume all of the src bitmaps are the same height & width
+    wideBmp = Bitmap.createBitmap(outer.getWidth(), outer.getHeight(), outer.getConfig());
+
+    wideBmpCanvas = new Canvas(wideBmp);
+
+
+    src = new Rect(0, 0, outer.getWidth(), outer.getHeight());
+    dest = new Rect(src);
+    dest.offset(0, 0);
+    wideBmpCanvas.drawBitmap(outer, src, dest, null);
+
+    // Bitmap inner = Bitmap.createScaledBitmap(innerB, (int)(innerB.getWidth()*0.9), (int)(innerB.getHeight()*0.9), false);
+
+    int scale = 6;
+
+    Bitmap tempBmp = Bitmap.createScaledBitmap(inner, inner.getWidth() - (inner.getWidth() / scale), inner.getHeight() - (inner.getHeight() / scale), false);
+
+    src = new Rect(0, 0, tempBmp.getWidth(), tempBmp.getHeight());
+    dest = new Rect(src);
+    //dest.offset((inner.getHeight()/scale)/2, (inner.getHeight()/scale))/2;
+    dest.offset((inner.getHeight() / scale) / 2, (inner.getHeight() / scale) / 2);
+
+    wideBmpCanvas.drawBitmap(tempBmp, src, dest, null);
+
+
+    return wideBmp;
+  }
 
   private static File bitmapToFile(Bitmap b, Context context) {
     File filesDir = context.getFilesDir();
-    File f = new File(filesDir,"cover.png");
+    File f = new File(filesDir, "cover.png");
 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     b.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
@@ -89,7 +124,6 @@ public class BlurFactory {
 
     return f;
   }
-
 
 
 }
