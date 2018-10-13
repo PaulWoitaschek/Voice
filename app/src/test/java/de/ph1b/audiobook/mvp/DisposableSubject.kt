@@ -12,14 +12,14 @@ class DisposableSubject(failureMetadata: FailureMetadata, actual: Disposable?) :
 
   fun isDisposed(): DisposableSubject {
     if (actual()?.isDisposed != true) {
-      fail("Expected to be disposed, but it's not")
+      failWithActual("expected to be disposed", true)
     }
     return this
   }
 
   fun isNotDisposed(): DisposableSubject {
     if (actual()?.isDisposed != false) {
-      fail("Expected to be NOT disposed, but it is.")
+      failWithActual("expected to be disposed", false)
     }
     return this
   }
