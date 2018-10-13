@@ -99,6 +99,4 @@
     <string name="book_header_current">Nuvarande</string>
     <string name="book_header_not_started">Inte börjat ännu</string>
     <string name="book_header_completed">Färdig</string>
-    <string name="pref_allow_crash_report_title">Kraschrapporter</string>
-    <string name="pref_allow_crash_report_content">Bidra till utvecklingen genom att skicka anonyma kraschrapporter.</string>
 </resources>

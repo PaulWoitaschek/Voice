@@ -45,14 +45,6 @@ class PrefsModule {
 
   @Provides
   @Singleton
-  @Named(PrefKeys.CRASH_REPORT_ENABLED)
-  fun crashReportEnabledPref(prefs: RxSharedPreferences): Pref<Boolean> {
-    val pref = prefs.getBoolean(PrefKeys.CRASH_REPORT_ENABLED, false)
-    return PersistentPref(pref)
-  }
-
-  @Provides
-  @Singleton
   @Named(PrefKeys.BOOKMARK_ON_SLEEP)
   fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences): Pref<Boolean> {
     val pref = prefs.getBoolean(PrefKeys.BOOKMARK_ON_SLEEP, false)

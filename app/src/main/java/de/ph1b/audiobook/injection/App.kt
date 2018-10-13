@@ -63,7 +63,7 @@ class App : Application() {
       .build()
     DataInjector.component = component
     component.inject(this)
-    CrashlyticsProxy.init(this, component.allowCrashReports)
+    CrashlyticsProxy.init(this)
 
     bookAdder.scanForFiles()
 

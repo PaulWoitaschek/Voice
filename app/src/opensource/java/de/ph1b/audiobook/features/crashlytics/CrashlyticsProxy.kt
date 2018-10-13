@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.crashlytics
 
 import android.app.Application
 import de.ph1b.audiobook.misc.ErrorReporter
-import de.ph1b.audiobook.persistence.pref.Pref
 
 /**
  * No-Op proxy for crashlytics
@@ -14,5 +13,5 @@ object CrashlyticsProxy : ErrorReporter {
 
   override fun logException(throwable: Throwable) {}
 
-  fun init(app: Application, enabled: Pref<Boolean>) {}
+  fun init(app: Application) {}
 }

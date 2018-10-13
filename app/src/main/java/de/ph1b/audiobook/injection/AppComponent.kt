@@ -27,10 +27,8 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -50,8 +48,6 @@ interface AppComponent : DataComponent {
   val context: Context
   val player: MediaPlayer
   val playStateManager: PlayStateManager
-  @get:Named(PrefKeys.CRASH_REPORT_ENABLED)
-  val allowCrashReports: Pref<Boolean>
 
   @Component.Builder
   interface Builder {

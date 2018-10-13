@@ -99,6 +99,4 @@
     <string name="book_header_current">En cours</string>
     <string name="book_header_not_started">Pas encore commencé</string>
     <string name="book_header_completed">Complété</string>
-    <string name="pref_allow_crash_report_title">Rapports d\'échec</string>
-    <string name="pref_allow_crash_report_content">Aider le développement en permettant l’envoi de rapports anonymes en cas d\'échec</string>
 </resources>

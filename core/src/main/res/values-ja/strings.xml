@@ -97,6 +97,4 @@
     <string name="book_header_current">現在</string>
     <string name="book_header_not_started">まだ開始していません</string>
     <string name="book_header_completed">完了</string>
-    <string name="pref_allow_crash_report_title">クラッシュレポート</string>
-    <string name="pref_allow_crash_report_content">開発を支援するため匿名のクラッシュレポートを送信してください</string>
 </resources>

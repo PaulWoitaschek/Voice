@@ -99,6 +99,4 @@
     <string name="book_header_current">Aktuelles</string>
     <string name="book_header_not_started">Neu</string>
     <string name="book_header_completed">Zu Ende</string>
-    <string name="pref_allow_crash_report_title">Crash reports</string>
-    <string name="pref_allow_crash_report_content">Hilf bei der Entwicklung indem du anonymisierte Crashreports überträgst.</string>
 </resources>

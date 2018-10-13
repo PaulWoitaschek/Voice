@@ -101,7 +101,4 @@
     <string name="book_header_current">Current</string>
     <string name="book_header_not_started">Not started Yet</string>
     <string name="book_header_completed">Completed</string>
-
-    <string name="pref_allow_crash_report_title">Crash reports</string>
-    <string name="pref_allow_crash_report_content">Help the development by allowing to send anonymized crash reports.</string>
 </resources>
