@@ -1,50 +1,66 @@
 package de.ph1b.audiobook.playback.utils
 
-import android.content.UriMatcher
 import android.net.Uri
 import java.util.UUID
 import javax.inject.Inject
 
 /**
- * Helper class for converting book and chapter ids to uris and back.
+ * Helper class for converting book and chapter ids to media ids.
  */
+
+private const val SCHEME = "voice"
+
 class BookUriConverter
 @Inject constructor() {
 
-  private fun baseBuilder() = Uri.Builder()
-    .authority(AUTHORITY)
-    .appendPath(PATH_BOOKS)
+  private val baseUri = Uri.Builder().scheme(SCHEME).build()
 
-  private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
-    addURI(AUTHORITY, PATH_BOOKS, ROOT)
-    addURI(AUTHORITY, "$PATH_BOOKS/#", BOOK_ID)
-    addURI(AUTHORITY, "$PATH_BOOKS/#/$PATH_CHAPTERS/#", CHAPTER_ID)
+  fun allBooksId(): String {
+    return baseUri.toString()
   }
 
-  fun type(uri: Uri): Int = matcher.match(uri)
+  fun chapterId(bookId: UUID, chapterId: Long): String {
+    return baseUri.buildUpon()
+      .appendPath(bookId.toString())
+      .appendPath(chapterId.toString())
+      .toString()
+  }
 
-  fun allBooks(): Uri = baseBuilder().build()
+  fun bookId(id: UUID): String {
+    return baseUri.buildUpon()
+      .appendPath(id.toString())
+      .toString()
+  }
 
-  fun book(bookId: UUID): Uri = baseBuilder()
-    .appendPath(bookId.toString())
-    .build()
+  fun parse(id: String): Parsed? {
+    val uri = Uri.parse(id)
+    if (uri.scheme != SCHEME) {
+      return null
+    }
+    val pathSegments = uri.pathSegments
 
-  fun chapter(bookId: UUID, chapter: Int): Uri = baseBuilder()
-    .appendPath(bookId.toString())
-    .appendPath(PATH_CHAPTERS)
-    .appendPath(chapter.toString())
-    .build()
+    val bookId = pathSegments.firstOrNull()?.toUuidOrNull()
+      ?: return Parsed.AllBooks
 
-  fun extractBook(uri: Uri) = UUID.fromString(uri.pathSegments[1].toString())!!
+    val chapterId = pathSegments.getOrNull(1)?.toLongOrNull()
+    return if (chapterId == null) {
+      Parsed.Book(bookId)
+    } else {
+      Parsed.Chapter(bookId, chapterId)
+    }
+  }
 
-  companion object {
-    private const val AUTHORITY = "books"
+  private fun String?.toUuidOrNull(): UUID? {
+    return try {
+      UUID.fromString(this)
+    } catch (e: IllegalArgumentException) {
+      null
+    }
+  }
 
-    private const val PATH_BOOKS = "root"
-    private const val PATH_CHAPTERS = "chapters"
-
-    const val ROOT = 1
-    const val BOOK_ID = 2
-    const val CHAPTER_ID = 3
+  sealed class Parsed {
+    object AllBooks : Parsed()
+    data class Book(val id: UUID) : Parsed()
+    data class Chapter(val bookId: UUID, val chapterId: Long) : Parsed()
   }
 }

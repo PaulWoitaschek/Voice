@@ -192,10 +192,9 @@ class ChangeNotifier @Inject constructor(
   }
 
   private fun Chapter.toMediaDescription(book: Book): MediaDescriptionCompat {
-    val index = book.content.chapters.indexOf(this)
     return MediaDescriptionCompat.Builder()
       .setTitle(name)
-      .setMediaId(bookUriConverter.chapter(book.id, index).toString())
+      .setMediaId(bookUriConverter.chapterId(book.id, id))
       .build()
   }
 }

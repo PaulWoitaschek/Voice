@@ -62,7 +62,11 @@ android {
     }
   }
 
-  testOptions.unitTests.isReturnDefaultValues = true
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+    animationsDisabled = true
+    unitTests.isIncludeAndroidResources = true
+  }
 
   lintOptions {
     isCheckDependencies = true
@@ -139,9 +143,6 @@ dependencies {
   testImplementation(Deps.mockito)
   testImplementation(Deps.mockitoKotlin)
 
-  androidTestImplementation(Deps.AndroidX.testRunner)
-  androidTestImplementation(Deps.truth)
-
   implementation(Deps.rxJava)
   implementation(Deps.rxAndroid)
   implementation(Deps.rxPreferences)
@@ -163,6 +164,9 @@ dependencies {
   implementation(Deps.moshi)
 
   implementation(Deps.tapTarget)
+  testImplementation(Deps.AndroidX.Test.runner)
+  testImplementation(Deps.AndroidX.Test.junit)
+  testImplementation(Deps.robolectric)
 }
 
 tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")

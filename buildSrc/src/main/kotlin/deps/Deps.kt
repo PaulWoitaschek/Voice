@@ -23,7 +23,6 @@ object Deps {
     const val recyclerView = "androidx.recyclerview:recyclerview:1.0.0"
     const val transitions = "androidx.transition:transition:1.0.0"
     const val palette = "androidx.palette:palette:1.0.0"
-    const val testRunner = "androidx.test:runner:1.1.0-alpha4"
     const val mediaCompat = "androidx.media:media:1.0.0"
     const val fragment = "androidx.fragment:fragment:1.0.0"
     const val ktx = "androidx.core:core-ktx:1.0.0"
@@ -33,6 +32,11 @@ object Deps {
       const val compiler = "androidx.room:room-compiler:2.0.0"
       const val testing = "androidx.room:room-testing:2.0.0"
       const val rxJava = "androidx.room:room-rxjava2:2.0.0"
+    }
+
+    object Test {
+      const val runner = "androidx.test:runner:1.1.0-beta02"
+      const val junit = "androidx.test.ext:junit:1.0.0-beta02"
     }
   }
 
@@ -90,4 +94,5 @@ object Deps {
   const val mockito = "org.mockito:mockito-core:2.23.0"
   const val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.6.0"
   const val truth = "com.google.truth:truth:0.42"
+  const val robolectric = "org.robolectric:robolectric:4.0-beta-1"
 }

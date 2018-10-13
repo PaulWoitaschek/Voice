@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import de.ph1b.audiobook.features.bookPlaying.chaptersAsBookPlayChapters
@@ -39,15 +38,13 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
     Timber.i("onPlayFromMediaId $mediaId")
-    val uri = Uri.parse(mediaId)
-    val type = bookUriConverter.type(uri)
-    when (type) {
-      BookUriConverter.BOOK_ID, BookUriConverter.CHAPTER_ID -> {
-        val id = bookUriConverter.extractBook(uri)
-        currentBookIdPref.value = id
-        onPlay()
-      }
-      else -> Timber.e("Invalid mediaId $mediaId")
+    mediaId ?: return
+    val parsed = bookUriConverter.parse(mediaId)
+    if (parsed is BookUriConverter.Parsed.Book) {
+      currentBookIdPref.value = parsed.id
+      onPlay()
+    } else {
+      Timber.e("Didn't handle $parsed")
     }
   }
 

@@ -34,19 +34,18 @@ class MediaBrowserHelper
   private val context: Context
 ) {
 
-  fun root(): String = bookUriConverter.allBooks().toString()
+  fun root(): String = bookUriConverter.allBooksId()
 
   suspend fun loadChildren(parentId: String): List<MediaBrowserCompat.MediaItem>? {
-    val uri = Uri.parse(parentId)
-    val items = mediaItems(uri)
+    val items = mediaItems(parentId)
     Timber.d("sending result $items")
     return items
   }
 
-  private suspend fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
-    val type = bookUriConverter.type(uri)
-
-    if (type == BookUriConverter.ROOT) {
+  private suspend fun mediaItems(parentId: String): List<MediaBrowserCompat.MediaItem>? {
+    val type = bookUriConverter.parse(parentId)
+      ?: return null
+    if (type is BookUriConverter.Parsed.AllBooks) {
       val currentBook = repo.bookById(currentBookIdPref.value)
       val current = currentBook?.toMediaDescription(
         titlePrefix = currentBookTitlePrefix()
@@ -63,6 +62,7 @@ class MediaBrowserHelper
         listOf(current) + all
       }
     } else {
+      Timber.e("Didn't handle $parentId")
       return null
     }
   }
@@ -71,7 +71,7 @@ class MediaBrowserHelper
 
   private suspend fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
     val iconUri = fileProviderUri(coverFile())
-    val mediaId = bookUriConverter.book(id).toString()
+    val mediaId = bookUriConverter.bookId(id)
     val description = MediaDescriptionCompat.Builder()
       .setTitle(titlePrefix + name)
       .setMediaId(mediaId)

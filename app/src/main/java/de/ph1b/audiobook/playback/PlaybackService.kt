@@ -146,7 +146,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .map { it.size }
       .distinctUntilChanged()
       .subscribe {
-        notifyChildrenChanged(bookUriConverter.allBooks().toString())
+        notifyChildrenChanged(bookUriConverter.allBooksId())
       }
       .disposeOnDestroy()
 

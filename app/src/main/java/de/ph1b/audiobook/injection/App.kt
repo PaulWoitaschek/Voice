@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
@@ -38,6 +39,13 @@ class App : Application() {
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
 
+    if (!alreadyCreated) {
+      // robolectric creates multiple instances of the Application so we need to prevent
+      // additional initializations
+      alreadyCreated = true
+      Picasso.setSingletonInstance(Picasso.Builder(this).build())
+    }
+
     RxAndroidPlugins.setInitMainThreadSchedulerHandler {
       AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
@@ -70,5 +78,6 @@ class App : Application() {
 
     lateinit var component: AppComponent
       @VisibleForTesting set
+    private var alreadyCreated = false
   }
 }

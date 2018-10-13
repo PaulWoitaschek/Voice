@@ -53,7 +53,7 @@ dependencies {
   implementation(Deps.Dagger.core)
   kapt(Deps.Dagger.compiler)
 
-  androidTestImplementation(Deps.AndroidX.testRunner)
+  androidTestImplementation(Deps.AndroidX.Test.runner)
   androidTestImplementation(Deps.truth)
 
   testImplementation(Deps.truth)
