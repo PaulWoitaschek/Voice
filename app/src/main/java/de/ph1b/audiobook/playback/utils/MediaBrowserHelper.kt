@@ -6,7 +6,6 @@ import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import androidx.core.content.FileProvider
-import androidx.media.MediaBrowserServiceCompat
 import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -15,9 +14,6 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.persistence.pref.Pref
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
@@ -38,23 +34,13 @@ class MediaBrowserHelper
   private val context: Context
 ) {
 
-  fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(
-    bookUriConverter.allBooks().toString(),
-    null
-  )
+  fun root(): String = bookUriConverter.allBooks().toString()
 
-  fun onLoadChildren(
-    parentId: String,
-    result: MediaBrowserServiceCompat.Result<List<MediaBrowserCompat.MediaItem>>
-  ) {
-    Timber.d("onLoadChildren $parentId, $result")
-    result.detach()
-    GlobalScope.launch {
-      val uri = Uri.parse(parentId)
-      val items = mediaItems(uri)
-      Timber.d("sending result $items")
-      result.sendResult(items)
-    }
+  suspend fun loadChildren(parentId: String): List<MediaBrowserCompat.MediaItem>? {
+    val uri = Uri.parse(parentId)
+    val items = mediaItems(uri)
+    Timber.d("sending result $items")
+    return items
   }
 
   private suspend fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {

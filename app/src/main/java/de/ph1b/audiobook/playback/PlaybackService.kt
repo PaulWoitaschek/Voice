@@ -26,6 +26,7 @@ import de.ph1b.audiobook.playback.utils.NotificationCreator
 import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
@@ -41,22 +42,6 @@ import javax.inject.Named
  * Service that hosts the longtime playback and handles its controls.
  */
 class PlaybackService : MediaBrowserServiceCompat() {
-
-  override fun onLoadChildren(
-    parentId: String,
-    result: Result<List<MediaBrowserCompat.MediaItem>>
-  ) {
-    mediaBrowserHelper.onLoadChildren(
-      parentId,
-      result
-    )
-  }
-
-  override fun onGetRoot(
-    clientPackageName: String,
-    clientUid: Int,
-    rootHints: Bundle?
-  ): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
   private val disposables = CompositeDisposable()
   private var isForeground = false
@@ -312,6 +297,26 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     return Service.START_NOT_STICKY
+  }
+
+  override fun onLoadChildren(
+    parentId: String,
+    result: Result<List<MediaBrowserCompat.MediaItem>>
+  ) {
+    result.detach()
+    val job = GlobalScope.launch {
+      val children = mediaBrowserHelper.loadChildren(parentId)
+      result.sendResult(children)
+    }
+    Disposables.fromAction { job.cancel() }.disposeOnDestroy()
+  }
+
+  override fun onGetRoot(
+    clientPackageName: String,
+    clientUid: Int,
+    rootHints: Bundle?
+  ): BrowserRoot {
+    return MediaBrowserServiceCompat.BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
   private fun play() {
