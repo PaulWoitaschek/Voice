@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback
 
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
-import de.ph1b.audiobook.features.bookPlaying.chaptersAsBookPlayChapters
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
 import de.ph1b.audiobook.injection.PrefKeys
@@ -27,12 +26,10 @@ class MediaSessionCallback @Inject constructor(
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
-    super.onSkipToQueueItem(id)
-    val bookPlayChapters = player.bookContent
-      ?.chapters?.chaptersAsBookPlayChapters()
-      ?: return
-    val chapter = bookPlayChapters[id.toInt()]
-    player.changePosition(time = chapter.start, changedFile = chapter.file)
+    Timber.i("onSkipToQueueItem $id")
+    val chapter = player.bookContent
+      ?.chapters?.getOrNull(id.toInt()) ?: return
+    player.changePosition(time = 0, changedFile = chapter.file)
     player.play()
   }
 
