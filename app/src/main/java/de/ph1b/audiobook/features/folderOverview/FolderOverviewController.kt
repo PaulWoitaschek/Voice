@@ -40,6 +40,10 @@ class FolderOverviewController :
       startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
     }
 
+    addAsLibraryMultiple.setOnClickListener {
+      startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK_MULTIPLE)
+    }
+
     overlay.isInvisible = true
 
     overlay.setOnClickListener {
@@ -73,6 +77,8 @@ class FolderOverviewController :
         "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title =
         "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
+    addAsLibraryMultiple.title =
+        "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks/Author/MultipleBooksByAuthor"
 
     setupToolbar()
   }
