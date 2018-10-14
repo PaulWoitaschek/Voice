@@ -124,6 +124,20 @@
         app:layout_constraintLeft_toRightOf="@id/playedTime"
         app:layout_constraintRight_toLeftOf="@id/maxTime" />
 
+    <TextView
+        android:id="@+id/TitleTextView"
+        android:layout_width="294dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/bookSpinner"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/bookSpinner"
         android:layout_width="0dp"

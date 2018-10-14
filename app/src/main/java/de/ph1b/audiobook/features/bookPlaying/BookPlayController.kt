@@ -147,15 +147,15 @@ class BookPlayController(
     playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
 
-    toolbar.setVisibility(View.INVISIBLE)
-    BackToMain.setOnClickListener { finish() }
-    ButtonTimer.setOnClickListener { presenter.toggleSleepTimer() }
-    ButtonBookmark.setOnClickListener {
+    //toolbar.setVisibility(View.INVISIBLE)
+    BackToMain?.setOnClickListener { finish() }
+    ButtonTimer?.setOnClickListener { presenter.toggleSleepTimer() }
+    ButtonBookmark?.setOnClickListener {
       val bookmarkController = BookmarkController.newInstance(bookId)
           .asTransaction()
       router.pushController(bookmarkController)
     }
-    ButtonPlayback.setOnClickListener {
+    ButtonPlayback?.setOnClickListener {
       PlaybackSpeedDialogFragment().show(
         fragmentManager,
         PlaybackSpeedDialogFragment.TAG

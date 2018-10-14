@@ -151,6 +151,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/AppToolbar"
+        android:visibility="gone"
         android:layout_width="384dp"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintHorizontal_bias="1.0"
