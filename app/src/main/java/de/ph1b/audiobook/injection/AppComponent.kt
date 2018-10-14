@@ -9,23 +9,23 @@ import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
-import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheet
-import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogFragment
-import de.ph1b.audiobook.features.bookOverview.EditCoverDialogFragment
+import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
+import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
+import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayPresenter
-import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogFragment
-import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
+import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogController
+import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
-import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
-import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
+import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
+import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
+import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -59,26 +59,26 @@ interface AppComponent : DataComponent {
   }
 
   fun inject(target: App)
-  fun inject(target: AutoRewindDialogFragment)
+  fun inject(target: AutoRewindDialogController)
   fun inject(target: BaseWidgetProvider)
   fun inject(target: BookOverviewController)
   fun inject(target: BookPlayController)
   fun inject(target: BookPlayPresenter)
-  fun inject(target: EditBookBottomSheet)
-  fun inject(target: EditBookTitleDialogFragment)
-  fun inject(target: EditCoverDialogFragment)
+  fun inject(target: EditBookBottomSheetController)
+  fun inject(target: EditBookTitleDialogController)
+  fun inject(target: EditCoverDialogController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
   fun inject(target: ImagePickerController)
-  fun inject(target: JumpToPositionDialogFragment)
+  fun inject(target: JumpToPositionDialogController)
   fun inject(target: LoadBookCover)
   fun inject(target: LoudnessDialog)
   fun inject(target: MainActivity)
-  fun inject(target: PlaybackSpeedDialogFragment)
-  fun inject(target: SeekDialogFragment)
+  fun inject(target: PlaybackSpeedDialogController)
+  fun inject(target: SeekDialogController)
   fun inject(target: SettingsController)
   fun inject(target: SleepTimerDialogFragment)
-  fun inject(target: ThemePickerDialogFragment)
+  fun inject(target: ThemePickerDialogController)
 
   fun playbackComponent(): PlaybackComponent.Builder
 }

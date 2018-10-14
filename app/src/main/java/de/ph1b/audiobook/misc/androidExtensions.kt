@@ -12,7 +12,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.fragment.app.DialogFragment
 import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
@@ -53,15 +52,6 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
 fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
   val array: Array<File>? = if (filter == null) listFiles() else listFiles(filter)
   return array?.toList() ?: emptyList()
-}
-
-/** find a callback. The hosting activity must implement [RouterProvider] and the supplied key must match to the instance id of a controller */
-fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
-  val routerProvider = activity as RouterProvider
-  val router = routerProvider.provideRouter()
-  val controllerId: String = arguments!!.getString(controllerBundleKey)!!
-  @Suppress("UNCHECKED_CAST")
-  return router.getControllerWithInstanceId(controllerId) as T
 }
 
 fun checkMainThread() {

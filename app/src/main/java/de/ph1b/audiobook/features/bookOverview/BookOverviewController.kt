@@ -1,12 +1,10 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bluelinelabs.conductor.RouterTransaction
@@ -46,7 +44,7 @@ private const val COVER_FROM_GALLERY = 1
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
 class BookOverviewController : BaseController(),
-  EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
+  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback {
 
   override val layoutRes = R.layout.book_overview
 
@@ -64,7 +62,6 @@ class BookOverviewController : BaseController(),
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
-  private var pendingTransaction: FragmentTransaction? = null
 
   override fun onViewCreated() {
     setupBottomAppBar()
@@ -90,8 +87,8 @@ class BookOverviewController : BaseController(),
       when (clickType) {
         BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
         BookOverviewClick.MENU -> {
-          val editDialog = EditBookBottomSheet.newInstance(this, book)
-          editDialog.show(fragmentManager, "editBottomSheet")
+          val editDialog = EditBookBottomSheetController.newInstance(this, book)
+          editDialog.showDialog(router, "editBottomSheet")
         }
       }
     }
@@ -129,13 +126,6 @@ class BookOverviewController : BaseController(),
     router.pushController(controller.asTransaction())
   }
 
-  override fun onActivityResumed(activity: Activity) {
-    super.onActivityResumed(activity)
-
-    pendingTransaction?.commit()
-    pendingTransaction = null
-  }
-
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       COVER_FROM_GALLERY -> {
@@ -146,12 +136,9 @@ class BookOverviewController : BaseController(),
             return
           }
 
-          @SuppressLint("CommitTransaction")
-          pendingTransaction = fragmentManager.beginTransaction()
-            .add(
-              EditCoverDialogFragment.newInstance(this, book, imageUri),
-              EditCoverDialogFragment.TAG
-            )
+          EditCoverDialogController.newInstance(this, book, imageUri).showDialog(
+            router, EditCoverDialogController.TAG
+          )
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)

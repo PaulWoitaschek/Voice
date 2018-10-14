@@ -5,32 +5,29 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
 import javax.inject.Named
 
-/**
- * Dialog for picking the UI theme.
- */
-class ThemePickerDialogFragment : DialogFragment() {
+class ThemePickerDialogController : DialogController() {
 
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
 
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
     val oldTheme = themePref.value
     val existingThemes = ThemeUtil.Theme.values()
-    val names = existingThemes.map { getString(it.nameId) }
+    val names = existingThemes.map { activity!!.getString(it.nameId) }
 
-    return MaterialDialog.Builder(context!!)
+    return MaterialDialog.Builder(activity!!)
       .items(*names.toTypedArray())
       .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
         val newTheme = existingThemes[i]
@@ -50,6 +47,6 @@ class ThemePickerDialogFragment : DialogFragment() {
   }
 
   companion object {
-    val TAG: String = ThemePickerDialogFragment::class.java.simpleName
+    val TAG: String = ThemePickerDialogController::class.java.simpleName
   }
 }

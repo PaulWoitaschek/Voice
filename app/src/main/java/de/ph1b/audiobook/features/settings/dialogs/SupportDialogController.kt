@@ -5,16 +5,14 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-
 import com.afollestad.materialdialogs.MaterialDialog
-
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.misc.DialogController
 import timber.log.Timber
 
-class SupportDialogFragment : DialogFragment() {
+class SupportDialogController : DialogController() {
 
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val onSupportListItemClicked = MaterialDialog.ListCallback { _, _, i, _ ->
       when (i) {
         0 -> visitUri(GITHUB_URL)
@@ -39,7 +37,7 @@ class SupportDialogFragment : DialogFragment() {
   }
 
   companion object {
-    val TAG: String = SupportDialogFragment::class.java.simpleName
+    val TAG: String = SupportDialogController::class.java.simpleName
     private val GITHUB_URL = Uri.parse("https://github.com/Ph1b/MaterialAudiobookPlayer")!!
     private val TRANSLATION_URL =
       Uri.parse("https://www.transifex.com/projects/p/material-audiobook-player")!!

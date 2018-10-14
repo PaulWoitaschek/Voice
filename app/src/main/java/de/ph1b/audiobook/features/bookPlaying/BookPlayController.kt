@@ -14,7 +14,7 @@ import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
+import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.clicks
@@ -246,9 +246,9 @@ class BookPlayController(
           true
         }
         R.id.action_time_lapse -> {
-          PlaybackSpeedDialogFragment().show(
-            fragmentManager,
-            PlaybackSpeedDialogFragment.TAG
+          PlaybackSpeedDialogController().showDialog(
+            router,
+            PlaybackSpeedDialogController.TAG
           )
           true
         }
@@ -283,7 +283,7 @@ class BookPlayController(
   }
 
   private fun launchJumpToPositionDialog() {
-    JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
+    JumpToPositionDialogController().showDialog(router, JumpToPositionDialogController.TAG)
   }
 
   override fun showLeftSleepTime(ms: Int) {
