@@ -3,8 +3,7 @@ package de.ph1b.audiobook.features.bookOverview
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
-import de.ph1b.audiobook.features.bookOverview.list.BY_LAST_PLAYED_THEN_NAME
-import de.ph1b.audiobook.features.bookOverview.list.BY_NAME
+import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -26,7 +25,9 @@ constructor(
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>
+  private val currentBookIdPref: Pref<UUID>,
+  @Named(PrefKeys.SORTING_MODE)
+  private val currentSorrtingMode: Pref<BookComparator>
 ) {
 
   fun attach() {
@@ -98,9 +99,10 @@ constructor(
       target += book
     }
 
-    current.sortWith(BY_LAST_PLAYED_THEN_NAME)
-    notStarted.sortWith(BY_NAME)
-    completed.sortWith(BY_NAME)
+    val sortingFunction = currentSorrtingMode.value.comparatorFunction
+    current.sortWith(sortingFunction)
+    notStarted.sortWith(sortingFunction)
+    completed.sortWith(sortingFunction)
 
     return BookOverviewState.Content(
       currentBook = currentBook,

@@ -82,6 +82,10 @@
     <string name="pref_support_title">Support</string>
     <string name="pref_support_translations">Translations</string>
     <string name="pref_support_contribute">Support and suggestions</string>
+    <string name="pref_sort_title">Sorting Options</string>
+    <string name="pref_sort_by_name">Name</string>
+    <string name="pref_sort_by_last_played">Last Played</string>
+    <string name="pref_sort_by_date_added">Date Added</string>
     <!--Misc-->
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>
