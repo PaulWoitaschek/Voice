@@ -1,24 +1,22 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.bottomCompoundDrawable
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.endCompoundDrawable
-import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.putUUID
@@ -32,19 +30,18 @@ import javax.inject.Inject
 /**
  * Bottom sheet dialog fragment that will be displayed when a book edit was requested
  */
-class EditBookBottomSheet : BottomSheetDialogFragment() {
+class EditBookBottomSheetController : DialogController() {
 
   @Inject
   lateinit var repo: BookRepository
 
-  private fun callback() = findCallback<Callback>(NI_TARGET)
+  private fun callback() = router.getControllerWithInstanceId(NI_TARGET) as Callback
 
-  @SuppressLint("InflateParams")
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
     val dialog =
-      BottomSheetDialog(context!!, R.style.BottomSheetStyle)
+      BottomSheetDialog(activity!!, R.style.BottomSheetStyle)
 
     // if there is no book, skip here
     val book = repo.bookById(bookId())
@@ -58,24 +55,25 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     dialog.setContentView(container.containerView)
 
     container.title.setOnClickListener {
-      EditBookTitleDialogFragment.newInstance(book)
-        .show(fragmentManager, EditBookTitleDialogFragment.TAG)
-      dismiss()
+      val router = (activity as RouterProvider).provideRouter()
+      EditBookTitleDialogController.newInstance(book)
+        .showDialog(router, EditBookTitleDialogController.TAG)
+      dismissDialog()
     }
     container.internetCover.setOnClickListener {
       callback().onInternetCoverRequested(book)
-      dismiss()
+      dismissDialog()
     }
     container.fileCover.setOnClickListener {
       callback().onFileCoverRequested(book)
-      dismiss()
+      dismissDialog()
     }
     container.bookmark.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
       val controller = BookmarkController.newInstance(book.id)
       router.pushController(controller.asTransaction())
 
-      dismiss()
+      dismissDialog()
     }
 
     tintLeftDrawable(container.title)
@@ -88,7 +86,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
   private fun tintLeftDrawable(textView: TextView) {
     val left = textView.startCompoundDrawable()!!
-    val tinted = left.tinted(context!!.color(R.color.icon_color))
+    val tinted = left.tinted(activity!!.color(R.color.icon_color))
     textView.setCompoundDrawablesRelative(
       tinted,
       textView.topCompoundDrawable(),
@@ -97,14 +95,14 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     )
   }
 
-  private fun bookId() = arguments!!.getUUID(NI_BOOK)
+  private fun bookId() = args.getUUID(NI_BOOK)
 
   companion object {
     private const val NI_BOOK = "ni#book"
     private const val NI_TARGET = "ni#target"
     fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback =
-      EditBookBottomSheet().apply {
-        arguments = Bundle().apply {
+      EditBookBottomSheetController().apply {
+        args.apply {
           putUUID(NI_BOOK, book.id)
           putString(NI_TARGET, target.instanceId)
         }

@@ -3,12 +3,12 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
-class JumpToPositionDialogFragment : DialogFragment() {
+class JumpToPositionDialogController : DialogController() {
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
@@ -28,7 +28,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
   @Inject
   lateinit var playerController: PlayerController
 
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
     val container =
@@ -81,7 +81,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
       }
     }
 
-    return MaterialDialog.Builder(context!!)
+    return MaterialDialog.Builder(activity!!)
       .customView(container.containerView, true)
       .title(R.string.action_time_change)
       .onPositive { _, _ ->
@@ -97,6 +97,6 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
   companion object {
 
-    val TAG: String = JumpToPositionDialogFragment::class.java.simpleName
+    val TAG: String = JumpToPositionDialogController::class.java.simpleName
   }
 }

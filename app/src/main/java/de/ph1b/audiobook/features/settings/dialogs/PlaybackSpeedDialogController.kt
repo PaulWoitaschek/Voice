@@ -3,13 +3,13 @@ package de.ph1b.audiobook.features.settings.dialogs
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.progressChangedStream
@@ -26,7 +26,7 @@ import javax.inject.Named
 /**
  * Dialog for setting the playback speed of the current book.
  */
-class PlaybackSpeedDialogFragment : DialogFragment() {
+class PlaybackSpeedDialogController : DialogController() {
 
   @Inject
   lateinit var repo: BookRepository
@@ -36,7 +36,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
   lateinit var playerController: PlayerController
 
   @SuppressLint("InflateParams")
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
     // init views
@@ -53,16 +53,17 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     seekBar.progress = ((speed - MIN) * FACTOR).toInt()
 
     // observable of seek bar, mapped to speed
-    @Suppress("CheckResult")
     seekBar.progressChangedStream(initialNotification = true)
       .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
       .doOnNext {
         // update speed text
-        val text = "${getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
+        val text =
+          "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
         textView.text = text
       }
       .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
       .subscribe { playerController.setSpeed(it) } // update speed after debounce
+      .disposeOnDestroyDialog()
 
     return MaterialDialog.Builder(activity!!)
       .title(R.string.playback_speed)
@@ -71,7 +72,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
   }
 
   companion object {
-    val TAG: String = PlaybackSpeedDialogFragment::class.java.simpleName
+    val TAG: String = PlaybackSpeedDialogController::class.java.simpleName
     private const val MAX = Book.SPEED_MAX
     private const val MIN = Book.SPEED_MIN
     private const val FACTOR = 100F

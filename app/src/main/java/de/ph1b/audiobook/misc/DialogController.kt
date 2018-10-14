@@ -9,6 +9,8 @@ import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 private const val SI_DIALOG = "android:savedDialogState"
 
@@ -19,6 +21,7 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
 
   private var dialog: Dialog? = null
   private var dismissed = false
+  private val compositeDisposable = CompositeDisposable()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -79,5 +82,14 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
     dismissed = true
   }
 
+  override fun onDestroy() {
+    super.onDestroy()
+    compositeDisposable.clear()
+  }
+
   protected abstract fun onCreateDialog(savedViewState: Bundle?): Dialog
+
+  protected fun Disposable.disposeOnDestroyDialog() {
+    compositeDisposable.add(this)
+  }
 }
