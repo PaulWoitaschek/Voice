@@ -168,10 +168,34 @@
         tools:text="00:34" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="40dp"
+        android:id="@+id/upperCornerLatch"
+        android:layout_width="33dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="52dp"
+        android:rotation="45"
+        android:translationX="11dp"
+        android:translationY="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/navBarColor" />
+
+    <ImageView
+        android:id="@+id/Latch"
+        android:layout_width="41dp"
         android:layout_height="180dp"
         android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/navBarColor" />
+
+    <ImageView
+        android:id="@+id/lowerCornerLatch"
+        android:layout_width="33dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="256dp"
+        android:rotation="-45"
+        android:translationX="11dp"
+        android:translationY="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/navBarColor" />
