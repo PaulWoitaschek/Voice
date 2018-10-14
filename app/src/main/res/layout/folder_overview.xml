@@ -67,6 +67,17 @@
                 app:fab_size="mini"
                 app:fab_title="@string/folder_add_collection" />
 
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addAsLibraryMultiple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/folder_add_collection_multiple"
+                app:fab_colorNormal="?attr/colorAccent"
+                app:fab_colorPressed="?attr/colorAccentDark"
+                app:fab_icon="@drawable/folder_multiple"
+                app:fab_size="mini"
+                app:fab_title="@string/folder_add_collection" />
+
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     </FrameLayout>

@@ -99,6 +99,25 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
   private fun addFileAndTerminate(chosen: File) {
     when (view.getMode()) {
+      FolderChooserActivity.OperationMode.COLLECTION_BOOK_MULTIPLE -> {
+        File(chosen.absolutePath).walk().forEach {
+          var containsFiles = false
+          File(it.absolutePath).listFiles()?.forEach {
+            if(it.isFile){
+              containsFiles=true
+            }
+          }
+          if(containsFiles){
+            if (canAddNewFolder(it.absolutePath)) {
+              val singleBooks = HashSet(singleBookFolderPref.value)
+              singleBooks.add(it.absolutePath)
+              singleBookFolderPref.value = singleBooks
+            }
+          }
+        }
+        view.finish()
+        Timber.v("chosenCollection = $chosen")
+      }
       FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
           val collections = HashSet(collectionBookFolderPref.value)

@@ -158,6 +158,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   enum class OperationMode {
+    COLLECTION_BOOK_MULTIPLE,
     COLLECTION_BOOK,
     SINGLE_BOOK
   }
