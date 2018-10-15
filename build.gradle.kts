@@ -113,17 +113,13 @@ tasks {
     into(artifactFolder)
   }
 
-  val allUnitTests = register<GradleBuild>("allUnitTests") {
-    val testResultFolder = File(rootDir, "testResults")
+  val allUnitTests = register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
-      val test = (subProject.tasks.findByName("testProprietaryDebugUnitTest")
+      (subProject.tasks.findByName("testProprietaryDebugUnitTest")
         ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
-      if (test != null) {
-        test.reports.junitXml.destination = File(testResultFolder, subProject.name)
-      }
-      test
     }
-    dependsOn(tests)
+    destinationDir = File(artifactFolder, "testResults")
+    reportOn(tests)
   }
 
   register<GradleBuild>("ci") {
