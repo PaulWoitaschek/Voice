@@ -68,11 +68,11 @@ object Deps {
 
   object ExoPlayer {
     const val core = "com.google.android.exoplayer:exoplayer-core:2.9.0"
-    private const val extensionVersion = "2.9.0"
+    private const val extensionVersion = "2.7.0-1"
     const val opus =
-      "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:2.7.0-1"
+      "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$extensionVersion"
     const val flac =
-      "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:2.7.0-1"
+      "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$extensionVersion"
   }
 
   const val moshi = "com.squareup.moshi:moshi:1.7.0"
