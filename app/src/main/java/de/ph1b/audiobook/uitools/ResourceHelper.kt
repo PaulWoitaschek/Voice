@@ -7,7 +7,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
 import androidx.core.content.ContextCompat
 
-
 @AnyRes
 fun Context.attrToResource(@AttrRes attrId: Int): Int {
   val a = theme.obtainStyledAttributes(intArrayOf(attrId))

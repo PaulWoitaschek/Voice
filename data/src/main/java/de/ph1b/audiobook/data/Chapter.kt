@@ -46,11 +46,11 @@ data class Chapter(
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is Chapter) return false
-    return this.file == other.file
-        && this.name == other.name
-        && this.duration == other.duration
-        && this.fileLastModified == other.fileLastModified
-        && this.marks.contentEquals(other.marks)
+    return this.file == other.file &&
+        this.name == other.name &&
+        this.duration == other.duration &&
+        this.fileLastModified == other.fileLastModified &&
+        this.marks.contentEquals(other.marks)
   }
 
   override fun hashCode(): Int {

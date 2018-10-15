@@ -34,5 +34,4 @@ class FolderChooserAdapter(
     data.addAll(newData)
     notifyDataSetChanged()
   }
-
 }

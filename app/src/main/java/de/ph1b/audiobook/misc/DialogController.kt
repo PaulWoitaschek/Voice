@@ -35,7 +35,7 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
         }
       }
     }
-    //stub view
+    // stub view
     return View(activity)
   }
 

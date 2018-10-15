@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import de.ph1b.audiobook.misc.dpToPxRounded
 
-
 class BookOverviewItemDecoration(context: Context) : ItemDecoration() {
 
   private val margin = context.dpToPxRounded(8F)

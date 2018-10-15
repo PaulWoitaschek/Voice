@@ -7,9 +7,9 @@ class BookOverviewDiff : DiffUtil.ItemCallback<Any>() {
 
   override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
     return if (oldItem is Book && newItem is Book) {
-      (oldItem.id == newItem.id
-          && oldItem.content.position == newItem.content.position
-          && oldItem.name == newItem.name)
+      (oldItem.id == newItem.id &&
+          oldItem.content.position == newItem.content.position &&
+          oldItem.name == newItem.name)
     } else oldItem == newItem
   }
 

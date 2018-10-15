@@ -67,7 +67,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     abort.setOnClickListener { finish() }
     upButton.setOnClickListener { onBackPressed() }
 
-    //recycler
+    // recycler
     adapter = FolderChooserAdapter(this, getMode()) {
       presenter().fileSelected(it)
     }

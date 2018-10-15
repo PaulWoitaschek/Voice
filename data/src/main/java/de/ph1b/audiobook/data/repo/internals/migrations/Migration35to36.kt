@@ -11,7 +11,6 @@ import de.ph1b.audiobook.data.repo.internals.getStringOrNull
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.transaction
 
-
 private const val ID = "bookId"
 private const val NAME = "bookName"
 private const val AUTHOR = "bookAuthor"
@@ -35,7 +34,6 @@ private const val CREATE_TABLE = """
       $ACTIVE INTEGER NOT NULL DEFAULT 1
     )
   """
-
 
 class Migration35to36 : IncrementalMigration(35) {
 

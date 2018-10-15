@@ -14,7 +14,6 @@ import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
 
-
 @Module
 class PrefsModule {
 

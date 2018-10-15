@@ -22,7 +22,6 @@ class SwitchSettingView : ConstraintLayout {
     View.inflate(context, R.layout.merge_setting_row_switch, this)
   }
 
-
   fun setTitle(@StringRes resId: Int) {
     switchTitle.setText(resId)
   }

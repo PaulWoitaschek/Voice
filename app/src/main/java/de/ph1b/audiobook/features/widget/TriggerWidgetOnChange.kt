@@ -42,9 +42,9 @@ class TriggerWidgetOnChange @Inject constructor(
         repo.byId(it).getIfPresent()
       }
       .distinctUntilChanged { previous, current ->
-        previous.id == current.id
-            && previous.content.chapters == current.content.chapters
-            && previous.content.currentFile == current.content.currentFile
+        previous.id == current.id &&
+            previous.content.chapters == current.content.chapters &&
+            previous.content.currentFile == current.content.currentFile
       }
   }
 }

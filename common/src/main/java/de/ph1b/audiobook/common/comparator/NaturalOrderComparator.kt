@@ -1,7 +1,8 @@
 package de.ph1b.audiobook.common.comparator
 
 import java.io.File
-import java.util.*
+import java.util.ArrayList
+import java.util.Comparator
 
 /**
  * Simple class holding various static comparators.

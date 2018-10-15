@@ -6,7 +6,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
 
-
 @RunWith(AndroidJUnit4::class)
 class BookUriConverterTest {
 
@@ -35,4 +34,3 @@ class BookUriConverterTest {
     assertThat(parsed).isEqualTo(BookUriConverter.Parsed.Chapter(bookId, 5L))
   }
 }
-

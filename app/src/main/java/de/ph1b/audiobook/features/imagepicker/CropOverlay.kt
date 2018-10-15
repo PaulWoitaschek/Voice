@@ -165,7 +165,6 @@ class CropOverlay @JvmOverloads constructor(
             Timber.i("inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y")
             dragRect.squareInset(inset)
           }
-
         }
         MotionEvent.ACTION_UP -> {
           // reset

@@ -4,11 +4,9 @@ import android.content.Context
 import android.os.Environment
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
 import java.util.UUID
-
 
 data class Book(
   val id: UUID,

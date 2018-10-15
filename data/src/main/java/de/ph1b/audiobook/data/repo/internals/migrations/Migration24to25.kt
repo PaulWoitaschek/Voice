@@ -254,12 +254,10 @@ class Migration24to25(
           } catch (e: IOException) {
             e.printStackTrace()
           }
-
         }
       } catch (e: JSONException) {
         throw InvalidPropertiesFormatException(e)
       }
-
     }
   }
 }

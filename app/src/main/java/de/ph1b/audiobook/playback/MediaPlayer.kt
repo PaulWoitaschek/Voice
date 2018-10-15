@@ -145,8 +145,8 @@ constructor(
   }
 
   fun init(content: BookContent) {
-    val shouldInitialize = player.playbackState == Player.STATE_IDLE
-        || !alreadyInitializedChapters(content)
+    val shouldInitialize = player.playbackState == Player.STATE_IDLE ||
+        !alreadyInitializedChapters(content)
     if (!shouldInitialize) {
       return
     }

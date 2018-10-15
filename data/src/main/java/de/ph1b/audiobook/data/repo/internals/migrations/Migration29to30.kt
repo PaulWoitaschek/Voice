@@ -71,7 +71,6 @@ private const val CREATE_TABLE_BOOKMARKS = """
 @SuppressLint("Recycle")
 class Migration29to30 : IncrementalMigration(29) {
 
-
   override fun migrate(db: SupportSQLiteDatabase) {
     // fetching old contents
     val cursor = db.query(

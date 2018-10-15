@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
-
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter

@@ -7,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-
 class NaturalOrderComparatorTest {
 
   private val testFolder = TemporaryFolder()
@@ -74,4 +73,3 @@ class NaturalOrderComparatorTest {
     testFolder.delete()
   }
 }
-

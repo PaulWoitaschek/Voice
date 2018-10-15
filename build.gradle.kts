@@ -7,6 +7,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdates
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import deps.Deps
 import deps.Versions
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 buildscript {
 
@@ -28,6 +29,7 @@ buildscript {
 plugins {
   id("com.gradle.build-scan") version "1.16"
   id("com.github.ben-manes.versions") version "0.20.0"
+  id("org.jlleitschuh.gradle.ktlint") version "6.1.0"
 }
 
 buildScan {
@@ -75,6 +77,10 @@ allprojects {
 }
 
 subprojects {
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
+  configure<KtlintExtension> {
+    version.set(Deps.ktLint)
+  }
   plugins.whenPluginAdded {
     if (this is AppPlugin || this is LibraryPlugin) {
       convention.findByType(BaseExtension::class)?.let {
@@ -127,6 +133,12 @@ tasks {
       subprojects.single { it.name == "app" }.tasks
         .single { it.name == "lintProprietaryDebug" } as LintBaseTask
     lint.lintOptions.htmlOutput = File(artifactFolder, "lint.html")
-    dependsOn(ciBuildApks, copyCiApk.get().mustRunAfter(ciBuildApks), allUnitTests, lint)
+    dependsOn(
+      "ktlintCheck",
+      ciBuildApks,
+      copyCiApk.get().mustRunAfter(ciBuildApks),
+      allUnitTests,
+      lint
+    )
   }
 }

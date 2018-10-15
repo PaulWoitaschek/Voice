@@ -57,7 +57,7 @@ class ChangeNotifier @Inject constructor(
           PlaybackStateCompat.ACTION_STOP
     )
 
-  //use a different feature set for Android Auto
+  // use a different feature set for Android Auto
   private val playbackStateBuilderForAuto = PlaybackStateCompat.Builder()
     .setActions(
       PlaybackStateCompat.ACTION_PAUSE or

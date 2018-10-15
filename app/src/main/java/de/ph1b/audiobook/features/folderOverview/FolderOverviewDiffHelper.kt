@@ -22,7 +22,6 @@ object FolderOverviewDiffHelper {
             oldItemPosition,
             newItemPosition
           )
-
       }, false
     ) // assume sorted
   }

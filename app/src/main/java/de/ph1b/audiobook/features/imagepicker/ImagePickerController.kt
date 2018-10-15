@@ -34,7 +34,6 @@ import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
-
 class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   constructor(book: Book) : this(

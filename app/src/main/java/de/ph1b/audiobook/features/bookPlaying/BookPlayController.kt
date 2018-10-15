@@ -37,8 +37,6 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -173,7 +171,7 @@ class BookPlayController(
     seekBar.setOnSeekBarChangeListener(
       object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
-          //sets text to adjust while using seekBar
+          // sets text to adjust while using seekBar
           playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
         }
 

@@ -98,4 +98,5 @@ object Deps {
   const val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.6.0"
   const val truth = "com.google.truth:truth:0.42"
   const val robolectric = "org.robolectric:robolectric:4.0-beta-1"
+  const val ktLint = "0.29.0"
 }

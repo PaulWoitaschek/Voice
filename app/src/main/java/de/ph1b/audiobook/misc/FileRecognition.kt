@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.misc
 
 import java.io.FileFilter
-import java.util.*
+import java.util.Arrays
 
 /**
  * Class containing methods for recognizing different file types by their file ending.

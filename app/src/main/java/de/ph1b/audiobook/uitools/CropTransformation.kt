@@ -33,5 +33,4 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
       (rect.right * scaleFactor).toInt(),
       (rect.bottom * scaleFactor).toInt()
     )
-
 }

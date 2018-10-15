@@ -31,7 +31,6 @@ class DataSourceConverter
       .setExtractorsFactory(extractorsFactory)
   }
 
-
   private fun Chapter.toMediaSource() = toMediaSource(file)
 
   fun toMediaSource(file: File): ExtractorMediaSource =

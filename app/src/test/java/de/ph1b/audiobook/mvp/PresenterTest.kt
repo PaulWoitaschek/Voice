@@ -6,7 +6,6 @@ import io.reactivex.disposables.Disposables
 import org.junit.Before
 import org.junit.Test
 
-
 class PresenterTest {
 
   private lateinit var presenter: Presenter<View>

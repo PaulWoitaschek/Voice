@@ -50,21 +50,21 @@ class BookSearchHandler
     playUnstructuredSearch(search.query)
   }
 
-  //Look for anything that might match the query
+  // Look for anything that might match the query
   private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
       val foundMatch = findAndPlayFirstMatch {
         val bookNameMatches = it.name.contains(query, ignoreCase = true)
         val authorMatches = it.author?.contains(query, ignoreCase = true) == true
-        val chapterNameMatches = it.content.chapters.any {
-          it.name.contains(query, ignoreCase = true)
+        val chapterNameMatches = it.content.chapters.any { chapter ->
+          chapter.name.contains(query, ignoreCase = true)
         }
         bookNameMatches || authorMatches || chapterNameMatches
       }
       if (foundMatch) return
     }
 
-    //continue playback
+    // continue playback
     Timber.i("continuing from search without query")
     val currentId = currentBookIdPref.value
     val noBookInitialized = repo.activeBooks.none { it.id == currentId }

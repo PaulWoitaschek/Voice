@@ -41,12 +41,12 @@ class JumpToPositionDialogFragment : DialogFragment() {
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()
     val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
     if (biggestHour == 0) {
-      //sets visibility of hour related things to gone if max.hour is zero
+      // sets visibility of hour related things to gone if max.hour is zero
       container.colon.isVisible = false
       container.numberHour.isVisible = false
     }
 
-    //set maximum values
+    // set maximum values
     container.numberHour.maxValue = biggestHour
     if (biggestHour == 0) {
       container.numberMinute.maxValue = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
@@ -54,7 +54,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
       container.numberMinute.maxValue = 59
     }
 
-    //set default values
+    // set default values
     val defaultHour = TimeUnit.MILLISECONDS.toHours(position.toLong()).toInt()
     val defaultMinute = TimeUnit.MILLISECONDS.toMinutes(position.toLong()).toInt() % 60
     container.numberHour.value = defaultHour
@@ -71,11 +71,11 @@ class JumpToPositionDialogFragment : DialogFragment() {
     container.numberMinute.setOnValueChangedListener { _, oldVal, newVal ->
       var hValue = container.numberHour.value
 
-      //scrolling forward
+      // scrolling forward
       if (oldVal == 59 && newVal == 0) {
         container.numberHour.value = ++hValue
       }
-      //scrolling backward
+      // scrolling backward
       if (oldVal == 0 && newVal == 59) {
         container.numberHour.value = --hValue
       }

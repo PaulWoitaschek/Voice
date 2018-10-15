@@ -54,4 +54,3 @@ class MediaAnalyzer @Inject constructor(
     object Failure : Result()
   }
 }
-

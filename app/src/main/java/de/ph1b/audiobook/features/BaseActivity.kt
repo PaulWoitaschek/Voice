@@ -9,8 +9,6 @@ import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivi
 import de.ph1b.audiobook.playback.PlaybackService
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
@@ -48,7 +46,6 @@ abstract class BaseActivity : AppCompatActivity() {
       if (nightModesDistinct) recreate()
     }
   }
-
 
   companion object {
     suspend fun storageMounted(): Boolean = withContext(Dispatchers.IO) {

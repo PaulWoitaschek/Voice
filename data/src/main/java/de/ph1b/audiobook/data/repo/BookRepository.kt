@@ -8,8 +8,6 @@ import de.ph1b.audiobook.data.repo.internals.BookStorage
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
@@ -18,7 +16,6 @@ import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
-
 
 @Singleton
 class BookRepository

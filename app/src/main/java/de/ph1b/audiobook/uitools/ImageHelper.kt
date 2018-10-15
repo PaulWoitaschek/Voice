@@ -8,7 +8,6 @@ import android.media.MediaMetadataRetriever
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
@@ -85,7 +84,6 @@ constructor(private val windowManager: Provider<WindowManager>) {
     } catch (e: IOException) {
       Timber.e(e, "Error at saving image with destination=$destination")
     }
-
   }
 
   val smallerScreenSize: Int
@@ -125,7 +123,7 @@ constructor(private val windowManager: Provider<WindowManager>) {
     val width = options.outWidth
     var reqLength = smallerScreenSize
 
-    //setting reqWidth matching to desired 1:1 ratio and screen-size
+    // setting reqWidth matching to desired 1:1 ratio and screen-size
     reqLength *= if (width < height) {
       (height / width)
     } else {
@@ -148,4 +146,3 @@ constructor(private val windowManager: Provider<WindowManager>) {
     return inSampleSize
   }
 }
-

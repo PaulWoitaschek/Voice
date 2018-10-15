@@ -4,7 +4,7 @@ import android.animation.Animator
 import android.animation.TimeInterpolator
 import android.util.ArrayMap
 import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
-import java.util.*
+import java.util.ArrayList
 
 class NoPauseAnimator(private val animator: Animator) : Animator() {
 
@@ -13,7 +13,7 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
   override fun addListener(listener: Animator.AnimatorListener) {
     val wrapper = AnimatorListenerWrapper(this, listener)
     if (!listeners.containsKey(listener)) {
-      listeners.put(listener, wrapper)
+      listeners[listener] = wrapper
       animator.addListener(wrapper)
     }
   }

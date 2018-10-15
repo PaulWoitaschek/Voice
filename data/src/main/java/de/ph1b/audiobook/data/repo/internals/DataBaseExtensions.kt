@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.ArrayList
 
-
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)
   while (moveToNext()) {
@@ -15,14 +14,12 @@ inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   }
 }
 
-
 inline fun Cursor.consumeEach(consume: (Cursor) -> Unit) = use {
   moveToPosition(-1)
   while (moveToNext()) {
     consume(it)
   }
 }
-
 
 /** a function that iterates of the rows of a cursor and maps all using a supplied mapper function */
 inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
@@ -51,7 +48,6 @@ inline fun <T> SupportSQLiteDatabase.transaction(
     endTransaction()
   }
 }
-
 
 @SuppressLint("Recycle")
 fun SQLiteDatabase.query(

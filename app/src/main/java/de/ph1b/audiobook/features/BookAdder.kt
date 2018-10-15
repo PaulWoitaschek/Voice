@@ -23,7 +23,6 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
@@ -154,7 +153,7 @@ class BookAdder
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
 
-    //getting books to remove
+    // getting books to remove
     val booksToRemove = ArrayList<Book>(20)
     for (book in repo.activeBooks) {
       var bookExists = false
@@ -310,7 +309,7 @@ class BookAdder
         }
       }
 
-      //set new bookmarks and chapters.
+      // set new bookmarks and chapters.
       // if the current path is gone, reset it correctly.
       bookToUpdate = bookToUpdate.updateContent {
         copy(
@@ -340,16 +339,16 @@ class BookAdder
     if (newChapters.isEmpty()) {
       // there are no chapters
       if (bookExisting != null) {
-        //so delete book if available
+        // so delete book if available
         repo.hideBook(listOf(bookExisting))
       }
     } else {
       // there are chapters
       if (bookExisting == null) {
-        //there is no active book.
+        // there is no active book.
         addNewBook(rootFile, bookId, newChapters, type)
       } else {
-        //there is a book, so update it if necessary
+        // there is a book, so update it if necessary
         updateBook(bookExisting, newChapters)
       }
     }

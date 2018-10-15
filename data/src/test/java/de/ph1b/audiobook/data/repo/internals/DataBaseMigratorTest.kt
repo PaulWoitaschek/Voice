@@ -198,7 +198,6 @@ class DataBaseMigratorTest {
         assertThat(chapterCursor.getStringOrNull("marks")).isEqualTo(chapter.marks ?: "{}")
       }
       chapterCursor.close()
-
     }
     metaDataCursor.close()
     bookSettingsCursor.close()

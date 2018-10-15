@@ -7,7 +7,6 @@ import java.util.UUID
 
 typealias BookClickListener = (Book, BookOverviewClick) -> Unit
 
-
 class BookOverviewAdapter(
   bookClickListener: BookClickListener
 ) : CompositeListAdapter<Any>(BookOverviewDiff()) {
