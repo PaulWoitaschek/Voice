@@ -46,6 +46,7 @@ android {
 
   buildTypes {
     getByName("release") {
+      signingConfig = signingConfigs.getByName("release")
       isMinifyEnabled = true
       isShrinkResources = true
       multiDexEnabled = false
@@ -57,7 +58,6 @@ android {
       multiDexEnabled = true
     }
     all {
-      signingConfig = signingConfigs.getByName("release")
       setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard.pro"))
     }
   }
