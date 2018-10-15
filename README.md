@@ -1,4 +1,4 @@
-Voice [![CI Status](https://circleci.com/gh/PaulWoitaschek/Voice.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)](https://circleci.com/gh/PaulWoitaschek/Voice)
+Voice [![CI Status](https://img.shields.io/bitrise/9a019fd662ba4b7f/master.svg?token=xxw4jv2fGrT9Dwxhm0K9ng)](https://app.bitrise.io/app/9a019fd662ba4b7f#/builds)
 =======================
 
 <a href="https://f-droid.org/packages/de.ph1b.audiobook/">
@@ -39,6 +39,6 @@ The project page is on [transifex](https://www.transifex.com/PaulWoitaschek/voic
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2014-2018 [Paul Woitaschek](http://www.paul-woitaschek.de/)
+Copyright (C) 2014 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/PaulWoitaschek/Voice/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
