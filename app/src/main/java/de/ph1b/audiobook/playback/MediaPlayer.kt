@@ -147,16 +147,17 @@ constructor(
   fun init(content: BookContent) {
     val shouldInitialize = player.playbackState == Player.STATE_IDLE
         || !alreadyInitializedChapters(content)
-    if (shouldInitialize) {
-      Timber.i("init")
-      _bookContent.onNext(content)
-      player.playWhenReady = false
-      player.prepare(dataSourceConverter.toMediaSource(content))
-      player.seekTo(content.currentChapterIndex, content.positionInChapter.toLong())
-      player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
-      loudnessGain.gainmB = content.loudnessGain
-      state = PlayerState.PAUSED
+    if (!shouldInitialize) {
+      return
     }
+    Timber.i("init")
+    _bookContent.onNext(content)
+    player.playWhenReady = false
+    player.prepare(dataSourceConverter.toMediaSource(content))
+    player.seekTo(content.currentChapterIndex, content.positionInChapter.toLong())
+    player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
+    loudnessGain.gainmB = content.loudnessGain
+    state = PlayerState.PAUSED
   }
 
   private fun alreadyInitializedChapters(content: BookContent): Boolean {
