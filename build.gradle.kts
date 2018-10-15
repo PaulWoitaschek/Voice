@@ -80,6 +80,7 @@ subprojects {
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
   configure<KtlintExtension> {
     version.set(Deps.ktLint)
+    android.set(true)
   }
   plugins.whenPluginAdded {
     if (this is AppPlugin || this is LibraryPlugin) {

@@ -16,7 +16,13 @@ class Migration26to27 : IncrementalMigration(26) {
     val copyBookTableName = "TABLE_BOOK_COPY"
     db.execSQL("DROP TABLE IF EXISTS $copyBookTableName")
     db.execSQL("ALTER TABLE TABLE_BOOK RENAME TO $copyBookTableName")
-    db.execSQL("CREATE TABLE " + "TABLE_BOOK" + " ( " + "BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " + "BOOK_JSON" + " TEXT NOT NULL, " + "LAST_TIME_BOOK_WAS_ACTIVE" + " INTEGER NOT NULL, " + "BOOK_ACTIVE" + " INTEGER NOT NULL)")
+    db.execSQL(
+      """CREATE TABLE TABLE_BOOK (
+      |BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+      |BOOK_JSON TEXT NOT NULL,
+      |LAST_TIME_BOOK_WAS_ACTIVE INTEGER NOT NULL,
+      |BOOK_ACTIVE INTEGER NOT NULL)""".trimMargin()
+    )
 
     val cursor = db.query(copyBookTableName, arrayOf("BOOK_JSON"))
     cursor.moveToNextLoop {

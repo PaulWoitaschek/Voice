@@ -29,7 +29,9 @@ object BetterSnack {
     bar.addCallback(
       object : Snackbar.Callback() {
         override fun onDismissed(snackbar: Snackbar?, event: Int) {
-          if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE && duration == Duration.INDEFINITE_NO_DISMISS) {
+          if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE &&
+            duration == Duration.INDEFINITE_NO_DISMISS
+          ) {
             // show again to enforce a decision
             make(root, text, duration, action, listener)
           }

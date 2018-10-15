@@ -145,8 +145,8 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     }
 
     if (!output.trim { it <= ' ' }.isEmpty()) {
-      val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-      devicePoints.mapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2] }
+      output.split("\n".toRegex()).dropLastWhile(String::isEmpty)
+        .flatMapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty) }
     }
 
     // Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
@@ -161,7 +161,9 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     } else {
       var i = 0
       while (i < results.size) {
-        if (!results[i].toLowerCase().contains("ext") && !results[i].toLowerCase().contains("sdcard")) {
+        if (!results[i].toLowerCase().contains("ext") &&
+          !results[i].toLowerCase().contains("sdcard")
+        ) {
           results.removeAt(i--)
         }
         i++

@@ -28,11 +28,51 @@ class Migration43to44 : IncrementalMigration(43) {
   }
 
   private fun createNewTables(db: SupportSQLiteDatabase) {
-    db.execSQL("CREATE TABLE `bookmark` (`file` TEXT NOT NULL, `title` TEXT NOT NULL, `time` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
-    db.execSQL("CREATE TABLE `chapters` (`file` TEXT NOT NULL, `name` TEXT NOT NULL, `duration` INTEGER NOT NULL, `fileLastModified` INTEGER NOT NULL, `marks` TEXT NOT NULL, `bookId` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
+    db.execSQL(
+      """
+      CREATE TABLE `bookmark` (
+      `file` TEXT NOT NULL,
+      `title` TEXT NOT NULL,
+      `time` INTEGER NOT NULL,
+      `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
+      """.trimIndent()
+    )
+    db.execSQL(
+      """
+      CREATE TABLE `chapters` (
+      `file` TEXT NOT NULL,
+      `name` TEXT NOT NULL,
+      `duration` INTEGER NOT NULL,
+      `fileLastModified` INTEGER NOT NULL,
+      `marks` TEXT NOT NULL,
+      `bookId` TEXT NOT NULL,
+      `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
+      """.trimIndent()
+    )
     db.execSQL("CREATE  INDEX `index_chapters_bookId` ON `chapters` (`bookId`)")
-    db.execSQL("CREATE TABLE `bookMetaData` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `root` TEXT NOT NULL, PRIMARY KEY(`id`))")
-    db.execSQL("CREATE TABLE `bookSettings` (`id` TEXT NOT NULL, `currentFile` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `playbackSpeed` REAL NOT NULL, `loudnessGain` INTEGER NOT NULL, `skipSilence` INTEGER NOT NULL, `active` INTEGER NOT NULL, `lastPlayedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))")
+    db.execSQL(
+      """
+      CREATE TABLE `bookMetaData` (
+      `id` TEXT NOT NULL,
+      `type` TEXT NOT NULL,
+      `author` TEXT,
+      `name` TEXT NOT NULL,
+      `root` TEXT NOT NULL, PRIMARY KEY(`id`))
+      """.trimIndent()
+    )
+    db.execSQL(
+      """
+      CREATE TABLE `bookSettings` (
+      `id` TEXT NOT NULL,
+      `currentFile` TEXT NOT NULL,
+      `positionInChapter` INTEGER NOT NULL,
+      `playbackSpeed` REAL NOT NULL,
+      `loudnessGain` INTEGER NOT NULL,
+      `skipSilence` INTEGER NOT NULL,
+      `active` INTEGER NOT NULL,
+      `lastPlayedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
+      """.trimIndent()
+    )
   }
 
   private fun fill(db: SupportSQLiteDatabase) {

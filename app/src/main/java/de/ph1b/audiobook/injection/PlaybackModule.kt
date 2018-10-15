@@ -53,7 +53,10 @@ class PlaybackModule {
       buttonReceiverPendingIntent
     ).apply {
       setCallback(callback)
-      setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+      setFlags(
+        MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
+            or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+      )
     }
   }
 }

@@ -84,7 +84,9 @@ class BookPlayController(
 
     // find closest position
     val currentChapter =
-      dataForCurrentFile.firstOrNull { book.content.positionInChapter >= it.start && book.content.positionInChapter < it.stop }
+      dataForCurrentFile.firstOrNull {
+        book.content.positionInChapter >= it.start && book.content.positionInChapter < it.stop
+      }
         ?: dataForCurrentFile.firstOrNull { book.content.positionInChapter == it.stop }
         ?: dataForCurrentFile.first()
     this.currentChapter = currentChapter

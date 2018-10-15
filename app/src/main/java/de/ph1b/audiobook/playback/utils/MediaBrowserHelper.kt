@@ -69,7 +69,9 @@ class MediaBrowserHelper
 
   private fun currentBookTitlePrefix() = "${context.getString(R.string.current_book)}: "
 
-  private suspend fun Book.toMediaDescription(titlePrefix: String = ""): MediaBrowserCompat.MediaItem {
+  private suspend fun Book.toMediaDescription(
+    titlePrefix: String = ""
+  ): MediaBrowserCompat.MediaItem {
     val iconUri = fileProviderUri(coverFile())
     val mediaId = bookUriConverter.bookId(id)
     val description = MediaDescriptionCompat.Builder()

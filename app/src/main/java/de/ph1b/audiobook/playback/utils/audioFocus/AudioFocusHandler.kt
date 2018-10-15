@@ -40,7 +40,8 @@ class AudioFocusHandler @Inject constructor(
     } else when (focusChange) {
       AudioManager.AUDIOFOCUS_GAIN -> handleGain()
       AudioManager.AUDIOFOCUS_LOSS -> handleLoss()
-      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> handleTemporaryLoss()
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK,
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> handleTemporaryLoss()
       else -> Timber.d("ignore audioFocus=$focusChange")
     }
   }

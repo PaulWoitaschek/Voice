@@ -102,7 +102,9 @@ class NotificationCreator
     return cover
   }
 
-  private suspend fun NotificationCompat.Builder.setLargeIcon(book: Book): NotificationCompat.Builder {
+  private suspend fun NotificationCompat.Builder.setLargeIcon(
+    book: Book
+  ): NotificationCompat.Builder {
     setLargeIcon(cover(book))
     return this
   }
@@ -161,7 +163,9 @@ class NotificationCreator
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
   }
 
-  private fun NotificationCompat.Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): NotificationCompat.Builder {
+  private fun NotificationCompat.Builder.addPlayPauseAction(
+    playState: PlayStateManager.PlayState
+  ): NotificationCompat.Builder {
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,

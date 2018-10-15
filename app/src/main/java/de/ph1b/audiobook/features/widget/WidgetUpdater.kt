@@ -132,7 +132,9 @@ class WidgetUpdater @Inject constructor(
       @Suppress("DEPRECATION")
       val displayHeight = display.height
 
-      return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
+      return orientation != Configuration.ORIENTATION_LANDSCAPE &&
+          (orientation == Configuration.ORIENTATION_PORTRAIT ||
+              displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
   private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {

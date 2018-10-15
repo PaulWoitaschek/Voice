@@ -58,7 +58,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   }
   private val originalUrl by lazy {
     val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
-    "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
+    "https://www.google.com/search?safe=on&site=imghp" +
+        "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
   override val layoutRes = R.layout.image_picker
@@ -71,7 +72,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       displayZoomControls = false
       javaScriptEnabled = true
       userAgentString =
-          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
+          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 

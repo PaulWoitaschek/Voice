@@ -31,7 +31,10 @@ class EditBookTitleDialogFragment : DialogFragment() {
 
     return MaterialDialog.Builder(activity!!)
       .title(R.string.edit_book_title)
-      .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+      .inputType(
+        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      )
       .input(getString(R.string.bookmark_edit_hint), presetName, false) { _, charSequence ->
         val newText = charSequence.toString()
         if (newText != presetName) {

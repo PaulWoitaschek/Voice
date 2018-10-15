@@ -21,7 +21,10 @@ class EditBookmarkDialog : DialogController() {
 
     val dialog = MaterialDialog.Builder(activity!!)
       .title(de.ph1b.audiobook.R.string.bookmark_edit_title)
-      .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+      .inputType(
+        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      )
       .input(
         activity!!.getString(R.string.bookmark_edit_hint),
         bookmarkTitle,

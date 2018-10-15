@@ -34,7 +34,8 @@ class Migration24to25(
 
     val newBookTable = "TABLE_BOOK"
     val createBookTable =
-      "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
+      """CREATE TABLE $newBookTable (
+        |BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)""".trimMargin()
     db.execSQL(createBookTable)
 
     val bookCursor = db.query(
