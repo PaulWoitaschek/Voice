@@ -18,3 +18,5 @@ mainframer.sh
 *.keystore
 signing.properties
 artifacts
+testResults
+
