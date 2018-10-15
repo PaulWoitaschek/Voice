@@ -6,15 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/AppToolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play"
         android:layout_width="wrap_content"
@@ -107,6 +98,19 @@
         app:layout_constraintLeft_toRightOf="@id/playedTime"
         app:layout_constraintRight_toLeftOf="@id/maxTime" />
 
+    <TextView
+        android:id="@+id/TitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/bookSpinner"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/bookSpinner"
         android:layout_width="0dp"
@@ -119,17 +123,20 @@
     <ImageView
         android:id="@+id/cover"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/cover"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/bookSpinner"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.115"
         app:layout_goneMarginBottom="16dp"
         tools:ignore="UnusedAttribute"
         tools:src="@android:color/darker_gray" />
+
 
     <View
         android:id="@+id/gradientShadow"
@@ -141,11 +148,112 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="InconsistentLayout" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
+        android:visibility="gone"
+        android:layout_width="384dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/cover" />
+
+
     <TextView
         android:id="@+id/timerCountdownView"
         style="@style/timer_text_view_style"
+        android:layout_marginTop="32dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="00:34" />
+
+    <ImageView
+        android:id="@+id/upperCornerLatch"
+        android:layout_width="33dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="52dp"
+        android:rotation="45"
+        android:translationX="11dp"
+        android:translationY="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/navBarColor" />
+
+    <ImageView
+        android:id="@+id/Latch"
+        android:layout_width="41dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/navBarColor" />
+
+    <ImageView
+        android:id="@+id/lowerCornerLatch"
+        android:layout_width="33dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="256dp"
+        android:rotation="-45"
+        android:translationX="11dp"
+        android:translationY="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/navBarColor" />
+
+    <ImageView
+        android:id="@+id/BackToMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/navBarColor"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ButtonTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/navBarColor"
+        android:src="@drawable/alarm_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ButtonBookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/navBarColor"
+        android:src="@drawable/bookmark_outline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonTimer" />
+
+    <ImageView
+        android:id="@+id/ButtonPlayback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/navBarColor"
+        android:src="@drawable/speedometer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonBookmark" />
+
+    <ImageView
+        android:id="@+id/ButtonMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/navBarColor"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonPlayback" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

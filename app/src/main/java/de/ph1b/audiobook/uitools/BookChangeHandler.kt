@@ -41,6 +41,7 @@ class BookChangeHandler : TransitionChangeHandler() {
       .addTarget(R.id.play)
       .excludeTarget(R.id.toolbar, true)
       .addTarget(R.id.cover)
+      //.addTarget(R.id.cover2)
       .apply {
         transitionName?.let { addTarget(it) }
       }

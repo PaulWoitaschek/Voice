@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment
 import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.uitools.BlurFactory
 import java.io.File
 import java.io.FileFilter
 
@@ -71,5 +72,6 @@ fun checkMainThread() {
 }
 
 suspend fun Book.coverFile(): File = coverFile(App.component.context)
+suspend fun Book.coverFileBlur(): File = BlurFactory.blurBitmap(coverFile(App.component.context),App.component.context)
 
 fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)
