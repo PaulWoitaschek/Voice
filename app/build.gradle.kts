@@ -31,13 +31,13 @@ android {
   signingConfigs {
     create("release") {
       val props = Properties()
-      var propsFile = rootProject.file("signing.properties")
+      var propsFile = File(rootDir, "signing/signing.properties")
       if (!propsFile.canRead()) {
         println("Use CI keystore.")
-        propsFile = rootProject.file(".circleci/signing/signing.properties")
+        propsFile = File(rootDir, "signing/ci/signing.properties")
       }
       props.load(propsFile.inputStream())
-      storeFile = rootProject.file(props["STORE_FILE"]!!)
+      storeFile = File(propsFile.parentFile, props["STORE_FILE"] as String)
       storePassword = props["STORE_PASSWORD"] as String
       keyAlias = props["KEY_ALIAS"] as String
       keyPassword = props["KEY_PASSWORD"] as String
