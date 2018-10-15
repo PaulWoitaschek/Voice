@@ -15,12 +15,13 @@ import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.getOnUiThread
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.withContext
 import javax.inject.Inject
 
 /**
@@ -56,11 +57,11 @@ class NotificationCreator
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
 
-  suspend fun createNotification(book: Book): Notification {
+  suspend fun createNotification(book: Book): Notification = withContext(Dispatchers.IO) {
     mediaStyle.setMediaSession(mediaSession.sessionToken)
     notificationBuilder.mActions.clear()
     val playState = playStateManager.playState
-    return notificationBuilder
+    notificationBuilder
       .addRewindAction()
       .addPlayPauseAction(playState)
       .addFastForwardAction()
@@ -87,7 +88,7 @@ class NotificationCreator
       Picasso.get()
         .load(coverFile)
         .resize(width, height)
-        .getOnUiThread()
+        .get()
     } else null
 
     val cover = picassoCover ?: imageHelper.drawableToBitmap(
