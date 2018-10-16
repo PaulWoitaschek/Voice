@@ -180,6 +180,12 @@ constructor(
     Timber.v("play called in state $state")
     prepareIfIdle()
     bookContent?.let {
+      val withChangedPlayedAtTime = it.updateSettings {
+        copy(lastPlayedAtMillis = System.currentTimeMillis())
+      }
+      _bookContent.onNext(withChangedPlayedAtTime)
+    }
+    bookContent?.let {
       if (state == PlayerState.ENDED) {
         Timber.i("play in state ended. Back to the beginning")
         changePosition(0, it.chapters.first().file)
