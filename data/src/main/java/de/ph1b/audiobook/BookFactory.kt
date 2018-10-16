@@ -19,7 +19,9 @@ object BookFactory {
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,
     skipSilence: Boolean = false,
-    chapters: List<Chapter> = listOf(ChapterFactory.create(bookId = id))
+    chapters: List<Chapter> = listOf(ChapterFactory.create(bookId = id)),
+    lastPlayedAtMillis: Long = 0L,
+    addedAtMillis: Long = 0L
   ): Book {
 
     val currentFile = chapters[currentFileIndex].file
@@ -33,7 +35,7 @@ object BookFactory {
         author = author,
         name = name,
         root = root,
-        addedAtMillis = System.currentTimeMillis()
+        addedAtMillis = addedAtMillis
       ),
       content = BookContent(
         id = id,
@@ -45,7 +47,7 @@ object BookFactory {
           loudnessGain = loudnessGain,
           skipSilence = skipSilence,
           active = true,
-          lastPlayedAtMillis = 0
+          lastPlayedAtMillis = lastPlayedAtMillis
         ),
         chapters = chapters
       )
