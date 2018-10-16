@@ -10,6 +10,7 @@ import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -31,7 +32,9 @@ class MediaBrowserHelper
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
-  private val context: Context
+  private val context: Context,
+  @Named(PrefKeys.SORTING_MODE)
+  private val sortingPref: Pref<BookComparator>
 ) {
 
   fun root(): String = bookUriConverter.allBooksId()
@@ -54,6 +57,7 @@ class MediaBrowserHelper
       // do NOT return the current book twice as this will break the listing due to stable IDs
       val all = repo.activeBooks
         .filter { it != currentBook }
+        .sortedWith(sortingPref.value.comparatorFunction)
         .map { it.toMediaDescription() }
 
       return if (current == null) {
