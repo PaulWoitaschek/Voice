@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.data
 
-import de.ph1b.audiobook.BookFactory
-import de.ph1b.audiobook.ChapterFactory
 import org.junit.Test
 import java.util.UUID
 

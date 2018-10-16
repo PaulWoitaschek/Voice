@@ -5,8 +5,8 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
-import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookFactory
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.di.DataInjector

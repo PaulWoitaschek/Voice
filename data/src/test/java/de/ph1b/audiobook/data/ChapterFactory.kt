@@ -1,12 +1,11 @@
-package de.ph1b.audiobook
+package de.ph1b.audiobook.data
 
 import androidx.collection.SparseArrayCompat
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
-import de.ph1b.audiobook.data.Chapter
 import java.io.File
 import java.util.UUID
 
-object ChapterFactory {
+internal object ChapterFactory {
 
   fun create(
     file: String = "First.mp3",

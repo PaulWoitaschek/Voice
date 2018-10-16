@@ -1,13 +1,8 @@
-package de.ph1b.audiobook
+package de.ph1b.audiobook.data
 
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.BookMetaData
-import de.ph1b.audiobook.data.BookSettings
-import de.ph1b.audiobook.data.Chapter
 import java.util.UUID
 
-object BookFactory {
+internal object BookFactory {
 
   fun create(
     id: UUID = UUID.randomUUID(),
