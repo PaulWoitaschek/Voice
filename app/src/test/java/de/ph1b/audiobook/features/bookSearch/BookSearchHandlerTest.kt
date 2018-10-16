@@ -63,7 +63,8 @@ class BookSearchHandlerTest {
         author = "AnotherBookAuthor",
         type = Book.Type.SINGLE_FOLDER,
         name = "AnotherBook",
-        root = "/sdcard/AnotherBook"
+        root = "/sdcard/AnotherBook",
+        addedAtMillis = 0
       ),
       content = BookContent(
         id = id,
@@ -109,7 +110,8 @@ class BookSearchHandlerTest {
         type = Book.Type.SINGLE_FOLDER,
         author = "Book1Author",
         name = "Book1",
-        root = "/sdcard/Book1"
+        root = "/sdcard/Book1",
+        addedAtMillis = 0
       ),
       id = id,
       content = BookContent(

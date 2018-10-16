@@ -32,7 +32,8 @@ object BookFactory {
         type = type,
         author = author,
         name = name,
-        root = root
+        root = root,
+        addedAtMillis = System.currentTimeMillis()
       ),
       content = BookContent(
         id = id,

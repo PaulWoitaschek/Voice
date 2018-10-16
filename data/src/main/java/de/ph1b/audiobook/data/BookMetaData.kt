@@ -17,7 +17,9 @@ data class BookMetaData(
   @ColumnInfo(name = "name")
   val name: String,
   @ColumnInfo(name = "root")
-  val root: String
+  val root: String,
+  @ColumnInfo(name = "addedAtMillis")
+  val addedAtMillis: Long
 ) {
 
   init {
