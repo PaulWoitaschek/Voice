@@ -115,7 +115,7 @@ class Migration43to44 : IncrementalMigration(43) {
         put("author", author)
         put("name", name)
         put("root", root)
-        put("addedAtMillis", System.currentTimeMillis())
+        put("addedAtMillis", 0L)
       }
 
       db.insert("bookSettings") {
