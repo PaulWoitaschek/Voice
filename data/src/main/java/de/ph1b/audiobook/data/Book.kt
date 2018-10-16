@@ -2,7 +2,6 @@ package de.ph1b.audiobook.data
 
 import android.content.Context
 import android.os.Environment
-import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
@@ -12,7 +11,7 @@ data class Book(
   val id: UUID,
   val content: BookContent,
   val metaData: BookMetaData
-) : Comparable<Book> {
+) {
 
   init {
     require(content.id == id) { "wrong book content" }
@@ -73,9 +72,6 @@ data class Book(
     coverFile
   }
 
-  override fun compareTo(other: Book) =
-    NaturalOrderComparator.stringComparator.compare(name, other.name)
-
   enum class Type {
     COLLECTION_FOLDER,
     COLLECTION_FILE,
@@ -84,7 +80,6 @@ data class Book(
   }
 
   companion object {
-    const val ID_UNKNOWN = 0L
     const val SPEED_MAX = 2.5F
     const val SPEED_MIN = 0.5F
   }
