@@ -57,7 +57,8 @@ class Migration43to44 : IncrementalMigration(43) {
       `type` TEXT NOT NULL,
       `author` TEXT,
       `name` TEXT NOT NULL,
-      `root` TEXT NOT NULL, PRIMARY KEY(`id`))
+      `root` TEXT NOT NULL,
+      `addedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
       """.trimIndent()
     )
     db.execSQL(
@@ -114,6 +115,7 @@ class Migration43to44 : IncrementalMigration(43) {
         put("author", author)
         put("name", name)
         put("root", root)
+        put("addedAtMillis", System.currentTimeMillis())
       }
 
       db.insert("bookSettings") {

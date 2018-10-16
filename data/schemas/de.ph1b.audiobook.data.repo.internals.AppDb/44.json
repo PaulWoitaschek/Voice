@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 44,
-    "identityHash": "5dd09eb49be8be0853be8ae0342f41f4",
+    "identityHash": "00788e07cc631b6e54d64c1490341554",
     "entities": [
       {
         "tableName": "bookmark",
@@ -109,7 +109,7 @@
       },
       {
         "tableName": "bookMetaData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `root` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `root` TEXT NOT NULL, `addedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -139,6 +139,12 @@
             "fieldPath": "root",
             "columnName": "root",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAtMillis",
+            "columnName": "addedAtMillis",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -216,7 +222,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5dd09eb49be8be0853be8ae0342f41f4\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"00788e07cc631b6e54d64c1490341554\")"
     ]
   }
 }

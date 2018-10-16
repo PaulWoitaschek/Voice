@@ -25,6 +25,7 @@ import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
+import de.ph1b.audiobook.features.settings.dialogs.SortingModeDialogController
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.MediaPlayer
@@ -79,6 +80,7 @@ interface AppComponent : DataComponent {
   fun inject(target: SettingsController)
   fun inject(target: SleepTimerDialogFragment)
   fun inject(target: ThemePickerDialogController)
+  fun inject(target: SortingModeDialogController)
 
   fun playbackComponent(): PlaybackComponent.Builder
 }

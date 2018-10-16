@@ -246,7 +246,8 @@ class BookAdder
           author = result.author,
           name = bookName,
           root = bookRoot,
-          id = bookId
+          id = bookId,
+          addedAtMillis = System.currentTimeMillis()
         ),
         content = BookContent(
           settings = BookSettings(
