@@ -22,7 +22,7 @@ class BookComparatorTest {
   @Test
   fun byName_thenLastTime() {
     val sorted = books.sortedWith(BookComparator.BY_NAME.comparatorFunction)
-    assertThat(sorted).containsExactly(b1, b2, b3, b5, b4).inOrder()
+    assertThat(sorted).containsExactly(b1, b3, b2, b5, b4).inOrder()
   }
 
   @Test
