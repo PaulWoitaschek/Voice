@@ -63,7 +63,7 @@ class BookPlayPresenterTest {
 
   @Test
   fun sleepTimberStopsAfterDetach() {
-    val sleepSand = PublishSubject.create<Int>()
+    val sleepSand = PublishSubject.create<Long>()
     whenever(mockSleepTimer.leftSleepTimeInMs).thenReturn(sleepSand)
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
