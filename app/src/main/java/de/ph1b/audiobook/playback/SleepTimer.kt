@@ -30,7 +30,6 @@ class SleepTimer
 
   private val _leftSleepTimeInMs = BehaviorSubject.createDefault<Long>(NOT_ACTIVE)
   val leftSleepTimeInMs: Observable<Long> = _leftSleepTimeInMs
-  private var sleepDisposable: Disposable? = null
   private var shakeDisposable: Disposable? = null
   private var shakeTimeoutDisposable: Disposable? = null
   private val shakeObservable = shakeDetector.detect()
@@ -71,23 +70,23 @@ class SleepTimer
     }
 
     // counts down the sleep sand
-    val sleepUpdateInterval = 1000L
     @Suppress("CheckResult")
     playStateManager.playStateStream()
       .map { it == PlayStateManager.PlayState.PLAYING }
       .distinctUntilChanged()
-      .subscribe { playing ->
+      .switchMap { playing ->
+        val sleepUpdateInterval = 1000L
         if (playing) {
-          sleepDisposable = Observable
+          Observable
             .interval(sleepUpdateInterval, MILLISECONDS, AndroidSchedulers.mainThread())
             .filter { _leftSleepTimeInMs.value!! > 0 } // only notify if there is still time left
             .map { _leftSleepTimeInMs.value!! - sleepUpdateInterval } // calculate the new time
-            .map { it.coerceAtLeast(0) } // but keep at least 0
-            .subscribe(_leftSleepTimeInMs::onNext)
+            .map { it.coerceAtLeast(0) }
         } else {
-          sleepDisposable?.dispose()
+          Observable.empty()
         }
       }
+      .subscribe(_leftSleepTimeInMs::onNext)
   }
 
   /** turns the sleep timer on or off **/
