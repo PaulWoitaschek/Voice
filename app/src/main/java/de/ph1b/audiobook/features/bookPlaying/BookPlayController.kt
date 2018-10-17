@@ -253,7 +253,7 @@ class BookPlayController(
           true
         }
         R.id.action_bookmark -> {
-          val bookmarkController = BookmarkController.newInstance(bookId)
+          val bookmarkController = BookmarkController(bookId)
             .asTransaction()
           router.pushController(bookmarkController)
           true

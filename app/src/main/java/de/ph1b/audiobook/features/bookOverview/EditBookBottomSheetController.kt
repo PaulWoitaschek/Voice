@@ -69,7 +69,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
     }
     container.bookmark.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
-      val controller = BookmarkController.newInstance(book.id)
+      val controller = BookmarkController(book.id)
       router.pushController(controller.asTransaction())
 
       dismissDialog()

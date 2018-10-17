@@ -30,10 +30,16 @@ import java.util.UUID
 /**
  * Dialog for creating a bookmark
  */
+private const val NI_BOOK_ID = "ni#bookId"
+
 class BookmarkController(args: Bundle) :
   MvpController<BookmarkView, BookmarkPresenter>(args), BookmarkView,
   BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
+
+  constructor(bookId: UUID) : this(Bundle().apply {
+    putUUID(NI_BOOK_ID, bookId)
+  })
 
   private val bookId = args.getUUID(NI_BOOK_ID)
   private val adapter = BookmarkAdapter(this)
@@ -152,16 +158,5 @@ class BookmarkController(args: Bundle) :
 
   private fun showDeleteBookmarkDialog(bookmark: Bookmark) {
     DeleteBookmarkDialog(this, bookmark).showDialog(router)
-  }
-
-  companion object {
-
-    private const val NI_BOOK_ID = "ni#bookId"
-
-    fun newInstance(bookId: UUID) = BookmarkController(
-      Bundle().apply {
-        putUUID(NI_BOOK_ID, bookId)
-      }
-    )
   }
 }
