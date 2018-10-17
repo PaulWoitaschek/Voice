@@ -136,9 +136,8 @@ class BookOverviewController : BaseController(),
             return
           }
 
-          EditCoverDialogController.newInstance(this, book, imageUri).showDialog(
-            router, EditCoverDialogController.TAG
-          )
+          EditCoverDialogController(this, book, imageUri)
+            .showDialog(router, EditCoverDialogController.TAG)
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)

@@ -33,7 +33,7 @@ import com.squareup.picasso.Callback as PicassoCallback
 /**
  * Simple dialog to edit the cover of a book.
  */
-class EditCoverDialogController : DialogController() {
+class EditCoverDialogController(args: Bundle) : DialogController(args) {
 
   @Inject
   lateinit var repo: BookRepository
@@ -91,7 +91,7 @@ class EditCoverDialogController : DialogController() {
               val coverFile = book.coverFile()
               imageHelper.saveCover(bitmap, coverFile)
               picasso.invalidate(coverFile)
-              val callback = router.getControllerWithInstanceId(NI_TARGET) as Callback
+              val callback = targetController as Callback
               callback.onBookCoverChanged(book)
               dismissDialog()
             }
@@ -120,13 +120,19 @@ class EditCoverDialogController : DialogController() {
 
     private const val NI_COVER_URI = "ni#coverPath"
     private const val NI_BOOK_ID = "ni#id"
-    private const val NI_TARGET = "ni#target"
 
-    fun <T> newInstance(target: T, book: Book, uri: Uri) where T : Controller, T : Callback =
-      EditCoverDialogController().apply {
-        args.putString(NI_COVER_URI, uri.toString())
-        args.putUUID(NI_BOOK_ID, book.id)
-        args.putString(NI_TARGET, target.instanceId)
+    operator fun <T> invoke(
+      target: T,
+      book: Book,
+      uri: Uri
+    ): EditCoverDialogController where T : Controller, T : Callback {
+      val args = Bundle().apply {
+        putString(NI_COVER_URI, uri.toString())
+        putUUID(NI_BOOK_ID, book.id)
       }
+      return EditCoverDialogController(args).apply {
+        targetController = target
+      }
+    }
   }
 }
