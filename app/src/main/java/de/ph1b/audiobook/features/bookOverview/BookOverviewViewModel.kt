@@ -99,7 +99,7 @@ constructor(
       target += book
     }
 
-    val sortingFunction = currentSorrtingMode.value.comparatorFunction
+    val sortingFunction = currentSorrtingMode.value
     current.sortWith(sortingFunction)
     notStarted.sortWith(sortingFunction)
     completed.sortWith(sortingFunction)

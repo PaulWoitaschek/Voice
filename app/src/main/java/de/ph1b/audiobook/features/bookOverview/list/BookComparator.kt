@@ -14,8 +14,8 @@ private val byLastPlayed = compareByDescending<Book> {
 
 enum class BookComparator(
   @StringRes val nameId: Int,
-  val comparatorFunction: Comparator<Book>
-) {
+  private val comparatorFunction: Comparator<Book>
+) : Comparator<Book> by comparatorFunction {
   BY_LAST_PLAYED(R.string.pref_sort_by_last_played, (byLastPlayed).then(byName)),
   BY_NAME(R.string.pref_sort_by_name, byName.then(byLastPlayed)),
   BY_DATE_ADDED(

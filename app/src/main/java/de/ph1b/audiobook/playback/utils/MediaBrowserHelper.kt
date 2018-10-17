@@ -57,7 +57,7 @@ class MediaBrowserHelper
       // do NOT return the current book twice as this will break the listing due to stable IDs
       val all = repo.activeBooks
         .filter { it != currentBook }
-        .sortedWith(sortingPref.value.comparatorFunction)
+        .sortedWith(sortingPref.value)
         .map { it.toMediaDescription() }
 
       return if (current == null) {
