@@ -87,7 +87,7 @@ class BookOverviewController : BaseController(),
       when (clickType) {
         BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
         BookOverviewClick.MENU -> {
-          val editDialog = EditBookBottomSheetController.newInstance(this, book)
+          val editDialog = EditBookBottomSheetController(this, book)
           editDialog.showDialog(router, "editBottomSheet")
         }
       }

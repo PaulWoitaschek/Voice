@@ -30,21 +30,20 @@ import javax.inject.Inject
 /**
  * Bottom sheet dialog fragment that will be displayed when a book edit was requested
  */
-class EditBookBottomSheetController : DialogController() {
+class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
 
   @Inject
   lateinit var repo: BookRepository
 
-  private fun callback() = router.getControllerWithInstanceId(NI_TARGET) as Callback
+  private val bookId = args.getUUID(NI_BOOK)
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     App.component.inject(this)
 
-    val dialog =
-      BottomSheetDialog(activity!!, R.style.BottomSheetStyle)
+    val dialog = BottomSheetDialog(activity!!, R.style.BottomSheetStyle)
 
     // if there is no book, skip here
-    val book = repo.bookById(bookId())
+    val book = repo.bookById(bookId)
     if (book == null) {
       Timber.e("book is null. Return early")
       return dialog
@@ -84,6 +83,8 @@ class EditBookBottomSheetController : DialogController() {
     return dialog
   }
 
+  private fun callback() = targetController as Callback
+
   private fun tintLeftDrawable(textView: TextView) {
     val left = textView.startCompoundDrawable()!!
     val tinted = left.tinted(activity!!.color(R.color.icon_color))
@@ -95,18 +96,19 @@ class EditBookBottomSheetController : DialogController() {
     )
   }
 
-  private fun bookId() = args.getUUID(NI_BOOK)
-
   companion object {
     private const val NI_BOOK = "ni#book"
-    private const val NI_TARGET = "ni#target"
-    fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback =
-      EditBookBottomSheetController().apply {
-        args.apply {
-          putUUID(NI_BOOK, book.id)
-          putString(NI_TARGET, target.instanceId)
-        }
+    operator fun <T> invoke(
+      target: T,
+      book: Book
+    ): EditBookBottomSheetController where T : Controller, T : Callback {
+      val args = Bundle().apply {
+        putUUID(NI_BOOK, book.id)
       }
+      return EditBookBottomSheetController(args).apply {
+        targetController = target
+      }
+    }
   }
 
   interface Callback {
