@@ -25,9 +25,7 @@ constructor(
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
-  @Named(PrefKeys.SORTING_MODE)
-  private val currentSorrtingMode: Pref<BookComparator>
+  private val currentBookIdPref: Pref<UUID>
 ) {
 
   fun attach() {
@@ -99,10 +97,9 @@ constructor(
       target += book
     }
 
-    val sortingFunction = currentSorrtingMode.value
-    current.sortWith(sortingFunction)
-    notStarted.sortWith(sortingFunction)
-    completed.sortWith(sortingFunction)
+    current.sortWith(BookComparator.BY_LAST_PLAYED)
+    notStarted.sortWith(BookComparator.BY_DATE_ADDED)
+    completed.sortWith(BookComparator.BY_LAST_PLAYED)
 
     return BookOverviewState.Content(
       currentBook = currentBook,
