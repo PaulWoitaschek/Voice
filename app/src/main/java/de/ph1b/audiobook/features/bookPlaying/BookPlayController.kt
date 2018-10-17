@@ -246,10 +246,7 @@ class BookPlayController(
           true
         }
         R.id.action_time_lapse -> {
-          PlaybackSpeedDialogController().showDialog(
-            router,
-            PlaybackSpeedDialogController.TAG
-          )
+          PlaybackSpeedDialogController().showDialog(router)
           true
         }
         R.id.action_bookmark -> {
@@ -283,7 +280,7 @@ class BookPlayController(
   }
 
   private fun launchJumpToPositionDialog() {
-    JumpToPositionDialogController().showDialog(router, JumpToPositionDialogController.TAG)
+    JumpToPositionDialogController().showDialog(router)
   }
 
   override fun showLeftSleepTime(ms: Int) {

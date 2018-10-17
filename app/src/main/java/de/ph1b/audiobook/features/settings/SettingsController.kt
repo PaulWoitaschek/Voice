@@ -46,7 +46,7 @@ class SettingsController : BaseController() {
       doubleSettingView = theme,
       titleRes = R.string.pref_theme_title
     ) {
-      ThemePickerDialogController().showDialog(router, ThemePickerDialogController.TAG)
+      ThemePickerDialogController().showDialog(router)
     }
     themePref.stream
       .subscribe { theme.setDescription(it.nameId) }
@@ -73,7 +73,7 @@ class SettingsController : BaseController() {
       doubleSettingView = skipAmount,
       titleRes = R.string.pref_seek_time
     ) {
-      SeekDialogController().showDialog(router, SeekDialogController.TAG)
+      SeekDialogController().showDialog(router)
     }
     seekTimePref.stream
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
@@ -85,7 +85,7 @@ class SettingsController : BaseController() {
       doubleSettingView = autoRewind,
       titleRes = R.string.pref_auto_rewind_title
     ) {
-      AutoRewindDialogController().showDialog(router, AutoRewindDialogController.TAG)
+      AutoRewindDialogController().showDialog(router)
     }
     autoRewindAmountPref.stream
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
@@ -98,7 +98,7 @@ class SettingsController : BaseController() {
     toolbar.tint()
     toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
-        SupportDialogController().showDialog(router, SupportDialogController.TAG)
+        SupportDialogController().showDialog(router)
         true
       } else
         false

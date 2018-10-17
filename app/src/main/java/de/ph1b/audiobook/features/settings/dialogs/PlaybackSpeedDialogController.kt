@@ -47,7 +47,7 @@ class PlaybackSpeedDialogController : DialogController() {
 
     // setting current speed
     val book = repo.bookById(currentBookIdPref.value)
-      ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+      ?: throw AssertionError("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
     seekBar.max = ((MAX - MIN) * FACTOR).toInt()
     seekBar.progress = ((speed - MIN) * FACTOR).toInt()
@@ -72,7 +72,6 @@ class PlaybackSpeedDialogController : DialogController() {
   }
 
   companion object {
-    val TAG: String = PlaybackSpeedDialogController::class.java.simpleName
     private const val MAX = Book.SPEED_MAX
     private const val MIN = Book.SPEED_MIN
     private const val FACTOR = 100F

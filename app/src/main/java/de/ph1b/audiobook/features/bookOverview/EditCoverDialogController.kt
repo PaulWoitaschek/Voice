@@ -116,8 +116,6 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
   }
 
   companion object {
-    val TAG: String = EditCoverDialogController::class.java.simpleName
-
     private const val NI_COVER_URI = "ni#coverPath"
     private const val NI_BOOK_ID = "ni#id"
 

@@ -37,7 +37,6 @@ class SupportDialogController : DialogController() {
   }
 
   companion object {
-    val TAG: String = SupportDialogController::class.java.simpleName
     private val GITHUB_URL = Uri.parse("https://github.com/Ph1b/MaterialAudiobookPlayer")!!
     private val TRANSLATION_URL =
       Uri.parse("https://www.transifex.com/projects/p/material-audiobook-player")!!

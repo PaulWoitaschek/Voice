@@ -94,9 +94,4 @@ class JumpToPositionDialogController : DialogController() {
       .negativeText(R.string.dialog_cancel)
       .build()
   }
-
-  companion object {
-
-    val TAG: String = JumpToPositionDialogController::class.java.simpleName
-  }
 }

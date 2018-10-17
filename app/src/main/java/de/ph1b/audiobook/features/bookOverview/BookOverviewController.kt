@@ -87,8 +87,7 @@ class BookOverviewController : BaseController(),
       when (clickType) {
         BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
         BookOverviewClick.MENU -> {
-          val editDialog = EditBookBottomSheetController(this, book)
-          editDialog.showDialog(router, "editBottomSheet")
+          EditBookBottomSheetController(this, book).showDialog(router)
         }
       }
     }
@@ -136,8 +135,7 @@ class BookOverviewController : BaseController(),
             return
           }
 
-          EditCoverDialogController(this, book, imageUri)
-            .showDialog(router, EditCoverDialogController.TAG)
+          EditCoverDialogController(this, book, imageUri).showDialog(router)
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
@@ -196,12 +194,13 @@ class BookOverviewController : BaseController(),
     if (currentTapTarget?.isVisible == true)
       return
 
-    val target = TapTarget.forToolbarMenuItem(
-      toolbar,
-      R.id.library,
-      getString(R.string.onboarding_title),
-      getString(R.string.onboarding_content)
-    )
+    val target = TapTarget
+      .forToolbarMenuItem(
+        toolbar,
+        R.id.library,
+        getString(R.string.onboarding_title),
+        getString(R.string.onboarding_content)
+      )
       .cancelable(false)
       .tintTarget(false)
       .outerCircleColor(R.color.accentDark)

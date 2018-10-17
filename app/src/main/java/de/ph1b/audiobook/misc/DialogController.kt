@@ -71,12 +71,11 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
     dialog = null
   }
 
-  fun showDialog(router: Router, tag: String? = null) {
+  fun showDialog(router: Router) {
     dismissed = false
     router.pushController(
       RouterTransaction.with(this)
         .pushChangeHandler(SimpleSwapChangeHandler(true))
-        .tag(tag)
     )
   }
 

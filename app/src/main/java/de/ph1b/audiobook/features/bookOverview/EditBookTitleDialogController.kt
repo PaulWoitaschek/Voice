@@ -62,9 +62,4 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
       .positiveText(R.string.dialog_confirm)
       .build()
   }
-
-  companion object {
-
-    val TAG: String = EditBookTitleDialogController::class.java.simpleName
-  }
 }

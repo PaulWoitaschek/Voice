@@ -54,8 +54,6 @@ class AutoRewindDialogController : DialogController() {
   }
 
   companion object {
-    val TAG: String = AutoRewindDialogController::class.java.simpleName
-
     private const val MIN = 0
     private const val MAX = 20
     private const val FACTOR = 10

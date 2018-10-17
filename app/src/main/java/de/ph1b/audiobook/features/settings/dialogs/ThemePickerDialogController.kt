@@ -45,8 +45,4 @@ class ThemePickerDialogController : DialogController() {
       .title(R.string.pref_theme_title)
       .build()
   }
-
-  companion object {
-    val TAG: String = ThemePickerDialogController::class.java.simpleName
-  }
 }

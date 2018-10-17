@@ -50,8 +50,6 @@ class SeekDialogController : DialogController() {
   }
 
   companion object {
-    val TAG: String = SeekDialogController::class.java.simpleName
-
     private const val FACTOR = 10
     private const val MIN = 3
     private const val MAX = 60
