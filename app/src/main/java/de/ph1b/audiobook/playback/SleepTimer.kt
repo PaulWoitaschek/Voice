@@ -21,7 +21,7 @@ class SleepTimer
 @Inject constructor(
   private val mediaPlayer: MediaPlayer,
   playStateManager: PlayStateManager,
-  shakeDetector: ShakeDetector,
+  private val shakeDetector: ShakeDetector,
   @Named(PrefKeys.SHAKE_TO_RESET)
   private val shakeToResetPref: Pref<Boolean>,
   @Named(PrefKeys.SLEEP_TIME)
@@ -32,24 +32,23 @@ class SleepTimer
   val leftSleepTimeInMs: Observable<Long> = _leftSleepTimeInMs
   private var shakeDisposable: Disposable? = null
   private var shakeTimeoutDisposable: Disposable? = null
-  private val shakeObservable = shakeDetector.detect()
 
   init {
     val fadeOutMs = SECONDS.toMillis(10)
     @Suppress("CheckResult")
     _leftSleepTimeInMs.filter { it <= fadeOutMs }
       .subscribe { msLeft ->
-        if (msLeft == 0L) {
-          mediaPlayer.pause(rewind = false)
-          mediaPlayer.skip(-fadeOutMs, MILLISECONDS)
-          mediaPlayer.stop()
-        }
         val volume = if (msLeft == 0L || msLeft == NOT_ACTIVE) {
           1F
         } else {
           msLeft.toFloat() / fadeOutMs
         }
         mediaPlayer.setVolume(volume)
+
+        if (msLeft == 0L) {
+          mediaPlayer.skip(-fadeOutMs, MILLISECONDS)
+          mediaPlayer.stop()
+        }
       }
 
     @Suppress("CheckResult")
@@ -109,7 +108,7 @@ class SleepTimer
       if (shouldSubscribe) {
         // setup shake detection if requested
         if (shakeToResetPref.value) {
-          shakeDisposable = shakeObservable.subscribe {
+          shakeDisposable = shakeDetector.detect().subscribe {
             if (_leftSleepTimeInMs.value == 0L) {
               Timber.d("detected shake while sleepSand==0. Resume playback")
               mediaPlayer.play()
