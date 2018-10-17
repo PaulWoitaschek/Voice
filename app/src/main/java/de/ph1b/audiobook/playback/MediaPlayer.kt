@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
+import androidx.annotation.FloatRange
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
@@ -62,7 +63,7 @@ constructor(
       if (_state.value != value) _state.onNext(value)
     }
 
-  private val seekTime by seekTimePref
+  private val seekTimeInSeconds by seekTimePref
   private var autoRewindAmount by autoRewindAmountPref
 
   init {
@@ -144,6 +145,11 @@ constructor(
       }
   }
 
+  fun setVolume(@FloatRange(from = 0.0, to = 1.0) volume: Float) {
+    require(volume in 0F..1F) { "volume $volume must be in [0,1]" }
+    player.volume = volume
+  }
+
   fun init(content: BookContent) {
     val shouldInitialize = player.playbackState == Player.STATE_IDLE ||
         !alreadyInitializedChapters(content)
@@ -198,9 +204,7 @@ constructor(
     }
   }
 
-  fun skip(forward: Boolean) {
-    Timber.v("skip forward=$forward")
-
+  fun skip(time: Long, timeUnit: TimeUnit) {
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
@@ -209,9 +213,8 @@ constructor(
       val currentPos = player.currentPosition
         .coerceAtLeast(0)
       val duration = player.duration
-      val delta = seekTime * 1000
 
-      val seekTo = if (forward) currentPos + delta else currentPos - delta
+      val seekTo = currentPos + timeUnit.toMillis(time)
       Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
 
       when {
@@ -220,6 +223,14 @@ constructor(
         else -> changePosition(seekTo.toInt())
       }
     }
+  }
+
+  fun skip(forward: Boolean) {
+    Timber.v("skip forward=$forward")
+    skip(
+      time = if (forward) seekTimeInSeconds.toLong() else -seekTimeInSeconds.toLong(),
+      timeUnit = TimeUnit.SECONDS
+    )
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
@@ -244,7 +255,7 @@ constructor(
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
       } else {
-        val time = (previousChapter.duration - (seekTime * 1000))
+        val time = (previousChapter.duration - (seekTimeInSeconds * 1000))
           .coerceAtLeast(0)
         changePosition(time, previousChapter.file)
       }

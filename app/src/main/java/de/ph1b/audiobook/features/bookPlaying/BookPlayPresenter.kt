@@ -10,7 +10,6 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.io.File
@@ -45,7 +44,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
       .disposeOnDetach()
 
     sleepTimer.leftSleepTimeInMs
-      .subscribe { view.showLeftSleepTime(it) }
+      .subscribe { view.showLeftSleepTime(it.toInt()) }
       .disposeOnDetach()
 
     bookRepository.byId(bookId)
