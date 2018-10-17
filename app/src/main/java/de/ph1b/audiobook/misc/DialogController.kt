@@ -75,7 +75,7 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
     dismissed = false
     router.pushController(
       RouterTransaction.with(this)
-        .pushChangeHandler(SimpleSwapChangeHandler(false))
+        .pushChangeHandler(SimpleSwapChangeHandler(true))
         .tag(tag)
     )
   }
