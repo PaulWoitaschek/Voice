@@ -32,9 +32,7 @@ class MediaBrowserHelper
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
-  private val context: Context,
-  @Named(PrefKeys.SORTING_MODE)
-  private val sortingPref: Pref<BookComparator>
+  private val context: Context
 ) {
 
   fun root(): String = bookUriConverter.allBooksId()
@@ -57,7 +55,7 @@ class MediaBrowserHelper
       // do NOT return the current book twice as this will break the listing due to stable IDs
       val all = repo.activeBooks
         .filter { it != currentBook }
-        .sortedWith(sortingPref.value)
+        .sortedWith(BookComparator.BY_LAST_PLAYED)
         .map { it.toMediaDescription() }
 
       return if (current == null) {
