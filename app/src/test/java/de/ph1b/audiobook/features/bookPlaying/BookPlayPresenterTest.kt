@@ -46,12 +46,12 @@ class BookPlayPresenterTest {
     whenever(mockBookRepository.booksStream()).thenReturn(Observable.empty())
     whenever(mockBookRepository.byId(any())).thenReturn(Observable.just(Optional.Absent()))
     whenever(mockPlayStateManager.playStateStream()).thenReturn(Observable.empty())
-    whenever(mockSleepTimer.leftSleepTimeInMs).thenReturn(Observable.empty())
+    whenever(mockSleepTimer.leftSleepTimeInMsStream).thenReturn(Observable.empty())
   }
 
   @Test
   fun sleepTimberShowsTime() {
-    whenever(mockSleepTimer.leftSleepTimeInMs).thenReturn(Observable.just(3, 2, 1))
+    whenever(mockSleepTimer.leftSleepTimeInMsStream).thenReturn(Observable.just(3, 2, 1))
     bookPlayPresenter.attach(mockView)
 
     inOrder(mockView).apply {
@@ -64,7 +64,7 @@ class BookPlayPresenterTest {
   @Test
   fun sleepTimberStopsAfterDetach() {
     val sleepSand = PublishSubject.create<Long>()
-    whenever(mockSleepTimer.leftSleepTimeInMs).thenReturn(sleepSand)
+    whenever(mockSleepTimer.leftSleepTimeInMsStream).thenReturn(sleepSand)
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
     sleepSand.onNext(1)

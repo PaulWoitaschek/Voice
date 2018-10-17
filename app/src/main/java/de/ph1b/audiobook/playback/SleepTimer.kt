@@ -2,10 +2,20 @@ package de.ph1b.audiobook.playback
 
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.channels.consumeEach
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.isActive
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.rx2.awaitFirst
+import kotlinx.coroutines.experimental.rx2.openSubscription
+import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.MINUTES
@@ -14,13 +24,13 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
-private const val NOT_ACTIVE = -1L
+private val FADE_OUT_MS = SECONDS.toMillis(10)
 
 @Singleton
 class SleepTimer
 @Inject constructor(
   private val mediaPlayer: MediaPlayer,
-  playStateManager: PlayStateManager,
+  private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @Named(PrefKeys.SHAKE_TO_RESET)
   private val shakeToResetPref: Pref<Boolean>,
@@ -28,110 +38,118 @@ class SleepTimer
   private val sleepTimePref: Pref<Int>
 ) {
 
-  private val _leftSleepTimeInMs = BehaviorSubject.createDefault<Long>(NOT_ACTIVE)
-  val leftSleepTimeInMs: Observable<Long> = _leftSleepTimeInMs
-  private var shakeDisposable: Disposable? = null
-  private var shakeTimeoutDisposable: Disposable? = null
-
-  init {
-    val fadeOutMs = SECONDS.toMillis(10)
-    @Suppress("CheckResult")
-    _leftSleepTimeInMs.filter { it <= fadeOutMs }
-      .subscribe { msLeft ->
-        val volume = if (msLeft == 0L || msLeft == NOT_ACTIVE) {
-          1F
-        } else {
-          msLeft.toFloat() / fadeOutMs
-        }
-        mediaPlayer.setVolume(volume)
-
-        if (msLeft == 0L) {
-          mediaPlayer.skip(-fadeOutMs, MILLISECONDS)
-          mediaPlayer.stop()
-        }
-      }
-
-    @Suppress("CheckResult")
-    _leftSleepTimeInMs.subscribe {
-      when {
-        it > 0 -> {
-          resetTimerOnShake(true)
-        }
-        it == NOT_ACTIVE -> {
-          // if the track ended by the user, disable the shake detector
-          resetTimerOnShake(false)
-        }
-        it == 0L -> {
-          // if the timer stopped normally, setup a timer of 5 minutes to resume playback
-          resetTimerOnShake(true, 5)
-        }
-      }
+  private val _leftSleepTimeInMsSubject = BehaviorSubject.createDefault<Long>(0)
+  private var leftSleepTimeMs: Long
+    get() = _leftSleepTimeInMsSubject.value!!
+    set(value) {
+      _leftSleepTimeInMsSubject.onNext(value)
     }
+  val leftSleepTimeInMsStream: Observable<Long> =
+    _leftSleepTimeInMsSubject.observeOn(AndroidSchedulers.mainThread())
 
-    // counts down the sleep sand
-    @Suppress("CheckResult")
-    playStateManager.playStateStream()
-      .map { it == PlayStateManager.PlayState.PLAYING }
-      .distinctUntilChanged()
-      .switchMap { playing ->
-        val sleepUpdateInterval = 1000L
-        if (playing) {
-          Observable
-            .interval(sleepUpdateInterval, MILLISECONDS, AndroidSchedulers.mainThread())
-            .filter { _leftSleepTimeInMs.value!! > 0 } // only notify if there is still time left
-            .map { _leftSleepTimeInMs.value!! - sleepUpdateInterval } // calculate the new time
-            .map { it.coerceAtLeast(0) }
-        } else {
-          Observable.empty()
-        }
-      }
-      .subscribe(_leftSleepTimeInMs::onNext)
-  }
+  fun sleepTimerActive(): Boolean = sleepJob?.isActive == true
 
-  /** turns the sleep timer on or off **/
+  private var sleepJob: Job? = null
+
   fun setActive(enable: Boolean) {
-    Timber.i("toggleSleepSand. Left sleepTime is ${_leftSleepTimeInMs.value}")
-
+    Timber.i("enable=$enable")
     if (enable) {
-      Timber.i("Starting sleepTimer")
-      val minutes = sleepTimePref.value
-      _leftSleepTimeInMs.onNext(MINUTES.toMillis(minutes.toLong()))
+      start()
     } else {
-      Timber.i("Cancelling sleepTimer")
-      _leftSleepTimeInMs.onNext(NOT_ACTIVE)
+      cancel()
     }
   }
 
-  private fun resetTimerOnShake(enable: Boolean, stopAfter: Long? = null) {
-    if (enable) {
-      val shouldSubscribe = shakeDisposable?.isDisposed != false
-      if (shouldSubscribe) {
-        // setup shake detection if requested
-        if (shakeToResetPref.value) {
-          shakeDisposable = shakeDetector.detect().subscribe {
-            if (_leftSleepTimeInMs.value == 0L) {
-              Timber.d("detected shake while sleepSand==0. Resume playback")
+  private fun start() {
+    Timber.i("Starting sleepTimer. Sleep in ${sleepTimePref.value} minutes.")
+    val sleepTimeInMs = MINUTES.toMillis(sleepTimePref.value.toLong())
+    leftSleepTimeMs = sleepTimeInMs
+    sleepJob?.cancel()
+    sleepJob = GlobalScope.launch {
+      val shakeDetectorJob = launch { restartTimerOnShake() }
+      startSleepTimerCountdown()
+      if (leftSleepTimeMs == 0L) {
+        stopPlayerForTimerEnded()
+      }
+      Timber.i("sleep timer ended")
+      if (isActive) {
+        continueListeningToShakesForSomeTime(shakeDetectorJob)
+      }
+      Timber.i("exiting")
+    }
+  }
+
+  private suspend fun continueListeningToShakesForSomeTime(shakeDetectorJob: Job) {
+    val listenToShakesForMs = MINUTES.toMillis(1)
+    Timber.i("Not cancelled. Continue listening to the shake detector for $listenToShakesForMs ms")
+    delay(listenToShakesForMs)
+    shakeDetectorJob.cancel()
+  }
+
+  private suspend fun startSleepTimerCountdown() {
+    val interval = 500L
+    while (leftSleepTimeMs > 0) {
+      delay(interval)
+      suspendUntilPlaying()
+      leftSleepTimeMs = (leftSleepTimeMs - interval).coerceAtLeast(0)
+      if (leftSleepTimeMs <= FADE_OUT_MS) {
+        adjustPlayerVolumeForSleepTime()
+      }
+    }
+  }
+
+  private suspend fun stopPlayerForTimerEnded() {
+    withContext(Dispatchers.Main) {
+      mediaPlayer.skip(-FADE_OUT_MS, MILLISECONDS)
+      mediaPlayer.stop()
+      mediaPlayer.setVolume(1F)
+    }
+  }
+
+  private suspend fun adjustPlayerVolumeForSleepTime() {
+    val volume = leftSleepTimeMs.toFloat() / FADE_OUT_MS
+    Timber.i("set volume to $volume")
+    withContext(Dispatchers.Main) {
+      mediaPlayer.setVolume(volume)
+    }
+  }
+
+  private suspend fun restartTimerOnShake() {
+    if (shakeToResetPref.value) {
+      shakeDetector.detect()
+        .doOnSubscribe { Timber.i("listen to shakes") }
+        .doOnDispose { Timber.i("stop listening to shakes") }
+        .openSubscription()
+        .consumeEach {
+          Timber.i("Shake detected. Reset sleep time")
+          if (leftSleepTimeMs > 0) {
+            withContext(Dispatchers.Main) {
+              mediaPlayer.setVolume(1F)
+            }
+            leftSleepTimeMs = MINUTES.toMillis(sleepTimePref.value.toLong())
+          } else {
+            withContext(Dispatchers.Main) {
               mediaPlayer.play()
             }
-
-            Timber.d("reset now by shake")
-            setActive(true)
+            start()
           }
-        }
-      }
-    } else {
-      shakeDisposable?.dispose()
-    }
-
-    shakeTimeoutDisposable?.dispose()
-    if (stopAfter != null) {
-      shakeTimeoutDisposable = Observable.timer(stopAfter, MINUTES)
-        .subscribe {
-          Timber.d("disabling pauseOnShake through timeout")
-          resetTimerOnShake(false)
         }
     }
   }
 
-  fun sleepTimerActive(): Boolean = _leftSleepTimeInMs.value!! > 0
+  private suspend fun suspendUntilPlaying() {
+    if (playStateManager.playState != PLAYING) {
+      Timber.i("Not playing. Wait for Playback to continue.")
+      playStateManager.playStateStream()
+        .filter { it == PLAYING }
+        .awaitFirst()
+      Timber.i("Playback continued.")
+    }
+  }
+
+  private fun cancel() {
+    sleepJob?.cancel()
+    _leftSleepTimeInMsSubject.onNext(0)
+    mediaPlayer.setVolume(1F)
+  }
 }

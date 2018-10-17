@@ -43,7 +43,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
       }
       .disposeOnDetach()
 
-    sleepTimer.leftSleepTimeInMs
+    sleepTimer.leftSleepTimeInMsStream
       .subscribe { view.showLeftSleepTime(it.toInt()) }
       .disposeOnDetach()
 
