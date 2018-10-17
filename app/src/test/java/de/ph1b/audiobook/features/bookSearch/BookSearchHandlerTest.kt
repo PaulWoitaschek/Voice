@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookSearch
 import android.annotation.SuppressLint
 import android.provider.MediaStore
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockito_kotlin.whenever
 import de.ph1b.audiobook.MemoryPref
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
@@ -11,7 +12,6 @@ import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.given
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
 import org.junit.Before
@@ -137,7 +137,7 @@ class BookSearchHandlerTest {
   fun setUp() {
     MockitoAnnotations.initMocks(this)
 
-    given { repo.activeBooks }.thenReturn(listOf(anotherBook, bookToFind))
+    whenever(repo.activeBooks).thenReturn(listOf(anotherBook, bookToFind))
     currentBookIdPref = MemoryPref(UUID.randomUUID())
 
     searchHandler = BookSearchHandler(repo, player, currentBookIdPref)
@@ -199,7 +199,7 @@ class BookSearchHandlerTest {
   @Test
   fun mediaFocusArtistInTitleNoArtistInBook() {
     val bookToFind = bookToFind.updateMetaData { copy(author = null, name = "The book of Tim") }
-    given { repo.activeBooks }.thenReturn(listOf(bookToFind))
+    whenever(repo.activeBooks).thenReturn(listOf(bookToFind))
 
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
