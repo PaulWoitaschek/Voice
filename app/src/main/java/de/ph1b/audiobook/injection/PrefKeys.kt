@@ -13,5 +13,4 @@ object PrefKeys {
   const val CURRENT_BOOK = "currentBook2"
   const val RESUME_AFTER_CALL = "resumeAfterCall"
   const val THEME = "THEME2_KEY"
-  const val SORTING_MODE = "sortingMode"
 }

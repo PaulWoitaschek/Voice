@@ -3,10 +3,8 @@ package de.ph1b.audiobook.features.settings
 import androidx.annotation.StringRes
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
-import de.ph1b.audiobook.features.settings.dialogs.SortingModeDialogController
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
 import de.ph1b.audiobook.injection.App
@@ -25,8 +23,6 @@ class SettingsController : BaseController() {
 
   @field:[Inject Named(PrefKeys.THEME)]
   lateinit var themePref: Pref<ThemeUtil.Theme>
-  @field:[Inject Named(PrefKeys.SORTING_MODE)]
-  lateinit var sortingPref: Pref<BookComparator>
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
   @field:[Inject Named(PrefKeys.RESUME_AFTER_CALL)]
@@ -54,17 +50,6 @@ class SettingsController : BaseController() {
     }
     themePref.stream
       .subscribe { theme.setDescription(it.nameId) }
-      .disposeOnDestroyView()
-
-    // sorting mode
-    setupTextSetting(
-      doubleSettingView = sortingMode,
-      titleRes = R.string.pref_sort_title
-    ) {
-      SortingModeDialogController().showDialog(router)
-    }
-    sortingPref.stream
-      .subscribe { sortingMode.setDescription(it.nameId) }
       .disposeOnDestroyView()
 
     // resume on playback
