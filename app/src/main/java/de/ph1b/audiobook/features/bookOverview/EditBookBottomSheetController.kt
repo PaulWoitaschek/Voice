@@ -55,7 +55,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
 
     container.title.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
-      EditBookTitleDialogController.newInstance(book)
+      EditBookTitleDialogController(book)
         .showDialog(router, EditBookTitleDialogController.TAG)
       dismissDialog()
     }

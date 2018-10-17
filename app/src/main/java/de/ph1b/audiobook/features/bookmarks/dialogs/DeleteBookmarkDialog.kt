@@ -11,7 +11,7 @@ import de.ph1b.audiobook.misc.DialogController
 /**
  * Dialog for confirming bookmark deletion.
  */
-class DeleteBookmarkDialog : DialogController() {
+class DeleteBookmarkDialog(args: Bundle) : DialogController(args) {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val bookId = args.getLong(NI_BOOK_ID)
@@ -37,11 +37,17 @@ class DeleteBookmarkDialog : DialogController() {
     private const val NI_BOOK_ID = "ni#bookId"
     private const val NI_BOOKMARK_TITLE = "ni#bookmarkTitle"
 
-    operator fun <T> invoke(target: T, bookmark: Bookmark) where T : Controller, T : Callback =
-      DeleteBookmarkDialog().apply {
-        targetController = target
-        args.putLong(NI_BOOK_ID, bookmark.id)
-        args.putString(NI_BOOKMARK_TITLE, bookmark.title)
+    operator fun <T> invoke(
+      target: T,
+      bookmark: Bookmark
+    ): DeleteBookmarkDialog where T : Controller, T : Callback {
+      val args = Bundle().apply {
+        putLong(NI_BOOK_ID, bookmark.id)
+        putString(NI_BOOKMARK_TITLE, bookmark.title)
       }
+      return DeleteBookmarkDialog(args).apply {
+        targetController = target
+      }
+    }
   }
 }

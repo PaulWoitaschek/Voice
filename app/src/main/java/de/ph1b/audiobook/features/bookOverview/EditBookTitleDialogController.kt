@@ -18,7 +18,16 @@ import javax.inject.Inject
 /**
  * Simple dialog for changing the name of a book
  */
-class EditBookTitleDialogController : DialogController() {
+
+private const val NI_PRESET_NAME = "niPresetName"
+private const val NI_BOOK_ID = "niBookId"
+
+class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
+
+  constructor(book: Book) : this(Bundle().apply {
+    putString(NI_PRESET_NAME, book.name)
+    putUUID(NI_BOOK_ID, book.id)
+  })
 
   @Inject
   lateinit var repo: BookRepository
@@ -57,13 +66,5 @@ class EditBookTitleDialogController : DialogController() {
   companion object {
 
     val TAG: String = EditBookTitleDialogController::class.java.simpleName
-    private const val NI_PRESET_NAME = "niPresetName"
-    private const val NI_BOOK_ID = "niBookId"
-
-    fun newInstance(book: Book): EditBookTitleDialogController =
-      EditBookTitleDialogController().apply {
-        args.putString(NI_PRESET_NAME, book.name)
-        args.putUUID(NI_BOOK_ID, book.id)
-      }
   }
 }

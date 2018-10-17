@@ -13,7 +13,7 @@ import de.ph1b.audiobook.misc.DialogController
 /**
  * Dialog for changing the bookmark title.
  */
-class EditBookmarkDialog : DialogController() {
+class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)
@@ -61,10 +61,14 @@ class EditBookmarkDialog : DialogController() {
     operator fun <T> invoke(
       target: T,
       bookmark: Bookmark
-    ) where T : Controller, T : EditBookmarkDialog.Callback = EditBookmarkDialog().apply {
-      targetController = target
-      args.putLong(NI_BOOK_ID, bookmark.id)
-      args.putString(NI_BOOKMARK_TITLE, bookmark.title)
+    ): EditBookmarkDialog where T : Controller, T : EditBookmarkDialog.Callback {
+      val args = Bundle().apply {
+        putLong(NI_BOOK_ID, bookmark.id)
+        putString(NI_BOOKMARK_TITLE, bookmark.title)
+      }
+      return EditBookmarkDialog(args).apply {
+        targetController = target
+      }
     }
   }
 }
