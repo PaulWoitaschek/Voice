@@ -25,10 +25,10 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="72dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_marginEnd="56dp"
         android:ellipsize="marquee"
         android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
 
     <ImageView
@@ -38,10 +38,10 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/remove"
-        android:tint="@color/icon_color"
         android:padding="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/delete"
+        android:tint="@color/icon_color"
         tools:src="@drawable/delete" />
 
 </RelativeLayout>

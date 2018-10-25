@@ -49,49 +49,49 @@
         tools:ignore="UnusedAttribute" />
 
     <ImageView
-        android:tint="@color/icon_color"
         android:id="@+id/rewind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/rewind"
         android:padding="8dp"
         android:src="@drawable/ic_fast_rewind"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:tint="@color/icon_color"
         android:id="@+id/previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/previous_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_previous"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/rewind"
         app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:tint="@color/icon_color"
         android:id="@+id/fastForward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/fast_forward"
         android:padding="8dp"
         android:src="@drawable/ic_fast_forward"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:tint="@color/icon_color"
         android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/next_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_next"
+        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/fastForward"
         app:layout_constraintTop_toTopOf="@id/play" />

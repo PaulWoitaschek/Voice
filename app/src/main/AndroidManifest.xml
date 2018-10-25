@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="de.ph1b.audiobook">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="de.ph1b.audiobook">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".injection.App"
@@ -22,49 +22,49 @@
         <!-- crashlytics -->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="122335d07af0e8a95ee41da564520a0d2fff550a"/>
+            android:value="122335d07af0e8a95ee41da564520a0d2fff550a" />
 
         <meta-data
             android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc"/>
+            android:resource="@xml/automotive_app_desc" />
 
         <!-- auto notification -->
         <meta-data
             android:name="com.google.android.gms.car.notification.SmallIcon"
             android:resource="@drawable/ic_notification"
-            tools:ignore="ManifestResource"/>
+            tools:ignore="ManifestResource" />
 
         <!-- auto theme -->
         <meta-data
             android:name="com.google.android.gms.car.application.theme"
-            android:resource="@style/Theme.AppCompat.DayNight"/>
+            android:resource="@style/Theme.AppCompat.DayNight" />
 
         <activity
             android:name=".features.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data
                 android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
+                android:resource="@xml/shortcuts" />
             <intent-filter>
-                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".features.externalStorageMissing.NoExternalStorageActivity"
-            android:label="@string/no_external_storage_action_bar_title"/>
+            android:label="@string/no_external_storage_action_bar_title" />
 
         <activity
             android:name=".features.folderChooser.FolderChooserActivity"
             android:parentActivityName=".features.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.MainActivity"/>
+                android:value=".features.MainActivity" />
         </activity>
 
         <service
@@ -73,14 +73,14 @@
             tools:ignore="ExportedService">
 
             <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService"/>
+                <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
 
         </service>
 
         <receiver android:name=".playback.events.MediaEventReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
@@ -89,12 +89,12 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info"/>
+                android:resource="@xml/widget_info" />
         </receiver>
 
         <provider
@@ -104,7 +104,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/cover_paths"/>
+                android:resource="@xml/cover_paths" />
         </provider>
     </application>
 

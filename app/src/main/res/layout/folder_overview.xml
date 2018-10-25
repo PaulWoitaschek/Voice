@@ -8,11 +8,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        app:navigationIcon="@drawable/close"
-        app:title="@string/audiobook_folders_title"
         style="@style/AppToolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/close"
+        app:title="@string/audiobook_folders_title" />
 
     <FrameLayout
         android:layout_width="match_parent"

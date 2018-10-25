@@ -1,6 +1,6 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:tools="http://schemas.android.com/tools"
-           tools:targetApi="n_mr1">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="n_mr1">
     <shortcut
         android:icon="@mipmap/ic_shortcut_play"
         android:shortcutId="playCurrent"
@@ -8,6 +8,6 @@
         <intent
             android:action="playCurrent"
             android:targetClass="de.ph1b.audiobook.features.MainActivity"
-            android:targetPackage="de.ph1b.audiobook"/>
+            android:targetPackage="de.ph1b.audiobook" />
     </shortcut>
 </shortcuts>

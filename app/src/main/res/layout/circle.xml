@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <View xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      android:layout_width="16dp"
-      android:layout_height="16dp"
-      android:background="@drawable/circle"
-      android:elevation="8dp"
-      tools:ignore="UnusedAttribute"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="16dp"
+    android:layout_height="16dp"
+    android:background="@drawable/circle"
+    android:elevation="8dp"
+    tools:ignore="UnusedAttribute" />

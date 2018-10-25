@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/wholeWidget"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/widget_background"
-              tools:ignore="Overdraw">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wholeWidget"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    tools:ignore="Overdraw">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:contentDescription="@string/content_cover"/>
+        android:contentDescription="@string/content_cover" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:maxLines="1"
                 android:textColor="@color/copy_abc_primary_text_material_dark"
                 android:textSize="@dimen/list_text_primary_size"
-                tools:text="Title text"/>
+                tools:text="Title text" />
 
             <TextView
                 android:id="@+id/summary"
@@ -47,7 +47,7 @@
                 android:maxLines="1"
                 android:textColor="@color/copy_abc_secondary_text_material_dark"
                 android:textSize="@dimen/list_text_secondary_size"
-                tools:text="Subtitle"/>
+                tools:text="Subtitle" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +67,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/rewind"
                 android:padding="8dp"
-                android:src="@drawable/ic_rewind_white_36dp"/>
+                android:src="@drawable/ic_rewind_white_36dp" />
 
             <ImageView
                 android:id="@+id/playPause"
@@ -76,7 +76,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/play_pause"
                 android:padding="8dp"
-                android:src="@drawable/ic_play_white_36dp"/>
+                android:src="@drawable/ic_play_white_36dp" />
 
             <ImageView
                 android:id="@+id/fastForward"
@@ -85,7 +85,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/fast_forward"
                 android:padding="8dp"
-                android:src="@drawable/ic_fast_forward_white_36dp"/>
+                android:src="@drawable/ic_fast_forward_white_36dp" />
 
         </LinearLayout>
     </LinearLayout>

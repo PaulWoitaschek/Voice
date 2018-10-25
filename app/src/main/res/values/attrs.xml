@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorAccentDark" format="reference"/>
+    <attr name="colorAccentDark" format="reference" />
 
     <!-- Toolbar-->
 
-    <attr name="background_overlay" format="reference"/>
+    <attr name="background_overlay" format="reference" />
 </resources>

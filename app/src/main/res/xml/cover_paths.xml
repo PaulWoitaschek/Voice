@@ -2,5 +2,5 @@
 <paths>
     <external-path
         name="covers"
-        path="Android/data/de.ph1b.audiobook/"/>
+        path="Android/data/de.ph1b.audiobook/" />
 </paths>

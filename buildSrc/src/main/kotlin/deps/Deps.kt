@@ -35,9 +35,9 @@ object Deps {
     }
 
     object Test {
-      const val runner = "androidx.test:runner:1.1.0-beta02"
-      const val junit = "androidx.test.ext:junit:1.0.0-beta02"
-      const val core = "androidx.test:core:1.0.0-beta02"
+      const val runner = "androidx.test:runner:1.1.0"
+      const val junit = "androidx.test.ext:junit:1.0.0"
+      const val core = "androidx.test:core:1.0.0"
     }
   }
 
@@ -61,7 +61,7 @@ object Deps {
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.26.1"
 
   object Dagger {
-    private const val version = "2.17"
+    private const val version = "2.18"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
@@ -77,7 +77,7 @@ object Deps {
 
   const val moshi = "com.squareup.moshi:moshi:1.7.0"
   const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.0"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.2"
+  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.3"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
@@ -97,6 +97,6 @@ object Deps {
   const val mockito = "org.mockito:mockito-core:2.23.0"
   const val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.6.0"
   const val truth = "com.google.truth:truth:0.42"
-  const val robolectric = "org.robolectric:robolectric:4.0-beta-1"
+  const val robolectric = "org.robolectric:robolectric:4.0"
   const val ktLint = "0.29.0"
 }
