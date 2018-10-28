@@ -80,7 +80,6 @@ object Deps {
   const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.3"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
-  const val threeTen = "com.jakewharton.threetenabp:threetenabp:1.1.1"
 
   object Kotlin {
     private const val versionKotlin = "1.2.71"

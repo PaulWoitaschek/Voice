@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.uitools
 
+import android.app.UiModeManager
 import android.content.Context
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
@@ -17,9 +18,9 @@ object ThemeUtil {
     return resId
   }
 
-  enum class Theme(@StringRes val nameId: Int) {
-    DAY_NIGHT(R.string.pref_theme_daynight),
-    DAY(R.string.pref_theme_day),
-    NIGHT(R.string.pref_theme_night)
+  enum class Theme(@StringRes val nameId: Int, val nightMode: Int) {
+    DAY_NIGHT(R.string.pref_theme_daynight, UiModeManager.MODE_NIGHT_AUTO),
+    DAY(R.string.pref_theme_day, UiModeManager.MODE_NIGHT_NO),
+    NIGHT(R.string.pref_theme_night, UiModeManager.MODE_NIGHT_YES)
   }
 }

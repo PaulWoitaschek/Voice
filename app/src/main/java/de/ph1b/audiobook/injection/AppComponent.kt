@@ -6,7 +6,6 @@ import dagger.BindsInstance
 import dagger.Component
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
-import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
@@ -60,7 +59,6 @@ interface AppComponent : DataComponent {
   }
 
   fun inject(target: App)
-  fun inject(target: BaseActivity)
   fun inject(target: AutoRewindDialogController)
   fun inject(target: BaseWidgetProvider)
   fun inject(target: BookOverviewController)

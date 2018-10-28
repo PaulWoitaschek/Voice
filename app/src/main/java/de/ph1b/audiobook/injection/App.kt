@@ -1,9 +1,10 @@
 package de.ph1b.audiobook.injection
 
 import android.app.Application
+import android.app.UiModeManager
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
-import com.jakewharton.threetenabp.AndroidThreeTen
+import androidx.core.content.getSystemService
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
@@ -38,7 +39,6 @@ class App : Application() {
     super.onCreate()
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
-    AndroidThreeTen.init(this)
 
     if (!alreadyCreated) {
       // robolectric creates multiple instances of the Application so we need to prevent
@@ -65,6 +65,14 @@ class App : Application() {
     DataInjector.component = component
     component.inject(this)
     CrashlyticsProxy.init(this)
+
+    val uiModeManager = getSystemService<UiModeManager>()!!
+    @Suppress("CheckResult")
+    themePref.stream
+      .distinctUntilChanged()
+      .subscribe {
+        uiModeManager.nightMode = it.nightMode
+      }
 
     bookAdder.scanForFiles()
 
