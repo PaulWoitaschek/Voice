@@ -13,13 +13,10 @@ import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.android.synthetic.main.book_overview_row.*
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
-import java.io.File
 import javax.inject.Inject
 
 class LoadBookCover(holder: BookOverviewHolder) {
@@ -36,7 +33,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
   private val cover = holder.cover
   private val defaultProgressColor = context.color(R.color.progressColor)
 
-  private var boundFile: File? = null
+  private var boundFileLength: Long = Long.MIN_VALUE
   private var boundName: String? = null
 
   private var currentCoverBindingJob: Job? = null
@@ -47,7 +44,8 @@ class LoadBookCover(holder: BookOverviewHolder) {
       val coverFile = book.coverFile()
       val bookName = book.name
 
-      if (boundName == book.name && boundFile?.length() == coverFile.length()) {
+      val coverFileLength = coverFile.length()
+      if (boundName == book.name && boundFileLength == coverFileLength) {
         return@launch
       }
 
@@ -55,7 +53,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
         progress.color = defaultProgressColor
       }
       val extractedColor = coverColorExtractor.extract(coverFile)
-      val shouldLoadImage = coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE
+      val shouldLoadImage = coverFileLength in 1..(MAX_IMAGE_SIZE - 1)
       withContext(Dispatchers.Main) {
         progress.color = extractedColor ?: defaultProgressColor
         val coverReplacement = CoverReplacement(bookName, context)
@@ -71,7 +69,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
           cover.doOnPreDraw { cover.setImageDrawable(coverReplacement) }
         }
 
-        boundFile = coverFile
+        boundFileLength = coverFileLength
         boundName = bookName
       }
     }
