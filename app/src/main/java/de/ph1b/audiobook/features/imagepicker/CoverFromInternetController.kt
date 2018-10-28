@@ -13,9 +13,9 @@ import android.webkit.WebViewClient
 import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import com.afollestad.materialcab.MaterialCab
+import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
@@ -32,15 +32,10 @@ import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.net.URLEncoder
+import java.util.UUID
 import javax.inject.Inject
 
-class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
-
-  constructor(book: Book) : this(
-    Bundle().apply {
-      putUUID(NI_BOOK_ID, book.id)
-    }
-  )
+class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
   init {
     App.component.inject(this)
@@ -184,6 +179,11 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
       imageHelper.saveCover(screenShot, coverFile)
       screenShot.recycle()
       Picasso.get().invalidate(coverFile)
+      val targetController = targetController
+      if (targetController?.isAttached == true) {
+        targetController as Callback
+        targetController.onBookCoverChanged(book.id)
+      }
     }
   }
 
@@ -278,8 +278,21 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   companion object {
 
+    operator fun <T> invoke(bookId: UUID, target: T): CoverFromInternetController where T : Controller, T : Callback {
+      val args = Bundle().apply {
+        putUUID(NI_BOOK_ID, bookId)
+      }
+      return CoverFromInternetController(args).apply {
+        targetController = target
+      }
+    }
+
     private const val NI_BOOK_ID = "ni"
     private const val ABOUT_BLANK = "about:blank"
     private const val SI_URL = "savedUrl"
+  }
+
+  interface Callback {
+    fun onBookCoverChanged(bookId: UUID)
   }
 }

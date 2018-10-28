@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
+import java.util.UUID
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -92,7 +93,7 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
               imageHelper.saveCover(bitmap, coverFile)
               picasso.invalidate(coverFile)
               val callback = targetController as Callback
-              callback.onBookCoverChanged(book)
+              callback.onBookCoverChanged(book.id)
               dismissDialog()
             }
           }
@@ -112,7 +113,7 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onBookCoverChanged(book: Book)
+    fun onBookCoverChanged(bookId: UUID)
   }
 
   companion object {

@@ -19,7 +19,7 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderType
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
-import de.ph1b.audiobook.features.imagepicker.ImagePickerController
+import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
@@ -44,7 +44,8 @@ private const val COVER_FROM_GALLERY = 1
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
 class BookOverviewController : BaseController(),
-  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback {
+  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
+  CoverFromInternetController.Callback {
 
   override val layoutRes = R.layout.book_overview
 
@@ -224,14 +225,14 @@ class BookOverviewController : BaseController(),
     }
   }
 
-  override fun onBookCoverChanged(book: Book) {
+  override fun onBookCoverChanged(bookId: UUID) {
     recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(book.id)
+      adapter.reloadBookCover(bookId)
     }
   }
 
   override fun onInternetCoverRequested(book: Book) {
-    router.pushController(ImagePickerController(book).asTransaction())
+    router.pushController(CoverFromInternetController(book.id, this).asTransaction())
   }
 
   override fun onFileCoverRequested(book: Book) {

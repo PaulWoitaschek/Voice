@@ -21,7 +21,7 @@ import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
-import de.ph1b.audiobook.features.imagepicker.ImagePickerController
+import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
@@ -69,7 +69,7 @@ interface AppComponent : DataComponent {
   fun inject(target: EditCoverDialogController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
-  fun inject(target: ImagePickerController)
+  fun inject(target: CoverFromInternetController)
   fun inject(target: JumpToPositionDialogController)
   fun inject(target: LoadBookCover)
   fun inject(target: LoudnessDialog)
