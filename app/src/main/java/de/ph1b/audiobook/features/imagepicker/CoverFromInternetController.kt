@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.imagepicker
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import com.afollestad.materialcab.MaterialCab
 import com.bluelinelabs.conductor.Controller
@@ -137,12 +135,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
       }
       onSelection { item ->
         if (item.itemId == R.id.confirm) {
-          cropOverlay.selectionOn = false
-          @Suppress("DEPRECATION")
-          val picture = webView.capturePicture()
-          val bitmap = createBitmap(picture.width, picture.height)
-          val canvas = Canvas(bitmap)
-          picture.draw(canvas)
+          val bitmap = takeWebViewScreenshot()
           saveCover(bitmap)
           MaterialCab.destroy()
           router.popCurrentController()
@@ -157,6 +150,17 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
         true
       }
     }
+  }
+
+  @Suppress("DEPRECATION")
+  private fun takeWebViewScreenshot(): Bitmap {
+    webView.isDrawingCacheEnabled = true
+    webView.buildDrawingCache()
+    val bitmap = webView.drawingCache.apply {
+      copy(config, false)
+    }
+    webView.isDrawingCacheEnabled = false
+    return bitmap
   }
 
   private fun saveCover(bitmap: Bitmap) {
