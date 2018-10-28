@@ -3,7 +3,7 @@ package de.ph1b.audiobook.injection
 import android.app.Application
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatDelegate
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
@@ -38,6 +38,7 @@ class App : Application() {
     super.onCreate()
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
+    AndroidThreeTen.init(this)
 
     if (!alreadyCreated) {
       // robolectric creates multiple instances of the Application so we need to prevent
@@ -66,8 +67,6 @@ class App : Application() {
     CrashlyticsProxy.init(this)
 
     bookAdder.scanForFiles()
-
-    AppCompatDelegate.setDefaultNightMode(themePref.value.nightMode)
 
     autoConnectedReceiver.register(this)
 

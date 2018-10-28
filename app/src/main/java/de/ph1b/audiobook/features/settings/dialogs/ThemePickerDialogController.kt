@@ -2,9 +2,6 @@ package de.ph1b.audiobook.features.settings.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
@@ -32,12 +29,6 @@ class ThemePickerDialogController : DialogController() {
       .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
         val newTheme = existingThemes[i]
         themePref.value = newTheme
-        AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
-
-        // use post so the dialog can close correctly
-        Handler().post {
-          (activity as AppCompatActivity).delegate.applyDayNight()
-        }
         true
       }
       .positiveText(R.string.dialog_confirm)

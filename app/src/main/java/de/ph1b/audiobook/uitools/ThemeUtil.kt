@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
 import de.ph1b.audiobook.R
 
 object ThemeUtil {
@@ -18,9 +17,9 @@ object ThemeUtil {
     return resId
   }
 
-  enum class Theme(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
-    DAY_NIGHT(R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
-    DAY(R.string.pref_theme_day, AppCompatDelegate.MODE_NIGHT_NO),
-    NIGHT(R.string.pref_theme_night, AppCompatDelegate.MODE_NIGHT_YES)
+  enum class Theme(@StringRes val nameId: Int) {
+    DAY_NIGHT(R.string.pref_theme_daynight),
+    DAY(R.string.pref_theme_day),
+    NIGHT(R.string.pref_theme_night)
   }
 }

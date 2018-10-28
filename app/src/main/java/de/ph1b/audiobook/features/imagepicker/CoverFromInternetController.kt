@@ -282,7 +282,10 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
   companion object {
 
-    operator fun <T> invoke(bookId: UUID, target: T): CoverFromInternetController where T : Controller, T : Callback {
+    operator fun <T> invoke(
+      bookId: UUID,
+      target: T
+    ): CoverFromInternetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putUUID(NI_BOOK_ID, bookId)
       }
