@@ -32,12 +32,6 @@ constructor(private val windowManager: Provider<WindowManager>) {
     return bitmap
   }
 
-  /**
-   * Saves a bitmap as a file to the personal directory.
-
-   * @param bitmap The bitmap to be saved
-   */
-  @Synchronized
   suspend fun saveCover(bitmap: Bitmap, destination: File) = withContext(Dispatchers.IO) {
     var bitmapToSave = bitmap
     // make bitmap square
@@ -57,7 +51,7 @@ constructor(private val windowManager: Provider<WindowManager>) {
     // save bitmap to storage
     try {
       FileOutputStream(destination).use {
-        bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 90, it)
+        bitmapToSave.compress(Bitmap.CompressFormat.WEBP, 70, it)
         it.flush()
       }
     } catch (e: IOException) {
