@@ -21,7 +21,6 @@ import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.blocking
 import java.io.File
 import javax.inject.Inject
 
@@ -119,7 +118,14 @@ class ChangeNotifier @Inject constructor(
       val coverFile = book.coverFile()
       if (coverFile.exists() && coverFile.canRead()) {
         bitmap = Picasso.get()
-          .blocking { load(coverFile).get() }
+          .load(coverFile)
+          .get()
+          .apply {
+            // we make a copy because we do not want to use picassos bitmap, since
+            // MediaSessionCompat recycles our bitmap eventually which would make
+            // picassos cached bitmap useless.
+            copy(config, false)
+          }
       }
       if (bitmap == null) {
         val replacement = CoverReplacement(book.name, context)
@@ -129,10 +135,6 @@ class ChangeNotifier @Inject constructor(
           imageHelper.smallerScreenSize
         )
       }
-      // we make a copy because we do not want to use picassos bitmap, since
-      // MediaSessionCompat recycles our bitmap eventually which would make
-      // picassos cached bitmap useless.
-      bitmap = bitmap.copy(bitmap.config, true)
       mediaMetaDataBuilder
         .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
         .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)

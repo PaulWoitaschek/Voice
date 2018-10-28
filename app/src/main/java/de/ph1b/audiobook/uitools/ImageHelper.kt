@@ -6,36 +6,15 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.view.WindowManager
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
-
-fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
-  val latch = CountDownLatch(1)
-  val bitmap = arrayOfNulls<Bitmap>(1)
-  Thread(
-    Runnable {
-      try {
-        bitmap[0] = this.getter()
-      } catch (ex: IOException) {
-        Timber.e(ex, "Exception at retrieving.")
-      } finally {
-        latch.countDown()
-      }
-    }
-  ).start()
-
-  latch.await()
-  return bitmap.first()
-}
 
 // 500 kb
 const val MAX_IMAGE_SIZE = 500 * 1024
