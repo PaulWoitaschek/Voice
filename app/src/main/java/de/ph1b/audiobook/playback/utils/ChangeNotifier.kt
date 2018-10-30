@@ -120,7 +120,7 @@ class ChangeNotifier @Inject constructor(
         bitmap = Picasso.get()
           .load(coverFile)
           .get()
-          .apply {
+          .run {
             // we make a copy because we do not want to use picassos bitmap, since
             // MediaSessionCompat recycles our bitmap eventually which would make
             // picassos cached bitmap useless.

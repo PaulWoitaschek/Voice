@@ -156,9 +156,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   private fun takeWebViewScreenshot(): Bitmap {
     webView.isDrawingCacheEnabled = true
     webView.buildDrawingCache()
-    val bitmap = webView.drawingCache.apply {
-      copy(config, false)
-    }
+    val drawingCache = webView.drawingCache
+    val bitmap = drawingCache.copy(drawingCache.config, false)
     webView.isDrawingCacheEnabled = false
     return bitmap
   }
