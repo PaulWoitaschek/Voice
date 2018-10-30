@@ -61,7 +61,7 @@ object Deps {
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.26.1"
 
   object Dagger {
-    private const val version = "2.18"
+    private const val version = "2.19"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
@@ -82,8 +82,8 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.2.71"
-    private const val versionCoroutines = "0.30.2"
+    private const val versionKotlin = "1.3.0"
+    private const val versionCoroutines = "1.0.0"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"

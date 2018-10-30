@@ -35,10 +35,10 @@ import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject

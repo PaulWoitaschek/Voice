@@ -18,8 +18,8 @@ import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.uitools.ThemeUtil
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named

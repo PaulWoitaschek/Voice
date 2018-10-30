@@ -3,9 +3,8 @@ package de.ph1b.audiobook.data.repo
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.repo.internals.BookmarkDao
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args),
   LayoutContainer {

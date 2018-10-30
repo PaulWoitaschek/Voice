@@ -5,10 +5,10 @@ import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
 import de.ph1b.audiobook.playback.PlaybackService
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Base class for all Activities which checks in onResume, if the storage

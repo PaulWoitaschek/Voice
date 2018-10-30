@@ -1,6 +1,5 @@
 import deps.Deps
 import deps.Versions
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
 
 plugins {
   id("com.android.library")
@@ -66,11 +65,4 @@ dependencies {
   testImplementation(Deps.junit)
   testImplementation(Deps.robolectric)
   testImplementation(Deps.truth)
-}
-
-
-kotlin {
-  experimental {
-    coroutines = Coroutines.ENABLE
-  }
 }

@@ -11,8 +11,8 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.Random
 import java.util.UUID
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 class DataBaseMigratorTest {
@@ -50,7 +50,7 @@ class DataBaseMigratorTest {
     db.execSQL(BookmarkTable.CREATE_TABLE)
 
     fun randomString() = UUID.randomUUID().toString()
-    fun randomInt() = Random().nextInt(100)
+    fun randomInt() = Random.nextInt(100)
 
     data class Bookmark(
       val path: String,

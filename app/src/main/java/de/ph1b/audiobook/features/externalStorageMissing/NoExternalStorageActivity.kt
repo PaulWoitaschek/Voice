@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import kotlinx.android.synthetic.main.activity_no_external.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NoExternalStorageActivity : AppCompatActivity() {
 

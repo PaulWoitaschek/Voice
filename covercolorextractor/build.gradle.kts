@@ -1,6 +1,5 @@
 import deps.Deps
 import deps.Versions
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
 
 plugins {
   id("com.android.library")
@@ -29,10 +28,4 @@ dependencies {
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
   implementation(Deps.timber)
-}
-
-kotlin {
-  experimental {
-    coroutines = Coroutines.ENABLE
-  }
 }

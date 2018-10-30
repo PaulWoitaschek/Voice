@@ -26,8 +26,8 @@ import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.net.URLEncoder
 import java.util.UUID
