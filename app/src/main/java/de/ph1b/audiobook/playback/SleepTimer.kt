@@ -6,6 +6,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -14,7 +15,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitFirst
-import kotlinx.coroutines.rx2.openSubscription
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -114,12 +114,10 @@ class SleepTimer
     }
   }
 
-  private suspend fun restartTimerOnShake() {
+  private suspend fun CoroutineScope.restartTimerOnShake() {
     if (shakeToResetPref.value) {
-      shakeDetector.detect()
-        .doOnSubscribe { Timber.i("listen to shakes") }
-        .doOnDispose { Timber.i("stop listening to shakes") }
-        .openSubscription()
+      @Suppress("EXPERIMENTAL_API_USAGE")
+      with(shakeDetector) { detect() }
         .consumeEach {
           Timber.i("Shake detected. Reset sleep time")
           if (leftSleepTimeMs > 0) {
