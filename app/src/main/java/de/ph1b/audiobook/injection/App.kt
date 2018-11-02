@@ -51,6 +51,7 @@ class App : Application() {
       AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
 
+    CrashlyticsProxy.init(this)
     GlobalScope.launch {
       if (BuildConfig.DEBUG) {
         Timber.plant(Timber.DebugTree())
@@ -64,7 +65,6 @@ class App : Application() {
       .build()
     DataInjector.component = component
     component.inject(this)
-    CrashlyticsProxy.init(this)
 
     val uiModeManager = getSystemService<UiModeManager>()!!
     @Suppress("CheckResult")
