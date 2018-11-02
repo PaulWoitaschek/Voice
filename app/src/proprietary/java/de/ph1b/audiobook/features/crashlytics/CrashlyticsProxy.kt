@@ -12,25 +12,19 @@ import io.fabric.sdk.android.Fabric
  */
 object CrashlyticsProxy : ErrorReporter {
 
-  private var enabled = false
-
   override fun log(message: String) {
-    if (enabled) {
-      Crashlytics.log(message)
-    }
+    Crashlytics.log(message)
   }
 
   override fun logException(throwable: Throwable) {
-    if (enabled) {
-      Crashlytics.logException(throwable)
-    }
+    Crashlytics.logException(throwable)
   }
 
   fun init(app: Application) {
     val crashlytics = Crashlytics.Builder()
       .core(
         CrashlyticsCore.Builder()
-          .disabled(BuildConfig.DEBUG || enabled)
+          .disabled(BuildConfig.DEBUG)
           .build()
       )
       .build()
