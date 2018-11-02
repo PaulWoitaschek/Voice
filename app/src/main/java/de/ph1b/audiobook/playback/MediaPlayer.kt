@@ -13,6 +13,7 @@ import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.checkMainThread
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
@@ -67,6 +68,7 @@ constructor(
   private var autoRewindAmount by autoRewindAmountPref
 
   init {
+    checkMainThread()
     player.audioAttributes = AudioAttributes.Builder()
       .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
@@ -89,6 +91,7 @@ constructor(
         .toInt()
       Timber.i("onPositionDiscontinuity with currentPos=$position")
       bookContent?.let {
+        checkMainThread()
         val index = player.currentWindowIndex
         _bookContent.onNext(
           it.updateSettings {
@@ -117,6 +120,7 @@ constructor(
       // upon end stop the player
       if (it == PlayerState.ENDED) {
         Timber.v("onEnded. Stopping player")
+        checkMainThread()
         player.playWhenReady = false
         playStateManager.playState = PlayState.STOPPED
       }
@@ -127,13 +131,17 @@ constructor(
       .switchMap {
         if (it == PlayerState.PLAYING) {
           Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map { _ -> player.currentPosition }
+            .map {
+              checkMainThread()
+              player.currentPosition
+            }
             .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
         } else Observable.empty()
       }
       .subscribe {
         // update the book
         bookContent?.let { book ->
+          checkMainThread()
           val index = player.currentWindowIndex
           val time = it.coerceAtLeast(0)
             .toInt()
@@ -147,6 +155,7 @@ constructor(
 
   fun setVolume(@FloatRange(from = 0.0, to = 1.0) volume: Float) {
     require(volume in 0F..1F) { "volume $volume must be in [0,1]" }
+    checkMainThread()
     player.volume = volume
   }
 
@@ -158,6 +167,7 @@ constructor(
     }
     Timber.i("init")
     _bookContent.onNext(content)
+    checkMainThread()
     player.playWhenReady = false
     player.prepare(dataSourceConverter.toMediaSource(content))
     player.seekTo(content.currentChapterIndex, content.positionInChapter.toLong())
@@ -198,6 +208,7 @@ constructor(
       }
 
       if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
+        checkMainThread()
         player.playWhenReady = true
         playStateManager.playState = PlayState.PLAYING
       } else Timber.d("ignore play in state $state")
@@ -205,6 +216,7 @@ constructor(
   }
 
   fun skip(time: Long, timeUnit: TimeUnit) {
+    checkMainThread()
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
@@ -247,6 +259,7 @@ constructor(
   }
 
   private fun previousByFile(content: BookContent, toNullOfNewTrack: Boolean) {
+    checkMainThread()
     val previousChapter = content.previousChapter
     if (player.currentPosition > 2000 || previousChapter == null) {
       Timber.i("seekTo beginning")
@@ -289,6 +302,7 @@ constructor(
 
   /** Stops the playback and releases some resources. */
   fun stop() {
+    checkMainThread()
     player.playWhenReady = false
     playStateManager.playState = PlayState.STOPPED
   }
@@ -299,6 +313,7 @@ constructor(
    */
   fun pause(rewind: Boolean) {
     Timber.v("pause")
+    checkMainThread()
     when (state) {
       PlayerState.PLAYING -> {
         bookContent?.let {
@@ -340,6 +355,7 @@ constructor(
 
   /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
+    checkMainThread()
     prepareIfIdle()
     val content = bookContent
       ?: return
@@ -351,6 +367,7 @@ constructor(
 
   /** Changes the current position in book. */
   fun changePosition(time: Int, changedFile: File? = null) {
+    checkMainThread()
     Timber.v("changePosition with time $time and file $changedFile")
     prepareIfIdle()
     if (state == PlayerState.IDLE)
@@ -367,6 +384,7 @@ constructor(
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
+    checkMainThread()
     bookContent?.let {
       val copy = it.updateSettings { copy(playbackSpeed = speed) }
       _bookContent.onNext(copy)
@@ -375,6 +393,7 @@ constructor(
   }
 
   fun setSkipSilences(skip: Boolean) {
+    checkMainThread()
     Timber.v("setSkipSilences to $skip")
 
     bookContent?.let {
