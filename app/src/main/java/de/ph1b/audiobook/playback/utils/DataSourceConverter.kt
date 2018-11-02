@@ -3,7 +3,6 @@ package de.ph1b.audiobook.playback.utils
 import android.content.Context
 import android.net.Uri
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
@@ -26,15 +25,16 @@ class DataSourceConverter
   init {
     val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
     val extractorsFactory = DefaultExtractorsFactory()
-      .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
+      .setConstantBitrateSeekingEnabled(true)
     mediaSourceFactory = ExtractorMediaSource.Factory(dataSourceFactory)
       .setExtractorsFactory(extractorsFactory)
   }
 
   private fun Chapter.toMediaSource() = toMediaSource(file)
 
-  fun toMediaSource(file: File): ExtractorMediaSource =
-    mediaSourceFactory.createMediaSource(Uri.fromFile(file))
+  fun toMediaSource(file: File): ExtractorMediaSource {
+    return mediaSourceFactory.createMediaSource(Uri.fromFile(file))
+  }
 
   /** convert a content to a media source. If the size is > 1 use a concat media source, else a regular */
   fun toMediaSource(content: BookContent): MediaSource {
