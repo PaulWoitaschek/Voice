@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package de.ph1b.audiobook.features
 
 import android.Manifest
@@ -22,18 +24,25 @@ import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.UUID
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlin.system.measureTimeMillis
 
 /**
  * Base class for adding new books.
@@ -52,13 +61,10 @@ class BookAdder
   private val collectionBookFolderPref: Pref<Set<String>>
 ) {
 
-  private val executor = Executors.newSingleThreadExecutor()
   private val _scannerActive = BehaviorSubject.createDefault(false)
   val scannerActive = _scannerActive.hide()!!
-  @Volatile
-  private var stopScanner = false
-  @Volatile
-  private var isScanning = false
+
+  private val scanningDispatcher = newSingleThreadContext("bookAdder")
 
   init {
     @Suppress("CheckResult")
@@ -70,9 +76,38 @@ class BookAdder
       .subscribe { scanForFiles(restartIfScanning = true) }
   }
 
+  private var scanningJob: Job? = null
+
+  fun scanForFiles(restartIfScanning: Boolean = false) {
+    Timber.i("scanForFiles with restartIfScanning=$restartIfScanning")
+    if (scanningJob?.isActive == true && !restartIfScanning) {
+      return
+    }
+    GlobalScope.launch {
+      scanningJob?.cancelAndJoin()
+      scanningJob = launch(scanningDispatcher) {
+        withContext(Dispatchers.Main) {
+          _scannerActive.onNext(true)
+        }
+        deleteOldBooks()
+        measureTimeMillis {
+          checkForBooks()
+        }.also {
+          Timber.i("checkForBooks took $it ms")
+        }
+        coverCollector.findCovers(repo.activeBooks)
+      }.also {
+        it.invokeOnCompletion {
+          launch(Dispatchers.Main) {
+            _scannerActive.onNext(false)
+          }
+        }
+      }
+    }
+  }
+
   // check for new books
-  @Throws(InterruptedException::class)
-  private suspend fun checkForBooks() {
+  private suspend fun CoroutineScope.checkForBooks() {
     val singleBooks = singleBookFiles
     for (f in singleBooks) {
       if (f.isFile && f.canRead()) {
@@ -92,47 +127,6 @@ class BookAdder
     }
   }
 
-  /** Restarts the scanner **/
-  fun scanForFiles(restartIfScanning: Boolean = false) {
-    Timber.i("scanForFiles with restartIfScanning=$restartIfScanning")
-    if (isScanning && !restartIfScanning)
-      return
-
-    stopScanner = true
-    executor.execute {
-      runBlocking {
-        isScanning = true
-        withContext(Dispatchers.Main) {
-          _scannerActive.onNext(true)
-        }
-        stopScanner = false
-
-        try {
-          deleteOldBooks()
-          profile("checkForBooks") {
-            checkForBooks()
-          }
-          runBlocking {
-            coverCollector.findCovers(repo.activeBooks)
-          }
-        } catch (ignored: InterruptedException) {
-        }
-
-        stopScanner = false
-        withContext(Dispatchers.Main) {
-          _scannerActive.onNext(false)
-        }
-        isScanning = false
-      }
-    }
-  }
-
-  private inline fun profile(taskName: String, task: () -> Unit) {
-    val start = System.nanoTime()
-    task()
-    Timber.d("$taskName took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start)}")
-  }
-
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
     get() = singleBookFolderPref.value
@@ -148,8 +142,7 @@ class BookAdder
 
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
-  @Throws(InterruptedException::class)
-  private suspend fun deleteOldBooks() {
+  private suspend fun CoroutineScope.deleteOldBooks() {
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
 
@@ -200,14 +193,16 @@ class BookAdder
     }
 
     if (!BaseActivity.storageMounted()) {
-      throw InterruptedException("Storage is not mounted")
+      coroutineContext.cancel()
+      throw CancellationException("Storage is not mounted")
     }
     if (ContextCompat.checkSelfPermission(
         context,
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      throw InterruptedException("Does not have external storage permission")
+      coroutineContext.cancel()
+      throw CancellationException("Does not have external storage permission")
     }
 
     repo.hideBook(booksToRemove)
@@ -223,9 +218,11 @@ class BookAdder
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = mediaAnalyzer.analyze(firstChapterFile)
-      .blockingGet() as? MediaAnalyzer.Result.Success
-      ?: return
+    val result = withContext(NonCancellable) {
+      with(mediaAnalyzer) {
+        analyze(firstChapterFile)
+      }
+    } as? MediaAnalyzer.Result.Success ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
@@ -327,14 +324,14 @@ class BookAdder
 
   /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
    * exist any longer **/
-  @Throws(InterruptedException::class)
-  private suspend fun checkBook(rootFile: File, type: Book.Type) {
+  private suspend fun CoroutineScope.checkBook(rootFile: File, type: Book.Type) {
     val bookExisting = getBookFromDb(rootFile, type, false)
     val bookId = bookExisting?.id ?: UUID.randomUUID()
     val newChapters = getChaptersByRootFile(bookId, rootFile)
 
     if (!BaseActivity.storageMounted()) {
-      throw InterruptedException("Storage not mounted")
+      coroutineContext.cancel()
+      throw CancellationException("Storage not mounted")
     }
 
     if (newChapters.isEmpty()) {
@@ -356,8 +353,7 @@ class BookAdder
   }
 
   // Returns all the chapters matching to a Book root
-  @Throws(InterruptedException::class)
-  private fun getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
+  private suspend fun CoroutineScope.getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
     val containingFiles = rootFile.walk()
       .filter { FileRecognition.musicFilter.accept(it) }
       .sortedWith(NaturalOrderComparator.fileComparator)
@@ -374,8 +370,9 @@ class BookAdder
       }
 
       // else parse and add
-      val result = mediaAnalyzer.analyze(f)
-        .blockingGet()
+      Timber.i("analyze $f")
+      val result = with(mediaAnalyzer) { analyze(f) }
+      Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {
           val chapters = chapterReader.read(f)
@@ -400,17 +397,8 @@ class BookAdder
           )
         )
       }
-      throwIfStopRequested()
     }
     return containingMedia
-  }
-
-  // Throws an interruption if [.stopScanner] is true.
-  @Throws(InterruptedException::class)
-  private fun throwIfStopRequested() {
-    if (stopScanner) {
-      throw InterruptedException("Interruption requested")
-    }
   }
 
   /**

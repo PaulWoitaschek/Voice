@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.misc
 
-import io.reactivex.Single
+import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -13,31 +13,27 @@ class MediaAnalyzer @Inject constructor(
   private val metaDataAnalyzer: MetaDataAnalyzer
 ) {
 
-  fun analyze(file: File) = Single.fromCallable { metaDataAnalyzer.parse(file) }
-    .flatMap { metaData ->
-      val metaDataDuration = metaData.duration ?: 0
-      if (metaDataDuration > 0) {
-        Single.just(
-          Result.Success(
-            metaDataDuration,
-            metaData.chapterName,
-            metaData.author,
-            metaData.bookName
-          )
-        )
+  suspend fun CoroutineScope.analyze(file: File): Result {
+    val metaData = metaDataAnalyzer.parse(file)
+    val metaDataDuration = metaData.duration ?: 0
+    return if (metaDataDuration > 0) {
+      Result.Success(
+        metaDataDuration,
+        metaData.chapterName,
+        metaData.author,
+        metaData.bookName
+      )
+    } else {
+      Timber.d("Invalid duration from meta data for $file. Try exoPlayer")
+      val exoDuration = with(exoPlayerDurationParser) { duration(file) } ?: -1
+      if (exoDuration > 0) {
+        Result.Success(exoDuration, metaData.chapterName, metaData.author, metaData.bookName)
       } else {
-        exoPlayerDurationParser.duration(file)
-          .map { exoDuration ->
-            Timber.d("Invalid duration from meta data for $file. Try exoPlayer")
-            if (exoDuration > 0) {
-              Result.Success(exoDuration, metaData.chapterName, metaData.author, metaData.bookName)
-            } else {
-              Timber.d("ExoPlayer failed to parse $file too.")
-              Result.Failure
-            }
-          }
+        Timber.d("ExoPlayer failed to parse $file too.")
+        Result.Failure
       }
-    }!!
+    }
+  }
 
   sealed class Result {
     data class Success(
