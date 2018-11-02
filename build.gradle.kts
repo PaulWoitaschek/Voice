@@ -29,7 +29,7 @@ buildscript {
 plugins {
   id("com.gradle.build-scan") version "1.16"
   id("com.github.ben-manes.versions") version "0.20.0"
-  id("org.jlleitschuh.gradle.ktlint") version "6.2.0"
+  id("org.jlleitschuh.gradle.ktlint") version "6.2.1"
 }
 
 buildScan {
