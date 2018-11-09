@@ -8,6 +8,7 @@ import de.ph1b.audiobook.data.repo.internals.BookStorage
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -21,7 +22,9 @@ import javax.inject.Singleton
 class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
-  private val allBooks by lazy { storage.books() }
+  private val allBooks by lazy {
+    runBlocking { storage.books() }
+  }
   private val active: MutableList<Book> by lazy {
     val activeBooks = allBooks.filter { it.content.settings.active }
     Collections.synchronizedList(activeBooks)
