@@ -46,7 +46,6 @@ class PersistenceModule {
   @Provides
   fun roomDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDb> {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
-      .allowMainThreadQueries()
   }
 
   @Provides
