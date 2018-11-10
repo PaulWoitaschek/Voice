@@ -41,4 +41,4 @@ Or you can start translating a new language if you speak it ;-)
 # License
 Copyright (C) 2014 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
-The license is [GnuGPLv3](https://github.com/PaulWoitaschek/Voice/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
+The license is [GNU GPLv3](https://github.com/PaulWoitaschek/Voice/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
