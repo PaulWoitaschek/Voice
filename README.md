@@ -25,7 +25,7 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 
 ## Development
 
-If you wan to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/Voice/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22).
+If you want to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/Voice/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22).
 Its always a good idea to talk about what are going to do before you actually start it, so frustration can be avoided.
 
 Some rules for coding:
