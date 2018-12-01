@@ -41,11 +41,11 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.2.1"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0-rc01"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
-  const val materialCab = "com.afollestad:material-cab:1.3.0"
+  const val materialCab = "com.afollestad:material-cab:1.3.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.12.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
@@ -67,7 +67,7 @@ object Deps {
   }
 
   object ExoPlayer {
-    const val core = "com.google.android.exoplayer:exoplayer-core:2.9.1"
+    const val core = "com.google.android.exoplayer:exoplayer-core:2.9.2"
     private const val extensionVersion = "2.7.0-1"
     const val opus =
       "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$extensionVersion"
@@ -77,12 +77,12 @@ object Deps {
 
   const val moshi = "com.squareup.moshi:moshi:1.8.0"
   const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.0"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.3"
+  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.4"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.0"
+    private const val versionKotlin = "1.3.10"
     private const val versionCoroutines = "1.0.1"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
@@ -94,9 +94,9 @@ object Deps {
   }
 
   const val junit = "junit:junit:4.12"
-  const val mockito = "org.mockito:mockito-core:2.23.0"
+  const val mockito = "org.mockito:mockito-core:2.23.4"
   const val mockitoKotlin = "com.nhaarman:mockito-kotlin-kt1.1:1.6.0"
   const val truth = "com.google.truth:truth:0.42"
-  const val robolectric = "org.robolectric:robolectric:4.0.1"
+  const val robolectric = "org.robolectric:robolectric:4.0.2"
   const val ktLint = "0.29.0"
 }

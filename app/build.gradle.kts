@@ -73,8 +73,8 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(Versions.sourceCompatibility)
-    setTargetCompatibility(Versions.targetCompatibility)
+    sourceCompatibility = Versions.sourceCompatibility
+    targetCompatibility = Versions.targetCompatibility
   }
 
   //noinspection GroovyMissingReturnStatement
@@ -85,10 +85,10 @@ android {
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      dimension = "free"
+      setDimension("free")
     }
     create("proprietary") {
-      dimension = "free"
+      setDimension("free")
     }
   }
   applicationVariants.all {

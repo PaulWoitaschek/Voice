@@ -16,8 +16,8 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(Versions.sourceCompatibility)
-    setTargetCompatibility(Versions.targetCompatibility)
+    sourceCompatibility = Versions.sourceCompatibility
+    targetCompatibility = Versions.targetCompatibility
   }
 }
 

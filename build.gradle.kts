@@ -27,9 +27,9 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "1.16"
+  `build-scan`
   id("com.github.ben-manes.versions") version "0.20.0"
-  id("org.jlleitschuh.gradle.ktlint") version "6.3.0"
+  id("org.jlleitschuh.gradle.ktlint") version "6.3.1"
 }
 
 buildScan {
@@ -133,7 +133,7 @@ tasks {
     val lint =
       subprojects.single { it.name == "app" }.tasks
         .single { it.name == "lintProprietaryDebug" } as LintBaseTask
-    lint.lintOptions.htmlOutput = File(artifactFolder, "lint.html")
+    lint.lintOptions.setHtmlOutput(File(artifactFolder, "lint.html"))
     dependsOn(
       "ktlintCheck",
       ciBuildApks,
