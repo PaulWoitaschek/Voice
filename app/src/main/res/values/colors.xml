@@ -5,7 +5,6 @@
     <color name="primary">@color/white</color>
     <color name="primaryDark">@color/grey200</color>
     <color name="grey200">#EEEEEE</color>
-    <color name="grey900">#212121</color>
     <color name="red700">#D32F2F</color>
     <color name="red900">#B71C1C</color>
     <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>
