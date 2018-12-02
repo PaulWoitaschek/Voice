@@ -26,10 +26,3 @@
 
 # dagger
 -dontwarn com.google.errorprone.annotations.*
-
-# Moshi: https://github.com/square/moshi/issues/738
-# Retain generated JsonAdapters if annotated type is retained.
--keep class **JsonAdapter {
-    <init>(...);
-    <fields>;
-}
