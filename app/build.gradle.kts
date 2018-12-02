@@ -148,8 +148,7 @@ dependencies {
 
   testImplementation(Deps.junit)
   testImplementation(Deps.truth)
-  testImplementation(Deps.mockito)
-  testImplementation(Deps.mockitoKotlin)
+  testImplementation(Deps.mockk)
 
   implementation(Deps.rxJava)
   implementation(Deps.rxAndroid)
