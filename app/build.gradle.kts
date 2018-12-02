@@ -25,6 +25,14 @@ android {
     versionName = Versions.versionName
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    ndk {
+      setAbiFilters(
+        listOf(
+          "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        )
+      )
+    }
   }
 
   signingConfigs {
@@ -80,6 +88,7 @@ android {
   //noinspection GroovyMissingReturnStatement
   packagingOptions {
     exclude("META-INF/rxjava.properties")
+    exclude("META-INF/proguard/moshi.pro")
   }
 
   flavorDimensions("free")
