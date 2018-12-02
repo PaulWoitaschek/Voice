@@ -59,6 +59,7 @@ class NotificationCreator
 
   suspend fun createNotification(book: Book): Notification = withContext(Dispatchers.IO) {
     mediaStyle.setMediaSession(mediaSession.sessionToken)
+    @Suppress("RestrictedApi")
     notificationBuilder.mActions.clear()
     val playState = playStateManager.playState
     notificationBuilder
