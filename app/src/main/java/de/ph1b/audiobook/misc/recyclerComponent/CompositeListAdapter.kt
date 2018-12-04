@@ -29,7 +29,7 @@ open class CompositeListAdapter<T : Any>(
 
   final override fun getItemViewType(position: Int): Int = helper.getItemViewType(position)
 
-  fun <T : Any, VH : RecyclerView.ViewHolder> addComponents(component: AdapterComponent<T, VH>) {
+  fun <VH : RecyclerView.ViewHolder> addComponents(component: AdapterComponent<T, VH>) {
     helper.addComponents(component)
   }
 
