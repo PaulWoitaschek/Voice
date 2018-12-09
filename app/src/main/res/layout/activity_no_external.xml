@@ -11,8 +11,8 @@
         android:layout_height="?attr/actionBarSize" />
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/no_external_storage_action_bar_title"
