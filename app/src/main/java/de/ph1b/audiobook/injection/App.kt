@@ -1,10 +1,9 @@
 package de.ph1b.audiobook.injection
 
 import android.app.Application
-import android.app.UiModeManager
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
-import androidx.core.content.getSystemService
+import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.data.di.DataInjector
@@ -66,12 +65,11 @@ class App : Application() {
     DataInjector.component = component
     component.inject(this)
 
-    val uiModeManager = getSystemService<UiModeManager>()!!
     @Suppress("CheckResult")
     themePref.stream
       .distinctUntilChanged()
-      .subscribe {
-        uiModeManager.nightMode = it.nightMode
+      .subscribe { theme ->
+        AppCompatDelegate.setDefaultNightMode(theme.nightMode)
       }
 
     bookAdder.scanForFiles()

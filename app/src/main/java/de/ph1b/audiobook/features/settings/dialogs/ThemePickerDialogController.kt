@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.settings.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
@@ -29,6 +30,8 @@ class ThemePickerDialogController : DialogController() {
       .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
         val newTheme = existingThemes[i]
         themePref.value = newTheme
+        val delegate = (activity!! as AppCompatActivity).delegate
+        delegate.setLocalNightMode(newTheme.nightMode)
         true
       }
       .positiveText(R.string.dialog_confirm)
