@@ -78,6 +78,7 @@ android {
   lintOptions {
     isCheckDependencies = true
     isIgnoreTestSources = true
+    isWarningsAsErrors = true
   }
 
   compileOptions {
