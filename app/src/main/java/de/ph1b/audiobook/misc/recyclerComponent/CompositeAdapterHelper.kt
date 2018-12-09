@@ -3,11 +3,9 @@ package de.ph1b.audiobook.misc.recyclerComponent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class CompositeAdapterHelper(
-  private val getItem: (position: Int) -> Any
-) {
+class CompositeAdapterHelper<T : Any>(private val getItem: (position: Int) -> T) {
 
-  private val components = ArrayList<AdapterComponent<Any, RecyclerView.ViewHolder>>()
+  private val components = ArrayList<AdapterComponent<T, RecyclerView.ViewHolder>>()
 
   fun getItemViewType(position: Int): Int {
     val item = getItem(position)
@@ -19,32 +17,26 @@ class CompositeAdapterHelper(
     throw IllegalStateException("No component for item $item at position=$position")
   }
 
-  fun <T : Any, VH : RecyclerView.ViewHolder> addComponents(component: AdapterComponent<T, VH>) {
+  fun <VH : RecyclerView.ViewHolder> addComponent(component: AdapterComponent<T, VH>) {
     @Suppress("UNCHECKED_CAST")
-    components.add(component as AdapterComponent<Any, RecyclerView.ViewHolder>)
-  }
-
-  fun addComponents(vararg component: AdapterComponent<*, *>) {
-    component.forEach {
-      addComponents(it)
-    }
+    components.add(component as AdapterComponent<T, RecyclerView.ViewHolder>)
   }
 
   fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val viewType = holder.itemViewType
     val component = componentForViewType(viewType)
-        ?: throw NullPointerException("No component for viewType $viewType")
+      ?: throw NullPointerException("No component for viewType $viewType")
     val item = getItem(position)
     component.onBindViewHolder(item, holder)
   }
 
   fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     val component = componentForViewType(viewType)
-        ?: throw NullPointerException("No component for viewType $viewType")
+      ?: throw NullPointerException("No component for viewType $viewType")
     return component.onCreateViewHolder(parent)
   }
 
-  private fun componentForViewType(viewType: Int): AdapterComponent<Any, RecyclerView.ViewHolder>? {
+  private fun componentForViewType(viewType: Int): AdapterComponent<T, RecyclerView.ViewHolder>? {
     return components.find { it.viewType == viewType }
   }
 }

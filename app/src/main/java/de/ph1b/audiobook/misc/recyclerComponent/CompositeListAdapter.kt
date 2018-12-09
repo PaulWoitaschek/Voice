@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
  */
 open class CompositeListAdapter<T : Any>(
   itemCallback: DiffUtil.ItemCallback<T> = EqualityItemCallback()
-) :
-  ListAdapter<T, RecyclerView.ViewHolder>(itemCallback) {
+) : ListAdapter<T, RecyclerView.ViewHolder>(itemCallback) {
 
-  private val helper = CompositeAdapterHelper { getItem(it) }
+  private val helper = CompositeAdapterHelper<T> { getItem(it) }
 
   final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     helper.onBindViewHolder(holder, position).also { onViewHolderBound(holder) }
@@ -29,11 +28,8 @@ open class CompositeListAdapter<T : Any>(
 
   final override fun getItemViewType(position: Int): Int = helper.getItemViewType(position)
 
-  fun <VH : RecyclerView.ViewHolder> addComponents(component: AdapterComponent<T, VH>) {
-    helper.addComponents(component)
-  }
-
-  fun addComponents(vararg component: AdapterComponent<*, *>) {
-    helper.addComponents(*component)
+  fun <U : T, VH : RecyclerView.ViewHolder> addComponent(component: AdapterComponent<U, VH>) {
+    @Suppress("UNCHECKED_CAST")
+    helper.addComponent(component as AdapterComponent<T, VH>)
   }
 }

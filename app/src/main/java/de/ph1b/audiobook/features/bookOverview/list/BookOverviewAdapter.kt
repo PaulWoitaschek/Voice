@@ -12,7 +12,8 @@ class BookOverviewAdapter(
 ) : CompositeListAdapter<Any>(BookOverviewDiff()) {
 
   init {
-    addComponents(BookOverviewComponent(bookClickListener), BookOverviewHeaderComponent())
+    addComponent(BookOverviewComponent(bookClickListener))
+    addComponent(BookOverviewHeaderComponent())
   }
 
   fun reloadBookCover(bookId: UUID) {
