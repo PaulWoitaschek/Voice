@@ -42,6 +42,64 @@ class DataBaseMigratorTest {
   }
 
   @Test
+  fun migrate44() {
+    val dbName = "testDb"
+    val db = helper.createDatabase(dbName, 44)
+
+    data class BookSetting(val id: String, val currentFile: String, val positionInChapter: Int)
+    data class Chapter(val file: String, val bookId: String)
+
+    fun insertBookSettings(settings: BookSetting) {
+      db.execSQL(
+        "INSERT OR REPLACE INTO `bookSettings`(`id`,`currentFile`,`positionInChapter`,`playbackSpeed`,`loudnessGain`,`skipSilence`," +
+            "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
+        arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0)
+      )
+    }
+
+    fun insertChapter(chapter: Chapter) {
+      db.execSQL(
+        "INSERT OR REPLACE INTO `chapters`(`file`,`name`,`duration`,`fileLastModified`,`marks`,`bookId`,`id`) " +
+            "VALUES (?,?,?,?,?,?,nullif(?, 0))",
+        arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId)
+      )
+    }
+
+    val correctBookId = "id1"
+    val file1 = "file1"
+    val file2 = "file2"
+    val correctBookSettings = BookSetting(id = correctBookId, currentFile = file1, positionInChapter = 5)
+    insertBookSettings(correctBookSettings)
+    insertChapter(Chapter(file1, correctBookId))
+    insertChapter(Chapter(file2, correctBookId))
+
+    val defectBookId = "id2"
+    val defectBookSetting = BookSetting(id = defectBookId, currentFile = file1, positionInChapter = 10)
+    insertBookSettings(defectBookSetting)
+    insertChapter(Chapter(file2, defectBookId))
+
+    db.close()
+
+    val migratedDb = helper.runMigrationsAndValidate(
+      dbName,
+      AppDb.VERSION,
+      true,
+      *PersistenceModule().migrations(getApplicationContext())
+    )
+
+    val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
+      BookSetting(
+        id = getString("id"),
+        currentFile = getString("currentFile"),
+        positionInChapter = getInt("positionInChapter")
+      )
+    }
+    assertThat(migratedBookSettings).containsAllOf(
+      correctBookSettings, BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0)
+    )
+  }
+
+  @Test
   fun migrate43() {
     val dbName = "testDb"
     val db = helper.createDatabase(dbName, 43)
