@@ -37,7 +37,7 @@ class SupportDialogController : DialogController() {
   }
 
   companion object {
-    private val GITHUB_URL = Uri.parse("https://github.com/Ph1b/MaterialAudiobookPlayer")!!
+    private val GITHUB_URL = Uri.parse("https://github.com/PaulWoitaschek/Voice")!!
     private val TRANSLATION_URL =
       Uri.parse("https://www.transifex.com/projects/p/voice")!!
   }
