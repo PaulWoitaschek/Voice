@@ -125,8 +125,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .distinctUntilChanged { book -> book.content.currentChapter }
       .subscribe {
         if (isForeground) {
-          runBlocking {
-            updateNotification(it)
+          try {
+            runBlocking {
+              updateNotification(it)
+            }
+          } catch (e: InterruptedException) {
+            Timber.e(e, "updateNotification was interrupted.")
           }
         }
       }
