@@ -139,8 +139,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
     playStateManager.playStateStream()
       .observeOn(Schedulers.io())
       .subscribe {
-        runBlocking {
-          handlePlaybackState(it)
+        try {
+          runBlocking {
+            handlePlaybackState(it)
+          }
+        } catch (e: InterruptedException) {
+          Timber.e(e, "handlePlaybackState was interrupted.")
         }
       }
       .disposeOnDestroy()
