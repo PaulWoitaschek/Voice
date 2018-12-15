@@ -5,6 +5,7 @@ import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.ErrorReporter
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import io.reactivex.Observable
@@ -18,12 +19,17 @@ class TriggerWidgetOnChange @Inject constructor(
   private val currentBookIdPref: Pref<UUID>,
   private val repo: BookRepository,
   private val playStateManager: PlayStateManager,
-  private val widgetUpdater: WidgetUpdater
+  private val widgetUpdater: WidgetUpdater,
+  private val errorReporter: ErrorReporter
 ) {
 
   fun init() {
     @Suppress("CheckResult")
-    anythingChanged().subscribe { widgetUpdater.update() }
+    anythingChanged().subscribe({
+      widgetUpdater.update()
+    }) {
+      errorReporter.logException(it)
+    }
   }
 
   private fun anythingChanged(): Observable<Any> =
