@@ -34,7 +34,6 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Provider
 
 @Reusable
 class WidgetUpdater @Inject constructor(
@@ -45,7 +44,7 @@ class WidgetUpdater @Inject constructor(
   private val imageHelper: ImageHelper,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
-  private val windowManager: Provider<WindowManager>
+  private val windowManager: WindowManager
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -124,7 +123,7 @@ class WidgetUpdater @Inject constructor(
   private val isPortrait: Boolean
     get() {
       val orientation = context.resources.configuration.orientation
-      val window = windowManager.get()
+      val window = windowManager
       val display = window.defaultDisplay
 
       @Suppress("DEPRECATION")
