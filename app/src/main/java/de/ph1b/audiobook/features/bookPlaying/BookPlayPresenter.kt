@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import de.ph1b.audiobook.common.Optional
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.injection.App
@@ -51,8 +51,8 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
       .distinctUntilChanged()
       .subscribe {
         when (it) {
-          is Optional.Present -> view.render(it.value)
-          is Optional.Absent -> view.finish()
+          Book.BOOK_NOT_FOUND -> view.finish()
+          else -> view.render(it)
         }
       }
       .disposeOnDetach()

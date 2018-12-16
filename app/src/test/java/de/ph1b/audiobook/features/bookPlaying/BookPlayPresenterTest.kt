@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.BookFactory
-import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
@@ -40,7 +39,7 @@ class BookPlayPresenterTest {
       sleepTimer = mockSleepTimer
     }
     every { mockBookRepository.booksStream() } returns Observable.empty()
-    every { mockBookRepository.byId(any()) } returns Observable.just(Optional.Absent())
+    every { mockBookRepository.byId(any()) } returns Observable.just(Book.BOOK_NOT_FOUND)
     every { mockPlayStateManager.playStateStream() } returns Observable.empty()
     every { mockSleepTimer.leftSleepTimeInMsStream } returns Observable.empty()
   }
@@ -166,7 +165,7 @@ class BookPlayPresenterTest {
   private fun bookRepoWillReturn(book: Book) {
     every { mockBookRepository.byId(bookId) } answers {
       val id = invocation.args[0] as UUID
-      Observable.just(Optional.of(book.takeIf { id == book.id }))
+      Observable.just(book.takeIf { id == book.id })
     }
     every { mockBookRepository.bookById(bookId) } answers {
       val id = invocation.args[0] as UUID

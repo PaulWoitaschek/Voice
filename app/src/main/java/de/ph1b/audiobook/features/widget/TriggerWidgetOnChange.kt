@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.widget
 
 import dagger.Reusable
-import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -39,7 +38,9 @@ class TriggerWidgetOnChange @Inject constructor(
   private fun currentBookChanged(): Observable<Book> {
     return currentBookIdPref.stream
       .switchMap {
-        repo.byId(it).getIfPresent()
+        repo.byId(it).filter { book ->
+          book != Book.BOOK_NOT_FOUND
+        }
       }
       .distinctUntilChanged { previous, current ->
         previous.id == current.id &&

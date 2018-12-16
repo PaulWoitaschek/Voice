@@ -82,5 +82,17 @@ data class Book(
   companion object {
     const val SPEED_MAX = 2.5F
     const val SPEED_MIN = 0.5F
+
+    private val EMPTY_UUID = UUID(0L, 0L)
+
+    @JvmStatic
+    val BOOK_NOT_FOUND = Book(
+      EMPTY_UUID,
+      BookContent(
+        EMPTY_UUID, listOf(),
+        BookSettings(EMPTY_UUID, File(""), 0, active = false, lastPlayedAtMillis = 0L)
+      ),
+      BookMetaData(EMPTY_UUID, Book.Type.SINGLE_FILE, null, "", "", 0L)
+    )
   }
 }

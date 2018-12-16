@@ -1,8 +1,7 @@
 package de.ph1b.audiobook.data.repo
 
-import de.ph1b.audiobook.common.Optional
-import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book.Companion.BOOK_NOT_FOUND
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import io.reactivex.Observable
@@ -40,9 +39,9 @@ class BookRepository
 
   fun booksStream(): Observable<List<Book>> = activeBooksSubject
 
-  fun byId(id: UUID): Observable<Optional<Book>> {
+  fun byId(id: UUID): Observable<Book> {
     return activeBooksSubject.map { books ->
-      books.find { it.id == id }.toOptional()
+      books.find { it.id == id } ?: BOOK_NOT_FOUND
     }
   }
 

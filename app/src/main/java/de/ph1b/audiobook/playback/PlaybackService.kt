@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
-import de.ph1b.audiobook.common.getIfPresent
+import com.google.android.exoplayer2.offline.DownloadService.startForeground
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
@@ -104,7 +104,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .disposeOnDestroy()
 
     val bookUpdated = currentBookIdPref.stream
-      .switchMap { repo.byId(it).getIfPresent() }
+      .switchMap {
+        repo.byId(it).filter { book ->
+          book != Book.BOOK_NOT_FOUND
+        }
+      }
       .distinctUntilChanged { old, new ->
         old.content == new.content
       }
