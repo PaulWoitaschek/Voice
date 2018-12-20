@@ -16,7 +16,6 @@ reports
 mainframer.sh
 .mainframer
 *.keystore
-signing.properties
 artifacts
 testResults
 
