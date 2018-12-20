@@ -18,4 +18,5 @@ mainframer.sh
 *.keystore
 artifacts
 testResults
-
+Gemfile.lock
+releases

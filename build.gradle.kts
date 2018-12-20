@@ -98,48 +98,17 @@ tasks {
     args("-c", "tx pull -af --minimum-perc=5")
   }
 
-  val artifactFolder = File(
-    "${rootDir.absolutePath}/artifacts/${Versions.versionName}_${Versions.versionCode}"
-  )
-
-  val ciBuildApks = register<GradleBuild>("ciBuildApks") {
-    val assembleTask = subprojects.single { it.name == "app" }
-      .tasks.single { it.name == "assembleProprietaryRelease" }.also { task ->
-      task.dependsOn.removeAll {
-        val name = it.toString()
-        name.contains("lint") || name.contains("crashlytics")
-      }
-    }
-    dependsOn(assembleTask)
+  register("appVersion") {
+    print("#BEGIN_VERSION#${Versions.versionName}_${Versions.versionCode}#END_VERSION#")
   }
 
-  val copyCiApk = register<Copy>("copyCiApk") {
-    from("app/build/outputs/apk/proprietary/release") {
-      include("*.apk")
-    }
-    into(artifactFolder)
-  }
-
-  val allUnitTests = register<TestReport>("allUnitTests") {
+  register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
       (subProject.tasks.findByName("testProprietaryDebugUnitTest")
         ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
     }
+    val artifactFolder = File("${rootDir.absolutePath}/artifacts")
     destinationDir = File(artifactFolder, "testResults")
     reportOn(tests)
-  }
-
-  register<GradleBuild>("ci") {
-    val lint =
-      subprojects.single { it.name == "app" }.tasks
-        .single { it.name == "lintProprietaryDebug" } as LintBaseTask
-    lint.lintOptions.setHtmlOutput(File(artifactFolder, "lint.html"))
-    dependsOn(
-      "ktlintCheck",
-      ciBuildApks,
-      copyCiApk.get().mustRunAfter(ciBuildApks),
-      allUnitTests,
-      lint
-    )
   }
 }
