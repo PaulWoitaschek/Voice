@@ -41,7 +41,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0-rc02"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0-rc03"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
@@ -96,6 +96,6 @@ object Deps {
   const val junit = "junit:junit:4.12"
   const val mockk = "io.mockk:mockk:1.8.13.kotlin13"
   const val truth = "com.google.truth:truth:0.42"
-  const val robolectric = "org.robolectric:robolectric:4.0.2"
+  const val robolectric = "org.robolectric:robolectric:4.1"
   const val ktLint = "0.29.0"
 }
