@@ -82,7 +82,7 @@ class DataBaseMigratorTest {
 
     val migratedDb = helper.runMigrationsAndValidate(
       dbName,
-      AppDb.VERSION,
+      45,
       true,
       *PersistenceModule().migrations(getApplicationContext())
     )
@@ -215,7 +215,7 @@ class DataBaseMigratorTest {
 
     val migratedDb = helper.runMigrationsAndValidate(
       dbName,
-      AppDb.VERSION,
+      44,
       true,
       *PersistenceModule().migrations(getApplicationContext())
     )
