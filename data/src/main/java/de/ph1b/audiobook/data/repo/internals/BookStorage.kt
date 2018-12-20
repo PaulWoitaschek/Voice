@@ -1,10 +1,12 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import androidx.room.RoomDatabase
+import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -29,11 +31,22 @@ class BookStorage
             val metaData = metaDataDao.byId(bookId)
             val chapters = chapterDao.byBookId(bookId)
 
+            val bookSettingsFileInChapters = chapters.any { chapter ->
+              chapter.file == bookSettings.currentFile
+            }
+            val correctedBookSettings = if (bookSettingsFileInChapters) {
+              bookSettings
+            } else {
+              Timber.e("bookSettings=$bookSettings currentFile is not in $chapters. metaData=$metaData")
+              CrashReporter.logException(AssertionError())
+              bookSettings.copy(currentFile = chapters[0].file)
+            }
+
             Book(
               id = bookId, content = BookContent(
                 id = bookId,
                 chapters = chapters,
-                settings = bookSettings
+                settings = correctedBookSettings
               ),
               metaData = metaData
             )

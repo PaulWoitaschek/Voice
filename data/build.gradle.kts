@@ -24,6 +24,17 @@ android {
     }
   }
 
+
+  flavorDimensions("free")
+  productFlavors {
+    create("opensource") {
+      setDimension("free")
+    }
+    create("proprietary") {
+      setDimension("free")
+    }
+  }
+
   sourceSets {
     // debug as a workaround, see https://github.com/robolectric/robolectric/issues/3928
     getByName("debug").assets.srcDir(files("$projectDir/schemas"))
@@ -43,6 +54,7 @@ android {
 
 dependencies {
   implementation(project(":common"))
+  implementation(project(":crashreporting"))
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
