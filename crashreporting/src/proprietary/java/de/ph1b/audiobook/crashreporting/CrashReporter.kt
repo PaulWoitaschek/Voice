@@ -1,22 +1,17 @@
-package de.ph1b.audiobook.features.crashlytics
+package de.ph1b.audiobook.crashreporting
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
-import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.misc.ErrorReporter
 import io.fabric.sdk.android.Fabric
 
-/**
- * Proxy-class that forwards to crashlytics
- */
-object CrashlyticsProxy : ErrorReporter {
+object CrashReporter {
 
-  override fun log(message: String) {
+  fun log(message: String) {
     Crashlytics.log(message)
   }
 
-  override fun logException(throwable: Throwable) {
+  fun logException(throwable: Throwable) {
     Crashlytics.logException(throwable)
   }
 

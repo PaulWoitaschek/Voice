@@ -16,8 +16,6 @@ import dagger.Provides
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.paulwoitaschek.chapterreader.ChapterReaderFactory
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
-import de.ph1b.audiobook.misc.ErrorReporter
 import javax.inject.Singleton
 
 /**
@@ -71,10 +69,6 @@ class AndroidModule {
   @Provides
   @Singleton
   fun provideMoshi(): Moshi = Moshi.Builder().build()
-
-  @Provides
-  @Singleton
-  fun provideErrorReporter(): ErrorReporter = CrashlyticsProxy
 
   @Provides
   @Singleton

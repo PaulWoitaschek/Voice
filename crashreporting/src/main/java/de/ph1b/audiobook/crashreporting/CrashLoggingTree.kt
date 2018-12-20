@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.crashlytics
+package de.ph1b.audiobook.crashreporting
 
 import timber.log.Timber
 
@@ -8,6 +8,6 @@ import timber.log.Timber
 class CrashLoggingTree : Timber.Tree() {
 
   override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-    CrashlyticsProxy.log(message)
+    CrashReporter.log(message)
   }
 }

@@ -120,6 +120,7 @@ dependencies {
   implementation(project(":common"))
   implementation(project(":data"))
   implementation(project(":covercolorextractor"))
+  implementation(project(":crashreporting"))
 
   implementation(Deps.chapterReader)
 
@@ -137,10 +138,6 @@ dependencies {
   implementation(Deps.materialCab)
 
   implementation(Deps.floatingActionButton)
-
-  add("proprietaryImplementation", Deps.crashlytics) {
-    isTransitive = true
-  }
 
   implementation(Deps.Dagger.core)
   kapt(Deps.Dagger.compiler)

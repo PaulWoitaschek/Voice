@@ -6,10 +6,10 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.crashreporting.CrashLoggingTree
+import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
-import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -50,7 +50,7 @@ class App : Application() {
       AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
 
-    CrashlyticsProxy.init(this)
+    CrashReporter.init(this)
     GlobalScope.launch {
       if (BuildConfig.DEBUG) {
         Timber.plant(Timber.DebugTree())

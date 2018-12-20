@@ -9,13 +9,13 @@ import androidx.core.content.ContextCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
+import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
@@ -383,7 +383,7 @@ class BookAdder
               }
             }
         } catch (e: Exception) {
-          CrashlyticsProxy.logException(e)
+          CrashReporter.logException(e)
           emptySparseArray<String>()
         }
         containingMedia.add(

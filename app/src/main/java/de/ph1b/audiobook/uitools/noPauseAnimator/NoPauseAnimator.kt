@@ -3,7 +3,7 @@ package de.ph1b.audiobook.uitools.noPauseAnimator
 import android.animation.Animator
 import android.animation.TimeInterpolator
 import android.util.ArrayMap
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
+import de.ph1b.audiobook.crashreporting.CrashReporter
 import java.util.ArrayList
 
 class NoPauseAnimator(private val animator: Animator) : Animator() {
@@ -80,7 +80,7 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     try {
       animator.duration = duration
     } catch (e: IllegalStateException) {
-      CrashlyticsProxy.logException(e)
+      CrashReporter.logException(e)
     }
     return this
   }
