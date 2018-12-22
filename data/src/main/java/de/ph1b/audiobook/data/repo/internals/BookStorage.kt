@@ -33,6 +33,8 @@ class BookStorage
             if (chapters.isEmpty()) {
               Timber.e("No chapters found for metaData=$metaData, bookSettings=$bookSettings")
               CrashReporter.logException(AssertionError())
+              metaDataDao.delete(metaData)
+              bookSettingsDao.delete(bookSettings)
               null
             } else {
               val bookSettingsFileInChapters = chapters.any { chapter ->

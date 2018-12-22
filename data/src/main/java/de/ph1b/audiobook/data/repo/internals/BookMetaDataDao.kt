@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -15,4 +16,7 @@ interface BookMetaDataDao {
 
   @Query("SELECT * FROM bookMetaData WHERE id = :id")
   fun byId(id: UUID): BookMetaData
+
+  @Delete
+  fun delete(metaData: BookMetaData)
 }
