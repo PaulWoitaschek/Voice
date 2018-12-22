@@ -96,6 +96,7 @@ tasks {
   register<Exec>("importStrings") {
     executable = "sh"
     args("-c", "tx pull -af --minimum-perc=5")
+    finalizedBy(":core:lintDebug")
   }
 
   register("appVersion") {

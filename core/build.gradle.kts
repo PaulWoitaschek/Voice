@@ -13,6 +13,10 @@ android {
     targetSdkVersion(Versions.targetSdk)
   }
 
+  lintOptions {
+    isWarningsAsErrors = true
+  }
+
   compileOptions {
     sourceCompatibility = Versions.sourceCompatibility
     targetCompatibility = Versions.targetCompatibility
