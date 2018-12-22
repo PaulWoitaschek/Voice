@@ -62,9 +62,9 @@
         připojení bude znovu spuštěno.</string>
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
-        <item quantity="few">%d sekundy</item>
-        <item quantity="many">%d sekund</item>
-        <item quantity="other">%d sekund</item>
+        <item quantity="few">%dsekundy </item>
+        <item quantity="many">%dsekund </item>
+        <item quantity="other">%dsekund </item>
     </plurals>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>

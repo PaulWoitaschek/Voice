@@ -14,6 +14,7 @@
     <string name="pause">Pausar</string>
     <string name="equalizer">Equalizador</string>
     <string name="volume_boost">Amplificador de Volume</string>
+    <string name="skip_silence">Pular Silêncio</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
     <string name="no_external_storage_action_bar_title">Memória Externa</string>
@@ -95,4 +96,7 @@
     <string name="music_notification">Reprodução</string>
     <string name="onboarding_title">Bem-vindo! </string>
     <string name="onboarding_content">Vamos começar adicionando seu primeiro audio livro.</string>
+    <string name="book_header_current">Atual</string>
+    <string name="book_header_not_started">Não iniciado ainda</string>
+    <string name="book_header_completed">Completo</string>
 </resources>

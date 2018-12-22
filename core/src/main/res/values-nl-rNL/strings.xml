@@ -13,10 +13,10 @@
     <string name="play">Afspelen</string>
     <string name="pause">Pauzeren</string>
     <string name="equalizer">Equalizer</string>
-    <string name="volume_boost">Volumeboost</string>
+    <string name="volume_boost">Volume verhogen</string>
     <string name="skip_silence">Stilte overslaan</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">De externe opslag is niet beschikbaar. Zorg ervoor dat deze verbonden is en niet is aangekoppeld aan uw computer.</string>
+    <string name="no_external_storage">De externe opslag is niet beschikbaar. Zorg ervoor dat deze verbonden is en niet is aangekoppeld aan je computer.</string>
     <string name="no_external_storage_action_bar_title">Externe opslag</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Instellen</string>
@@ -34,7 +34,7 @@
     <string name="audiobook_folders_title">Audioboek-mappen</string>
     <string name="chosen_folder_description">Gekozen map:</string>
     <string name="delete_folder">Verwijderen uit bibliotheek?</string>
-    <string name="delete_folder_content">Wilt u de volgende map verwijderen uit uw bibliotheek?</string>
+    <string name="delete_folder_content">Wil je de volgende map verwijderen uit je bibliotheek?</string>
     <string name="folder_add_single_book">Los boek</string>
     <string name="folder_add_collection">Map met meerdere boeken</string>
     <string name="for_example">bijv.</string>
@@ -42,7 +42,7 @@
     <string name="content_is_folder">Map</string>
     <string name="content_is_file">Bestand</string>
     <string name="content_navigate_up">Ga naar bovenliggende map</string>
-    <string name="permission_external_new_explanation">Boeken kunnen niet worden gelezen zonder uw toestemming</string>
+    <string name="permission_external_new_explanation">Boeken kunnen niet worden gelezen zonder machtiging</string>
     <string name="permission_retry">Opnieuw proberen?</string>
     <string name="permission_goto_settings">Instellingen</string>
     <string name="storage_pre_device">Opslag:</string>
@@ -55,11 +55,11 @@
     <string name="bookmark_edit_title">Bladwijzer bewerken</string>
     <string name="bookmark_edit_hint">Bladwijzernaam</string>
     <string name="bookmark_added">Bladwijzer is toegevoegd</string>
-    <string name="bookmark_delete_title">Wilt u deze bladwijzer verwijderen?</string>
+    <string name="bookmark_delete_title">Wil je deze bladwijzer verwijderen?</string>
     <!--Settings-->
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
-    <string name="pref_resume_on_replug_hint">Als u het afspelen gepauzeerd hebt door het verwijderen van uw hoofdtelefoon, dan zal het afspelen verder gaan na het opnieuw aansluiten ervan.</string>
+    <string name="pref_resume_on_replug_hint">Als het afspelen gepauzeerd is door het losmaken van de hoofdtelefoon, dan zal het afspelen hervatten na opnieuw aansluiten.</string>
     <string name="pref_resume_after_call">Hervatten na beëindigen telefoongesprek</string>
     <string name="pref_resume_after_call_hint">Hervat het afspelen na het beëindigen van een telefoongesprek.</string>
     <string name="min">%s min</string>
@@ -73,7 +73,7 @@
     <string name="pref_theme_title">Thema</string>
     <string name="pref_theme_day">Dag</string>
     <string name="pref_theme_night">Nacht</string>
-    <string name="pref_theme_daynight">Dag / Nacht</string>
+    <string name="pref_theme_daynight">Dag/Nacht</string>
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatisch %d seconde terugspoelen na handmatig pauzeren.</item>
@@ -90,12 +90,12 @@
     <!--license activity-->
     <string name="refresh">Verversen</string>
     <string name="reset">Herstellen</string>
-    <string name="no_network">Geen netwerkverbinding?</string>
+    <string name="no_network">Geen internetverbinding?</string>
     <string name="network_top">Dit ging niet zo goed...</string>
     <string name="cover_crop">Omslag bijsnijden</string>
     <string name="music_notification">Afspelen</string>
     <string name="onboarding_title">Welkom!</string>
-    <string name="onboarding_content">Laten we beginnen met het toevoegen van uw eerste audioboek.</string>
+    <string name="onboarding_content">Laten we beginnen met het toevoegen van je eerste audioboek.</string>
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog niet begonnen</string>
     <string name="book_header_completed">Voltooid</string>

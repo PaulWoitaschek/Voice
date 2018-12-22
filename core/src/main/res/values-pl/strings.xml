@@ -14,6 +14,7 @@
     <string name="pause">Pauza</string>
     <string name="equalizer">Equalizer</string>
     <string name="volume_boost">Volume Boost</string>
+    <string name="skip_silence">Pomiń ciszę</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
     <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
@@ -99,4 +100,7 @@
     <string name="music_notification">Odtwarzanie</string>
     <string name="onboarding_title">Witaj!</string>
     <string name="onboarding_content">Zacznijmy od dodania twojego pierwszego audiobooka.</string>
+    <string name="book_header_current">Aktualna</string>
+    <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
+    <string name="book_header_completed">Odsłuchana</string>
 </resources>
