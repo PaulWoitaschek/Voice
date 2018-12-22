@@ -26,30 +26,35 @@ class BookStorage
     return synchronizedWithIoDispatcher {
       appDb.transaction {
         bookSettingsDao.all()
-          .map { bookSettings ->
+          .mapNotNull { bookSettings ->
             val bookId = bookSettings.id
             val metaData = metaDataDao.byId(bookId)
             val chapters = chapterDao.byBookId(bookId)
-
-            val bookSettingsFileInChapters = chapters.any { chapter ->
-              chapter.file == bookSettings.currentFile
-            }
-            val correctedBookSettings = if (bookSettingsFileInChapters) {
-              bookSettings
-            } else {
-              Timber.e("bookSettings=$bookSettings currentFile is not in $chapters. metaData=$metaData")
+            if (chapters.isEmpty()) {
+              Timber.e("No chapters found for metaData=$metaData, bookSettings=$bookSettings")
               CrashReporter.logException(AssertionError())
-              bookSettings.copy(currentFile = chapters[0].file)
-            }
+              null
+            } else {
+              val bookSettingsFileInChapters = chapters.any { chapter ->
+                chapter.file == bookSettings.currentFile
+              }
+              val correctedBookSettings = if (bookSettingsFileInChapters) {
+                bookSettings
+              } else {
+                Timber.e("bookSettings=$bookSettings currentFile is not in $chapters. metaData=$metaData")
+                CrashReporter.logException(AssertionError())
+                bookSettings.copy(currentFile = chapters[0].file)
+              }
 
-            Book(
-              id = bookId, content = BookContent(
-                id = bookId,
-                chapters = chapters,
-                settings = correctedBookSettings
-              ),
-              metaData = metaData
-            )
+              Book(
+                id = bookId, content = BookContent(
+                  id = bookId,
+                  chapters = chapters,
+                  settings = correctedBookSettings
+                ),
+                metaData = metaData
+              )
+            }
           }
       }
     }
