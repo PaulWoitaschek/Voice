@@ -57,17 +57,17 @@ object Deps {
     const val support = "com.bluelinelabs:conductor-support:$version"
   }
 
-  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.7@aar"
+  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.8@aar"
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.0"
 
   object Dagger {
-    private const val version = "2.19"
+    private const val version = "2.20"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
 
   object ExoPlayer {
-    const val core = "com.google.android.exoplayer:exoplayer-core:2.9.2"
+    const val core = "com.google.android.exoplayer:exoplayer-core:2.9.3"
     private const val extensionVersion = "2.7.0-1"
     const val opus =
       "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$extensionVersion"
@@ -83,7 +83,7 @@ object Deps {
 
   object Kotlin {
     private const val versionKotlin = "1.3.11"
-    private const val versionCoroutines = "1.0.1"
+    private const val versionCoroutines = "1.1.0"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
