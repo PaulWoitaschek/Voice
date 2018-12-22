@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.misc.recyclerComponent
 
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,8 @@ open class CompositeListAdapter<T : Any>(
 
   private val helper = CompositeAdapterHelper<T> { getItem(it) }
 
-  final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+  @CallSuper
+  override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     helper.onBindViewHolder(holder, position).also { onViewHolderBound(holder) }
   }
 

@@ -14,10 +14,10 @@ class BookOverviewDiff : DiffUtil.ItemCallback<Any>() {
   }
 
   override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-    if (oldItem is Book && newItem is Book) {
-      return oldItem.id == newItem.id
+    return if (oldItem is Book && newItem is Book) {
+      oldItem.id == newItem.id
     } else {
-      return oldItem == newItem
+      oldItem == newItem
     }
   }
 }

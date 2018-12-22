@@ -10,6 +10,7 @@ import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_overview_row.*
+import timber.log.Timber
 
 class BookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<Book, BookOverviewHolder>(Book::class) {
@@ -69,5 +70,10 @@ class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListe
     this.progress.progress = progress
 
     loadBookCover.load(book)
+  }
+
+  fun setPlaying(playing: Boolean) {
+    Timber.i("book=${boundBook?.name} changed to playing=$playing")
+    playingIndicator.isVisible = playing
   }
 }

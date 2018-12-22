@@ -17,4 +17,8 @@
     <issue id="ObsoleteLintCustomCheck" severity="ignore" />
     <issue id="Overdraw" severity="ignore" />
     <issue id="UnusedQuantity" severity="ignore" />
+
+    <issue id="UnusedAttribute">
+        <ignore regexp="android:foreground" />
+    </issue>
 </lint>
