@@ -21,6 +21,8 @@ import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_REWIND
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -92,7 +94,7 @@ class ChangeNotifier @Inject constructor(
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   @Synchronized
-  suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
+  suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) = withContext(IO) {
     val currentChapter = book.content.currentChapter
     val playState = playStateManager.playState
 

@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import androidx.media.session.MediaButtonReceiver
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.RxBroadcast
+import de.ph1b.audiobook.misc.rxCompletable
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -30,8 +32,6 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.rx2.rxCompletable
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -88,13 +88,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
     // update book when changed by player
     player.bookContentStream.distinctUntilChanged()
       .observeOn(Schedulers.io())
-      .subscribe { content ->
-        runBlocking {
+      .switchMapCompletable { content ->
+        rxCompletable {
           repo.bookById(content.id)
             ?.copy(content = content)
             ?.let { repo.updateBook(it) }
         }
       }
+      .subscribe()
       .disposeOnDestroy()
 
     notifyOnAutoConnectionChange.listen()
@@ -114,7 +115,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         player.init(it.content)
       }
       .switchMapCompletable {
-        GlobalScope.rxCompletable {
+        rxCompletable {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
       }
@@ -123,30 +124,22 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     bookUpdated
       .distinctUntilChanged { book -> book.content.currentChapter }
-      .subscribe {
-        if (isForeground) {
-          try {
-            runBlocking {
-              updateNotification(it)
-            }
-          } catch (e: InterruptedException) {
-            Timber.e(e, "updateNotification was interrupted.")
+      .switchMapCompletable {
+        rxCompletable {
+          if (isForeground) {
+            updateNotification(it)
           }
         }
       }
+      .subscribe()
       .disposeOnDestroy()
 
     playStateManager.playStateStream()
       .observeOn(Schedulers.io())
-      .subscribe {
-        try {
-          runBlocking {
-            handlePlaybackState(it)
-          }
-        } catch (e: InterruptedException) {
-          Timber.e(e, "handlePlaybackState was interrupted.")
-        }
+      .switchMapCompletable {
+        rxCompletable { handlePlaybackState(it) }
       }
+      .subscribe()
       .disposeOnDestroy()
 
     HeadsetPlugReceiver.events(this@PlaybackService)
@@ -262,16 +255,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
     when (intent?.action) {
-      Intent.ACTION_MEDIA_BUTTON -> androidx.media.session.MediaButtonReceiver.handleIntent(
-        mediaSession,
-        intent
-      )
-      PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(
-        intent.getFloatExtra(
-          PlayerController.EXTRA_SPEED,
-          1F
-        )
-      )
+      Intent.ACTION_MEDIA_BUTTON -> {
+        MediaButtonReceiver.handleIntent(mediaSession, intent)
+      }
+      PlayerController.ACTION_SPEED -> {
+        val speed = intent.getFloatExtra(PlayerController.EXTRA_SPEED, 1F)
+        player.setPlaybackSpeed(speed)
+      }
       PlayerController.ACTION_CHANGE -> {
         val time = intent.getIntExtra(PlayerController.CHANGE_TIME, 0)
         val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
