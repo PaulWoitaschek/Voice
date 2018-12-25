@@ -85,28 +85,33 @@ class BookRepository
   suspend fun updateBookName(id: UUID, name: String) {
     withContext(Dispatchers.IO) {
       storage.updateBookName(id, name)
-      val index = active.indexOfFirst { it.id == id }
-      if (index != -1) {
-        active[index] = active[index].updateMetaData { copy(name = name) }
-        withContext(Dispatchers.Main) {
-          activeBooksSubject.onNext(active.toList())
-        }
-      } else {
-        Timber.e("update failed as there was no book")
+      updateBookInMemory(id) {
+        updateMetaData { copy(name = name) }
       }
+    }
+  }
+
+  private suspend inline fun updateBookInMemory(id: UUID, update: Book.() -> Book) {
+    val index = active.indexOfFirst { it.id == id }
+    if (index != -1) {
+      active[index] = update(active[index])
+      withContext(Dispatchers.Main) {
+        activeBooksSubject.onNext(active.toList())
+      }
+    } else {
+      Timber.e("update failed as there was no book")
     }
   }
 
   suspend fun markBookAsPlayedNow(id: UUID) {
     withContext(Dispatchers.IO) {
-      val book = bookById(id)
-        ?: return@withContext
-      val updatedBook = book.update(
-        updateSettings = {
-          copy(lastPlayedAtMillis = System.currentTimeMillis())
-        }
-      )
-      updateBook(updatedBook)
+      val lastPlayedAt = System.currentTimeMillis()
+      storage.updateLastPlayedAt(id, lastPlayedAt)
+      updateBookInMemory(id) {
+        update(updateSettings = {
+          copy(lastPlayedAtMillis = lastPlayedAt)
+        })
+      }
     }
   }
 

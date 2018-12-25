@@ -92,6 +92,12 @@ class BookStorage
     }
   }
 
+  suspend fun updateLastPlayedAt(id: UUID, lastPlayedAt: Long) {
+    synchronizedWithIoDispatcher {
+      bookSettingsDao.updateLastPlayedAt(id, lastPlayedAt)
+    }
+  }
+
   private suspend inline fun <T> synchronizedWithIoDispatcher(crossinline action: () -> T): T {
     // as the dispatcher is single threaded, we have implicit thread safety.
     return withContext(STORAGE_DISPATCHER) {

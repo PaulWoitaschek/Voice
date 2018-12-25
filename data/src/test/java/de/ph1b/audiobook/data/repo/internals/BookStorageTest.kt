@@ -29,16 +29,33 @@ class BookStorageTest {
       .build()
   private val storage = BookStorage(db.chapterDao(), db.bookMetadataDao(), db.bookSettingsDao(), db)
 
+  val bookA = BookFactory.create(name = "Name A", lastPlayedAtMillis = 5)
+  val bookB = BookFactory.create(name = "Name B", lastPlayedAtMillis = 10)
+
+  init {
+    runBlocking {
+      storage.addOrUpdate(bookA)
+      storage.addOrUpdate(bookB)
+    }
+  }
+
   @Test
   fun updateName() {
     runBlocking {
-      val bookA = BookFactory.create(name = "Name A")
-      storage.addOrUpdate(bookA)
-      val bookB = BookFactory.create(name = "Name B")
-      storage.addOrUpdate(bookB)
       storage.updateBookName(bookA.id, "Name A2")
       val books = storage.books()
-      assertThat(books).containsExactly(bookA.updateMetaData { copy(name = "Name A2") }, bookB)
+      val updatedBook = bookA.updateMetaData { copy(name = "Name A2") }
+      assertThat(books).containsExactly(updatedBook, bookB)
+    }
+  }
+
+  @Test
+  fun updateLastPlayedAt() {
+    runBlocking {
+      storage.updateLastPlayedAt(bookA.id, 500)
+      val books = storage.books()
+      val updatedBook = bookA.update(updateSettings = { copy(lastPlayedAtMillis = 500) })
+      assertThat(books).containsExactly(updatedBook, bookB)
     }
   }
 }

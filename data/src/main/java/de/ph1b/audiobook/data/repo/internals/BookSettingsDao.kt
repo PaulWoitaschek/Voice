@@ -22,4 +22,7 @@ interface BookSettingsDao {
 
   @Delete
   fun delete(bookSettings: BookSettings)
+
+  @Query("UPDATE bookSettings SET lastPlayedAtMillis = :lastPlayedAtMillis WHERE id = :id")
+  fun updateLastPlayedAt(id: UUID, lastPlayedAtMillis: Long)
 }
