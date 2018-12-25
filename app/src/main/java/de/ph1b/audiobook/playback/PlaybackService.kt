@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -179,6 +180,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .filter { it == PlayState.STOPPED }
       .subscribe {
         Timber.d("STOPPED for $idleTimeOutInSeconds. Stop self")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          // Android O has the dumb restriction that a service that was launched by startForegroundService must go to foreground within
+          // 10 seconds - even if we are going to stop it anyways.
+          // @see [https://issuetracker.google.com/issues/76112072]
+          startForeground(NOTIFICATION_ID, notificationCreator.createDummyNotification())
+        }
         stopSelf()
       }
       .disposeOnDestroy()

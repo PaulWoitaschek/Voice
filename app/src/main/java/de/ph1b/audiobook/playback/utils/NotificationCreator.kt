@@ -35,7 +35,7 @@ class NotificationCreator
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val mediaSession: MediaSessionCompat,
-  notificationChannelCreator: NotificationChannelCreator
+  private val notificationChannelCreator: NotificationChannelCreator
 ) {
 
   private var cachedImage: CachedImage? = null
@@ -56,6 +56,18 @@ class NotificationCreator
       .setStyle(mediaStyle)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
+
+  fun createDummyNotification(): Notification {
+    val builder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
+      .setAutoCancel(true)
+      .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+      .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      .setShowWhen(false)
+      .setSmallIcon(R.drawable.ic_notification)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+      .setWhen(0)
+    return builder.build()
+  }
 
   suspend fun createNotification(book: Book): Notification = withContext(Dispatchers.IO) {
     mediaStyle.setMediaSession(mediaSession.sessionToken)
