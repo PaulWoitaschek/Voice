@@ -4,6 +4,7 @@ import androidx.room.RoomDatabase
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.BookSettings
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -95,6 +96,12 @@ class BookStorage
   suspend fun updateLastPlayedAt(id: UUID, lastPlayedAt: Long) {
     synchronizedWithIoDispatcher {
       bookSettingsDao.updateLastPlayedAt(id, lastPlayedAt)
+    }
+  }
+
+  suspend fun updateBookSettings(settings: BookSettings) {
+    synchronizedWithIoDispatcher {
+      bookSettingsDao.update(settings)
     }
   }
 

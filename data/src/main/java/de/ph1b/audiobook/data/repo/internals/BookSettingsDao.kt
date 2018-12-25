@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import de.ph1b.audiobook.data.BookSettings
 import java.util.UUID
 
@@ -25,4 +26,7 @@ interface BookSettingsDao {
 
   @Query("UPDATE bookSettings SET lastPlayedAtMillis = :lastPlayedAtMillis WHERE id = :id")
   fun updateLastPlayedAt(id: UUID, lastPlayedAtMillis: Long)
+
+  @Update(onConflict = OnConflictStrategy.FAIL)
+  fun update(settings: BookSettings)
 }

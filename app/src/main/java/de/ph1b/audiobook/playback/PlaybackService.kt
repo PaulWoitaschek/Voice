@@ -87,14 +87,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     sessionToken = mediaSession.sessionToken
 
     // update book when changed by player
-    player.bookContentStream.distinctUntilChanged()
-      .observeOn(Schedulers.io())
-      .switchMapCompletable { content ->
-        rxCompletable {
-          repo.bookById(content.id)
-            ?.copy(content = content)
-            ?.let { repo.updateBook(it) }
-        }
+    player.bookContentStream.map { it.settings }
+      .distinctUntilChanged()
+      .switchMapCompletable { settings ->
+        rxCompletable { repo.updateBookSettings(settings) }
       }
       .subscribe()
       .disposeOnDestroy()
