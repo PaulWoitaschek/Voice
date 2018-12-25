@@ -50,12 +50,8 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
       ) { _, charSequence ->
         val newText = charSequence.toString()
         if (newText != presetName) {
-          repo.bookById(bookId)?.updateMetaData {
-            copy(name = newText)
-          }?.let {
-            GlobalScope.launch {
-              repo.updateBook(it)
-            }
+          GlobalScope.launch {
+            repo.updateBookName(bookId, newText)
           }
         }
       }

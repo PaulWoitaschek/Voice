@@ -82,6 +82,21 @@ class BookRepository
     }
   }
 
+  suspend fun updateBookName(id: UUID, name: String) {
+    withContext(Dispatchers.IO) {
+      storage.updateBookName(id, name)
+      val index = active.indexOfFirst { it.id == id }
+      if (index != -1) {
+        active[index] = active[index].updateMetaData { copy(name = name) }
+        withContext(Dispatchers.Main) {
+          activeBooksSubject.onNext(active.toList())
+        }
+      } else {
+        Timber.e("update failed as there was no book")
+      }
+    }
+  }
+
   suspend fun markBookAsPlayedNow(id: UUID) {
     withContext(Dispatchers.IO) {
       val book = bookById(id)

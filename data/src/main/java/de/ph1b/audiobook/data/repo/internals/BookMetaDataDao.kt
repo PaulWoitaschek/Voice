@@ -19,4 +19,7 @@ interface BookMetaDataDao {
 
   @Delete
   fun delete(metaData: BookMetaData)
+
+  @Query("UPDATE bookMetaData SET name = :name WHERE id = :id")
+  fun updateBookName(id: UUID, name: String)
 }

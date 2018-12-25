@@ -86,6 +86,12 @@ class BookStorage
     }
   }
 
+  suspend fun updateBookName(id: UUID, name: String) {
+    synchronizedWithIoDispatcher {
+      metaDataDao.updateBookName(id, name)
+    }
+  }
+
   private suspend inline fun <T> synchronizedWithIoDispatcher(crossinline action: () -> T): T {
     // as the dispatcher is single threaded, we have implicit thread safety.
     return withContext(STORAGE_DISPATCHER) {
