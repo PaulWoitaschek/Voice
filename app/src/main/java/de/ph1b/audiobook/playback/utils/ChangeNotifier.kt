@@ -22,7 +22,10 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -93,69 +96,78 @@ class ChangeNotifier @Inject constructor(
 
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
-  @Synchronized
-  suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) = withContext(IO) {
-    val currentChapter = book.content.currentChapter
-    val playState = playStateManager.playState
+  private val mutex = Mutex()
 
-    val bookName = book.name
-    val chapterName = currentChapter.name
-    val author = book.author
-    val position = book.content.positionInChapter
+  suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
+    mutex.withLock {
+      withContext(IO) {
+        val currentChapter = book.content.currentChapter
+        val playState = playStateManager.playState
 
-    context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
+        val bookName = book.name
+        val chapterName = currentChapter.name
+        val author = book.author
+        val position = book.content.positionInChapter
 
-    val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
-      .setState(playState.playbackStateCompat, position.toLong(), book.content.playbackSpeed)
-      .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
-      .build()
+        context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
-    mediaSession.setPlaybackState(playbackState)
+        val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
+          .setState(playState.playbackStateCompat, position.toLong(), book.content.playbackSpeed)
+          .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
+          .build()
 
-    if (what == Type.METADATA && lastFileForMetaData != book.content.currentFile) {
-      appendQueue(book)
-      // this check is necessary. Else the lockscreen controls will flicker due to
-      // an updated picture
-      var bitmap: Bitmap? = null
-      val coverFile = book.coverFile()
-      if (coverFile.exists() && coverFile.canRead()) {
-        bitmap = Picasso.get()
-          .load(coverFile)
-          .get()
-          .run {
-            // we make a copy because we do not want to use picassos bitmap, since
-            // MediaSessionCompat recycles our bitmap eventually which would make
-            // picassos cached bitmap useless.
-            copy(config, false)
+        try {
+          mediaSession.setPlaybackState(playbackState)
+        } catch (e: IllegalArgumentException) {
+          Timber.e(e, "Can't set playbackState.")
+        }
+
+        if (what == Type.METADATA && lastFileForMetaData != book.content.currentFile) {
+          appendQueue(book)
+          // this check is necessary. Else the lockscreen controls will flicker due to
+          // an updated picture
+          var bitmap: Bitmap? = null
+          val coverFile = book.coverFile()
+          if (coverFile.exists() && coverFile.canRead()) {
+            bitmap = Picasso.get()
+              .load(coverFile)
+              .get()
+              .run {
+                // we make a copy because we do not want to use picassos bitmap, since
+                // MediaSessionCompat recycles our bitmap eventually which would make
+                // picassos cached bitmap useless.
+                copy(config, false)
+              }
           }
-      }
-      if (bitmap == null) {
-        val replacement = CoverReplacement(book.name, context)
-        bitmap = imageHelper.drawableToBitmap(
-          replacement,
-          imageHelper.smallerScreenSize,
-          imageHelper.smallerScreenSize
-        )
-      }
-      mediaMetaDataBuilder
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
-        .putLong(
-          MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-          (book.content.currentChapterIndex + 1).toLong()
-        )
-        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.content.chapters.size.toLong())
-        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
-        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
-        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
-        .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
-      mediaSession.setMetadata(mediaMetaDataBuilder.build())
+          if (bitmap == null) {
+            val replacement = CoverReplacement(book.name, context)
+            bitmap = imageHelper.drawableToBitmap(
+              replacement,
+              imageHelper.smallerScreenSize,
+              imageHelper.smallerScreenSize
+            )
+          }
+          mediaMetaDataBuilder
+            .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+            .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
+            .putLong(
+              MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
+              (book.content.currentChapterIndex + 1).toLong()
+            )
+            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.content.chapters.size.toLong())
+            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+            .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+            .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
+            .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
+          mediaSession.setMetadata(mediaMetaDataBuilder.build())
 
-      lastFileForMetaData = book.content.currentFile
+          lastFileForMetaData = book.content.currentFile
+        }
+      }
     }
   }
 
