@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderHolder
 import de.ph1b.audiobook.misc.dpToPxRounded
 
 class BookOverviewItemDecoration(context: Context) : ItemDecoration() {
@@ -17,6 +18,20 @@ class BookOverviewItemDecoration(context: Context) : ItemDecoration() {
     parent: RecyclerView,
     state: RecyclerView.State
   ) {
-    outRect.set(margin, margin / 2, margin, margin / 2)
+    val childHolder = parent.getChildViewHolder(view)
+    val bottom: Int
+    val top: Int
+    if (childHolder is BookOverviewHeaderHolder) {
+      bottom = 0
+      top = if (childHolder.adapterPosition == 0) {
+        0
+      } else {
+        2 * margin
+      }
+    } else {
+      bottom = margin
+      top = 0
+    }
+    outRect.set(margin, top, margin, bottom)
   }
 }

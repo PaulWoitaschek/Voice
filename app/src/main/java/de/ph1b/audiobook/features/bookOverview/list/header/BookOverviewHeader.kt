@@ -12,8 +12,7 @@ enum class BookOverviewHeaderType {
   FINISHED
 }
 
-class BookOverviewHeaderHolder(parent: ViewGroup) :
-  ExtensionsHolder(parent, R.layout.book_overview_header) {
+class BookOverviewHeaderHolder(parent: ViewGroup) : ExtensionsHolder(parent, R.layout.book_overview_header) {
 
   fun bind(type: BookOverviewHeaderType) {
     val context = itemView.context
