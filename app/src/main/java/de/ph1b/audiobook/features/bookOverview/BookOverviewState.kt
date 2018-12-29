@@ -1,19 +1,16 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 
 sealed class BookOverviewState {
 
   data class Content(
-    val currentBook: Book?,
     val playing: Boolean,
-    val currentBooks: List<Book>,
-    val notStartedBooks: List<Book>,
-    val completedBooks: List<Book>
-  ) : BookOverviewState() {
-
-    val books = currentBooks + notStartedBooks + completedBooks
-  }
+    val currentBooks: List<BookOverviewModel>,
+    val notStartedBooks: List<BookOverviewModel>,
+    val completedBooks: List<BookOverviewModel>,
+    val currentBookPresent: Boolean
+  ) : BookOverviewState()
 
   object Loading : BookOverviewState()
 

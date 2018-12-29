@@ -172,10 +172,7 @@ class BookOverviewController : BaseController(),
           }
         }
         adapter.submitList(content)
-        adapter.setActiveBook(state.currentBook?.id)
-        val currentBook = state.currentBook
-
-        fab.isVisible = currentBook != null
+        fab.isVisible = state.currentBookPresent
         showPlaying(state.playing)
       }
       is BookOverviewState.NoFolderSet -> {

@@ -4,6 +4,7 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.bookOverview.list.BookComparator
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -80,7 +81,7 @@ constructor(
     currentBookId: UUID?,
     playing: Boolean
   ): BookOverviewState.Content {
-    val currentBook = books.find { it.id == currentBookId }
+    val currentBookPresent = books.any { it.id == currentBookId }
 
     val current = ArrayList<Book>()
     val notStarted = ArrayList<Book>()
@@ -102,11 +103,11 @@ constructor(
     completed.sortWith(BookComparator.BY_LAST_PLAYED)
 
     return BookOverviewState.Content(
-      currentBook = currentBook,
       playing = playing,
-      completedBooks = completed,
-      currentBooks = current,
-      notStartedBooks = notStarted
+      currentBookPresent = currentBookPresent,
+      completedBooks = completed.map { BookOverviewModel(it, it.id == currentBookId) },
+      currentBooks = current.map { BookOverviewModel(it, it.id == currentBookId) },
+      notStartedBooks = notStarted.map { BookOverviewModel(it, it.id == currentBookId) }
     )
   }
 
