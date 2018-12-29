@@ -76,38 +76,40 @@ constructor(
     return content(books = books, currentBookId = currentBookId, playing = playing)
   }
 
-  private fun content(
-    books: List<Book>,
-    currentBookId: UUID?,
-    playing: Boolean
-  ): BookOverviewState.Content {
+  private fun content(books: List<Book>, currentBookId: UUID?, playing: Boolean): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
 
-    val current = ArrayList<Book>()
-    val notStarted = ArrayList<Book>()
-    val completed = ArrayList<Book>()
-
-    books.forEach { book ->
-      val position = book.content.position
-      val duration = book.content.duration
-      val target = when {
-        position == 0 -> notStarted
-        position >= duration -> completed
-        else -> current
+    val currentModels = books.asSequence()
+      .filter {
+        val position = it.content.position
+        val duration = it.content.duration
+        position in 1 until duration
       }
-      target += book
-    }
+      .sortedWith(BookComparator.BY_LAST_PLAYED)
+      .take(4)
+      .map { BookOverviewModel(it, it.id == currentBookId) }
+      .toList()
 
-    current.sortWith(BookComparator.BY_LAST_PLAYED)
-    notStarted.sortWith(BookComparator.BY_DATE_ADDED)
-    completed.sortWith(BookComparator.BY_LAST_PLAYED)
+    val notStartedModels = books.asSequence()
+      .filter { it.content.position == 0 }
+      .sortedWith(BookComparator.BY_DATE_ADDED)
+      .take(2)
+      .map { BookOverviewModel(it, it.id == currentBookId) }
+      .toList()
+
+    val completedModels = books.asSequence()
+      .filter { it.content.position >= it.content.duration }
+      .sortedWith(BookComparator.BY_LAST_PLAYED)
+      .take(2)
+      .map { BookOverviewModel(it, it.id == currentBookId) }
+      .toList()
 
     return BookOverviewState.Content(
       playing = playing,
       currentBookPresent = currentBookPresent,
-      completedBooks = completed.map { BookOverviewModel(it, it.id == currentBookId) },
-      currentBooks = current.map { BookOverviewModel(it, it.id == currentBookId) },
-      notStartedBooks = notStarted.map { BookOverviewModel(it, it.id == currentBookId) }
+      completedBooks = completedModels,
+      currentBooks = currentModels,
+      notStartedBooks = notStartedModels
     )
   }
 
