@@ -15,8 +15,9 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItem
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
-import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderType
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
@@ -157,18 +158,10 @@ class BookOverviewController : BaseController(),
     Timber.i("render ${state.javaClass.simpleName}")
     when (state) {
       is BookOverviewState.Content -> {
-        val content = ArrayList<Any>().apply {
-          if (state.currentBooks.isNotEmpty()) {
-            add(BookOverviewHeaderType.CURRENT)
-            addAll(state.currentBooks)
-          }
-          if (state.notStartedBooks.isNotEmpty()) {
-            add(BookOverviewHeaderType.NOT_STARTED)
-            addAll(state.notStartedBooks)
-          }
-          if (state.completedBooks.isNotEmpty()) {
-            add(BookOverviewHeaderType.FINISHED)
-            addAll(state.completedBooks)
+        val content = ArrayList<BookOverviewItem>().apply {
+          state.categoriesWithContents.forEach { (category, content) ->
+            add(BookOverviewHeaderModel(category, content.hasMore))
+            addAll(content.books)
           }
         }
         adapter.submitList(content)

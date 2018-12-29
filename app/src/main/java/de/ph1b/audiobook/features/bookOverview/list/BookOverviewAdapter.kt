@@ -9,7 +9,7 @@ typealias BookClickListener = (Book, BookOverviewClick) -> Unit
 
 class BookOverviewAdapter(
   bookClickListener: BookClickListener
-) : CompositeListAdapter<Any>(BookOverviewDiff()) {
+) : CompositeListAdapter<BookOverviewItem>(BookOverviewDiff()) {
 
   init {
     addComponent(BookOverviewComponent(bookClickListener))
@@ -19,7 +19,7 @@ class BookOverviewAdapter(
   fun reloadBookCover(bookId: UUID) {
     for (i in 0 until itemCount) {
       val item = getItem(i)
-      if (item is Book && item.id == bookId) {
+      if (item is BookOverviewModel && item.book.id == bookId) {
         notifyItemChanged(i)
         break
       }

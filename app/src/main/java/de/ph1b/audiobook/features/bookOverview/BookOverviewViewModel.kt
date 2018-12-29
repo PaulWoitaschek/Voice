@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features.bookOverview
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
+import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -13,6 +13,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
+import java.util.LinkedHashMap
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -79,38 +80,41 @@ constructor(
   private fun content(books: List<Book>, currentBookId: UUID?, playing: Boolean): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
 
-    val currentModels = books.asSequence()
-      .filter {
-        val position = it.content.position
-        val duration = it.content.duration
-        position in 1 until duration
+    val categoriesWithContents = LinkedHashMap<BookOverviewCategory, BookOverviewCategoryContent>()
+    BookOverviewCategory.values().forEach { category ->
+      val content = content(books, category, currentBookId)
+      if (content != null) {
+        categoriesWithContents[category] = content
       }
-      .sortedWith(BookComparator.BY_LAST_PLAYED)
-      .take(4)
-      .map { BookOverviewModel(it, it.id == currentBookId) }
-      .toList()
-
-    val notStartedModels = books.asSequence()
-      .filter { it.content.position == 0 }
-      .sortedWith(BookComparator.BY_DATE_ADDED)
-      .take(2)
-      .map { BookOverviewModel(it, it.id == currentBookId) }
-      .toList()
-
-    val completedModels = books.asSequence()
-      .filter { it.content.position >= it.content.duration }
-      .sortedWith(BookComparator.BY_LAST_PLAYED)
-      .take(2)
-      .map { BookOverviewModel(it, it.id == currentBookId) }
-      .toList()
+    }
 
     return BookOverviewState.Content(
       playing = playing,
       currentBookPresent = currentBookPresent,
-      completedBooks = completedModels,
-      currentBooks = currentModels,
-      notStartedBooks = notStartedModels
+      categoriesWithContents = categoriesWithContents
     )
+  }
+
+  private fun content(
+    books: List<Book>,
+    category: BookOverviewCategory,
+    currentBookId: UUID?
+  ): BookOverviewCategoryContent? {
+    val booksOfCategory = books.filter(category.filter)
+      .sortedWith(category.comparator)
+    if (booksOfCategory.isEmpty()) {
+      return null
+    }
+    val takeAtMost = when (category) {
+      BookOverviewCategory.CURRENT -> 4
+      BookOverviewCategory.NOT_STARTED -> 2
+      BookOverviewCategory.FINISHED -> 2
+    }
+    val models = booksOfCategory.take(takeAtMost).map {
+      BookOverviewModel(it, it.id == currentBookId)
+    }
+    val hasMore = models.size != booksOfCategory.size
+    return BookOverviewCategoryContent(models, hasMore)
   }
 
   fun playPause() {
