@@ -85,14 +85,19 @@ class BookOverviewController : BaseController(),
 
   private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
-    adapter = BookOverviewAdapter { book, clickType ->
-      when (clickType) {
-        BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
-        BookOverviewClick.MENU -> {
-          EditBookBottomSheetController(this, book).showDialog(router)
+    adapter = BookOverviewAdapter(
+      bookClickListener = { book, clickType ->
+        when (clickType) {
+          BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
+          BookOverviewClick.MENU -> {
+            EditBookBottomSheetController(this, book).showDialog(router)
+          }
         }
+      },
+      openCategoryListener = {
+        Timber.i("open $it")
       }
-    }
+    )
     recyclerView.adapter = adapter
     // without this the item would blink on every change
     val anim = recyclerView.itemAnimator as SimpleItemAnimator

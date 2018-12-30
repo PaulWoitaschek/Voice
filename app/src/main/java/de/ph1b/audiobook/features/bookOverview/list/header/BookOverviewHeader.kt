@@ -8,9 +8,21 @@ import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_overview_header.*
 
-class BookOverviewHeaderHolder(parent: ViewGroup) : ExtensionsHolder(parent, R.layout.book_overview_header) {
+typealias OpenCategoryListener = (BookOverviewCategory) -> Unit
+
+class BookOverviewHeaderHolder(parent: ViewGroup, listener: OpenCategoryListener) :
+  ExtensionsHolder(parent, R.layout.book_overview_header) {
+
+  private var boundCategory: BookOverviewCategory? = null
+
+  init {
+    showAll.setOnClickListener {
+      boundCategory?.let(listener)
+    }
+  }
 
   fun bind(model: BookOverviewHeaderModel) {
+    boundCategory = model.category
     val context = itemView.context
     text.text = when (model.category) {
       BookOverviewCategory.CURRENT -> context.getString(R.string.book_header_current)
@@ -21,11 +33,11 @@ class BookOverviewHeaderHolder(parent: ViewGroup) : ExtensionsHolder(parent, R.l
   }
 }
 
-class BookOverviewHeaderComponent :
+class BookOverviewHeaderComponent(private val listener: OpenCategoryListener) :
   AdapterComponent<BookOverviewHeaderModel, BookOverviewHeaderHolder>(BookOverviewHeaderModel::class) {
 
   override fun onCreateViewHolder(parent: ViewGroup) =
-    BookOverviewHeaderHolder(parent)
+    BookOverviewHeaderHolder(parent, listener)
 
   override fun onBindViewHolder(model: BookOverviewHeaderModel, holder: BookOverviewHeaderHolder) {
     holder.bind(model)
