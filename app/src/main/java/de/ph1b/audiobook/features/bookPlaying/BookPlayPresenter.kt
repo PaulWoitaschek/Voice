@@ -3,7 +3,9 @@ package de.ph1b.audiobook.features.bookPlaying
 import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
+import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
@@ -15,6 +17,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
 
 class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
 
@@ -28,12 +31,15 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   lateinit var sleepTimer: SleepTimer
   @Inject
   lateinit var bookmarkRepo: BookmarkRepo
+  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
+  lateinit var currentBookIdPref: Pref<UUID>
 
   init {
     appComponent.inject(this)
   }
 
   override fun onAttach(view: BookPlayMvp.View) {
+    currentBookIdPref.value = bookId
     playStateManager.playStateStream()
       .map { it == PlayState.PLAYING }
       .distinctUntilChanged()
