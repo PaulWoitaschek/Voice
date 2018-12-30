@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview.list.header
 
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.core.view.isInvisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
@@ -17,7 +17,7 @@ class BookOverviewHeaderHolder(parent: ViewGroup) : ExtensionsHolder(parent, R.l
       BookOverviewCategory.NOT_STARTED -> context.getString(R.string.book_header_not_started)
       BookOverviewCategory.FINISHED -> context.getString(R.string.book_header_completed)
     }
-    showAll.isVisible = model.hasMore
+    showAll.isInvisible = !model.hasMore
   }
 }
 
