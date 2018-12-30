@@ -13,8 +13,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
@@ -85,7 +85,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     _layoutContainer = DialogLayoutContainer(
       activity!!.layoutInflater.inflate(R.layout.dialog_sleep)

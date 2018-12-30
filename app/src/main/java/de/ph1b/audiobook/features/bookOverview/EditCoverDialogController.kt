@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
@@ -43,7 +43,7 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     val picasso = Picasso.get()
 

@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
@@ -33,7 +33,7 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
   lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     val presetName = args.getString(NI_PRESET_NAME)
     val bookId = args.getUUID(NI_BOOK_ID)

@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
@@ -23,7 +23,7 @@ class SeekDialogController : DialogController() {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     val container =
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))

@@ -15,8 +15,8 @@ import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
@@ -53,7 +53,7 @@ class MainActivity : BaseActivity(), RouterProvider {
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    App.component.inject(this)
+    appComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
 

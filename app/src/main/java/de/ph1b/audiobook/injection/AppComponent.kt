@@ -8,6 +8,7 @@ import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
+import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
@@ -58,6 +59,7 @@ interface AppComponent : DataComponent {
     fun build(): AppComponent
   }
 
+  fun inject(target: BookCategoryController)
   fun inject(target: App)
   fun inject(target: AutoRewindDialogController)
   fun inject(target: BaseWidgetProvider)

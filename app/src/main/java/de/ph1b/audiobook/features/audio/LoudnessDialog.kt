@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
@@ -34,7 +34,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     val container = DialogLayoutContainer(
       activity!!.layoutInflater.inflate(R.layout.loudness, null, false)
@@ -52,6 +52,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
         player.setLoudnessGain(it)
         container.currentValue.text = format(it)
       }
+      .disposeOnDestroyDialog()
 
     container.currentValue.text = format(book.content.loudnessGain)
     container.maxValue.text = format(container.seekBar.max)

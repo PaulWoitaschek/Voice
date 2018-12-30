@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
@@ -36,7 +36,7 @@ import javax.inject.Inject
 class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   @Inject

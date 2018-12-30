@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -15,7 +15,7 @@ import javax.inject.Named
 class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]

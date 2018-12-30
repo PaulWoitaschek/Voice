@@ -23,8 +23,8 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.ElevateToolbarOnScroll
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
@@ -52,7 +52,7 @@ class BookOverviewController : BaseController(),
   override val layoutRes = R.layout.book_overview
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]

@@ -7,8 +7,8 @@ import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -33,7 +33,7 @@ class SettingsController : BaseController() {
   lateinit var seekTimePref: Pref<Int>
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   override val layoutRes = R.layout.settings

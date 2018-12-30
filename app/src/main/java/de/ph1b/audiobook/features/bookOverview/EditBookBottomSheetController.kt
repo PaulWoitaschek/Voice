@@ -9,7 +9,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.RouterProvider
@@ -38,7 +38,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   private val bookId = args.getUUID(NI_BOOK)
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    App.component.inject(this)
+    appComponent.inject(this)
 
     val dialog = BottomSheetDialog(activity!!, R.style.BottomSheetStyle)
 

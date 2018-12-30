@@ -3,7 +3,7 @@ package de.ph1b.audiobook.features.bookPlaying
 import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
@@ -30,7 +30,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   lateinit var bookmarkRepo: BookmarkRepo
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   override fun onAttach(view: BookPlayMvp.View) {

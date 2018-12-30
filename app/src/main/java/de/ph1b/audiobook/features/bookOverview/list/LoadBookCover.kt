@@ -5,7 +5,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -25,7 +25,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
   lateinit var coverColorExtractor: CoverColorExtractor
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   private val context = holder.itemView.context

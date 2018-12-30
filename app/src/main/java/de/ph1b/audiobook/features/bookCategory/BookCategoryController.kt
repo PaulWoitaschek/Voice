@@ -4,13 +4,22 @@ import android.os.Bundle
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.tint
 import kotlinx.android.synthetic.main.book_category.*
+import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
 class BookCategoryController(bundle: Bundle) : BaseController(bundle) {
+
+  @Inject
+  lateinit var viewModel: BookCategoryViewModel
+
+  init {
+    appComponent.inject(this)
+  }
 
   constructor(category: BookOverviewCategory) : this(Bundle().apply {
     putSerializable(NI_CATEGORY, category)

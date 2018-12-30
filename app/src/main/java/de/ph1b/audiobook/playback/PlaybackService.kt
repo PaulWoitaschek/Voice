@@ -14,8 +14,8 @@ import androidx.media.session.MediaButtonReceiver
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.rxCompletable
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -78,7 +78,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
   override fun onCreate() {
-    App.component.playbackComponent()
+    appComponent.playbackComponent()
       .playbackService(this)
       .build()
       .inject(this)

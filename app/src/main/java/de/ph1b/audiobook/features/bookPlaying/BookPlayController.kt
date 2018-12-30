@@ -15,7 +15,7 @@ import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.clicks
 import de.ph1b.audiobook.misc.color
@@ -72,7 +72,7 @@ class BookPlayController(
   private var playPauseDrawableSetter by clearAfterDestroyView<PlayPauseDrawableSetter>()
 
   init {
-    App.component.inject(this)
+    appComponent.inject(this)
   }
 
   override fun render(book: Book) {

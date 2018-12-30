@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import java.io.File
 import java.io.FileFilter
 
@@ -60,6 +60,6 @@ fun checkMainThread() {
   }
 }
 
-suspend fun Book.coverFile(): File = coverFile(App.component.context)
+suspend fun Book.coverFile(): File = coverFile(appComponent.context)
 
 fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)

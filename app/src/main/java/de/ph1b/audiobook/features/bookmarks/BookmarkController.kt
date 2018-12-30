@@ -18,7 +18,7 @@ import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.misc.tint
@@ -45,7 +45,7 @@ class BookmarkController(args: Bundle) :
   private val adapter = BookmarkAdapter(this)
 
   override val layoutRes = R.layout.bookmark
-  override fun createPresenter() = App.component.bookmarkPresenter.apply {
+  override fun createPresenter() = appComponent.bookmarkPresenter.apply {
     bookId = this@BookmarkController.bookId
   }
 

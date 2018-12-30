@@ -59,11 +59,11 @@ class App : Application() {
       }
     }
 
-    component = DaggerAppComponent.builder()
+    appComponent = DaggerAppComponent.builder()
       .application(this)
       .build()
-    DataInjector.component = component
-    component.inject(this)
+    DataInjector.component = appComponent
+    appComponent.inject(this)
 
     @Suppress("CheckResult")
     themePref.stream
@@ -81,8 +81,9 @@ class App : Application() {
 
   companion object {
 
-    lateinit var component: AppComponent
-      @VisibleForTesting set
     private var alreadyCreated = false
   }
 }
+
+lateinit var appComponent: AppComponent
+  @VisibleForTesting set

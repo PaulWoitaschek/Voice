@@ -5,7 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import javax.inject.Inject
 
 class BaseWidgetProvider : AppWidgetProvider() {
@@ -14,7 +14,7 @@ class BaseWidgetProvider : AppWidgetProvider() {
   lateinit var widgetUpdater: WidgetUpdater
 
   override fun onReceive(context: Context, intent: Intent?) {
-    App.component.inject(this)
+    appComponent.inject(this)
     super.onReceive(context, intent)
   }
 
