@@ -13,6 +13,7 @@ import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
@@ -94,8 +95,9 @@ class BookOverviewController : BaseController(),
           }
         }
       },
-      openCategoryListener = {
-        Timber.i("open $it")
+      openCategoryListener = { category ->
+        Timber.i("open $category")
+        router.pushController(BookCategoryController(category).asTransaction())
       }
     )
     recyclerView.adapter = adapter

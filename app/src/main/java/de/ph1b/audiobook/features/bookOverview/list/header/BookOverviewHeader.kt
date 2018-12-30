@@ -23,12 +23,7 @@ class BookOverviewHeaderHolder(parent: ViewGroup, listener: OpenCategoryListener
 
   fun bind(model: BookOverviewHeaderModel) {
     boundCategory = model.category
-    val context = itemView.context
-    text.text = when (model.category) {
-      BookOverviewCategory.CURRENT -> context.getString(R.string.book_header_current)
-      BookOverviewCategory.NOT_STARTED -> context.getString(R.string.book_header_not_started)
-      BookOverviewCategory.FINISHED -> context.getString(R.string.book_header_completed)
-    }
+    text.setText(model.category.nameRes)
     showAll.isInvisible = !model.hasMore
   }
 }

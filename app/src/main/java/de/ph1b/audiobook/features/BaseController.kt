@@ -39,7 +39,7 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
   private var _containerView: View? = null
   override val containerView: View? get() = _containerView
 
-  override fun onCreateView(
+  final override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup,
     savedViewState: Bundle?
