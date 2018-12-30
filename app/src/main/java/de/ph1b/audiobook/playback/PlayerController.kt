@@ -28,8 +28,6 @@ class PlayerController
     setAction(action)
   }
 
-  fun stop() = fire(stopIntent)
-
   fun rewind() = fire(rewindIntent)
 
   fun play() = fire(playIntent)
