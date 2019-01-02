@@ -4,7 +4,7 @@ import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
@@ -32,7 +32,7 @@ class BookPlayPresenterTest {
   private val mockView = mockk<BookPlayMvp.View>(relaxUnitFun = true)
 
   init {
-    App.component = mockk(relaxed = true)
+    appComponent = mockk(relaxed = true)
     bookPlayPresenter = BookPlayPresenter(bookId).apply {
       bookRepository = mockBookRepository
       playerController = mockPlayerController
