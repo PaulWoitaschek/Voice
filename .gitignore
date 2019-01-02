@@ -11,7 +11,6 @@ local.properties
 MaterialAudiobookPlayer.iml
 .kobalt
 reports
-*.mp3
 .idea/
 mainframer.sh
 .mainframer

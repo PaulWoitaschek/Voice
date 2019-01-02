@@ -172,7 +172,14 @@ dependencies {
   implementation(Deps.tapTarget)
   testImplementation(Deps.AndroidX.Test.runner)
   testImplementation(Deps.AndroidX.Test.junit)
+  testImplementation(Deps.AndroidX.Test.core)
   testImplementation(Deps.robolectric)
+
+  androidTestImplementation(Deps.truth)
+  androidTestImplementation(Deps.junit)
+  androidTestImplementation(Deps.AndroidX.Test.runner)
+  androidTestImplementation(Deps.AndroidX.Test.core)
+  androidTestImplementation(Deps.AndroidX.Test.junit)
 }
 
 tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")
