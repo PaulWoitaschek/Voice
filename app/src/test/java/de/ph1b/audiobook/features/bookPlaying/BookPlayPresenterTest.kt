@@ -38,6 +38,7 @@ class BookPlayPresenterTest {
       playerController = mockPlayerController
       playStateManager = mockPlayStateManager
       sleepTimer = mockSleepTimer
+      currentBookIdPref = mockk(relaxUnitFun = true)
     }
     every { mockBookRepository.booksStream() } returns Observable.empty()
     every { mockBookRepository.byId(any()) } returns Observable.just(Optional.Absent())
