@@ -101,12 +101,6 @@ android {
       setDimension("free")
     }
   }
-  applicationVariants.all {
-    outputs.all {
-      this as BaseVariantOutputImpl
-      outputFileName = "$versionCode-${parent!!.name}-$baseName-$versionName.apk"
-    }
-  }
 }
 
 androidExtensions {
