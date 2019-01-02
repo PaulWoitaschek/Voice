@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -186,11 +187,18 @@ class WidgetUpdater @Inject constructor(
     var cover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
       val sizeForPicasso = coverSize.takeIf { it > 0 }
         ?: context.dpToPxRounded(56F)
-      Picasso.get()
-        .load(coverFile)
-        .resize(sizeForPicasso, sizeForPicasso)
-        .get()
-    } else null
+      try {
+        Picasso.get()
+          .load(coverFile)
+          .resize(sizeForPicasso, sizeForPicasso)
+          .get()
+      } catch (e: IOException) {
+        Timber.e(e)
+        null
+      }
+    } else {
+      null
+    }
 
     if (cover == null) {
       val coverReplacement = CoverReplacement(book.name, context)
