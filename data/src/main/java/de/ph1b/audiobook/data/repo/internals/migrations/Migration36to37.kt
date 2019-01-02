@@ -8,18 +8,13 @@ import de.ph1b.audiobook.data.repo.internals.getString
 import de.ph1b.audiobook.data.repo.internals.mapRows
 import de.ph1b.audiobook.data.repo.internals.transaction
 
-/**
- * The field LAST_MODIFIED was added to the chapters
- */
-class Migration36to37 : IncrementalMigration(36) {
-
-  private val TABLE_NAME = "tableChapters"
-  private val DURATION = "chapterDuration"
-  private val NAME = "chapterName"
-  private val PATH = "chapterPath"
-  private val BOOK_ID = "bookId"
-  private val LAST_MODIFIED = "lastModified"
-  private val CREATE_TABLE = """
+private const val TABLE_NAME = "tableChapters"
+private const val DURATION = "chapterDuration"
+private const val NAME = "chapterName"
+private const val PATH = "chapterPath"
+private const val BOOK_ID = "bookId"
+private const val LAST_MODIFIED = "lastModified"
+private const val CREATE_TABLE = """
       CREATE TABLE $TABLE_NAME (
         $DURATION INTEGER NOT NULL,
         $NAME TEXT NOT NULL,
@@ -30,8 +25,13 @@ class Migration36to37 : IncrementalMigration(36) {
       )
   """
 
+/**
+ * The field LAST_MODIFIED was added to the chapters
+ */
+class Migration36to37 : IncrementalMigration(36) {
+
   override fun migrate(db: SupportSQLiteDatabase) {
-    val data = db.query(TABLE_NAME).mapRows {
+    val data = db.query("SELECT * FROM $TABLE_NAME").mapRows {
       Holder(getLong(DURATION), getString(NAME), getString(PATH), getLong(BOOK_ID))
     }
 
@@ -51,5 +51,5 @@ class Migration36to37 : IncrementalMigration(36) {
     }
   }
 
-  data class Holder(val duration: Long, val name: String, val path: String, val bookId: Long)
+  private data class Holder(val duration: Long, val name: String, val path: String, val bookId: Long)
 }
