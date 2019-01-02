@@ -9,6 +9,7 @@ platform :android do
     unit_tests
     lint
     ktLint
+    assemble_instrumentation_apks
   end
 
   lane :build_apks do
@@ -22,6 +23,15 @@ platform :android do
 
   lane :unit_tests do
     gradle(task: 'allUnitTests')
+  end
+
+  lane :assemble_instrumentation_apks do
+    gradle(task: 'app:assembleProprietaryDebug app:assembleAndroidTest')
+    Dir.chdir('../') do
+      FileUtils.mkdir_p 'artifacts'
+      FileUtils.copy('app/build/outputs/apk/proprietary/debug/app-proprietary-debug.apk', 'artifacts/app-debug.apk')
+      FileUtils.copy('app/build/outputs/apk/androidTest/proprietary/debug/app-proprietary-debug-androidTest.apk', 'artifacts/instrumentation.apk')
+    end
   end
 
   lane :lint do
