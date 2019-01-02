@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import androidx.room.RoomDatabase
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
@@ -109,17 +108,6 @@ class BookStorage
     // as the dispatcher is single threaded, we have implicit thread safety.
     return withContext(STORAGE_DISPATCHER) {
       action()
-    }
-  }
-
-  private inline fun <T> RoomDatabase.transaction(action: () -> T): T {
-    beginTransaction()
-    return try {
-      action().also {
-        setTransactionSuccessful()
-      }
-    } finally {
-      endTransaction()
     }
   }
 }

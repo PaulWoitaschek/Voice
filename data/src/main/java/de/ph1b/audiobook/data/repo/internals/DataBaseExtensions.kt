@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.ArrayList
 
@@ -44,6 +45,17 @@ inline fun <T> SupportSQLiteDatabase.transaction(
     val result = body()
     setTransactionSuccessful()
     return result
+  } finally {
+    endTransaction()
+  }
+}
+
+inline fun <T> RoomDatabase.transaction(action: () -> T): T {
+  beginTransaction()
+  return try {
+    action().also {
+      setTransactionSuccessful()
+    }
   } finally {
     endTransaction()
   }
