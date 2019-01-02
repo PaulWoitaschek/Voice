@@ -7,9 +7,9 @@ platform :android do
   lane :ci do
     build_apks
     unit_tests
+    assemble_instrumentation_apks
     lint
     ktLint
-    assemble_instrumentation_apks
   end
 
   lane :build_apks do
@@ -35,12 +35,15 @@ platform :android do
   end
 
   lane :lint do
-    gradle(task: 'app:lintProprietaryDebug')
-    folder = ARTIFACT_FOLDER + '/lint'
-    copy_artifacts(
-      target_path: folder,
-      artifacts: ['app/build/reports/*.html']
-    )
+    begin
+      gradle(task: 'app:lintProprietaryDebug')
+    ensure
+      folder = ARTIFACT_FOLDER + '/lint'
+      copy_artifacts(
+        target_path: folder,
+        artifacts: ['app/build/reports/*.html']
+      )
+    end
   end
 
   lane :ktLint do
