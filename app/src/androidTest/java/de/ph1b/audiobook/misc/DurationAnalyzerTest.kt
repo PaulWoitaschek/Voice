@@ -54,7 +54,7 @@ class DurationAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Int? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      with(durationAnalyzer) { duration(file) }
+      durationAnalyzer.duration(file)
     }
   }
 

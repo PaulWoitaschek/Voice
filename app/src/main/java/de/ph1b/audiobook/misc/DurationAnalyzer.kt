@@ -10,23 +10,15 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.channels.first
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import java.io.File
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-/**
- * Analyzes the duration of a file
- */
 class DurationAnalyzer
 @Inject constructor(
   private val dataSourceConverter: DataSourceConverter,
@@ -64,16 +56,10 @@ class DurationAnalyzer
     )
   }
 
-  suspend fun CoroutineScope.duration(file: File): Int? {
+  suspend fun duration(file: File): Int? {
     waitForIdle()
-    val cancelJob = launch {
-      delay(TimeUnit.SECONDS.toMillis(3))
-      coroutineContext.cancel()
-    }
-    try {
-      return scan(file).takeIf { it > 0 }
-    } finally {
-      cancelJob.cancel()
+    return withTimeoutOrNull(3000) {
+      scan(file).takeIf { it != null && it > 0 }
     }
   }
 
@@ -81,31 +67,35 @@ class DurationAnalyzer
     if (playbackState.value != Player.STATE_IDLE) {
       withContext(Main) {
         player.stop()
+        Timber.v("will stop player.")
       }
+      playbackState.openSubscription()
+        .first {
+          Timber.v("state is ${stateName[it]}")
+          it == Player.STATE_IDLE
+        }
     }
-    playbackState.openSubscription()
-      .filter { it == Player.STATE_IDLE }
-      .first()
   }
 
-  private suspend fun CoroutineScope.scan(file: File): Int {
+  private suspend fun scan(file: File): Int? {
+    Timber.v("scan $file start")
     val mediaSource = dataSourceConverter.toMediaSource(file)
     withContext(Main) {
       player.prepare(mediaSource)
     }
+    Timber.v("scan, prepared $file.")
     playbackState.openSubscription()
-      .filter {
+      .first {
+        Timber.v("scan, state=${stateName[it]}")
         when (it) {
           Player.STATE_READY -> true
-          Player.STATE_ENDED -> {
-            Timber.e("ended!. Cancel")
-            coroutineContext.cancel()
-            false
+          Player.STATE_ENDED, Player.STATE_IDLE -> {
+            Timber.e("Couldn't prepare. Return no duration.")
+            return null
           }
           else -> false
         }
       }
-      .first()
 
     return withContext(Main) {
       if (!player.isCurrentWindowSeekable) {
@@ -113,11 +103,22 @@ class DurationAnalyzer
       }
       val duration = player.duration
       try {
-        if (duration == C.TIME_UNSET) -1
-        else duration.toInt()
+        if (duration == C.TIME_UNSET) {
+          null
+        } else {
+          duration.toInt()
+        }
       } finally {
+        Timber.v("scan $file stop")
         player.stop()
       }
     }
   }
+
+  private val stateName = mapOf(
+    Player.STATE_READY to "ready",
+    Player.STATE_ENDED to "ended",
+    Player.STATE_IDLE to "idle",
+    Player.STATE_BUFFERING to "buffering"
+  )
 }

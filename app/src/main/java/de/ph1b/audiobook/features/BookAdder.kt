@@ -5,6 +5,7 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import androidx.collection.SparseArrayCompat
 import androidx.core.content.ContextCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
@@ -28,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
@@ -218,11 +218,7 @@ class BookAdder
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = withContext(NonCancellable) {
-      with(mediaAnalyzer) {
-        analyze(firstChapterFile)
-      }
-    } as? MediaAnalyzer.Result.Success ?: return
+    val result = mediaAnalyzer.analyze(firstChapterFile) as? MediaAnalyzer.Result.Success ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
@@ -353,7 +349,7 @@ class BookAdder
   }
 
   // Returns all the chapters matching to a Book root
-  private suspend fun CoroutineScope.getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
+  private suspend fun getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
     val containingFiles = rootFile.walk()
       .filter { FileRecognition.musicFilter.accept(it) }
       .sortedWith(NaturalOrderComparator.fileComparator)
@@ -371,12 +367,12 @@ class BookAdder
 
       // else parse and add
       Timber.i("analyze $f")
-      val result = with(mediaAnalyzer) { analyze(f) }
+      val result = mediaAnalyzer.analyze(f)
       Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {
           val chapters = chapterReader.read(f)
-          androidx.collection.SparseArrayCompat<String>(chapters.size)
+          SparseArrayCompat<String>(chapters.size)
             .apply {
               chapters.forEach {
                 put(it.startInMs.toInt(), it.title)
