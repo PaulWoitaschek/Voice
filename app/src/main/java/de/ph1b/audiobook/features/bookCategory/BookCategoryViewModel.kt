@@ -24,7 +24,13 @@ class BookCategoryViewModel
         it.asSequence()
           .filter(category.filter)
           .sortedWith(category.comparator)
-          .map { book -> BookOverviewModel(book, book.id == currentBookId) }
+          .map { book ->
+            BookOverviewModel(
+              book = book,
+              isCurrentBook = book.id == currentBookId,
+              useGridView = false // todo
+            )
+          }
           .toList()
       }
   }

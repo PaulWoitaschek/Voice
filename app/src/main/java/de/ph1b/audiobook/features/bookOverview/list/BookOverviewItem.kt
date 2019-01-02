@@ -20,17 +20,19 @@ data class BookOverviewModel(
   val progress: Float,
   val book: Book,
   val remainingTimeInMs: Int,
-  val isCurrentBook: Boolean
+  val isCurrentBook: Boolean,
+  val useGridView: Boolean
 ) : BookOverviewItem() {
 
-  constructor(book: Book, isCurrentBook: Boolean) : this(
+  constructor(book: Book, isCurrentBook: Boolean, useGridView: Boolean) : this(
     name = book.name,
     author = book.author,
     transitionName = book.coverTransitionName,
     book = book,
     progress = book.progress(),
     remainingTimeInMs = book.remainingTimeInMs(),
-    isCurrentBook = isCurrentBook
+    isCurrentBook = isCurrentBook,
+    useGridView = useGridView
   )
 
   fun areContentsTheSame(other: BookOverviewModel): Boolean {

@@ -36,35 +36,36 @@ constructor(
 
   val coverChanged: Observable<UUID> = coverFromDiscCollector.coverChanged()
 
-  val state: Observable<BookOverviewState>
-    get() {
-      val bookStream = repo.booksStream()
-      val currentBookIdStream = currentBookIdPref.stream
-      val playingStream = playStateManager.playStateStream()
-        .map { it == PlayState.PLAYING }
-        .distinctUntilChanged()
-      val scannerActiveStream = bookAdder.scannerActive
-      return Observables
-        .combineLatest(
-          bookStream,
-          currentBookIdStream,
-          playingStream,
-          scannerActiveStream
-        ) { books, currentBookId, playing, scannerActive ->
-          state(
-            books = books,
-            scannerActive = scannerActive,
-            currentBookId = currentBookId,
-            playing = playing
-          )
-        }
-    }
+  fun state(amountOfColumns: Int): Observable<BookOverviewState> {
+    val bookStream = repo.booksStream()
+    val currentBookIdStream = currentBookIdPref.stream
+    val playingStream = playStateManager.playStateStream()
+      .map { it == PlayState.PLAYING }
+      .distinctUntilChanged()
+    val scannerActiveStream = bookAdder.scannerActive
+    return Observables
+      .combineLatest(
+        bookStream,
+        currentBookIdStream,
+        playingStream,
+        scannerActiveStream
+      ) { books, currentBookId, playing, scannerActive ->
+        state(
+          books = books,
+          scannerActive = scannerActive,
+          currentBookId = currentBookId,
+          playing = playing,
+          amountOfColumns = amountOfColumns
+        )
+      }
+  }
 
   private fun state(
     books: List<Book>,
     scannerActive: Boolean,
     currentBookId: UUID?,
-    playing: Boolean
+    playing: Boolean,
+    amountOfColumns: Int
   ): BookOverviewState {
     if (books.isEmpty()) {
       return if (scannerActive) {
@@ -74,15 +75,20 @@ constructor(
       }
     }
 
-    return content(books = books, currentBookId = currentBookId, playing = playing)
+    return content(books = books, currentBookId = currentBookId, playing = playing, amountOfColumns = amountOfColumns)
   }
 
-  private fun content(books: List<Book>, currentBookId: UUID?, playing: Boolean): BookOverviewState.Content {
+  private fun content(
+    books: List<Book>,
+    currentBookId: UUID?,
+    playing: Boolean,
+    amountOfColumns: Int
+  ): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
 
     val categoriesWithContents = LinkedHashMap<BookOverviewCategory, BookOverviewCategoryContent>()
     BookOverviewCategory.values().forEach { category ->
-      val content = content(books, category, currentBookId)
+      val content = content(books, category, currentBookId, amountOfColumns)
       if (content != null) {
         categoriesWithContents[category] = content
       }
@@ -98,20 +104,21 @@ constructor(
   private fun content(
     books: List<Book>,
     category: BookOverviewCategory,
-    currentBookId: UUID?
+    currentBookId: UUID?,
+    amountOfColumns: Int
   ): BookOverviewCategoryContent? {
     val booksOfCategory = books.filter(category.filter)
       .sortedWith(category.comparator)
     if (booksOfCategory.isEmpty()) {
       return null
     }
-    val takeAtMost = when (category) {
+    val rows = when (category) {
       BookOverviewCategory.CURRENT -> 4
       BookOverviewCategory.NOT_STARTED -> 4
       BookOverviewCategory.FINISHED -> 2
     }
-    val models = booksOfCategory.take(takeAtMost).map {
-      BookOverviewModel(it, it.id == currentBookId)
+    val models = booksOfCategory.take(rows * amountOfColumns).map {
+      BookOverviewModel(book = it, isCurrentBook = it.id == currentBookId, useGridView = amountOfColumns > 1)
     }
     val hasMore = models.size != booksOfCategory.size
     return BookOverviewCategoryContent(models, hasMore)

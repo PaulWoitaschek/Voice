@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -9,7 +10,7 @@ import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
-import kotlinx.android.synthetic.main.book_overview_row.*
+import kotlinx.android.synthetic.main.book_overview_row_list.*
 
 class BookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<BookOverviewModel, BookOverviewHolder>(BookOverviewModel::class) {
@@ -24,10 +25,20 @@ class BookOverviewComponent(private val listener: BookClickListener) :
 }
 
 class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListener) :
-  ExtensionsHolder(parent, R.layout.book_overview_row) {
+  ExtensionsHolder(parent, R.layout.book_overview_row_list) {
 
   private var boundBook: Book? = null
   private val loadBookCover = LoadBookCover(this)
+  private var isGridLayout = false
+
+  private val listConstraintSet = ConstraintSet().apply {
+    clone(root)
+  }
+  private val gridConstraintSet by lazy {
+    ConstraintSet().apply {
+      clone(itemView.context, R.layout.book_overview_row_grid)
+    }
+  }
 
   init {
     val outlineProvider = RoundRectOutlineProvider(itemView.context.dpToPx(2F))
@@ -60,6 +71,12 @@ class BookOverviewHolder(parent: ViewGroup, private val listener: BookClickListe
     remainingTime.text = formatTime(model.remainingTimeInMs.toLong())
     this.progress.progress = model.progress
     loadBookCover.load(model.book)
+
+    if (isGridLayout != model.useGridView) {
+      isGridLayout = model.useGridView
+      val constraintSet = if (isGridLayout) gridConstraintSet else listConstraintSet
+      constraintSet.applyTo(root)
+    }
 
     playingIndicator.isVisible = model.isCurrentBook
   }

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
@@ -21,6 +21,7 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItem
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
+import de.ph1b.audiobook.features.gridCount.gridColumnCount
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.PrefKeys
@@ -69,9 +70,10 @@ class BookOverviewController : BaseController(),
   override fun onViewCreated() {
     setupBottomAppBar()
     setupFab()
-    setupRecyclerView()
+    val amountOfColumns = gridColumnCount(activity)
+    setupRecyclerView(amountOfColumns)
 
-    viewModel.state
+    viewModel.state(amountOfColumns)
       .subscribe(::render)
       .disposeOnDestroyView()
     viewModel.coverChanged
@@ -84,7 +86,7 @@ class BookOverviewController : BaseController(),
     playPauseDrawableSetter = PlayPauseDrawableSetter(fab)
   }
 
-  private fun setupRecyclerView() {
+  private fun setupRecyclerView(amountOfColumns: Int) {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
       bookClickListener = { book, clickType ->
@@ -104,9 +106,17 @@ class BookOverviewController : BaseController(),
     // without this the item would blink on every change
     val anim = recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    val listDecoration = BookOverviewItemDecoration(activity)
+    val layoutManager = GridLayoutManager(activity, amountOfColumns).apply {
+      spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+          val isHeader = adapter.itemAtPositionIsHeader(position)
+          return if (isHeader) amountOfColumns else 1
+        }
+      }
+    }
+    val listDecoration = BookOverviewItemDecoration(activity, amountOfColumns > 1, layoutManager)
     recyclerView.addItemDecoration(listDecoration)
-    recyclerView.layoutManager = LinearLayoutManager(activity)
+    recyclerView.layoutManager = layoutManager
     recyclerView.addOnScrollListener(ElevateToolbarOnScroll(toolbar))
   }
 

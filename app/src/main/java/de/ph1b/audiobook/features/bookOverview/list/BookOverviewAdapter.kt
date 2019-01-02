@@ -27,4 +27,9 @@ class BookOverviewAdapter(
       }
     }
   }
+
+  fun itemAtPositionIsHeader(position: Int): Boolean {
+    val item = getItem(position)
+    return item is BookOverviewHeaderModel
+  }
 }
