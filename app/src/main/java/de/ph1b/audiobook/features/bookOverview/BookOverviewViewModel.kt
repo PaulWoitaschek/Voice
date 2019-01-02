@@ -107,7 +107,7 @@ constructor(
     }
     val takeAtMost = when (category) {
       BookOverviewCategory.CURRENT -> 4
-      BookOverviewCategory.NOT_STARTED -> 2
+      BookOverviewCategory.NOT_STARTED -> 4
       BookOverviewCategory.FINISHED -> 2
     }
     val models = booksOfCategory.take(takeAtMost).map {
