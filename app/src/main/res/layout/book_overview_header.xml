@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,12 +16,12 @@
         tools:text="Current" />
 
     <Button
+        android:id="@+id/showAll"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginEnd="8dp"
-        android:id="@+id/showAll"
         android:text="@string/show_all"
         android:textColor="@color/book_overview_more" />
 
