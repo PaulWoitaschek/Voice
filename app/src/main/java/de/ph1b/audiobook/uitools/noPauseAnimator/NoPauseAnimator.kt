@@ -3,7 +3,7 @@ package de.ph1b.audiobook.uitools.noPauseAnimator
 import android.animation.Animator
 import android.animation.TimeInterpolator
 import android.util.ArrayMap
-import de.ph1b.audiobook.crashreporting.CrashReporter
+import timber.log.Timber
 import java.util.ArrayList
 
 class NoPauseAnimator(private val animator: Animator) : Animator() {
@@ -80,7 +80,7 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     try {
       animator.duration = duration
     } catch (e: IllegalStateException) {
-      CrashReporter.logException(e)
+      Timber.e(e)
     }
     return this
   }
@@ -98,7 +98,11 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
   }
 
   override fun start() {
-    animator.start()
+    try {
+      animator.start()
+    } catch (e: NullPointerException) {
+      Timber.e(e)
+    }
   }
 }
 
