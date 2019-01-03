@@ -17,5 +17,4 @@
     <color name="textColorPrimary">@color/abc_primary_text_material_dark</color>
     <color name="textColorSecondary">@color/abc_secondary_text_material_dark</color>
     <color name="placeholderCoverColor">@color/primaryDark</color>
-    <color name="book_overview_more">#99FFFFFF</color>
 </resources>

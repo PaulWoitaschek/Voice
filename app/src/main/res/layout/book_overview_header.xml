@@ -10,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="?attr/colorAccent"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textSize="16sp"
         tools:text="Current" />
 
@@ -22,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginEnd="8dp"
-        android:text="@string/show_all"
-        android:textColor="@color/book_overview_more" />
+        android:text="@string/show_all" />
 
 </FrameLayout>
