@@ -109,6 +109,9 @@ class BookOverviewController : BaseController(),
     val layoutManager = GridLayoutManager(activity, amountOfColumns).apply {
       spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
+          if (position == -1) {
+            return 1
+          }
           val isHeader = adapter.itemAtPositionIsHeader(position)
           return if (isHeader) amountOfColumns else 1
         }
