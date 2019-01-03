@@ -8,7 +8,8 @@ sealed class BookOverviewState {
   data class Content(
     val playing: Boolean,
     val currentBookPresent: Boolean,
-    val categoriesWithContents: Map<BookOverviewCategory, BookOverviewCategoryContent>
+    val categoriesWithContents: Map<BookOverviewCategory, BookOverviewCategoryContent>,
+    val useGrid: Boolean
   ) : BookOverviewState()
 
   object Loading : BookOverviewState()

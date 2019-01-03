@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookOverview
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,11 +28,14 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.ElevateToolbarOnScroll
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
+import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.misc.tint
+import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
@@ -66,15 +70,16 @@ class BookOverviewController : BaseController(),
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
+  private var useGrid = false
 
   override fun onViewCreated() {
-    setupBottomAppBar()
+    val gridMenuItem = setupToolbar()
     setupFab()
     val amountOfColumns = gridColumnCount(activity)
     setupRecyclerView(amountOfColumns)
 
     viewModel.state(amountOfColumns)
-      .subscribe(::render)
+      .subscribe { render(it, gridMenuItem) }
       .disposeOnDestroyView()
     viewModel.coverChanged
       .subscribe(::bookCoverChanged)
@@ -123,7 +128,7 @@ class BookOverviewController : BaseController(),
     recyclerView.addOnScrollListener(ElevateToolbarOnScroll(toolbar))
   }
 
-  private fun setupBottomAppBar() {
+  private fun setupToolbar(): GridMenuItem {
     toolbar.inflateMenu(R.menu.book_overview)
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
@@ -136,10 +141,16 @@ class BookOverviewController : BaseController(),
           toFolderOverview()
           true
         }
+        R.id.toggleGrid -> {
+          viewModel.useGrid(!useGrid)
+          true
+        }
         else -> false
       }
     }
     toolbar.tint()
+
+    return GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
   }
 
   private fun toFolderOverview() {
@@ -174,7 +185,7 @@ class BookOverviewController : BaseController(),
     router.pushController(transaction)
   }
 
-  private fun render(state: BookOverviewState) {
+  private fun render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
     Timber.i("render ${state.javaClass.simpleName}")
     when (state) {
       is BookOverviewState.Content -> {
@@ -187,12 +198,22 @@ class BookOverviewController : BaseController(),
         adapter.submitList(content)
         fab.isVisible = state.currentBookPresent
         showPlaying(state.playing)
+
+        useGrid = state.useGrid
+        gridMenuItem.item.apply {
+          val useGrid = state.useGrid
+          setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)
+          val drawableRes = if (useGrid) R.drawable.ic_view_list else R.drawable.ic_view_grid
+          val tintColor = activity.color(R.color.toolbarIconColor)
+          icon = activity.drawable(drawableRes).tinted(tintColor)
+        }
       }
       is BookOverviewState.NoFolderSet -> {
         showNoFolderWarning()
       }
     }
     loadingProgress.isVisible = state == BookOverviewState.Loading
+    gridMenuItem.item.isVisible = state != BookOverviewState.Loading
   }
 
   private fun showPlaying(playing: Boolean) {
@@ -263,3 +284,5 @@ class BookOverviewController : BaseController(),
     viewModel.attach()
   }
 }
+
+private inline class GridMenuItem(val item: MenuItem)

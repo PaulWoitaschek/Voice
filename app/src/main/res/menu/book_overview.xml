@@ -11,6 +11,13 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
+        android:id="@+id/toggleGrid"
+        android:icon="@drawable/ic_view_grid"
+        android:title="@string/layout_grid"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/action_settings"

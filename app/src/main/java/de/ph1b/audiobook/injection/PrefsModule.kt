@@ -3,10 +3,11 @@ package de.ph1b.audiobook.injection
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import dagger.Module
 import dagger.Provides
+import de.ph1b.audiobook.features.bookOverview.GridMode
+import de.ph1b.audiobook.misc.converters.UUIDConverter
 import de.ph1b.audiobook.persistence.pref.PersistentPref
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -15,18 +16,23 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class PrefsModule {
+object PrefsModule {
 
   @Provides
-  fun provideSharedPreferences(context: Context): SharedPreferences =
-    PreferenceManager.getDefaultSharedPreferences(context)
+  @JvmStatic
+  fun provideSharedPreferences(context: Context): SharedPreferences {
+    return PreferenceManager.getDefaultSharedPreferences(context)
+  }
 
   @Provides
+  @JvmStatic
   @Singleton
-  fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
-    RxSharedPreferences.create(sharedPreferences)
+  fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences {
+    return RxSharedPreferences.create(sharedPreferences)
+  }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.THEME)
   fun provideThemePreference(prefs: RxSharedPreferences): Pref<ThemeUtil.Theme> {
@@ -35,6 +41,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.RESUME_ON_REPLUG)
   fun provideResumeOnReplugPreference(prefs: RxSharedPreferences): Pref<Boolean> {
@@ -43,6 +50,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.BOOKMARK_ON_SLEEP)
   fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences): Pref<Boolean> {
@@ -51,6 +59,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.SHAKE_TO_RESET)
   fun provideShakeToResetPreference(prefs: RxSharedPreferences): Pref<Boolean> {
@@ -59,6 +68,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   fun provideAutoRewindAmountPreference(prefs: RxSharedPreferences): Pref<Int> {
@@ -67,6 +77,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.SEEK_TIME)
   fun provideSeekTimePreference(prefs: RxSharedPreferences): Pref<Int> {
@@ -75,6 +86,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.SLEEP_TIME)
   fun provideSleepTimePreference(prefs: RxSharedPreferences): Pref<Int> {
@@ -83,6 +95,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences): Pref<Set<String>> {
@@ -91,6 +104,7 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
   fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Pref<Set<String>> {
@@ -99,25 +113,29 @@ class PrefsModule {
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.CURRENT_BOOK)
   fun provideCurrentBookIdPreference(prefs: RxSharedPreferences): Pref<UUID> {
-    val pref =
-      prefs.getObject(
-        PrefKeys.CURRENT_BOOK,
-        UUID.randomUUID(),
-        object : Preference.Converter<UUID> {
-          override fun deserialize(serialized: String): UUID = UUID.fromString(serialized)
-          override fun serialize(value: UUID): String = value.toString()
-        })
+    val pref = prefs.getObject(PrefKeys.CURRENT_BOOK, UUID.randomUUID(), UUIDConverter())
     return PersistentPref(pref)
   }
 
   @Provides
+  @JvmStatic
   @Singleton
   @Named(PrefKeys.RESUME_AFTER_CALL)
   fun provideResumeAfterCallPreference(prefs: RxSharedPreferences): Pref<Boolean> {
     val pref = prefs.getBoolean(PrefKeys.RESUME_AFTER_CALL, false)
+    return PersistentPref(pref)
+  }
+
+  @Provides
+  @JvmStatic
+  @Singleton
+  @Named(PrefKeys.GRID_MODE)
+  fun gridViewPref(prefs: RxSharedPreferences): Pref<GridMode> {
+    val pref = prefs.getEnum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE, GridMode::class.java)
     return PersistentPref(pref)
   }
 }

@@ -27,11 +27,17 @@ constructor(
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>
+  private val currentBookIdPref: Pref<UUID>,
+  @Named(PrefKeys.GRID_MODE)
+  private val gridModePref: Pref<GridMode>
 ) {
 
   fun attach() {
     bookAdder.scanForFiles()
+  }
+
+  fun useGrid(useGrid: Boolean) {
+    gridModePref.value = if (useGrid) GridMode.GRID else GridMode.LIST
   }
 
   val coverChanged: Observable<UUID> = coverFromDiscCollector.coverChanged()
@@ -48,14 +54,16 @@ constructor(
         bookStream,
         currentBookIdStream,
         playingStream,
-        scannerActiveStream
-      ) { books, currentBookId, playing, scannerActive ->
+        scannerActiveStream,
+        gridModePref.stream
+      ) { books, currentBookId, playing, scannerActive, gridMode ->
         state(
           books = books,
           scannerActive = scannerActive,
           currentBookId = currentBookId,
           playing = playing,
-          amountOfColumns = amountOfColumns
+          amountOfColumns = amountOfColumns,
+          gridMode = gridMode
         )
       }
   }
@@ -65,7 +73,8 @@ constructor(
     scannerActive: Boolean,
     currentBookId: UUID?,
     playing: Boolean,
-    amountOfColumns: Int
+    amountOfColumns: Int,
+    gridMode: GridMode
   ): BookOverviewState {
     if (books.isEmpty()) {
       return if (scannerActive) {
@@ -75,14 +84,21 @@ constructor(
       }
     }
 
-    return content(books = books, currentBookId = currentBookId, playing = playing, amountOfColumns = amountOfColumns)
+    return content(
+      books = books,
+      currentBookId = currentBookId,
+      playing = playing,
+      amountOfColumns = amountOfColumns,
+      gridMode = gridMode
+    )
   }
 
   private fun content(
     books: List<Book>,
     currentBookId: UUID?,
     playing: Boolean,
-    amountOfColumns: Int
+    amountOfColumns: Int,
+    gridMode: GridMode
   ): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
 
@@ -97,7 +113,8 @@ constructor(
     return BookOverviewState.Content(
       playing = playing,
       currentBookPresent = currentBookPresent,
-      categoriesWithContents = categoriesWithContents
+      categoriesWithContents = categoriesWithContents,
+      useGrid = gridMode == GridMode.GRID
     )
   }
 

@@ -2,6 +2,7 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import deps.Deps
 import deps.Versions
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 plugins {
@@ -174,6 +175,13 @@ dependencies {
   androidTestImplementation(Deps.AndroidX.Test.runner)
   androidTestImplementation(Deps.AndroidX.Test.core)
   androidTestImplementation(Deps.AndroidX.Test.junit)
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    jvmTarget = "1.8"
+    freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
+  }
 }
 
 tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")
