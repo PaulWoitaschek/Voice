@@ -41,7 +41,8 @@ data class BookOverviewModel(
     return oldBook.id == newBook.id &&
         oldBook.content.position == newBook.content.position &&
         name == other.name &&
-        isCurrentBook == other.isCurrentBook
+        isCurrentBook == other.isCurrentBook &&
+        useGridView == other.useGridView
   }
 
   fun areItemsTheSame(other: BookOverviewModel): Boolean {

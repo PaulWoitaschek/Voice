@@ -5,6 +5,7 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
+import de.ph1b.audiobook.features.gridCount.GridCount
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -29,7 +30,8 @@ constructor(
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   @Named(PrefKeys.GRID_MODE)
-  private val gridModePref: Pref<GridMode>
+  private val gridModePref: Pref<GridMode>,
+  private val gridCount: GridCount
 ) {
 
   fun attach() {
@@ -42,7 +44,7 @@ constructor(
 
   val coverChanged: Observable<UUID> = coverFromDiscCollector.coverChanged()
 
-  fun state(amountOfColumns: Int): Observable<BookOverviewState> {
+  fun state(): Observable<BookOverviewState> {
     val bookStream = repo.booksStream()
     val currentBookIdStream = currentBookIdPref.stream
     val playingStream = playStateManager.playStateStream()
@@ -62,7 +64,6 @@ constructor(
           scannerActive = scannerActive,
           currentBookId = currentBookId,
           playing = playing,
-          amountOfColumns = amountOfColumns,
           gridMode = gridMode
         )
       }
@@ -73,7 +74,6 @@ constructor(
     scannerActive: Boolean,
     currentBookId: UUID?,
     playing: Boolean,
-    amountOfColumns: Int,
     gridMode: GridMode
   ): BookOverviewState {
     if (books.isEmpty()) {
@@ -88,7 +88,6 @@ constructor(
       books = books,
       currentBookId = currentBookId,
       playing = playing,
-      amountOfColumns = amountOfColumns,
       gridMode = gridMode
     )
   }
@@ -97,10 +96,17 @@ constructor(
     books: List<Book>,
     currentBookId: UUID?,
     playing: Boolean,
-    amountOfColumns: Int,
     gridMode: GridMode
   ): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
+
+    val amountOfColumns = when (gridMode) {
+      GridMode.LIST -> 1
+      GridMode.GRID -> gridCount.gridColumnCount()
+      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+        gridCount.gridColumnCount()
+      } else 1
+    }
 
     val categoriesWithContents = LinkedHashMap<BookOverviewCategory, BookOverviewCategoryContent>()
     BookOverviewCategory.values().forEach { category ->
@@ -114,7 +120,7 @@ constructor(
       playing = playing,
       currentBookPresent = currentBookPresent,
       categoriesWithContents = categoriesWithContents,
-      useGrid = gridMode == GridMode.GRID
+      columnCount = amountOfColumns
     )
   }
 

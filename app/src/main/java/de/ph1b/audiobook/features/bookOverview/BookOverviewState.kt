@@ -9,8 +9,11 @@ sealed class BookOverviewState {
     val playing: Boolean,
     val currentBookPresent: Boolean,
     val categoriesWithContents: Map<BookOverviewCategory, BookOverviewCategoryContent>,
-    val useGrid: Boolean
-  ) : BookOverviewState()
+    val columnCount: Int
+  ) : BookOverviewState() {
+
+    val useGrid = columnCount > 1
+  }
 
   object Loading : BookOverviewState()
 

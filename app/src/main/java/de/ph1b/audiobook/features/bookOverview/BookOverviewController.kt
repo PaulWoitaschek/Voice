@@ -22,7 +22,6 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItem
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
-import de.ph1b.audiobook.features.gridCount.gridColumnCount
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.PrefKeys
@@ -71,14 +70,14 @@ class BookOverviewController : BaseController(),
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var useGrid = false
+  private var columnCount = 1
 
   override fun onViewCreated() {
     val gridMenuItem = setupToolbar()
     setupFab()
-    val amountOfColumns = gridColumnCount(activity)
-    setupRecyclerView(amountOfColumns)
+    setupRecyclerView()
 
-    viewModel.state(amountOfColumns)
+    viewModel.state()
       .subscribe { render(it, gridMenuItem) }
       .disposeOnDestroyView()
     viewModel.coverChanged
@@ -91,7 +90,7 @@ class BookOverviewController : BaseController(),
     playPauseDrawableSetter = PlayPauseDrawableSetter(fab)
   }
 
-  private fun setupRecyclerView(amountOfColumns: Int) {
+  private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
       bookClickListener = { book, clickType ->
@@ -111,18 +110,18 @@ class BookOverviewController : BaseController(),
     // without this the item would blink on every change
     val anim = recyclerView.itemAnimator as SimpleItemAnimator
     anim.supportsChangeAnimations = false
-    val layoutManager = GridLayoutManager(activity, amountOfColumns).apply {
+    val layoutManager = GridLayoutManager(activity, 1).apply {
       spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
           if (position == -1) {
             return 1
           }
           val isHeader = adapter.itemAtPositionIsHeader(position)
-          return if (isHeader) amountOfColumns else 1
+          return if (isHeader) columnCount else 1
         }
       }
     }
-    val listDecoration = BookOverviewItemDecoration(activity, amountOfColumns > 1, layoutManager)
+    val listDecoration = BookOverviewItemDecoration(activity, layoutManager)
     recyclerView.addItemDecoration(listDecoration)
     recyclerView.layoutManager = layoutManager
     recyclerView.addOnScrollListener(ElevateToolbarOnScroll(toolbar))
@@ -200,6 +199,9 @@ class BookOverviewController : BaseController(),
         showPlaying(state.playing)
 
         useGrid = state.useGrid
+        columnCount = state.columnCount
+        val lm = recyclerView.layoutManager as GridLayoutManager
+        lm.spanCount = columnCount
         gridMenuItem.item.apply {
           val useGrid = state.useGrid
           setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)

@@ -11,7 +11,6 @@ import de.ph1b.audiobook.misc.dpToPxRounded
 
 class BookOverviewItemDecoration(
   context: Context,
-  private val isGridLayout: Boolean,
   private val layoutManager: GridLayoutManager
 ) : ItemDecoration() {
 
@@ -42,8 +41,9 @@ class BookOverviewItemDecoration(
 
     val left: Int
     val right: Int
+    val spanCount = layoutManager.spanCount
+    val isGridLayout = spanCount > 1
     if (isGridLayout) {
-      val spanCount = layoutManager.spanCount
       val spanIndex = layoutManager.spanSizeLookup.getSpanIndex(position, spanCount)
       val isLeft = spanIndex == 0
       val isRight = spanIndex == spanCount - 1
