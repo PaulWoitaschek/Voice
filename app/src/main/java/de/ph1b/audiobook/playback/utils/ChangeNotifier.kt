@@ -27,6 +27,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -129,15 +130,19 @@ class ChangeNotifier @Inject constructor(
           var bitmap: Bitmap? = null
           val coverFile = book.coverFile()
           if (coverFile.exists() && coverFile.canRead()) {
-            bitmap = Picasso.get()
-              .load(coverFile)
-              .get()
-              .run {
-                // we make a copy because we do not want to use picassos bitmap, since
-                // MediaSessionCompat recycles our bitmap eventually which would make
-                // picassos cached bitmap useless.
-                copy(config, false)
-              }
+            try {
+              bitmap = Picasso.get()
+                .load(coverFile)
+                .get()
+                .run {
+                  // we make a copy because we do not want to use picassos bitmap, since
+                  // MediaSessionCompat recycles our bitmap eventually which would make
+                  // picassos cached bitmap useless.
+                  copy(config, false)
+                }
+            } catch (e: IOException) {
+              Timber.e(e)
+            }
           }
           if (bitmap == null) {
             val replacement = CoverReplacement(book.name, context)
