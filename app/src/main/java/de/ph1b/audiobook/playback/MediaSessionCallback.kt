@@ -22,7 +22,8 @@ class MediaSessionCallback @Inject constructor(
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val player: MediaPlayer,
-  private val bookSearchParser: BookSearchParser
+  private val bookSearchParser: BookSearchParser,
+  private val playStateManager: PlayStateManager
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
@@ -86,12 +87,22 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onPause() {
     Timber.i("onPause")
-    player.pause(true)
+    // sometimes the system handles this wrongly so we toggle playPause
+    playPause()
   }
 
   override fun onPlay() {
     Timber.i("onPlay")
-    player.play()
+    // sometimes the system handles this wrongly so we toggle playPause
+    playPause()
+  }
+
+  private fun playPause() {
+    if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {
+      player.pause(rewind = true)
+    } else {
+      player.play()
+    }
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {
