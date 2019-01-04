@@ -19,7 +19,10 @@ internal object BookFactory {
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,
     skipSilence: Boolean = false,
-    chapters: List<Chapter> = listOf(ChapterFactory.create(bookId = id)),
+    chapters: List<Chapter> = listOf(
+      ChapterFactory.create(bookId = id, file = "1.mp3"),
+      ChapterFactory.create(bookId = id, file = "2.mp3")
+    ),
     lastPlayedAtMillis: Long = 0L,
     addedAtMillis: Long = 0L
   ): Book {

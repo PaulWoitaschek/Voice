@@ -32,8 +32,7 @@ data class BookContent(
     null
   }
   val duration = chapters.sumBy { it.duration }
-  val position: Int =
-    chapters.take(currentChapterIndex).sumBy { it.duration } + settings.positionInChapter
+  val position: Int = chapters.take(currentChapterIndex).sumBy { it.duration } + settings.positionInChapter
   val currentFile = settings.currentFile
   val positionInChapter = settings.positionInChapter
   val loudnessGain = settings.loudnessGain
