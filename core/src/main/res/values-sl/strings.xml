@@ -2,6 +2,7 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Trenutna knjiga</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">Platnica</string>
     <string name="play_pause">Predvajaj / Ustavi</string>

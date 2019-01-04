@@ -2,6 +2,7 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">재생 중인 책</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>

@@ -2,6 +2,7 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Huidige boek</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">Voorblad</string>
     <string name="play_pause">Speel / Breek</string>

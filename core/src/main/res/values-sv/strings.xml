@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Aktuella boken</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Visa alla</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>

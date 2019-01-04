@@ -2,6 +2,7 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Поточна книга</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Призупинити</string>

@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Aktuelles Buch</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Weitere</string>
     <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>

@@ -2,6 +2,7 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Livro atual</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>

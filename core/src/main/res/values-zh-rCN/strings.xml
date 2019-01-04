@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">当前书籍</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">显示全部</string>
     <!--BookPlayFragment-->
     <string name="cover">封面</string>
     <string name="play_pause">播放 / 暂停</string>
@@ -14,6 +16,7 @@
     <string name="pause">暂停</string>
     <string name="equalizer">均衡器</string>
     <string name="volume_boost">音量提升</string>
+    <string name="skip_silence">跳过空白部分</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">外部存储不可用。请确保外部存储已连接且没有被挂载在您的计算机上。</string>
     <string name="no_external_storage_action_bar_title">外部存储</string>
@@ -91,4 +94,9 @@
     <string name="network_top">出了一些小问题...</string>
     <string name="cover_crop">封面裁剪</string>
     <string name="music_notification">播放</string>
+    <string name="onboarding_title">欢迎！</string>
+    <string name="onboarding_content">请从加入您的第一部有声书开始。</string>
+    <string name="book_header_current">正在播放</string>
+    <string name="book_header_not_started">尚未开始播放</string>
+    <string name="book_header_completed">已经播放完毕</string>
 </resources>
