@@ -100,7 +100,7 @@ tasks {
   }
 
   register("appVersion") {
-    print("#BEGIN_VERSION#${Versions.versionName}_${Versions.versionCode}#END_VERSION#")
+    print("#BEGIN_VERSION#${Versions.versionName}#END_VERSION#")
   }
 
   register<TestReport>("allUnitTests") {

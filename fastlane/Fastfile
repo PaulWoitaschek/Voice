@@ -58,5 +58,14 @@ platform :android do
       target_path: folder,
       artifacts: ['app/build/outputs/**/release/*.apk']
     )
+    github_release = set_github_release(
+      repository_name: "PaulWoitaschek/Voice",
+      api_token: ENV["GITHUB_TOKEN"],
+      tag_name: app_version,
+      name: "",
+      description: "",
+      commitish: "master",
+      upload_assets: [folder + '/' + 'app-proprietary-release.apk']
+    )
   end
 end
