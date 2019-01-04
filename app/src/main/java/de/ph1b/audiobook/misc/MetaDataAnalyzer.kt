@@ -10,29 +10,26 @@ import javax.inject.Inject
 class MetaDataAnalyzer @Inject constructor() {
 
   private val mmr = MediaMetadataRetriever()
-  private var file: File? = null
 
   @Synchronized
   fun parse(file: File): MetaData {
-    this.file = file
+    val chapterNameFallback = chapterNameFallback(file)
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
-    val fallback = chapterNameFallback()
-    return if (prepare() || prepare()) {
-      val chapterName = parseChapterName()
-        ?: fallback
-      val duration = parseDuration()
-      val bookName = parseBookName()
-      val author = parseAuthor()
-      MetaData(chapterName, duration, bookName, author)
-    } else {
-      MetaData(fallback, null, null, null)
+    repeat(2) {
+      if (prepare(file)) {
+        val chapterName = parseChapterName()
+          ?: chapterNameFallback
+        val bookName = parseBookName()
+        val author = parseAuthor()
+        return MetaData(chapterName = chapterName, bookName = bookName, author = author)
+      }
     }
+    return MetaData(chapterName = chapterNameFallback, bookName = null, author = null)
   }
 
-  private fun prepare(): Boolean {
+  private fun prepare(file: File): Boolean {
     // Note: MediaMetadataRetriever throws undocumented Exceptions. We catch these
     // and act appropriate.
-    val file = file ?: error("No file")
     return try {
       mmr.setDataSource(file.absolutePath)
       true
@@ -42,45 +39,39 @@ class MetaDataAnalyzer @Inject constructor() {
   }
 
   private fun parseChapterName(): String? {
-    val chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
-    if (chapterName?.isEmpty() == true)
-      return null
-    return chapterName
+    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
+      ?.takeUnless { it.isEmpty() }
   }
 
-  private fun chapterNameFallback(): String {
-    val file = file ?: error("No file prepared")
-    val withoutExtension = file.nameWithoutExtension
+  private fun chapterNameFallback(file: File): String {
+    return file.nameWithoutExtension
       .trim()
-    return if (withoutExtension.isEmpty()) file.name else withoutExtension
+      .takeUnless { it.isEmpty() }
+      ?: file.name
   }
 
-  private fun parseDuration() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)
-    ?.toIntOrNull()
-    ?: 0
-
-  private fun parseBookName() = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+  private fun parseBookName(): String? = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
 
   private fun parseAuthor(): String? {
-    var author = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-    if (author.isNullOrEmpty())
-      author = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
-    return author
+    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+      ?.takeUnless { it.isEmpty() }
+      ?: mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
   }
 
   /**
    * As [MediaMetadataRetriever] has several bugs it is important to catch the exception here as
    * it randomly throws [RuntimeException] on certain implementations.
    */
-  private fun MediaMetadataRetriever.safeExtract(key: Int) = try {
-    extractMetadata(key)
-  } catch (ignored: Exception) {
-    null
+  private fun MediaMetadataRetriever.safeExtract(key: Int): String? {
+    return try {
+      extractMetadata(key)
+    } catch (ignored: Exception) {
+      null
+    }
   }
 
   data class MetaData(
     val chapterName: String,
-    val duration: Int?,
     val bookName: String?,
     val author: String?
   )

@@ -13,24 +13,18 @@ class MediaAnalyzer @Inject constructor(
 ) {
 
   suspend fun analyze(file: File): Result {
-    val metaData = metaDataAnalyzer.parse(file)
-    val metaDataDuration = metaData.duration ?: 0
-    return if (metaDataDuration > 0) {
+    val duration = exoPlayerDurationParser.duration(file) ?: -1
+    return if (duration > 0) {
+      val metaData = metaDataAnalyzer.parse(file)
       Result.Success(
-        metaDataDuration,
-        metaData.chapterName,
-        metaData.author,
-        metaData.bookName
+        duration = duration,
+        chapterName = metaData.chapterName,
+        author = metaData.author,
+        bookName = metaData.bookName
       )
     } else {
-      Timber.d("Invalid duration from meta data for $file. Try exoPlayer")
-      val exoDuration = exoPlayerDurationParser.duration(file) ?: -1
-      if (exoDuration > 0) {
-        Result.Success(exoDuration, metaData.chapterName, metaData.author, metaData.bookName)
-      } else {
-        Timber.d("ExoPlayer failed to parse $file too.")
-        Result.Failure
-      }
+      Timber.d("ExoPlayer failed to parse $file too.")
+      Result.Failure
     }
   }
 
