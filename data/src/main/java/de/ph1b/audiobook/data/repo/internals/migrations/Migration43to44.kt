@@ -20,11 +20,9 @@ import java.util.UUID
 class Migration43to44 : IncrementalMigration(43) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    //   db.transaction {
     createNewTables(db)
     fill(db)
     deleteOldTables(db)
-    //  }
   }
 
   private fun createNewTables(db: SupportSQLiteDatabase) {
