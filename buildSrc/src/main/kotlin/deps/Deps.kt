@@ -94,7 +94,7 @@ object Deps {
   }
 
   const val junit = "junit:junit:4.12"
-  const val mockk = "io.mockk:mockk:1.8.13.kotlin13"
+  const val mockk = "io.mockk:mockk:1.9"
   const val truth = "com.google.truth:truth:0.42"
   const val robolectric = "org.robolectric:robolectric:4.1"
   const val ktLint = "0.29.0"
