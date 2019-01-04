@@ -1,3 +1,8 @@
+# 4.1.2
+* Fixed an issue where books did not end up in the "Completed" category
+* Stability improvements
+* Added a workaround for incorrect bluetooth play/pause controls
+
 # 3.6.0
 * Player stability
 * Fixed Book sorting
