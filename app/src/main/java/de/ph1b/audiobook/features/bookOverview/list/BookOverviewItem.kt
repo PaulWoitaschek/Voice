@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import androidx.annotation.FloatRange
+import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 
@@ -49,8 +50,11 @@ data class BookOverviewModel(
 private fun Book.progress(): Float {
   val globalPosition = content.position
   val totalDuration = content.duration
-  return (globalPosition.toFloat() / totalDuration.toFloat())
-    .coerceAtMost(1F)
+  val progress = globalPosition.toFloat() / totalDuration.toFloat()
+  if (progress < 0F || progress > 1F) {
+    CrashReporter.logException(AssertionError("Couldn't determine progress for book=$this. Progress is $progress."))
+  }
+  return progress.coerceIn(0F, 1F)
 }
 
 private fun Book.remainingTimeInMs(): Int {
