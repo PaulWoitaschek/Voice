@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.content.Context
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderComponent
 import de.ph1b.audiobook.features.bookOverview.list.header.OpenCategoryListener
@@ -11,12 +10,12 @@ typealias BookClickListener = (Book, BookOverviewClick) -> Unit
 
 class BookOverviewAdapter(
   bookClickListener: BookClickListener,
-  openCategoryListener: OpenCategoryListener,
-  context: Context
+  openCategoryListener: OpenCategoryListener
 ) : CompositeListAdapter<BookOverviewItem>(BookOverviewDiff()) {
 
   init {
-    addComponent(BookOverviewComponent(bookClickListener, context))
+    addComponent(GridBookOverviewComponent(bookClickListener))
+    addComponent(ListBookOverviewComponent(bookClickListener))
     addComponent(BookOverviewHeaderComponent(openCategoryListener))
   }
 

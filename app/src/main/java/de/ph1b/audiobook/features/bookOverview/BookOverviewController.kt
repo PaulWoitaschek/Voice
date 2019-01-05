@@ -93,7 +93,6 @@ class BookOverviewController : BaseController(),
   private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
-      context = activity,
       bookClickListener = { book, clickType ->
         when (clickType) {
           BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)

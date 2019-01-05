@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.content.Context
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -13,42 +11,58 @@ import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.book_overview_row_list.*
 
-class BookOverviewComponent(private val listener: BookClickListener, context: Context) :
+class GridBookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<BookOverviewModel, BookOverviewHolder>(BookOverviewModel::class) {
 
-  private val listConstraintSet = ConstraintSet().apply {
-    clone(context, R.layout.book_overview_row_list)
-  }
-
-  private val gridConstraintSet = ConstraintSet().apply {
-    clone(context, R.layout.book_overview_row_grid)
-  }
+  override val viewType = 42
 
   override fun onCreateViewHolder(parent: ViewGroup): BookOverviewHolder {
     return BookOverviewHolder(
+      layoutRes = R.layout.book_overview_row_grid,
       parent = parent,
-      listener = listener,
-      listConstraintSet = listConstraintSet,
-      gridConstraintSet = gridConstraintSet
+      listener = listener
     )
   }
 
   override fun onBindViewHolder(model: BookOverviewModel, holder: BookOverviewHolder) {
     holder.bind(model)
   }
+
+  override fun isForViewType(model: Any): Boolean {
+    return model is BookOverviewModel && model.useGridView
+  }
+}
+
+class ListBookOverviewComponent(private val listener: BookClickListener) :
+  AdapterComponent<BookOverviewModel, BookOverviewHolder>(BookOverviewModel::class) {
+
+  override val viewType = 43
+
+  override fun onCreateViewHolder(parent: ViewGroup): BookOverviewHolder {
+    return BookOverviewHolder(
+      layoutRes = R.layout.book_overview_row_list,
+      parent = parent,
+      listener = listener
+    )
+  }
+
+  override fun onBindViewHolder(model: BookOverviewModel, holder: BookOverviewHolder) {
+    holder.bind(model)
+  }
+
+  override fun isForViewType(model: Any): Boolean {
+    return model is BookOverviewModel && !model.useGridView
+  }
 }
 
 class BookOverviewHolder(
+  layoutRes: Int,
   parent: ViewGroup,
-  private val listener: BookClickListener,
-  private val listConstraintSet: ConstraintSet,
-  private val gridConstraintSet: ConstraintSet
-) :
-  ExtensionsHolder(parent, R.layout.book_overview_row_list) {
+  private val listener: BookClickListener
+) : ExtensionsHolder(parent, layoutRes) {
 
   private var boundBook: Book? = null
   private val loadBookCover = LoadBookCover(this)
-  private var isGridLayout = false
 
   init {
     val outlineProvider = RoundRectOutlineProvider(itemView.context.dpToPx(2F))
@@ -73,20 +87,18 @@ class BookOverviewHolder(
     boundBook = model.book
     val name = model.name
     title.text = name
-    author.text = model.author
-    author.isVisible = model.author != null
-    title.maxLines = if (model.author == null) 2 else 1
+    if (model.useGridView) {
+      title.maxLines = 2
+    } else {
+      author.text = model.author
+      author.isVisible = model.author != null
+      title.maxLines = if (model.author == null) 2 else 1
+    }
 
     cover.transitionName = model.transitionName
     remainingTime.text = formatTime(model.remainingTimeInMs.toLong())
     this.progress.progress = model.progress
     loadBookCover.load(model.book)
-
-    if (isGridLayout != model.useGridView) {
-      isGridLayout = model.useGridView
-      val constraintSet = if (isGridLayout) gridConstraintSet else listConstraintSet
-      constraintSet.applyTo(root)
-    }
 
     playingIndicator.isVisible = model.isCurrentBook
   }

@@ -39,7 +39,7 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle) {
     toolbar.tint()
     toolbar.setNavigationOnClickListener { popOrBack() }
 
-    val adapter = BookCategoryAdapter(activity) { book, clickType ->
+    val adapter = BookCategoryAdapter() { book, clickType ->
       when (clickType) {
         BookOverviewClick.REGULAR -> {
           router.replaceTopController(BookPlayController(book.id).asTransaction())
