@@ -172,7 +172,8 @@ class BookPlayController(
   private fun setupSeekBar() {
     seekBar.setOnSeekBarChangeListener(
       object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
+        override fun onProgressChanged(view: SeekBar?, progress: Int, fromUser: Boolean) {
+          if (!isAttached) return
           // sets text to adjust while using seekBar
           playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
         }
@@ -181,6 +182,7 @@ class BookPlayController(
         }
 
         override fun onStopTrackingTouch(view: SeekBar?) {
+          if (!isAttached) return
           currentChapter?.let {
             val progress = seekBar.progress
             presenter.seekTo(it.start + progress, it.file)
