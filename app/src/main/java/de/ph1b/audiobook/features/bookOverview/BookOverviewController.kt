@@ -70,7 +70,7 @@ class BookOverviewController : BaseController(),
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var menuBook: Book? = null
   private var useGrid = false
-  private var columnCount = 1
+  // private var columnCount = 1
 
   override fun onViewCreated() {
     val gridMenuItem = setupToolbar()
@@ -117,7 +117,7 @@ class BookOverviewController : BaseController(),
             return 1
           }
           val isHeader = adapter.itemAtPositionIsHeader(position)
-          return if (isHeader) columnCount else 1
+          return if (isHeader) spanCount else 1
         }
       }
     }
@@ -199,9 +199,9 @@ class BookOverviewController : BaseController(),
         showPlaying(state.playing)
 
         useGrid = state.useGrid
-        columnCount = state.columnCount
+        //columnCount = state.columnCount
         val lm = recyclerView.layoutManager as GridLayoutManager
-        lm.spanCount = columnCount
+        lm.spanCount = state.columnCount
         gridMenuItem.item.apply {
           val useGrid = state.useGrid
           setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)

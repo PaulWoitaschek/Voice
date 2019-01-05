@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.bookCategory
 
 import android.os.Bundle
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -49,13 +49,15 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle) {
       }
     }
     recyclerView.adapter = adapter
-    recyclerView.layoutManager = LinearLayoutManager(activity)
-    recyclerView.addItemDecoration(BookOverviewItemDecoration(activity))
+    val layoutManager = GridLayoutManager(activity, 1)
+    recyclerView.layoutManager = layoutManager
+    recyclerView.addItemDecoration(BookCategoryItemDecoration(activity, layoutManager))
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
     viewModel.get(category)
       .subscribe {
-        adapter.submitList(it)
+        layoutManager.spanCount = it.gridColumnCount
+        adapter.submitList(it.models)
       }
       .disposeOnDestroyView()
   }

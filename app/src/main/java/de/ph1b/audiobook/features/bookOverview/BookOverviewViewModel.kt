@@ -100,13 +100,7 @@ constructor(
   ): BookOverviewState.Content {
     val currentBookPresent = books.any { it.id == currentBookId }
 
-    val amountOfColumns = when (gridMode) {
-      GridMode.LIST -> 1
-      GridMode.GRID -> gridCount.gridColumnCount()
-      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-        gridCount.gridColumnCount()
-      } else 1
-    }
+    val amountOfColumns = gridCount.gridColumnCount(gridMode)
 
     val categoriesWithContents = LinkedHashMap<BookOverviewCategory, BookOverviewCategoryContent>()
     BookOverviewCategory.values().forEach { category ->

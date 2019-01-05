@@ -16,10 +16,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:clipToPadding="false"
-        android:paddingTop="2dp"
-        android:paddingBottom="100dp" />
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <View
         android:layout_width="match_parent"
