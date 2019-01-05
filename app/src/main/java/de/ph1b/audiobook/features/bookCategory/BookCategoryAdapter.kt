@@ -6,6 +6,7 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.GridBookOverviewComponent
 import de.ph1b.audiobook.features.bookOverview.list.ListBookOverviewComponent
 import de.ph1b.audiobook.misc.recyclerComponent.CompositeListAdapter
+import java.util.UUID
 
 class BookCategoryAdapter(listener: BookClickListener) :
   CompositeListAdapter<BookOverviewModel>(Diff()) {
@@ -13,6 +14,16 @@ class BookCategoryAdapter(listener: BookClickListener) :
   init {
     addComponent(GridBookOverviewComponent(listener))
     addComponent(ListBookOverviewComponent(listener))
+  }
+
+  fun notifyCoverChanged(bookId: UUID) {
+    for (i in 0 until itemCount) {
+      val item = getItem(i)
+      if (item.book.id == bookId) {
+        notifyItemChanged(i)
+        return
+      }
+    }
   }
 }
 

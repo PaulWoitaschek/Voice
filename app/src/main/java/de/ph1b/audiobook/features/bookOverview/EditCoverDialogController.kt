@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
@@ -17,11 +18,10 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,7 +33,7 @@ import com.squareup.picasso.Callback as PicassoCallback
 /**
  * Simple dialog to edit the cover of a book.
  */
-class EditCoverDialogController(args: Bundle) : DialogController(args) {
+class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @Inject
   lateinit var repo: BookRepository
@@ -55,13 +55,12 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
     )
 
     // init values
-    val bookId = args.getUUID(NI_BOOK_ID)
-    val uri = Uri.parse(args.getString(NI_COVER_URI))
-    val book = repo.bookById(bookId)!!
+    val arguments = args.getParcelable(NI_ARGS) as Arguments
+    val book = repo.bookById(arguments.bookId)!!
 
     container.coverReplacement.isVisible = true
     container.cropOverlay.selectionOn = false
-    picasso.load(uri)
+    picasso.load(arguments.coverUri)
       .into(
         container.coverImage, object : PicassoCallback {
           override fun onError(e: Exception?) {
@@ -103,7 +102,7 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
         }
         // picasso only holds a weak reference so we have to protect against gc
         container.coverImage.tag = target
-        picasso.load(uri)
+        picasso.load(arguments.coverUri)
           .transform(CropTransformation(container.cropOverlay, container.coverImage))
           .into(target)
       } else dismissDialog()
@@ -116,21 +115,21 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
   }
 
   companion object {
-    private const val NI_COVER_URI = "ni#coverPath"
-    private const val NI_BOOK_ID = "ni#id"
+    private const val NI_ARGS = "ni#bundle"
 
-    operator fun <T> invoke(
-      target: T,
-      bookId: UUID,
-      uri: Uri
-    ): EditCoverDialogController where T : Controller, T : Callback {
-      val args = Bundle().apply {
-        putString(NI_COVER_URI, uri.toString())
-        putUUID(NI_BOOK_ID, bookId)
+    operator fun <T> invoke(target: T, args: Arguments): EditCoverDialogController where T : Controller, T : Callback {
+      val bundle = Bundle().apply {
+        putParcelable(NI_ARGS, args)
       }
-      return EditCoverDialogController(args).apply {
+      return EditCoverDialogController(bundle).apply {
         targetController = target
       }
     }
   }
+
+  @Parcelize
+  data class Arguments(
+    val coverUri: Uri,
+    val bookId: UUID
+  ) : Parcelable
 }

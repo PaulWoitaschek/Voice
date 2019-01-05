@@ -26,8 +26,10 @@ import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URLEncoder
 import java.util.UUID
@@ -183,9 +185,11 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
       screenShot.recycle()
       Picasso.get().invalidate(coverFile)
       val targetController = targetController
-      if (targetController?.isAttached == true) {
-        targetController as Callback
-        targetController.onBookCoverChanged(book.id)
+      withContext(Dispatchers.Main) {
+        if (targetController?.isAttached == true) {
+          targetController as Callback
+          targetController.onBookCoverChanged(book.id)
+        }
       }
     }
   }

@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.view.MenuItem
@@ -14,6 +13,7 @@ import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -44,8 +44,6 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
-private const val COVER_FROM_GALLERY = 1
-
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
@@ -61,14 +59,14 @@ class BookOverviewController : BaseController(),
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
-
   @Inject
   lateinit var viewModel: BookOverviewViewModel
+  @Inject
+  lateinit var galleryPicker: GalleryPicker
 
   private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
-  private var menuBookId: UUID? = null
   private var useGrid = false
 
   override fun onViewCreated() {
@@ -157,19 +155,9 @@ class BookOverviewController : BaseController(),
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      COVER_FROM_GALLERY -> {
-        if (resultCode == Activity.RESULT_OK) {
-          val imageUri = data?.data
-          val bookId = menuBookId
-          if (imageUri == null || bookId == null) {
-            return
-          }
-
-          EditCoverDialogController(this, bookId, imageUri).showDialog(router)
-        }
-      }
-      else -> super.onActivityResult(requestCode, resultCode, data)
+    val arguments = galleryPicker.parse(requestCode, resultCode, data)
+    if (arguments != null) {
+      EditCoverDialogController(this, arguments).showDialog(router)
     }
   }
 
@@ -269,10 +257,7 @@ class BookOverviewController : BaseController(),
   }
 
   override fun onFileCoverRequested(book: Book) {
-    menuBookId = book.id
-    val galleryPickerIntent = Intent(Intent.ACTION_PICK)
-    galleryPickerIntent.type = "image/*"
-    startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
+    galleryPicker.pick(book.id, this)
   }
 
   override fun onDestroyView() {
