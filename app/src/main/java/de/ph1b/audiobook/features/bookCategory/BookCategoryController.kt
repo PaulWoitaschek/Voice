@@ -12,6 +12,7 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.tint
+import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.android.synthetic.main.book_category.*
 import javax.inject.Inject
 
@@ -39,10 +40,13 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle) {
     toolbar.tint()
     toolbar.setNavigationOnClickListener { popOrBack() }
 
-    val adapter = BookCategoryAdapter() { book, clickType ->
+    val adapter = BookCategoryAdapter { book, clickType ->
       when (clickType) {
         BookOverviewClick.REGULAR -> {
-          router.replaceTopController(BookPlayController(book.id).asTransaction())
+          val changeHandler = BookChangeHandler().apply {
+            transitionName = book.coverTransitionName
+          }
+          router.replaceTopController(BookPlayController(book.id).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
         }
