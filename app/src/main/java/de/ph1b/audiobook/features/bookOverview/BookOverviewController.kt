@@ -186,7 +186,6 @@ class BookOverviewController : BaseController(),
         showPlaying(state.playing)
 
         useGrid = state.useGrid
-        //columnCount = state.columnCount
         val lm = recyclerView.layoutManager as GridLayoutManager
         lm.spanCount = state.columnCount
         gridMenuItem.item.apply {
