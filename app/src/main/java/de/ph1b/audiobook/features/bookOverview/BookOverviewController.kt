@@ -68,9 +68,8 @@ class BookOverviewController : BaseController(),
   private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
-  private var menuBook: Book? = null
+  private var menuBookId: UUID? = null
   private var useGrid = false
-  // private var columnCount = 1
 
   override fun onViewCreated() {
     val gridMenuItem = setupToolbar()
@@ -162,12 +161,12 @@ class BookOverviewController : BaseController(),
       COVER_FROM_GALLERY -> {
         if (resultCode == Activity.RESULT_OK) {
           val imageUri = data?.data
-          val book = menuBook
-          if (imageUri == null || book == null) {
+          val bookId = menuBookId
+          if (imageUri == null || bookId == null) {
             return
           }
 
-          EditCoverDialogController(this, book, imageUri).showDialog(router)
+          EditCoverDialogController(this, bookId, imageUri).showDialog(router)
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
@@ -270,7 +269,7 @@ class BookOverviewController : BaseController(),
   }
 
   override fun onFileCoverRequested(book: Book) {
-    menuBook = book
+    menuBookId = book.id
     val galleryPickerIntent = Intent(Intent.ACTION_PICK)
     galleryPickerIntent.type = "image/*"
     startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)

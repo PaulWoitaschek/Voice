@@ -12,7 +12,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
@@ -122,12 +121,12 @@ class EditCoverDialogController(args: Bundle) : DialogController(args) {
 
     operator fun <T> invoke(
       target: T,
-      book: Book,
+      bookId: UUID,
       uri: Uri
     ): EditCoverDialogController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putString(NI_COVER_URI, uri.toString())
-        putUUID(NI_BOOK_ID, book.id)
+        putUUID(NI_BOOK_ID, bookId)
       }
       return EditCoverDialogController(args).apply {
         targetController = target
