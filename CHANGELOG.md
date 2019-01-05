@@ -1,3 +1,8 @@
+# 4.2.0
+* Added a Grid View :)
+* Better Transitions from Category Detail View to Player
+* Allow Editing the Book from the Category Detail View
+
 # 4.1.2
 * Fixed an issue where books did not end up in the "Completed" category
 * Stability improvements
