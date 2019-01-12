@@ -2,11 +2,16 @@ package de.ph1b.audiobook.injection
 
 import android.app.PendingIntent
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.support.v4.media.session.MediaSessionCompat
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import dagger.Module
 import dagger.Provides
 import de.ph1b.audiobook.playback.MediaSessionCallback
+import de.ph1b.audiobook.playback.OnlyAudioRenderersFactory
 import de.ph1b.audiobook.playback.PlaybackService
 import de.ph1b.audiobook.playback.events.MediaEventReceiver
 
@@ -14,15 +19,17 @@ import de.ph1b.audiobook.playback.events.MediaEventReceiver
  * Module for playback related classes
  */
 @Module
-class PlaybackModule {
+object PlaybackModule {
 
   @Provides
+  @JvmStatic
   fun provideMediaButtonReceiverComponentName(service: PlaybackService): ComponentName {
     return ComponentName(service.packageName, MediaEventReceiver::class.java.name)
   }
 
   @Provides
   @PerService
+  @JvmStatic
   fun provideButtonRecieverPendingIntent(
     service: PlaybackService,
     mbrComponentName: ComponentName
@@ -40,6 +47,7 @@ class PlaybackModule {
 
   @Provides
   @PerService
+  @JvmStatic
   fun provideMediaSession(
     service: PlaybackService,
     callback: MediaSessionCallback,
@@ -58,5 +66,11 @@ class PlaybackModule {
             or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
       )
     }
+  }
+
+  @Provides
+  @JvmStatic
+  fun exoPlayer(context: Context, onlyAudioRenderersFactory: OnlyAudioRenderersFactory): SimpleExoPlayer {
+    return ExoPlayerFactory.newSimpleInstance(context, onlyAudioRenderersFactory, DefaultTrackSelector())
   }
 }

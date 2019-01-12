@@ -40,7 +40,8 @@ import javax.inject.Singleton
   modules = [
     AndroidModule::class,
     PrefsModule::class,
-    PersistenceModule::class
+    PersistenceModule::class,
+    PlaybackModule::class
   ]
 )
 interface AppComponent : DataComponent {
