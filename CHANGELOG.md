@@ -1,3 +1,6 @@
+# 4.2.1
+* Fixed parsing of defect audio files which contained video at the beginning
+
 # 4.2.0
 * Added a Grid View :)
 * Better Transitions from Category Detail View to Player
