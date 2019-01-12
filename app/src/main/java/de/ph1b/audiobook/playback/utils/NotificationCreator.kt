@@ -22,6 +22,8 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -98,10 +100,15 @@ class NotificationCreator
     // get the cover or fallback to a replacement
     val coverFile = book.coverFile()
     val picassoCover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
-      Picasso.get()
-        .load(coverFile)
-        .resize(width, height)
-        .get()
+      try {
+        Picasso.get()
+          .load(coverFile)
+          .resize(width, height)
+          .get()
+      } catch (e: IOException) {
+        Timber.e(e, "Can't decode $coverFile")
+        null
+      }
     } else null
 
     val cover = picassoCover ?: imageHelper.drawableToBitmap(
