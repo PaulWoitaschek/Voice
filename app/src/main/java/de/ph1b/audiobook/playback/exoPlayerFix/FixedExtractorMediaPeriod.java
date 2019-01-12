@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2016 The Android Open Source Project
  *
@@ -13,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.exoplayer2.source;
+package de.ph1b.audiobook.playback.exoPlayerFix;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.google.android.exoplayer2.extractor.*;
 import com.google.android.exoplayer2.extractor.SeekMap.SeekPoints;
+import com.google.android.exoplayer2.source.*;
 import com.google.android.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import com.google.android.exoplayer2.source.SampleQueue.UpstreamFormatChangedListener;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -48,8 +50,8 @@ import java.util.Arrays;
  */
 /* package */
 @SuppressWarnings({"WeakerAccess", "ConstantConditions", "unused"})
-final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput,
-    Loader.Callback<ExtractorMediaPeriod.ExtractingLoadable>, Loader.ReleaseCallback,
+final class FixedExtractorMediaPeriod implements MediaPeriod, ExtractorOutput,
+    Loader.Callback<FixedExtractorMediaPeriod.ExtractingLoadable>, Loader.ReleaseCallback,
     UpstreamFormatChangedListener {
 
   /**
@@ -112,7 +114,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput,
    */
   // maybeFinishPrepare is not posted to the handler until initialization completes.
   @SuppressWarnings("nullness:methodref.receiver.bound.invalid")
-  public ExtractorMediaPeriod(
+  public FixedExtractorMediaPeriod(
       Uri uri,
       DataSource dataSource,
       Extractor[] extractors,
@@ -130,14 +132,14 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput,
     this.allocator = allocator;
     this.customCacheKey = customCacheKey;
     this.continueLoadingCheckIntervalBytes = continueLoadingCheckIntervalBytes;
-    loader = new Loader("Loader:ExtractorMediaPeriod");
+    loader = new Loader("Loader:FixedExtractorMediaPeriod");
     extractorHolder = new ExtractorHolder(extractors);
     loadCondition = new ConditionVariable();
     maybeFinishPrepareRunnable = this::maybeFinishPrepare;
     onContinueLoadingRequestedRunnable =
         () -> {
           if (!released) {
-            Assertions.checkNotNull(callback).onContinueLoadingRequested(ExtractorMediaPeriod.this);
+            Assertions.checkNotNull(callback).onContinueLoadingRequested(FixedExtractorMediaPeriod.this);
           }
         };
     handler = new Handler();
@@ -891,23 +893,23 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput,
 
     @Override
     public boolean isReady() {
-      return ExtractorMediaPeriod.this.isReady(track);
+      return FixedExtractorMediaPeriod.this.isReady(track);
     }
 
     @Override
     public void maybeThrowError() throws IOException {
-      ExtractorMediaPeriod.this.maybeThrowError();
+      FixedExtractorMediaPeriod.this.maybeThrowError();
     }
 
     @Override
     public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer,
                         boolean formatRequired) {
-      return ExtractorMediaPeriod.this.readData(track, formatHolder, buffer, formatRequired);
+      return FixedExtractorMediaPeriod.this.readData(track, formatHolder, buffer, formatRequired);
     }
 
     @Override
     public int skipData(long positionUs) {
-      return ExtractorMediaPeriod.this.skipData(track, positionUs);
+      return FixedExtractorMediaPeriod.this.skipData(track, positionUs);
     }
 
   }
