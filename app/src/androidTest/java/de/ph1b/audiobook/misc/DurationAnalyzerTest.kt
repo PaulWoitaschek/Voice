@@ -6,6 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import de.ph1b.audiobook.injection.PlaybackModule
+import de.ph1b.audiobook.playback.OnlyAudioRenderersFactory
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import de.ph1b.audiobook.test.R
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +30,7 @@ class DurationAnalyzerTest {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val dataSourceConverter = DataSourceConverter(context)
     durationAnalyzer = runBlocking(Dispatchers.Main) {
-      DurationAnalyzer(dataSourceConverter, context)
+      DurationAnalyzer(dataSourceConverter, PlaybackModule.exoPlayer(context, OnlyAudioRenderersFactory(context)))
     }
   }
 
