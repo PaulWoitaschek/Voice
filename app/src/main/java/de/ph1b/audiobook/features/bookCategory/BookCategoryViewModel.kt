@@ -21,16 +21,26 @@ class BookCategoryViewModel
   private val currentBookIdPref: Pref<UUID>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
-  private val gridCount: GridCount
+  private val gridCount: GridCount,
+  private val comparatorPrefForCategory: @JvmSuppressWildcards Map<BookOverviewCategory, Pref<BookComparator>>
 ) {
 
-  fun get(category: BookOverviewCategory): Observable<BookCategoryState> {
-    return Observables.combineLatest(gridModePref.stream, repo.booksStream()) { gridMode, books ->
+  lateinit var category: BookOverviewCategory
+
+  private fun comparatorPref(): Pref<BookComparator> = comparatorPrefForCategory[category]!!
+
+  fun get(): Observable<BookCategoryState> {
+    val comparatorStream = comparatorPref().stream
+    return Observables.combineLatest(
+      gridModePref.stream,
+      repo.booksStream(),
+      comparatorStream
+    ) { gridMode, books, comparator ->
       val gridColumnCount = gridCount.gridColumnCount(gridMode)
       val currentBookId = currentBookIdPref.value
       val models = books.asSequence()
         .filter(category.filter)
-        .sortedWith(BookComparator.BY_NAME)
+        .sortedWith(comparator)
         .map { book ->
           BookOverviewModel(
             book = book,
@@ -44,12 +54,12 @@ class BookCategoryViewModel
   }
 
   fun sort(comparator: BookComparator) {
+    comparatorPref().value = comparator
   }
 
   fun bookSorting(): BookComparator {
-    return BookComparator.BY_NAME
+    return comparatorPref().value
   }
-
 }
 
 data class BookCategoryState(

@@ -37,16 +37,17 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
   @Inject
   lateinit var galleryPicker: GalleryPicker
 
-  init {
-    appComponent.inject(this)
-  }
-
   constructor(category: BookOverviewCategory) : this(Bundle().apply {
     putSerializable(NI_CATEGORY, category)
   })
 
   private val category = bundle.getSerializable(NI_CATEGORY) as BookOverviewCategory
   private var adapter by clearAfterDestroyView<BookCategoryAdapter>()
+
+  init {
+    appComponent.inject(this)
+    viewModel.category = category
+  }
 
   override val layoutRes = R.layout.book_category
 
@@ -84,7 +85,7 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
     recyclerView.addItemDecoration(BookCategoryItemDecoration(activity, layoutManager))
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
-    viewModel.get(category)
+    viewModel.get()
       .subscribe {
         layoutManager.spanCount = it.gridColumnCount
         adapter.submitList(it.models)

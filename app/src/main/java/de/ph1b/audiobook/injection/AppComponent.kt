@@ -41,7 +41,8 @@ import javax.inject.Singleton
     AndroidModule::class,
     PrefsModule::class,
     PersistenceModule::class,
-    PlaybackModule::class
+    PlaybackModule::class,
+    SortingModule::class
   ]
 )
 interface AppComponent : DataComponent {
