@@ -4,7 +4,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import de.ph1b.audiobook.playback.PlaybackService
 
-@Subcomponent(modules = [PlaybackModule::class])
+@Subcomponent(modules = [PlaybackServiceModule::class])
 @PerService
 interface PlaybackComponent {
 
