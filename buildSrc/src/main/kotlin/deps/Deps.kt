@@ -41,7 +41,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0-rc03"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
@@ -61,7 +61,7 @@ object Deps {
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.0"
 
   object Dagger {
-    private const val version = "2.20"
+    private const val version = "2.21"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
