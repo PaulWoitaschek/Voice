@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookCategory
 
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.GridMode
+import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
@@ -29,7 +30,7 @@ class BookCategoryViewModel
       val currentBookId = currentBookIdPref.value
       val models = books.asSequence()
         .filter(category.filter)
-        .sortedWith(category.comparator)
+        .sortedWith(BookComparator.BY_NAME)
         .map { book ->
           BookOverviewModel(
             book = book,
