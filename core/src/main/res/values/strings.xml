@@ -102,7 +102,12 @@
     <string name="onboarding_title">Welcome!</string>
     <string name="onboarding_content">Let\'s get started by adding your first audio book.</string>
 
+    <!-- book category -->
     <string name="book_header_current">Current</string>
     <string name="book_header_not_started">Not started Yet</string>
     <string name="book_header_completed">Completed</string>
+    <string name="book_category_sort">Sorting</string>
+    <string name="book_category_sort_by_name">Name</string>
+    <string name="book_category_sort_by_last_played">Last Played</string>
+    <string name="book_category_sort_by_added">Added</string>
 </resources>

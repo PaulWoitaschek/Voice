@@ -2,6 +2,8 @@ package de.ph1b.audiobook.features.bookCategory
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
@@ -10,6 +12,7 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
+import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
@@ -49,6 +52,16 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
 
   override fun onViewCreated() {
     toolbar.setTitle(category.nameRes)
+    toolbar.inflateMenu(R.menu.book_category)
+    toolbar.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.sort -> {
+          showSortingPopup()
+          true
+        }
+        else -> false
+      }
+    }
     toolbar.tint()
     toolbar.setNavigationOnClickListener { popOrBack() }
 
@@ -79,6 +92,26 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
       .disposeOnDestroyView()
   }
 
+  private fun showSortingPopup() {
+    val anchor = toolbar.findViewById<View>(R.id.sort)
+    PopupMenu(activity, anchor).apply {
+      inflate(R.menu.sort_menu)
+      val bookSorting = viewModel.bookSorting()
+      menu.findItem(bookSorting.menuId).isChecked = true
+      setOnMenuItemClickListener { menuItem ->
+        val itemId = menuItem.itemId
+        val comparator = BookComparator.values().find { it.menuId == itemId }
+        if (comparator != null) {
+          viewModel.sort(comparator)
+          true
+        } else {
+          false
+        }
+      }
+      show()
+    }
+  }
+
   override fun onInternetCoverRequested(book: Book) {
     router.pushController(CoverFromInternetController(book.id, this).asTransaction())
   }
@@ -98,3 +131,10 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
     galleryPicker.pick(book.id, this)
   }
 }
+
+private val BookComparator.menuId: Int
+  get() = when (this) {
+    BookComparator.BY_LAST_PLAYED -> R.id.byLastPlayed
+    BookComparator.BY_NAME -> R.id.byName
+    BookComparator.BY_DATE_ADDED -> R.id.byAdded
+  }

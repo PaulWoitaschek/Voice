@@ -42,6 +42,14 @@ class BookCategoryViewModel
       BookCategoryState(gridColumnCount, models)
     }
   }
+
+  fun sort(comparator: BookComparator) {
+  }
+
+  fun bookSorting(): BookComparator {
+    return BookComparator.BY_NAME
+  }
+
 }
 
 data class BookCategoryState(

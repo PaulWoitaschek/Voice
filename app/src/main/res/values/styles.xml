@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="DayNightTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
+    <style name="AppTheme" parent="DayNightTheme">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
