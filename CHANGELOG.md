@@ -1,3 +1,6 @@
+# 4.3.0
+* You can now sort the books by: Name, Date added or last played!
+
 # 4.2.1
 * Fixed parsing of defect audio files which contained video at the beginning
 
