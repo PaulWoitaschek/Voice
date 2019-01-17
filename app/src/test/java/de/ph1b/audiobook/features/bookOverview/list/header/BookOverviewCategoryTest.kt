@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.bookOverview.list.header
 
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
-import de.ph1b.audiobook.data.Book
 import org.junit.Test
 
 class BookOverviewCategoryTest {
@@ -15,10 +14,7 @@ class BookOverviewCategoryTest {
         copy(currentFile = lastChapter.file, positionInChapter = lastChapter.duration)
       }
     }
-    println(book)
-    println(book.content.position)
-    println(book.content.duration)
-    assertThat(book.categories()).containsExactly(BookOverviewCategory.FINISHED)
+    assertThat(book.category).isEqualTo(BookOverviewCategory.FINISHED)
   }
 
   @Test
@@ -29,7 +25,7 @@ class BookOverviewCategoryTest {
         copy(currentFile = firstChapter.file, positionInChapter = 0)
       }
     }
-    assertThat(book.categories()).containsExactly(BookOverviewCategory.NOT_STARTED)
+    assertThat(book.category).isEqualTo(BookOverviewCategory.NOT_STARTED)
   }
 
   @Test
@@ -40,13 +36,6 @@ class BookOverviewCategoryTest {
         copy(currentFile = lastChapter.file, positionInChapter = 0)
       }
     }
-    println(book)
-    assertThat(book.categories()).containsExactly(BookOverviewCategory.CURRENT)
-  }
-
-  private fun Book.categories(): List<BookOverviewCategory> {
-    return BookOverviewCategory.values().filter { categoryToCheck ->
-      categoryToCheck.filter(this)
-    }
+    assertThat(book.category).isEqualTo(BookOverviewCategory.CURRENT)
   }
 }
