@@ -21,6 +21,8 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
@@ -58,6 +60,8 @@ class NotificationCreator
       .setStyle(mediaStyle)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
+  // notificationBuilder is not thread-save, we need to synchronize the access.
+  private val notificationBuilderLock = Mutex()
 
   fun createDummyNotification(): Notification {
     val builder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
@@ -71,21 +75,26 @@ class NotificationCreator
     return builder.build()
   }
 
-  suspend fun createNotification(book: Book): Notification = withContext(Dispatchers.IO) {
-    mediaStyle.setMediaSession(mediaSession.sessionToken)
-    @Suppress("RestrictedApi")
-    notificationBuilder.mActions.clear()
-    val playState = playStateManager.playState
-    notificationBuilder
-      .addRewindAction()
-      .addPlayPauseAction(playState)
-      .addFastForwardAction()
-      .setChapterInfo(book)
-      .setContentIntent(contentIntent(book))
-      .setContentTitle(book)
-      .setLargeIcon(book)
-      .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
-      .build()
+  suspend fun createNotification(book: Book): Notification {
+    return notificationBuilderLock.withLock {
+      withContext(Dispatchers.IO) {
+        mediaStyle.setMediaSession(mediaSession.sessionToken)
+        @Suppress("RestrictedApi")
+        notificationBuilder.mActions.clear()
+        val playState = playStateManager.playState
+        notificationBuilder
+          .addRewindAction()
+          .addPlayPauseAction(playState)
+          .addFastForwardAction()
+          .setChapterInfo(book)
+          .setContentIntent(contentIntent(book))
+          .setContentTitle(book)
+          .setLargeIcon(book)
+          .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
+          .build()
+      }
+
+    }
   }
 
   private suspend fun cover(book: Book): Bitmap {
