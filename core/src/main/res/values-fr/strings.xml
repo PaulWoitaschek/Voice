@@ -97,6 +97,7 @@
     <string name="music_notification">Lecture</string>
     <string name="onboarding_title">Bienvenue</string>
     <string name="onboarding_content">Commençons par ajouter votre premier livre audio.</string>
+    <!--book category-->
     <string name="book_header_current">En cours</string>
     <string name="book_header_not_started">Pas encore commencé</string>
     <string name="book_header_completed">Complété</string>

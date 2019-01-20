@@ -90,4 +90,5 @@
     <string name="no_network">인터넷끊김?</string>
     <string name="network_top">미안, 에러가 났어...</string>
     <string name="cover_crop">책표지 자르기</string>
+    <!--book category-->
 </resources>

@@ -97,6 +97,7 @@
     <string name="music_notification">Reprodução</string>
     <string name="onboarding_title">Bem-vindo! </string>
     <string name="onboarding_content">Vamos começar adicionando seu primeiro audio livro.</string>
+    <!--book category-->
     <string name="book_header_current">Atual</string>
     <string name="book_header_not_started">Não iniciado ainda</string>
     <string name="book_header_completed">Completo</string>

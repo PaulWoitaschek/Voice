@@ -87,4 +87,5 @@
     <string name="no_network">Ingen netværk?</string>
     <string name="network_top">Dette fungerede ikke optimalt...</string>
     <string name="cover_crop">Skær cover til</string>
+    <!--book category-->
 </resources>

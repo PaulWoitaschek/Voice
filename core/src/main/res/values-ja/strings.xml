@@ -95,6 +95,7 @@
     <string name="music_notification">再生</string>
     <string name="onboarding_title">ようこそ!</string>
     <string name="onboarding_content">オーディオブックを追加して始めましょう。</string>
+    <!--book category-->
     <string name="book_header_current">現在</string>
     <string name="book_header_not_started">まだ開始していません</string>
     <string name="book_header_completed">完了</string>

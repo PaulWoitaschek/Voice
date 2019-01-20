@@ -87,5 +87,6 @@
     <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
     <string name="cover_crop">Περικοπή εξωφύλλου</string>
     <string name="onboarding_title">Καλώς Ήλθατε!</string>
+    <!--book category-->
     <string name="book_header_current">Τρέχον</string>
 </resources>

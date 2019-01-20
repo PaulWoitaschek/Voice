@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Текущая книга</string>
+    <string name="layout_grid">Сетка</string>
+    <string name="layout_list">Список</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Показать все</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>
@@ -15,6 +18,7 @@
     <string name="pause">Пауза</string>
     <string name="equalizer">Эквалайзер</string>
     <string name="volume_boost">Усиление звука</string>
+    <string name="skip_silence">Пропускать тишину</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и не используется компьютером в данный момент.</string>
     <string name="no_external_storage_action_bar_title">Карта памяти</string>
@@ -100,4 +104,8 @@
     <string name="music_notification">Воспроизведение</string>
     <string name="onboarding_title">Добро пожаловать!</string>
     <string name="onboarding_content">Давайте добавим вашу первую аудиокнигу.</string>
+    <!--book category-->
+    <string name="book_header_current">Слушаю</string>
+    <string name="book_header_not_started">Поледние добавленные</string>
+    <string name="book_header_completed">Прослушанные</string>
 </resources>

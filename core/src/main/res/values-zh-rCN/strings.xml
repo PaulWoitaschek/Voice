@@ -96,6 +96,7 @@
     <string name="music_notification">播放</string>
     <string name="onboarding_title">欢迎！</string>
     <string name="onboarding_content">请从加入您的第一部有声书开始。</string>
+    <!--book category-->
     <string name="book_header_current">正在播放</string>
     <string name="book_header_not_started">尚未开始播放</string>
     <string name="book_header_completed">已经播放完毕</string>

@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Huidig boek</string>
+    <string name="layout_grid">Rasterindeling</string>
+    <string name="layout_list">Lijstindeling</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
     <string name="show_all">Alles tonen</string>
     <!--BookPlayFragment-->
@@ -98,7 +100,12 @@
     <string name="music_notification">Afspelen</string>
     <string name="onboarding_title">Welkom!</string>
     <string name="onboarding_content">Laten we beginnen met het toevoegen van je eerste audioboek.</string>
+    <!--book category-->
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog niet begonnen</string>
     <string name="book_header_completed">Voltooid</string>
+    <string name="book_category_sort">Sortering</string>
+    <string name="book_category_sort_by_name">Naam</string>
+    <string name="book_category_sort_by_last_played">Laatst afgespeeld</string>
+    <string name="book_category_sort_by_added">Toegevoegd</string>
 </resources>

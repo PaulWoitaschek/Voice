@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Libro corrente</string>
+    <string name="layout_grid">Layout a Griglia</string>
+    <string name="layout_list">Layout a Lista</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Visualizza tutto</string>
     <!--BookPlayFragment-->
     <string name="cover">Copertina</string>
     <string name="play_pause">Play / Pausa</string>
@@ -97,6 +100,7 @@
     <string name="music_notification">Riproduzione</string>
     <string name="onboarding_title">Benvenuto !</string>
     <string name="onboarding_content">Comincia aggiungendo il primo Audiolibro.</string>
+    <!--book category-->
     <string name="book_header_current">Corrente</string>
     <string name="book_header_not_started">Non ancora iniziato</string>
     <string name="book_header_completed">Completato</string>

@@ -96,4 +96,5 @@
     <string name="music_notification">Възпроизвеждане</string>
     <string name="onboarding_title">Добре дошли!</string>
     <string name="onboarding_content">Нека започнем като добавим първата Ви аудиокнига.</string>
+    <!--book category-->
 </resources>

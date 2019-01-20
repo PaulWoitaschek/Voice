@@ -97,6 +97,7 @@
     <string name="music_notification">Terugspeel</string>
     <string name="onboarding_title">Welkom!</string>
     <string name="onboarding_content">Kom ons begin deur jou eerste klankboek by te voeg.</string>
+    <!--book category-->
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog nie begin nie</string>
     <string name="book_header_completed">Voltooi</string>

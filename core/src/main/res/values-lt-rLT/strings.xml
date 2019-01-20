@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Dabartinė knyga</string>
+    <string name="layout_grid">Tinklelio išdėstymas</string>
+    <string name="layout_list">Sąrašo išdėstymas</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Rodyti visas</string>
     <!--BookPlayFragment-->
     <string name="cover">Viršelis</string>
     <string name="play_pause">Atkurti / pristabdyti</string>
@@ -15,9 +18,10 @@
     <string name="pause">Pristabdyti</string>
     <string name="equalizer">Glodintuvas</string>
     <string name="volume_boost">Garsio padidinimas</string>
+    <string name="skip_silence">Peršokti tylą</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Nėra prieinamų išorinių atmintinių. Įsitikinkite, jog ji prijungta ir nėra primontuota jūsų kompiuteryje.</string>
-    <string name="no_external_storage_action_bar_title">Išorinė atmintinė</string>
+    <string name="no_external_storage">Nėra prieinamų išorinių laikmenų. Įsitikinkite, jog ji prijungta ir nėra primontuota jūsų kompiuteryje.</string>
+    <string name="no_external_storage_action_bar_title">Išorinė laikmena</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Nustatyti</string>
     <string name="dialog_cancel">Atšaukti</string>
@@ -45,7 +49,7 @@
     <string name="permission_external_new_explanation">Neturint leidimo negalima nuskaityti knygų</string>
     <string name="permission_retry">Bandyti dar kartą?</string>
     <string name="permission_goto_settings">Nustatymai</string>
-    <string name="storage_pre_device">Atmintinė:</string>
+    <string name="storage_pre_device">Laikmena:</string>
     <string name="storage_all">Visos</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Atkūrimo sparta</string>
@@ -100,4 +104,12 @@
     <string name="music_notification">Atkūrimas</string>
     <string name="onboarding_title">Sveiki!</string>
     <string name="onboarding_content">Pradėkite pridėdami pirmąją audioknygą.</string>
+    <!--book category-->
+    <string name="book_header_current">Dabartinės</string>
+    <string name="book_header_not_started">Dar nepradėtos</string>
+    <string name="book_header_completed">Užbaigtos</string>
+    <string name="book_category_sort">Rikiavimas</string>
+    <string name="book_category_sort_by_name">Pavadinimas</string>
+    <string name="book_category_sort_by_last_played">Paskutinio atkūrimo data</string>
+    <string name="book_category_sort_by_added">Pridėjimo data</string>
 </resources>

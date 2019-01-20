@@ -101,6 +101,7 @@
     <string name="music_notification">Odtwarzanie</string>
     <string name="onboarding_title">Witaj!</string>
     <string name="onboarding_content">Zacznijmy od dodania twojego pierwszego audiobooka.</string>
+    <!--book category-->
     <string name="book_header_current">Aktualna</string>
     <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
     <string name="book_header_completed">Odsłuchana</string>

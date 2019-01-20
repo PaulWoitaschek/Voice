@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Aktuella boken</string>
+    <string name="layout_grid">Rutnätslayout</string>
+    <string name="layout_list">Listlayout</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
     <string name="show_all">Visa alla</string>
     <!--BookPlayFragment-->
@@ -98,6 +100,7 @@
     <string name="music_notification">Uppspelning</string>
     <string name="onboarding_title">Välkommen!</string>
     <string name="onboarding_content">Låt oss börja med att lägga till din första ljudbok.</string>
+    <!--book category-->
     <string name="book_header_current">Nuvarande</string>
     <string name="book_header_not_started">Inte börjat ännu</string>
     <string name="book_header_completed">Färdig</string>

@@ -92,4 +92,5 @@
     <string name="no_network">Ağ yok?</string>
     <string name="network_top">Bu iş çok iyi sonuç vermedi ...</string>
     <string name="cover_crop">Kapağı kırp</string>
+    <!--book category-->
 </resources>

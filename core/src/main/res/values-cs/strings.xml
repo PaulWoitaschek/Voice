@@ -93,4 +93,5 @@
     <string name="no_network">Źádné připojení?</string>
     <string name="network_top">Tak tohle moc dobře nedopadlo...</string>
     <string name="cover_crop">Oříznout obal</string>
+    <!--book category-->
 </resources>

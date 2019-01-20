@@ -56,4 +56,5 @@
     <string name="network_top">هذا لا يعمل بشكل جيد جداً</string>
     <string name="cover_crop">إقتصاص الغطاء</string>
     <string name="onboarding_title">مرحباً!</string>
+    <!--book category-->
 </resources>

@@ -92,4 +92,5 @@
     <string name="no_network">नेटवर्क नहीं है?</string>
     <string name="network_top">यह सही से नहीं चला...</string>
     <string name="cover_crop">कवर काटें</string>
+    <!--book category-->
 </resources>
