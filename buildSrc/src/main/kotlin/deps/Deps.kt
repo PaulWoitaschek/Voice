@@ -10,8 +10,8 @@ object Versions {
   const val compileSdk = 28
   const val minSdk = 21
   const val targetSdk = 27
-  const val versionCode = 3060323
-  const val versionName = "4.2.1"
+  const val versionCode = 3060324
+  const val versionName = "4.3.0"
 }
 
 object Deps {
