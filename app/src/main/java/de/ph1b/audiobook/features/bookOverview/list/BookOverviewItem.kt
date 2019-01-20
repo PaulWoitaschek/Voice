@@ -55,7 +55,12 @@ private fun Book.progress(): Float {
   val totalDuration = content.duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
-    CrashReporter.logException(AssertionError("Couldn't determine progress for book=$this. Progress is $progress."))
+    CrashReporter.logException(
+      AssertionError(
+        "Couldn't determine progress for book=$this. Progress is $progress, " +
+            "globalPosition=$globalPosition, totalDuration=$totalDuration"
+      )
+    )
   }
   return progress.coerceIn(0F, 1F)
 }
