@@ -4,12 +4,12 @@ import android.content.Context
 import android.net.Uri
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.Reusable
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
-import de.ph1b.audiobook.playback.exoPlayerFix.FixedExtractorMediaSource
 import java.io.File
 import javax.inject.Inject
 
@@ -20,13 +20,13 @@ import javax.inject.Inject
 class DataSourceConverter
 @Inject constructor(context: Context) {
 
-  private val mediaSourceFactory: FixedExtractorMediaSource.Factory
+  private val mediaSourceFactory: ExtractorMediaSource.Factory
 
   init {
     val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
-    mediaSourceFactory = FixedExtractorMediaSource.Factory(dataSourceFactory)
+    mediaSourceFactory = ExtractorMediaSource.Factory(dataSourceFactory)
       .setExtractorsFactory(extractorsFactory)
   }
 

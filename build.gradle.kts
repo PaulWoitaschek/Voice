@@ -1,9 +1,6 @@
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryPlugin
-import com.android.build.gradle.tasks.LintBaseTask
-import com.android.builder.model.AndroidProject
-import com.github.benmanes.gradle.versions.updates.DependencyUpdates
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import deps.Deps
 import deps.Versions
@@ -29,7 +26,7 @@ buildscript {
 plugins {
   `build-scan`
   id("com.github.ben-manes.versions") version "0.20.0"
-  id("org.jlleitschuh.gradle.ktlint") version "6.3.1"
+  id("org.jlleitschuh.gradle.ktlint") version "7.0.0"
 }
 
 buildScan {

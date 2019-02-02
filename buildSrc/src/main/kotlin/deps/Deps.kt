@@ -2,7 +2,6 @@ package deps
 
 import org.gradle.api.JavaVersion
 
-
 object Versions {
   val sourceCompatibility = JavaVersion.VERSION_1_8
   val targetCompatibility = JavaVersion.VERSION_1_8
@@ -23,7 +22,7 @@ object Deps {
     const val recyclerView = "androidx.recyclerview:recyclerview:1.0.0"
     const val transitions = "androidx.transition:transition:1.0.1"
     const val palette = "androidx.palette:palette:1.0.0"
-    const val mediaCompat = "androidx.media:media:1.0.0"
+    const val mediaCompat = "androidx.media:media:1.0.1"
     const val fragment = "androidx.fragment:fragment:1.0.0"
     const val ktx = "androidx.core:core-ktx:1.0.1"
 
@@ -58,7 +57,7 @@ object Deps {
   }
 
   const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.8@aar"
-  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.0"
+  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.1"
 
   object Dagger {
     private const val version = "2.21"
@@ -67,23 +66,21 @@ object Deps {
   }
 
   object ExoPlayer {
-    const val core = "com.google.android.exoplayer:exoplayer-core:2.9.3"
-    private const val extensionVersion = "2.7.0-1"
-    const val opus =
-      "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$extensionVersion"
-    const val flac =
-      "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$extensionVersion"
+    private const val version = "2.9.4"
+    const val core = "com.google.android.exoplayer:exoplayer-core:$version"
+    const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$version"
+    const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$version"
   }
 
   const val moshi = "com.squareup.moshi:moshi:1.8.0"
   const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.0"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.5"
+  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.6"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.11"
-    private const val versionCoroutines = "1.1.0"
+    private const val versionKotlin = "1.3.20"
+    private const val versionCoroutines = "1.1.1"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
