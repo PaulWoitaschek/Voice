@@ -7,7 +7,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import javax.inject.Inject
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 @Reusable
 class ShakeDetector
 @Inject constructor(private val sensorManager: SensorManager?) {

@@ -115,7 +115,6 @@ class SleepTimer
 
   private suspend fun restartTimerOnShake() {
     if (shakeToResetPref.value) {
-      @Suppress("EXPERIMENTAL_API_USAGE")
       shakeDetector.detect()
         .consumeEach {
           Timber.i("Shake detected. Reset sleep time")

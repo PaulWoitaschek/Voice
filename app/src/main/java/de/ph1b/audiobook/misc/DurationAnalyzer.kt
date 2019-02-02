@@ -1,5 +1,3 @@
-@file:Suppress("EXPERIMENTAL_API_USAGE")
-
 package de.ph1b.audiobook.misc
 
 import com.google.android.exoplayer2.C

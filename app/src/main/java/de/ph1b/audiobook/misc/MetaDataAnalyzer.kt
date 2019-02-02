@@ -21,10 +21,11 @@ class MetaDataAnalyzer @Inject constructor() {
           ?: chapterNameFallback
         val bookName = parseBookName()
         val author = parseAuthor()
-        return MetaData(chapterName = chapterName, bookName = bookName, author = author)
+        val duration = parseDuration()
+        return MetaData(chapterName = chapterName, bookName = bookName, author = author, duration = duration)
       }
     }
-    return MetaData(chapterName = chapterNameFallback, bookName = null, author = null)
+    return MetaData(chapterName = chapterNameFallback, bookName = null, author = null, duration = null)
   }
 
   private fun prepare(file: File): Boolean {
@@ -58,6 +59,10 @@ class MetaDataAnalyzer @Inject constructor() {
       ?: mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
   }
 
+  private fun parseDuration(): Int {
+    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toIntOrNull() ?: 0
+  }
+
   /**
    * As [MediaMetadataRetriever] has several bugs it is important to catch the exception here as
    * it randomly throws [RuntimeException] on certain implementations.
@@ -73,6 +78,7 @@ class MetaDataAnalyzer @Inject constructor() {
   data class MetaData(
     val chapterName: String,
     val bookName: String?,
-    val author: String?
+    val author: String?,
+    val duration: Int?
   )
 }

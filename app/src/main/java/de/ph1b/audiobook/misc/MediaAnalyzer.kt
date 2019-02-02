@@ -13,9 +13,10 @@ class MediaAnalyzer @Inject constructor(
 ) {
 
   suspend fun analyze(file: File): Result {
-    val duration = exoPlayerDurationParser.duration(file) ?: -1
+    val metaData = metaDataAnalyzer.parse(file)
+    val duration = metaData.duration?.takeIf { it > 0 }
+      ?: exoPlayerDurationParser.duration(file) ?: 0
     return if (duration > 0) {
-      val metaData = metaDataAnalyzer.parse(file)
       Result.Success(
         duration = duration,
         chapterName = metaData.chapterName,

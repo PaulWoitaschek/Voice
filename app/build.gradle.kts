@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import deps.Deps
 import deps.Versions
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
@@ -180,7 +179,11 @@ dependencies {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     jvmTarget = "1.8"
-    freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
+    freeCompilerArgs = listOf(
+      "-XXLanguage:+InlineClasses",
+      "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+      "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"
+    )
   }
 }
 
