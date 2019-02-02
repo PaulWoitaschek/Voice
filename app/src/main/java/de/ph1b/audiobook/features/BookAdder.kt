@@ -2,9 +2,7 @@ package de.ph1b.audiobook.features
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import androidx.collection.SparseArrayCompat
-import androidx.core.content.ContextCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
@@ -19,6 +17,7 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.Observables
+import de.ph1b.audiobook.misc.hasPermission
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.persistence.pref.Pref
@@ -192,14 +191,9 @@ class BookAdder
     if (!storageMounted()) {
       throw CancellationException("Storage is not mounted")
     }
-    if (ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
-    ) {
+    if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       throw CancellationException("Does not have external storage permission")
     }
-
     repo.hideBook(booksToRemove)
   }
 
