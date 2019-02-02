@@ -61,8 +61,6 @@
     <string name="action_settings">Voorkeure</string>
     <string name="pref_resume_on_replug">Hervat terugspeling</string>
     <string name="pref_resume_on_replug_hint">Indien speling gebreek is as gevolg van oorfone wat verwyder was sal dit hervat word sodra die oorfone terug gesit is.</string>
-    <string name="pref_resume_after_call">Lees verder na \'n oproep</string>
-    <string name="pref_resume_after_call_hint">Gaan aan om verder te lees na \'n oproep</string>
     <string name="min">%smin</string>
     <string name="delete_last_number">Skrap die laaste ingevoerde nommer</string>
     <plurals name="seconds">

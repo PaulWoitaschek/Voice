@@ -106,4 +106,8 @@
     <string name="book_header_current">Слушаю</string>
     <string name="book_header_not_started">Поледние добавленные</string>
     <string name="book_header_completed">Прослушанные</string>
+    <string name="book_category_sort">Сортировка</string>
+    <string name="book_category_sort_by_name">Название</string>
+    <string name="book_category_sort_by_last_played">Посл. прослуш.</string>
+    <string name="book_category_sort_by_added">Дата</string>
 </resources>

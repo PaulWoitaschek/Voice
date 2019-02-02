@@ -102,4 +102,8 @@
     <string name="book_header_current">Nuvarande</string>
     <string name="book_header_not_started">Inte börjat ännu</string>
     <string name="book_header_completed">Färdig</string>
+    <string name="book_category_sort">Sortering</string>
+    <string name="book_category_sort_by_name">Namn</string>
+    <string name="book_category_sort_by_last_played">Senast spelade</string>
+    <string name="book_category_sort_by_added">Tillagd</string>
 </resources>
