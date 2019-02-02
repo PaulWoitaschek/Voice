@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BaseActivity
+import de.ph1b.audiobook.misc.storageMounted
 import kotlinx.android.synthetic.main.activity_no_external.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,7 +21,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
 
   override fun onBackPressed() {
     runBlocking {
-      if (BaseActivity.storageMounted()) {
+      if (storageMounted()) {
         super.onBackPressed()
       } else {
         val i = Intent(Intent.ACTION_MAIN)
@@ -35,7 +35,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
   public override fun onResume() {
     super.onResume()
     GlobalScope.launch(Dispatchers.Main) {
-      if (BaseActivity.storageMounted()) {
+      if (storageMounted()) {
         onBackPressed()
       }
     }

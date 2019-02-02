@@ -20,6 +20,7 @@ import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.misc.listFilesSafely
+import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
@@ -190,7 +191,7 @@ class BookAdder
       }
     }
 
-    if (!BaseActivity.storageMounted()) {
+    if (!storageMounted()) {
       coroutineContext.cancel()
       throw CancellationException("Storage is not mounted")
     }
@@ -323,7 +324,7 @@ class BookAdder
     val bookId = bookExisting?.id ?: UUID.randomUUID()
     val newChapters = getChaptersByRootFile(bookId, rootFile)
 
-    if (!BaseActivity.storageMounted()) {
+    if (!storageMounted()) {
       coroutineContext.cancel()
       throw CancellationException("Storage not mounted")
     }
