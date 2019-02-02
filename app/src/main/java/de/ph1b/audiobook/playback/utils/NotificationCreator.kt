@@ -93,7 +93,6 @@ class NotificationCreator
           .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
           .build()
       }
-
     }
   }
 
