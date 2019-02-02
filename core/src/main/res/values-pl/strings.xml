@@ -61,8 +61,6 @@
     <string name="action_settings">Preferencje</string>
     <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
     <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
-    <string name="pref_resume_after_call">Przywróć po połączeniu</string>
-    <string name="pref_resume_after_call_hint">Przywraca odtwarzanie po zakończeniu połączenia</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
     <plurals name="seconds">

@@ -26,7 +26,6 @@ import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
-import de.ph1b.audiobook.playback.utils.audioFocus.AudioFocusHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
@@ -72,8 +71,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   lateinit var autoConnected: AndroidAutoConnectedReceiver
   @Inject
   lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
-  @Inject
-  lateinit var audioFocusHelper: AudioFocusHandler
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
@@ -229,7 +226,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun handlePlaybackStateStopped() {
     mediaSession.isActive = false
-    audioFocusHelper.abandon()
     notificationManager.cancel(NOTIFICATION_ID)
     stopForeground(true)
     isForeground = false
@@ -244,7 +240,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private suspend fun handlePlaybackStatePlaying() {
-    audioFocusHelper.request()
     Timber.d("set mediaSession to active")
     mediaSession.isActive = true
     currentBook()?.let {

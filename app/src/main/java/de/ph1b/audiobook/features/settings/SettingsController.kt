@@ -25,8 +25,6 @@ class SettingsController : BaseController() {
   lateinit var themePref: Pref<ThemeUtil.Theme>
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
-  @field:[Inject Named(PrefKeys.RESUME_AFTER_CALL)]
-  lateinit var resumeAfterCallPref: Pref<Boolean>
   @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]
   lateinit var autoRewindAmountPref: Pref<Int>
   @field:[Inject Named(PrefKeys.SEEK_TIME)]
@@ -58,14 +56,6 @@ class SettingsController : BaseController() {
       titleRes = R.string.pref_resume_on_replug,
       contentRes = R.string.pref_resume_on_replug_hint,
       pref = resumeOnReplugPref
-    )
-
-    // resume on playback
-    setupSwitchSetting(
-      settingView = resumeAfterCall,
-      titleRes = R.string.pref_resume_after_call,
-      contentRes = R.string.pref_resume_after_call_hint,
-      pref = resumeAfterCallPref
     )
 
     // skip amount

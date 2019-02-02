@@ -63,19 +63,25 @@ constructor(
 
   init {
     checkMainThread()
-    player.audioAttributes = AudioAttributes.Builder()
+    val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
+    player.setAudioAttributes(audioAttributes, true)
 
     player.onStateChanged {
+      playStateManager.playState = when (it) {
+        PlayerState.IDLE -> PlayState.STOPPED
+        PlayerState.ENDED -> PlayState.STOPPED
+        PlayerState.PAUSED -> PlayState.PAUSED
+        PlayerState.PLAYING -> PlayState.PLAYING
+      }
       state = it
     }
 
     player.onError {
       Timber.e("onError")
       player.playWhenReady = false
-      playStateManager.playState = PlayState.STOPPED
     }
 
     // upon position change update the book
@@ -116,7 +122,6 @@ constructor(
         Timber.v("onEnded. Stopping player")
         checkMainThread()
         player.playWhenReady = false
-        playStateManager.playState = PlayState.STOPPED
       }
     }
 
@@ -204,7 +209,6 @@ constructor(
       if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
         checkMainThread()
         player.playWhenReady = true
-        playStateManager.playState = PlayState.PLAYING
       } else Timber.d("ignore play in state $state")
     }
   }
@@ -297,8 +301,7 @@ constructor(
   /** Stops the playback and releases some resources. */
   fun stop() {
     checkMainThread()
-    player.playWhenReady = false
-    playStateManager.playState = PlayState.STOPPED
+    player.stop()
   }
 
   /**
@@ -312,7 +315,6 @@ constructor(
       PlayerState.PLAYING -> {
         bookContent?.let {
           player.playWhenReady = false
-          playStateManager.playState = PlayState.PAUSED
 
           if (rewind) {
             val autoRewind = autoRewindAmount * 1000

@@ -60,8 +60,6 @@
     <string name="action_settings">Параметри</string>
     <string name="pref_resume_on_replug">Відновити програвання</string>
     <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
-    <string name="pref_resume_after_call">Відновити після виклику</string>
-    <string name="pref_resume_after_call_hint">Відновлює програвання після виклику.</string>
     <string name="min">%s хв</string>
     <string name="delete_last_number">Видаляє останнє введене число</string>
     <plurals name="seconds">

@@ -124,15 +124,6 @@ object PrefsModule {
   @Provides
   @JvmStatic
   @Singleton
-  @Named(PrefKeys.RESUME_AFTER_CALL)
-  fun provideResumeAfterCallPreference(prefs: RxSharedPreferences): Pref<Boolean> {
-    val pref = prefs.getBoolean(PrefKeys.RESUME_AFTER_CALL, false)
-    return PersistentPref(pref)
-  }
-
-  @Provides
-  @JvmStatic
-  @Singleton
   @Named(PrefKeys.GRID_MODE)
   fun gridViewPref(prefs: RxSharedPreferences): Pref<GridMode> {
     val pref = prefs.getEnum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE, GridMode::class.java)

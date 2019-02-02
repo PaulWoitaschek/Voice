@@ -64,8 +64,6 @@
     <string name="action_settings">Preferences</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
-    <string name="pref_resume_after_call">Resume after call</string>
-    <string name="pref_resume_after_call_hint">Resumes the playback after a call.</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Deletes the last entered number</string>
     <plurals name="seconds">

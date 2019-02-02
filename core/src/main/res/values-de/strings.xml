@@ -64,8 +64,6 @@
     <string name="action_settings">Einstellungen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
-    <string name="pref_resume_after_call">Nach Anruf fortsetzen</string>
-    <string name="pref_resume_after_call_hint">Nimmt die Wiedergabe nach einem Anruf wieder auf.</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Löscht die zuletzt eingegebene Zahl</string>
     <plurals name="seconds">
