@@ -24,11 +24,9 @@ import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
@@ -106,7 +104,7 @@ class BookAdder
   }
 
   // check for new books
-  private suspend fun CoroutineScope.checkForBooks() {
+  private suspend fun checkForBooks() {
     val singleBooks = singleBookFiles
     for (f in singleBooks) {
       if (f.isFile && f.canRead()) {
@@ -141,7 +139,7 @@ class BookAdder
 
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
-  private suspend fun CoroutineScope.deleteOldBooks() {
+  private suspend fun deleteOldBooks() {
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
 
@@ -192,7 +190,6 @@ class BookAdder
     }
 
     if (!storageMounted()) {
-      coroutineContext.cancel()
       throw CancellationException("Storage is not mounted")
     }
     if (ContextCompat.checkSelfPermission(
@@ -200,7 +197,6 @@ class BookAdder
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      coroutineContext.cancel()
       throw CancellationException("Does not have external storage permission")
     }
 
@@ -319,13 +315,12 @@ class BookAdder
 
   /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
    * exist any longer **/
-  private suspend fun CoroutineScope.checkBook(rootFile: File, type: Book.Type) {
+  private suspend fun checkBook(rootFile: File, type: Book.Type) {
     val bookExisting = getBookFromDb(rootFile, type, false)
     val bookId = bookExisting?.id ?: UUID.randomUUID()
     val newChapters = getChaptersByRootFile(bookId, rootFile)
 
     if (!storageMounted()) {
-      coroutineContext.cancel()
       throw CancellationException("Storage not mounted")
     }
 
