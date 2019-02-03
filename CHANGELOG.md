@@ -1,3 +1,7 @@
+# 4.3.1
+* Fixed: Some books were not being recognized. If you encounter an issue with a file, please just mail me the file - that's the easiest
+way for me to fix it!
+
 # 4.3.0
 * You can now sort the books by: Name, Date added or last played!
 
