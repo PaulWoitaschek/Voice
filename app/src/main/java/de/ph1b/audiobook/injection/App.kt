@@ -59,7 +59,7 @@ class App : Application() {
       }
     }
 
-    appComponent = DaggerAppComponent.builder()
+    appComponent = AppComponent.builder()
       .application(this)
       .build()
     DataInjector.component = appComponent

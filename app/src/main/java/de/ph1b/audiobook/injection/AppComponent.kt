@@ -85,4 +85,8 @@ interface AppComponent : DataComponent {
   fun inject(target: ThemePickerDialogController)
 
   fun playbackComponent(): PlaybackComponent.Builder
+
+  companion object {
+    fun builder(): AppComponent.Builder = DaggerAppComponent.builder()
+  }
 }
