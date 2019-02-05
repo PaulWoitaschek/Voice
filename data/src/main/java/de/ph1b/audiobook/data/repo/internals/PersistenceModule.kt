@@ -32,27 +32,33 @@ import de.ph1b.audiobook.data.repo.internals.migrations.Migration46
 import javax.inject.Singleton
 
 @Module
-class PersistenceModule {
+object PersistenceModule {
 
   @Provides
+  @JvmStatic
   fun bookmarkDao(appDb: AppDb) = appDb.bookmarkDao()
 
   @Provides
+  @JvmStatic
   fun chapterDao(appDb: AppDb) = appDb.chapterDao()
 
   @Provides
+  @JvmStatic
   fun metaDataDao(appDb: AppDb) = appDb.bookMetadataDao()
 
   @Provides
+  @JvmStatic
   fun bookSettingsDao(appDb: AppDb) = appDb.bookSettingsDao()
 
   @Provides
+  @JvmStatic
   fun roomDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDb> {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
   }
 
   @Provides
   @Singleton
+  @JvmStatic
   fun appDb(
     builder: RoomDatabase.Builder<AppDb>,
     migrations: Array<Migration>
@@ -63,6 +69,7 @@ class PersistenceModule {
   }
 
   @Provides
+  @JvmStatic
   fun migrations(context: Context): Array<Migration> {
     return arrayOf(
       Migration23to24(),

@@ -37,7 +37,7 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule().migrations(getApplicationContext())
+      *PersistenceModule.migrations(getApplicationContext())
     )
   }
 
@@ -84,7 +84,7 @@ class DataBaseMigratorTest {
       dbName,
       45,
       true,
-      *PersistenceModule().migrations(getApplicationContext())
+      *PersistenceModule.migrations(getApplicationContext())
     )
 
     val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
@@ -217,7 +217,7 @@ class DataBaseMigratorTest {
       dbName,
       44,
       true,
-      *PersistenceModule().migrations(getApplicationContext())
+      *PersistenceModule.migrations(getApplicationContext())
     )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")
