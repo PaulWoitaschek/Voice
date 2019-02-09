@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.view.isVisible
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.getActionButton
+import com.afollestad.materialdialogs.customview.customView
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -74,14 +76,14 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
         }
       )
 
-    val dialog = MaterialDialog.Builder(activity!!)
-      .customView(container.containerView, false)
-      .title(R.string.cover)
-      .positiveText(R.string.dialog_confirm)
-      .build()
+    val dialog = MaterialDialog(activity!!).apply {
+      customView(view = container.containerView)
+      title(R.string.cover)
+      positiveButton(R.string.dialog_confirm)
+    }
 
     // use a click listener so the dialog stays open till the image was saved
-    dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
+    dialog.getActionButton(WhichButton.POSITIVE).setOnClickListener {
       val r = container.cropOverlay.selectedRect
       if (!r.isEmpty) {
         val target = object : SimpleTarget {

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
@@ -19,24 +21,23 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
     val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)
     val bookmarkId = args.getLong(NI_BOOK_ID)
 
-    val dialog = MaterialDialog.Builder(activity!!)
-      .title(de.ph1b.audiobook.R.string.bookmark_edit_title)
-      .inputType(
-        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-            or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-      )
-      .input(
-        activity!!.getString(R.string.bookmark_edit_hint),
-        bookmarkTitle,
-        false
+    val dialog = MaterialDialog(activity!!).apply {
+      title(de.ph1b.audiobook.R.string.bookmark_edit_title)
+      val inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+          InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      input(
+        hintRes = R.string.bookmark_edit_hint,
+        prefill = bookmarkTitle,
+        allowEmpty = false,
+        inputType = inputType
       ) { _, charSequence ->
         val callback = targetController as EditBookmarkDialog.Callback
         val newTitle = charSequence.toString()
         callback.onEditBookmark(bookmarkId, newTitle)
       }
-      .positiveText(de.ph1b.audiobook.R.string.dialog_confirm)
-      .build()
-    val editText = dialog.inputEditText!!
+      positiveButton(de.ph1b.audiobook.R.string.dialog_confirm)
+    }
+    val editText = dialog.getInputField()
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         val callback = targetController as EditBookmarkDialog.Callback

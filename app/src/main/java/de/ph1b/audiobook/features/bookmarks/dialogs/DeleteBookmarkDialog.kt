@@ -16,16 +16,15 @@ class DeleteBookmarkDialog(args: Bundle) : DialogController(args) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val bookId = args.getLong(NI_BOOK_ID)
     val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)!!
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.bookmark_delete_title)
-      .content(bookmarkTitle)
-      .positiveText(R.string.remove)
-      .negativeText(R.string.dialog_cancel)
-      .onPositive { _, _ ->
+    return MaterialDialog(activity!!).apply {
+      title(R.string.bookmark_delete_title)
+      message(text = bookmarkTitle)
+      positiveButton(R.string.remove) {
         val callback = targetController as Callback
         callback.onDeleteBookmarkConfirmed(bookId)
       }
-      .build()
+      negativeButton(R.string.dialog_cancel)
+    }
   }
 
   interface Callback {

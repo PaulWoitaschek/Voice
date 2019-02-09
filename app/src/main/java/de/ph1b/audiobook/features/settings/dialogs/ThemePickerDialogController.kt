@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
@@ -25,18 +26,16 @@ class ThemePickerDialogController : DialogController() {
     val existingThemes = ThemeUtil.Theme.values()
     val names = existingThemes.map { activity!!.getString(it.nameId) }
 
-    return MaterialDialog.Builder(activity!!)
-      .items(*names.toTypedArray())
-      .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
-        val newTheme = existingThemes[i]
+    return MaterialDialog(activity!!).apply {
+      listItemsSingleChoice(items = names, initialSelection = existingThemes.indexOf(oldTheme)) { _, index, _ ->
+        val newTheme = existingThemes[index]
         themePref.value = newTheme
         val delegate = (activity!! as AppCompatActivity).delegate
         delegate.setLocalNightMode(newTheme.nightMode)
-        true
       }
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .title(R.string.pref_theme_title)
-      .build()
+      positiveButton(R.string.dialog_confirm)
+      negativeButton(R.string.dialog_cancel)
+      title(R.string.pref_theme_title)
+    }
   }
 }

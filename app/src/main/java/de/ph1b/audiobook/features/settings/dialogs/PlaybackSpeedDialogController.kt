@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -57,18 +58,17 @@ class PlaybackSpeedDialogController : DialogController() {
       .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
       .doOnNext {
         // update speed text
-        val text =
-          "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
+        val text = "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
         textView.text = text
       }
       .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
       .subscribe { playerController.setSpeed(it) } // update speed after debounce
       .disposeOnDestroyDialog()
 
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.playback_speed)
-      .customView(container.containerView, true)
-      .build()
+    return MaterialDialog(activity!!).apply {
+      title(R.string.playback_speed)
+      customView(view = container.containerView, scrollable = true)
+    }
   }
 
   companion object {

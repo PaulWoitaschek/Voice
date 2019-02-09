@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
@@ -41,16 +42,15 @@ class AutoRewindDialogController : DialogController() {
       container.textView.text = autoRewindSummary
     }
 
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.pref_auto_rewind_title)
-      .customView(container.containerView, true)
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .onPositive { _, _ ->
+    return MaterialDialog(activity!!).apply {
+      title(R.string.pref_auto_rewind_title)
+      customView(view = container.containerView, scrollable = true)
+      positiveButton(R.string.dialog_confirm) {
         val newRewindAmount = container.seekBar.progress / FACTOR + MIN
         autoRewindAmountPref.value = newRewindAmount
       }
-      .build()
+      negativeButton(R.string.dialog_cancel)
+    }
   }
 
   companion object {

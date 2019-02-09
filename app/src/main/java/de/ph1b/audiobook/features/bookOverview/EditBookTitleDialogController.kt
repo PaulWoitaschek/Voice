@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -14,10 +15,6 @@ import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-/**
- * Simple dialog for changing the name of a book
- */
 
 private const val NI_PRESET_NAME = "niPresetName"
 private const val NI_BOOK_ID = "niBookId"
@@ -38,24 +35,23 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
     val presetName = args.getString(NI_PRESET_NAME)
     val bookId = args.getUUID(NI_BOOK_ID)
 
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.edit_book_title)
-      .inputType(
-        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-            or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-      )
-      .input(
-        activity!!.getString(R.string.bookmark_edit_hint), presetName,
-        false
-      ) { _, charSequence ->
-        val newText = charSequence.toString()
+    return MaterialDialog(activity!!).apply {
+      title(R.string.edit_book_title)
+      val inputType = InputType.TYPE_CLASS_TEXT or
+          InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      input(
+        inputType = inputType,
+        hintRes = R.string.change_book_name,
+        prefill = presetName
+      ) { _, text ->
+        val newText = text.toString()
         if (newText != presetName) {
           GlobalScope.launch {
             repo.updateBookName(bookId, newText)
           }
         }
+        positiveButton(R.string.dialog_confirm)
       }
-      .positiveText(R.string.dialog_confirm)
-      .build()
+    }
   }
 }

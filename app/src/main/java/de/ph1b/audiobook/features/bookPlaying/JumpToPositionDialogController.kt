@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
@@ -81,17 +82,16 @@ class JumpToPositionDialogController : DialogController() {
       }
     }
 
-    return MaterialDialog.Builder(activity!!)
-      .customView(container.containerView, true)
-      .title(R.string.action_time_change)
-      .onPositive { _, _ ->
+    return MaterialDialog(activity!!).apply {
+      customView(view = container.containerView, scrollable = true)
+      title(R.string.action_time_change)
+      positiveButton(R.string.dialog_confirm) {
         val h = container.numberHour.value
         val m = container.numberMinute.value
         val newPosition = (m + 60 * h) * 60 * 1000
         playerController.changePosition(newPosition, book.content.currentChapter.file)
       }
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .build()
+      negativeButton(R.string.dialog_cancel)
+    }
   }
 }

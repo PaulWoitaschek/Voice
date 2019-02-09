@@ -128,7 +128,8 @@ dependencies {
 
   implementation(Deps.picasso)
 
-  implementation(Deps.materialDialogs)
+  implementation(Deps.MaterialDialog.core)
+  implementation(Deps.MaterialDialog.input)
   implementation(Deps.materialCab)
 
   implementation(Deps.floatingActionButton)

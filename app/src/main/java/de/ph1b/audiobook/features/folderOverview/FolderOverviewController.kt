@@ -55,26 +55,20 @@ class FolderOverviewController :
 
     adapter = FolderOverviewAdapter { toDelete ->
       val toDeleteName = toDelete.folder
-      MaterialDialog.Builder(activity)
-        .title(R.string.delete_folder)
-        .content("${getString(R.string.delete_folder_content)}\n$toDeleteName")
-        .positiveText(R.string.remove)
-        .negativeText(R.string.dialog_cancel)
-        .onPositive { _, _ ->
-          presenter.removeFolder(toDelete)
-        }
-        .show()
+      MaterialDialog(activity).show {
+        title(R.string.delete_folder)
+        message(text = "${getString(R.string.delete_folder_content)}\n$toDeleteName")
+        positiveButton(R.string.remove) { presenter.removeFolder(toDelete) }
+        negativeButton(R.string.dialog_cancel)
+      }
     }
     recycler.adapter = adapter
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
     addAsSingle.title =
-        "${getString(R.string.folder_add_single_book)}\n" +
-        "${getString(R.string.for_example)} Harry Potter 4"
-    addAsLibrary.title =
-        "${getString(R.string.folder_add_collection)}\n" +
-        "${getString(R.string.for_example)} AudioBooks"
+      "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
+    addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
 
     setupToolbar()
   }

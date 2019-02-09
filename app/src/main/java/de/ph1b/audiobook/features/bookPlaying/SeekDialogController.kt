@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
@@ -34,19 +35,19 @@ class SeekDialogController : DialogController() {
     container.seekBar.onProgressChanged(initialNotification = true) {
       val value = it / FACTOR + MIN
       container.textView.text =
-          activity!!.resources.getQuantityString(R.plurals.seconds, value, value)
+        activity!!.resources.getQuantityString(R.plurals.seconds, value, value)
     }
     container.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.pref_seek_time)
-      .customView(container.containerView, true)
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .onPositive { _, _ ->
+    return MaterialDialog(activity!!).apply {
+      title(R.string.pref_seek_time)
+      customView(view = container.containerView, scrollable = true)
+      positiveButton(R.string.dialog_confirm) {
         val newSeekTime = container.seekBar.progress / FACTOR + MIN
         seekTimePref.value = newSeekTime
-      }.build()
+      }
+      negativeButton(R.string.dialog_cancel)
+    }
   }
 
   companion object {

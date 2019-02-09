@@ -43,11 +43,16 @@ object Deps {
   const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.1"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
-  const val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
   const val materialCab = "com.afollestad:material-cab:1.3.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.12.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
+
+  object MaterialDialog {
+    private const val version = "2.0.0"
+    const val core = "com.afollestad.material-dialogs:core:2.0.0"
+    const val input = "com.afollestad.material-dialogs:input:2.0.0"
+  }
 
   object Conductor {
     private const val version = "2.1.5"

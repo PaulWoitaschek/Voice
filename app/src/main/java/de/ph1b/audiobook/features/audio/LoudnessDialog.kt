@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
@@ -42,7 +43,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
     val bookId = args.getUUID(NI_BOOK_ID)
     val book = repo.bookById(bookId)
-      ?: return MaterialDialog.Builder(activity!!).build()
+      ?: return emptyDialog()
 
     container.seekBar.max = LoudnessGain.MAX_MB
     container.seekBar.progress = book.content.loudnessGain
@@ -57,10 +58,14 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
     container.currentValue.text = format(book.content.loudnessGain)
     container.maxValue.text = format(container.seekBar.max)
 
-    return MaterialDialog.Builder(activity!!)
-      .title(R.string.volume_boost)
-      .customView(container.containerView, true)
-      .build()
+    return MaterialDialog(activity!!).apply {
+      title(R.string.volume_boost)
+      customView(view = container.containerView, scrollable = true)
+    }
+  }
+
+  private fun emptyDialog(): Dialog {
+    return MaterialDialog(activity!!)
   }
 
   private fun format(milliDb: Int) = dbFormat.format(milliDb / 100.0)
