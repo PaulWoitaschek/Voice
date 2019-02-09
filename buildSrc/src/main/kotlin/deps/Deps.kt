@@ -40,7 +40,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.0"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.1"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialDialogs = "com.afollestad.material-dialogs:core:0.9.6.0"
@@ -56,7 +56,7 @@ object Deps {
     const val support = "com.bluelinelabs:conductor-support:$version"
   }
 
-  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.8@aar"
+  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.9@aar"
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.1"
 
   object Dagger {
@@ -79,7 +79,7 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.20"
+    private const val versionKotlin = "1.3.21"
     private const val versionCoroutines = "1.1.1"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
@@ -94,5 +94,5 @@ object Deps {
   const val mockk = "io.mockk:mockk:1.9"
   const val truth = "com.google.truth:truth:0.42"
   const val robolectric = "org.robolectric:robolectric:4.1"
-  const val ktLint = "0.29.0"
+  const val ktLint = "0.30.0"
 }
