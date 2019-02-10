@@ -67,8 +67,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
       displayZoomControls = false
       javaScriptEnabled = true
       userAgentString =
-          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+        "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
+            "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 
@@ -267,6 +267,10 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   override fun handleBack(): Boolean {
     if (MaterialCab.destroy()) {
       return true
+    }
+
+    if (noNetwork.isVisible) {
+      return false
     }
 
     if (webView.canGoBack()) {
