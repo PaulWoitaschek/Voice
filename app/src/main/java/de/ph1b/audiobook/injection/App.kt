@@ -1,7 +1,9 @@
 package de.ph1b.audiobook.injection
 
 import android.app.Application
+import android.os.Build
 import android.os.Looper
+import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
@@ -64,6 +66,13 @@ class App : Application() {
       .build()
     DataInjector.component = appComponent
     appComponent.inject(this)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      // instantiating a web-view for the first time changes the day night theme.
+      // therefore we work around by creating a webview first.
+      // https://issuetracker.google.com/issues/37124582
+      WebView(this)
+    }
 
     @Suppress("CheckResult")
     themePref.stream
