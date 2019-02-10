@@ -2,8 +2,11 @@ package de.ph1b.audiobook.features.bookOverview
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
+import androidx.core.view.doOnLayout
 import com.bluelinelabs.conductor.Controller
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -49,9 +52,14 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
       return dialog
     }
 
-    val container =
-      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.book_more_bottom_sheet))
+    val container = DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.book_more_bottom_sheet))
     dialog.setContentView(container.containerView)
+
+    BottomSheetBehavior.from(dialog.findViewById<View>(R.id.design_bottom_sheet)).apply {
+      container.containerView.doOnLayout {
+        peekHeight = it.height
+      }
+    }
 
     container.title.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
@@ -74,24 +82,24 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
       dismissDialog()
     }
 
-    tintLeftDrawable(container.title)
-    tintLeftDrawable(container.internetCover)
-    tintLeftDrawable(container.fileCover)
-    tintLeftDrawable(container.bookmark)
+    container.title.tintLeftDrawable()
+    container.internetCover.tintLeftDrawable()
+    container.fileCover.tintLeftDrawable()
+    container.bookmark.tintLeftDrawable()
 
     return dialog
   }
 
   private fun callback() = targetController as Callback
 
-  private fun tintLeftDrawable(textView: TextView) {
-    val left = textView.startCompoundDrawable()!!
+  private fun TextView.tintLeftDrawable() {
+    val left = startCompoundDrawable()!!
     val tinted = left.tinted(activity!!.color(R.color.icon_color))
-    textView.setCompoundDrawablesRelative(
+    setCompoundDrawablesRelative(
       tinted,
-      textView.topCompoundDrawable(),
-      textView.endCompoundDrawable(),
-      textView.bottomCompoundDrawable()
+      topCompoundDrawable(),
+      endCompoundDrawable(),
+      bottomCompoundDrawable()
     )
   }
 
