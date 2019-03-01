@@ -98,6 +98,7 @@ class BookOverviewHolder(
     cover.transitionName = model.transitionName
     remainingTime.text = formatTime(model.remainingTimeInMs.toLong())
     this.progress.progress = model.progress
+    this.percentageProgress.progress = model.progress
     loadBookCover.load(model.book)
 
     playingIndicator.isVisible = model.isCurrentBook

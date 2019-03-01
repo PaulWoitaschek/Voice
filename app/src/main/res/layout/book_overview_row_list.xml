@@ -86,6 +86,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <de.ph1b.audiobook.uitools.ProgressPercentageView
+        android:id="@+id/percentageProgress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/cover"
+        app:layout_constraintBottom_toBottomOf="@+id/cover" />
+
     <ImageView
         android:id="@+id/playingIndicator"
         android:layout_width="24dp"
