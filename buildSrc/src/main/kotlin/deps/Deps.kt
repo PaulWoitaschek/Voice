@@ -40,18 +40,18 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.1"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.2"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
-  const val materialCab = "com.afollestad:material-cab:1.3.1"
+  const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.12.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
 
   object MaterialDialog {
-    private const val version = "2.0.0"
-    const val core = "com.afollestad.material-dialogs:core:2.0.0"
-    const val input = "com.afollestad.material-dialogs:input:2.0.0"
+    private const val version = "2.6.0"
+    const val core = "com.afollestad.material-dialogs:core:$version"
+    const val input = "com.afollestad.material-dialogs:input:$version"
   }
 
   object Conductor {
@@ -62,7 +62,7 @@ object Deps {
   }
 
   const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.9@aar"
-  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.27.1"
+  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.28.1"
 
   object Dagger {
     private const val version = "2.21"
@@ -71,15 +71,15 @@ object Deps {
   }
 
   object ExoPlayer {
-    private const val version = "2.9.4"
+    private const val version = "2.9.6"
     const val core = "com.google.android.exoplayer:exoplayer-core:$version"
     const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$version"
     const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$version"
   }
 
   const val moshi = "com.squareup.moshi:moshi:1.8.0"
-  const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.0"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.6"
+  const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
+  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.8"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
@@ -96,8 +96,8 @@ object Deps {
   }
 
   const val junit = "junit:junit:4.12"
-  const val mockk = "io.mockk:mockk:1.9"
-  const val truth = "com.google.truth:truth:0.42"
-  const val robolectric = "org.robolectric:robolectric:4.1"
+  const val mockk = "io.mockk:mockk:1.9.3"
+  const val truth = "com.google.truth:truth:0.43"
+  const val robolectric = "org.robolectric:robolectric:4.2.1"
   const val ktLint = "0.30.0"
 }

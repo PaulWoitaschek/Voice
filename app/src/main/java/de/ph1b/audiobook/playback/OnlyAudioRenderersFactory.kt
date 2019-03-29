@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.Renderer
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
+import com.google.android.exoplayer2.mediacodec.MediaCodecSelector
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.video.VideoRendererEventListener
 import java.util.ArrayList
@@ -18,11 +19,13 @@ class OnlyAudioRenderersFactory @Inject constructor(
 
   override fun buildVideoRenderers(
     context: Context?,
+    extensionRendererMode: Int,
+    mediaCodecSelector: MediaCodecSelector?,
     drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
-    allowedVideoJoiningTimeMs: Long,
+    playClearSamplesWithoutKeys: Boolean,
     eventHandler: Handler?,
     eventListener: VideoRendererEventListener?,
-    extensionRendererMode: Int,
+    allowedVideoJoiningTimeMs: Long,
     out: ArrayList<Renderer>?
   ) {
   }

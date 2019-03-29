@@ -10,7 +10,9 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.isVisible
-import com.afollestad.materialcab.MaterialCab
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.createCab
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -45,6 +47,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   lateinit var repo: BookRepository
   @Inject
   lateinit var imageHelper: ImageHelper
+
+  private var cab: AttachedCab? = null
 
   private var webViewIsLoading = BehaviorSubject.createDefault(false)
   private val book by lazy {
@@ -126,11 +130,11 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   }
 
   private fun showCab() {
-    MaterialCab.attach(activity, R.id.cabStub) {
-      menuRes = R.menu.crop_menu
+    cab = activity.createCab(R.id.cabStub) {
+      menu(R.menu.crop_menu)
       val tintColor = activity.color(R.color.toolbarIconColor)
-      titleColor = tintColor
-      closeDrawableRes = R.drawable.close
+      titleColor(literal = tintColor)
+      closeDrawable(R.drawable.close)
       onCreate { _, menu ->
         val confirmIcon = menu.findItem(R.id.confirm).icon
         confirmIcon.setTint(tintColor)
@@ -139,7 +143,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
         if (item.itemId == R.id.confirm) {
           val bitmap = takeWebViewScreenshot()
           saveCover(bitmap)
-          MaterialCab.destroy()
+          this.destroy()
           router.popCurrentController()
           true
         } else {
@@ -151,6 +155,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
         fab.show()
         true
       }
+      slideDown()
     }
   }
 
@@ -265,7 +270,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   }
 
   override fun handleBack(): Boolean {
-    if (MaterialCab.destroy()) {
+    if (cab.destroy()) {
       return true
     }
 
