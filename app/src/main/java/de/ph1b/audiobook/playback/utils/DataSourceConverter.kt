@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.utils
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -33,7 +34,11 @@ class DataSourceConverter
   private fun Chapter.toMediaSource(): MediaSource = toMediaSource(file)
 
   fun toMediaSource(file: File): MediaSource {
-    return mediaSourceFactory.createMediaSource(Uri.fromFile(file))
+    return toMediaSource(file.toUri())
+  }
+
+  fun toMediaSource(uri: Uri): MediaSource {
+    return mediaSourceFactory.createMediaSource(uri)
   }
 
   /** convert a content to a media source. If the size is > 1 use a concat media source, else a regular */

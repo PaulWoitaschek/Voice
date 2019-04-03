@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import androidx.collection.SparseArrayCompat
+import androidx.documentfile.provider.DocumentFile
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
@@ -207,17 +208,21 @@ class BookAdder
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = mediaAnalyzer.analyze(firstChapterFile) as? MediaAnalyzer.Result.Success ?: return
+    val result =
+      mediaAnalyzer.analyze(DocumentFile.fromFile(firstChapterFile)) as? MediaAnalyzer.Result.Success ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
       bookName = result.chapterName
       if (bookName.isNullOrEmpty()) {
         val withoutExtension = rootFile.nameWithoutExtension
-        bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
+        bookName = if (withoutExtension.isEmpty()) {
+          rootFile.name!!
+        } else {
+          withoutExtension
+        }
       }
     }
-    bookName!!
 
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
@@ -251,8 +256,11 @@ class BookAdder
 
       // if the file is not valid, update time and position
       val time = if (oldCurrentFileValid) orphanedBook.content.positionInChapter else 0
-      val currentFile =
-        if (oldCurrentFileValid) orphanedBook.content.currentFile else newChapters.first().file
+      val currentFile = if (oldCurrentFileValid) {
+        orphanedBook.content.currentFile
+      } else {
+        newChapters.first().file
+      }
 
       orphanedBook = orphanedBook.updateContent {
         copy(
@@ -355,7 +363,7 @@ class BookAdder
 
       // else parse and add
       Timber.i("analyze $f")
-      val result = mediaAnalyzer.analyze(f)
+      val result = mediaAnalyzer.analyze(DocumentFile.fromFile(f))
       Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {

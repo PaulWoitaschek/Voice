@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.misc
 
 import android.content.Context
+import android.net.Uri
 import androidx.annotation.RawRes
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -56,7 +57,7 @@ class DurationAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Int? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      durationAnalyzer.duration(file)
+      durationAnalyzer.duration(Uri.fromFile(file))
     }
   }
 

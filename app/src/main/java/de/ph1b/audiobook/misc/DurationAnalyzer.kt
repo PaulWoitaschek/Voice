@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.misc
 
+import android.net.Uri
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -10,7 +11,6 @@ import kotlinx.coroutines.channels.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class DurationAnalyzer
@@ -31,10 +31,10 @@ class DurationAnalyzer
     )
   }
 
-  suspend fun duration(file: File): Int? {
+  suspend fun duration(uri: Uri): Int? {
     waitForIdle()
     return withTimeoutOrNull(3000) {
-      scan(file).takeIf { it != null && it > 0 }
+      scan(uri).takeIf { it != null && it > 0 }
     }
   }
 
@@ -53,13 +53,13 @@ class DurationAnalyzer
     }
   }
 
-  private suspend fun scan(file: File): Int? {
-    Timber.v("scan $file start")
-    val mediaSource = dataSourceConverter.toMediaSource(file)
+  private suspend fun scan(uri: Uri): Int? {
+    Timber.v("scan $uri start")
+    val mediaSource = dataSourceConverter.toMediaSource(uri)
     withContext(Main) {
       player.prepare(mediaSource)
     }
-    Timber.v("scan, prepared $file.")
+    Timber.v("scan, prepared $uri.")
     playbackState.openSubscription()
       .first {
         Timber.v("scan, state=${stateName[it]}")
@@ -75,7 +75,7 @@ class DurationAnalyzer
 
     return withContext(Main) {
       if (!player.isCurrentWindowSeekable) {
-        Timber.d("file $file is not seekable")
+        Timber.d("uri $uri is not seekable")
       }
       val duration = player.duration
       try {
@@ -85,7 +85,7 @@ class DurationAnalyzer
           duration.toInt()
         }
       } finally {
-        Timber.v("scan $file stop")
+        Timber.v("scan $uri stop")
         player.stop()
       }
     }

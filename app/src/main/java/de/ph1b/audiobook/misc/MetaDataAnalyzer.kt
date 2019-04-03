@@ -1,18 +1,22 @@
 package de.ph1b.audiobook.misc
 
+import android.content.Context
 import android.media.MediaMetadataRetriever
-import java.io.File
+import androidx.documentfile.provider.DocumentFile
 import javax.inject.Inject
 
 /**
  * Extracts meta data from media files. This class is thread safe.
  */
-class MetaDataAnalyzer @Inject constructor() {
+class MetaDataAnalyzer
+@Inject constructor(
+  private val context: Context
+) {
 
   private val mmr = MediaMetadataRetriever()
 
   @Synchronized
-  fun parse(file: File): MetaData {
+  fun parse(file: DocumentFile): MetaData {
     val chapterNameFallback = chapterNameFallback(file)
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
     repeat(2) {
@@ -28,11 +32,11 @@ class MetaDataAnalyzer @Inject constructor() {
     return MetaData(chapterName = chapterNameFallback, bookName = null, author = null, duration = null)
   }
 
-  private fun prepare(file: File): Boolean {
+  private fun prepare(file: DocumentFile): Boolean {
     // Note: MediaMetadataRetriever throws undocumented Exceptions. We catch these
     // and act appropriate.
     return try {
-      mmr.setDataSource(file.absolutePath)
+      mmr.setDataSource(context, file.uri)
       true
     } catch (e: RuntimeException) {
       false
@@ -44,11 +48,12 @@ class MetaDataAnalyzer @Inject constructor() {
       ?.takeUnless { it.isEmpty() }
   }
 
-  private fun chapterNameFallback(file: File): String {
-    return file.nameWithoutExtension
+  private fun chapterNameFallback(file: DocumentFile): String {
+    val name = file.name ?: "Chapter"
+    return name.substringBeforeLast(".")
       .trim()
       .takeUnless { it.isEmpty() }
-      ?: file.name
+      ?: name
   }
 
   private fun parseBookName(): String? = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUM)
