@@ -1,6 +1,5 @@
 import deps.Deps
 import deps.Versions
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
@@ -86,10 +85,10 @@ android {
     targetCompatibility = Versions.targetCompatibility
   }
 
-  //noinspection GroovyMissingReturnStatement
   packagingOptions {
     exclude("META-INF/rxjava.properties")
     exclude("META-INF/proguard/moshi.pro")
+    pickFirst("META-INF/atomicfu.kotlin_module")
   }
 
   flavorDimensions("free")
@@ -104,9 +103,7 @@ android {
 }
 
 androidExtensions {
-  configure(delegateClosureOf<AndroidExtensionsExtension> {
-    isExperimental = true
-  })
+  isExperimental = true
 }
 
 dependencies {

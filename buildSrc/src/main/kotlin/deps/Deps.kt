@@ -40,7 +40,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.3.2"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.4.0-rc03"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -49,7 +49,7 @@ object Deps {
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
 
   object MaterialDialog {
-    private const val version = "2.6.0"
+    private const val version = "2.7.0"
     const val core = "com.afollestad.material-dialogs:core:$version"
     const val input = "com.afollestad.material-dialogs:input:$version"
   }
@@ -65,7 +65,7 @@ object Deps {
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.28.1"
 
   object Dagger {
-    private const val version = "2.21"
+    private const val version = "2.22.1"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
@@ -84,20 +84,19 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.21"
-    private const val versionCoroutines = "1.1.1"
+    private const val versionKotlin = "1.3.30"
+    private const val versionCoroutines = "1.2.0"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
-    const val coroutinesAndroid =
-      "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
+    const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
     const val coroutinesRx = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$versionCoroutines"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionKotlin"
   }
 
   const val junit = "junit:junit:4.12"
   const val mockk = "io.mockk:mockk:1.9.3"
-  const val truth = "com.google.truth:truth:0.43"
+  const val truth = "com.google.truth:truth:0.44"
   const val robolectric = "org.robolectric:robolectric:4.2.1"
   const val ktLint = "0.30.0"
 }
