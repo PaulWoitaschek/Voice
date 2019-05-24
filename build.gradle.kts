@@ -30,8 +30,12 @@ plugins {
 }
 
 buildScan {
-  setTermsOfServiceUrl("https://gradle.com/terms-of-service")
+  termsOfServiceUrl = "https://gradle.com/terms-of-service"
   setTermsOfServiceAgree("yes")
+}
+
+tasks.wrapper {
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 tasks {

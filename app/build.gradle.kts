@@ -152,8 +152,8 @@ dependencies {
   implementation(Deps.timber)
 
   implementation(Deps.ExoPlayer.core)
-  implementation(Deps.ExoPlayer.flac)
-  implementation(Deps.ExoPlayer.opus)
+  implementation(Deps.ExoPlayer.flac) { isTransitive = false }
+  implementation(Deps.ExoPlayer.opus) { isTransitive = false }
 
   implementation(Deps.Conductor.base)
   implementation(Deps.Conductor.support)

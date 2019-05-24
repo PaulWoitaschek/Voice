@@ -24,7 +24,7 @@ object Deps {
     const val palette = "androidx.palette:palette:1.0.0"
     const val mediaCompat = "androidx.media:media:1.0.1"
     const val fragment = "androidx.fragment:fragment:1.0.0"
-    const val ktx = "androidx.core:core-ktx:1.0.1"
+    const val ktx = "androidx.core:core-ktx:1.0.2"
 
     object Room {
       const val runtime = "androidx.room:room-runtime:2.0.0"
@@ -40,7 +40,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.4.0"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.4.1"
   const val material = "com.google.android.material:material:1.0.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -49,7 +49,7 @@ object Deps {
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
 
   object MaterialDialog {
-    private const val version = "2.7.0"
+    private const val version = "2.8.1"
     const val core = "com.afollestad.material-dialogs:core:$version"
     const val input = "com.afollestad.material-dialogs:input:$version"
   }
@@ -61,8 +61,8 @@ object Deps {
     const val support = "com.bluelinelabs:conductor-support:$version"
   }
 
-  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.9@aar"
-  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.28.1"
+  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1@aar"
+  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.29.0"
 
   object Dagger {
     private const val version = "2.22.1"
@@ -71,10 +71,11 @@ object Deps {
   }
 
   object ExoPlayer {
-    private const val version = "2.9.6"
+    private const val version = "2.10.1"
+    private const val extensionVersion = "$version-3"
     const val core = "com.google.android.exoplayer:exoplayer-core:$version"
-    const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:opus:$version"
-    const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:flac:$version"
+    const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-opus:$extensionVersion"
+    const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-flac:$extensionVersion"
   }
 
   const val moshi = "com.squareup.moshi:moshi:1.8.0"
@@ -84,8 +85,8 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.30"
-    private const val versionCoroutines = "1.2.0"
+    private const val versionKotlin = "1.3.31"
+    private const val versionCoroutines = "1.2.1"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
