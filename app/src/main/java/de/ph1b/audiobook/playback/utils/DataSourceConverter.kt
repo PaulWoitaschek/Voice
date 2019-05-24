@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.Reusable
 import de.ph1b.audiobook.data.BookContent
@@ -21,19 +21,18 @@ import javax.inject.Inject
 class DataSourceConverter
 @Inject constructor(context: Context) {
 
-  private val mediaSourceFactory: ExtractorMediaSource.Factory
+  private val mediaSourceFactory: ProgressiveMediaSource.Factory
 
   init {
     val dataSourceFactory = DefaultDataSourceFactory(context, context.packageName)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
-    mediaSourceFactory = ExtractorMediaSource.Factory(dataSourceFactory)
-      .setExtractorsFactory(extractorsFactory)
+    mediaSourceFactory = ProgressiveMediaSource.Factory(dataSourceFactory, extractorsFactory)
   }
 
   private fun Chapter.toMediaSource(): MediaSource = toMediaSource(file)
 
-  fun toMediaSource(file: File): MediaSource {
+  private fun toMediaSource(file: File): MediaSource {
     return toMediaSource(file.toUri())
   }
 
