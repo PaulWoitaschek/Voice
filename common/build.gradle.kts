@@ -21,7 +21,6 @@ android {
   }
 }
 
-
 dependencies {
   implementation(Deps.Kotlin.std)
   implementation(Deps.AndroidX.appCompat)
