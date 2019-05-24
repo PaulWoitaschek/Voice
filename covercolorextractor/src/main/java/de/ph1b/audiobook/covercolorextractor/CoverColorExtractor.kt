@@ -1,13 +1,14 @@
 package de.ph1b.audiobook.covercolorextractor
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.palette.graphics.Palette
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -15,6 +16,7 @@ import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@SuppressLint("UseSparseArrays")
 class CoverColorExtractor {
 
   private val tasks = HashMap<Long, Deferred<Int?>>()
@@ -27,20 +29,22 @@ class CoverColorExtractor {
     val fileHash = fileHash(file)
     val extracted = extractedColors.getOrElse(fileHash) { 0 }
     if (extracted == 0) {
-      val task = tasks.getOrPut(fileHash) { extractionTask(file) }
+      val task = tasks.getOrPut(fileHash) { extractionAsync(file) }
       task.await()
     } else extracted
   }
 
-  private suspend fun CoroutineScope.extractionTask(file: File): Deferred<Int?> = async {
-    val bitmap = bitmapByFile(file)
-    if (bitmap != null) {
-      val extracted = extractColor(bitmap)
-      bitmap.recycle()
-      val hash = fileHash(file)
-      extractedColors[hash] = extracted
-      extracted
-    } else null
+  private suspend fun extractionAsync(file: File): Deferred<Int?> = coroutineScope {
+    async {
+      val bitmap = bitmapByFile(file)
+      if (bitmap != null) {
+        val extracted = extractColor(bitmap)
+        bitmap.recycle()
+        val hash = fileHash(file)
+        extractedColors[hash] = extracted
+        extracted
+      } else null
+    }
   }
 
   private suspend fun bitmapByFile(file: File): Bitmap? = withContext(Dispatchers.IO) {
