@@ -13,7 +13,7 @@ import timber.log.Timber
 object HeadsetPlugReceiver {
 
   private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
-  private val PLUGGED = 1
+  private const val PLUGGED = 1
   private val UNPLUGGED = 0
 
   fun events(c: Context): Observable<HeadsetState> = RxBroadcast.register(c, filter)

@@ -316,7 +316,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     clientUid: Int,
     rootHints: Bundle?
   ): BrowserRoot {
-    return MediaBrowserServiceCompat.BrowserRoot(mediaBrowserHelper.root(), null)
+    return BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
   private fun play() {

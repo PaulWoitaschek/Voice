@@ -191,6 +191,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   }
 
   companion object {
-    val MARSHMALLOW_SD_FALLBACK = "/storage"
+    const val MARSHMALLOW_SD_FALLBACK = "/storage"
   }
 }

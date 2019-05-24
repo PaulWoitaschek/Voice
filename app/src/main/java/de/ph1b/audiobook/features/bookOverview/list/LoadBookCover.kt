@@ -53,7 +53,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
         progress.color = defaultProgressColor
       }
       val extractedColor = coverColorExtractor.extract(coverFile)
-      val shouldLoadImage = coverFileLength in 1..(MAX_IMAGE_SIZE - 1)
+      val shouldLoadImage = coverFileLength in 1 until MAX_IMAGE_SIZE
       withContext(Dispatchers.Main) {
         progress.color = extractedColor ?: defaultProgressColor
         val coverReplacement = CoverReplacement(bookName, context)

@@ -8,9 +8,9 @@ import java.util.ArrayList
 
 class NoPauseAnimator(private val animator: Animator) : Animator() {
 
-  private val listeners = ArrayMap<Animator.AnimatorListener, Animator.AnimatorListener>()
+  private val listeners = ArrayMap<AnimatorListener, AnimatorListener>()
 
-  override fun addListener(listener: Animator.AnimatorListener) {
+  override fun addListener(listener: AnimatorListener) {
     val wrapper = AnimatorListenerWrapper(this, listener)
     if (!listeners.containsKey(listener)) {
       listeners[listener] = wrapper
@@ -38,7 +38,7 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     animator.interpolator = timeInterpolator
   }
 
-  override fun getListeners(): ArrayList<Animator.AnimatorListener> {
+  override fun getListeners(): ArrayList<AnimatorListener> {
     return ArrayList(listeners.keys)
   }
 
@@ -68,7 +68,7 @@ class NoPauseAnimator(private val animator: Animator) : Animator() {
     animator.removeAllListeners()
   }
 
-  override fun removeListener(listener: Animator.AnimatorListener) {
+  override fun removeListener(listener: AnimatorListener) {
     val wrapper = listeners[listener]
     if (wrapper != null) {
       listeners.remove(listener)

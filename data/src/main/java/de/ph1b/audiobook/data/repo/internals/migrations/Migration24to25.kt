@@ -78,7 +78,7 @@ class Migration24to25(
         if (configFileValid) {
           configFile.readText(Charsets.UTF_8)
           val retString = configFile.readText(Charsets.UTF_8)
-          if (!retString.isEmpty()) {
+          if (retString.isNotEmpty()) {
             playingInformation = JSONObject(retString)
           }
         }

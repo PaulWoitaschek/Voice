@@ -27,7 +27,7 @@ class BookCategoryViewModel
 
   lateinit var category: BookOverviewCategory
 
-  private fun comparatorPref(): Pref<BookComparator> = comparatorPrefForCategory[category]!!
+  private fun comparatorPref(): Pref<BookComparator> = comparatorPrefForCategory.getValue(category)
 
   fun get(): Observable<BookCategoryState> {
     val comparatorStream = comparatorPref().stream

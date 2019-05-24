@@ -22,7 +22,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
     val bookmarkId = args.getLong(NI_BOOK_ID)
 
     val dialog = MaterialDialog(activity!!).apply {
-      title(de.ph1b.audiobook.R.string.bookmark_edit_title)
+      title(R.string.bookmark_edit_title)
       val inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
           InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
       input(
@@ -31,16 +31,16 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
         allowEmpty = false,
         inputType = inputType
       ) { _, charSequence ->
-        val callback = targetController as EditBookmarkDialog.Callback
+        val callback = targetController as Callback
         val newTitle = charSequence.toString()
         callback.onEditBookmark(bookmarkId, newTitle)
       }
-      positiveButton(de.ph1b.audiobook.R.string.dialog_confirm)
+      positiveButton(R.string.dialog_confirm)
     }
     val editText = dialog.getInputField()
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
-        val callback = targetController as EditBookmarkDialog.Callback
+        val callback = targetController as Callback
         val newTitle = editText.text.toString()
         callback.onEditBookmark(bookmarkId, newTitle)
         dismissDialog()
@@ -62,7 +62,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
     operator fun <T> invoke(
       target: T,
       bookmark: Bookmark
-    ): EditBookmarkDialog where T : Controller, T : EditBookmarkDialog.Callback {
+    ): EditBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
         putLong(NI_BOOK_ID, bookmark.id)
         putString(NI_BOOKMARK_TITLE, bookmark.title)

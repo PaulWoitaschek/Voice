@@ -30,7 +30,7 @@ class Migration30to31 : IncrementalMigration(30) {
         chapterCount++
       }
       if (chapterCount == 0) {
-        db.delete(tableBook, bookIdColumn + "=?", arrayOf(bookId.toString()))
+        db.delete(tableBook, "$bookIdColumn=?", arrayOf(bookId.toString()))
       }
     }
   }

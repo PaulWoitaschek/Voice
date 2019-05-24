@@ -16,6 +16,7 @@ buildscript {
     mavenCentral()
   }
 
+  @Suppress("RemoveRedundantQualifierName")
   dependencies {
     classpath(deps.Deps.androidGradlePlugin)
     classpath(deps.Deps.Kotlin.gradlePlugin)

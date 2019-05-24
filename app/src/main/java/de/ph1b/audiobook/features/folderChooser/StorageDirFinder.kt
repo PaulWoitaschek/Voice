@@ -144,7 +144,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     } catch (ignored: Exception) {
     }
 
-    if (!output.trim { it <= ' ' }.isEmpty()) {
+    if (output.trim { it <= ' ' }.isNotEmpty()) {
       output.split("\n".toRegex()).dropLastWhile(String::isEmpty)
         .flatMapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty) }
     }

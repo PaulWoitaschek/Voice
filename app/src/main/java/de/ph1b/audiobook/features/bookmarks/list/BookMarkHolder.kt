@@ -41,12 +41,12 @@ class BookMarkHolder(
     val index = chapters.indexOf(currentChapter)
 
     summary.text = itemView.context.getString(
-      de.ph1b.audiobook.R.string.format_bookmarks_n_of,
+      R.string.format_bookmarks_n_of,
       index + 1,
       size
     )
     time.text = itemView.context.getString(
-      de.ph1b.audiobook.R.string.format_bookmarks_time,
+      R.string.format_bookmarks_time,
       formatTime(bookmark.time.toLong()),
       formatTime(currentChapter.duration.toLong())
     )

@@ -26,7 +26,7 @@ class CircularRevealBookPlayTransition : Visibility() {
       return
 
     val finalRadius = next.right - previous.left
-    transitionValues.values.put(FINAL_RADIUS, finalRadius)
+    transitionValues.values[FINAL_RADIUS] = finalRadius
   }
 
   override fun onAppear(

@@ -22,10 +22,10 @@ fun formatTime(timeMs: Long, durationMs: Long = 0): String {
 }
 
 private fun Long.digits(): Int {
-  if (this == 0L) {
-    return 0
+  return if (this == 0L) {
+    0
   } else {
-    return toString().length
+    toString().length
   }
 }
 

@@ -25,16 +25,16 @@ class AddBookmarkDialog : DialogController() {
       title(R.string.bookmark)
       input(hintRes = R.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->
         val title = charSequence.toString()
-        val callback = targetController as AddBookmarkDialog.Callback
+        val callback = targetController as Callback
         callback.onBookmarkNameChosen(title)
       }
-      positiveButton(de.ph1b.audiobook.R.string.dialog_confirm)
+      positiveButton(R.string.dialog_confirm)
     }
     val editText = dialog.getInputField()
     editText.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         val title = editText.text.toString()
-        val callback = targetController as AddBookmarkDialog.Callback
+        val callback = targetController as Callback
         callback.onBookmarkNameChosen(title)
         dismissDialog()
         true
@@ -48,7 +48,7 @@ class AddBookmarkDialog : DialogController() {
   }
 
   companion object {
-    operator fun <T> invoke(target: T) where T : Controller, T : AddBookmarkDialog.Callback =
+    operator fun <T> invoke(target: T) where T : Controller, T : Callback =
       AddBookmarkDialog().apply {
         targetController = target
       }

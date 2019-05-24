@@ -22,7 +22,7 @@ data class BookPlayChapter(
     val number = (index + 1).toString()
 
     // desired format is "1 - Title"
-    if (!chapterName.startsWith(number + " - ")) {
+    if (!chapterName.startsWith("$number - ")) {
       // if getTitle does not match desired format
       chapterName = if (chapterName.startsWith(number)) {
         // if it starts with a number, a " - " should follow

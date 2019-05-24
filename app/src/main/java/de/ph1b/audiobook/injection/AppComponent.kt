@@ -87,6 +87,6 @@ interface AppComponent : DataComponent {
   fun playbackComponent(): PlaybackComponent.Builder
 
   companion object {
-    fun builder(): AppComponent.Builder = DaggerAppComponent.builder()
+    fun builder(): Builder = DaggerAppComponent.builder()
   }
 }
