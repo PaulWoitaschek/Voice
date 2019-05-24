@@ -276,12 +276,10 @@ class CropOverlay @JvmOverloads constructor(
       canvas.drawRect(right, 0f, boundsWidth, boundsHeight, darkeningPaint) // right
       canvas.drawRect(left, bottom, right, boundsHeight, darkeningPaint) // bottom
 
-      with(canvas) {
-        topCircle.center(centerX, top)
-        leftCircle.center(left, centerY)
-        rightCircle.center(right, centerY)
-        bottomCircle.center(centerX, bottom)
-      }
+      topCircle.center(centerX, top)
+      leftCircle.center(left, centerY)
+      rightCircle.center(right, centerY)
+      bottomCircle.center(centerX, bottom)
     }
   }
 
