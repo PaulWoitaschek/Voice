@@ -51,7 +51,6 @@ class NotificationCreator
 
   private val notificationBuilder =
     NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
-      .setAutoCancel(true)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
       .setDeleteIntent(stopIntent())
       .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -65,7 +64,6 @@ class NotificationCreator
 
   fun createDummyNotification(): Notification {
     val builder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
-      .setAutoCancel(true)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setShowWhen(false)
