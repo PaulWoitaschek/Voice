@@ -12,6 +12,7 @@ import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import io.mockk.every
 import io.mockk.mockk
@@ -141,7 +142,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -150,7 +151,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -159,7 +160,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -168,7 +169,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(anotherBook.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -180,7 +181,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -196,7 +197,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -209,7 +210,7 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 
   @Test
@@ -223,6 +224,6 @@ class BookSearchHandlerTest {
     searchHandler.handle(bookSearch)
 
     assertThat(currentBookIdPref.value).isEqualTo(bookToFind.id)
-    verify(exactly = 1) { player.play() }
+    verify(exactly = 1) { player.execute(PlayerCommand.Play) }
   }
 }

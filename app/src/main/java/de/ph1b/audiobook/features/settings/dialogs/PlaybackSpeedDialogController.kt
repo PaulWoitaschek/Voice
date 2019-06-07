@@ -15,6 +15,7 @@ import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.dialog_amount_chooser.*
@@ -62,7 +63,9 @@ class PlaybackSpeedDialogController : DialogController() {
         textView.text = text
       }
       .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-      .subscribe { playerController.setSpeed(it) } // update speed after debounce
+      .subscribe {
+        playerController.execute(PlayerCommand.SetPlaybackSpeed(it))
+      } // update speed after debounce
       .disposeOnDestroyDialog()
 
     return MaterialDialog(activity!!).apply {

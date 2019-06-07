@@ -9,6 +9,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.mockk.every
@@ -124,35 +125,35 @@ class BookPlayPresenterTest {
   fun playPause() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.playPause()
-    verify(exactly = 1) { mockPlayerController.playPause() }
+    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.PlayPause) }
   }
 
   @Test
   fun rewind() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.rewind()
-    verify(exactly = 1) { mockPlayerController.rewind() }
+    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Rewind) }
   }
 
   @Test
   fun fastForward() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.fastForward()
-    verify(exactly = 1) { mockPlayerController.fastForward() }
+    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.FastForward) }
   }
 
   @Test
   fun next() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.next()
-    verify(exactly = 1) { mockPlayerController.next() }
+    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Next) }
   }
 
   @Test
   fun previous() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.previous()
-    verify(exactly = 1) { mockPlayerController.previous() }
+    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Previous) }
   }
 
   @Test
@@ -161,7 +162,9 @@ class BookPlayPresenterTest {
     bookRepoWillReturn(book)
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.seekTo(100, null)
-    verify(exactly = 1) { mockPlayerController.changePosition(100, book.content.currentFile) }
+    verify(exactly = 1) {
+      mockPlayerController.execute(PlayerCommand.SetPosition(100, book.content.currentFile))
+    }
   }
 
   private fun bookRepoWillReturn(book: Book) {
@@ -182,7 +185,9 @@ class BookPlayPresenterTest {
     bookPlayPresenter.attach(mockView)
     val lastFile = book.content.chapters.last().file
     bookPlayPresenter.seekTo(100, lastFile)
-    verify(exactly = 1) { mockPlayerController.changePosition(100, lastFile) }
+    verify(exactly = 1) {
+      mockPlayerController.execute(PlayerCommand.SetPosition(100, lastFile))
+    }
   }
 
   @Test

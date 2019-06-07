@@ -13,6 +13,7 @@ import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.putUUID
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.loudness.*
@@ -50,7 +51,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
     container.seekBar.progressChangedStream()
       .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
       .subscribe {
-        player.setLoudnessGain(it)
+        player.execute(PlayerCommand.SetLoudnessGain(it))
         container.currentValue.text = format(it)
       }
       .disposeOnDestroyDialog()

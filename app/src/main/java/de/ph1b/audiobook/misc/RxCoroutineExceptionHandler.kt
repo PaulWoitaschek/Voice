@@ -20,7 +20,7 @@ private object RxCoroutineExceptionHandler :
   }
 }
 
-object RxScope : CoroutineScope {
+private object RxScope : CoroutineScope {
 
   override val coroutineContext: CoroutineContext = RxCoroutineExceptionHandler
 }

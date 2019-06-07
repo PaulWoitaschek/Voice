@@ -23,7 +23,7 @@ import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -44,7 +44,6 @@ class WidgetUpdater @Inject constructor(
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   private val imageHelper: ImageHelper,
-  private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val windowManager: Provider<WindowManager>
 ) {
@@ -142,7 +141,7 @@ class WidgetUpdater @Inject constructor(
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      playerController.playPauseIntent,
+      PlayerCommand.PlayPause.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
@@ -150,7 +149,7 @@ class WidgetUpdater @Inject constructor(
     val fastForwardPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      playerController.fastForwardAutoPlayIntent,
+      PlayerCommand.FastForward.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
@@ -158,7 +157,7 @@ class WidgetUpdater @Inject constructor(
     val rewindPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_REWIND,
-      playerController.rewindAutoPlayerIntent,
+      PlayerCommand.RewindAutoPlay.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)

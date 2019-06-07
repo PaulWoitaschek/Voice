@@ -5,8 +5,9 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.os.Build
+import android.os.Binder
 import android.os.Bundle
+import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
@@ -31,13 +32,15 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
+
+private const val NOTIFICATION_ID = 42
 
 /**
  * Service that hosts the longtime playback and handles its controls.
@@ -45,7 +48,6 @@ import javax.inject.Named
 class PlaybackService : MediaBrowserServiceCompat() {
 
   private val disposables = CompositeDisposable()
-  private var isForeground = false
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
@@ -120,9 +122,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .distinctUntilChanged { book -> book.content.currentChapter }
       .switchMapCompletable {
         rxCompletable {
-          if (isForeground) {
-            updateNotification(it)
-          }
+          updateNotification(it)
         }
       }
       .subscribe()
@@ -172,13 +172,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
       .filter { it == PlayState.STOPPED }
       .subscribe {
-        Timber.d("STOPPED for $idleTimeOutInSeconds. Stop self")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          // Android O has the dumb restriction that a service that was launched by startForegroundService must go to foreground within
-          // 10 seconds - even if we are going to stop it anyways.
-          // @see [https://issuetracker.google.com/issues/76112072]
-          startForeground(NOTIFICATION_ID, notificationCreator.createDummyNotification())
-        }
+        Timber.d("Stopped for $idleTimeOutInSeconds. Stop self")
         stopSelf()
       }
       .disposeOnDestroy()
@@ -186,15 +180,19 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun currentBookIdChanged(id: UUID) {
     if (player.bookContent?.id != id) {
-      player.stop()
-      repo.bookById(id)?.let { player.init(it.content) }
+      val book = repo.bookById(id)
+      if (book != null) {
+        player.init(book.content)
+      } else {
+        player.stop()
+      }
     }
   }
 
   private fun headsetPlugged() {
     if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
       if (resumeOnReplugPref.value) {
-        play()
+        execute(PlayerCommand.Play)
       }
     }
   }
@@ -228,12 +226,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.isActive = false
     notificationManager.cancel(NOTIFICATION_ID)
     stopForeground(true)
-    isForeground = false
   }
 
   private suspend fun handlePlaybackStatePaused() {
     stopForeground(false)
-    isForeground = false
     currentBook()?.let {
       updateNotification(it)
     }
@@ -245,58 +241,78 @@ class PlaybackService : MediaBrowserServiceCompat() {
     currentBook()?.let {
       val notification = notificationCreator.createNotification(it)
       startForeground(NOTIFICATION_ID, notification)
-      isForeground = true
     }
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
-    when (intent?.action) {
-      Intent.ACTION_MEDIA_BUTTON -> {
+    if (intent != null) {
+      if (intent.action == Intent.ACTION_MEDIA_BUTTON) {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
-      }
-      PlayerController.ACTION_SPEED -> {
-        val speed = intent.getFloatExtra(PlayerController.EXTRA_SPEED, 1F)
-        player.setPlaybackSpeed(speed)
-      }
-      PlayerController.ACTION_CHANGE -> {
-        val time = intent.getIntExtra(PlayerController.CHANGE_TIME, 0)
-        val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
-        player.changePosition(time, file)
-      }
-      PlayerController.ACTION_FORCE_NEXT -> player.next()
-      PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(toNullOfNewTrack = true)
-      PlayerController.ACTION_LOUDNESS -> {
-        val loudness = intent.getIntExtra(PlayerController.CHANGE_LOUDNESS, 0)
-        player.setLoudnessGain(loudness)
-      }
-      PlayerController.ACTION_SKIP_SILENCE -> {
-        val skipSilences = intent.getBooleanExtra(PlayerController.SKIP_SILENCE, false)
-        player.setSkipSilences(skipSilences)
-      }
-      PlayerController.ACTION_PLAY_PAUSE -> {
-        if (playStateManager.playState == PlayState.PLAYING) {
-          player.pause(true)
-        } else {
-          play()
-        }
-      }
-      PlayerController.ACTION_STOP -> player.stop()
-      PlayerController.ACTION_PLAY -> play()
-      PlayerController.ACTION_REWIND -> player.skip(forward = false)
-      PlayerController.ACTION_REWIND_AUTO_PLAY -> {
-        player.skip(forward = false)
-        play()
-      }
-      PlayerController.ACTION_FAST_FORWARD -> player.skip(forward = true)
-      PlayerController.ACTION_FAST_FORWARD_AUTO_PLAY -> {
-        player.skip(forward = true)
-        play()
+      } else {
+        PlayerCommand.fromIntent(intent)?.let(::execute)
       }
     }
 
     return Service.START_NOT_STICKY
+  }
+
+  fun execute(command: PlayerCommand) {
+    return when (command) {
+      PlayerCommand.Play -> {
+        GlobalScope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+        player.play()
+      }
+      PlayerCommand.Next -> {
+        player.next()
+      }
+      PlayerCommand.PlayPause -> {
+        if (playStateManager.playState == PlayState.PLAYING) {
+          player.pause(true)
+        } else {
+          execute(PlayerCommand.Play)
+        }
+      }
+      PlayerCommand.Rewind -> {
+        player.skip(forward = false)
+      }
+      PlayerCommand.FastForward -> {
+        player.skip(forward = true)
+      }
+      PlayerCommand.Previous -> {
+        player.previous(toNullOfNewTrack = true)
+      }
+      is PlayerCommand.SkipSilence -> {
+        player.setSkipSilences(command.skipSilence)
+      }
+      is PlayerCommand.SetLoudnessGain -> {
+        player.setLoudnessGain(command.mB)
+      }
+      is PlayerCommand.SetPlaybackSpeed -> {
+        player.setPlaybackSpeed(command.speed)
+      }
+      is PlayerCommand.SetPosition -> {
+        player.changePosition(command.time, command.file)
+      }
+      PlayerCommand.FastForwardAutoPlay -> {
+        player.skip(forward = true)
+        execute(PlayerCommand.Play)
+      }
+      PlayerCommand.Stop -> {
+        player.stop()
+      }
+      PlayerCommand.RewindAutoPlay -> {
+        player.skip(forward = false)
+        execute(PlayerCommand.Play)
+      }
+      is PlayerCommand.PlayChapterAtIndex -> {
+        val chapter = player.bookContent
+          ?.chapters?.getOrNull(command.index.toInt()) ?: return
+        player.changePosition(0, chapter.file)
+        player.play()
+      }
+    }
   }
 
   override fun onLoadChildren(
@@ -304,11 +320,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     result: Result<List<MediaBrowserCompat.MediaItem>>
   ) {
     result.detach()
-    val job = GlobalScope.launch {
+    GlobalScope.launch {
       val children = mediaBrowserHelper.loadChildren(parentId)
       result.sendResult(children)
-    }
-    Disposables.fromAction { job.cancel() }.disposeOnDestroy()
+    }.disposeOnDestroy()
   }
 
   override fun onGetRoot(
@@ -319,13 +334,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
-  private fun play() {
-    GlobalScope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
-    player.play()
-  }
-
   private fun Disposable.disposeOnDestroy() {
     disposables.add(this)
+  }
+
+  private fun Job.disposeOnDestroy() {
+    val disposable = Disposables.fromAction { cancel() }
+    disposables.add(disposable)
   }
 
   override fun onDestroy() {
@@ -339,7 +354,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
     super.onDestroy()
   }
 
-  companion object {
-    private const val NOTIFICATION_ID = 42
-  }
+  private val binder = PlaybackServiceBinder(this)
+
+  override fun onBind(intent: Intent?): IBinder = binder
+
+  class PlaybackServiceBinder(val service: PlaybackService) : Binder()
 }

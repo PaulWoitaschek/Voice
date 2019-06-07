@@ -22,7 +22,7 @@ import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.PlayerCommand
 import kotlinx.android.synthetic.main.activity_book.*
 import java.util.UUID
 import javax.inject.Inject
@@ -41,8 +41,6 @@ class MainActivity : BaseActivity(), RouterProvider {
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
-  @Inject
-  lateinit var playerController: PlayerController
   @Inject
   lateinit var repo: BookRepository
   @Inject
@@ -119,7 +117,7 @@ class MainActivity : BaseActivity(), RouterProvider {
         val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(it.id).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
-        playerController.play()
+        playerController.execute(PlayerCommand.Play)
         return
       }
     }

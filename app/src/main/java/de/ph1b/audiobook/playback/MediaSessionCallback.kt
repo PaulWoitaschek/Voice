@@ -21,17 +21,13 @@ class MediaSessionCallback @Inject constructor(
   private val currentBookIdPref: Pref<UUID>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
-  private val player: MediaPlayer,
   private val bookSearchParser: BookSearchParser,
-  private val playStateManager: PlayStateManager
+  private val playerController: PlayerController
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
     Timber.i("onSkipToQueueItem $id")
-    val chapter = player.bookContent
-      ?.chapters?.getOrNull(id.toInt()) ?: return
-    player.changePosition(time = 0, changedFile = chapter.file)
-    player.play()
+    playerController.execute(PlayerCommand.PlayChapterAtIndex(id))
   }
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
@@ -55,7 +51,7 @@ class MediaSessionCallback @Inject constructor(
   override fun onSkipToNext() {
     Timber.i("onSkipToNext")
     if (autoConnection.connected) {
-      player.next()
+      playerController.execute(PlayerCommand.Next)
     } else {
       onFastForward()
     }
@@ -63,13 +59,13 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onRewind() {
     Timber.i("onRewind")
-    player.skip(forward = false)
+    playerController.execute(PlayerCommand.RewindAutoPlay)
   }
 
   override fun onSkipToPrevious() {
     Timber.i("onSkipToPrevious")
     if (autoConnection.connected) {
-      player.previous(toNullOfNewTrack = true)
+      playerController.execute(PlayerCommand.Previous)
     } else {
       onRewind()
     }
@@ -77,32 +73,24 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onFastForward() {
     Timber.i("onFastForward")
-    player.skip(forward = true)
+    playerController.execute(PlayerCommand.FastForwardAutoPlay)
   }
 
   override fun onStop() {
     Timber.i("onStop")
-    player.stop()
+    playerController.execute(PlayerCommand.Stop)
   }
 
   override fun onPause() {
     Timber.i("onPause")
     // sometimes the system handles this wrongly so we toggle playPause
-    playPause()
+    playerController.execute(PlayerCommand.PlayPause)
   }
 
   override fun onPlay() {
     Timber.i("onPlay")
     // sometimes the system handles this wrongly so we toggle playPause
-    playPause()
-  }
-
-  private fun playPause() {
-    if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {
-      player.pause(rewind = true)
-    } else {
-      player.play()
-    }
+    playerController.execute(PlayerCommand.PlayPause)
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {

@@ -16,7 +16,7 @@ import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -36,10 +36,9 @@ class NotificationCreator
 @Inject constructor(
   private val context: Context,
   private val imageHelper: ImageHelper,
-  private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val mediaSession: MediaSessionCompat,
-  private val notificationChannelCreator: NotificationChannelCreator
+  notificationChannelCreator: NotificationChannelCreator
 ) {
 
   private var cachedImage: CachedImage? = null
@@ -61,17 +60,6 @@ class NotificationCreator
       .setWhen(0)
   // notificationBuilder is not thread-save, we need to synchronize the access.
   private val notificationBuilderLock = Mutex()
-
-  fun createDummyNotification(): Notification {
-    val builder = NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
-      .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
-      .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-      .setShowWhen(false)
-      .setSmallIcon(R.drawable.ic_notification)
-      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-      .setWhen(0)
-    return builder.build()
-  }
 
   suspend fun createNotification(book: Book): Notification {
     return notificationBuilderLock.withLock {
@@ -161,7 +149,7 @@ class NotificationCreator
   private fun stopIntent(): PendingIntent = PendingIntent.getService(
     context,
     KeyEvent.KEYCODE_MEDIA_STOP,
-    playerController.stopIntent,
+    PlayerCommand.Stop.toIntent(context),
     PendingIntent.FLAG_UPDATE_CURRENT
   )
 
@@ -169,7 +157,7 @@ class NotificationCreator
     val fastForwardPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      playerController.fastForwardAutoPlayIntent,
+      PlayerCommand.FastForwardAutoPlay.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return addAction(
@@ -183,7 +171,7 @@ class NotificationCreator
     val rewindPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_REWIND,
-      playerController.rewindAutoPlayerIntent,
+      PlayerCommand.Rewind.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
@@ -195,7 +183,7 @@ class NotificationCreator
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      playerController.playPauseIntent,
+      PlayerCommand.PlayPause.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return if (playState == PlayStateManager.PlayState.PLAYING) {

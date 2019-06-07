@@ -13,6 +13,7 @@ import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.dialog_time_picker.*
 import java.util.UUID
@@ -89,7 +90,7 @@ class JumpToPositionDialogController : DialogController() {
         val h = container.numberHour.value
         val m = container.numberMinute.value
         val newPosition = (m + 60 * h) * 60 * 1000
-        playerController.changePosition(newPosition, book.content.currentChapter.file)
+        playerController.execute(PlayerCommand.SetPosition(newPosition, book.content.currentChapter.file))
       }
       negativeButton(R.string.dialog_cancel)
     }

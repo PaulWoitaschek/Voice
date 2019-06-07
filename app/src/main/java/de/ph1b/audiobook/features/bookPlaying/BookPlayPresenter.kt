@@ -8,6 +8,7 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import kotlinx.coroutines.Dispatchers
@@ -65,36 +66,36 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   }
 
   override fun playPause() {
-    playerController.playPause()
+    playerController.execute(PlayerCommand.PlayPause)
   }
 
   override fun rewind() {
-    playerController.rewind()
+    playerController.execute(PlayerCommand.Rewind)
   }
 
   override fun fastForward() {
-    playerController.fastForward()
+    playerController.execute(PlayerCommand.FastForward)
   }
 
   override fun next() {
-    playerController.next()
+    playerController.execute(PlayerCommand.Next)
   }
 
   override fun previous() {
-    playerController.previous()
+    playerController.execute(PlayerCommand.Previous)
   }
 
   override fun seekTo(position: Int, file: File?) {
     Timber.i("seekTo position$position, file$file")
     val book = bookRepository.bookById(bookId)
       ?: return
-    playerController.changePosition(position, file ?: book.content.currentFile)
+    playerController.execute(PlayerCommand.SetPosition(position, file ?: book.content.currentFile))
   }
 
   override fun toggleSkipSilence() {
     val skipSilence = bookRepository.bookById(bookId)?.content?.skipSilence
       ?: return
-    playerController.setSkipSilence(!skipSilence)
+    playerController.execute(PlayerCommand.SkipSilence(!skipSilence))
   }
 
   override fun toggleSleepTimer() {
