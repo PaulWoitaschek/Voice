@@ -77,6 +77,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
+  private var started = false
+
   override fun onCreate() {
     appComponent.playbackComponent()
       .playbackService(this)
@@ -244,6 +246,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.d("set mediaSession to active")
     mediaSession.isActive = true
     currentBook()?.let {
+      if (!started) {
+        started = true
+        // in case this service was not started but just bound, start it.
+        startForegroundService(Intent(this, javaClass))
+      }
       val notification = notificationCreator.createNotification(it)
       startForeground(NOTIFICATION_ID, notification)
     }
