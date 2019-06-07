@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Binder
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
@@ -225,7 +226,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun handlePlaybackStateStopped() {
     mediaSession.isActive = false
     notificationManager.cancel(NOTIFICATION_ID)
-    stopForeground(true)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      stopForeground(STOP_FOREGROUND_DETACH)
+    } else {
+      stopForeground(true)
+    }
   }
 
   private suspend fun handlePlaybackStatePaused() {
