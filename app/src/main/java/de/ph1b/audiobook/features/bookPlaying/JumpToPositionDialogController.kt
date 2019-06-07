@@ -40,8 +40,8 @@ class JumpToPositionDialogController : DialogController() {
     val book = repo.bookById(currentBookIdPref.value)!!
     val duration = book.content.currentChapter.duration
     val position = book.content.positionInChapter
-    val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()
-    val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
+    val biggestHour = TimeUnit.MILLISECONDS.toHours(duration).toInt()
+    val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration).toInt()
     if (biggestHour == 0) {
       // sets visibility of hour related things to gone if max.hour is zero
       container.colon.isVisible = false
@@ -51,14 +51,14 @@ class JumpToPositionDialogController : DialogController() {
     // set maximum values
     container.numberHour.maxValue = biggestHour
     if (biggestHour == 0) {
-      container.numberMinute.maxValue = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()).toInt()
+      container.numberMinute.maxValue = TimeUnit.MILLISECONDS.toMinutes(duration).toInt()
     } else {
       container.numberMinute.maxValue = 59
     }
 
     // set default values
-    val defaultHour = TimeUnit.MILLISECONDS.toHours(position.toLong()).toInt()
-    val defaultMinute = TimeUnit.MILLISECONDS.toMinutes(position.toLong()).toInt() % 60
+    val defaultHour = TimeUnit.MILLISECONDS.toHours(position).toInt()
+    val defaultMinute = TimeUnit.MILLISECONDS.toMinutes(position).toInt() % 60
     container.numberHour.value = defaultHour
     container.numberMinute.value = defaultMinute
 
@@ -89,7 +89,7 @@ class JumpToPositionDialogController : DialogController() {
       positiveButton(R.string.dialog_confirm) {
         val h = container.numberHour.value
         val m = container.numberMinute.value
-        val newPosition = (m + 60 * h) * 60 * 1000
+        val newPosition = (m + 60 * h) * 60 * 1000L
         playerController.execute(PlayerCommand.SetPosition(newPosition, book.content.currentChapter.file))
       }
       negativeButton(R.string.dialog_cancel)

@@ -113,7 +113,7 @@ class ChangeNotifier @Inject constructor(
         context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
         val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
-          .setState(playState.playbackStateCompat, position.toLong(), book.content.playbackSpeed)
+          .setState(playState.playbackStateCompat, position, book.content.playbackSpeed)
           .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
           .build()
 
@@ -155,7 +155,7 @@ class ChangeNotifier @Inject constructor(
           mediaMetaDataBuilder
             .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration.toLong())
+            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration)
             .putLong(
               MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
               (book.content.currentChapterIndex + 1).toLong()
@@ -198,7 +198,7 @@ class ChangeNotifier @Inject constructor(
       bookName: String,
       chapterName: String,
       playState: PlayStateManager.PlayState,
-      time: Int
+      time: Long
     ) =
       intent.apply {
         putExtra("id", 1)

@@ -25,17 +25,25 @@ data class BookContent(
   val currentChapterIndex = chapters.indexOf(currentChapter)
   val previousChapter = chapters.getOrNull(currentChapterIndex - 1)
   val nextChapter = chapters.getOrNull(currentChapterIndex + 1)
-  val nextChapterMarkPosition: Int? by lazy {
+  val nextChapterMarkPosition: Long? by lazy {
     currentChapter.marks.forEachIndexed { _, start, _ ->
-      if (start > settings.positionInChapter) return@lazy start
+      if (start > settings.positionInChapter) return@lazy start.toLong()
     }
     null
   }
   val duration = chapters.sumBy { it.duration }
-  val position: Int = chapters.take(currentChapterIndex).sumBy { it.duration } + settings.positionInChapter
+  val position: Long = chapters.take(currentChapterIndex).sumBy { it.duration } + settings.positionInChapter
   val currentFile = settings.currentFile
   val positionInChapter = settings.positionInChapter
   val loudnessGain = settings.loudnessGain
   val skipSilence = settings.skipSilence
   val playbackSpeed = settings.playbackSpeed
+}
+
+private inline fun <T> Iterable<T>.sumBy(selector: (T) -> Long): Long {
+  var sum = 0L
+  forEach { element ->
+    sum += selector(element)
+  }
+  return sum
 }

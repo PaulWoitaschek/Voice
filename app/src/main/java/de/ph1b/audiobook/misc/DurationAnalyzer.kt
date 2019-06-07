@@ -31,7 +31,7 @@ class DurationAnalyzer
     )
   }
 
-  suspend fun duration(uri: Uri): Int? {
+  suspend fun duration(uri: Uri): Long? {
     waitForIdle()
     return withTimeoutOrNull(3000) {
       scan(uri).takeIf { it != null && it > 0 }
@@ -53,7 +53,7 @@ class DurationAnalyzer
     }
   }
 
-  private suspend fun scan(uri: Uri): Int? {
+  private suspend fun scan(uri: Uri): Long? {
     Timber.v("scan $uri start")
     val mediaSource = dataSourceConverter.toMediaSource(uri)
     withContext(Main) {
@@ -79,11 +79,7 @@ class DurationAnalyzer
       }
       val duration = player.duration
       try {
-        if (duration == C.TIME_UNSET) {
-          null
-        } else {
-          duration.toInt()
-        }
+        duration.takeUnless { it == C.TIME_UNSET }
       } finally {
         Timber.v("scan $uri stop")
         player.stop()

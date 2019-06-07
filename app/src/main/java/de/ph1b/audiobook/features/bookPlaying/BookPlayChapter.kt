@@ -7,8 +7,8 @@ import java.io.File
 
 data class BookPlayChapter(
   val file: File,
-  val start: Int,
-  val stop: Int,
+  val start: Long,
+  val stop: Long,
   val name: String
 ) {
 
@@ -41,8 +41,8 @@ fun List<Chapter>.chaptersAsBookPlayChapters(): List<BookPlayChapter> {
   forEach {
     if (it.marks.size() > 1) {
       it.marks.forEachIndexed { index, position, name ->
-        val start = if (index == 0) 0 else position
-        val nextPosition = it.marks.keyAtOrNull(index + 1)
+        val start = if (index == 0) 0L else position.toLong()
+        val nextPosition = it.marks.keyAtOrNull(index + 1)?.toLong()
         val stop = if (nextPosition == null) it.duration else nextPosition - 1
         data.add(BookPlayChapter(it.file, start, stop, name))
       }

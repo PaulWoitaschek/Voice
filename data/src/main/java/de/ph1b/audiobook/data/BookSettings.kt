@@ -14,7 +14,7 @@ data class BookSettings(
   @ColumnInfo(name = "currentFile")
   val currentFile: File,
   @ColumnInfo(name = "positionInChapter")
-  val positionInChapter: Int,
+  val positionInChapter: Long,
   @ColumnInfo(name = "playbackSpeed")
   val playbackSpeed: Float = 1F,
   @ColumnInfo(name = "loudnessGain")

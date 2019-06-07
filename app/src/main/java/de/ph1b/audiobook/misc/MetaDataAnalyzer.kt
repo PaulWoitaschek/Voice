@@ -64,8 +64,8 @@ class MetaDataAnalyzer
       ?: mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
   }
 
-  private fun parseDuration(): Int {
-    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toIntOrNull() ?: 0
+  private fun parseDuration(): Long {
+    return mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0
   }
 
   /**
@@ -84,6 +84,6 @@ class MetaDataAnalyzer
     val chapterName: String,
     val bookName: String?,
     val author: String?,
-    val duration: Int?
+    val duration: Long?
   )
 }

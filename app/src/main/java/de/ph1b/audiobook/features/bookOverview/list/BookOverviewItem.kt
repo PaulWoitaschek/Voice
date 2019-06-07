@@ -19,7 +19,7 @@ data class BookOverviewModel(
   @FloatRange(from = 0.0, to = 1.0)
   val progress: Float,
   val book: Book,
-  val remainingTimeInMs: Int,
+  val remainingTimeInMs: Long,
   val isCurrentBook: Boolean,
   val useGridView: Boolean
 ) : BookOverviewItem() {
@@ -65,6 +65,6 @@ private fun Book.progress(): Float {
   return progress.coerceIn(0F, 1F)
 }
 
-private fun Book.remainingTimeInMs(): Int {
+private fun Book.remainingTimeInMs(): Long {
   return content.duration - content.position
 }

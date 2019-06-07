@@ -93,6 +93,10 @@ class MediaSessionCallback @Inject constructor(
     playerController.execute(PlayerCommand.PlayPause)
   }
 
+  override fun onSeekTo(pos: Long) {
+    playerController.execute(PlayerCommand.Seek(pos))
+  }
+
   override fun onCustomAction(action: String?, extras: Bundle?) {
     Timber.i("onCustomAction $action")
     when (action) {

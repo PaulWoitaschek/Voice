@@ -24,7 +24,7 @@ data class Chapter(
   @ColumnInfo(name = "name")
   val name: String,
   @ColumnInfo(name = "duration")
-  val duration: Int,
+  val duration: Long,
   @ColumnInfo(name = "fileLastModified")
   val fileLastModified: Long,
   @ColumnInfo(name = "marks")

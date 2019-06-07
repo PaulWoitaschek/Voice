@@ -94,14 +94,14 @@ class BookPlayController(
     val chapterIndex = data.indexOf(currentChapter)
     bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
-    seekBar.max = duration
-    maxTime.text = formatTime(duration.toLong(), duration.toLong())
+    seekBar.max = duration.toInt()
+    maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
     val progress = book.content.positionInChapter - currentChapter.start
     if (!seekBar.isPressed) {
-      seekBar.progress = progress
-      playedTime.text = formatTime(progress.toLong(), duration.toLong())
+      seekBar.progress = progress.toInt()
+      playedTime.text = formatTime(progress, duration)
     }
 
     // name

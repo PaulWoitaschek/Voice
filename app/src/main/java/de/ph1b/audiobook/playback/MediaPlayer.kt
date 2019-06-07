@@ -88,7 +88,6 @@ constructor(
     player.onPositionDiscontinuity {
       val position = player.currentPosition
         .coerceAtLeast(0)
-        .toInt()
       Timber.i("onPositionDiscontinuity with currentPos=$position")
       bookContent?.let {
         checkMainThread()
@@ -132,18 +131,16 @@ constructor(
           Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map {
               checkMainThread()
-              player.currentPosition
+              player.currentPosition.coerceAtLeast(0)
             }
             .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
         } else Observable.empty()
       }
-      .subscribe {
+      .subscribe { time ->
         // update the book
         bookContent?.let { book ->
           checkMainThread()
           val index = player.currentWindowIndex
-          val time = it.coerceAtLeast(0)
-            .toInt()
           val copy = book.updateSettings {
             copy(positionInChapter = time, currentFile = book.chapters[index].file)
           }
@@ -169,7 +166,7 @@ constructor(
     checkMainThread()
     player.playWhenReady = false
     player.prepare(dataSourceConverter.toMediaSource(content))
-    player.seekTo(content.currentChapterIndex, content.positionInChapter.toLong())
+    player.seekTo(content.currentChapterIndex, content.positionInChapter)
     player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
     loudnessGain.gainmB = content.loudnessGain
     state = PlayerState.PAUSED
@@ -230,7 +227,7 @@ constructor(
       when {
         seekTo < 0 -> previous(false)
         seekTo > duration -> next()
-        else -> changePosition(seekTo.toInt())
+        else -> changePosition(seekTo)
       }
     }
   }
@@ -279,11 +276,11 @@ constructor(
       if (content.positionInChapter >= startOfMark) {
         val diff = content.positionInChapter - startOfMark
         if (diff > 2000) {
-          changePosition(startOfMark)
+          changePosition(startOfMark.toLong())
           return true
         } else if (index > 0) {
           val seekTo = marks.keyAt(index - 1)
-          changePosition(seekTo)
+          changePosition(seekTo.toLong())
           return true
         }
       }
@@ -340,7 +337,7 @@ constructor(
               }
 
               // finally change position
-              changePosition(maybeSeekTo.toInt())
+              changePosition(maybeSeekTo)
             }
           }
         }
@@ -362,7 +359,7 @@ constructor(
   }
 
   /** Changes the current position in book. */
-  fun changePosition(time: Int, changedFile: File? = null) {
+  fun changePosition(time: Long, changedFile: File? = null) {
     checkMainThread()
     Timber.v("changePosition with time $time and file $changedFile")
     prepareIfIdle()
@@ -374,7 +371,7 @@ constructor(
         copy(positionInChapter = time, currentFile = changedFile ?: currentFile)
       }
       _bookContent.onNext(copy)
-      player.seekTo(copy.currentChapterIndex, time.toLong())
+      player.seekTo(copy.currentChapterIndex, time)
     }
   }
 

@@ -16,7 +16,7 @@ data class Bookmark(
   @ColumnInfo(name = "title")
   val title: String,
   @ColumnInfo(name = "time")
-  val time: Int,
+  val time: Long,
   @ColumnInfo(name = "id")
   @PrimaryKey(autoGenerate = true)
   val id: Long = ID_UNKNOWN

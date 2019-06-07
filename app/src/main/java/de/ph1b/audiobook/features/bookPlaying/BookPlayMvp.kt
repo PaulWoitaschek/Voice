@@ -23,7 +23,7 @@ interface BookPlayMvp {
     abstract fun fastForward()
     abstract fun next()
     abstract fun previous()
-    abstract fun seekTo(position: Int, file: File? = null)
+    abstract fun seekTo(position: Long, file: File? = null)
     abstract fun toggleSleepTimer()
     abstract fun addBookmark()
     abstract fun toggleSkipSilence()

@@ -312,6 +312,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
         player.changePosition(0, chapter.file)
         player.play()
       }
+      is PlayerCommand.Seek -> {
+        player.changePosition(command.time)
+      }
     }
   }
 

@@ -39,7 +39,10 @@ sealed class PlayerCommand : Parcelable {
   data class SetPlaybackSpeed(val speed: Float) : PlayerCommand()
 
   @Parcelize
-  data class SetPosition(val time: Int, val file: File) : PlayerCommand()
+  data class SetPosition(val time: Long, val file: File) : PlayerCommand()
+
+  @Parcelize
+  data class Seek(val time: Long) : PlayerCommand()
 
   @Parcelize
   data class PlayChapterAtIndex(val index: Long) : PlayerCommand()
