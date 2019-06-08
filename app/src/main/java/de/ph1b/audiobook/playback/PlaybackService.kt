@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Binder
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.core.app.ServiceCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
 import de.ph1b.audiobook.common.getIfPresent
@@ -229,16 +229,15 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
 
   private fun handlePlaybackStateStopped() {
     mediaSession.isActive = false
-    notificationManager.cancel(NOTIFICATION_ID)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      stopForeground(STOP_FOREGROUND_DETACH)
-    } else {
+    if (dismissNotificationOnStop) {
       stopForeground(true)
+    } else {
+      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
     }
   }
 
   private suspend fun handlePlaybackStatePaused() {
-    stopForeground(false)
+    ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
     currentBook()?.let {
       updateNotification(it)
     }
@@ -355,14 +354,16 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
     disposables.add(this)
   }
 
+  private var dismissNotificationOnStop = false
+
   override fun onDestroy() {
     Timber.v("onDestroy called")
+    dismissNotificationOnStop = playStateManager.playState == PlayState.PAUSED
     player.stop()
 
     mediaSession.release()
-    disposables.dispose()
     onCreateJob.cancel()
-
+    disposables.dispose()
     notifyOnAutoConnectionChange.unregister()
     super.onDestroy()
   }
