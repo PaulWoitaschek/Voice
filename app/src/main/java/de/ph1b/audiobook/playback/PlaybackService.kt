@@ -30,10 +30,10 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -46,8 +46,10 @@ private const val NOTIFICATION_ID = 42
 /**
  * Service that hosts the longtime playback and handles its controls.
  */
-class PlaybackService : MediaBrowserServiceCompat() {
+class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
 
+  private val onCreateJob = SupervisorJob()
+  override val coroutineContext = onCreateJob + Dispatchers.Main
   private val disposables = CompositeDisposable()
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
@@ -273,7 +275,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   fun execute(command: PlayerCommand) {
     return when (command) {
       PlayerCommand.Play -> {
-        GlobalScope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+        launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
         player.play()
       }
       PlayerCommand.Next -> {
@@ -335,10 +337,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     result: Result<List<MediaBrowserCompat.MediaItem>>
   ) {
     result.detach()
-    GlobalScope.launch {
+    launch {
       val children = mediaBrowserHelper.loadChildren(parentId)
       result.sendResult(children)
-    }.disposeOnDestroy()
+    }
   }
 
   override fun onGetRoot(
@@ -353,17 +355,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
     disposables.add(this)
   }
 
-  private fun Job.disposeOnDestroy() {
-    val disposable = Disposables.fromAction { cancel() }
-    disposables.add(disposable)
-  }
-
   override fun onDestroy() {
     Timber.v("onDestroy called")
     player.stop()
 
     mediaSession.release()
     disposables.dispose()
+    onCreateJob.cancel()
 
     notifyOnAutoConnectionChange.unregister()
     super.onDestroy()
