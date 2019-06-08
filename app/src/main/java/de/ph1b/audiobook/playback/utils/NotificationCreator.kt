@@ -41,6 +41,10 @@ class NotificationCreator
   notificationChannelCreator: NotificationChannelCreator
 ) {
 
+  init {
+    notificationChannelCreator.createChannel()
+  }
+
   private var cachedImage: CachedImage? = null
 
   private val mediaStyle = MediaStyle()
@@ -49,7 +53,7 @@ class NotificationCreator
     .setShowCancelButton(true)
 
   private val notificationBuilder =
-    NotificationCompat.Builder(context, notificationChannelCreator.musicChannel)
+    NotificationCompat.Builder(context, MUSIC_CHANNEL_ID)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
       .setDeleteIntent(stopIntent())
       .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -93,18 +97,19 @@ class NotificationCreator
 
     // get the cover or fallback to a replacement
     val coverFile = book.coverFile()
-    val picassoCover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
-      try {
-        Picasso.get()
-          .load(coverFile)
-          .resize(width, height)
-          .get()
-      } catch (e: IOException) {
-        Timber.e(e, "Can't decode $coverFile")
-        null
-      }
-    } else null
-
+    val picassoCover = withContext(Dispatchers.IO) {
+      if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
+        try {
+          Picasso.get()
+            .load(coverFile)
+            .resize(width, height)
+            .get()
+        } catch (e: IOException) {
+          Timber.e(e, "Can't decode $coverFile")
+          null
+        }
+      } else null
+    }
     val cover = picassoCover ?: imageHelper.drawableToBitmap(
       CoverReplacement(book.name, context),
       width,

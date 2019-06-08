@@ -6,29 +6,30 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import de.ph1b.audiobook.R
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Creates the notification channel and exposes the channel name.
- */
+const val MUSIC_CHANNEL_ID = "musicChannel4"
+
 @Singleton
-class NotificationChannelCreator @Inject constructor(
-  notificationManager: NotificationManager,
-  context: Context
+class NotificationChannelCreator
+@Inject constructor(
+  private val notificationManager: NotificationManager,
+  private val context: Context
 ) {
 
-  val musicChannel = "musicChannel4"
+  private var created = AtomicBoolean()
 
-  init {
-    createChannel(context, notificationManager)
-  }
+  fun createChannel() {
+    if (created.getAndSet(true)) {
+      return
+    }
 
-  private fun createChannel(context: Context, notificationManager: NotificationManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val name = context.getString(R.string.music_notification)
       val channel = NotificationChannel(
-        musicChannel,
+        MUSIC_CHANNEL_ID,
         name,
         NotificationManager.IMPORTANCE_LOW
       ).apply {
