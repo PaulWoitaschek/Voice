@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.Builder
 import androidx.media.app.NotificationCompat.MediaStyle
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -21,8 +22,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
@@ -47,43 +46,30 @@ class NotificationCreator
 
   private var cachedImage: CachedImage? = null
 
-  private val mediaStyle = MediaStyle()
-    .setShowActionsInCompactView(0, 1, 2)
-    .setCancelButtonIntent(stopIntent())
-    .setShowCancelButton(true)
-
-  private val notificationBuilder =
-    NotificationCompat.Builder(context, MUSIC_CHANNEL_ID)
+  suspend fun createNotification(book: Book): Notification {
+    val mediaStyle = MediaStyle()
+      .setShowActionsInCompactView(0, 1, 2)
+      .setCancelButtonIntent(stopIntent())
+      .setShowCancelButton(true)
+      .setMediaSession(mediaSession.sessionToken)
+    return Builder(context, MUSIC_CHANNEL_ID)
+      .addRewindAction()
+      .addPlayPauseAction(playStateManager.playState)
+      .addFastForwardAction()
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+      .setChapterInfo(book)
+      .setContentIntent(contentIntent(book))
+      .setContentTitle(book)
       .setDeleteIntent(stopIntent())
+      .setLargeIcon(book)
+      .setOngoing(playStateManager.playState == PlayStateManager.PlayState.PLAYING)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setShowWhen(false)
       .setSmallIcon(R.drawable.ic_notification)
       .setStyle(mediaStyle)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
-  // notificationBuilder is not thread-save, we need to synchronize the access.
-  private val notificationBuilderLock = Mutex()
-
-  suspend fun createNotification(book: Book): Notification {
-    return notificationBuilderLock.withLock {
-      withContext(Dispatchers.IO) {
-        mediaStyle.setMediaSession(mediaSession.sessionToken)
-        @Suppress("RestrictedApi")
-        notificationBuilder.mActions.clear()
-        val playState = playStateManager.playState
-        notificationBuilder
-          .addRewindAction()
-          .addPlayPauseAction(playState)
-          .addFastForwardAction()
-          .setChapterInfo(book)
-          .setContentIntent(contentIntent(book))
-          .setContentTitle(book)
-          .setLargeIcon(book)
-          .setOngoing(playState == PlayStateManager.PlayState.PLAYING)
-          .build()
-      }
-    }
+      .build()
   }
 
   private suspend fun cover(book: Book): Bitmap {
@@ -121,14 +107,12 @@ class NotificationCreator
     return cover
   }
 
-  private suspend fun NotificationCompat.Builder.setLargeIcon(
-    book: Book
-  ): NotificationCompat.Builder {
+  private suspend fun Builder.setLargeIcon(book: Book): Builder {
     setLargeIcon(cover(book))
     return this
   }
 
-  private fun NotificationCompat.Builder.setContentTitle(book: Book): NotificationCompat.Builder {
+  private fun Builder.setContentTitle(book: Book): Builder {
     setContentTitle(book.name)
     return this
   }
@@ -138,7 +122,7 @@ class NotificationCreator
     return PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
   }
 
-  private fun NotificationCompat.Builder.setChapterInfo(book: Book): NotificationCompat.Builder {
+  private fun Builder.setChapterInfo(book: Book): Builder {
     val chapters = book.content.chapters
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.
@@ -151,14 +135,16 @@ class NotificationCreator
     return this
   }
 
-  private fun stopIntent(): PendingIntent = PendingIntent.getService(
-    context,
-    KeyEvent.KEYCODE_MEDIA_STOP,
-    PlayerCommand.Stop.toIntent(context),
-    PendingIntent.FLAG_UPDATE_CURRENT
-  )
+  private fun stopIntent(): PendingIntent {
+    return PendingIntent.getService(
+      context,
+      KeyEvent.KEYCODE_MEDIA_STOP,
+      PlayerCommand.Stop.toIntent(context),
+      PendingIntent.FLAG_UPDATE_CURRENT
+    )
+  }
 
-  private fun NotificationCompat.Builder.addFastForwardAction(): NotificationCompat.Builder {
+  private fun Builder.addFastForwardAction(): Builder {
     val fastForwardPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
@@ -172,7 +158,7 @@ class NotificationCreator
     )
   }
 
-  private fun NotificationCompat.Builder.addRewindAction(): NotificationCompat.Builder {
+  private fun Builder.addRewindAction(): Builder {
     val rewindPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_REWIND,
@@ -182,9 +168,7 @@ class NotificationCreator
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
   }
 
-  private fun NotificationCompat.Builder.addPlayPauseAction(
-    playState: PlayStateManager.PlayState
-  ): NotificationCompat.Builder {
+  private fun Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): Builder {
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
