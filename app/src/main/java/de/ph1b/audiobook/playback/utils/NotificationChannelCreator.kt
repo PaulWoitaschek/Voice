@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback.utils
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -25,7 +24,6 @@ class NotificationChannelCreator @Inject constructor(
     createChannel(context, notificationManager)
   }
 
-  @SuppressLint("NewApi")
   private fun createChannel(context: Context, notificationManager: NotificationManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val name = context.getString(R.string.music_notification)
