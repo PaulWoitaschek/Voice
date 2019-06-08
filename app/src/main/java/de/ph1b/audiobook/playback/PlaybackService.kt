@@ -30,7 +30,6 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -116,7 +115,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
         player.init(it.content)
       }
       .switchMapCompletable {
-        rxCompletable {
+        rxCompletable(Dispatchers.Main) {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
       }
@@ -134,9 +133,8 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
       .disposeOnDestroy()
 
     playStateManager.playStateStream()
-      .observeOn(Schedulers.io())
       .switchMapCompletable {
-        rxCompletable { handlePlaybackState(it) }
+        rxCompletable(Dispatchers.Main) { handlePlaybackState(it) }
       }
       .subscribe()
       .disposeOnDestroy()
