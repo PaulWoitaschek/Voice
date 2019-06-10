@@ -19,6 +19,7 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.RxBroadcast
+import de.ph1b.audiobook.misc.latestAsFlow
 import de.ph1b.audiobook.misc.rxCompletable
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
@@ -33,6 +34,8 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -89,14 +92,13 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
 
     sessionToken = mediaSession.sessionToken
 
-    // update book when changed by player
-    player.bookContentStream.map { it.settings }
-      .distinctUntilChanged()
-      .switchMapCompletable { settings ->
-        rxCompletable { repo.updateBookSettings(settings) }
-      }
-      .subscribe()
-      .disposeOnDestroy()
+    launch {
+      player.bookContentStream.latestAsFlow()
+        .distinctUntilChangedBy { it.settings }
+        .collect { content ->
+          repo.updateBookContent(content)
+        }
+    }
 
     notifyOnAutoConnectionChange.listen()
 

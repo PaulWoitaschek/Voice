@@ -3,12 +3,12 @@ package de.ph1b.audiobook.data.repo.internals
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.BookSettings
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 /**
@@ -98,18 +98,19 @@ class BookStorage
     }
   }
 
-  suspend fun updateBookSettings(settings: BookSettings) {
+  suspend fun updateBookContent(content: BookContent) {
     synchronizedWithIoDispatcher {
-      bookSettingsDao.update(settings)
+      bookSettingsDao.update(content.settings)
     }
   }
 
   private suspend inline fun <T> synchronizedWithIoDispatcher(crossinline action: () -> T): T {
-    // as the dispatcher is single threaded, we have implicit thread safety.
-    return withContext(STORAGE_DISPATCHER) {
-      action()
+    return DB_MUTEX.withLock {
+      withContext(Dispatchers.IO) {
+        action()
+      }
     }
   }
 }
 
-private val STORAGE_DISPATCHER = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+private val DB_MUTEX = Mutex()

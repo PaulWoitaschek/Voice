@@ -24,7 +24,6 @@ android {
     }
   }
 
-
   flavorDimensions("free")
   productFlavors {
     create("opensource") {

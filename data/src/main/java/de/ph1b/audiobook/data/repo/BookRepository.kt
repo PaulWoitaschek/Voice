@@ -3,7 +3,7 @@ package de.ph1b.audiobook.data.repo
 import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookSettings
+import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import io.reactivex.Observable
@@ -65,16 +65,11 @@ class BookRepository
 
   fun bookById(id: UUID) = active.firstOrNull { it.id == id }
 
-  suspend fun updateBookSettings(settings: BookSettings) {
-    updateBookInMemory(settings.id) {
-      val currentFileInChapters = content.chapters.any { it.file == settings.currentFile }
-      if (currentFileInChapters) {
-        update(updateSettings = { settings })
-      } else {
-        this
-      }
+  suspend fun updateBookContent(content: BookContent) {
+    updateBookInMemory(content.id) {
+      updateContent { content }
     }
-    storage.updateBookSettings(settings)
+    storage.updateBookContent(content)
   }
 
   fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)

@@ -14,11 +14,9 @@ data class BookContent(
   )
 
   init {
-    if (BuildConfig.DEBUG) {
       chapters.forEach {
         require(it.bookId == id) { "Wrong chapter book id in $this" }
       }
-    }
   }
 
   val currentChapter = chapters.first { it.file == settings.currentFile }
