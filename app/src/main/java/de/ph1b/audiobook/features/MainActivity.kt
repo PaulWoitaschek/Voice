@@ -52,6 +52,7 @@ class MainActivity : BaseActivity(), RouterProvider {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     appComponent.inject(this)
+    setTheme(R.style.AppTheme) // revert the loading theme
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
 

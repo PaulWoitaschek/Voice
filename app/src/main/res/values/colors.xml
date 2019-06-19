@@ -32,4 +32,6 @@
     <color name="textColorPrimary">@color/abc_primary_text_material_light</color>
     <color name="textColorSecondary">@color/abc_secondary_text_material_light</color>
     <color name="placeholderCoverColor">@color/grey200</color>
+
+    <color name="startupColor">@color/black</color>
 </resources>

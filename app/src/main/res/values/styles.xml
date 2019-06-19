@@ -74,4 +74,9 @@
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="LoadingTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/startupColor</item>
+        <item name="colorPrimaryDark">@color/startupColor</item>
+    </style>
 </resources>
