@@ -138,6 +138,13 @@ class BookRepository
     }
   }
 
+  suspend fun hideBook(idToDelete: UUID) {
+    val toDelete = ArrayList<Book>()
+    val aBook = bookById(idToDelete)
+    aBook?.let { toDelete.add(it) }
+    hideBook(toDelete)
+  }
+
   suspend fun revealBook(book: Book) {
     withContext(Dispatchers.IO) {
       Timber.v("Called revealBook=$book")

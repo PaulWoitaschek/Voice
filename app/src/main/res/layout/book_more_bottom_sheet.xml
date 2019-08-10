@@ -34,4 +34,12 @@
         android:text="@string/bookmark"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
+    <TextView
+        android:id="@+id/deleteFile"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/ic_delete_forever_black_24dp"
+        android:text="@string/delete_file"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:visibility="visible"/>
+
 </LinearLayout>

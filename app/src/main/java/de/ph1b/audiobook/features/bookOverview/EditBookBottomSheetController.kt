@@ -81,11 +81,16 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
 
       dismissDialog()
     }
+    container.deleteFile.setOnClickListener {
+      callback().onFileDeletionRequested(book)
+      dismissDialog()
+    }
 
     container.title.tintLeftDrawable()
     container.internetCover.tintLeftDrawable()
     container.fileCover.tintLeftDrawable()
     container.bookmark.tintLeftDrawable()
+    container.deleteFile.tintLeftDrawable()
 
     return dialog
   }
@@ -121,5 +126,6 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   interface Callback {
     fun onInternetCoverRequested(book: Book)
     fun onFileCoverRequested(book: Book)
+    fun onFileDeletionRequested(book: Book)
   }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
@@ -24,6 +25,10 @@ import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.android.synthetic.main.book_category.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -32,6 +37,8 @@ private const val NI_CATEGORY = "ni#category"
 class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookBottomSheetController.Callback,
   CoverFromInternetController.Callback, EditCoverDialogController.Callback {
 
+  @Inject
+  lateinit var repo: BookRepository
   @Inject
   lateinit var viewModel: BookCategoryViewModel
   @Inject
@@ -130,6 +137,15 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
 
   override fun onFileCoverRequested(book: Book) {
     galleryPicker.pick(book.id, this)
+  }
+
+  override fun onFileDeletionRequested(book: Book) {
+    GlobalScope.launch (Dispatchers.IO) {
+      val bookContent = book.content
+      val currentFile = bookContent.currentFile
+      currentFile.delete()
+      repo.hideBook(book.id)
+    }
   }
 }
 

@@ -12,6 +12,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
@@ -39,6 +40,9 @@ import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_overview.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -63,6 +67,8 @@ class BookOverviewController : BaseController(),
   lateinit var viewModel: BookOverviewViewModel
   @Inject
   lateinit var galleryPicker: GalleryPicker
+  @Inject
+  lateinit var repo: BookRepository
 
   private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
   private var adapter: BookOverviewAdapter by clearAfterDestroyView()
@@ -257,6 +263,15 @@ class BookOverviewController : BaseController(),
 
   override fun onFileCoverRequested(book: Book) {
     galleryPicker.pick(book.id, this)
+  }
+
+  override fun onFileDeletionRequested(book: Book) {
+    GlobalScope.launch (Dispatchers.IO) {
+      val bookContent = book.content
+      val currentFile = bookContent.currentFile
+      currentFile.delete()
+      repo.hideBook(book.id)
+    }
   }
 
   override fun onDestroyView() {
