@@ -60,10 +60,14 @@
     <string name="bookmark_edit_hint">Bookmark name</string>
     <string name="bookmark_added">Bookmark added</string>
     <string name="bookmark_delete_title">Delete this bookmark?</string>
+    <!--Files-->
+    <string name="delete_file">Delete</string>
     <!--Settings-->
     <string name="action_settings">Preferences</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
+    <string name="pref_save_playback_speed">Save playback speed</string>
+    <string name="pref_save_playback_speed_hint">If you change playback speed during playback, that setting will be used for future playbacks.</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Deletes the last entered number</string>
     <plurals name="seconds">

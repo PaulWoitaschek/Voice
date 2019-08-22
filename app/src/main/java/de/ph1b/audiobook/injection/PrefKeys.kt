@@ -13,4 +13,6 @@ object PrefKeys {
   const val CURRENT_BOOK = "currentBook2"
   const val THEME = "THEME2_KEY"
   const val GRID_MODE = "gridView"
+  const val SAVE_PLAYBACK_SPEED = "SAVE_PLAYBACK_SPEED"
+  const val PLAYING_SPEED = "PLAYING_SPEED"
 }

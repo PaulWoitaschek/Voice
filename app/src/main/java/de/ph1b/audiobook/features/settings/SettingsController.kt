@@ -29,6 +29,8 @@ class SettingsController : BaseController() {
   lateinit var autoRewindAmountPref: Pref<Int>
   @field:[Inject Named(PrefKeys.SEEK_TIME)]
   lateinit var seekTimePref: Pref<Int>
+  @field:[Inject Named(PrefKeys.SAVE_PLAYBACK_SPEED)]
+  lateinit var savePlaybackPref: Pref<Boolean>
 
   init {
     appComponent.inject(this)
@@ -81,6 +83,14 @@ class SettingsController : BaseController() {
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
       .subscribe { autoRewind.setDescription(it) }
       .disposeOnDestroyView()
+
+    // save playback speed
+    setupSwitchSetting(
+        settingView = savePlaybackSpeed,
+        titleRes = R.string.pref_save_playback_speed,
+        contentRes = R.string.pref_save_playback_speed_hint,
+        pref = savePlaybackPref
+    )
   }
 
   private fun setupToolbar() {

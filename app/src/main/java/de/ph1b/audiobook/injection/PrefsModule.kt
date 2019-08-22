@@ -52,6 +52,24 @@ object PrefsModule {
   @Provides
   @JvmStatic
   @Singleton
+  @Named(PrefKeys.SAVE_PLAYBACK_SPEED)
+  fun provideSavePlaybackPreference(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.SAVE_PLAYBACK_SPEED, false)
+    return PersistentPref(pref)
+  }
+
+  @Provides
+  @JvmStatic
+  @Singleton
+  @Named(PrefKeys.PLAYING_SPEED)
+  fun providePlayingSpeedPreference(prefs: RxSharedPreferences): Pref<Float> {
+    val pref = prefs.getFloat(PrefKeys.SLEEP_TIME, 1F)
+    return PersistentPref(pref)
+  }
+
+  @Provides
+  @JvmStatic
+  @Singleton
   @Named(PrefKeys.BOOKMARK_ON_SLEEP)
   fun provideBookmarkOnSleepTimerPreference(prefs: RxSharedPreferences): Pref<Boolean> {
     val pref = prefs.getBoolean(PrefKeys.BOOKMARK_ON_SLEEP, false)

@@ -40,6 +40,10 @@ constructor(
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
+  @Named(PrefKeys.PLAYING_SPEED)
+  private val playingSpeedPref: Pref<Float>,
+  @Named(PrefKeys.SAVE_PLAYBACK_SPEED)
+  private val savePlaybackPref: Pref<Boolean>,
   private val equalizer: Equalizer,
   private val loudnessGain: LoudnessGain,
   private val wakeLockManager: WakeLockManager,
@@ -60,6 +64,8 @@ constructor(
 
   private val seekTimeInSeconds by seekTimePref
   private var autoRewindAmount by autoRewindAmountPref
+
+  private var selectedSpeed = 1F
 
   init {
     checkMainThread()
@@ -167,7 +173,13 @@ constructor(
     player.playWhenReady = false
     player.prepare(dataSourceConverter.toMediaSource(content))
     player.seekTo(content.currentChapterIndex, content.positionInChapter)
-    player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
+    if (savePlaybackPref.value) {
+      selectedSpeed = playingSpeedPref.value
+      setLocalPlaybackSpeed(selectedSpeed)
+      player.setPlaybackParameters(selectedSpeed, content.skipSilence)
+    } else {
+      player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
+    }
     loudnessGain.gainmB = content.loudnessGain
     state = PlayerState.PAUSED
   }
@@ -185,6 +197,14 @@ constructor(
       val copy = it.updateSettings { copy(loudnessGain = mB) }
       _bookContent.onNext(copy)
       loudnessGain.gainmB = mB
+    }
+  }
+
+  private fun setLocalPlaybackSpeed(speed: Float) {
+    bookContent?.let {
+      val copy = it.updateSettings { copy(playbackSpeed = speed) }
+      _bookContent.onNext(copy)
+      playingSpeedPref.value = speed
     }
   }
 
@@ -379,6 +399,9 @@ constructor(
   fun setPlaybackSpeed(speed: Float) {
     checkMainThread()
     bookContent?.let {
+      if (savePlaybackPref.value) {
+        playingSpeedPref.value = speed
+      }
       val copy = it.updateSettings { copy(playbackSpeed = speed) }
       _bookContent.onNext(copy)
       player.setPlaybackParameters(speed, it.skipSilence)
