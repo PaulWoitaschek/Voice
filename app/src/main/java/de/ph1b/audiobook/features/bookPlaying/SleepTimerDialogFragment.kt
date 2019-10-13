@@ -166,7 +166,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       setOnShowListener {
         val parentView = layoutContainer.containerView.parent as View
         parentView.background = null
-        val coordinator = findViewById<FrameLayout>(R.id.design_bottom_sheet)
+        val coordinator = findViewById<FrameLayout>(R.id.design_bottom_sheet)!!
         val behavior = BottomSheetBehavior.from(coordinator)
         behavior.peekHeight = layoutContainer.time.bottom
         behavior.state = BottomSheetBehavior.STATE_EXPANDED

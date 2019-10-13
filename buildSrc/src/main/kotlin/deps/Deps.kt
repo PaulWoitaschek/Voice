@@ -43,7 +43,7 @@ object Deps {
   }
 
   const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.1"
-  const val material = "com.google.android.material:material:1.0.0"
+  const val material = "com.google.android.material:material:1.1.0-beta01"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
@@ -73,7 +73,7 @@ object Deps {
   }
 
   object ExoPlayer {
-    private const val extensionVersion = "2.10.1-3"
+    private const val extensionVersion = "2.10.5"
     const val core = "com.google.android.exoplayer:exoplayer-core:2.10.5"
     const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-opus:$extensionVersion"
     const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-flac:$extensionVersion"

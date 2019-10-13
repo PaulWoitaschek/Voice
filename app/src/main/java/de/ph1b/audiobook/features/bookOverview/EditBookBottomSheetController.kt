@@ -55,7 +55,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
     val container = DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.book_more_bottom_sheet))
     dialog.setContentView(container.containerView)
 
-    BottomSheetBehavior.from(dialog.findViewById<View>(R.id.design_bottom_sheet)).apply {
+    BottomSheetBehavior.from(dialog.findViewById(R.id.design_bottom_sheet)!!).apply {
       container.containerView.doOnLayout {
         peekHeight = it.height
       }
