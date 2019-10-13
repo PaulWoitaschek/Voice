@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/AppToolbar"
+        app:title="@string/no_external_storage_action_bar_title"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 
@@ -16,8 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/no_external_storage_action_bar_title"
-        android:src="@drawable/usb"
-        android:tint="@color/icon_color" />
+        android:src="@drawable/usb" />
 
     <TextView
         android:id="@+id/textView"

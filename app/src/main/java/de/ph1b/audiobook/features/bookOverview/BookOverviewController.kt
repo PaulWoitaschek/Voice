@@ -15,11 +15,7 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItem
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
+import de.ph1b.audiobook.features.bookOverview.list.*
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
@@ -27,29 +23,28 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.ElevateToolbarOnScroll
-import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
-import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
-import de.ph1b.audiobook.misc.tint
-import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_overview.*
 import timber.log.Timber
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.collections.ArrayList
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
 class BookOverviewController : BaseController(),
-  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback {
+    EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
+    CoverFromInternetController.Callback {
 
   override val layoutRes = R.layout.book_overview
 
@@ -75,11 +70,11 @@ class BookOverviewController : BaseController(),
     setupRecyclerView()
 
     viewModel.state()
-      .subscribe { render(it, gridMenuItem) }
-      .disposeOnDestroyView()
+        .subscribe { render(it, gridMenuItem) }
+        .disposeOnDestroyView()
     viewModel.coverChanged
-      .subscribe(::bookCoverChanged)
-      .disposeOnDestroyView()
+        .subscribe(::bookCoverChanged)
+        .disposeOnDestroyView()
   }
 
   private fun setupFab() {
@@ -90,18 +85,18 @@ class BookOverviewController : BaseController(),
   private fun setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
-      bookClickListener = { book, clickType ->
-        when (clickType) {
-          BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
-          BookOverviewClick.MENU -> {
-            EditBookBottomSheetController(this, book).showDialog(router)
+        bookClickListener = { book, clickType ->
+          when (clickType) {
+            BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
+            BookOverviewClick.MENU -> {
+              EditBookBottomSheetController(this, book).showDialog(router)
+            }
           }
+        },
+        openCategoryListener = { category ->
+          Timber.i("open $category")
+          router.pushController(BookCategoryController(category).asTransaction())
         }
-      },
-      openCategoryListener = { category ->
-        Timber.i("open $category")
-        router.pushController(BookCategoryController(category).asTransaction())
-      }
     )
     recyclerView.adapter = adapter
     // without this the item would blink on every change
@@ -125,7 +120,6 @@ class BookOverviewController : BaseController(),
   }
 
   private fun setupToolbar(): GridMenuItem {
-    toolbar.inflateMenu(R.menu.book_overview)
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
@@ -144,7 +138,6 @@ class BookOverviewController : BaseController(),
         else -> false
       }
     }
-    toolbar.tint()
 
     return GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
   }
@@ -167,7 +160,7 @@ class BookOverviewController : BaseController(),
     val transition = BookChangeHandler()
     transition.transitionName = book.coverTransitionName
     transaction.pushChangeHandler(transition)
-      .popChangeHandler(transition)
+        .popChangeHandler(transition)
     router.pushController(transaction)
   }
 
@@ -192,8 +185,7 @@ class BookOverviewController : BaseController(),
           val useGrid = state.useGrid
           setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)
           val drawableRes = if (useGrid) R.drawable.ic_view_list else R.drawable.ic_view_grid
-          val tintColor = activity.color(R.color.toolbarIconColor)
-          icon = activity.drawable(drawableRes).tinted(tintColor)
+          setIcon(drawableRes)
         }
       }
       is BookOverviewState.NoFolderSet -> {
@@ -216,19 +208,19 @@ class BookOverviewController : BaseController(),
       return
 
     val target = TapTarget
-      .forToolbarMenuItem(
-        toolbar,
-        R.id.library,
-        getString(R.string.onboarding_title),
-        getString(R.string.onboarding_content)
-      )
-      .cancelable(false)
-      .tintTarget(false)
-      .outerCircleColor(R.color.accentDark)
-      .descriptionTextColorInt(Color.WHITE)
-      .textColorInt(Color.WHITE)
-      .targetCircleColorInt(Color.BLACK)
-      .transparentTarget(true)
+        .forToolbarMenuItem(
+            toolbar,
+            R.id.library,
+            getString(R.string.onboarding_title),
+            getString(R.string.onboarding_content)
+        )
+        .cancelable(false)
+        .tintTarget(false)
+        .outerCircleColor(R.color.accentDark)
+        .descriptionTextColorInt(Color.WHITE)
+        .textColorInt(Color.WHITE)
+        .targetCircleColorInt(Color.BLACK)
+        .transparentTarget(true)
     currentTapTarget = TapTargetView.showFor(activity, target, object : TapTargetView.Listener() {
       override fun onTargetClick(view: TapTargetView?) {
         super.onTargetClick(view)

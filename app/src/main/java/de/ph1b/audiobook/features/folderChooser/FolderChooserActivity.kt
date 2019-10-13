@@ -11,13 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.Permissions
-import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.misc.drawable
-import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.tint
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import timber.log.Timber
@@ -33,7 +27,7 @@ import java.io.File
  * values.
  */
 class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(),
-  FolderChooserView {
+    FolderChooserView {
 
   override fun newPresenter() = FolderChooserPresenter()
 
@@ -42,7 +36,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun showSubFolderWarning(first: String, second: String) {
     val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
     Toast.makeText(this, message, Toast.LENGTH_LONG)
-      .show()
+        .show()
   }
 
   private lateinit var adapter: FolderChooserAdapter
@@ -73,10 +67,10 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
     recycler.layoutManager = LinearLayoutManager(this)
     recycler.addItemDecoration(
-      DividerItemDecoration(
-        this,
-        DividerItemDecoration.VERTICAL
-      )
+        DividerItemDecoration(
+            this,
+            DividerItemDecoration.VERTICAL
+        )
     )
     recycler.adapter = adapter
     val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
@@ -84,7 +78,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     // spinner
     spinnerAdapter =
-        MultiLineSpinnerAdapter(toolSpinner, this, color(R.color.textColorPrimary)) { file, _ ->
+        MultiLineSpinnerAdapter(toolSpinner, this, colorFromAttr(android.R.attr.textColorPrimary)) { file, _ ->
           if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
             getString(R.string.storage_all)
           } else {
@@ -102,16 +96,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   private fun setupToolbar() {
-    toolbar.setNavigationIcon(R.drawable.close)
     toolbar.setNavigationOnClickListener { super.onBackPressed() }
-    toolbar.setTitle(R.string.audiobook_folders_title)
-    toolbar.tint()
   }
 
   override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
+      requestCode: Int,
+      permissions: Array<String>,
+      grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)

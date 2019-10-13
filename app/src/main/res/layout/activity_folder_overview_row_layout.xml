@@ -13,9 +13,7 @@
         android:padding="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_folder"
-        tools:ignore="ContentDescription"
-        tools:src="@drawable/ic_folder"
-        tools:tint="?attr/colorControlNormal" />
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView"
@@ -41,7 +39,6 @@
         android:padding="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/delete"
-        android:tint="@color/icon_color"
         tools:src="@drawable/delete" />
 
 </RelativeLayout>

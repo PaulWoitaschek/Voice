@@ -5,16 +5,9 @@
 
     <color name="background_overlay">@color/copy_primary_text_disabled_material_dark</color>
 
-    <color name="icon_color">@color/white</color>
-
-    <color name="snackbar_background_color">@color/background_material_light</color>
-    <color name="snackbar_text_color">@color/copy_primary_text_default_material_light</color>
-
     <color name="bookOverviewCardColor">@color/primaryDark</color>
     <color name="windowBackgroundColor">@color/primary</color>
     <color name="navBarColor">@color/primaryDark</color>
     <color name="toolbarIconColor">@color/white</color>
-    <color name="textColorPrimary">@color/abc_primary_text_material_dark</color>
-    <color name="textColorSecondary">@color/abc_secondary_text_material_dark</color>
     <color name="placeholderCoverColor">@color/primaryDark</color>
 </resources>

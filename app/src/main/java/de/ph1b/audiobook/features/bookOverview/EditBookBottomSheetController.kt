@@ -2,8 +2,6 @@ package de.ph1b.audiobook.features.bookOverview
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.core.view.doOnLayout
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -13,19 +11,8 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
-import de.ph1b.audiobook.misc.RouterProvider
-import de.ph1b.audiobook.misc.bottomCompoundDrawable
-import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.misc.endCompoundDrawable
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.inflate
-import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.misc.startCompoundDrawable
-import de.ph1b.audiobook.misc.tinted
-import de.ph1b.audiobook.misc.topCompoundDrawable
 import kotlinx.android.synthetic.main.book_more_bottom_sheet.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,7 +30,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val dialog = BottomSheetDialog(activity!!, R.style.BottomSheetStyle)
+    val dialog = BottomSheetDialog(activity!!)
 
     // if there is no book, skip here
     val book = repo.bookById(bookId)
@@ -82,32 +69,16 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
       dismissDialog()
     }
 
-    container.title.tintLeftDrawable()
-    container.internetCover.tintLeftDrawable()
-    container.fileCover.tintLeftDrawable()
-    container.bookmark.tintLeftDrawable()
-
     return dialog
   }
 
   private fun callback() = targetController as Callback
 
-  private fun TextView.tintLeftDrawable() {
-    val left = startCompoundDrawable()!!
-    val tinted = left.tinted(activity!!.color(R.color.icon_color))
-    setCompoundDrawablesRelative(
-      tinted,
-      topCompoundDrawable(),
-      endCompoundDrawable(),
-      bottomCompoundDrawable()
-    )
-  }
-
   companion object {
     private const val NI_BOOK = "ni#book"
     operator fun <T> invoke(
-      target: T,
-      book: Book
+        target: T,
+        book: Book
     ): EditBookBottomSheetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putUUID(NI_BOOK, book.id)

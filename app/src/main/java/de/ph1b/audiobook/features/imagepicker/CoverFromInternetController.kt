@@ -24,7 +24,6 @@ import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
@@ -34,7 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URLEncoder
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
@@ -71,8 +70,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
       displayZoomControls = false
       javaScriptEnabled = true
       userAgentString =
-        "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-            "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
+              "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 
@@ -92,10 +91,10 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(
-        view: WebView,
-        errorCode: Int,
-        description: String?,
-        failingUrl: String?
+          view: WebView,
+          errorCode: Int,
+          description: String?,
+          failingUrl: String?
       ) {
         Timber.d("received webViewError. Set webView invisible")
         view.loadUrl(ABOUT_BLANK)
@@ -107,16 +106,16 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
     // after first successful load set visibilities
     webViewIsLoading
-      .distinctUntilChanged()
-      .filter { it }
-      .subscribe {
-        // sets progressbar and webviews visibilities correctly once the page is loaded
-        Timber.i("WebView is now loading. Set webView visible")
-        progressBar.isVisible = false
-        noNetwork.isVisible = false
-        webViewContainer.isVisible = true
-      }
-      .disposeOnDestroyView()
+        .distinctUntilChanged()
+        .filter { it }
+        .subscribe {
+          // sets progressbar and webviews visibilities correctly once the page is loaded
+          Timber.i("WebView is now loading. Set webView visible")
+          progressBar.isVisible = false
+          noNetwork.isVisible = false
+          webViewContainer.isVisible = true
+        }
+        .disposeOnDestroyView()
 
     webView.loadUrl(originalUrl)
 
@@ -178,11 +177,11 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
     GlobalScope.launch {
       val screenShot = Bitmap.createBitmap(
-        bitmap,
-        left,
-        top,
-        width,
-        height
+          bitmap,
+          left,
+          top,
+          width,
+          height
       )
       bitmap.recycle()
       val coverFile = book.coverFile()
@@ -201,12 +200,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
   @SuppressLint("InflateParams")
   private fun setupToolbar() {
-    toolbar.setTitle(R.string.cover)
-
-    toolbar.setNavigationIcon(R.drawable.close)
     toolbar.setNavigationOnClickListener { popOrBack() }
-
-    toolbar.inflateMenu(R.menu.image_picker)
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.reset -> {
@@ -216,7 +210,6 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
         else -> false
       }
     }
-    toolbar.tint()
 
     // set the rotating icon
     val menu = toolbar.menu
@@ -236,30 +229,30 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
     refreshItem.actionView = rotateView
 
     webViewIsLoading
-      .filter { it }
-      .filter { !rotation.hasStarted() }
-      .doOnNext { Timber.i("is loading. Start animation") }
-      .subscribe {
-        rotation.start()
-      }
-      .disposeOnDestroyView()
+        .filter { it }
+        .filter { !rotation.hasStarted() }
+        .doOnNext { Timber.i("is loading. Start animation") }
+        .subscribe {
+          rotation.start()
+        }
+        .disposeOnDestroyView()
 
     rotation.setAnimationListener(
-      object : Animation.AnimationListener {
-        override fun onAnimationRepeat(p0: Animation?) {
-          if (webViewIsLoading.value == false) {
-            Timber.i("we are in the refresh round. cancel now.")
-            rotation.cancel()
-            rotation.reset()
+        object : Animation.AnimationListener {
+          override fun onAnimationRepeat(p0: Animation?) {
+            if (webViewIsLoading.value == false) {
+              Timber.i("we are in the refresh round. cancel now.")
+              rotation.cancel()
+              rotation.reset()
+            }
+          }
+
+          override fun onAnimationEnd(p0: Animation?) {
+          }
+
+          override fun onAnimationStart(p0: Animation?) {
           }
         }
-
-        override fun onAnimationEnd(p0: Animation?) {
-        }
-
-        override fun onAnimationStart(p0: Animation?) {
-        }
-      }
     )
   }
 
@@ -295,8 +288,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   companion object {
 
     operator fun <T> invoke(
-      bookId: UUID,
-      target: T
+        bookId: UUID,
+        target: T
     ): CoverFromInternetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putUUID(NI_BOOK_ID, bookId)

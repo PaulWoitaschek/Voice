@@ -1,17 +1,15 @@
 package de.ph1b.audiobook.misc
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 
 fun SeekBar.onProgressChanged(
-  initialNotification: Boolean = false,
-  progressChanged: (Int) -> Unit
+    initialNotification: Boolean = false,
+    progressChanged: (Int) -> Unit
 ) {
   val listener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -30,10 +28,10 @@ fun SeekBar.onProgressChanged(
 }
 
 fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> =
-  Observable.create {
-    onProgressChanged(initialNotification) { position -> it.onNext(position) }
-    it.setCancellable { setOnSeekBarChangeListener(null) }
-  }
+    Observable.create {
+      onProgressChanged(initialNotification) { position -> it.onNext(position) }
+      it.setCancellable { setOnSeekBarChangeListener(null) }
+    }
 
 fun <T : View> T.clicks(): Observable<T> = Observable.create { emitter ->
   setOnClickListener { emitter.onNext(this) }
@@ -60,11 +58,6 @@ inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (In
     }
   }
 }
-
-fun TextView.startCompoundDrawable(): Drawable? = compoundDrawablesRelative[0]
-fun TextView.topCompoundDrawable(): Drawable? = compoundDrawablesRelative[1]
-fun TextView.endCompoundDrawable(): Drawable? = compoundDrawablesRelative[2]
-fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawablesRelative[3]
 
 /** if the recyclerview is computing layout, post the action. else just execute it */
 inline fun RecyclerView.postedIfComputingLayout(crossinline action: () -> Unit) {

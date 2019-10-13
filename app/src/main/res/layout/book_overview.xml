@@ -9,6 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        app:menu="@menu/book_overview"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="?attr/colorPrimary">

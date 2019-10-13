@@ -21,16 +21,15 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.popOrBack
-import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.android.synthetic.main.book_category.*
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
 class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback, EditCoverDialogController.Callback {
+    CoverFromInternetController.Callback, EditCoverDialogController.Callback {
 
   @Inject
   lateinit var viewModel: BookCategoryViewModel
@@ -63,7 +62,6 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
         else -> false
       }
     }
-    toolbar.tint()
     toolbar.setNavigationOnClickListener { popOrBack() }
 
     val adapter = BookCategoryAdapter { book, clickType ->
@@ -86,11 +84,11 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
     viewModel.get()
-      .subscribe {
-        layoutManager.spanCount = it.gridColumnCount
-        adapter.submitList(it.models)
-      }
-      .disposeOnDestroyView()
+        .subscribe {
+          layoutManager.spanCount = it.gridColumnCount
+          adapter.submitList(it.models)
+        }
+        .disposeOnDestroyView()
   }
 
   private fun showSortingPopup() {

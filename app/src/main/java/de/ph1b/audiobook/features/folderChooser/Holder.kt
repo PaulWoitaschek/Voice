@@ -2,17 +2,14 @@ package de.ph1b.audiobook.features.folderChooser
 
 import android.view.ViewGroup
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.misc.drawable
-import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.activity_folder_chooser_adapter_row_layout.*
 import java.io.File
 
 class Holder(
-  parent: ViewGroup,
-  private val mode: FolderChooserActivity.OperationMode,
-  private val listener: (selected: File) -> Unit
+    parent: ViewGroup,
+    private val mode: FolderChooserActivity.OperationMode,
+    private val listener: (selected: File) -> Unit
 ) : ExtensionsHolder(parent, R.layout.activity_folder_chooser_adapter_row_layout) {
 
   private var boundFile: File? = null
@@ -35,12 +32,12 @@ class Holder(
     }
 
     val context = itemView.context
-    val drawable = context.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
-    icon.setImageDrawable(drawable.tinted(context.color(R.color.icon_color)))
+    val drawableRes = if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album
+    icon.setImageResource(drawableRes)
     icon.contentDescription = context.getString(
-      if (isDirectory) {
-        R.string.content_is_folder
-      } else R.string.content_is_file
+        if (isDirectory) {
+          R.string.content_is_folder
+        } else R.string.content_is_file
     )
   }
 }

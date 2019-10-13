@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.storageMounted
-import kotlinx.android.synthetic.main.activity_no_external.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,7 +15,6 @@ class NoExternalStorageActivity : AppCompatActivity() {
   public override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_no_external)
-    toolbar.setTitle(R.string.no_external_storage_action_bar_title)
   }
 
   override fun onBackPressed() {

@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.app.AppCompatDelegate.*
 import de.ph1b.audiobook.R
 
 object ThemeUtil {

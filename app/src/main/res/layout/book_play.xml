@@ -8,6 +8,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        app:menu="@menu/book_play"
+        app:navigationIcon="@drawable/ic_arrow_back"
         style="@style/AppToolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -33,7 +35,6 @@
         android:contentDescription="@string/rewind"
         android:padding="8dp"
         android:src="@drawable/ic_fast_rewind"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
@@ -45,7 +46,6 @@
         android:contentDescription="@string/previous_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_previous"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintRight_toLeftOf="@id/rewind"
         app:layout_constraintTop_toTopOf="@id/play" />
@@ -57,7 +57,6 @@
         android:contentDescription="@string/fast_forward"
         android:padding="8dp"
         android:src="@drawable/ic_fast_forward"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/play"
         app:layout_constraintTop_toTopOf="@id/play" />
@@ -69,7 +68,6 @@
         android:contentDescription="@string/next_track"
         android:padding="8dp"
         android:src="@drawable/ic_skip_next"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@id/play"
         app:layout_constraintLeft_toRightOf="@id/fastForward"
         app:layout_constraintTop_toTopOf="@id/play" />

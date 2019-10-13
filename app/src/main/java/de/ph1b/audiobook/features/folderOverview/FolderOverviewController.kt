@@ -14,9 +14,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
-import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.mvp.MvpController
 import kotlinx.android.synthetic.main.folder_overview.*
+import kotlin.math.max
 
 private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
 
@@ -24,7 +24,7 @@ private const val SI_BACKGROUND_VISIBILITY = "si#overlayVisibility"
  * Controller that lets the user add, edit or remove the set audio book folders.
  */
 class FolderOverviewController :
-  MvpController<FolderOverviewController, FolderOverviewPresenter>() {
+    MvpController<FolderOverviewController, FolderOverviewPresenter>() {
 
   override fun createPresenter(): FolderOverviewPresenter = FolderOverviewPresenter()
 
@@ -50,7 +50,7 @@ class FolderOverviewController :
     val layoutManager = LinearLayoutManager(activity)
     recycler.layoutManager = layoutManager
     recycler.addItemDecoration(
-      DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+        DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
 
     adapter = FolderOverviewAdapter { toDelete ->
@@ -67,17 +67,14 @@ class FolderOverviewController :
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
     addAsSingle.title =
-      "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
+        "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
 
     setupToolbar()
   }
 
   private fun setupToolbar() {
-    toolbar.apply {
-      setNavigationOnClickListener { activity.onBackPressed() }
-      tint()
-    }
+    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
   }
 
   override fun provideView() = this
@@ -94,12 +91,12 @@ class FolderOverviewController :
       getFamCenter(famCenter)
 
       // get the final radius for the clipping circle
-      val finalRadius = Math.max(overlay.width, overlay.height)
+      val finalRadius = max(overlay.width, overlay.height)
 
       // create the animator for this view (the start radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
-        overlay,
-        famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
+          overlay,
+          famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
       )
 
       // make the view visible and start the animation
@@ -116,18 +113,18 @@ class FolderOverviewController :
 
       // create the animation (the final radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
-        overlay,
-        famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
+          overlay,
+          famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
       )
 
       // make the view invisible when the animation is done
       anim.addListener(
-        object : AnimatorListenerAdapter() {
-          override fun onAnimationEnd(animation: Animator) {
-            super.onAnimationEnd(animation)
-            overlay.isInvisible = true
+          object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+              super.onAnimationEnd(animation)
+              overlay.isInvisible = true
+            }
           }
-        }
       )
 
       // start the animation
@@ -141,7 +138,7 @@ class FolderOverviewController :
    */
   private fun getFamCenter(point: Point) {
     val x =
-      fam.left + ((buttonRepresentingTheFam.left + buttonRepresentingTheFam.right) / 2)
+        fam.left + ((buttonRepresentingTheFam.left + buttonRepresentingTheFam.right) / 2)
     val y = fam.top + ((buttonRepresentingTheFam.top + buttonRepresentingTheFam.bottom) / 2)
     point.set(x, y)
   }

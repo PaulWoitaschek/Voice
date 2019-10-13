@@ -61,7 +61,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:src="@drawable/ic_clock"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cover"
         app:layout_constraintTop_toBottomOf="@+id/title"
@@ -93,7 +92,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_equalizer"
-        android:tint="@color/icon_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />

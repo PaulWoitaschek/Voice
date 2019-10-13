@@ -179,7 +179,6 @@
         android:scaleType="center"
         android:src="@drawable/backspace"
         android:text="1"
-        android:tint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="@+id/zero"
         app:layout_constraintLeft_toRightOf="@+id/zero"
         app:layout_constraintRight_toRightOf="parent"

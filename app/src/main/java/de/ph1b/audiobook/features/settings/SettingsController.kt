@@ -9,7 +9,6 @@ import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.settings.*
@@ -41,51 +40,49 @@ class SettingsController : BaseController() {
 
     // theme
     setupTextSetting(
-      doubleSettingView = theme,
-      titleRes = R.string.pref_theme_title
+        doubleSettingView = theme,
+        titleRes = R.string.pref_theme_title
     ) {
       ThemePickerDialogController().showDialog(router)
     }
     themePref.stream
-      .subscribe { theme.setDescription(it.nameId) }
-      .disposeOnDestroyView()
+        .subscribe { theme.setDescription(it.nameId) }
+        .disposeOnDestroyView()
 
     // resume on playback
     setupSwitchSetting(
-      settingView = resumePlayback,
-      titleRes = R.string.pref_resume_on_replug,
-      contentRes = R.string.pref_resume_on_replug_hint,
-      pref = resumeOnReplugPref
+        settingView = resumePlayback,
+        titleRes = R.string.pref_resume_on_replug,
+        contentRes = R.string.pref_resume_on_replug_hint,
+        pref = resumeOnReplugPref
     )
 
     // skip amount
     setupTextSetting(
-      doubleSettingView = skipAmount,
-      titleRes = R.string.pref_seek_time
+        doubleSettingView = skipAmount,
+        titleRes = R.string.pref_seek_time
     ) {
       SeekDialogController().showDialog(router)
     }
     seekTimePref.stream
-      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .subscribe { skipAmount.setDescription(it) }
-      .disposeOnDestroyView()
+        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+        .subscribe { skipAmount.setDescription(it) }
+        .disposeOnDestroyView()
 
     // auto rewind
     setupTextSetting(
-      doubleSettingView = autoRewind,
-      titleRes = R.string.pref_auto_rewind_title
+        doubleSettingView = autoRewind,
+        titleRes = R.string.pref_auto_rewind_title
     ) {
       AutoRewindDialogController().showDialog(router)
     }
     autoRewindAmountPref.stream
-      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .subscribe { autoRewind.setDescription(it) }
-      .disposeOnDestroyView()
+        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+        .subscribe { autoRewind.setDescription(it) }
+        .disposeOnDestroyView()
   }
 
   private fun setupToolbar() {
-    toolbar.inflateMenu(R.menu.menu_settings)
-    toolbar.tint()
     toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
         SupportDialogController().showDialog(router)
@@ -99,10 +96,10 @@ class SettingsController : BaseController() {
   }
 
   private inline fun setupTextSetting(
-    doubleSettingView: DoubleSettingView,
-    @StringRes titleRes: Int,
-    @StringRes contentRes: Int? = null,
-    crossinline onClick: () -> Unit
+      doubleSettingView: DoubleSettingView,
+      @StringRes titleRes: Int,
+      @StringRes contentRes: Int? = null,
+      crossinline onClick: () -> Unit
   ) {
     doubleSettingView.setTitle(titleRes)
     if (contentRes != null) doubleSettingView.setDescription(contentRes)
@@ -112,10 +109,10 @@ class SettingsController : BaseController() {
   }
 
   private fun setupSwitchSetting(
-    settingView: SwitchSettingView,
-    @StringRes titleRes: Int,
-    @StringRes contentRes: Int,
-    pref: Pref<Boolean>
+      settingView: SwitchSettingView,
+      @StringRes titleRes: Int,
+      @StringRes contentRes: Int,
+      pref: Pref<Boolean>
   ) {
     settingView.setTitle(titleRes)
     settingView.setDescription(contentRes)
@@ -124,8 +121,8 @@ class SettingsController : BaseController() {
       pref.value = it
     }
     pref.stream
-      .subscribe { settingView.setChecked(it) }
-      .disposeOnDestroyView()
+        .subscribe { settingView.setChecked(it) }
+        .disposeOnDestroyView()
 
     settingView.setOnClickListener { settingView.toggle() }
   }

@@ -6,15 +6,13 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.LayoutRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
+import de.ph1b.audiobook.uitools.ThemeUtil
 import java.io.File
 import java.io.FileFilter
 
@@ -25,6 +23,12 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 @ColorInt
 fun Context.color(@ColorRes id: Int): Int {
   return ContextCompat.getColor(this, id)
+}
+
+@ColorInt
+fun Context.colorFromAttr(@AttrRes id: Int): Int {
+  val colorRes = ThemeUtil.getResourceId(this, id)
+  return color(colorRes)
 }
 
 fun View.layoutInflater() = context.layoutInflater()

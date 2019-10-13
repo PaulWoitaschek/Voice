@@ -17,8 +17,7 @@
         android:contentDescription="@string/popup_edit"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:src="@drawable/ic_more_vert"
-        android:tint="@color/icon_color" />
+        android:src="@drawable/ic_more_vert" />
 
     <LinearLayout
         android:layout_width="match_parent"

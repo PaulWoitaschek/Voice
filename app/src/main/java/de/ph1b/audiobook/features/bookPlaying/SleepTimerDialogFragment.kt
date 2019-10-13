@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.dialog_sleep.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -88,7 +88,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     appComponent.inject(this)
 
     _layoutContainer = DialogLayoutContainer(
-      activity!!.layoutInflater.inflate(R.layout.dialog_sleep)
+        activity!!.layoutInflater.inflate(R.layout.dialog_sleep)
     )
 
     // restore or get fresh
@@ -129,14 +129,14 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       bookmarkOnSleepTimerPref.value = layoutContainer.bookmarkSwitch.isChecked
       if (bookmarkOnSleepTimerPref.value) {
         val date = DateUtils.formatDateTime(
-          context,
-          System.currentTimeMillis(),
-          DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
+            context,
+            System.currentTimeMillis(),
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
         GlobalScope.launch(Dispatchers.IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
-            book,
-            date + ": " + getString(R.string.action_sleep)
+              book,
+              date + ": " + getString(R.string.action_sleep)
           )
         }
       }
@@ -157,10 +157,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       layoutContainer.shakeToResetSwitch.isVisible = false
     }
 
-    return BottomSheetDialog(
-      context!!,
-      R.style.BottomSheetStyle
-    ).apply {
+    return BottomSheetDialog(context!!).apply {
       setContentView(layoutContainer.containerView)
       // hide the background so the fab looks overlapping
       setOnShowListener {

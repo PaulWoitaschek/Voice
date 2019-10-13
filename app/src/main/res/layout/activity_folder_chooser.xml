@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     style="?android:buttonBarStyle"
     android:layout_width="match_parent"
@@ -9,6 +10,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        app:navigationIcon="@drawable/close"
+        app:title="@string/audiobook_folders_title"
         style="@style/AppToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
@@ -56,7 +59,6 @@
             android:contentDescription="@string/content_navigate_up"
             android:focusable="true"
             android:scaleType="fitStart"
-            android:tint="@color/icon_color"
             tools:src="@drawable/ic_arrow_upward" />
 
         <LinearLayout
