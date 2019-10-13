@@ -1,8 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="DayNightTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
-
-    <style name="AppTheme" parent="DayNightTheme">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -25,14 +23,9 @@
         <item name="md_color_button_text">@color/accent</item>
     </style>
 
-    <style name="PopupMenuStyle" parent="Widget.AppCompat.Light.PopupMenu">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
         <item name="android:background">?attr/colorPrimary</item>
-        <item name="popupTheme">@style/Theme.MaterialComponents.Light</item>
     </style>
 
     <style name="fab_label_style">

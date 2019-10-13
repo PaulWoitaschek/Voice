@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.bookmarks
 
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -25,7 +24,7 @@ import de.ph1b.audiobook.misc.tint
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import kotlinx.android.synthetic.main.bookmark.*
-import java.util.UUID
+import java.util.*
 
 /**
  * Dialog for creating a bookmark
@@ -33,9 +32,9 @@ import java.util.UUID
 private const val NI_BOOK_ID = "ni#bookId"
 
 class BookmarkController(args: Bundle) :
-  MvpController<BookmarkView, BookmarkPresenter>(args), BookmarkView,
-  BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
-  EditBookmarkDialog.Callback {
+    MvpController<BookmarkView, BookmarkPresenter>(args), BookmarkView,
+    BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
+    EditBookmarkDialog.Callback {
 
   constructor(bookId: UUID) : this(Bundle().apply {
     putUUID(NI_BOOK_ID, bookId)
@@ -57,7 +56,7 @@ class BookmarkController(args: Bundle) :
     val index = adapter.indexOf(bookmark)
     recycler.smoothScrollToPosition(index)
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-      .show()
+        .show()
   }
 
   override fun onDeleteBookmarkConfirmed(id: Long) {
@@ -113,9 +112,9 @@ class BookmarkController(args: Bundle) :
 
     val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
       override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
+          recyclerView: RecyclerView,
+          viewHolder: RecyclerView.ViewHolder,
+          target: RecyclerView.ViewHolder
       ): Boolean {
         return false
       }
@@ -129,8 +128,7 @@ class BookmarkController(args: Bundle) :
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
-    val themedContext = ContextThemeWrapper(activity, R.style.PopupMenuStyle)
-    val popup = PopupMenu(themedContext, v)
+    val popup = PopupMenu(activity, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {
       when (it.itemId) {
