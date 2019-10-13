@@ -4,19 +4,14 @@ import com.android.build.gradle.LibraryPlugin
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import deps.Deps
 import deps.Versions
+import deps.configureBaseRepos
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
+@Suppress("RemoveRedundantQualifierName")
 buildscript {
 
-  repositories {
-    maven { setUrl("https://maven.google.com") }
-    jcenter()
-    google()
-    maven { setUrl("https://maven.fabric.io/public") }
-    mavenCentral()
-  }
+  deps.configureBaseRepos(repositories)
 
-  @Suppress("RemoveRedundantQualifierName")
   dependencies {
     classpath(deps.Deps.androidGradlePlugin)
     classpath(deps.Deps.Kotlin.gradlePlugin)
@@ -25,49 +20,34 @@ buildscript {
 }
 
 plugins {
-  `build-scan`
-  id("com.github.ben-manes.versions") version "0.21.0"
-  id("org.jlleitschuh.gradle.ktlint") version "7.3.0"
+  `build-scan` version "2.4.2"
+  id("com.github.ben-manes.versions") version "0.26.0"
+  id("org.jlleitschuh.gradle.ktlint") version "9.0.0"
 }
 
 buildScan {
   termsOfServiceUrl = "https://gradle.com/terms-of-service"
-  setTermsOfServiceAgree("yes")
+  termsOfServiceAgree = "yes"
 }
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
 
-tasks {
-  "dependencyUpdates"(DependencyUpdatesTask::class) {
-    resolutionStrategy {
-      componentSelection {
-        all {
-          val reject = listOf("rc", "beta", "alpha").any {
-            candidate.version.contains(it, ignoreCase = true)
-          }
-          if (reject) {
-            reject("blacklisted")
-          }
-          if (candidate.group == "javax.annotation" && candidate.version == "1.0-20050927.133100") {
-            reject("blacklisted")
-          }
-        }
-      }
-    }
+fun isNonStable(version: String): Boolean {
+  return listOf("rc", "beta", "alpha").any {
+    version.contains(it, ignoreCase = true)
+  }
+}
+
+tasks.withType(DependencyUpdatesTask::class) {
+  rejectVersionIf {
+    isNonStable(candidate.version) && !isNonStable(currentVersion)
   }
 }
 
 allprojects {
-  repositories {
-    maven { setUrl("https://maven.google.com") }
-    google()
-    jcenter()
-    mavenCentral()
-    maven { setUrl("https://maven.fabric.io/public") }
-    maven { setUrl("https://jitpack.io") }
-  }
+  configureBaseRepos(repositories)
 
   configurations.all {
     resolutionStrategy {
@@ -94,7 +74,6 @@ subprojects {
 }
 
 tasks {
-
   register<Exec>("importStrings") {
     executable = "sh"
     args("-c", "tx pull -af --minimum-perc=5")
@@ -102,13 +81,15 @@ tasks {
   }
 
   register("appVersion") {
-    print("#BEGIN_VERSION#${Versions.versionName}#END_VERSION#")
+    doLast {
+      print("#BEGIN_VERSION#${Versions.versionName}#END_VERSION#")
+    }
   }
 
   register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
       (subProject.tasks.findByName("testProprietaryDebugUnitTest")
-        ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
+          ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
     }
     val artifactFolder = File("${rootDir.absolutePath}/artifacts")
     destinationDir = File(artifactFolder, "testResults")

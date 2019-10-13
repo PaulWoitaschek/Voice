@@ -10,32 +10,34 @@ import com.google.android.exoplayer2.drm.FrameworkMediaCrypto
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector
 import com.google.android.exoplayer2.text.TextOutput
 import com.google.android.exoplayer2.video.VideoRendererEventListener
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
-class OnlyAudioRenderersFactory @Inject constructor(
-  context: Context
+class OnlyAudioRenderersFactory
+@Inject constructor(
+    context: Context
 ) : DefaultRenderersFactory(context) {
 
   override fun buildVideoRenderers(
-    context: Context?,
-    extensionRendererMode: Int,
-    mediaCodecSelector: MediaCodecSelector?,
-    drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
-    playClearSamplesWithoutKeys: Boolean,
-    eventHandler: Handler?,
-    eventListener: VideoRendererEventListener?,
-    allowedVideoJoiningTimeMs: Long,
-    out: ArrayList<Renderer>?
+      context: Context?,
+      extensionRendererMode: Int,
+      mediaCodecSelector: MediaCodecSelector?,
+      drmSessionManager: DrmSessionManager<FrameworkMediaCrypto>?,
+      playClearSamplesWithoutKeys: Boolean,
+      enableDecoderFallback: Boolean,
+      eventHandler: Handler?,
+      eventListener: VideoRendererEventListener?,
+      allowedVideoJoiningTimeMs: Long,
+      out: ArrayList<Renderer>?
   ) {
   }
 
   override fun buildTextRenderers(
-    context: Context?,
-    output: TextOutput?,
-    outputLooper: Looper?,
-    extensionRendererMode: Int,
-    out: ArrayList<Renderer>?
+      context: Context?,
+      output: TextOutput?,
+      outputLooper: Looper?,
+      extensionRendererMode: Int,
+      out: ArrayList<Renderer>?
   ) {
   }
 }

@@ -11,8 +11,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 private object RxCoroutineExceptionHandler :
-  AbstractCoroutineContextElement(CoroutineExceptionHandler),
-  CoroutineExceptionHandler {
+    AbstractCoroutineContextElement(CoroutineExceptionHandler),
+    CoroutineExceptionHandler {
 
   override fun handleException(context: CoroutineContext, exception: Throwable) {
     if (exception is CancellationException) return
@@ -20,14 +20,10 @@ private object RxCoroutineExceptionHandler :
   }
 }
 
-private object RxScope : CoroutineScope {
-
-  override val coroutineContext: CoroutineContext = RxCoroutineExceptionHandler
-}
 
 fun rxCompletable(
-  context: CoroutineContext = EmptyCoroutineContext,
-  block: suspend CoroutineScope.() -> Unit
+    context: CoroutineContext = EmptyCoroutineContext,
+    block: suspend CoroutineScope.() -> Unit
 ): Completable {
-  return RxScope.rxCompletable(context, block)
+  return rxCompletable(context + RxCoroutineExceptionHandler, block)
 }

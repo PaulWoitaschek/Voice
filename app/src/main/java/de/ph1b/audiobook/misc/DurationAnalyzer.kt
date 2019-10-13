@@ -2,12 +2,13 @@ package de.ph1b.audiobook.misc
 
 import android.net.Uri
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.SimpleExoPlayer
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.first
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
@@ -15,19 +16,25 @@ import javax.inject.Inject
 
 class DurationAnalyzer
 @Inject constructor(
-  private val dataSourceConverter: DataSourceConverter,
-  private val player: SimpleExoPlayer
+    private val dataSourceConverter: DataSourceConverter,
+    private val player: SimpleExoPlayer
 ) {
 
-  private val playbackState = ConflatedBroadcastChannel(player.playbackState)
+  private val _state = ConflatedBroadcastChannel(player.playbackState)
+  private val stateFlow = _state.asFlow()
+  private var state: Int
+    get() = _state.value
+    set(value) {
+      _state.offer(value)
+    }
 
   init {
     player.addListener(
-      object : Player.EventListener {
-        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-          this@DurationAnalyzer.playbackState.offer(playbackState)
+        object : EventListener {
+          override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            state = playbackState
+          }
         }
-      }
     )
   }
 
@@ -39,17 +46,16 @@ class DurationAnalyzer
   }
 
   private suspend fun waitForIdle() {
-    val playState = playbackState.value
-    if (playState != Player.STATE_IDLE) {
+    val playState = state
+    if (playState != STATE_IDLE) {
       withContext(Main) {
         player.stop()
         Timber.v("will stop player. because state is ${stateName[playState]}")
       }
-      playbackState.openSubscription()
-        .first {
-          Timber.v("state is ${stateName[it]}")
-          it == Player.STATE_IDLE
-        }
+      stateFlow.first {
+        Timber.v("state is ${stateName[it]}")
+        it == STATE_IDLE
+      }
     }
   }
 
@@ -60,18 +66,20 @@ class DurationAnalyzer
       player.prepare(mediaSource)
     }
     Timber.v("scan, prepared $uri.")
-    playbackState.openSubscription()
-      .first {
-        Timber.v("scan, state=${stateName[it]}")
-        when (it) {
-          Player.STATE_READY -> true
-          Player.STATE_ENDED, Player.STATE_IDLE -> {
-            Timber.e("Couldn't prepare. Return no duration.")
-            return null
-          }
-          else -> false
+    stateFlow.first {
+      Timber.v("scan, state=${stateName[it]}")
+      when (it) {
+        STATE_READY -> true
+        STATE_ENDED, STATE_IDLE -> {
+          Timber.e("Couldn't prepare. Return no duration.")
+          true
         }
+        else -> false
       }
+    }
+    if (state != STATE_READY) {
+      return null
+    }
 
     return withContext(Main) {
       if (!player.isCurrentWindowSeekable) {
@@ -88,9 +96,9 @@ class DurationAnalyzer
   }
 
   private val stateName = mapOf(
-    Player.STATE_READY to "ready",
-    Player.STATE_ENDED to "ended",
-    Player.STATE_IDLE to "idle",
-    Player.STATE_BUFFERING to "buffering"
+      STATE_READY to "ready",
+      STATE_ENDED to "ended",
+      STATE_IDLE to "idle",
+      STATE_BUFFERING to "buffering"
   )
 }

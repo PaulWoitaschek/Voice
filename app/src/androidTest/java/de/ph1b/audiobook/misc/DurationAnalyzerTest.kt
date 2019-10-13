@@ -54,7 +54,7 @@ class DurationAnalyzerTest {
     assertThat(durationOfResource(R.raw.intact2)).isEqualTo(119040)
   }
 
-  private fun durationOfResource(@RawRes resource: Int): Int? {
+  private fun durationOfResource(@RawRes resource: Int): Long? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
       durationAnalyzer.duration(Uri.fromFile(file))

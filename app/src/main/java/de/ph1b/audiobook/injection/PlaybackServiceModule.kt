@@ -23,17 +23,17 @@ object PlaybackServiceModule {
   @PerService
   @JvmStatic
   fun provideButtonRecieverPendingIntent(
-    service: PlaybackService,
-    mbrComponentName: ComponentName
+      service: PlaybackService,
+      mbrComponentName: ComponentName
   ): PendingIntent {
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
       component = mbrComponentName
     }
     return PendingIntent.getBroadcast(
-      service,
-      0,
-      mediaButtonIntent,
-      PendingIntent.FLAG_UPDATE_CURRENT
+        service,
+        0,
+        mediaButtonIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
     )
   }
 
@@ -41,22 +41,18 @@ object PlaybackServiceModule {
   @PerService
   @JvmStatic
   fun provideMediaSession(
-    service: PlaybackService,
-    callback: MediaSessionCallback,
-    mbrComponentName: ComponentName,
-    buttonReceiverPendingIntent: PendingIntent
+      service: PlaybackService,
+      callback: MediaSessionCallback,
+      mbrComponentName: ComponentName,
+      buttonReceiverPendingIntent: PendingIntent
   ): MediaSessionCompat {
     return MediaSessionCompat(
-      service,
-      PlaybackService::class.java.name,
-      mbrComponentName,
-      buttonReceiverPendingIntent
+        service,
+        PlaybackService::class.java.name,
+        mbrComponentName,
+        buttonReceiverPendingIntent
     ).apply {
       setCallback(callback)
-      setFlags(
-        MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-            or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-      )
     }
   }
 }

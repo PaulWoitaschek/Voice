@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Voice.iml" filepath="$PROJECT_DIR$/.idea/Voice.iml" group="Voice" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Voice/app" />
+      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" group="Voice/buildSrc" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" group="Voice/common" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" group="Voice/core" />
+      <module fileurl="file://$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" filepath="$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" group="Voice/covercolorextractor" />
+      <module fileurl="file://$PROJECT_DIR$/crashreporting/crashreporting.iml" filepath="$PROJECT_DIR$/crashreporting/crashreporting.iml" group="Voice/crashreporting" />
+      <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" group="Voice/data" />
+    </modules>
+  </component>
+</project>
