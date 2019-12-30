@@ -20,14 +20,8 @@ buildscript {
 }
 
 plugins {
-  `build-scan` version "2.4.2"
   id("com.github.ben-manes.versions") version "0.26.0"
   id("org.jlleitschuh.gradle.ktlint") version "9.0.0"
-}
-
-buildScan {
-  termsOfServiceUrl = "https://gradle.com/terms-of-service"
-  termsOfServiceAgree = "yes"
 }
 
 tasks.wrapper {
