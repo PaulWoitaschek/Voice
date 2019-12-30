@@ -10,7 +10,7 @@ import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogController
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.NightMode
 import kotlinx.android.synthetic.main.settings.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,7 +21,7 @@ import javax.inject.Named
 class SettingsController : BaseController() {
 
   @field:[Inject Named(PrefKeys.THEME)]
-  lateinit var themePref: Pref<ThemeUtil.Theme>
+  lateinit var themePref: Pref<NightMode>
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
   @field:[Inject Named(PrefKeys.AUTO_REWIND_AMOUNT)]

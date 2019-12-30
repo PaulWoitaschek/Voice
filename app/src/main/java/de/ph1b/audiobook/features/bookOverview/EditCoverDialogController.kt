@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -57,7 +57,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     )
 
     // init values
-    val arguments = args.getParcelable(NI_ARGS) as Arguments
+    val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
     val book = repo.bookById(arguments.bookId)!!
 
     container.coverReplacement.isVisible = true

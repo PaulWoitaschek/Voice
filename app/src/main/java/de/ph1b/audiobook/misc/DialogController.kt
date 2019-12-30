@@ -30,7 +30,7 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
     savedViewState: Bundle?
   ): View {
     dialog = onCreateDialog(savedViewState).apply {
-      ownerActivity = activity!!
+      setOwnerActivity(activity!!)
       setOnDismissListener { dismissDialog() }
       if (savedViewState != null) {
         val dialogState = savedViewState.getBundle(SI_DIALOG)

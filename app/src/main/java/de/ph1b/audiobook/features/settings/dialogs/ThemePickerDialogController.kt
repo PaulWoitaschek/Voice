@@ -10,20 +10,20 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.NightMode
 import javax.inject.Inject
 import javax.inject.Named
 
 class ThemePickerDialogController : DialogController() {
 
   @field:[Inject Named(PrefKeys.THEME)]
-  lateinit var themePref: Pref<ThemeUtil.Theme>
+  lateinit var themePref: Pref<NightMode>
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
     val oldTheme = themePref.value
-    val existingThemes = ThemeUtil.Theme.values()
+    val existingThemes = NightMode.values()
     val names = existingThemes.map { activity!!.getString(it.nameId) }
 
     return MaterialDialog(activity!!).apply {

@@ -16,7 +16,7 @@ import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
-import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.NightMode
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.GlobalScope
@@ -34,7 +34,7 @@ class App : Application() {
   @Inject
   lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
   @field:[Inject Named(PrefKeys.THEME)]
-  lateinit var themePref: Pref<ThemeUtil.Theme>
+  lateinit var themePref: Pref<NightMode>
 
   override fun onCreate() {
     super.onCreate()
