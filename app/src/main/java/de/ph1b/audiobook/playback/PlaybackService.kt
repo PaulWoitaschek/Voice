@@ -5,12 +5,12 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
 import de.ph1b.audiobook.common.getIfPresent
@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -250,7 +250,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
       if (!started) {
         started = true
         // in case this service was not started but just bound, start it.
-        startForegroundService(Intent(this, javaClass))
+        ContextCompat.startForegroundService(this, Intent(this, javaClass))
       }
       val notification = notificationCreator.createNotification(it)
       startForeground(NOTIFICATION_ID, notification)
@@ -368,9 +368,5 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
     super.onDestroy()
   }
 
-  private val binder = PlaybackServiceBinder(this)
-
-  override fun onBind(intent: Intent?): IBinder = binder
-
-  class PlaybackServiceBinder(val service: PlaybackService) : Binder()
+  override fun onBind(intent: Intent?): IBinder? = null
 }
