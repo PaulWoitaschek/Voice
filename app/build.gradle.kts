@@ -1,7 +1,7 @@
 import deps.Deps
 import deps.Versions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Properties
+import java.util.*
 
 plugins {
   id("com.android.application")
@@ -61,6 +61,7 @@ android {
       isShrinkResources = false
       ext["enableCrashlytics"] = false
       multiDexEnabled = true
+      applicationIdSuffix = ".debug"
     }
     all {
       signingConfig = signingConfigs.getByName("release")

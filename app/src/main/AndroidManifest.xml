@@ -100,7 +100,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="de.ph1b.audiobook.coverprovider"
+          android:authorities="${applicationId}.coverprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

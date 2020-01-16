@@ -7,6 +7,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import androidx.core.content.FileProvider
 import dagger.Reusable
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -18,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -87,7 +88,7 @@ class MediaBrowserHelper
   private suspend fun fileProviderUri(coverFile: File): Uri? {
     return withContext(Dispatchers.IO) {
       if (coverFile.exists()) {
-        FileProvider.getUriForFile(context, "de.ph1b.audiobook.coverprovider", coverFile)
+        FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.coverprovider", coverFile)
           .apply {
             context.grantUriPermission(
               "com.google.android.wearable.app",
