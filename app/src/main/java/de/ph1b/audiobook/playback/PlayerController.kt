@@ -11,14 +11,7 @@ import javax.inject.Singleton
 class PlayerController
 @Inject constructor(val context: Context) {
 
-  var service: PlaybackService? = null
-
   fun execute(action: PlayerCommand) {
-    val service = service
-    if (service != null) {
-      service.execute(action)
-    } else {
-      context.startService(action.toIntent(context))
-    }
+    context.startService(action.toIntent(context))
   }
 }

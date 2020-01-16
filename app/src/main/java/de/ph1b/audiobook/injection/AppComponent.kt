@@ -6,7 +6,6 @@ import dagger.BindsInstance
 import dagger.Component
 import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
-import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
@@ -15,11 +14,7 @@ import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
-import de.ph1b.audiobook.features.bookPlaying.BookPlayController
-import de.ph1b.audiobook.features.bookPlaying.BookPlayPresenter
-import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogController
-import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
-import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
+import de.ph1b.audiobook.features.bookPlaying.*
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
@@ -68,7 +63,6 @@ interface AppComponent : DataComponent {
   fun inject(target: BaseWidgetProvider)
   fun inject(target: BookOverviewController)
   fun inject(target: BookPlayController)
-  fun inject(target: BaseActivity)
   fun inject(target: BookPlayPresenter)
   fun inject(target: EditBookBottomSheetController)
   fun inject(target: EditBookTitleDialogController)

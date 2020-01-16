@@ -4,11 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
@@ -23,8 +19,9 @@ import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerCommand
+import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.activity_book.*
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -47,6 +44,8 @@ class MainActivity : BaseActivity(), RouterProvider {
   lateinit var bookSearchParser: BookSearchParser
   @Inject
   lateinit var bookSearchHandler: BookSearchHandler
+  @Inject
+  lateinit var playerController: PlayerController
 
   private lateinit var router: Router
 

@@ -43,7 +43,7 @@ class CircularRevealBookPlayTransition : Visibility() {
     val parent = view.parent as? View?
         ?: return null
     val parentWidth = parent.width
-    val finalRadius = endValues.values?.getOrElse(FINAL_RADIUS) {
+    val finalRadius = endValues.values.getOrElse(FINAL_RADIUS) {
       parentWidth
     } as Int
 
