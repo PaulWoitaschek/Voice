@@ -21,8 +21,8 @@
     </style>
 
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:background">?attr/colorSurface</item>
     </style>
 
     <style name="fab_label_style">

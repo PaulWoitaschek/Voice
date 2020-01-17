@@ -6,12 +6,10 @@
   android:layout_height="match_parent"
   android:background="?android:attr/windowBackground">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:background="?attr/colorSurface"
       app:menu="@menu/book_overview"
       app:title="@string/app_name" />
 
