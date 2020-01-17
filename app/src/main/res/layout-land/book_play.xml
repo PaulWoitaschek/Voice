@@ -1,155 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bookPlayRoot"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/bookPlayRoot"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/x50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+      android:id="@+id/x50"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/x75"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+      android:id="@+id/x75"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/y50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
+      android:id="@+id/y50"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.50" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/AppToolbar"
-        app:menu="@menu/book_play"
-        android:layout_width="0dp"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      style="@style/AppToolbar"
+      android:layout_width="0dp"
+      android:layout_height="?attr/actionBarSize"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:menu="@menu/book_play"
+      app:navigationIcon="@drawable/ic_arrow_back" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="@string/play_pause"
-        android:transitionName="@string/fab_transition"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/x75"
-        app:layout_constraintRight_toRightOf="@id/x75"
-        tools:ignore="UnusedAttribute" />
+      android:id="@+id/play"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:contentDescription="@string/play_pause"
+      android:transitionName="@string/fab_transition"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="@id/x75"
+      app:layout_constraintRight_toRightOf="@id/x75"
+      tools:ignore="UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/rewind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/rewind"
-        android:padding="8dp"
-        android:src="@drawable/ic_fast_rewind"
-        app:layout_constraintBottom_toBottomOf="@id/play"
-        app:layout_constraintRight_toLeftOf="@id/play"
-        app:layout_constraintTop_toTopOf="@id/play" />
+      android:id="@+id/rewind"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/rewind"
+      android:padding="8dp"
+      android:src="@drawable/ic_fast_rewind"
+      app:layout_constraintBottom_toBottomOf="@id/play"
+      app:layout_constraintRight_toLeftOf="@id/play"
+      app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:id="@+id/previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/previous_track"
-        android:padding="8dp"
-        android:src="@drawable/ic_skip_previous"
-        app:layout_constraintBottom_toBottomOf="@id/play"
-        app:layout_constraintRight_toLeftOf="@id/rewind"
-        app:layout_constraintTop_toTopOf="@id/play" />
+      android:id="@+id/previous"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/previous_track"
+      android:padding="8dp"
+      android:src="@drawable/ic_skip_previous"
+      app:layout_constraintBottom_toBottomOf="@id/play"
+      app:layout_constraintRight_toLeftOf="@id/rewind"
+      app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:id="@+id/fastForward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/fast_forward"
-        android:padding="8dp"
-        android:src="@drawable/ic_fast_forward"
-        app:layout_constraintBottom_toBottomOf="@id/play"
-        app:layout_constraintLeft_toRightOf="@id/play"
-        app:layout_constraintTop_toTopOf="@id/play" />
+      android:id="@+id/fastForward"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/fast_forward"
+      android:padding="8dp"
+      android:src="@drawable/ic_fast_forward"
+      app:layout_constraintBottom_toBottomOf="@id/play"
+      app:layout_constraintLeft_toRightOf="@id/play"
+      app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
-        android:id="@+id/next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/next_track"
-        android:padding="8dp"
-        android:src="@drawable/ic_skip_next"
-        app:layout_constraintBottom_toBottomOf="@id/play"
-        app:layout_constraintLeft_toRightOf="@id/fastForward"
-        app:layout_constraintTop_toTopOf="@id/play" />
+      android:id="@+id/next"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/next_track"
+      android:padding="8dp"
+      android:src="@drawable/ic_skip_next"
+      app:layout_constraintBottom_toBottomOf="@id/play"
+      app:layout_constraintLeft_toRightOf="@id/fastForward"
+      app:layout_constraintTop_toTopOf="@id/play" />
 
     <TextView
-        android:id="@+id/playedTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/zeroTime"
-        app:layout_constraintBottom_toTopOf="@id/play"
-        app:layout_constraintLeft_toRightOf="@id/x50" />
+      android:id="@+id/playedTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:text="@string/zeroTime"
+      app:layout_constraintBottom_toTopOf="@id/play"
+      app:layout_constraintLeft_toRightOf="@id/x50" />
 
     <TextView
-        android:id="@+id/maxTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/zeroTime"
-        app:layout_constraintBottom_toTopOf="@id/play"
-        app:layout_constraintRight_toRightOf="parent" />
+      android:id="@+id/maxTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:text="@string/zeroTime"
+      app:layout_constraintBottom_toTopOf="@id/play"
+      app:layout_constraintRight_toRightOf="parent" />
 
     <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        app:layout_constraintBottom_toTopOf="@id/play"
-        app:layout_constraintLeft_toRightOf="@id/playedTime"
-        app:layout_constraintRight_toLeftOf="@id/maxTime" />
+      android:id="@+id/seekBar"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="4dp"
+      android:layout_marginRight="4dp"
+      app:layout_constraintBottom_toTopOf="@id/play"
+      app:layout_constraintLeft_toRightOf="@id/playedTime"
+      app:layout_constraintRight_toLeftOf="@id/maxTime" />
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/bookSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/seekBar"
-        app:layout_constraintLeft_toRightOf="@id/x50"
-        app:layout_constraintRight_toRightOf="parent" />
+      android:id="@+id/bookSpinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
+      app:layout_constraintBottom_toTopOf="@id/seekBar"
+      app:layout_constraintLeft_toRightOf="@id/x50"
+      app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
-        android:id="@+id/cover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/cover"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/x50"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:ignore="UnusedAttribute"
-        tools:src="@android:color/darker_gray" />
+      android:id="@+id/cover"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:adjustViewBounds="true"
+      android:contentDescription="@string/cover"
+      android:scaleType="centerCrop"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="@id/x50"
+      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      tools:ignore="UnusedAttribute"
+      tools:src="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/timerCountdownView"
-        style="@style/timer_text_view_style"
-        app:layout_constraintRight_toRightOf="@id/cover"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:text="00:34" />
+      android:id="@+id/timerCountdownView"
+      style="@style/timer_text_view_style"
+      app:layout_constraintRight_toRightOf="@id/cover"
+      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      tools:text="00:34" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

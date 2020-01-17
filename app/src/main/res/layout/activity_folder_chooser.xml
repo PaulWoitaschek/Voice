@@ -8,11 +8,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         app:navigationIcon="@drawable/close"
         app:title="@string/audiobook_folders_title"
-        style="@style/AppToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
@@ -41,7 +40,7 @@
 
         </RelativeLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
