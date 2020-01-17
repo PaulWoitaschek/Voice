@@ -5,7 +5,6 @@
 
     <color name="background_overlay">@color/copy_primary_text_disabled_material_dark</color>
 
-    <color name="windowBackgroundColor">@color/primary</color>
     <color name="navBarColor">@color/primaryDark</color>
     <color name="toolbarIconColor">@color/white</color>
     <color name="placeholderCoverColor">@color/primaryDark</color>

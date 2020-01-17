@@ -16,7 +16,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">
             @bool/use_light_navigation
         </item>
-        <item name="android:windowBackground">@color/windowBackgroundColor</item>
         <item name="toolbarStyle">@style/AppToolbar</item>
         <item name="md_color_button_text">@color/accent</item>
     </style>

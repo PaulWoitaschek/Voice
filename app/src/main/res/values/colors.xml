@@ -22,7 +22,6 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="progressColor">#E0E0E0</color>
-    <color name="windowBackgroundColor">@color/white</color>
     <color name="navBarColor">@color/white</color>
     <color name="toolbarIconColor">@color/black</color>
     <color name="placeholderCoverColor">@color/grey200</color>
