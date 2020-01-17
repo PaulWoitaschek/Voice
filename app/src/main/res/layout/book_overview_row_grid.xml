@@ -1,91 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bookOverviewCardColor"
-    android:elevation="2dp"
-    android:foreground="?attr/selectableItemBackground">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/cover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/primary"
-        tools:ignore="ContentDescription"
-        tools:src="@color/grey200" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/card"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/background"
-        android:layout_width="0dp"
-        android:layout_height="92dp"
-        android:background="@color/bookOverviewCardColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cover" />
+        <ImageView
+          android:id="@+id/cover"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:background="@color/primary"
+          tools:ignore="ContentDescription"
+          tools:src="@color/grey200" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="2dp"
-        android:ellipsize="end"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/remainingTime"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="1984" />
+        <Space
+          android:id="@+id/background"
+          android:layout_width="0dp"
+          android:layout_height="92dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/cover" />
 
-    <TextView
-        android:id="@+id/remainingTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/progress"
-        app:layout_constraintStart_toEndOf="@+id/clock"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="32:01" />
+        <TextView
+          android:id="@+id/title"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="2dp"
+          android:ellipsize="end"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+          app:layout_constraintBottom_toTopOf="@+id/remainingTime"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="@+id/background"
+          app:layout_constraintVertical_chainStyle="packed"
+          tools:text="1984" />
 
-    <ImageView
-        android:id="@+id/clock"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_clock"
-        app:layout_constraintBottom_toBottomOf="@+id/remainingTime"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/remainingTime"
-        tools:ignore="ContentDescription" />
+        <TextView
+          android:id="@+id/remainingTime"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="4dp"
+          android:layout_marginTop="2dp"
+          android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+          app:layout_constraintBottom_toTopOf="@+id/progress"
+          app:layout_constraintStart_toEndOf="@+id/clock"
+          app:layout_constraintTop_toBottomOf="@+id/title"
+          tools:text="32:01" />
 
-    <de.ph1b.audiobook.uitools.SquareProgressView
-        android:id="@+id/progress"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+          android:id="@+id/clock"
+          android:layout_width="14dp"
+          android:layout_height="14dp"
+          android:layout_marginStart="16dp"
+          android:src="@drawable/ic_clock"
+          app:layout_constraintBottom_toBottomOf="@+id/remainingTime"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="@+id/remainingTime"
+          tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/playingIndicator"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_equalizer"
-        app:layout_constraintBottom_toTopOf="@+id/progress"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ContentDescription" />
+        <de.ph1b.audiobook.uitools.SquareProgressView
+          android:id="@+id/progress"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          app:layout_constraintBottom_toBottomOf="@+id/background"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+          android:id="@+id/playingIndicator"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginBottom="8dp"
+          android:src="@drawable/ic_equalizer"
+          app:layout_constraintBottom_toTopOf="@+id/progress"
+          app:layout_constraintEnd_toEndOf="parent"
+          tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

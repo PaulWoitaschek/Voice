@@ -65,11 +65,8 @@ class BookOverviewHolder(
   private val loadBookCover = LoadBookCover(this)
 
   init {
-    val outlineProvider = RoundRectOutlineProvider(itemView.context.dpToPx(2F))
-    itemView.clipToOutline = true
-    itemView.outlineProvider = outlineProvider
     cover.clipToOutline = true
-    cover.outlineProvider = outlineProvider
+    cover.outlineProvider = RoundRectOutlineProvider(itemView.context.dpToPx(2F))
     itemView.setOnClickListener {
       boundBook?.let { book ->
         listener(book, BookOverviewClick.REGULAR)
@@ -96,7 +93,7 @@ class BookOverviewHolder(
     }
 
     cover.transitionName = model.transitionName
-    remainingTime.text = formatTime(model.remainingTimeInMs.toLong())
+    remainingTime.text = formatTime(model.remainingTimeInMs)
     this.progress.progress = model.progress
     loadBookCover.load(model.book)
 

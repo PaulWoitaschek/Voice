@@ -1,99 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bookOverviewCardColor"
-    android:elevation="2dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:minHeight="92dp">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/cover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/primary"
-        tools:ignore="ContentDescription" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/card"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="92dp">
 
-    <TextView
-        android:id="@+id/author"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_marginEnd="16dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        app:layout_constraintBottom_toTopOf="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cover"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="George Orwell" />
+        <ImageView
+          android:id="@+id/cover"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:background="@color/primary"
+          tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/clock"
-        app:layout_constraintEnd_toStartOf="@+id/playingIndicator"
-        app:layout_constraintStart_toEndOf="@+id/cover"
-        app:layout_constraintTop_toBottomOf="@+id/author"
-        tools:text="1984" />
+        <TextView
+          android:id="@+id/author"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:ellipsize="end"
+          android:maxLines="1"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+          app:layout_constraintBottom_toTopOf="@+id/title"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/cover"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_chainStyle="packed"
+          tools:text="George Orwell" />
 
-    <ImageView
-        android:id="@+id/clock"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/ic_clock"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cover"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:ignore="ContentDescription" />
+        <TextView
+          android:id="@+id/title"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:ellipsize="end"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+          app:layout_constraintBottom_toTopOf="@+id/clock"
+          app:layout_constraintEnd_toStartOf="@+id/playingIndicator"
+          app:layout_constraintStart_toEndOf="@+id/cover"
+          app:layout_constraintTop_toBottomOf="@+id/author"
+          tools:text="1984" />
 
-    <TextView
-        android:id="@+id/remainingTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toBottomOf="@+id/clock"
-        app:layout_constraintStart_toEndOf="@+id/clock"
-        app:layout_constraintTop_toTopOf="@+id/clock"
-        tools:text="32:01" />
+        <ImageView
+          android:id="@+id/clock"
+          android:layout_width="14dp"
+          android:layout_height="14dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="4dp"
+          android:src="@drawable/ic_clock"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/cover"
+          app:layout_constraintTop_toBottomOf="@+id/title"
+          tools:ignore="ContentDescription" />
 
-    <de.ph1b.audiobook.uitools.SquareProgressView
-        android:id="@+id/progress"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+          android:id="@+id/remainingTime"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="4dp"
+          android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+          app:layout_constraintBottom_toBottomOf="@+id/clock"
+          app:layout_constraintStart_toEndOf="@+id/clock"
+          app:layout_constraintTop_toTopOf="@+id/clock"
+          tools:text="32:01" />
 
-    <ImageView
-        android:id="@+id/playingIndicator"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_equalizer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        <de.ph1b.audiobook.uitools.SquareProgressView
+          android:id="@+id/progress"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+          android:id="@+id/playingIndicator"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginEnd="8dp"
+          android:src="@drawable/ic_equalizer"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:ignore="ContentDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
