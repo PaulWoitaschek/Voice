@@ -1,64 +1,53 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bookShelfRoot"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/bookShelfRoot"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?android:attr/windowBackground">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        app:menu="@menu/book_overview"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="?attr/colorPrimary">
-
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="@color/toolbarIconColor"
-            android:textSize="24sp" />
-
-    </androidx.appcompat.widget.Toolbar>
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:background="?attr/colorSurface"
+      app:menu="@menu/book_overview"
+      app:title="@string/app_name" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:clipToPadding="false"
-        android:paddingTop="2dp"
-        android:paddingBottom="100dp" />
+      android:id="@+id/recyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
+      android:clipToPadding="false"
+      android:paddingTop="2dp"
+      android:paddingBottom="100dp" />
 
     <ProgressBar
-        android:id="@+id/loadingProgress"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        tools:visibility="visible" />
+      android:id="@+id/loadingProgress"
+      style="@style/Widget.AppCompat.ProgressBar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/play_pause"
-        android:transitionName="@string/fab_transition"
-        app:fab_size="normal"
-        tools:ignore="UnusedAttribute" />
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end|bottom"
+      android:layout_margin="16dp"
+      android:contentDescription="@string/play_pause"
+      android:transitionName="@string/fab_transition"
+      app:fab_size="normal"
+      tools:ignore="UnusedAttribute" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/shadow_top" />
+      android:layout_width="match_parent"
+      android:layout_height="8dp"
+      android:layout_gravity="bottom"
+      android:background="@drawable/shadow_top" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
