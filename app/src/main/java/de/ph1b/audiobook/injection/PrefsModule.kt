@@ -10,7 +10,6 @@ import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.misc.converters.UUIDConverter
 import de.ph1b.audiobook.persistence.pref.PersistentPref
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.uitools.NightMode
 import java.util.*
 import javax.inject.Named
 import javax.inject.Singleton
@@ -34,9 +33,9 @@ object PrefsModule {
   @Provides
   @JvmStatic
   @Singleton
-  @Named(PrefKeys.THEME)
-  fun provideThemePreference(prefs: RxSharedPreferences): Pref<NightMode> {
-    val pref = prefs.getEnum(PrefKeys.THEME, NightMode.DayNight, NightMode::class.java)
+  @Named(PrefKeys.DARK_THEME)
+  fun darkThemePref(prefs: RxSharedPreferences): Pref<Boolean> {
+    val pref = prefs.getBoolean(PrefKeys.DARK_THEME, false)
     return PersistentPref(pref)
   }
 

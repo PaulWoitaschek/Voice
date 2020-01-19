@@ -161,6 +161,7 @@ dependencies {
   implementation(Deps.Conductor.lifecycle)
 
   implementation(Deps.moshi)
+  implementation(Deps.lifecycle)
 
   implementation(Deps.tapTarget)
   testImplementation(Deps.AndroidX.Test.runner)

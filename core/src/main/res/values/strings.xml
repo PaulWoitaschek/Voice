@@ -72,6 +72,7 @@
     </plurals>
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_root_folder_title">Audiobook folder</string>
+    <string name="pref_theme_dark">Dark Theme</string>
     <string name="pref_theme_title">Theme</string>
     <string name="pref_theme_day">Day</string>
     <string name="pref_theme_night">Night</string>

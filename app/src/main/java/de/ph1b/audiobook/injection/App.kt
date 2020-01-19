@@ -13,10 +13,10 @@ import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
+import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
-import de.ph1b.audiobook.uitools.NightMode
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.GlobalScope
@@ -33,8 +33,8 @@ class App : Application() {
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
   @Inject
   lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
-  @field:[Inject Named(PrefKeys.THEME)]
-  lateinit var themePref: Pref<NightMode>
+  @field:[Inject Named(PrefKeys.DARK_THEME)]
+  lateinit var useDarkTheme: Pref<Boolean>
 
   override fun onCreate() {
     super.onCreate()
@@ -67,19 +67,22 @@ class App : Application() {
     DataInjector.component = appComponent
     appComponent.inject(this)
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    if (DARK_THEME_SETTABLE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       // instantiating a web-view for the first time changes the day night theme.
       // therefore we work around by creating a webview first.
       // https://issuetracker.google.com/issues/37124582
       WebView(this)
     }
 
-    @Suppress("CheckResult")
-    themePref.stream
-      .distinctUntilChanged()
-      .subscribe { theme ->
-        AppCompatDelegate.setDefaultNightMode(theme.nightMode)
-      }
+    if (DARK_THEME_SETTABLE) {
+      @Suppress("CheckResult")
+      useDarkTheme.stream
+        .distinctUntilChanged()
+        .subscribe { useDarkTheme ->
+          val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+          AppCompatDelegate.setDefaultNightMode(nightMode)
+        }
+    }
 
     bookAdder.scanForFiles()
 
