@@ -62,7 +62,6 @@ class NotificationCreator
       .setContentTitle(book)
       .setDeleteIntent(stopIntent())
       .setLargeIcon(book)
-      .setOngoing(playStateManager.playState == PlayStateManager.PlayState.Playing)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setShowWhen(false)
       .setSmallIcon(R.drawable.ic_notification)
