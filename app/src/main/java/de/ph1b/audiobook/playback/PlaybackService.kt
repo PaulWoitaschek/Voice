@@ -35,7 +35,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -46,7 +45,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitFirst
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -95,6 +93,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .inject(this)
     super.onCreate()
 
+    mediaSession.isActive = true
     sessionToken = mediaSession.sessionToken
 
     scope.launch {
@@ -166,27 +165,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
         audioBecomingNoisy()
       }
     }
-
-    tearDownAutomatically()
   }
 
   private suspend fun updateNotification(book: Book) {
     val notification = notificationCreator.createNotification(book)
     notificationManager.notify(NOTIFICATION_ID, notification)
-  }
-
-  private fun tearDownAutomatically() {
-    val idleTimeOutInSeconds: Long = 7
-    scope.launch {
-      playStateManager.playStateStream().latestAsFlow()
-        .distinctUntilChanged()
-        .debounce(SECONDS.toMillis(idleTimeOutInSeconds))
-        .filter { it == PlayState.STOPPED }
-        .collect {
-          Timber.d("Stopped for $idleTimeOutInSeconds. Stop self")
-          stopSelf()
-        }
-    }
   }
 
   private fun currentBookIdChanged(id: UUID) {
@@ -234,12 +217,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun handlePlaybackStateStopped() {
-    mediaSession.isActive = false
-    if (dismissNotificationOnStop) {
-      stopForeground(true)
-    } else {
-      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-    }
+    ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+    stopSelf()
   }
 
   private suspend fun handlePlaybackStatePaused() {
@@ -251,7 +230,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private suspend fun handlePlaybackStatePlaying() {
     Timber.d("set mediaSession to active")
-    mediaSession.isActive = true
     currentBook()?.let {
       if (!started) {
         started = true
@@ -356,12 +334,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
-  private var dismissNotificationOnStop = false
 
   override fun onDestroy() {
     Timber.v("onDestroy called")
-    dismissNotificationOnStop = playStateManager.playState == PlayState.PAUSED
     player.stop()
+    mediaSession.isActive = false
     mediaSession.release()
     scope.cancel()
     super.onDestroy()
