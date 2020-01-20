@@ -138,12 +138,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .subscribe()
       .disposeOnDestroy()
 
-    playStateManager.playStateStream()
-      .switchMapCompletable {
-        rxCompletable(Dispatchers.Main) { handlePlaybackState(it) }
-      }
-      .subscribe()
-      .disposeOnDestroy()
+    scope.launch {
+      playStateManager.playStateStream().latestAsFlow()
+        .collect {
+          handlePlaybackState(it)
+        }
+    }
 
     HeadsetPlugReceiver.events(this@PlaybackService)
       .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
