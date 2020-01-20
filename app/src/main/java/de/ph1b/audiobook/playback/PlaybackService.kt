@@ -84,7 +84,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
-  private var started = false
+  private var isForeground = false
 
   override fun onCreate() {
     appComponent.playbackComponent()
@@ -218,11 +218,15 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun handlePlaybackStateStopped() {
     ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+    isForeground = false
     stopSelf()
   }
 
   private suspend fun handlePlaybackStatePaused() {
-    ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+    if (isForeground) {
+      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+      isForeground = false
+    }
     currentBook()?.let {
       updateNotification(it)
     }
@@ -231,13 +235,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private suspend fun handlePlaybackStatePlaying() {
     Timber.d("set mediaSession to active")
     currentBook()?.let {
-      if (!started) {
-        started = true
+      val notification = notificationCreator.createNotification(it)
+      if (!isForeground) {
         // in case this service was not started but just bound, start it.
         ContextCompat.startForegroundService(this, Intent(this, javaClass))
+        startForeground(NOTIFICATION_ID, notification)
+        isForeground = true
       }
-      val notification = notificationCreator.createNotification(it)
-      startForeground(NOTIFICATION_ID, notification)
     }
   }
 
