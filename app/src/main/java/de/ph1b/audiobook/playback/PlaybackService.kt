@@ -31,11 +31,15 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -96,7 +100,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
     }
 
-    notifyOnAutoConnectionChange.listen()
+    scope.launch {
+      notifyOnAutoConnectionChange.listen()
+    }
 
     currentBookIdPref.stream
       .subscribe { currentBookIdChanged(it) }
@@ -360,7 +366,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.release()
     scope.cancel()
     disposables.dispose()
-    notifyOnAutoConnectionChange.unregister()
     super.onDestroy()
   }
 
