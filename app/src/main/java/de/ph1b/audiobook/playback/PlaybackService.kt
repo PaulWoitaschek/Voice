@@ -104,9 +104,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
       notifyOnAutoConnectionChange.listen()
     }
 
-    currentBookIdPref.stream
-      .subscribe { currentBookIdChanged(it) }
-      .disposeOnDestroy()
+    scope.launch {
+      currentBookIdPref.flow.collect {
+        currentBookIdChanged(it)
+      }
+    }
 
     val bookUpdated = currentBookIdPref.stream
       .switchMap { repo.byId(it).getIfPresent() }
