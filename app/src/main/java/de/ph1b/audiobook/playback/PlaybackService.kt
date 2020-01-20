@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -44,7 +45,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -182,15 +183,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun tearDownAutomatically() {
     val idleTimeOutInSeconds: Long = 7
-    playStateManager.playStateStream()
-      .distinctUntilChanged()
-      .debounce(idleTimeOutInSeconds, TimeUnit.SECONDS)
-      .filter { it == PlayState.STOPPED }
-      .subscribe {
-        Timber.d("Stopped for $idleTimeOutInSeconds. Stop self")
-        stopSelf()
-      }
-      .disposeOnDestroy()
+    scope.launch {
+      playStateManager.playStateStream().latestAsFlow()
+        .distinctUntilChanged()
+        .debounce(SECONDS.toMillis(idleTimeOutInSeconds))
+        .filter { it == PlayState.STOPPED }
+        .collect {
+          Timber.d("Stopped for $idleTimeOutInSeconds. Stop self")
+          stopSelf()
+        }
+    }
   }
 
   private fun currentBookIdChanged(id: UUID) {
