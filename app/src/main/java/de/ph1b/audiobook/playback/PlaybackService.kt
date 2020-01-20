@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
@@ -216,15 +215,24 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return repo.bookById(id)
   }
 
-  private fun handlePlaybackStateStopped() {
-    ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-    isForeground = false
+  private suspend fun handlePlaybackStateStopped() {
+    if (isForeground) {
+      stopForeground(false)
+      isForeground = false
+    }
+
+    currentBook()?.let {
+      updateNotification(it)
+      changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
+      changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+    }
+
     stopSelf()
   }
 
   private suspend fun handlePlaybackStatePaused() {
     if (isForeground) {
-      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+      stopForeground(false)
       isForeground = false
     }
     currentBook()?.let {
