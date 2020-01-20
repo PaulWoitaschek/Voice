@@ -18,13 +18,14 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.RxBroadcast
+import de.ph1b.audiobook.misc.flowBroadcastReceiver
 import de.ph1b.audiobook.misc.latestAsFlow
 import de.ph1b.audiobook.misc.rxCompletable
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
+import de.ph1b.audiobook.playback.events.HeadsetState
+import de.ph1b.audiobook.playback.events.headsetStateChangeFlow
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
@@ -37,6 +38,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -145,10 +147,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
     }
 
-    HeadsetPlugReceiver.events(this@PlaybackService)
-      .filter { it == HeadsetPlugReceiver.HeadsetState.PLUGGED }
-      .subscribe { headsetPlugged() }
-      .disposeOnDestroy()
+    scope.launch {
+      headsetStateChangeFlow()
+        .filter { it == HeadsetState.Plugged }
+        .collect {
+          headsetPlugged()
+        }
+    }
 
     repo.booksStream()
       .map { it.size }
@@ -158,13 +163,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       .disposeOnDestroy()
 
-    RxBroadcast
-      .register(
-        this@PlaybackService,
-        IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-      )
-      .subscribe { audioBecomingNoisy() }
-      .disposeOnDestroy()
+    scope.launch {
+      flowBroadcastReceiver(IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)).collect {
+        audioBecomingNoisy()
+      }
+    }
 
     tearDownAutomatically()
   }

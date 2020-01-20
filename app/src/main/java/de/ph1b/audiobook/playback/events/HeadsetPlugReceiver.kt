@@ -3,36 +3,28 @@ package de.ph1b.audiobook.playback.events
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import de.ph1b.audiobook.misc.RxBroadcast
-import io.reactivex.Observable
+import de.ph1b.audiobook.misc.flowBroadcastReceiver
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
-/**
- * Simple receiver wrapper which holds a [android.content.BroadcastReceiver] that notifies on headset changes.
- */
-object HeadsetPlugReceiver {
 
-  private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
-  private const val PLUGGED = 1
-  private val UNPLUGGED = 0
+private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
+private const val PLUGGED = 1
+private const val UNPLUGGED = 0
 
-  fun events(c: Context): Observable<HeadsetState> = RxBroadcast.register(c, filter)
+
+fun Context.headsetStateChangeFlow(): Flow<HeadsetState> {
+  return flowBroadcastReceiver(IntentFilter(Intent.ACTION_HEADSET_PLUG))
     .map {
       Timber.i("onReceive with intent=$it")
-      val intState = it.getIntExtra("state", UNPLUGGED)
-      when (it.getIntExtra("state", UNPLUGGED)) {
-        UNPLUGGED -> HeadsetState.UNPLUGGED
-        PLUGGED -> HeadsetState.PLUGGED
+      when (val intState = it.getIntExtra("state", UNPLUGGED)) {
+        UNPLUGGED -> HeadsetState.Unplugged
+        PLUGGED -> HeadsetState.Plugged
         else -> {
           Timber.i("Unknown headsetState $intState")
-          HeadsetState.UNKNOWN
+          HeadsetState.Unknown
         }
       }
     }
-
-  enum class HeadsetState {
-    PLUGGED,
-    UNPLUGGED,
-    UNKNOWN
-  }
 }
