@@ -37,8 +37,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -155,13 +157,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
     }
 
-    repo.booksStream()
-      .map { it.size }
-      .distinctUntilChanged()
-      .subscribe {
-        notifyChildrenChanged(bookUriConverter.allBooksId())
-      }
-      .disposeOnDestroy()
+    scope.launch {
+      repo.booksStream().latestAsFlow()
+        .map { it.size }
+        .distinctUntilChanged()
+        .collect {
+          notifyChildrenChanged(bookUriConverter.allBooksId())
+        }
+    }
 
     scope.launch {
       flowBroadcastReceiver(IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)).collect {
