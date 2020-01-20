@@ -31,12 +31,9 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -48,10 +45,9 @@ private const val NOTIFICATION_ID = 42
 /**
  * Service that hosts the longtime playback and handles its controls.
  */
-class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
+class PlaybackService : MediaBrowserServiceCompat() {
 
-  private val onCreateJob = SupervisorJob()
-  override val coroutineContext = onCreateJob + Dispatchers.Main
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
   private val disposables = CompositeDisposable()
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
@@ -92,7 +88,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
 
     sessionToken = mediaSession.sessionToken
 
-    launch {
+    scope.launch {
       player.bookContentStream.latestAsFlow()
         .distinctUntilChangedBy { it.settings }
         .collect { content ->
@@ -274,7 +270,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
   fun execute(command: PlayerCommand) {
     return when (command) {
       PlayerCommand.Play -> {
-        launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
+        scope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
         player.play()
       }
       PlayerCommand.Next -> {
@@ -336,7 +332,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
     result: Result<List<MediaBrowserCompat.MediaItem>>
   ) {
     result.detach()
-    launch {
+    scope.launch {
       val children = mediaBrowserHelper.loadChildren(parentId)
       result.sendResult(children)
     }
@@ -362,7 +358,7 @@ class PlaybackService : MediaBrowserServiceCompat(), CoroutineScope {
     player.stop()
 
     mediaSession.release()
-    onCreateJob.cancel()
+    scope.cancel()
     disposables.dispose()
     notifyOnAutoConnectionChange.unregister()
     super.onDestroy()
