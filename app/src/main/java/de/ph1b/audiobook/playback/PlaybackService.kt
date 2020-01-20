@@ -227,7 +227,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
     }
 
-    stopSelf()
+    //stopSelf()
   }
 
   private suspend fun handlePlaybackStatePaused() {

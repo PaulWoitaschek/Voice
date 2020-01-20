@@ -14,7 +14,11 @@ import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
-import de.ph1b.audiobook.features.bookPlaying.*
+import de.ph1b.audiobook.features.bookPlaying.BookPlayController
+import de.ph1b.audiobook.features.bookPlaying.BookPlayPresenter
+import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogController
+import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
+import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
@@ -23,6 +27,7 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
+import de.ph1b.audiobook.playback.CommandBroadcastReceiver
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import javax.inject.Singleton
@@ -56,19 +61,20 @@ interface AppComponent : DataComponent {
     fun build(): AppComponent
   }
 
-  fun inject(target: BookCategoryController)
   fun inject(target: App)
   fun inject(target: AutoRewindDialogController)
   fun inject(target: BaseWidgetProvider)
+  fun inject(target: BookCategoryController)
   fun inject(target: BookOverviewController)
   fun inject(target: BookPlayController)
   fun inject(target: BookPlayPresenter)
+  fun inject(target: CommandBroadcastReceiver)
+  fun inject(target: CoverFromInternetController)
   fun inject(target: EditBookBottomSheetController)
   fun inject(target: EditBookTitleDialogController)
   fun inject(target: EditCoverDialogController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
-  fun inject(target: CoverFromInternetController)
   fun inject(target: JumpToPositionDialogController)
   fun inject(target: LoadBookCover)
   fun inject(target: LoudnessDialog)

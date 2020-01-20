@@ -53,8 +53,16 @@ sealed class PlayerCommand : Parcelable {
   @Parcelize
   object Stop : PlayerCommand()
 
-  fun toIntent(context: Context): Intent {
-    return Intent(context, PlaybackService::class.java)
+  fun toServiceIntent(context: Context): Intent {
+    return toIntent<PlaybackService>(context)
+  }
+
+  fun toBroadcastReceiverIntent(context: Context): Intent {
+    return toIntent<CommandBroadcastReceiver>(context)
+  }
+
+  private inline fun <reified T> toIntent(context: Context): Intent {
+    return Intent(context, T::class.java)
       .setAction(INTENT_ACTION)
       .putExtra(INTENT_EXTRA, this)
   }

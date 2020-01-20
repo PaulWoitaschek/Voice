@@ -141,7 +141,7 @@ class WidgetUpdater @Inject constructor(
     val playPausePI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      PlayerCommand.PlayPause.toIntent(context),
+      PlayerCommand.PlayPause.toServiceIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
@@ -149,7 +149,7 @@ class WidgetUpdater @Inject constructor(
     val fastForwardPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      PlayerCommand.FastForward.toIntent(context),
+      PlayerCommand.FastForward.toServiceIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
@@ -157,7 +157,7 @@ class WidgetUpdater @Inject constructor(
     val rewindPI = PendingIntentCompat.getForegroundService(
       context,
       KeyEvent.KEYCODE_MEDIA_REWIND,
-      PlayerCommand.RewindAutoPlay.toIntent(context),
+      PlayerCommand.RewindAutoPlay.toServiceIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)

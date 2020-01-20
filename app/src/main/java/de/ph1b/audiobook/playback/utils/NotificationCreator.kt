@@ -14,7 +14,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PerService
-import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerCommand
@@ -135,19 +134,19 @@ class NotificationCreator
   }
 
   private fun stopIntent(): PendingIntent {
-    return PendingIntent.getService(
+    return PendingIntent.getBroadcast(
       context,
       KeyEvent.KEYCODE_MEDIA_STOP,
-      PlayerCommand.Stop.toIntent(context),
+      PlayerCommand.Stop.toServiceIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
   }
 
   private fun Builder.addFastForwardAction(): Builder {
-    val fastForwardPI = PendingIntentCompat.getForegroundService(
+    val fastForwardPI = PendingIntent.getBroadcast(
       context,
       KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      PlayerCommand.FastForwardAutoPlay.toIntent(context),
+      PlayerCommand.FastForwardAutoPlay.toBroadcastReceiverIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return addAction(
@@ -158,20 +157,20 @@ class NotificationCreator
   }
 
   private fun Builder.addRewindAction(): Builder {
-    val rewindPI = PendingIntentCompat.getForegroundService(
+    val rewindPI = PendingIntent.getBroadcast(
       context,
       KeyEvent.KEYCODE_MEDIA_REWIND,
-      PlayerCommand.Rewind.toIntent(context),
+      PlayerCommand.Rewind.toBroadcastReceiverIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
   }
 
   private fun Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): Builder {
-    val playPausePI = PendingIntentCompat.getForegroundService(
+    val playPausePI = PendingIntent.getBroadcast(
       context,
       KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      PlayerCommand.PlayPause.toIntent(context),
+      PlayerCommand.PlayPause.toBroadcastReceiverIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
     return if (playState == PlayStateManager.PlayState.Playing) {
