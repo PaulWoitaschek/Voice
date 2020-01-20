@@ -236,6 +236,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.d("set mediaSession to active")
     currentBook()?.let {
       val notification = notificationCreator.createNotification(it)
+      notificationManager.notify(NOTIFICATION_ID, notification)
       if (!isForeground) {
         // in case this service was not started but just bound, start it.
         ContextCompat.startForegroundService(this, Intent(this, javaClass))
