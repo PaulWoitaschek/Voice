@@ -16,12 +16,12 @@ class PlayStateManager
 @Inject
 constructor() {
 
-  private val playStateSubject = BehaviorSubject.createDefault(PlayState.STOPPED)
+  private val playStateSubject = BehaviorSubject.createDefault(PlayState.Stopped)
 
   init {
     @Suppress("CheckResult")
     playStateSubject.subscribe {
-      if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
+      if (it == PlayState.Playing || it == PlayState.Stopped) {
         pauseReason = PauseReason.NONE
       }
     }
@@ -33,17 +33,18 @@ constructor() {
 
   var playState: PlayState
     set(value) {
-      Timber.i("playState set to $value")
-      playStateSubject.onNext(value)
+      if (playStateSubject.value != value) {
+        Timber.i("playState set to $value")
+        playStateSubject.onNext(value)
+      }
     }
     get() = playStateSubject.value!!
 
   /** Represents the play states for the playback.  */
   enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
-
-    PLAYING(PlaybackStateCompat.STATE_PLAYING),
-    PAUSED(PlaybackStateCompat.STATE_PAUSED),
-    STOPPED(PlaybackStateCompat.STATE_STOPPED)
+    Playing(PlaybackStateCompat.STATE_PLAYING),
+    Paused(PlaybackStateCompat.STATE_PAUSED),
+    Stopped(PlaybackStateCompat.STATE_STOPPED)
   }
 
   enum class PauseReason {

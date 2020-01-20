@@ -6,9 +6,9 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PAUSED
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.STOPPED
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Paused
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Stopped
 import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
@@ -73,12 +73,12 @@ class BookPlayPresenterTest {
   fun playState() {
     every { mockPlayStateManager.playStateStream() }.returns(
       Observable.just(
-        PLAYING,
-        STOPPED,
-        STOPPED,
-        PLAYING,
-        PAUSED,
-        STOPPED
+        Playing,
+        Stopped,
+        Stopped,
+        Playing,
+        Paused,
+        Stopped
       )
     )
     bookPlayPresenter.attach(mockView)

@@ -2,7 +2,7 @@ package de.ph1b.audiobook.playback
 
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.PLAYING
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -134,10 +134,10 @@ class SleepTimer
   }
 
   private suspend fun suspendUntilPlaying() {
-    if (playStateManager.playState != PLAYING) {
+    if (playStateManager.playState != Playing) {
       Timber.i("Not playing. Wait for Playback to continue.")
       playStateManager.playStateStream()
-        .filter { it == PLAYING }
+        .filter { it == Playing }
         .awaitFirst()
       Timber.i("Playback continued.")
     }

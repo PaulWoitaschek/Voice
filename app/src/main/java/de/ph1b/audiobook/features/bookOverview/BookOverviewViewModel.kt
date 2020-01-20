@@ -49,7 +49,7 @@ constructor(
     val bookStream = repo.booksStream()
     val currentBookIdStream = currentBookIdPref.stream
     val playingStream = playStateManager.playStateStream()
-      .map { it == PlayState.PLAYING }
+      .map { it == PlayState.Playing }
       .distinctUntilChanged()
     val scannerActiveStream = bookAdder.scannerActive
     return Observables

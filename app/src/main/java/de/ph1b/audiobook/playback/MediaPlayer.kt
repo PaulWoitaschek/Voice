@@ -71,10 +71,10 @@ constructor(
 
     player.onStateChanged {
       playStateManager.playState = when (it) {
-        PlayerState.IDLE -> PlayState.STOPPED
-        PlayerState.ENDED -> PlayState.STOPPED
-        PlayerState.PAUSED -> PlayState.PAUSED
-        PlayerState.PLAYING -> PlayState.PLAYING
+        PlayerState.IDLE -> PlayState.Stopped
+        PlayerState.ENDED -> PlayState.Stopped
+        PlayerState.PAUSED -> PlayState.Paused
+        PlayerState.PLAYING -> PlayState.Playing
       }
       state = it
     }

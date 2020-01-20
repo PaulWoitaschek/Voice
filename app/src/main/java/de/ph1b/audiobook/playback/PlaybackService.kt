@@ -193,7 +193,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun audioBecomingNoisy() {
     Timber.d("audio becoming noisy. playState=${playStateManager.playState}")
-    if (playStateManager.playState === PlayState.PLAYING) {
+    if (playStateManager.playState === PlayState.Playing) {
       playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
       player.pause(true)
     }
@@ -202,9 +202,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private suspend fun handlePlaybackState(state: PlayState) {
     Timber.d("handlePlaybackState $state")
     when (state) {
-      PlayState.PLAYING -> handlePlaybackStatePlaying()
-      PlayState.PAUSED -> handlePlaybackStatePaused()
-      PlayState.STOPPED -> handlePlaybackStateStopped()
+      PlayState.Playing -> handlePlaybackStatePlaying()
+      PlayState.Paused -> handlePlaybackStatePaused()
+      PlayState.Stopped -> handlePlaybackStateStopped()
     }
     currentBook()?.let {
       changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
@@ -265,7 +265,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         player.next()
       }
       PlayerCommand.PlayPause -> {
-        if (playStateManager.playState == PlayState.PLAYING) {
+        if (playStateManager.playState == PlayState.Playing) {
           player.pause(true)
         } else {
           execute(PlayerCommand.Play)

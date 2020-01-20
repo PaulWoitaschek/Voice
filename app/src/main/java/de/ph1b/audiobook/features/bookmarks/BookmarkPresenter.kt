@@ -59,7 +59,7 @@ class BookmarkPresenter @Inject constructor(
     val bookmark = bookmarks.find { it.id == id }
       ?: return
 
-    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
+    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
 
     currentBookIdPref.value = bookId
     playerController.execute(PlayerCommand.SetPosition(bookmark.time, bookmark.mediaFile))

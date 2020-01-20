@@ -205,7 +205,7 @@ class ChangeNotifier @Inject constructor(
         } else removeExtra("artist")
         putExtra("album", bookName)
         putExtra("track", chapterName)
-        putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
+        putExtra("playing", playState === PlayStateManager.PlayState.Playing)
         putExtra("position", time)
         putExtra("package", BuildConfig.APPLICATION_ID)
       }

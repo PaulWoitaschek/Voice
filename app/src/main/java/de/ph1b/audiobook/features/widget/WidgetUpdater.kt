@@ -162,7 +162,7 @@ class WidgetUpdater @Inject constructor(
     )
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
-    val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.PLAYING) {
+    val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
       R.drawable.ic_pause_white_36dp
     } else R.drawable.ic_play_white_36dp
     remoteViews.setImageViewResource(R.id.playPause, playIcon)

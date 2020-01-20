@@ -42,7 +42,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   override fun onAttach(view: BookPlayMvp.View) {
     currentBookIdPref.value = bookId
     playStateManager.playStateStream()
-      .map { it == PlayState.PLAYING }
+      .map { it == PlayState.Playing }
       .distinctUntilChanged()
       .subscribe {
         Timber.i("onNext with playing=$it")

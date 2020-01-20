@@ -62,7 +62,7 @@ class NotificationCreator
       .setContentTitle(book)
       .setDeleteIntent(stopIntent())
       .setLargeIcon(book)
-      .setOngoing(playStateManager.playState == PlayStateManager.PlayState.PLAYING)
+      .setOngoing(playStateManager.playState == PlayStateManager.PlayState.Playing)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setShowWhen(false)
       .setSmallIcon(R.drawable.ic_notification)
@@ -175,7 +175,7 @@ class NotificationCreator
       PlayerCommand.PlayPause.toIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
     )
-    return if (playState == PlayStateManager.PlayState.PLAYING) {
+    return if (playState == PlayStateManager.PlayState.Playing) {
       addAction(R.drawable.ic_pause_white_36dp, context.getString(R.string.pause), playPausePI)
     } else {
       addAction(R.drawable.ic_play_white_36dp, context.getString(R.string.play), playPausePI)
