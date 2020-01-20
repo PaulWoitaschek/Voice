@@ -244,6 +244,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
+    initPlayer(currentBookIdPref.value)
+
     if (intent != null) {
       if (intent.action == Intent.ACTION_MEDIA_BUTTON) {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
@@ -255,7 +257,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return Service.START_NOT_STICKY
   }
 
-  fun execute(command: PlayerCommand) {
+  private fun execute(command: PlayerCommand) {
     initPlayer(currentBookIdPref.value)
     return when (command) {
       PlayerCommand.Play -> {
