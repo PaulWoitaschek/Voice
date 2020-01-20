@@ -161,7 +161,7 @@ constructor(
     if (!shouldInitialize) {
       return
     }
-    Timber.i("init")
+    Timber.i("init ${content.currentFile}")
     _bookContent.onNext(content)
     checkMainThread()
     player.playWhenReady = false
@@ -189,7 +189,7 @@ constructor(
   }
 
   fun play() {
-    Timber.v("play called in state $state")
+    Timber.v("play called in state $state, currentFile=${bookContent?.currentFile}")
     prepareIfIdle()
     bookContent?.let {
       val withChangedPlayedAtTime = it.updateSettings {

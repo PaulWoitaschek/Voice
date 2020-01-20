@@ -110,7 +110,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     scope.launch {
       currentBookIdPref.flow.collect {
-        currentBookIdChanged(it)
+        initPlayer(it)
       }
     }
 
@@ -172,7 +172,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     notificationManager.notify(NOTIFICATION_ID, notification)
   }
 
-  private fun currentBookIdChanged(id: UUID) {
+  private fun initPlayer(id: UUID) {
     if (player.bookContent?.id != id) {
       val book = repo.bookById(id)
       if (book != null) {
@@ -256,6 +256,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   fun execute(command: PlayerCommand) {
+    initPlayer(currentBookIdPref.value)
     return when (command) {
       PlayerCommand.Play -> {
         scope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
