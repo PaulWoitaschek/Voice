@@ -22,4 +22,6 @@ sealed class Optional<T : Any> {
   }
 }
 
+val <T : Any> Optional<T>.orNull: T? get() = if (this is Optional.Present) value else null
+
 fun <T : Any> T?.toOptional(): Optional<T> = Optional.of(this)

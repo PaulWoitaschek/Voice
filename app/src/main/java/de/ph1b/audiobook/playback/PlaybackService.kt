@@ -13,14 +13,13 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
-import de.ph1b.audiobook.common.getIfPresent
+import de.ph1b.audiobook.common.orNull
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.flowBroadcastReceiver
 import de.ph1b.audiobook.misc.latestAsFlow
-import de.ph1b.audiobook.misc.rxCompletable
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -30,19 +29,21 @@ import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationCreator
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.awaitFirst
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.TimeUnit.SECONDS
@@ -57,7 +58,6 @@ private const val NOTIFICATION_ID = 42
 class PlaybackService : MediaBrowserServiceCompat() {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-  private val disposables = CompositeDisposable()
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
@@ -115,33 +115,27 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
     }
 
-    val bookUpdated = currentBookIdPref.stream
-      .switchMap { repo.byId(it).getIfPresent() }
-      .distinctUntilChanged { old, new ->
-        old.content == new.content
+    val bookUpdated = currentBookIdPref.flow
+      .mapLatest { repo.byId(it).awaitFirst().orNull }
+      .filterNotNull()
+      .distinctUntilChangedBy {
+        it.content
       }
-    bookUpdated
-      .doOnNext {
-        Timber.i("init ${it.name}")
-        player.init(it.content)
-      }
-      .switchMapCompletable {
-        rxCompletable(Dispatchers.Main) {
+    scope.launch {
+      bookUpdated
+        .collectLatest {
+          player.init(it.content)
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
         }
-      }
-      .subscribe()
-      .disposeOnDestroy()
+    }
 
-    bookUpdated
-      .distinctUntilChanged { book -> book.content.currentChapter }
-      .switchMapCompletable {
-        rxCompletable {
+    scope.launch {
+      bookUpdated
+        .distinctUntilChangedBy { book -> book.content.currentChapter }
+        .collectLatest {
           updateNotification(it)
         }
-      }
-      .subscribe()
-      .disposeOnDestroy()
+    }
 
     scope.launch {
       playStateManager.playStateStream().latestAsFlow()
@@ -362,20 +356,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
-  private fun Disposable.disposeOnDestroy() {
-    disposables.add(this)
-  }
-
   private var dismissNotificationOnStop = false
 
   override fun onDestroy() {
     Timber.v("onDestroy called")
     dismissNotificationOnStop = playStateManager.playState == PlayState.PAUSED
     player.stop()
-
     mediaSession.release()
     scope.cancel()
-    disposables.dispose()
     super.onDestroy()
   }
 
