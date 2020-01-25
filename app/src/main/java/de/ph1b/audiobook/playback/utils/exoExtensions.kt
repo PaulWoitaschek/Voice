@@ -10,8 +10,8 @@ import de.ph1b.audiobook.playback.PlayerState
 
 fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
   val params = playbackParameters
-  if (params == null || params.speed != speed || params.skipSilence != skipSilence) {
-    playbackParameters = PlaybackParameters(speed, 1F, skipSilence)
+  if (params.speed != speed || params.skipSilence != skipSilence) {
+    setPlaybackParameters(PlaybackParameters(speed, 1F, skipSilence))
   }
 }
 
@@ -46,7 +46,7 @@ inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit)
 
 inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
   addAnalyticsListener(object : AnalyticsListener {
-    override fun onAudioSessionId(eventTime: AnalyticsListener.EventTime?, audioSessionId: Int) {
+    override fun onAudioSessionId(eventTime: AnalyticsListener.EventTime, audioSessionId: Int) {
       action(audioSessionId)
     }
   })

@@ -12,7 +12,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.injection.PerService
-import de.ph1b.audiobook.misc.checkMainThread
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_FAST_FORWARD
 import de.ph1b.audiobook.playback.ANDROID_AUTO_ACTION_NEXT
@@ -47,30 +46,30 @@ class ChangeNotifier @Inject constructor(
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
     .setActions(
       PlaybackStateCompat.ACTION_FAST_FORWARD or
-          PlaybackStateCompat.ACTION_PAUSE or
-          PlaybackStateCompat.ACTION_PLAY or
-          PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
-          PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-          PlaybackStateCompat.ACTION_PLAY_PAUSE or
-          PlaybackStateCompat.ACTION_REWIND or
-          PlaybackStateCompat.ACTION_SEEK_TO or
-          PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-          PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-          PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
-          PlaybackStateCompat.ACTION_STOP
+        PlaybackStateCompat.ACTION_PAUSE or
+        PlaybackStateCompat.ACTION_PLAY or
+        PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
+        PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
+        PlaybackStateCompat.ACTION_PLAY_PAUSE or
+        PlaybackStateCompat.ACTION_REWIND or
+        PlaybackStateCompat.ACTION_SEEK_TO or
+        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+        PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
+        PlaybackStateCompat.ACTION_STOP
     )
 
   // use a different feature set for Android Auto
   private val playbackStateBuilderForAuto = PlaybackStateCompat.Builder()
     .setActions(
       PlaybackStateCompat.ACTION_PAUSE or
-          PlaybackStateCompat.ACTION_PLAY or
-          PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
-          PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
-          PlaybackStateCompat.ACTION_PLAY_PAUSE or
-          PlaybackStateCompat.ACTION_SEEK_TO or
-          PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
-          PlaybackStateCompat.ACTION_STOP
+        PlaybackStateCompat.ACTION_PLAY or
+        PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID or
+        PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH or
+        PlaybackStateCompat.ACTION_PLAY_PAUSE or
+        PlaybackStateCompat.ACTION_SEEK_TO or
+        PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
+        PlaybackStateCompat.ACTION_STOP
     )
     .addCustomAction(
       ANDROID_AUTO_ACTION_REWIND,
@@ -94,7 +93,6 @@ class ChangeNotifier @Inject constructor(
     )
 
   suspend fun notify(what: Type, book: Book, forAuto: Boolean = false) {
-    checkMainThread()
     val currentChapter = book.content.currentChapter
     val playState = playStateManager.playState
 
@@ -104,17 +102,6 @@ class ChangeNotifier @Inject constructor(
     val position = book.content.positionInChapter
 
     context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
-
-    val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
-      .setState(playState.playbackStateCompat, position, book.content.playbackSpeed)
-      .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
-      .build()
-
-    try {
-      mediaSession.setPlaybackState(playbackState)
-    } catch (e: IllegalArgumentException) {
-      Timber.e(e, "Can't set playbackState.")
-    }
 
     if (what == Type.METADATA && lastFileForMetaData != book.content.currentFile) {
       appendQueue(book)
@@ -172,6 +159,13 @@ class ChangeNotifier @Inject constructor(
 
       lastFileForMetaData = book.content.currentFile
     }
+
+    val playbackState = (if (forAuto) playbackStateBuilderForAuto else playbackStateBuilder)
+      .setState(playState.playbackStateCompat, position, book.content.playbackSpeed)
+      .setActiveQueueItemId(book.content.chapters.indexOf(book.content.currentChapter).toLong())
+      .build()
+
+    mediaSession.setPlaybackState(playbackState)
   }
 
   private fun appendQueue(book: Book) {
