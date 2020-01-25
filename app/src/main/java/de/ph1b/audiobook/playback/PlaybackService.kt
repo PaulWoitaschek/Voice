@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.playback
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
@@ -92,6 +94,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .inject(this)
     super.onCreate()
 
+    // this is necessary because otherwise after a the service gets restarted,
+    // the media session is not updated any longer.
+    notificationManager.cancel(NOTIFICATION_ID)
+
     mediaSession.isActive = true
     sessionToken = mediaSession.sessionToken
 
@@ -166,9 +172,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-  private suspend fun updateNotification(book: Book) {
-    val notification = notificationCreator.createNotification(book)
-    notificationManager.notify(NOTIFICATION_ID, notification)
+  private suspend fun updateNotification(book: Book): Notification {
+    Timber.i("updateNotification for ${book.name}")
+    return notificationCreator.createNotification(book).also {
+      notificationManager.notify(NOTIFICATION_ID, it)
+    }
   }
 
   private fun initPlayer(id: UUID) {
@@ -217,7 +225,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private suspend fun handlePlaybackStateStopped() {
     if (isForeground) {
-      stopForeground(false)
+      Timber.i("stopForeground")
+      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
       isForeground = false
     }
 
@@ -227,12 +236,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
       changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
     }
 
-    //stopSelf()
+    stopSelf()
   }
 
   private suspend fun handlePlaybackStatePaused() {
     if (isForeground) {
-      stopForeground(false)
+      Timber.d("stopForeground")
+      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
       isForeground = false
     }
     currentBook()?.let {
@@ -241,12 +251,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private suspend fun handlePlaybackStatePlaying() {
-    Timber.d("set mediaSession to active")
     currentBook()?.let {
-      val notification = notificationCreator.createNotification(it)
-      notificationManager.notify(NOTIFICATION_ID, notification)
+      val notification = updateNotification(it)
       if (!isForeground) {
-        // in case this service was not started but just bound, start it.
+        Timber.i("startForeground")
         ContextCompat.startForegroundService(this, Intent(this, javaClass))
         startForeground(NOTIFICATION_ID, notification)
         isForeground = true
@@ -350,13 +358,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
     return BrowserRoot(mediaBrowserHelper.root(), null)
   }
 
-
   override fun onDestroy() {
-    Timber.v("onDestroy called")
-    player.stop()
-    mediaSession.isActive = false
-    mediaSession.release()
     scope.cancel()
+    player.stop()
+    mediaSession.release()
     super.onDestroy()
   }
 
