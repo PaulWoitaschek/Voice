@@ -20,6 +20,17 @@
         <item name="md_color_button_text">@color/accent</item>
     </style>
 
+    <style name="PlayButtonStyle">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="FastForwardRewindStyle">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:elevation">4dp</item>
         <item name="android:background">?attr/colorSurface</item>

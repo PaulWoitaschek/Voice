@@ -7,27 +7,11 @@ import android.transition.Visibility
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
-import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.noPauseAnimator.noPause
 
 private const val FINAL_RADIUS = "de.ph1b.audiobook:CircularRevealBookPlayTransition:finalRadius"
 
 class CircularRevealBookPlayTransition : Visibility() {
-
-  override fun captureEndValues(transitionValues: TransitionValues?) {
-    super.captureEndValues(transitionValues)
-    if (transitionValues == null)
-      return
-
-    val parent = transitionValues.view.parent as View
-    val previous = parent.findViewById<View?>(R.id.previous)
-    val next = parent.findViewById<View?>(R.id.next)
-    if (previous == null || next == null)
-      return
-
-    val finalRadius = next.right - previous.left
-    transitionValues.values[FINAL_RADIUS] = finalRadius
-  }
 
   override fun onAppear(
     sceneRoot: ViewGroup?,

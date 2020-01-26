@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.uitools
 
 import android.graphics.drawable.AnimatedVectorDrawable
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.widget.ImageView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.drawable
 
-class PlayPauseDrawableSetter(val fab: FloatingActionButton) {
+class PlayPauseDrawableSetter(val fab: ImageView) {
 
   private val playToPause =
     fab.context.drawable(R.drawable.avd_play_to_pause) as AnimatedVectorDrawable

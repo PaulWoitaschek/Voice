@@ -38,60 +38,42 @@
       app:menu="@menu/book_play"
       app:navigationIcon="@drawable/ic_arrow_back" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
       android:id="@+id/play"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
+      android:layout_width="94dp"
+      android:layout_height="94dp"
+      android:layout_marginBottom="36dp"
+      android:background="@drawable/play_button"
       android:contentDescription="@string/play_pause"
+      android:elevation="8dp"
+      android:foreground="?attr/selectableItemBackground"
+      android:padding="16dp"
+      android:theme="@style/PlayButtonStyle"
+      android:tint="@color/white"
       android:transitionName="@string/fab_transition"
+      app:fabCustomSize="84dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="@id/x75"
-      app:layout_constraintRight_toRightOf="@id/x75"
-      tools:ignore="UnusedAttribute" />
+      app:layout_constraintRight_toRightOf="@id/x75" />
 
     <ImageView
       android:id="@+id/rewind"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      style="@style/FastForwardRewindStyle"
+      android:layout_marginEnd="16dp"
       android:contentDescription="@string/rewind"
-      android:padding="8dp"
       android:src="@drawable/ic_fast_rewind"
       app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintRight_toLeftOf="@id/play"
-      app:layout_constraintTop_toTopOf="@id/play" />
-
-    <ImageView
-      android:id="@+id/previous"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:contentDescription="@string/previous_track"
-      android:padding="8dp"
-      android:src="@drawable/ic_skip_previous"
-      app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintRight_toLeftOf="@id/rewind"
+      app:layout_constraintEnd_toStartOf="@id/play"
       app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
       android:id="@+id/fastForward"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      style="@style/FastForwardRewindStyle"
+      android:layout_marginStart="16dp"
       android:contentDescription="@string/fast_forward"
-      android:padding="8dp"
       android:src="@drawable/ic_fast_forward"
       app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintLeft_toRightOf="@id/play"
-      app:layout_constraintTop_toTopOf="@id/play" />
-
-    <ImageView
-      android:id="@+id/next"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:contentDescription="@string/next_track"
-      android:padding="8dp"
-      android:src="@drawable/ic_skip_next"
-      app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintLeft_toRightOf="@id/fastForward"
+      app:layout_constraintStart_toEndOf="@id/play"
       app:layout_constraintTop_toTopOf="@id/play" />
 
     <TextView
