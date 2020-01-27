@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewConfiguration
-import android.widget.SeekBar
 import androidx.core.view.isVisible
+import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -94,14 +94,18 @@ class BookPlayController(
     val chapterIndex = data.indexOf(currentChapter)
     bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
-    seekBar.max = duration.toInt()
+    slider.valueTo = duration.toFloat()
     maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
     val progress = book.content.positionInChapter - currentChapter.start
-    if (!seekBar.isPressed) {
-      seekBar.progress = progress.toInt()
+    if (!slider.isPressed) {
+      slider.value = progress.toFloat()
       playedTime.text = formatTime(progress, duration)
+    }
+
+    slider.setLabelFormatter {
+      formatTime(it.toLong(), duration)
     }
 
     // name
@@ -170,26 +174,23 @@ class BookPlayController(
   }
 
   private fun setupSeekBar() {
-    seekBar.setOnSeekBarChangeListener(
-      object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(view: SeekBar?, progress: Int, fromUser: Boolean) {
-          if (!isAttached) return
-          // sets text to adjust while using seekBar
-          playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
-        }
+    slider.addOnChangeListener { slider, value, fromUser ->
+      if (isAttached && !fromUser) {
+        playedTime.text = formatTime(value.toLong(), slider.valueTo.toLong())
+      }
+    }
+    slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+      override fun onStartTrackingTouch(slider: Slider) {
+      }
 
-        override fun onStartTrackingTouch(view: SeekBar?) {
-        }
-
-        override fun onStopTrackingTouch(view: SeekBar?) {
-          if (!isAttached) return
-          currentChapter?.let {
-            val progress = seekBar.progress
-            presenter.seekTo(it.start + progress, it.file)
-          }
+      override fun onStopTrackingTouch(slider: Slider) {
+        if (!isAttached) return
+        currentChapter?.let {
+          val progress = slider.value.toLong()
+          presenter.seekTo(it.start + progress, it.file)
         }
       }
-    )
+    })
   }
 
   private fun setupSpinner() {

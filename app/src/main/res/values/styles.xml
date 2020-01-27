@@ -6,13 +6,16 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="background_overlay">@color/copy_primary_text_disabled_material_light</item>
 
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorPrimary">@color/red700</item>
+        <item name="colorPrimaryDark">@color/red900</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorAccentDark">@color/accentDark</item>
+        <item name="colorSecondary">@color/red700</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/navBarColor</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">@bool/use_light_status
         </item>
+        <item name="android:statusBarColor">@color/primaryDark</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">
             @bool/use_light_navigation
         </item>
@@ -21,7 +24,11 @@
     </style>
 
     <style name="PlayButtonStyle">
-        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlNormal">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="SliderStyle" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/red700</item>
     </style>
 
     <style name="FastForwardRewindStyle">

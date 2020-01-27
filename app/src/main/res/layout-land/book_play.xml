@@ -94,8 +94,8 @@
       app:layout_constraintBottom_toTopOf="@id/play"
       app:layout_constraintRight_toRightOf="parent" />
 
-    <SeekBar
-      android:id="@+id/seekBar"
+    <com.google.android.material.slider.Slider
+      android:id="@+id/slider"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginLeft="4dp"
@@ -109,7 +109,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="4dp"
-      app:layout_constraintBottom_toTopOf="@id/seekBar"
+      app:layout_constraintBottom_toTopOf="@+id/slider"
       app:layout_constraintLeft_toRightOf="@id/x50"
       app:layout_constraintRight_toRightOf="parent" />
 
