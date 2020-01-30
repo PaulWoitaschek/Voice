@@ -11,9 +11,11 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asObservable
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -50,8 +52,9 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
       }
       .disposeOnDetach()
 
-    sleepTimer.leftSleepTimeInMsStream
-      .subscribe { view.showLeftSleepTime(it.toInt()) }
+    sleepTimer.leftSleepTimeFlow.asObservable()
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe { view.showLeftSleepTime(it) }
       .disposeOnDetach()
 
     bookRepository.byId(bookId)

@@ -5,7 +5,9 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.analytics.AnalyticsListener
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.playback.PlayerState
 
 fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
@@ -13,6 +15,30 @@ fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
   if (params.speed != speed || params.skipSilence != skipSilence) {
     setPlaybackParameters(PlaybackParameters(speed, 1F, skipSilence))
   }
+}
+
+fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
+  addListener(object : Player.EventListener {
+    override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+      listener()
+    }
+
+    override fun onPositionDiscontinuity(reason: Int) {
+      listener()
+    }
+
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+      listener()
+    }
+
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+      listener()
+    }
+
+    override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+      listener()
+    }
+  })
 }
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
@@ -26,7 +52,12 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
             if (playWhenReady) PlayerState.PLAYING
             else PlayerState.PAUSED
           }
-          else -> null
+          else -> {
+            if (BuildConfig.DEBUG) {
+              error("Unknown playbackState $playbackState")
+            }
+            null
+          }
         }
         if (state != null) action(state)
       }

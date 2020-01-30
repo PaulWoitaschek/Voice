@@ -32,7 +32,7 @@ class NotifyOnAutoConnectionChange
         // display the current book but don't play it
         val book = repo.bookById(currentBookIdPref.value)
         if (book != null) {
-          changeNotifier.notify(ChangeNotifier.Type.METADATA, book, true)
+          changeNotifier.updateMetadata(book)
         }
       }
   }

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.data.Book
 import java.io.File
+import kotlin.time.Duration
 
 /**
  * MVP for the book detail screen
@@ -12,7 +13,7 @@ interface BookPlayMvp {
     fun render(book: Book)
     fun finish()
     fun showPlaying(playing: Boolean)
-    fun showLeftSleepTime(ms: Int)
+    fun showLeftSleepTime(duration: Duration)
     fun openSleepTimeDialog()
     fun showBookmarkAdded()
   }

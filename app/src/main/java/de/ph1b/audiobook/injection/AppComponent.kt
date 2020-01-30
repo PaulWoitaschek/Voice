@@ -28,7 +28,6 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.CommandBroadcastReceiver
-import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import javax.inject.Singleton
 
@@ -49,7 +48,6 @@ interface AppComponent : DataComponent {
 
   val bookmarkPresenter: BookmarkPresenter
   val context: Context
-  val player: MediaPlayer
   val playStateManager: PlayStateManager
 
   @Component.Builder

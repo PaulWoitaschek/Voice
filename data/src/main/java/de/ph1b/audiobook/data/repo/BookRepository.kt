@@ -1,14 +1,19 @@
 package de.ph1b.audiobook.data.repo
 
 import de.ph1b.audiobook.common.Optional
+import de.ph1b.audiobook.common.orNull
 import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -161,4 +166,11 @@ class BookRepository
     }
     return null
   }
+}
+
+fun BookRepository.flowById(bookId: UUID): Flow<Book?> {
+  return byId(bookId)
+    .toFlowable(BackpressureStrategy.LATEST)
+    .asFlow()
+    .map { it.orNull }
 }

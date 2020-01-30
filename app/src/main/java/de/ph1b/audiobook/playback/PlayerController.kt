@@ -39,4 +39,12 @@ class PlayerController
       }
     }
   }
+
+  fun fadeOut() {
+    // todo implement
+  }
+
+  fun cancelFadeout() {
+    // todo implement
+  }
 }

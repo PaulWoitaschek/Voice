@@ -42,6 +42,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.time.Duration
 
 private const val NI_BOOK_ID = "niBookId"
 
@@ -281,11 +282,11 @@ class BookPlayController(
     JumpToPositionDialogController().showDialog(router)
   }
 
-  override fun showLeftSleepTime(ms: Int) {
-    val active = ms > 0
+  override fun showLeftSleepTime(duration: Duration) {
+    val active = duration > Duration.ZERO
     sleepTimerItem.icon = activity.drawable(if (active) R.drawable.alarm_off else R.drawable.alarm)
       .tinted(activity.color(R.color.toolbarIconColor))
-    timerCountdownView.text = formatTime(ms.toLong(), ms.toLong())
+    timerCountdownView.text = formatTime(duration.toLongMilliseconds(), duration.toLongMilliseconds())
     timerCountdownView.isVisible = active
   }
 

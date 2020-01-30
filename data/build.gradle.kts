@@ -61,6 +61,7 @@ dependencies {
   implementation(Deps.rxJava)
   implementation(Deps.moshi)
   implementation(Deps.AndroidX.ktx)
+  implementation(Deps.Kotlin.coroutinesRx)
 
   api(Deps.AndroidX.Room.runtime)
   implementation(Deps.AndroidX.Room.rxJava)

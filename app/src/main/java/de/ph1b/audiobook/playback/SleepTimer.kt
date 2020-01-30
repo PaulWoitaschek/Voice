@@ -1,50 +1,53 @@
 package de.ph1b.audiobook.playback
 
 import de.ph1b.audiobook.injection.PrefKeys
+import de.ph1b.audiobook.misc.delay
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitFirst
-import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.MINUTES
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlin.time.Duration
+import kotlin.time.milliseconds
+import kotlin.time.seconds
 
-private val FADE_OUT_MS = SECONDS.toMillis(10)
+private val FADE_OUT = 5.seconds
 
 @Singleton
 class SleepTimer
 @Inject constructor(
-  private val mediaPlayer: MediaPlayer,
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @Named(PrefKeys.SHAKE_TO_RESET)
-  private val shakeToResetPref: Pref<Boolean>,
+  shakeToResetPref: Pref<Boolean>,
   @Named(PrefKeys.SLEEP_TIME)
-  private val sleepTimePref: Pref<Int>
+  private val sleepTimePre: Pref<Int>,
+  private val playerController: PlayerController
 ) {
 
-  private val _leftSleepTimeInMsSubject = BehaviorSubject.createDefault<Long>(0)
-  private var leftSleepTimeMs: Long
-    get() = _leftSleepTimeInMsSubject.value!!
+  private val shakeToResetEnabled by shakeToResetPref
+  private val sleepTime: Duration get() = 10.seconds // sleepTimePre.value.minutes
+
+  private val _leftSleepTime = ConflatedBroadcastChannel(Duration.ZERO)
+  private var leftSleepTime: Duration
+    get() = _leftSleepTime.value
     set(value) {
-      _leftSleepTimeInMsSubject.onNext(value)
+      _leftSleepTime.offer(value)
     }
-  val leftSleepTimeInMsStream: Observable<Long> =
-    _leftSleepTimeInMsSubject.observeOn(AndroidSchedulers.mainThread())
+  val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime.asFlow()
 
   fun sleepTimerActive(): Boolean = sleepJob?.isActive == true
 
@@ -60,15 +63,14 @@ class SleepTimer
   }
 
   private fun start() {
-    Timber.i("Starting sleepTimer. Sleep in ${sleepTimePref.value} minutes.")
-    val sleepTimeInMs = MINUTES.toMillis(sleepTimePref.value.toLong())
-    leftSleepTimeMs = sleepTimeInMs
+    Timber.i("Starting sleepTimer. Sleep in ${sleepTime.inMinutes.toLong()} minutes.")
+    leftSleepTime = sleepTime
     sleepJob?.cancel()
-    sleepJob = GlobalScope.launch {
+    sleepJob = GlobalScope.launch(Dispatchers.Main) {
       val shakeDetectorJob = launch { restartTimerOnShake() }
       startSleepTimerCountdown()
-      if (leftSleepTimeMs == 0L) {
-        stopPlayerForTimerEnded()
+      if (leftSleepTime == Duration.ZERO) {
+        playerController.execute(PlayerCommand.Stop)
       }
       Timber.i("sleep timer ended")
       if (isActive) {
@@ -86,47 +88,29 @@ class SleepTimer
   }
 
   private suspend fun startSleepTimerCountdown() {
-    val interval = 500L
-    while (leftSleepTimeMs > 0) {
-      delay(interval)
+    val interval = 500.milliseconds
+    var fadeOutSent = false
+    while (leftSleepTime > Duration.ZERO) {
       suspendUntilPlaying()
-      leftSleepTimeMs = (leftSleepTimeMs - interval).coerceAtLeast(0)
-      if (leftSleepTimeMs <= FADE_OUT_MS) {
-        adjustPlayerVolumeForSleepTime()
+      delay(interval)
+      leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
+      if (leftSleepTime <= FADE_OUT && !fadeOutSent) {
+        fadeOutSent = true
+        playerController.fadeOut()
       }
     }
   }
 
-  private suspend fun stopPlayerForTimerEnded() {
-    withContext(Dispatchers.Main) {
-      mediaPlayer.skip(-FADE_OUT_MS, MILLISECONDS)
-      mediaPlayer.stop()
-      mediaPlayer.setVolume(1F)
-    }
-  }
-
-  private suspend fun adjustPlayerVolumeForSleepTime() {
-    val volume = leftSleepTimeMs.toFloat() / FADE_OUT_MS
-    Timber.i("set volume to $volume")
-    withContext(Dispatchers.Main) {
-      mediaPlayer.setVolume(volume)
-    }
-  }
-
   private suspend fun restartTimerOnShake() {
-    if (shakeToResetPref.value) {
+    if (shakeToResetEnabled) {
       shakeDetector.detect()
-        .consumeEach {
+        .collect {
           Timber.i("Shake detected. Reset sleep time")
-          if (leftSleepTimeMs > 0) {
-            withContext(Dispatchers.Main) {
-              mediaPlayer.setVolume(1F)
-            }
-            leftSleepTimeMs = MINUTES.toMillis(sleepTimePref.value.toLong())
+          if (leftSleepTime > Duration.ZERO) {
+            playerController.cancelFadeout()
+            leftSleepTime = sleepTime
           } else {
-            withContext(Dispatchers.Main) {
-              mediaPlayer.play()
-            }
+            playerController.execute(PlayerCommand.Play)
             start()
           }
         }
@@ -145,7 +129,7 @@ class SleepTimer
 
   private fun cancel() {
     sleepJob?.cancel()
-    _leftSleepTimeInMsSubject.onNext(0)
-    mediaPlayer.setVolume(1F)
+    leftSleepTime = Duration.ZERO
+    playerController.cancelFadeout()
   }
 }

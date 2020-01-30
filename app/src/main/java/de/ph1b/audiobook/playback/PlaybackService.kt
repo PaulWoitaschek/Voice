@@ -8,14 +8,16 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.app.ServiceCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
-import de.ph1b.audiobook.common.orNull
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.flowById
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.flowBroadcastReceiver
@@ -39,10 +41,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.awaitFirst
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -83,6 +84,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
+  @Inject
+  lateinit var mediaController: MediaControllerCompat
 
   private var isForeground = false
 
@@ -99,6 +102,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     mediaSession.isActive = true
     sessionToken = mediaSession.sessionToken
+
+    mediaController.registerCallback(MediaControllerCallback())
 
     scope.launch {
       player.bookContentStream.latestAsFlow()
@@ -119,7 +124,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     val bookUpdated = currentBookIdPref.flow
-      .mapLatest { repo.byId(it).awaitFirst().orNull }
+      .flatMapLatest { repo.flowById(it) }
       .filterNotNull()
       .distinctUntilChangedBy {
         it.content
@@ -128,7 +133,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       bookUpdated
         .collectLatest {
           player.init(it.content)
-          changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
+          changeNotifier.updateMetadata(it)
         }
     }
 
@@ -137,13 +142,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .distinctUntilChangedBy { book -> book.content.currentChapter }
         .collectLatest {
           updateNotification(it)
-        }
-    }
-
-    scope.launch {
-      playStateManager.playStateStream().latestAsFlow()
-        .collect {
-          handlePlaybackState(it)
         }
     }
 
@@ -202,62 +200,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     if (playStateManager.playState === PlayState.Playing) {
       playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
       player.pause(true)
-    }
-  }
-
-  private suspend fun handlePlaybackState(state: PlayState) {
-    Timber.d("handlePlaybackState $state")
-    when (state) {
-      PlayState.Playing -> handlePlaybackStatePlaying()
-      PlayState.Paused -> handlePlaybackStatePaused()
-      PlayState.Stopped -> handlePlaybackStateStopped()
-    }
-    currentBook()?.let {
-      changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
-    }
-  }
-
-  private fun currentBook(): Book? {
-    val id = currentBookIdPref.value
-    return repo.bookById(id)
-  }
-
-  private suspend fun handlePlaybackStateStopped() {
-    if (isForeground) {
-      Timber.i("stopForeground")
-      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-      isForeground = false
-    }
-
-    currentBook()?.let {
-      updateNotification(it)
-      changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, it, autoConnected.connected)
-      changeNotifier.notify(ChangeNotifier.Type.METADATA, it, autoConnected.connected)
-    }
-
-    stopSelf()
-  }
-
-  private suspend fun handlePlaybackStatePaused() {
-    if (isForeground) {
-      Timber.d("stopForeground")
-      ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-      isForeground = false
-    }
-    currentBook()?.let {
-      updateNotification(it)
-    }
-  }
-
-  private suspend fun handlePlaybackStatePlaying() {
-    currentBook()?.let {
-      val notification = updateNotification(it)
-      if (!isForeground) {
-        Timber.i("startForeground")
-        ContextCompat.startForegroundService(this, Intent(this, javaClass))
-        startForeground(NOTIFICATION_ID, notification)
-        isForeground = true
-      }
     }
   }
 
@@ -362,5 +304,82 @@ class PlaybackService : MediaBrowserServiceCompat() {
     player.stop()
     mediaSession.release()
     super.onDestroy()
+  }
+
+  private suspend fun updateNotification(state: PlaybackStateCompat) {
+    val updatedState = state.state
+
+    val book = repo.bookById(currentBookIdPref.value)
+    val notification = if (book != null &&
+      updatedState != PlaybackStateCompat.STATE_NONE
+    ) {
+      notificationCreator.createNotification(book)
+    } else {
+      null
+    }
+
+    when (updatedState) {
+      PlaybackStateCompat.STATE_BUFFERING,
+      PlaybackStateCompat.STATE_PLAYING -> {
+
+        /**
+         * This may look strange, but the documentation for [Service.startForeground]
+         * notes that "calling this method does *not* put the service in the started
+         * state itself, even though the name sounds like it."
+         */
+        if (notification != null) {
+          notificationManager.notify(NOTIFICATION_ID, notification)
+
+          if (!isForeground) {
+            ContextCompat.startForegroundService(
+              applicationContext,
+              Intent(applicationContext, this@PlaybackService.javaClass)
+            )
+            startForeground(NOTIFICATION_ID, notification)
+            isForeground = true
+          }
+        }
+      }
+      else -> {
+        if (isForeground) {
+          stopForeground(false)
+          isForeground = false
+
+          // If playback has ended, also stop the service.
+          if (updatedState == PlaybackStateCompat.STATE_NONE) {
+            stopSelf()
+          }
+
+          if (notification != null) {
+            notificationManager.notify(NOTIFICATION_ID, notification)
+          } else {
+            removeNowPlayingNotification()
+          }
+        }
+      }
+    }
+  }
+
+  private fun removeNowPlayingNotification() {
+    notificationManager.cancel(NOTIFICATION_ID)
+  }
+
+  private inner class MediaControllerCallback : MediaControllerCompat.Callback() {
+
+    override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+      mediaController.playbackState?.let { state ->
+        scope.launch {
+          player.updateMediaSessionPlaybackState()
+          updateNotification(state)
+        }
+      }
+    }
+
+    override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+      state ?: return
+      scope.launch {
+        updateNotification(state)
+      }
+    }
   }
 }

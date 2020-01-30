@@ -2,7 +2,9 @@ package de.ph1b.audiobook.injection
 
 import android.app.PendingIntent
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import dagger.Module
 import dagger.Provides
@@ -15,44 +17,48 @@ object PlaybackServiceModule {
 
   @Provides
   @JvmStatic
-  fun provideMediaButtonReceiverComponentName(service: PlaybackService): ComponentName {
+  fun mediaButtonReceiverComponentName(service: PlaybackService): ComponentName {
     return ComponentName(service.packageName, MediaEventReceiver::class.java.name)
   }
 
   @Provides
   @PerService
-  @JvmStatic
-  fun provideButtonRecieverPendingIntent(
-      service: PlaybackService,
-      mbrComponentName: ComponentName
+  fun buttonReceiverPendingIntent(
+    service: PlaybackService,
+    mbrComponentName: ComponentName
   ): PendingIntent {
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
       component = mbrComponentName
     }
     return PendingIntent.getBroadcast(
-        service,
-        0,
-        mediaButtonIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+      service,
+      0,
+      mediaButtonIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
   }
 
   @Provides
   @PerService
-  @JvmStatic
-  fun provideMediaSession(
-      service: PlaybackService,
-      callback: MediaSessionCallback,
-      mbrComponentName: ComponentName,
-      buttonReceiverPendingIntent: PendingIntent
+  fun mediaSession(
+    service: PlaybackService,
+    callback: MediaSessionCallback,
+    mbrComponentName: ComponentName,
+    buttonReceiverPendingIntent: PendingIntent
   ): MediaSessionCompat {
     return MediaSessionCompat(
-        service,
-        PlaybackService::class.java.name,
-        mbrComponentName,
-        buttonReceiverPendingIntent
+      service,
+      PlaybackService::class.java.name,
+      mbrComponentName,
+      buttonReceiverPendingIntent
     ).apply {
       setCallback(callback)
     }
+  }
+
+  @Provides
+  @PerService
+  fun mediaController(context: Context, mediaSession: MediaSessionCompat): MediaControllerCompat {
+    return MediaControllerCompat(context, mediaSession)
   }
 }

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.playback
 
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.annotation.FloatRange
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
@@ -10,14 +11,17 @@ import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessGain
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.checkMainThread
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
 import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onError
 import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
+import de.ph1b.audiobook.playback.utils.onSessionPlaybackStateNeedsUpdate
 import de.ph1b.audiobook.playback.utils.onStateChanged
 import de.ph1b.audiobook.playback.utils.setPlaybackParameters
 import io.reactivex.Observable
@@ -28,9 +32,8 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Singleton
 
-@Singleton
+@PerService
 class MediaPlayer
 @Inject
 constructor(
@@ -42,7 +45,8 @@ constructor(
   private val equalizer: Equalizer,
   private val loudnessGain: LoudnessGain,
   private val dataSourceConverter: DataSourceConverter,
-  private val player: SimpleExoPlayer
+  private val player: SimpleExoPlayer,
+  private val changeNotifier: ChangeNotifier
 ) {
 
   private val _bookContent = BehaviorSubject.create<BookContent>()
@@ -67,6 +71,9 @@ constructor(
       .build()
     player.setAudioAttributes(audioAttributes, true)
 
+    player.onSessionPlaybackStateNeedsUpdate {
+      updateMediaSessionPlaybackState()
+    }
     player.onStateChanged {
       playStateManager.playState = when (it) {
         PlayerState.IDLE -> PlayState.Stopped
@@ -141,6 +148,17 @@ constructor(
           _bookContent.onNext(copy)
         }
       }
+  }
+
+  fun updateMediaSessionPlaybackState() {
+    val playbackStateCompat = when (player.playbackState) {
+      Player.STATE_BUFFERING -> PlaybackStateCompat.STATE_BUFFERING
+      Player.STATE_READY -> if (player.playWhenReady) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+      Player.STATE_ENDED -> PlaybackStateCompat.STATE_STOPPED
+      Player.STATE_IDLE -> PlaybackStateCompat.STATE_NONE
+      else -> PlaybackStateCompat.STATE_NONE
+    }
+    changeNotifier.updatePlaybackState(playbackStateCompat, bookContent)
   }
 
   fun setVolume(@FloatRange(from = 0.0, to = 1.0) volume: Float) {

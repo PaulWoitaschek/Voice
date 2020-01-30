@@ -68,7 +68,7 @@ object Deps {
   const val fabricGradlePlugin = "io.fabric.tools:gradle:1.31.1"
 
   object Dagger {
-    private const val version = "2.24"
+    private const val version = "2.26"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }

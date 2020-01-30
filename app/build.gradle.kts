@@ -1,7 +1,7 @@
 import deps.Deps
 import deps.Versions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.*
+import java.util.Properties
 
 plugins {
   id("com.android.application")
@@ -183,7 +183,8 @@ tasks.withType<KotlinCompile> {
       "-XXLanguage:+InlineClasses",
       "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
       "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
-      "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+      "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+      "-Xuse-experimental=kotlin.time.ExperimentalTime"
     )
   }
 }
