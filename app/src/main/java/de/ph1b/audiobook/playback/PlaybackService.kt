@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Bundle
-import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.ServiceCompat
@@ -364,6 +363,4 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.release()
     super.onDestroy()
   }
-
-  override fun onBind(intent: Intent?): IBinder? = null
 }
