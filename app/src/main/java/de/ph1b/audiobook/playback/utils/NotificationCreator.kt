@@ -6,7 +6,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
-import android.view.KeyEvent
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_STOP
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
 import androidx.media.app.NotificationCompat.MediaStyle
@@ -18,7 +21,6 @@ import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -47,6 +49,24 @@ class NotificationCreator
     buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
   )
 
+  private val rewindAction = NotificationCompat.Action(
+    R.drawable.ic_rewind_white_36dp,
+    context.getString(R.string.rewind),
+    buildMediaButtonPendingIntent(context, ACTION_REWIND)
+  )
+
+  private val playAction = NotificationCompat.Action(
+    R.drawable.ic_play_white_36dp,
+    context.getString(R.string.play),
+    buildMediaButtonPendingIntent(context, ACTION_PLAY)
+  )
+
+  private val pauseAction = NotificationCompat.Action(
+    R.drawable.ic_pause_white_36dp,
+    context.getString(R.string.pause),
+    buildMediaButtonPendingIntent(context, ACTION_PAUSE)
+  )
+
   init {
     notificationChannelCreator.createChannel()
   }
@@ -60,7 +80,7 @@ class NotificationCreator
       .setShowCancelButton(true)
       .setMediaSession(mediaSession.sessionToken)
     return Builder(context, MUSIC_CHANNEL_ID)
-      .addRewindAction()
+      .addAction(rewindAction)
       .addPlayPauseAction(playStateManager.playState)
       .addAction(fastForwardAction)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
@@ -142,35 +162,14 @@ class NotificationCreator
   }
 
   private fun stopIntent(): PendingIntent {
-    return PendingIntent.getBroadcast(
-      context,
-      KeyEvent.KEYCODE_MEDIA_STOP,
-      PlayerCommand.Stop.toServiceIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
-  }
-
-  private fun Builder.addRewindAction(): Builder {
-    val rewindPI = PendingIntent.getBroadcast(
-      context,
-      KeyEvent.KEYCODE_MEDIA_REWIND,
-      PlayerCommand.Rewind.toBroadcastReceiverIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
-    return addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
+    return buildMediaButtonPendingIntent(context, ACTION_STOP)
   }
 
   private fun Builder.addPlayPauseAction(playState: PlayStateManager.PlayState): Builder {
-    val playPausePI = PendingIntent.getBroadcast(
-      context,
-      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      PlayerCommand.PlayPause.toBroadcastReceiverIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
     return if (playState == PlayStateManager.PlayState.Playing) {
-      addAction(R.drawable.ic_pause_white_36dp, context.getString(R.string.pause), playPausePI)
+      addAction(pauseAction)
     } else {
-      addAction(R.drawable.ic_play_white_36dp, context.getString(R.string.play), playPausePI)
+      addAction(playAction)
     }
   }
 }

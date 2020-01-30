@@ -8,7 +8,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
-import android.view.KeyEvent
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
 import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
@@ -20,12 +21,10 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.PendingIntentCompat
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -140,23 +139,13 @@ class WidgetUpdater @Inject constructor(
     }
 
   private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
-    val playPausePI = PendingIntentCompat.getForegroundService(
-      context,
-      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-      PlayerCommand.PlayPause.toServiceIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
     val fastForwardPI = buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
-    val rewindPI = PendingIntentCompat.getForegroundService(
-      context,
-      KeyEvent.KEYCODE_MEDIA_REWIND,
-      PlayerCommand.RewindAutoPlay.toServiceIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val rewindPI = buildMediaButtonPendingIntent(context, ACTION_REWIND)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
