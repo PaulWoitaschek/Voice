@@ -15,7 +15,6 @@ import de.ph1b.audiobook.misc.checkMainThread
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.utils.DataSourceConverter
-import de.ph1b.audiobook.playback.utils.WakeLockManager
 import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onError
 import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
@@ -42,7 +41,6 @@ constructor(
   private val seekTimePref: Pref<Int>,
   private val equalizer: Equalizer,
   private val loudnessGain: LoudnessGain,
-  private val wakeLockManager: WakeLockManager,
   private val dataSourceConverter: DataSourceConverter,
   private val player: SimpleExoPlayer
 ) {
@@ -112,10 +110,6 @@ constructor(
     @Suppress("CheckResult")
     _state.subscribe {
       Timber.i("state changed to $it")
-
-      // set the wake-lock based on the play state
-      wakeLockManager.stayAwake(it == PlayerState.PLAYING)
-
       // upon end stop the player
       if (it == PlayerState.ENDED) {
         Timber.v("onEnded. Stopping player")
@@ -157,7 +151,7 @@ constructor(
 
   fun init(content: BookContent) {
     val shouldInitialize = player.playbackState == Player.STATE_IDLE ||
-        !alreadyInitializedChapters(content)
+      !alreadyInitializedChapters(content)
     if (!shouldInitialize) {
       return
     }
