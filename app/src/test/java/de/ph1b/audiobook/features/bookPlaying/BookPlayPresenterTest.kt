@@ -139,7 +139,7 @@ class BookPlayPresenterTest {
   fun rewind() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.rewind()
-    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Rewind) }
+    verify(exactly = 1) { mockPlayerController.rewind() }
   }
 
   @Test

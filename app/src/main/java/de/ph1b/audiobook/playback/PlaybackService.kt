@@ -239,9 +239,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
           execute(PlayerCommand.Play)
         }
       }
-      PlayerCommand.Rewind -> {
-        player.skip(forward = false)
-      }
       PlayerCommand.Previous -> {
         player.previous(toNullOfNewTrack = true)
       }

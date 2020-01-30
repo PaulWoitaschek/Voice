@@ -18,9 +18,6 @@ sealed class PlayerCommand : Parcelable {
   object PlayPause : PlayerCommand()
 
   @Parcelize
-  object Rewind : PlayerCommand()
-
-  @Parcelize
   object RewindAutoPlay : PlayerCommand()
 
   @Parcelize

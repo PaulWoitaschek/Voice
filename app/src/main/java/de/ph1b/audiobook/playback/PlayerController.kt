@@ -78,6 +78,8 @@ class PlayerController
 
   fun fastForward() = execute { it.fastForward() }
 
+  fun rewind() = execute { it.rewind() }
+
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)
   }
