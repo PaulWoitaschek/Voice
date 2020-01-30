@@ -86,6 +86,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
   lateinit var resumeOnReplugPref: Pref<Boolean>
   @Inject
   lateinit var mediaController: MediaControllerCompat
+  @Inject
+  lateinit var callback: MediaSessionCallback
 
   private var isForeground = false
 
@@ -101,6 +103,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     notificationManager.cancel(NOTIFICATION_ID)
 
     mediaSession.isActive = true
+    mediaSession.setCallback(callback)
     sessionToken = mediaSession.sessionToken
 
     mediaController.registerCallback(MediaControllerCallback())
@@ -239,9 +242,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
       PlayerCommand.Rewind -> {
         player.skip(forward = false)
       }
-      PlayerCommand.FastForward -> {
-        player.skip(forward = true)
-      }
       PlayerCommand.Previous -> {
         player.previous(toNullOfNewTrack = true)
       }
@@ -256,10 +256,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       is PlayerCommand.SetPosition -> {
         player.changePosition(command.time, command.file)
-      }
-      PlayerCommand.FastForwardAutoPlay -> {
-        player.skip(forward = true)
-        execute(PlayerCommand.Play)
       }
       PlayerCommand.Stop -> {
         player.stop()

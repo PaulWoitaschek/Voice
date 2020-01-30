@@ -190,6 +190,14 @@ constructor(
     return currentContent.chapters == content.chapters
   }
 
+  fun playPause() {
+    if (state == PlayerState.PLAYING) {
+      pause(rewind = true)
+    } else {
+      play()
+    }
+  }
+
   fun setLoudnessGain(mB: Int) {
     Timber.v("setLoudnessGain to $mB mB")
 

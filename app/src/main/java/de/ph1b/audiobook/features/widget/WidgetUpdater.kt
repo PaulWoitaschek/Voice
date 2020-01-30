@@ -7,10 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
+import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import com.squareup.picasso.Picasso
 import dagger.Reusable
 import de.ph1b.audiobook.R
@@ -133,8 +135,8 @@ class WidgetUpdater @Inject constructor(
       val displayHeight = display.height
 
       return orientation != Configuration.ORIENTATION_LANDSCAPE &&
-          (orientation == Configuration.ORIENTATION_PORTRAIT ||
-              displayWidth == displayHeight || displayWidth < displayHeight)
+        (orientation == Configuration.ORIENTATION_PORTRAIT ||
+          displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
   private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
@@ -146,12 +148,7 @@ class WidgetUpdater @Inject constructor(
     )
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
-    val fastForwardPI = PendingIntentCompat.getForegroundService(
-      context,
-      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      PlayerCommand.FastForward.toServiceIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val fastForwardPI = buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
     val rewindPI = PendingIntentCompat.getForegroundService(

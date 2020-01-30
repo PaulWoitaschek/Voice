@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
+import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.utils.BookUriConverter
@@ -15,19 +16,24 @@ import javax.inject.Named
 /**
  * Media session callback that handles playback controls.
  */
-class MediaSessionCallback @Inject constructor(
+@PerService
+class MediaSessionCallback
+@Inject constructor(
   private val bookUriConverter: BookUriConverter,
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,
-  private val playerController: PlayerController
+  private val player: MediaPlayer
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
     Timber.i("onSkipToQueueItem $id")
-    playerController.execute(PlayerCommand.PlayChapterAtIndex(id))
+    val chapter = player.bookContent
+      ?.chapters?.getOrNull(id.toInt()) ?: return
+    player.changePosition(0, chapter.file)
+    player.play()
   }
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
@@ -51,7 +57,7 @@ class MediaSessionCallback @Inject constructor(
   override fun onSkipToNext() {
     Timber.i("onSkipToNext")
     if (autoConnection.connected) {
-      playerController.execute(PlayerCommand.Next)
+      player.next()
     } else {
       onFastForward()
     }
@@ -59,13 +65,14 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onRewind() {
     Timber.i("onRewind")
-    playerController.execute(PlayerCommand.RewindAutoPlay)
+    player.skip(forward = false)
+    player.play()
   }
 
   override fun onSkipToPrevious() {
     Timber.i("onSkipToPrevious")
     if (autoConnection.connected) {
-      playerController.execute(PlayerCommand.Previous)
+      player.previous(toNullOfNewTrack = true)
     } else {
       onRewind()
     }
@@ -73,28 +80,28 @@ class MediaSessionCallback @Inject constructor(
 
   override fun onFastForward() {
     Timber.i("onFastForward")
-    playerController.execute(PlayerCommand.FastForwardAutoPlay)
+    player.skip(forward = true)
   }
 
   override fun onStop() {
     Timber.i("onStop")
-    playerController.execute(PlayerCommand.Stop)
+    player.stop()
   }
 
   override fun onPause() {
     Timber.i("onPause")
     // sometimes the system handles this wrongly so we toggle playPause
-    playerController.execute(PlayerCommand.PlayPause)
+    player.playPause()
   }
 
   override fun onPlay() {
     Timber.i("onPlay")
     // sometimes the system handles this wrongly so we toggle playPause
-    playerController.execute(PlayerCommand.PlayPause)
+    player.playPause()
   }
 
   override fun onSeekTo(pos: Long) {
-    playerController.execute(PlayerCommand.Seek(pos))
+    player.changePosition(pos)
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {

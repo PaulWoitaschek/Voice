@@ -18,8 +18,15 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Test
 import java.util.UUID
+import kotlin.time.Duration
+import kotlin.time.nanoseconds
+import kotlin.time.seconds
 
 class BookPlayPresenterTest {
 
@@ -44,28 +51,28 @@ class BookPlayPresenterTest {
     every { mockBookRepository.booksStream() } returns Observable.empty()
     every { mockBookRepository.byId(any()) } returns Observable.just(Optional.Absent())
     every { mockPlayStateManager.playStateStream() } returns Observable.empty()
-    every { mockSleepTimer.leftSleepTimeInMsStream } returns Observable.empty()
+    every { mockSleepTimer.leftSleepTimeFlow } returns emptyFlow()
   }
 
   @Test
   fun sleepTimberShowsTime() {
-    every { mockSleepTimer.leftSleepTimeInMsStream } returns Observable.just(3, 2, 1)
+    every { mockSleepTimer.leftSleepTimeFlow } returns flowOf(3.nanoseconds, 2.nanoseconds, 1.nanoseconds)
     bookPlayPresenter.attach(mockView)
 
     verifyOrder {
-      mockView.showLeftSleepTime(3)
-      mockView.showLeftSleepTime(2)
-      mockView.showLeftSleepTime(1)
+      mockView.showLeftSleepTime(3.nanoseconds)
+      mockView.showLeftSleepTime(2.nanoseconds)
+      mockView.showLeftSleepTime(1.nanoseconds)
     }
   }
 
   @Test
   fun sleepTimberStopsAfterDetach() {
-    val sleepSand = PublishSubject.create<Long>()
-    every { mockSleepTimer.leftSleepTimeInMsStream } returns sleepSand
+    val sleepSand = ConflatedBroadcastChannel<Duration>()
+    every { mockSleepTimer.leftSleepTimeFlow } returns sleepSand.asFlow()
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
-    sleepSand.onNext(1)
+    sleepSand.offer(1.seconds)
     verify(exactly = 0) { mockView.showLeftSleepTime(any()) }
   }
 
@@ -139,7 +146,7 @@ class BookPlayPresenterTest {
   fun fastForward() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.fastForward()
-    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.FastForward) }
+    verify(exactly = 1) { mockPlayerController.fastForward() }
   }
 
   @Test

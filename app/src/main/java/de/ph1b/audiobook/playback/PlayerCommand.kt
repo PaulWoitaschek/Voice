@@ -24,9 +24,6 @@ sealed class PlayerCommand : Parcelable {
   object RewindAutoPlay : PlayerCommand()
 
   @Parcelize
-  object FastForward : PlayerCommand()
-
-  @Parcelize
   object Previous : PlayerCommand()
 
   @Parcelize
@@ -46,9 +43,6 @@ sealed class PlayerCommand : Parcelable {
 
   @Parcelize
   data class PlayChapterAtIndex(val index: Long) : PlayerCommand()
-
-  @Parcelize
-  object FastForwardAutoPlay : PlayerCommand()
 
   @Parcelize
   object Stop : PlayerCommand()

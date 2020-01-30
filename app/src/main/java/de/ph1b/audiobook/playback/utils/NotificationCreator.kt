@@ -5,10 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
 import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
 import androidx.media.app.NotificationCompat.MediaStyle
+import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
@@ -39,6 +41,12 @@ class NotificationCreator
   notificationChannelCreator: NotificationChannelCreator
 ) {
 
+  private val fastForwardAction = NotificationCompat.Action(
+    R.drawable.ic_fast_forward_white_36dp,
+    context.getString(R.string.fast_forward),
+    buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
+  )
+
   init {
     notificationChannelCreator.createChannel()
   }
@@ -54,7 +62,7 @@ class NotificationCreator
     return Builder(context, MUSIC_CHANNEL_ID)
       .addRewindAction()
       .addPlayPauseAction(playStateManager.playState)
-      .addFastForwardAction()
+      .addAction(fastForwardAction)
       .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
       .setChapterInfo(book)
       .setContentIntent(contentIntent(book))
@@ -139,20 +147,6 @@ class NotificationCreator
       KeyEvent.KEYCODE_MEDIA_STOP,
       PlayerCommand.Stop.toServiceIntent(context),
       PendingIntent.FLAG_UPDATE_CURRENT
-    )
-  }
-
-  private fun Builder.addFastForwardAction(): Builder {
-    val fastForwardPI = PendingIntent.getBroadcast(
-      context,
-      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD,
-      PlayerCommand.FastForwardAutoPlay.toBroadcastReceiverIntent(context),
-      PendingIntent.FLAG_UPDATE_CURRENT
-    )
-    return addAction(
-      R.drawable.ic_fast_forward_white_36dp,
-      context.getString(R.string.fast_forward),
-      fastForwardPI
     )
   }
 

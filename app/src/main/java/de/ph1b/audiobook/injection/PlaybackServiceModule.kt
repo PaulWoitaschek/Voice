@@ -8,7 +8,6 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import dagger.Module
 import dagger.Provides
-import de.ph1b.audiobook.playback.MediaSessionCallback
 import de.ph1b.audiobook.playback.PlaybackService
 import de.ph1b.audiobook.playback.events.MediaEventReceiver
 
@@ -42,7 +41,6 @@ object PlaybackServiceModule {
   @PerService
   fun mediaSession(
     service: PlaybackService,
-    callback: MediaSessionCallback,
     mbrComponentName: ComponentName,
     buttonReceiverPendingIntent: PendingIntent
   ): MediaSessionCompat {
@@ -51,9 +49,7 @@ object PlaybackServiceModule {
       PlaybackService::class.java.name,
       mbrComponentName,
       buttonReceiverPendingIntent
-    ).apply {
-      setCallback(callback)
-    }
+    )
   }
 
   @Provides

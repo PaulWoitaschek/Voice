@@ -77,7 +77,7 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
   }
 
   override fun fastForward() {
-    playerController.execute(PlayerCommand.FastForward)
+    playerController.fastForward()
   }
 
   override fun next() {
