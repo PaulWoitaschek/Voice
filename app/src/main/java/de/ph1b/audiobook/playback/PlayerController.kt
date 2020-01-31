@@ -64,15 +64,11 @@ class PlayerController
 
   fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
 
+  fun fadeOut() = execute { it.fadeOut() }
+
+  fun cancelFadeout() = execute { it.cancelFadeOut() }
+
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)
-  }
-
-  fun fadeOut() {
-    // todo implement
-  }
-
-  fun cancelFadeout() {
-    // todo implement
   }
 }

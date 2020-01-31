@@ -225,8 +225,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   override fun onDestroy() {
     scope.cancel()
-    player.stop()
     mediaSession.release()
+    player.release()
     super.onDestroy()
   }
 

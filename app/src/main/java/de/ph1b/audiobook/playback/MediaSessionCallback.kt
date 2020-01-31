@@ -130,6 +130,12 @@ class MediaSessionCallback
         val time = extras.getLong(SET_POSITION_EXTRA_TIME)
         player.changePosition(time, file)
       }
+      FADE_OUT_ACTION -> {
+        player.fadeOut()
+      }
+      CANCEL_FADE_OUT_ACTION -> {
+        player.cancelFadeOut()
+      }
       else -> if (BuildConfig.DEBUG) {
         error("Didn't handle $action")
       }
@@ -167,3 +173,11 @@ fun TransportControls.setPosition(time: Long, file: File) = sendCustomAction(SET
   putString(SET_POSITION_EXTRA_FILE, file.absolutePath)
   putLong(SET_POSITION_EXTRA_TIME, time)
 }
+
+private const val FADE_OUT_ACTION = "fadeOut"
+
+fun TransportControls.fadeOut() = sendCustomAction(FADE_OUT_ACTION)
+
+private const val CANCEL_FADE_OUT_ACTION = "cancelFadeOut"
+
+fun TransportControls.cancelFadeOut() = sendCustomAction(CANCEL_FADE_OUT_ACTION)

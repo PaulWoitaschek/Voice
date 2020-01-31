@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.support.v4.media.session.PlaybackStateCompat
-import androidx.annotation.FloatRange
+import android.view.animation.AccelerateInterpolator
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PerService
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.checkMainThread
+import de.ph1b.audiobook.misc.delay
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
@@ -27,11 +28,18 @@ import de.ph1b.audiobook.playback.utils.setPlaybackParameters
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.time.Duration
+import kotlin.time.milliseconds
+import kotlin.time.seconds
 
 @PerService
 class MediaPlayer
@@ -49,6 +57,8 @@ constructor(
   private val changeNotifier: ChangeNotifier
 ) {
 
+  private val scope = MainScope()
+
   private val _bookContent = BehaviorSubject.create<BookContent>()
   val bookContent: BookContent? get() = _bookContent.value
   val bookContentStream = _bookContent.hide()!!
@@ -60,7 +70,7 @@ constructor(
       if (_state.value != value) _state.onNext(value)
     }
 
-  private val seekTimeInSeconds by seekTimePref
+  private val seekTime: Duration get() = seekTimePref.value.seconds
   private var autoRewindAmount by autoRewindAmountPref
 
   init {
@@ -161,12 +171,6 @@ constructor(
     changeNotifier.updatePlaybackState(playbackStateCompat, bookContent)
   }
 
-  fun setVolume(@FloatRange(from = 0.0, to = 1.0) volume: Float) {
-    require(volume in 0F..1F) { "volume $volume must be in [0,1]" }
-    checkMainThread()
-    player.volume = volume
-  }
-
   fun init(content: BookContent) {
     val shouldInitialize = player.playbackState == Player.STATE_IDLE ||
       !alreadyInitializedChapters(content)
@@ -230,34 +234,30 @@ constructor(
     }
   }
 
-  fun skip(time: Long, timeUnit: TimeUnit) {
+  private fun skip(skipAmount: Duration) {
     checkMainThread()
     prepareIfIdle()
     if (state == PlayerState.IDLE)
       return
 
     bookContent?.let {
-      val currentPos = player.currentPosition
-        .coerceAtLeast(0)
-      val duration = player.duration
+      val currentPos = player.currentPosition.milliseconds
+        .coerceAtLeast(Duration.ZERO)
+      val duration = player.duration.milliseconds
 
-      val seekTo = currentPos + timeUnit.toMillis(time)
+      val seekTo = currentPos + skipAmount
       Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
-
       when {
-        seekTo < 0 -> previous(false)
+        seekTo < Duration.ZERO -> previous(false)
         seekTo > duration -> next()
-        else -> changePosition(seekTo)
+        else -> changePosition(seekTo.toLongMilliseconds())
       }
     }
   }
 
   fun skip(forward: Boolean) {
     Timber.v("skip forward=$forward")
-    skip(
-      time = if (forward) seekTimeInSeconds.toLong() else -seekTimeInSeconds.toLong(),
-      timeUnit = TimeUnit.SECONDS
-    )
+    skip(skipAmount = if (forward) seekTime else -seekTime)
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
@@ -283,9 +283,9 @@ constructor(
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
       } else {
-        val time = (previousChapter.duration - (seekTimeInSeconds * 1000))
-          .coerceAtLeast(0)
-        changePosition(time, previousChapter.file)
+        val time = (previousChapter.duration.milliseconds - seekTime)
+          .coerceAtLeast(Duration.ZERO)
+        changePosition(time.toLongMilliseconds(), previousChapter.file)
       }
     }
   }
@@ -415,4 +415,44 @@ constructor(
       player.setPlaybackParameters(it.playbackSpeed, skip)
     }
   }
+
+  private var fadeOutJob: Job? = null
+
+  fun fadeOut() {
+    if (fadeOutJob?.isActive == true) {
+      return
+    }
+    fadeOutJob = scope.launch {
+      var timeLeft = FADE_OUT_DURATION
+      val step = 100.milliseconds
+      while (timeLeft > Duration.ZERO) {
+        delay(step)
+        timeLeft -= step
+        player.volume = volumeForFadeOutTimeLeft(timeLeft)
+      }
+      pause(rewind = false)
+      skip(-FADE_OUT_DURATION)
+      player.volume = 1F
+      player.stop()
+    }
+  }
+
+  fun cancelFadeOut() {
+    fadeOutJob?.cancel()
+    player.volume = 1F
+    play()
+  }
+
+  fun release() {
+    player.release()
+    scope.cancel()
+  }
 }
+
+private fun volumeForFadeOutTimeLeft(timeLeft: Duration): Float {
+  val fraction = (timeLeft / FADE_OUT_DURATION).toFloat()
+  return FADE_OUT_INTERPOLATOR.getInterpolation(fraction)
+    .also { Timber.i("set volume to $it") }
+}
+
+private val FADE_OUT_INTERPOLATOR = AccelerateInterpolator()

@@ -8,15 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitFirst
 import timber.log.Timber
-import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -25,7 +22,7 @@ import kotlin.time.milliseconds
 import kotlin.time.minutes
 import kotlin.time.seconds
 
-private val FADE_OUT = 5.seconds
+val FADE_OUT_DURATION = 10.seconds
 
 @Singleton
 class SleepTimer
@@ -50,7 +47,7 @@ class SleepTimer
     }
   val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime.asFlow()
 
-  fun sleepTimerActive(): Boolean = sleepJob?.isActive == true
+  fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
 
   private var sleepJob: Job? = null
 
@@ -68,24 +65,14 @@ class SleepTimer
     leftSleepTime = sleepTime
     sleepJob?.cancel()
     sleepJob = GlobalScope.launch(Dispatchers.Main) {
-      val shakeDetectorJob = launch { restartTimerOnShake() }
+      launch { restartTimerOnShake() }
       startSleepTimerCountdown()
-      if (leftSleepTime == Duration.ZERO) {
-        playerController.stop()
-      }
-      Timber.i("sleep timer ended")
-      if (isActive) {
-        continueListeningToShakesForSomeTime(shakeDetectorJob)
+      if (shakeToResetEnabled) {
+        Timber.i("sleep timer ended. Wait for another minute while listening for shakes.")
+        delay(1.minutes)
       }
       Timber.i("exiting")
     }
-  }
-
-  private suspend fun continueListeningToShakesForSomeTime(shakeDetectorJob: Job) {
-    val listenToShakesForMs = MINUTES.toMillis(1)
-    Timber.i("Not cancelled. Continue listening to the shake detector for $listenToShakesForMs ms")
-    delay(listenToShakesForMs)
-    shakeDetectorJob.cancel()
   }
 
   private suspend fun startSleepTimerCountdown() {
@@ -95,7 +82,7 @@ class SleepTimer
       suspendUntilPlaying()
       delay(interval)
       leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
-      if (leftSleepTime <= FADE_OUT && !fadeOutSent) {
+      if (leftSleepTime <= FADE_OUT_DURATION && !fadeOutSent) {
         fadeOutSent = true
         playerController.fadeOut()
       }
