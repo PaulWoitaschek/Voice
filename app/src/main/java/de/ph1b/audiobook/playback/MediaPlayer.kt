@@ -25,16 +25,20 @@ import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
 import de.ph1b.audiobook.playback.utils.onSessionPlaybackStateNeedsUpdate
 import de.ph1b.audiobook.playback.utils.onStateChanged
 import de.ph1b.audiobook.playback.utils.setPlaybackParameters
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
@@ -63,11 +67,11 @@ constructor(
   val bookContent: BookContent? get() = _bookContent.value
   val bookContentStream = _bookContent.hide()!!
 
-  private val _state = BehaviorSubject.createDefault(PlayerState.IDLE)
+  private val _state = ConflatedBroadcastChannel(PlayerState.IDLE)
   private var state: PlayerState
-    get() = _state.value!!
+    get() = _state.value
     set(value) {
-      if (_state.value != value) _state.onNext(value)
+      if (_state.value != value) _state.offer(value)
     }
 
   private val seekTime: Duration get() = seekTimePref.value.seconds
@@ -124,40 +128,42 @@ constructor(
       loudnessGain.update(it)
     }
 
-    @Suppress("CheckResult")
-    _state.subscribe {
-      Timber.i("state changed to $it")
-      // upon end stop the player
-      if (it == PlayerState.ENDED) {
-        Timber.v("onEnded. Stopping player")
-        checkMainThread()
-        player.playWhenReady = false
+    scope.launch {
+      _state.asFlow().collect {
+        Timber.i("state changed to $it")
+        // upon end stop the player
+        if (it == PlayerState.ENDED) {
+          Timber.v("onEnded. Stopping player")
+          checkMainThread()
+          player.playWhenReady = false
+        }
       }
     }
 
-    @Suppress("CheckResult")
-    _state
-      .switchMap {
-        if (it == PlayerState.PLAYING) {
-          Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map {
-              checkMainThread()
-              player.currentPosition.coerceAtLeast(0)
+    scope.launch {
+      _state.asFlow().map { it == PlayerState.PLAYING }.distinctUntilChanged()
+        .transformLatest { playing ->
+          if (playing) {
+            while (true) {
+              delay(200.milliseconds)
+              emit(player.currentPosition.coerceAtLeast(0))
             }
-            .distinctUntilChanged { position -> position / 1000 } // let the value only pass the full second changed.
-        } else Observable.empty()
-      }
-      .subscribe { time ->
-        // update the book
-        bookContent?.let { book ->
-          checkMainThread()
-          val index = player.currentWindowIndex
-          val copy = book.updateSettings {
-            copy(positionInChapter = time, currentFile = book.chapters[index].file)
           }
-          _bookContent.onNext(copy)
         }
-      }
+        .distinctUntilChangedBy {
+          // only if the second changed, emit
+          it / 1000
+        }
+        .collect { time ->
+          bookContent?.let { book ->
+            val index = player.currentWindowIndex
+            val copy = book.updateSettings {
+              copy(positionInChapter = time, currentFile = book.chapters[index].file)
+            }
+            _bookContent.onNext(copy)
+          }
+        }
+    }
   }
 
   fun updateMediaSessionPlaybackState() {
