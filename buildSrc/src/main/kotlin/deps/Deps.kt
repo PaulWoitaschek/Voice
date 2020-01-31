@@ -8,7 +8,7 @@ object Versions {
   val targetCompatibility = JavaVersion.VERSION_1_8
 
   const val compileSdk = 29
-  const val minSdk = 21
+  const val minSdk = 23
   const val targetSdk = 28
   const val versionCode = 3060327
   const val versionName = "4.3.3"
