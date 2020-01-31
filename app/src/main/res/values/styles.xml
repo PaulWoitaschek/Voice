@@ -27,10 +27,6 @@
         <item name="colorControlNormal">?attr/colorOnSecondary</item>
     </style>
 
-    <style name="SliderStyle" parent="ThemeOverlay.MaterialComponents">
-        <item name="colorPrimary">@color/red700</item>
-    </style>
-
     <style name="FastForwardRewindStyle">
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
