@@ -27,7 +27,6 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
-import de.ph1b.audiobook.playback.CommandBroadcastReceiver
 import de.ph1b.audiobook.playback.PlayStateManager
 import javax.inject.Singleton
 
@@ -66,7 +65,6 @@ interface AppComponent : DataComponent {
   fun inject(target: BookOverviewController)
   fun inject(target: BookPlayController)
   fun inject(target: BookPlayPresenter)
-  fun inject(target: CommandBroadcastReceiver)
   fun inject(target: CoverFromInternetController)
   fun inject(target: EditBookBottomSheetController)
   fun inject(target: EditBookTitleDialogController)

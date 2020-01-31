@@ -150,20 +150,6 @@ class BookPlayPresenterTest {
   }
 
   @Test
-  fun next() {
-    bookPlayPresenter.attach(mockView)
-    bookPlayPresenter.next()
-    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Next) }
-  }
-
-  @Test
-  fun previous() {
-    bookPlayPresenter.attach(mockView)
-    bookPlayPresenter.previous()
-    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.Previous) }
-  }
-
-  @Test
   fun seekToWithoutFileUsesBookFile() {
     val book = BookFactory.create(id = bookId)
     bookRepoWillReturn(book)

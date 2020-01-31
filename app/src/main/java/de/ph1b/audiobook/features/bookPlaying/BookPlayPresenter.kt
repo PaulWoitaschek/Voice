@@ -80,14 +80,6 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
     playerController.fastForward()
   }
 
-  override fun next() {
-    playerController.execute(PlayerCommand.Next)
-  }
-
-  override fun previous() {
-    playerController.execute(PlayerCommand.Previous)
-  }
-
   override fun seekTo(position: Long, file: File?) {
     Timber.i("seekTo position$position, file$file")
     val book = bookRepository.bookById(bookId)

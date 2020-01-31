@@ -23,8 +23,7 @@ class PlayerController
   private val context: Context,
   private val repo: BookRepository,
   @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
-  private val playStateManager: PlayStateManager
+  private val currentBookIdPref: Pref<UUID>
 ) {
 
   private var _controller: MediaControllerCompat? = null
@@ -62,19 +61,16 @@ class PlayerController
 
   fun execute(command: PlayerCommand) {
     Timber.d("execute $command")
-
-    if (command is PlayerCommand.Stop && playStateManager.playState == PlayStateManager.PlayState.Stopped) {
-      Timber.d("$command in stopped state. Ignore")
+    val bookExists = repo.bookById(currentBookIdPref.value) != null
+    if (bookExists) {
+      Timber.d("execute $command")
+      ContextCompat.startForegroundService(context, command.toServiceIntent(context))
     } else {
-      val bookExists = repo.bookById(currentBookIdPref.value) != null
-      if (bookExists) {
-        Timber.d("execute $command")
-        ContextCompat.startForegroundService(context, command.toServiceIntent(context))
-      } else {
-        Timber.w("ignore $command because there is no book.")
-      }
+      Timber.w("ignore $command because there is no book.")
     }
   }
+
+  fun stop() = execute { it.stop() }
 
   fun fastForward() = execute { it.fastForward() }
 

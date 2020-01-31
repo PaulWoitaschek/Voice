@@ -12,16 +12,7 @@ sealed class PlayerCommand : Parcelable {
   object Play : PlayerCommand()
 
   @Parcelize
-  object Next : PlayerCommand()
-
-  @Parcelize
   object PlayPause : PlayerCommand()
-
-  @Parcelize
-  object RewindAutoPlay : PlayerCommand()
-
-  @Parcelize
-  object Previous : PlayerCommand()
 
   @Parcelize
   data class SkipSilence(val skipSilence: Boolean) : PlayerCommand()
@@ -41,15 +32,8 @@ sealed class PlayerCommand : Parcelable {
   @Parcelize
   data class PlayChapterAtIndex(val index: Long) : PlayerCommand()
 
-  @Parcelize
-  object Stop : PlayerCommand()
-
   fun toServiceIntent(context: Context): Intent {
     return toIntent<PlaybackService>(context)
-  }
-
-  fun toBroadcastReceiverIntent(context: Context): Intent {
-    return toIntent<CommandBroadcastReceiver>(context)
   }
 
   private inline fun <reified T> toIntent(context: Context): Intent {

@@ -229,18 +229,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
         scope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
         player.play()
       }
-      PlayerCommand.Next -> {
-        player.next()
-      }
       PlayerCommand.PlayPause -> {
         if (playStateManager.playState == PlayState.Playing) {
           player.pause(true)
         } else {
           execute(PlayerCommand.Play)
         }
-      }
-      PlayerCommand.Previous -> {
-        player.previous(toNullOfNewTrack = true)
       }
       is PlayerCommand.SkipSilence -> {
         player.setSkipSilences(command.skipSilence)
@@ -253,13 +247,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       is PlayerCommand.SetPosition -> {
         player.changePosition(command.time, command.file)
-      }
-      PlayerCommand.Stop -> {
-        player.stop()
-      }
-      PlayerCommand.RewindAutoPlay -> {
-        player.skip(forward = false)
-        execute(PlayerCommand.Play)
       }
       is PlayerCommand.PlayChapterAtIndex -> {
         val chapter = player.bookContent

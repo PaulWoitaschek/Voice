@@ -86,14 +86,6 @@
         </receiver>
 
         <receiver
-          android:name=".playback.CommandBroadcastReceiver"
-          android:exported="false">
-            <intent-filter>
-                <action android:name="de.ph1b.audiobook.playeraction" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
           android:name=".features.widget.BaseWidgetProvider"
           android:icon="@mipmap/ic_launcher"
           android:label="@string/app_name">

@@ -22,6 +22,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.milliseconds
+import kotlin.time.minutes
 import kotlin.time.seconds
 
 private val FADE_OUT = 5.seconds
@@ -34,12 +35,12 @@ class SleepTimer
   @Named(PrefKeys.SHAKE_TO_RESET)
   shakeToResetPref: Pref<Boolean>,
   @Named(PrefKeys.SLEEP_TIME)
-  private val sleepTimePre: Pref<Int>,
+  private val sleepTimePref: Pref<Int>,
   private val playerController: PlayerController
 ) {
 
   private val shakeToResetEnabled by shakeToResetPref
-  private val sleepTime: Duration get() = 10.seconds // sleepTimePre.value.minutes
+  private val sleepTime: Duration get() = sleepTimePref.value.minutes
 
   private val _leftSleepTime = ConflatedBroadcastChannel(Duration.ZERO)
   private var leftSleepTime: Duration
@@ -70,7 +71,7 @@ class SleepTimer
       val shakeDetectorJob = launch { restartTimerOnShake() }
       startSleepTimerCountdown()
       if (leftSleepTime == Duration.ZERO) {
-        playerController.execute(PlayerCommand.Stop)
+        playerController.stop()
       }
       Timber.i("sleep timer ended")
       if (isActive) {
