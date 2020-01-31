@@ -38,7 +38,7 @@
     </style>
 
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
-        <item name="android:elevation">@dimen/design_appbar_elevation</item>
+        <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
     </style>
 
     <style name="fab_label_style">
