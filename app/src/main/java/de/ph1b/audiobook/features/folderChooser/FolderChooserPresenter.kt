@@ -15,6 +15,9 @@ import java.util.ArrayList
 import java.util.HashSet
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.math.min
+
+private const val SI_CHOSEN_FILE = "siChosenFile"
 
 /**
  * The Presenter for [FolderChooserView]
@@ -33,7 +36,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   lateinit var storageDirFinder: StorageDirFinder
 
   private val rootDirs = ArrayList<File>()
-  private val SI_CHOSEN_FILE = "siChosenFile"
   private var chosenFile: File? = null
 
   override fun onAttach(view: FolderChooserView) {
@@ -60,7 +62,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   private fun File.closestFolder(): File = if (isDirectory) {
     this
   } else {
-    parentFile
+    parentFile!!
   }
 
   /** Call this when a file was selected by the user or the root folder has changed */
@@ -146,7 +148,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
       }
 
       val oldParts = s.split(File.separator)
-      val max = Math.min(oldParts.size, newParts.size) - 1
+      val max = min(oldParts.size, newParts.size) - 1
       val filesAreSubsets = (0..max).none { oldParts[it] != newParts[it] }
       if (filesAreSubsets) {
         Timber.i("the files are sub folders of each other.")
