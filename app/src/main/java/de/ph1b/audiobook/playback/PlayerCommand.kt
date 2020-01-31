@@ -20,12 +20,6 @@ sealed class PlayerCommand : Parcelable {
   @Parcelize
   data class SetPosition(val time: Long, val file: File) : PlayerCommand()
 
-  @Parcelize
-  data class Seek(val time: Long) : PlayerCommand()
-
-  @Parcelize
-  data class PlayChapterAtIndex(val index: Long) : PlayerCommand()
-
   fun toServiceIntent(context: Context): Intent {
     return toIntent<PlaybackService>(context)
   }

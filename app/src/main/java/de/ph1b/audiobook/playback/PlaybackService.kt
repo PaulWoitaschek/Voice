@@ -231,15 +231,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
       is PlayerCommand.SetPosition -> {
         player.changePosition(command.time, command.file)
       }
-      is PlayerCommand.PlayChapterAtIndex -> {
-        val chapter = player.bookContent
-          ?.chapters?.getOrNull(command.index.toInt()) ?: return
-        player.changePosition(0, chapter.file)
-        player.play()
-      }
-      is PlayerCommand.Seek -> {
-        player.changePosition(command.time)
-      }
     }
   }
 
