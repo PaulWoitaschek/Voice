@@ -13,6 +13,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
+import java.util.Locale
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,14 +45,13 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
 
     if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
       // Device has physical external storage; use plain paths.
-      if (rawExternalStorage == null || rawExternalStorage.isEmpty()) {
-        // EXTERNAL_STORAGE undefined; falling back to default.
-      } else {
+      if (rawExternalStorage != null && rawExternalStorage.isNotEmpty()) {
         rv.add(rawExternalStorage)
       }
     } else {
       // Device has emulated storage; external storage paths should have
       // userId burned into them.
+      @Suppress("DEPRECATION")
       val path = Environment.getExternalStorageDirectory().absolutePath
       val folders = dirSeparator.split(path)
       val lastFolder = folders[folders.size - 1]
@@ -77,6 +77,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
       val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
       rv.addAll(rawSecondaryStorage)
     }
+    @Suppress("DEPRECATION")
     rv.add(Environment.getExternalStorageDirectory().absolutePath)
     rv.add("/storage/extSdCard")
     rv.add("/storage/emulated/0")
@@ -153,7 +154,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       var i = 0
       while (i < results.size) {
-        if (!results[i].toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+        if (!results[i].toLowerCase(Locale.US).matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
           results.removeAt(i--)
         }
         i++
@@ -161,8 +162,8 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     } else {
       var i = 0
       while (i < results.size) {
-        if (!results[i].toLowerCase().contains("ext") &&
-          !results[i].toLowerCase().contains("sdcard")
+        if (!results[i].toLowerCase(Locale.US).contains("ext") &&
+          !results[i].toLowerCase(Locale.US).contains("sdcard")
         ) {
           results.removeAt(i--)
         }
