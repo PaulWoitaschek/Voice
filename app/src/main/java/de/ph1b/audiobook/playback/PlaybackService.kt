@@ -14,7 +14,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
-import androidx.media.session.MediaButtonReceiver
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.flowById
@@ -210,16 +209,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
 
     initPlayer(currentBookIdPref.value)
-
     if (intent != null) {
-      if (intent.action == Intent.ACTION_MEDIA_BUTTON) {
-        MediaButtonReceiver.handleIntent(mediaSession, intent)
-      } else {
-        PlayerCommand.fromIntent(intent)?.let(::execute)
-      }
+      PlayerCommand.fromIntent(intent)?.let(::execute)
     }
 
-    return Service.START_NOT_STICKY
+    return super.onStartCommand(intent, flags, startId)
   }
 
   private fun execute(command: PlayerCommand) {
