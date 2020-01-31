@@ -72,10 +72,6 @@
     </plurals>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
-    <string name="pref_theme_title">Thema</string>
-    <string name="pref_theme_day">Tag</string>
-    <string name="pref_theme_night">Nacht</string>
-    <string name="pref_theme_daynight">Tag / Nacht</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spult nach manuellem Pausieren automatisch um %d Sekunde zurück.</item>

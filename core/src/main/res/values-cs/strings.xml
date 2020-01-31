@@ -69,10 +69,6 @@
     </plurals>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
-    <string name="pref_theme_title">Vzhled</string>
-    <string name="pref_theme_day">Den</string>
-    <string name="pref_theme_night">Noc</string>
-    <string name="pref_theme_daynight">Den / Noc</string>
     <string name="pref_auto_rewind_title">Automaticky přetočit</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automaticky přetočí o %d sekundu po ručním pozastavení.</item>

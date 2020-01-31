@@ -71,10 +71,6 @@
     </plurals>
     <string name="pref_seek_time">Przewiń o</string>
     <string name="pref_root_folder_title">Folder audiobooków</string>
-    <string name="pref_theme_title">Motyw</string>
-    <string name="pref_theme_day">Dzień</string>
-    <string name="pref_theme_night">Noc</string>
-    <string name="pref_theme_daynight">Dzień / Noc</string>
     <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>

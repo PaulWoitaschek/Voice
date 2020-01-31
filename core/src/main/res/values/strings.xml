@@ -73,10 +73,6 @@
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_root_folder_title">Audiobook folder</string>
     <string name="pref_theme_dark">Dark Theme</string>
-    <string name="pref_theme_title">Theme</string>
-    <string name="pref_theme_day">Day</string>
-    <string name="pref_theme_night">Night</string>
-    <string name="pref_theme_daynight">Day / Night</string>
     <string name="pref_auto_rewind_title">Auto rewind</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatically rewinds %d second after manual pausing.</item>

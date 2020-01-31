@@ -70,10 +70,6 @@
     </plurals>
     <string name="pref_seek_time">Пропустити</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>
-    <string name="pref_theme_title">Тема</string>
-    <string name="pref_theme_day">День</string>
-    <string name="pref_theme_night">Ніч</string>
-    <string name="pref_theme_daynight">Режим день / ніч</string>
     <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>

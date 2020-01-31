@@ -68,10 +68,6 @@
     </plurals>
     <string name="pref_seek_time">スキップ量</string>
     <string name="pref_root_folder_title">オーディオブック フォルダー</string>
-    <string name="pref_theme_title">テーマ</string>
-    <string name="pref_theme_day">日中</string>
-    <string name="pref_theme_night">夜間</string>
-    <string name="pref_theme_daynight">日中 / 夜間</string>
     <string name="pref_auto_rewind_title">自動巻き戻し</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other">手動で一時停止した後、自動的に %d 秒巻き戻します。</item>

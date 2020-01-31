@@ -68,10 +68,6 @@
     </plurals>
     <string name="pref_seek_time">Omitir cantidad</string>
     <string name="pref_root_folder_title">Directorio de audiolibros</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_day">Día</string>
-    <string name="pref_theme_night">Noche</string>
-    <string name="pref_theme_daynight">Día / Noche</string>
     <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automáticamente retrasar %d segundo después de pausa manual.</item>

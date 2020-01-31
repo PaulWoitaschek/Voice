@@ -67,10 +67,6 @@
     </plurals>
     <string name="pref_seek_time">आगे कूदने की मात्रा</string>
     <string name="pref_root_folder_title">किताबों का फोल्डर</string>
-    <string name="pref_theme_title">थीम</string>
-    <string name="pref_theme_day">दिन</string>
-    <string name="pref_theme_night">रात</string>
-    <string name="pref_theme_daynight">दिन / रात</string>
     <string name="pref_auto_rewind_title">अपने आप रिवाइंड</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">पॉज़ करने पर अपने आप %d सेकंड रिवाइंड हो जायेगा।</item>

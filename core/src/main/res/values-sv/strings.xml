@@ -72,10 +72,6 @@
     </plurals>
     <string name="pref_seek_time">Skippa mängd</string>
     <string name="pref_root_folder_title">Ljudboksmapp</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_day">Dag</string>
-    <string name="pref_theme_night">Natt</string>
-    <string name="pref_theme_daynight">Dag/Natt</string>
     <string name="pref_auto_rewind_title">Automatisk återspolning</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spolas automatiskt %d sekund efter manuell paus.</item>

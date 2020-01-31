@@ -72,10 +72,6 @@
     </plurals>
     <string name="pref_seek_time">Salta</string>
     <string name="pref_root_folder_title">Cartella audiolibro</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_day">Giorno</string>
-    <string name="pref_theme_night">Notte</string>
-    <string name="pref_theme_daynight">Giorno / Notte</string>
     <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Riavvolgimento automatico di %d secondo quando si mette in pausa manualmente.</item>

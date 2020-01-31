@@ -68,10 +68,6 @@
     </plurals>
     <string name="pref_seek_time">Количестество на прескачане</string>
     <string name="pref_root_folder_title">Папка с аудио книги</string>
-    <string name="pref_theme_title">Фон на приложението</string>
-    <string name="pref_theme_day">Ден</string>
-    <string name="pref_theme_night">Нощ</string>
-    <string name="pref_theme_daynight">Ден/нощ</string>
     <string name="pref_auto_rewind_title">Авто пренавиване</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично пренавива %d секунда след ръчно паузиране</item>

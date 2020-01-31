@@ -64,10 +64,6 @@
     </plurals>
     <string name="pref_seek_time">میزان پرش</string>
     <string name="pref_root_folder_title">پوشه‌ی کتاب‌صوتی</string>
-    <string name="pref_theme_title">ظاهر</string>
-    <string name="pref_theme_day">روز</string>
-    <string name="pref_theme_night">شب</string>
-    <string name="pref_theme_daynight">روز / شب</string>
     <string name="pref_auto_rewind_title">بازپخش خودکار</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">پس از قطع دستی، به صورت خودکار %d ثانیه بازپخش انجام شود.</item>

@@ -69,10 +69,6 @@
     </plurals>
     <string name="pref_seek_time">Skip hoeveelheid</string>
     <string name="pref_root_folder_title">Klankboek gids</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_day">Dag</string>
-    <string name="pref_theme_night">Nag</string>
-    <string name="pref_theme_daynight">Dag / Nag</string>
     <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Outomastiese terugdraai van %d sekonde na /\'n breek.</item>

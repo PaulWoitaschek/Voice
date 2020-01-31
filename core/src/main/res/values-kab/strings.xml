@@ -19,10 +19,6 @@
     <!--PlaybackSpeed-->
     <!--Bookmarks-->
     <!--Settings-->
-    <string name="pref_theme_title">Asentel</string>
-    <string name="pref_theme_day">Ass</string>
-    <string name="pref_theme_night">Iḍ</string>
-    <string name="pref_theme_daynight">Ass / Iḍ</string>
     <!--Misc-->
     <string name="remove">Kkes</string>
     <!--hide folder dialog-->

@@ -38,7 +38,6 @@
     <!--Bookmarks-->
     <!--Settings-->
     <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
-    <string name="pref_theme_title">الثيم</string>
     <string name="pref_support_title">الدعم</string>
     <string name="pref_support_translations">الترجمة</string>
     <string name="pref_support_contribute">الدعم و الإقتراحات</string>

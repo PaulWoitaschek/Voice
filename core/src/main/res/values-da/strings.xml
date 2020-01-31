@@ -65,10 +65,6 @@
     </plurals>
     <string name="pref_seek_time">Spring over mængde</string>
     <string name="pref_root_folder_title">Lydbogs mappe</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_day">Dag</string>
-    <string name="pref_theme_night">Nat</string>
-    <string name="pref_theme_daynight">Dag / Nat</string>
     <string name="pref_auto_rewind_title">Auto tilbagespoling</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spoler automatisk %d sekund tilbage efter manuel pause.</item>

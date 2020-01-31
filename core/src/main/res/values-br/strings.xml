@@ -18,9 +18,6 @@
     <!--Bookmarks-->
     <!--Settings-->
     <string name="min">%s mun</string>
-    <string name="pref_theme_day">Deiz</string>
-    <string name="pref_theme_night">Noz</string>
-    <string name="pref_theme_daynight">Deiz pe noz</string>
     <string name="pref_support_translations">Troidigezioù</string>
     <!--Misc-->
     <!--hide folder dialog-->
