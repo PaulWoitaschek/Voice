@@ -52,8 +52,6 @@ class PlayerController
 
   fun skipSilence(skip: Boolean) = execute { it.skipSilence(skip) }
 
-  fun stop() = execute { it.stop() }
-
   fun fastForward() = execute { it.fastForward() }
 
   fun rewind() = execute { it.rewind() }
