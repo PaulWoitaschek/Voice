@@ -29,7 +29,6 @@
       android:theme="@style/PlayButtonStyle"
       android:tint="@color/white"
       android:transitionName="@string/fab_transition"
-      app:fabCustomSize="84dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent" />

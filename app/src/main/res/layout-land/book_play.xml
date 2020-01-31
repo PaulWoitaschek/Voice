@@ -50,7 +50,6 @@
       android:theme="@style/PlayButtonStyle"
       android:tint="@color/white"
       android:transitionName="@string/fab_transition"
-      app:fabCustomSize="84dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="@id/x75"
       app:layout_constraintRight_toRightOf="@id/x75" />
