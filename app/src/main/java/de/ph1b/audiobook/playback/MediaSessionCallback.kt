@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.os.Bundle
+import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
 import de.ph1b.audiobook.features.bookSearch.BookSearchParser
@@ -90,14 +91,12 @@ class MediaSessionCallback
 
   override fun onPause() {
     Timber.i("onPause")
-    // sometimes the system handles this wrongly so we toggle playPause
-    player.playPause()
+    player.pause(rewind = true)
   }
 
   override fun onPlay() {
     Timber.i("onPlay")
-    // sometimes the system handles this wrongly so we toggle playPause
-    player.playPause()
+    player.play()
   }
 
   override fun onSeekTo(pos: Long) {
@@ -111,6 +110,11 @@ class MediaSessionCallback
       ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
       ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
       ANDROID_AUTO_ACTION_REWIND -> onRewind()
+      PLAY_PAUSE_ACTION -> player.playPause()
     }
   }
 }
+
+private const val PLAY_PAUSE_ACTION = "playPause"
+
+fun MediaControllerCompat.TransportControls.playPause() = sendCustomAction(PLAY_PAUSE_ACTION, Bundle.EMPTY)

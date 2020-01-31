@@ -9,12 +9,6 @@ import java.io.File
 sealed class PlayerCommand : Parcelable {
 
   @Parcelize
-  object Play : PlayerCommand()
-
-  @Parcelize
-  object PlayPause : PlayerCommand()
-
-  @Parcelize
   data class SkipSilence(val skipSilence: Boolean) : PlayerCommand()
 
   @Parcelize

@@ -116,18 +116,6 @@ class BookRepository
     }
   }
 
-  suspend fun markBookAsPlayedNow(id: UUID) {
-    withContext(Dispatchers.IO) {
-      val lastPlayedAt = System.currentTimeMillis()
-      storage.updateLastPlayedAt(id, lastPlayedAt)
-      updateBookInMemory(id) {
-        update(updateSettings = {
-          copy(lastPlayedAtMillis = lastPlayedAt)
-        })
-      }
-    }
-  }
-
   suspend fun hideBook(toDelete: List<Book>) {
     withContext(Dispatchers.IO) {
       Timber.v("hideBooks=${toDelete.size}")

@@ -192,7 +192,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun headsetPlugged() {
     if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
       if (resumeOnReplugPref.value) {
-        execute(PlayerCommand.Play)
+        mediaController.transportControls.play()
       }
     }
   }
@@ -219,17 +219,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun execute(command: PlayerCommand) {
     initPlayer(currentBookIdPref.value)
     return when (command) {
-      PlayerCommand.Play -> {
-        scope.launch { repo.markBookAsPlayedNow(currentBookIdPref.value) }
-        player.play()
-      }
-      PlayerCommand.PlayPause -> {
-        if (playStateManager.playState == PlayState.Playing) {
-          player.pause(true)
-        } else {
-          execute(PlayerCommand.Play)
-        }
-      }
       is PlayerCommand.SkipSilence -> {
         player.setSkipSilences(command.skipSilence)
       }

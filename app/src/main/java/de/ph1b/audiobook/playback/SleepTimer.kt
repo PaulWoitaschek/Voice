@@ -111,7 +111,7 @@ class SleepTimer
             playerController.cancelFadeout()
             leftSleepTime = sleepTime
           } else {
-            playerController.execute(PlayerCommand.Play)
+            playerController.play()
             start()
           }
         }

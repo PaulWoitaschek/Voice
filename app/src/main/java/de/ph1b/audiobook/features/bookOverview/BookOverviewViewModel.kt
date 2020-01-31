@@ -11,7 +11,6 @@ import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
@@ -143,6 +142,6 @@ constructor(
   }
 
   fun playPause() {
-    playerController.execute(PlayerCommand.PlayPause)
+    playerController.playPause()
   }
 }

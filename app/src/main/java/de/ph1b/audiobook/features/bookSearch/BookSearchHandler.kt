@@ -6,7 +6,6 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import timber.log.Timber
 import java.util.UUID
@@ -74,7 +73,7 @@ class BookSearchHandler
         currentBookIdPref.value = it
       }
     }
-    player.execute(PlayerCommand.Play)
+    player.play()
   }
 
   private fun playArtist(search: BookSearch) {
@@ -94,7 +93,7 @@ class BookSearchHandler
     return if (book != null) {
       Timber.i("found a match ${book.name}")
       currentBookIdPref.value = book.id
-      player.execute(PlayerCommand.Play)
+      player.play()
       true
     } else false
   }

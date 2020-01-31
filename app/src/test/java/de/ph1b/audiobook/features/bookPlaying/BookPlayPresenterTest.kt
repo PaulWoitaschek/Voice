@@ -132,7 +132,7 @@ class BookPlayPresenterTest {
   fun playPause() {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.playPause()
-    verify(exactly = 1) { mockPlayerController.execute(PlayerCommand.PlayPause) }
+    verify(exactly = 1) { mockPlayerController.playPause() }
   }
 
   @Test

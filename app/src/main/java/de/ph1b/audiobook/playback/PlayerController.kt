@@ -76,6 +76,10 @@ class PlayerController
 
   fun rewind() = execute { it.rewind() }
 
+  fun play() = execute { it.play() }
+
+  fun playPause() = execute { it.playPause() }
+
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)
   }

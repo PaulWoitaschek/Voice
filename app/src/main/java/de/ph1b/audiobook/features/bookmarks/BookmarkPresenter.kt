@@ -65,7 +65,7 @@ class BookmarkPresenter @Inject constructor(
     playerController.execute(PlayerCommand.SetPosition(bookmark.time, bookmark.mediaFile))
 
     if (wasPlaying) {
-      playerController.execute(PlayerCommand.Play)
+      playerController.play()
     }
 
     view.finish()
