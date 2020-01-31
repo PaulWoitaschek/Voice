@@ -9,6 +9,8 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.flowById
 import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessGain
 import de.ph1b.audiobook.injection.PerService
@@ -32,14 +34,18 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
@@ -59,7 +65,10 @@ constructor(
   private val loudnessGain: LoudnessGain,
   private val dataSourceConverter: DataSourceConverter,
   private val player: SimpleExoPlayer,
-  private val changeNotifier: ChangeNotifier
+  private val changeNotifier: ChangeNotifier,
+  @Named(PrefKeys.CURRENT_BOOK)
+  private val currentBookIdPref: Pref<UUID>,
+  private val repo: BookRepository
 ) {
 
   private val scope = MainScope()
@@ -166,6 +175,18 @@ constructor(
           }
         }
     }
+
+    scope.launch {
+      val notIdleFlow = _state.asFlow().filter { it != PlayerState.IDLE }
+      val contentFlow = currentBookIdPref.flow.flatMapLatest { repo.flowById(it) }
+        .filterNotNull()
+        .map { it.content }
+        .distinctUntilChanged()
+      combine(notIdleFlow, contentFlow) { _, content ->
+        Unit
+      }
+        .collect { prepare() }
+    }
   }
 
   fun updateMediaSessionPlaybackState() {
@@ -177,23 +198,6 @@ constructor(
       else -> PlaybackStateCompat.STATE_NONE
     }
     changeNotifier.updatePlaybackState(playbackStateCompat, bookContent)
-  }
-
-  fun init(content: BookContent) {
-    val shouldInitialize = player.playbackState == Player.STATE_IDLE ||
-      !alreadyInitializedChapters(content)
-    if (!shouldInitialize) {
-      return
-    }
-    Timber.i("init ${content.currentFile}")
-    bookContent = content
-    checkMainThread()
-    player.playWhenReady = false
-    player.prepare(dataSourceConverter.toMediaSource(content))
-    player.seekTo(content.currentChapterIndex, content.positionInChapter)
-    player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
-    loudnessGain.gainmB = content.loudnessGain
-    state = PlayerState.PAUSED
   }
 
   private fun alreadyInitializedChapters(content: BookContent): Boolean {
@@ -221,7 +225,7 @@ constructor(
 
   fun play() {
     Timber.v("play called in state $state, currentFile=${bookContent?.currentFile}")
-    prepareIfIdle()
+    prepare()
     bookContent?.let {
       bookContent = it.updateSettings {
         copy(lastPlayedAtMillis = System.currentTimeMillis())
@@ -242,7 +246,7 @@ constructor(
 
   private fun skip(skipAmount: Duration) {
     checkMainThread()
-    prepareIfIdle()
+    prepare()
     if (state == PlayerState.IDLE)
       return
 
@@ -269,7 +273,7 @@ constructor(
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
     Timber.i("previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state")
-    prepareIfIdle()
+    prepare()
     if (state == PlayerState.IDLE)
       return
 
@@ -314,23 +318,29 @@ constructor(
     return false
   }
 
-  private fun prepareIfIdle() {
-    if (state == PlayerState.IDLE) {
-      Timber.d("state is idle so ExoPlayer might have an error. Try to prepare it")
-      bookContent?.let(::init)
+  private fun prepare() {
+    val content = repo.bookById(currentBookIdPref.value)?.content ?: return
+    Timber.i("prepare $content")
+    val shouldInitialize = player.playbackState == Player.STATE_IDLE || !alreadyInitializedChapters(content)
+    if (!shouldInitialize) {
+      Timber.i("already prepared.")
+      return
     }
+    bookContent = content
+    checkMainThread()
+    player.playWhenReady = false
+    player.prepare(dataSourceConverter.toMediaSource(content))
+    player.seekTo(content.currentChapterIndex, content.positionInChapter)
+    player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
+    loudnessGain.gainmB = content.loudnessGain
+    state = PlayerState.PAUSED
   }
 
-  /** Stops the playback and releases some resources. */
   fun stop() {
     checkMainThread()
     player.stop()
   }
 
-  /**
-   * Pauses the player.
-   * @param rewind true if the player should automatically rewind a little bit.
-   */
   fun pause(rewind: Boolean) {
     Timber.v("pause")
     checkMainThread()
@@ -372,13 +382,11 @@ constructor(
     }
   }
 
-  /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
     checkMainThread()
-    prepareIfIdle()
+    prepare()
     val content = bookContent
       ?: return
-
     val nextChapterMarkPosition = content.nextChapterMarkPosition
     if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)
     else content.nextChapter?.let { changePosition(0, it.file) }
@@ -388,7 +396,7 @@ constructor(
   fun changePosition(time: Long, changedFile: File? = null) {
     checkMainThread()
     Timber.v("changePosition with time $time and file $changedFile")
-    prepareIfIdle()
+    prepare()
     if (state == PlayerState.IDLE)
       return
 

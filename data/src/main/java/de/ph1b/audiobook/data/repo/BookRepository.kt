@@ -70,11 +70,12 @@ class BookRepository
 
   fun bookById(id: UUID) = active.firstOrNull { it.id == id }
 
-  suspend fun updateBookContent(content: BookContent) {
-    updateBookInMemory(content.id) {
+  suspend fun updateBookContent(content: BookContent): Book? {
+    val updated = updateBookInMemory(content.id) {
       updateContent { content }
     }
     storage.updateBookContent(content)
+    return updated
   }
 
   fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
@@ -104,15 +105,18 @@ class BookRepository
     }
   }
 
-  private suspend inline fun updateBookInMemory(id: UUID, update: Book.() -> Book) {
+  private suspend inline fun updateBookInMemory(id: UUID, update: Book.() -> Book): Book? {
     val index = active.indexOfFirst { it.id == id }
-    if (index != -1) {
-      active[index] = update(active[index])
+    return if (index != -1) {
+      val updated = update(active[index])
+      active[index] = updated
       withContext(Dispatchers.Main) {
         activeBooksSubject.onNext(active.toList())
       }
+      updated
     } else {
       Timber.e("update failed as there was no book")
+      null
     }
   }
 

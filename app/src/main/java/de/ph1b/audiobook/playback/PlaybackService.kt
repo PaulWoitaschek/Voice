@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.data.repo.flowById
 import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.flowBroadcastReceiver
@@ -34,12 +33,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -110,40 +106,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
       player.bookContentFlow
         .distinctUntilChangedBy { it.settings }
         .collect { content ->
-          repo.updateBookContent(content)
+          val updatedBook = repo.updateBookContent(content)
+          if (updatedBook != null) {
+            changeNotifier.updateMetadata(updatedBook)
+            updateNotification(updatedBook)
+          }
         }
     }
 
     scope.launch {
       notifyOnAutoConnectionChange.listen()
-    }
-
-    scope.launch {
-      currentBookIdPref.flow.collect {
-        initPlayer(it)
-      }
-    }
-
-    val bookUpdated = currentBookIdPref.flow
-      .flatMapLatest { repo.flowById(it) }
-      .filterNotNull()
-      .distinctUntilChangedBy {
-        it.content
-      }
-    scope.launch {
-      bookUpdated
-        .collectLatest {
-          player.init(it.content)
-          changeNotifier.updateMetadata(it)
-        }
-    }
-
-    scope.launch {
-      bookUpdated
-        .distinctUntilChangedBy { book -> book.content.currentChapter }
-        .collectLatest {
-          updateNotification(it)
-        }
     }
 
     scope.launch {
@@ -174,17 +146,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     Timber.i("updateNotification for ${book.name}")
     return notificationCreator.createNotification(book).also {
       notificationManager.notify(NOTIFICATION_ID, it)
-    }
-  }
-
-  private fun initPlayer(id: UUID) {
-    if (player.bookContent?.id != id) {
-      val book = repo.bookById(id)
-      if (book != null) {
-        player.init(book.content)
-      } else {
-        player.stop()
-      }
     }
   }
 
