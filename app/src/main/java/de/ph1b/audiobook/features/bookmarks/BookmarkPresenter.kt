@@ -8,7 +8,6 @@ import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -62,7 +61,7 @@ class BookmarkPresenter @Inject constructor(
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
 
     currentBookIdPref.value = bookId
-    playerController.execute(PlayerCommand.SetPosition(bookmark.time, bookmark.mediaFile))
+    playerController.setPosition(bookmark.time, bookmark.mediaFile)
 
     if (wasPlaying) {
       playerController.play()

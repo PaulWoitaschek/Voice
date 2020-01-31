@@ -9,7 +9,6 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Paused
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Stopped
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.mockk.every
@@ -156,7 +155,7 @@ class BookPlayPresenterTest {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.seekTo(100, null)
     verify(exactly = 1) {
-      mockPlayerController.execute(PlayerCommand.SetPosition(100, book.content.currentFile))
+      mockPlayerController.setPosition(100, book.content.currentFile)
     }
   }
 
@@ -179,7 +178,7 @@ class BookPlayPresenterTest {
     val lastFile = book.content.chapters.last().file
     bookPlayPresenter.seekTo(100, lastFile)
     verify(exactly = 1) {
-      mockPlayerController.execute(PlayerCommand.SetPosition(100, lastFile))
+      mockPlayerController.setPosition(100, lastFile)
     }
   }
 

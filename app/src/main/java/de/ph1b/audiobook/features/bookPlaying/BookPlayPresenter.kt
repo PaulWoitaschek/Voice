@@ -8,7 +8,6 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.PlayerCommand
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -84,13 +83,13 @@ class BookPlayPresenter(private val bookId: UUID) : BookPlayMvp.Presenter() {
     Timber.i("seekTo position$position, file$file")
     val book = bookRepository.bookById(bookId)
       ?: return
-    playerController.execute(PlayerCommand.SetPosition(position, file ?: book.content.currentFile))
+    playerController.setPosition(position, file ?: book.content.currentFile)
   }
 
   override fun toggleSkipSilence() {
     val skipSilence = bookRepository.bookById(bookId)?.content?.skipSilence
       ?: return
-    playerController.execute(PlayerCommand.SkipSilence(!skipSilence))
+    playerController.skipSilence(!skipSilence)
   }
 
   override fun toggleSleepTimer() {

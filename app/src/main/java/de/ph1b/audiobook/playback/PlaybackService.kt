@@ -2,7 +2,6 @@ package de.ph1b.audiobook.playback
 
 import android.app.Notification
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
@@ -205,35 +204,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    Timber.v("onStartCommand, intent=$intent, flags=$flags, startId=$startId")
-
-    initPlayer(currentBookIdPref.value)
-    if (intent != null) {
-      PlayerCommand.fromIntent(intent)?.let(::execute)
-    }
-
-    return super.onStartCommand(intent, flags, startId)
-  }
-
-  private fun execute(command: PlayerCommand) {
-    initPlayer(currentBookIdPref.value)
-    return when (command) {
-      is PlayerCommand.SkipSilence -> {
-        player.setSkipSilences(command.skipSilence)
-      }
-      is PlayerCommand.SetLoudnessGain -> {
-        player.setLoudnessGain(command.mB)
-      }
-      is PlayerCommand.SetPlaybackSpeed -> {
-        player.setPlaybackSpeed(command.speed)
-      }
-      is PlayerCommand.SetPosition -> {
-        player.changePosition(command.time, command.file)
-      }
-    }
-  }
-
   override fun onLoadChildren(
     parentId: String,
     result: Result<List<MediaBrowserCompat.MediaItem>>
@@ -275,12 +245,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     when (updatedState) {
       PlaybackStateCompat.STATE_BUFFERING,
       PlaybackStateCompat.STATE_PLAYING -> {
-
-        /**
-         * This may look strange, but the documentation for [Service.startForeground]
-         * notes that "calling this method does *not* put the service in the started
-         * state itself, even though the name sounds like it."
-         */
         if (notification != null) {
           notificationManager.notify(NOTIFICATION_ID, notification)
 
@@ -299,7 +263,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
           stopForeground(false)
           isForeground = false
 
-          // If playback has ended, also stop the service.
           if (updatedState == PlaybackStateCompat.STATE_NONE) {
             stopSelf()
           }

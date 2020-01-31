@@ -4,26 +4,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
-import androidx.core.content.ContextCompat
-import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.pref.Pref
 import timber.log.Timber
-import java.util.UUID
+import java.io.File
 import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
-/**
- * Class for controlling the player through the service
- */
-@Singleton
 class PlayerController
 @Inject constructor(
-  private val context: Context,
-  private val repo: BookRepository,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>
+  private val context: Context
 ) {
 
   private var _controller: MediaControllerCompat? = null
@@ -59,16 +46,11 @@ class PlayerController
     browser.connect()
   }
 
-  fun execute(command: PlayerCommand) {
-    Timber.d("execute $command")
-    val bookExists = repo.bookById(currentBookIdPref.value) != null
-    if (bookExists) {
-      Timber.d("execute $command")
-      ContextCompat.startForegroundService(context, command.toServiceIntent(context))
-    } else {
-      Timber.w("ignore $command because there is no book.")
-    }
-  }
+  fun setPosition(time: Long, file: File) = execute { it.setPosition(time, file) }
+
+  fun setLoudnessGain(mB: Int) = execute { it.setLoudnessGain(mB) }
+
+  fun skipSilence(skip: Boolean) = execute { it.skipSilence(skip) }
 
   fun stop() = execute { it.stop() }
 
@@ -79,6 +61,8 @@ class PlayerController
   fun play() = execute { it.play() }
 
   fun playPause() = execute { it.playPause() }
+
+  fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
 
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)
