@@ -2,10 +2,10 @@ package de.ph1b.audiobook.injection
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import dagger.Module
 import dagger.Provides
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.misc.converters.UUIDConverter
 import de.ph1b.audiobook.persistence.pref.PersistentPref
@@ -21,7 +21,7 @@ object PrefsModule {
   @Provides
   @JvmStatic
   fun provideSharedPreferences(context: Context): SharedPreferences {
-    return PreferenceManager.getDefaultSharedPreferences(context)
+    return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
   }
 
   @Provides
