@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
  * Instead of handling the view type and items manually, add a [AdapterComponent] for each view type.
  */
 open class CompositeListAdapter<T : Any>(
-  itemCallback: DiffUtil.ItemCallback<T> = EqualityItemCallback()
+  itemCallback: DiffUtil.ItemCallback<T>
 ) : ListAdapter<T, RecyclerView.ViewHolder>(itemCallback) {
 
   private val helper = CompositeAdapterHelper<T> { getItem(it) }
