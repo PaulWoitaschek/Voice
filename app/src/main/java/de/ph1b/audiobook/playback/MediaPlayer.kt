@@ -25,15 +25,16 @@ import de.ph1b.audiobook.playback.utils.onPositionDiscontinuity
 import de.ph1b.audiobook.playback.utils.onSessionPlaybackStateNeedsUpdate
 import de.ph1b.audiobook.playback.utils.onStateChanged
 import de.ph1b.audiobook.playback.utils.setPlaybackParameters
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
@@ -63,9 +64,13 @@ constructor(
 
   private val scope = MainScope()
 
-  private val _bookContent = BehaviorSubject.create<BookContent>()
-  val bookContent: BookContent? get() = _bookContent.value
-  val bookContentStream = _bookContent.hide()!!
+  private val _bookContent = ConflatedBroadcastChannel<BookContent?>(null)
+  var bookContent: BookContent?
+    get() = _bookContent.value
+    private set(value) {
+      _bookContent.offer(value)
+    }
+  val bookContentFlow: Flow<BookContent> get() = _bookContent.asFlow().filterNotNull()
 
   private val _state = ConflatedBroadcastChannel(PlayerState.IDLE)
   private var state: PlayerState
@@ -111,14 +116,12 @@ constructor(
       bookContent?.let {
         checkMainThread()
         val index = player.currentWindowIndex
-        _bookContent.onNext(
-          it.updateSettings {
-            copy(
-              positionInChapter = position,
-              currentFile = it.chapters[index].file
-            )
-          }
-        )
+        bookContent = it.updateSettings {
+          copy(
+            positionInChapter = position,
+            currentFile = it.chapters[index].file
+          )
+        }
       }
     }
 
@@ -157,10 +160,9 @@ constructor(
         .collect { time ->
           bookContent?.let { book ->
             val index = player.currentWindowIndex
-            val copy = book.updateSettings {
+            bookContent = book.updateSettings {
               copy(positionInChapter = time, currentFile = book.chapters[index].file)
             }
-            _bookContent.onNext(copy)
           }
         }
     }
@@ -184,7 +186,7 @@ constructor(
       return
     }
     Timber.i("init ${content.currentFile}")
-    _bookContent.onNext(content)
+    bookContent = content
     checkMainThread()
     player.playWhenReady = false
     player.prepare(dataSourceConverter.toMediaSource(content))
@@ -212,8 +214,7 @@ constructor(
     Timber.v("setLoudnessGain to $mB mB")
 
     bookContent?.let {
-      val copy = it.updateSettings { copy(loudnessGain = mB) }
-      _bookContent.onNext(copy)
+      bookContent = it.updateSettings { copy(loudnessGain = mB) }
       loudnessGain.gainmB = mB
     }
   }
@@ -222,10 +223,9 @@ constructor(
     Timber.v("play called in state $state, currentFile=${bookContent?.currentFile}")
     prepareIfIdle()
     bookContent?.let {
-      val withChangedPlayedAtTime = it.updateSettings {
+      bookContent = it.updateSettings {
         copy(lastPlayedAtMillis = System.currentTimeMillis())
       }
-      _bookContent.onNext(withChangedPlayedAtTime)
     }
     bookContent?.let {
       if (state == PlayerState.ENDED) {
@@ -396,7 +396,7 @@ constructor(
       val copy = it.updateSettings {
         copy(positionInChapter = time, currentFile = changedFile ?: currentFile)
       }
-      _bookContent.onNext(copy)
+      bookContent = copy
       player.seekTo(copy.currentChapterIndex, time)
     }
   }
@@ -406,7 +406,7 @@ constructor(
     checkMainThread()
     bookContent?.let {
       val copy = it.updateSettings { copy(playbackSpeed = speed) }
-      _bookContent.onNext(copy)
+      bookContent = copy
       player.setPlaybackParameters(speed, it.skipSilence)
     }
   }
@@ -416,8 +416,7 @@ constructor(
     Timber.v("setSkipSilences to $skip")
 
     bookContent?.let {
-      val copy = it.updateSettings { copy(skipSilence = skip) }
-      _bookContent.onNext(copy)
+      bookContent = it.updateSettings { copy(skipSilence = skip) }
       player.setPlaybackParameters(it.playbackSpeed, skip)
     }
   }

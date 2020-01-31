@@ -107,7 +107,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaController.registerCallback(MediaControllerCallback())
 
     scope.launch {
-      player.bookContentStream.latestAsFlow()
+      player.bookContentFlow
         .distinctUntilChangedBy { it.settings }
         .collect { content ->
           repo.updateBookContent(content)
