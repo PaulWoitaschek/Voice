@@ -16,6 +16,7 @@ import com.afollestad.materialcab.createCab
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.appComponent
@@ -23,7 +24,6 @@ import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.uitools.ImageHelper
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
 import kotlinx.coroutines.Dispatchers

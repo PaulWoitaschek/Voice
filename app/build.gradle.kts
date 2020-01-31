@@ -1,6 +1,5 @@
 import deps.Deps
 import deps.Versions
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 plugins {
@@ -113,6 +112,8 @@ dependencies {
   implementation(project(":data"))
   implementation(project(":covercolorextractor"))
   implementation(project(":crashreporting"))
+  implementation(project(":playback"))
+  implementation(project(":prefs"))
 
   implementation(Deps.chapterReader)
 
@@ -174,19 +175,6 @@ dependencies {
   androidTestImplementation(Deps.AndroidX.Test.runner)
   androidTestImplementation(Deps.AndroidX.Test.core)
   androidTestImplementation(Deps.AndroidX.Test.junit)
-}
-
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    jvmTarget = "1.8"
-    freeCompilerArgs = listOf(
-      "-XXLanguage:+InlineClasses",
-      "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-      "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
-      "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
-      "-Xuse-experimental=kotlin.time.ExperimentalTime"
-    )
-  }
 }
 
 tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")

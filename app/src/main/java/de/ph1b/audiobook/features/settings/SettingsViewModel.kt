@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.settings
 
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -26,7 +26,12 @@ class SettingsViewModel
   val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects.asFlow()
 
   fun viewState(): Flow<SettingsViewState> {
-    return combine(useDarkTheme.flow, resumeOnReplugPref.flow, autoRewindAmountPref.flow, seekTimePref.flow) { useDarkTheme, resumeOnreplug, autoRewindAmount, seekTime ->
+    return combine(
+      useDarkTheme.flow,
+      resumeOnReplugPref.flow,
+      autoRewindAmountPref.flow,
+      seekTimePref.flow
+    ) { useDarkTheme, resumeOnreplug, autoRewindAmount, seekTime ->
       SettingsViewState(
         useDarkTheme = useDarkTheme,
         showDarkThemePref = DARK_THEME_SETTABLE,

@@ -4,9 +4,9 @@ import dagger.Reusable
 import de.ph1b.audiobook.common.getIfPresent
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import io.reactivex.Observable
 import java.util.UUID
 import javax.inject.Inject

@@ -14,14 +14,14 @@ import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.misc.hasPermission
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.storageMounted
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
@@ -205,7 +205,7 @@ class BookAdder
     newChapters: List<Chapter>,
     type: Book.Type
   ) {
-    val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
+    val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent!!
 
     val firstChapterFile = newChapters.first().file
     val result =
@@ -217,6 +217,7 @@ class BookAdder
       if (bookName.isNullOrEmpty()) {
         val withoutExtension = rootFile.nameWithoutExtension
         bookName = if (withoutExtension.isEmpty()) {
+          @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
           rootFile.name!!
         } else {
           withoutExtension
@@ -411,7 +412,7 @@ class BookAdder
       }
     } else if (rootFile.isFile) {
       for (b in books) {
-        if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
+        if (rootFile.parentFile?.absolutePath == b.root && type === b.type) {
           val singleChapter = b.content.chapters.first()
           if (singleChapter.file == rootFile) {
             return b

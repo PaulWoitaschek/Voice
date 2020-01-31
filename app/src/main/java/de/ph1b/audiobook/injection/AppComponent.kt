@@ -27,7 +27,8 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
-import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.di.PlaybackComponent
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import javax.inject.Singleton
 
 /**
@@ -48,15 +49,6 @@ interface AppComponent : DataComponent {
   val bookmarkPresenter: BookmarkPresenter
   val context: Context
   val playStateManager: PlayStateManager
-
-  @Component.Builder
-  interface Builder {
-
-    @BindsInstance
-    fun application(application: Application): Builder
-
-    fun build(): AppComponent
-  }
 
   fun inject(target: App)
   fun inject(target: AutoRewindDialogController)
@@ -80,9 +72,14 @@ interface AppComponent : DataComponent {
   fun inject(target: SettingsController)
   fun inject(target: SleepTimerDialogFragment)
 
-  fun playbackComponent(): PlaybackComponent.Builder
+  fun playbackComponentFactory(): PlaybackComponent.Factory
+
+  @Component.Factory
+  interface Factory {
+    fun create(@BindsInstance application: Application): AppComponent
+  }
 
   companion object {
-    fun builder(): Builder = DaggerAppComponent.builder()
+    fun factory(): Factory = DaggerAppComponent.factory()
   }
 }

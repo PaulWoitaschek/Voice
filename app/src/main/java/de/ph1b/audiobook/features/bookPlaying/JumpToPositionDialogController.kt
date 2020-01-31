@@ -7,13 +7,13 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.inflate
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.android.synthetic.main.dialog_time_picker.*
 import java.util.UUID
 import java.util.concurrent.TimeUnit

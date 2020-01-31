@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#161920</color>
-    <color name="primaryDark">#0c0b10</color>
     <color name="colorOnSurface">@color/white</color>
 
     <color name="background_overlay">@color/copy_primary_text_disabled_material_dark</color>
 
     <color name="navBarColor">@color/primaryDark</color>
     <color name="toolbarIconColor">@color/white</color>
-    <color name="placeholderCoverColor">@color/primaryDark</color>
 </resources>

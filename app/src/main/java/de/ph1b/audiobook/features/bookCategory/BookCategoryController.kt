@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
@@ -23,7 +23,7 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.android.synthetic.main.book_category.*
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"

@@ -2,9 +2,13 @@ package de.ph1b.audiobook.misc
 
 import android.net.Uri
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.Player.*
+import com.google.android.exoplayer2.Player.EventListener
+import com.google.android.exoplayer2.Player.STATE_BUFFERING
+import com.google.android.exoplayer2.Player.STATE_ENDED
+import com.google.android.exoplayer2.Player.STATE_IDLE
+import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.SimpleExoPlayer
-import de.ph1b.audiobook.playback.utils.DataSourceConverter
+import de.ph1b.audiobook.playback.player.DataSourceConverter
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -16,8 +20,8 @@ import javax.inject.Inject
 
 class DurationAnalyzer
 @Inject constructor(
-    private val dataSourceConverter: DataSourceConverter,
-    private val player: SimpleExoPlayer
+  private val dataSourceConverter: DataSourceConverter,
+  private val player: SimpleExoPlayer
 ) {
 
   private val _state = ConflatedBroadcastChannel(player.playbackState)

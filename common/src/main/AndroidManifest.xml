@@ -1,5 +1,1 @@
-<manifest package="de.ph1b.audiobook.common">
-
-    <application/>
-
-</manifest>
+<manifest package="de.ph1b.audiobook.common" />

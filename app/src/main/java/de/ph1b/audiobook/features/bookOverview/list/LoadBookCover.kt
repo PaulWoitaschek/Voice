@@ -3,13 +3,13 @@ package de.ph1b.audiobook.features.bookOverview.list
 import androidx.core.view.doOnPreDraw
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.CoverReplacement
+import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
 import kotlinx.android.synthetic.main.book_overview_row_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

@@ -1,14 +1,14 @@
 package de.ph1b.audiobook.features.bookCategory
 
+import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.GridMode
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import io.reactivex.Observable
 import java.util.UUID
 import javax.inject.Inject

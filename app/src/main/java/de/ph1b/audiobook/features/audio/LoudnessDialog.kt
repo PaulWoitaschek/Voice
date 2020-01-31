@@ -14,6 +14,7 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.player.LoudnessGain
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.loudness.*
 import java.text.DecimalFormat

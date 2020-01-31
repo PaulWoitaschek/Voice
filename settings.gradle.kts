@@ -9,10 +9,11 @@ gradleEnterprise {
   }
 }
 
-
 include(":app")
 include(":core")
 include(":common")
 include(":data")
 include(":covercolorextractor")
 include(":crashreporting")
+include(":playback")
+include(":prefs")

@@ -1,6 +1,6 @@
 package de.ph1b.audiobook
 
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlin.reflect.KProperty

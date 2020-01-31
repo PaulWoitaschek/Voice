@@ -9,7 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.injection.PlaybackModule
 import de.ph1b.audiobook.playback.OnlyAudioRenderersFactory
-import de.ph1b.audiobook.playback.utils.DataSourceConverter
+import de.ph1b.audiobook.playback.player.DataSourceConverter
 import de.ph1b.audiobook.test.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

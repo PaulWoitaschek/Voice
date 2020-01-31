@@ -3,7 +3,7 @@ package de.ph1b.audiobook.features.bookOverview.list.header
 import androidx.annotation.StringRes
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
+import de.ph1b.audiobook.data.BookComparator
 import java.util.concurrent.TimeUnit.SECONDS
 
 enum class BookOverviewCategory(

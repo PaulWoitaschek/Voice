@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.features.folderOverview
 
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import java.util.HashSet
 import javax.inject.Inject
 import javax.inject.Named

@@ -11,8 +11,10 @@ import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.session.search.BookSearch
+import de.ph1b.audiobook.playback.session.search.BookSearchHandler
+import de.ph1b.audiobook.prefs.Pref
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

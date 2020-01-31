@@ -6,12 +6,12 @@ import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.misc.Observables
-import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import java.util.LinkedHashMap

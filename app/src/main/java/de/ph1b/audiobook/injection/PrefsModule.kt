@@ -9,8 +9,9 @@ import dagger.Provides
 import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.misc.converters.UUIDConverter
 import de.ph1b.audiobook.persistence.pref.PersistentPref
-import de.ph1b.audiobook.persistence.pref.Pref
-import java.util.*
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
+import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
 

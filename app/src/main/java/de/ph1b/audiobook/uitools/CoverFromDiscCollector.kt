@@ -3,6 +3,7 @@ package de.ph1b.audiobook.uitools
 import android.app.ActivityManager
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
+import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.misc.FileRecognition

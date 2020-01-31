@@ -17,6 +17,8 @@
             <option value="$PROJECT_DIR$/covercolorextractor" />
             <option value="$PROJECT_DIR$/crashreporting" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/playback" />
+            <option value="$PROJECT_DIR$/prefs" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

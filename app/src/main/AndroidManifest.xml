@@ -69,7 +69,7 @@
         </activity>
 
         <service
-          android:name=".playback.PlaybackService"
+          android:name=".playback.session.PlaybackService"
           android:exported="true"
           tools:ignore="ExportedService">
 

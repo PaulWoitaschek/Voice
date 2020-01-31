@@ -4,11 +4,11 @@ import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -5,10 +5,10 @@ import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import de.ph1b.audiobook.features.bookOverview.list.BookComparator
+import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.persistence.pref.PersistentPref
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
 import javax.inject.Singleton
 
 @MapKey

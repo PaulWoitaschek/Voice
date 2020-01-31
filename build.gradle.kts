@@ -65,6 +65,19 @@ subprojects {
       }
     }
   }
+
+  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+      jvmTarget = "1.8"
+      freeCompilerArgs = listOf(
+        "-XXLanguage:+InlineClasses",
+        "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+        "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+        "-Xuse-experimental=kotlin.time.ExperimentalTime"
+      )
+    }
+  }
 }
 
 tasks {

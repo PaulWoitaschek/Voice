@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.utils
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import de.ph1b.audiobook.playback.session.BookUriConverter
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID

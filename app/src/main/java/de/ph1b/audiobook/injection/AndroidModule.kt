@@ -15,7 +15,11 @@ import dagger.Module
 import dagger.Provides
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.paulwoitaschek.chapterreader.ChapterReaderFactory
+import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
+import de.ph1b.audiobook.misc.ApplicationIdProviderImpl
+import de.ph1b.audiobook.misc.ToBookIntentProviderImpl
+import de.ph1b.audiobook.playback.notification.ToBookIntentProvider
 import javax.inject.Singleton
 
 /**
@@ -91,4 +95,10 @@ object AndroidModule {
   fun provideCoverColorExtractor(): CoverColorExtractor {
     return CoverColorExtractor()
   }
+
+  @Provides
+  fun toToBookIntentProvider(impl: ToBookIntentProviderImpl): ToBookIntentProvider = impl
+
+  @Provides
+  fun applicationIdProvider(impl: ApplicationIdProviderImpl): ApplicationIdProvider = impl
 }

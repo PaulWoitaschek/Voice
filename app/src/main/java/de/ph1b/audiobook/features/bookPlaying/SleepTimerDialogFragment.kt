@@ -13,20 +13,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.android.synthetic.main.dialog_sleep.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 

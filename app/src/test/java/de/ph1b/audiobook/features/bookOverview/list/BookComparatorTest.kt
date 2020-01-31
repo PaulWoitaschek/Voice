@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookOverview.list
 
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
+import de.ph1b.audiobook.data.BookComparator
 import org.junit.Test
 
 class BookComparatorTest {

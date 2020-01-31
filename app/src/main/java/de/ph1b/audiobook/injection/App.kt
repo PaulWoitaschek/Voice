@@ -15,8 +15,11 @@ import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
-import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.AndroidAutoConnectedReceiver
+import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
+import de.ph1b.audiobook.playback.di.PlaybackComponent
+import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.GlobalScope
@@ -25,7 +28,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-class App : Application() {
+class App : Application(), PlaybackComponentFactoryProvider {
 
   @Inject
   lateinit var bookAdder: BookAdder
@@ -61,9 +64,8 @@ class App : Application() {
       }
     }
 
-    appComponent = AppComponent.builder()
-      .application(this)
-      .build()
+    appComponent = AppComponent.factory()
+      .create(this)
     DataInjector.component = appComponent
     appComponent.inject(this)
 
@@ -89,6 +91,10 @@ class App : Application() {
     autoConnectedReceiver.register(this)
 
     triggerWidgetOnChange.init()
+  }
+
+  override fun factory(): PlaybackComponent.Factory {
+    return appComponent.playbackComponentFactory()
   }
 
   companion object {

@@ -13,16 +13,16 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
-import de.ph1b.audiobook.features.bookSearch.BookSearchHandler
-import de.ph1b.audiobook.features.bookSearch.BookSearchParser
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.persistence.pref.Pref
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.session.search.BookSearchHandler
+import de.ph1b.audiobook.playback.session.search.BookSearchParser
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.android.synthetic.main.activity_book.*
 import java.util.UUID
 import javax.inject.Inject
@@ -158,7 +158,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     private const val NI_GO_TO_BOOK = "niGotoBook"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(c: Context, bookId: UUID) = Intent(c, MainActivity::class.java).apply {
+    fun goToBookIntent(context: Context, bookId: UUID) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId.toString())
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }

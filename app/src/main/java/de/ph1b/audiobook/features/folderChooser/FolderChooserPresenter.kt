@@ -3,12 +3,12 @@ package de.ph1b.audiobook.features.folderChooser
 import android.annotation.SuppressLint
 import android.os.Bundle
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.injection.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.pref.Pref
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList

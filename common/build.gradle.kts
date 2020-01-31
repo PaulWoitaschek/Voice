@@ -25,6 +25,10 @@ dependencies {
   implementation(Deps.Kotlin.std)
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.rxJava)
+  implementation(Deps.Kotlin.coroutines)
+  implementation(Deps.Kotlin.coroutinesRx)
+  implementation(Deps.Dagger.core)
+  implementation(Deps.timber)
 
   testImplementation(Deps.truth)
   testImplementation(Deps.junit)

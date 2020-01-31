@@ -5,12 +5,12 @@ import de.ph1b.audiobook.common.Optional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Paused
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Stopped
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Paused
+import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
+import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Stopped
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

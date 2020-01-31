@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.persistence.pref
 
 import com.f2prateek.rx.preferences2.Preference
+import de.ph1b.audiobook.prefs.Pref
 import io.reactivex.Observable
 import kotlin.reflect.KProperty
 

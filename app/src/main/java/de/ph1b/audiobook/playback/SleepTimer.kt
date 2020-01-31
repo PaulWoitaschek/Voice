@@ -1,9 +1,11 @@
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.injection.PrefKeys
-import de.ph1b.audiobook.misc.delay
-import de.ph1b.audiobook.persistence.pref.Pref
-import de.ph1b.audiobook.playback.PlayStateManager.PlayState.Playing
+import de.ph1b.audiobook.common.delay
+import de.ph1b.audiobook.playback.player.FADE_OUT_DURATION
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
+import de.ph1b.audiobook.prefs.Pref
+import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -20,9 +22,6 @@ import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 import kotlin.time.minutes
-import kotlin.time.seconds
-
-val FADE_OUT_DURATION = 10.seconds
 
 @Singleton
 class SleepTimer

@@ -15,20 +15,20 @@ import com.afollestad.materialdialogs.customview.customView
 import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CropTransformation
-import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 

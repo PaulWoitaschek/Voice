@@ -9,8 +9,9 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.CoverReplacement
+import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.features.audio.Equalizer
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.features.settings.SettingsController
@@ -28,8 +29,7 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
+import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import de.ph1b.audiobook.uitools.ThemeUtil
 import kotlinx.android.synthetic.main.book_play.*
