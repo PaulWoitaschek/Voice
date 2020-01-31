@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.Permissions
+import de.ph1b.audiobook.misc.colorFromAttr
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import timber.log.Timber
@@ -44,7 +48,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   private lateinit var permissions: Permissions
   private lateinit var permissionHelper: PermissionHelper
 
-  override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
+  override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE)!!)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -100,9 +104,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   }
 
   override fun onRequestPermissionsResult(
-      requestCode: Int,
-      permissions: Array<String>,
-      grantResults: IntArray
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -144,7 +148,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
    */
   override fun setUpButtonEnabled(upEnabled: Boolean) {
     upButton.isEnabled = upEnabled
-    val upIcon = if (upEnabled) drawable(R.drawable.ic_arrow_upward) else null
+    val upIcon = if (upEnabled) getDrawable(R.drawable.ic_arrow_upward)!! else null
     upButton.setImageDrawable(upIcon)
   }
 

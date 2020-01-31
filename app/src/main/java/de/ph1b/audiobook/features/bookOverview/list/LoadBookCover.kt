@@ -8,7 +8,6 @@ import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.coverFile
 import kotlinx.android.synthetic.main.book_overview_row_list.*
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +30,7 @@ class LoadBookCover(holder: BookOverviewHolder) {
   private val context = holder.itemView.context
   private val progress = holder.progress
   private val cover = holder.cover
-  private val defaultProgressColor = context.color(R.color.progressColor)
+  private val defaultProgressColor = context.getColor(R.color.progressColor)
 
   private var boundFileLength: Long = Long.MIN_VALUE
   private var boundName: String? = null

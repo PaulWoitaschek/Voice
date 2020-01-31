@@ -1,34 +1,27 @@
 package de.ph1b.audiobook.misc
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.*
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.LayoutRes
 import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.uitools.ThemeUtil
 import java.io.File
 import java.io.FileFilter
+import kotlin.math.roundToInt
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
-
-fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)!!
-
-@ColorInt
-fun Context.color(@ColorRes id: Int): Int {
-  return ContextCompat.getColor(this, id)
-}
 
 @ColorInt
 fun Context.colorFromAttr(@AttrRes id: Int): Int {
   val colorRes = ThemeUtil.getResourceId(this, id)
-  return color(colorRes)
+  return getColor(colorRes)
 }
 
 fun View.layoutInflater() = context.layoutInflater()
@@ -38,16 +31,9 @@ var <T> Preference<T>.value: T
   get() = get()!!
   set(value) = set(value!!)
 
-fun Context.dpToPx(dp: Float) =
-  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+fun Context.dpToPx(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 
-fun Context.dpToPxRounded(dp: Float) = Math.round(dpToPx(dp))
-
-fun Drawable.tinted(@ColorInt color: Int): Drawable {
-  val wrapped = DrawableCompat.wrap(mutate())
-  wrapped.setTint(color)
-  return wrapped
-}
+fun Context.dpToPxRounded(dp: Float): Int = dpToPx(dp).roundToInt()
 
 /**
  * As there are cases where [File.listFiles] returns null even though it is a directory, we return

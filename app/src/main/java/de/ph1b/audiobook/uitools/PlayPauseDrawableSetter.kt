@@ -3,14 +3,13 @@ package de.ph1b.audiobook.uitools
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.widget.ImageView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.drawable
 
 class PlayPauseDrawableSetter(val fab: ImageView) {
 
   private val playToPause =
-    fab.context.drawable(R.drawable.avd_play_to_pause) as AnimatedVectorDrawable
+    fab.context.getDrawable(R.drawable.avd_play_to_pause)!! as AnimatedVectorDrawable
   private val pauseToPlay =
-    fab.context.drawable(R.drawable.avd_pause_to_play) as AnimatedVectorDrawable
+    fab.context.getDrawable(R.drawable.avd_pause_to_play)!! as AnimatedVectorDrawable
 
   private var playing = false
 

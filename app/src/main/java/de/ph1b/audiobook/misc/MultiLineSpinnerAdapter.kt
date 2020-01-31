@@ -54,7 +54,7 @@ class MultiLineSpinnerAdapter<Type>(
           )
         )
         textView.setTextColor(
-          context.color(
+          context.getColor(
             ThemeUtil.getResourceId(
               context,
               android.R.attr.textColorPrimary

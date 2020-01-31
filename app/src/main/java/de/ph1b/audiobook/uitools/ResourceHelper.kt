@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
-import androidx.core.content.ContextCompat
 
 @AnyRes
 fun Context.attrToResource(@AttrRes attrId: Int): Int {
@@ -22,5 +21,5 @@ fun Context.attrToResource(@AttrRes attrId: Int): Int {
 @CheckResult
 fun Context.drawableFromAttr(@AttrRes attrId: Int): Drawable {
   val res = attrToResource(attrId)
-  return ContextCompat.getDrawable(this, res)!!
+  return getDrawable(res)!!
 }

@@ -20,7 +20,6 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.CircleOutlineProvider
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.clicks
-import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
@@ -196,7 +195,7 @@ class BookPlayController(
     spinnerAdapter = MultiLineSpinnerAdapter(
       spinner = bookSpinner,
       context = activity,
-      unselectedTextColor = activity.color(
+      unselectedTextColor = activity.getColor(
         ThemeUtil.getResourceId(
           activity,
           android.R.attr.textColorPrimary
