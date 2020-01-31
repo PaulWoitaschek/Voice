@@ -16,6 +16,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import io.reactivex.Observable
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -51,6 +53,7 @@ class BookPlayPresenterTest {
     every { mockBookRepository.byId(any()) } returns Observable.just(Optional.Absent())
     every { mockPlayStateManager.playStateStream() } returns Observable.empty()
     every { mockSleepTimer.leftSleepTimeFlow } returns emptyFlow()
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
   }
 
   @Test
@@ -72,7 +75,7 @@ class BookPlayPresenterTest {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
     sleepSand.offer(1.seconds)
-    verify(exactly = 0) { mockView.showLeftSleepTime(any()) }
+    verify(exactly = 0) { mockView.showLeftSleepTime((1.seconds)) }
   }
 
   @Test
@@ -103,7 +106,7 @@ class BookPlayPresenterTest {
     bookPlayPresenter.attach(mockView)
     bookPlayPresenter.detach()
     verify(exactly = 0) {
-      mockView.showLeftSleepTime(any())
+      mockView.showLeftSleepTime(1.seconds)
     }
   }
 

@@ -14,7 +14,7 @@ internal object BookFactory {
     type: Book.Type = Book.Type.SINGLE_FOLDER,
     author: String = "TestAuthor",
     currentFileIndex: Int = 0,
-    time: Int = 0,
+    time: Long = 0,
     name: String = "TestBook",
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,

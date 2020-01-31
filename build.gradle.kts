@@ -1,11 +1,9 @@
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryPlugin
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import deps.Deps
 import deps.Versions
 import deps.configureBaseRepos
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 @Suppress("RemoveRedundantQualifierName")
 buildscript {
@@ -20,24 +18,11 @@ buildscript {
 }
 
 plugins {
-  id("com.github.ben-manes.versions") version "0.26.0"
-  id("org.jlleitschuh.gradle.ktlint") version "9.0.0"
+  id("com.github.ben-manes.versions") version "0.27.0"
 }
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
-}
-
-fun isNonStable(version: String): Boolean {
-  return listOf("rc", "beta", "alpha").any {
-    version.contains(it, ignoreCase = true)
-  }
-}
-
-tasks.withType(DependencyUpdatesTask::class) {
-  rejectVersionIf {
-    isNonStable(candidate.version) && !isNonStable(currentVersion)
-  }
 }
 
 allprojects {
@@ -53,11 +38,6 @@ allprojects {
 }
 
 subprojects {
-  apply(plugin = "org.jlleitschuh.gradle.ktlint")
-  configure<KtlintExtension> {
-    version.set(Deps.ktLint)
-    android.set(true)
-  }
   plugins.whenPluginAdded {
     if (this is AppPlugin || this is LibraryPlugin) {
       convention.findByType(BaseExtension::class)?.let {
@@ -96,10 +76,13 @@ tasks {
   register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
       (subProject.tasks.findByName("testProprietaryDebugUnitTest")
-          ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
+        ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
     }
     val artifactFolder = File("${rootDir.absolutePath}/artifacts")
     destinationDir = File(artifactFolder, "testResults")
     reportOn(tests)
   }
 }
+
+apply(from = "dependency_updates.gradle")
+apply(from = "apply_ktlint.gradle")

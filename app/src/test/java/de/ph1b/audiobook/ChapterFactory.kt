@@ -11,7 +11,7 @@ internal object ChapterFactory {
   fun create(
     file: String = "First.mp3",
     parent: String = "/root/",
-    duration: Int = 10000,
+    duration: Long = 10000,
     lastModified: Long = 12345L,
     bookId: UUID,
     marks: SparseArrayCompat<String> = emptySparseArray()

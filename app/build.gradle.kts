@@ -169,6 +169,7 @@ dependencies {
   testImplementation(Deps.AndroidX.Test.junit)
   testImplementation(Deps.AndroidX.Test.core)
   testImplementation(Deps.robolectric)
+  testImplementation(Deps.Kotlin.coroutinesTest)
 
   androidTestImplementation(Deps.truth)
   androidTestImplementation(Deps.junit)

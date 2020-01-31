@@ -94,9 +94,9 @@ class DataBaseMigratorTest {
         positionInChapter = getInt("positionInChapter")
       )
     }
-    assertThat(migratedBookSettings).containsAllOf(
+    assertThat(migratedBookSettings).containsExactly(
       correctBookSettings, BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0)
-    )
+    ).inOrder()
   }
 
   @Test

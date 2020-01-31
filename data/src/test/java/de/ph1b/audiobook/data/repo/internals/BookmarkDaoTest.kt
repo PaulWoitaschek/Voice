@@ -39,7 +39,7 @@ class BookmarkDaoTest {
         Bookmark(
           book.content.chapters.first().file,
           "my title",
-          System.currentTimeMillis().toInt()
+          System.currentTimeMillis()
         )
       }
       .map {

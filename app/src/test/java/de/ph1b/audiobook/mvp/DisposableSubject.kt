@@ -7,18 +7,18 @@ import com.google.common.truth.Truth.assertAbout
 import de.ph1b.audiobook.mvp.DisposableSubject.Companion.factory
 import io.reactivex.disposables.Disposable
 
-class DisposableSubject(failureMetadata: FailureMetadata, actual: Disposable?) :
-  Subject<DisposableSubject, Disposable>(failureMetadata, actual) {
+class DisposableSubject(failureMetadata: FailureMetadata, private val actual: Disposable?) :
+  Subject(failureMetadata, actual) {
 
   fun isDisposed(): DisposableSubject {
-    if (actual()?.isDisposed != true) {
+    if (actual?.isDisposed != true) {
       failWithActual("expected to be disposed", true)
     }
     return this
   }
 
   fun isNotDisposed(): DisposableSubject {
-    if (actual()?.isDisposed != false) {
+    if (actual?.isDisposed != false) {
       failWithActual("expected to be disposed", false)
     }
     return this

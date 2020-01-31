@@ -176,7 +176,7 @@ constructor(
         .filterNotNull()
         .map { it.content }
         .distinctUntilChanged()
-      combine(notIdleFlow, contentFlow) { _, content ->
+      combine(notIdleFlow, contentFlow) { _, _ ->
         Unit
       }
         .collect { prepare() }
