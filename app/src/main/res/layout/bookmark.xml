@@ -9,7 +9,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        style="@style/AppToolbar"
         app:title="@string/bookmark"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />

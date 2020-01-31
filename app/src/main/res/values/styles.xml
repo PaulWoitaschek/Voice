@@ -15,6 +15,9 @@
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/navBarColor</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">@bool/use_light_status
         </item>
+        <item name="colorControlNormal">@color/colorOnSurface</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="android:statusBarColor">@color/primaryDark</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">
             @bool/use_light_navigation
@@ -34,9 +37,8 @@
         <item name="android:scaleType">centerCrop</item>
     </style>
 
-    <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:elevation">4dp</item>
-        <item name="android:background">?attr/colorSurface</item>
+    <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="android:elevation">@dimen/design_appbar_elevation</item>
     </style>
 
     <style name="fab_label_style">

@@ -19,7 +19,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
@@ -33,7 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URLEncoder
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
@@ -91,10 +90,10 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(
-          view: WebView,
-          errorCode: Int,
-          description: String?,
-          failingUrl: String?
+        view: WebView,
+        errorCode: Int,
+        description: String?,
+        failingUrl: String?
       ) {
         Timber.d("received webViewError. Set webView invisible")
         view.loadUrl(ABOUT_BLANK)
@@ -131,13 +130,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   private fun showCab() {
     cab = activity.createCab(R.id.cabStub) {
       menu(R.menu.crop_menu)
-      val tintColor = activity.color(R.color.toolbarIconColor)
-      titleColor(literal = tintColor)
       closeDrawable(R.drawable.close)
-      onCreate { _, menu ->
-        val confirmIcon = menu.findItem(R.id.confirm).icon
-        confirmIcon.setTint(tintColor)
-      }
       onSelection { item ->
         if (item.itemId == R.id.confirm) {
           val bitmap = takeWebViewScreenshot()
@@ -288,8 +281,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   companion object {
 
     operator fun <T> invoke(
-        bookId: UUID,
-        target: T
+      bookId: UUID,
+      target: T
     ): CoverFromInternetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putUUID(NI_BOOK_ID, bookId)

@@ -4,6 +4,7 @@
     <color name="accentDark">@color/red900</color>
     <color name="primary">@color/white</color>
     <color name="primaryDark">@color/grey200</color>
+    <color name="colorOnSurface">@color/black</color>
     <color name="grey200">#EEEEEE</color>
     <color name="red700">#D32F2F</color>
     <color name="red900">#B71C1C</color>

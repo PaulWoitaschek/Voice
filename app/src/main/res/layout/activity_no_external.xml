@@ -7,7 +7,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        style="@style/AppToolbar"
         app:title="@string/no_external_storage_action_bar_title"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />

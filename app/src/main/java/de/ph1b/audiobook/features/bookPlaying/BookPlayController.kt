@@ -23,12 +23,10 @@ import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.misc.tinted
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.MAX_IMAGE_SIZE
@@ -284,8 +282,7 @@ class BookPlayController(
 
   override fun showLeftSleepTime(duration: Duration) {
     val active = duration > Duration.ZERO
-    sleepTimerItem.icon = activity.drawable(if (active) R.drawable.alarm_off else R.drawable.alarm)
-      .tinted(activity.color(R.color.toolbarIconColor))
+    sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
     timerCountdownView.text = formatTime(duration.toLongMilliseconds(), duration.toLongMilliseconds())
     timerCountdownView.isVisible = active
   }

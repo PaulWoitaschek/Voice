@@ -8,7 +8,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar"
-      style="@style/AppToolbar"
       android:layout_width="0dp"
       android:layout_height="?attr/actionBarSize"
       app:layout_constraintLeft_toLeftOf="parent"

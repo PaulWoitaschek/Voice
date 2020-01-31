@@ -14,7 +14,6 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             app:menu="@menu/image_picker"
-            style="@style/AppToolbar"
             app:navigationIcon="@drawable/close"
             app:title="@string/cover"
             android:layout_width="match_parent"
