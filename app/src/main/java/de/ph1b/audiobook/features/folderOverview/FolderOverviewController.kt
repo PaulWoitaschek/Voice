@@ -66,6 +66,8 @@ class FolderOverviewController :
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
+    addAsSingle.setIconDrawable(activity.getDrawable(R.drawable.ic_folder)!!)
+    addAsLibrary.setIconDrawable(activity.getDrawable(R.drawable.folder_multiple)!!)
     addAsSingle.title =
         "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
