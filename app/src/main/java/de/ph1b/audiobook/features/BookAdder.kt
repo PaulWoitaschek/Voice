@@ -225,7 +225,7 @@ class BookAdder
       }
     }
 
-    var orphanedBook = getBookFromDb(rootFile, type, true)
+    val orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
         id = bookId,
@@ -245,7 +245,7 @@ class BookAdder
             active = true,
             lastPlayedAtMillis = 0
           ),
-          chapters = newChapters,
+          chapters = newChapters.withBookId(bookId),
           id = bookId
         )
       )
@@ -263,17 +263,16 @@ class BookAdder
         newChapters.first().file
       }
 
-      orphanedBook = orphanedBook.updateContent {
+      val withUpdatedContent = orphanedBook.updateContent {
         copy(
           settings = settings.copy(
             positionInChapter = time,
             currentFile = currentFile
           ),
-          chapters = newChapters
+          chapters = newChapters.withBookId(orphanedBook.id)
         )
       }
-      // now finally un-hide this book
-      repo.revealBook(orphanedBook)
+      repo.revealBook(withUpdatedContent)
     }
   }
 
@@ -421,5 +420,15 @@ class BookAdder
       }
     }
     return null
+  }
+}
+
+private fun Iterable<Chapter>.withBookId(bookId: UUID): List<Chapter> {
+  return map { chapter ->
+    if (chapter.bookId == bookId) {
+      chapter
+    } else {
+      chapter.copy(bookId = bookId)
+    }
   }
 }
