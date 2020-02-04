@@ -2,10 +2,13 @@ package de.ph1b.audiobook.features.folderOverview
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
+import androidx.annotation.ColorInt
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -66,8 +69,8 @@ class FolderOverviewController :
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    addAsSingle.setIconDrawable(activity.getDrawable(R.drawable.ic_folder)!!)
-    addAsLibrary.setIconDrawable(activity.getDrawable(R.drawable.folder_multiple)!!)
+    addAsSingle.setIconDrawable(activity.getDrawable(R.drawable.ic_folder)!!.tinted(Color.WHITE))
+    addAsLibrary.setIconDrawable(activity.getDrawable(R.drawable.folder_multiple)!!.tinted(Color.WHITE))
     addAsSingle.title =
         "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
@@ -176,3 +179,5 @@ class FolderOverviewController :
     outState.putInt(SI_BACKGROUND_VISIBILITY, overlay.visibility)
   }
 }
+
+private fun Drawable.tinted(@ColorInt color: Int): Drawable = mutate().apply { setTint(color) }
