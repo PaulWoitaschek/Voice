@@ -18,3 +18,4 @@ artifacts
 testResults
 Gemfile.lock
 releases
+.transifexrc
