@@ -304,7 +304,7 @@ class BookAdder
       // if the current path is gone, reset it correctly.
       bookToUpdate = bookToUpdate.updateContent {
         copy(
-          chapters = newChapters,
+          chapters = newChapters.withBookId(bookToUpdate.id),
           settings = settings.copy(
             currentFile = if (currentPathIsGone) newChapters.first().file else currentFile,
             positionInChapter = if (currentPathIsGone) 0 else positionInChapter
