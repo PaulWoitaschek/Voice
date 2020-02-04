@@ -100,8 +100,8 @@ class BookPlayViewModel
   fun seekTo(ms: Long) {
     val book = repo.bookById(bookId) ?: return
     val currentChapter = book.content.currentChapter
-    val markForPosition = currentChapter.currentMark(ms)
-    player.setPosition(markForPosition.startMs + ms, currentChapter.file)
+    val currentMark = currentChapter.currentMark(book.content.positionInChapter)
+    player.setPosition(currentMark.startMs + ms, currentChapter.file)
   }
 
   fun toggleSleepTimer() {
