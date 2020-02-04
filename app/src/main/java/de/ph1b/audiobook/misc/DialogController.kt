@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.archlifecycle.ControllerLifecycleOwner
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -18,7 +21,12 @@ private const val SI_DIALOG = "android:savedDialogState"
 /**
  * A wrapper that wraps a dialog in a controller
  */
-abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args) {
+abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args), LifecycleOwner {
+
+  @Suppress("LeakingThis")
+  private val lifecycleOwner = ControllerLifecycleOwner(this)
+
+  override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 
   private var dialog: Dialog? = null
   private var dismissed = false

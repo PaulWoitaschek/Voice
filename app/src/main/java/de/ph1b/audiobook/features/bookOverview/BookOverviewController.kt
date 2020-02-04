@@ -199,8 +199,7 @@ class BookOverviewController : BaseController(),
 
   private fun showPlaying(playing: Boolean) {
     Timber.i("Called showPlaying $playing")
-    val laidOut = fab.isLaidOut
-    playPauseDrawableSetter.setPlaying(playing = playing, animated = laidOut)
+    playPauseDrawableSetter.setPlaying(playing = playing)
   }
 
   /** Show a warning that no audiobook folder was chosen */

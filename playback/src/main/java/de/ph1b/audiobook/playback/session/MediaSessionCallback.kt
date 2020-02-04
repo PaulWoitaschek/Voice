@@ -137,6 +137,12 @@ class MediaSessionCallback
       CANCEL_FADE_OUT_ACTION -> {
         player.cancelFadeOut()
       }
+      FORCED_PREVIOUS -> {
+        player.previous(toNullOfNewTrack = true)
+      }
+      FORCED_NEXT -> {
+        player.next()
+      }
       else -> if (BuildConfig.DEBUG) {
         error("Didn't handle $action")
       }
@@ -187,3 +193,9 @@ const val ANDROID_AUTO_ACTION_FAST_FORWARD = "fast_forward"
 const val ANDROID_AUTO_ACTION_REWIND = "rewind"
 const val ANDROID_AUTO_ACTION_NEXT = "next"
 const val ANDROID_AUTO_ACTION_PREVIOUS = "previous"
+
+private const val FORCED_PREVIOUS = "forcedPrevious"
+fun TransportControls.forcedPrevious() = sendCustomAction(FORCED_PREVIOUS)
+
+private const val FORCED_NEXT = "forcedNext"
+fun TransportControls.forcedNext() = sendCustomAction(FORCED_NEXT)

@@ -100,6 +100,8 @@ android {
       setDimension("free")
     }
   }
+
+  viewBinding.isEnabled = true
 }
 
 androidExtensions {
@@ -163,6 +165,8 @@ dependencies {
 
   implementation(Deps.moshi)
   implementation(Deps.lifecycle)
+
+  implementation(Deps.groupie)
 
   implementation(Deps.tapTarget)
   testImplementation(Deps.AndroidX.Test.runner)

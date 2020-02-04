@@ -50,6 +50,7 @@ object Deps {
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
   const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+  const val groupie = "com.xwray:groupie:2.7.2"
 
   object MaterialDialog {
     private const val version = "3.1.1"

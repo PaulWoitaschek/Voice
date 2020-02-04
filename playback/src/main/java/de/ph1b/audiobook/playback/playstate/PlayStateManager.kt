@@ -1,8 +1,11 @@
 package de.ph1b.audiobook.playback.playstate
 
 import android.support.v4.media.session.PlaybackStateCompat
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +33,7 @@ constructor() {
   var pauseReason = PauseReason.NONE
 
   fun playStateStream(): Observable<PlayState> = playStateSubject.distinctUntilChanged()
+  fun playStateFlow(): Flow<PlayState> = playStateSubject.toFlowable(BackpressureStrategy.LATEST).asFlow()
 
   var playState: PlayState
     set(value) {

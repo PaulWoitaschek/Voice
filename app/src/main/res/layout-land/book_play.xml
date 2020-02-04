@@ -31,8 +31,8 @@
       android:id="@+id/toolbar"
       android:layout_width="0dp"
       android:layout_height="?attr/actionBarSize"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:menu="@menu/book_play"
       app:navigationIcon="@drawable/ic_arrow_back" />
@@ -41,7 +41,8 @@
       android:id="@+id/play"
       android:layout_width="94dp"
       android:layout_height="94dp"
-      android:layout_marginBottom="36dp"
+      android:layout_marginBottom="24dp"
+      android:adjustViewBounds="true"
       android:background="@drawable/play_button"
       android:contentDescription="@string/play_pause"
       android:elevation="8dp"
@@ -51,8 +52,8 @@
       android:tint="@color/white"
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toLeftOf="@id/x75"
-      app:layout_constraintRight_toRightOf="@id/x75" />
+      app:layout_constraintEnd_toEndOf="@+id/x75"
+      app:layout_constraintStart_toStartOf="@+id/x75" />
 
     <ImageView
       android:id="@+id/rewind"
@@ -60,9 +61,9 @@
       android:layout_marginEnd="16dp"
       android:contentDescription="@string/rewind"
       android:src="@drawable/ic_fast_rewind"
-      app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintEnd_toStartOf="@id/play"
-      app:layout_constraintTop_toTopOf="@id/play" />
+      app:layout_constraintBottom_toBottomOf="@+id/play"
+      app:layout_constraintEnd_toStartOf="@+id/play"
+      app:layout_constraintTop_toTopOf="@+id/play" />
 
     <ImageView
       android:id="@+id/fastForward"
@@ -70,9 +71,9 @@
       android:layout_marginStart="16dp"
       android:contentDescription="@string/fast_forward"
       android:src="@drawable/ic_fast_forward"
-      app:layout_constraintBottom_toBottomOf="@id/play"
-      app:layout_constraintStart_toEndOf="@id/play"
-      app:layout_constraintTop_toTopOf="@id/play" />
+      app:layout_constraintBottom_toBottomOf="@+id/play"
+      app:layout_constraintStart_toEndOf="@+id/play"
+      app:layout_constraintTop_toTopOf="@+id/play" />
 
     <TextView
       android:id="@+id/playedTime"
@@ -80,8 +81,10 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:text="@string/zeroTime"
-      app:layout_constraintBottom_toTopOf="@id/play"
-      app:layout_constraintLeft_toRightOf="@id/x50" />
+      android:textAppearance="?textAppearanceBody2"
+      app:layout_constraintBottom_toBottomOf="@+id/slider"
+      app:layout_constraintStart_toEndOf="@+id/x50"
+      app:layout_constraintTop_toTopOf="@+id/slider" />
 
     <TextView
       android:id="@+id/maxTime"
@@ -89,27 +92,65 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
       android:text="@string/zeroTime"
-      app:layout_constraintBottom_toTopOf="@id/play"
-      app:layout_constraintRight_toRightOf="parent" />
+      android:textAppearance="?textAppearanceBody2"
+      app:layout_constraintBottom_toBottomOf="@+id/slider"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/slider" />
 
     <com.google.android.material.slider.Slider
       android:id="@+id/slider"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="4dp"
-      android:layout_marginRight="4dp"
-      app:layout_constraintBottom_toTopOf="@id/play"
-      app:layout_constraintLeft_toRightOf="@id/playedTime"
-      app:layout_constraintRight_toLeftOf="@id/maxTime" />
+      android:layout_marginStart="4dp"
+      android:layout_marginEnd="4dp"
+      android:layout_marginBottom="8dp"
+      app:layout_constraintBottom_toTopOf="@+id/play"
+      app:layout_constraintEnd_toStartOf="@+id/maxTime"
+      app:layout_constraintStart_toEndOf="@+id/playedTime" />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/bookSpinner"
+    <ImageView
+      android:id="@+id/previous"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:contentDescription="@string/previous_track"
+      android:foreground="?attr/selectableItemBackgroundBorderless"
+      android:padding="12dp"
+      android:src="@drawable/ic_chevron_left"
+      app:layout_constraintBottom_toBottomOf="@+id/currentChapterText"
+      app:layout_constraintStart_toEndOf="@+id/x50"
+      app:layout_constraintTop_toTopOf="@+id/currentChapterText" />
+
+    <ImageView
+      android:id="@+id/next"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:contentDescription="@string/next_track"
+      android:foreground="?attr/selectableItemBackgroundBorderless"
+      android:padding="12dp"
+      android:src="@drawable/ic_chevron_right"
+      app:layout_constraintBottom_toBottomOf="@+id/currentChapterText"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/currentChapterText" />
+
+    <TextView
+      android:id="@+id/currentChapterText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="4dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      android:ellipsize="end"
+      android:foreground="?attr/selectableItemBackground"
+      android:gravity="center"
+      android:maxLines="2"
+      android:minHeight="56dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:textAppearance="?textAppearanceBody1"
       app:layout_constraintBottom_toTopOf="@+id/slider"
-      app:layout_constraintLeft_toRightOf="@id/x50"
-      app:layout_constraintRight_toRightOf="parent" />
+      app:layout_constraintEnd_toStartOf="@+id/next"
+      app:layout_constraintStart_toEndOf="@+id/previous" />
 
     <ImageView
       android:id="@+id/cover"
@@ -119,17 +160,17 @@
       android:contentDescription="@string/cover"
       android:scaleType="centerCrop"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toLeftOf="@id/x50"
-      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      app:layout_constraintEnd_toStartOf="@+id/x50"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/toolbar"
       tools:ignore="UnusedAttribute"
       tools:src="@android:color/darker_gray" />
 
     <TextView
       android:id="@+id/timerCountdownView"
       style="@style/timer_text_view_style"
-      app:layout_constraintRight_toRightOf="@id/cover"
-      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      app:layout_constraintEnd_toEndOf="@+id/cover"
+      app:layout_constraintTop_toBottomOf="@+id/toolbar"
       tools:text="00:34" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

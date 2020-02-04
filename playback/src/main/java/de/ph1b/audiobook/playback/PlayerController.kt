@@ -7,6 +7,8 @@ import android.support.v4.media.session.MediaControllerCompat
 import de.ph1b.audiobook.playback.session.PlaybackService
 import de.ph1b.audiobook.playback.session.cancelFadeOut
 import de.ph1b.audiobook.playback.session.fadeOut
+import de.ph1b.audiobook.playback.session.forcedNext
+import de.ph1b.audiobook.playback.session.forcedPrevious
 import de.ph1b.audiobook.playback.session.playPause
 import de.ph1b.audiobook.playback.session.setLoudnessGain
 import de.ph1b.audiobook.playback.session.setPosition
@@ -62,6 +64,10 @@ class PlayerController
   fun fastForward() = execute { it.fastForward() }
 
   fun rewind() = execute { it.rewind() }
+
+  fun previous() = execute { it.forcedPrevious() }
+
+  fun next() = execute { it.forcedNext() }
 
   fun play() = execute { it.play() }
 

@@ -102,7 +102,7 @@
             "columnNames": [
               "bookId"
             ],
-            "createSql": "CREATE  INDEX `index_chapters_bookId` ON `${TABLE_NAME}` (`bookId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_chapters_bookId` ON `${TABLE_NAME}` (`bookId`)"
           }
         ],
         "foreignKeys": []
@@ -220,9 +220,10 @@
         "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"00788e07cc631b6e54d64c1490341554\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '00788e07cc631b6e54d64c1490341554')"
     ]
   }
 }
