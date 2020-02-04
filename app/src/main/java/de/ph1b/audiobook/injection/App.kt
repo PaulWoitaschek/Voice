@@ -81,7 +81,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
       useDarkTheme.stream
         .distinctUntilChanged()
         .subscribe { useDarkTheme ->
-          val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+          val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
           AppCompatDelegate.setDefaultNightMode(nightMode)
         }
     }
