@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Şu anki kitap</string>
+    <string name="layout_grid">Izgara Görünümü</string>
+    <string name="layout_list">Liste Görünümü</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Hepsini göster</string>
     <!--BookPlayFragment-->
     <string name="cover">Kapak</string>
     <string name="play_pause">Oynat / Durdur</string>
@@ -14,6 +17,8 @@
     <string name="play">Oynat</string>
     <string name="pause">Duraklat</string>
     <string name="equalizer">Ekolayzer</string>
+    <string name="volume_boost">Ses Yükseltme</string>
+    <string name="skip_silence">Sessizliği Geç</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Harici Depolama Birimi mevcut değil. Lütfen bağlı olduğundan ve bilgisayarınıza takılı olmadığından emin olun.</string>
     <string name="no_external_storage_action_bar_title">Harici Depolama</string>
@@ -86,5 +91,14 @@
     <string name="no_network">Ağ yok?</string>
     <string name="network_top">Bu iş çok iyi sonuç vermedi ...</string>
     <string name="cover_crop">Kapağı kırp</string>
+    <string name="onboarding_title">Hoşgeldin!</string>
+    <string name="onboarding_content">İlk sesli kitabını eklemekle başlayalım.</string>
     <!--book category-->
+    <string name="book_header_current">Şu anki</string>
+    <string name="book_header_not_started">Henüz başlamadı</string>
+    <string name="book_header_completed">Tamamlandı</string>
+    <string name="book_category_sort">Sıralıyor</string>
+    <string name="book_category_sort_by_name">Ad</string>
+    <string name="book_category_sort_by_last_played">Son Çalınan</string>
+    <string name="book_category_sort_by_added">Eklendi</string>
 </resources>

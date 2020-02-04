@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">재생 중인 책</string>
+    <string name="layout_grid">타일 정렬</string>
+    <string name="layout_list">목록 정렬</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">모두 보여주기</string>
     <!--BookPlayFragment-->
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
@@ -14,6 +17,8 @@
     <string name="play">재생</string>
     <string name="pause">정지</string>
     <string name="equalizer">이퀄라이저</string>
+    <string name="volume_boost">음량 키우기</string>
+    <string name="skip_silence">무음 건너뛰기</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
@@ -84,5 +89,15 @@
     <string name="no_network">인터넷끊김?</string>
     <string name="network_top">미안, 에러가 났어...</string>
     <string name="cover_crop">책표지 자르기</string>
+    <string name="music_notification">재생</string>
+    <string name="onboarding_title">어서오세요!</string>
+    <string name="onboarding_content">오디오북이 들어있는 폴더를 추가해보세요.</string>
     <!--book category-->
+    <string name="book_header_current">현재</string>
+    <string name="book_header_not_started">아직 재생 안 됨</string>
+    <string name="book_header_completed">완료됨</string>
+    <string name="book_category_sort">정렬</string>
+    <string name="book_category_sort_by_name">이름</string>
+    <string name="book_category_sort_by_last_played">최근에 재생됨</string>
+    <string name="book_category_sort_by_added">추가됨</string>
 </resources>

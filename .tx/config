@@ -1,6 +1,6 @@
 [main]
 host = https://www.transifex.com
-lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE,fa_IR:fa-rIR,hi_IN:hi-rIN,lt_LT:lt-rLT,nl_NL:nl-rNL
+lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE,fa_IR:fa-rIR,hi_IN:hi-rIN,lt_LT:lt-rLT,nl_NL:nl-rNL,pt_PT:pt-rPT
 
 [voice.strings]
 file_filter = core/src/main/res/values-<lang>/strings.xml

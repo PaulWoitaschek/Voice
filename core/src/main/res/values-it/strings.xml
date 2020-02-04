@@ -98,4 +98,8 @@
     <string name="book_header_current">Corrente</string>
     <string name="book_header_not_started">Non ancora iniziato</string>
     <string name="book_header_completed">Completato</string>
+    <string name="book_category_sort">Ordinamento</string>
+    <string name="book_category_sort_by_name">Nome</string>
+    <string name="book_category_sort_by_last_played">Ultima riproduzione</string>
+    <string name="book_category_sort_by_added">Aggiunta</string>
 </resources>

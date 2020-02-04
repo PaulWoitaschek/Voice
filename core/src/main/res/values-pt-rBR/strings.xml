@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Livro atual</string>
+    <string name="layout_grid">Grade</string>
+    <string name="layout_list">Lista</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Mostrar todos</string>
     <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
@@ -95,4 +98,8 @@
     <string name="book_header_current">Atual</string>
     <string name="book_header_not_started">Não iniciado ainda</string>
     <string name="book_header_completed">Completo</string>
+    <string name="book_category_sort">Ordenar</string>
+    <string name="book_category_sort_by_name">Nome</string>
+    <string name="book_category_sort_by_last_played">Ultimo reproduzido</string>
+    <string name="book_category_sort_by_added">Adicionado</string>
 </resources>

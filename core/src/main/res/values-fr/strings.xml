@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Livre en cours</string>
+    <string name="layout_grid">Disposition de la grille</string>
+    <string name="layout_list">Agencement en liste</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Tout montrer</string>
     <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lecture / Pause</string>
@@ -95,4 +98,8 @@
     <string name="book_header_current">En cours</string>
     <string name="book_header_not_started">Pas encore commencé</string>
     <string name="book_header_completed">Complété</string>
+    <string name="book_category_sort">Tri</string>
+    <string name="book_category_sort_by_name">Nom</string>
+    <string name="book_category_sort_by_last_played">Dernière lecture</string>
+    <string name="book_category_sort_by_added">Ajouté</string>
 </resources>

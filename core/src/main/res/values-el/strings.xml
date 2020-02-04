@@ -2,18 +2,23 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Τρέχον βιβλίο</string>
+    <string name="layout_grid">Διάταξη Πλέγματος</string>
+    <string name="layout_list">Διάταξη Λίστας</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Εμφάνιση όλων</string>
     <!--BookPlayFragment-->
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>
     <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
-    <string name="rewind">Επανέλαση</string>
+    <string name="rewind">Επανάληψη </string>
     <string name="fast_forward">Γρήγορη προώθηση</string>
-    <string name="previous_track">Προηγούμενο τραγούδι</string>
-    <string name="next_track">Επόμενο τραγούδι</string>
+    <string name="previous_track">Προηγούμενο κομμάτι</string>
+    <string name="next_track">Επόμενο κομμάτι </string>
     <string name="play">Αναπαραγωγή</string>
     <string name="pause">Παύση</string>
     <string name="equalizer">Ισοσταθμιστής</string>
+    <string name="volume_boost">Ώθηση έντασης ήχου</string>
+    <string name="skip_silence">Παράλειψη ησυχίας</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Τα εξωτερικά μέσα αποθήκευσης δεν είναι διαθέσιμα. Παρακαλούμε βεβαιωθείτε ότι είναι συνδεδεμένα και όχι τοποθετημένα στον υπολογιστή σας.</string>
     <string name="no_external_storage_action_bar_title">Εξωτερικά μέσα αποθήκευσης</string>
@@ -24,11 +29,12 @@
     <string name="content_cover">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
     <string name="change_book_name">Όνομα</string>
     <string name="download_book_cover">Εξώφυλλο από το Διαδίκτυο</string>
+    <string name="pick_book_cover">Εξώφυλλο από αρχεία του συστήματος </string>
     <string name="edit_book_title">Επεξεργασία βιβλίου</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Μετάβαση σε</string>
     <!--BookAdding-->
-    <string name="adding_failed_subfolder">Οι φάκελοι δεν πρέπει να είναι ένας υποφάκελος του άλλου:</string>
+    <string name="adding_failed_subfolder">Οι φάκελοι δεν πρέπει να είναι ο ένας υποφάκελος του άλλου:</string>
     <string name="audiobook_folders_title">Φάκελοι Audiobook</string>
     <string name="chosen_folder_description">Επιλεγμένος φάκελος:</string>
     <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
@@ -41,6 +47,7 @@
     <string name="content_is_file">Αρχείο</string>
     <string name="content_navigate_up">Μετάβαση στον παραπάνω φάκελο</string>
     <string name="permission_external_new_explanation">Δεν είναι δυνατή η ανάγνωση βιβλίων χωρίς άδεια</string>
+    <string name="permission_retry">Επανάληψη; </string>
     <string name="permission_goto_settings">Ρυθμίσεις</string>
     <string name="storage_pre_device">Αποθηκευτικός χώρος:</string>
     <string name="storage_all">Όλα</string>
@@ -48,6 +55,7 @@
     <string name="playback_speed">Ταχύτητα αναπαραγωγής</string>
     <!--Bookmarks-->
     <string name="bookmark">Σελιδοδείκτης</string>
+    <string name="shake_to_reset">Ταρακούνημα για παύση</string>
     <string name="bookmark_edit_title">Επεξεργασία σελιδοδείκτη</string>
     <string name="bookmark_edit_hint">Ονομα του σελιδοδείκτη</string>
     <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
@@ -82,7 +90,15 @@
     <string name="no_network">Χωρίς δίκτυο;</string>
     <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
     <string name="cover_crop">Περικοπή εξωφύλλου</string>
+    <string name="music_notification">Αναπαραγωγή</string>
     <string name="onboarding_title">Καλώς Ήλθατε!</string>
+    <string name="onboarding_content">Ας ξεκινήσουμε προσθέτοντας το πρώτο σου audiobook.</string>
     <!--book category-->
     <string name="book_header_current">Τρέχον</string>
+    <string name="book_header_not_started">Μη διαβασμένα</string>
+    <string name="book_header_completed">Ολοκληρωμένα </string>
+    <string name="book_category_sort">Διάταξη </string>
+    <string name="book_category_sort_by_name">Όνομα</string>
+    <string name="book_category_sort_by_last_played">Ακούστηκαν τελευταία</string>
+    <string name="book_category_sort_by_added">Προσθήκη</string>
 </resources>

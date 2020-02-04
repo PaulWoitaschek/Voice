@@ -29,7 +29,7 @@
     <string name="content_cover">Omslag zelf kiezen</string>
     <string name="change_book_name">Naam</string>
     <string name="download_book_cover">Omslag ophalen van internet</string>
-    <string name="pick_book_cover">Opslag ophalen uit bestandssysteem</string>
+    <string name="pick_book_cover">Omslag ophalen uit bestandssysteem</string>
     <string name="edit_book_title">Boek bewerken</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Bladeren naar</string>

@@ -2,6 +2,8 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">当前书籍</string>
+    <string name="layout_grid">格状布局</string>
+    <string name="layout_list">列表布局</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
     <string name="show_all">显示全部</string>
     <!--BookPlayFragment-->
@@ -94,4 +96,8 @@
     <string name="book_header_current">正在播放</string>
     <string name="book_header_not_started">尚未开始播放</string>
     <string name="book_header_completed">已经播放完毕</string>
+    <string name="book_category_sort">排序中</string>
+    <string name="book_category_sort_by_name">名</string>
+    <string name="book_category_sort_by_last_played">上一次播放</string>
+    <string name="book_category_sort_by_added">已添加</string>
 </resources>
