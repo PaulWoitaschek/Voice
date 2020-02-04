@@ -92,7 +92,7 @@ class BookAdder
         }.also {
           Timber.i("checkForBooks took $it ms")
         }
-        coverCollector.findCovers(repo.activeBooks)
+        coverCollector.findCovers(repo.activeBooks())
       }.also {
         it.invokeOnCompletion {
           launch(Dispatchers.Main) {
@@ -145,7 +145,7 @@ class BookAdder
 
     // getting books to remove
     val booksToRemove = ArrayList<Book>(20)
-    for (book in repo.activeBooks) {
+    for (book in repo.activeBooks()) {
       var bookExists = false
       when (book.type) {
         Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
@@ -398,12 +398,12 @@ class BookAdder
    *
    * @param orphaned If we should return a book that is orphaned, or a book that is currently
    */
-  private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
+  private suspend fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
     val books: List<Book> =
       if (orphaned) {
         repo.getOrphanedBooks()
       } else {
-        repo.activeBooks
+        repo.activeBooks()
       }
     if (rootFile.isDirectory) {
       return books.firstOrNull {

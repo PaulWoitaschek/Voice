@@ -54,7 +54,7 @@ class MediaBrowserHelper
       )
 
       // do NOT return the current book twice as this will break the listing due to stable IDs
-      val all = repo.activeBooks
+      val all = repo.activeBooks()
         .filter { it != currentBook }
         .sortedWith(BookComparator.BY_LAST_PLAYED)
         .map { it.toMediaDescription() }

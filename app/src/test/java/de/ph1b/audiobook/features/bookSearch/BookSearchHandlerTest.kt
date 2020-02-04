@@ -15,7 +15,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.session.search.BookSearch
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.prefs.Pref
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
@@ -131,7 +131,7 @@ class BookSearchHandlerTest {
   }
 
   init {
-    every { repo.activeBooks } returns listOf(anotherBook, bookToFind)
+    coEvery { repo.activeBooks() } returns listOf(anotherBook, bookToFind)
     currentBookIdPref = MemoryPref(UUID.randomUUID())
 
     searchHandler = BookSearchHandler(repo, player, currentBookIdPref)
@@ -188,7 +188,7 @@ class BookSearchHandlerTest {
   @Test
   fun mediaFocusArtistInTitleNoArtistInBook() {
     val bookToFind = bookToFind.updateMetaData { copy(author = null, name = "The book of Tim") }
-    every { repo.activeBooks } returns listOf(bookToFind)
+    coEvery { repo.activeBooks() } returns listOf(bookToFind)
 
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
