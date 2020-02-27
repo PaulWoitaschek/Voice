@@ -42,7 +42,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-rc02"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0"
   const val material = "com.google.android.material:material:1.2.0-alpha04"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
