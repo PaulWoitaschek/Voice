@@ -15,8 +15,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
-import kotlinx.coroutines.Job
-
 
 abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateController(args),
   LayoutContainer, LifecycleOwner {
@@ -27,14 +25,9 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
   override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 
   private val onCreateViewDisposables = CompositeDisposable()
-  private val onCreateViewJobs = ArrayList<Job>()
 
   fun Disposable.disposeOnDestroyView() {
     onCreateViewDisposables.add(this)
-  }
-
-  fun Job.cancelOnDestroyView() {
-    onCreateViewJobs += this
   }
 
   val activity: AppCompatActivity get() = getActivity() as AppCompatActivity
@@ -64,8 +57,6 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
     super.onDestroyView(view)
     onDestroyView()
     onCreateViewDisposables.clear()
-    onCreateViewJobs.forEach { it.cancel() }
-    onCreateViewJobs.clear()
     clearFindViewByIdCache()
     _containerView = null
   }
