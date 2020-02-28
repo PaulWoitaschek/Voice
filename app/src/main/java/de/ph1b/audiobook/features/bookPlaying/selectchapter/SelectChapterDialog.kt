@@ -49,7 +49,8 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
         SelectChapterRowBinding::bind
       ) { data, position ->
         root.setOnClickListener(listener)
-        textView.text = data.name
+        @Suppress("SetTextI18n")
+        textView.text = "${position + 1} - ${data.name}"
         textView.setCompoundDrawablesWithIntrinsicBounds(
           0,
           0,
