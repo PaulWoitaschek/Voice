@@ -100,7 +100,7 @@ class BookStorage
 
   suspend fun updateBookContent(content: BookContent) {
     synchronizedWithIoDispatcher {
-      bookSettingsDao.update(content.settings)
+      bookSettingsDao.insert(content.settings)
     }
   }
 
