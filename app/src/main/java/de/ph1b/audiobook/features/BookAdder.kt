@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import androidx.collection.SparseArrayCompat
-import androidx.documentfile.provider.DocumentFile
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.sparseArray.emptySparseArray
@@ -209,7 +208,7 @@ class BookAdder
 
     val firstChapterFile = newChapters.first().file
     val result =
-      mediaAnalyzer.analyze(DocumentFile.fromFile(firstChapterFile)) as? MediaAnalyzer.Result.Success ?: return
+      mediaAnalyzer.analyze(firstChapterFile) as? MediaAnalyzer.Result.Success ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
@@ -363,7 +362,7 @@ class BookAdder
 
       // else parse and add
       Timber.i("analyze $f")
-      val result = mediaAnalyzer.analyze(DocumentFile.fromFile(f))
+      val result = mediaAnalyzer.analyze(f)
       Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
         val marks = try {

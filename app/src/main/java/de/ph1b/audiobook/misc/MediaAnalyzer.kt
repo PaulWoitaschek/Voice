@@ -1,7 +1,8 @@
 package de.ph1b.audiobook.misc
 
-import androidx.documentfile.provider.DocumentFile
+import androidx.core.net.toUri
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -12,10 +13,10 @@ class MediaAnalyzer @Inject constructor(
   private val metaDataAnalyzer: MetaDataAnalyzer
 ) {
 
-  suspend fun analyze(file: DocumentFile): Result {
+  suspend fun analyze(file: File): Result {
     val metaData = metaDataAnalyzer.parse(file)
     val duration = metaData.duration?.takeIf { it > 0L }
-      ?: exoPlayerDurationParser.duration(file.uri) ?: 0L
+      ?: exoPlayerDurationParser.duration(file.toUri()) ?: 0L
     return if (duration > 0) {
       Result.Success(
         duration = duration,

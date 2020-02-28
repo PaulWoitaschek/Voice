@@ -2,7 +2,8 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
-import androidx.documentfile.provider.DocumentFile
+import androidx.core.net.toUri
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -16,7 +17,7 @@ class MetaDataAnalyzer
   private val mmr = MediaMetadataRetriever()
 
   @Synchronized
-  fun parse(file: DocumentFile): MetaData {
+  fun parse(file: File): MetaData {
     val chapterNameFallback = chapterNameFallback(file)
     // try preparing twice as MediaMetadataRetriever throws undocumented exceptions
     repeat(2) {
@@ -32,11 +33,11 @@ class MetaDataAnalyzer
     return MetaData(chapterName = chapterNameFallback, bookName = null, author = null, duration = null)
   }
 
-  private fun prepare(file: DocumentFile): Boolean {
+  private fun prepare(file: File): Boolean {
     // Note: MediaMetadataRetriever throws undocumented Exceptions. We catch these
     // and act appropriate.
     return try {
-      mmr.setDataSource(context, file.uri)
+      mmr.setDataSource(context, file.toUri())
       true
     } catch (e: RuntimeException) {
       false
@@ -48,7 +49,7 @@ class MetaDataAnalyzer
       ?.takeUnless { it.isEmpty() }
   }
 
-  private fun chapterNameFallback(file: DocumentFile): String {
+  private fun chapterNameFallback(file: File): String {
     val name = file.name ?: "Chapter"
     return name.substringBeforeLast(".")
       .trim()
