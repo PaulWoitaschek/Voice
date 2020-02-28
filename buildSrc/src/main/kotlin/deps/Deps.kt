@@ -21,14 +21,13 @@ object Deps {
     const val appCompat = "androidx.appcompat:appcompat:1.1.0"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-    const val transitions = "androidx.transition:transition:1.3.0"
+    const val transitions = "androidx.transition:transition:1.3.1"
     const val palette = "androidx.palette:palette:1.0.0"
     const val mediaCompat = "androidx.media:media:1.1.0"
-    const val fragment = "androidx.fragment:fragment:1.2.0"
-    const val ktx = "androidx.core:core-ktx:1.1.0"
+    const val ktx = "androidx.core:core-ktx:1.2.0"
 
     object Room {
-      private const val version = "2.2.3"
+      private const val version = "2.2.4"
       const val runtime = "androidx.room:room-runtime:$version"
       const val compiler = "androidx.room:room-compiler:$version"
       const val testing = "androidx.room:room-testing:$version"
@@ -42,8 +41,8 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0"
-  const val material = "com.google.android.material:material:1.2.0-alpha04"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.1"
+  const val material = "com.google.android.material:material:1.2.0-alpha05"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
@@ -53,7 +52,7 @@ object Deps {
   const val groupie = "com.xwray:groupie:2.7.2"
 
   object MaterialDialog {
-    private const val version = "3.1.1"
+    private const val version = "3.3.0"
     const val core = "com.afollestad.material-dialogs:core:$version"
     const val input = "com.afollestad.material-dialogs:input:$version"
   }
@@ -82,7 +81,7 @@ object Deps {
 
   const val moshi = "com.squareup.moshi:moshi:1.9.2"
   const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.17"
+  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.18"
   const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 

@@ -248,7 +248,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun openSleepTimeDialog() {
-    SleepTimerDialogFragment(bookId)
+    SleepTimerDialogController(bookId)
       .showDialog(router)
   }
 }

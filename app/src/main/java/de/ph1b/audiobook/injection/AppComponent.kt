@@ -17,7 +17,7 @@ import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
-import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
+import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
@@ -70,7 +70,7 @@ interface AppComponent : DataComponent {
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)
   fun inject(target: SettingsController)
-  fun inject(target: SleepTimerDialogFragment)
+  fun inject(target: SleepTimerDialogController)
 
   fun playbackComponentFactory(): PlaybackComponent.Factory
 

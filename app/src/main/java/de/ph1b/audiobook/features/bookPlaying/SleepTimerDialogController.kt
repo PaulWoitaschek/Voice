@@ -37,7 +37,7 @@ private const val SI_MINUTES = "si#time"
 /**
  * Simple dialog for activating the sleep timer
  */
-class SleepTimerDialogFragment(bundle: Bundle) : DialogController(bundle) {
+class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
   constructor(bookId: UUID) : this(Bundle().apply {
     putUUID(NI_BOOK_ID, bookId)

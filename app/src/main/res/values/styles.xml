@@ -24,7 +24,6 @@
         </item>
         <item name="toolbarStyle">@style/AppToolbar</item>
         <item name="md_color_button_text">@color/accent</item>
-        <item name="md_corner_radius">2dp</item>
     </style>
 
     <style name="PlayButtonStyle">

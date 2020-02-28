@@ -125,7 +125,6 @@ dependencies {
   implementation(Deps.AndroidX.transitions)
   implementation(Deps.AndroidX.constraintLayout)
   implementation(Deps.AndroidX.mediaCompat)
-  implementation(Deps.AndroidX.fragment)
 
   implementation(Deps.picasso)
 
