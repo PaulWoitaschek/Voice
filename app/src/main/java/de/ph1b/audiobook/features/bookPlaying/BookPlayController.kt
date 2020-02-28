@@ -11,7 +11,8 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.databinding.BookPlayBinding
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
@@ -26,7 +27,6 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
-import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -40,7 +40,7 @@ private const val NI_BOOK_ID = "niBookId"
 /**
  * Base class for book playing interaction.
  */
-class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
+class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
   constructor(bookId: UUID) : this(Bundle().apply { putUUID(NI_BOOK_ID, bookId) })
 
@@ -52,8 +52,6 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
   private val bookId = bundle.getUUID(NI_BOOK_ID)
   private var coverLoaded = false
 
-  override val layoutRes = R.layout.book_play
-
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()
   private var skipSilenceItem: MenuItem by clearAfterDestroyView()
 
@@ -64,24 +62,25 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
     this.viewModel.bookId = bookId
   }
 
-  override fun onViewCreated() {
+  override fun onBindingCreated(binding: BookPlayBinding) {
+    super.onBindingCreated(binding)
     coverLoaded = false
-    playPauseDrawableSetter = PlayPauseDrawableSetter(play)
+    playPauseDrawableSetter = PlayPauseDrawableSetter(binding.play)
     setupClicks()
     setupSlider()
     setupToolbar()
-    play.apply {
+    binding.play.apply {
       outlineProvider = CircleOutlineProvider()
       clipToOutline = true
     }
   }
 
-  override fun onAttach(view: View) {
-    super.onAttach(view)
+  override fun onAttach(binding: BookPlayBinding) {
+    super.onAttach(binding)
 
     lifecycleScope.launch {
       this@BookPlayController.viewModel.viewState().collect {
-        render(it)
+        render(binding, it)
       }
     }
     lifecycleScope.launch {
@@ -103,21 +102,21 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
     }
   }
 
-  private fun render(viewState: BookPlayViewState) {
+  private fun render(binding: BookPlayBinding, viewState: BookPlayViewState) {
     Timber.d("render $viewState")
-    toolbar.title = viewState.title
-    currentChapterText.text = viewState.chapterName
-    currentChapterText.isVisible = viewState.chapterName != null
-    previous.isVisible = viewState.showPreviousNextButtons
-    next.isVisible = viewState.showPreviousNextButtons
-    playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    maxTime.text = formatTime(viewState.duration.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    slider.valueTo = viewState.duration.inMilliseconds.toFloat()
-    if (!slider.isPressed) {
-      slider.value = viewState.playedTime.inMilliseconds.toFloat()
+    binding.toolbar.title = viewState.title
+    binding.currentChapterText.text = viewState.chapterName
+    binding.currentChapterText.isVisible = viewState.chapterName != null
+    binding.previous.isVisible = viewState.showPreviousNextButtons
+    binding.next.isVisible = viewState.showPreviousNextButtons
+    binding.playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
+    binding.maxTime.text = formatTime(viewState.duration.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
+    binding.slider.valueTo = viewState.duration.inMilliseconds.toFloat()
+    if (!binding.slider.isPressed) {
+      binding.slider.value = viewState.playedTime.inMilliseconds.toFloat()
     }
     playPauseDrawableSetter.setPlaying(viewState.playing)
-    showLeftSleepTime(viewState.sleepTime)
+    showLeftSleepTime(binding, viewState.sleepTime)
 
     if (!coverLoaded) {
       coverLoaded = true
@@ -126,23 +125,23 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
         val coverFile = viewState.cover.file()
         val placeholder = viewState.cover.placeholder(activity!!)
         if (coverFile == null) {
-          Picasso.get().cancelRequest(cover)
-          cover.setImageDrawable(placeholder)
+          Picasso.get().cancelRequest(binding.cover)
+          binding.cover.setImageDrawable(placeholder)
         } else {
-          Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
+          Picasso.get().load(coverFile).placeholder(placeholder).into(binding.cover)
         }
       }
     }
   }
 
   private fun setupClicks() {
-    play.setOnClickListener { this.viewModel.playPause() }
-    rewind.setOnClickListener { this.viewModel.rewind() }
-    fastForward.setOnClickListener { this.viewModel.fastForward() }
-    playedTime.setOnClickListener { launchJumpToPositionDialog() }
-    previous.setOnClickListener { this.viewModel.previous() }
-    next.setOnClickListener { this.viewModel.next() }
-    currentChapterText.setOnClickListener {
+    binding.play.setOnClickListener { this.viewModel.playPause() }
+    binding.rewind.setOnClickListener { this.viewModel.rewind() }
+    binding.fastForward.setOnClickListener { this.viewModel.fastForward() }
+    binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
+    binding.previous.setOnClickListener { this.viewModel.previous() }
+    binding.next.setOnClickListener { this.viewModel.next() }
+    binding.currentChapterText.setOnClickListener {
       SelectChapterDialog(bookId).showDialog(router)
     }
 
@@ -152,22 +151,23 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
         return true
       }
     })
-    cover.isClickable = true
-    cover.setOnTouchListener { _, event ->
+    binding.cover.isClickable = true
+    @Suppress("ClickableViewAccessibility")
+    binding.cover.setOnTouchListener { _, event ->
       detector.onTouchEvent(event)
     }
   }
 
   private fun setupSlider() {
-    slider.setLabelFormatter {
-      formatTime(it.toLong(), slider.valueTo.toLong())
+    binding.slider.setLabelFormatter {
+      formatTime(it.toLong(), binding.slider.valueTo.toLong())
     }
-    slider.addOnChangeListener { slider, value, fromUser ->
+    binding.slider.addOnChangeListener { slider, value, fromUser ->
       if (isAttached && !fromUser) {
-        playedTime.text = formatTime(value.toLong(), slider.valueTo.toLong())
+        binding.playedTime.text = formatTime(value.toLong(), slider.valueTo.toLong())
       }
     }
-    slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+    binding.slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
       override fun onStartTrackingTouch(slider: Slider) {
       }
 
@@ -179,7 +179,7 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
   }
 
   private fun setupToolbar() {
-    val menu = toolbar.menu
+    val menu = binding.toolbar.menu
 
     sleepTimerItem = menu.findItem(R.id.action_sleep)
     val equalizerItem = menu.findItem(R.id.action_equalizer)
@@ -187,14 +187,14 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
 
     skipSilenceItem = menu.findItem(R.id.action_skip_silence)
 
-    toolbar.findViewById<View>(R.id.action_bookmark)
+    binding.toolbar.findViewById<View>(R.id.action_bookmark)
       .setOnLongClickListener {
         this.viewModel.addBookmark()
         true
       }
 
-    toolbar.setNavigationOnClickListener { router.popController(this) }
-    toolbar.setOnMenuItemClickListener {
+    binding.toolbar.setNavigationOnClickListener { router.popController(this) }
+    binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
           val transaction = SettingsController().asTransaction()
@@ -240,11 +240,11 @@ class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
     JumpToPositionDialogController().showDialog(router)
   }
 
-  private fun showLeftSleepTime(duration: Duration) {
+  private fun showLeftSleepTime(binding: BookPlayBinding, duration: Duration) {
     val active = duration > Duration.ZERO
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
-    timerCountdownView.text = formatTime(duration.toLongMilliseconds(), duration.toLongMilliseconds())
-    timerCountdownView.isVisible = active
+    binding.timerCountdownView.text = formatTime(duration.toLongMilliseconds(), duration.toLongMilliseconds())
+    binding.timerCountdownView.isVisible = active
   }
 
   private fun openSleepTimeDialog() {
