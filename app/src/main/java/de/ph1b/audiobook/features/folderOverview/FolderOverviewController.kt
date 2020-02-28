@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
+import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.mvp.MvpController
 import kotlinx.android.synthetic.main.folder_overview.*
 import kotlin.math.max
@@ -58,9 +59,9 @@ class FolderOverviewController :
 
     adapter = FolderOverviewAdapter { toDelete ->
       val toDeleteName = toDelete.folder
-      MaterialDialog(activity).show {
+      MaterialDialog(activity!!).show {
         title(R.string.delete_folder)
-        message(text = "${getString(R.string.delete_folder_content)}\n$toDeleteName")
+        message(text = "${context.getString(R.string.delete_folder_content)}\n$toDeleteName")
         positiveButton(R.string.remove) { presenter.removeFolder(toDelete) }
         negativeButton(R.string.dialog_cancel)
       }
@@ -69,17 +70,17 @@ class FolderOverviewController :
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    addAsSingle.setIconDrawable(activity.getDrawable(R.drawable.ic_folder)!!.tinted(Color.WHITE))
-    addAsLibrary.setIconDrawable(activity.getDrawable(R.drawable.folder_multiple)!!.tinted(Color.WHITE))
+    addAsSingle.setIconDrawable(context.getDrawable(R.drawable.ic_folder)!!.tinted(Color.WHITE))
+    addAsLibrary.setIconDrawable(context.getDrawable(R.drawable.folder_multiple)!!.tinted(Color.WHITE))
     addAsSingle.title =
-        "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
-    addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
+      "${context.getString(R.string.folder_add_single_book)}\n${context.getString(R.string.for_example)} Harry Potter 4"
+    addAsLibrary.title = "${context.getString(R.string.folder_add_collection)}\n${context.getString(R.string.for_example)} AudioBooks"
 
     setupToolbar()
   }
 
   private fun setupToolbar() {
-    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+    toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
   }
 
   override fun provideView() = this
@@ -114,7 +115,7 @@ class FolderOverviewController :
       getFamCenter(famCenter)
 
       // get the initial radius for the clipping circle
-      val initialRadius = Math.max(overlay.height, overlay.width)
+      val initialRadius = max(overlay.height, overlay.width)
 
       // create the animation (the final radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
@@ -154,7 +155,7 @@ class FolderOverviewController :
   }
 
   private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
-    val intent = FolderChooserActivity.newInstanceIntent(activity, operationMode)
+    val intent = FolderChooserActivity.newInstanceIntent(activity!!, operationMode)
     // we don't want our listener be informed.
     fam.setOnFloatingActionsMenuUpdateListener(null)
     fam.collapseImmediately()

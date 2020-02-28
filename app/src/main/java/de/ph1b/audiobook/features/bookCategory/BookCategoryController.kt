@@ -10,8 +10,8 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
-import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
+import de.ph1b.audiobook.features.SyntheticViewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
-class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookBottomSheetController.Callback,
+class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), EditBookBottomSheetController.Callback,
     CoverFromInternetController.Callback, EditCoverDialogController.Callback {
 
   @Inject
@@ -83,7 +83,7 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
     recyclerView.adapter = adapter
     val layoutManager = GridLayoutManager(activity, 1)
     recyclerView.layoutManager = layoutManager
-    recyclerView.addItemDecoration(BookCategoryItemDecoration(activity, layoutManager))
+    recyclerView.addItemDecoration(BookCategoryItemDecoration(activity!!, layoutManager))
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
     lifecycleScope.launch {
@@ -97,7 +97,7 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
 
   private fun showSortingPopup() {
     val anchor = toolbar.findViewById<View>(R.id.sort)
-    PopupMenu(activity, anchor).apply {
+    PopupMenu(activity!!, anchor).apply {
       inflate(R.menu.sort_menu)
       val bookSorting = viewModel.bookSorting()
       menu.findItem(bookSorting.menuId).isChecked = true

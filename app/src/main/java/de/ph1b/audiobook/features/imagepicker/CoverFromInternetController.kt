@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.SyntheticViewController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
@@ -39,7 +39,7 @@ import java.net.URLEncoder
 import java.util.UUID
 import javax.inject.Inject
 
-class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
+class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bundle) {
 
   init {
     appComponent.inject(this)
@@ -133,7 +133,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   }
 
   private fun showCab() {
-    cab = activity.createCab(R.id.cabStub) {
+    cab = activity!!.createCab(R.id.cabStub) {
       menu(R.menu.crop_menu)
       closeDrawable(R.drawable.close)
       onSelection { item ->
@@ -239,7 +239,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
     rotation.setAnimationListener(
       object : Animation.AnimationListener {
         override fun onAnimationRepeat(p0: Animation?) {
-          if (webViewIsLoading.value == false) {
+          if (!webViewIsLoading.value) {
             Timber.i("we are in the refresh round. cancel now.")
             rotation.cancel()
             rotation.reset()

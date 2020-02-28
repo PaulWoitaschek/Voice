@@ -11,7 +11,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.SyntheticViewController
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
@@ -40,7 +40,7 @@ private const val NI_BOOK_ID = "niBookId"
 /**
  * Base class for book playing interaction.
  */
-class BookPlayController(bundle: Bundle) : BaseController(bundle) {
+class BookPlayController(bundle: Bundle) : SyntheticViewController(bundle) {
 
   constructor(bookId: UUID) : this(Bundle().apply { putUUID(NI_BOOK_ID, bookId) })
 
@@ -124,7 +124,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
       // we need to synchronously load this because the transition breaks otherwise
       runBlocking {
         val coverFile = viewState.cover.file()
-        val placeholder = viewState.cover.placeholder(activity)
+        val placeholder = viewState.cover.placeholder(activity!!)
         if (coverFile == null) {
           Picasso.get().cancelRequest(cover)
           cover.setImageDrawable(placeholder)
@@ -220,7 +220,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
           true
         }
         R.id.action_equalizer -> {
-          equalizer.launch(activity)
+          equalizer.launch(activity!!)
           true
         }
         R.id.action_skip_silence -> {
@@ -249,6 +249,6 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
   private fun openSleepTimeDialog() {
     SleepTimerDialogFragment(bookId)
-      .show(fragmentManager, "fmSleepTimer")
+      .showDialog(router)
   }
 }

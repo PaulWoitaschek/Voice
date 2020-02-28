@@ -13,8 +13,8 @@ import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
+import de.ph1b.audiobook.features.SyntheticViewController
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -47,7 +47,7 @@ import kotlin.collections.component2
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookOverviewController : BaseController(),
+class BookOverviewController : SyntheticViewController(),
   EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
   CoverFromInternetController.Callback {
 
@@ -116,7 +116,7 @@ class BookOverviewController : BaseController(),
         }
       }
     }
-    val listDecoration = BookOverviewItemDecoration(activity, layoutManager)
+    val listDecoration = BookOverviewItemDecoration(activity!!, layoutManager)
     recyclerView.addItemDecoration(listDecoration)
     recyclerView.layoutManager = layoutManager
   }
@@ -212,8 +212,8 @@ class BookOverviewController : BaseController(),
       .forToolbarMenuItem(
         toolbar,
         R.id.library,
-        getString(R.string.onboarding_title),
-        getString(R.string.onboarding_content)
+        activity!!.getString(R.string.onboarding_title),
+        activity!!.getString(R.string.onboarding_content)
       )
       .cancelable(false)
       .tintTarget(false)

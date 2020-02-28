@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -14,7 +13,9 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.injection.appComponent
+import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.DialogLayoutContainer
+import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.putUUID
@@ -36,14 +37,11 @@ private const val SI_MINUTES = "si#time"
 /**
  * Simple dialog for activating the sleep timer
  */
-class SleepTimerDialogFragment() : AppCompatDialogFragment() {
+class SleepTimerDialogFragment(bundle: Bundle) : DialogController(bundle) {
 
-  @SuppressLint("ValidFragment")
-  constructor(bookId: UUID) : this() {
-    arguments = Bundle().apply {
-      putUUID(NI_BOOK_ID, bookId)
-    }
-  }
+  constructor(bookId: UUID) : this(Bundle().apply {
+    putUUID(NI_BOOK_ID, bookId)
+  })
 
   @Inject
   lateinit var bookmarkRepo: BookmarkRepo
@@ -78,13 +76,13 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
   }
 
   private fun updateTimeState() {
-    layoutContainer.time.text = getString(R.string.min, selectedMinutes.toString())
+    layoutContainer.time.text = context.getString(R.string.min, selectedMinutes.toString())
 
     if (selectedMinutes > 0) layoutContainer.fab.show()
     else layoutContainer.fab.hide()
   }
 
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
     _layoutContainer = DialogLayoutContainer(
@@ -92,7 +90,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     )
 
     // restore or get fresh
-    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: sleepTimePref.value
+    selectedMinutes = savedViewState?.getInt(SI_MINUTES) ?: sleepTimePref.value
     updateTimeState()
 
     // find views and prepare clicks
@@ -118,8 +116,8 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       true
     }
 
-    val bookId = arguments!!.getUUID(NI_BOOK_ID)
-    val book = repo.bookById(bookId) ?: return super.onCreateDialog(savedInstanceState)
+    val bookId = args.getUUID(NI_BOOK_ID)
+    val book = repo.bookById(bookId)!!
 
     layoutContainer.fab.setOnClickListener {
       // should be hidden if
@@ -136,7 +134,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
         GlobalScope.launch(Dispatchers.IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
               book,
-              date + ": " + getString(R.string.action_sleep)
+            date + ": " + context.getString(R.string.action_sleep)
           )
         }
       }
@@ -144,7 +142,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       shakeToResetPref.value = layoutContainer.shakeToResetSwitch.isChecked
 
       sleepTimer.setActive(true)
-      dismiss()
+      dismissDialog()
     }
 
     // setup bookmark toggle
@@ -157,7 +155,7 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
       layoutContainer.shakeToResetSwitch.isVisible = false
     }
 
-    return BottomSheetDialog(context!!).apply {
+    return BottomSheetDialog(context).apply {
       setContentView(layoutContainer.containerView)
       // hide the background so the fab looks overlapping
       setOnShowListener {
@@ -171,8 +169,8 @@ class SleepTimerDialogFragment() : AppCompatDialogFragment() {
     }
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
+  override fun onDestroyView(view: View) {
+    super.onDestroyView(view)
     _layoutContainer = null
   }
 }

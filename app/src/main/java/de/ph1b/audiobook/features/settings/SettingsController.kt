@@ -3,7 +3,7 @@ package de.ph1b.audiobook.features.settings
 import android.view.View
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BaseController
+import de.ph1b.audiobook.features.SyntheticViewController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class SettingsController : BaseController() {
+class SettingsController : SyntheticViewController() {
 
   @Inject
   lateinit var viewModel: SettingsViewModel
@@ -84,7 +84,7 @@ class SettingsController : BaseController() {
         false
     }
     toolbar.setNavigationOnClickListener {
-      activity.onBackPressed()
+      activity!!.onBackPressed()
     }
   }
 }

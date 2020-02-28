@@ -18,12 +18,13 @@ import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.appComponent
+import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import kotlinx.android.synthetic.main.bookmark.*
-import java.util.*
+import java.util.UUID
 
 /**
  * Dialog for creating a bookmark
@@ -100,8 +101,8 @@ class BookmarkController(args: Bundle) :
   }
 
   private fun setupList() {
-    val layoutManager = LinearLayoutManager(activity)
-    recycler.addItemDecoration(VerticalDividerItemDecoration(activity))
+    val layoutManager = LinearLayoutManager(context)
+    recycler.addItemDecoration(VerticalDividerItemDecoration(context))
     recycler.layoutManager = layoutManager
     recycler.adapter = adapter
     val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
@@ -109,9 +110,9 @@ class BookmarkController(args: Bundle) :
 
     val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
       override fun onMove(
-          recyclerView: RecyclerView,
-          viewHolder: RecyclerView.ViewHolder,
-          target: RecyclerView.ViewHolder
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
       ): Boolean {
         return false
       }
@@ -125,7 +126,7 @@ class BookmarkController(args: Bundle) :
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
-    val popup = PopupMenu(activity, v)
+    val popup = PopupMenu(context, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {
       when (it.itemId) {
