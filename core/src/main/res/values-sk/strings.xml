@@ -74,6 +74,7 @@
     </plurals>
     <string name="pref_seek_time">Preskočiť o</string>
     <string name="pref_root_folder_title">Adresár s audioknihou</string>
+    <string name="pref_theme_dark">Tmavá téma</string>
     <string name="pref_auto_rewind_title">Automaticky pretočiť</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automaticky pretočí o %d sek. po ručnom pozastavení.</item>

@@ -2,7 +2,10 @@
 <resources>
     <!--BookShelf-->
     <string name="current_book">Aktualna książka</string>
+    <string name="layout_grid">Układ Siatki</string>
+    <string name="layout_list">Układ Listy</string>
     <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Pokaż wszystko</string>
     <!--BookPlayFragment-->
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj/Pauza</string>
@@ -71,6 +74,7 @@
     </plurals>
     <string name="pref_seek_time">Przewiń o</string>
     <string name="pref_root_folder_title">Folder audiobooków</string>
+    <string name="pref_theme_dark">Ciemna stylizacja</string>
     <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
@@ -99,4 +103,8 @@
     <string name="book_header_current">Aktualna</string>
     <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
     <string name="book_header_completed">Odsłuchana</string>
+    <string name="book_category_sort">Sortowanie</string>
+    <string name="book_category_sort_by_name">Nazwa</string>
+    <string name="book_category_sort_by_last_played">Ostatnio odtwarzane</string>
+    <string name="book_category_sort_by_added">Dodane</string>
 </resources>
