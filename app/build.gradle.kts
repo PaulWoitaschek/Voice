@@ -158,8 +158,7 @@ dependencies {
   implementation(Deps.ExoPlayer.flac) { isTransitive = false }
   implementation(Deps.ExoPlayer.opus) { isTransitive = false }
 
-  implementation(Deps.Conductor.base)
-  implementation(Deps.Conductor.support)
+  implementation(Deps.conductor)
 
   implementation(Deps.moshi)
   implementation(Deps.lifecycle)

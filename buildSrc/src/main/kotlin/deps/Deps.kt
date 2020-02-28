@@ -50,17 +50,12 @@ object Deps {
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.7.2"
+  const val conductor = "com.bluelinelabs:conductor:2.1.5"
 
   object MaterialDialog {
     private const val version = "3.3.0"
     const val core = "com.afollestad.material-dialogs:core:$version"
     const val input = "com.afollestad.material-dialogs:input:$version"
-  }
-
-  object Conductor {
-    private const val version = "2.1.5"
-    const val base = "com.bluelinelabs:conductor:$version"
-    const val support = "com.bluelinelabs:conductor-support:$version"
   }
 
   const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1@aar"
