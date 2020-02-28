@@ -10,7 +10,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
-import com.bluelinelabs.conductor.archlifecycle.ControllerLifecycleOwner
+import de.ph1b.audiobook.misc.conductor.ControllerLifecycleOwner
+import de.ph1b.audiobook.misc.conductor.LifecycleScopeProperty
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
@@ -23,6 +24,8 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
   private val lifecycleOwner = ControllerLifecycleOwner(this)
 
   override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+
+  val lifecycleScope by LifecycleScopeProperty(lifecycle)
 
   private val onCreateViewDisposables = CompositeDisposable()
 

@@ -161,7 +161,6 @@ dependencies {
 
   implementation(Deps.Conductor.base)
   implementation(Deps.Conductor.support)
-  implementation(Deps.Conductor.lifecycle)
 
   implementation(Deps.moshi)
   implementation(Deps.lifecycle)

@@ -314,12 +314,11 @@ constructor(
 
   private fun prepare() {
     val content = repo.bookById(currentBookIdPref.value)?.content ?: return
-    Timber.i("prepare $content")
     val shouldInitialize = player.playbackState == Player.STATE_IDLE || !alreadyInitializedChapters(content)
     if (!shouldInitialize) {
-      Timber.i("already prepared.")
       return
     }
+    Timber.i("prepare $content")
     bookContent = content
     checkMainThread()
     player.playWhenReady = false

@@ -144,7 +144,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private suspend fun updateNotification(book: Book): Notification {
-    Timber.i("updateNotification for ${book.name}")
     return notificationCreator.createNotification(book).also {
       notificationManager.notify(NOTIFICATION_ID, it)
     }

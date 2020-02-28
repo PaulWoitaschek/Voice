@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookPlaying.selectchapter
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getRecyclerView
@@ -18,6 +17,7 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.groupie.BindingItem
 import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -35,16 +35,6 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   init {
     appComponent.inject(this)
     viewModel.bookId = args.getUUID(NI_BOOK_ID)
-
-    lifecycleScope.launchWhenStarted {
-      viewModel.viewEffects.collect {
-        when (it) {
-          SelectChapterViewEffect.CloseScreen -> {
-            dismissDialog()
-          }
-        }
-      }
-    }
   }
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
@@ -75,6 +65,19 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
       customListAdapter(adapter)
       if (viewState.selectedIndex != null) {
         getRecyclerView().layoutManager!!.scrollToPosition(viewState.selectedIndex)
+      }
+    }
+  }
+
+  override fun onAttach(view: View) {
+    super.onAttach(view)
+    lifecycleScope.launch {
+      viewModel.viewEffects.collect {
+        when (it) {
+          SelectChapterViewEffect.CloseScreen -> {
+            dismissDialog()
+          }
+        }
       }
     }
   }

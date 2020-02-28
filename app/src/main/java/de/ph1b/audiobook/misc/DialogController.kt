@@ -11,8 +11,9 @@ import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.archlifecycle.ControllerLifecycleOwner
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
+import de.ph1b.audiobook.misc.conductor.ControllerLifecycleOwner
+import de.ph1b.audiobook.misc.conductor.LifecycleScopeProperty
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -27,6 +28,8 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
   private val lifecycleOwner = ControllerLifecycleOwner(this)
 
   override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+
+  val lifecycleScope by LifecycleScopeProperty(lifecycle)
 
   private var dialog: Dialog? = null
   private var dismissed = false

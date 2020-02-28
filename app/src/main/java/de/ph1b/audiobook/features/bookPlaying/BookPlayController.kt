@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -29,6 +28,7 @@ import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_play.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.UUID
@@ -74,13 +74,17 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
       outlineProvider = CircleOutlineProvider()
       clipToOutline = true
     }
+  }
 
-    lifecycleScope.launchWhenStarted {
+  override fun onAttach(view: View) {
+    super.onAttach(view)
+
+    lifecycleScope.launch {
       this@BookPlayController.viewModel.viewState().collect {
         render(it)
       }
     }
-    lifecycleScope.launchWhenStarted {
+    lifecycleScope.launch {
       this@BookPlayController.viewModel.viewEffects.collect {
         handleViewEffect(it)
       }

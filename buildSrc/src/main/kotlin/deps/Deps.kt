@@ -49,7 +49,7 @@ object Deps {
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
   const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
-  const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+  const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.7.2"
 
   object MaterialDialog {
@@ -61,7 +61,6 @@ object Deps {
   object Conductor {
     private const val version = "2.1.5"
     const val base = "com.bluelinelabs:conductor:$version"
-    const val lifecycle = "com.bluelinelabs:conductor-archlifecycle:$version"
     const val support = "com.bluelinelabs:conductor-support:$version"
   }
 

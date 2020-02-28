@@ -11,6 +11,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
@@ -34,6 +35,8 @@ import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_overview.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -67,13 +70,9 @@ class BookOverviewController : BaseController(),
   private var useGrid = false
 
   override fun onViewCreated() {
-    val gridMenuItem = setupToolbar()
+    setupToolbar()
     setupFab()
     setupRecyclerView()
-
-    viewModel.state()
-      .subscribe { render(it, gridMenuItem) }
-      .disposeOnDestroyView()
     viewModel.coverChanged
       .subscribe(::bookCoverChanged)
       .disposeOnDestroyView()
@@ -120,7 +119,7 @@ class BookOverviewController : BaseController(),
     recyclerView.layoutManager = layoutManager
   }
 
-  private fun setupToolbar(): GridMenuItem {
+  private fun setupToolbar() {
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
@@ -139,9 +138,9 @@ class BookOverviewController : BaseController(),
         else -> false
       }
     }
-
-    return GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
   }
+
+  private fun gridMenuItem(): GridMenuItem = GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
 
   private fun toFolderOverview() {
     val controller = FolderOverviewController()
@@ -259,6 +258,14 @@ class BookOverviewController : BaseController(),
   override fun onAttach(view: View) {
     super.onAttach(view)
     viewModel.attach()
+
+    val gridMenuItem = gridMenuItem()
+    lifecycleScope.launch {
+      viewModel.state().latestAsFlow()
+        .collect {
+          render(it, gridMenuItem)
+        }
+    }
   }
 }
 

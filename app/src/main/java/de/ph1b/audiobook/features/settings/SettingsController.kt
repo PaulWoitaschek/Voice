@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.settings
 
+import android.view.View
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
@@ -10,9 +10,9 @@ import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
 import de.ph1b.audiobook.injection.appComponent
 import kotlinx.android.synthetic.main.settings.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
 
 class SettingsController : BaseController() {
 
@@ -37,14 +37,18 @@ class SettingsController : BaseController() {
     autoRewind.setOnClickListener {
       viewModel.changeAutoRewindAmount()
     }
+  }
 
-    lifecycleScope.launchWhenStarted {
+  override fun onAttach(view: View) {
+    super.onAttach(view)
+
+    lifecycleScope.launch {
       viewModel.viewEffects.collect {
         handleViewEffect(it)
       }
     }
 
-    lifecycleScope.launchWhenStarted {
+    lifecycleScope.launch {
       viewModel.viewState().collect {
         render(it)
       }
