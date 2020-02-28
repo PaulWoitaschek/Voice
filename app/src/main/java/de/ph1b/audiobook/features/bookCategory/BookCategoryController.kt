@@ -7,6 +7,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.BaseController
@@ -23,6 +24,8 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.android.synthetic.main.book_category.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -83,12 +86,13 @@ class BookCategoryController(bundle: Bundle) : BaseController(bundle), EditBookB
     recyclerView.addItemDecoration(BookCategoryItemDecoration(activity, layoutManager))
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
-    viewModel.get()
-        .subscribe {
+    lifecycleScope.launch {
+      viewModel.get().latestAsFlow()
+        .collect {
           layoutManager.spanCount = it.gridColumnCount
           adapter.submitList(it.models)
         }
-        .disposeOnDestroyView()
+    }
   }
 
   private fun showSortingPopup() {

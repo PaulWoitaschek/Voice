@@ -73,9 +73,11 @@ class BookOverviewController : BaseController(),
     setupToolbar()
     setupFab()
     setupRecyclerView()
-    viewModel.coverChanged
-      .subscribe(::bookCoverChanged)
-      .disposeOnDestroyView()
+    lifecycleScope.launch {
+      viewModel.coverChanged.latestAsFlow().collect {
+        bookCoverChanged(it)
+      }
+    }
   }
 
   private fun setupFab() {

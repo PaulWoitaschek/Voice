@@ -12,8 +12,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import de.ph1b.audiobook.misc.conductor.ControllerLifecycleOwner
 import de.ph1b.audiobook.misc.conductor.LifecycleScopeProperty
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 
@@ -26,12 +24,6 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
   override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 
   val lifecycleScope by LifecycleScopeProperty(lifecycle)
-
-  private val onCreateViewDisposables = CompositeDisposable()
-
-  fun Disposable.disposeOnDestroyView() {
-    onCreateViewDisposables.add(this)
-  }
 
   val activity: AppCompatActivity get() = getActivity() as AppCompatActivity
 
@@ -59,7 +51,6 @@ abstract class BaseController(args: Bundle = Bundle()) : RestoreViewOnCreateCont
   final override fun onDestroyView(view: View) {
     super.onDestroyView(view)
     onDestroyView()
-    onCreateViewDisposables.clear()
     clearFindViewByIdCache()
     _containerView = null
   }

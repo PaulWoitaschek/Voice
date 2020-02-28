@@ -24,10 +24,14 @@ import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.image_picker.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -48,7 +52,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
   private var cab: AttachedCab? = null
 
-  private var webViewIsLoading = BehaviorSubject.createDefault(false)
+  private var webViewIsLoading = ConflatedBroadcastChannel(false)
   private val book by lazy {
     val id = bundle.getUUID(NI_BOOK_ID)
     repo.bookById(id)!!
@@ -56,7 +60,7 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
   private val originalUrl by lazy {
     val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
     "https://www.google.com/search?safe=on&site=imghp" +
-        "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
+      "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
   override val layoutRes = R.layout.image_picker
@@ -69,8 +73,8 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
       displayZoomControls = false
       javaScriptEnabled = true
       userAgentString =
-          "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-              "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+        "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
+          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 
@@ -78,14 +82,14 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
         super.onPageStarted(view, url, favicon)
 
         Timber.i("page started with $url")
-        webViewIsLoading.onNext(true)
+        webViewIsLoading.offer(true)
       }
 
       override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
 
         Timber.i("page stopped with $url")
-        webViewIsLoading.onNext(false)
+        webViewIsLoading.offer(false)
       }
 
       @Suppress("OverridingDeprecatedMember")
@@ -104,17 +108,18 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
     }
 
     // after first successful load set visibilities
-    webViewIsLoading
+    lifecycleScope.launch {
+      webViewIsLoading.asFlow()
         .distinctUntilChanged()
         .filter { it }
-        .subscribe {
+        .collect {
           // sets progressbar and webviews visibilities correctly once the page is loaded
           Timber.i("WebView is now loading. Set webView visible")
           progressBar.isVisible = false
           noNetwork.isVisible = false
           webViewContainer.isVisible = true
         }
-        .disposeOnDestroyView()
+    }
 
     webView.loadUrl(originalUrl)
 
@@ -170,11 +175,11 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
 
     GlobalScope.launch {
       val screenShot = Bitmap.createBitmap(
-          bitmap,
-          left,
-          top,
-          width,
-          height
+        bitmap,
+        left,
+        top,
+        width,
+        height
       )
       bitmap.recycle()
       val coverFile = book.coverFile()
@@ -221,31 +226,32 @@ class CoverFromInternetController(bundle: Bundle) : BaseController(bundle) {
     }
     refreshItem.actionView = rotateView
 
-    webViewIsLoading
+    lifecycleScope.launch {
+      webViewIsLoading.asFlow()
         .filter { it }
         .filter { !rotation.hasStarted() }
-        .doOnNext { Timber.i("is loading. Start animation") }
-        .subscribe {
+        .collect {
+          Timber.i("is loading. Start animation")
           rotation.start()
         }
-        .disposeOnDestroyView()
+    }
 
     rotation.setAnimationListener(
-        object : Animation.AnimationListener {
-          override fun onAnimationRepeat(p0: Animation?) {
-            if (webViewIsLoading.value == false) {
-              Timber.i("we are in the refresh round. cancel now.")
-              rotation.cancel()
-              rotation.reset()
-            }
-          }
-
-          override fun onAnimationEnd(p0: Animation?) {
-          }
-
-          override fun onAnimationStart(p0: Animation?) {
+      object : Animation.AnimationListener {
+        override fun onAnimationRepeat(p0: Animation?) {
+          if (webViewIsLoading.value == false) {
+            Timber.i("we are in the refresh round. cancel now.")
+            rotation.cancel()
+            rotation.reset()
           }
         }
+
+        override fun onAnimationEnd(p0: Animation?) {
+        }
+
+        override fun onAnimationStart(p0: Animation?) {
+        }
+      }
     )
   }
 
