@@ -68,8 +68,8 @@ object Deps {
   }
 
   object ExoPlayer {
-    private const val extensionVersion = "2.11.1"
-    const val core = "com.google.android.exoplayer:exoplayer-core:2.11.1"
+    const val core = "com.google.android.exoplayer:exoplayer-core:2.11.3"
+    private const val extensionVersion = "2.11.3"
     const val opus = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-opus:$extensionVersion"
     const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-flac:$extensionVersion"
   }
