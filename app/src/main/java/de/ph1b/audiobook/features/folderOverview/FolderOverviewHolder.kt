@@ -6,8 +6,8 @@ import de.ph1b.audiobook.uitools.ExtensionsHolder
 import kotlinx.android.synthetic.main.activity_folder_overview_row_layout.*
 
 class FolderOverviewHolder(
-    parent: ViewGroup,
-    itemClicked: (position: Int) -> Unit
+  parent: ViewGroup,
+  itemClicked: (position: Int) -> Unit
 ) : ExtensionsHolder(parent, R.layout.activity_folder_overview_row_layout) {
 
   private val context = parent.context

@@ -11,8 +11,13 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.misc.DialogController
+import de.ph1b.audiobook.misc.DialogLayoutContainer
+import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
+import de.ph1b.audiobook.misc.getUUID
+import de.ph1b.audiobook.misc.inflate
+import de.ph1b.audiobook.misc.putUUID
 import kotlinx.android.synthetic.main.book_more_bottom_sheet.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -77,8 +82,8 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   companion object {
     private const val NI_BOOK = "ni#book"
     operator fun <T> invoke(
-        target: T,
-        book: Book
+      target: T,
+      book: Book
     ): EditBookBottomSheetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putUUID(NI_BOOK, book.id)

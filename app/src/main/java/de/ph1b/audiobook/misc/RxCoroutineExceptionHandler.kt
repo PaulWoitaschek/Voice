@@ -20,10 +20,9 @@ private object RxCoroutineExceptionHandler :
   }
 }
 
-
 fun rxCompletable(
-    context: CoroutineContext = EmptyCoroutineContext,
-    block: suspend CoroutineScope.() -> Unit
+  context: CoroutineContext = EmptyCoroutineContext,
+  block: suspend CoroutineScope.() -> Unit
 ): Completable {
   return rxCompletable(context + RxCoroutineExceptionHandler, block)
 }

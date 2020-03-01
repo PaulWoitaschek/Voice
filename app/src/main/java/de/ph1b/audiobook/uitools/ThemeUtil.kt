@@ -14,5 +14,4 @@ object ThemeUtil {
     require(resId != -1) { "Resource with attr=$attr not found" }
     return resId
   }
-
 }

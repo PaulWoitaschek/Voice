@@ -7,9 +7,9 @@ import kotlinx.android.synthetic.main.activity_folder_chooser_adapter_row_layout
 import java.io.File
 
 class Holder(
-    parent: ViewGroup,
-    private val mode: FolderChooserActivity.OperationMode,
-    private val listener: (selected: File) -> Unit
+  parent: ViewGroup,
+  private val mode: FolderChooserActivity.OperationMode,
+  private val listener: (selected: File) -> Unit
 ) : ExtensionsHolder(parent, R.layout.activity_folder_chooser_adapter_row_layout) {
 
   private var boundFile: File? = null

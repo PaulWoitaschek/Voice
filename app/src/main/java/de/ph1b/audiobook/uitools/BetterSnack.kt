@@ -16,11 +16,11 @@ object BetterSnack {
    * @param listener the listener that should be invoked when an action was made
    */
   fun make(
-      root: View,
-      text: String,
-      duration: Duration = Duration.INDEFINITE_NO_DISMISS,
-      action: String? = null,
-      listener: (() -> Unit)? = null
+    root: View,
+    text: String,
+    duration: Duration = Duration.INDEFINITE_NO_DISMISS,
+    action: String? = null,
+    listener: (() -> Unit)? = null
   ) {
     val bar = Snackbar.make(root, text, duration.internalDuration)
     bar.addCallback(

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 
 fun SeekBar.onProgressChanged(
-    initialNotification: Boolean = false,
-    progressChanged: (Int) -> Unit
+  initialNotification: Boolean = false,
+  progressChanged: (Int) -> Unit
 ) {
   val listener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
