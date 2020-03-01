@@ -5,7 +5,6 @@ import de.ph1b.audiobook.data.currentMark
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.data.repo.flowById
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -46,7 +45,7 @@ class BookPlayViewModel
     currentBookIdPref.value = bookId
 
     return combine(
-      repo.flowById(bookId).filterNotNull(), playStateManager.playStateFlow(), sleepTimer.leftSleepTimeFlow
+      repo.flow(bookId).filterNotNull(), playStateManager.playStateFlow(), sleepTimer.leftSleepTimeFlow
     ) { book, playState, sleepTime ->
       val currentMark = book.content.currentChapter.currentMark(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.hasMoreThanOneChapter()

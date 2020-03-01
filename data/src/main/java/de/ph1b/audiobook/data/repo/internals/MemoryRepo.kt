@@ -1,15 +1,13 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import android.os.Looper
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -34,11 +32,8 @@ class MemoryRepo
     allBooks.filter { !it.content.settings.active }.toMutableList()
   }
 
-  private val activeBooksSubject: BehaviorSubject<List<Book>> by lazy {
-    BehaviorSubject.createDefault<List<Book>>(active)
-  }
-
-  fun stream(): Observable<List<Book>> = activeBooksSubject
+  private val activeBooksSubject = ConflatedBroadcastChannel<List<Book>>(active)
+  val activeBooks: Flow<List<Book>> get() = activeBooksSubject.asFlow()
 
   suspend fun active(): List<Book> = locked {
     active.toList()
@@ -86,13 +81,7 @@ class MemoryRepo
   }
 
   private suspend fun updateActiveBookSubject() {
-    if (Looper.getMainLooper() == Looper.myLooper()) {
-      activeBooksSubject.onNext(active.toList())
-    } else {
-      withContext(Dispatchers.Main) {
-        activeBooksSubject.onNext(active.toList())
-      }
-    }
+    activeBooksSubject.send(active.toList())
   }
 }
 

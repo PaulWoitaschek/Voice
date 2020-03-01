@@ -1,19 +1,18 @@
 package de.ph1b.audiobook.data.repo
 
 import de.ph1b.audiobook.common.Optional
-import de.ph1b.audiobook.common.orNull
 import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.MemoryRepo
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.rx2.asObservable
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -27,10 +26,17 @@ class BookRepository
   private val memoryRepo: MemoryRepo
 ) {
 
-  fun booksStream(): Observable<List<Book>> = memoryRepo.stream()
+  fun flow(): Flow<List<Book>> = memoryRepo.activeBooks
+
+  fun flow(bookId: UUID): Flow<Book?> {
+    return memoryRepo.activeBooks
+      .map { books -> books.find { it.id == bookId } }
+  }
+
+  fun booksStream(): Observable<List<Book>> = flow().asObservable().observeOn(AndroidSchedulers.mainThread())
 
   fun byId(id: UUID): Observable<Optional<Book>> {
-    return memoryRepo.stream().map { books ->
+    return booksStream().map { books ->
       books.find { it.id == id }.toOptional()
     }
   }
@@ -101,11 +107,4 @@ class BookRepository
   }
 
   suspend fun chapterByFile(file: File): Chapter? = memoryRepo.chapterByFile(file)
-}
-
-fun BookRepository.flowById(bookId: UUID): Flow<Book?> {
-  return byId(bookId)
-    .toFlowable(BackpressureStrategy.LATEST)
-    .asFlow()
-    .map { it.orNull }
 }

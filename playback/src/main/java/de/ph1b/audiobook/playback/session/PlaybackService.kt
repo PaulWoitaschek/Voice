@@ -13,7 +13,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
-import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
@@ -128,7 +127,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     scope.launch {
-      repo.booksStream().latestAsFlow()
+      repo.flow()
         .map { it.size }
         .distinctUntilChanged()
         .collect {

@@ -12,7 +12,6 @@ import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.data.repo.flowById
 import de.ph1b.audiobook.playback.di.PerService
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
@@ -172,7 +171,7 @@ constructor(
 
     scope.launch {
       val notIdleFlow = _state.asFlow().filter { it != PlayerState.IDLE }
-      val contentFlow = currentBookIdPref.flow.flatMapLatest { repo.flowById(it) }
+      val contentFlow = currentBookIdPref.flow.flatMapLatest { repo.flow(it) }
         .filterNotNull()
         .map { it.content }
         .distinctUntilChanged()
