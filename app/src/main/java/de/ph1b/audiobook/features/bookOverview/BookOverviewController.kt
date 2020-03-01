@@ -263,7 +263,7 @@ class BookOverviewController : SyntheticViewController(),
 
     val gridMenuItem = gridMenuItem()
     lifecycleScope.launch {
-      viewModel.state().latestAsFlow()
+      viewModel.state()
         .collect {
           render(it, gridMenuItem)
         }

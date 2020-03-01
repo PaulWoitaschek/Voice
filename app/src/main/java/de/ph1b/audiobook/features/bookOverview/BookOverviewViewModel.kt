@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
-import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
@@ -14,6 +14,8 @@ import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import java.util.LinkedHashMap
 import java.util.UUID
 import javax.inject.Inject
@@ -44,29 +46,29 @@ constructor(
 
   val coverChanged: Observable<UUID> = coverFromDiscCollector.coverChanged()
 
-  fun state(): Observable<BookOverviewState> {
-    val bookStream = repo.booksStream()
-    val currentBookIdStream = currentBookIdPref.stream
+  fun state(): Flow<BookOverviewState> {
+    val bookStream = repo.flow()
+    val currentBookIdStream = currentBookIdPref.flow
     val playingStream = playStateManager.playStateStream()
       .map { it == PlayState.Playing }
       .distinctUntilChanged()
-    val scannerActiveStream = bookAdder.scannerActive
-    return Observables
-      .combineLatest(
-        bookStream,
-        currentBookIdStream,
-        playingStream,
-        scannerActiveStream,
-        gridModePref.stream
-      ) { books, currentBookId, playing, scannerActive, gridMode ->
-        state(
-          books = books,
-          scannerActive = scannerActive,
-          currentBookId = currentBookId,
-          playing = playing,
-          gridMode = gridMode
-        )
-      }
+      .latestAsFlow()
+    val scannerActiveStream = bookAdder.scannerActive.latestAsFlow()
+    return combine(
+      bookStream,
+      currentBookIdStream,
+      playingStream,
+      scannerActiveStream,
+      gridModePref.flow
+    ) { books, currentBookId, playing, scannerActive, gridMode ->
+      state(
+        books = books,
+        scannerActive = scannerActive,
+        currentBookId = currentBookId,
+        playing = playing,
+        gridMode = gridMode
+      )
+    }
   }
 
   private fun state(
