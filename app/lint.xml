@@ -18,6 +18,10 @@
     <issue id="Overdraw" severity="ignore" />
     <issue id="UnusedQuantity" severity="ignore" />
 
+    <!-- necessary because a bug in lint that casues all
+    viewbinding references layouts to be recognized as ignored-->
+    <issue id="UnusedResources" severity="ignore" />
+
     <issue id="UnusedAttribute">
         <ignore regexp="android:foreground" />
     </issue>
