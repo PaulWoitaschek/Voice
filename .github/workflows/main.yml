@@ -9,5 +9,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: ./gradlew allUnitTests
+      
+    - name: Fastlane
+      uses: maierj/fastlane-action@v1.4.0
+      with:
+        lane: ci
+
+    - name: Upload artifacts
+    - uses: actions/upload-artifact@v1.0.0
+      with:
+        name: "Artifacts"
+        path: "artifacts"
