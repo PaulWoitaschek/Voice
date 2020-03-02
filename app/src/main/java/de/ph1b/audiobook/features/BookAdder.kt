@@ -15,7 +15,6 @@ import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
-import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.misc.hasPermission
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.storageMounted
@@ -27,6 +26,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
@@ -63,13 +64,12 @@ class BookAdder
   private val scanningDispatcher = newSingleThreadContext("bookAdder")
 
   init {
-    @Suppress("CheckResult")
-    Observables
-      .combineLatest(
-        collectionBookFolderPref.stream,
-        singleBookFolderPref.stream
-      ) { _, _ -> Unit }
-      .subscribe { scanForFiles(restartIfScanning = true) }
+    GlobalScope.launch {
+      merge(collectionBookFolderPref.flow, singleBookFolderPref.flow)
+        .collect {
+          scanForFiles(restartIfScanning = true)
+        }
+    }
   }
 
   private var scanningJob: Job? = null
