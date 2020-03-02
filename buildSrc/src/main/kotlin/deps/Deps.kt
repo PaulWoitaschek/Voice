@@ -9,7 +9,7 @@ object Versions {
 
   const val compileSdk = 29
   const val minSdk = 23
-  const val targetSdk = 28
+  const val targetSdk = 29
   const val versionCode = 3060334
   const val versionName = "5.0.0-rc8"
 }
