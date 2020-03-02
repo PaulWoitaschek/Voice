@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.data.repo
 
-import de.ph1b.audiobook.common.Optional
-import de.ph1b.audiobook.common.toOptional
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
@@ -34,12 +32,6 @@ class BookRepository
   }
 
   fun booksStream(): Observable<List<Book>> = flow().asObservable().observeOn(AndroidSchedulers.mainThread())
-
-  fun byId(id: UUID): Observable<Optional<Book>> {
-    return booksStream().map { books ->
-      books.find { it.id == id }.toOptional()
-    }
-  }
 
   suspend fun addBook(book: Book) {
     Timber.v("addBook=${book.name}")
