@@ -11,10 +11,12 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.util.UUID
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [28])
 class DataBaseMigratorTest {
 
   @Rule

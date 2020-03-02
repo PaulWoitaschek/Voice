@@ -5,9 +5,11 @@ import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.playback.session.BookUriConverter
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [28])
 class BookUriConverterTest {
 
   private val converter = BookUriConverter()

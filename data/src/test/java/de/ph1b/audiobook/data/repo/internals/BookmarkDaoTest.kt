@@ -12,8 +12,10 @@ import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.di.DataInjector
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [28])
 class BookmarkDaoTest {
 
   init {

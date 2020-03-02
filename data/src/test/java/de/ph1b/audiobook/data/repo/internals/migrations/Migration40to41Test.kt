@@ -17,11 +17,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 /**
  * Test the migration from 40 to 41
  */
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [28])
 class Migration40to41Test {
 
   private lateinit var db: SupportSQLiteDatabase
