@@ -6,10 +6,10 @@ import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
-import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -29,11 +29,11 @@ class BookCategoryViewModel
 
   private fun comparatorPref(): Pref<BookComparator> = comparatorPrefForCategory.getValue(category)
 
-  fun get(): Observable<BookCategoryState> {
-    val comparatorStream = comparatorPref().stream
-    return Observables.combineLatest(
-      gridModePref.stream,
-      repo.booksStream(),
+  fun get(): Flow<BookCategoryState> {
+    val comparatorStream = comparatorPref().flow
+    return combine(
+      gridModePref.flow,
+      repo.flow(),
       comparatorStream
     ) { gridMode, books, comparator ->
       val gridColumnCount = gridCount.gridColumnCount(gridMode)

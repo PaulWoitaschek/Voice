@@ -5,12 +5,9 @@ import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.internals.BookStorage
 import de.ph1b.audiobook.data.repo.internals.MemoryRepo
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.rx2.asObservable
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -30,8 +27,6 @@ class BookRepository
     return memoryRepo.activeBooks
       .map { books -> books.find { it.id == bookId } }
   }
-
-  fun booksStream(): Observable<List<Book>> = flow().asObservable().observeOn(AndroidSchedulers.mainThread())
 
   suspend fun addBook(book: Book) {
     Timber.v("addBook=${book.name}")

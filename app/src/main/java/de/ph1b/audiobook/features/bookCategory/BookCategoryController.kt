@@ -7,7 +7,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.GalleryPicker
@@ -32,7 +31,7 @@ import javax.inject.Inject
 private const val NI_CATEGORY = "ni#category"
 
 class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), EditBookBottomSheetController.Callback,
-    CoverFromInternetController.Callback, EditCoverDialogController.Callback {
+  CoverFromInternetController.Callback, EditCoverDialogController.Callback {
 
   @Inject
   lateinit var viewModel: BookCategoryViewModel
@@ -87,7 +86,7 @@ class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), 
     (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
     lifecycleScope.launch {
-      viewModel.get().latestAsFlow()
+      viewModel.get()
         .collect {
           layoutManager.spanCount = it.gridColumnCount
           adapter.submitList(it.models)
