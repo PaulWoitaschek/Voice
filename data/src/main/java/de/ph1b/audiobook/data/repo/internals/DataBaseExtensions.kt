@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.ArrayList
+import java.util.concurrent.Callable
 
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)
@@ -50,15 +51,8 @@ inline fun <T> SupportSQLiteDatabase.transaction(
   }
 }
 
-inline fun <T> RoomDatabase.transaction(action: () -> T): T {
-  beginTransaction()
-  return try {
-    action().also {
-      setTransactionSuccessful()
-    }
-  } finally {
-    endTransaction()
-  }
+inline fun <T> RoomDatabase.transaction(crossinline action: () -> T): T {
+  return runInTransaction(Callable { action() })
 }
 
 @SuppressLint("Recycle")
