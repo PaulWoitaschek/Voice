@@ -48,7 +48,7 @@ class MediaBrowserHelper
     val type = bookUriConverter.parse(parentId)
       ?: return null
     if (type is BookUriConverter.Parsed.AllBooks) {
-      val currentBook = repo.bookByIdBlocking(currentBookIdPref.value)
+      val currentBook = repo.bookById(currentBookIdPref.value)
       val current = currentBook?.toMediaDescription(
         titlePrefix = currentBookTitlePrefix()
       )

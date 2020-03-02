@@ -10,7 +10,6 @@ import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -88,8 +87,8 @@ class BookPlayViewModel
   }
 
   fun addBookmark() {
-    scope.launch(Dispatchers.Main) {
-      val book = repo.bookByIdBlocking(bookId) ?: return@launch
+    scope.launch {
+      val book = repo.bookById(bookId) ?: return@launch
       val title = book.content.currentChapter.name
       bookmarkRepo.addBookmarkAtBookPosition(book, title)
       _viewEffects.send(BookPlayViewEffect.BookmarkAdded)
@@ -97,10 +96,12 @@ class BookPlayViewModel
   }
 
   fun seekTo(ms: Long) {
-    val book = repo.bookByIdBlocking(bookId) ?: return
-    val currentChapter = book.content.currentChapter
-    val currentMark = currentChapter.currentMark(book.content.positionInChapter)
-    player.setPosition(currentMark.startMs + ms, currentChapter.file)
+    scope.launch {
+      val book = repo.bookById(bookId) ?: return@launch
+      val currentChapter = book.content.currentChapter
+      val currentMark = currentChapter.currentMark(book.content.positionInChapter)
+      player.setPosition(currentMark.startMs + ms, currentChapter.file)
+    }
   }
 
   fun toggleSleepTimer() {
@@ -112,8 +113,10 @@ class BookPlayViewModel
   }
 
   fun toggleSkipSilence() {
-    val skipSilence = repo.bookByIdBlocking(bookId)?.content?.skipSilence
-      ?: return
-    player.skipSilence(!skipSilence)
+    scope.launch {
+      val skipSilence = repo.bookById(bookId)?.content?.skipSilence
+        ?: return@launch
+      player.skipSilence(!skipSilence)
+    }
   }
 }

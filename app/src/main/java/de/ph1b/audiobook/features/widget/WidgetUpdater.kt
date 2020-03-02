@@ -53,7 +53,7 @@ class WidgetUpdater @Inject constructor(
 
   fun update() {
     GlobalScope.launch(Dispatchers.IO) {
-      val book = repo.bookByIdBlocking(currentBookIdPref.value)
+      val book = repo.bookById(currentBookIdPref.value)
       Timber.i("update with book ${book?.name}")
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
       val ids = appWidgetManager.getAppWidgetIds(componentName)

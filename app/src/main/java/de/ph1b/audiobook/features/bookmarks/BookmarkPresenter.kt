@@ -9,8 +9,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -19,7 +18,8 @@ import javax.inject.Named
 /**
  * Presenter for the bookmark MVP
  */
-class BookmarkPresenter @Inject constructor(
+class BookmarkPresenter
+@Inject constructor(
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>,
   private val repo: BookRepository,
@@ -28,6 +28,8 @@ class BookmarkPresenter @Inject constructor(
   private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
+  private val scope = MainScope()
+
   var bookId: UUID = UUID.randomUUID()
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
@@ -35,7 +37,7 @@ class BookmarkPresenter @Inject constructor(
   override fun onAttach(view: BookmarkView) {
     val book = repo.bookByIdBlocking(bookId) ?: return
 
-    GlobalScope.launch(Dispatchers.Main) {
+    scope.launch {
       bookmarks.clear()
       bookmarks.addAll(bookmarkRepo.bookmarks(book))
       chapters.clear()
@@ -46,7 +48,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun deleteBookmark(id: Long) {
-    GlobalScope.launch(Dispatchers.Main) {
+    scope.launch {
       bookmarkRepo.deleteBookmark(id)
       bookmarks.removeAll { it.id == id }
 
@@ -71,7 +73,7 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun editBookmark(id: Long, newTitle: String) {
-    GlobalScope.launch(Dispatchers.Main) {
+    scope.launch {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(
           title = newTitle,
@@ -87,8 +89,8 @@ class BookmarkPresenter @Inject constructor(
   }
 
   fun addBookmark(name: String) {
-    GlobalScope.launch(Dispatchers.Main) {
-      val book = repo.bookByIdBlocking(bookId) ?: return@launch
+    scope.launch {
+      val book = repo.bookById(bookId) ?: return@launch
       val title = if (name.isEmpty()) book.content.currentChapter.name else name
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
       bookmarks.add(addedBookmark)
