@@ -9,16 +9,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.putUUID
-import kotlinx.android.synthetic.main.book_more_bottom_sheet.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,29 +42,29 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
       return dialog
     }
 
-    val container = DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.book_more_bottom_sheet))
-    dialog.setContentView(container.containerView)
+    val binding = BookMoreBottomSheetBinding.inflate(activity!!.layoutInflater)
+    dialog.setContentView(binding.root)
 
     BottomSheetBehavior.from(dialog.findViewById(R.id.design_bottom_sheet)!!).apply {
-      container.containerView.doOnLayout {
+      binding.root.doOnLayout {
         peekHeight = it.height
       }
     }
 
-    container.title.setOnClickListener {
+    binding.title.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
       EditBookTitleDialogController(book).showDialog(router)
       dismissDialog()
     }
-    container.internetCover.setOnClickListener {
+    binding.internetCover.setOnClickListener {
       callback().onInternetCoverRequested(book)
       dismissDialog()
     }
-    container.fileCover.setOnClickListener {
+    binding.fileCover.setOnClickListener {
       callback().onFileCoverRequested(book)
       dismissDialog()
     }
-    container.bookmark.setOnClickListener {
+    binding.bookmark.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
       val controller = BookmarkController(book.id)
       router.pushController(controller.asTransaction())

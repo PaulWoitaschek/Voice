@@ -17,14 +17,13 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.DialogCoverEditBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.SimpleTarget
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.dialog_cover_edit.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,43 +47,36 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
     val picasso = Picasso.get()
 
-    val container = DialogLayoutContainer(
-      activity!!.layoutInflater.inflate(
-        R.layout.dialog_cover_edit,
-        null,
-        false
-      )
-    )
-
+    val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
     // init values
     val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
     val book = repo.bookByIdBlocking(arguments.bookId)!!
 
-    container.coverReplacement.isVisible = true
-    container.cropOverlay.selectionOn = false
+    binding.coverReplacement.isVisible = true
+    binding.cropOverlay.selectionOn = false
     picasso.load(arguments.coverUri)
       .into(
-        container.coverImage, object : PicassoCallback {
+        binding.coverImage, object : PicassoCallback {
           override fun onError(e: Exception?) {
             dismissDialog()
           }
 
           override fun onSuccess() {
-            container.cropOverlay.selectionOn = true
-            container.coverReplacement.isVisible = false
+            binding.cropOverlay.selectionOn = true
+            binding.coverReplacement.isVisible = false
           }
         }
       )
 
     val dialog = MaterialDialog(activity!!).apply {
-      customView(view = container.containerView)
+      customView(view = binding.root)
       title(R.string.cover)
       positiveButton(R.string.dialog_confirm)
     }
 
     // use a click listener so the dialog stays open till the image was saved
     dialog.getActionButton(WhichButton.POSITIVE).setOnClickListener {
-      val r = container.cropOverlay.selectedRect
+      val r = binding.cropOverlay.selectedRect
       if (!r.isEmpty) {
         val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
@@ -103,9 +95,9 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
           }
         }
         // picasso only holds a weak reference so we have to protect against gc
-        container.coverImage.tag = target
+        binding.coverImage.tag = target
         picasso.load(arguments.coverUri)
-          .transform(CropTransformation(container.cropOverlay, container.coverImage))
+          .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
           .into(target)
       } else dismissDialog()
     }

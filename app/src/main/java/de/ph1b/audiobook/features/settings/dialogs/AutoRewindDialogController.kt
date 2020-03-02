@@ -6,14 +6,12 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.android.synthetic.main.dialog_amount_chooser.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,27 +24,26 @@ class AutoRewindDialogController : DialogController() {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val container =
-      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     val oldRewindAmount = autoRewindAmountPref.value
-    container.seekBar.max = (MAX - MIN) * FACTOR
-    container.seekBar.progress = (oldRewindAmount - MIN) * FACTOR
-    container.seekBar.onProgressChanged(initialNotification = true) {
+    binding.seekBar.max = (MAX - MIN) * FACTOR
+    binding.seekBar.progress = (oldRewindAmount - MIN) * FACTOR
+    binding.seekBar.onProgressChanged(initialNotification = true) {
       val progress = it / FACTOR
       val autoRewindSummary = activity!!.resources.getQuantityString(
         R.plurals.pref_auto_rewind_summary,
         progress,
         progress
       )
-      container.textView.text = autoRewindSummary
+      binding.textView.text = autoRewindSummary
     }
 
     return MaterialDialog(activity!!).apply {
       title(R.string.pref_auto_rewind_title)
-      customView(view = container.containerView, scrollable = true)
+      customView(view = binding.root, scrollable = true)
       positiveButton(R.string.dialog_confirm) {
-        val newRewindAmount = container.seekBar.progress / FACTOR + MIN
+        val newRewindAmount = binding.seekBar.progress / FACTOR + MIN
         autoRewindAmountPref.value = newRewindAmount
       }
       negativeButton(R.string.dialog_cancel)

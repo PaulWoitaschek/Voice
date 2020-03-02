@@ -7,16 +7,15 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.LoudnessBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.player.LoudnessGain
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.loudness.*
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -38,30 +37,27 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val container = DialogLayoutContainer(
-      activity!!.layoutInflater.inflate(R.layout.loudness, null, false)
-    )
-
+    val binding = LoudnessBinding.inflate(activity!!.layoutInflater)
     val bookId = args.getUUID(NI_BOOK_ID)
     val book = repo.bookByIdBlocking(bookId)
       ?: return emptyDialog()
 
-    container.seekBar.max = LoudnessGain.MAX_MB
-    container.seekBar.progress = book.content.loudnessGain
-    container.seekBar.progressChangedStream()
+    binding.seekBar.max = LoudnessGain.MAX_MB
+    binding.seekBar.progress = book.content.loudnessGain
+    binding.seekBar.progressChangedStream()
       .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
       .subscribe {
         player.setLoudnessGain(it)
-        container.currentValue.text = format(it)
+        binding.currentValue.text = format(it)
       }
       .disposeOnDestroyDialog()
 
-    container.currentValue.text = format(book.content.loudnessGain)
-    container.maxValue.text = format(container.seekBar.max)
+    binding.currentValue.text = format(book.content.loudnessGain)
+    binding.maxValue.text = format(binding.seekBar.max)
 
     return MaterialDialog(activity!!).apply {
       title(R.string.volume_boost)
-      customView(view = container.containerView, scrollable = true)
+      customView(view = binding.root, scrollable = true)
     }
   }
 

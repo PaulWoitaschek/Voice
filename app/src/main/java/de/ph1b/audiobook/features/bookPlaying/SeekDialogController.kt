@@ -6,14 +6,12 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.android.synthetic.main.dialog_amount_chooser.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,24 +24,23 @@ class SeekDialogController : DialogController() {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val container =
-      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     // init
     val oldSeekTime = seekTimePref.value
-    container.seekBar.max = (MAX - MIN) * FACTOR
-    container.seekBar.onProgressChanged(initialNotification = true) {
+    binding.seekBar.max = (MAX - MIN) * FACTOR
+    binding.seekBar.onProgressChanged(initialNotification = true) {
       val value = it / FACTOR + MIN
-      container.textView.text =
+      binding.textView.text =
         activity!!.resources.getQuantityString(R.plurals.seconds, value, value)
     }
-    container.seekBar.progress = (oldSeekTime - MIN) * FACTOR
+    binding.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
     return MaterialDialog(activity!!).apply {
       title(R.string.pref_seek_time)
-      customView(view = container.containerView, scrollable = true)
+      customView(view = binding.root, scrollable = true)
       positiveButton(R.string.dialog_confirm) {
-        val newSeekTime = container.seekBar.progress / FACTOR + MIN
+        val newSeekTime = binding.seekBar.progress / FACTOR + MIN
         seekTimePref.value = newSeekTime
       }
       negativeButton(R.string.dialog_cancel)

@@ -12,18 +12,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.databinding.DialogSleepBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
 import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.android.synthetic.main.dialog_sleep.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -58,8 +56,8 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   @field:[Inject Named(PrefKeys.SLEEP_TIME)]
   lateinit var sleepTimePref: Pref<Int>
 
-  private var _layoutContainer: DialogLayoutContainer? = null
-  private val layoutContainer: DialogLayoutContainer get() = _layoutContainer!!
+  private var _binding: DialogSleepBinding? = null
+  private val binding: DialogSleepBinding get() = _binding!!
   private var selectedMinutes = 0
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -76,41 +74,38 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   }
 
   private fun updateTimeState() {
-    layoutContainer.time.text = context.getString(R.string.min, selectedMinutes.toString())
+    binding.time.text = context.getString(R.string.min, selectedMinutes.toString())
 
-    if (selectedMinutes > 0) layoutContainer.fab.show()
-    else layoutContainer.fab.hide()
+    if (selectedMinutes > 0) binding.fab.show()
+    else binding.fab.hide()
   }
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    _layoutContainer = DialogLayoutContainer(
-        activity!!.layoutInflater.inflate(R.layout.dialog_sleep)
-    )
-
+    _binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
     // restore or get fresh
     selectedMinutes = savedViewState?.getInt(SI_MINUTES) ?: sleepTimePref.value
     updateTimeState()
 
     // find views and prepare clicks
-    layoutContainer.one.setOnClickListener { appendNumber(1) }
-    layoutContainer.two.setOnClickListener { appendNumber(2) }
-    layoutContainer.three.setOnClickListener { appendNumber(3) }
-    layoutContainer.four.setOnClickListener { appendNumber(4) }
-    layoutContainer.five.setOnClickListener { appendNumber(5) }
-    layoutContainer.six.setOnClickListener { appendNumber(6) }
-    layoutContainer.seven.setOnClickListener { appendNumber(7) }
-    layoutContainer.eight.setOnClickListener { appendNumber(8) }
-    layoutContainer.nine.setOnClickListener { appendNumber(9) }
-    layoutContainer.zero.setOnClickListener { appendNumber(0) }
+    binding.one.setOnClickListener { appendNumber(1) }
+    binding.two.setOnClickListener { appendNumber(2) }
+    binding.three.setOnClickListener { appendNumber(3) }
+    binding.four.setOnClickListener { appendNumber(4) }
+    binding.five.setOnClickListener { appendNumber(5) }
+    binding.six.setOnClickListener { appendNumber(6) }
+    binding.seven.setOnClickListener { appendNumber(7) }
+    binding.eight.setOnClickListener { appendNumber(8) }
+    binding.nine.setOnClickListener { appendNumber(9) }
+    binding.zero.setOnClickListener { appendNumber(0) }
     // upon delete remove the last number
-    layoutContainer.delete.setOnClickListener {
+    binding.delete.setOnClickListener {
       selectedMinutes /= 10
       updateTimeState()
     }
     // upon long click remove all numbers
-    layoutContainer.delete.setOnLongClickListener {
+    binding.delete.setOnLongClickListener {
       selectedMinutes = 0
       updateTimeState()
       true
@@ -119,51 +114,51 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     val bookId = args.getUUID(NI_BOOK_ID)
     val book = repo.bookByIdBlocking(bookId)!!
 
-    layoutContainer.fab.setOnClickListener {
+    binding.fab.setOnClickListener {
       // should be hidden if
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
 
-      bookmarkOnSleepTimerPref.value = layoutContainer.bookmarkSwitch.isChecked
+      bookmarkOnSleepTimerPref.value = binding.bookmarkSwitch.isChecked
       if (bookmarkOnSleepTimerPref.value) {
         val date = DateUtils.formatDateTime(
-            context,
-            System.currentTimeMillis(),
-            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
+          context,
+          System.currentTimeMillis(),
+          DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
         )
         GlobalScope.launch(Dispatchers.IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
-              book,
+            book,
             date + ": " + context.getString(R.string.action_sleep)
           )
         }
       }
 
-      shakeToResetPref.value = layoutContainer.shakeToResetSwitch.isChecked
+      shakeToResetPref.value = binding.shakeToResetSwitch.isChecked
 
       sleepTimer.setActive(true)
       dismissDialog()
     }
 
     // setup bookmark toggle
-    layoutContainer.bookmarkSwitch.isChecked = bookmarkOnSleepTimerPref.value
+    binding.bookmarkSwitch.isChecked = bookmarkOnSleepTimerPref.value
 
     // setup shake to reset setting
-    layoutContainer.shakeToResetSwitch.isChecked = shakeToResetPref.value
+    binding.shakeToResetSwitch.isChecked = shakeToResetPref.value
     val shakeSupported = shakeDetector.shakeSupported()
     if (!shakeSupported) {
-      layoutContainer.shakeToResetSwitch.isVisible = false
+      binding.shakeToResetSwitch.isVisible = false
     }
 
     return BottomSheetDialog(context).apply {
-      setContentView(layoutContainer.containerView)
+      setContentView(binding.root)
       // hide the background so the fab looks overlapping
       setOnShowListener {
-        val parentView = layoutContainer.containerView.parent as View
+        val parentView = binding.root.parent as View
         parentView.background = null
         val coordinator = findViewById<FrameLayout>(R.id.design_bottom_sheet)!!
         val behavior = BottomSheetBehavior.from(coordinator)
-        behavior.peekHeight = layoutContainer.time.bottom
+        behavior.peekHeight = binding.time.bottom
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
       }
     }
@@ -171,6 +166,6 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
   override fun onDestroyView(view: View) {
     super.onDestroyView(view)
-    _layoutContainer = null
+    _binding = null
   }
 }

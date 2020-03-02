@@ -7,14 +7,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.DialogTimePickerBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.android.synthetic.main.dialog_time_picker.*
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -32,8 +30,7 @@ class JumpToPositionDialogController : DialogController() {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val container =
-      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_time_picker))
+    val binding = DialogTimePickerBinding.inflate(activity!!.layoutInflater)
 
     // init
     val book = repo.bookByIdBlocking(currentBookIdPref.value)!!
@@ -43,51 +40,51 @@ class JumpToPositionDialogController : DialogController() {
     val durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration).toInt()
     if (biggestHour == 0) {
       // sets visibility of hour related things to gone if max.hour is zero
-      container.colon.isVisible = false
-      container.numberHour.isVisible = false
+      binding.colon.isVisible = false
+      binding.numberHour.isVisible = false
     }
 
     // set maximum values
-    container.numberHour.maxValue = biggestHour
+    binding.numberHour.maxValue = biggestHour
     if (biggestHour == 0) {
-      container.numberMinute.maxValue = TimeUnit.MILLISECONDS.toMinutes(duration).toInt()
+      binding.numberMinute.maxValue = TimeUnit.MILLISECONDS.toMinutes(duration).toInt()
     } else {
-      container.numberMinute.maxValue = 59
+      binding.numberMinute.maxValue = 59
     }
 
     // set default values
     val defaultHour = TimeUnit.MILLISECONDS.toHours(position).toInt()
     val defaultMinute = TimeUnit.MILLISECONDS.toMinutes(position).toInt() % 60
-    container.numberHour.value = defaultHour
-    container.numberMinute.value = defaultMinute
+    binding.numberHour.value = defaultHour
+    binding.numberMinute.value = defaultMinute
 
-    container.numberHour.setOnValueChangedListener { _, _, newVal ->
+    binding.numberHour.setOnValueChangedListener { _, _, newVal ->
       if (newVal == biggestHour) {
-        container.numberMinute.maxValue = (durationInMinutes - newVal * 60) % 60
+        binding.numberMinute.maxValue = (durationInMinutes - newVal * 60) % 60
       } else {
-        container.numberMinute.maxValue = 59
+        binding.numberMinute.maxValue = 59
       }
     }
 
-    container.numberMinute.setOnValueChangedListener { _, oldVal, newVal ->
-      var hValue = container.numberHour.value
+    binding.numberMinute.setOnValueChangedListener { _, oldVal, newVal ->
+      var hValue = binding.numberHour.value
 
       // scrolling forward
       if (oldVal == 59 && newVal == 0) {
-        container.numberHour.value = ++hValue
+        binding.numberHour.value = ++hValue
       }
       // scrolling backward
       if (oldVal == 0 && newVal == 59) {
-        container.numberHour.value = --hValue
+        binding.numberHour.value = --hValue
       }
     }
 
     return MaterialDialog(activity!!).apply {
-      customView(view = container.containerView, scrollable = true)
+      customView(view = binding.root, scrollable = true)
       title(R.string.action_time_change)
       positiveButton(R.string.dialog_confirm) {
-        val h = container.numberHour.value
-        val m = container.numberMinute.value
+        val h = binding.numberHour.value
+        val m = binding.numberMinute.value
         val newPosition = (m + 60 * h) * 60 * 1000L
         playerController.setPosition(newPosition, book.content.currentChapter.file)
       }

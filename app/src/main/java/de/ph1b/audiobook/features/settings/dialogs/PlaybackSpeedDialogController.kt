@@ -8,16 +8,14 @@ import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
-import de.ph1b.audiobook.misc.DialogLayoutContainer
-import de.ph1b.audiobook.misc.inflate
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.dialog_amount_chooser.*
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -41,10 +39,9 @@ class PlaybackSpeedDialogController : DialogController() {
     appComponent.inject(this)
 
     // init views
-    val container =
-      DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_amount_chooser))
-    val seekBar = container.seekBar
-    val textView = container.textView
+    val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
+    val seekBar = binding.seekBar
+    val textView = binding.textView
 
     // setting current speed
     val book = repo.bookByIdBlocking(currentBookIdPref.value)
@@ -69,7 +66,7 @@ class PlaybackSpeedDialogController : DialogController() {
 
     return MaterialDialog(activity!!).apply {
       title(R.string.playback_speed)
-      customView(view = container.containerView, scrollable = true)
+      customView(view = binding.root, scrollable = true)
     }
   }
 
