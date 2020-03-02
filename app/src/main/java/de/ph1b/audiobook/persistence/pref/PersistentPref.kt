@@ -1,18 +1,39 @@
 package de.ph1b.audiobook.persistence.pref
 
-import com.f2prateek.rx.preferences2.Preference
-import de.ph1b.audiobook.common.latestAsFlow
+import android.content.SharedPreferences
 import de.ph1b.audiobook.prefs.Pref
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlin.reflect.KProperty
 
-class PersistentPref<T : Any>(private val pref: Preference<T>) : Pref<T>() {
+class PersistentPref<T>(
+  private val prefs: SharedPreferences,
+  private val adapter: PrefAdapter<T>,
+  val key: String,
+  private val default: T
+) : Pref<T>() {
 
-  override val flow: Flow<T> get() = pref.asObservable().latestAsFlow()
+  private val channel = ConflatedBroadcastChannel<T>()
 
-  override fun getValue(thisRef: Any, property: KProperty<*>): T = pref.get()
+  init {
+    notifyChanged()
+  }
+
+  fun notifyChanged() {
+    val value = if (prefs.contains(key)) {
+      adapter.get(key, prefs)
+    } else {
+      default
+    }
+    channel.offer(value)
+  }
+
+  override val flow: Flow<T> get() = channel.asFlow()
+
+  override fun getValue(thisRef: Any, property: KProperty<*>): T = channel.value
 
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-    pref.set(value)
+    adapter.set(key, prefs, value)
   }
 }

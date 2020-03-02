@@ -8,7 +8,6 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
-import com.f2prateek.rx.preferences2.Preference
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -25,11 +24,6 @@ fun Context.colorFromAttr(@AttrRes id: Int): Int {
 }
 
 fun View.layoutInflater() = context.layoutInflater()
-
-/** enforce a non-null property */
-var <T> Preference<T>.value: T
-  get() = get()!!
-  set(value) = set(value!!)
 
 fun Context.dpToPx(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 

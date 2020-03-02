@@ -76,7 +76,6 @@ object Deps {
   const val moshi = "com.squareup.moshi:moshi:1.9.2"
   const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
   const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.18"
-  const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {

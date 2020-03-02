@@ -144,7 +144,6 @@ dependencies {
 
   implementation(Deps.rxJava)
   implementation(Deps.rxAndroid)
-  implementation(Deps.rxPreferences)
 
   implementation(Deps.Kotlin.std)
   implementation(Deps.Kotlin.coroutines)
