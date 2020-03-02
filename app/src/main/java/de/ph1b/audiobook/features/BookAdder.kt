@@ -21,16 +21,16 @@ import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
@@ -58,8 +58,8 @@ class BookAdder
   private val collectionBookFolderPref: Pref<Set<String>>
 ) {
 
-  private val _scannerActive = BehaviorSubject.createDefault(false)
-  val scannerActive = _scannerActive.hide()!!
+  private val _scannerActive = ConflatedBroadcastChannel(false)
+  val scannerActive: Flow<Boolean> = _scannerActive.asFlow()
 
   private val scanningDispatcher = newSingleThreadContext("bookAdder")
 
@@ -82,9 +82,7 @@ class BookAdder
     GlobalScope.launch {
       scanningJob?.cancelAndJoin()
       scanningJob = launch(scanningDispatcher) {
-        withContext(Dispatchers.Main) {
-          _scannerActive.onNext(true)
-        }
+        _scannerActive.send(true)
         deleteOldBooks()
         measureTimeMillis {
           checkForBooks()
@@ -93,11 +91,7 @@ class BookAdder
         }
         coverCollector.findCovers(repo.activeBooks())
       }.also {
-        it.invokeOnCompletion {
-          launch(Dispatchers.Main) {
-            _scannerActive.onNext(false)
-          }
-        }
+        _scannerActive.send(false)
       }
     }
   }

@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
@@ -15,6 +14,8 @@ import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.util.LinkedHashMap
 import java.util.UUID
 import javax.inject.Inject
@@ -48,11 +49,10 @@ constructor(
   fun state(): Flow<BookOverviewState> {
     val bookStream = repo.flow()
     val currentBookIdStream = currentBookIdPref.flow
-    val playingStream = playStateManager.playStateStream()
+    val playingStream = playStateManager.playStateFlow()
       .map { it == PlayState.Playing }
       .distinctUntilChanged()
-      .latestAsFlow()
-    val scannerActiveStream = bookAdder.scannerActive.latestAsFlow()
+    val scannerActiveStream = bookAdder.scannerActive
     return combine(
       bookStream,
       currentBookIdStream,
