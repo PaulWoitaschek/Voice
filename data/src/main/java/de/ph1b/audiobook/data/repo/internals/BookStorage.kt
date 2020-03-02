@@ -3,17 +3,18 @@ package de.ph1b.audiobook.data.repo.internals
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
+import java.util.concurrent.Executors
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Provides access to the persistent storage for bookmarks.
  */
+@Singleton
 class BookStorage
 @Inject constructor(
   private val chapterDao: ChapterDao,
@@ -21,6 +22,8 @@ class BookStorage
   private val bookSettingsDao: BookSettingsDao,
   private val appDb: AppDb
 ) {
+
+  private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
   suspend fun books(): List<Book> {
     return synchronizedWithIoDispatcher {
@@ -105,12 +108,8 @@ class BookStorage
   }
 
   private suspend inline fun <T> synchronizedWithIoDispatcher(crossinline action: () -> T): T {
-    return DB_MUTEX.withLock {
-      withContext(Dispatchers.IO) {
-        action()
-      }
+    return withContext(dispatcher) {
+      action()
     }
   }
 }
-
-private val DB_MUTEX = Mutex()
