@@ -15,7 +15,6 @@ jobs:
       with:
         lane: ci
 
-    - name: Upload artifacts
     - uses: actions/upload-artifact@v1.0.0
       with:
         name: "Artifacts"
