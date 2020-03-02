@@ -56,9 +56,6 @@ class BookRepository
   suspend fun activeBooks(): List<Book> = memoryRepo.active()
 
   suspend fun updateBook(book: Book) {
-    if (bookByIdBlocking(book.id) == book) {
-      return
-    }
     if (memoryRepo.replace(book)) {
       storage.addOrUpdate(book)
     } else Timber.e("update failed as there was no book")

@@ -44,9 +44,13 @@ class MemoryRepo
     if (index == -1) {
       false
     } else {
-      active[index] = book
-      updateActiveBookSubject()
-      true
+      if (active[index] == book) {
+        false
+      } else {
+        active[index] = book
+        updateActiveBookSubject()
+        true
+      }
     }
   }
 
