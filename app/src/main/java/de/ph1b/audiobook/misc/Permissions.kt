@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onStart
 
 private const val REQUEST_CODE = 1512
 
@@ -15,14 +18,14 @@ private const val REQUEST_CODE = 1512
  */
 class Permissions(private val activity: Activity) {
 
-  private val permissionSubject = PublishSubject.create<Array<String>>()
+  private val permissionChannel = BroadcastChannel<Array<String>>(1)
 
-  fun request(permission: String): Single<PermissionResult> {
+  suspend fun request(permission: String): PermissionResult {
     return if (activity.hasPermission(permission)) {
-      Single.just(PermissionResult.GRANTED)
+      PermissionResult.GRANTED
     } else {
-      permissionSubject
-        .doOnSubscribe {
+      permissionChannel.asFlow()
+        .onStart {
           ActivityCompat.requestPermissions(
             activity,
             arrayOf(permission),
@@ -30,21 +33,20 @@ class Permissions(private val activity: Activity) {
           )
         }
         .filter { it.contains(permission) }
-        .firstOrError()
-        .map {
-          when {
-            activity.hasPermission(permission) -> PermissionResult.GRANTED
-            showRationale(permission) -> PermissionResult.DENIED_ASK_AGAIN
-            else -> PermissionResult.DENIED_FOREVER
-          }
-        }
+        .first()
+
+      when {
+        activity.hasPermission(permission) -> PermissionResult.GRANTED
+        showRationale(permission) -> PermissionResult.DENIED_ASK_AGAIN
+        else -> PermissionResult.DENIED_FOREVER
+      }
     }
   }
 
   @Suppress("UNUSED_PARAMETER")
   fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     if (requestCode == REQUEST_CODE) {
-      permissionSubject.onNext(permissions)
+      permissionChannel.offer(permissions)
     }
   }
 

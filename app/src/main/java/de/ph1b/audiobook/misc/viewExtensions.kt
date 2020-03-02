@@ -27,15 +27,11 @@ fun SeekBar.onProgressChanged(
   if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
-fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> =
-    Observable.create {
-      onProgressChanged(initialNotification) { position -> it.onNext(position) }
-      it.setCancellable { setOnSeekBarChangeListener(null) }
+fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> {
+  return Observable.create {
+    onProgressChanged(initialNotification) { position -> it.onNext(position) }
+    it.setCancellable { setOnSeekBarChangeListener(null) }
     }
-
-fun <T : View> T.clicks(): Observable<T> = Observable.create { emitter ->
-  setOnClickListener { emitter.onNext(this) }
-  emitter.setCancellable { setOnClickListener(null) }
 }
 
 inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (Int) -> Unit) {

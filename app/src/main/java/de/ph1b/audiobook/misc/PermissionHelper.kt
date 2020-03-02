@@ -8,32 +8,26 @@ import android.provider.Settings
 import android.view.View
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.BetterSnack
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 private const val PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-/**
- * Simple helper for obtaining android api 23 permissions
- */
 class PermissionHelper(private val activity: Activity, private val permissions: Permissions) {
-
-  private val permissionDialogConfirmed = PublishSubject.create<Unit>()
 
   fun storagePermission(gotPermission: () -> Unit = {}) {
     val root = activity.findViewById<View>(android.R.id.content)
     @Suppress("CheckResult")
-    permissions.request(PERMISSION)
-      .toObservable()
-      .repeatWhen { upstream -> upstream.switchMap { permissionDialogConfirmed } }
-      .subscribe {
-        when (it!!) {
-          Permissions.PermissionResult.GRANTED -> gotPermission()
-          Permissions.PermissionResult.DENIED_FOREVER -> handleDeniedForever(root)
-          Permissions.PermissionResult.DENIED_ASK_AGAIN -> showRationale(root) {
-            permissionDialogConfirmed.onNext(Unit)
-          }
+    GlobalScope.launch(Dispatchers.Main) {
+      when (permissions.request(PERMISSION)) {
+        Permissions.PermissionResult.GRANTED -> gotPermission()
+        Permissions.PermissionResult.DENIED_FOREVER -> handleDeniedForever(root)
+        Permissions.PermissionResult.DENIED_ASK_AGAIN -> showRationale(root) {
+          storagePermission(gotPermission)
         }
       }
+    }
   }
 
   private fun showRationale(root: View, listener: () -> Unit) {
