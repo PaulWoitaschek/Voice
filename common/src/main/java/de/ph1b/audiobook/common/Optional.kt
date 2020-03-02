@@ -16,12 +16,12 @@ sealed class Optional<T : Any> {
   }
 
   companion object {
-    fun <T : Any> of(value: T?): Optional<T> =
-      if (value == null) Absent()
-      else Present(value)
+    fun <T : Any> of(value: T?): Optional<T> {
+      return if (value == null) {
+        Absent()
+      } else {
+        Present(value)
+      }
+    }
   }
 }
-
-val <T : Any> Optional<T>.orNull: T? get() = if (this is Optional.Present) value else null
-
-fun <T : Any> T?.toOptional(): Optional<T> = Optional.of(this)
