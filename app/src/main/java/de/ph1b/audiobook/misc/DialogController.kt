@@ -14,8 +14,6 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
 import de.ph1b.audiobook.misc.conductor.ControllerLifecycleOwner
 import de.ph1b.audiobook.misc.conductor.LifecycleScopeProperty
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 private const val SI_DIALOG = "android:savedDialogState"
 
@@ -33,7 +31,6 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
 
   private var dialog: Dialog? = null
   private var dismissed = false
-  private val onCreateViewDisposable = CompositeDisposable()
 
   final override fun onCreateView(
     inflater: LayoutInflater,
@@ -76,7 +73,6 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
   @CallSuper
   override fun onDestroyView(view: View) {
     super.onDestroyView(view)
-    onCreateViewDisposable.clear()
     dialog!!.setOnDismissListener(null)
     dialog!!.dismiss()
     dialog = null
@@ -99,8 +95,4 @@ abstract class DialogController(args: Bundle = Bundle()) : RestoreViewOnCreateCo
   }
 
   protected abstract fun onCreateDialog(savedViewState: Bundle?): Dialog
-
-  protected fun Disposable.disposeOnDestroyDialog() {
-    onCreateViewDisposable.add(this)
-  }
 }

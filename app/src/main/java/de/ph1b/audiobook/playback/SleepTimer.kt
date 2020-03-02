@@ -13,8 +13,9 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.awaitFirst
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -107,9 +108,9 @@ class SleepTimer
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
       Timber.i("Not playing. Wait for Playback to continue.")
-      playStateManager.playStateStream()
+      playStateManager.playStateFlow()
         .filter { it == Playing }
-        .awaitFirst()
+        .first()
       Timber.i("Playback continued.")
     }
   }

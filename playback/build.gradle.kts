@@ -41,9 +41,7 @@ dependencies {
 
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Kotlin.coroutinesRx)
   implementation(Deps.AndroidX.mediaCompat)
-  implementation(Deps.rxJava)
   implementation(Deps.picasso)
   implementation(Deps.AndroidX.ktx)
 

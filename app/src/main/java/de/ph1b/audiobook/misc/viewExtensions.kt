@@ -5,7 +5,9 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 fun SeekBar.onProgressChanged(
   initialNotification: Boolean = false,
@@ -27,11 +29,15 @@ fun SeekBar.onProgressChanged(
   if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
-fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> {
-  return Observable.create {
-    onProgressChanged(initialNotification) { position -> it.onNext(position) }
-    it.setCancellable { setOnSeekBarChangeListener(null) }
+fun SeekBar.progressChangedStream(): Flow<Int> {
+  return callbackFlow {
+    onProgressChanged(initialNotification = true) { position ->
+      offer(position)
     }
+    awaitClose {
+      setOnSeekBarChangeListener(null)
+    }
+  }
 }
 
 inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (Int) -> Unit) {

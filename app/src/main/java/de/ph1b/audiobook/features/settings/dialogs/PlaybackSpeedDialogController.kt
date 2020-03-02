@@ -15,10 +15,13 @@ import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -34,35 +37,32 @@ class PlaybackSpeedDialogController : DialogController() {
   @Inject
   lateinit var playerController: PlayerController
 
-  @SuppressLint("InflateParams")
+  @SuppressLint("InflateParams", "SetTextI18n")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
     // init views
     val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
-    val seekBar = binding.seekBar
-    val textView = binding.textView
 
     // setting current speed
     val book = repo.bookByIdBlocking(currentBookIdPref.value)
-      ?: throw AssertionError("Cannot instantiate ${javaClass.name} without a current book")
+      ?: error("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
-    seekBar.max = ((MAX - MIN) * FACTOR).toInt()
-    seekBar.progress = ((speed - MIN) * FACTOR).toInt()
+    binding.seekBar.max = ((MAX - MIN) * FACTOR).toInt()
+    binding.seekBar.progress = ((speed - MIN) * FACTOR).toInt()
 
-    // observable of seek bar, mapped to speed
-    seekBar.progressChangedStream(initialNotification = true)
-      .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
-      .doOnNext {
-        // update speed text
-        val text = "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
-        textView.text = text
-      }
-      .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-      .subscribe {
-        playerController.setSpeed(it)
-      } // update speed after debounce
-      .disposeOnDestroyDialog()
+    lifecycleScope.launch {
+      binding.seekBar.progressChangedStream()
+        .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
+        .onEach {
+          // update speed text
+          binding.textView.text = "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
+        }
+        .debounce(50)
+        .collect {
+          playerController.setSpeed(it)
+        }
+    }
 
     return MaterialDialog(activity!!).apply {
       title(R.string.playback_speed)

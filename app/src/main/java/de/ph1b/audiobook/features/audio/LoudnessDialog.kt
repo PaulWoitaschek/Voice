@@ -15,10 +15,12 @@ import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.player.LoudnessGain
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -44,13 +46,14 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
     binding.seekBar.max = LoudnessGain.MAX_MB
     binding.seekBar.progress = book.content.loudnessGain
-    binding.seekBar.progressChangedStream()
-      .throttleLast(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-      .subscribe {
-        player.setLoudnessGain(it)
-        binding.currentValue.text = format(it)
-      }
-      .disposeOnDestroyDialog()
+    lifecycleScope.launch {
+      binding.seekBar.progressChangedStream()
+        .onEach { binding.currentValue.text = format(it) }
+        .debounce(100L)
+        .collect {
+          player.setLoudnessGain(it)
+        }
+    }
 
     binding.currentValue.text = format(book.content.loudnessGain)
     binding.maxValue.text = format(binding.seekBar.max)

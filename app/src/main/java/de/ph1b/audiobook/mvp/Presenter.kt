@@ -3,7 +3,6 @@ package de.ph1b.audiobook.mvp
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import de.ph1b.audiobook.misc.checkMainThread
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import timber.log.Timber
@@ -26,8 +25,6 @@ abstract class Presenter<V : Any> {
 
   private var internalView: V? = null
 
-  private val compositeDisposable = CompositeDisposable()
-
   @CallSuper
   open fun onRestore(savedState: Bundle) {
     checkMainThread()
@@ -49,7 +46,6 @@ abstract class Presenter<V : Any> {
     Timber.i("detach $internalView")
     checkMainThread()
     onAttachScope.cancel()
-    compositeDisposable.clear()
     internalView = null
   }
 

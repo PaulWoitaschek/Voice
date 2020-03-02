@@ -5,10 +5,8 @@ import de.ph1b.audiobook.playback.di.PerService
 import de.ph1b.audiobook.playback.session.ChangeNotifier
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import io.reactivex.BackpressureStrategy
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.reactive.asFlow
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -27,7 +25,7 @@ class NotifyOnAutoConnectionChange
 ) {
 
   suspend fun listen() {
-    autoConnection.stream.toFlowable(BackpressureStrategy.LATEST).asFlow()
+    autoConnection.stream
       .filter { it }
       .collect {
         // display the current book but don't play it

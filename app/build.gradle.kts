@@ -85,7 +85,6 @@ android {
   }
 
   packagingOptions {
-    exclude("META-INF/rxjava.properties")
     exclude("META-INF/proguard/moshi.pro")
     pickFirst("META-INF/atomicfu.kotlin_module")
   }
@@ -142,13 +141,9 @@ dependencies {
   testImplementation(Deps.truth)
   testImplementation(Deps.mockk)
 
-  implementation(Deps.rxJava)
-  implementation(Deps.rxAndroid)
-
   implementation(Deps.Kotlin.std)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
-  implementation(Deps.Kotlin.coroutinesRx)
 
   implementation(Deps.timber)
 

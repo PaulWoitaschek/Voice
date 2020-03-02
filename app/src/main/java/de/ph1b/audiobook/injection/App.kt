@@ -2,7 +2,6 @@ package de.ph1b.audiobook.injection
 
 import android.app.Application
 import android.os.Build
-import android.os.Looper
 import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,8 +19,6 @@ import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
@@ -52,10 +49,6 @@ class App : Application(), PlaybackComponentFactoryProvider {
       // additional initializations
       alreadyCreated = true
       Picasso.setSingletonInstance(Picasso.Builder(this).build())
-    }
-
-    RxAndroidPlugins.setInitMainThreadSchedulerHandler {
-      AndroidSchedulers.from(Looper.getMainLooper(), true)
     }
 
     CrashReporter.init(this)

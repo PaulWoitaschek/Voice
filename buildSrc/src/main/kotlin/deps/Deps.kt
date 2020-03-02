@@ -74,8 +74,6 @@ object Deps {
   }
 
   const val moshi = "com.squareup.moshi:moshi:1.9.2"
-  const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-  const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.18"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
@@ -86,7 +84,6 @@ object Deps {
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versionCoroutines"
-    const val coroutinesRx = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$versionCoroutines"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionKotlin"
   }
 

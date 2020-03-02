@@ -58,11 +58,8 @@ dependencies {
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
-  implementation(Deps.rxJava)
   implementation(Deps.moshi)
   implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Kotlin.coroutinesRx)
-  implementation(Deps.rxAndroid)
 
   api(Deps.AndroidX.Room.runtime)
   kapt(Deps.AndroidX.Room.compiler)
