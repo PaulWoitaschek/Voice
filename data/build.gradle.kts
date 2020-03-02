@@ -65,7 +65,6 @@ dependencies {
   implementation(Deps.rxAndroid)
 
   api(Deps.AndroidX.Room.runtime)
-  implementation(Deps.AndroidX.Room.rxJava)
   kapt(Deps.AndroidX.Room.compiler)
 
   implementation(Deps.Dagger.core)

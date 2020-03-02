@@ -31,7 +31,6 @@ object Deps {
       const val runtime = "androidx.room:room-runtime:$version"
       const val compiler = "androidx.room:room-compiler:$version"
       const val testing = "androidx.room:room-testing:$version"
-      const val rxJava = "androidx.room:room-rxjava2:$version"
     }
 
     object Test {
