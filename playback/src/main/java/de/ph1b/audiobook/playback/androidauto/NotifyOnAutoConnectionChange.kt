@@ -31,7 +31,7 @@ class NotifyOnAutoConnectionChange
       .filter { it }
       .collect {
         // display the current book but don't play it
-        val book = repo.bookById(currentBookIdPref.value)
+        val book = repo.bookByIdBlocking(currentBookIdPref.value)
         if (book != null) {
           changeNotifier.updateMetadata(book)
         }

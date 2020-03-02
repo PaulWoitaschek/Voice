@@ -33,7 +33,7 @@ class BookmarkPresenter @Inject constructor(
   private val chapters = ArrayList<Chapter>()
 
   override fun onAttach(view: BookmarkView) {
-    val book = repo.bookById(bookId) ?: return
+    val book = repo.bookByIdBlocking(bookId) ?: return
 
     GlobalScope.launch(Dispatchers.Main) {
       bookmarks.clear()
@@ -88,7 +88,7 @@ class BookmarkPresenter @Inject constructor(
 
   fun addBookmark(name: String) {
     GlobalScope.launch(Dispatchers.Main) {
-      val book = repo.bookById(bookId) ?: return@launch
+      val book = repo.bookByIdBlocking(bookId) ?: return@launch
       val title = if (name.isEmpty()) book.content.currentChapter.name else name
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
       bookmarks.add(addedBookmark)

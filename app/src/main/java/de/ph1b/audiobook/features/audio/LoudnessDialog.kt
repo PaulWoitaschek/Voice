@@ -43,7 +43,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
     )
 
     val bookId = args.getUUID(NI_BOOK_ID)
-    val book = repo.bookById(bookId)
+    val book = repo.bookByIdBlocking(bookId)
       ?: return emptyDialog()
 
     container.seekBar.max = LoudnessGain.MAX_MB

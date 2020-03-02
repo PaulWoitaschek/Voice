@@ -55,7 +55,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
   private var webViewIsLoading = ConflatedBroadcastChannel(false)
   private val book by lazy {
     val id = bundle.getUUID(NI_BOOK_ID)
-    repo.bookById(id)!!
+    repo.bookByIdBlocking(id)!!
   }
   private val originalUrl by lazy {
     val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())

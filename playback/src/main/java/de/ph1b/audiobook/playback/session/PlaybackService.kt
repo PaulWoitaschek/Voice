@@ -193,7 +193,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private suspend fun updateNotification(state: PlaybackStateCompat) {
     val updatedState = state.state
 
-    val book = repo.bookById(currentBookIdPref.value)
+    val book = repo.bookByIdBlocking(currentBookIdPref.value)
     val notification = if (book != null &&
       updatedState != PlaybackStateCompat.STATE_NONE
     ) {

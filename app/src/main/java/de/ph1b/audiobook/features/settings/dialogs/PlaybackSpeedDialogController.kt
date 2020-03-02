@@ -47,7 +47,7 @@ class PlaybackSpeedDialogController : DialogController() {
     val textView = container.textView
 
     // setting current speed
-    val book = repo.bookById(currentBookIdPref.value)
+    val book = repo.bookByIdBlocking(currentBookIdPref.value)
       ?: throw AssertionError("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
     seekBar.max = ((MAX - MIN) * FACTOR).toInt()

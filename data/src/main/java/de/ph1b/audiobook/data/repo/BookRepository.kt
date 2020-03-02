@@ -47,7 +47,9 @@ class BookRepository
     memoryRepo.add(book)
   }
 
-  fun bookById(id: UUID): Book? = runBlocking { memoryRepo.active().find { it.id == id } }
+  fun bookByIdBlocking(id: UUID): Book? = runBlocking { bookById(id) }
+
+  suspend fun bookById(id: UUID): Book? = memoryRepo.active().find { it.id == id }
 
   suspend fun updateBookContent(content: BookContent): Book? {
     val updated = updateBookInMemory(content.id) {
@@ -62,7 +64,7 @@ class BookRepository
   suspend fun activeBooks(): List<Book> = memoryRepo.active()
 
   suspend fun updateBook(book: Book) {
-    if (bookById(book.id) == book) {
+    if (bookByIdBlocking(book.id) == book) {
       return
     }
     if (memoryRepo.replace(book)) {

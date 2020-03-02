@@ -38,7 +38,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
     val dialog = BottomSheetDialog(activity!!)
 
     // if there is no book, skip here
-    val book = repo.bookById(bookId)
+    val book = repo.bookByIdBlocking(bookId)
     if (book == null) {
       Timber.e("book is null. Return early")
       return dialog

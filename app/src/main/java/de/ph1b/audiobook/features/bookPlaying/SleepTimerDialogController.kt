@@ -117,7 +117,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     }
 
     val bookId = args.getUUID(NI_BOOK_ID)
-    val book = repo.bookById(bookId)!!
+    val book = repo.bookByIdBlocking(bookId)!!
 
     layoutContainer.fab.setOnClickListener {
       // should be hidden if

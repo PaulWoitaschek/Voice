@@ -36,7 +36,7 @@ class JumpToPositionDialogController : DialogController() {
       DialogLayoutContainer(activity!!.layoutInflater.inflate(R.layout.dialog_time_picker))
 
     // init
-    val book = repo.bookById(currentBookIdPref.value)!!
+    val book = repo.bookByIdBlocking(currentBookIdPref.value)!!
     val duration = book.content.currentChapter.duration
     val position = book.content.positionInChapter
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration).toInt()

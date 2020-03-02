@@ -89,7 +89,7 @@ class BookPlayViewModel
 
   fun addBookmark() {
     scope.launch(Dispatchers.Main) {
-      val book = repo.bookById(bookId) ?: return@launch
+      val book = repo.bookByIdBlocking(bookId) ?: return@launch
       val title = book.content.currentChapter.name
       bookmarkRepo.addBookmarkAtBookPosition(book, title)
       _viewEffects.send(BookPlayViewEffect.BookmarkAdded)
@@ -97,7 +97,7 @@ class BookPlayViewModel
   }
 
   fun seekTo(ms: Long) {
-    val book = repo.bookById(bookId) ?: return
+    val book = repo.bookByIdBlocking(bookId) ?: return
     val currentChapter = book.content.currentChapter
     val currentMark = currentChapter.currentMark(book.content.positionInChapter)
     player.setPosition(currentMark.startMs + ms, currentChapter.file)
@@ -112,7 +112,7 @@ class BookPlayViewModel
   }
 
   fun toggleSkipSilence() {
-    val skipSilence = repo.bookById(bookId)?.content?.skipSilence
+    val skipSilence = repo.bookByIdBlocking(bookId)?.content?.skipSilence
       ?: return
     player.skipSilence(!skipSilence)
   }
