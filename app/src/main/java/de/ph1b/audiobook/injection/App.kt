@@ -22,7 +22,10 @@ import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -78,12 +81,14 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
     if (DARK_THEME_SETTABLE) {
       @Suppress("CheckResult")
-      useDarkTheme.stream
-        .distinctUntilChanged()
-        .subscribe { useDarkTheme ->
-          val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-          AppCompatDelegate.setDefaultNightMode(nightMode)
-        }
+      GlobalScope.launch(Dispatchers.Main) {
+        useDarkTheme.flow
+          .distinctUntilChanged()
+          .collect { useDarkTheme ->
+            val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+          }
+      }
     }
 
     bookAdder.scanForFiles()

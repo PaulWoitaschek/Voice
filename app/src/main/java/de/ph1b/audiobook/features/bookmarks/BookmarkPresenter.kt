@@ -9,7 +9,6 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -28,8 +27,6 @@ class BookmarkPresenter
   private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
-  private val scope = MainScope()
-
   var bookId: UUID = UUID.randomUUID()
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
@@ -37,13 +34,13 @@ class BookmarkPresenter
   override fun onAttach(view: BookmarkView) {
     val book = repo.bookByIdBlocking(bookId) ?: return
 
-    scope.launch {
+    onAttachScope.launch {
       bookmarks.clear()
       bookmarks.addAll(bookmarkRepo.bookmarks(book))
       chapters.clear()
       chapters.addAll(book.content.chapters)
 
-      if (attached) renderView()
+      renderView()
     }
   }
 
@@ -99,6 +96,8 @@ class BookmarkPresenter
   }
 
   private fun renderView() {
-    view.render(bookmarks, chapters)
+    if (attached) {
+      view.render(bookmarks, chapters)
+    }
   }
 }

@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import de.ph1b.audiobook.misc.checkMainThread
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import timber.log.Timber
 
 abstract class Presenter<V : Any> {
+
+  protected val scope = MainScope()
+  protected var onAttachScope = MainScope().also { it.cancel() }
 
   val view: V
     get() {
@@ -37,12 +41,14 @@ abstract class Presenter<V : Any> {
     }
 
     internalView = view
+    onAttachScope = MainScope()
     onAttach(view)
   }
 
   fun detach() {
     Timber.i("detach $internalView")
     checkMainThread()
+    onAttachScope.cancel()
     compositeDisposable.clear()
     internalView = null
   }
@@ -53,11 +59,4 @@ abstract class Presenter<V : Any> {
   }
 
   open fun onAttach(view: V) {}
-
-  fun Disposable.disposeOnDetach() {
-    checkMainThread()
-    if (internalView == null) {
-      dispose()
-    } else compositeDisposable.add(this)
-  }
 }

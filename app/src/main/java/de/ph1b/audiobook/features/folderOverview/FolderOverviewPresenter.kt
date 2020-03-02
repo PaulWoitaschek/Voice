@@ -1,11 +1,14 @@
 package de.ph1b.audiobook.features.folderOverview
 
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.Observables
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
-import java.util.HashSet
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,33 +27,29 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
   lateinit var collectionBookFolderPref: Pref<Set<String>>
 
   override fun onAttach(view: FolderOverviewController) {
-    val collectionFolderStream = collectionBookFolderPref.stream
+    val collectionFolderStream = collectionBookFolderPref.flow
       .map { set -> set.map { FolderModel(it, true) } }
-    val singleFolderStream = singleBookFolderPref.stream
+    val singleFolderStream = singleBookFolderPref.flow
       .map { set -> set.map { FolderModel(it, false) } }
 
-    Observables.combineLatest(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
-      .subscribe { view.newData(it) }
-      .disposeOnDetach()
+    onAttachScope.launch {
+      combine(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
+        .collect { view.newData(it) }
+    }
   }
 
   /** removes a selected folder **/
   fun removeFolder(folder: FolderModel) {
-    @Suppress("CheckResult")
-    collectionBookFolderPref.stream
-      .map { HashSet(it) }
-      .firstOrError()
-      .subscribe { it ->
-        val removed = it.remove(folder.folder)
-        if (removed) collectionBookFolderPref.value = it
-      }
-    @Suppress("CheckResult")
-    singleBookFolderPref.stream
-      .map { HashSet(it) }
-      .firstOrError()
-      .subscribe { it ->
-        val removed = it.remove(folder.folder)
-        if (removed) singleBookFolderPref.value = it
-      }
+    scope.launch {
+      val folders = collectionBookFolderPref.flow.first().toMutableSet()
+      val removed = folders.remove(folder.folder)
+      if (removed) collectionBookFolderPref.value = folders
+    }
+
+    scope.launch {
+      val folders = singleBookFolderPref.flow.first().toMutableSet()
+      val removed = folders.remove(folder.folder)
+      if (removed) singleBookFolderPref.value = folders
+    }
   }
 }
