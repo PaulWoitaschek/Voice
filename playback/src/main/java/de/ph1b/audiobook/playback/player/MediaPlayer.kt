@@ -184,8 +184,9 @@ constructor(
 
   fun updateMediaSessionPlaybackState() {
     val playbackStateCompat = when (player.playbackState) {
-      Player.STATE_BUFFERING -> PlaybackStateCompat.STATE_BUFFERING
-      Player.STATE_READY -> if (player.playWhenReady) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+      Player.STATE_READY, Player.STATE_BUFFERING -> {
+        if (player.playWhenReady) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+      }
       Player.STATE_ENDED -> PlaybackStateCompat.STATE_STOPPED
       Player.STATE_IDLE -> PlaybackStateCompat.STATE_NONE
       else -> PlaybackStateCompat.STATE_NONE
