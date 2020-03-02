@@ -13,7 +13,6 @@ import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
 import de.ph1b.audiobook.prefs.Pref
 import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import io.reactivex.Observable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.util.LinkedHashMap
@@ -44,7 +43,7 @@ constructor(
     gridModePref.value = if (useGrid) GridMode.GRID else GridMode.LIST
   }
 
-  val coverChanged: Observable<UUID> = coverFromDiscCollector.coverChanged()
+  val coverChanged: Flow<UUID> = coverFromDiscCollector.coverChanged()
 
   fun state(): Flow<BookOverviewState> {
     val bookStream = repo.flow()

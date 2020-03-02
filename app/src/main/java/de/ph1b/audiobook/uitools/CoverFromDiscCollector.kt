@@ -8,9 +8,9 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.coverFile
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -29,7 +29,7 @@ class CoverFromDiscCollector
 ) {
 
   private val picasso = Picasso.get()
-  private val coverChangedSubject = PublishSubject.create<UUID>()
+  private val coverChanged = BroadcastChannel<UUID>(1)
 
   /** Find and stores covers for each book */
   suspend fun findCovers(books: List<Book>) {
@@ -53,7 +53,7 @@ class CoverFromDiscCollector
       val coverFile = book.coverFile()
       imageHelper.saveCover(it, coverFile)
       picasso.invalidate(coverFile)
-      coverChangedSubject.onNext(book.id)
+      coverChanged.send(book.id)
     }
   }
 
@@ -66,7 +66,7 @@ class CoverFromDiscCollector
           val coverFile = book.coverFile()
           imageHelper.saveCover(it, coverFile)
           picasso.invalidate(coverFile)
-          coverChangedSubject.onNext(book.id)
+          coverChanged.send(book.id)
           return true
         }
       }
@@ -75,9 +75,7 @@ class CoverFromDiscCollector
   }
 
   /** emits the bookId of a cover that has changed */
-  fun coverChanged(): Observable<UUID> = coverChangedSubject
-    .hide()
-    .observeOn(AndroidSchedulers.mainThread())
+  fun coverChanged(): Flow<UUID> = coverChanged.asFlow()
 
   /** Find the embedded cover of a chapter */
   private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {

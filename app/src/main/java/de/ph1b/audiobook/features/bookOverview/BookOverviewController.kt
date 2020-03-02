@@ -11,7 +11,6 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.latestAsFlow
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.SyntheticViewController
@@ -74,7 +73,7 @@ class BookOverviewController : SyntheticViewController(),
     setupFab()
     setupRecyclerView()
     lifecycleScope.launch {
-      viewModel.coverChanged.latestAsFlow().collect {
+      viewModel.coverChanged.collect {
         bookCoverChanged(it)
       }
     }
