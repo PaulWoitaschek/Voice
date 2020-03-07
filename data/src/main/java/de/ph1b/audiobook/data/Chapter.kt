@@ -95,7 +95,7 @@ class ChapterMark(
 
 val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)
 
-fun Chapter.currentMark(positionInChapterMs: Long): ChapterMark {
+fun Chapter.markForPosition(positionInChapterMs: Long): ChapterMark {
   return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
     ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
     ?: chapterMarks.first()

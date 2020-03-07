@@ -9,8 +9,8 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.ph1b.audiobook.common.delay
 import de.ph1b.audiobook.common.sparseArray.forEachIndexed
-import de.ph1b.audiobook.common.sparseArray.keyAtOrNull
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.di.PerService
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -353,16 +353,11 @@ constructor(
 
               // now try to find the current chapter mark and make sure we don't auto-rewind
               // to a previous mark
-              val chapterMarks = it.currentChapter.marks
-              chapterMarks.forEachIndexed(reversed = true)
-              findStartOfMark@{ index, startOfMark, _ ->
-                if (startOfMark <= currentPosition) {
-                  val next = chapterMarks.keyAtOrNull(index + 1)
-                  if (next == null || next > currentPosition) {
-                    maybeSeekTo = maybeSeekTo.coerceAtLeast(startOfMark.toLong())
-                    return@findStartOfMark
-                  }
-                }
+              val currentChapter = it.currentChapter
+              val currentMark = currentChapter.markForPosition(currentPosition)
+              val markForSeeking = currentChapter.markForPosition(maybeSeekTo)
+              if (markForSeeking != currentMark) {
+                maybeSeekTo = maybeSeekTo.coerceAtLeast(currentMark.startMs)
               }
 
               // finally change position

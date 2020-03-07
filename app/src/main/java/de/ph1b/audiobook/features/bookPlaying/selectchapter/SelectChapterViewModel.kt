@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying.selectchapter
 
-import de.ph1b.audiobook.data.currentMark
+import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.MainScope
@@ -37,7 +37,7 @@ class SelectChapterViewModel
     val chapterMarks = book.content.chapters.flatMap {
       it.chapterMarks
     }
-    val currentMark = book.content.currentChapter.currentMark(book.content.positionInChapter)
+    val currentMark = book.content.currentChapter.markForPosition(book.content.positionInChapter)
     val selectedIndex = chapterMarks.indexOf(currentMark)
     return SelectChapterViewState(chapterMarks, selectedIndex.takeUnless { it == -1 })
   }

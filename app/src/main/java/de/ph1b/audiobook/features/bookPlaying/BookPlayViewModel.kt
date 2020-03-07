@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.currentMark
 import de.ph1b.audiobook.data.durationMs
+import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayerController
@@ -46,7 +46,7 @@ class BookPlayViewModel
     return combine(
       repo.flow(bookId).filterNotNull(), playStateManager.playStateFlow(), sleepTimer.leftSleepTimeFlow
     ) { book, playState, sleepTime ->
-      val currentMark = book.content.currentChapter.currentMark(book.content.positionInChapter)
+      val currentMark = book.content.currentChapter.markForPosition(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.hasMoreThanOneChapter()
       BookPlayViewState(
         sleepTime = sleepTime,
@@ -99,7 +99,7 @@ class BookPlayViewModel
     scope.launch {
       val book = repo.bookById(bookId) ?: return@launch
       val currentChapter = book.content.currentChapter
-      val currentMark = currentChapter.currentMark(book.content.positionInChapter)
+      val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
       player.setPosition(currentMark.startMs + ms, currentChapter.file)
     }
   }
