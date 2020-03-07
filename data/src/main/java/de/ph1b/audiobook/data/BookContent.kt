@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data
 
-import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import java.util.UUID
 
 data class BookContent(
@@ -14,21 +13,15 @@ data class BookContent(
   )
 
   init {
-      chapters.forEach {
-        require(it.bookId == id) { "Wrong chapter book id in $this" }
-      }
+    chapters.forEach {
+      require(it.bookId == id) { "Wrong chapter book id in $this" }
+    }
   }
 
   val currentChapter = chapters.first { it.file == settings.currentFile }
   val currentChapterIndex = chapters.indexOf(currentChapter)
   val previousChapter = chapters.getOrNull(currentChapterIndex - 1)
   val nextChapter = chapters.getOrNull(currentChapterIndex + 1)
-  val nextChapterMarkPosition: Long? by lazy {
-    currentChapter.marks.forEachIndexed { _, start, _ ->
-      if (start > settings.positionInChapter) return@lazy start.toLong()
-    }
-    null
-  }
   val duration = chapters.sumBy { it.duration }
   val position: Long = chapters.take(currentChapterIndex).sumBy { it.duration } + settings.positionInChapter
   val currentFile = settings.currentFile

@@ -8,8 +8,9 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.ph1b.audiobook.common.delay
-import de.ph1b.audiobook.common.sparseArray.forEachIndexed
 import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.ChapterMark
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.di.PerService
@@ -295,18 +296,18 @@ constructor(
   }
 
   private fun previousByMarks(content: BookContent): Boolean {
-    val marks = content.currentChapter.marks
-    marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
-      if (content.positionInChapter >= startOfMark) {
-        val diff = content.positionInChapter - startOfMark
-        if (diff > 2000) {
-          changePosition(startOfMark.toLong())
-          return true
-        } else if (index > 0) {
-          val seekTo = marks.keyAt(index - 1)
-          changePosition(seekTo.toLong())
-          return true
-        }
+    val currentChapter = content.currentChapter
+    val currentMark = currentChapter.markForPosition(content.positionInChapter)
+    val timePlayedInMark = content.positionInChapter - currentMark.startMs
+    if (timePlayedInMark > 2000) {
+      changePosition(currentMark.startMs)
+      return true
+    } else {
+      // jump to the start of the previous mark
+      val indexOfCurrentMark = currentChapter.chapterMarks.indexOf(currentMark)
+      if (indexOfCurrentMark > 0) {
+        changePosition(currentChapter.chapterMarks[indexOfCurrentMark - 1].startMs)
+        return true
       }
     }
     return false
@@ -375,9 +376,12 @@ constructor(
     prepare()
     val content = bookContent
       ?: return
-    val nextChapterMarkPosition = content.nextChapterMarkPosition
-    if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)
-    else content.nextChapter?.let { changePosition(0, it.file) }
+    val nextMark = content.currentChapter.nextMark(content.positionInChapter)
+    if (nextMark != null) {
+      changePosition(nextMark.startMs)
+    } else {
+      content.nextChapter?.let { changePosition(0, it.file) }
+    }
   }
 
   /** Changes the current position in book. */
@@ -457,3 +461,14 @@ private fun volumeForFadeOutTimeLeft(timeLeft: Duration): Float {
 }
 
 private val FADE_OUT_INTERPOLATOR = AccelerateInterpolator()
+
+private fun Chapter.nextMark(positionInChapterMs: Long): ChapterMark? {
+  val markForPosition = markForPosition(positionInChapterMs)
+  val marks = chapterMarks
+  val index = marks.indexOf(markForPosition)
+  return if (index != -1) {
+    marks.getOrNull(index + 1)
+  } else {
+    null
+  }
+}
