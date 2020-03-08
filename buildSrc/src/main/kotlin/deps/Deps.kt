@@ -28,7 +28,7 @@ object Deps {
 
     object Room {
       private const val version = "2.2.4"
-      const val runtime = "androidx.room:room-runtime:$version"
+      const val runtime = "androidx.room:room-ktx:$version"
       const val compiler = "androidx.room:room-compiler:$version"
       const val testing = "androidx.room:room-testing:$version"
     }
@@ -73,18 +73,22 @@ object Deps {
     const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-flac:$extensionVersion"
   }
 
-  const val moshi = "com.squareup.moshi:moshi:1.9.2"
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.3.61"
-    private const val versionCoroutines = "1.3.3"
+    private const val versionKotlin = "1.3.70"
+    private const val versionCoroutines = "1.3.4"
 
     const val std = "org.jetbrains.kotlin:kotlin-stdlib:$versionKotlin"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versionCoroutines"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionKotlin"
+
+    object Serialization {
+      const val runtime = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
+      const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:$versionKotlin"
+    }
   }
 
   const val junit = "junit:junit:4.13"

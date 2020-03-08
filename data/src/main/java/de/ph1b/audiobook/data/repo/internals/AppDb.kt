@@ -21,7 +21,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun bookSettingsDao(): BookSettingsDao
 
   companion object {
-    const val VERSION = 47
+    const val VERSION = 48
     const val DATABASE_NAME = "autoBookDB"
   }
 }

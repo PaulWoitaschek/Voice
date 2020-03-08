@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.provider.MediaStore
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.MemoryPref
-import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
@@ -40,16 +39,16 @@ class BookSearchHandlerTest {
     "anotherBookChapter1",
     5000,
     0,
-    emptySparseArray(),
-    bookId = UUID.randomUUID()
+    bookId = UUID.randomUUID(),
+    markData = emptyList()
   )
   private val anotherBookChapter2 = Chapter(
     File("/sdcard/AnotherBook/chapter2.mp3"),
     "anotherBookChapter2",
     10000,
     0,
-    emptySparseArray(),
-    bookId = UUID.randomUUID()
+    bookId = UUID.randomUUID(),
+    markData = emptyList()
   )
 
   private val anotherBook = UUID.randomUUID().let { id ->
@@ -88,7 +87,7 @@ class BookSearchHandlerTest {
       "bookToFindChapter1",
       5000,
       0,
-      emptySparseArray(),
+      emptyList(),
       UUID.randomUUID()
     )
   private val bookToFindChapter2 =
@@ -97,7 +96,7 @@ class BookSearchHandlerTest {
       "bookToFindChapter2",
       10000,
       0,
-      emptySparseArray(),
+      emptyList(),
       bookId = UUID.randomUUID()
     )
   private val bookToFind = UUID.randomUUID().let { id ->

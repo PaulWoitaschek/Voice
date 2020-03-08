@@ -2,16 +2,15 @@ package de.ph1b.audiobook.features
 
 import android.Manifest
 import android.content.Context
-import androidx.collection.SparseArrayCompat
 import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.common.sparseArray.emptySparseArray
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
@@ -359,17 +358,14 @@ class BookAdder
       val result = mediaAnalyzer.analyze(f)
       Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
-        val marks = try {
-          val chapters = chapterReader.read(f)
-          SparseArrayCompat<String>(chapters.size)
-            .apply {
-              chapters.forEach {
-                put(it.startInMs.toInt(), it.title)
-              }
+        val marks: List<MarkData> = try {
+          chapterReader.read(f)
+            .map {
+              MarkData(it.startInMs, it.title)
             }
         } catch (e: Exception) {
           CrashReporter.logException(e)
-          emptySparseArray<String>()
+          emptyList()
         }
         containingMedia.add(
           Chapter(

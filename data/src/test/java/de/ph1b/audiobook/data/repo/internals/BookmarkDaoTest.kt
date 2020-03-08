@@ -4,12 +4,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookFactory
 import de.ph1b.audiobook.data.Bookmark
-import de.ph1b.audiobook.data.di.DataComponent
-import de.ph1b.audiobook.data.di.DataInjector
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -17,14 +14,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [28])
 class BookmarkDaoTest {
-
-  init {
-    DataInjector.component = object : DataComponent {
-      override fun inject(converters: Converters) {
-        converters.moshi = Moshi.Builder().build()
-      }
-    }
-  }
 
   private val dao =
     Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDb::class.java)

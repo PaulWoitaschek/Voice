@@ -85,7 +85,6 @@ android {
   }
 
   packagingOptions {
-    exclude("META-INF/proguard/moshi.pro")
     pickFirst("META-INF/atomicfu.kotlin_module")
   }
 
@@ -125,6 +124,7 @@ dependencies {
   implementation(Deps.AndroidX.mediaCompat)
 
   implementation(Deps.picasso)
+  implementation(Deps.Kotlin.Serialization.runtime)
 
   implementation(Deps.MaterialDialog.core)
   implementation(Deps.MaterialDialog.input)
@@ -153,7 +153,6 @@ dependencies {
 
   implementation(Deps.conductor)
 
-  implementation(Deps.moshi)
   implementation(Deps.lifecycle)
 
   implementation(Deps.groupie)

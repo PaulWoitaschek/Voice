@@ -4,6 +4,7 @@ import deps.Versions
 plugins {
   id("com.android.library")
   id("kotlin-android")
+  id("kotlinx-serialization")
   id("kotlin-kapt")
 }
 
@@ -58,8 +59,8 @@ dependencies {
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
-  implementation(Deps.moshi)
   implementation(Deps.AndroidX.ktx)
+  implementation(Deps.Kotlin.Serialization.runtime)
 
   api(Deps.AndroidX.Room.runtime)
   kapt(Deps.AndroidX.Room.compiler)

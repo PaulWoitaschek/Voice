@@ -10,7 +10,6 @@ import android.net.ConnectivityManager
 import android.os.PowerManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
-import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import de.paulwoitaschek.chapterreader.ChapterReader
@@ -78,11 +77,6 @@ object AndroidModule {
   @JvmStatic
   fun providePowerManager(context: Context) =
     context.getSystemService(Context.POWER_SERVICE) as PowerManager
-
-  @Provides
-  @Singleton
-  @JvmStatic
-  fun provideMoshi(): Moshi = Moshi.Builder().build()
 
   @Provides
   @Singleton

@@ -1,43 +1,30 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import androidx.collection.SparseArrayCompat
 import androidx.room.TypeConverter
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.di.DataInjector
+import de.ph1b.audiobook.data.MarkData
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import java.io.File
 import java.util.UUID
-import javax.inject.Inject
 
 class Converters {
 
-  @Inject
-  lateinit var moshi: Moshi
+  private val json = Json(JsonConfiguration.Stable)
+  private val markDataListSerializer = MarkData.serializer().list
 
-  private val sparseStringArrayAdapter: JsonAdapter<SparseArrayCompat<String>>
+  @TypeConverter
+  fun fromMarks(data: List<MarkData>): String = json.stringify(markDataListSerializer, data)
 
-  init {
-    DataInjector.component.inject(this)
-    val stringAdapter = moshi.adapter(String::class.java)
-    sparseStringArrayAdapter = SparseArrayAdapter(stringAdapter)
-  }
+  @TypeConverter
+  fun toMarks(string: String): List<MarkData> = json.parse(markDataListSerializer, string)
 
   @TypeConverter
   fun fromFile(file: File): String = file.absolutePath
 
   @TypeConverter
   fun toFile(path: String) = File(path)
-
-  @TypeConverter
-  fun fromSparseArrayCompat(array: SparseArrayCompat<String>): String {
-    return sparseStringArrayAdapter.toJson(array)
-  }
-
-  @TypeConverter
-  fun toSparseArrayCompat(json: String): SparseArrayCompat<String> {
-    return sparseStringArrayAdapter.fromJson(json)!!
-  }
 
   @TypeConverter
   fun fromBookType(type: Book.Type): String = type.name

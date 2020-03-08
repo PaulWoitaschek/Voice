@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
-import de.ph1b.audiobook.data.di.DataComponent
 import de.ph1b.audiobook.data.repo.internals.PersistenceModule
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
@@ -44,7 +43,7 @@ import javax.inject.Singleton
     SortingModule::class
   ]
 )
-interface AppComponent : DataComponent {
+interface AppComponent {
 
   val bookmarkPresenter: BookmarkPresenter
   val context: Context

@@ -1,14 +1,12 @@
 package de.ph1b.audiobook.data
 
-import androidx.collection.SparseArrayCompat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.common.sparseArray.contentEquals
-import de.ph1b.audiobook.common.sparseArray.forEachIndexed
+import kotlinx.serialization.Serializable
 import java.io.File
 import java.util.UUID
 
@@ -29,7 +27,7 @@ data class Chapter(
   @ColumnInfo(name = "fileLastModified")
   val fileLastModified: Long,
   @ColumnInfo(name = "marks")
-  val marks: SparseArrayCompat<String>,
+  val markData: List<MarkData>,
   @ColumnInfo(name = "bookId")
   val bookId: UUID,
   @ColumnInfo(name = "id")
@@ -45,45 +43,30 @@ data class Chapter(
   val chapterMarks: List<ChapterMark>
 
   init {
-    if (marks.isEmpty) {
-      chapterMarks = listOf(ChapterMark(name, 0L, duration))
+    chapterMarks = if (markData.isEmpty()) {
+      listOf(ChapterMark(name, 0L, duration))
     } else {
-      chapterMarks = mutableListOf()
-      marks.forEachIndexed { index, key, value ->
+      val sorted = markData.sorted()
+      sorted.mapIndexed { index, (startMs, name) ->
         val isFirst = index == 0
-        val isLast = index == marks.size() - 1
-        val start = if (isFirst) 0L else key.toLong()
-        val end = if (isLast) duration else marks.keyAt(index + 1).toLong() - 1
-        chapterMarks += ChapterMark(name = value, startMs = start, endMs = end)
+        val isLast = index == sorted.size - 1
+        val start = if (isFirst) 0L else startMs
+        val end = if (isLast) duration else sorted[index + 1].startMs - 1
+        ChapterMark(name = name, startMs = start, endMs = end)
       }
     }
   }
 
-  override fun compareTo(other: Chapter) =
-    NaturalOrderComparator.fileComparator.compare(file, other.file)
+  override fun compareTo(other: Chapter): Int = NaturalOrderComparator.fileComparator.compare(file, other.file)
+}
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other !is Chapter) return false
-    return this.file == other.file &&
-      this.name == other.name &&
-      this.duration == other.duration &&
-      this.fileLastModified == other.fileLastModified &&
-      this.marks.contentEquals(other.marks)
-  }
-
-  override fun hashCode(): Int {
-    var hashCode = 17
-    hashCode = 31 * hashCode + file.hashCode()
-    hashCode = 31 * hashCode + name.hashCode()
-    hashCode = 31 * hashCode + duration.hashCode()
-    hashCode = 31 * hashCode + fileLastModified.hashCode()
-    marks.forEachIndexed { index, key, value ->
-      hashCode = 31 * hashCode + index.hashCode()
-      hashCode = 31 * hashCode + key.hashCode()
-      hashCode = 31 * hashCode + value.hashCode()
-    }
-    return hashCode
+@Serializable
+data class MarkData(
+  val startMs: Long,
+  val name: String
+) : Comparable<MarkData> {
+  override fun compareTo(other: MarkData): Int {
+    return startMs.compareTo(other.startMs)
   }
 }
 

@@ -9,7 +9,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.crashreporting.CrashLoggingTree
 import de.ph1b.audiobook.crashreporting.CrashReporter
-import de.ph1b.audiobook.data.di.DataInjector
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
@@ -62,7 +61,6 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
     appComponent = AppComponent.factory()
       .create(this)
-    DataInjector.component = appComponent
     appComponent.inject(this)
 
     if (DARK_THEME_SETTABLE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

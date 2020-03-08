@@ -29,6 +29,7 @@ import de.ph1b.audiobook.data.repo.internals.migrations.Migration43to44
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration44
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration45
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration46
+import de.ph1b.audiobook.data.repo.internals.migrations.Migration47
 import javax.inject.Singleton
 
 @Module
@@ -94,7 +95,8 @@ object PersistenceModule {
       Migration43to44(),
       Migration44(),
       Migration45(),
-      Migration46()
+      Migration46(),
+      Migration47()
     )
   }
 }

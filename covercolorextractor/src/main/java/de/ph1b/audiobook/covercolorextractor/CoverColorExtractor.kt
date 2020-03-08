@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.covercolorextractor
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.palette.graphics.Palette
 import com.squareup.picasso.MemoryPolicy
@@ -16,7 +15,6 @@ import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@SuppressLint("UseSparseArrays")
 class CoverColorExtractor {
 
   private val tasks = HashMap<Long, Deferred<Int?>>()
