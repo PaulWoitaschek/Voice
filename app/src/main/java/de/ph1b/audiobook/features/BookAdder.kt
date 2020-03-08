@@ -27,7 +27,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import timber.log.Timber
@@ -40,9 +40,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.system.measureTimeMillis
 
-/**
- * Base class for adding new books.
- */
 @Singleton
 class BookAdder
 @Inject constructor(
@@ -64,7 +61,7 @@ class BookAdder
 
   init {
     GlobalScope.launch {
-      merge(collectionBookFolderPref.flow, singleBookFolderPref.flow)
+      combine(collectionBookFolderPref.flow, singleBookFolderPref.flow) { _, _ -> Unit }
         .collect {
           scanForFiles(restartIfScanning = true)
         }
