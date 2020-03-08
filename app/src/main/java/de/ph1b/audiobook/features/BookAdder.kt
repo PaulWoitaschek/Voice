@@ -87,7 +87,9 @@ class BookAdder
         }
         coverCollector.findCovers(repo.activeBooks())
       }.also {
-        _scannerActive.send(false)
+        it.invokeOnCompletion {
+          _scannerActive.offer(false)
+        }
       }
     }
   }

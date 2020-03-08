@@ -52,6 +52,7 @@ subprojects {
       jvmTarget = "1.8"
       freeCompilerArgs = listOf(
         "-XXLanguage:+InlineClasses",
+        "-Xuse-experimental=kotlin.ExperimentalStdlibApi",
         "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
         "-Xuse-experimental=kotlinx.coroutines.FlowPreview",

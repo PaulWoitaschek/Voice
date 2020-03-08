@@ -18,7 +18,6 @@ import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItem
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
@@ -58,8 +57,10 @@ class BookOverviewController : SyntheticViewController(),
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
+
   @Inject
   lateinit var viewModel: BookOverviewViewModel
+
   @Inject
   lateinit var galleryPicker: GalleryPicker
 
@@ -167,21 +168,27 @@ class BookOverviewController : SyntheticViewController(),
 
   private fun render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
     Timber.i("render ${state.javaClass.simpleName}")
+    val adapterContent = when (state) {
+      is BookOverviewState.Content -> buildList {
+        state.categoriesWithContents.forEach { (category, content) ->
+          add(BookOverviewHeaderModel(category, content.hasMore))
+          addAll(content.books)
+        }
+      }
+      BookOverviewState.Loading, BookOverviewState.NoFolderSet -> emptyList()
+    }
+    adapter.submitList(adapterContent)
+
     when (state) {
       is BookOverviewState.Content -> {
-        val content = ArrayList<BookOverviewItem>().apply {
-          state.categoriesWithContents.forEach { (category, content) ->
-            add(BookOverviewHeaderModel(category, content.hasMore))
-            addAll(content.books)
-          }
-        }
-        adapter.submitList(content)
+        hideNoFolderWarning()
         fab.isVisible = state.currentBookPresent
-        showPlaying(state.playing)
 
         useGrid = state.useGrid
         val lm = recyclerView.layoutManager as GridLayoutManager
         lm.spanCount = state.columnCount
+
+        showPlaying(state.playing)
         gridMenuItem.item.apply {
           val useGrid = state.useGrid
           setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)
@@ -189,10 +196,16 @@ class BookOverviewController : SyntheticViewController(),
           setIcon(drawableRes)
         }
       }
-      is BookOverviewState.NoFolderSet -> {
+      BookOverviewState.Loading -> {
+        hideNoFolderWarning()
+        fab.isVisible = false
+      }
+      BookOverviewState.NoFolderSet -> {
         showNoFolderWarning()
+        fab.isVisible = false
       }
     }
+
     loadingProgress.isVisible = state == BookOverviewState.Loading
     gridMenuItem.item.isVisible = state != BookOverviewState.Loading
   }
@@ -200,6 +213,14 @@ class BookOverviewController : SyntheticViewController(),
   private fun showPlaying(playing: Boolean) {
     Timber.i("Called showPlaying $playing")
     playPauseDrawableSetter.setPlaying(playing = playing)
+  }
+
+  private fun hideNoFolderWarning() {
+    val currentTapTarget = currentTapTarget ?: return
+    if (currentTapTarget.isVisible) {
+      currentTapTarget.dismiss(false)
+    }
+    this.currentTapTarget = null
   }
 
   /** Show a warning that no audiobook folder was chosen */
