@@ -50,7 +50,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
     // init values
     val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
-    val book = repo.bookByIdBlocking(arguments.bookId)!!
+    val book = repo.bookById(arguments.bookId)!!
 
     binding.coverReplacement.isVisible = true
     binding.cropOverlay.selectionOn = false

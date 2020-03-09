@@ -41,7 +41,7 @@ class LoudnessDialog(args: Bundle) : DialogController(args) {
 
     val binding = LoudnessBinding.inflate(activity!!.layoutInflater)
     val bookId = args.getUUID(NI_BOOK_ID)
-    val book = repo.bookByIdBlocking(bookId)
+    val book = repo.bookById(bookId)
       ?: return emptyDialog()
 
     binding.seekBar.max = LoudnessGain.MAX_MB

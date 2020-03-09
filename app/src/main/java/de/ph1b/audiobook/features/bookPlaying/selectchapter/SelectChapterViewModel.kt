@@ -26,7 +26,7 @@ class SelectChapterViewModel
   lateinit var bookId: UUID
 
   fun viewState(): SelectChapterViewState {
-    val book = bookRepository.bookByIdBlocking(bookId)
+    val book = bookRepository.bookById(bookId)
 
     if (book == null) {
       Timber.d("no book found for $bookId. CloseScreen")

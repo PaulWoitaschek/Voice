@@ -65,19 +65,14 @@ class BookStorage
     }
   }
 
-  suspend fun revealBook(bookId: UUID) {
+  suspend fun setBookActive(bookId: UUID, active: Boolean) {
     synchronizedWithIoDispatcher {
-      bookSettingsDao.setActive(bookId, true)
-    }
-  }
-
-  suspend fun hideBook(bookId: UUID) {
-    synchronizedWithIoDispatcher {
-      bookSettingsDao.setActive(bookId, false)
+      bookSettingsDao.setActive(bookId, active = active)
     }
   }
 
   suspend fun addOrUpdate(book: Book) {
+    // todo check if this leads to dupes
     synchronizedWithIoDispatcher {
       appDb.transaction {
         metaDataDao.insert(book.metaData)

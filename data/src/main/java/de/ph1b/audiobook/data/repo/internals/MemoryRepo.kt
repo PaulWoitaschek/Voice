@@ -1,99 +1,63 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.BookContent
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 class MemoryRepo
 @Inject constructor(
-  private val storage: BookStorage
+  initial: List<Book>
 ) {
 
-  private val listLock = Mutex()
+  private val books = ConflatedBroadcastChannel(initial)
+  val flow: Flow<List<Book>> = books.asFlow()
 
-  private suspend inline fun <T> locked(action: () -> T): T {
-    return listLock.withLock(action = action)
+  fun addOrUpdate(book: Book) {
+    val updated = books.value.toMutableList().apply {
+      removeAll { it.id == book.id }
+      add(book)
+    }
+    books.offer(updated)
   }
 
-  private val allBooks by lazy {
-    runBlocking { storage.books() }
-  }
-  private val active: MutableList<Book> by lazy {
-    allBooks.filter { it.content.settings.active }.toMutableList()
-  }
-  private val orphaned: MutableList<Book> by lazy {
-    allBooks.filter { !it.content.settings.active }.toMutableList()
+  fun updateBookContent(content: BookContent): Book? {
+    return updateBook(content.id) {
+      copy(content = content)
+    }
   }
 
-  private val activeBooksSubject = ConflatedBroadcastChannel<List<Book>>(active)
-  val activeBooks: Flow<List<Book>> get() = activeBooksSubject.asFlow()
-
-  suspend fun active(): List<Book> = locked {
-    active.toList()
+  fun updateBookName(id: UUID, name: String) {
+    updateBook(id) {
+      update(updateMetaData = {
+        copy(name = name)
+      })
+    }
   }
 
-  suspend fun replace(book: Book): Boolean = locked {
-    val index = active.indexOfFirst { it.id == book.id }
+  fun setBookActive(bookId: UUID, active: Boolean) {
+    updateBook(bookId) {
+      update(updateSettings = { copy(active = active) })
+    }
+  }
+
+  private fun updateBook(id: UUID, update: Book.() -> Book): Book? {
+    val books = books.value
+    val index = books.indexOfFirst { it.id == id }
     if (index == -1) {
-      false
-    } else {
-      if (active[index] == book) {
-        false
-      } else {
-        active[index] = book
-        updateActiveBookSubject()
-        true
-      }
+      return null
     }
-  }
-
-  suspend fun orphaned(): List<Book> = locked {
-    orphaned.toList()
-  }
-
-  suspend fun hide(toDelete: List<Book>) = locked {
-    val idsToDelete = toDelete.map(Book::id)
-    val somethingRemoved = active.removeAll { it.id in idsToDelete }
-    orphaned.addAll(toDelete)
-    if (somethingRemoved) {
-      updateActiveBookSubject()
+    val currentBook = books[index]
+    val updated = update(currentBook)
+    val updatedBooks = books.toMutableList().apply {
+      set(index, updated)
     }
+    this.books.offer(updatedBooks)
+    return updated
   }
 
-  suspend fun reveal(book: Book) = locked {
-    orphaned.removeAll { it.id == book.id }
-    active.add(book)
-    updateActiveBookSubject()
-  }
-
-  suspend fun add(book: Book) {
-    locked {
-      active.add(book)
-      updateActiveBookSubject()
-    }
-  }
-
-  suspend fun chapterByFile(file: File): Chapter? = locked {
-    active.chapterByFile(file) ?: orphaned.chapterByFile(file)
-  }
-
-  private suspend fun updateActiveBookSubject() {
-    activeBooksSubject.send(active.toList())
-  }
-}
-
-private fun List<Book>.chapterByFile(file: File): Chapter? {
-  forEach { book ->
-    book.content.chapters.forEach { chapter ->
-      if (chapter.file == file) return chapter
-    }
-  }
-  return null
+  fun allBooks(): List<Book> = books.value
 }

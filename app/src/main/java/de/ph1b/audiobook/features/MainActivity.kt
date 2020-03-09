@@ -105,7 +105,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     // if we should enter a book set the backstack and return early
     intent.getStringExtra(NI_GO_TO_BOOK)
       ?.let(UUID::fromString)
-      ?.let(repo::bookByIdBlocking)
+      ?.let(repo::bookById)
       ?.let {
         val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(it.id).asTransaction()
@@ -115,7 +115,7 @@ class MainActivity : BaseActivity(), RouterProvider {
 
     // if we should play the current book, set the backstack and return early
     if (intent?.action == "playCurrent") {
-      repo.bookByIdBlocking(currentBookIdPref.value)?.let {
+      repo.bookById(currentBookIdPref.value)?.let {
         val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(it.id).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)

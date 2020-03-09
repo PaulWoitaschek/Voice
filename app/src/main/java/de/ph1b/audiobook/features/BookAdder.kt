@@ -115,21 +115,17 @@ class BookAdder
     }
   }
 
-  /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
     get() = singleBookFolderPref.value
       .map(::File)
       .sortedWith(NaturalOrderComparator.fileComparator)
 
-  // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
     get() = collectionBookFolderPref.value
       .map(::File)
       .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
       .sortedWith(NaturalOrderComparator.fileComparator)
 
-  /** Deletes all the books that exist on the database but not on the hard drive or on the saved
-   * audio book paths. **/
   private suspend fun deleteOldBooks() {
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
@@ -186,7 +182,9 @@ class BookAdder
     if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       throw CancellationException("Does not have external storage permission")
     }
-    repo.hideBook(booksToRemove)
+    booksToRemove.forEach {
+      repo.setBookActive(it.id, false)
+    }
   }
 
   // adds a new book
@@ -263,7 +261,7 @@ class BookAdder
           chapters = newChapters.withBookId(orphanedBook.id)
         )
       }
-      repo.revealBook(withUpdatedContent)
+      repo.addBook(withUpdatedContent)
     }
   }
 
@@ -302,7 +300,7 @@ class BookAdder
           )
         )
       }
-      repo.updateBook(bookToUpdate)
+      repo.addBook(bookToUpdate)
     }
   }
 
@@ -321,7 +319,7 @@ class BookAdder
       // there are no chapters
       if (bookExisting != null) {
         // so delete book if available
-        repo.hideBook(listOf(bookExisting))
+        repo.setBookActive(bookExisting.id, false)
       }
     } else {
       // there are chapters
@@ -386,7 +384,7 @@ class BookAdder
    *
    * @param orphaned If we should return a book that is orphaned, or a book that is currently
    */
-  private suspend fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
+  private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
     val books: List<Book> =
       if (orphaned) {
         repo.getOrphanedBooks()

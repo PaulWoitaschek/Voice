@@ -17,80 +17,66 @@ import javax.inject.Singleton
 @Singleton
 class BookRepository
 @Inject constructor(
-  private val storage: BookStorage,
-  private val memoryRepo: MemoryRepo
+  private val storage: BookStorage
 ) {
 
-  fun flow(): Flow<List<Book>> = memoryRepo.activeBooks
+  private val memory = MemoryRepo(runBlocking {
+    // filter duplicates
+    storage.books().distinctBy { "${it.root}${it.type.name}" }
+  })
+
+  fun flow(): Flow<List<Book>> {
+    return memory.flow.map { books ->
+      books.filter { it.content.settings.active }
+    }
+  }
 
   fun flow(bookId: UUID): Flow<Book?> {
-    return memoryRepo.activeBooks
-      .map { books -> books.find { it.id == bookId } }
+    return memory.flow.map { books -> books.find { it.id == bookId } }
   }
+
+  fun bookById(id: UUID): Book? = memory.allBooks().find { it.id == id }
+
+  fun getOrphanedBooks(): List<Book> = memory.allBooks().filterActive(false)
+
+  fun activeBooks(): List<Book> = memory.allBooks().filterActive(true)
 
   suspend fun addBook(book: Book) {
     Timber.v("addBook=${book.name}")
+    require(book.content.settings.active) {
+      "Book $book must be active"
+    }
+    memory.addOrUpdate(book)
     storage.addOrUpdate(book)
-    memoryRepo.add(book)
   }
 
-  fun bookByIdBlocking(id: UUID): Book? = runBlocking { bookById(id) }
-
-  suspend fun bookById(id: UUID): Book? = memoryRepo.active().find { it.id == id }
-
   suspend fun updateBookContent(content: BookContent): Book? {
-    val updated = updateBookInMemory(content.id) {
-      updateContent { content }
-    }
+    val updated = memory.updateBookContent(content)
     storage.updateBookContent(content)
     return updated
   }
 
-  suspend fun getOrphanedBooks(): List<Book> = memoryRepo.orphaned()
-
-  suspend fun activeBooks(): List<Book> = memoryRepo.active()
-
-  suspend fun updateBook(book: Book) {
-    if (memoryRepo.replace(book)) {
-      storage.addOrUpdate(book)
-    } else Timber.e("update failed as there was no book")
-  }
-
   suspend fun updateBookName(id: UUID, name: String) {
+    memory.updateBookName(id, name)
     storage.updateBookName(id, name)
-    updateBookInMemory(id) {
-      updateMetaData { copy(name = name) }
+  }
+
+  suspend fun setBookActive(bookId: UUID, active: Boolean) {
+    memory.setBookActive(bookId, active)
+    storage.setBookActive(bookId, active)
+  }
+
+  fun chapterByFile(file: File): Chapter? {
+    memory.allBooks().forEach { book ->
+      val chapter = book.content.chapters.find { it.file == file }
+      if (chapter != null) {
+        return chapter
+      }
     }
+    return null
   }
+}
 
-  private suspend inline fun updateBookInMemory(id: UUID, update: Book.() -> Book): Book? {
-    val book = memoryRepo.active().find { it.id == id }
-    if (book == null) {
-      Timber.e("update failed as there was no book")
-      return null
-    }
-    val updatedBook = update(book)
-    val replaced = memoryRepo.replace(updatedBook)
-    return if (replaced) {
-      updatedBook
-    } else {
-      Timber.e("update failed as there was no book")
-      null
-    }
-  }
-
-  suspend fun hideBook(toDelete: List<Book>) {
-    Timber.v("hideBooks=${toDelete.size}")
-    if (toDelete.isEmpty()) return
-    memoryRepo.hide(toDelete)
-    toDelete.forEach { storage.hideBook(it.id) }
-  }
-
-  suspend fun revealBook(book: Book) {
-    Timber.v("Called revealBook=$book")
-    memoryRepo.reveal(book)
-    storage.revealBook(book.id)
-  }
-
-  suspend fun chapterByFile(file: File): Chapter? = memoryRepo.chapterByFile(file)
+private fun List<Book>.filterActive(active: Boolean): List<Book> {
+  return filter { it.content.settings.active == active }
 }

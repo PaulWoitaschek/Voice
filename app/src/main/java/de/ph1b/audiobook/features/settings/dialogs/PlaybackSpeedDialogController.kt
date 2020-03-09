@@ -45,7 +45,7 @@ class PlaybackSpeedDialogController : DialogController() {
     val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
     // setting current speed
-    val book = repo.bookByIdBlocking(currentBookIdPref.value)
+    val book = repo.bookById(currentBookIdPref.value)
       ?: error("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
     binding.seekBar.max = ((MAX - MIN) * FACTOR).toInt()

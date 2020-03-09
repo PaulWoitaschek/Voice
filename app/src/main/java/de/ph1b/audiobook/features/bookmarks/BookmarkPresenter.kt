@@ -32,7 +32,7 @@ class BookmarkPresenter
   private val chapters = ArrayList<Chapter>()
 
   override fun onAttach(view: BookmarkView) {
-    val book = repo.bookByIdBlocking(bookId) ?: return
+    val book = repo.bookById(bookId) ?: return
 
     onAttachScope.launch {
       bookmarks.clear()

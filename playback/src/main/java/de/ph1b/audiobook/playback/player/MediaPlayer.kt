@@ -314,7 +314,7 @@ constructor(
   }
 
   private fun prepare() {
-    val content = repo.bookByIdBlocking(currentBookIdPref.value)?.content ?: return
+    val content = repo.bookById(currentBookIdPref.value)?.content ?: return
     val shouldInitialize = player.playbackState == Player.STATE_IDLE || !alreadyInitializedChapters(content)
     if (!shouldInitialize) {
       return
