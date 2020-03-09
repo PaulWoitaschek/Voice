@@ -21,8 +21,7 @@ class BookRepository
 ) {
 
   private val memory = MemoryRepo(runBlocking {
-    // filter duplicates
-    storage.books().distinctBy { "${it.root}${it.type.name}" }
+    storage.books()
   })
 
   fun flow(): Flow<List<Book>> {
@@ -37,7 +36,7 @@ class BookRepository
 
   fun bookById(id: UUID): Book? = memory.allBooks().find { it.id == id }
 
-  fun getOrphanedBooks(): List<Book> = memory.allBooks().filterActive(false)
+  fun allBooks(): List<Book> = memory.allBooks()
 
   fun activeBooks(): List<Book> = memory.allBooks().filterActive(true)
 
@@ -62,6 +61,7 @@ class BookRepository
   }
 
   suspend fun setBookActive(bookId: UUID, active: Boolean) {
+    Timber.d("setBookActive(bookId=$bookId, active=$active)")
     memory.setBookActive(bookId, active)
     storage.setBookActive(bookId, active)
   }

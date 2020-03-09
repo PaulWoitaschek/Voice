@@ -78,6 +78,9 @@ class BookAdder
     GlobalScope.launch {
       scanningJob?.cancelAndJoin()
       scanningJob = launch(scanningDispatcher) {
+        if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+          throw CancellationException("Does not have external storage permission")
+        }
         _scannerActive.send(true)
         deleteOldBooks()
         measureTimeMillis {
@@ -179,9 +182,6 @@ class BookAdder
     if (!storageMounted()) {
       throw CancellationException("Storage is not mounted")
     }
-    if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      throw CancellationException("Does not have external storage permission")
-    }
     booksToRemove.forEach {
       repo.setBookActive(it.id, false)
     }
@@ -214,8 +214,8 @@ class BookAdder
       }
     }
 
-    val orphanedBook = getBookFromDb(rootFile, type, true)
-    if (orphanedBook == null) {
+    val existingBook = getBookFromDb(rootFile, type)
+    if (existingBook == null) {
       val newBook = Book(
         id = bookId,
         metaData = BookMetaData(
@@ -241,24 +241,24 @@ class BookAdder
       repo.addBook(newBook)
     } else {
       // checks if current path is still valid.
-      val oldCurrentFile = orphanedBook.content.currentFile
+      val oldCurrentFile = existingBook.content.currentFile
       val oldCurrentFileValid = newChapters.any { it.file == oldCurrentFile }
 
       // if the file is not valid, update time and position
-      val time = if (oldCurrentFileValid) orphanedBook.content.positionInChapter else 0
+      val time = if (oldCurrentFileValid) existingBook.content.positionInChapter else 0
       val currentFile = if (oldCurrentFileValid) {
-        orphanedBook.content.currentFile
+        existingBook.content.currentFile
       } else {
         newChapters.first().file
       }
 
-      val withUpdatedContent = orphanedBook.updateContent {
+      val withUpdatedContent = existingBook.updateContent {
         copy(
           settings = settings.copy(
             positionInChapter = time,
             currentFile = currentFile
           ),
-          chapters = newChapters.withBookId(orphanedBook.id)
+          chapters = newChapters.withBookId(existingBook.id)
         )
       }
       repo.addBook(withUpdatedContent)
@@ -268,8 +268,8 @@ class BookAdder
   /** Updates a book. Adds the new chapters to the book and corrects the
    * [BookContent.currentFile] and [BookContent.positionInChapter]. **/
   private suspend fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
-    var bookToUpdate = bookExisting
-    val bookHasChanged = bookToUpdate.content.chapters != newChapters
+    var bookToUpdate = bookExisting.update(updateSettings = { copy(active = true) })
+    val bookHasChanged = (bookToUpdate.content.chapters != newChapters) || !bookExisting.content.settings.active
     // sort chapters
     if (bookHasChanged) {
       // check if the chapter set as the current still exists
@@ -307,7 +307,7 @@ class BookAdder
   /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
    * exist any longer **/
   private suspend fun checkBook(rootFile: File, type: Book.Type) {
-    val bookExisting = getBookFromDb(rootFile, type, false)
+    val bookExisting = getBookFromDb(rootFile, type)
     val bookId = bookExisting?.id ?: UUID.randomUUID()
     val newChapters = getChaptersByRootFile(bookId, rootFile)
 
@@ -379,18 +379,8 @@ class BookAdder
     return containingMedia
   }
 
-  /**
-   * Gets a book from the database matching to a defines mask.
-   *
-   * @param orphaned If we should return a book that is orphaned, or a book that is currently
-   */
-  private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-    val books: List<Book> =
-      if (orphaned) {
-        repo.getOrphanedBooks()
-      } else {
-        repo.activeBooks()
-      }
+  private fun getBookFromDb(rootFile: File, type: Book.Type): Book? {
+    val books = repo.allBooks()
     if (rootFile.isDirectory) {
       return books.firstOrNull {
         rootFile.absolutePath == it.root && type === it.type
