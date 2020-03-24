@@ -7,6 +7,7 @@ plugins {
   id("io.fabric")
   id("kotlin-android")
   id("kotlin-android-extensions")
+  id("kotlinx-serialization")
   id("kotlin-kapt")
 }
 
@@ -113,8 +114,7 @@ dependencies {
   implementation(project(":crashreporting"))
   implementation(project(":playback"))
   implementation(project(":prefs"))
-
-  implementation(Deps.chapterReader)
+  implementation(project(":ffmpeg"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

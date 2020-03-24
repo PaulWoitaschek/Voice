@@ -78,7 +78,7 @@ class CoverFromDiscCollector
   fun coverChanged(): Flow<UUID> = coverChanged.asFlow()
 
   /** Find the embedded cover of a chapter */
-  private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
+  private suspend fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
     chapters.forEachIndexed { index, (file) ->
       val cover = imageHelper.getEmbeddedCover(file)
       if (cover != null || index == 5) return cover

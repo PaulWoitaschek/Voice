@@ -1,31 +1,54 @@
 package de.ph1b.audiobook.misc
 
-import androidx.core.net.toUri
+import de.ph1b.audiobook.data.MarkData
+import de.ph1b.audiobook.ffmpeg.ffprobe
+import de.ph1b.audiobook.misc.metadata.MetaDataScanResult
+import de.ph1b.audiobook.misc.metadata.findTag
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.seconds
 
 /**
  * Analyzes media files for meta data and duration.
  */
-class MediaAnalyzer @Inject constructor(
-  private val exoPlayerDurationParser: DurationAnalyzer,
-  private val metaDataAnalyzer: MetaDataAnalyzer
-) {
+class MediaAnalyzer
+@Inject constructor() {
+
+  private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true))
 
   suspend fun analyze(file: File): Result {
-    val metaData = metaDataAnalyzer.parse(file)
-    val duration = metaData.duration?.takeIf { it > 0L }
-      ?: exoPlayerDurationParser.duration(file.toUri()) ?: 0L
-    return if (duration > 0) {
+    Timber.d("analyze $file")
+
+    val elements = ffProbeCommand(file)
+    val result = ffprobe(*elements.toTypedArray())
+    if (result.code != 0) {
+      Timber.e("Unable to parse $file, ${result.message}")
+      return Result.Failure
+    }
+    Timber.d(result.message)
+
+    val parsed = json.parse(MetaDataScanResult.serializer(), result.message)
+    Timber.d(parsed.toString())
+
+    val duration = parsed.format?.duration
+    return if (duration != null) {
       Result.Success(
-        duration = duration,
-        chapterName = metaData.chapterName,
-        author = metaData.author,
-        bookName = metaData.bookName
+        duration = duration.seconds.toLongMilliseconds(),
+        chapterName = parsed.findTag { title } ?: chapterNameFallback(file),
+        author = parsed.findTag { artist },
+        bookName = parsed.findTag { album },
+        chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
+          MarkData(
+            startMs = metaDataChapter.start,
+            name = metaDataChapter.tags?.title ?: (index + 1).toString()
+          )
+        }
       )
     } else {
-      Timber.d("ExoPlayer failed to parse $file too.")
+      Timber.e("Unable to parse $file")
       Result.Failure
     }
   }
@@ -35,7 +58,8 @@ class MediaAnalyzer @Inject constructor(
       val duration: Long,
       val chapterName: String,
       val author: String?,
-      val bookName: String?
+      val bookName: String?,
+      val chapters: List<MarkData>
     ) : Result() {
       init {
         require(duration > 0)
@@ -44,4 +68,30 @@ class MediaAnalyzer @Inject constructor(
 
     object Failure : Result()
   }
+}
+
+private fun ffProbeCommand(file: File): List<String> {
+  return listOf(
+    "-i",
+    file.absolutePath,
+    "-print_format",
+    "json=c=1",
+    "-show_chapters",
+    "-loglevel",
+    "error",
+    "-show_entries",
+    "format=duration",
+    "-show_entries",
+    "format_tags=artist,title,album",
+    "-show_entries",
+    "stream_tags=title,artist,album"
+  )
+}
+
+private fun chapterNameFallback(file: File): String {
+  val name = file.name ?: "Chapter"
+  return name.substringBeforeLast(".")
+    .trim()
+    .takeUnless { it.isEmpty() }
+    ?: name
 }

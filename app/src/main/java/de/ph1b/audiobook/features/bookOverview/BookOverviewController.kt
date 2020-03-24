@@ -33,6 +33,7 @@ import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.android.synthetic.main.book_overview.*
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -75,6 +76,7 @@ class BookOverviewController : SyntheticViewController(),
     setupRecyclerView()
     lifecycleScope.launch {
       viewModel.coverChanged.collect {
+        ensureActive()
         bookCoverChanged(it)
       }
     }

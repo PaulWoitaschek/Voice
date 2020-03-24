@@ -2,15 +2,12 @@ package de.ph1b.audiobook.features
 
 import android.Manifest
 import android.content.Context
-import de.paulwoitaschek.chapterreader.ChapterReader
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
-import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
@@ -47,7 +44,6 @@ class BookAdder
   private val repo: BookRepository,
   private val coverCollector: CoverFromDiscCollector,
   private val mediaAnalyzer: MediaAnalyzer,
-  private val chapterReader: ChapterReader,
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   private val singleBookFolderPref: Pref<Set<String>>,
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
@@ -355,23 +351,14 @@ class BookAdder
       val result = mediaAnalyzer.analyze(f)
       Timber.i("analyzed $f.")
       if (result is MediaAnalyzer.Result.Success) {
-        val marks: List<MarkData> = try {
-          chapterReader.read(f)
-            .map {
-              MarkData(it.startInMs, it.title)
-            }
-        } catch (e: Exception) {
-          CrashReporter.logException(e)
-          emptyList()
-        }
         containingMedia.add(
           Chapter(
-            f,
-            result.chapterName,
-            result.duration,
-            lastModified,
-            marks,
-            bookId
+            file = f,
+            name = result.chapterName,
+            duration = result.duration,
+            fileLastModified = lastModified,
+            markData = result.chapters,
+            bookId = bookId
           )
         )
       }

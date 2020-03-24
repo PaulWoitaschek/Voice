@@ -46,10 +46,10 @@ object Deps {
   const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
-  const val chapterReader = "com.github.PaulWoitaschek:ChapterReader:0.1.4"
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.7.2"
   const val conductor = "com.bluelinelabs:conductor:2.1.5"
+  const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.3.1.LTS"
 
   object MaterialDialog {
     private const val version = "3.3.0"

@@ -12,8 +12,6 @@ import android.telephony.TelephonyManager
 import android.view.WindowManager
 import dagger.Module
 import dagger.Provides
-import de.paulwoitaschek.chapterreader.ChapterReader
-import de.paulwoitaschek.chapterreader.ChapterReaderFactory
 import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.misc.ApplicationIdProviderImpl
@@ -77,11 +75,6 @@ object AndroidModule {
   @JvmStatic
   fun providePowerManager(context: Context) =
     context.getSystemService(Context.POWER_SERVICE) as PowerManager
-
-  @Provides
-  @Singleton
-  @JvmStatic
-  fun provideChapterReader(): ChapterReader = ChapterReaderFactory.create()
 
   @Provides
   @Singleton

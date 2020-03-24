@@ -22,13 +22,7 @@ android {
 }
 
 dependencies {
-  implementation(project(":ffmpeg"))
   implementation(Deps.Kotlin.std)
-  implementation(Deps.AndroidX.appCompat)
   implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Dagger.core)
-  implementation(Deps.timber)
-
-  testImplementation(Deps.truth)
-  testImplementation(Deps.junit)
+  implementation(Deps.ffmpeg)
 }

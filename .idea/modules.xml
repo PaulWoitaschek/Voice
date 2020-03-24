@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" filepath="$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" group="Voice/covercolorextractor" />
       <module fileurl="file://$PROJECT_DIR$/crashreporting/crashreporting.iml" filepath="$PROJECT_DIR$/crashreporting/crashreporting.iml" group="Voice/crashreporting" />
       <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" group="Voice/data" />
+      <module fileurl="file://$PROJECT_DIR$/ffmpeg/ffmpeg.iml" filepath="$PROJECT_DIR$/ffmpeg/ffmpeg.iml" group="Voice/ffmpeg" />
       <module fileurl="file://$PROJECT_DIR$/playback/playback.iml" filepath="$PROJECT_DIR$/playback/playback.iml" group="Voice/playback" />
       <module fileurl="file://$PROJECT_DIR$/prefs/prefs.iml" filepath="$PROJECT_DIR$/prefs/prefs.iml" group="Voice/prefs" />
     </modules>
