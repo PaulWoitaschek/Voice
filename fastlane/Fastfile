@@ -53,12 +53,12 @@ platform :android do
   end
 
   lane :release do
-    gradle(task: 'app:assembleProprietaryRelease')
+    gradle(task: 'app:bundleProprietaryRelease app:assembleProprietaryRelease')
     app_version = gradle(task: 'appVersion', flags: '-q').match('#BEGIN_VERSION#(.*?)#END_VERSION#')[-1]
     folder = RELEASE_FOLDER + '/' + app_version
     copy_artifacts(
       target_path: folder,
-      artifacts: ['app/build/outputs/**/release/*.apk']
+      artifacts: ['app/build/outputs/**/release/*.aab', 'app/build/outputs/**/release/*.apk']
     )
   end
 end
