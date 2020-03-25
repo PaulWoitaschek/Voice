@@ -3,16 +3,18 @@ name: CI
 on: [push]
 
 jobs:
+  env:
+    GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
   build:
     timeout-minutes: 60
-    
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-      
+
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
-      
+
     - name: Fastlane
       uses: maierj/fastlane-action@v1.4.0
       with:
