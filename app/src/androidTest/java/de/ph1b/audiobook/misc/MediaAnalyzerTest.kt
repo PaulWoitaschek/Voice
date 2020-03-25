@@ -1,17 +1,10 @@
 package de.ph1b.audiobook.misc
 
-import android.content.Context
-import android.net.Uri
 import androidx.annotation.RawRes
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import de.ph1b.audiobook.injection.PlaybackModule
-import de.ph1b.audiobook.playback.OnlyAudioRenderersFactory
-import de.ph1b.audiobook.playback.player.DataSourceConverter
 import de.ph1b.audiobook.test.R
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -20,20 +13,12 @@ import org.junit.runner.RunWith
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class DurationAnalyzerTest {
+class MediaAnalyzerTest {
 
   @get:Rule
   val temporaryFolder = TemporaryFolder()
 
-  private val durationAnalyzer: DurationAnalyzer
-
-  init {
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    val dataSourceConverter = DataSourceConverter(context)
-    durationAnalyzer = runBlocking(Dispatchers.Main) {
-      DurationAnalyzer(dataSourceConverter, PlaybackModule.exoPlayer(context, OnlyAudioRenderersFactory(context)))
-    }
-  }
+  private val mediaAnalyzer: MediaAnalyzer = MediaAnalyzer()
 
   @Test(timeout = 1000)
   fun defectFile_noDuration() {
@@ -57,7 +42,7 @@ class DurationAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Long? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      durationAnalyzer.duration(Uri.fromFile(file))
+      (mediaAnalyzer.analyze(file) as? MediaAnalyzer.Result.Success)?.duration
     }
   }
 
