@@ -72,6 +72,7 @@
     </plurals>
     <string name="pref_seek_time">Aantal overslaan</string>
     <string name="pref_root_folder_title">Audioboek-map</string>
+    <string name="pref_theme_dark">Donker thema</string>
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatisch %d seconde terugspoelen na handmatig pauzeren.</item>

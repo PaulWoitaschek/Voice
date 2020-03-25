@@ -71,6 +71,7 @@
     </plurals>
     <string name="pref_seek_time">跳过时间</string>
     <string name="pref_root_folder_title">有声书目录</string>
+    <string name="pref_theme_dark">暗黑主题</string>
     <string name="pref_auto_rewind_title">自动倒回</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other">手动暂停后自动倒回 %d 秒。</item>

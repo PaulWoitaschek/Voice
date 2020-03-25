@@ -72,6 +72,7 @@
     </plurals>
     <string name="pref_seek_time">Sauter de</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
+    <string name="pref_theme_dark">Dunkles Thema</string>
     <string name="pref_auto_rewind_title">Rembobinage automatique</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Rembobine automatiquement de %d seconde après une pause manuelle.</item>

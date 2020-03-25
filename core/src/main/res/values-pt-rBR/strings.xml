@@ -72,6 +72,7 @@
     </plurals>
     <string name="pref_seek_time">Pular para</string>
     <string name="pref_root_folder_title">Pasta de Audiolivros</string>
+    <string name="pref_theme_dark">Tema escuro</string>
     <string name="pref_auto_rewind_title">Retornar automaticamente</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Volta automaticamente %d segundo após pausar manualmente.</item>
