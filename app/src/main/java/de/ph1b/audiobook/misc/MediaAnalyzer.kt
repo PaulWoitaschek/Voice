@@ -6,6 +6,7 @@ import de.ph1b.audiobook.misc.metadata.MetaDataScanResult
 import de.ph1b.audiobook.misc.metadata.findTag
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
+import kotlinx.serialization.json.JsonDecodingException
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -30,8 +31,12 @@ class MediaAnalyzer
     }
     Timber.d(result.message)
 
-    val parsed = json.parse(MetaDataScanResult.serializer(), result.message)
-    Timber.d(parsed.toString())
+    val parsed = try {
+      json.parse(MetaDataScanResult.serializer(), result.message)
+    } catch (e: JsonDecodingException) {
+      Timber.e(e, "Unable to parse $file")
+      return Result.Failure
+    }
 
     val duration = parsed.format?.duration
     return if (duration != null) {
