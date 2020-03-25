@@ -18,11 +18,6 @@ jobs:
       uses: maierj/fastlane-action@v1.4.0
       with:
         lane: ci
-        
-    - name: Instrumentation Tests
-      uses: ReactiveCircus/android-emulator-runner@v2.5.0
-      with:
-        script: ./gradlew connectedCheck
 
     - uses: actions/upload-artifact@v1.0.0
       if: always()
