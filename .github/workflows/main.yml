@@ -1,10 +1,9 @@
 name: CI
 
 on: [push]
-
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
 jobs:
-  env:
-    GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
   build:
     timeout-minutes: 60
 
