@@ -83,7 +83,7 @@ private fun ffProbeCommand(file: File): List<String> {
     "json=c=1",
     "-show_chapters",
     "-loglevel",
-    "error",
+    "quiet",
     "-show_entries",
     "format=duration",
     "-show_entries",
