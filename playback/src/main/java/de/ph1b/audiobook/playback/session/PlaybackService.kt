@@ -100,6 +100,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaSession.setCallback(callback)
     sessionToken = mediaSession.sessionToken
 
+    player.updateMediaSessionPlaybackState()
+
     mediaController.registerCallback(MediaControllerCallback())
 
     scope.launch {
