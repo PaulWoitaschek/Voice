@@ -43,21 +43,25 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @Inject
   lateinit var bookmarkRepo: BookmarkRepo
+
   @Inject
   lateinit var sleepTimer: SleepTimer
+
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var shakeDetector: ShakeDetector
+
   @field:[Inject Named(PrefKeys.SHAKE_TO_RESET)]
   lateinit var shakeToResetPref: Pref<Boolean>
+
   @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
   lateinit var bookmarkOnSleepTimerPref: Pref<Boolean>
+
   @field:[Inject Named(PrefKeys.SLEEP_TIME)]
   lateinit var sleepTimePref: Pref<Int>
 
-  private var _binding: DialogSleepBinding? = null
-  private val binding: DialogSleepBinding get() = _binding!!
   private var selectedMinutes = 0
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -65,26 +69,26 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     outState.putInt(SI_MINUTES, selectedMinutes)
   }
 
-  @SuppressLint("SetTextI18n")
-  private fun appendNumber(number: Int) {
-    val newNumber = selectedMinutes * 10 + number
-    if (newNumber > 999) return
-    selectedMinutes = newNumber
-    updateTimeState()
-  }
-
-  private fun updateTimeState() {
-    binding.time.text = context.getString(R.string.min, selectedMinutes.toString())
-
-    if (selectedMinutes > 0) binding.fab.show()
-    else binding.fab.hide()
-  }
-
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    _binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
-    // restore or get fresh
+    val binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
+
+    fun updateTimeState() {
+      binding.time.text = context.getString(R.string.min, selectedMinutes.toString())
+
+      if (selectedMinutes > 0) binding.fab.show()
+      else binding.fab.hide()
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun appendNumber(number: Int) {
+      val newNumber = selectedMinutes * 10 + number
+      if (newNumber > 999) return
+      selectedMinutes = newNumber
+      updateTimeState()
+    }
+
     selectedMinutes = savedViewState?.getInt(SI_MINUTES) ?: sleepTimePref.value
     updateTimeState()
 
@@ -162,10 +166,5 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
       }
     }
-  }
-
-  override fun onDestroyView(view: View) {
-    super.onDestroyView(view)
-    _binding = null
   }
 }
