@@ -3,6 +3,7 @@ package de.ph1b.audiobook.misc
 import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.ffmpeg.ffprobe
 import de.ph1b.audiobook.misc.metadata.MetaDataScanResult
+import de.ph1b.audiobook.misc.metadata.TagType
 import de.ph1b.audiobook.misc.metadata.findTag
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -42,9 +43,9 @@ class MediaAnalyzer
     return if (duration != null) {
       Result.Success(
         duration = duration.seconds.toLongMilliseconds(),
-        chapterName = parsed.findTag { title } ?: chapterNameFallback(file),
-        author = parsed.findTag { artist },
-        bookName = parsed.findTag { album },
+        chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(file),
+        author = parsed.findTag(TagType.Artist),
+        bookName = parsed.findTag(TagType.Album),
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
             startMs = metaDataChapter.start,

@@ -9,22 +9,30 @@ data class MetaDataScanResult(
   val format: MetaDataFormat?
 )
 
-inline fun MetaDataScanResult.findTag(find: MetaDataTags.() -> String?): String? {
-  val formatResult = format?.tags?.find()
-  if (formatResult != null) {
-    return formatResult
-  } else {
-    streams.forEach { stream ->
-      val streamResult = stream.tags?.find()
-      if (streamResult != null) {
-        return streamResult
-      }
-    }
-    chapters.forEach { chapter ->
-      chapter.tags
+enum class TagType {
+  Title, Artist, Album
+}
+
+fun MetaDataScanResult.findTag(tagType: TagType): String? {
+  val tags = mutableListOf<MetaDataTags>()
+  format?.tags?.let { tags += it }
+  streams.mapNotNullTo(tags) { it.tags }
+  chapters.mapNotNullTo(tags) { it.tags }
+  tags.forEach { tag ->
+    val result = tag.find(tagType)
+    if (result != null) {
+      return result
     }
   }
   return null
+}
+
+private fun MetaDataTags.find(tagType: TagType): String? {
+  return when (tagType) {
+    TagType.Title -> title
+    TagType.Artist -> artist
+    TagType.Album -> album
+  }?.takeIf { it.isNotEmpty() }
 }
 
 @Serializable
@@ -33,12 +41,7 @@ data class MetaDataStream(
 )
 
 @Serializable
-data class MetaDataChapter(val start: Long, val tags: MetaDataChapterTags? = null)
-
-@Serializable
-data class MetaDataChapterTags(
-  val title: String? = null
-)
+data class MetaDataChapter(val start: Long, val tags: MetaDataTags? = null)
 
 @Serializable
 data class MetaDataFormat(
