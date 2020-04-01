@@ -25,4 +25,6 @@ data class BookPlayCover(private val book: Book) {
   }
 
   fun placeholder(context: Context): CoverReplacement = CoverReplacement(book.name, context)
+
+  fun coverTransitionName(): String = book.coverTransitionName
 }

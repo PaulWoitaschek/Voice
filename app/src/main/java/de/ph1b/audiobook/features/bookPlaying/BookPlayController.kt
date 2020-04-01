@@ -120,6 +120,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
     if (!coverLoaded) {
       coverLoaded = true
+      binding.cover.transitionName = viewState.cover.coverTransitionName()
       // we need to synchronously load this because the transition breaks otherwise
       runBlocking {
         val coverFile = viewState.cover.file()
