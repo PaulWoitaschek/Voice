@@ -151,7 +151,8 @@ dependencies {
   implementation(Deps.ExoPlayer.flac) { isTransitive = false }
   implementation(Deps.ExoPlayer.opus) { isTransitive = false }
 
-  implementation(Deps.conductor)
+  implementation(Deps.Conductor.core)
+  implementation(Deps.Conductor.transition)
 
   implementation(Deps.lifecycle)
 

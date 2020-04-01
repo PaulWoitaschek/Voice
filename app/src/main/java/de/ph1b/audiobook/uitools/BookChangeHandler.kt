@@ -1,18 +1,18 @@
 package de.ph1b.audiobook.uitools
 
 import android.os.Bundle
-import android.transition.ArcMotion
-import android.transition.ChangeBounds
-import android.transition.ChangeClipBounds
-import android.transition.ChangeImageTransform
-import android.transition.ChangeTransform
-import android.transition.Fade
-import android.transition.Transition
-import android.transition.TransitionSet
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
+import androidx.transition.ArcMotion
+import androidx.transition.ChangeBounds
+import androidx.transition.ChangeClipBounds
+import androidx.transition.ChangeImageTransform
+import androidx.transition.ChangeTransform
+import androidx.transition.Fade
+import androidx.transition.Transition
+import androidx.transition.TransitionSet
+import com.bluelinelabs.conductor.changehandler.androidxtransition.TransitionChangeHandler
 import de.ph1b.audiobook.R
 
 /**
@@ -32,7 +32,7 @@ class BookChangeHandler : TransitionChangeHandler() {
   ): Transition {
     val moveFabAndCover = TransitionSet()
       .addTransition(ChangeBounds().apply {
-        pathMotion = ArcMotion()
+        setPathMotion(ArcMotion())
       })
       .addTransition(ChangeTransform())
       .addTransition(ChangeClipBounds())

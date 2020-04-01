@@ -48,8 +48,12 @@ object Deps {
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.7.2"
-  const val conductor = "com.bluelinelabs:conductor:2.1.5"
   const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.3.1.LTS"
+
+  object Conductor {
+    const val core = "com.bluelinelabs:conductor:3.0.0-rc4"
+    const val transition = "com.bluelinelabs:conductor-androidx-transition:3.0.0-rc4"
+  }
 
   object MaterialDialog {
     private const val version = "3.3.0"

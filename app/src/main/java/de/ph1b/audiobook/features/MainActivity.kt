@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.attachRouter
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
@@ -60,7 +60,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)
 
-    router = Conductor.attachRouter(this, root, savedInstanceState)
+    router = attachRouter(root, savedInstanceState)
     if (!router.hasRootController()) {
       setupRouter()
     }
