@@ -2,11 +2,11 @@ package de.ph1b.audiobook.playback.session.search
 
 import android.provider.MediaStore
 import dagger.Reusable
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.UUID
@@ -39,7 +39,7 @@ class BookSearchHandler
     }
   }
 
-  private suspend fun playAlbum(search: BookSearch) {
+  private fun playAlbum(search: BookSearch) {
     if (search.album != null) {
       val foundMatch = findAndPlayFirstMatch {
         val nameMatches = it.name.contains(search.album, ignoreCase = true)
@@ -54,7 +54,7 @@ class BookSearchHandler
   }
 
   // Look for anything that might match the query
-  private suspend fun playUnstructuredSearch(query: String?) {
+  private fun playUnstructuredSearch(query: String?) {
     if (query != null) {
       val foundMatch = findAndPlayFirstMatch {
         val bookNameMatches = it.name.contains(query, ignoreCase = true)
@@ -80,7 +80,7 @@ class BookSearchHandler
     player.play()
   }
 
-  private suspend fun playArtist(search: BookSearch) {
+  private fun playArtist(search: BookSearch) {
     Timber.i("playArtist")
     if (search.artist != null) {
       val foundMatch =
@@ -92,7 +92,7 @@ class BookSearchHandler
   }
 
   // Play the first book that matches to a selector. Returns if a book is being played
-  private suspend inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
+  private inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
     val book = repo.activeBooks().firstOrNull(selector)
     return if (book != null) {
       Timber.i("found a match ${book.name}")

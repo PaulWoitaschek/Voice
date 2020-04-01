@@ -55,6 +55,13 @@ object Deps {
     const val transition = "com.bluelinelabs:conductor-androidx-transition:3.0.0-rc4"
   }
 
+  object Prefs {
+    private const val version = "0.1.4"
+    const val core = "com.github.PaulWoitaschek.FlowPref:core:$version"
+    const val android = "com.github.PaulWoitaschek.FlowPref:android:$version"
+    const val inMemory = "com.github.PaulWoitaschek.FlowPref:in-memory:$version"
+  }
+
   object MaterialDialog {
     private const val version = "3.3.0"
     const val core = "com.afollestad.material-dialogs:core:$version"
@@ -105,26 +112,26 @@ object Deps {
 fun configureBaseRepos(repositoryHandler: RepositoryHandler) {
   repositoryHandler.apply {
     google()
-        .mavenContent {
-          includeGroupByRegex("androidx.*")
-          includeGroupByRegex("com.google.*")
-          includeGroupByRegex("com.android.*")
-        }
+      .mavenContent {
+        includeGroupByRegex("androidx.*")
+        includeGroupByRegex("com.google.*")
+        includeGroupByRegex("com.android.*")
+      }
     maven { setUrl("https://maven.fabric.io/public") }
-        .mavenContent {
-          includeGroup("io.fabric.tools")
-          includeGroup("io.fabric.sdk.android")
-          includeGroup("com.crashlytics.sdk.android")
-        }
+      .mavenContent {
+        includeGroup("io.fabric.tools")
+        includeGroup("io.fabric.sdk.android")
+        includeGroup("com.crashlytics.sdk.android")
+      }
     maven { setUrl("https://jitpack.io") }
-        .mavenContent {
-          includeGroupByRegex("com.github.PaulWoitaschek.*")
-        }
+      .mavenContent {
+        includeGroupByRegex("com.github.PaulWoitaschek.*")
+      }
     mavenCentral()
-        .mavenContent {
-          includeGroup("javax.inject")
-        }
+      .mavenContent {
+        includeGroup("javax.inject")
+      }
     jcenter()
-        .mavenContent { releasesOnly() }
+      .mavenContent { releasesOnly() }
   }
 }

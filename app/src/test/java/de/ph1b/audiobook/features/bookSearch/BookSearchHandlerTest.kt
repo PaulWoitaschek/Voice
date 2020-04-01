@@ -3,7 +3,8 @@ package de.ph1b.audiobook.features.bookSearch
 import android.annotation.SuppressLint
 import android.provider.MediaStore
 import com.google.common.truth.Truth.assertThat
-import de.ph1b.audiobook.MemoryPref
+import de.paulwoitaschek.flowpref.Pref
+import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
@@ -13,7 +14,6 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.session.search.BookSearch
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
-import de.ph1b.audiobook.prefs.Pref
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -131,7 +131,7 @@ class BookSearchHandlerTest {
 
   init {
     coEvery { repo.activeBooks() } returns listOf(anotherBook, bookToFind)
-    currentBookIdPref = MemoryPref(UUID.randomUUID())
+    currentBookIdPref = InMemoryPref(UUID.randomUUID())
 
     searchHandler = BookSearchHandler(repo, player, currentBookIdPref)
   }

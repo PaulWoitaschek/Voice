@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.features.bookPlaying
 
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
@@ -8,8 +10,6 @@ import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow

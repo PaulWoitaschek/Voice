@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.BookAdder
@@ -9,8 +11,6 @@ import de.ph1b.audiobook.features.gridCount.GridCount
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

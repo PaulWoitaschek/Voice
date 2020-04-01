@@ -44,6 +44,7 @@ dependencies {
   implementation(Deps.AndroidX.mediaCompat)
   implementation(Deps.picasso)
   implementation(Deps.AndroidX.ktx)
+  implementation(Deps.Prefs.core)
 
   implementation(Deps.Dagger.core)
   kapt(Deps.Dagger.compiler)

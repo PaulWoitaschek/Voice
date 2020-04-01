@@ -4,10 +4,11 @@ import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import de.paulwoitaschek.flowpref.Pref
+import de.paulwoitaschek.flowpref.android.AndroidPreferences
+import de.paulwoitaschek.flowpref.android.enum
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
-import de.ph1b.audiobook.persistence.pref.ReactivePrefs
-import de.ph1b.audiobook.prefs.Pref
 import javax.inject.Singleton
 
 @MapKey
@@ -21,7 +22,7 @@ object SortingModule {
   @Singleton
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.CURRENT)
-  fun currentComparatorPref(prefs: ReactivePrefs): Pref<BookComparator> {
+  fun currentComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
     return prefs.enum(BookOverviewCategory.CURRENT.name, BookComparator.BY_NAME)
   }
 
@@ -30,7 +31,7 @@ object SortingModule {
   @Singleton
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.NOT_STARTED)
-  fun notStartedComparatorPref(prefs: ReactivePrefs): Pref<BookComparator> {
+  fun notStartedComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
     return prefs.enum(BookOverviewCategory.NOT_STARTED.name, BookComparator.BY_NAME, BookComparator::class.java)
   }
 
@@ -39,7 +40,7 @@ object SortingModule {
   @Singleton
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.FINISHED)
-  fun finishedComparatorPref(prefs: ReactivePrefs): Pref<BookComparator> {
+  fun finishedComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
     return prefs.enum(BookOverviewCategory.FINISHED.name, BookComparator.BY_NAME, BookComparator::class.java)
   }
 }

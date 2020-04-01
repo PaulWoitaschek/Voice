@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.features.settings
 
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow

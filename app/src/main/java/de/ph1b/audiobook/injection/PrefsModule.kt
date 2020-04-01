@@ -4,11 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import de.paulwoitaschek.flowpref.Pref
+import de.paulwoitaschek.flowpref.android.AndroidPreferences
+import de.paulwoitaschek.flowpref.android.boolean
+import de.paulwoitaschek.flowpref.android.enum
+import de.paulwoitaschek.flowpref.android.int
+import de.paulwoitaschek.flowpref.android.stringSet
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.features.bookOverview.GridMode
-import de.ph1b.audiobook.persistence.pref.ReactivePrefs
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
+import de.ph1b.audiobook.misc.UUIDAdapter
 import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
@@ -25,15 +30,15 @@ object PrefsModule {
   @Provides
   @JvmStatic
   @Singleton
-  fun prefs(sharedPreferences: SharedPreferences): ReactivePrefs {
-    return ReactivePrefs(sharedPreferences)
+  fun prefs(sharedPreferences: SharedPreferences): AndroidPreferences {
+    return AndroidPreferences(sharedPreferences)
   }
 
   @Provides
   @JvmStatic
   @Singleton
   @Named(PrefKeys.DARK_THEME)
-  fun darkThemePref(prefs: ReactivePrefs): Pref<Boolean> {
+  fun darkThemePref(prefs: AndroidPreferences): Pref<Boolean> {
     return prefs.boolean(PrefKeys.DARK_THEME, false)
   }
 
@@ -41,7 +46,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.RESUME_ON_REPLUG)
-  fun provideResumeOnReplugPreference(prefs: ReactivePrefs): Pref<Boolean> {
+  fun provideResumeOnReplugPreference(prefs: AndroidPreferences): Pref<Boolean> {
     return prefs.boolean(PrefKeys.RESUME_ON_REPLUG, true)
   }
 
@@ -49,7 +54,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.BOOKMARK_ON_SLEEP)
-  fun provideBookmarkOnSleepTimerPreference(prefs: ReactivePrefs): Pref<Boolean> {
+  fun provideBookmarkOnSleepTimerPreference(prefs: AndroidPreferences): Pref<Boolean> {
     return prefs.boolean(PrefKeys.BOOKMARK_ON_SLEEP, false)
   }
 
@@ -57,7 +62,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.SHAKE_TO_RESET)
-  fun provideShakeToResetPreference(prefs: ReactivePrefs): Pref<Boolean> {
+  fun provideShakeToResetPreference(prefs: AndroidPreferences): Pref<Boolean> {
     return prefs.boolean(PrefKeys.SHAKE_TO_RESET, false)
   }
 
@@ -65,7 +70,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
-  fun provideAutoRewindAmountPreference(prefs: ReactivePrefs): Pref<Int> {
+  fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.AUTO_REWIND_AMOUNT, 2)
   }
 
@@ -73,7 +78,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.SEEK_TIME)
-  fun provideSeekTimePreference(prefs: ReactivePrefs): Pref<Int> {
+  fun provideSeekTimePreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.SEEK_TIME, 20)
   }
 
@@ -81,7 +86,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.SLEEP_TIME)
-  fun provideSleepTimePreference(prefs: ReactivePrefs): Pref<Int> {
+  fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.SLEEP_TIME, 20)
   }
 
@@ -89,7 +94,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
-  fun provideSingleBookFoldersPreference(prefs: ReactivePrefs): Pref<Set<String>> {
+  fun provideSingleBookFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
     return prefs.stringSet(PrefKeys.SINGLE_BOOK_FOLDERS, emptySet())
   }
 
@@ -97,7 +102,7 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  fun provideCollectionFoldersPreference(prefs: ReactivePrefs): Pref<Set<String>> {
+  fun provideCollectionFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
     return prefs.stringSet(PrefKeys.COLLECTION_BOOK_FOLDERS, emptySet())
   }
 
@@ -105,15 +110,15 @@ object PrefsModule {
   @JvmStatic
   @Singleton
   @Named(PrefKeys.CURRENT_BOOK)
-  fun provideCurrentBookIdPreference(prefs: ReactivePrefs): Pref<UUID> {
-    return prefs.uuid(PrefKeys.CURRENT_BOOK, UUID.randomUUID())
+  fun provideCurrentBookIdPreference(prefs: AndroidPreferences): Pref<UUID> {
+    return prefs.create(PrefKeys.CURRENT_BOOK, UUID.randomUUID(), UUIDAdapter)
   }
 
   @Provides
   @JvmStatic
   @Singleton
   @Named(PrefKeys.GRID_MODE)
-  fun gridViewPref(prefs: ReactivePrefs): Pref<GridMode> {
+  fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
     return prefs.enum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE)
   }
 }

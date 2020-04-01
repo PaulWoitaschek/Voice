@@ -5,14 +5,14 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogTimePickerBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

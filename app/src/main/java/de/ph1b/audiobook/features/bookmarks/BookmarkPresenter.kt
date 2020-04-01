@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.features.bookmarks
 
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -7,8 +9,6 @@ import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject

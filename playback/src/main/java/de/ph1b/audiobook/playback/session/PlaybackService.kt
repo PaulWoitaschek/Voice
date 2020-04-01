@@ -13,6 +13,8 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
@@ -26,8 +28,6 @@ import de.ph1b.audiobook.playback.playstate.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.session.headset.HeadsetState
 import de.ph1b.audiobook.playback.session.headset.headsetStateChangeFlow
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

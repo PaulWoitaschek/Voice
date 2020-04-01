@@ -7,7 +7,9 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.util.Assertions.checkMainThread
+import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.delay
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.ChapterMark
@@ -18,8 +20,6 @@ import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.playstate.PlayerState
 import de.ph1b.audiobook.playback.session.ChangeNotifier
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel

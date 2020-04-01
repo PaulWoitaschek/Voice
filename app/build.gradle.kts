@@ -87,6 +87,7 @@ android {
 
   packagingOptions {
     pickFirst("META-INF/atomicfu.kotlin_module")
+    pickFirst("META-INF/core.kotlin_module")
   }
 
   flavorDimensions("free")
@@ -157,6 +158,9 @@ dependencies {
   implementation(Deps.lifecycle)
 
   implementation(Deps.groupie)
+
+  implementation(Deps.Prefs.android)
+  testImplementation(Deps.Prefs.inMemory)
 
   implementation(Deps.tapTarget)
   testImplementation(Deps.AndroidX.Test.runner)

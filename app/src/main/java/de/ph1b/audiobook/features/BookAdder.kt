@@ -2,7 +2,9 @@ package de.ph1b.audiobook.features
 
 import android.Manifest
 import android.content.Context
+import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
@@ -14,8 +16,6 @@ import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.hasPermission
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.storageMounted
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job

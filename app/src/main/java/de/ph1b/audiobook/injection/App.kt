@@ -6,7 +6,9 @@ import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
+import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.crashreporting.CrashLoggingTree
 import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.features.BookAdder
@@ -16,8 +18,6 @@ import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect

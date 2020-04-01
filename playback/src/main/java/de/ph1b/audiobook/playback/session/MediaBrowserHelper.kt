@@ -7,13 +7,13 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import androidx.core.content.FileProvider
 import dagger.Reusable
+import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.ApplicationIdProvider
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.R
-import de.ph1b.audiobook.prefs.Pref
-import de.ph1b.audiobook.prefs.PrefKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
