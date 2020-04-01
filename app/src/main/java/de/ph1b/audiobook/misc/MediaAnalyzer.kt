@@ -40,7 +40,7 @@ class MediaAnalyzer
     }
 
     val duration = parsed.format?.duration
-    return if (duration != null) {
+    return if (duration != null && duration > 0) {
       Result.Success(
         duration = duration.seconds.toLongMilliseconds(),
         chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(file),
