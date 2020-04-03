@@ -70,7 +70,6 @@ class MediaSessionCallback
   override fun onRewind() {
     Timber.i("onRewind")
     player.skip(forward = false)
-    player.play()
   }
 
   override fun onSkipToPrevious() {
