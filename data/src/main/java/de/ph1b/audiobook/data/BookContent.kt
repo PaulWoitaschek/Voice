@@ -16,6 +16,9 @@ data class BookContent(
     chapters.forEach {
       require(it.bookId == id) { "Wrong chapter book id in $this" }
     }
+    require(chapters.any { it.file == settings.currentFile }) {
+      "Wrong currentFile in $this"
+    }
   }
 
   val currentChapter = chapters.first { it.file == settings.currentFile }
