@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.settings
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
@@ -27,9 +26,7 @@ class SwitchSettingView : ConstraintLayout {
   }
 
   init {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      foreground = context.drawableFromAttr(R.attr.selectableItemBackground)
-    }
+    foreground = context.drawableFromAttr(R.attr.selectableItemBackground)
     val padding = context.dpToPxRounded(8F)
     updatePadding(top = padding, bottom = padding)
   }

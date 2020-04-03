@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.folderChooser
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Environment
 import android.text.TextUtils
 import androidx.annotation.RequiresPermission
@@ -91,9 +90,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
 
     // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
     // if one of the files in the fallback dir has contents we add it to the list.
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
-    }
+    rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
     rv.addAll(storageDirs2())
 
     // get the non empty files
@@ -151,24 +148,12 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     }
 
     // Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      var i = 0
-      while (i < results.size) {
-        if (!results[i].toLowerCase(Locale.US).matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
-          results.removeAt(i--)
-        }
-        i++
+    var i = 0
+    while (i < results.size) {
+      if (!results[i].toLowerCase(Locale.US).matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+        results.removeAt(i--)
       }
-    } else {
-      var i = 0
-      while (i < results.size) {
-        if (!results[i].toLowerCase(Locale.US).contains("ext") &&
-          !results[i].toLowerCase(Locale.US).contains("sdcard")
-        ) {
-          results.removeAt(i--)
-        }
-        i++
-      }
+      i++
     }
 
     return results
