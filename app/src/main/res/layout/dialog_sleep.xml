@@ -185,7 +185,7 @@
       app:layout_constraintTop_toTopOf="@+id/zero"
       tools:ignore="HardcodedText" />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
       android:id="@+id/bookmarkSwitch"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
       app:layout_constraintTop_toBottomOf="@+id/time"
       app:switchTextAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
       android:id="@+id/shakeToResetSwitch"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
