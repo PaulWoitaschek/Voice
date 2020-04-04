@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookOverview
 import android.content.Intent
 import android.graphics.Color
 import android.view.MenuItem
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -14,8 +13,9 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -32,7 +32,6 @@ import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
 import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
-import kotlinx.android.synthetic.main.book_overview.*
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -46,11 +45,9 @@ import kotlin.collections.component2
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookOverviewController : SyntheticViewController(),
+class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOverviewBinding::inflate),
   EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
   CoverFromInternetController.Callback {
-
-  override val layoutRes = R.layout.book_overview
 
   init {
     appComponent.inject(this)
@@ -70,31 +67,33 @@ class BookOverviewController : SyntheticViewController(),
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var useGrid = false
 
-  override fun onViewCreated() {
-    setupToolbar()
-    setupFab()
-    setupRecyclerView()
-    lifecycleScope.launch {
-      viewModel.coverChanged.collect {
-        ensureActive()
-        bookCoverChanged(it)
+  override fun onBindingCreated(binding: BookOverviewBinding) {
+    binding.apply {
+      setupToolbar()
+      setupFab()
+      setupRecyclerView()
+      lifecycleScope.launch {
+        viewModel.coverChanged.collect {
+          ensureActive()
+          bookCoverChanged(it)
+        }
       }
     }
   }
 
-  private fun setupFab() {
-    fab.setOnClickListener { viewModel.playPause() }
+  private fun BookOverviewBinding.setupFab() {
+    binding.fab.setOnClickListener { viewModel.playPause() }
     playPauseDrawableSetter = PlayPauseDrawableSetter(fab)
   }
 
-  private fun setupRecyclerView() {
+  private fun BookOverviewBinding.setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
       bookClickListener = { book, clickType ->
         when (clickType) {
           BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
           BookOverviewClick.MENU -> {
-            EditBookBottomSheetController(this, book).showDialog(router)
+            EditBookBottomSheetController(this@BookOverviewController, book).showDialog(router)
           }
         }
       },
@@ -123,7 +122,7 @@ class BookOverviewController : SyntheticViewController(),
     recyclerView.layoutManager = layoutManager
   }
 
-  private fun setupToolbar() {
+  private fun BookOverviewBinding.setupToolbar() {
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
@@ -144,7 +143,7 @@ class BookOverviewController : SyntheticViewController(),
     }
   }
 
-  private fun gridMenuItem(): GridMenuItem = GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
+  private fun BookOverviewBinding.gridMenuItem(): GridMenuItem = GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
 
   private fun toFolderOverview() {
     val controller = FolderOverviewController()
@@ -168,7 +167,7 @@ class BookOverviewController : SyntheticViewController(),
     router.pushController(transaction)
   }
 
-  private fun render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
+  private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
     Timber.i("render ${state.javaClass.simpleName}")
     val adapterContent = when (state) {
       is BookOverviewState.Content -> buildList {
@@ -226,7 +225,7 @@ class BookOverviewController : SyntheticViewController(),
   }
 
   /** Show a warning that no audiobook folder was chosen */
-  private fun showNoFolderWarning() {
+  private fun BookOverviewBinding.showNoFolderWarning() {
     if (currentTapTarget?.isVisible == true)
       return
 
@@ -252,7 +251,7 @@ class BookOverviewController : SyntheticViewController(),
     })
   }
 
-  private fun bookCoverChanged(bookId: UUID) {
+  private fun BookOverviewBinding.bookCoverChanged(bookId: UUID) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {
@@ -261,7 +260,7 @@ class BookOverviewController : SyntheticViewController(),
   }
 
   override fun onBookCoverChanged(bookId: UUID) {
-    recyclerView.postedIfComputingLayout {
+    binding.recyclerView.postedIfComputingLayout {
       adapter.reloadBookCover(bookId)
     }
   }
@@ -276,19 +275,20 @@ class BookOverviewController : SyntheticViewController(),
 
   override fun onDestroyView() {
     super.onDestroyView()
-    recyclerView.adapter = null
+    binding.recyclerView.adapter = null
   }
 
-  override fun onAttach(view: View) {
-    super.onAttach(view)
-    viewModel.attach()
-
-    val gridMenuItem = gridMenuItem()
-    lifecycleScope.launch {
-      viewModel.state()
-        .collect {
-          render(it, gridMenuItem)
-        }
+  override fun onAttach(binding: BookOverviewBinding) {
+    super.onAttach(binding)
+    binding.apply {
+      viewModel.attach()
+      val gridMenuItem = gridMenuItem()
+      lifecycleScope.launch {
+        viewModel.state()
+          .collect {
+            render(it, gridMenuItem)
+          }
+      }
     }
   }
 }

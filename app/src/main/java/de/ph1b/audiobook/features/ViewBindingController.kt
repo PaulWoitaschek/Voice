@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-typealias InflateBinding <B> = (LayoutInflater, ViewGroup, Boolean) -> B
+typealias InflateBinding <B> = (LayoutInflater, ViewGroup?, Boolean) -> B
 
 abstract class ViewBindingController<B : ViewBinding>(
   args: Bundle = Bundle(),
   private val inflateBinding: InflateBinding<B>
 ) : BaseController(args) {
+
+  constructor(inflateBinding: InflateBinding<B>) : this(Bundle(), inflateBinding)
 
   private var _binding: B? = null
   val binding: B get() = _binding ?: error("No binding present.")
