@@ -1,3 +1,8 @@
+# 5.0.1
+* Hopefully fixed an issue where Voice lost the progress on a book
+* Don't automatically play when on rewinding
+* Fixed a bug in the chapter parsing of m4b files
+
 # 4.3.1
 * Fixed: Some books were not being recognized. If you encounter an issue with a file, please just mail me the file - that's the easiest
 way for me to fix it!
