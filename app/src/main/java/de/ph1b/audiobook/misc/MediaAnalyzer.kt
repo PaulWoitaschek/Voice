@@ -48,7 +48,7 @@ class MediaAnalyzer
         bookName = parsed.findTag(TagType.Album),
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
-            startMs = metaDataChapter.start,
+            startMs = metaDataChapter.start.toLongMilliseconds(),
             name = metaDataChapter.tags?.title ?: (index + 1).toString()
           )
         }

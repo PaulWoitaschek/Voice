@@ -1,6 +1,9 @@
 package de.ph1b.audiobook.misc.metadata
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
+import kotlin.time.seconds
 
 @Serializable
 data class MetaDataScanResult(
@@ -41,7 +44,14 @@ data class MetaDataStream(
 )
 
 @Serializable
-data class MetaDataChapter(val start: Long, val tags: MetaDataTags? = null)
+data class MetaDataChapter(
+  @SerialName("start_time")
+  private val startInSeconds: Double,
+  val tags: MetaDataTags? = null
+) {
+
+  val start: Duration get() = startInSeconds.seconds
+}
 
 @Serializable
 data class MetaDataFormat(
