@@ -7,7 +7,6 @@ import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -27,7 +26,6 @@ class BookSearchHandler
 
   fun handle(search: BookSearch) {
     Timber.i("handle $search")
-    runBlocking {
       when (search.mediaFocus) {
         MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
         MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
@@ -36,7 +34,6 @@ class BookSearchHandler
         MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(search)
         else -> playUnstructuredSearch(search.query)
       }
-    }
   }
 
   private fun playAlbum(search: BookSearch) {
