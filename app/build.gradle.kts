@@ -150,7 +150,6 @@ dependencies {
 
   implementation(Deps.ExoPlayer.core)
   implementation(Deps.ExoPlayer.flac) { isTransitive = false }
-  implementation(Deps.ExoPlayer.opus) { isTransitive = false }
 
   implementation(Deps.Conductor.core)
   implementation(Deps.Conductor.transition)
