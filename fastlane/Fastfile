@@ -41,14 +41,4 @@ platform :android do
   lane :ktLint do
     gradle(task: 'ktlintCheck')
   end
-
-  lane :release do
-    gradle(task: 'app:bundleProprietaryRelease app:assembleProprietaryRelease')
-    app_version = gradle(task: 'appVersion', flags: '-q').match('#BEGIN_VERSION#(.*?)#END_VERSION#')[-1]
-    folder = RELEASE_FOLDER + '/' + app_version
-    copy_artifacts(
-      target_path: folder,
-      artifacts: ['app/build/outputs/bundle/proprietaryRelease/*.aab', 'app/build/outputs/apk/proprietary/release/*.apk']
-    )
-  end
 end
