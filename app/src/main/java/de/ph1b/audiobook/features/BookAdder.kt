@@ -19,6 +19,7 @@ import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -26,12 +27,12 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CancellationException
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -53,7 +54,7 @@ class BookAdder
   private val _scannerActive = ConflatedBroadcastChannel(false)
   val scannerActive: Flow<Boolean> = _scannerActive.asFlow()
 
-  private val scanningDispatcher = newSingleThreadContext("bookAdder")
+  private val scanningDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
   init {
     GlobalScope.launch {
