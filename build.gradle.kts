@@ -36,6 +36,21 @@ allprojects {
       force("com.google.code.findbugs:jsr305:3.0.1")
     }
   }
+
+  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+      jvmTarget = "1.8"
+      freeCompilerArgs = listOf(
+        "-Xinline-classes",
+        "-progressive",
+        "-Xopt-in=kotlin.RequiresOptIn",
+        "-Xopt-in=kotlin.ExperimentalStdlibApi",
+        "-Xopt-in=kotlin.time.ExperimentalTime",
+        "-Xopt-in=kotlinx.coroutines.FlowPreview",
+        "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+      )
+    }
+  }
 }
 
 subprojects {
@@ -44,20 +59,6 @@ subprojects {
       convention.findByType(BaseExtension::class)?.let {
         it.dexOptions.preDexLibraries = System.getenv("CI") != "true"
       }
-    }
-  }
-
-  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = "1.8"
-      freeCompilerArgs = listOf(
-        "-XXLanguage:+InlineClasses",
-        "-Xuse-experimental=kotlin.ExperimentalStdlibApi",
-        "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
-        "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
-        "-Xuse-experimental=kotlin.time.ExperimentalTime"
-      )
     }
   }
 }
