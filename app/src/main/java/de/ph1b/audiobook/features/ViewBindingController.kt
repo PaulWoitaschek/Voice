@@ -26,7 +26,7 @@ abstract class ViewBindingController<B : ViewBinding>(
     return inflateBinding(inflater, container, false)
       .also {
         _binding = it
-        onBindingCreated(it)
+        it.onBindingCreated()
       }
       .root
   }
@@ -39,12 +39,12 @@ abstract class ViewBindingController<B : ViewBinding>(
 
   open fun onDestroyView() {}
 
-  open fun onBindingCreated(binding: B) {}
+  open fun B.onBindingCreated() {}
 
   final override fun onAttach(view: View) {
     super.onAttach(view)
-    onAttach(binding)
+    binding.onAttach()
   }
 
-  open fun onAttach(binding: B) {}
+  open fun B.onAttach() {}
 }

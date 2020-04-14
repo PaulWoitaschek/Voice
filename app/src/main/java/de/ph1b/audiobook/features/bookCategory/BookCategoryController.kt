@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
+import de.ph1b.audiobook.databinding.BookCategoryBinding
 import de.ph1b.audiobook.features.GalleryPicker
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -22,7 +23,6 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.uitools.BookChangeHandler
-import kotlinx.android.synthetic.main.book_category.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -30,7 +30,8 @@ import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
-class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), EditBookBottomSheetController.Callback,
+class BookCategoryController(bundle: Bundle) : ViewBindingController<BookCategoryBinding>(bundle, BookCategoryBinding::inflate),
+  EditBookBottomSheetController.Callback,
   CoverFromInternetController.Callback, EditCoverDialogController.Callback {
 
   @Inject
@@ -50,9 +51,7 @@ class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), 
     viewModel.category = category
   }
 
-  override val layoutRes = R.layout.book_category
-
-  override fun onViewCreated() {
+  override fun BookCategoryBinding.onBindingCreated() {
     toolbar.setTitle(category.nameRes)
     toolbar.inflateMenu(R.menu.book_category)
     toolbar.setOnMenuItemClickListener {
@@ -75,7 +74,7 @@ class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), 
           router.replaceTopController(BookPlayController(book.id).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
-          EditBookBottomSheetController(this, book).showDialog(router)
+          EditBookBottomSheetController(this@BookCategoryController, book).showDialog(router)
         }
       }
     }.also { adapter = it }
@@ -94,7 +93,7 @@ class BookCategoryController(bundle: Bundle) : SyntheticViewController(bundle), 
     }
   }
 
-  private fun showSortingPopup() {
+  private fun BookCategoryBinding.showSortingPopup() {
     val anchor = toolbar.findViewById<View>(R.id.sort)
     PopupMenu(activity!!, anchor).apply {
       inflate(R.menu.sort_menu)

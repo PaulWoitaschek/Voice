@@ -62,25 +62,22 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     this.viewModel.bookId = bookId
   }
 
-  override fun onBindingCreated(binding: BookPlayBinding) {
-    super.onBindingCreated(binding)
+  override fun BookPlayBinding.onBindingCreated() {
     coverLoaded = false
-    playPauseDrawableSetter = PlayPauseDrawableSetter(binding.play)
+    playPauseDrawableSetter = PlayPauseDrawableSetter(play)
     setupClicks()
     setupSlider()
     setupToolbar()
-    binding.play.apply {
+    play.apply {
       outlineProvider = CircleOutlineProvider()
       clipToOutline = true
     }
   }
 
-  override fun onAttach(binding: BookPlayBinding) {
-    super.onAttach(binding)
-
+  override fun BookPlayBinding.onAttach() {
     lifecycleScope.launch {
       this@BookPlayController.viewModel.viewState().collect {
-        render(binding, it)
+        render(this@onAttach, it)
       }
     }
     lifecycleScope.launch {

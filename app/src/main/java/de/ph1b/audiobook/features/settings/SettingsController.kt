@@ -1,20 +1,19 @@
 package de.ph1b.audiobook.features.settings
 
-import android.view.View
 import androidx.core.view.isVisible
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.databinding.SettingsBinding
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogController
 import de.ph1b.audiobook.injection.appComponent
-import kotlinx.android.synthetic.main.settings.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class SettingsController : SyntheticViewController() {
+class SettingsController : ViewBindingController<SettingsBinding>(SettingsBinding::inflate) {
 
   @Inject
   lateinit var viewModel: SettingsViewModel
@@ -23,9 +22,7 @@ class SettingsController : SyntheticViewController() {
     appComponent.inject(this)
   }
 
-  override val layoutRes = R.layout.settings
-
-  override fun onViewCreated() {
+  override fun SettingsBinding.onBindingCreated() {
     setupToolbar()
 
     resumePlayback.onCheckedChanged { viewModel.toggleResumeOnReplug() }
@@ -39,9 +36,7 @@ class SettingsController : SyntheticViewController() {
     }
   }
 
-  override fun onAttach(view: View) {
-    super.onAttach(view)
-
+  override fun SettingsBinding.onAttach() {
     lifecycleScope.launch {
       viewModel.viewEffects.collect {
         handleViewEffect(it)
@@ -66,7 +61,7 @@ class SettingsController : SyntheticViewController() {
     }
   }
 
-  private fun render(state: SettingsViewState) {
+  private fun SettingsBinding.render(state: SettingsViewState) {
     Timber.d("render $state")
     darkTheme.isVisible = state.showDarkThemePref
     darkTheme.setChecked(state.useDarkTheme)
@@ -75,7 +70,7 @@ class SettingsController : SyntheticViewController() {
     autoRewind.setDescription(resources!!.getQuantityString(R.plurals.seconds, state.autoRewindInSeconds, state.autoRewindInSeconds))
   }
 
-  private fun setupToolbar() {
+  private fun SettingsBinding.setupToolbar() {
     toolbar.setOnMenuItemClickListener {
       if (it.itemId == R.id.action_contribute) {
         SupportDialogController().showDialog(router)

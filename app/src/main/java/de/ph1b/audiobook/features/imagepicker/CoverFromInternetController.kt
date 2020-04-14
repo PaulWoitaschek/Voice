@@ -18,13 +18,13 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.databinding.ImagePickerBinding
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
-import kotlinx.android.synthetic.main.image_picker.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -39,7 +39,7 @@ import java.net.URLEncoder
 import java.util.UUID
 import javax.inject.Inject
 
-class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bundle) {
+class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
 
   init {
     appComponent.inject(this)
@@ -63,10 +63,8 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
       "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
-  override val layoutRes = R.layout.image_picker
-
   @SuppressLint("SetJavaScriptEnabled")
-  override fun onViewCreated() {
+  override fun ImagePickerBinding.onBindingCreated() {
     with(webView.settings) {
       setSupportZoom(true)
       builtInZoomControls = true
@@ -132,7 +130,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
     setupToolbar()
   }
 
-  private fun showCab() {
+  private fun ImagePickerBinding.showCab() {
     cab = activity!!.createCab(R.id.cabStub) {
       menu(R.menu.crop_menu)
       closeDrawable(R.drawable.close)
@@ -157,7 +155,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
   }
 
   @Suppress("DEPRECATION")
-  private fun takeWebViewScreenshot(): Bitmap {
+  private fun ImagePickerBinding.takeWebViewScreenshot(): Bitmap {
     webView.isDrawingCacheEnabled = true
     webView.buildDrawingCache()
     val drawingCache = webView.drawingCache
@@ -166,7 +164,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
     return bitmap
   }
 
-  private fun saveCover(bitmap: Bitmap) {
+  private fun ImagePickerBinding.saveCover(bitmap: Bitmap) {
     val cropRect = cropOverlay.selectedRect
     val left = cropRect.left
     val top = cropRect.top
@@ -197,7 +195,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
   }
 
   @SuppressLint("InflateParams")
-  private fun setupToolbar() {
+  private fun ImagePickerBinding.setupToolbar() {
     toolbar.setNavigationOnClickListener { popOrBack() }
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
@@ -258,7 +256,7 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // load the last page loaded or the original one of there is none
     val url: String? = savedViewState.getString(SI_URL)
-    webView.loadUrl(url)
+    binding.webView.loadUrl(url)
   }
 
   override fun handleBack(): Boolean {
@@ -266,12 +264,12 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
       return true
     }
 
-    if (noNetwork.isVisible) {
+    if (binding.noNetwork.isVisible) {
       return false
     }
 
-    if (webView.canGoBack()) {
-      webView.goBack()
+    if (binding.webView.canGoBack()) {
+      binding.webView.goBack()
       return true
     }
 
@@ -279,8 +277,8 @@ class CoverFromInternetController(bundle: Bundle) : SyntheticViewController(bund
   }
 
   override fun onSaveViewState(view: View, outState: Bundle) {
-    if (webView.url != ABOUT_BLANK) {
-      outState.putString(SI_URL, webView.url)
+    if (binding.webView.url != ABOUT_BLANK) {
+      outState.putString(SI_URL, binding.webView.url)
     }
   }
 

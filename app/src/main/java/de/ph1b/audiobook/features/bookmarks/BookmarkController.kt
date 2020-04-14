@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
@@ -23,7 +24,6 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
 import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
-import kotlinx.android.synthetic.main.bookmark.*
 import java.util.UUID
 
 /**
@@ -32,7 +32,7 @@ import java.util.UUID
 private const val NI_BOOK_ID = "ni#bookId"
 
 class BookmarkController(args: Bundle) :
-    MvpController<BookmarkView, BookmarkPresenter>(args), BookmarkView,
+  MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(BookmarkBinding::inflate, args), BookmarkView,
     BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
     EditBookmarkDialog.Callback {
 
@@ -43,7 +43,6 @@ class BookmarkController(args: Bundle) :
   private val bookId = args.getUUID(NI_BOOK_ID)
   private val adapter = BookmarkAdapter(this)
 
-  override val layoutRes = R.layout.bookmark
   override fun createPresenter() = appComponent.bookmarkPresenter.apply {
     bookId = this@BookmarkController.bookId
   }
@@ -54,7 +53,7 @@ class BookmarkController(args: Bundle) :
 
   override fun showBookmarkAdded(bookmark: Bookmark) {
     val index = adapter.indexOf(bookmark)
-    recycler.smoothScrollToPosition(index)
+    binding.recycler.smoothScrollToPosition(index)
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
         .show()
   }
@@ -80,7 +79,7 @@ class BookmarkController(args: Bundle) :
     router.popController(this)
   }
 
-  override fun onViewCreated() {
+  override fun BookmarkBinding.onBindingCreated() {
     setupToolbar()
     setupList()
 
@@ -90,17 +89,17 @@ class BookmarkController(args: Bundle) :
   }
 
   override fun onDestroyView() {
-    recycler.adapter = null
+    binding.recycler.adapter = null
   }
 
-  private fun setupToolbar() {
+  private fun BookmarkBinding.setupToolbar() {
     toolbar.setNavigationIcon(R.drawable.close)
     toolbar.setNavigationOnClickListener {
-      router.popController(this)
+      router.popController(this@BookmarkController)
     }
   }
 
-  private fun setupList() {
+  private fun BookmarkBinding.setupList() {
     val layoutManager = LinearLayoutManager(context)
     recycler.addItemDecoration(VerticalDividerItemDecoration(context))
     recycler.layoutManager = layoutManager

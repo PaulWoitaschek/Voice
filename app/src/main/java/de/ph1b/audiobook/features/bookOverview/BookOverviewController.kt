@@ -67,16 +67,14 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var useGrid = false
 
-  override fun onBindingCreated(binding: BookOverviewBinding) {
-    binding.apply {
-      setupToolbar()
-      setupFab()
-      setupRecyclerView()
-      lifecycleScope.launch {
-        viewModel.coverChanged.collect {
-          ensureActive()
-          bookCoverChanged(it)
-        }
+  override fun BookOverviewBinding.onBindingCreated() {
+    setupToolbar()
+    setupFab()
+    setupRecyclerView()
+    lifecycleScope.launch {
+      viewModel.coverChanged.collect {
+        ensureActive()
+        bookCoverChanged(it)
       }
     }
   }
@@ -278,17 +276,14 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     binding.recyclerView.adapter = null
   }
 
-  override fun onAttach(binding: BookOverviewBinding) {
-    super.onAttach(binding)
-    binding.apply {
-      viewModel.attach()
-      val gridMenuItem = gridMenuItem()
-      lifecycleScope.launch {
-        viewModel.state()
-          .collect {
-            render(it, gridMenuItem)
-          }
-      }
+  override fun BookOverviewBinding.onAttach() {
+    viewModel.attach()
+    val gridMenuItem = gridMenuItem()
+    lifecycleScope.launch {
+      viewModel.state()
+        .collect {
+          render(it, gridMenuItem)
+        }
     }
   }
 }

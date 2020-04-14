@@ -2,16 +2,19 @@ package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
 import android.view.View
+import androidx.viewbinding.ViewBinding
 import com.bluelinelabs.conductor.Controller
-import de.ph1b.audiobook.features.SyntheticViewController
+import de.ph1b.audiobook.features.InflateBinding
+import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.misc.checkMainThread
 
 /**
  * Base controller that provides a convenient way for binding a view to a presenter
  */
-abstract class MvpController<V : Any, out P>(
+abstract class MvpController<V : Any, out P, B : ViewBinding>(
+  inflateBinding: InflateBinding<B>,
   args: Bundle = Bundle()
-) : SyntheticViewController(args) where P : Presenter<V> {
+) : ViewBindingController<B>(args, inflateBinding) where P : Presenter<V> {
 
   private var internalPresenter: P? = null
   val presenter: P
