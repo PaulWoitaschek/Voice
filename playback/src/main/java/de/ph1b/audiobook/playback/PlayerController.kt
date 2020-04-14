@@ -5,8 +5,6 @@ import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import de.ph1b.audiobook.playback.session.PlaybackService
-import de.ph1b.audiobook.playback.session.cancelFadeOut
-import de.ph1b.audiobook.playback.session.fadeOut
 import de.ph1b.audiobook.playback.session.forcedNext
 import de.ph1b.audiobook.playback.session.forcedPrevious
 import de.ph1b.audiobook.playback.session.playPause
@@ -73,11 +71,9 @@ class PlayerController
 
   fun playPause() = execute { it.playPause() }
 
+  fun pause() = execute { it.pause() }
+
   fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
-
-  fun fadeOut() = execute { it.fadeOut() }
-
-  fun cancelFadeout() = execute { it.cancelFadeOut() }
 
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)

@@ -61,14 +61,6 @@ object PrefsModule {
   @Provides
   @JvmStatic
   @Singleton
-  @Named(PrefKeys.SHAKE_TO_RESET)
-  fun provideShakeToResetPreference(prefs: AndroidPreferences): Pref<Boolean> {
-    return prefs.boolean(PrefKeys.SHAKE_TO_RESET, false)
-  }
-
-  @Provides
-  @JvmStatic
-  @Singleton
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.AUTO_REWIND_AMOUNT, 2)

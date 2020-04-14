@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.paulwoitaschek.flowpref.Pref
@@ -52,9 +51,6 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @Inject
   lateinit var shakeDetector: ShakeDetector
-
-  @field:[Inject Named(PrefKeys.SHAKE_TO_RESET)]
-  lateinit var shakeToResetPref: Pref<Boolean>
 
   @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
   lateinit var bookmarkOnSleepTimerPref: Pref<Boolean>
@@ -138,21 +134,12 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
         }
       }
 
-      shakeToResetPref.value = binding.shakeToResetSwitch.isChecked
-
       sleepTimer.setActive(true)
       dismissDialog()
     }
 
     // setup bookmark toggle
     binding.bookmarkSwitch.isChecked = bookmarkOnSleepTimerPref.value
-
-    // setup shake to reset setting
-    binding.shakeToResetSwitch.isChecked = shakeToResetPref.value
-    val shakeSupported = shakeDetector.shakeSupported()
-    if (!shakeSupported) {
-      binding.shakeToResetSwitch.isVisible = false
-    }
 
     return BottomSheetDialog(context).apply {
       setContentView(binding.root)
