@@ -52,9 +52,6 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var shakeDetector: ShakeDetector
 
-  @field:[Inject Named(PrefKeys.BOOKMARK_ON_SLEEP)]
-  lateinit var bookmarkOnSleepTimerPref: Pref<Boolean>
-
   @field:[Inject Named(PrefKeys.SLEEP_TIME)]
   lateinit var sleepTimePref: Pref<Int>
 
@@ -115,12 +112,9 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     val book = repo.bookById(bookId)!!
 
     binding.fab.setOnClickListener {
-      // should be hidden if
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
 
-      bookmarkOnSleepTimerPref.value = binding.bookmarkSwitch.isChecked
-      if (bookmarkOnSleepTimerPref.value) {
         val date = DateUtils.formatDateTime(
           context,
           System.currentTimeMillis(),
@@ -132,14 +126,10 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
             date + ": " + context.getString(R.string.action_sleep)
           )
         }
-      }
 
       sleepTimer.setActive(true)
       dismissDialog()
     }
-
-    // setup bookmark toggle
-    binding.bookmarkSwitch.isChecked = bookmarkOnSleepTimerPref.value
 
     return BottomSheetDialog(context).apply {
       setContentView(binding.root)
