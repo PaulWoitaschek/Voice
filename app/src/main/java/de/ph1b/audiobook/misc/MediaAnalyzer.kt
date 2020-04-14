@@ -4,6 +4,7 @@ import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.ffmpeg.ffprobe
 import de.ph1b.audiobook.misc.metadata.MetaDataScanResult
 import de.ph1b.audiobook.misc.metadata.TagType
+import de.ph1b.audiobook.misc.metadata.find
 import de.ph1b.audiobook.misc.metadata.findTag
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -49,7 +50,7 @@ class MediaAnalyzer
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
             startMs = metaDataChapter.start.toLongMilliseconds(),
-            name = metaDataChapter.tags?.title ?: (index + 1).toString()
+            name = metaDataChapter.tags?.find(TagType.Title) ?: (index + 1).toString()
           )
         }
       )
