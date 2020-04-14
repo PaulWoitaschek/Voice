@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.playback
 
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.delay
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.playback.player.FADE_OUT_DURATION
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -10,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect

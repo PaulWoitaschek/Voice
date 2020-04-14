@@ -8,7 +8,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.delay
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
@@ -24,6 +23,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
