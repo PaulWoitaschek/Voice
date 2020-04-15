@@ -15,7 +15,8 @@ data class BookPlayViewState(
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
-  val cover: BookPlayCover
+  val cover: BookPlayCover,
+  val skipSilence: Boolean
 )
 
 data class BookPlayCover(private val book: Book) {

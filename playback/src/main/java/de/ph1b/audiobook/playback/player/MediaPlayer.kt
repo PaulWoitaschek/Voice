@@ -400,6 +400,7 @@ constructor(
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
     checkMainThread()
+    prepare()
     bookContent?.let {
       val copy = it.updateSettings { copy(playbackSpeed = speed) }
       bookContent = copy
@@ -410,7 +411,7 @@ constructor(
   fun setSkipSilences(skip: Boolean) {
     checkMainThread()
     Timber.v("setSkipSilences to $skip")
-
+    prepare()
     bookContent?.let {
       bookContent = it.updateSettings { copy(skipSilence = skip) }
       player.setPlaybackParameters(it.playbackSpeed, skip)

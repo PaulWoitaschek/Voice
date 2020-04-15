@@ -56,7 +56,8 @@ class BookPlayViewModel
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
-        cover = BookPlayCover(book)
+        cover = BookPlayCover(book),
+        skipSilence = book.content.skipSilence
       )
     }
   }

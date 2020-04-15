@@ -77,7 +77,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   override fun BookPlayBinding.onAttach() {
     lifecycleScope.launch {
       this@BookPlayController.viewModel.viewState().collect {
-        render(this@onAttach, it)
+        this@onAttach.render(it)
       }
     }
     lifecycleScope.launch {
@@ -99,34 +99,35 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     }
   }
 
-  private fun render(binding: BookPlayBinding, viewState: BookPlayViewState) {
+  private fun BookPlayBinding.render(viewState: BookPlayViewState) {
     Timber.d("render $viewState")
-    binding.toolbar.title = viewState.title
-    binding.currentChapterText.text = viewState.chapterName
-    binding.currentChapterText.isVisible = viewState.chapterName != null
-    binding.previous.isVisible = viewState.showPreviousNextButtons
-    binding.next.isVisible = viewState.showPreviousNextButtons
-    binding.playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    binding.maxTime.text = formatTime(viewState.duration.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    binding.slider.valueTo = viewState.duration.inMilliseconds.toFloat()
-    if (!binding.slider.isPressed) {
-      binding.slider.value = viewState.playedTime.inMilliseconds.toFloat()
+    toolbar.title = viewState.title
+    currentChapterText.text = viewState.chapterName
+    currentChapterText.isVisible = viewState.chapterName != null
+    previous.isVisible = viewState.showPreviousNextButtons
+    next.isVisible = viewState.showPreviousNextButtons
+    playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
+    maxTime.text = formatTime(viewState.duration.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
+    slider.valueTo = viewState.duration.inMilliseconds.toFloat()
+    if (!slider.isPressed) {
+      slider.value = viewState.playedTime.inMilliseconds.toFloat()
     }
+    skipSilenceItem.isChecked = viewState.skipSilence
     playPauseDrawableSetter.setPlaying(viewState.playing)
-    showLeftSleepTime(binding, viewState.sleepTime)
+    showLeftSleepTime(this, viewState.sleepTime)
 
     if (!coverLoaded) {
       coverLoaded = true
-      binding.cover.transitionName = viewState.cover.coverTransitionName()
+      cover.transitionName = viewState.cover.coverTransitionName()
       // we need to synchronously load this because the transition breaks otherwise
       runBlocking {
         val coverFile = viewState.cover.file()
         val placeholder = viewState.cover.placeholder(activity!!)
         if (coverFile == null) {
-          Picasso.get().cancelRequest(binding.cover)
-          binding.cover.setImageDrawable(placeholder)
+          Picasso.get().cancelRequest(cover)
+          cover.setImageDrawable(placeholder)
         } else {
-          Picasso.get().load(coverFile).placeholder(placeholder).into(binding.cover)
+          Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
         }
       }
     }
