@@ -21,7 +21,7 @@ data class BookPlayViewState(
 
 data class BookPlayCover(private val book: Book) {
 
-  suspend fun file(): File? {
+  fun file(): File? {
     return book.coverFile()
   }
 

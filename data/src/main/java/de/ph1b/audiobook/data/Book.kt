@@ -1,9 +1,6 @@
 package de.ph1b.audiobook.data
 
 import android.content.Context
-import android.os.Environment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
 
@@ -51,24 +48,8 @@ data class Book(
     return copy(content = newContent, metaData = newMetaData)
   }
 
-  suspend fun coverFile(context: Context): File = withContext(Dispatchers.IO) {
-    val coverFile = coverFile(Environment.getExternalStorageDirectory().absolutePath, context)
-    val parentFile = coverFile.parentFile!!
-    if (!parentFile.exists()) {
-      parentFile.mkdirs()
-    }
-    coverFile
-  }
-
-  private fun coverFile(externalStorageDir: String, context: Context): File {
-    val baseName = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
-      // if its part of a collection, take the first file
-      content.chapters.first().file.absolutePath.replace("/", "")
-    } else {
-      // if its a single, just take the root
-      root.replace("/", "")
-    }
-    return File("$externalStorageDir/Android/data/${context.packageName}", "$baseName.jpg")
+  fun coverFile(context: Context): File {
+    return File(context.filesDir, id.toString())
   }
 
   enum class Type {

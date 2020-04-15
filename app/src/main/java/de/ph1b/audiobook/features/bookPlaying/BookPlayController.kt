@@ -29,7 +29,6 @@ import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -119,8 +118,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     if (!coverLoaded) {
       coverLoaded = true
       cover.transitionName = viewState.cover.coverTransitionName()
-      // we need to synchronously load this because the transition breaks otherwise
-      runBlocking {
         val coverFile = viewState.cover.file()
         val placeholder = viewState.cover.placeholder(activity!!)
         if (coverFile == null) {
@@ -128,7 +125,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           cover.setImageDrawable(placeholder)
         } else {
           Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
-        }
       }
     }
   }
