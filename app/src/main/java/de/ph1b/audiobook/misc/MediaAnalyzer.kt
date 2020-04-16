@@ -79,19 +79,14 @@ class MediaAnalyzer
 
 private fun ffProbeCommand(file: File): List<String> {
   return listOf(
-    "-i",
-    file.absolutePath,
-    "-print_format",
-    "json=c=1",
+    "-i", file.absolutePath,
+    "-print_format", "json=c=1",
     "-show_chapters",
-    "-loglevel",
-    "quiet",
-    "-show_entries",
-    "format=duration",
-    "-show_entries",
-    "format_tags=artist,title,album",
-    "-show_entries",
-    "stream_tags=title,artist,album"
+    "-loglevel", "quiet",
+    "-show_entries", "format=duration",
+    "-show_entries", "format_tags=artist,title,album",
+    "-show_entries", "stream_tags=artist,title,album",
+    "-select_streams", "a" // only select the audio stream
   )
 }
 
