@@ -1,27 +1,7 @@
-enum Stability {
-  Eap("eap"),
-  Alpha("alpha"),
-  Beta("beta"),
-  Rc("rc"),
-  Stable
-
-  final List<String> keywords
-
-  Stability(String... keywords) {
-    this.keywords = keywords.toList()
-  }
-}
-
-static Stability stability(String value) {
-  return Stability.values().find {
-    it.keywords.any { keyword ->
-      value.toLowerCase().contains(keyword.toLowerCase())
-    }
-  } ?: Stability.Stable
-}
+import deps.DependencyStability
 
 dependencyUpdates {
   rejectVersionIf {
-    return stability(it.candidate.version) < stability(it.currentVersion)
+    DependencyStability.ofVersion(it.candidate.version) < DependencyStability.ofVersion(it.currentVersion)
   }
 }

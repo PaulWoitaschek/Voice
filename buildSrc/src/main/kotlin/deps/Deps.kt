@@ -8,7 +8,7 @@ object Versions {
   val targetCompatibility = JavaVersion.VERSION_1_8
 
   const val compileSdk = 29
-  const val minSdk = 23
+  const val minSdk = 24
   const val targetSdk = 29
   const val versionCode = 3060341
   const val versionName = "5.0.1"
@@ -40,7 +40,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.2"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.3"
   const val material = "com.google.android.material:material:1.2.0-alpha06"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -48,7 +48,7 @@ object Deps {
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.7.2"
-  const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.3.1.LTS"
+  const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.3.2"
 
   object Conductor {
     const val core = "com.bluelinelabs:conductor:3.0.0-rc4"
