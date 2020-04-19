@@ -28,7 +28,7 @@ platform :android do
 
   lane :lint do
     begin
-      gradle(task: 'app:lintProprietaryDebug')
+      gradle(task: 'app:lintProprietaryRelease')
     ensure
       folder = ARTIFACT_FOLDER + '/lint'
       copy_artifacts(

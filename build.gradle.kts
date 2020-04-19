@@ -78,8 +78,11 @@ tasks {
 
   register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
-      (subProject.tasks.findByName("testProprietaryDebugUnitTest")
-        ?: subProject.tasks.findByName("testDebugUnitTest")) as? Test
+      val tasks = subProject.tasks
+      (tasks.findByName("testProprietaryReleaseUnitTest")
+        ?: tasks.findByName("testReleaseUnitTest")
+        ?: tasks.findByName("test")
+        ) as? Test
     }
     val artifactFolder = File("${rootDir.absolutePath}/artifacts")
     destinationDir = File(artifactFolder, "testResults")
