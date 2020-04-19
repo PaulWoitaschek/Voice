@@ -1,3 +1,13 @@
+# 5.0.2
+* Show an icon if a bookmark was added by the sleep timer. Starting the sleep timer now always creates a bookmark
+* Add an icon on the current playing chapter to indicate that you can click on it to see the list of chapters.
+* Fixed an issue with opus playback
+* After the sleep timer ended, for 30 seconds you have the chance to shake the phone to restart the playback. The feature is now always active without a toggle.
+* Fixed flac chapter parsing
+* Fixed the skip silence not always working
+* Fixed an issue where wrong covers were detected.
+* Fixed an issue with opus title parsing
+
 # 5.0.1
 * Hopefully fixed an issue where Voice lost the progress on a book
 * Don't automatically play when on rewinding
