@@ -36,8 +36,9 @@ android {
   }
 
   sourceSets {
-    // debug as a workaround, see https://github.com/robolectric/robolectric/issues/3928
-    getByName("debug").assets.srcDir(files("$projectDir/schemas"))
+    named("test") {
+      assets.srcDir(project.file("schemas"))
+    }
   }
 
   testOptions {
