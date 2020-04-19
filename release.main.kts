@@ -21,7 +21,7 @@ class Release : CliktCommand() {
     return File("buildSrc/src/main/kotlin/deps/Deps.kt")
       .readLines()
       .mapNotNull {
-        "versionName = (.*)".toRegex().find(it)?.groupValues?.getOrNull(1)
+        "versionName = \"(.*)\"".toRegex().find(it)?.groupValues?.getOrNull(1)
       }
       .single()
   }
