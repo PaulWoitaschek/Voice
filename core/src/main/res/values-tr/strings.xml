@@ -34,35 +34,35 @@
     <!--JumpToPosition-->
     <string name="action_time_change">Şuna git:</string>
     <!--BookAdding-->
-    <string name="adding_failed_subfolder">Klasörler birbirinin alt klasörü olmamalıdır:</string>
-    <string name="audiobook_folders_title">Sesli kitap klasörleri</string>
-    <string name="chosen_folder_description">Seçilen klasör:</string>
+    <string name="adding_failed_subfolder">Dizinler birbirinin alt dizini olamaz:</string>
+    <string name="audiobook_folders_title">Sesli kitap dizinleri</string>
+    <string name="chosen_folder_description">Seçilen dizin:</string>
     <string name="delete_folder">Kütüphaneden kaldırılsın mı?</string>
-    <string name="delete_folder_content">Aşağıdaki klasörü kitaplığınızdan kaldırmak istiyor musunuz?</string>
+    <string name="delete_folder_content">Aşağıdaki dizini kitaplığınızdan kaldırmak istiyor musunuz?</string>
     <string name="folder_add_single_book">Tek kitap</string>
-    <string name="folder_add_collection">Birden fazla kitap içeren klasör</string>
+    <string name="folder_add_collection">Birden fazla kitap içeren dizin</string>
     <string name="for_example">örn.</string>
     <string name="content_add_book">Bir kitap ekle</string>
-    <string name="content_is_folder">Klasör </string>
+    <string name="content_is_folder">Dizin</string>
     <string name="content_is_file">Dosya</string>
-    <string name="content_navigate_up">Üst klasöre gidin</string>
-    <string name="permission_external_new_explanation">İzinsiz kitap okuyamıyor</string>
-    <string name="permission_retry">Tekrar?</string>
+    <string name="content_navigate_up">Üst dizine gidin</string>
+    <string name="permission_external_new_explanation">İzin olmadan kitaplar okunamıyor</string>
+    <string name="permission_retry">Yine dene?</string>
     <string name="permission_goto_settings">Ayarlar</string>
     <string name="storage_pre_device">Depolama:</string>
     <string name="storage_all">Tümü</string>
     <!--PlaybackSpeed-->
-    <string name="playback_speed">Oynatma hızı</string>
+    <string name="playback_speed">Geriye oynatım hızı</string>
     <!--Bookmarks-->
     <string name="bookmark">Yerimi</string>
     <string name="shake_to_reset">Sıfırlamak için sallayın</string>
-    <string name="bookmark_edit_title">Yerimini düzenle</string>
+    <string name="bookmark_edit_title">Yer imini düzenle</string>
     <string name="bookmark_edit_hint">Yer imi adı</string>
     <string name="bookmark_added">Yer imi eklendi</string>
     <string name="bookmark_delete_title">Bu yer imi silinsin mi?</string>
     <!--Settings-->
     <string name="action_settings">Tercihler</string>
-    <string name="pref_resume_on_replug">Oynatmaya devam et</string>
+    <string name="pref_resume_on_replug">Geriye oynatıma devam et</string>
     <string name="pref_resume_on_replug_hint">Kulaklığı çıkardığınızda durakladıysa, tekrar taktığınızda devam eder.</string>
     <string name="min">%s dak</string>
     <string name="delete_last_number">Son girilen numarayı siler</string>
@@ -71,7 +71,8 @@
         <item quantity="other">%d saniye</item>
     </plurals>
     <string name="pref_seek_time">Değeri atla</string>
-    <string name="pref_root_folder_title">Sesli kitap klasörü</string>
+    <string name="pref_root_folder_title">Sesli kitap dizini</string>
+    <string name="pref_theme_dark">Karanlık Tema</string>
     <string name="pref_auto_rewind_title">Otomatik geri sarma</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Elle duraklatıldıktan sonra %d saniye otomatik olarak geri sarar.</item>
@@ -91,6 +92,7 @@
     <string name="no_network">Ağ yok?</string>
     <string name="network_top">Bu iş çok iyi sonuç vermedi ...</string>
     <string name="cover_crop">Kapağı kırp</string>
+    <string name="music_notification">Geriye oynatım</string>
     <string name="onboarding_title">Hoşgeldin!</string>
     <string name="onboarding_content">İlk sesli kitabını eklemekle başlayalım.</string>
     <!--book category-->
@@ -99,6 +101,6 @@
     <string name="book_header_completed">Tamamlandı</string>
     <string name="book_category_sort">Sıralıyor</string>
     <string name="book_category_sort_by_name">Ad</string>
-    <string name="book_category_sort_by_last_played">Son Çalınan</string>
+    <string name="book_category_sort_by_last_played">Son Oynatılan</string>
     <string name="book_category_sort_by_added">Eklendi</string>
 </resources>
