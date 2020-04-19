@@ -102,7 +102,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     Timber.d("render $viewState")
     toolbar.title = viewState.title
     currentChapterText.text = viewState.chapterName
-    currentChapterText.isVisible = viewState.chapterName != null
+    currentChapterContainer.isVisible = viewState.chapterName != null
     previous.isVisible = viewState.showPreviousNextButtons
     next.isVisible = viewState.showPreviousNextButtons
     playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
@@ -136,7 +136,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
     binding.previous.setOnClickListener { this.viewModel.previous() }
     binding.next.setOnClickListener { this.viewModel.next() }
-    binding.currentChapterText.setOnClickListener {
+    binding.currentChapterContainer.setOnClickListener {
       SelectChapterDialog(bookId).showDialog(router)
     }
 

@@ -94,9 +94,9 @@
       android:foreground="?attr/selectableItemBackgroundBorderless"
       android:padding="12dp"
       android:src="@drawable/ic_chevron_left"
-      app:layout_constraintBottom_toBottomOf="@+id/currentChapterText"
+      app:layout_constraintBottom_toBottomOf="@+id/currentChapterContainer"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/currentChapterText" />
+      app:layout_constraintTop_toTopOf="@+id/currentChapterContainer" />
 
     <ImageView
       android:id="@+id/next"
@@ -106,39 +106,56 @@
       android:foreground="?attr/selectableItemBackgroundBorderless"
       android:padding="12dp"
       android:src="@drawable/ic_chevron_right"
-      app:layout_constraintBottom_toBottomOf="@+id/currentChapterText"
+      app:layout_constraintBottom_toBottomOf="@+id/currentChapterContainer"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/currentChapterText" />
+      app:layout_constraintTop_toTopOf="@+id/currentChapterContainer" />
 
-    <TextView
-      android:id="@+id/currentChapterText"
+    <FrameLayout
+      android:id="@+id/currentChapterContainer"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:foreground="?attr/selectableItemBackground"
       android:layout_marginStart="8dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="8dp"
-      android:ellipsize="end"
-      android:foreground="?attr/selectableItemBackground"
       android:gravity="center"
-      android:maxLines="2"
-      android:minHeight="56dp"
-      android:paddingTop="16dp"
-      android:paddingBottom="16dp"
-      android:textAppearance="?textAppearanceBody1"
-      app:layout_constraintEnd_toStartOf="@+id/next"
-      android:layout_marginBottom="8dp"
       app:layout_constraintBottom_toTopOf="@+id/slider"
-      app:layout_constraintStart_toEndOf="@+id/previous" />
+      app:layout_constraintEnd_toStartOf="@+id/next"
+      app:layout_constraintStart_toEndOf="@+id/previous"
+      tools:text="This is the end">
+
+        <TextView
+          android:id="@+id/currentChapterText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:drawableEnd="@drawable/ic_chevron_down"
+          android:drawablePadding="4dp"
+          android:ellipsize="end"
+          android:gravity="center"
+          android:maxLines="2"
+          android:minHeight="56dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp"
+          android:textAppearance="?textAppearanceBody1"
+          app:layout_constrainedWidth="true"
+          app:layout_constraintBottom_toTopOf="@+id/slider"
+          app:layout_constraintEnd_toStartOf="@+id/next"
+          app:layout_constraintStart_toEndOf="@+id/previous"
+          tools:text="This is the end" />
+
+    </FrameLayout>
 
     <ImageView
       android:id="@+id/cover"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:layout_marginBottom="8dp"
       android:adjustViewBounds="true"
       android:contentDescription="@string/cover"
-      android:layout_marginBottom="8dp"
       android:scaleType="centerCrop"
-      app:layout_constraintBottom_toTopOf="@id/currentChapterText"
+      app:layout_constraintBottom_toTopOf="@+id/currentChapterContainer"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@id/toolbar"
