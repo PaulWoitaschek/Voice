@@ -83,6 +83,11 @@ object Deps {
     const val flac = "com.github.PaulWoitaschek.ExoPlayer-Extensions:extension-flac:$extensionVersion"
   }
 
+  object ThreeTen {
+    const val jvm = "org.threeten:threetenbp:1.4.3"
+    const val android = "com.jakewharton.threetenabp:threetenabp:1.2.3"
+  }
+
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {

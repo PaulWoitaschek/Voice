@@ -7,6 +7,7 @@ import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.misc.DialogController
+import java.util.UUID
 
 /**
  * Dialog for confirming bookmark deletion.
@@ -14,7 +15,7 @@ import de.ph1b.audiobook.misc.DialogController
 class DeleteBookmarkDialog(args: Bundle) : DialogController(args) {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    val bookId = args.getLong(NI_BOOK_ID)
+    val bookId = args.getSerializable(NI_BOOK_ID) as UUID
     val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)!!
     return MaterialDialog(activity!!).apply {
       title(R.string.bookmark_delete_title)
@@ -28,7 +29,7 @@ class DeleteBookmarkDialog(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onDeleteBookmarkConfirmed(id: Long)
+    fun onDeleteBookmarkConfirmed(id: UUID)
   }
 
   companion object {
@@ -41,7 +42,7 @@ class DeleteBookmarkDialog(args: Bundle) : DialogController(args) {
       bookmark: Bookmark
     ): DeleteBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
-        putLong(NI_BOOK_ID, bookmark.id)
+        putSerializable(NI_BOOK_ID, bookmark.id)
         putString(NI_BOOKMARK_TITLE, bookmark.title)
       }
       return DeleteBookmarkDialog(args).apply {

@@ -1,71 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:background="?attr/selectableItemBackground"
-    android:descendantFocusability="blocksDescendants"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    tools:ignore="Overdraw">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="72dp"
+  android:background="?attr/selectableItemBackground"
+  android:descendantFocusability="blocksDescendants"
+  android:gravity="center_vertical"
+  android:orientation="horizontal"
+  tools:ignore="Overdraw">
 
     <ImageView
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="72dp"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/popup_edit"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:src="@drawable/ic_more_vert" />
+      android:id="@+id/edit"
+      android:layout_width="wrap_content"
+      android:layout_height="72dp"
+      android:layout_alignParentEnd="true"
+      android:contentDescription="@string/popup_edit"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:src="@drawable/ic_more_vert"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:layout_toStartOf="@id/edit"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:drawablePadding="4dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      app:layout_constrainedWidth="true"
+      app:layout_constraintBottom_toTopOf="@+id/summary"
+      app:layout_constraintEnd_toStartOf="@+id/edit"
+      app:layout_constraintHorizontal_bias="0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_chainStyle="packed"
+      tools:drawableStart="@drawable/ic_sleep"
+      tools:text="Fictive bookmark title that might be too long to fit" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            tools:text="Fictive bookmark title that is possibly too long long long" />
+    <TextView
+      android:id="@+id/summary"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="8dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+      android:textSize="@dimen/list_text_secondary_size"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/time"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/title"
+      tools:text="(4/102)" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <TextView
+      android:id="@+id/time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+      android:textSize="@dimen/list_text_secondary_size"
+      app:layout_constraintBottom_toBottomOf="@+id/summary"
+      app:layout_constraintEnd_toStartOf="@+id/edit"
+      app:layout_constraintTop_toTopOf="@+id/summary"
+      tools:text="10:10:10 / 12:12:12" />
 
-            <TextView
-                android:id="@+id/summary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textSize="@dimen/list_text_secondary_size"
-                tools:text="(4/102)" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textSize="@dimen/list_text_secondary_size"
-                tools:text="10:10:10 / 12:12:12" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

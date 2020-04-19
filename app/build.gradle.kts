@@ -157,6 +157,7 @@ dependencies {
   implementation(Deps.lifecycle)
 
   implementation(Deps.groupie)
+  implementation(Deps.ThreeTen.android)
 
   implementation(Deps.Prefs.android)
   testImplementation(Deps.Prefs.inMemory)

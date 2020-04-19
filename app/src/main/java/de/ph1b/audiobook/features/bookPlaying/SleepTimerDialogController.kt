@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -114,16 +113,11 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     binding.fab.setOnClickListener {
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
-
-        val date = DateUtils.formatDateTime(
-          context,
-          System.currentTimeMillis(),
-          DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE
-        )
-        GlobalScope.launch(Dispatchers.IO) {
+      GlobalScope.launch(Dispatchers.IO) {
           bookmarkRepo.addBookmarkAtBookPosition(
-            book,
-            date + ": " + context.getString(R.string.action_sleep)
+            book = book,
+            setBySleepTimer = true,
+            title = null
           )
         }
 

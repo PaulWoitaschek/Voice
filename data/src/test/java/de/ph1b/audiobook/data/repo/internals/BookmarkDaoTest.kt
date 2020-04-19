@@ -7,9 +7,12 @@ import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookFactory
 import de.ph1b.audiobook.data.Bookmark
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.threeten.bp.Instant
+import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [28])
@@ -30,12 +33,16 @@ class BookmarkDaoTest {
         Bookmark(
           book.content.chapters.first().file,
           "my title",
-          System.currentTimeMillis()
+          System.currentTimeMillis(),
+          addedAt = Instant.now(),
+          setBySleepTimer = false,
+          id = UUID.randomUUID()
         )
       }
-      .map {
-        val addedId = dao.addBookmark(it)
-        it.copy(id = addedId)
+      .onEach {
+        runBlocking {
+          dao.addBookmark(it)
+        }
       }
 
     // test inserted match
@@ -46,12 +53,18 @@ class BookmarkDaoTest {
     val toDelete = bookmarks.subList(0, 5)
     val notToDelete = bookmarks.subList(5, bookmarks.size)
     toDelete.forEach {
-      dao.deleteBookmark(it.id)
+      runBlocking {
+        dao.deleteBookmark(it.id)
+      }
     }
 
     // check that only the non deleted remain
     assertThat(bookmarksForBook(book)).isEqualTo(notToDelete)
   }
 
-  private fun bookmarksForBook(book: Book) = dao.allForFiles(book.content.chapters.map { it.file })
+  private fun bookmarksForBook(book: Book): List<Bookmark> {
+    return runBlocking {
+      dao.allForFiles(book.content.chapters.map { it.file })
+    }
+  }
 }

@@ -6,6 +6,7 @@ import de.ph1b.audiobook.data.MarkData
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
+import org.threeten.bp.Instant
 import java.io.File
 import java.util.UUID
 
@@ -37,4 +38,14 @@ class Converters {
 
   @TypeConverter
   fun toUUID(string: String): UUID = UUID.fromString(string)
+
+  @TypeConverter
+  fun fromInstant(instant: Instant): String {
+    return instant.toString()
+  }
+
+  @TypeConverter
+  fun toInstant(string: String): Instant {
+    return Instant.parse(string)
+  }
 }

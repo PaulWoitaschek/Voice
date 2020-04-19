@@ -90,8 +90,11 @@ class BookPlayViewModel
   fun addBookmark() {
     scope.launch {
       val book = repo.bookById(bookId) ?: return@launch
-      val title = book.content.currentChapter.name
-      bookmarkRepo.addBookmarkAtBookPosition(book, title)
+      bookmarkRepo.addBookmarkAtBookPosition(
+        book = book,
+        title = null,
+        setBySleepTimer = false
+      )
       _viewEffects.send(BookPlayViewEffect.BookmarkAdded)
     }
   }

@@ -58,7 +58,7 @@ class BookmarkController(args: Bundle) :
         .show()
   }
 
-  override fun onDeleteBookmarkConfirmed(id: Long) {
+  override fun onDeleteBookmarkConfirmed(id: UUID) {
     presenter.deleteBookmark(id)
   }
 
@@ -67,7 +67,7 @@ class BookmarkController(args: Bundle) :
     router.popController(this)
   }
 
-  override fun onEditBookmark(id: Long, title: String) {
+  override fun onEditBookmark(id: UUID, title: String) {
     presenter.editBookmark(id, title)
   }
 

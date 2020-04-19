@@ -11,6 +11,7 @@ import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.misc.DialogController
+import java.util.UUID
 
 /**
  * Dialog for changing the bookmark title.
@@ -19,7 +20,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val bookmarkTitle = args.getString(NI_BOOKMARK_TITLE)
-    val bookmarkId = args.getLong(NI_BOOK_ID)
+    val bookmarkId = args.getSerializable(NI_BOOK_ID) as UUID
 
     val dialog = MaterialDialog(activity!!).apply {
       title(R.string.bookmark_edit_title)
@@ -51,7 +52,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onEditBookmark(id: Long, title: String)
+    fun onEditBookmark(id: UUID, title: String)
   }
 
   companion object {
@@ -64,7 +65,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
       bookmark: Bookmark
     ): EditBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
-        putLong(NI_BOOK_ID, bookmark.id)
+        putSerializable(NI_BOOK_ID, bookmark.id)
         putString(NI_BOOKMARK_TITLE, bookmark.title)
       }
       return EditBookmarkDialog(args).apply {

@@ -44,7 +44,7 @@ class BookmarkPresenter
     }
   }
 
-  fun deleteBookmark(id: Long) {
+  fun deleteBookmark(id: UUID) {
     scope.launch {
       bookmarkRepo.deleteBookmark(id)
       bookmarks.removeAll { it.id == id }
@@ -53,7 +53,7 @@ class BookmarkPresenter
     }
   }
 
-  fun selectBookmark(id: Long) {
+  fun selectBookmark(id: UUID) {
     val bookmark = bookmarks.find { it.id == id }
       ?: return
 
@@ -69,17 +69,15 @@ class BookmarkPresenter
     view.finish()
   }
 
-  fun editBookmark(id: Long, newTitle: String) {
+  fun editBookmark(id: UUID, newTitle: String) {
     scope.launch {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(
-          title = newTitle,
-          id = Bookmark.ID_UNKNOWN
+          title = newTitle
         )
-        bookmarkRepo.deleteBookmark(it.id)
-        val newBookmark = bookmarkRepo.addBookmark(withNewTitle)
+        bookmarkRepo.addBookmark(withNewTitle)
         val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
-        bookmarks[index] = newBookmark
+        bookmarks[index] = withNewTitle
         if (attached) renderView()
       }
     }
@@ -88,8 +86,11 @@ class BookmarkPresenter
   fun addBookmark(name: String) {
     scope.launch {
       val book = repo.bookById(bookId) ?: return@launch
-      val title = if (name.isEmpty()) book.content.currentChapter.name else name
-      val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(book, title)
+      val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(
+        book = book,
+        title = name,
+        setBySleepTimer = false
+      )
       bookmarks.add(addedBookmark)
       if (attached) renderView()
     }

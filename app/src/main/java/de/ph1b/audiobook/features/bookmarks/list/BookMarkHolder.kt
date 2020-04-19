@@ -1,26 +1,25 @@
 package de.ph1b.audiobook.features.bookmarks.list
 
+import android.text.format.DateUtils
 import android.view.ViewGroup
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.markForPosition
+import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.misc.formatTime
-import de.ph1b.audiobook.uitools.ExtensionsHolder
-import kotlinx.android.synthetic.main.bookmark_row_layout.*
+import de.ph1b.audiobook.uitools.ViewBindingHolder
 
-/**
- * ViewHolder for displaying a Bookmark
- */
 class BookMarkHolder(
   parent: ViewGroup,
   private val listener: BookmarkClickListener
-) : ExtensionsHolder(parent, R.layout.bookmark_row_layout) {
+) : ViewBindingHolder<BookmarkRowLayoutBinding>(parent, BookmarkRowLayoutBinding::inflate) {
 
   var boundBookmark: Bookmark? = null
     private set
 
   init {
-    edit.setOnClickListener { view ->
+    binding.edit.setOnClickListener { view ->
       boundBookmark?.let {
         listener.onOptionsMenuClicked(it, view)
       }
@@ -34,21 +33,24 @@ class BookMarkHolder(
 
   fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
     boundBookmark = bookmark
-    title.text = bookmark.title
-
-    val size = chapters.size
     val currentChapter = chapters.single { it.file == bookmark.mediaFile }
+    val bookmarkTitle = bookmark.title
+    binding.title.text = when {
+      bookmark.setBySleepTimer -> {
+        DateUtils.formatDateTime(itemView.context, bookmark.addedAt.toEpochMilli(), DateUtils.FORMAT_SHOW_TIME)
+      }
+      bookmarkTitle != null && bookmarkTitle.isNotEmpty() -> bookmarkTitle
+      else -> currentChapter.markForPosition(bookmark.time).name
+    }
+    binding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(if (bookmark.setBySleepTimer) R.drawable.ic_sleep else 0, 0, 0, 0)
+    val size = chapters.size
     val index = chapters.indexOf(currentChapter)
 
-    summary.text = itemView.context.getString(
+    binding.summary.text = itemView.context.getString(
       R.string.format_bookmarks_n_of,
       index + 1,
       size
     )
-    time.text = itemView.context.getString(
-      R.string.format_bookmarks_time,
-      formatTime(bookmark.time.toLong()),
-      formatTime(currentChapter.duration.toLong())
-    )
+    binding.time.text = formatTime(bookmark.time)
   }
 }

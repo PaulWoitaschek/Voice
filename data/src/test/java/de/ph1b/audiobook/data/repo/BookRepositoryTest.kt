@@ -54,7 +54,7 @@ class BookRepositoryTest {
     }
   }
 
-  fun ignoringChapterIds(): Correspondence<Book, Book> {
+  private fun ignoringChapterIds(): Correspondence<Book, Book> {
     return Correspondence.from({ actual, expected ->
       actual?.withZeroedChapterIds() == expected?.withZeroedChapterIds()
     }, "compare")

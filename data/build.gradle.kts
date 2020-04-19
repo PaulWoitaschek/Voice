@@ -75,4 +75,7 @@ dependencies {
   testImplementation(Deps.junit)
   testImplementation(Deps.robolectric)
   testImplementation(Deps.truth)
+
+  api(Deps.ThreeTen.android)
+  testImplementation(Deps.ThreeTen.jvm)
 }
