@@ -1,4 +1,4 @@
-Voice [![CI Status](https://img.shields.io/bitrise/9a019fd662ba4b7f/master.svg?token=xxw4jv2fGrT9Dwxhm0K9ng)](https://app.bitrise.io/app/9a019fd662ba4b7f#/builds)
+Voice ![CI](https://github.com/PaulWoitaschek/Voice/workflows/CI/badge.svg)
 =======================
 
 <a href="https://f-droid.org/packages/de.ph1b.audiobook/">
