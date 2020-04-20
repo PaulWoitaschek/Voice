@@ -13,7 +13,6 @@ import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
-import de.ph1b.audiobook.features.bookmarks.dialogs.DeleteBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.list.BookMarkHolder
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
@@ -33,8 +32,8 @@ private const val NI_BOOK_ID = "ni#bookId"
 
 class BookmarkController(args: Bundle) :
   MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(BookmarkBinding::inflate, args), BookmarkView,
-    BookmarkClickListener, AddBookmarkDialog.Callback, DeleteBookmarkDialog.Callback,
-    EditBookmarkDialog.Callback {
+  BookmarkClickListener, AddBookmarkDialog.Callback,
+  EditBookmarkDialog.Callback {
 
   constructor(bookId: UUID) : this(Bundle().apply {
     putUUID(NI_BOOK_ID, bookId)
@@ -55,11 +54,7 @@ class BookmarkController(args: Bundle) :
     val index = adapter.indexOf(bookmark)
     binding.recycler.smoothScrollToPosition(index)
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-        .show()
-  }
-
-  override fun onDeleteBookmarkConfirmed(id: UUID) {
-    presenter.deleteBookmark(id)
+      .show()
   }
 
   override fun onBookmarkClicked(bookmark: Bookmark) {
@@ -134,7 +129,7 @@ class BookmarkController(args: Bundle) :
           true
         }
         R.id.delete -> {
-          showDeleteBookmarkDialog(bookmark)
+          presenter.deleteBookmark(bookmark.id)
           true
         }
         else -> false
@@ -149,9 +144,5 @@ class BookmarkController(args: Bundle) :
 
   private fun showAddBookmarkDialog() {
     AddBookmarkDialog(this).showDialog(router)
-  }
-
-  private fun showDeleteBookmarkDialog(bookmark: Bookmark) {
-    DeleteBookmarkDialog(this, bookmark).showDialog(router)
   }
 }
