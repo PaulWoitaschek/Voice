@@ -22,7 +22,6 @@ import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
-import de.ph1b.audiobook.uitools.VerticalDividerItemDecoration
 import java.util.UUID
 
 /**
@@ -96,7 +95,6 @@ class BookmarkController(args: Bundle) :
 
   private fun BookmarkBinding.setupList() {
     val layoutManager = LinearLayoutManager(context)
-    recycler.addItemDecoration(VerticalDividerItemDecoration(context))
     recycler.layoutManager = layoutManager
     recycler.adapter = adapter
     val itemAnimator = recycler.itemAnimator as DefaultItemAnimator
