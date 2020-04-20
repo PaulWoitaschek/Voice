@@ -9,7 +9,6 @@ import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.coverFile
-import kotlinx.android.synthetic.main.book_overview_row_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class LoadBookCover(holder: BookOverviewHolder) {
+class LoadBookCover(binding: BookOverviewBinding) {
 
   @Inject
   lateinit var coverColorExtractor: CoverColorExtractor
@@ -27,9 +26,9 @@ class LoadBookCover(holder: BookOverviewHolder) {
     appComponent.inject(this)
   }
 
-  private val context = holder.itemView.context
-  private val progress = holder.progress
-  private val cover = holder.cover
+  private val context = binding.root.context
+  private val progress = binding.progress
+  private val cover = binding.cover
   private val defaultProgressColor = context.getColor(R.color.progressColor)
 
   private var boundFileLength: Long = Long.MIN_VALUE

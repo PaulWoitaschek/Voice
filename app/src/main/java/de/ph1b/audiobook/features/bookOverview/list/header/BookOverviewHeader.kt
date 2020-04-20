@@ -2,29 +2,28 @@ package de.ph1b.audiobook.features.bookOverview.list.header
 
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.BookOverviewHeaderBinding
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
-import de.ph1b.audiobook.uitools.ExtensionsHolder
-import kotlinx.android.synthetic.main.book_overview_header.*
+import de.ph1b.audiobook.uitools.ViewBindingHolder
 
 typealias OpenCategoryListener = (BookOverviewCategory) -> Unit
 
 class BookOverviewHeaderHolder(parent: ViewGroup, listener: OpenCategoryListener) :
-  ExtensionsHolder(parent, R.layout.book_overview_header) {
+  ViewBindingHolder<BookOverviewHeaderBinding>(parent, BookOverviewHeaderBinding::inflate) {
 
   private var boundCategory: BookOverviewCategory? = null
 
   init {
-    showAll.setOnClickListener {
+    binding.showAll.setOnClickListener {
       boundCategory?.let(listener)
     }
   }
 
   fun bind(model: BookOverviewHeaderModel) {
     boundCategory = model.category
-    text.setText(model.category.nameRes)
-    showAll.isInvisible = !model.hasMore
+    binding.text.setText(model.category.nameRes)
+    binding.showAll.isInvisible = !model.hasMore
   }
 }
 
