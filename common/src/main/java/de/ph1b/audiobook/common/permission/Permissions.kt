@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.common.permission
 
 import android.app.Activity
 import android.content.Context

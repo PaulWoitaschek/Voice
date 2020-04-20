@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/ffmpeg/ffmpeg.iml" filepath="$PROJECT_DIR$/ffmpeg/ffmpeg.iml" group="Voice/ffmpeg" />
       <module fileurl="file://$PROJECT_DIR$/playback/playback.iml" filepath="$PROJECT_DIR$/playback/playback.iml" group="Voice/playback" />
       <module fileurl="file://$PROJECT_DIR$/prefs/prefs.iml" filepath="$PROJECT_DIR$/prefs/prefs.iml" group="Voice/prefs" />
+      <module fileurl="file://$PROJECT_DIR$/scanner/scanner.iml" filepath="$PROJECT_DIR$/scanner/scanner.iml" group="Voice/scanner" />
     </modules>
   </component>
 </project>

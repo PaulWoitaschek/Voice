@@ -12,13 +12,13 @@ import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.crashreporting.CrashLoggingTree
 import de.ph1b.audiobook.crashreporting.CrashReporter
-import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
+import de.ph1b.audiobook.scanner.MediaScanner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
@@ -31,7 +31,7 @@ import javax.inject.Named
 class App : Application(), PlaybackComponentFactoryProvider {
 
   @Inject
-  lateinit var bookAdder: BookAdder
+  lateinit var mediaScanner: MediaScanner
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
   @Inject
@@ -86,7 +86,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
       }
     }
 
-    bookAdder.scanForFiles()
+    mediaScanner.scanForFiles()
 
     autoConnectedReceiver.register(this)
 

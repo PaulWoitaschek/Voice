@@ -116,6 +116,7 @@ dependencies {
   implementation(project(":playback"))
   implementation(project(":prefs"))
   implementation(project(":ffmpeg"))
+  implementation(project(":scanner"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

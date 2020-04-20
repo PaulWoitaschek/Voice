@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.permission.PermissionHelper
+import de.ph1b.audiobook.common.permission.Permissions
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.Permissions
 import de.ph1b.audiobook.misc.colorFromAttr
 import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.mvp.RxBaseActivity

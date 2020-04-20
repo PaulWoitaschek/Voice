@@ -1,13 +1,12 @@
-package de.ph1b.audiobook.uitools
+package de.ph1b.audiobook.scanner
 
 import android.app.ActivityManager
+import android.content.Context
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
-import de.ph1b.audiobook.misc.FileRecognition
-import de.ph1b.audiobook.misc.coverFile
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -25,7 +24,8 @@ import javax.inject.Singleton
 class CoverFromDiscCollector
 @Inject constructor(
   private val activityManager: ActivityManager,
-  private val imageHelper: ImageHelper
+  private val imageHelper: ImageHelper,
+  private val context: Context
 ) {
 
   private val picasso = Picasso.get()
@@ -37,7 +37,7 @@ class CoverFromDiscCollector
   }
 
   private suspend fun findCoverForBook(book: Book) {
-    val coverFile = book.coverFile()
+    val coverFile = book.coverFile(context)
     if (coverFile.exists())
       return
 
@@ -50,7 +50,7 @@ class CoverFromDiscCollector
 
   private suspend fun findAndSaveCoverEmbedded(book: Book) {
     getEmbeddedCover(book.content.chapters)?.let {
-      val coverFile = book.coverFile()
+      val coverFile = book.coverFile(context)
       imageHelper.saveCover(it, coverFile)
       picasso.invalidate(coverFile)
       coverChanged.send(book.id)
@@ -63,7 +63,7 @@ class CoverFromDiscCollector
       if (root.exists()) {
         val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
         getCoverFromDisk(images.toList())?.let {
-          val coverFile = book.coverFile()
+          val coverFile = book.coverFile(context)
           imageHelper.saveCover(it, coverFile)
           picasso.invalidate(coverFile)
           coverChanged.send(book.id)

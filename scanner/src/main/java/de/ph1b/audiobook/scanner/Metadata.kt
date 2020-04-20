@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc.metadata
+package de.ph1b.audiobook.scanner
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

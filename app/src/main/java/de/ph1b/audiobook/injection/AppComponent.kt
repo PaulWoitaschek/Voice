@@ -26,9 +26,9 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
-import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import de.ph1b.audiobook.scanner.MediaAnalyzer
 import javax.inject.Singleton
 
 /**

@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/ffmpeg" />
             <option value="$PROJECT_DIR$/playback" />
             <option value="$PROJECT_DIR$/prefs" />
+            <option value="$PROJECT_DIR$/scanner" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

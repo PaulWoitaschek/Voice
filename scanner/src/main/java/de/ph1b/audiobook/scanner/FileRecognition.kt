@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.scanner
 
 import java.io.FileFilter
 import java.util.Locale

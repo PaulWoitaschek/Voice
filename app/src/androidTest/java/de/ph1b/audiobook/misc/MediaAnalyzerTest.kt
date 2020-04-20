@@ -4,6 +4,7 @@ import androidx.annotation.RawRes
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import de.ph1b.audiobook.scanner.MediaAnalyzer
 import de.ph1b.audiobook.test.R
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -18,7 +19,8 @@ class MediaAnalyzerTest {
   @get:Rule
   val temporaryFolder = TemporaryFolder()
 
-  private val mediaAnalyzer: MediaAnalyzer = MediaAnalyzer()
+  private val mediaAnalyzer: MediaAnalyzer =
+    MediaAnalyzer()
 
   @Test(timeout = 1000)
   fun defectFile_noDuration() {

@@ -6,9 +6,9 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.mvp.Presenter
+import de.ph1b.audiobook.scanner.FileRecognition
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList

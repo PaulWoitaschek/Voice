@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.common
 
 import android.os.Environment
 import kotlinx.coroutines.Dispatchers

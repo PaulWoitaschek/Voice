@@ -1,22 +1,18 @@
-package de.ph1b.audiobook.features
+package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
+import de.ph1b.audiobook.common.permission.hasPermission
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.common.storageMounted
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.misc.FileRecognition
-import de.ph1b.audiobook.misc.MediaAnalyzer
-import de.ph1b.audiobook.misc.hasPermission
-import de.ph1b.audiobook.misc.listFilesSafely
-import de.ph1b.audiobook.misc.storageMounted
-import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -39,7 +35,7 @@ import javax.inject.Singleton
 import kotlin.system.measureTimeMillis
 
 @Singleton
-class BookAdder
+class MediaScanner
 @Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
@@ -123,7 +119,7 @@ class BookAdder
   private val collectionBookFiles: List<File>
     get() = collectionBookFolderPref.value
       .map(::File)
-      .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
+      .flatMap { it.listFiles(FileRecognition.folderAndMusicFilter)?.toList() ?: emptyList() }
       .sortedWith(NaturalOrderComparator.fileComparator)
 
   private suspend fun deleteOldBooks() {

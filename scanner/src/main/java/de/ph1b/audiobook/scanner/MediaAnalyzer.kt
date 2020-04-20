@@ -1,11 +1,7 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.scanner
 
 import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.ffmpeg.ffprobe
-import de.ph1b.audiobook.misc.metadata.MetaDataScanResult
-import de.ph1b.audiobook.misc.metadata.TagType
-import de.ph1b.audiobook.misc.metadata.find
-import de.ph1b.audiobook.misc.metadata.findTag
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.json.JsonDecodingException

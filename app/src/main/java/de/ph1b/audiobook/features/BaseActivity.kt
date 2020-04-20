@@ -2,8 +2,8 @@ package de.ph1b.audiobook.features
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import de.ph1b.audiobook.common.storageMounted
 import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
-import de.ph1b.audiobook.misc.storageMounted
 import de.ph1b.audiobook.playback.session.PlaybackService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

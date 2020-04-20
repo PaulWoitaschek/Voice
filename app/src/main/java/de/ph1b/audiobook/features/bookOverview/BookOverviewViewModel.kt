@@ -4,14 +4,14 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
-import de.ph1b.audiobook.uitools.CoverFromDiscCollector
+import de.ph1b.audiobook.scanner.CoverFromDiscCollector
+import de.ph1b.audiobook.scanner.MediaScanner
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,7 +25,7 @@ class BookOverviewViewModel
 @Inject
 constructor(
   private val repo: BookRepository,
-  private val bookAdder: BookAdder,
+  private val mediaScanner: MediaScanner,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
@@ -37,7 +37,7 @@ constructor(
 ) {
 
   fun attach() {
-    bookAdder.scanForFiles()
+    mediaScanner.scanForFiles()
   }
 
   fun useGrid(useGrid: Boolean) {
@@ -52,7 +52,7 @@ constructor(
     val playingStream = playStateManager.playStateFlow()
       .map { it == PlayState.Playing }
       .distinctUntilChanged()
-    val scannerActiveStream = bookAdder.scannerActive
+    val scannerActiveStream = mediaScanner.scannerActive
     return combine(
       bookStream,
       currentBookIdStream,
