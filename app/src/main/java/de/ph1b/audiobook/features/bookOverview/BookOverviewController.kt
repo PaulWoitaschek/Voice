@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookOverview
 import android.content.Intent
 import android.graphics.Color
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -215,17 +216,15 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
   }
 
   private fun hideNoFolderWarning() {
-    val currentTapTarget = currentTapTarget ?: return
-    if (currentTapTarget.isVisible) {
-      currentTapTarget.dismiss(false)
-    }
-    this.currentTapTarget = null
+    currentTapTarget?.dismiss(false)
+    currentTapTarget = null
   }
 
   /** Show a warning that no audiobook folder was chosen */
   private fun BookOverviewBinding.showNoFolderWarning() {
-    if (currentTapTarget?.isVisible == true)
+    if (currentTapTarget != null) {
       return
+    }
 
     val target = TapTarget
       .forToolbarMenuItem(
@@ -285,6 +284,12 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
           render(it, gridMenuItem)
         }
     }
+  }
+
+  override fun onDetach(view: View) {
+    super.onDetach(view)
+    currentTapTarget?.dismiss(false)
+    currentTapTarget = null
   }
 }
 
