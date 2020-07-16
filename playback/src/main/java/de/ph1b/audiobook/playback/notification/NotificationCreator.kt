@@ -94,6 +94,7 @@ class NotificationCreator
       .setStyle(mediaStyle)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)
+      .setOnlyAlertOnce(true)
       .build()
   }
 
