@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
@@ -26,12 +27,15 @@ import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.player.Equalizer
+import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.time.Duration
 
 private const val NI_BOOK_ID = "niBookId"
@@ -47,6 +51,9 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   lateinit var equalizer: Equalizer
   @Inject
   lateinit var viewModel: BookPlayViewModel
+
+  @field:[Inject Named(PrefKeys.KIDS_MODE)]
+  lateinit var kidsMode: Pref<Boolean>
 
   private val bookId = bundle.getUUID(NI_BOOK_ID)
   private var coverLoaded = false
@@ -228,6 +235,10 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         }
         else -> false
       }
+    }
+    // hide all menu items in kids mode
+    if(kidsMode.value) {
+      binding.toolbar.menu.forEach { item: MenuItem -> item.isVisible = false }
     }
   }
 
