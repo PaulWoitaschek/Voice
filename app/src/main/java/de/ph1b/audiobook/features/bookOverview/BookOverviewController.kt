@@ -174,7 +174,9 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     val adapterContent = when (state) {
       is BookOverviewState.Content -> buildList {
         state.categoriesWithContents.forEach { (category, content) ->
-          add(BookOverviewHeaderModel(category, content.hasMore))
+          if(!kidsMode.value) {
+            add(BookOverviewHeaderModel(category, content.hasMore))
+          }
           addAll(content.books)
         }
       }

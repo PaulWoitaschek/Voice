@@ -33,7 +33,10 @@ constructor(
   private val currentBookIdPref: Pref<UUID>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
-  private val gridCount: GridCount
+  private val gridCount: GridCount,
+  @Named(PrefKeys.KIDS_MODE)
+  private val kidsMode: Pref<Boolean>
+
 ) {
 
   fun attach() {
@@ -125,21 +128,32 @@ constructor(
     currentBookId: UUID?,
     amountOfColumns: Int
   ): BookOverviewCategoryContent? {
-    val booksOfCategory = books.filter(category.filter)
-      .sortedWith(category.comparator)
-    if (booksOfCategory.isEmpty()) {
-      return null
+    if(this.kidsMode.value){
+      if(BookOverviewCategory.CURRENT != category) return null;
+      val booksOfCategory =  books.sortedWith(category.comparator);
+      if (booksOfCategory.isEmpty()) {
+        return null
+      }
+      val models = booksOfCategory.map {
+        BookOverviewModel(book = it, isCurrentBook = it.id == currentBookId, useGridView = amountOfColumns > 1)
+      }
+      return BookOverviewCategoryContent(models, false)
+    } else {
+      val booksOfCategory = books.filter(category.filter).sortedWith(category.comparator);
+      if (booksOfCategory.isEmpty()) {
+        return null
+      }
+      val rows = when (category) {
+        BookOverviewCategory.CURRENT -> 4
+        BookOverviewCategory.NOT_STARTED -> 4
+        BookOverviewCategory.FINISHED -> 2
+      }
+      val models = booksOfCategory.take(rows * amountOfColumns).map {
+        BookOverviewModel(book = it, isCurrentBook = it.id == currentBookId, useGridView = amountOfColumns > 1)
+      }
+      val hasMore = models.size != booksOfCategory.size
+      return BookOverviewCategoryContent(models, hasMore)
     }
-    val rows = when (category) {
-      BookOverviewCategory.CURRENT -> 4
-      BookOverviewCategory.NOT_STARTED -> 4
-      BookOverviewCategory.FINISHED -> 2
-    }
-    val models = booksOfCategory.take(rows * amountOfColumns).map {
-      BookOverviewModel(book = it, isCurrentBook = it.id == currentBookId, useGridView = amountOfColumns > 1)
-    }
-    val hasMore = models.size != booksOfCategory.size
-    return BookOverviewCategoryContent(models, hasMore)
   }
 
   fun playPause() {
