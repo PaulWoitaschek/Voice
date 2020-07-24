@@ -10,5 +10,6 @@ object PrefKeys {
   const val COLLECTION_BOOK_FOLDERS = "folders"
   const val CURRENT_BOOK = "currentBook2"
   const val DARK_THEME = "darkTheme"
+  const val KIDS_MODE = "kidsMode"
   const val GRID_MODE = "gridView"
 }

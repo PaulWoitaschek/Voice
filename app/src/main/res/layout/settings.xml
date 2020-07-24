@@ -32,6 +32,13 @@
               app:ssv_title="@string/pref_theme_dark" />
 
             <de.ph1b.audiobook.features.settings.SwitchSettingView
+              android:id="@+id/kidsMode"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:ssv_title="@string/pref_kids_mode"
+              app:ssv_description="@string/pref_kids_mode_description" />
+
+            <de.ph1b.audiobook.features.settings.SwitchSettingView
               android:id="@+id/resumePlayback"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

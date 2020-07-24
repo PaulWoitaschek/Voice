@@ -27,6 +27,7 @@ class SettingsController : ViewBindingController<SettingsBinding>(SettingsBindin
 
     resumePlayback.onCheckedChanged { viewModel.toggleResumeOnReplug() }
     darkTheme.onCheckedChanged { viewModel.toggleDarkTheme() }
+    kidsMode.onCheckedChanged { viewModel.toggleKidsMode() }
 
     skipAmount.setOnClickListener {
       viewModel.changeSkipAmount()
@@ -63,6 +64,7 @@ class SettingsController : ViewBindingController<SettingsBinding>(SettingsBindin
 
   private fun SettingsBinding.render(state: SettingsViewState) {
     Timber.d("render $state")
+    kidsMode.setChecked(state.kidsMode);
     darkTheme.isVisible = state.showDarkThemePref
     darkTheme.setChecked(state.useDarkTheme)
     resumePlayback.setChecked(state.resumeOnReplug)

@@ -5,5 +5,6 @@ data class SettingsViewState(
   val showDarkThemePref: Boolean,
   val resumeOnReplug: Boolean,
   val seekTimeInSeconds: Int,
-  val autoRewindInSeconds: Int
+  val autoRewindInSeconds: Int,
+  val kidsMode: Boolean
 )
