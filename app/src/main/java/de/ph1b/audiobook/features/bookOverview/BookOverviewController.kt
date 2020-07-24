@@ -56,6 +56,9 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
 
+  @field:[Inject Named(PrefKeys.KIDS_MODE)]
+  lateinit var kidsMode: Pref<Boolean>
+
   @Inject
   lateinit var viewModel: BookOverviewViewModel
 
@@ -142,6 +145,7 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
   }
 
   private fun BookOverviewBinding.gridMenuItem(): GridMenuItem = GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
+  private fun BookOverviewBinding.libraryMenuItem(): LibraryMenuItem = LibraryMenuItem(toolbar.menu.findItem(R.id.library))
 
   private fun toFolderOverview() {
     val controller = FolderOverviewController()
@@ -206,7 +210,12 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     }
 
     loadingProgress.isVisible = state == BookOverviewState.Loading
-    gridMenuItem.item.isVisible = state != BookOverviewState.Loading
+    if(kidsMode.value) {
+      libraryMenuItem().item.isVisible = false
+      gridMenuItem.item.isVisible = false
+    } else {
+      gridMenuItem.item.isVisible = state != BookOverviewState.Loading
+    }
   }
 
   private fun showPlaying(playing: Boolean) {
@@ -289,3 +298,4 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
 }
 
 private inline class GridMenuItem(val item: MenuItem)
+private inline class LibraryMenuItem(val item: MenuItem)
