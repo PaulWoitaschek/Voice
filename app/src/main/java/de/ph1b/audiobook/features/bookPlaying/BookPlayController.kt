@@ -108,6 +108,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   private fun BookPlayBinding.render(viewState: BookPlayViewState) {
     Timber.d("render $viewState")
     toolbar.title = viewState.title
+    currentChapterText.textSize = if(kidsMode.value) 20.0f else 12.0f
     currentChapterText.text = viewState.chapterName
     currentChapterContainer.isVisible = viewState.chapterName != null
     previous.isVisible = viewState.showPreviousNextButtons
@@ -194,7 +195,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         this.viewModel.addBookmark()
         true
       }
-
+      
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {

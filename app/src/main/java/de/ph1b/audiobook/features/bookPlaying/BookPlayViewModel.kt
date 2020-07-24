@@ -29,6 +29,8 @@ class BookPlayViewModel
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
   private val bookmarkRepo: BookmarkRepo,
+  @Named(PrefKeys.KIDS_MODE)
+  private val kidsMode: Pref<Boolean>,
   @Named(PrefKeys.CURRENT_BOOK)
   private val currentBookIdPref: Pref<UUID>
 ) {
@@ -48,12 +50,13 @@ class BookPlayViewModel
     ) { book, playState, sleepTime ->
       val currentMark = book.content.currentChapter.markForPosition(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.hasMoreThanOneChapter()
+      val chapterNumber = book.content.currentChapterIndex.toString() + " / " + book.content.chapters.size
       BookPlayViewState(
         sleepTime = sleepTime,
         playing = playState == PlayStateManager.PlayState.Playing,
         title = book.name,
         showPreviousNextButtons = hasMoreThanOneChapter,
-        chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
+        chapterName =  if(kidsMode.value) chapterNumber else currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
         cover = BookPlayCover(book),
