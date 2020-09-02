@@ -1,4 +1,3 @@
-import deps.Deps
 import deps.Versions
 import deps.configureBaseRepos
 
@@ -31,7 +30,7 @@ allprojects {
     }
   }
 
-  plugins.withType<com.android.build.gradle.internal.plugins.BasePlugin> {
+  plugins.withType(com.android.build.gradle.internal.plugins.BasePlugin::class.java) {
     with(extension) {
       defaultConfig {
         multiDexEnabled = true
@@ -40,7 +39,7 @@ allprojects {
         targetSdkVersion(29)
       }
       compileOptions {
-        coreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
       }
