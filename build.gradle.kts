@@ -27,7 +27,6 @@ allprojects {
 
   configurations.all {
     resolutionStrategy {
-      force(Deps.AndroidX.supportAnnotations)
       force("com.google.code.findbugs:jsr305:3.0.1")
     }
   }

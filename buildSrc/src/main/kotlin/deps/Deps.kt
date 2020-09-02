@@ -10,7 +10,6 @@ object Versions {
 object Deps {
 
   object AndroidX {
-    const val supportAnnotations = "androidx.annotation:annotation:1.0.0"
     const val appCompat = "androidx.appcompat:appcompat:1.2.0"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.1"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
