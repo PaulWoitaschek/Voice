@@ -10,11 +10,11 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.permission.PermissionHelper
 import de.ph1b.audiobook.common.permission.Permissions
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.injection.appComponent
@@ -23,7 +23,6 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
-import kotlinx.android.synthetic.main.activity_book.*
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -62,12 +61,13 @@ class MainActivity : BaseActivity(), RouterProvider {
   override fun onCreate(savedInstanceState: Bundle?) {
     appComponent.inject(this)
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_book)
+    val binding = ActivityBookBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)
 
-    router = Conductor.attachRouter(this, root, savedInstanceState)
+    router = Conductor.attachRouter(this, binding.root, savedInstanceState)
     if (!router.hasRootController()) {
       setupRouter()
     }

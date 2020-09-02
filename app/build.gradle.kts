@@ -80,6 +80,7 @@ android {
 
 androidExtensions {
   isExperimental = true
+  features = setOf("parcelize")
 }
 
 dependencies {
