@@ -1,6 +1,3 @@
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryPlugin
 import deps.Deps
 import deps.Versions
 import deps.configureBaseRepos
@@ -19,7 +16,7 @@ buildscript {
 }
 
 plugins {
-  id("com.github.ben-manes.versions") version "0.28.0"
+  id("com.github.ben-manes.versions") version "0.29.0"
 }
 
 tasks.wrapper {
@@ -32,8 +29,28 @@ allprojects {
   configurations.all {
     resolutionStrategy {
       force(Deps.AndroidX.supportAnnotations)
-      force(Deps.Kotlin.std)
       force("com.google.code.findbugs:jsr305:3.0.1")
+    }
+  }
+
+  plugins.withType<com.android.build.gradle.internal.plugins.BasePlugin> {
+    with(extension) {
+      defaultConfig {
+        multiDexEnabled = true
+        minSdkVersion(24)
+        @Suppress("OldTargetApi")
+        targetSdkVersion(29)
+      }
+      compileOptions {
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+      }
+      compileSdkVersion(29)
+
+      dependencies {
+        add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.0.9")
+      }
     }
   }
 
@@ -49,16 +66,6 @@ allprojects {
         "-Xopt-in=kotlinx.coroutines.FlowPreview",
         "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
       )
-    }
-  }
-}
-
-subprojects {
-  plugins.whenPluginAdded {
-    if (this is AppPlugin || this is LibraryPlugin) {
-      convention.findByType(BaseExtension::class)?.let {
-        it.dexOptions.preDexLibraries = System.getenv("CI") != "true"
-      }
     }
   }
 }
@@ -79,9 +86,10 @@ tasks {
   register<TestReport>("allUnitTests") {
     val tests = subprojects.mapNotNull { subProject ->
       val tasks = subProject.tasks
-      (tasks.findByName("testProprietaryReleaseUnitTest")
-        ?: tasks.findByName("testReleaseUnitTest")
-        ?: tasks.findByName("test")
+      (
+        tasks.findByName("testProprietaryReleaseUnitTest")
+          ?: tasks.findByName("testReleaseUnitTest")
+          ?: tasks.findByName("test")
         ) as? Test
     }
     val artifactFolder = File("${rootDir.absolutePath}/artifacts")

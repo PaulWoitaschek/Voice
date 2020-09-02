@@ -1,5 +1,4 @@
 import deps.Deps
-import deps.Versions
 
 plugins {
   id("com.android.library")
@@ -8,32 +7,18 @@ plugins {
 }
 
 android {
-
-  compileSdkVersion(Versions.compileSdk)
-
-  defaultConfig {
-    minSdkVersion(Versions.minSdk)
-    targetSdkVersion(Versions.targetSdk)
-  }
-
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      setDimension("free")
+      dimension = "free"
     }
     create("proprietary") {
-      setDimension("free")
+      dimension = "free"
     }
-  }
-
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
   }
 }
 
 dependencies {
-  implementation(Deps.Kotlin.std)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
 }

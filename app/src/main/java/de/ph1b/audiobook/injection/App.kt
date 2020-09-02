@@ -5,7 +5,6 @@ import android.os.Build
 import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
@@ -32,10 +31,13 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
   @Inject
   lateinit var mediaScanner: MediaScanner
+
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+
   @Inject
   lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
+
   @field:[Inject Named(PrefKeys.DARK_THEME)]
   lateinit var useDarkTheme: Pref<Boolean>
 
@@ -60,8 +62,6 @@ class App : Application(), PlaybackComponentFactoryProvider {
         Timber.plant(CrashLoggingTree())
       }
     }
-
-    AndroidThreeTen.init(this)
 
     appComponent = AppComponent.factory()
       .create(this)

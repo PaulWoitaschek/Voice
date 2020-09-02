@@ -2,18 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Voice.iml" filepath="$PROJECT_DIR$/.idea/Voice.iml" group="Voice" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Voice/app" />
-      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" group="Voice/buildSrc" />
-      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" group="Voice/common" />
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" group="Voice/core" />
-      <module fileurl="file://$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" filepath="$PROJECT_DIR$/covercolorextractor/covercolorextractor.iml" group="Voice/covercolorextractor" />
-      <module fileurl="file://$PROJECT_DIR$/crashreporting/crashreporting.iml" filepath="$PROJECT_DIR$/crashreporting/crashreporting.iml" group="Voice/crashreporting" />
-      <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" group="Voice/data" />
-      <module fileurl="file://$PROJECT_DIR$/ffmpeg/ffmpeg.iml" filepath="$PROJECT_DIR$/ffmpeg/ffmpeg.iml" group="Voice/ffmpeg" />
-      <module fileurl="file://$PROJECT_DIR$/playback/playback.iml" filepath="$PROJECT_DIR$/playback/playback.iml" group="Voice/playback" />
-      <module fileurl="file://$PROJECT_DIR$/prefs/prefs.iml" filepath="$PROJECT_DIR$/prefs/prefs.iml" group="Voice/prefs" />
-      <module fileurl="file://$PROJECT_DIR$/scanner/scanner.iml" filepath="$PROJECT_DIR$/scanner/scanner.iml" group="Voice/scanner" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Voice.iml" filepath="$PROJECT_DIR$/.idea/Voice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Voice.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Voice.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Voice.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/Voice.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" filepath="$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crashreporting/Voice.crashreporting.iml" filepath="$PROJECT_DIR$/.idea/modules/crashreporting/Voice.crashreporting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" filepath="$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" filepath="$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" filepath="$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" filepath="$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" filepath="$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" />
     </modules>
   </component>
 </project>

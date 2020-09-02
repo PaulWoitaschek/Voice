@@ -3,23 +3,22 @@ package de.ph1b.audiobook.data.repo.internals
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.MarkData
-import kotlinx.serialization.builtins.list
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import org.threeten.bp.Instant
 import java.io.File
+import java.time.Instant
 import java.util.UUID
 
 class Converters {
 
-  private val json = Json(JsonConfiguration.Stable)
-  private val markDataListSerializer = MarkData.serializer().list
+  private val json = Json { allowStructuredMapKeys = true }
+  private val markDataListSerializer = ListSerializer(MarkData.serializer())
 
   @TypeConverter
-  fun fromMarks(data: List<MarkData>): String = json.stringify(markDataListSerializer, data)
+  fun fromMarks(data: List<MarkData>): String = json.encodeToString(markDataListSerializer, data)
 
   @TypeConverter
-  fun toMarks(string: String): List<MarkData> = json.parse(markDataListSerializer, string)
+  fun toMarks(string: String): List<MarkData> = json.decodeFromString(markDataListSerializer, string)
 
   @TypeConverter
   fun fromFile(file: File): String = file.absolutePath

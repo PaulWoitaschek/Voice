@@ -5,3 +5,5 @@
 /caches
 vcs.xml
 kotlinScripting.xml
+/jarRepositories.xml
+/compiler.xml

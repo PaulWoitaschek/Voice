@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-  ktlint "com.pinterest:ktlint:0.36.0"
+  ktlint "com.pinterest:ktlint:0.38.0"
 }
 
 task ktlintCheck(type: JavaExec, group: "verification") {
@@ -19,6 +19,5 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
   main = "com.pinterest.ktlint.Main"
   args "-F", "**/src/**/*.kt"
 }
-
 
 ktlintFormat.finalizedBy(ktlintCheck)

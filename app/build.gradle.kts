@@ -13,13 +13,8 @@ plugins {
 
 android {
 
-  compileSdkVersion(Versions.compileSdk)
-
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    minSdkVersion(Versions.minSdk)
-    targetSdkVersion(Versions.targetSdk)
-
     versionCode = Versions.versionCode
     versionName = Versions.versionName
 
@@ -54,13 +49,11 @@ android {
     getByName("release") {
       isMinifyEnabled = true
       isShrinkResources = true
-      multiDexEnabled = false
     }
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
       ext["enableCrashlytics"] = false
-      multiDexEnabled = true
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -80,11 +73,6 @@ android {
     isWarningsAsErrors = true
   }
 
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
-  }
-
   packagingOptions {
     pickFirst("META-INF/atomicfu.kotlin_module")
     pickFirst("META-INF/core.kotlin_module")
@@ -93,14 +81,16 @@ android {
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      setDimension("free")
+      dimension = "free"
     }
     create("proprietary") {
-      setDimension("free")
+      dimension = "free"
     }
   }
 
-  viewBinding.isEnabled = true
+  buildFeatures {
+    viewBinding = true
+  }
 }
 
 androidExtensions {
@@ -126,7 +116,7 @@ dependencies {
   implementation(Deps.AndroidX.mediaCompat)
 
   implementation(Deps.picasso)
-  implementation(Deps.Kotlin.Serialization.runtime)
+  implementation(Deps.Kotlin.Serialization.core)
 
   implementation(Deps.MaterialDialog.core)
   implementation(Deps.MaterialDialog.input)
@@ -143,7 +133,6 @@ dependencies {
   testImplementation(Deps.truth)
   testImplementation(Deps.mockk)
 
-  implementation(Deps.Kotlin.std)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
 
@@ -158,7 +147,6 @@ dependencies {
   implementation(Deps.lifecycle)
 
   implementation(Deps.groupie)
-  implementation(Deps.ThreeTen.android)
 
   implementation(Deps.Prefs.android)
   testImplementation(Deps.Prefs.inMemory)

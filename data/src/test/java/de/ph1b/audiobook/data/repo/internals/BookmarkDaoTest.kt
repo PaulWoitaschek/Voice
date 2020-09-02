@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import org.threeten.bp.Instant
+import java.time.Instant
 import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)

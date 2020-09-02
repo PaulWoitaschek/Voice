@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
+import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.attachRouter
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.permission.PermissionHelper
@@ -35,18 +35,25 @@ class MainActivity : BaseActivity(), RouterProvider {
 
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
+
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
+
   @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
   lateinit var singleBookFolderPref: Pref<Set<String>>
+
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
+
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var bookSearchParser: BookSearchParser
+
   @Inject
   lateinit var bookSearchHandler: BookSearchHandler
+
   @Inject
   lateinit var playerController: PlayerController
 
@@ -60,7 +67,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     permissions = Permissions(this)
     permissionHelper = PermissionHelper(this, permissions)
 
-    router = attachRouter(root, savedInstanceState)
+    router = Conductor.attachRouter(this, root, savedInstanceState)
     if (!router.hasRootController()) {
       setupRouter()
     }

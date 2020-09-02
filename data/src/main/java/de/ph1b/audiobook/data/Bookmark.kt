@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import org.threeten.bp.Instant
 import java.io.File
+import java.time.Instant
 import java.util.UUID
 
 @Entity(tableName = "bookmark")

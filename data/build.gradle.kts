@@ -1,5 +1,4 @@
 import deps.Deps
-import deps.Versions
 
 plugins {
   id("com.android.library")
@@ -10,12 +9,7 @@ plugins {
 
 android {
 
-  compileSdkVersion(Versions.compileSdk)
-
   defaultConfig {
-    minSdkVersion(Versions.minSdk)
-    targetSdkVersion(Versions.targetSdk)
-
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     javaCompileOptions {
@@ -28,10 +22,10 @@ android {
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      setDimension("free")
+      dimension = "free"
     }
     create("proprietary") {
-      setDimension("free")
+      dimension = "free"
     }
   }
 
@@ -46,11 +40,6 @@ android {
     animationsDisabled = true
     unitTests.isIncludeAndroidResources = true
   }
-
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
-  }
 }
 
 dependencies {
@@ -61,7 +50,7 @@ dependencies {
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Kotlin.coroutinesAndroid)
   implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Kotlin.Serialization.runtime)
+  implementation(Deps.Kotlin.Serialization.core)
 
   api(Deps.AndroidX.Room.runtime)
   kapt(Deps.AndroidX.Room.compiler)
@@ -76,7 +65,4 @@ dependencies {
   testImplementation(Deps.junit)
   testImplementation(Deps.robolectric)
   testImplementation(Deps.truth)
-
-  api(Deps.ThreeTen.android)
-  testImplementation(Deps.ThreeTen.jvm)
 }

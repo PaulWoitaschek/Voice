@@ -4,8 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.MarkData
 import org.junit.Test
-import org.threeten.bp.Instant
 import java.io.File
+import java.time.Instant
 import java.util.UUID
 
 class ConvertersTest {

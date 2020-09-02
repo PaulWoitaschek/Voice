@@ -7,8 +7,8 @@ import de.ph1b.audiobook.data.repo.internals.BookmarkDao
 import de.ph1b.audiobook.data.repo.internals.transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.threeten.bp.Instant
 import timber.log.Timber
+import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton

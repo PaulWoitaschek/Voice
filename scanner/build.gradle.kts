@@ -1,5 +1,4 @@
 import deps.Deps
-import deps.Versions
 
 plugins {
   id("com.android.library")
@@ -8,27 +7,14 @@ plugins {
 }
 
 android {
-
-  compileSdkVersion(Versions.compileSdk)
-
-  defaultConfig {
-    minSdkVersion(Versions.minSdk)
-    targetSdkVersion(Versions.targetSdk)
-  }
-
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      setDimension("free")
+      dimension = "free"
     }
     create("proprietary") {
-      setDimension("free")
+      dimension = "free"
     }
-  }
-
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
   }
 }
 
@@ -37,13 +23,12 @@ dependencies {
   implementation(project(":data"))
   implementation(project(":common"))
   implementation(Deps.Prefs.core)
-  implementation(Deps.Kotlin.std)
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Dagger.core)
   implementation(Deps.timber)
   implementation(Deps.picasso)
-  implementation(Deps.Kotlin.Serialization.runtime)
+  implementation(Deps.Kotlin.Serialization.core)
 
   testImplementation(Deps.truth)
   testImplementation(Deps.junit)

@@ -2,9 +2,8 @@ package de.ph1b.audiobook.scanner
 
 import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.ffmpeg.ffprobe
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.json.JsonDecodingException
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -16,7 +15,10 @@ import kotlin.time.seconds
 class MediaAnalyzer
 @Inject constructor() {
 
-  private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true))
+  private val json = Json {
+    ignoreUnknownKeys = true
+    allowStructuredMapKeys = true
+  }
 
   suspend fun analyze(file: File): Result {
     Timber.d("analyze $file")
@@ -30,8 +32,8 @@ class MediaAnalyzer
     Timber.d(result.message)
 
     val parsed = try {
-      json.parse(MetaDataScanResult.serializer(), result.message)
-    } catch (e: JsonDecodingException) {
+      json.decodeFromString(MetaDataScanResult.serializer(), result.message)
+    } catch (e: SerializationException) {
       Timber.e(e, "Unable to parse $file")
       return Result.Failure
     }
