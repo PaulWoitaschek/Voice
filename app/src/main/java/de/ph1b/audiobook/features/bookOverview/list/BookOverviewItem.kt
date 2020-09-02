@@ -1,9 +1,9 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
 import androidx.annotation.FloatRange
-import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
+import timber.log.Timber
 
 sealed class BookOverviewItem
 
@@ -39,10 +39,10 @@ data class BookOverviewModel(
     val oldBook = book
     val newBook = other.book
     return oldBook.id == newBook.id &&
-        oldBook.content.position == newBook.content.position &&
-        name == other.name &&
-        isCurrentBook == other.isCurrentBook &&
-        useGridView == other.useGridView
+      oldBook.content.position == newBook.content.position &&
+      name == other.name &&
+      isCurrentBook == other.isCurrentBook &&
+      useGridView == other.useGridView
   }
 
   fun areItemsTheSame(other: BookOverviewModel): Boolean {
@@ -55,12 +55,7 @@ private fun Book.progress(): Float {
   val totalDuration = content.duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
-    CrashReporter.logException(
-      AssertionError(
-        "Couldn't determine progress for book=$this. Progress is $progress, " +
-            "globalPosition=$globalPosition, totalDuration=$totalDuration"
-      )
-    )
+    Timber.e("Couldn't determine progress for book=$this")
   }
   return progress.coerceIn(0F, 1F)
 }

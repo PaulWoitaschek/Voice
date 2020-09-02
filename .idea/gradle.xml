@@ -15,7 +15,6 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/covercolorextractor" />
-            <option value="$PROJECT_DIR$/crashreporting" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/ffmpeg" />
             <option value="$PROJECT_DIR$/playback" />
@@ -24,7 +23,6 @@
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

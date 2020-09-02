@@ -19,16 +19,6 @@ android {
     }
   }
 
-  flavorDimensions("free")
-  productFlavors {
-    create("opensource") {
-      dimension = "free"
-    }
-    create("proprietary") {
-      dimension = "free"
-    }
-  }
-
   sourceSets {
     named("test") {
       assets.srcDir(project.file("schemas"))
@@ -44,7 +34,6 @@ android {
 
 dependencies {
   implementation(project(":common"))
-  implementation(project(":crashreporting"))
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)

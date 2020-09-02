@@ -21,11 +21,6 @@
       android:theme="@style/AppTheme"
       tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <!-- crashlytics -->
-        <meta-data
-          android:name="io.fabric.ApiKey"
-          android:value="122335d07af0e8a95ee41da564520a0d2fff550a" />
-
         <meta-data
           android:name="com.google.android.gms.car.application"
           android:resource="@xml/automotive_app_desc" />

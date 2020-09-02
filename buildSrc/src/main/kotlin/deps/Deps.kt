@@ -62,9 +62,6 @@ object Deps {
     const val input = "com.afollestad.material-dialogs:input:$version"
   }
 
-  const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1@aar"
-  const val fabricGradlePlugin = "io.fabric.tools:gradle:1.31.2"
-
   object Dagger {
     private const val version = "2.28.3"
     const val core = "com.google.dagger:dagger:$version"
@@ -108,12 +105,6 @@ fun configureBaseRepos(repositoryHandler: RepositoryHandler) {
         includeGroupByRegex("androidx.*")
         includeGroupByRegex("com.google.*")
         includeGroupByRegex("com.android.*")
-      }
-    maven { setUrl("https://maven.fabric.io/public") }
-      .mavenContent {
-        includeGroup("io.fabric.tools")
-        includeGroup("io.fabric.sdk.android")
-        includeGroup("com.crashlytics.sdk.android")
       }
     maven { setUrl("https://jitpack.io") }
       .mavenContent {

@@ -6,23 +6,10 @@ plugins {
   id("kotlin-kapt")
 }
 
-android {
-  flavorDimensions("free")
-  productFlavors {
-    create("opensource") {
-      dimension = "free"
-    }
-    create("proprietary") {
-      dimension = "free"
-    }
-  }
-}
-
 dependencies {
   implementation(project(":common"))
   implementation(project(":core"))
   implementation(project(":data"))
-  implementation(project(":crashreporting"))
   implementation(project(":prefs"))
 
   implementation(Deps.timber)

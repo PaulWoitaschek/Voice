@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" filepath="$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crashreporting/Voice.crashreporting.iml" filepath="$PROJECT_DIR$/.idea/modules/crashreporting/Voice.crashreporting.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" filepath="$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" filepath="$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" filepath="$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" />

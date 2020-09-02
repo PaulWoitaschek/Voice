@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo.internals
 
-import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -35,7 +34,6 @@ class BookStorage
             val chapters = chapterDao.byBookId(bookId)
             if (chapters.isEmpty()) {
               Timber.e("No chapters found for metaData=$metaData, bookSettings=$bookSettings")
-              CrashReporter.logException(AssertionError())
               metaDataDao.delete(metaData)
               bookSettingsDao.delete(bookSettings)
               null
@@ -47,12 +45,12 @@ class BookStorage
                 bookSettings
               } else {
                 Timber.e("bookSettings=$bookSettings currentFile is not in $chapters. metaData=$metaData")
-                CrashReporter.logException(AssertionError())
                 bookSettings.copy(currentFile = chapters[0].file)
               }
 
               Book(
-                id = bookId, content = BookContent(
+                id = bookId,
+                content = BookContent(
                   id = bookId,
                   chapters = chapters,
                   settings = correctedBookSettings

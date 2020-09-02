@@ -9,8 +9,6 @@ import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.crashreporting.CrashLoggingTree
-import de.ph1b.audiobook.crashreporting.CrashReporter
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
@@ -53,14 +51,8 @@ class App : Application(), PlaybackComponentFactoryProvider {
       Picasso.setSingletonInstance(Picasso.Builder(this).build())
     }
 
-    CrashReporter.init(this)
-
-    GlobalScope.launch {
-      if (BuildConfig.DEBUG) {
-        Timber.plant(Timber.DebugTree())
-      } else {
-        Timber.plant(CrashLoggingTree())
-      }
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
     }
 
     appComponent = AppComponent.factory()

@@ -4,7 +4,6 @@ import java.util.Properties
 
 plugins {
   id("com.android.application")
-  id("io.fabric")
   id("kotlin-android")
   id("kotlin-android-extensions")
   id("kotlinx-serialization")
@@ -53,7 +52,6 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
-      ext["enableCrashlytics"] = false
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -78,16 +76,6 @@ android {
     pickFirst("META-INF/core.kotlin_module")
   }
 
-  flavorDimensions("free")
-  productFlavors {
-    create("opensource") {
-      dimension = "free"
-    }
-    create("proprietary") {
-      dimension = "free"
-    }
-  }
-
   buildFeatures {
     viewBinding = true
   }
@@ -102,7 +90,6 @@ dependencies {
   implementation(project(":common"))
   implementation(project(":data"))
   implementation(project(":covercolorextractor"))
-  implementation(project(":crashreporting"))
   implementation(project(":playback"))
   implementation(project(":prefs"))
   implementation(project(":ffmpeg"))

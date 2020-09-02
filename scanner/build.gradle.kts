@@ -6,18 +6,6 @@ plugins {
   id("kotlinx-serialization")
 }
 
-android {
-  flavorDimensions("free")
-  productFlavors {
-    create("opensource") {
-      dimension = "free"
-    }
-    create("proprietary") {
-      dimension = "free"
-    }
-  }
-}
-
 dependencies {
   implementation(project(":ffmpeg"))
   implementation(project(":data"))
