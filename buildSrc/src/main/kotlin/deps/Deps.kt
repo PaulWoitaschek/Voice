@@ -1,6 +1,7 @@
 package deps
 
 import org.gradle.api.artifacts.dsl.RepositoryHandler
+import org.gradle.kotlin.dsl.maven
 
 object Versions {
   const val versionCode = 3060342
@@ -99,21 +100,28 @@ object Deps {
 @Suppress("UnstableApiUsage")
 fun configureBaseRepos(repositoryHandler: RepositoryHandler) {
   repositoryHandler.apply {
-    google()
-      .mavenContent {
-        includeGroupByRegex("androidx.*")
-        includeGroupByRegex("com.google.*")
-        includeGroupByRegex("com.android.*")
+
+    exclusiveContent {
+      forRepository {
+        google()
       }
-    maven { setUrl("https://jitpack.io") }
-      .mavenContent {
+      filter {
+        includeGroupByRegex("androidx.*")
+        includeGroupByRegex("com.android.*")
+        includeGroup("com.google.test.platform")
+        includeGroup("com.google.android.material")
+      }
+    }
+
+    exclusiveContent {
+      forRepository {
+        maven(url = "https://jitpack.io")
+      }
+      filter {
         includeGroupByRegex("com.github.PaulWoitaschek.*")
       }
-    mavenCentral()
-      .mavenContent {
-        includeGroup("javax.inject")
-      }
-    jcenter()
-      .mavenContent { releasesOnly() }
+    }
+
+    jcenter().mavenContent { releasesOnly() }
   }
 }
