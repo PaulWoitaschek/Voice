@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-private const val PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
+private const val PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE
 
 class PermissionHelper(private val activity: Activity, private val permissions: Permissions) {
 

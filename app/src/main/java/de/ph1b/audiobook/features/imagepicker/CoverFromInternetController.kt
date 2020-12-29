@@ -72,7 +72,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       javaScriptEnabled = true
       userAgentString =
         "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+        "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 
@@ -256,7 +256,9 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // load the last page loaded or the original one of there is none
     val url: String? = savedViewState.getString(SI_URL)
-    binding.webView.loadUrl(url)
+    if (url != null) {
+      binding.webView.loadUrl(url)
+    }
   }
 
   override fun handleBack(): Boolean {

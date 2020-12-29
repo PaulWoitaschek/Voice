@@ -35,15 +35,14 @@ allprojects {
       defaultConfig {
         multiDexEnabled = true
         minSdkVersion(24)
-        @Suppress("OldTargetApi")
-        targetSdkVersion(29)
+        targetSdkVersion(30)
       }
       compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
       }
-      compileSdkVersion(29)
+      compileSdkVersion(30)
 
       dependencies {
         add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.0.9")
