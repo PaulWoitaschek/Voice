@@ -7,3 +7,5 @@ vcs.xml
 kotlinScripting.xml
 /jarRepositories.xml
 /compiler.xml
+/assetWizardSettings.xml
+/gradle.xml
