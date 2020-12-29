@@ -24,12 +24,6 @@ tasks.wrapper {
 allprojects {
   configureBaseRepos(repositories)
 
-  configurations.all {
-    resolutionStrategy {
-      force("com.google.code.findbugs:jsr305:3.0.1")
-    }
-  }
-
   plugins.withType(com.android.build.gradle.internal.plugins.BasePlugin::class.java) {
     with(extension) {
       defaultConfig {
