@@ -12,7 +12,7 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
 
   init {
     controller.addLifecycleListener(
-      object : Controller.LifecycleListener {
+      object : Controller.LifecycleListener() {
         override fun postDestroyView(controller: Controller) {
           if (controller.isDestroyed || controller.isBeingDestroyed) {
             Timber.d("We are in teardown. Defer releasing the reference.")

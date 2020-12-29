@@ -29,7 +29,7 @@ abstract class MvpController<V : Any, out P, B : ViewBinding>(
 
   init {
     addLifecycleListener(
-      object : LifecycleListener {
+      object : LifecycleListener() {
 
         override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
           presenter.onRestore(savedInstanceState)

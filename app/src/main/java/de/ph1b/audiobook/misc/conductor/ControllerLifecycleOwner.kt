@@ -16,7 +16,7 @@ class ControllerLifecycleOwner<T>(lifecycleController: T) : LifecycleOwner where
   override fun getLifecycle(): Lifecycle = lifecycleRegistry
 
   init {
-    lifecycleController.addLifecycleListener(object : LifecycleListener {
+    lifecycleController.addLifecycleListener(object : LifecycleListener() {
       override fun postContextAvailable(controller: Controller, context: Context) {
         lifecycleRegistry.handleLifecycleEvent(Event.ON_CREATE)
       }

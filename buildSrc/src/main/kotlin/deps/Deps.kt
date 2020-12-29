@@ -12,15 +12,15 @@ object Deps {
 
   object AndroidX {
     const val appCompat = "androidx.appcompat:appcompat:1.2.0"
-    const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.1"
+    const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.4"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
     const val transitions = "androidx.transition:transition:1.3.1"
     const val palette = "androidx.palette:palette:1.0.0"
-    const val mediaCompat = "androidx.media:media:1.1.0"
-    const val ktx = "androidx.core:core-ktx:1.3.1"
+    const val mediaCompat = "androidx.media:media:1.2.1"
+    const val ktx = "androidx.core:core-ktx:1.3.2"
 
     object Room {
-      private const val version = "2.2.5"
+      private const val version = "2.2.6"
       const val runtime = "androidx.room:room-ktx:$version"
       const val compiler = "androidx.room:room-compiler:$version"
       const val testing = "androidx.room:room-testing:$version"
@@ -34,7 +34,7 @@ object Deps {
   }
 
   const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
-  const val material = "com.google.android.material:material:1.2.0"
+  const val material = "com.google.android.material:material:1.2.1"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.71828"
@@ -44,13 +44,13 @@ object Deps {
   const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.4"
 
   object Conductor {
-    private const val version = "3.0.0-rc6"
+    private const val version = "3.0.0"
     const val core = "com.bluelinelabs:conductor:$version"
     const val transition = "com.bluelinelabs:conductor-androidx-transition:$version"
   }
 
   object Prefs {
-    private const val version = "1.0.0"
+    private const val version = "1.0.1"
     const val core = "com.github.PaulWoitaschek.FlowPref:core:$version"
     const val android = "com.github.PaulWoitaschek.FlowPref:android:$version"
     const val inMemory = "com.github.PaulWoitaschek.FlowPref:in-memory:$version"
@@ -63,7 +63,7 @@ object Deps {
   }
 
   object Dagger {
-    private const val version = "2.28.3"
+    private const val version = "2.30.1"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
@@ -77,8 +77,8 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.4.0"
-    private const val versionCoroutines = "1.3.9"
+    private const val versionKotlin = "1.4.21-2"
+    private const val versionCoroutines = "1.4.2"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
@@ -86,15 +86,15 @@ object Deps {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionKotlin"
 
     object Serialization {
-      const val core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
+      const val core = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
       const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:$versionKotlin"
     }
   }
 
-  const val junit = "junit:junit:4.13"
-  const val mockk = "io.mockk:mockk:1.10.0"
-  const val truth = "com.google.truth:truth:1.0.1"
-  const val robolectric = "org.robolectric:robolectric:4.3.1"
+  const val junit = "junit:junit:4.13.1"
+  const val mockk = "io.mockk:mockk:1.10.4"
+  const val truth = "com.google.truth:truth:1.1"
+  const val robolectric = "org.robolectric:robolectric:4.4"
 }
 
 @Suppress("UnstableApiUsage")
