@@ -2,7 +2,9 @@ package de.ph1b.audiobook.features.bookCategory
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,8 +12,8 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.databinding.BookCategoryBinding
+import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
-import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
@@ -30,18 +32,23 @@ import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
-class BookCategoryController(bundle: Bundle) : ViewBindingController<BookCategoryBinding>(bundle, BookCategoryBinding::inflate),
+class BookCategoryController(bundle: Bundle) :
+  BaseController(bundle),
   EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback, EditCoverDialogController.Callback {
+  CoverFromInternetController.Callback,
+  EditCoverDialogController.Callback {
 
   @Inject
   lateinit var viewModel: BookCategoryViewModel
+
   @Inject
   lateinit var galleryPicker: GalleryPicker
 
-  constructor(category: BookOverviewCategory) : this(Bundle().apply {
-    putSerializable(NI_CATEGORY, category)
-  })
+  constructor(category: BookOverviewCategory) : this(
+    Bundle().apply {
+      putSerializable(NI_CATEGORY, category)
+    }
+  )
 
   private val category = bundle.getSerializable(NI_CATEGORY) as BookOverviewCategory
   private var adapter by clearAfterDestroyView<BookCategoryAdapter>()
@@ -51,19 +58,20 @@ class BookCategoryController(bundle: Bundle) : ViewBindingController<BookCategor
     viewModel.category = category
   }
 
-  override fun BookCategoryBinding.onBindingCreated() {
-    toolbar.setTitle(category.nameRes)
-    toolbar.inflateMenu(R.menu.book_category)
-    toolbar.setOnMenuItemClickListener {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
+    val binding = BookCategoryBinding.inflate(inflater, container, false)
+    binding.toolbar.setTitle(category.nameRes)
+    binding.toolbar.inflateMenu(R.menu.book_category)
+    binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.sort -> {
-          showSortingPopup()
+          showSortingPopup(binding)
           true
         }
         else -> false
       }
     }
-    toolbar.setNavigationOnClickListener { popOrBack() }
+    binding.toolbar.setNavigationOnClickListener { popOrBack() }
 
     val adapter = BookCategoryAdapter { book, clickType ->
       when (clickType) {
@@ -74,15 +82,15 @@ class BookCategoryController(bundle: Bundle) : ViewBindingController<BookCategor
           router.replaceTopController(BookPlayController(book.id).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
-          EditBookBottomSheetController(this@BookCategoryController, book).showDialog(router)
+          EditBookBottomSheetController(this, book).showDialog(router)
         }
       }
     }.also { adapter = it }
-    recyclerView.adapter = adapter
+    binding.recyclerView.adapter = adapter
     val layoutManager = GridLayoutManager(activity, 1)
-    recyclerView.layoutManager = layoutManager
-    recyclerView.addItemDecoration(BookCategoryItemDecoration(activity!!, layoutManager))
-    (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+    binding.recyclerView.layoutManager = layoutManager
+    binding.recyclerView.addItemDecoration(BookCategoryItemDecoration(activity!!, layoutManager))
+    (binding.recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
     lifecycleScope.launch {
       viewModel.get()
@@ -91,10 +99,12 @@ class BookCategoryController(bundle: Bundle) : ViewBindingController<BookCategor
           adapter.submitList(it.models)
         }
     }
+
+    return binding.root
   }
 
-  private fun BookCategoryBinding.showSortingPopup() {
-    val anchor = toolbar.findViewById<View>(R.id.sort)
+  private fun showSortingPopup(bookCategoryBinding: BookCategoryBinding) {
+    val anchor = bookCategoryBinding.toolbar.findViewById<View>(R.id.sort)
     PopupMenu(activity!!, anchor).apply {
       inflate(R.menu.sort_menu)
       val bookSorting = viewModel.bookSorting()
