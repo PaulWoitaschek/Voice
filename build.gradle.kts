@@ -39,7 +39,7 @@ allprojects {
       compileSdkVersion(30)
 
       dependencies {
-        add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.0.9")
+        add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.1.1")
       }
     }
   }
