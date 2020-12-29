@@ -23,10 +23,10 @@ import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.SimpleTarget
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
@@ -38,6 +38,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var imageHelper: ImageHelper
 
@@ -56,7 +57,8 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     binding.cropOverlay.selectionOn = false
     picasso.load(arguments.coverUri)
       .into(
-        binding.coverImage, object : PicassoCallback {
+        binding.coverImage,
+        object : PicassoCallback {
           override fun onError(e: Exception?) {
             dismissDialog()
           }

@@ -5,7 +5,7 @@ import java.util.Properties
 plugins {
   id("com.android.application")
   id("kotlin-android")
-  id("kotlin-android-extensions")
+  id("kotlin-parcelize")
   id("kotlinx-serialization")
   id("kotlin-kapt")
 }
@@ -76,11 +76,6 @@ android {
   buildFeatures {
     viewBinding = true
   }
-}
-
-androidExtensions {
-  isExperimental = true
-  features = setOf("parcelize")
 }
 
 dependencies {
