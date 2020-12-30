@@ -2,6 +2,7 @@ package de.ph1b.audiobook.injection
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import de.paulwoitaschek.flowpref.Pref
@@ -10,6 +11,7 @@ import de.paulwoitaschek.flowpref.android.boolean
 import de.paulwoitaschek.flowpref.android.enum
 import de.paulwoitaschek.flowpref.android.int
 import de.paulwoitaschek.flowpref.android.stringSet
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.features.bookOverview.GridMode
@@ -19,6 +21,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
+@ContributesTo(AppScope::class)
 object PrefsModule {
 
   @Provides

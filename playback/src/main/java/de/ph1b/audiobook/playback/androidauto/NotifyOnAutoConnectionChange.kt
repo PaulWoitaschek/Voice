@@ -3,7 +3,7 @@ package de.ph1b.audiobook.playback.androidauto
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.playback.di.PerService
+import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.session.ChangeNotifier
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -14,7 +14,7 @@ import javax.inject.Named
 /**
  * Notifies about changes upon android auto connection.
  */
-@PerService
+@PlaybackScope
 class NotifyOnAutoConnectionChange
 @Inject constructor(
   private val changeNotifier: ChangeNotifier,

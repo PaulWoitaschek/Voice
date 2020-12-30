@@ -1,3 +1,10 @@
+pluginManagement {
+  @Suppress("UnstableApiUsage")
+  plugins {
+    id("com.squareup.anvil") version "2.0.11"
+  }
+}
+
 plugins {
   id("com.gradle.enterprise") version "3.0"
 }
@@ -10,7 +17,7 @@ gradleEnterprise {
 }
 
 include(":app")
-include(":core")
+include(":strings")
 include(":common")
 include(":data")
 include(":covercolorextractor")
@@ -18,3 +25,4 @@ include(":playback")
 include(":prefs")
 include(":ffmpeg")
 include(":scanner")
+include(":core")

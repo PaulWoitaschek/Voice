@@ -2,10 +2,11 @@ package de.ph1b.audiobook.data.repo.internals
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration23to24
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration24to25
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration25to26
@@ -36,44 +37,33 @@ import de.ph1b.audiobook.data.repo.internals.migrations.Migration50
 import javax.inject.Singleton
 
 @Module
+@ContributesTo(AppScope::class)
 object PersistenceModule {
 
   @Provides
-  @JvmStatic
-  fun bookmarkDao(appDb: AppDb) = appDb.bookmarkDao()
+  fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
 
   @Provides
-  @JvmStatic
-  fun chapterDao(appDb: AppDb) = appDb.chapterDao()
+  fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
 
   @Provides
-  @JvmStatic
-  fun metaDataDao(appDb: AppDb) = appDb.bookMetadataDao()
+  fun metaDataDao(appDb: AppDb): BookMetaDataDao = appDb.bookMetadataDao()
 
   @Provides
-  @JvmStatic
-  fun bookSettingsDao(appDb: AppDb) = appDb.bookSettingsDao()
-
-  @Provides
-  @JvmStatic
-  fun roomDatabaseBuilder(context: Context): RoomDatabase.Builder<AppDb> {
-    return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
-  }
+  fun bookSettingsDao(appDb: AppDb): BookSettingsDao = appDb.bookSettingsDao()
 
   @Provides
   @Singleton
-  @JvmStatic
   fun appDb(
-    builder: RoomDatabase.Builder<AppDb>,
+    context: Context,
     migrations: Array<Migration>
   ): AppDb {
-    return builder
+    return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
       .addMigrations(*migrations)
       .build()
   }
 
   @Provides
-  @JvmStatic
   fun migrations(context: Context): Array<Migration> {
     return arrayOf(
       Migration23to24(),

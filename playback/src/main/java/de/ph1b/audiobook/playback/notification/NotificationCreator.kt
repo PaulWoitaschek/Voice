@@ -20,7 +20,7 @@ import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.playback.R
-import de.ph1b.audiobook.playback.di.PerService
+import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,7 +31,7 @@ import javax.inject.Inject
 /**
  * Provides Notifications based on playing information.
  */
-@PerService
+@PlaybackScope
 class NotificationCreator
 @Inject constructor(
   private val context: Context,

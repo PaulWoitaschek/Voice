@@ -14,7 +14,7 @@ import de.ph1b.audiobook.data.BookContent
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
-import de.ph1b.audiobook.playback.di.PerService
+import de.ph1b.audiobook.playback.di.PlaybackScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -25,7 +25,7 @@ import javax.inject.Inject
 /**
  * Sets updated metadata on the media session and sends broadcasts about meta changes
  */
-@PerService
+@PlaybackScope
 class ChangeNotifier
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,

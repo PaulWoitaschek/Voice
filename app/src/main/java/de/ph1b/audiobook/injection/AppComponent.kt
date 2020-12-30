@@ -2,9 +2,10 @@ package de.ph1b.audiobook.injection
 
 import android.app.Application
 import android.content.Context
+import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
-import de.ph1b.audiobook.data.repo.internals.PersistenceModule
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
@@ -35,14 +36,8 @@ import javax.inject.Singleton
  * Base component that is the entry point for injection.
  */
 @Singleton
-@Component(
-  modules = [
-    AndroidModule::class,
-    PrefsModule::class,
-    PersistenceModule::class,
-    PlaybackModule::class,
-    SortingModule::class
-  ]
+@MergeComponent(
+  scope = AppScope::class
 )
 interface AppComponent {
 

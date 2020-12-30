@@ -7,7 +7,7 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
-import de.ph1b.audiobook.playback.di.PerService
+import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.player.MediaPlayer
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
@@ -20,7 +20,7 @@ import javax.inject.Named
 /**
  * Media session callback that handles playback controls.
  */
-@PerService
+@PlaybackScope
 class MediaSessionCallback
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,

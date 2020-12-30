@@ -10,8 +10,10 @@ import android.net.ConnectivityManager
 import android.os.PowerManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.misc.ApplicationIdProviderImpl
@@ -23,6 +25,7 @@ import javax.inject.Singleton
  * Module providing Android SDK Related instances.
  */
 @Module
+@ContributesTo(AppScope::class)
 object AndroidModule {
 
   @Provides

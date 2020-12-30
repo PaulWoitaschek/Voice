@@ -8,6 +8,7 @@ plugins {
   id("kotlin-parcelize")
   id("kotlinx-serialization")
   id("kotlin-kapt")
+  id("com.squareup.anvil")
 }
 
 android {
@@ -79,7 +80,7 @@ android {
 }
 
 dependencies {
-  implementation(project(":core"))
+  implementation(project(":strings"))
   implementation(project(":common"))
   implementation(project(":data"))
   implementation(project(":covercolorextractor"))

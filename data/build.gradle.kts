@@ -5,6 +5,11 @@ plugins {
   id("kotlin-android")
   id("kotlinx-serialization")
   id("kotlin-kapt")
+  id("com.squareup.anvil")
+}
+
+anvil {
+  generateDaggerFactories = true
 }
 
 android {
@@ -45,7 +50,6 @@ dependencies {
   kapt(Deps.AndroidX.Room.compiler)
 
   implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
 
   testImplementation(Deps.AndroidX.Room.testing)
   testImplementation(Deps.AndroidX.Test.core)

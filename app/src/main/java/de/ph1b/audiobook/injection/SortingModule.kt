@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.injection
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.MapKey
 import dagger.Module
 import dagger.Provides
@@ -7,6 +8,7 @@ import dagger.multibindings.IntoMap
 import de.paulwoitaschek.flowpref.Pref
 import de.paulwoitaschek.flowpref.android.AndroidPreferences
 import de.paulwoitaschek.flowpref.android.enum
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import javax.inject.Singleton
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 annotation class BookOverviewCategoryKey(val value: BookOverviewCategory)
 
 @Module
+@ContributesTo(AppScope::class)
 object SortingModule {
 
   @JvmStatic

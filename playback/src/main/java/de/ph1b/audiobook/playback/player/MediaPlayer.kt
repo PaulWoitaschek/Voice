@@ -13,7 +13,7 @@ import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.ChapterMark
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.playback.di.PerService
+import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.playstate.PlayerState
@@ -43,7 +43,7 @@ import kotlin.time.Duration
 import kotlin.time.milliseconds
 import kotlin.time.seconds
 
-@PerService
+@PlaybackScope
 class MediaPlayer
 @Inject
 constructor(
@@ -172,9 +172,7 @@ constructor(
         .filterNotNull()
         .map { it.content }
         .distinctUntilChanged()
-      combine(notIdleFlow, contentFlow) { _, _ ->
-        Unit
-      }
+      combine(notIdleFlow, contentFlow) { _, _ -> }
         .collect { prepare() }
     }
   }

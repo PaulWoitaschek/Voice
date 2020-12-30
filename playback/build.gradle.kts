@@ -3,12 +3,16 @@ import deps.Deps
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("kotlin-kapt")
+  id("com.squareup.anvil")
+}
+
+anvil {
+  generateDaggerFactories = true
 }
 
 dependencies {
   implementation(project(":common"))
-  implementation(project(":core"))
+  implementation(project(":strings"))
   implementation(project(":data"))
   implementation(project(":prefs"))
 
@@ -20,7 +24,6 @@ dependencies {
   implementation(Deps.Prefs.core)
 
   implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
 
   implementation(Deps.ExoPlayer.core)
   implementation(Deps.ExoPlayer.flac) { isTransitive = false }

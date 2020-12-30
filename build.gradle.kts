@@ -60,6 +60,20 @@ allprojects {
   }
 }
 
+subprojects {
+  fun addCoreDependencies() {
+    if (path != ":core") {
+      dependencies.add("implementation", project(":core"))
+    }
+  }
+  plugins.withId("kotlin") {
+    addCoreDependencies()
+  }
+  plugins.withId("kotlin-android") {
+    addCoreDependencies()
+  }
+}
+
 tasks {
   register<Exec>("importStrings") {
     executable = "sh"

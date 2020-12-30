@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" filepath="$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" filepath="$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" filepath="$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" />
     </modules>
   </component>
 </project>

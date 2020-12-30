@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
   implementation(project(":ffmpeg"))
-  implementation(project(":core"))
+  implementation(project(":strings"))
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.Dagger.core)
