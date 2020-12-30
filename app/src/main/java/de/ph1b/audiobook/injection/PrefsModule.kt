@@ -25,20 +25,18 @@ import javax.inject.Singleton
 object PrefsModule {
 
   @Provides
-  @JvmStatic
+  @Singleton
   fun provideSharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   fun prefs(sharedPreferences: SharedPreferences): AndroidPreferences {
     return AndroidPreferences(sharedPreferences)
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.DARK_THEME)
   fun darkThemePref(prefs: AndroidPreferences): Pref<Boolean> {
@@ -46,7 +44,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.RESUME_ON_REPLUG)
   fun provideResumeOnReplugPreference(prefs: AndroidPreferences): Pref<Boolean> {
@@ -54,7 +51,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
@@ -62,7 +58,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.SEEK_TIME)
   fun provideSeekTimePreference(prefs: AndroidPreferences): Pref<Int> {
@@ -70,7 +65,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.SLEEP_TIME)
   fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
@@ -78,7 +72,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   fun provideSingleBookFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
@@ -86,7 +79,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
   fun provideCollectionFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
@@ -94,7 +86,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.CURRENT_BOOK)
   fun provideCurrentBookIdPreference(prefs: AndroidPreferences): Pref<UUID> {
@@ -102,7 +93,6 @@ object PrefsModule {
   }
 
   @Provides
-  @JvmStatic
   @Singleton
   @Named(PrefKeys.GRID_MODE)
   fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {

@@ -29,59 +29,57 @@ import javax.inject.Singleton
 object AndroidModule {
 
   @Provides
-  @JvmStatic
   fun provideContext(app: Application): Context = app
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun provideAudioManager(context: Context) =
-    context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+  fun provideAudioManager(context: Context): AudioManager {
+    return context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun provideActivityManager(context: Context) =
-    context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+  fun provideActivityManager(context: Context): ActivityManager {
+    return context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun provideTelephonyManager(context: Context) =
-    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+  fun provideTelephonyManager(context: Context): TelephonyManager {
+    return context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun provideConnectivityManager(context: Context) =
-    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+  fun provideConnectivityManager(context: Context): ConnectivityManager {
+    return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+  }
 
   @Provides
-  @JvmStatic
-  fun provideWindowManager(context: Context) =
-    context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-  @Provides
-  @Singleton
-  @JvmStatic
-  fun provideNotificationManager(context: Context) =
-    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+  fun provideWindowManager(context: Context): WindowManager {
+    return context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun provideSensorManager(context: Context) =
-    context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+  fun provideNotificationManager(context: Context): NotificationManager {
+    return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
-  fun providePowerManager(context: Context) =
-    context.getSystemService(Context.POWER_SERVICE) as PowerManager
+  fun provideSensorManager(context: Context): SensorManager? {
+    return context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+  }
 
   @Provides
   @Singleton
-  @JvmStatic
+  fun providePowerManager(context: Context): PowerManager {
+    return context.getSystemService(Context.POWER_SERVICE) as PowerManager
+  }
+
+  @Provides
+  @Singleton
   fun provideCoverColorExtractor(): CoverColorExtractor {
     return CoverColorExtractor()
   }

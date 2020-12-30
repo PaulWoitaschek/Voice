@@ -13,7 +13,6 @@ import de.ph1b.audiobook.playback.OnlyAudioRenderersFactory
 object PlaybackModule {
 
   @Provides
-  @JvmStatic
   fun exoPlayer(context: Context, onlyAudioRenderersFactory: OnlyAudioRenderersFactory): SimpleExoPlayer {
     return SimpleExoPlayer.Builder(context, onlyAudioRenderersFactory)
       .build()

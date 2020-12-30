@@ -20,7 +20,6 @@ annotation class BookOverviewCategoryKey(val value: BookOverviewCategory)
 @ContributesTo(AppScope::class)
 object SortingModule {
 
-  @JvmStatic
   @Provides
   @Singleton
   @IntoMap
@@ -29,7 +28,6 @@ object SortingModule {
     return prefs.enum(BookOverviewCategory.CURRENT.name, BookComparator.BY_NAME)
   }
 
-  @JvmStatic
   @Provides
   @Singleton
   @IntoMap
@@ -38,7 +36,6 @@ object SortingModule {
     return prefs.enum(BookOverviewCategory.NOT_STARTED.name, BookComparator.BY_NAME, BookComparator::class.java)
   }
 
-  @JvmStatic
   @Provides
   @Singleton
   @IntoMap
