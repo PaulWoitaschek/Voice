@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -151,7 +152,7 @@ class FolderChooserActivity :
    */
   override fun setUpButtonEnabled(upEnabled: Boolean) {
     binding.upButton.isEnabled = upEnabled
-    val upIcon = if (upEnabled) getDrawable(R.drawable.ic_arrow_upward)!! else null
+    val upIcon = if (upEnabled) AppCompatResources.getDrawable(this, R.drawable.ic_arrow_upward)!! else null
     binding.upButton.setImageDrawable(upIcon)
   }
 

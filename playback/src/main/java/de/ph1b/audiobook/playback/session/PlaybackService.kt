@@ -17,7 +17,6 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.androidauto.NotifyOnAutoConnectionChange
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.playback.misc.flowBroadcastReceiver
@@ -54,32 +53,43 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
+
   @Inject
   lateinit var player: MediaPlayer
+
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var notificationManager: NotificationManager
+
   @Inject
   lateinit var notificationCreator: NotificationCreator
+
   @Inject
   lateinit var playStateManager: PlayStateManager
+
   @Inject
   lateinit var bookUriConverter: BookUriConverter
+
   @Inject
   lateinit var mediaBrowserHelper: MediaBrowserHelper
+
   @Inject
   lateinit var mediaSession: MediaSessionCompat
+
   @Inject
   lateinit var changeNotifier: ChangeNotifier
-  @Inject
-  lateinit var autoConnected: AndroidAutoConnectedReceiver
+
   @Inject
   lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
+
   @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
   lateinit var resumeOnReplugPref: Pref<Boolean>
+
   @Inject
   lateinit var mediaController: MediaControllerCompat
+
   @Inject
   lateinit var callback: MediaSessionCallback
 

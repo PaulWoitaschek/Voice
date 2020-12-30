@@ -12,8 +12,6 @@ import javax.inject.Inject
 class ShakeDetector
 @Inject constructor(private val sensorManager: SensorManager?) {
 
-  fun shakeSupported() = sensorManager != null
-
   fun detect(): Flow<Unit> = callbackFlow {
     if (sensorManager == null) {
       return@callbackFlow

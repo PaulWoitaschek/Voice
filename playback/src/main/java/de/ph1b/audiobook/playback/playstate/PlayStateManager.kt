@@ -55,8 +55,12 @@ constructor() {
 
   enum class PauseReason {
     NONE,
+
+    @Suppress("unused")
     CALL,
     BECAUSE_HEADSET,
+
+    @Suppress("unused")
     LOSS_TRANSIENT
   }
 }

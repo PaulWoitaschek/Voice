@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.misc
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
@@ -40,6 +41,7 @@ fun SeekBar.progressChangedStream(): Flow<Int> {
   }
 }
 
+@SuppressLint("ClickableViewAccessibility")
 inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (Int) -> Unit) {
   // add an onTouchListener to check if it's really user input
   var isUserSelection = false

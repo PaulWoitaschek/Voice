@@ -190,6 +190,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="32dp"
+      android:contentDescription="@string/action_sleep"
       android:src="@drawable/check"
       app:layout_constraintBottom_toBottomOf="@id/fabY"
       app:layout_constraintLeft_toLeftOf="@id/fabX"

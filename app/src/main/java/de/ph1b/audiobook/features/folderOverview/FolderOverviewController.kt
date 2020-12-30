@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.annotation.ColorInt
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -52,7 +53,7 @@ class FolderOverviewController :
     val layoutManager = LinearLayoutManager(activity)
     recycler.layoutManager = layoutManager
     recycler.addItemDecoration(
-        DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+      DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
 
     adapter = FolderOverviewAdapter { toDelete ->
@@ -68,8 +69,8 @@ class FolderOverviewController :
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    addAsSingle.setIconDrawable(context.getDrawable(R.drawable.ic_folder)!!.tinted(Color.WHITE))
-    addAsLibrary.setIconDrawable(context.getDrawable(R.drawable.folder_multiple)!!.tinted(Color.WHITE))
+    addAsSingle.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_folder)!!.tinted(Color.WHITE))
+    addAsLibrary.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.folder_multiple)!!.tinted(Color.WHITE))
     addAsSingle.title =
       "${context.getString(R.string.folder_add_single_book)}\n${context.getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${context.getString(R.string.folder_add_collection)}\n${context.getString(R.string.for_example)} AudioBooks"
@@ -100,7 +101,7 @@ class FolderOverviewController :
       // create the animator for this view (the start radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
         binding.overlay,
-          famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
+        famCenter.x, famCenter.y, 0f, finalRadius.toFloat()
       )
 
       // make the view visible and start the animation
@@ -118,17 +119,17 @@ class FolderOverviewController :
       // create the animation (the final radius is zero)
       val anim = ViewAnimationUtils.createCircularReveal(
         binding.overlay,
-          famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
+        famCenter.x, famCenter.y, initialRadius.toFloat(), 0f
       )
 
       // make the view invisible when the animation is done
       anim.addListener(
-          object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-              super.onAnimationEnd(animation)
-              binding.overlay.isInvisible = true
-            }
+        object : AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator) {
+            super.onAnimationEnd(animation)
+            binding.overlay.isInvisible = true
           }
+        }
       )
 
       // start the animation

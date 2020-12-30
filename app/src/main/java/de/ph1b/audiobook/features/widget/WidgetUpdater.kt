@@ -64,7 +64,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
+  private fun updateWidgetForId(book: Book?, widgetId: Int) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -72,7 +72,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
+  private fun initWidgetForPresentBook(widgetId: Int, book: Book) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -134,11 +134,13 @@ class WidgetUpdater @Inject constructor(
       val displayHeight = display.height
 
       return orientation != Configuration.ORIENTATION_LANDSCAPE &&
-        (orientation == Configuration.ORIENTATION_PORTRAIT ||
-          displayWidth == displayHeight || displayWidth < displayHeight)
+        (
+          orientation == Configuration.ORIENTATION_PORTRAIT ||
+            displayWidth == displayHeight || displayWidth < displayHeight
+          )
     }
 
-  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
+  private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 

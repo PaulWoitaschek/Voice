@@ -13,7 +13,7 @@ private const val PLUGGED = 1
 private const val UNPLUGGED = 0
 
 fun Context.headsetStateChangeFlow(): Flow<HeadsetState> {
-  return flowBroadcastReceiver(IntentFilter(Intent.ACTION_HEADSET_PLUG))
+  return flowBroadcastReceiver(filter)
     .map {
       Timber.i("onReceive with intent=$it")
       when (val intState = it.getIntExtra("state", UNPLUGGED)) {

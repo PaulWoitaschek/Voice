@@ -49,11 +49,11 @@
       android:foreground="?attr/selectableItemBackground"
       android:padding="16dp"
       android:theme="@style/PlayButtonStyle"
-      android:tint="@color/white"
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/x75"
-      app:layout_constraintStart_toStartOf="@+id/x75" />
+      app:layout_constraintStart_toStartOf="@+id/x75"
+      app:tint="@color/white" />
 
     <ImageView
       android:id="@+id/rewind"
@@ -151,7 +151,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
-          android:drawableEnd="@drawable/ic_chevron_down"
           android:drawablePadding="4dp"
           android:ellipsize="end"
           android:gravity="center"
@@ -164,6 +163,7 @@
           app:layout_constraintBottom_toTopOf="@+id/slider"
           app:layout_constraintEnd_toStartOf="@+id/next"
           app:layout_constraintStart_toEndOf="@+id/previous"
+          app:drawableEndCompat="@drawable/ic_chevron_down"
           tools:text="This is the end" />
 
     </FrameLayout>
