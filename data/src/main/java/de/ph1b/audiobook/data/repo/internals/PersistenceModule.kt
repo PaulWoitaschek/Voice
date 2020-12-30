@@ -7,6 +7,10 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import de.ph1b.audiobook.AppScope
+import de.ph1b.audiobook.data.repo.internals.dao.BookMetaDataDao
+import de.ph1b.audiobook.data.repo.internals.dao.BookSettingsDao
+import de.ph1b.audiobook.data.repo.internals.dao.BookmarkDao
+import de.ph1b.audiobook.data.repo.internals.dao.ChapterDao
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration23to24
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration24to25
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration25to26

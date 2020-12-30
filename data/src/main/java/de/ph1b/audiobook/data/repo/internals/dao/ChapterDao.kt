@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.data.repo.internals
+package de.ph1b.audiobook.data.repo.internals.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -11,11 +11,11 @@ import java.util.UUID
 interface ChapterDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insert(chapters: List<Chapter>)
+  suspend fun insert(chapters: List<Chapter>)
 
   @Query("SELECT * FROM chapters WHERE bookId = :bookId")
-  fun byBookId(bookId: UUID): List<Chapter>
+  suspend fun byBookId(bookId: UUID): List<Chapter>
 
   @Query("DELETE FROM chapters WHERE bookId = :bookId")
-  fun deleteByBookId(bookId: UUID)
+  suspend fun deleteByBookId(bookId: UUID)
 }

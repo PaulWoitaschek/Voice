@@ -6,7 +6,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)
@@ -50,17 +53,22 @@ inline fun <T> SupportSQLiteDatabase.transaction(
   }
 }
 
-inline fun <T> RoomDatabase.transaction(action: () -> T): T {
-  @Suppress("DEPRECATION")
-  beginTransaction()
-  return try {
-    action().also {
-      @Suppress("DEPRECATION")
-      setTransactionSuccessful()
-    }
-  } finally {
+suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
+  contract {
+    callsInPlace(action, InvocationKind.EXACTLY_ONCE)
+  }
+  return withContext(kotlinx.coroutines.Dispatchers.IO) {
     @Suppress("DEPRECATION")
-    endTransaction()
+    beginTransaction()
+    try {
+      action().also {
+        @Suppress("DEPRECATION")
+        setTransactionSuccessful()
+      }
+    } finally {
+      @Suppress("DEPRECATION")
+      endTransaction()
+    }
   }
 }
 

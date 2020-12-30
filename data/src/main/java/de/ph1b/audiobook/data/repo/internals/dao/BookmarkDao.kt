@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.data.repo.internals
+package de.ph1b.audiobook.data.repo.internals.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

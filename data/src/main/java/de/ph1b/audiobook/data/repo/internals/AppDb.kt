@@ -7,6 +7,10 @@ import de.ph1b.audiobook.data.BookMetaData
 import de.ph1b.audiobook.data.BookSettings
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.repo.internals.dao.BookMetaDataDao
+import de.ph1b.audiobook.data.repo.internals.dao.BookSettingsDao
+import de.ph1b.audiobook.data.repo.internals.dao.BookmarkDao
+import de.ph1b.audiobook.data.repo.internals.dao.ChapterDao
 
 @Database(
   entities = [Bookmark::class, Chapter::class, BookMetaData::class, BookSettings::class],

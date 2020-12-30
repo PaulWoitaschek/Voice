@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.data.repo.internals
+package de.ph1b.audiobook.data.repo.internals.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -12,14 +12,14 @@ import java.util.UUID
 interface BookMetaDataDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insert(metaData: BookMetaData)
+  suspend fun insert(metaData: BookMetaData)
 
   @Query("SELECT * FROM bookMetaData WHERE id = :id")
-  fun byId(id: UUID): BookMetaData
+  suspend fun byId(id: UUID): BookMetaData
 
   @Delete
-  fun delete(metaData: BookMetaData)
+  suspend fun delete(metaData: BookMetaData)
 
   @Query("UPDATE bookMetaData SET name = :name WHERE id = :id")
-  fun updateBookName(id: UUID, name: String)
+  suspend fun updateBookName(id: UUID, name: String)
 }

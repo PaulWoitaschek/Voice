@@ -3,7 +3,7 @@ package de.ph1b.audiobook.data.repo
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.repo.internals.AppDb
-import de.ph1b.audiobook.data.repo.internals.BookmarkDao
+import de.ph1b.audiobook.data.repo.internals.dao.BookmarkDao
 import de.ph1b.audiobook.data.repo.internals.transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
