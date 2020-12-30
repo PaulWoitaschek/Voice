@@ -37,7 +37,7 @@ object Deps {
   const val material = "com.google.android.material:material:1.2.1"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
-  const val picasso = "com.squareup.picasso:picasso:2.71828"
+  const val picasso = "com.squareup.picasso:picasso:2.8"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
   const val groupie = "com.xwray:groupie:2.8.1"
