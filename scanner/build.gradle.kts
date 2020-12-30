@@ -4,6 +4,12 @@ plugins {
   id("com.android.library")
   id("kotlin-android")
   id("kotlinx-serialization")
+  id("com.squareup.anvil")
+}
+
+anvil {
+  generateDaggerFactories = true
+  generateDaggerFactoriesOnly = true
 }
 
 dependencies {
