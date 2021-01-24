@@ -18,7 +18,7 @@
     <issue id="Overdraw" severity="ignore" />
     <issue id="UnusedQuantity" severity="ignore" />
 
-    <!-- necessary because a bug in lint that casues all
+    <!-- necessary because a bug in lint that causes all
     viewbinding references layouts to be recognized as ignored-->
     <issue id="UnusedResources" severity="ignore" />
 

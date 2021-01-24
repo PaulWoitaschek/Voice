@@ -12,7 +12,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.DialogController
 
 /**
- * Dialog for chosing a title for a new bookmark.
+ * Dialog for choosing a title for a new bookmark.
  */
 class AddBookmarkDialog : DialogController() {
 
