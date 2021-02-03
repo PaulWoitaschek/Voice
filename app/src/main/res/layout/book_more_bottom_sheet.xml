@@ -34,4 +34,18 @@
         android:text="@string/bookmark"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
+    <TextView
+        android:id="@+id/markAsComplete"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/bookmark"
+        android:text="@string/mark_as_complete"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <TextView
+        android:id="@+id/markAsNotStarted"
+        style="@style/BottomSheetRow"
+        android:drawableStart="@drawable/bookmark"
+        android:text="@string/mark_as_not_started"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
 </LinearLayout>

@@ -30,6 +30,8 @@
     <string name="change_book_name">Name</string>
     <string name="download_book_cover">Cover from internet</string>
     <string name="pick_book_cover">Cover from file system</string>
+    <string name="mark_as_complete">Mark as Complete</string>
+    <string name="mark_as_not_started">Mark as Not Started</string>
     <string name="edit_book_title">Edit book</string>
     l    <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
