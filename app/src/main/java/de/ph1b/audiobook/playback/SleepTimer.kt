@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.playback.player.FADE_OUT_DURATION
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
 import kotlinx.coroutines.Job
@@ -77,12 +78,16 @@ class SleepTimer
 
   private suspend fun startSleepTimerCountdown() {
     val interval = 500.milliseconds
+    var fadeOutSent = false
     while (leftSleepTime > Duration.ZERO) {
       suspendUntilPlaying()
       delay(interval)
       leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
+      if (leftSleepTime <= FADE_OUT_DURATION && !fadeOutSent) {
+        fadeOutSent = true
+        playerController.fadeOut()
+      }
     }
-    playerController.pause()
   }
 
   private suspend fun suspendUntilPlaying() {
@@ -98,5 +103,6 @@ class SleepTimer
   private fun cancel() {
     sleepJob?.cancel()
     leftSleepTime = Duration.ZERO
+    playerController.cancelFadeout()
   }
 }
