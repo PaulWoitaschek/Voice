@@ -14,7 +14,7 @@ object Deps {
     const val appCompat = "androidx.appcompat:appcompat:1.2.0"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.4"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-    const val transitions = "androidx.transition:transition:1.3.1"
+    const val transitions = "androidx.transition:transition:1.4.0"
     const val palette = "androidx.palette:palette:1.0.0"
     const val mediaCompat = "androidx.media:media:1.2.1"
     const val ktx = "androidx.core:core-ktx:1.3.2"
@@ -33,18 +33,18 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
-  const val material = "com.google.android.material:material:1.2.1"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
+  const val material = "com.google.android.material:material:1.3.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
   const val picasso = "com.squareup.picasso:picasso:2.8"
   const val tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.0"
-  const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+  const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.3.0"
   const val groupie = "com.xwray:groupie:2.8.1"
   const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.4"
 
   object Conductor {
-    private const val version = "3.0.0"
+    private const val version = "3.0.1"
     const val core = "com.bluelinelabs:conductor:$version"
     const val transition = "com.bluelinelabs:conductor-androidx-transition:$version"
   }
@@ -63,7 +63,7 @@ object Deps {
   }
 
   object Dagger {
-    private const val version = "2.30.1"
+    private const val version = "2.33"
     const val core = "com.google.dagger:dagger:$version"
     const val compiler = "com.google.dagger:dagger-compiler:$version"
   }
@@ -77,7 +77,7 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.4.21-2"
+    private const val versionKotlin = "1.4.31"
     private const val versionCoroutines = "1.4.2"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
@@ -91,10 +91,10 @@ object Deps {
     }
   }
 
-  const val junit = "junit:junit:4.13.1"
-  const val mockk = "io.mockk:mockk:1.10.4"
-  const val truth = "com.google.truth:truth:1.1"
-  const val robolectric = "org.robolectric:robolectric:4.4"
+  const val junit = "junit:junit:4.13.2"
+  const val mockk = "io.mockk:mockk:1.11.0"
+  const val truth = "com.google.truth:truth:1.1.2"
+  const val robolectric = "org.robolectric:robolectric:4.5.1"
 }
 
 @Suppress("UnstableApiUsage")
