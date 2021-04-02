@@ -11,7 +11,7 @@ object Versions {
 object Deps {
 
   object AndroidX {
-    const val appCompat = "androidx.appcompat:appcompat:1.2.0"
+    const val appCompat = "androidx.appcompat:appcompat:1.3.0-rc01"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.4"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
     const val transitions = "androidx.transition:transition:1.4.0"
@@ -33,7 +33,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha12"
   const val material = "com.google.android.material:material:1.3.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -101,17 +101,7 @@ object Deps {
 fun configureBaseRepos(repositoryHandler: RepositoryHandler) {
   repositoryHandler.apply {
 
-    exclusiveContent {
-      forRepository {
-        google()
-      }
-      filter {
-        includeGroupByRegex("androidx.*")
-        includeGroupByRegex("com.android.*")
-        includeGroup("com.google.test.platform")
-        includeGroup("com.google.android.material")
-      }
-    }
+    google()
 
     exclusiveContent {
       forRepository {
@@ -122,6 +112,7 @@ fun configureBaseRepos(repositoryHandler: RepositoryHandler) {
       }
     }
 
+    mavenCentral().mavenContent { releasesOnly() }
     jcenter().mavenContent { releasesOnly() }
   }
 }

@@ -9,7 +9,7 @@ import androidx.core.net.toUri
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.DialogController
+import de.ph1b.audiobook.common.conductor.DialogController
 import timber.log.Timber
 
 private val GITHUB_URL = "https://github.com/PaulWoitaschek/Voice".toUri()

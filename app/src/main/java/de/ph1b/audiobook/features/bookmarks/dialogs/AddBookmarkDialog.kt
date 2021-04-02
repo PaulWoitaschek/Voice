@@ -9,7 +9,7 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.misc.DialogController
+import de.ph1b.audiobook.common.conductor.DialogController
 
 /**
  * Dialog for chosing a title for a new bookmark.
@@ -18,8 +18,8 @@ class AddBookmarkDialog : DialogController() {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val inputType = InputType.TYPE_CLASS_TEXT or
-        InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
-        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+      InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
     val dialog = MaterialDialog(activity!!).apply {
 
       title(R.string.bookmark)

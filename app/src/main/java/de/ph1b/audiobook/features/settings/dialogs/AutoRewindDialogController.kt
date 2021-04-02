@@ -7,10 +7,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.onProgressChanged
 import javax.inject.Inject
 import javax.inject.Named

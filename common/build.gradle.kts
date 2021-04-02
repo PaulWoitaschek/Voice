@@ -20,6 +20,7 @@ dependencies {
   implementation(Deps.timber)
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.material)
+  api(Deps.Conductor.core)
 
   testImplementation(Deps.truth)
   testImplementation(Deps.junit)

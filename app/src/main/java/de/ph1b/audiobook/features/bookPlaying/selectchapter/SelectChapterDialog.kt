@@ -9,10 +9,10 @@ import com.afollestad.materialdialogs.list.getRecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.ChapterMark
 import de.ph1b.audiobook.databinding.SelectChapterRowBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.groupie.BindingItem
 import de.ph1b.audiobook.misc.putUUID
@@ -28,9 +28,11 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var viewModel: SelectChapterViewModel
 
-  constructor(bookId: UUID) : this(Bundle().apply {
-    putUUID(NI_BOOK_ID, bookId)
-  })
+  constructor(bookId: UUID) : this(
+    Bundle().apply {
+      putUUID(NI_BOOK_ID, bookId)
+    }
+  )
 
   init {
     appComponent.inject(this)

@@ -1,18 +1,19 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.playbackScreen
 
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.squareup.anvil.annotations.ContributesTo
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.AppScope
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.databinding.DialogTimePickerBinding
-import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.rootComponentAs
+import voice.playbackScreen.databinding.DialogTimePickerBinding
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,14 +23,18 @@ class JumpToPositionDialogController : DialogController() {
 
   @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
   lateinit var currentBookIdPref: Pref<UUID>
+
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var playerController: PlayerController
 
-  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    appComponent.inject(this)
+  init {
+    rootComponentAs<Component>().inject(this)
+  }
 
+  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val binding = DialogTimePickerBinding.inflate(activity!!.layoutInflater)
 
     // init
@@ -90,5 +95,10 @@ class JumpToPositionDialogController : DialogController() {
       }
       negativeButton(R.string.dialog_cancel)
     }
+  }
+
+  @ContributesTo(AppScope::class)
+  interface Component {
+    fun inject(target: JumpToPositionDialogController)
   }
 }

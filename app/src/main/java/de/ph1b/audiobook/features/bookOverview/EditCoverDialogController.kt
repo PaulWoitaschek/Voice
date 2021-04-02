@@ -16,10 +16,10 @@ import com.bluelinelabs.conductor.Controller
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.SimpleTarget

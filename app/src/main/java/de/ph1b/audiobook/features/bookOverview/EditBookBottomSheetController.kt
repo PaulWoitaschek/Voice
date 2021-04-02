@@ -7,12 +7,12 @@ import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.getUUID

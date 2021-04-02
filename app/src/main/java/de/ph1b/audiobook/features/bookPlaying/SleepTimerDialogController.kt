@@ -9,12 +9,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.databinding.DialogSleepBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
@@ -35,9 +35,11 @@ private const val SI_MINUTES = "si#time"
  */
 class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(bookId: UUID) : this(Bundle().apply {
-    putUUID(NI_BOOK_ID, bookId)
-  })
+  constructor(bookId: UUID) : this(
+    Bundle().apply {
+      putUUID(NI_BOOK_ID, bookId)
+    }
+  )
 
   @Inject
   lateinit var bookmarkRepo: BookmarkRepo
@@ -114,12 +116,12 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
       GlobalScope.launch(Dispatchers.IO) {
-          bookmarkRepo.addBookmarkAtBookPosition(
-            book = book,
-            setBySleepTimer = true,
-            title = null
-          )
-        }
+        bookmarkRepo.addBookmarkAtBookPosition(
+          book = book,
+          setBySleepTimer = true,
+          title = null
+        )
+      }
 
       sleepTimer.setActive(true)
       dismissDialog()

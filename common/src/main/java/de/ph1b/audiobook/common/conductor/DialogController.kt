@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package de.ph1b.audiobook.common.conductor
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,8 +12,6 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
-import de.ph1b.audiobook.misc.conductor.ControllerLifecycleOwner
-import de.ph1b.audiobook.misc.conductor.LifecycleScopeProperty
 
 private const val SI_DIALOG = "android:savedDialogState"
 

@@ -9,8 +9,8 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Bookmark
-import de.ph1b.audiobook.misc.DialogController
 import java.util.UUID
 
 /**
@@ -25,7 +25,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
     val dialog = MaterialDialog(activity!!).apply {
       title(R.string.bookmark_edit_title)
       val inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
-          InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
       input(
         hintRes = R.string.bookmark_edit_hint,
         prefill = bookmarkTitle,

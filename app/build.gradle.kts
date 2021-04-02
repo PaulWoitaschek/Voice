@@ -88,6 +88,7 @@ dependencies {
   implementation(project(":prefs"))
   implementation(project(":ffmpeg"))
   implementation(project(":scanner"))
+  implementation(project(":playbackScreen"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

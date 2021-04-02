@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc.conductor
+package de.ph1b.audiobook.common.conductor
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.ON_DESTROY

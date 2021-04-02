@@ -6,10 +6,10 @@ import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.GlobalScope
@@ -21,10 +21,12 @@ private const val NI_BOOK_ID = "niBookId"
 
 class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
 
-  constructor(book: Book) : this(Bundle().apply {
-    putString(NI_PRESET_NAME, book.name)
-    putUUID(NI_BOOK_ID, book.id)
-  })
+  constructor(book: Book) : this(
+    Bundle().apply {
+      putString(NI_PRESET_NAME, book.name)
+      putUUID(NI_BOOK_ID, book.id)
+    }
+  )
 
   @Inject
   lateinit var repo: BookRepository
@@ -38,7 +40,7 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
     return MaterialDialog(activity!!).apply {
       title(R.string.edit_book_title)
       val inputType = InputType.TYPE_CLASS_TEXT or
-          InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+        InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
       input(
         inputType = inputType,
         hintRes = R.string.change_book_name,

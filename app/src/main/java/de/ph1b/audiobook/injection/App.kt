@@ -8,13 +8,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
 import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
+import de.ph1b.audiobook.rootComponent
 import de.ph1b.audiobook.scanner.MediaScanner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -57,6 +57,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
     appComponent = AppComponent.factory()
       .create(this)
+    rootComponent = appComponent
     appComponent.inject(this)
 
     if (DARK_THEME_SETTABLE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

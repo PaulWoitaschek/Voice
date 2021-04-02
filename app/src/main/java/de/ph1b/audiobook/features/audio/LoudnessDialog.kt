@@ -6,10 +6,10 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.LoudnessBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.DialogController
 import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.putUUID

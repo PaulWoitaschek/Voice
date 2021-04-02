@@ -30,6 +30,7 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import voice.playbackScreen.JumpToPositionDialogController
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -118,13 +119,13 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     if (!coverLoaded) {
       coverLoaded = true
       cover.transitionName = viewState.cover.coverTransitionName()
-        val coverFile = viewState.cover.file()
-        val placeholder = viewState.cover.placeholder(activity!!)
-        if (coverFile == null) {
-          Picasso.get().cancelRequest(cover)
-          cover.setImageDrawable(placeholder)
-        } else {
-          Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
+      val coverFile = viewState.cover.file()
+      val placeholder = viewState.cover.placeholder(activity!!)
+      if (coverFile == null) {
+        Picasso.get().cancelRequest(cover)
+        cover.setImageDrawable(placeholder)
+      } else {
+        Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
       }
     }
   }
@@ -140,12 +141,15 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       SelectChapterDialog(bookId).showDialog(router)
     }
 
-    val detector = GestureDetectorCompat(activity, object : GestureDetector.SimpleOnGestureListener() {
-      override fun onDoubleTap(e: MotionEvent?): Boolean {
-        viewModel.playPause()
-        return true
+    val detector = GestureDetectorCompat(
+      activity,
+      object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+          viewModel.playPause()
+          return true
+        }
       }
-    })
+    )
     binding.cover.isClickable = true
     @Suppress("ClickableViewAccessibility")
     binding.cover.setOnTouchListener { _, event ->

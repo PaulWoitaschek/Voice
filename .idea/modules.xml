@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" filepath="$PROJECT_DIR$/.idea/modules/data/Voice.data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" filepath="$PROJECT_DIR$/.idea/modules/ffmpeg/Voice.ffmpeg.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" filepath="$PROJECT_DIR$/.idea/modules/playback/Voice.playback.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/playbackScreen/Voice.playbackScreen.iml" filepath="$PROJECT_DIR$/.idea/modules/playbackScreen/Voice.playbackScreen.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" filepath="$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" filepath="$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" />

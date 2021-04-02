@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc.conductor
+package de.ph1b.audiobook.common.conductor
 
 import android.content.Context
 import android.view.View
