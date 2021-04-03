@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.content.Context
 import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.misc.coverFile
 import java.io.File
 import kotlin.time.Duration
 
@@ -21,8 +20,8 @@ data class BookPlayViewState(
 
 data class BookPlayCover(private val book: Book) {
 
-  fun file(): File? {
-    return book.coverFile()
+  fun file(context: Context): File {
+    return book.coverFile(context)
   }
 
   fun placeholder(context: Context): CoverReplacement = CoverReplacement(book.name, context)

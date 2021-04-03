@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.playbackScreen
 
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
@@ -7,8 +7,9 @@ import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.features.bookPlaying.BookPlayCover
+import de.ph1b.audiobook.features.bookPlaying.BookPlayViewState
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.SleepTimer
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import voice.sleepTimer.SleepTimer
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named

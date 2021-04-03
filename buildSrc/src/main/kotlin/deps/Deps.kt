@@ -77,7 +77,7 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.4.31"
+    private const val versionKotlin = "1.4.32"
     private const val versionCoroutines = "1.4.2"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"

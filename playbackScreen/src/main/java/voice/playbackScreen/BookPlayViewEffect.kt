@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.playbackScreen
 
 sealed class BookPlayViewEffect {
   object BookmarkAdded : BookPlayViewEffect()

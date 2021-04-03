@@ -16,7 +16,6 @@ import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
-import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
@@ -27,8 +26,6 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.di.PlaybackComponent
-import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import de.ph1b.audiobook.scanner.MediaAnalyzer
 import javax.inject.Singleton
 
 /**
@@ -42,8 +39,6 @@ interface AppComponent {
 
   val bookmarkPresenter: BookmarkPresenter
   val context: Context
-  val playStateManager: PlayStateManager
-  val ma: MediaAnalyzer
 
   fun inject(target: App)
   fun inject(target: AutoRewindDialogController)
@@ -64,7 +59,6 @@ interface AppComponent {
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)
   fun inject(target: SettingsController)
-  fun inject(target: SleepTimerDialogController)
 
   fun playbackComponentFactory(): PlaybackComponent.Factory
 

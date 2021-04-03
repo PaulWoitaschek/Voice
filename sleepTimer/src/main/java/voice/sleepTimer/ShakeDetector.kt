@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.playback
+package voice.sleepTimer
 
 import android.hardware.Sensor
 import android.hardware.SensorManager

@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.sleepTimer
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -7,22 +7,18 @@ import android.view.View
 import android.widget.FrameLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.anvil.annotations.ContributesTo
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.databinding.DialogSleepBinding
-import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.conductor.context
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
-import de.ph1b.audiobook.playback.ShakeDetector
-import de.ph1b.audiobook.playback.SleepTimer
+import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import voice.sleepTimer.databinding.DialogSleepBinding
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -37,7 +33,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
   constructor(bookId: UUID) : this(
     Bundle().apply {
-      putUUID(NI_BOOK_ID, bookId)
+      putSerializable(NI_BOOK_ID, bookId)
     }
   )
 
@@ -50,8 +46,9 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var repo: BookRepository
 
-  @Inject
-  lateinit var shakeDetector: ShakeDetector
+  init {
+    rootComponentAs<Component>().inject(this)
+  }
 
   @field:[Inject Named(PrefKeys.SLEEP_TIME)]
   lateinit var sleepTimePref: Pref<Int>
@@ -64,12 +61,10 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   }
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    appComponent.inject(this)
-
     val binding = DialogSleepBinding.inflate(activity!!.layoutInflater)
 
     fun updateTimeState() {
-      binding.time.text = context.getString(R.string.min, selectedMinutes.toString())
+      binding.time.text = activity!!.getString(R.string.min, selectedMinutes.toString())
 
       if (selectedMinutes > 0) binding.fab.show()
       else binding.fab.hide()
@@ -109,7 +104,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       true
     }
 
-    val bookId = args.getUUID(NI_BOOK_ID)
+    val bookId = args.getSerializable(NI_BOOK_ID) as UUID
     val book = repo.bookById(bookId)!!
 
     binding.fab.setOnClickListener {
@@ -127,7 +122,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       dismissDialog()
     }
 
-    return BottomSheetDialog(context).apply {
+    return BottomSheetDialog(activity!!).apply {
       setContentView(binding.root)
       // hide the background so the fab looks overlapping
       setOnShowListener {
@@ -139,5 +134,10 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
       }
     }
+  }
+
+  @ContributesTo(AppScope::class)
+  interface Component {
+    fun inject(target: SleepTimerDialogController)
   }
 }

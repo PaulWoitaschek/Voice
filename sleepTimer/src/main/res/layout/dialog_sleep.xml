@@ -25,7 +25,7 @@
       android:id="@+id/time"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:background="@color/primary"
+      android:background="?attr/colorSurface"
       android:gravity="center"
       android:maxLines="1"
       android:paddingTop="8dp"

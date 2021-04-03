@@ -69,13 +69,4 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:textSize">16sp</item>
     </style>
-
-    <style name="sleep_number">
-        <item name="android:padding">4dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline4
-        </item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:gravity">center</item>
-    </style>
 </resources>

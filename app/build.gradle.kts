@@ -89,6 +89,7 @@ dependencies {
   implementation(project(":ffmpeg"))
   implementation(project(":scanner"))
   implementation(project(":playbackScreen"))
+  implementation(project(":sleepTimer"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

@@ -22,7 +22,6 @@ dependencies {
   implementation(project(":playback"))
   implementation(project(":data"))
   implementation(project(":prefs"))
-  implementation(project(":sleepTimer"))
 
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
@@ -31,6 +30,8 @@ dependencies {
   implementation(Deps.Prefs.core)
   implementation(Deps.MaterialDialog.core)
   implementation(Deps.AndroidX.ktx)
+  implementation(Deps.AndroidX.constraintLayout)
+  implementation(Deps.material)
 
   implementation(Deps.Dagger.core)
 }

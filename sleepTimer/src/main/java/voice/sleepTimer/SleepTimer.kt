@@ -1,7 +1,8 @@
-package de.ph1b.audiobook.playback
+package voice.sleepTimer
 
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
 import kotlinx.coroutines.Job

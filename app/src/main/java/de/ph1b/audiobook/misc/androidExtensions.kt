@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.uitools.ThemeUtil
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileFilter
 import kotlin.math.roundToInt
@@ -45,6 +44,6 @@ fun checkMainThread() {
   }
 }
 
-fun Book.coverFile(): File = runBlocking { coverFile(appComponent.context) }
+fun Book.coverFile(): File = coverFile(appComponent.context)
 
 fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)
