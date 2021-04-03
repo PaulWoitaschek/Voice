@@ -7,7 +7,6 @@ import dagger.BindsInstance
 import dagger.Component
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.features.MainActivity
-import de.ph1b.audiobook.features.audio.LoudnessDialog
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
@@ -54,7 +53,6 @@ interface AppComponent {
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
   fun inject(target: LoadBookCover)
-  fun inject(target: LoudnessDialog)
   fun inject(target: MainActivity)
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)

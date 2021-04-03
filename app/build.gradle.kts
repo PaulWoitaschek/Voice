@@ -63,15 +63,17 @@ android {
     unitTests.isIncludeAndroidResources = true
   }
 
-  lintOptions {
+  lint {
     isCheckDependencies = true
     isIgnoreTestSources = true
     isWarningsAsErrors = true
   }
 
   packagingOptions {
-    pickFirst("META-INF/atomicfu.kotlin_module")
-    pickFirst("META-INF/core.kotlin_module")
+    with(resources.pickFirsts) {
+      add("META-INF/atomicfu.kotlin_module")
+      add("META-INF/core.kotlin_module")
+    }
   }
 
   buildFeatures {
@@ -90,6 +92,7 @@ dependencies {
   implementation(project(":scanner"))
   implementation(project(":playbackScreen"))
   implementation(project(":sleepTimer"))
+  implementation(project(":loudness"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

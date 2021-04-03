@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:paddingStart="@dimen/dialog_horizontal_padding"
-    android:paddingEnd="@dimen/dialog_horizontal_padding"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="horizontal"
+  android:paddingStart="24dp"
+  android:paddingEnd="24dp">
 
     <TextView
-        android:id="@+id/currentValue"
-        android:layout_width="48sp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        tools:text="0 dp" />
+      android:id="@+id/currentValue"
+      android:layout_width="48sp"
+      android:layout_height="wrap_content"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:maxLines="1"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      tools:text="0 dp" />
 
     <SeekBar
         android:id="@+id/seekBar"
