@@ -43,8 +43,8 @@ internal fun AutoRewindAmountDialog(
     showDialog = showDialog,
     title = stringResource(R.string.pref_seek_time),
     currentSeconds = currentSeconds,
-    minSeconds = 3,
-    maxSeconds = 60,
+    minSeconds = 0,
+    maxSeconds = 20,
     textPluralRes = R.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed
   )

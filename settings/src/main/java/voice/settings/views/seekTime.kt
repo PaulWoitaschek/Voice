@@ -44,7 +44,7 @@ internal fun SeekAmountDialog(
     title = stringResource(R.string.pref_seek_time),
     currentSeconds = currentSeconds,
     minSeconds = 3,
-    maxSeconds = 20,
+    maxSeconds = 60,
     textPluralRes = R.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed
   )
