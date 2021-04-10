@@ -8,9 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.features.widget.TriggerWidgetOnChange
-import de.ph1b.audiobook.misc.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.misc.StrictModeInit
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackComponent

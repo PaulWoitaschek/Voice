@@ -55,7 +55,8 @@ allprojects {
         "-Xopt-in=kotlin.time.ExperimentalTime",
         "-Xopt-in=kotlinx.coroutines.FlowPreview",
         "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-Xopt-in=kotlin.contracts.ExperimentalContracts"
+        "-Xopt-in=kotlin.contracts.ExperimentalContracts",
+        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
       )
     }
   }

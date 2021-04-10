@@ -1,5 +1,6 @@
 package deps
 
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.kotlin.dsl.maven
 
@@ -33,7 +34,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha12"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha14"
   const val material = "com.google.android.material:material:1.3.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -77,7 +78,7 @@ object Deps {
   const val timber = "com.jakewharton.timber:timber:4.7.1"
 
   object Kotlin {
-    private const val versionKotlin = "1.4.32"
+    private const val versionKotlin = "1.4.31"
     private const val versionCoroutines = "1.4.2"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
@@ -95,6 +96,20 @@ object Deps {
   const val mockk = "io.mockk:mockk:1.11.0"
   const val truth = "com.google.truth:truth:1.1.2"
   const val robolectric = "org.robolectric:robolectric:4.5.1"
+}
+
+fun DependencyHandler.composeImplementation() {
+  add("implementation", "androidx.compose.ui:ui:1.0.0-beta04")
+  add("implementation", "androidx.compose.ui:ui-tooling:1.0.0-beta04")
+  add("implementation", "androidx.compose.foundation:foundation:1.0.0-beta04")
+  add("implementation", "androidx.compose.material:material:1.0.0-beta04")
+  add("implementation", "androidx.compose.material:material-icons-core:1.0.0-beta04")
+  add("implementation", "androidx.compose.material:material-icons-extended:1.0.0-beta04")
+  add("implementation", "androidx.compose.material:material-icons-extended:1.0.0-beta04")
+  add("implementation", "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1")
+  add("implementation", "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
+  add("implementation", "androidx.core:core-ktx:1.3.2")
+  add("implementation", "androidx.navigation:navigation-compose:1.0.0-alpha10")
 }
 
 @Suppress("UnstableApiUsage")

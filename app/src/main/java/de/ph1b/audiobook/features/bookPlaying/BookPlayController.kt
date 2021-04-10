@@ -13,10 +13,9 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.ViewBindingController
+import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
-import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.CircleOutlineProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
@@ -33,6 +32,7 @@ import voice.loudness.LoudnessDialog
 import voice.playbackScreen.BookPlayViewEffect
 import voice.playbackScreen.BookPlayViewModel
 import voice.playbackScreen.JumpToPositionDialogController
+import voice.settings.SettingsController
 import voice.sleepTimer.SleepTimerDialogController
 import java.util.UUID
 import javax.inject.Inject
@@ -199,8 +199,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
-          val transaction = SettingsController().asTransaction()
-          router.pushController(transaction)
+          router.pushController(SettingsController().asTransaction())
           true
         }
         R.id.action_time_change -> {

@@ -25,7 +25,6 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
-import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
@@ -37,6 +36,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import voice.settings.SettingsController
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -46,8 +46,10 @@ import kotlin.collections.component2
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
-class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOverviewBinding::inflate),
-  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
+class BookOverviewController :
+  ViewBindingController<BookOverviewBinding>(BookOverviewBinding::inflate),
+  EditCoverDialogController.Callback,
+  EditBookBottomSheetController.Callback,
   CoverFromInternetController.Callback {
 
   init {
@@ -125,8 +127,7 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
-          val transaction = SettingsController().asTransaction()
-          router.pushController(transaction)
+          router.pushController(SettingsController().asTransaction())
           true
         }
         R.id.library -> {
@@ -240,12 +241,15 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
       .textColorInt(Color.WHITE)
       .targetCircleColorInt(Color.BLACK)
       .transparentTarget(true)
-    currentTapTarget = TapTargetView.showFor(activity, target, object : TapTargetView.Listener() {
-      override fun onTargetClick(view: TapTargetView?) {
-        super.onTargetClick(view)
-        toFolderOverview()
+    currentTapTarget = TapTargetView.showFor(
+      activity, target,
+      object : TapTargetView.Listener() {
+        override fun onTargetClick(view: TapTargetView?) {
+          super.onTargetClick(view)
+          toFolderOverview()
+        }
       }
-    })
+    )
   }
 
   private fun BookOverviewBinding.bookCoverChanged(bookId: UUID) {

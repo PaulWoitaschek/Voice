@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.settings.dialogs
+package de.ph1b.audiobook.features.audio
 
 import android.annotation.SuppressLint
 import android.app.Dialog

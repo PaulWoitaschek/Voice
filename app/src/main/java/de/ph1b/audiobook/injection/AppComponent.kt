@@ -7,6 +7,7 @@ import dagger.BindsInstance
 import dagger.Component
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.features.MainActivity
+import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
@@ -20,11 +21,9 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
-import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogController
-import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.di.PlaybackComponent
+import voice.settings.SettingsController
 import javax.inject.Singleton
 
 /**
@@ -34,13 +33,12 @@ import javax.inject.Singleton
 @MergeComponent(
   scope = AppScope::class
 )
-interface AppComponent {
+interface AppComponent : SettingsController.Component {
 
   val bookmarkPresenter: BookmarkPresenter
   val context: Context
 
   fun inject(target: App)
-  fun inject(target: AutoRewindDialogController)
   fun inject(target: BaseWidgetProvider)
   fun inject(target: BookCategoryController)
   fun inject(target: BookOverviewController)
@@ -56,7 +54,6 @@ interface AppComponent {
   fun inject(target: MainActivity)
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)
-  fun inject(target: SettingsController)
 
   fun playbackComponentFactory(): PlaybackComponent.Factory
 

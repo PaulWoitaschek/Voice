@@ -93,6 +93,7 @@ dependencies {
   implementation(project(":playbackScreen"))
   implementation(project(":sleepTimer"))
   implementation(project(":loudness"))
+  implementation(project(":settings"))
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)

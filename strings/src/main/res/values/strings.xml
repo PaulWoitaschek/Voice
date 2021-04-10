@@ -105,4 +105,6 @@
     <string name="book_category_sort_by_name">Name</string>
     <string name="book_category_sort_by_last_played">Last Played</string>
     <string name="book_category_sort_by_added">Added</string>
+
+    <string name="close">Close</string>
 </resources>

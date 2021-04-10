@@ -2,14 +2,4 @@
 <resources>
     <attr name="colorAccentDark" format="reference" />
     <attr name="background_overlay" format="reference" />
-
-    <declare-styleable name="DoubleSettingView">
-        <attr name="dsv_title" format="string" />
-        <attr name="dsv_description" format="string" />
-    </declare-styleable>
-
-    <declare-styleable name="SwitchSettingView">
-        <attr name="ssv_title" format="string" />
-        <attr name="ssv_description" format="string" />
-    </declare-styleable>
 </resources>

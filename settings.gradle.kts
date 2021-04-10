@@ -1,12 +1,12 @@
 pluginManagement {
   @Suppress("UnstableApiUsage")
   plugins {
-    id("com.squareup.anvil") version "2.2.0"
+    id("com.squareup.anvil") version "2.2.1"
   }
 }
 
 plugins {
-  id("com.gradle.enterprise") version "3.0"
+  id("com.gradle.enterprise") version "3.6.1"
 }
 
 gradleEnterprise {
@@ -29,3 +29,4 @@ include(":core")
 include(":playbackScreen")
 include(":sleepTimer")
 include(":loudness")
+include(":settings")
