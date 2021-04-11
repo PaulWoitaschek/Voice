@@ -14,7 +14,7 @@ platform :android do
   end
 
   lane :build_apks do
-    gradle(task: 'app:assembleProprietaryRelease -x lint -x lintVitalProprietaryRelease')
+    gradle(task: 'app:assembleRelease -x lint -x lintVitalRelease')
     folder = ARTIFACT_FOLDER + '/apk'
     copy_artifacts(
       target_path: folder,
@@ -28,7 +28,7 @@ platform :android do
 
   lane :lint do
     begin
-      gradle(task: 'app:lintProprietaryRelease')
+      gradle(task: 'app:lintRelease')
     ensure
       folder = ARTIFACT_FOLDER + '/lint'
       copy_artifacts(

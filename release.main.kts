@@ -7,14 +7,12 @@ import java.io.File
 class Release : CliktCommand() {
 
   override fun run() {
-    execute("./gradlew", "app:bundleProprietaryRelease", "app:assembleProprietaryRelease")
+    execute("./gradlew", "app:bundleRelease")
     val appVersion = appVersion()
     val releaseFolder = File("releases", appVersion)
     releaseFolder.mkdirs()
-    File("app/build/outputs/bundle/proprietaryRelease/app-proprietary-release.aab")
+    File("app/build/outputs/bundle/release/app-release.aab")
       .copyTo(File(releaseFolder, "app.aab"))
-    File("app/build/outputs/apk/proprietary/release/app-proprietary-release.apk")
-      .copyTo(File(releaseFolder, "app.apk"))
   }
 
   private fun appVersion(): String {
