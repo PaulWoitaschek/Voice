@@ -12,10 +12,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: malinskiy/action-android/install-sdk@release/0.0.5
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7.2'
 
     - name: Fastlane
-      uses: maierj/fastlane-action@v1.4.0
+      uses: maierj/fastlane-action@v2.0.1
       with:
         lane: ci
 
