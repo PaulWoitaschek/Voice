@@ -6,4 +6,5 @@ internal interface BookPlayListener {
   fun fastForward()
   fun rewind()
   fun playPause()
+  fun seekTo(milliseconds: Long)
 }

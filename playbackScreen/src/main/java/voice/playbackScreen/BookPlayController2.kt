@@ -43,6 +43,10 @@ class BookPlayController2(bundle: Bundle) : Controller(bundle) {
       override fun playPause() {
         viewModel.playPause()
       }
+
+      override fun seekTo(milliseconds: Long) {
+        viewModel.seekTo(milliseconds)
+      }
     }
     return ComposeView(container.context).apply {
       setContent {
