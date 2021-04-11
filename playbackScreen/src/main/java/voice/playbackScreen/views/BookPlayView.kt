@@ -1,6 +1,7 @@
 package voice.playbackScreen.views
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -10,7 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FastForward
+import androidx.compose.material.icons.filled.FastRewind
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -55,7 +59,44 @@ internal fun BookPlayView(viewState: BookPlayViewState, listener: BookPlayListen
         )
       }
     ) {
-      Column(Modifier.padding(vertical = 8.dp)) {
+      Row {
+
+        Column(Modifier.padding(vertical = 8.dp)) {
+          IconButton(
+            onClick = {
+              listener.rewind()
+            }
+          ) {
+            Icon(
+              imageVector = Icons.Default.FastRewind,
+              contentDescription = stringResource(R.string.rewind)
+            )
+          }
+        }
+        Column(Modifier.padding(vertical = 8.dp)) {
+          IconButton(
+            onClick = {
+              listener.playPause()
+            }
+          ) {
+            Icon(
+              imageVector = Icons.Default.PlayCircleOutline,
+              contentDescription = stringResource(R.string.play_pause)
+            )
+          }
+        }
+        Column(Modifier.padding(vertical = 8.dp)) {
+          IconButton(
+            onClick = {
+              listener.fastForward()
+            }
+          ) {
+            Icon(
+              imageVector = Icons.Default.FastForward,
+              contentDescription = stringResource(R.string.fast_forward)
+            )
+          }
+        }
       }
     }
   }

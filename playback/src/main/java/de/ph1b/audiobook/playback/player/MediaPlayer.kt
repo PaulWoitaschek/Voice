@@ -147,7 +147,7 @@ constructor(
         .transformLatest { playing ->
           if (playing) {
             while (true) {
-              delay(200.milliseconds)
+              delay(200)
               emit(player.currentPosition.coerceAtLeast(0))
             }
           }

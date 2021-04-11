@@ -31,6 +31,18 @@ class BookPlayController2(bundle: Bundle) : Controller(bundle) {
       override fun close() {
         router.popController(this@BookPlayController2)
       }
+
+      override fun fastForward() {
+        viewModel.fastForward()
+      }
+
+      override fun rewind() {
+        viewModel.rewind()
+      }
+
+      override fun playPause() {
+        viewModel.playPause()
+      }
     }
     return ComposeView(container.context).apply {
       setContent {

@@ -79,7 +79,7 @@ object Deps {
 
   object Kotlin {
     private const val versionKotlin = "1.4.31"
-    private const val versionCoroutines = "1.4.2"
+    private const val versionCoroutines = "1.4.3"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versionCoroutines"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versionCoroutines"
