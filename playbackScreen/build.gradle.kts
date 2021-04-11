@@ -1,18 +1,19 @@
 import deps.Deps
+import deps.composeImplementation
 
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("com.squareup.anvil")
-}
-
-anvil {
-  generateDaggerFactories = true
+  id("kotlin-kapt")
 }
 
 android {
   buildFeatures {
     viewBinding = true
+    compose = true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion = "1.0.0-beta03"
   }
 }
 
@@ -33,4 +34,7 @@ dependencies {
   implementation(Deps.AndroidX.ktx)
 
   implementation(Deps.Dagger.core)
+  kapt(Deps.Dagger.compiler)
+
+  composeImplementation()
 }

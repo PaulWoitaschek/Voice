@@ -23,6 +23,8 @@ import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.di.PlaybackComponent
+import voice.playbackScreen.BookPlayController2
+import voice.playbackScreen.JumpToPositionDialogController
 import voice.settings.SettingsController
 import javax.inject.Singleton
 
@@ -33,7 +35,7 @@ import javax.inject.Singleton
 @MergeComponent(
   scope = AppScope::class
 )
-interface AppComponent : SettingsController.Component {
+interface AppComponent : SettingsController.Component, JumpToPositionDialogController.Component, BookPlayController2.Component {
 
   val bookmarkPresenter: BookmarkPresenter
   val context: Context

@@ -12,7 +12,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
@@ -36,6 +35,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import voice.playbackScreen.BookPlayController2
 import voice.settings.SettingsController
 import java.util.UUID
 import javax.inject.Inject
@@ -165,6 +165,7 @@ class BookOverviewController :
     transaction.pushChangeHandler(transition)
       .popChangeHandler(transition)
     router.pushController(transaction)
+    router.pushController(BookPlayController2(book.id).asTransaction())
   }
 
   private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: GridMenuItem) {

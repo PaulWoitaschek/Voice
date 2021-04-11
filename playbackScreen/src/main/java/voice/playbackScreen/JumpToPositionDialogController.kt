@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
-import com.squareup.anvil.annotations.ContributesTo
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
@@ -97,7 +95,6 @@ class JumpToPositionDialogController : DialogController() {
     }
   }
 
-  @ContributesTo(AppScope::class)
   interface Component {
     fun inject(target: JumpToPositionDialogController)
   }

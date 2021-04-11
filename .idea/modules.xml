@@ -16,7 +16,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" filepath="$PROJECT_DIR$/.idea/modules/prefs/Voice.prefs.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" filepath="$PROJECT_DIR$/.idea/modules/scanner/Voice.scanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/settings/Voice.settings.iml" filepath="$PROJECT_DIR$/.idea/modules/settings/Voice.settings.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/settings/data/Voice.settings.data.iml" filepath="$PROJECT_DIR$/.idea/modules/settings/data/Voice.settings.data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/settings/ui/Voice.settings.ui.iml" filepath="$PROJECT_DIR$/.idea/modules/settings/ui/Voice.settings.ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sleepTimer/Voice.sleepTimer.iml" filepath="$PROJECT_DIR$/.idea/modules/sleepTimer/Voice.sleepTimer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" />
