@@ -41,7 +41,9 @@ class FolderOverviewController :
     addAsLibrary.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
     }
-
+    addAsLibraries.setOnClickListener {
+      startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOKS)
+    }
     overlay.isInvisible = true
 
     overlay.setOnClickListener {
@@ -70,9 +72,11 @@ class FolderOverviewController :
 
     addAsSingle.setIconDrawable(context.getDrawable(R.drawable.ic_folder)!!.tinted(Color.WHITE))
     addAsLibrary.setIconDrawable(context.getDrawable(R.drawable.folder_multiple)!!.tinted(Color.WHITE))
+    addAsLibraries.setIconDrawable(context.getDrawable(R.drawable.folders_multiple)!!.tinted(Color.WHITE))
     addAsSingle.title =
       "${context.getString(R.string.folder_add_single_book)}\n${context.getString(R.string.for_example)} Harry Potter 4"
     addAsLibrary.title = "${context.getString(R.string.folder_add_collection)}\n${context.getString(R.string.for_example)} AudioBooks"
+    addAsLibraries.title = "${context.getString(R.string.folder_add_collections)}\n${context.getString(R.string.for_example)} AudioBook Folders"
 
     setupToolbar()
   }

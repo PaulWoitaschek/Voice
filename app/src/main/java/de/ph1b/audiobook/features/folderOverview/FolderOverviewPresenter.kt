@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.folderOverview
 
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.mvp.Presenter
 import kotlinx.coroutines.flow.collect
@@ -28,9 +29,9 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.flow
-      .map { set -> set.map { FolderModel(it, true) } }
+      .map { set -> set.map { FolderModel(it, FolderChooserActivity.OperationMode.COLLECTION_BOOK) } }
     val singleFolderStream = singleBookFolderPref.flow
-      .map { set -> set.map { FolderModel(it, false) } }
+      .map { set -> set.map { FolderModel(it, FolderChooserActivity.OperationMode.SINGLE_BOOK) } }
 
     onAttachScope.launch {
       combine(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }

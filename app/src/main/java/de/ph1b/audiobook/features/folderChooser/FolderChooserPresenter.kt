@@ -110,6 +110,20 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         view.finish()
         Timber.v("chosenCollection = $chosen")
       }
+
+      FolderChooserActivity.OperationMode.COLLECTION_BOOKS -> {
+        val folders = chosen.closestFolder().getContentsSorted()
+        for (folder in folders) {
+          if (canAddNewFolder(folder.absolutePath)) {
+            val singleBooks = HashSet(singleBookFolderPref.value)
+            singleBooks.add(folder.absolutePath)
+            singleBookFolderPref.value = singleBooks
+          }
+          Timber.v("chosenCollection = $folder")
+        }
+        view.finish()
+      }
+
       FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
           val singleBooks = HashSet(singleBookFolderPref.value)
