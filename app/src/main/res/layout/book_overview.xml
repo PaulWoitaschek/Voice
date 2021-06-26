@@ -6,21 +6,42 @@
   android:layout_height="match_parent"
   android:background="?android:attr/windowBackground">
 
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:menu="@menu/book_overview"
-      app:title="@string/app_name" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
-      android:clipToPadding="false"
-      android:paddingTop="2dp"
-      android:paddingBottom="100dp" />
+      android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+          android:layout_width="match_parent"
+          android:layout_height="?android:actionBarSize"
+          android:orientation="vertical">
+
+            <com.google.android.material.appbar.MaterialToolbar
+              android:id="@+id/toolbar"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:menu="@menu/book_overview"
+              app:title="@string/app_name"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.tabs.TabLayout
+          android:id="@+id/tabLayout"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/page_view_tab_size"
+          android:theme="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
+          android:elevation="6dp"
+          android:minHeight="@dimen/page_view_tab_size"
+          tools:transitionName="Sample"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+          android:id="@+id/viewPage"
+          android:layout_width="match_parent"
+          android:layout_height="589dp"
+          android:layout_gravity="bottom"
+          android:clipToPadding="false" />
+
+    </LinearLayout>
 
     <ProgressBar
       android:id="@+id/loadingProgress"

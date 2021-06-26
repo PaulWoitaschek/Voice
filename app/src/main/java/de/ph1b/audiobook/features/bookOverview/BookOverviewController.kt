@@ -4,11 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.MenuItem
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.material.tabs.TabLayoutMediator
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.PrefKeys
@@ -16,11 +15,7 @@ import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.ViewBindingController
-import de.ph1b.audiobook.features.bookCategory.BookCategoryController
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
+import de.ph1b.audiobook.features.bookOverview.list.PagerOverviewAdapter
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
@@ -29,7 +24,6 @@ import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
-import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.ensureActive
@@ -39,16 +33,14 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book.
  */
 class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOverviewBinding::inflate),
-  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback {
-
+  EditCoverDialogController.Callback, EditBookBottomSheetController.Callback, ScreenSlideController.Callback,
+  CoverFromInternetController.Callback
+{
   init {
     appComponent.inject(this)
   }
@@ -63,61 +55,46 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
   lateinit var galleryPicker: GalleryPicker
 
   private var playPauseDrawableSetter: PlayPauseDrawableSetter by clearAfterDestroyView()
-  private var adapter: BookOverviewAdapter by clearAfterDestroyView()
+  private var adapter: PagerOverviewAdapter by clearAfterDestroyView()
   private var currentTapTarget by clearAfterDestroyViewNullable<TapTargetView>()
   private var useGrid = false
+
+  private var tabLayoutMediator: TabLayoutMediator by clearAfterDestroyView()
 
   override fun BookOverviewBinding.onBindingCreated() {
     setupToolbar()
     setupFab()
-    setupRecyclerView()
+    setupViewPager()
+    setupTab()
     lifecycleScope.launch {
       viewModel.coverChanged.collect {
         ensureActive()
-        bookCoverChanged(it)
+        onBookCoverChanged(it)
       }
     }
+  }
+  private fun BookOverviewBinding.setupTab() {
+    tabLayoutMediator = TabLayoutMediator(tabLayout, viewPage) { tab, position ->
+      if(adapter.itemCount>position)
+      {
+        viewPage.setCurrentItem(
+          tab.position,
+          true
+        )
+        tab.setText(adapter.getItemName(position))
+      }
+    }
+    tabLayoutMediator.attach()
+  }
+
+  private fun setupViewPager() {
+    adapter = PagerOverviewAdapter(this)
+    binding.viewPage.adapter = adapter
   }
 
   private fun BookOverviewBinding.setupFab() {
     binding.fab.setOnClickListener { viewModel.playPause() }
     playPauseDrawableSetter = PlayPauseDrawableSetter(fab)
-  }
-
-  private fun BookOverviewBinding.setupRecyclerView() {
-    recyclerView.setHasFixedSize(true)
-    adapter = BookOverviewAdapter(
-      bookClickListener = { book, clickType ->
-        when (clickType) {
-          BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
-          BookOverviewClick.MENU -> {
-            EditBookBottomSheetController(this@BookOverviewController, book).showDialog(router)
-          }
-        }
-      },
-      openCategoryListener = { category ->
-        Timber.i("open $category")
-        router.pushController(BookCategoryController(category).asTransaction())
-      }
-    )
-    recyclerView.adapter = adapter
-    // without this the item would blink on every change
-    val anim = recyclerView.itemAnimator as SimpleItemAnimator
-    anim.supportsChangeAnimations = false
-    val layoutManager = GridLayoutManager(activity, 1).apply {
-      spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-        override fun getSpanSize(position: Int): Int {
-          if (position == -1) {
-            return 1
-          }
-          val isHeader = adapter.itemAtPositionIsHeader(position)
-          return if (isHeader) spanCount else 1
-        }
-      }
-    }
-    val listDecoration = BookOverviewItemDecoration(activity!!, layoutManager)
-    recyclerView.addItemDecoration(listDecoration)
-    recyclerView.layoutManager = layoutManager
   }
 
   private fun BookOverviewBinding.setupToolbar() {
@@ -155,7 +132,7 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     }
   }
 
-  private fun invokeBookSelectionCallback(book: Book) {
+  override fun invokeBookSelectionCallback(book: Book) {
     currentBookIdPref.value = book.id
     val transaction = RouterTransaction.with(BookPlayController(book.id))
     val transition = BookChangeHandler()
@@ -165,27 +142,25 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     router.pushController(transaction)
   }
 
+  override fun invokeEditBookBottomSheetController(book: Book) {
+    Timber.i("invokeEditBookBottomSheetController ${book.javaClass.simpleName}")
+    EditBookBottomSheetController(this, book).showDialog(router)
+  }
+
   private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
     Timber.i("render ${state.javaClass.simpleName}")
-    val adapterContent = when (state) {
-      is BookOverviewState.Content -> buildList {
-        state.categoriesWithContents.forEach { (category, content) ->
-          add(BookOverviewHeaderModel(category, content.hasMore))
-          addAll(content.books)
-        }
-      }
-      BookOverviewState.Loading, BookOverviewState.NoFolderSet -> emptyList()
-    }
-    adapter.submitList(adapterContent)
 
     when (state) {
       is BookOverviewState.Content -> {
+
+        if(state.categoriesWithContents.size != adapter.itemCount) {
+          adapter.updateItems(state.categoriesWithContents.keys)
+        }
+
         hideNoFolderWarning()
         fab.isVisible = state.currentBookPresent
 
         useGrid = state.useGrid
-        val lm = recyclerView.layoutManager as GridLayoutManager
-        lm.spanCount = state.columnCount
 
         showPlaying(state.playing)
         gridMenuItem.item.apply {
@@ -249,18 +224,8 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
     })
   }
 
-  private fun BookOverviewBinding.bookCoverChanged(bookId: UUID) {
-    // there is an issue where notifyDataSetChanges throws:
-    // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-    recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(bookId)
-    }
-  }
-
   override fun onBookCoverChanged(bookId: UUID) {
-    binding.recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(bookId)
-    }
+    adapter.notifyItems()
   }
 
   override fun onInternetCoverRequested(book: Book) {
@@ -273,7 +238,7 @@ class BookOverviewController : ViewBindingController<BookOverviewBinding>(BookOv
 
   override fun onDestroyView() {
     super.onDestroyView()
-    binding.recyclerView.adapter = null
+    binding.viewPage.adapter = null
   }
 
   override fun BookOverviewBinding.onAttach() {

@@ -21,6 +21,8 @@ object Deps {
     const val appCompat = "androidx.appcompat:appcompat:1.1.0"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+    const val pagerView = "androidx.viewpager2:viewpager2:1.0.0"
+
     const val transitions = "androidx.transition:transition:1.3.1"
     const val palette = "androidx.palette:palette:1.0.0"
     const val mediaCompat = "androidx.media:media:1.1.0"
@@ -52,6 +54,7 @@ object Deps {
 
   object Conductor {
     const val core = "com.bluelinelabs:conductor:3.0.0-rc4"
+    const val viewPager2 = "com.bluelinelabs:conductor-viewpager2:3.0.0"
     const val transition = "com.bluelinelabs:conductor-androidx-transition:3.0.0-rc4"
   }
 

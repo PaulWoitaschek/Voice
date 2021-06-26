@@ -12,6 +12,7 @@ import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
+import de.ph1b.audiobook.features.bookOverview.ScreenSlideController
 import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogController
@@ -56,6 +57,7 @@ interface AppComponent {
   fun inject(target: BaseWidgetProvider)
   fun inject(target: BookCategoryController)
   fun inject(target: BookOverviewController)
+  fun inject(target: ScreenSlideController)
   fun inject(target: BookPlayController)
   fun inject(target: CoverFromInternetController)
   fun inject(target: SelectChapterDialog)

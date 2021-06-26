@@ -93,10 +93,10 @@ android {
   flavorDimensions("free")
   productFlavors {
     create("opensource") {
-      setDimension("free")
+      dimension = "free"
     }
     create("proprietary") {
-      setDimension("free")
+      dimension = "free"
     }
   }
 
@@ -119,6 +119,7 @@ dependencies {
 
   implementation(Deps.AndroidX.appCompat)
   implementation(Deps.AndroidX.recyclerView)
+  implementation(Deps.AndroidX.pagerView)
   implementation(Deps.material)
   implementation(Deps.AndroidX.transitions)
   implementation(Deps.AndroidX.constraintLayout)
@@ -153,6 +154,7 @@ dependencies {
 
   implementation(Deps.Conductor.core)
   implementation(Deps.Conductor.transition)
+  implementation(Deps.Conductor.viewPager2)
 
   implementation(Deps.lifecycle)
 
