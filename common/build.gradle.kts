@@ -7,8 +7,8 @@ plugins {
 }
 
 anvil {
-  generateDaggerFactories = true
-  generateDaggerFactoriesOnly = true
+  generateDaggerFactories.set(true)
+  generateDaggerFactoriesOnly.set(true)
 }
 
 dependencies {

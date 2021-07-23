@@ -40,8 +40,6 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
-import kotlin.time.milliseconds
-import kotlin.time.seconds
 
 @PlaybackScope
 class MediaPlayer
@@ -79,7 +77,7 @@ constructor(
       if (_state.value != value) _state.offer(value)
     }
 
-  private val seekTime: Duration get() = seekTimePref.value.seconds
+  private val seekTime: Duration get() = Duration.seconds(seekTimePref.value)
   private var autoRewindAmount by autoRewindAmountPref
 
   init {
@@ -240,16 +238,16 @@ constructor(
       return
 
     bookContent?.let {
-      val currentPos = player.currentPosition.milliseconds
+      val currentPos = Duration.milliseconds(player.currentPosition)
         .coerceAtLeast(Duration.ZERO)
-      val duration = player.duration.milliseconds
+      val duration = Duration.milliseconds(player.duration)
 
       val seekTo = currentPos + skipAmount
       Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
       when {
         seekTo < Duration.ZERO -> previous(false)
         seekTo > duration -> next()
-        else -> changePosition(seekTo.toLongMilliseconds())
+        else -> changePosition(seekTo.inWholeMilliseconds)
       }
     }
   }
@@ -282,9 +280,9 @@ constructor(
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
       } else {
-        val time = (previousChapter.duration.milliseconds - seekTime)
+        val time = (Duration.milliseconds(previousChapter.duration) - seekTime)
           .coerceAtLeast(Duration.ZERO)
-        changePosition(time.toLongMilliseconds(), previousChapter.file)
+        changePosition(time.inWholeMilliseconds, previousChapter.file)
       }
     }
   }
@@ -319,7 +317,8 @@ constructor(
     player.playWhenReady = false
     player.prepare(dataSourceConverter.toMediaSource(content))
     player.seekTo(content.currentChapterIndex, content.positionInChapter)
-    player.setPlaybackParameters(content.playbackSpeed, content.skipSilence)
+    player.setPlaybackSpeed(content.playbackSpeed)
+    player.skipSilenceEnabled = content.skipSilence
     loudnessGain.gainmB = content.loudnessGain
     state = PlayerState.PAUSED
   }
@@ -402,7 +401,7 @@ constructor(
     bookContent?.let {
       val copy = it.updateSettings { copy(playbackSpeed = speed) }
       bookContent = copy
-      player.setPlaybackParameters(speed, it.skipSilence)
+      player.setPlaybackSpeed(speed)
     }
   }
 
@@ -412,7 +411,7 @@ constructor(
     prepare()
     bookContent?.let {
       bookContent = it.updateSettings { copy(skipSilence = skip) }
-      player.setPlaybackParameters(it.playbackSpeed, skip)
+      player.skipSilenceEnabled = skip
     }
   }
 

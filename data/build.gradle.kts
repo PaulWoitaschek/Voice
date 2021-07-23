@@ -9,7 +9,7 @@ plugins {
 }
 
 anvil {
-  generateDaggerFactories = true
+  generateDaggerFactories.set(true)
 }
 
 android {

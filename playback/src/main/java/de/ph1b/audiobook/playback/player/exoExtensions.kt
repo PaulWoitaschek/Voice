@@ -10,15 +10,8 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.playstate.PlayerState
 
-fun SimpleExoPlayer.setPlaybackParameters(speed: Float, skipSilence: Boolean) {
-  val params = playbackParameters
-  if (params.speed != speed || params.skipSilence != skipSilence) {
-    setPlaybackParameters(PlaybackParameters(speed, 1F, skipSilence))
-  }
-}
-
 fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
-  addListener(object : Player.EventListener {
+  addListener(object : Player.Listener {
     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
       listener()
     }
@@ -43,7 +36,7 @@ fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(
-    object : Player.EventListener {
+    object : Player.Listener {
       override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         val state = when (playbackState) {
           Player.STATE_ENDED -> PlayerState.ENDED
@@ -67,7 +60,7 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
 
 inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
   addListener(
-    object : Player.EventListener {
+    object : Player.Listener {
       override fun onPlayerError(error: ExoPlaybackException) {
         action(error)
       }
@@ -77,7 +70,7 @@ inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit)
 
 inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
   addAnalyticsListener(object : AnalyticsListener {
-    override fun onAudioSessionId(eventTime: AnalyticsListener.EventTime, audioSessionId: Int) {
+    override fun onAudioSessionIdChanged(eventTime: AnalyticsListener.EventTime, audioSessionId: Int) {
       action(audioSessionId)
     }
   })
@@ -85,7 +78,7 @@ inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(
-    object : Player.EventListener {
+    object : Player.Listener {
       override fun onPositionDiscontinuity(reason: Int) {
         action()
       }

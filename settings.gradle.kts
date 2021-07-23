@@ -1,7 +1,7 @@
 pluginManagement {
   @Suppress("UnstableApiUsage")
   plugins {
-    id("com.squareup.anvil") version "2.2.1"
+    id("com.squareup.anvil") version "2.3.3"
   }
 }
 
