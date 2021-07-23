@@ -45,7 +45,7 @@ object Deps {
   const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.4"
 
   object Conductor {
-    private const val version = "3.0.1"
+    private const val version = "3.1.1"
     const val core = "com.bluelinelabs:conductor:$version"
     const val transition = "com.bluelinelabs:conductor-androidx-transition:$version"
   }
