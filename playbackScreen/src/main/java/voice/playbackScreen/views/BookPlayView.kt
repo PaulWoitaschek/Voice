@@ -1,6 +1,5 @@
 package voice.playbackScreen.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +14,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import coil.compose.rememberImagePainter
 import de.ph1b.audiobook.features.bookPlaying.BookPlayViewState
 import voice.playbackScreen.BookPlayListener
 import voice.playbackScreen.R
@@ -60,18 +56,11 @@ internal fun BookPlayView(viewState: BookPlayViewState, listener: BookPlayListen
       }
     ) {
       Column {
-        Image(
+        BookPlayCover(
           modifier = Modifier
             .weight(1F)
             .fillMaxSize(),
-          contentScale = ContentScale.Crop,
-          painter = rememberImagePainter(
-            data = viewState.cover.file(LocalContext.current),
-            builder = {
-              error(viewState.cover.placeholder(LocalContext.current))
-            }
-          ),
-          contentDescription = null
+          cover = viewState.cover
         )
         PlaybackSlider(viewState, listener)
         Row {

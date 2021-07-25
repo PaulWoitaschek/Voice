@@ -26,5 +26,17 @@ data class BookPlayCover(private val book: Book) {
 
   fun placeholder(context: Context): CoverReplacement = CoverReplacement(book.name, context)
 
+  override fun equals(other: Any?): Boolean {
+    if (other !is BookPlayCover) return false
+    return book.name == other.book.name && book.id == other.book.id
+  }
+
+  override fun hashCode(): Int {
+    var hash = 7
+    hash = 31 * hash + book.name.hashCode()
+    hash = 31 * hash + book.id.hashCode()
+    return hash
+  }
+
   fun coverTransitionName(): String = book.coverTransitionName
 }
