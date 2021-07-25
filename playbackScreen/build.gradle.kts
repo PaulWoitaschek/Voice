@@ -28,6 +28,7 @@ dependencies {
   implementation(Deps.timber)
   implementation(Deps.Kotlin.coroutines)
   implementation(Deps.picasso)
+  implementation(Deps.coil)
   implementation(Deps.AndroidX.ktx)
   implementation(Deps.Prefs.core)
   implementation(Deps.MaterialDialog.core)

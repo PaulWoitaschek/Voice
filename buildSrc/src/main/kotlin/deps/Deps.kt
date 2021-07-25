@@ -43,6 +43,7 @@ object Deps {
   const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.3.0"
   const val groupie = "com.xwray:groupie:2.8.1"
   const val ffmpeg = "com.arthenica:mobile-ffmpeg-audio:4.4"
+  const val coil = "io.coil-kt:coil-compose:1.3.0"
 
   object Conductor {
     private const val version = "3.1.1"
