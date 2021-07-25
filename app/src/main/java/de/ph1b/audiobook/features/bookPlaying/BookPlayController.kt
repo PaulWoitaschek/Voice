@@ -37,6 +37,7 @@ import voice.sleepTimer.SleepTimerDialogController
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 private const val NI_BOOK_ID = "niBookId"
 
@@ -109,11 +110,17 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     currentChapterContainer.isVisible = viewState.chapterName != null
     previous.isVisible = viewState.showPreviousNextButtons
     next.isVisible = viewState.showPreviousNextButtons
-    playedTime.text = formatTime(viewState.playedTime.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    maxTime.text = formatTime(viewState.duration.toLongMilliseconds(), viewState.duration.toLongMilliseconds())
-    slider.valueTo = viewState.duration.inMilliseconds.toFloat()
+    playedTime.text = formatTime(
+      viewState.playedTime.inWholeMilliseconds,
+      viewState.duration.inWholeMilliseconds
+    )
+    maxTime.text = formatTime(
+      viewState.duration.inWholeMilliseconds,
+      viewState.duration.inWholeMilliseconds
+    )
+    slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
     if (!slider.isPressed) {
-      slider.value = viewState.playedTime.inMilliseconds.toFloat()
+      slider.value = viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat()
     }
     skipSilenceItem.isChecked = viewState.skipSilence
     playPauseDrawableSetter.setPlaying(viewState.playing)
@@ -244,7 +251,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   private fun showLeftSleepTime(binding: BookPlayBinding, duration: Duration) {
     val active = duration > Duration.ZERO
     sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
-    binding.timerCountdownView.text = formatTime(duration.toLongMilliseconds(), duration.toLongMilliseconds())
+    binding.timerCountdownView.text = formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
     binding.timerCountdownView.isVisible = active
   }
 

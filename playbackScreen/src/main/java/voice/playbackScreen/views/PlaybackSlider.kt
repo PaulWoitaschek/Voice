@@ -7,18 +7,19 @@ import androidx.compose.runtime.remember
 import de.ph1b.audiobook.features.bookPlaying.BookPlayViewState
 import voice.playbackScreen.BookPlayListener
 import kotlin.math.roundToLong
+import kotlin.time.DurationUnit
 
 @Composable
 internal fun PlaybackSlider(
   viewState: BookPlayViewState,
   listener: BookPlayListener
 ) {
-  val sliderValue = remember(viewState.playedTime.inMilliseconds) {
-    mutableStateOf(viewState.playedTime.inMilliseconds.toFloat())
+  val sliderValue = remember(viewState.playedTime.toDouble(DurationUnit.MILLISECONDS)) {
+    mutableStateOf(viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat())
   }
   Slider(
     value = sliderValue.value,
-    valueRange = 0f..viewState.duration.inMilliseconds.toFloat(),
+    valueRange = 0f..viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat(),
     onValueChange = {
       sliderValue.value = it
     },
