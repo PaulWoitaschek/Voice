@@ -33,7 +33,7 @@ class VerticalChangeHandler : AnimatorChangeHandler() {
       }.apply {
         interpolator = Interpolators.accelerate
         duration =
-            from.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+          from.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
       }
     } else AnimatorSet()
   }

@@ -15,6 +15,7 @@ buildscript {
 
 plugins {
   id("com.github.ben-manes.versions") version "0.38.0"
+  id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 }
 
 tasks.wrapper {
@@ -68,6 +69,7 @@ subprojects {
       dependencies.add("implementation", project(":core"))
     }
   }
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
   plugins.withId("kotlin") {
     addCoreDependencies()
   }
@@ -104,4 +106,3 @@ tasks {
 }
 
 apply(from = "dependency_updates.gradle")
-apply(from = "apply_ktlint.gradle")

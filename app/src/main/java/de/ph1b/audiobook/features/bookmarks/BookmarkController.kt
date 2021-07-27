@@ -30,13 +30,17 @@ import java.util.UUID
 private const val NI_BOOK_ID = "ni#bookId"
 
 class BookmarkController(args: Bundle) :
-  MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(BookmarkBinding::inflate, args), BookmarkView,
-  BookmarkClickListener, AddBookmarkDialog.Callback,
+  MvpController<BookmarkView, BookmarkPresenter, BookmarkBinding>(BookmarkBinding::inflate, args),
+  BookmarkView,
+  BookmarkClickListener,
+  AddBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
-  constructor(bookId: UUID) : this(Bundle().apply {
-    putUUID(NI_BOOK_ID, bookId)
-  })
+  constructor(bookId: UUID) : this(
+    Bundle().apply {
+      putUUID(NI_BOOK_ID, bookId)
+    }
+  )
 
   private val bookId = args.getUUID(NI_BOOK_ID)
   private val adapter = BookmarkAdapter(this)

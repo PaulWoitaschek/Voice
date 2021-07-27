@@ -26,14 +26,14 @@ class BookSearchHandler
 
   fun handle(search: BookSearch) {
     Timber.i("handle $search")
-      when (search.mediaFocus) {
-        MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
-        MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
-          playAlbum(search)
-        }
-        MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(search)
-        else -> playUnstructuredSearch(search.query)
+    when (search.mediaFocus) {
+      MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
+      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
+        playAlbum(search)
       }
+      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(search)
+      else -> playUnstructuredSearch(search.query)
+    }
   }
 
   private fun playAlbum(search: BookSearch) {

@@ -35,9 +35,9 @@ class Holder(
     val drawableRes = if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album
     binding.icon.setImageResource(drawableRes)
     binding.icon.contentDescription = context.getString(
-        if (isDirectory) {
-          R.string.content_is_folder
-        } else R.string.content_is_file
+      if (isDirectory) {
+        R.string.content_is_folder
+      } else R.string.content_is_file
     )
   }
 }

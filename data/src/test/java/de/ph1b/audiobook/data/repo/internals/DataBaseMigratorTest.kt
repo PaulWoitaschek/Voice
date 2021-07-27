@@ -54,7 +54,7 @@ class DataBaseMigratorTest {
     fun insertBookSettings(settings: BookSetting) {
       db.execSQL(
         "INSERT OR REPLACE INTO `bookSettings`(`id`,`currentFile`,`positionInChapter`,`playbackSpeed`,`loudnessGain`,`skipSilence`," +
-            "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
+          "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
         arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0)
       )
     }
@@ -62,7 +62,7 @@ class DataBaseMigratorTest {
     fun insertChapter(chapter: Chapter) {
       db.execSQL(
         "INSERT OR REPLACE INTO `chapters`(`file`,`name`,`duration`,`fileLastModified`,`marks`,`bookId`,`id`) " +
-            "VALUES (?,?,?,?,?,?,nullif(?, 0))",
+          "VALUES (?,?,?,?,?,?,nullif(?, 0))",
         arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId)
       )
     }
@@ -125,11 +125,14 @@ class DataBaseMigratorTest {
       )
     }
     bookmarks.forEach {
-      db.insert(BookmarkTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
-        put(BookmarkTable.PATH, it.path)
-        put(BookmarkTable.TITLE, it.title)
-        put(BookmarkTable.TIME, it.time)
-      })
+      db.insert(
+        BookmarkTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+        ContentValues().apply {
+          put(BookmarkTable.PATH, it.path)
+          put(BookmarkTable.TITLE, it.title)
+          put(BookmarkTable.TIME, it.time)
+        }
+      )
     }
 
     data class Chapter(
@@ -191,26 +194,32 @@ class DataBaseMigratorTest {
 
     books.forEach { book ->
       val bookId =
-        db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
-          put(BookTable.AUTHOR, book.author)
-          put(BookTable.NAME, book.name)
-          put(BookTable.CURRENT_MEDIA_PATH, book.currentMediaPath)
-          put(BookTable.PLAYBACK_SPEED, book.playbackSpeed)
-          put(BookTable.ROOT, book.root)
-          put(BookTable.TIME, book.time)
-          put(BookTable.TYPE, book.type)
-          put(BookTable.LOUDNESS_GAIN, book.loudnessGain)
-          put(BookTable.ACTIVE, book.active)
-        })
+        db.insert(
+          BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+          ContentValues().apply {
+            put(BookTable.AUTHOR, book.author)
+            put(BookTable.NAME, book.name)
+            put(BookTable.CURRENT_MEDIA_PATH, book.currentMediaPath)
+            put(BookTable.PLAYBACK_SPEED, book.playbackSpeed)
+            put(BookTable.ROOT, book.root)
+            put(BookTable.TIME, book.time)
+            put(BookTable.TYPE, book.type)
+            put(BookTable.LOUDNESS_GAIN, book.loudnessGain)
+            put(BookTable.ACTIVE, book.active)
+          }
+        )
       book.chapters.forEach { chapter ->
-        db.insert(ChapterTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
-          put(ChapterTable.DURATION, chapter.duration)
-          put(ChapterTable.NAME, chapter.name)
-          put(ChapterTable.PATH, chapter.path)
-          put(ChapterTable.LAST_MODIFIED, chapter.lastModified)
-          put(ChapterTable.MARKS, chapter.marks)
-          put(ChapterTable.BOOK_ID, bookId)
-        })
+        db.insert(
+          ChapterTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+          ContentValues().apply {
+            put(ChapterTable.DURATION, chapter.duration)
+            put(ChapterTable.NAME, chapter.name)
+            put(ChapterTable.PATH, chapter.path)
+            put(ChapterTable.LAST_MODIFIED, chapter.lastModified)
+            put(ChapterTable.MARKS, chapter.marks)
+            put(ChapterTable.BOOK_ID, bookId)
+          }
+        )
       }
     }
     db.close()

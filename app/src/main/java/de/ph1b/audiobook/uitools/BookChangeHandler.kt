@@ -31,9 +31,11 @@ class BookChangeHandler : TransitionChangeHandler() {
     isPush: Boolean
   ): Transition {
     val moveFabAndCover = TransitionSet()
-      .addTransition(ChangeBounds().apply {
-        setPathMotion(ArcMotion())
-      })
+      .addTransition(
+        ChangeBounds().apply {
+          setPathMotion(ArcMotion())
+        }
+      )
       .addTransition(ChangeTransform())
       .addTransition(ChangeClipBounds())
       .addTransition(ChangeImageTransform())

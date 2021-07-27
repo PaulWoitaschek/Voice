@@ -1,12 +1,16 @@
 pluginManagement {
   @Suppress("UnstableApiUsage")
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+  }
   plugins {
     id("com.squareup.anvil") version "2.3.3"
   }
 }
 
 plugins {
-  id("com.gradle.enterprise") version "3.6.1"
+  id("com.gradle.enterprise") version "3.6.3"
 }
 
 gradleEnterprise {
