@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.playbackScreen
 
 import android.content.Context
 import de.ph1b.audiobook.common.CoverReplacement

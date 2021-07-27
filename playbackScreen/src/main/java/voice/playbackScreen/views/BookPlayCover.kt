@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.rememberImagePainter
-import de.ph1b.audiobook.features.bookPlaying.BookPlayCover
+import voice.playbackScreen.BookPlayCover
 
 @Composable
 internal fun BookPlayCover(modifier: Modifier, cover: BookPlayCover) {

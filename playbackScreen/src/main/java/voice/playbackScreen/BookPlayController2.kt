@@ -47,6 +47,14 @@ class BookPlayController2(bundle: Bundle) : Controller(bundle) {
       override fun seekTo(milliseconds: Long) {
         viewModel.seekTo(milliseconds)
       }
+
+      override fun previousTrack() {
+        viewModel.previous()
+      }
+
+      override fun nextTrack() {
+        viewModel.next()
+      }
     }
     return ComposeView(container.context).apply {
       setContent {

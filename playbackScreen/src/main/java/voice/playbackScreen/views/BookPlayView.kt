@@ -10,13 +10,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import de.ph1b.audiobook.features.bookPlaying.BookPlayViewState
 import voice.playbackScreen.BookPlayListener
+import voice.playbackScreen.BookPlayViewState
 import voice.playbackScreen.R
 
 @Composable
@@ -62,6 +64,33 @@ internal fun BookPlayView(viewState: BookPlayViewState, listener: BookPlayListen
             .fillMaxSize(),
           cover = viewState.cover
         )
+        if (viewState.chapterName != null) {
+          Row {
+            IconButton(
+              onClick = {
+                listener.previousTrack()
+              }
+            ) {
+              Icon(
+                imageVector = Icons.Default.ChevronLeft,
+                contentDescription = stringResource(R.string.previous_track)
+              )
+            }
+
+            Text(text = viewState.chapterName)
+
+            IconButton(
+              onClick = {
+                listener.nextTrack()
+              }
+            ) {
+              Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = stringResource(R.string.next_track)
+              )
+            }
+          }
+        }
         PlaybackSlider(viewState, listener)
         Row {
           Rewind(listener)
