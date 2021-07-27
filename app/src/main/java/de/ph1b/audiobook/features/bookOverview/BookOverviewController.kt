@@ -144,7 +144,7 @@ class BookOverviewController :
     }
   }
 
-  private fun BookOverviewBinding.gridMenuItem(): GridMenuItem = GridMenuItem(toolbar.menu.findItem(R.id.toggleGrid))
+  private fun BookOverviewBinding.gridMenuItem(): MenuItem = toolbar.menu.findItem(R.id.toggleGrid)
 
   private fun toFolderOverview() {
     val controller = FolderOverviewController()
@@ -169,7 +169,7 @@ class BookOverviewController :
     router.pushController(BookPlayController2(book.id).asTransaction())
   }
 
-  private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: GridMenuItem) {
+  private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: MenuItem) {
     Timber.i("render ${state.javaClass.simpleName}")
     val adapterContent = when (state) {
       is BookOverviewState.Content -> buildList {
@@ -192,7 +192,7 @@ class BookOverviewController :
         lm.spanCount = state.columnCount
 
         showPlaying(state.playing)
-        gridMenuItem.item.apply {
+        gridMenuItem.apply {
           val useGrid = state.useGrid
           setTitle(if (useGrid) R.string.layout_list else R.string.layout_grid)
           val drawableRes = if (useGrid) R.drawable.ic_view_list else R.drawable.ic_view_grid
@@ -210,7 +210,7 @@ class BookOverviewController :
     }
 
     loadingProgress.isVisible = state == BookOverviewState.Loading
-    gridMenuItem.item.isVisible = state != BookOverviewState.Loading
+    gridMenuItem.isVisible = state != BookOverviewState.Loading
   }
 
   private fun showPlaying(playing: Boolean) {
@@ -298,5 +298,3 @@ class BookOverviewController :
     currentTapTarget = null
   }
 }
-
-private inline class GridMenuItem(val item: MenuItem)
