@@ -51,7 +51,8 @@
               app:fab_colorNormal="?attr/colorAccent"
               app:fab_colorPressed="?attr/colorAccentDark"
               app:fab_size="mini"
-              app:fab_title="x" />
+              android:contentDescription="@string/folder_add_recursive_book"
+              app:fab_title="@string/folder_add_recursive_book" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
               android:id="@+id/addAsSingle"
