@@ -194,6 +194,27 @@ class MediaScanner
             }
           }
         }
+        Book.Type.RECURSIVE_FILE -> recursiveBookFiles.forEach {
+          if (it.isFile) {
+            val chapters = book.content.chapters
+            val singleBookChapterFile = chapters.first().file
+            if (singleBookChapterFile.absolutePath.startsWith(it.absolutePath)) {
+              if(singleBookChapterFile.exists()){
+                bookExists = true
+              }
+            }
+          }
+        }
+        Book.Type.RECURSIVE_FOLDER -> recursiveBookFiles.forEach {
+          if (it.isDirectory) {
+            // multi file book
+            if (book.root.startsWith(it.absolutePath)) {
+              if(File(book.root).exists()){
+                bookExists = true
+              }
+            }
+          }
+        }
       }
 
       if (!bookExists) {
