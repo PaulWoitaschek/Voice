@@ -2,7 +2,6 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
-import android.util.Log
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
