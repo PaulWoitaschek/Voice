@@ -2,6 +2,7 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
+import android.util.Log
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
@@ -25,7 +26,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CancellationException
 import java.util.concurrent.Executors
@@ -44,7 +44,9 @@ class MediaScanner
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   private val singleBookFolderPref: Pref<Set<String>>,
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  private val collectionBookFolderPref: Pref<Set<String>>
+  private val collectionBookFolderPref: Pref<Set<String>>,
+  @Named(PrefKeys.RECURSIVE_BOOK_FOLDERS)
+  private val recursiveBookFolderPref: Pref<Set<String>>
 ) {
 
   private val _scannerActive = ConflatedBroadcastChannel(false)
@@ -109,7 +111,34 @@ class MediaScanner
         checkBook(f, Book.Type.COLLECTION_FOLDER)
       }
     }
+    val recursiveBooks = recursiveBookFiles
+    for (f in recursiveBooks) {
+      if (f.isFile && f.canRead()) {
+        checkBook(f, Book.Type.RECURSIVE_FILE)
+      } else if (f.isDirectory && f.canRead()) {
+        scanFolderRecursive(f)
+      }
+    }
   }
+
+  private suspend fun scanFolderRecursive(file: File){
+    var hasFiles = false;
+    file.listFiles().forEach { i ->
+        if(i.isDirectory){
+          scanFolderRecursive(i)
+        }else if (i.isFile){
+          hasFiles=true;
+        }
+    }
+    if(hasFiles){
+      checkBook(file, Book.Type.RECURSIVE_FOLDER)
+    }
+  }
+
+  private val recursiveBookFiles: List<File>
+    get() = recursiveBookFolderPref.value
+      .map(::File)
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   private val singleBookFiles: List<File>
     get() = singleBookFolderPref.value

@@ -157,6 +157,7 @@ class FolderChooserActivity :
   }
 
   enum class OperationMode {
+    RECURSIVE,
     COLLECTION_BOOK,
     SINGLE_BOOK
   }

@@ -32,6 +32,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.RECURSIVE_BOOK_FOLDERS)]
+  lateinit var recursiveBookFolderPref: Pref<Set<String>>
   @Inject
   lateinit var storageDirFinder: StorageDirFinder
 
@@ -118,6 +120,15 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         }
         view.finish()
         Timber.v("chosenSingleBook = $chosen")
+      }
+      FolderChooserActivity.OperationMode.RECURSIVE -> {
+        if (canAddNewFolder(chosen.absolutePath)) {
+          val recursiveBooks = HashSet(recursiveBookFolderPref.value)
+          recursiveBooks.add(chosen.absolutePath)
+          recursiveBookFolderPref.value = recursiveBooks
+        }
+        view.finish()
+        Timber.v("chosenRecursiveBook = $chosen")
       }
     }
   }

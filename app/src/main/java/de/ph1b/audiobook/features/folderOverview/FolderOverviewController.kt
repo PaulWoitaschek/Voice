@@ -36,6 +36,9 @@ class FolderOverviewController :
   override fun FolderOverviewBinding.onBindingCreated() {
     buttonRepresentingTheFam = binding.root.findViewById(R.id.fab_expand_menu_button)
 
+    addRecursive.setOnClickListener {
+      startFolderChooserActivity(FolderChooserActivity.OperationMode.RECURSIVE)
+    }
     addAsSingle.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
     }

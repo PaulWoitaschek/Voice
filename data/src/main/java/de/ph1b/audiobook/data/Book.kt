@@ -53,6 +53,8 @@ data class Book(
   }
 
   enum class Type {
+    RECURSIVE_FOLDER,
+    RECURSIVE_FILE,
     COLLECTION_FOLDER,
     COLLECTION_FILE,
     SINGLE_FOLDER,

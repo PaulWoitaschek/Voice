@@ -44,6 +44,9 @@ class MainActivity : BaseActivity(), RouterProvider {
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
 
+  @field:[Inject Named(PrefKeys.RECURSIVE_BOOK_FOLDERS)]
+  lateinit var recursiveBookFolderPref: Pref<Set<String>>
+
   @Inject
   lateinit var repo: BookRepository
 

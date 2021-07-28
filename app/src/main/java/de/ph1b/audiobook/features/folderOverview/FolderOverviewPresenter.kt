@@ -25,15 +25,19 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
   lateinit var singleBookFolderPref: Pref<Set<String>>
   @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
   lateinit var collectionBookFolderPref: Pref<Set<String>>
+  @field:[Inject Named(PrefKeys.RECURSIVE_BOOK_FOLDERS)]
+  lateinit var recursiveBookFolderPref: Pref<Set<String>>
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.flow
       .map { set -> set.map { FolderModel(it, true) } }
     val singleFolderStream = singleBookFolderPref.flow
       .map { set -> set.map { FolderModel(it, false) } }
+    val recursiveFolderStream = recursiveBookFolderPref.flow
+      .map { set -> set.map { FolderModel(it, false) } }
 
     onAttachScope.launch {
-      combine(collectionFolderStream, singleFolderStream) { t1, t2 -> t1 + t2 }
+      combine(collectionFolderStream, singleFolderStream, recursiveFolderStream) { t1, t2, t3 -> t1 + t2 + t3}
         .collect { view.newData(it) }
     }
   }
@@ -50,6 +54,12 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
       val folders = singleBookFolderPref.flow.first().toMutableSet()
       val removed = folders.remove(folder.folder)
       if (removed) singleBookFolderPref.value = folders
+    }
+
+    scope.launch {
+      val folders = recursiveBookFolderPref.flow.first().toMutableSet()
+      val removed = folders.remove(folder.folder)
+      if (removed) recursiveBookFolderPref.value = folders
     }
   }
 }

@@ -8,6 +8,7 @@ object PrefKeys {
   const val SLEEP_TIME = "SLEEP_TIME"
   const val SINGLE_BOOK_FOLDERS = "singleBookFolders"
   const val COLLECTION_BOOK_FOLDERS = "folders"
+  const val RECURSIVE_BOOK_FOLDERS = "recursiveBookFolders"
   const val CURRENT_BOOK = "currentBook2"
   const val DARK_THEME = "darkTheme"
   const val GRID_MODE = "gridView"

@@ -87,6 +87,13 @@ object PrefsModule {
 
   @Provides
   @Singleton
+  @Named(PrefKeys.RECURSIVE_BOOK_FOLDERS)
+  fun provideRecursiveFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
+    return prefs.stringSet(PrefKeys.RECURSIVE_BOOK_FOLDERS, emptySet())
+  }
+
+  @Provides
+  @Singleton
   @Named(PrefKeys.CURRENT_BOOK)
   fun provideCurrentBookIdPreference(prefs: AndroidPreferences): Pref<UUID> {
     return prefs.create(PrefKeys.CURRENT_BOOK, UUID.randomUUID(), UUIDAdapter)
