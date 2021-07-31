@@ -25,6 +25,7 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
+import java.util.UUID
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -35,7 +36,6 @@ import voice.playbackScreen.BookPlayViewState
 import voice.playbackScreen.JumpToPositionDialogController
 import voice.settings.SettingsController
 import voice.sleepTimer.SleepTimerDialogController
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -51,6 +51,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
   @Inject
   lateinit var equalizer: Equalizer
+
   @Inject
   lateinit var viewModel: BookPlayViewModel
 
@@ -129,7 +130,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
     if (!coverLoaded) {
       coverLoaded = true
-      cover.transitionName = viewState.cover.coverTransitionName()
       val coverFile = viewState.cover.file(activity!!)
       val placeholder = viewState.cover.placeholder(activity!!)
       if (!coverFile.exists()) {

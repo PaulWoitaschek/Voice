@@ -2,8 +2,9 @@ package voice.playbackScreen
 
 import android.content.Context
 import de.ph1b.audiobook.common.CoverReplacement
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.bookCover
 import java.io.File
+import java.util.UUID
 import kotlin.time.Duration
 
 data class BookPlayViewState(
@@ -18,25 +19,14 @@ data class BookPlayViewState(
   val skipSilence: Boolean
 )
 
-data class BookPlayCover(private val book: Book) {
+data class BookPlayCover(
+  private val bookName: String,
+  private val bookId: UUID,
+) {
 
   fun file(context: Context): File {
-    return book.coverFile(context)
+    return bookCover(context, bookId)
   }
 
-  fun placeholder(context: Context): CoverReplacement = CoverReplacement(book.name, context)
-
-  override fun equals(other: Any?): Boolean {
-    if (other !is BookPlayCover) return false
-    return book.name == other.book.name && book.id == other.book.id
-  }
-
-  override fun hashCode(): Int {
-    var hash = 7
-    hash = 31 * hash + book.name.hashCode()
-    hash = 31 * hash + book.id.hashCode()
-    return hash
-  }
-
-  fun coverTransitionName(): String = book.coverTransitionName
+  fun placeholder(context: Context): CoverReplacement = CoverReplacement(bookName, context)
 }

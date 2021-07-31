@@ -9,6 +9,7 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import java.util.UUID
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import voice.sleepTimer.SleepTimer
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
@@ -56,7 +56,7 @@ class BookPlayViewModel
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = Duration.milliseconds(currentMark.durationMs),
         playedTime = Duration.milliseconds((book.content.positionInChapter - currentMark.startMs)),
-        cover = BookPlayCover(book),
+        cover = BookPlayCover(book.name, book.id),
         skipSilence = book.content.skipSilence
       )
     }

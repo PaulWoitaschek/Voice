@@ -7,6 +7,7 @@ import org.gradle.kotlin.dsl.maven
 object Versions {
   const val versionCode = 3060342
   const val versionName = "5.0.2"
+  const val compose = "1.0.0"
 }
 
 object Deps {
@@ -34,7 +35,7 @@ object Deps {
     }
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-rc01"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0"
   const val material = "com.google.android.material:material:1.3.0"
   const val floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
   const val materialCab = "com.afollestad:material-cab:2.0.1"
@@ -101,17 +102,22 @@ object Deps {
 
 fun DependencyHandler.composeImplementation() {
 
-  val composeVersion = "1.0.0-rc02"
-  add("implementation", "androidx.compose.ui:ui:$composeVersion")
-  add("implementation", "androidx.compose.ui:ui-tooling:$composeVersion")
-  add("implementation", "androidx.compose.foundation:foundation:$composeVersion")
-  add("implementation", "androidx.compose.material:material:$composeVersion")
-  add("implementation", "androidx.compose.material:material-icons-core:$composeVersion")
-  add("implementation", "androidx.compose.material:material-icons-extended:$composeVersion")
-  add("implementation", "androidx.compose.material:material-icons-extended:$composeVersion")
-  add("implementation", "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1")
-  add("implementation", "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-  add("implementation", "androidx.core:core-ktx:1.6.0")
+  val accompanistVersion = "0.15.0"
+  listOf(
+    "androidx.compose.ui:ui:${Versions.compose}",
+    "androidx.compose.ui:ui-tooling:${Versions.compose}",
+    "androidx.compose.foundation:foundation:${Versions.compose}",
+    "androidx.compose.material:material:${Versions.compose}",
+    "androidx.compose.material:material-icons-core:${Versions.compose}",
+    "androidx.compose.material:material-icons-extended:${Versions.compose}",
+    "androidx.compose.material:material-icons-extended:${Versions.compose}",
+    "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1",
+    "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07",
+    "androidx.core:core-ktx:1.6.0",
+    "com.google.accompanist:accompanist-insets:$accompanistVersion"
+  ).forEach {
+    add("implementation", it)
+  }
 }
 
 @Suppress("UnstableApiUsage")

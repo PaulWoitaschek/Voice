@@ -49,7 +49,7 @@ data class Book(
   }
 
   fun coverFile(context: Context): File {
-    return File(context.filesDir, id.toString())
+    return bookCover(context, id)
   }
 
   enum class Type {
@@ -63,4 +63,8 @@ data class Book(
     const val SPEED_MAX = 2.5F
     const val SPEED_MIN = 0.5F
   }
+}
+
+fun bookCover(context: Context, bookId: UUID): File {
+  return File(context.filesDir, bookId.toString())
 }
