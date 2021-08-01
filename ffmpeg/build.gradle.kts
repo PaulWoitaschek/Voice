@@ -1,11 +1,9 @@
-import deps.Deps
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
 }
 
 dependencies {
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.ffmpeg)
+  implementation(libs.coroutines.core)
+  implementation(libs.ffmpeg)
 }

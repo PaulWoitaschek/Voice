@@ -1,4 +1,5 @@
-import deps.Versions
+@file:Suppress("UnstableApiUsage")
+
 import deps.configureBaseRepos
 
 @Suppress("RemoveRedundantQualifierName")
@@ -7,9 +8,11 @@ buildscript {
   deps.configureBaseRepos(repositories)
 
   dependencies {
-    classpath(deps.Deps.androidGradlePlugin)
-    classpath(deps.Deps.Kotlin.gradlePlugin)
-    classpath(deps.Deps.Kotlin.Serialization.gradlePlugin)
+    val libs = project.extensions.getByType<VersionCatalogsExtension>()
+      .named("libs") as org.gradle.accessors.dm.LibrariesForLibs
+    classpath(libs.androidGradlePlugin)
+    classpath(libs.kotlin.gradlePlugin)
+    classpath(libs.serialization.gradlePlugin)
   }
 }
 
@@ -29,8 +32,8 @@ allprojects {
     with(extension) {
       defaultConfig {
         multiDexEnabled = true
-        minSdkVersion(24)
-        targetSdkVersion(30)
+        minSdk = 24
+        targetSdk = 30
       }
       compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -38,6 +41,10 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
       }
       compileSdkVersion(30)
+
+      composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+      }
 
       dependencies {
         add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.1.1")
@@ -83,12 +90,6 @@ tasks {
     executable = "sh"
     args("-c", "tx pull -af --minimum-perc=5")
     finalizedBy(":core:lintDebug")
-  }
-
-  register("appVersion") {
-    doLast {
-      print("#BEGIN_VERSION#${Versions.versionName}#END_VERSION#")
-    }
   }
 
   register<TestReport>("allUnitTests") {

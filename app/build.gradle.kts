@@ -1,5 +1,3 @@
-import deps.Deps
-import deps.Versions
 import java.util.Properties
 
 plugins {
@@ -15,8 +13,8 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionCode = Versions.versionCode
-    versionName = Versions.versionName
+    versionCode = 3060342
+    versionName = "5.0.2"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -95,61 +93,61 @@ dependencies {
   implementation(project(":loudness"))
   implementation(project(":settings"))
 
-  implementation(Deps.AndroidX.appCompat)
-  implementation(Deps.AndroidX.recyclerView)
-  implementation(Deps.material)
-  implementation(Deps.AndroidX.transitions)
-  implementation(Deps.AndroidX.constraintLayout)
-  implementation(Deps.AndroidX.mediaCompat)
+  implementation(libs.appCompat)
+  implementation(libs.recyclerView)
+  implementation(libs.material)
+  implementation(libs.transitions)
+  implementation(libs.constraintLayout)
+  implementation(libs.media)
 
-  implementation(Deps.picasso)
-  implementation(Deps.Kotlin.Serialization.core)
+  implementation(libs.picasso)
+  implementation(libs.serialization.json)
 
-  implementation(Deps.MaterialDialog.core)
-  implementation(Deps.MaterialDialog.input)
-  implementation(Deps.materialCab)
+  implementation(libs.materialDialog.core)
+  implementation(libs.materialDialog.input)
+  implementation(libs.materialCab)
 
-  implementation(Deps.floatingActionButton)
+  implementation(libs.floatingActionButton)
 
-  implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
+  implementation(libs.dagger.core)
+  kapt(libs.dagger.compiler)
 
-  implementation(Deps.AndroidX.ktx)
+  implementation(libs.androidxCore)
 
-  testImplementation(Deps.junit)
-  testImplementation(Deps.truth)
-  testImplementation(Deps.mockk)
+  testImplementation(libs.junit)
+  testImplementation(libs.truth)
+  testImplementation(libs.mockk)
 
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Kotlin.coroutinesAndroid)
+  implementation(libs.coroutines.core)
+  implementation(libs.coroutines.android)
 
-  implementation(Deps.timber)
+  implementation(libs.timber)
 
-  implementation(Deps.ExoPlayer.core)
-  implementation(Deps.ExoPlayer.flac) { isTransitive = false }
+  implementation(libs.exoPlayer.core)
+  implementation(libs.exoPlayer.flac) { isTransitive = false }
 
-  implementation(Deps.Conductor.core)
-  implementation(Deps.Conductor.transition)
+  implementation(libs.conductor.core)
+  implementation(libs.conductor.transition)
 
-  implementation(Deps.lifecycle)
+  implementation(libs.lifecycle)
 
-  implementation(Deps.groupie)
+  implementation(libs.groupie)
 
-  implementation(Deps.Prefs.android)
-  testImplementation(Deps.Prefs.inMemory)
+  implementation(libs.prefs.android)
+  testImplementation(libs.prefs.inMemory)
 
-  implementation(Deps.tapTarget)
-  testImplementation(Deps.AndroidX.Test.runner)
-  testImplementation(Deps.AndroidX.Test.junit)
-  testImplementation(Deps.AndroidX.Test.core)
-  testImplementation(Deps.robolectric)
-  testImplementation(Deps.Kotlin.coroutinesTest)
+  implementation(libs.tapTarget)
+  testImplementation(libs.androidX.test.runner)
+  testImplementation(libs.androidX.test.junit)
+  testImplementation(libs.androidX.test.core)
+  testImplementation(libs.robolectric)
+  testImplementation(libs.coroutines.test)
 
-  androidTestImplementation(Deps.truth)
-  androidTestImplementation(Deps.junit)
-  androidTestImplementation(Deps.AndroidX.Test.runner)
-  androidTestImplementation(Deps.AndroidX.Test.core)
-  androidTestImplementation(Deps.AndroidX.Test.junit)
+  androidTestImplementation(libs.truth)
+  androidTestImplementation(libs.junit)
+  androidTestImplementation(libs.androidX.test.runner)
+  androidTestImplementation(libs.androidX.test.core)
+  androidTestImplementation(libs.androidX.test.junit)
 }
 
 tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")

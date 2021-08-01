@@ -1,5 +1,3 @@
-import deps.Deps
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
@@ -39,23 +37,23 @@ android {
 
 dependencies {
   implementation(project(":common"))
-  implementation(Deps.AndroidX.appCompat)
-  implementation(Deps.timber)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Kotlin.coroutinesAndroid)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Kotlin.Serialization.core)
+  implementation(libs.appCompat)
+  implementation(libs.timber)
+  implementation(libs.coroutines.core)
+  implementation(libs.coroutines.android)
+  implementation(libs.androidxCore)
+  implementation(libs.serialization.json)
 
-  api(Deps.AndroidX.Room.runtime)
-  kapt(Deps.AndroidX.Room.compiler)
+  api(libs.room.runtime)
+  kapt(libs.room.compiler)
 
-  implementation(Deps.Dagger.core)
+  implementation(libs.dagger.core)
 
-  testImplementation(Deps.AndroidX.Room.testing)
-  testImplementation(Deps.AndroidX.Test.core)
-  testImplementation(Deps.AndroidX.Test.junit)
-  testImplementation(Deps.AndroidX.Test.runner)
-  testImplementation(Deps.junit)
-  testImplementation(Deps.robolectric)
-  testImplementation(Deps.truth)
+  testImplementation(libs.room.testing)
+  testImplementation(libs.androidX.test.core)
+  testImplementation(libs.androidX.test.junit)
+  testImplementation(libs.androidX.test.runner)
+  testImplementation(libs.junit)
+  testImplementation(libs.robolectric)
+  testImplementation(libs.truth)
 }

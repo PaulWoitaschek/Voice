@@ -1,5 +1,3 @@
-import deps.Deps
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
@@ -16,14 +14,14 @@ dependencies {
   implementation(project(":ffmpeg"))
   implementation(project(":data"))
   implementation(project(":common"))
-  implementation(Deps.Prefs.core)
-  implementation(Deps.AndroidX.appCompat)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Dagger.core)
-  implementation(Deps.timber)
-  implementation(Deps.picasso)
-  implementation(Deps.Kotlin.Serialization.core)
+  implementation(libs.prefs.core)
+  implementation(libs.appCompat)
+  implementation(libs.coroutines.core)
+  implementation(libs.dagger.core)
+  implementation(libs.timber)
+  implementation(libs.picasso)
+  implementation(libs.serialization.json)
 
-  testImplementation(Deps.truth)
-  testImplementation(Deps.junit)
+  testImplementation(libs.truth)
+  testImplementation(libs.junit)
 }

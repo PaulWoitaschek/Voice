@@ -1,5 +1,3 @@
-import deps.Deps
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
@@ -16,15 +14,15 @@ dependencies {
   implementation(project(":data"))
   implementation(project(":prefs"))
 
-  implementation(Deps.timber)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.AndroidX.mediaCompat)
-  implementation(Deps.picasso)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Prefs.core)
+  implementation(libs.timber)
+  implementation(libs.coroutines.core)
+  implementation(libs.media)
+  implementation(libs.picasso)
+  implementation(libs.androidxCore)
+  implementation(libs.prefs.core)
 
-  implementation(Deps.Dagger.core)
+  implementation(libs.dagger.core)
 
-  implementation(Deps.ExoPlayer.core)
-  implementation(Deps.ExoPlayer.flac) { isTransitive = false }
+  implementation(libs.exoPlayer.core)
+  implementation(libs.exoPlayer.flac) { isTransitive = false }
 }

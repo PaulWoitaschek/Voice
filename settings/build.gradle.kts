@@ -1,6 +1,3 @@
-import deps.Deps
-import deps.composeImplementation
-
 plugins {
   id("com.android.library")
   kotlin("android")
@@ -11,9 +8,6 @@ android {
   buildFeatures {
     compose = true
   }
-  composeOptions {
-    kotlinCompilerExtensionVersion = deps.Versions.compose
-  }
 }
 
 dependencies {
@@ -23,18 +17,18 @@ dependencies {
   implementation(project(":data"))
   implementation(project(":prefs"))
 
-  implementation(Deps.timber)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.picasso)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Prefs.core)
-  implementation(Deps.MaterialDialog.core)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.AndroidX.constraintLayout)
-  implementation(Deps.material)
+  implementation(libs.timber)
+  implementation(libs.coroutines.core)
+  implementation(libs.picasso)
+  implementation(libs.androidxCore)
+  implementation(libs.prefs.core)
+  implementation(libs.materialDialog.core)
+  implementation(libs.androidxCore)
+  implementation(libs.constraintLayout)
+  implementation(libs.material)
 
-  implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
+  implementation(libs.dagger.core)
+  kapt(libs.dagger.compiler)
 
-  composeImplementation()
+  implementation(libs.bundles.compose)
 }

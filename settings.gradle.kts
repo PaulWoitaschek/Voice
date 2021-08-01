@@ -1,3 +1,5 @@
+enableFeaturePreview("VERSION_CATALOGS")
+
 pluginManagement {
   @Suppress("UnstableApiUsage")
   repositories {

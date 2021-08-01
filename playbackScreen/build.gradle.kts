@@ -1,6 +1,3 @@
-import deps.Deps
-import deps.composeImplementation
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
@@ -12,9 +9,6 @@ android {
     viewBinding = true
     compose = true
   }
-  composeOptions {
-    kotlinCompilerExtensionVersion = deps.Versions.compose
-  }
 }
 
 dependencies {
@@ -25,17 +19,17 @@ dependencies {
   implementation(project(":prefs"))
   implementation(project(":sleepTimer"))
 
-  implementation(Deps.timber)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.picasso)
-  implementation(Deps.coil)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Prefs.core)
-  implementation(Deps.MaterialDialog.core)
-  implementation(Deps.AndroidX.ktx)
+  implementation(libs.timber)
+  implementation(libs.coroutines.core)
+  implementation(libs.picasso)
+  implementation(libs.coil)
+  implementation(libs.androidxCore)
+  implementation(libs.prefs.core)
+  implementation(libs.materialDialog.core)
+  implementation(libs.androidxCore)
 
-  implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
+  implementation(libs.dagger.core)
+  kapt(libs.dagger.compiler)
 
-  composeImplementation()
+  implementation(libs.bundles.compose)
 }
