@@ -10,8 +10,8 @@ anvil {
 }
 
 dependencies {
-  implementation(project(":ffmpeg"))
-  implementation(project(":strings"))
+  implementation(projects.ffmpeg)
+  implementation(projects.strings)
   implementation(libs.appCompat)
   implementation(libs.coroutines.core)
   implementation(libs.dagger.core)

@@ -11,9 +11,9 @@ anvil {
 }
 
 dependencies {
-  implementation(project(":ffmpeg"))
-  implementation(project(":data"))
-  implementation(project(":common"))
+  implementation(projects.ffmpeg)
+  implementation(projects.data)
+  implementation(projects.common)
   implementation(libs.prefs.core)
   implementation(libs.appCompat)
   implementation(libs.coroutines.core)

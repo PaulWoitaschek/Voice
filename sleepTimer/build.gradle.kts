@@ -15,11 +15,11 @@ android {
 }
 
 dependencies {
-  implementation(project(":common"))
-  implementation(project(":strings"))
-  implementation(project(":playback"))
-  implementation(project(":data"))
-  implementation(project(":prefs"))
+  implementation(projects.common)
+  implementation(projects.strings)
+  implementation(projects.playback)
+  implementation(projects.data)
+  implementation(projects.prefs)
 
   implementation(libs.timber)
   implementation(libs.coroutines.core)

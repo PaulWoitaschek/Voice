@@ -73,7 +73,7 @@ allprojects {
 subprojects {
   fun addCoreDependencies() {
     if (path != ":core") {
-      dependencies.add("implementation", project(":core"))
+      dependencies.add("implementation", projects.core)
     }
   }
   apply(plugin = "org.jlleitschuh.gradle.ktlint")

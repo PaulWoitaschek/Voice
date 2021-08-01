@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-  implementation(project(":common"))
+  implementation(projects.common)
   implementation(libs.appCompat)
   implementation(libs.timber)
   implementation(libs.coroutines.core)
