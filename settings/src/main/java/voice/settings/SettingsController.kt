@@ -11,6 +11,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import com.bluelinelabs.conductor.Controller
+import com.squareup.anvil.annotations.ContributesTo
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.rootComponentAs
 import timber.log.Timber
 import voice.settings.views.Settings
@@ -71,6 +73,7 @@ class SettingsController : Controller() {
     }
   }
 
+  @ContributesTo(AppScope::class)
   interface Component {
     fun inject(target: SettingsController)
   }

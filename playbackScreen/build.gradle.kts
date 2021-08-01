@@ -1,7 +1,11 @@
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("kotlin-kapt")
+  id("com.squareup.anvil")
+}
+
+anvil {
+  generateDaggerFactories.set(true)
 }
 
 android {
@@ -29,7 +33,6 @@ dependencies {
   implementation(libs.androidxCore)
 
   implementation(libs.dagger.core)
-  kapt(libs.dagger.compiler)
 
   implementation(libs.bundles.compose)
 }
