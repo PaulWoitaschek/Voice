@@ -122,7 +122,14 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     )
     slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
     if (!slider.isPressed) {
-      slider.value = viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat()
+      var sliderProgress = viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat()
+      if(slider.valueFrom > sliderProgress){
+        sliderProgress=slider.valueFrom
+      }
+      if(slider.valueTo < sliderProgress){
+        sliderProgress=slider.valueTo
+      }
+      slider.value = sliderProgress
     }
     skipSilenceItem.isChecked = viewState.skipSilence
     playPauseDrawableSetter.setPlaying(viewState.playing)
