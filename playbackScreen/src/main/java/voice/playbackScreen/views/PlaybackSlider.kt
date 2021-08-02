@@ -1,6 +1,8 @@
 package voice.playbackScreen.views
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +20,10 @@ internal fun PlaybackSlider(
     mutableStateOf(viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat())
   }
   Slider(
+    colors = SliderDefaults.colors(
+      thumbColor = MaterialTheme.colors.secondary,
+      activeTrackColor = MaterialTheme.colors.secondary,
+    ),
     value = sliderValue.value,
     valueRange = 0f..viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat(),
     onValueChange = {
