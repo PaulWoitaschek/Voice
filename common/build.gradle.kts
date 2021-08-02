@@ -6,7 +6,6 @@ plugins {
 
 anvil {
   generateDaggerFactories.set(true)
-  generateDaggerFactoriesOnly.set(true)
 }
 
 android {
@@ -25,6 +24,7 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.material)
   implementation(libs.bundles.compose)
+  implementation(libs.prefs.core)
   api(libs.conductor.core)
 
   testImplementation(libs.truth)
