@@ -1,4 +1,4 @@
-package voice.playbackScreen
+package voice.common.compose
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

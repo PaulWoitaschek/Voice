@@ -30,10 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import java.util.UUID
+import voice.common.compose.VoiceTheme
 import voice.playbackScreen.BookPlayListener
 import voice.playbackScreen.BookPlayViewState
 import voice.playbackScreen.R
-import voice.playbackScreen.VoiceTheme
 import kotlin.time.Duration
 
 @Composable

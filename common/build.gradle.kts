@@ -9,6 +9,12 @@ anvil {
   generateDaggerFactoriesOnly.set(true)
 }
 
+android {
+  buildFeatures {
+    compose = true
+  }
+}
+
 dependencies {
   implementation(projects.ffmpeg)
   implementation(projects.strings)
@@ -18,6 +24,7 @@ dependencies {
   implementation(libs.timber)
   implementation(libs.appCompat)
   implementation(libs.material)
+  implementation(libs.bundles.compose)
   api(libs.conductor.core)
 
   testImplementation(libs.truth)
