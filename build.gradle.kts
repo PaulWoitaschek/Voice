@@ -1,4 +1,5 @@
-import deps.Versions
+@file:Suppress("UnstableApiUsage")
+
 import deps.configureBaseRepos
 
 @Suppress("RemoveRedundantQualifierName")
@@ -7,14 +8,17 @@ buildscript {
   deps.configureBaseRepos(repositories)
 
   dependencies {
-    classpath(deps.Deps.androidGradlePlugin)
-    classpath(deps.Deps.Kotlin.gradlePlugin)
-    classpath(deps.Deps.Kotlin.Serialization.gradlePlugin)
+    val libs = project.extensions.getByType<VersionCatalogsExtension>()
+      .named("libs") as org.gradle.accessors.dm.LibrariesForLibs
+    classpath(libs.androidGradlePlugin)
+    classpath(libs.kotlin.gradlePlugin)
+    classpath(libs.serialization.gradlePlugin)
   }
 }
 
 plugins {
   id("com.github.ben-manes.versions") version "0.38.0"
+  id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 }
 
 tasks.wrapper {
@@ -28,8 +32,8 @@ allprojects {
     with(extension) {
       defaultConfig {
         multiDexEnabled = true
-        minSdkVersion(24)
-        targetSdkVersion(30)
+        minSdk = 24
+        targetSdk = 30
       }
       compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -37,6 +41,10 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
       }
       compileSdkVersion(30)
+
+      composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+      }
 
       dependencies {
         add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.1.1")
@@ -65,9 +73,10 @@ allprojects {
 subprojects {
   fun addCoreDependencies() {
     if (path != ":core") {
-      dependencies.add("implementation", project(":core"))
+      dependencies.add("implementation", projects.core)
     }
   }
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
   plugins.withId("kotlin") {
     addCoreDependencies()
   }
@@ -81,12 +90,6 @@ tasks {
     executable = "sh"
     args("-c", "tx pull -af --minimum-perc=5")
     finalizedBy(":core:lintDebug")
-  }
-
-  register("appVersion") {
-    doLast {
-      print("#BEGIN_VERSION#${Versions.versionName}#END_VERSION#")
-    }
   }
 
   register<TestReport>("allUnitTests") {
@@ -104,4 +107,3 @@ tasks {
 }
 
 apply(from = "dependency_updates.gradle")
-apply(from = "apply_ktlint.gradle")

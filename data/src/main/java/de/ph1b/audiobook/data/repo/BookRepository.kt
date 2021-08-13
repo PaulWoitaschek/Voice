@@ -20,9 +20,11 @@ class BookRepository
   private val storage: BookStorage
 ) {
 
-  private val memory = MemoryRepo(runBlocking {
-    storage.books()
-  })
+  private val memory = MemoryRepo(
+    runBlocking {
+      storage.books()
+    }
+  )
 
   fun flow(): Flow<List<Book>> {
     return memory.flow.map { books ->

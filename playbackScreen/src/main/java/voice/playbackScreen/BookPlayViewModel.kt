@@ -7,10 +7,9 @@ import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
-import de.ph1b.audiobook.features.bookPlaying.BookPlayCover
-import de.ph1b.audiobook.features.bookPlaying.BookPlayViewState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import java.util.UUID
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +18,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import voice.sleepTimer.SleepTimer
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.milliseconds
+import kotlin.time.Duration
 
 class BookPlayViewModel
 @Inject constructor(
@@ -56,16 +54,16 @@ class BookPlayViewModel
         title = book.name,
         showPreviousNextButtons = hasMoreThanOneChapter,
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
-        duration = currentMark.durationMs.milliseconds,
-        playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
-        cover = BookPlayCover(book),
+        duration = Duration.milliseconds(currentMark.durationMs),
+        playedTime = Duration.milliseconds((book.content.positionInChapter - currentMark.startMs)),
+        cover = BookPlayCover(book.name, book.id),
         skipSilence = book.content.skipSilence
       )
     }
   }
 
   private fun Book.hasMoreThanOneChapter(): Boolean {
-    val chapterCount = content.chapters.sumBy { it.chapterMarks.size }
+    val chapterCount = content.chapters.sumOf { it.chapterMarks.size }
     return chapterCount > 1
   }
 
@@ -114,7 +112,7 @@ class BookPlayViewModel
     if (sleepTimer.sleepTimerActive()) {
       sleepTimer.setActive(false)
     } else {
-      _viewEffects.offer(BookPlayViewEffect.ShowSleepTimeDialog)
+      _viewEffects.trySend(BookPlayViewEffect.ShowSleepTimeDialog).isSuccess
     }
   }
 

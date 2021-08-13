@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import com.bluelinelabs.conductor.Controller
+import com.squareup.anvil.annotations.ContributesTo
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.rootComponentAs
-import voice.playbackScreen.views.BookPlayView
 import java.util.UUID
+import voice.playbackScreen.views.BookPlayView
 import javax.inject.Inject
 
 private const val NI_BOOK_ID = "ni#bookId"
@@ -47,6 +49,14 @@ class BookPlayController2(bundle: Bundle) : Controller(bundle) {
       override fun seekTo(milliseconds: Long) {
         viewModel.seekTo(milliseconds)
       }
+
+      override fun previousTrack() {
+        viewModel.previous()
+      }
+
+      override fun nextTrack() {
+        viewModel.next()
+      }
     }
     return ComposeView(container.context).apply {
       setContent {
@@ -58,6 +68,7 @@ class BookPlayController2(bundle: Bundle) : Controller(bundle) {
     }
   }
 
+  @ContributesTo(AppScope::class)
   interface Component {
     fun inject(target: BookPlayController2)
   }

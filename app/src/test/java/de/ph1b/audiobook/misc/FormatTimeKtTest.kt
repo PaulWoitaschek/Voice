@@ -43,7 +43,7 @@ class FormatTimeKtTest {
 
   private fun ms(hours: Long, minutes: Long, seconds: Long): Long {
     return TimeUnit.HOURS.toMillis(hours) +
-        TimeUnit.MINUTES.toMillis(minutes) +
-        TimeUnit.SECONDS.toMillis(seconds)
+      TimeUnit.MINUTES.toMillis(minutes) +
+      TimeUnit.SECONDS.toMillis(seconds)
   }
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -17,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
+import voice.common.compose.VoiceTheme
 import voice.settings.R
 import voice.settings.SettingsViewListener
 import voice.settings.SettingsViewState
@@ -25,10 +26,11 @@ import voice.settings.SettingsViewState
 internal fun Settings(viewState: SettingsViewState, listener: SettingsViewListener) {
   val showContributeDialog = remember { mutableStateOf(false) }
 
-  MaterialTheme {
+  VoiceTheme {
     Scaffold(
       topBar = {
         TopAppBar(
+          modifier = Modifier.statusBarsPadding(),
           title = {
             Text(stringResource(R.string.action_settings))
           },

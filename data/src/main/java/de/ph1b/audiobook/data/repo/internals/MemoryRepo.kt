@@ -32,9 +32,11 @@ class MemoryRepo
 
   fun updateBookName(id: UUID, name: String) {
     updateBook(id) {
-      update(updateMetaData = {
-        copy(name = name)
-      })
+      update(
+        updateMetaData = {
+          copy(name = name)
+        }
+      )
     }
   }
 

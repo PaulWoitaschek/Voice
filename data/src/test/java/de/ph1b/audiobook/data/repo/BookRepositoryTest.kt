@@ -55,14 +55,19 @@ class BookRepositoryTest {
   }
 
   private fun ignoringChapterIds(): Correspondence<Book, Book> {
-    return Correspondence.from({ actual, expected ->
-      actual?.withZeroedChapterIds() == expected?.withZeroedChapterIds()
-    }, "compare")
+    return Correspondence.from(
+      { actual, expected ->
+        actual?.withZeroedChapterIds() == expected?.withZeroedChapterIds()
+      },
+      "compare"
+    )
   }
 }
 
 private fun Book.withZeroedChapterIds(): Book = updateContent {
-  copy(chapters = chapters.map { chapter ->
-    chapter.copy(id = 0)
-  })
+  copy(
+    chapters = chapters.map { chapter ->
+      chapter.copy(id = 0)
+    }
+  )
 }

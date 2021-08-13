@@ -1,5 +1,3 @@
-import deps.Deps
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
@@ -8,20 +6,27 @@ plugins {
 
 anvil {
   generateDaggerFactories.set(true)
-  generateDaggerFactoriesOnly.set(true)
+}
+
+android {
+  buildFeatures {
+    compose = true
+  }
 }
 
 dependencies {
-  implementation(project(":ffmpeg"))
-  implementation(project(":strings"))
-  implementation(Deps.AndroidX.appCompat)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.Dagger.core)
-  implementation(Deps.timber)
-  implementation(Deps.AndroidX.appCompat)
-  implementation(Deps.material)
-  api(Deps.Conductor.core)
+  implementation(projects.ffmpeg)
+  implementation(projects.strings)
+  implementation(libs.appCompat)
+  implementation(libs.coroutines.core)
+  implementation(libs.dagger.core)
+  implementation(libs.timber)
+  implementation(libs.appCompat)
+  implementation(libs.material)
+  implementation(libs.bundles.compose)
+  implementation(libs.prefs.core)
+  api(libs.conductor.core)
 
-  testImplementation(Deps.truth)
-  testImplementation(Deps.junit)
+  testImplementation(libs.truth)
+  testImplementation(libs.junit)
 }

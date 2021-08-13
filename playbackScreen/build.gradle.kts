@@ -1,10 +1,11 @@
-import deps.Deps
-import deps.composeImplementation
-
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("kotlin-kapt")
+  id("com.squareup.anvil")
+}
+
+anvil {
+  generateDaggerFactories.set(true)
 }
 
 android {
@@ -12,30 +13,26 @@ android {
     viewBinding = true
     compose = true
   }
-  composeOptions {
-    kotlinCompilerExtensionVersion = "1.0.0-rc02"
-  }
 }
 
 dependencies {
-  implementation(project(":common"))
-  implementation(project(":strings"))
-  implementation(project(":playback"))
-  implementation(project(":data"))
-  implementation(project(":prefs"))
-  implementation(project(":sleepTimer"))
+  implementation(projects.common)
+  implementation(projects.strings)
+  implementation(projects.playback)
+  implementation(projects.data)
+  implementation(projects.prefs)
+  implementation(projects.sleepTimer)
 
-  implementation(Deps.timber)
-  implementation(Deps.Kotlin.coroutines)
-  implementation(Deps.picasso)
-  implementation(Deps.coil)
-  implementation(Deps.AndroidX.ktx)
-  implementation(Deps.Prefs.core)
-  implementation(Deps.MaterialDialog.core)
-  implementation(Deps.AndroidX.ktx)
+  implementation(libs.timber)
+  implementation(libs.coroutines.core)
+  implementation(libs.picasso)
+  implementation(libs.coil)
+  implementation(libs.androidxCore)
+  implementation(libs.prefs.core)
+  implementation(libs.materialDialog.core)
+  implementation(libs.androidxCore)
 
-  implementation(Deps.Dagger.core)
-  kapt(Deps.Dagger.compiler)
+  implementation(libs.dagger.core)
 
-  composeImplementation()
+  implementation(libs.bundles.compose)
 }

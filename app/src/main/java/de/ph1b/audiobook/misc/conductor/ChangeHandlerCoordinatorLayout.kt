@@ -10,7 +10,8 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 /**
  * Like [com.bluelinelabs.conductor.ChangeHandlerFrameLayout], but as a CoordinatorLayout
  */
-class ChangeHandlerCoordinatorLayout : androidx.coordinatorlayout.widget.CoordinatorLayout,
+class ChangeHandlerCoordinatorLayout :
+  androidx.coordinatorlayout.widget.CoordinatorLayout,
   ControllerChangeHandler.ControllerChangeListener {
 
   private var inProgressTransactionCount: Int = 0

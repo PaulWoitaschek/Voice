@@ -53,7 +53,8 @@ class CropOverlay @JvmOverloads constructor(
   }
 
   private val scaleGestureDetector = ScaleGestureDetector(
-    context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    context,
+    object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
       override fun onScale(detector: ScaleGestureDetector): Boolean {
         val dx = detector.currentSpanX - detector.previousSpanX
         val dy = detector.currentSpanY - detector.previousSpanY
