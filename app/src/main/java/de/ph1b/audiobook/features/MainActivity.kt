@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.core.view.WindowCompat
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
@@ -60,7 +59,6 @@ class MainActivity : BaseActivity(), RouterProvider {
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    WindowCompat.setDecorFitsSystemWindows(window, false)
     appComponent.inject(this)
     super.onCreate(savedInstanceState)
     val binding = ActivityBookBinding.inflate(layoutInflater)

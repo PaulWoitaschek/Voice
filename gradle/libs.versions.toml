@@ -8,7 +8,6 @@ dagger = "2.38.1"
 exoPlayer = "2.14.0"
 kotlin = "1.5.21"
 compose = "1.0.1"
-accompanist = "0.17.0"
 
 [libraries]
 androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
@@ -74,7 +73,6 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
-compose-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 
 [bundles]
 compose = [
@@ -84,7 +82,6 @@ compose = [
   "compose-material-core",
   "compose-material-icons-core",
   "compose-material-icons-extended",
-  "compose-insets",
   "androidxCore",
   "viewModel-savedState",
   "viewModel-compose",

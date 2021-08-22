@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import voice.common.compose.VoiceTheme
 import voice.settings.R
 import voice.settings.SettingsViewListener
@@ -30,7 +29,6 @@ internal fun Settings(viewState: SettingsViewState, listener: SettingsViewListen
     Scaffold(
       topBar = {
         TopAppBar(
-          modifier = Modifier.statusBarsPadding(),
           title = {
             Text(stringResource(R.string.action_settings))
           },
