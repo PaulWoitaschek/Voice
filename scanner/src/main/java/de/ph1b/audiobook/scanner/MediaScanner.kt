@@ -2,6 +2,7 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
+import android.util.Log
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
@@ -50,6 +51,7 @@ class MediaScanner
 
   private val _scannerActive = ConflatedBroadcastChannel(false)
   val scannerActive: Flow<Boolean> = _scannerActive.asFlow()
+  private val mKeywordRegex = arrayOf("cd")
 
   private val scanningDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
@@ -115,18 +117,41 @@ class MediaScanner
       if (f.isFile && f.canRead()) {
         checkBook(f, Book.Type.RECURSIVE_FILE)
       } else if (f.isDirectory && f.canRead()) {
-        scanFolderRecursive(f)
+          scanFolderRecursive(f)
       }
     }
   }
 
+  private fun containsAny(string: String, keywords: Array<String>): Boolean {
+    val test = string.lowercase()
+    for(keyword in keywords){
+      if(test.contains(keyword)){
+        return true
+      }
+    }
+    return false
+  }
+
   private suspend fun scanFolderRecursive(file: File){
-    var hasFiles = false;
+    var hasFiles = false
     file.listFiles().forEach { i ->
         if(i.isDirectory){
-          scanFolderRecursive(i)
+          var hasChapter = false
+          for(t in i.listFiles()){
+            if (t.isDirectory){
+              if(containsAny(t.name, mKeywordRegex)){
+                hasChapter=true
+              }
+            }
+          }
+
+          if (!hasChapter) {
+            scanFolderRecursive(i)
+          } else {
+            checkBook(i, Book.Type.RECURSIVE_FOLDER)
+          }
         }else if (i.isFile){
-          hasFiles=true;
+          hasFiles=true
         }
     }
     if(hasFiles){
