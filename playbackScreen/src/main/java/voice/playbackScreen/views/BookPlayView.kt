@@ -1,12 +1,9 @@
 package voice.playbackScreen.views
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -16,10 +13,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AlarmAdd
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Speed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -111,49 +106,6 @@ private fun CloseIcon(listener: BookPlayListener) {
 }
 
 @Composable
-private fun PlayRow(playing: Boolean, listener: BookPlayListener) {
-  Row(
-    modifier = Modifier.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center
-  ) {
-    SleepTimerIcon(listener)
-    Rewind(listener)
-    PlayPause(playing, listener)
-    FastForward(listener)
-    PlaybackSpeedIcon(listener)
-  }
-}
-
-@Composable
-private fun PlaybackSpeedIcon(listener: BookPlayListener) {
-  IconButton(
-    onClick = {
-      listener.close()
-    }
-  ) {
-    Icon(
-      imageVector = Icons.Default.Speed,
-      contentDescription = stringResource(R.string.action_sleep)
-    )
-  }
-}
-
-@Composable
-private fun SleepTimerIcon(listener: BookPlayListener) {
-  IconButton(
-    onClick = {
-      listener.close()
-    }
-  ) {
-    Icon(
-      imageVector = Icons.Default.AlarmAdd,
-      contentDescription = stringResource(R.string.action_sleep)
-    )
-  }
-}
-
-@Composable
 private fun Title(
   modifier: Modifier,
   viewState: BookPlayViewState
@@ -182,14 +134,15 @@ private fun BookPlayViewPreview() {
     playing = true,
     skipSilence = false
   )
-  val listener = object : BookPlayListener {
-    override fun close() {}
-    override fun fastForward() {}
-    override fun rewind() {}
-    override fun previousTrack() {}
-    override fun nextTrack() {}
-    override fun playPause() {}
-    override fun seekTo(milliseconds: Long) {}
-  }
-  BookPlayView(viewState = viewState, listener = listener)
+  BookPlayView(viewState = viewState, listener = NoOpBookPlayListener)
+}
+
+internal object NoOpBookPlayListener : BookPlayListener {
+  override fun close() {}
+  override fun fastForward() {}
+  override fun rewind() {}
+  override fun previousTrack() {}
+  override fun nextTrack() {}
+  override fun playPause() {}
+  override fun seekTo(milliseconds: Long) {}
 }
