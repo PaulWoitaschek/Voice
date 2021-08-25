@@ -1,14 +1,34 @@
+@file:Suppress("UnstableApiUsage")
+
 enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-  @Suppress("UnstableApiUsage")
   repositories {
     gradlePluginPortal()
     mavenCentral()
+    google()
   }
   plugins {
     id("com.squareup.anvil") version "2.3.3"
+  }
+}
+
+dependencyResolutionManagement {
+  repositories {
+    google()
+
+    exclusiveContent {
+      forRepository {
+        maven(url = "https://jitpack.io")
+      }
+      filter {
+        includeGroupByRegex("com.github.PaulWoitaschek.*")
+      }
+    }
+
+    mavenCentral().mavenContent { releasesOnly() }
+    jcenter().mavenContent { releasesOnly() }
   }
 }
 

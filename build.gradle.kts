@@ -1,12 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
-import deps.configureBaseRepos
-
 @Suppress("RemoveRedundantQualifierName")
 buildscript {
-
-  deps.configureBaseRepos(repositories)
-
   dependencies {
     val libs = project.extensions.getByType<VersionCatalogsExtension>()
       .named("libs") as org.gradle.accessors.dm.LibrariesForLibs
@@ -26,8 +21,6 @@ tasks.wrapper {
 }
 
 allprojects {
-  configureBaseRepos(repositories)
-
   plugins.withType(com.android.build.gradle.internal.plugins.BasePlugin::class.java) {
     with(extension) {
       defaultConfig {
