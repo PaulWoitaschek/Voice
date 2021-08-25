@@ -7,7 +7,7 @@ materialDialog = "3.3.0"
 dagger = "2.38.1"
 exoPlayer = "2.14.0"
 kotlin = "1.5.21"
-compose = "1.0.1"
+compose = "1.1.0-alpha02"
 
 [libraries]
 androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
@@ -73,6 +73,8 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
+compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose" }
+compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 
 [bundles]
 compose = [
@@ -82,6 +84,8 @@ compose = [
   "compose-material-core",
   "compose-material-icons-core",
   "compose-material-icons-extended",
+  "compose-animation-graphics",
+  "compose-animation-animation",
   "androidxCore",
   "viewModel-savedState",
   "viewModel-compose",

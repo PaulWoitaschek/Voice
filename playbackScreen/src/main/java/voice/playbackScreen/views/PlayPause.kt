@@ -1,13 +1,12 @@
 package voice.playbackScreen.views
 
+import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +18,7 @@ import voice.playbackScreen.BookPlayListener
 import voice.playbackScreen.R
 
 @Composable
-internal fun PlayPause(listener: BookPlayListener) {
+internal fun PlayPause(playing: Boolean, listener: BookPlayListener) {
   Surface(
     modifier = Modifier.size(80.dp),
     elevation = 8.dp,
@@ -30,11 +29,12 @@ internal fun PlayPause(listener: BookPlayListener) {
     }
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
+      val playToPause = animatedVectorResource(id = R.drawable.avd_play_to_pause)
       Icon(
         modifier = Modifier
           .align(Alignment.Center)
           .size(48.dp),
-        imageVector = Icons.Default.PlayCircleOutline,
+        painter = playToPause.painterFor(atEnd = playing),
         tint = Color.White,
         contentDescription = stringResource(R.string.play_pause)
       )

@@ -59,7 +59,7 @@ internal fun BookPlayView(viewState: BookPlayViewState, listener: BookPlayListen
               ChapterRow(viewState.chapterName, listener)
             }
             PlaybackSlider(viewState, listener)
-            PlayRow(listener)
+            PlayRow(playing = viewState.playing, listener)
           }
         }
       }
@@ -111,7 +111,7 @@ private fun CloseIcon(listener: BookPlayListener) {
 }
 
 @Composable
-private fun PlayRow(listener: BookPlayListener) {
+private fun PlayRow(playing: Boolean, listener: BookPlayListener) {
   Row(
     modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
@@ -119,7 +119,7 @@ private fun PlayRow(listener: BookPlayListener) {
   ) {
     SleepTimerIcon(listener)
     Rewind(listener)
-    PlayPause(listener)
+    PlayPause(playing, listener)
     FastForward(listener)
     PlaybackSpeedIcon(listener)
   }

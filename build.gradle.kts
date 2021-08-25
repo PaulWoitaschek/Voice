@@ -40,7 +40,7 @@ allprojects {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
       }
-      compileSdkVersion(30)
+      compileSdkVersion(31)
 
       composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
@@ -64,7 +64,8 @@ allprojects {
         "-Xopt-in=kotlinx.coroutines.FlowPreview",
         "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
+        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+        "-Xopt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
       )
     }
   }
