@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-  id("com.github.ben-manes.versions") version "0.38.0"
+  id("com.github.ben-manes.versions") version "0.39.0"
   id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 }
 
@@ -100,4 +100,26 @@ tasks {
   }
 }
 
-apply(from = "dependency_updates.gradle")
+enum class DependencyStability(private val regex: Regex) {
+  Dev(".*dev.*".toRegex()),
+  Eap("eap".toRegex()),
+  Milestone("M1".toRegex()),
+  Alpha("alpha".toRegex()),
+  Beta("beta".toRegex()),
+  Rc("rc".toRegex()),
+  Stable(".*".toRegex());
+
+  companion object {
+    fun ofVersion(version: String): DependencyStability {
+      return values().first {
+        it.regex.containsMatchIn(version)
+      }
+    }
+  }
+}
+
+tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+  rejectVersionIf {
+    DependencyStability.ofVersion(candidate.version) < DependencyStability.ofVersion(currentVersion)
+  }
+}
