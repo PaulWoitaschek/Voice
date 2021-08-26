@@ -2,7 +2,6 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
-import android.util.Log
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
@@ -125,7 +124,9 @@ class MediaScanner
   private fun containsAny(string: String, keywords: Array<String>): Boolean {
     val test = string.lowercase()
     for(keyword in keywords){
-      if(test.contains(keyword)){
+      //match lowercase, followed by a space (optional) or number(optional) but not if followed directly by character
+      val regex = ("""(?i)""" + keyword + """[^a-zäöüßèéáàíì] *[0-9]*""").toRegex()
+      if(regex.matches(input = test)){
         return true
       }
     }
