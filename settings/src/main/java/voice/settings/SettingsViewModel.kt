@@ -4,6 +4,7 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.common.pref.PrefKeys
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 import javax.inject.Named
@@ -19,6 +20,9 @@ class SettingsViewModel
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>
 ) {
+
+  private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
+  val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
 
   fun viewState(): Flow<SettingsViewState> {
     return combine(
@@ -37,6 +41,10 @@ class SettingsViewModel
     }
   }
 
+  fun close() {
+    SettingsViewEffect.CloseScreen.emit()
+  }
+
   fun toggleResumeOnReplug() {
     resumeOnReplugPref.value = !resumeOnReplugPref.value
   }
@@ -45,11 +53,23 @@ class SettingsViewModel
     useDarkTheme.value = !useDarkTheme.value
   }
 
-  fun changeSeekAmount(seconds: Int) {
+  fun seekAmountChanged(seconds: Int) {
     seekTimePref.value = seconds
   }
 
-  fun changeAutoRewindAmount(seconds: Int) {
+  fun autoRewindAmountChanged(seconds: Int) {
     autoRewindAmountPref.value = seconds
+  }
+
+  fun openSupport() {
+    SettingsViewEffect.ToSupport.emit()
+  }
+
+  fun openTranslations() {
+    SettingsViewEffect.ToTranslations.emit()
+  }
+
+  private fun SettingsViewEffect.emit() {
+    _viewEffects.tryEmit(this)
   }
 }

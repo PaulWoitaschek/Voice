@@ -9,7 +9,6 @@
           <package name="" alias="false" withSubpackages="true" />
           <package name="javax" alias="false" withSubpackages="true" />
           <package name="kotlin" alias="false" withSubpackages="true" />
-          <package name="" alias="true" withSubpackages="true" />
         </value>
       </option>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />

@@ -3,22 +3,20 @@ package voice.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
-import com.bluelinelabs.conductor.Controller
 import com.squareup.anvil.annotations.ContributesTo
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.rootComponentAs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import voice.common.compose.ComposeController
 import voice.settings.views.Settings
 import javax.inject.Inject
 
-class SettingsController : Controller() {
+class SettingsController : ComposeController() {
 
   @Inject
   lateinit var viewModel: SettingsViewModel
@@ -27,42 +25,27 @@ class SettingsController : Controller() {
     rootComponentAs<Component>().inject(this)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
-    val listener = object : SettingsViewListener {
-      override fun close() {
-        router.popController(this@SettingsController)
-      }
-
-      override fun toggleResumeOnReplug() {
-        viewModel.toggleResumeOnReplug()
-      }
-
-      override fun seekAmountChanged(seconds: Int) {
-        viewModel.changeSeekAmount(seconds)
-      }
-
-      override fun autoRewindAmountChanged(seconds: Int) {
-        viewModel.changeAutoRewindAmount(seconds)
-      }
-
-      override fun openSupport() {
-        visitUri("https://github.com/PaulWoitaschek/Voice".toUri())
-      }
-
-      override fun openTranslations() {
-        visitUri("https://www.transifex.com/projects/p/voice".toUri())
-      }
-
-      override fun toggleDarkTheme() {
-        viewModel.toggleDarkTheme()
+  override fun onCreateView(scope: CoroutineScope) {
+    scope.launch {
+      viewModel.viewEffects.collect {
+        when (it) {
+          SettingsViewEffect.CloseScreen -> {
+            router.popController(this@SettingsController)
+          }
+          SettingsViewEffect.ToSupport -> {
+            visitUri("https://github.com/PaulWoitaschek/Voice".toUri())
+          }
+          SettingsViewEffect.ToTranslations -> {
+            visitUri("https://www.transifex.com/projects/p/voice".toUri())
+          }
+        }
       }
     }
-    return ComposeView(container.context).apply {
-      setContent {
-        val viewState = viewModel.viewState().collectAsState(SettingsViewState.Empty)
-        Settings(viewState.value, listener)
-      }
-    }
+  }
+
+  @Composable
+  override fun Content() {
+    Settings(viewModel)
   }
 
   private fun visitUri(uri: Uri) {
