@@ -9,7 +9,6 @@ import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -19,22 +18,17 @@ import kotlin.math.roundToInt
 
 @Composable
 fun TimeSettingDialog(
-  showDialog: MutableState<Boolean>,
   title: String,
   currentSeconds: Int,
   @PluralsRes textPluralRes: Int,
   minSeconds: Int,
   maxSeconds: Int,
-  onSecondsConfirmed: (Int) -> Unit
+  onSecondsConfirmed: (Int) -> Unit,
+  onDismiss: () -> Unit
 ) {
-  if (!showDialog.value) {
-    return
-  }
   val sliderValue = remember { mutableStateOf(currentSeconds.toFloat()) }
   AlertDialog(
-    onDismissRequest = {
-      showDialog.value = false
-    },
+    onDismissRequest = onDismiss,
     title = {
       ProvideTextStyle(MaterialTheme.typography.h6) {
         Text(text = title)
@@ -64,7 +58,7 @@ fun TimeSettingDialog(
       TextButton(
         onClick = {
           onSecondsConfirmed(sliderValue.value.roundToInt())
-          showDialog.value = false
+          onDismiss()
         }
       ) {
         Text(stringResource(R.string.dialog_confirm))
@@ -73,7 +67,7 @@ fun TimeSettingDialog(
     dismissButton = {
       TextButton(
         onClick = {
-          showDialog.value = false
+          onDismiss()
         }
       ) {
         Text(stringResource(R.string.dialog_cancel))

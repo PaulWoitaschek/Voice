@@ -13,8 +13,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,23 +62,44 @@ internal fun Settings(viewModel: SettingsViewModel) {
         DarkThemeRow(viewState.useDarkTheme, viewModel::toggleDarkTheme)
       }
       ResumeOnReplugRow(viewState.resumeOnReplug, viewModel::toggleResumeOnReplug)
-      val showSeekTimeDialog = remember { mutableStateOf(false) }
-      val showAutoRewindDialog = remember { mutableStateOf(false) }
       SeekTimeRow(viewState.seekTimeInSeconds) {
-        showSeekTimeDialog.value = true
+        viewModel.onSeekAmountRowClicked()
       }
       AutoRewindRow(viewState.autoRewindInSeconds) {
-        showAutoRewindDialog.value = true
+        viewModel.onAutoRewindRowClicked()
       }
-      SeekAmountDialog(showSeekTimeDialog, viewState.seekTimeInSeconds, viewModel::seekAmountChanged)
-      AutoRewindAmountDialog(showAutoRewindDialog, viewState.autoRewindInSeconds, viewModel::autoRewindAmountChanged)
-      if (viewState.dialog == SettingsViewState.Dialog.Contribute) {
-        ContributeDialog(
-          suggestionsClicked = { viewModel.openSupport() },
-          translationsClicked = { viewModel.openTranslations() },
-          onDismiss = { viewModel.dismissContributeDialog() }
-        )
-      }
+      Dialog(viewState, viewModel)
+    }
+  }
+}
+
+@Composable
+private fun Dialog(
+  viewState: SettingsViewState,
+  viewModel: SettingsViewModel
+) {
+  val dialog = viewState.dialog ?: return
+  when (dialog) {
+    SettingsViewState.Dialog.Contribute -> {
+      ContributeDialog(
+        suggestionsClicked = { viewModel.openSupport() },
+        translationsClicked = { viewModel.openTranslations() },
+        onDismiss = { viewModel.dismissDialog() }
+      )
+    }
+    SettingsViewState.Dialog.AutoRewindAmount -> {
+      AutoRewindAmountDialog(
+        currentSeconds = viewState.autoRewindInSeconds,
+        onSecondsConfirmed = viewModel::autoRewindAmountChanged,
+        onDismiss = viewModel::dismissDialog
+      )
+    }
+    SettingsViewState.Dialog.SeekTime -> {
+      SeekAmountDialog(
+        currentSeconds = viewState.seekTimeInSeconds,
+        onSecondsConfirmed = viewModel::seekAmountChanged,
+        onDismiss = viewModel::dismissDialog
+      )
     }
   }
 }

@@ -62,25 +62,33 @@ class SettingsViewModel
     seekTimePref.value = seconds
   }
 
+  fun onSeekAmountRowClicked() {
+    dialog.tryEmit(SettingsViewState.Dialog.SeekTime)
+  }
+
   fun autoRewindAmountChanged(seconds: Int) {
     autoRewindAmountPref.value = seconds
+  }
+
+  fun onAutoRewindRowClicked() {
+    dialog.tryEmit(SettingsViewState.Dialog.AutoRewindAmount)
   }
 
   fun onLikeClicked() {
     dialog.tryEmit(SettingsViewState.Dialog.Contribute)
   }
 
-  fun dismissContributeDialog() {
+  fun dismissDialog() {
     dialog.tryEmit(null)
   }
 
   fun openSupport() {
-    dialog.tryEmit(null)
+    dismissDialog()
     SettingsViewEffect.ToSupport.emit()
   }
 
   fun openTranslations() {
-    dialog.tryEmit(null)
+    dismissDialog()
     SettingsViewEffect.ToTranslations.emit()
   }
 

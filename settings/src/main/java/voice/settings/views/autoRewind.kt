@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -14,9 +13,10 @@ import voice.settings.R
 @Composable
 internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () -> Unit) {
   ListItem(
-    modifier = Modifier.clickable {
-      openAutoRewindDialog()
-    }
+    modifier = Modifier
+      .clickable {
+        openAutoRewindDialog()
+      }
       .fillMaxWidth(),
     text = {
       Text(text = stringResource(R.string.pref_auto_rewind_title))
@@ -35,17 +35,17 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
 
 @Composable
 internal fun AutoRewindAmountDialog(
-  showDialog: MutableState<Boolean>,
   currentSeconds: Int,
-  onSecondsConfirmed: (Int) -> Unit
+  onSecondsConfirmed: (Int) -> Unit,
+  onDismiss: () -> Unit
 ) {
   TimeSettingDialog(
-    showDialog = showDialog,
     title = stringResource(R.string.pref_seek_time),
     currentSeconds = currentSeconds,
     minSeconds = 0,
     maxSeconds = 20,
     textPluralRes = R.plurals.seconds,
-    onSecondsConfirmed = onSecondsConfirmed
+    onSecondsConfirmed = onSecondsConfirmed,
+    onDismiss = onDismiss
   )
 }

@@ -21,6 +21,6 @@ data class SettingsViewState(
   }
 
   enum class Dialog {
-    Contribute
+    Contribute, AutoRewindAmount, SeekTime
   }
 }
