@@ -5,7 +5,8 @@ data class SettingsViewState(
   val showDarkThemePref: Boolean,
   val resumeOnReplug: Boolean,
   val seekTimeInSeconds: Int,
-  val autoRewindInSeconds: Int
+  val autoRewindInSeconds: Int,
+  val dialog: Dialog?
 ) {
 
   companion object {
@@ -14,7 +15,12 @@ data class SettingsViewState(
       showDarkThemePref = false,
       resumeOnReplug = false,
       seekTimeInSeconds = 0,
-      autoRewindInSeconds = 0
+      autoRewindInSeconds = 0,
+      dialog = null
     )
+  }
+
+  enum class Dialog {
+    Contribute
   }
 }

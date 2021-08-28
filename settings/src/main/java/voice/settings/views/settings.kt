@@ -25,7 +25,6 @@ import voice.settings.SettingsViewState
 @Composable
 internal fun Settings(viewModel: SettingsViewModel) {
   val viewState by viewModel.viewState().collectAsState(SettingsViewState.Empty)
-  val showContributeDialog = remember { mutableStateOf(false) }
   Scaffold(
     topBar = {
       TopAppBar(
@@ -35,7 +34,7 @@ internal fun Settings(viewModel: SettingsViewModel) {
         actions = {
           IconButton(
             onClick = {
-              showContributeDialog.value = true
+              viewModel.onLikeClicked()
             },
             content = {
               Icon(
@@ -75,11 +74,13 @@ internal fun Settings(viewModel: SettingsViewModel) {
       }
       SeekAmountDialog(showSeekTimeDialog, viewState.seekTimeInSeconds, viewModel::seekAmountChanged)
       AutoRewindAmountDialog(showAutoRewindDialog, viewState.autoRewindInSeconds, viewModel::autoRewindAmountChanged)
-      ContributeDialog(
-        showContributeDialog,
-        suggestionsClicked = { viewModel.openSupport() },
-        translationsClicked = { viewModel.openTranslations() }
-      )
+      if (viewState.dialog == SettingsViewState.Dialog.Contribute) {
+        ContributeDialog(
+          suggestionsClicked = { viewModel.openSupport() },
+          translationsClicked = { viewModel.openTranslations() },
+          onDismiss = { viewModel.dismissContributeDialog() }
+        )
+      }
     }
   }
 }

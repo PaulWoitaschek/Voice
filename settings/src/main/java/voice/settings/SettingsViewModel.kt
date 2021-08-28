@@ -5,6 +5,7 @@ import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.common.pref.PrefKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 import javax.inject.Named
@@ -24,19 +25,23 @@ class SettingsViewModel
   private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
 
+  private val dialog = MutableStateFlow<SettingsViewState.Dialog?>(null)
+
   fun viewState(): Flow<SettingsViewState> {
     return combine(
       useDarkTheme.flow,
       resumeOnReplugPref.flow,
       autoRewindAmountPref.flow,
-      seekTimePref.flow
-    ) { useDarkTheme, resumeOnReplug, autoRewindAmount, seekTime ->
+      seekTimePref.flow,
+      dialog
+    ) { useDarkTheme, resumeOnReplug, autoRewindAmount, seekTime, dialog ->
       SettingsViewState(
         useDarkTheme = useDarkTheme,
         showDarkThemePref = DARK_THEME_SETTABLE,
         resumeOnReplug = resumeOnReplug,
         seekTimeInSeconds = seekTime,
-        autoRewindInSeconds = autoRewindAmount
+        autoRewindInSeconds = autoRewindAmount,
+        dialog = dialog
       )
     }
   }
@@ -61,11 +66,21 @@ class SettingsViewModel
     autoRewindAmountPref.value = seconds
   }
 
+  fun onLikeClicked() {
+    dialog.tryEmit(SettingsViewState.Dialog.Contribute)
+  }
+
+  fun dismissContributeDialog() {
+    dialog.tryEmit(null)
+  }
+
   fun openSupport() {
+    dialog.tryEmit(null)
     SettingsViewEffect.ToSupport.emit()
   }
 
   fun openTranslations() {
+    dialog.tryEmit(null)
     SettingsViewEffect.ToTranslations.emit()
   }
 
