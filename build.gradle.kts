@@ -1,12 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
-import deps.configureBaseRepos
-
 @Suppress("RemoveRedundantQualifierName")
 buildscript {
-
-  deps.configureBaseRepos(repositories)
-
   dependencies {
     val libs = project.extensions.getByType<VersionCatalogsExtension>()
       .named("libs") as org.gradle.accessors.dm.LibrariesForLibs
@@ -17,7 +12,7 @@ buildscript {
 }
 
 plugins {
-  id("com.github.ben-manes.versions") version "0.38.0"
+  id("com.github.ben-manes.versions") version "0.39.0"
   id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 }
 
@@ -26,8 +21,6 @@ tasks.wrapper {
 }
 
 allprojects {
-  configureBaseRepos(repositories)
-
   plugins.withType(com.android.build.gradle.internal.plugins.BasePlugin::class.java) {
     with(extension) {
       defaultConfig {
@@ -40,7 +33,7 @@ allprojects {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
       }
-      compileSdkVersion(30)
+      compileSdkVersion(31)
 
       composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
@@ -64,7 +57,8 @@ allprojects {
         "-Xopt-in=kotlinx.coroutines.FlowPreview",
         "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
+        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+        "-Xopt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
       )
     }
   }
@@ -106,4 +100,26 @@ tasks {
   }
 }
 
-apply(from = "dependency_updates.gradle")
+enum class DependencyStability(private val regex: Regex) {
+  Dev(".*dev.*".toRegex()),
+  Eap("eap".toRegex()),
+  Milestone("M1".toRegex()),
+  Alpha("alpha".toRegex()),
+  Beta("beta".toRegex()),
+  Rc("rc".toRegex()),
+  Stable(".*".toRegex());
+
+  companion object {
+    fun ofVersion(version: String): DependencyStability {
+      return values().first {
+        it.regex.containsMatchIn(version)
+      }
+    }
+  }
+}
+
+tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+  rejectVersionIf {
+    DependencyStability.ofVersion(candidate.version) < DependencyStability.ofVersion(currentVersion)
+  }
+}

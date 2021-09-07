@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.insets.ProvideWindowInsets
 import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.Dispatchers
@@ -37,9 +36,7 @@ fun VoiceTheme(
     )
   }
   MaterialTheme(colors = colors) {
-    ProvideWindowInsets {
-      content()
-    }
+    content()
   }
 }
 

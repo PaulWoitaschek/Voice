@@ -18,7 +18,7 @@
         <item name="colorControlNormal">@color/colorOnSurface</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">
             @bool/use_light_navigation
         </item>
