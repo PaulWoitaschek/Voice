@@ -21,14 +21,23 @@ class FolderOverviewHolder(
   fun bind(model: FolderModel) {
     // set text
     binding.textView.text = model.folder
-
     // set correct image
-    val drawableId = if (model.isCollection) R.drawable.folder_multiple else R.drawable.ic_folder
+    val drawableId = when (model.type) {
+      FolderModel.FOLDER_NO_COLLECTION -> R.drawable.ic_folder
+      FolderModel.FOLDER_COLLECTION -> R.drawable.folder_multiple
+      FolderModel.FOLDER_RECURSIVE -> R.drawable.folder_recursive
+      else -> R.drawable.ic_folder
+    }
     binding.icon.setImageResource(drawableId)
 
     // set content description
-    val contentDescriptionId =
-      if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
+    val contentDescriptionId = when (model.type) {
+      FolderModel.FOLDER_NO_COLLECTION -> R.string.folder_add_single_book
+      FolderModel.FOLDER_COLLECTION -> R.string.folder_add_collection
+      FolderModel.FOLDER_RECURSIVE -> R.string.folder_add_recursive_book
+      else -> R.string.folder_add_single_book
+    }
+
     val contentDescription = itemView.context.getString(contentDescriptionId)
     binding.icon.contentDescription = contentDescription
   }

@@ -54,6 +54,7 @@
               android:contentDescription="@string/folder_add_recursive_book"
               app:fab_title="@string/folder_add_recursive_book" />
 
+            <!--
             <com.getbase.floatingactionbutton.FloatingActionButton
               android:id="@+id/addAsSingle"
               android:layout_width="wrap_content"
@@ -73,7 +74,7 @@
               app:fab_colorPressed="?attr/colorAccentDark"
               app:fab_size="mini"
               app:fab_title="@string/folder_add_collection" />
-
+            -->
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     </FrameLayout>

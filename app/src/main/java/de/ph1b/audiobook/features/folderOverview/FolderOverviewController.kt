@@ -39,12 +39,12 @@ class FolderOverviewController :
     addRecursive.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.RECURSIVE)
     }
-    addAsSingle.setOnClickListener {
+    /*addAsSingle.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
     }
     addAsLibrary.setOnClickListener {
       startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
-    }
+    }*/
 
     overlay.isInvisible = true
 
@@ -72,12 +72,13 @@ class FolderOverviewController :
 
     fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-    addAsSingle.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_folder)!!.tinted(Color.WHITE))
-    addRecursive.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.folder_multiple)!!.tinted(Color.WHITE))
-    addAsLibrary.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.folder_multiple)!!.tinted(Color.WHITE))
-    addAsSingle.title =
+    //addAsSingle.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_folder)!!.tinted(Color.WHITE))
+    addRecursive.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.folder_recursive)!!.tinted(Color.WHITE))
+    //addAsLibrary.setIconDrawable(AppCompatResources.getDrawable(context, R.drawable.folder_multiple)!!.tinted(Color.WHITE))
+    /*addAsSingle.title =
       "${context.getString(R.string.folder_add_single_book)}\n${context.getString(R.string.for_example)} Harry Potter 4"
-    addAsLibrary.title = "${context.getString(R.string.folder_add_collection)}\n${context.getString(R.string.for_example)} AudioBooks"
+    addAsLibrary.title = "${context.getString(R.string.folder_add_collection)}\n${context.getString(R.string.for_example)} AudioBooks"*/
+    addRecursive.title = "${context.getString(R.string.folder_add_recursive_book)}"
 
     setupToolbar()
   }

@@ -2,6 +2,9 @@ package de.ph1b.audiobook.features.folderOverview
 
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.features.folderOverview.FolderModel.Companion.FOLDER_COLLECTION
+import de.ph1b.audiobook.features.folderOverview.FolderModel.Companion.FOLDER_NO_COLLECTION
+import de.ph1b.audiobook.features.folderOverview.FolderModel.Companion.FOLDER_RECURSIVE
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.mvp.Presenter
 import kotlinx.coroutines.flow.collect
@@ -30,11 +33,11 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   override fun onAttach(view: FolderOverviewController) {
     val collectionFolderStream = collectionBookFolderPref.flow
-      .map { set -> set.map { FolderModel(it, true) } }
+      .map { set -> set.map { FolderModel(it, FOLDER_COLLECTION) } }
     val singleFolderStream = singleBookFolderPref.flow
-      .map { set -> set.map { FolderModel(it, false) } }
+      .map { set -> set.map { FolderModel(it, FOLDER_NO_COLLECTION) } }
     val recursiveFolderStream = recursiveBookFolderPref.flow
-      .map { set -> set.map { FolderModel(it, false) } }
+      .map { set -> set.map { FolderModel(it, FOLDER_RECURSIVE) } }
 
     onAttachScope.launch {
       combine(collectionFolderStream, singleFolderStream, recursiveFolderStream) { t1, t2, t3 -> t1 + t2 + t3}

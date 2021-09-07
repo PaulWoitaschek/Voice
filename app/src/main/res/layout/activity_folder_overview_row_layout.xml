@@ -5,15 +5,15 @@
     android:layout_height="56dp">
 
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:padding="8dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_folder"
-        tools:ignore="ContentDescription" />
+      android:id="@+id/icon"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:padding="8dp"
+      android:scaleType="centerInside"
+      android:src="@drawable/ic_folder"
+      tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView"
