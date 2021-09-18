@@ -1,7 +1,7 @@
 plugins {
   id("com.android.library")
   kotlin("android")
-  id("com.squareup.anvil")
+  alias(libs.plugins.anvil)
 }
 
 anvil {

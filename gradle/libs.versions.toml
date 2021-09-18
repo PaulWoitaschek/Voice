@@ -92,3 +92,4 @@ compose = [
 
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+anvil = { id = "com.squareup.anvil", version = "2.3.4" }

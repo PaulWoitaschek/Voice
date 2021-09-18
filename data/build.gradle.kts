@@ -3,7 +3,7 @@ plugins {
   id("kotlin-android")
   alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")
-  id("com.squareup.anvil")
+  alias(libs.plugins.anvil)
 }
 
 anvil {
