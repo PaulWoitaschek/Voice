@@ -4,7 +4,7 @@ plugins {
   id("com.android.application")
   id("kotlin-android")
   id("kotlin-parcelize")
-  id("kotlinx-serialization")
+  alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")
   id("com.squareup.anvil")
 }

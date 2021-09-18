@@ -1,7 +1,7 @@
 plugins {
   id("com.android.library")
   id("kotlin-android")
-  id("kotlinx-serialization")
+  alias(libs.plugins.kotlin.serialization)
   id("com.squareup.anvil")
 }
 

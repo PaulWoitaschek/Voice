@@ -40,7 +40,6 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-serialization-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -90,3 +89,6 @@ compose = [
   "viewModel-savedState",
   "viewModel-compose",
 ]
+
+[plugins]
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
