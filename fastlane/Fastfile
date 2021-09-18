@@ -14,7 +14,7 @@ platform :android do
   end
 
   lane :build_apks do
-    gradle(task: 'app:assembleRelease -x lint -x lintVitalRelease')
+    gradle_with_default_flags(task: 'app:assembleRelease -x lint -x lintVitalRelease')
     folder = ARTIFACT_FOLDER + '/apk'
     copy_artifacts(
       target_path: folder,
@@ -23,12 +23,12 @@ platform :android do
   end
 
   lane :unit_tests do
-    gradle(task: 'allUnitTests')
+    gradle_with_default_flags(task: 'allUnitTests')
   end
 
   lane :lint do
     begin
-      gradle(task: 'app:lintRelease')
+      gradle_with_default_flags(task: 'app:lintRelease')
     ensure
       folder = ARTIFACT_FOLDER + '/lint'
       copy_artifacts(
@@ -39,6 +39,12 @@ platform :android do
   end
 
   lane :ktLint do
-    gradle(task: 'ktlintCheck')
+    gradle_with_default_flags(task: 'ktlintCheck')
+  end
+
+  def gradle_with_default_flags(task:, flags: '')
+    flags += ' --console=plain'
+    flags += ' --no-configuration-cache'
+    gradle(task: task, flags: flags)
   end
 end
