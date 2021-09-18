@@ -6,8 +6,8 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.38.1"
 exoPlayer = "2.14.0"
-kotlin = "1.5.21"
-compose = "1.1.0-alpha02"
+kotlin = "1.5.30"
+compose = "1.1.0-alpha04"
 
 [libraries]
 androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
@@ -90,4 +90,3 @@ compose = [
   "viewModel-savedState",
   "viewModel-compose",
 ]
-

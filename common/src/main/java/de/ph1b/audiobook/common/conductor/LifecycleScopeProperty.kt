@@ -29,13 +29,16 @@ class LifecycleScopeProperty(private val lifecycle: Lifecycle) : ReadOnlyPropert
     lifecycle.addObserver(
       object : LifecycleEventObserver {
         override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-          @Suppress("NON_EXHAUSTIVE_WHEN")
           when (event) {
             ON_START -> initScope(STARTED)
             ON_RESUME -> initScope(RESUMED)
             ON_PAUSE -> cancelScope(RESUMED)
             ON_STOP -> cancelScope(STARTED)
             ON_DESTROY -> cancelScope(CREATED)
+            Lifecycle.Event.ON_CREATE,
+            Lifecycle.Event.ON_ANY -> {
+              // no-op
+            }
           }
         }
       })
