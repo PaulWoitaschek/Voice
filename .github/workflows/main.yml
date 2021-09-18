@@ -12,16 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '2.7.2'
+        bundler-cache: true
+        
+    - run: bundle exec fastlane ci
 
-    - name: Fastlane
-      uses: maierj/fastlane-action@v2.0.1
-      with:
-        lane: ci
-
-    - uses: actions/upload-artifact@v1.0.0
+    - uses: actions/upload-artifact@v2
       if: always()
       with:
         name: "Artifacts"
