@@ -10,7 +10,7 @@ kotlin = "1.5.30"
 compose = "1.1.0-alpha04"
 
 [libraries]
-androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
+androidPluginForGradle = "com.android.tools.build:gradle:7.0.1"
 material = "com.google.android.material:material:1.3.0"
 floatingActionButton = "com.getbase:floatingactionbutton:1.10.1"
 materialCab = "com.afollestad:material-cab:2.0.1"
@@ -32,7 +32,7 @@ transitions = "androidx.transition:transition:1.4.0"
 palette = "androidx.palette:palette:1.0.0"
 media = "androidx.media:media:1.2.1"
 androidxCore = "androidx.core:core-ktx:1.6.0"
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 viewModel-savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1"
 viewModel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
 
@@ -40,7 +40,7 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-serialization-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+serialization-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }

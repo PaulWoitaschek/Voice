@@ -1,13 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
-@Suppress("RemoveRedundantQualifierName")
 buildscript {
   dependencies {
-    val libs = project.extensions.getByType<VersionCatalogsExtension>()
-      .named("libs") as org.gradle.accessors.dm.LibrariesForLibs
-    classpath(libs.androidGradlePlugin)
-    classpath(libs.kotlin.gradlePlugin)
-    classpath(libs.serialization.gradlePlugin)
+    classpath(libs.androidPluginForGradle)
+    classpath(libs.kotlin.pluginForGradle)
+    classpath(libs.serialization.pluginForGradle)
   }
 }
 
