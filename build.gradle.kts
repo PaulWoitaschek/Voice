@@ -62,6 +62,7 @@ tasks {
       val tasks = subProject.tasks
       (
         tasks.findByName("testReleaseUnitTest")
+          ?: tasks.findByName("testDebugUnitTest")
           ?: tasks.findByName("test")
         ) as? Test
     }
