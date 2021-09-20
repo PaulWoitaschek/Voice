@@ -34,7 +34,7 @@ class Migration39to40Test {
           db.execSQL(BookTable.CREATE_TABLE)
         }
 
-        override fun onUpgrade(db: SupportSQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
         }
       })
       .build()
@@ -75,7 +75,7 @@ class Migration39to40Test {
     put(BookTable.TYPE, "COLLECTION_FOLDER")
   }
 
-  object BookTable {
+  private object BookTable {
     const val ID = "bookId"
     const val NAME = "bookName"
     const val AUTHOR = "bookAuthor"
