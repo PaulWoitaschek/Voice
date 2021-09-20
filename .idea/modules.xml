@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Voice.iml" filepath="$PROJECT_DIR$/.idea/Voice.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Voice.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Voice.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Voice.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/Voice.buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/Voice.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" filepath="$PROJECT_DIR$/.idea/modules/covercolorextractor/Voice.covercolorextractor.iml" />
@@ -19,6 +18,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/settings/ui/Voice.settings.ui.iml" filepath="$PROJECT_DIR$/.idea/modules/settings/ui/Voice.settings.ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sleepTimer/Voice.sleepTimer.iml" filepath="$PROJECT_DIR$/.idea/modules/sleepTimer/Voice.sleepTimer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Voice.strings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" />
     </modules>
   </component>
 </project>

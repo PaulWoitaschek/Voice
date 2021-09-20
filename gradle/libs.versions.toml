@@ -33,8 +33,10 @@ palette = "androidx.palette:palette:1.0.0"
 media = "androidx.media:media:1.2.1"
 androidxCore = "androidx.core:core-ktx:1.6.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 viewModel-savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1"
 viewModel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }

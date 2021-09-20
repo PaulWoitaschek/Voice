@@ -1,8 +1,7 @@
 import java.util.Properties
 
 plugins {
-  id("com.android.application")
-  id("kotlin-android")
+  id("voice-android-app")
   id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")

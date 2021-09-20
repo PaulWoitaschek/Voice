@@ -17,33 +17,8 @@ tasks.wrapper {
 }
 
 allprojects {
-  plugins.withType(com.android.build.gradle.internal.plugins.BasePlugin::class.java) {
-    with(extension) {
-      defaultConfig {
-        multiDexEnabled = true
-        minSdk = 24
-        targetSdk = 30
-      }
-      compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-      }
-      compileSdkVersion(31)
-
-      composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
-      }
-
-      dependencies {
-        add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:1.1.1")
-      }
-    }
-  }
-
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-      jvmTarget = "1.8"
       freeCompilerArgs = listOf(
         "-Xinline-classes",
         "-progressive",

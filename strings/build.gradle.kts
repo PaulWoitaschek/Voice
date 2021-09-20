@@ -1,5 +1,5 @@
 plugins {
-  id("com.android.library")
+  id("voice-android-library")
 }
 
 android {

@@ -8,6 +8,7 @@ pluginManagement {
     gradlePluginPortal()
     mavenCentral()
     google()
+    includeBuild("plugins")
   }
 }
 

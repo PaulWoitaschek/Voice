@@ -1,6 +1,5 @@
 plugins {
-  id("com.android.library")
-  kotlin("android")
+  id("voice-android-library")
   alias(libs.plugins.anvil)
 }
 
