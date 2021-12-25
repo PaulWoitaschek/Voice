@@ -30,7 +30,7 @@ class SelectChapterViewModel
 
     if (book == null) {
       Timber.d("no book found for $bookId. CloseScreen")
-      _viewEffects.offer(SelectChapterViewEffect.CloseScreen)
+      _viewEffects.trySend(SelectChapterViewEffect.CloseScreen)
       return SelectChapterViewState(emptyList(), null)
     }
 
@@ -51,7 +51,7 @@ class SelectChapterViewModel
           currentIndex++
           if (currentIndex == index) {
             player.setPosition(mark.startMs, chapter.file)
-            _viewEffects.offer(SelectChapterViewEffect.CloseScreen)
+            _viewEffects.trySend(SelectChapterViewEffect.CloseScreen)
             return@launch
           }
         }

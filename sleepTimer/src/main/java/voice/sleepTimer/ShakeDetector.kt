@@ -17,7 +17,7 @@ class ShakeDetector
       return@callbackFlow
     }
 
-    val listener = ShakeListener { offer(Unit) }
+    val listener = ShakeListener { trySend(Unit) }
     val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
     awaitClose {

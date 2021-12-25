@@ -80,14 +80,14 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         super.onPageStarted(view, url, favicon)
 
         Timber.i("page started with $url")
-        webViewIsLoading.offer(true)
+        webViewIsLoading.trySend(true)
       }
 
       override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
 
         Timber.i("page stopped with $url")
-        webViewIsLoading.offer(false)
+        webViewIsLoading.trySend(false)
       }
 
       @Suppress("OverridingDeprecatedMember")

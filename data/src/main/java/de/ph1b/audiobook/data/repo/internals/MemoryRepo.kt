@@ -21,7 +21,7 @@ class MemoryRepo
       removeAll { it.id == book.id }
       add(book)
     }
-    books.offer(updated)
+    books.trySend(updated)
   }
 
   fun updateBookContent(content: BookContent): Book? {
@@ -57,7 +57,7 @@ class MemoryRepo
     val updatedBooks = books.toMutableList().apply {
       set(index, updated)
     }
-    this.books.offer(updatedBooks)
+    this.books.trySend(updatedBooks)
     return updated
   }
 

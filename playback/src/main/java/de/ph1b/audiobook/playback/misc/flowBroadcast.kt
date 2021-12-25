@@ -12,7 +12,7 @@ fun Context.flowBroadcastReceiver(filter: IntentFilter): Flow<Intent> {
   return callbackFlow {
     val receiver = object : BroadcastReceiver() {
       override fun onReceive(context: Context?, intent: Intent) {
-        offer(intent)
+        trySend(intent)
       }
     }
     registerReceiver(receiver, filter)

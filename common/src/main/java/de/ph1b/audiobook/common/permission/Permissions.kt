@@ -46,7 +46,7 @@ class Permissions(private val activity: Activity) {
   @Suppress("UNUSED_PARAMETER")
   fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     if (requestCode == REQUEST_CODE) {
-      permissionChannel.offer(permissions)
+      permissionChannel.trySend(permissions)
     }
   }
 

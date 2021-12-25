@@ -1,6 +1,8 @@
 package voice.playbackScreen.views
 
 import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -91,12 +93,13 @@ private fun PlayPause(playing: Boolean, listener: BookPlayListener) {
     }
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
-      val playToPause = animatedVectorResource(id = R.drawable.avd_play_to_pause)
+      val playToPause = AnimatedImageVector.animatedVectorResource(id = R.drawable.avd_play_to_pause)
       Icon(
         modifier = Modifier
           .align(Alignment.Center)
           .size(48.dp),
-        painter = playToPause.painterFor(atEnd = playing),
+        painter = rememberAnimatedVectorPainter(animatedImageVector = playToPause,
+          atEnd = playing),
         tint = Color.White,
         contentDescription = stringResource(R.string.play_pause)
       )

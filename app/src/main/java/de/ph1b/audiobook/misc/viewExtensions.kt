@@ -33,7 +33,7 @@ fun SeekBar.onProgressChanged(
 fun SeekBar.progressChangedStream(): Flow<Int> {
   return callbackFlow {
     onProgressChanged(initialNotification = true) { position ->
-      offer(position)
+      trySend(position)
     }
     awaitClose {
       setOnSeekBarChangeListener(null)

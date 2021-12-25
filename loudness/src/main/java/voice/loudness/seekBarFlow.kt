@@ -9,7 +9,7 @@ internal fun SeekBar.progressChangedStream(): Flow<Int> {
   return callbackFlow {
     val listener = object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        offer(progress)
+        trySend(progress)
       }
 
       override fun onStartTrackingTouch(seekBar: SeekBar) {

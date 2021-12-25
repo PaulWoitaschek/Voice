@@ -41,7 +41,7 @@ class SleepTimer
   private var leftSleepTime: Duration
     get() = _leftSleepTime.value
     set(value) {
-      _leftSleepTime.offer(value)
+      _leftSleepTime.trySend(value)
     }
   val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime.asFlow()
 

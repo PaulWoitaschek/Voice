@@ -27,11 +27,11 @@ class AndroidAutoConnectedReceiver @Inject constructor() {
       when (intent?.getStringExtra("media_connection_status")) {
         "media_connected" -> {
           Timber.i("connected")
-          _connected.offer(true)
+          _connected.trySend(true)
         }
         "media_disconnected" -> {
           Timber.i("disconnected")
-          _connected.offer(false)
+          _connected.trySend(false)
         }
       }
     }

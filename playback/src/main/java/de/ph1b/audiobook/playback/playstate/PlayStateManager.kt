@@ -41,7 +41,7 @@ constructor() {
     set(value) {
       if (playStateChannel.value != value) {
         Timber.i("playState set to $value")
-        playStateChannel.offer(value)
+        playStateChannel.trySend(value)
       }
     }
     get() = playStateChannel.value

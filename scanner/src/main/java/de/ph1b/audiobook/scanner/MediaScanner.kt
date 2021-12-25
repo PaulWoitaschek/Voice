@@ -84,7 +84,7 @@ class MediaScanner
         coverCollector.findCovers(repo.activeBooks())
       }.also {
         it.invokeOnCompletion {
-          _scannerActive.offer(false)
+          _scannerActive.trySend(false)
         }
       }
     }

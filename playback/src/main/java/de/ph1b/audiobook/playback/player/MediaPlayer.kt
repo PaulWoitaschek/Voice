@@ -66,7 +66,7 @@ constructor(
   var bookContent: BookContent?
     get() = _bookContent.value
     private set(value) {
-      _bookContent.offer(value)
+      _bookContent.trySend(value)
     }
   val bookContentFlow: Flow<BookContent> get() = _bookContent.asFlow().filterNotNull()
 
@@ -74,7 +74,7 @@ constructor(
   private var state: PlayerState
     get() = _state.value
     set(value) {
-      if (_state.value != value) _state.offer(value)
+      if (_state.value != value) _state.trySend(value)
     }
 
   private val seekTime: Duration get() = Duration.seconds(seekTimePref.value)

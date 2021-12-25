@@ -8,8 +8,8 @@ buildscript {
 }
 
 plugins {
-  id("com.github.ben-manes.versions") version "0.39.0"
-  id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+  alias(libs.plugins.gradleVersions)
+  alias(libs.plugins.ktlint)
 }
 
 tasks.wrapper {
