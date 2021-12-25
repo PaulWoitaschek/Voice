@@ -3,7 +3,7 @@ package de.ph1b.audiobook.scanner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
-import kotlin.time.seconds
+import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class MetaDataScanResult(

@@ -28,6 +28,7 @@ import voice.playbackScreen.BookPlayListener
 import voice.playbackScreen.BookPlayViewState
 import voice.playbackScreen.R
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun BookPlayView(viewState: BookPlayViewState, listener: BookPlayListener) {
@@ -126,11 +127,11 @@ private fun BookPlayViewPreview() {
     showPreviousNextButtons = true,
     title = "Perry Hotter",
     sleepTime = Duration.ZERO,
-    playedTime = Duration.seconds(100),
+    playedTime = 100.seconds,
     cover = voice.playbackScreen.BookPlayCover(
       "Perry Hotter", UUID.randomUUID()
     ),
-    duration = Duration.seconds(200),
+    duration = 200.seconds,
     playing = true,
     skipSilence = false
   )

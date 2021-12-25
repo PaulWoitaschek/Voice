@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
-import kotlin.time.seconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Analyzes media files for meta data and duration.
@@ -41,13 +41,13 @@ class MediaAnalyzer
     val duration = parsed.format?.duration
     return if (duration != null && duration > 0) {
       Result.Success(
-        duration = duration.seconds.toLongMilliseconds(),
+        duration = duration.seconds.inWholeMilliseconds,
         chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(file),
         author = parsed.findTag(TagType.Artist),
         bookName = parsed.findTag(TagType.Album),
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
-            startMs = metaDataChapter.start.toLongMilliseconds(),
+            startMs = metaDataChapter.start.inWholeMilliseconds,
             name = metaDataChapter.tags?.find(TagType.Title) ?: (index + 1).toString()
           )
         }

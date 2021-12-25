@@ -40,6 +40,7 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @PlaybackScope
 class MediaPlayer
@@ -77,7 +78,7 @@ constructor(
       if (_state.value != value) _state.trySend(value)
     }
 
-  private val seekTime: Duration get() = Duration.seconds(seekTimePref.value)
+  private val seekTime: Duration get() = seekTimePref.value.seconds
   private var autoRewindAmount by autoRewindAmountPref
 
   init {
