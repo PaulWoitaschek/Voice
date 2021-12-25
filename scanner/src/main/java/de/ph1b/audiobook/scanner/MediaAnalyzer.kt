@@ -25,7 +25,7 @@ class MediaAnalyzer
 
     val elements = ffProbeCommand(file)
     val result = ffprobe(*elements.toTypedArray())
-    if (result.code != 0) {
+    if (!result.success) {
       Timber.e("Unable to parse $file, ${result.message}")
       return Result.Failure
     }

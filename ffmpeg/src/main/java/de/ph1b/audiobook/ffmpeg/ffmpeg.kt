@@ -1,39 +1,42 @@
 package de.ph1b.audiobook.ffmpeg
 
-import com.arthenica.mobileffmpeg.Config
-import com.arthenica.mobileffmpeg.FFmpeg
-import com.arthenica.mobileffmpeg.FFprobe
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
+import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.SessionState
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
-/**
- * As ffmpeg doesn't properly handle command return values, we need to synchronize the access so we have no races.
- */
-private val mutex = Mutex()
-
-suspend fun ffprobe(vararg command: String): FfmpegCommandResult = withDispatcherAndLock {
-  val code = FFprobe.execute(command)
-  val message = Config.getLastCommandOutput()
-  FfmpegCommandResult(message, code)
-}
-
-suspend fun ffmpeg(vararg command: String): FfmpegCommandResult = withDispatcherAndLock {
-  val code = FFmpeg.execute(command)
-  val message = Config.getLastCommandOutput()
-  FfmpegCommandResult(message, code)
-}
-
-private suspend inline fun <T> withDispatcherAndLock(crossinline action: () -> T): T {
-  return withContext(Dispatchers.Default) {
-    mutex.withLock {
-      action()
+suspend fun ffprobe(vararg command: String): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
+  val probeSession = FFprobeKit.executeAsync(command) { session ->
+    when (session.state) {
+      SessionState.COMPLETED -> {
+        cont.resume(FfmpegCommandResult(session.output, success = true))
+      }
+      SessionState.FAILED -> {
+        cont.resume(FfmpegCommandResult(session.output, success = false))
+      }
+      else -> {}
     }
   }
+  cont.invokeOnCancellation { probeSession.cancel() }
+}
+
+suspend fun ffmpeg(vararg command: String): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
+  val probeSession = FFmpegKit.executeAsync(command) { session ->
+    when (session.state) {
+      SessionState.COMPLETED -> {
+        cont.resume(FfmpegCommandResult(session.output, success = true))
+      }
+      SessionState.FAILED -> {
+        cont.resume(FfmpegCommandResult(session.output, success = false))
+      }
+      else -> {}
+    }
+  }
+  cont.invokeOnCancellation { probeSession.cancel() }
 }
 
 data class FfmpegCommandResult(
   val message: String,
-  val code: Int
+  val success: Boolean
 )
