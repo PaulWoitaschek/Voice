@@ -25,13 +25,13 @@ constructor() {
     GlobalScope.launch(Dispatchers.Main) {
       playStateChannel.collect {
         if (it == PlayState.Playing || it == PlayState.Stopped) {
-          pauseReason = PauseReason.NONE
+          pauseReason = PauseReason.None
         }
       }
     }
   }
 
-  var pauseReason = PauseReason.NONE
+  var pauseReason = PauseReason.None
 
   fun playStateFlow(): Flow<PlayState> = playStateChannel
 
@@ -52,13 +52,13 @@ constructor() {
   }
 
   enum class PauseReason {
-    NONE,
+    None,
 
     @Suppress("unused")
-    CALL,
-    BECAUSE_HEADSET,
+    Call,
+    BecauseHeadset,
 
     @Suppress("unused")
-    LOSS_TRANSIENT
+    LossTransient
   }
 }

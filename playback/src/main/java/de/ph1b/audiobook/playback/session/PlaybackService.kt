@@ -31,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -161,7 +160,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun headsetPlugged() {
-    if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
+    if (playStateManager.pauseReason == PauseReason.BecauseHeadset) {
       if (resumeOnReplugPref.value) {
         mediaController.transportControls.play()
       }
@@ -171,7 +170,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private fun audioBecomingNoisy() {
     Timber.d("audio becoming noisy. playState=${playStateManager.playState}")
     if (playStateManager.playState === PlayState.Playing) {
-      playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
+      playStateManager.pauseReason = PauseReason.BecauseHeadset
       player.pause(true)
     }
   }
