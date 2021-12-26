@@ -27,10 +27,7 @@ import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,12 +44,13 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
 
   @Inject
   lateinit var repo: BookRepository
+
   @Inject
   lateinit var imageHelper: ImageHelper
 
   private var cab: AttachedCab? = null
 
-  private var webViewIsLoading = ConflatedBroadcastChannel(false)
+  private var webViewIsLoading = MutableStateFlow(false)
   private val book by lazy {
     val id = bundle.getUUID(NI_BOOK_ID)
     repo.bookById(id)!!
@@ -72,7 +70,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       javaScriptEnabled = true
       userAgentString =
         "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-        "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
 
@@ -80,14 +78,14 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         super.onPageStarted(view, url, favicon)
 
         Timber.i("page started with $url")
-        webViewIsLoading.trySend(true)
+        webViewIsLoading.value = true
       }
 
       override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
 
         Timber.i("page stopped with $url")
-        webViewIsLoading.trySend(false)
+        webViewIsLoading.value = false
       }
 
       @Suppress("OverridingDeprecatedMember")
@@ -107,8 +105,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
 
     // after first successful load set visibilities
     lifecycleScope.launch {
-      webViewIsLoading.asFlow()
-        .distinctUntilChanged()
+      webViewIsLoading
         .filter { it }
         .collect {
           // sets progressbar and webviews visibilities correctly once the page is loaded
@@ -225,7 +222,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     refreshItem.actionView = rotateView
 
     lifecycleScope.launch {
-      webViewIsLoading.asFlow()
+      webViewIsLoading
         .filter { it }
         .filter { !rotation.hasStarted() }
         .collect {

@@ -2,10 +2,8 @@ package de.ph1b.audiobook.playback.playstate
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,12 +18,12 @@ class PlayStateManager
 @Inject
 constructor() {
 
-  private val playStateChannel = ConflatedBroadcastChannel(PlayState.Stopped)
+  private val playStateChannel = MutableStateFlow(PlayState.Stopped)
 
   init {
     @Suppress("CheckResult")
     GlobalScope.launch(Dispatchers.Main) {
-      playStateChannel.asFlow().collect {
+      playStateChannel.collect {
         if (it == PlayState.Playing || it == PlayState.Stopped) {
           pauseReason = PauseReason.NONE
         }
@@ -35,13 +33,13 @@ constructor() {
 
   var pauseReason = PauseReason.NONE
 
-  fun playStateFlow(): Flow<PlayState> = playStateChannel.asFlow()
+  fun playStateFlow(): Flow<PlayState> = playStateChannel
 
   var playState: PlayState
     set(value) {
       if (playStateChannel.value != value) {
         Timber.i("playState set to $value")
-        playStateChannel.trySend(value)
+        playStateChannel.value = value
       }
     }
     get() = playStateChannel.value

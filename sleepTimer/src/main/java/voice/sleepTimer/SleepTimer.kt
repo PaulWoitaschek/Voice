@@ -7,10 +7,9 @@ import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -37,13 +36,13 @@ class SleepTimer
   private val scope = MainScope()
   private val sleepTime: Duration get() = sleepTimePref.value.minutes
 
-  private val _leftSleepTime = ConflatedBroadcastChannel(Duration.ZERO)
+  private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
   private var leftSleepTime: Duration
     get() = _leftSleepTime.value
     set(value) {
-      _leftSleepTime.trySend(value)
+      _leftSleepTime.value = value
     }
-  val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime.asFlow()
+  val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime
 
   fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
 

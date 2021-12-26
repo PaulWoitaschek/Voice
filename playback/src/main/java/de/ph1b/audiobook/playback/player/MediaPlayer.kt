@@ -20,11 +20,9 @@ import de.ph1b.audiobook.playback.playstate.PlayerState
 import de.ph1b.audiobook.playback.session.ChangeNotifier
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -40,6 +38,7 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @PlaybackScope
@@ -63,19 +62,19 @@ constructor(
 
   private val scope = MainScope()
 
-  private val _bookContent = ConflatedBroadcastChannel<BookContent?>(null)
+  private val _bookContent = MutableStateFlow<BookContent?>(null)
   var bookContent: BookContent?
     get() = _bookContent.value
     private set(value) {
-      _bookContent.trySend(value)
+      _bookContent.value = value
     }
-  val bookContentFlow: Flow<BookContent> get() = _bookContent.asFlow().filterNotNull()
+  val bookContentFlow: Flow<BookContent> get() = _bookContent.filterNotNull()
 
-  private val _state = ConflatedBroadcastChannel(PlayerState.IDLE)
+  private val _state = MutableStateFlow(PlayerState.IDLE)
   private var state: PlayerState
     get() = _state.value
     set(value) {
-      if (_state.value != value) _state.trySend(value)
+      if (_state.value != value) _state.value = value
     }
 
   private val seekTime: Duration get() = seekTimePref.value.seconds
@@ -130,7 +129,7 @@ constructor(
     }
 
     scope.launch {
-      _state.asFlow().collect {
+      _state.collect {
         Timber.i("state changed to $it")
         // upon end stop the player
         if (it == PlayerState.ENDED) {
@@ -142,7 +141,7 @@ constructor(
     }
 
     scope.launch {
-      _state.asFlow().map { it == PlayerState.PLAYING }.distinctUntilChanged()
+      _state.map { it == PlayerState.PLAYING }.distinctUntilChanged()
         .transformLatest { playing ->
           if (playing) {
             while (true) {
@@ -166,7 +165,7 @@ constructor(
     }
 
     scope.launch {
-      val notIdleFlow = _state.asFlow().filter { it != PlayerState.IDLE }
+      val notIdleFlow = _state.filter { it != PlayerState.IDLE }
       val contentFlow = currentBookIdPref.flow.flatMapLatest { repo.flow(it) }
         .filterNotNull()
         .map { it.content }
@@ -239,9 +238,9 @@ constructor(
       return
 
     bookContent?.let {
-      val currentPos = Duration.milliseconds(player.currentPosition)
+      val currentPos = player.currentPosition.milliseconds
         .coerceAtLeast(Duration.ZERO)
-      val duration = Duration.milliseconds(player.duration)
+      val duration = player.duration.milliseconds
 
       val seekTo = currentPos + skipAmount
       Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
@@ -281,7 +280,7 @@ constructor(
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
       } else {
-        val time = (Duration.milliseconds(previousChapter.duration) - seekTime)
+        val time = (previousChapter.duration.milliseconds - seekTime)
           .coerceAtLeast(Duration.ZERO)
         changePosition(time.inWholeMilliseconds, previousChapter.file)
       }

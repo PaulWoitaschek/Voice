@@ -2,9 +2,8 @@ package de.ph1b.audiobook.data.repo.internals
 
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookContent
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 import javax.inject.Inject
 
@@ -13,15 +12,15 @@ class MemoryRepo
   initial: List<Book>
 ) {
 
-  private val books = ConflatedBroadcastChannel(initial)
-  val flow: Flow<List<Book>> = books.asFlow()
+  private val books = MutableStateFlow(initial)
+  val flow: Flow<List<Book>> = books
 
   fun addOrUpdate(book: Book) {
     val updated = books.value.toMutableList().apply {
       removeAll { it.id == book.id }
       add(book)
     }
-    books.trySend(updated)
+    books.value = updated
   }
 
   fun updateBookContent(content: BookContent): Book? {
@@ -57,7 +56,7 @@ class MemoryRepo
     val updatedBooks = books.toMutableList().apply {
       set(index, updated)
     }
-    this.books.trySend(updatedBooks)
+    this.books.value = updatedBooks
     return updated
   }
 

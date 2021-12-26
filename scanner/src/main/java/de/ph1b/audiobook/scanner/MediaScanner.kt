@@ -17,10 +17,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -47,8 +45,8 @@ class MediaScanner
   private val collectionBookFolderPref: Pref<Set<String>>
 ) {
 
-  private val _scannerActive = ConflatedBroadcastChannel(false)
-  val scannerActive: Flow<Boolean> = _scannerActive.asFlow()
+  private val _scannerActive = MutableStateFlow(false)
+  val scannerActive: Flow<Boolean> = _scannerActive
 
   private val scanningDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
@@ -74,7 +72,7 @@ class MediaScanner
         if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
           throw CancellationException("Does not have external storage permission")
         }
-        _scannerActive.send(true)
+        _scannerActive.value = true
         deleteOldBooks()
         measureTimeMillis {
           checkForBooks()
@@ -84,7 +82,7 @@ class MediaScanner
         coverCollector.findCovers(repo.activeBooks())
       }.also {
         it.invokeOnCompletion {
-          _scannerActive.trySend(false)
+          _scannerActive.value = false
         }
       }
     }
