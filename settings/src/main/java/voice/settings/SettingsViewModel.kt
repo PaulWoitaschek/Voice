@@ -20,7 +20,7 @@ class SettingsViewModel
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>
-) {
+) : SettingsListener {
 
   private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
@@ -46,48 +46,48 @@ class SettingsViewModel
     }
   }
 
-  fun close() {
+  override fun close() {
     SettingsViewEffect.CloseScreen.emit()
   }
 
-  fun toggleResumeOnReplug() {
+  override fun toggleResumeOnReplug() {
     resumeOnReplugPref.value = !resumeOnReplugPref.value
   }
 
-  fun toggleDarkTheme() {
+  override fun toggleDarkTheme() {
     useDarkTheme.value = !useDarkTheme.value
   }
 
-  fun seekAmountChanged(seconds: Int) {
+  override fun seekAmountChanged(seconds: Int) {
     seekTimePref.value = seconds
   }
 
-  fun onSeekAmountRowClicked() {
+  override fun onSeekAmountRowClicked() {
     dialog.tryEmit(SettingsViewState.Dialog.SeekTime)
   }
 
-  fun autoRewindAmountChanged(seconds: Int) {
+  override fun autoRewindAmountChanged(seconds: Int) {
     autoRewindAmountPref.value = seconds
   }
 
-  fun onAutoRewindRowClicked() {
+  override fun onAutoRewindRowClicked() {
     dialog.tryEmit(SettingsViewState.Dialog.AutoRewindAmount)
   }
 
-  fun onLikeClicked() {
+  override fun onLikeClicked() {
     dialog.tryEmit(SettingsViewState.Dialog.Contribute)
   }
 
-  fun dismissDialog() {
+  override fun dismissDialog() {
     dialog.tryEmit(null)
   }
 
-  fun openSupport() {
+  override fun openSupport() {
     dismissDialog()
     SettingsViewEffect.ToSupport.emit()
   }
 
-  fun openTranslations() {
+  override fun openTranslations() {
     dismissDialog()
     SettingsViewEffect.ToTranslations.emit()
   }
