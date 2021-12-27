@@ -363,21 +363,19 @@ class MediaScanner
 
   private fun getBookFromDb(rootFile: File, type: Book.Type): Book? {
     val books = repo.allBooks()
-    if (rootFile.isDirectory) {
-      return books.firstOrNull {
-        rootFile.absolutePath == it.root && type === it.type
-      }
-    } else if (rootFile.isFile) {
-      for (b in books) {
-        if (rootFile.parentFile?.absolutePath == b.root && type === b.type) {
-          val singleChapter = b.content.chapters.first()
-          if (singleChapter.file == rootFile) {
-            return b
-          }
+    return when {
+      rootFile.isDirectory -> {
+        books.firstOrNull {
+          rootFile.absolutePath == it.root && type === it.type
         }
       }
+      rootFile.isFile -> {
+        books.firstOrNull { book ->
+          rootFile.parentFile?.absolutePath == book.root && type === book.type && book.content.chapters.first().file == rootFile
+        }
+      }
+      else -> null
     }
-    return null
   }
 }
 
