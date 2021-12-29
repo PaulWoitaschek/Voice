@@ -14,7 +14,7 @@ class BookCategoryItemDecoration(context: Context, private val layoutManager: Gr
   private val halfMargin = context.dpToPxRounded(4F)
 
   override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-    val position = parent.getChildViewHolder(view).adapterPosition
+    val position = parent.getChildViewHolder(view).absoluteAdapterPosition
     val spanSizeLookup = layoutManager.spanSizeLookup
     val spanCount = layoutManager.spanCount
 

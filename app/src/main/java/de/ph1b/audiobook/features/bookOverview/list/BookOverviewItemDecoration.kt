@@ -24,7 +24,7 @@ class BookOverviewItemDecoration(
     state: RecyclerView.State
   ) {
     val childHolder = parent.getChildViewHolder(view)
-    val position = childHolder.adapterPosition
+    val position = childHolder.absoluteAdapterPosition
     val bottom: Int
     val top: Int
     if (childHolder is BookOverviewHeaderHolder) {

@@ -12,8 +12,8 @@ class FolderOverviewHolder(
 
   init {
     binding.remove.setOnClickListener {
-      if (adapterPosition != -1) {
-        itemClicked(adapterPosition)
+      if (absoluteAdapterPosition != -1) {
+        itemClicked(absoluteAdapterPosition)
       }
     }
   }
