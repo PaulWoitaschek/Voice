@@ -24,6 +24,6 @@ data class BookMetaData(
 
   init {
     require(name.isNotEmpty()) { "name must not be empty" }
-    require(root.isNotEmpty(), { "root must not be empty" })
+    require(root.isNotEmpty()) { "root must not be empty" }
   }
 }
