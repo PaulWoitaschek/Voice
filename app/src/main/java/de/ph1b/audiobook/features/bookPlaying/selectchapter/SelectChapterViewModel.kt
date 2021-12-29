@@ -4,9 +4,8 @@ import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -20,8 +19,8 @@ class SelectChapterViewModel
 
   private val scope = MainScope()
 
-  private val _viewEffects = BroadcastChannel<SelectChapterViewEffect>(1)
-  val viewEffects: Flow<SelectChapterViewEffect> get() = _viewEffects.asFlow()
+  private val _viewEffects = MutableSharedFlow<SelectChapterViewEffect>(extraBufferCapacity = 1)
+  val viewEffects: Flow<SelectChapterViewEffect> get() = _viewEffects
 
   lateinit var bookId: UUID
 
@@ -30,7 +29,7 @@ class SelectChapterViewModel
 
     if (book == null) {
       Timber.d("no book found for $bookId. CloseScreen")
-      _viewEffects.trySend(SelectChapterViewEffect.CloseScreen)
+      _viewEffects.tryEmit(SelectChapterViewEffect.CloseScreen)
       return SelectChapterViewState(emptyList(), null)
     }
 
@@ -51,7 +50,7 @@ class SelectChapterViewModel
           currentIndex++
           if (currentIndex == index) {
             player.setPosition(mark.startMs, chapter.file)
-            _viewEffects.trySend(SelectChapterViewEffect.CloseScreen)
+            _viewEffects.tryEmit(SelectChapterViewEffect.CloseScreen)
             return@launch
           }
         }

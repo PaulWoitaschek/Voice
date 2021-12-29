@@ -7,9 +7,8 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Chapter
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -29,7 +28,7 @@ class CoverFromDiscCollector
 ) {
 
   private val picasso = Picasso.get()
-  private val coverChanged = BroadcastChannel<UUID>(1)
+  private val coverChanged = MutableSharedFlow<UUID>(extraBufferCapacity = 1)
 
   /** Find and stores covers for each book */
   suspend fun findCovers(books: List<Book>) {
@@ -53,7 +52,7 @@ class CoverFromDiscCollector
       val coverFile = book.coverFile(context)
       imageHelper.saveCover(it, coverFile)
       picasso.invalidate(coverFile)
-      coverChanged.send(book.id)
+      coverChanged.emit(book.id)
     }
   }
 
@@ -66,7 +65,7 @@ class CoverFromDiscCollector
           val coverFile = book.coverFile(context)
           imageHelper.saveCover(it, coverFile)
           picasso.invalidate(coverFile)
-          coverChanged.send(book.id)
+          coverChanged.emit(book.id)
           return true
         }
       }
@@ -75,7 +74,7 @@ class CoverFromDiscCollector
   }
 
   /** emits the bookId of a cover that has changed */
-  fun coverChanged(): Flow<UUID> = coverChanged.asFlow()
+  fun coverChanged(): Flow<UUID> = coverChanged
 
   /** Find the embedded cover of a chapter */
   private suspend fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {

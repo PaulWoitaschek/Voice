@@ -9,18 +9,17 @@ import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import java.util.UUID
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import voice.sleepTimer.SleepTimer
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 class BookPlayViewModel
 @Inject constructor(
@@ -35,8 +34,8 @@ class BookPlayViewModel
 
   private val scope = MainScope()
 
-  private val _viewEffects = BroadcastChannel<BookPlayViewEffect>(1)
-  val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects.asFlow()
+  private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
+  val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
   lateinit var bookId: UUID
 
@@ -54,8 +53,8 @@ class BookPlayViewModel
         title = book.name,
         showPreviousNextButtons = hasMoreThanOneChapter,
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
-        duration = Duration.milliseconds(currentMark.durationMs),
-        playedTime = Duration.milliseconds((book.content.positionInChapter - currentMark.startMs)),
+        duration = currentMark.durationMs.milliseconds,
+        playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
         cover = BookPlayCover(book.name, book.id),
         skipSilence = book.content.skipSilence
       )
@@ -95,7 +94,7 @@ class BookPlayViewModel
         title = null,
         setBySleepTimer = false
       )
-      _viewEffects.send(BookPlayViewEffect.BookmarkAdded)
+      _viewEffects.emit(BookPlayViewEffect.BookmarkAdded)
     }
   }
 
@@ -112,7 +111,7 @@ class BookPlayViewModel
     if (sleepTimer.sleepTimerActive()) {
       sleepTimer.setActive(false)
     } else {
-      _viewEffects.trySend(BookPlayViewEffect.ShowSleepTimeDialog).isSuccess
+      _viewEffects.tryEmit(BookPlayViewEffect.ShowSleepTimeDialog)
     }
   }
 

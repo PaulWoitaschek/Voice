@@ -5,8 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
@@ -18,13 +17,13 @@ private const val REQUEST_CODE = 1512
  */
 class Permissions(private val activity: Activity) {
 
-  private val permissionChannel = BroadcastChannel<Array<String>>(1)
+  private val permissionChannel = MutableSharedFlow<List<String>>(extraBufferCapacity = 1)
 
   suspend fun request(permission: String): PermissionResult {
     return if (activity.hasPermission(permission)) {
       PermissionResult.GRANTED
     } else {
-      permissionChannel.asFlow()
+      permissionChannel
         .onStart {
           ActivityCompat.requestPermissions(
             activity,
@@ -46,7 +45,7 @@ class Permissions(private val activity: Activity) {
   @Suppress("UNUSED_PARAMETER")
   fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     if (requestCode == REQUEST_CODE) {
-      permissionChannel.trySend(permissions)
+      permissionChannel.tryEmit(permissions.toList())
     }
   }
 
