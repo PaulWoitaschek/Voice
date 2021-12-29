@@ -26,8 +26,13 @@ class FolderOverviewAdapter(private val deleteClicked: (toDelete: FolderModel) -
     val diff = FolderOverviewDiffHelper.diff(this.items, newItemsSorted)
     this.items.clear()
     this.items.addAll(newItemsSorted)
-    if (hadItems) diff.dispatchUpdatesTo(this)
-    else notifyDataSetChanged()
+    if (hadItems) {
+      diff.dispatchUpdatesTo(this)
+    } else {
+      // when there are no previous items, we don't want any animation.
+      @Suppress("NotifyDataSetChanged")
+      notifyDataSetChanged()
+    }
   }
 
   override fun getItemCount(): Int = items.size

@@ -32,6 +32,8 @@ class FolderChooserAdapter(
       return
     data.clear()
     data.addAll(newData)
+    // the data here always changes as a whole so we don't gain anything by diffing.
+    @Suppress("NotifyDataSetChanged")
     notifyDataSetChanged()
   }
 }
