@@ -332,23 +332,23 @@ class MediaScanner
       .toList()
 
     val containingMedia = ArrayList<Chapter>(containingFiles.size)
-    for (f in containingFiles) {
+    for (file in containingFiles) {
       // check for existing chapter first so we can skip parsing
-      val existingChapter = repo.chapterByFile(f)
-      val lastModified = f.lastModified()
+      val existingChapter = repo.chapterByFile(file)
+      val lastModified = file.lastModified()
       if (existingChapter?.fileLastModified == lastModified) {
         containingMedia.add(existingChapter)
         continue
       }
 
       // else parse and add
-      Timber.i("analyze $f")
-      val result = mediaAnalyzer.analyze(f)
-      Timber.i("analyzed $f.")
+      Timber.i("analyze $file")
+      val result = mediaAnalyzer.analyze(file)
+      Timber.i("analyzed $file.")
       if (result is MediaAnalyzer.Result.Success) {
         containingMedia.add(
           Chapter(
-            file = f,
+            file = file,
             name = result.chapterName,
             duration = result.duration,
             fileLastModified = lastModified,

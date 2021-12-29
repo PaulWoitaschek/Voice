@@ -1,12 +1,17 @@
 package de.ph1b.audiobook.common.comparator
 
+import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import org.junit.runner.RunWith
+import java.io.File
 
+@RunWith(AndroidJUnit4::class)
 class NaturalOrderComparatorTest {
 
   private val testFolder = TemporaryFolder()
@@ -21,13 +26,17 @@ class NaturalOrderComparatorTest {
 
   @Test
   fun fileComparator() {
+    val expected = testFiles()
+    val sorted = expected.sortedWith(NaturalOrderComparator.fileComparator)
+    assertThat(sorted).isEqualTo(expected)
+  }
+
+  private fun testFiles(): List<File> {
     testFolder.newFolder("folder", "subfolder", "subsubfolder")
     testFolder.newFolder("storage", "emulated", "0")
     testFolder.newFolder("xFolder")
 
-    val alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms")
-    val expected = listOf(
-      alarmsFolder,
+    return listOf(
       testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
       testFolder.newFile("folder/subfolder/test.mp3"),
       testFolder.newFile("folder/subfolder/test2.mp3"),
@@ -39,9 +48,6 @@ class NaturalOrderComparatorTest {
       testFolder.newFile("1.mp3"),
       testFolder.newFile("a.jpg")
     )
-
-    val sorted = expected.sortedWith(NaturalOrderComparator.fileComparator)
-    assertThat(sorted).isEqualTo(expected)
   }
 
   @Test
@@ -61,12 +67,66 @@ class NaturalOrderComparatorTest {
       "Ba",
       "cA",
       "D",
-      "e"
+      "e",
+      "folder1/1.mp3",
+      "folder1/10.mp3",
+      "folder2/2.mp3",
+      "folder10/1.mp3",
     )
-
     val sorted = expected.sortedWith(NaturalOrderComparator.stringComparator)
     assertThat(sorted).isEqualTo(expected)
   }
+
+  @Test
+  fun uriComparatorContent() {
+    val expected = listOf(
+      "folder1/1.mp3",
+      "folder1/10.mp3",
+      "folder2/2.mp3",
+      "folder10/1.mp3",
+      "00 I",
+      "00 Introduction",
+      "1",
+      "01 How to build a universe",
+      "01 I",
+      "2",
+      "9",
+      "10",
+      "a",
+      "Ab",
+      "aC",
+      "Ba",
+      "cA",
+      "D",
+      "e",
+    )
+
+    val uris = expected.map {
+      Uri.Builder()
+        .scheme("content")
+        .authority("com.android.externalstorage.documents")
+        .appendPath("tree")
+        .appendPath("primary:audiobooks")
+        .appendPath("document")
+        .appendPath("primary:audiobooks/$it")
+        .build()
+    }
+
+    assertThat(uris.sortedWith(NaturalOrderComparator.uriComparator))
+      .containsExactlyElementsIn(uris)
+      .inOrder()
+  }
+
+  @Test
+  fun uriComparatorFiles() {
+    val expected = testFiles()
+    val uris = expected.map { Uri.fromFile(it) }
+
+    assertThat(uris.sortedWith(NaturalOrderComparator.uriComparator))
+      .containsExactlyElementsIn(uris)
+      .inOrder()
+  }
+
 
   @After
   fun tearDown() {
