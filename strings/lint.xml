@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<lint>g
-    <issue id="UnusedQuantity" severity="ignore" />
-    <issue id="TypographyEllipsis" severity="ignore" />
-    <issue id="MissingTranslation" severity="ignore" />
-    <issue id="Typos" severity="ignore" />
-</lint>
