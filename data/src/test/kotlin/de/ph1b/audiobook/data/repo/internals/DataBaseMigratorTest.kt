@@ -3,7 +3,6 @@ package de.ph1b.audiobook.data.repo.internals
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
-import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,20 +10,17 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import java.util.UUID
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [28])
 class DataBaseMigratorTest {
 
   @Rule
   @JvmField
   val helper = MigrationTestHelper(
     InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java.canonicalName,
-    FrameworkSQLiteOpenHelperFactory()
+    AppDb::class.java,
   )
 
   @Test
