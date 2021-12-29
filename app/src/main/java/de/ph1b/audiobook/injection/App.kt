@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.injection
 
 import android.app.Application
-import android.os.Build
-import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.picasso.Picasso
@@ -17,9 +15,7 @@ import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.rootComponent
 import de.ph1b.audiobook.scanner.MediaScanner
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -61,16 +57,8 @@ class App : Application(), PlaybackComponentFactoryProvider {
     rootComponent = appComponent
     appComponent.inject(this)
 
-    if (DARK_THEME_SETTABLE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      // instantiating a web-view for the first time changes the day night theme.
-      // therefore we work around by creating a webview first.
-      // https://issuetracker.google.com/issues/37124582
-      WebView(this)
-    }
-
     if (DARK_THEME_SETTABLE) {
-      @Suppress("CheckResult")
-      GlobalScope.launch(Dispatchers.Main) {
+      MainScope().launch {
         useDarkTheme.flow
           .distinctUntilChanged()
           .collect { useDarkTheme ->
