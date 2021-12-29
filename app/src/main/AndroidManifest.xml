@@ -37,7 +37,8 @@
 
         <activity
           android:name=".features.MainActivity"
-          android:label="@string/app_name">
+          android:label="@string/app_name"
+          android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -74,7 +75,9 @@
 
         </service>
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+        <receiver
+          android:name="androidx.media.session.MediaButtonReceiver"
+          android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -83,7 +86,8 @@
         <receiver
           android:name=".features.widget.BaseWidgetProvider"
           android:icon="@mipmap/ic_launcher"
-          android:label="@string/app_name">
+          android:label="@string/app_name"
+          android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
