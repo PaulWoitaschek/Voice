@@ -11,9 +11,6 @@ import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
 
-/**
- * Dialog for chosing a title for a new bookmark.
- */
 class AddBookmarkDialog : DialogController() {
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
@@ -23,6 +20,7 @@ class AddBookmarkDialog : DialogController() {
     val dialog = MaterialDialog(activity!!).apply {
 
       title(R.string.bookmark)
+      @Suppress("CheckResult")
       input(hintRes = R.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->
         val title = charSequence.toString()
         val callback = targetController as Callback

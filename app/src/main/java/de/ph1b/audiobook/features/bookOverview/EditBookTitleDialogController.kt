@@ -41,6 +41,7 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
       title(R.string.edit_book_title)
       val inputType = InputType.TYPE_CLASS_TEXT or
         InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      @Suppress("CheckResult")
       input(
         inputType = inputType,
         hintRes = R.string.change_book_name,
