@@ -108,8 +108,10 @@ class WidgetUpdater @Inject constructor(
     val wholeWidgetClickI = Intent(context, MainActivity::class.java)
     wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     val wholeWidgetClickPI = PendingIntent.getActivity(
-      context, System.currentTimeMillis().toInt(),
-      wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      System.currentTimeMillis().toInt(),
+      wholeWidgetClickI,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     val coverReplacement = CoverReplacement("V", context)
     val cover = imageHelper.drawableToBitmap(
@@ -130,6 +132,7 @@ class WidgetUpdater @Inject constructor(
 
       @Suppress("DEPRECATION")
       val displayWidth = display.width
+
       @Suppress("DEPRECATION")
       val displayHeight = display.height
 
@@ -167,7 +170,7 @@ class WidgetUpdater @Inject constructor(
       context,
       System.currentTimeMillis().toInt(),
       wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     val coverFile = book.coverFile()

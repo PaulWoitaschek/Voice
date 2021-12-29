@@ -5,11 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_STOP
+import android.support.v4.media.session.PlaybackStateCompat.*
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
 import androidx.media.app.NotificationCompat.MediaStyle
@@ -111,6 +107,7 @@ class NotificationCreator
     val picassoCover = withContext(Dispatchers.IO) {
       if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
         try {
+          @Suppress("BlockingMethodInNonBlockingContext")
           Picasso.get()
             .load(coverFile)
             .resize(width, height)
@@ -144,7 +141,12 @@ class NotificationCreator
 
   private fun contentIntent(book: Book): PendingIntent {
     val contentIntent = toBookIntentProvider.goToBookIntent(book.id)
-    return PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    return PendingIntent.getActivity(
+      context,
+      0,
+      contentIntent,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
   }
 
   private fun Builder.setChapterInfo(book: Book): Builder {
