@@ -33,10 +33,8 @@ import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import voice.playbackScreen.BookPlayController2
 import voice.settings.SettingsController
 import java.util.UUID
 import javax.inject.Inject
@@ -166,7 +164,6 @@ class BookOverviewController :
     transaction.pushChangeHandler(transition)
       .popChangeHandler(transition)
     router.pushController(transaction)
-    router.pushController(BookPlayController2(book.id).asTransaction())
   }
 
   private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: MenuItem) {
