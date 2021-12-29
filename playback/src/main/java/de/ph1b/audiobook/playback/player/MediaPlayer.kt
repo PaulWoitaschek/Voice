@@ -315,7 +315,8 @@ constructor(
     bookContent = content
     checkMainThread()
     player.playWhenReady = false
-    player.prepare(dataSourceConverter.toMediaSource(content))
+    player.setMediaSource(dataSourceConverter.toMediaSource(content))
+    player.prepare()
     player.seekTo(content.currentChapterIndex, content.positionInChapter)
     player.setPlaybackSpeed(content.playbackSpeed)
     player.skipSilenceEnabled = content.skipSilence
