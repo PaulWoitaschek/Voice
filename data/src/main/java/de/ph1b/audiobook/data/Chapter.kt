@@ -40,20 +40,16 @@ data class Chapter(
   }
 
   @Ignore
-  val chapterMarks: List<ChapterMark>
-
-  init {
-    chapterMarks = if (markData.isEmpty()) {
-      listOf(ChapterMark(name, 0L, duration))
-    } else {
-      val sorted = markData.sorted()
-      sorted.mapIndexed { index, (startMs, name) ->
-        val isFirst = index == 0
-        val isLast = index == sorted.size - 1
-        val start = if (isFirst) 0L else startMs
-        val end = if (isLast) duration else sorted[index + 1].startMs - 1
-        ChapterMark(name = name, startMs = start, endMs = end)
-      }
+  val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {
+    listOf(ChapterMark(name, 0L, duration))
+  } else {
+    val sorted = markData.sorted()
+    sorted.mapIndexed { index, (startMs, name) ->
+      val isFirst = index == 0
+      val isLast = index == sorted.size - 1
+      val start = if (isFirst) 0L else startMs
+      val end = if (isLast) duration else sorted[index + 1].startMs - 1
+      ChapterMark(name = name, startMs = start, endMs = end)
     }
   }
 
