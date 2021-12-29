@@ -1,11 +1,12 @@
 package de.ph1b.audiobook.scanner
 
+import android.content.Context
+import android.net.Uri
 import de.ph1b.audiobook.data.MarkData
 import de.ph1b.audiobook.ffmpeg.ffprobe
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -13,20 +14,33 @@ import kotlin.time.Duration.Companion.seconds
  * Analyzes media files for meta data and duration.
  */
 class MediaAnalyzer
-@Inject constructor() {
+@Inject constructor(
+  private val context: Context,
+) {
 
   private val json = Json {
     ignoreUnknownKeys = true
     allowStructuredMapKeys = true
   }
 
-  suspend fun analyze(file: File): Result {
-    Timber.d("analyze $file")
+  suspend fun analyze(uri: Uri): Result {
+    Timber.d("analyze $uri")
 
-    val elements = ffProbeCommand(file)
-    val result = ffprobe(*elements.toTypedArray())
+    val result = ffprobe(
+      input = uri,
+      context = context,
+      command = listOf(
+        "-print_format", "json=c=1",
+        "-show_chapters",
+        "-loglevel", "quiet",
+        "-show_entries", "format=duration",
+        "-show_entries", "format_tags=artist,title,album",
+        "-show_entries", "stream_tags=artist,title,album",
+        "-select_streams", "a" // only select the audio stream
+      )
+    )
     if (!result.success) {
-      Timber.e("Unable to parse $file, ${result.message}")
+      Timber.e("Unable to parse $uri, ${result.message}")
       return Result.Failure
     }
     Timber.d(result.message)
@@ -34,7 +48,7 @@ class MediaAnalyzer
     val parsed = try {
       json.decodeFromString(MetaDataScanResult.serializer(), result.message)
     } catch (e: SerializationException) {
-      Timber.e(e, "Unable to parse $file")
+      Timber.e(e, "Unable to parse $uri")
       return Result.Failure
     }
 
@@ -42,7 +56,7 @@ class MediaAnalyzer
     return if (duration != null && duration > 0) {
       Result.Success(
         duration = duration.seconds.inWholeMilliseconds,
-        chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(file),
+        chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(uri),
         author = parsed.findTag(TagType.Artist),
         bookName = parsed.findTag(TagType.Album),
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
@@ -53,7 +67,7 @@ class MediaAnalyzer
         }
       )
     } else {
-      Timber.e("Unable to parse $file")
+      Timber.e("Unable to parse $uri")
       Result.Failure
     }
   }
@@ -75,21 +89,8 @@ class MediaAnalyzer
   }
 }
 
-private fun ffProbeCommand(file: File): List<String> {
-  return listOf(
-    "-i", file.absolutePath,
-    "-print_format", "json=c=1",
-    "-show_chapters",
-    "-loglevel", "quiet",
-    "-show_entries", "format=duration",
-    "-show_entries", "format_tags=artist,title,album",
-    "-show_entries", "stream_tags=artist,title,album",
-    "-select_streams", "a" // only select the audio stream
-  )
-}
-
-private fun chapterNameFallback(file: File): String {
-  val name = file.name ?: "Chapter"
+private fun chapterNameFallback(file: Uri): String {
+  val name = file.lastPathSegment ?: "Chapter"
   return name.substringBeforeLast(".")
     .trim()
     .takeUnless { it.isEmpty() }

@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.misc
 
 import androidx.annotation.RawRes
+import androidx.core.net.toUri
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
@@ -19,8 +21,7 @@ class MediaAnalyzerTest {
   @get:Rule
   val temporaryFolder = TemporaryFolder()
 
-  private val mediaAnalyzer: MediaAnalyzer =
-    MediaAnalyzer()
+  private val mediaAnalyzer = MediaAnalyzer(ApplicationProvider.getApplicationContext())
 
   @Test(timeout = 1000)
   fun defectFile_noDuration() {
@@ -44,7 +45,7 @@ class MediaAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Long? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      (mediaAnalyzer.analyze(file) as? MediaAnalyzer.Result.Success)?.duration
+      (mediaAnalyzer.analyze(file.toUri()) as? MediaAnalyzer.Result.Success)?.duration
     }
   }
 

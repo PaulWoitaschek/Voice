@@ -20,6 +20,7 @@ dependencies {
   implementation(libs.timber)
   implementation(libs.picasso)
   implementation(libs.serialization.json)
+  implementation(libs.androidxCore)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)

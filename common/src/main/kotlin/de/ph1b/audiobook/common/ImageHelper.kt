@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.view.WindowManager
+import androidx.core.net.toUri
 import de.ph1b.audiobook.ffmpeg.ffmpeg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -55,6 +56,7 @@ constructor(
 
     // save bitmap to storage
     try {
+      @Suppress("BlockingMethodInNonBlockingContext")
       FileOutputStream(destination).use {
         bitmapToSave.compress(Bitmap.CompressFormat.WEBP, 70, it)
         it.flush()
@@ -79,12 +81,14 @@ constructor(
     val output = File(context.cacheDir, "cover_tmp.jpg")
     output.delete()
     ffmpeg(
-      "-i",
-      f.absolutePath,
-      "-vf",
-      "scale=iw*min($width/iw\\,$height/ih):ih*min($width/iw\\,$height/ih)," +
-        "pad=$width:$height:($width-iw*min($width/iw\\,$height/ih))/2:($height-ih*min($width/iw\\,$height/ih))/2",
-      output.absolutePath
+      input = f.toUri(),
+      context = context,
+      command = listOf(
+        "-vf",
+        "scale=iw*min($width/iw\\,$height/ih):ih*min($width/iw\\,$height/ih)," +
+          "pad=$width:$height:($width-iw*min($width/iw\\,$height/ih))/2:($height-ih*min($width/iw\\,$height/ih))/2",
+        output.absolutePath
+      )
     )
     if (output.exists()) {
       BitmapFactory.decodeFile(output.absolutePath)

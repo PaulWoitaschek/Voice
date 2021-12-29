@@ -1,13 +1,17 @@
 package de.ph1b.audiobook.ffmpeg
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toFile
 import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.SessionState
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-suspend fun ffprobe(vararg command: String): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
-  val probeSession = FFprobeKit.executeAsync(command) { session ->
+suspend fun ffprobe(input: Uri, context: Context, command: List<String>): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
+  val probeSession = FFprobeKit.executeAsync(fullCommand(input, context, command).toTypedArray()) { session ->
     when (session.state) {
       SessionState.COMPLETED -> {
         cont.resume(FfmpegCommandResult(session.output, success = true))
@@ -21,8 +25,8 @@ suspend fun ffprobe(vararg command: String): FfmpegCommandResult = suspendCancel
   cont.invokeOnCancellation { probeSession.cancel() }
 }
 
-suspend fun ffmpeg(vararg command: String): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
-  val probeSession = FFmpegKit.executeAsync(command) { session ->
+suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
+  val probeSession = FFmpegKit.executeAsync(fullCommand(input, context, command).toTypedArray()) { session ->
     when (session.state) {
       SessionState.COMPLETED -> {
         cont.resume(FfmpegCommandResult(session.output, success = true))
@@ -34,6 +38,15 @@ suspend fun ffmpeg(vararg command: String): FfmpegCommandResult = suspendCancell
     }
   }
   cont.invokeOnCancellation { probeSession.cancel() }
+}
+
+private fun fullCommand(input: Uri, context: Context, command: List<String>): List<String> {
+  val mappedInput = if (input.scheme == "content") {
+    FFmpegKitConfig.getSafParameterForRead(context, input)
+  } else {
+    input.toFile().absolutePath
+  }
+  return listOf("-i", mappedInput) + command
 }
 
 data class FfmpegCommandResult(

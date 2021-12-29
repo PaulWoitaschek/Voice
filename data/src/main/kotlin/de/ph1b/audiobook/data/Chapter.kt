@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.data
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -35,6 +37,9 @@ data class Chapter(
   val id: Long = 0L
 ) : Comparable<Chapter> {
 
+  @Ignore
+  val uri: Uri = file.toUri()
+
   init {
     require(name.isNotEmpty())
   }
@@ -53,7 +58,7 @@ data class Chapter(
     }
   }
 
-  override fun compareTo(other: Chapter): Int = NaturalOrderComparator.fileComparator.compare(file, other.file)
+  override fun compareTo(other: Chapter): Int = NaturalOrderComparator.uriComparator.compare(uri, other.uri)
 }
 
 @Serializable

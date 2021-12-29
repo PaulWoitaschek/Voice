@@ -114,6 +114,7 @@
             "columnNames": [
               "bookId"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_chapters_bookId` ON `${TABLE_NAME}` (`bookId`)"
           }
         ],

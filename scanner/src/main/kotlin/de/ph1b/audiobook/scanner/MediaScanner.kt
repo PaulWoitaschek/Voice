@@ -2,6 +2,7 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
+import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
@@ -187,9 +188,7 @@ class MediaScanner
   ) {
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent!!
 
-    val firstChapterFile = newChapters.first().file
-    val result =
-      mediaAnalyzer.analyze(firstChapterFile) as? MediaAnalyzer.Result.Success ?: return
+    val result = mediaAnalyzer.analyze(newChapters.first().uri) as? MediaAnalyzer.Result.Success ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
@@ -219,7 +218,7 @@ class MediaScanner
         ),
         content = BookContent(
           settings = BookSettings(
-            currentFile = firstChapterFile,
+            currentFile = newChapters.first().file,
             positionInChapter = 0,
             id = bookId,
             active = true,
@@ -343,7 +342,7 @@ class MediaScanner
 
       // else parse and add
       Timber.i("analyze $file")
-      val result = mediaAnalyzer.analyze(file)
+      val result = mediaAnalyzer.analyze(file.toUri())
       Timber.i("analyzed $file.")
       if (result is MediaAnalyzer.Result.Success) {
         containingMedia.add(

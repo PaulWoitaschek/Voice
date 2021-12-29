@@ -25,6 +25,7 @@ dependencies {
   implementation(libs.bundles.compose)
   implementation(libs.prefs.core)
   api(libs.conductor.core)
+  implementation(libs.androidxCore)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)

@@ -1,7 +1,10 @@
 package de.ph1b.audiobook.data
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.io.File
@@ -25,11 +28,14 @@ data class Bookmark(
   val id: UUID
 ) : Comparable<Bookmark> {
 
+  @Ignore
+  val mediaUri: Uri = mediaFile.toUri()
+
   override fun compareTo(other: Bookmark): Int {
-    // compare files
-    val fileCompare = NaturalOrderComparator.fileComparator.compare(mediaFile, other.mediaFile)
-    if (fileCompare != 0) {
-      return fileCompare
+    // compare uri
+    val uriCompare = NaturalOrderComparator.uriComparator.compare(mediaUri, other.mediaUri)
+    if (uriCompare != 0) {
+      return uriCompare
     }
 
     // if files are the same compare time
