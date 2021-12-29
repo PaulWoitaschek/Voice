@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.scanner
 
 import java.io.FileFilter
-import java.util.Locale
 
 /**
  * Class containing methods for recognizing different file types by their file ending.
@@ -37,12 +36,12 @@ object FileRecognition {
   )
 
   val imageFilter = FileFilter {
-    val extension = it.extension.toLowerCase(Locale.US)
+    val extension = it.extension.lowercase()
     extension in imageTypes
   }
 
   val musicFilter = FileFilter {
-    val extension = it.extension.toLowerCase(Locale.US)
+    val extension = it.extension.lowercase()
     extension in audioTypes
   }
 
@@ -50,7 +49,7 @@ object FileRecognition {
     if (it.isDirectory) {
       true
     } else {
-      val extension = it.extension.toLowerCase(Locale.US)
+      val extension = it.extension.lowercase()
       extension in audioTypes
     }
   }

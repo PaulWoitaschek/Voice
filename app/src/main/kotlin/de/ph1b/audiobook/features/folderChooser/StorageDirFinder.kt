@@ -12,7 +12,6 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
-import java.util.Locale
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -150,7 +149,7 @@ class StorageDirFinder @Inject constructor(private val context: Context) {
     // Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
     var i = 0
     while (i < results.size) {
-      if (!results[i].toLowerCase(Locale.US).matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+      if (!results[i].lowercase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
         results.removeAt(i--)
       }
       i++

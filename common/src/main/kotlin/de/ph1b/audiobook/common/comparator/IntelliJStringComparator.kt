@@ -72,9 +72,9 @@ class IntelliJStringComparator : Comparator<String> {
         } else {
           // similar logic to charsMatch() below
           if (ch1 != ch2) {
-            val diff1 = ch1.toUpperCase() - ch2.toUpperCase()
+            val diff1 = ch1.uppercaseChar() - ch2.uppercaseChar()
             if (diff1 != 0) {
-              val diff2 = ch1.toLowerCase() - ch2.toLowerCase()
+              val diff2 = ch1.lowercaseChar() - ch2.lowercaseChar()
               if (diff2 != 0) {
                 return diff2
               }
