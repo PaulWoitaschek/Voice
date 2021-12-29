@@ -1,8 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import gradle.kotlin.dsl.accessors._c4fcb3ec03f9133cd9522b64213c2cea.coreLibraryDesugaring
-import gradle.kotlin.dsl.accessors._c4fcb3ec03f9133cd9522b64213c2cea.kotlin
-
 plugins {
   id("com.android.application")
   id("kotlin-android")
