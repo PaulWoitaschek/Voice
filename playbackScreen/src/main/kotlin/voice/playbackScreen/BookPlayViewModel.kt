@@ -103,7 +103,7 @@ class BookPlayViewModel
       val book = repo.bookById(bookId) ?: return@launch
       val currentChapter = book.content.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      player.setPosition(currentMark.startMs + ms, currentChapter.file)
+      player.setPosition(currentMark.startMs + ms, currentChapter.uri)
     }
   }
 

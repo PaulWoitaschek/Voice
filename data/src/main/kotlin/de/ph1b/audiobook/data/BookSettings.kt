@@ -1,7 +1,10 @@
 package de.ph1b.audiobook.data
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.io.File
 import java.util.UUID
@@ -26,6 +29,9 @@ data class BookSettings(
   @ColumnInfo(name = "lastPlayedAtMillis")
   val lastPlayedAtMillis: Long
 ) {
+
+  @Ignore
+  val currentUri : Uri = currentFile.toUri()
 
   init {
     require(playbackSpeed >= Book.SPEED_MIN) { "speed $playbackSpeed must be >= ${Book.SPEED_MIN}" }

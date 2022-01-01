@@ -1,8 +1,10 @@
 package de.ph1b.audiobook.playback.session
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.playback.BuildConfig
@@ -12,7 +14,6 @@ import de.ph1b.audiobook.playback.player.MediaPlayer
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
 import timber.log.Timber
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -36,7 +37,7 @@ class MediaSessionCallback
     Timber.i("onSkipToQueueItem $id")
     val chapter = player.bookContent
       ?.chapters?.getOrNull(id.toInt()) ?: return
-    player.changePosition(0, chapter.file)
+    player.changePosition(0, chapter.uri)
     player.play()
   }
 
@@ -126,9 +127,9 @@ class MediaSessionCallback
         player.setLoudnessGain(mB)
       }
       SET_POSITION_ACTION -> {
-        val file = File(extras!!.getString(SET_POSITION_EXTRA_FILE)!!)
+        val uri = extras!!.getString(SET_POSITION_EXTRA_URI)!!.toUri()
         val time = extras.getLong(SET_POSITION_EXTRA_TIME)
-        player.changePosition(time, file)
+        player.changePosition(time, uri)
       }
       FORCED_PREVIOUS -> {
         player.previous(toNullOfNewTrack = true)
@@ -167,10 +168,10 @@ fun TransportControls.setLoudnessGain(mB: Int) = sendCustomAction(SET_LOUDNESS_G
 
 private const val SET_POSITION_ACTION = "setPosition"
 private const val SET_POSITION_EXTRA_TIME = "$SET_POSITION_ACTION#time"
-private const val SET_POSITION_EXTRA_FILE = "$SET_POSITION_ACTION#file"
+private const val SET_POSITION_EXTRA_URI = "$SET_POSITION_ACTION#uri"
 
-fun TransportControls.setPosition(time: Long, file: File) = sendCustomAction(SET_POSITION_ACTION) {
-  putString(SET_POSITION_EXTRA_FILE, file.absolutePath)
+fun TransportControls.setPosition(time: Long, uri: Uri) = sendCustomAction(SET_POSITION_ACTION) {
+  putString(SET_POSITION_EXTRA_URI, uri.toString())
   putLong(SET_POSITION_EXTRA_TIME, time)
 }
 

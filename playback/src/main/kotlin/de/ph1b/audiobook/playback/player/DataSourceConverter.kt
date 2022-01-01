@@ -37,7 +37,7 @@ class DataSourceConverter
 
   private fun Chapter.toMediaSource(): MediaSource {
     val item = MediaItem.Builder()
-      .setUri(Uri.fromFile(file))
+      .setUri(uri)
       .build()
     return mediaSourceFactory.createMediaSource(item)
   }

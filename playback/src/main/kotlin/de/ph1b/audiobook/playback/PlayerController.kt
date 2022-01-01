@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.content.ComponentName
 import android.content.Context
+import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import de.ph1b.audiobook.playback.session.PlaybackService
@@ -12,7 +13,6 @@ import de.ph1b.audiobook.playback.session.setLoudnessGain
 import de.ph1b.audiobook.playback.session.setPosition
 import de.ph1b.audiobook.playback.session.skipSilence
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class PlayerController
@@ -53,7 +53,7 @@ class PlayerController
     browser.connect()
   }
 
-  fun setPosition(time: Long, file: File) = execute { it.setPosition(time, file) }
+  fun setPosition(time: Long, uri: Uri) = execute { it.setPosition(time, uri) }
 
   fun setLoudnessGain(mB: Int) = execute { it.setLoudnessGain(mB) }
 

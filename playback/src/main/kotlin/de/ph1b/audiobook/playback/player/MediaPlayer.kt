@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.playback.player
 
+import android.net.Uri
 import android.support.v4.media.session.PlaybackStateCompat
+import androidx.core.net.toFile
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -33,7 +35,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -221,7 +222,7 @@ constructor(
     bookContent?.let {
       if (state == PlayerState.ENDED) {
         Timber.i("play in state ended. Back to the beginning")
-        changePosition(0, it.chapters.first().file)
+        changePosition(0, it.chapters.first().uri)
       }
 
       if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
@@ -278,11 +279,11 @@ constructor(
       changePosition(0)
     } else {
       if (toNullOfNewTrack) {
-        changePosition(0, previousChapter.file)
+        changePosition(0, previousChapter.uri)
       } else {
         val time = (previousChapter.duration.milliseconds - seekTime)
           .coerceAtLeast(Duration.ZERO)
-        changePosition(time.inWholeMilliseconds, previousChapter.file)
+        changePosition(time.inWholeMilliseconds, previousChapter.uri)
       }
     }
   }
@@ -374,21 +375,21 @@ constructor(
     if (nextMark != null) {
       changePosition(nextMark.startMs)
     } else {
-      content.nextChapter?.let { changePosition(0, it.file) }
+      content.nextChapter?.let { changePosition(0, it.uri) }
     }
   }
 
   /** Changes the current position in book. */
-  fun changePosition(time: Long, changedFile: File? = null) {
+  fun changePosition(time: Long, changedUri: Uri? = null) {
     checkMainThread()
-    Timber.v("changePosition with time $time and file $changedFile")
+    Timber.v("changePosition with time $time and file $changedUri")
     prepare()
     if (state == PlayerState.IDLE)
       return
 
     bookContent?.let {
       val copy = it.updateSettings {
-        copy(positionInChapter = time, currentFile = changedFile ?: currentFile)
+        copy(positionInChapter = time, currentFile = (changedUri ?: currentUri).toFile())
       }
       bookContent = copy
       player.seekTo(copy.currentChapterIndex, time)

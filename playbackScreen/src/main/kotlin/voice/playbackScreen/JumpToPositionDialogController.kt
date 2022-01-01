@@ -91,7 +91,7 @@ class JumpToPositionDialogController : DialogController() {
         val h = binding.numberHour.value
         val m = binding.numberMinute.value
         val newPosition = (m + 60 * h) * 60 * 1000L
-        playerController.setPosition(newPosition, book.content.currentChapter.file)
+        playerController.setPosition(newPosition, book.content.currentChapter.uri)
       }
       negativeButton(R.string.dialog_cancel)
     }
