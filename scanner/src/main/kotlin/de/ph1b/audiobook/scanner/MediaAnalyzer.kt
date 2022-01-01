@@ -23,7 +23,7 @@ class MediaAnalyzer
     allowStructuredMapKeys = true
   }
 
-  suspend fun analyze(uri: Uri): Result {
+  suspend fun analyze(uri: Uri): Metadata? {
     Timber.d("analyze $uri")
 
     val result = ffprobe(
@@ -41,7 +41,7 @@ class MediaAnalyzer
     )
     if (!result.success) {
       Timber.e("Unable to parse $uri, ${result.message}")
-      return Result.Failure
+      return null
     }
     Timber.d(result.message)
 
@@ -49,12 +49,12 @@ class MediaAnalyzer
       json.decodeFromString(MetaDataScanResult.serializer(), result.message)
     } catch (e: SerializationException) {
       Timber.e(e, "Unable to parse $uri")
-      return Result.Failure
+      return null
     }
 
     val duration = parsed.format?.duration
     return if (duration != null && duration > 0) {
-      Result.Success(
+      Metadata(
         duration = duration.seconds.inWholeMilliseconds,
         chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(uri),
         author = parsed.findTag(TagType.Artist),
@@ -68,25 +68,17 @@ class MediaAnalyzer
       )
     } else {
       Timber.e("Unable to parse $uri")
-      Result.Failure
+      null
     }
   }
 
-  sealed class Result {
-    data class Success(
-      val duration: Long,
-      val chapterName: String,
-      val author: String?,
-      val bookName: String?,
-      val chapters: List<MarkData>
-    ) : Result() {
-      init {
-        require(duration > 0)
-      }
-    }
-
-    object Failure : Result()
-  }
+  data class Metadata(
+    val duration: Long,
+    val chapterName: String,
+    val author: String?,
+    val bookName: String?,
+    val chapters: List<MarkData>
+  )
 }
 
 private fun chapterNameFallback(file: Uri): String {

@@ -21,7 +21,11 @@ dependencies {
   implementation(libs.picasso)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
+  implementation(libs.documentFile)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)
+  testImplementation(libs.androidX.test.runner)
+  testImplementation(libs.androidX.test.core)
+  testImplementation(libs.androidX.test.junit)
 }

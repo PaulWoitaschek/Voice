@@ -188,7 +188,7 @@ class MediaScanner
   ) {
     val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent!!
 
-    val result = mediaAnalyzer.analyze(newChapters.first().uri) as? MediaAnalyzer.Result.Success ?: return
+    val result = mediaAnalyzer.analyze(newChapters.first().uri) ?: return
 
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
@@ -344,7 +344,7 @@ class MediaScanner
       Timber.i("analyze $file")
       val result = mediaAnalyzer.analyze(file.toUri())
       Timber.i("analyzed $file.")
-      if (result is MediaAnalyzer.Result.Success) {
+      if (result != null) {
         containingMedia.add(
           Chapter(
             file = file,

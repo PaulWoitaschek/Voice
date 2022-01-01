@@ -45,7 +45,7 @@ class MediaAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Long? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      (mediaAnalyzer.analyze(file.toUri()) as? MediaAnalyzer.Result.Success)?.duration
+      mediaAnalyzer.analyze(file.toUri())?.duration
     }
   }
 
