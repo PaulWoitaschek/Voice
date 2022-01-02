@@ -85,7 +85,6 @@ dependencies {
   implementation(projects.data)
   implementation(projects.covercolorextractor)
   implementation(projects.playback)
-  implementation(projects.prefs)
   implementation(projects.ffmpeg)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)

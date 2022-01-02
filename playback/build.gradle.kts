@@ -11,7 +11,6 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.data)
-  implementation(projects.prefs)
 
   implementation(libs.timber)
   implementation(libs.coroutines.core)

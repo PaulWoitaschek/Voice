@@ -18,7 +18,6 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data)
-  implementation(projects.prefs)
 
   implementation(libs.timber)
   implementation(libs.coroutines.core)
