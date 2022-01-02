@@ -1,14 +1,19 @@
 package de.ph1b.audiobook.common.comparator
 
 import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
 import java.io.File
 import java.util.ArrayList
-import java.util.Comparator
+import kotlin.Comparator
 
 
 object NaturalOrderComparator {
 
   val stringComparator: Comparator<String> = IntelliJStringComparator()
+
+  val documentFileComparator = Comparator<DocumentFile?> { left, right ->
+    stringComparator.compare(left?.name, right?.name)
+  }
 
   val uriComparator = object : Comparator<Uri> {
     override fun compare(lhs: Uri, rhs: Uri): Int {
