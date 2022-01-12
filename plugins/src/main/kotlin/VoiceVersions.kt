@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
-val VersionCatalog.composeVersion: String get() = findVersion("compose").get().requiredVersion
+val VersionCatalog.composeVersion: String get() = findVersion("composeCompiler").get().requiredVersion
 
 val VersionCatalog.desugar: Provider<MinimalExternalModuleDependency> get() = findDependency("desugar").get()
 

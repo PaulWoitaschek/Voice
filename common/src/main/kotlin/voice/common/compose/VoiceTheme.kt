@@ -4,6 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -20,7 +22,7 @@ object VoiceColors {
 fun VoiceTheme(
   content: @Composable () -> Unit
 ) {
-  val colors = if (isDarkTheme()) {
+  MaterialTheme(colors = if (isDarkTheme()) {
     darkColors(
       primary = Color.Black,
       onPrimary = Color.White,
@@ -34,9 +36,14 @@ fun VoiceTheme(
       secondary = VoiceColors.Red700,
       secondaryVariant = VoiceColors.Red700
     )
-  }
-  MaterialTheme(colors = colors) {
-    content()
+  }) {
+    androidx.compose.material3.MaterialTheme(colorScheme = if (isDarkTheme()) {
+      darkColorScheme()
+    } else {
+      lightColorScheme()
+    }) {
+      content()
+    }
   }
 }
 

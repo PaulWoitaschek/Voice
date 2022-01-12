@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.common.pref
 
+import javax.inject.Qualifier
+
 object PrefKeys {
 
   const val RESUME_ON_REPLUG = "RESUME_ON_REPLUG"
@@ -12,3 +14,6 @@ object PrefKeys {
   const val DARK_THEME = "darkTheme"
   const val GRID_MODE = "gridView"
 }
+
+@Qualifier
+annotation class AudiobookFolders

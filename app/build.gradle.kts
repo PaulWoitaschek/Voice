@@ -91,6 +91,7 @@ dependencies {
   implementation(projects.sleepTimer)
   implementation(projects.loudness)
   implementation(projects.settings)
+  implementation(projects.folderPicker)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
@@ -98,6 +99,7 @@ dependencies {
   implementation(libs.transitions)
   implementation(libs.constraintLayout)
   implementation(libs.media)
+  implementation(libs.datastore)
 
   implementation(libs.picasso)
   implementation(libs.serialization.json)

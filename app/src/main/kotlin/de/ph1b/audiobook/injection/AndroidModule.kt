@@ -19,6 +19,7 @@ import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.misc.ApplicationIdProviderImpl
 import de.ph1b.audiobook.misc.ToBookIntentProviderImpl
 import de.ph1b.audiobook.playback.notification.ToBookIntentProvider
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 /**
@@ -89,4 +90,10 @@ object AndroidModule {
 
   @Provides
   fun applicationIdProvider(impl: ApplicationIdProviderImpl): ApplicationIdProvider = impl
+
+  @Provides
+  @Singleton
+  fun json(): Json {
+    return Json.Default
+  }
 }

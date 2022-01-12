@@ -2,6 +2,8 @@ package de.ph1b.audiobook.injection
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import androidx.datastore.core.DataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -13,9 +15,13 @@ import de.paulwoitaschek.flowpref.android.int
 import de.paulwoitaschek.flowpref.android.stringSet
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.BuildConfig
+import de.ph1b.audiobook.common.pref.AudiobookFolders
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.misc.UUIDAdapter
+import de.ph1b.audiobook.serialization.SerializableDataStoreFactory
+import de.ph1b.audiobook.serialization.UriSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
@@ -97,5 +103,16 @@ object PrefsModule {
   @Named(PrefKeys.GRID_MODE)
   fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
     return prefs.enum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE)
+  }
+
+  @Provides
+  @Singleton
+  @AudiobookFolders
+  fun audiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+    return factory.create(
+      serializer = ListSerializer(UriSerializer),
+      fileName = "audiobookFolders",
+      defaultValue = emptyList()
+    )
   }
 }

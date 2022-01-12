@@ -35,6 +35,7 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import voice.folderPicker.FolderPickerController
 import voice.settings.SettingsController
 import java.util.UUID
 import javax.inject.Inject
@@ -145,7 +146,7 @@ class BookOverviewController :
   private fun BookOverviewBinding.gridMenuItem(): MenuItem = toolbar.menu.findItem(R.id.toggleGrid)
 
   private fun toFolderOverview() {
-    val controller = FolderOverviewController()
+    val controller = FolderPickerController()
     router.pushController(controller.asTransaction())
   }
 
