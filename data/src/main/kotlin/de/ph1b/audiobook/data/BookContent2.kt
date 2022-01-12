@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.data
 
 import android.net.Uri
+import java.io.File
 import java.time.Instant
 
 data class BookContent2(
@@ -18,7 +19,8 @@ data class BookContent2(
   val duration: Long,
   val chapters: List<Uri>,
   val currentChapter: Uri,
-  val positionInChapter: Long
+  val positionInChapter: Long,
+  val cover : File?,
 ) {
 
   init {

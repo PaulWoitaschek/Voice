@@ -11,7 +11,6 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.R
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +55,7 @@ class MediaBrowserHelper
       // do NOT return the current book twice as this will break the listing due to stable IDs
       val all = repo.activeBooks()
         .filter { it != currentBook }
-        .sortedWith(BookComparator.BY_LAST_PLAYED)
+        // todo .sortedWith(BookComparator.BY_LAST_PLAYED)
         .map { it.toMediaDescription() }
 
       return if (current == null) {

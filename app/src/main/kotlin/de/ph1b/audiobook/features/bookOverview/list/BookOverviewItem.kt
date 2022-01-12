@@ -1,9 +1,11 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
+import android.net.Uri
 import androidx.annotation.FloatRange
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import timber.log.Timber
+import java.io.File
 
 sealed class BookOverviewItem
 
@@ -12,47 +14,43 @@ data class BookOverviewHeaderModel(
   val hasMore: Boolean
 ) : BookOverviewItem()
 
-data class BookOverviewModel(
+data class BookOverviewViewState(
   val name: String,
   val author: String?,
   val transitionName: String,
   @FloatRange(from = 0.0, to = 1.0)
   val progress: Float,
-  val book: Book,
   val remainingTimeInMs: Long,
   val isCurrentBook: Boolean,
-  val useGridView: Boolean
+  val useGridView: Boolean,
+  val id: Uri,
+  val cover: File?,
 ) : BookOverviewItem() {
 
-  constructor(book: Book, isCurrentBook: Boolean, useGridView: Boolean) : this(
+  constructor(book: BookContent2, amountOfColumns: Int, currentBookId: Uri?) : this(
     name = book.name,
     author = book.author,
-    transitionName = book.coverTransitionName,
-    book = book,
+    transitionName = book.name,
     progress = book.progress(),
     remainingTimeInMs = book.remainingTimeInMs(),
-    isCurrentBook = isCurrentBook,
-    useGridView = useGridView
+    isCurrentBook = book.uri == currentBookId,
+    useGridView = amountOfColumns > 1,
+    id = book.uri,
+    cover = book.cover,
   )
 
-  fun areContentsTheSame(other: BookOverviewModel): Boolean {
-    val oldBook = book
-    val newBook = other.book
-    return oldBook.id == newBook.id &&
-      oldBook.content.position == newBook.content.position &&
-      name == other.name &&
-      isCurrentBook == other.isCurrentBook &&
-      useGridView == other.useGridView
+  fun areContentsTheSame(other: BookOverviewViewState): Boolean {
+    return this == other
   }
 
-  fun areItemsTheSame(other: BookOverviewModel): Boolean {
-    return book.id == other.book.id
+  fun areItemsTheSame(other: BookOverviewViewState): Boolean {
+    return id == other.id
   }
 }
 
-private fun Book.progress(): Float {
-  val globalPosition = content.position
-  val totalDuration = content.duration
+private fun BookContent2.progress(): Float {
+  val globalPosition = position
+  val totalDuration = duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
     Timber.e("Couldn't determine progress for book=$this")
@@ -60,6 +58,6 @@ private fun Book.progress(): Float {
   return progress.coerceIn(0F, 1F)
 }
 
-private fun Book.remainingTimeInMs(): Long {
-  return content.duration - content.position
+private fun BookContent2.remainingTimeInMs(): Long {
+  return duration - position
 }

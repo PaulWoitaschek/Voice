@@ -127,7 +127,7 @@ class BookCategoryController(bundle: Bundle) :
   }
 
   override fun onBookCoverChanged(bookId: UUID) {
-    adapter.notifyCoverChanged(bookId)
+    // todo adapter.notifyCoverChanged(bookId)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -13,7 +13,6 @@ import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
-import de.ph1b.audiobook.features.bookOverview.list.LoadBookCover
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
@@ -49,7 +48,6 @@ interface AppComponent {
   fun inject(target: EditCoverDialogController)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
-  fun inject(target: LoadBookCover)
   fun inject(target: MainActivity)
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)

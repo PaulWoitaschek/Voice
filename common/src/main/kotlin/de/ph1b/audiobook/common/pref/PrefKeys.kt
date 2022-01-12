@@ -17,3 +17,6 @@ object PrefKeys {
 
 @Qualifier
 annotation class AudiobookFolders
+
+@Qualifier
+annotation class CurrentBook

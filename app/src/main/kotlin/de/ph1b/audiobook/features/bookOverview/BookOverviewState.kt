@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 
 sealed class BookOverviewState {
@@ -21,6 +21,6 @@ sealed class BookOverviewState {
 }
 
 data class BookOverviewCategoryContent(
-  val books: List<BookOverviewModel>,
-  val hasMore: Boolean
+        val books: List<BookOverviewViewState>,
+        val hasMore: Boolean
 )

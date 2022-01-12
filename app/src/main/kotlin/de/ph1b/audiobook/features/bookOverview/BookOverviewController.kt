@@ -256,13 +256,13 @@ class BookOverviewController :
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(bookId)
+      // todo adapter.reloadBookCover(bookId)
     }
   }
 
   override fun onBookCoverChanged(bookId: UUID) {
     binding.recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(bookId)
+      // todo adapter.reloadBookCover(bookId)
     }
   }
 

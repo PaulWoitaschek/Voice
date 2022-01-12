@@ -49,7 +49,8 @@ class MediaScanner2
         },
         chapters = chapterUris,
         positionInChapter = 0L,
-        currentChapter = chapters.first().uri
+        currentChapter = chapters.first().uri,
+        cover = null
       )
     }
 

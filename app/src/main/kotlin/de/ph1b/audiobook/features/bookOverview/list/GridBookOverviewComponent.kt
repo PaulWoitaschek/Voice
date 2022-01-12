@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
 import de.ph1b.audiobook.databinding.BookOverviewRowListBinding
@@ -17,7 +19,7 @@ import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.SquareProgressView
 
 class GridBookOverviewComponent(private val listener: BookClickListener) :
-  AdapterComponent<BookOverviewModel, BookOverviewHolder>(BookOverviewModel::class) {
+  AdapterComponent<BookOverviewViewState, BookOverviewHolder>(BookOverviewViewState::class) {
 
   override val viewType = 42
 
@@ -37,17 +39,17 @@ class GridBookOverviewComponent(private val listener: BookClickListener) :
     )
   }
 
-  override fun onBindViewHolder(model: BookOverviewModel, holder: BookOverviewHolder) {
+  override fun onBindViewHolder(model: BookOverviewViewState, holder: BookOverviewHolder) {
     holder.bind(model)
   }
 
   override fun isForViewType(model: Any): Boolean {
-    return model is BookOverviewModel && model.useGridView
+    return model is BookOverviewViewState && model.useGridView
   }
 }
 
 class ListBookOverviewComponent(private val listener: BookClickListener) :
-  AdapterComponent<BookOverviewModel, BookOverviewHolder>(BookOverviewModel::class) {
+  AdapterComponent<BookOverviewViewState, BookOverviewHolder>(BookOverviewViewState::class) {
 
   override val viewType = 43
 
@@ -67,12 +69,12 @@ class ListBookOverviewComponent(private val listener: BookClickListener) :
     )
   }
 
-  override fun onBindViewHolder(model: BookOverviewModel, holder: BookOverviewHolder) {
+  override fun onBindViewHolder(model: BookOverviewViewState, holder: BookOverviewHolder) {
     holder.bind(model)
   }
 
   override fun isForViewType(model: Any): Boolean {
-    return model is BookOverviewModel && !model.useGridView
+    return model is BookOverviewViewState && !model.useGridView
   }
 }
 
@@ -92,7 +94,6 @@ class BookOverviewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
   private var boundBook: Book? = null
-  private val loadBookCover = LoadBookCover(binding)
 
   init {
     binding.cover.clipToOutline = true
@@ -110,8 +111,8 @@ class BookOverviewHolder(
     }
   }
 
-  fun bind(model: BookOverviewModel) {
-    boundBook = model.book
+  fun bind(model: BookOverviewViewState) {
+    // todo  boundBook = model.book
     val name = model.name
     binding.title.text = name
     binding.author?.text = model.author
@@ -120,7 +121,16 @@ class BookOverviewHolder(
     binding.cover.transitionName = model.transitionName
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = model.progress
-    loadBookCover.load(model.book)
+    val cover = model.cover
+    val coverReplacement = CoverReplacement(name, itemView.context)
+    if (cover == null) {
+      Picasso.get().cancelRequest(binding.cover)
+      binding.cover.setImageDrawable(coverReplacement)
+    } else {
+      Picasso.get().load(cover)
+        .placeholder(coverReplacement)
+        .into(binding.cover)
+    }
     binding.playingIndicator.isVisible = model.isCurrentBook
   }
 }

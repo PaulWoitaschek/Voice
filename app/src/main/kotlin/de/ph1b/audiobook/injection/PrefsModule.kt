@@ -16,12 +16,14 @@ import de.paulwoitaschek.flowpref.android.stringSet
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.pref.AudiobookFolders
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.misc.UUIDAdapter
 import de.ph1b.audiobook.serialization.SerializableDataStoreFactory
 import de.ph1b.audiobook.serialization.UriSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.nullable
 import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
@@ -113,6 +115,17 @@ object PrefsModule {
       serializer = ListSerializer(UriSerializer),
       fileName = "audiobookFolders",
       defaultValue = emptyList()
+    )
+  }
+
+  @Provides
+  @Singleton
+  @CurrentBook
+  fun currentBook(factory: SerializableDataStoreFactory): DataStore<Uri?> {
+    return factory.create(
+      serializer = UriSerializer.nullable,
+      fileName = "currentBook",
+      defaultValue = null
     )
   }
 }

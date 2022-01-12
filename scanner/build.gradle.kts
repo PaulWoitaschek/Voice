@@ -22,6 +22,7 @@ dependencies {
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
+  implementation(libs.datastore)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)

@@ -1,10 +1,13 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import android.net.Uri
+import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
+import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
 import de.ph1b.audiobook.playback.PlayerController
@@ -24,16 +27,16 @@ import javax.inject.Named
 class BookOverviewViewModel
 @Inject
 constructor(
-  private val repo: BookRepository,
+  private val repo: BookRepo2,
   private val mediaScanner: MediaScanner,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
+  @CurrentBook
+  private val currentBookDataStore: DataStore<Uri?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
-  private val gridCount: GridCount
+  private val gridCount: GridCount,
 ) {
 
   fun attach() {
@@ -47,17 +50,14 @@ constructor(
   val coverChanged: Flow<UUID> = coverFromDiscCollector.coverChanged()
 
   fun state(): Flow<BookOverviewState> {
-    val bookStream = repo.flow()
-    val currentBookIdStream = currentBookIdPref.flow
     val playingStream = playStateManager.playStateFlow()
       .map { it == PlayState.Playing }
       .distinctUntilChanged()
-    val scannerActiveStream = mediaScanner.scannerActive
     return combine(
-      bookStream,
-      currentBookIdStream,
+      repo.flow(),
+      currentBookDataStore.data,
       playingStream,
-      scannerActiveStream,
+      mediaScanner.scannerActive,
       gridModePref.flow
     ) { books, currentBookId, playing, scannerActive, gridMode ->
       state(
@@ -71,9 +71,9 @@ constructor(
   }
 
   private fun state(
-    books: List<Book>,
+    books: List<BookContent2>,
     scannerActive: Boolean,
-    currentBookId: UUID?,
+    currentBookId: Uri?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState {
@@ -94,12 +94,12 @@ constructor(
   }
 
   private fun content(
-    books: List<Book>,
-    currentBookId: UUID?,
+    books: List<BookContent2>,
+    currentBookId: Uri?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState.Content {
-    val currentBookPresent = books.any { it.id == currentBookId }
+    val currentBookPresent = books.any { it.uri == currentBookId }
 
     val amountOfColumns = gridCount.gridColumnCount(gridMode)
 
@@ -120,13 +120,12 @@ constructor(
   }
 
   private fun content(
-    books: List<Book>,
+    books: List<BookContent2>,
     category: BookOverviewCategory,
-    currentBookId: UUID?,
+    currentBookId: Uri?,
     amountOfColumns: Int
   ): BookOverviewCategoryContent? {
-    val booksOfCategory = books.filter(category.filter)
-      .sortedWith(category.comparator)
+    val booksOfCategory = books.filter(category.filter).sortedWith(category.comparator)
     if (booksOfCategory.isEmpty()) {
       return null
     }
@@ -135,8 +134,8 @@ constructor(
       BookOverviewCategory.NOT_STARTED -> 4
       BookOverviewCategory.FINISHED -> 2
     }
-    val models = booksOfCategory.take(rows * amountOfColumns).map {
-      BookOverviewModel(book = it, isCurrentBook = it.id == currentBookId, useGridView = amountOfColumns > 1)
+    val models = booksOfCategory.take(rows * amountOfColumns).map { book ->
+      BookOverviewViewState(book, amountOfColumns, currentBookId)
     }
     val hasMore = models.size != booksOfCategory.size
     return BookOverviewCategoryContent(models, hasMore)

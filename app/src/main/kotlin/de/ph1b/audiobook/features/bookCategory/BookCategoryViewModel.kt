@@ -1,24 +1,26 @@
 package de.ph1b.audiobook.features.bookCategory
 
+import android.net.Uri
+import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.BookComparator
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.features.bookOverview.GridMode
-import de.ph1b.audiobook.features.bookOverview.list.BookOverviewModel
+import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
 class BookCategoryViewModel
 @Inject constructor(
-  private val repo: BookRepository,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
+  private val repo: BookRepo2,
+  @CurrentBook
+  private val currentBookId: DataStore<Uri?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
@@ -34,19 +36,15 @@ class BookCategoryViewModel
     return combine(
       gridModePref.flow,
       repo.flow(),
-      comparatorStream
-    ) { gridMode, books, comparator ->
+      comparatorStream,
+      currentBookId.data,
+    ) { gridMode, books, comparator, currentBookId ->
       val gridColumnCount = gridCount.gridColumnCount(gridMode)
-      val currentBookId = currentBookIdPref.value
       val models = books.asSequence()
         .filter(category.filter)
         .sortedWith(comparator)
         .map { book ->
-          BookOverviewModel(
-            book = book,
-            isCurrentBook = book.id == currentBookId,
-            useGridView = gridColumnCount > 1
-          )
+          BookOverviewViewState(book, gridColumnCount, currentBookId)
         }
         .toList()
       BookCategoryState(gridColumnCount, models)
@@ -64,5 +62,5 @@ class BookCategoryViewModel
 
 data class BookCategoryState(
   val gridColumnCount: Int,
-  val models: List<BookOverviewModel>
+  val models: List<BookOverviewViewState>
 )

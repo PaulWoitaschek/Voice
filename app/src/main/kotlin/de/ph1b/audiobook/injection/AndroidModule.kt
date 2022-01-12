@@ -15,7 +15,6 @@ import dagger.Module
 import dagger.Provides
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.ApplicationIdProvider
-import de.ph1b.audiobook.covercolorextractor.CoverColorExtractor
 import de.ph1b.audiobook.misc.ApplicationIdProviderImpl
 import de.ph1b.audiobook.misc.ToBookIntentProviderImpl
 import de.ph1b.audiobook.playback.notification.ToBookIntentProvider
@@ -77,12 +76,6 @@ object AndroidModule {
   @Singleton
   fun providePowerManager(context: Context): PowerManager {
     return context.getSystemService(Context.POWER_SERVICE) as PowerManager
-  }
-
-  @Provides
-  @Singleton
-  fun provideCoverColorExtractor(): CoverColorExtractor {
-    return CoverColorExtractor()
   }
 
   @Provides

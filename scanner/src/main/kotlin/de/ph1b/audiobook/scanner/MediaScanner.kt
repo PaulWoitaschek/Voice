@@ -2,10 +2,14 @@ package de.ph1b.audiobook.scanner
 
 import android.Manifest
 import android.content.Context
+import android.net.Uri
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
+import androidx.documentfile.provider.DocumentFile
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.common.permission.hasPermission
+import de.ph1b.audiobook.common.pref.AudiobookFolders
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.common.storageMounted
 import de.ph1b.audiobook.data.Book
@@ -21,6 +25,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -43,7 +48,10 @@ class MediaScanner
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   private val singleBookFolderPref: Pref<Set<String>>,
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  private val collectionBookFolderPref: Pref<Set<String>>
+  private val collectionBookFolderPref: Pref<Set<String>>,
+  @AudiobookFolders
+  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val scanner2: MediaScanner2,
 ) {
 
   private val _scannerActive = MutableStateFlow(false)
@@ -53,7 +61,7 @@ class MediaScanner
 
   init {
     GlobalScope.launch {
-      combine(collectionBookFolderPref.flow, singleBookFolderPref.flow) { _, _ -> Unit }
+      combine(collectionBookFolderPref.flow, singleBookFolderPref.flow, audiobookFolders.data) { _, _, _ -> }
         .collect {
           scanForFiles(restartIfScanning = true)
         }
@@ -70,10 +78,9 @@ class MediaScanner
     GlobalScope.launch {
       scanningJob?.cancelAndJoin()
       scanningJob = launch(scanningDispatcher) {
-        if (!context.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          throw CancellationException("Does not have external storage permission")
-        }
         _scannerActive.value = true
+
+        scanner2.scan(audiobookFolders.data.first().map { DocumentFile.fromTreeUri(context, it)!! })
         deleteOldBooks()
         measureTimeMillis {
           checkForBooks()

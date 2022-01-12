@@ -83,7 +83,6 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.common)
   implementation(projects.data)
-  implementation(projects.covercolorextractor)
   implementation(projects.playback)
   implementation(projects.ffmpeg)
   implementation(projects.scanner)

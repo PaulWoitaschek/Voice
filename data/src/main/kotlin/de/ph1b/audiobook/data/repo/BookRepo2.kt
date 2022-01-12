@@ -2,6 +2,8 @@ package de.ph1b.audiobook.data.repo
 
 import android.net.Uri
 import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.BookContent2
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,4 +19,6 @@ class BookRepo2
     val chapters = content.chapters.mapNotNull { chapterRepo.get(uri) }
     return Book2(content, chapters = chapters)
   }
+
+  fun flow(): Flow<List<BookContent2>> = contentRepo.flow()
 }
