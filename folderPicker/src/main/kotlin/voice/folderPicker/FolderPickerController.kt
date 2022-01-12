@@ -37,6 +37,9 @@ class FolderPickerController : ComposeController() {
       },
       onDismissExplanationCardClick = {
         viewModel.dismissExplanationCard()
+      },
+      onCloseClick = {
+        router.popController(this)
       }
     )
   }

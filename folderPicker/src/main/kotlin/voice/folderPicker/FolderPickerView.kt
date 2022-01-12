@@ -38,7 +38,8 @@ fun FolderPickerView(
   viewState: FolderPickerViewState,
   onAddClick: () -> Unit,
   onDeleteClick: (Uri) -> Unit,
-  onDismissExplanationCardClick: () -> Unit
+  onDismissExplanationCardClick: () -> Unit,
+  onCloseClick: () -> Unit
 ) {
   Scaffold(
     topBar = {
@@ -47,7 +48,7 @@ fun FolderPickerView(
           Text(text = "Audioboook Folders")
         },
         navigationIcon = {
-          IconButton(onClick = { /*TODO*/ }) {
+          IconButton(onClick = onCloseClick) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Close")
           }
         }
