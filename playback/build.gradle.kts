@@ -18,6 +18,7 @@ dependencies {
   implementation(libs.picasso)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
+  implementation(libs.datastore)
 
   implementation(libs.dagger.core)
 

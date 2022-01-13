@@ -84,3 +84,9 @@ fun Chapter.markForPosition(positionInChapterMs: Long): ChapterMark {
     ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
     ?: chapterMarks.first()
 }
+
+fun Chapter2.markForPosition(positionInChapterMs: Long): ChapterMark {
+  return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
+    ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
+    ?: chapterMarks.first()
+}

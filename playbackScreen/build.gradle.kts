@@ -21,6 +21,7 @@ dependencies {
   implementation(projects.data)
   implementation(projects.sleepTimer)
 
+  implementation(libs.datastore)
   implementation(libs.timber)
   implementation(libs.coroutines.core)
   implementation(libs.picasso)

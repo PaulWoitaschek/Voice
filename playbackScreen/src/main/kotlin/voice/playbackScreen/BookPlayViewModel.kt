@@ -1,11 +1,12 @@
 package voice.playbackScreen
 
-import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.pref.PrefKeys
+import android.net.Uri
+import androidx.datastore.core.DataStore
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -14,22 +15,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.sleepTimer.SleepTimer
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.time.Duration.Companion.milliseconds
 
 class BookPlayViewModel
 @Inject constructor(
-  private val repo: BookRepository,
+  private val repo: BookRepo2,
   private val player: PlayerController,
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
   private val bookmarkRepo: BookmarkRepo,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>
+  @CurrentBook
+  private val currentBookId: DataStore<Uri?>,
 ) {
 
   private val scope = MainScope()
@@ -37,25 +37,27 @@ class BookPlayViewModel
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
-  lateinit var bookId: UUID
+  lateinit var bookId: Uri
 
   fun viewState(): Flow<BookPlayViewState> {
-    currentBookIdPref.value = bookId
+    scope.launch {
+      currentBookId.updateData { bookId }
+    }
 
     return combine(
       repo.flow(bookId).filterNotNull(), playStateManager.playStateFlow(), sleepTimer.leftSleepTimeFlow
     ) { book, playState, sleepTime ->
-      val currentMark = book.content.currentChapter.markForPosition(book.content.positionInChapter)
-      val hasMoreThanOneChapter = book.hasMoreThanOneChapter()
+      val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
+      val hasMoreThanOneChapter = book.chapters.size > 1
       BookPlayViewState(
         sleepTime = sleepTime,
         playing = playState == PlayStateManager.PlayState.Playing,
-        title = book.name,
+        title = book.content.name,
         showPreviousNextButtons = hasMoreThanOneChapter,
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
-        cover = BookPlayCover(book.name, book.id),
+        cover = book.content.cover,
         skipSilence = book.content.skipSilence
       )
     }
@@ -88,6 +90,8 @@ class BookPlayViewModel
 
   fun addBookmark() {
     scope.launch {
+/*
+todo
       val book = repo.bookById(bookId) ?: return@launch
       bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
@@ -95,13 +99,14 @@ class BookPlayViewModel
         setBySleepTimer = false
       )
       _viewEffects.emit(BookPlayViewEffect.BookmarkAdded)
+*/
     }
   }
 
   fun seekTo(ms: Long) {
     scope.launch {
-      val book = repo.bookById(bookId) ?: return@launch
-      val currentChapter = book.content.currentChapter
+      val book = repo.flow(bookId).first() ?: return@launch
+      val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
       player.setPosition(currentMark.startMs + ms, currentChapter.uri)
     }
@@ -117,8 +122,8 @@ class BookPlayViewModel
 
   fun toggleSkipSilence() {
     scope.launch {
-      val skipSilence = repo.bookById(bookId)?.content?.skipSilence
-        ?: return@launch
+      val book = repo.flow(bookId).first() ?: return@launch
+      val skipSilence = book.content.skipSilence
       player.skipSilence(!skipSilence)
     }
   }

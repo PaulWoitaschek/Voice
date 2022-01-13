@@ -2,8 +2,10 @@ package de.ph1b.audiobook.features
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.datastore.core.DataStore
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
@@ -12,6 +14,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.permission.PermissionHelper
 import de.ph1b.audiobook.common.permission.Permissions
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ActivityBookBinding
@@ -23,6 +26,8 @@ import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -35,8 +40,8 @@ class MainActivity : BaseActivity(), RouterProvider {
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
 
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<UUID>
+  @field:[Inject CurrentBook]
+  lateinit var currentBook: DataStore<Uri?>
 
   @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
   lateinit var singleBookFolderPref: Pref<Set<String>>
@@ -111,20 +116,19 @@ class MainActivity : BaseActivity(), RouterProvider {
   private fun setupRouter() {
     // if we should enter a book set the backstack and return early
     intent.getStringExtra(NI_GO_TO_BOOK)
-      ?.let(UUID::fromString)
-      ?.let(repo::bookById)
       ?.let {
+        val bookId = Uri.parse(it)
         val bookShelf = RouterTransaction.with(BookOverviewController())
-        val bookPlay = BookPlayController(it.id).asTransaction()
+        val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         return
       }
 
     // if we should play the current book, set the backstack and return early
     if (intent?.action == "playCurrent") {
-      repo.bookById(currentBookIdPref.value)?.let {
+      runBlocking { currentBook.data.first() }?.let { bookId ->
         val bookShelf = RouterTransaction.with(BookOverviewController())
-        val bookPlay = BookPlayController(it.id).asTransaction()
+        val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         playerController.play()
         return

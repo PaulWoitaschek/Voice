@@ -2,17 +2,18 @@ package de.ph1b.audiobook.features.bookOverview
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.datastore.core.DataStore
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
-import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
@@ -23,7 +24,6 @@ import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewItemDecoration
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
-import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
@@ -34,12 +34,12 @@ import de.ph1b.audiobook.uitools.BookChangeHandler
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import voice.folderPicker.FolderPickerController
 import voice.settings.SettingsController
 import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.collections.component1
 import kotlin.collections.component2
 
@@ -56,8 +56,8 @@ class BookOverviewController :
     appComponent.inject(this)
   }
 
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<UUID>
+  @field:[Inject CurrentBook]
+  lateinit var currentBookIdPref: DataStore<Uri?>
 
   @Inject
   lateinit var viewModel: BookOverviewViewModel
@@ -77,7 +77,7 @@ class BookOverviewController :
     lifecycleScope.launch {
       viewModel.coverChanged.collect {
         ensureActive()
-        bookCoverChanged(it)
+        // todo bookCoverChanged(it)
       }
     }
   }
@@ -90,11 +90,11 @@ class BookOverviewController :
   private fun BookOverviewBinding.setupRecyclerView() {
     recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
-      bookClickListener = { book, clickType ->
+      bookClickListener = { bookId, clickType ->
         when (clickType) {
-          BookOverviewClick.REGULAR -> invokeBookSelectionCallback(book)
+          BookOverviewClick.REGULAR -> invokeBookSelectionCallback(bookId)
           BookOverviewClick.MENU -> {
-            EditBookBottomSheetController(this@BookOverviewController, book).showDialog(router)
+            // todo EditBookBottomSheetController(this@BookOverviewController, bookId).showDialog(router)
           }
         }
       },
@@ -157,11 +157,13 @@ class BookOverviewController :
     }
   }
 
-  private fun invokeBookSelectionCallback(book: Book) {
-    currentBookIdPref.value = book.id
-    val transaction = RouterTransaction.with(BookPlayController(book.id))
+  private fun invokeBookSelectionCallback(bookId: Uri) {
+    runBlocking {
+      currentBookIdPref.updateData { bookId }
+    }
+    val transaction = RouterTransaction.with(BookPlayController(bookId))
     val transition = BookChangeHandler()
-    transition.transitionName = book.coverTransitionName
+    transition.transitionName = bookId.toString()
     transaction.pushChangeHandler(transition)
       .popChangeHandler(transition)
     router.pushController(transaction)
@@ -252,11 +254,11 @@ class BookOverviewController :
     )
   }
 
-  private fun BookOverviewBinding.bookCoverChanged(bookId: UUID) {
+  private fun BookOverviewBinding.bookCoverChanged(bookId: Uri) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {
-      // todo adapter.reloadBookCover(bookId)
+      adapter.reloadBookCover(bookId)
     }
   }
 

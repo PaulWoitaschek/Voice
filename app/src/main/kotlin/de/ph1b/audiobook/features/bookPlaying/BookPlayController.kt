@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MenuItem
@@ -11,30 +12,24 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
-import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
-import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.CircleOutlineProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.formatTime
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import voice.loudness.LoudnessDialog
 import voice.playbackScreen.BookPlayViewEffect
 import voice.playbackScreen.BookPlayViewModel
 import voice.playbackScreen.BookPlayViewState
 import voice.playbackScreen.JumpToPositionDialogController
 import voice.settings.SettingsController
-import voice.sleepTimer.SleepTimerDialogController
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -46,7 +41,7 @@ private const val NI_BOOK_ID = "niBookId"
  */
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
-  constructor(bookId: UUID) : this(Bundle().apply { putUUID(NI_BOOK_ID, bookId) })
+  constructor(bookId: Uri) : this(Bundle().apply { putParcelable(NI_BOOK_ID, bookId) })
 
   @Inject
   lateinit var equalizer: Equalizer
@@ -54,7 +49,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   @Inject
   lateinit var viewModel: BookPlayViewModel
 
-  private val bookId = bundle.getUUID(NI_BOOK_ID)
+  private val bookId: Uri = bundle.getParcelable(NI_BOOK_ID)!!
   private var coverLoaded = false
 
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()
@@ -129,13 +124,16 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
     if (!coverLoaded) {
       coverLoaded = true
-      val coverFile = viewState.cover.file(activity!!)
-      val placeholder = viewState.cover.placeholder(activity!!)
-      if (!coverFile.exists()) {
+      val coverFile = viewState.cover
+      val placeholder = CoverReplacement(viewState.title, root.context)
+      if (coverFile == null) {
         Picasso.get().cancelRequest(cover)
         cover.setImageDrawable(placeholder)
       } else {
-        Picasso.get().load(coverFile).placeholder(placeholder).into(cover)
+        Picasso.get()
+          .load(coverFile)
+          .placeholder(placeholder)
+          .into(cover)
       }
     }
   }
@@ -148,7 +146,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.previous.setOnClickListener { this.viewModel.previous() }
     binding.next.setOnClickListener { this.viewModel.next() }
     binding.currentChapterContainer.setOnClickListener {
-      SelectChapterDialog(bookId).showDialog(router)
+      // todo SelectChapterDialog(bookId).showDialog(router)
     }
 
     val detector = GestureDetectorCompat(
@@ -222,9 +220,8 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           true
         }
         R.id.action_bookmark -> {
-          val bookmarkController = BookmarkController(bookId)
-            .asTransaction()
-          router.pushController(bookmarkController)
+          // todo val bookmarkController = BookmarkController(bookId).asTransaction()
+          //  router.pushController(bookmarkController)
           true
         }
         R.id.action_equalizer -> {
@@ -236,7 +233,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           true
         }
         R.id.loudness -> {
-          LoudnessDialog(bookId).showDialog(router)
+          // todo LoudnessDialog(bookId).showDialog(router)
           true
         }
         else -> false
@@ -256,7 +253,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun openSleepTimeDialog() {
-    SleepTimerDialogController(bookId)
-      .showDialog(router)
+    // todo SleepTimerDialogController(bookId)
+    // .showDialog(router)
   }
 }

@@ -6,7 +6,7 @@ import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderCom
 import de.ph1b.audiobook.features.bookOverview.list.header.OpenCategoryListener
 import de.ph1b.audiobook.misc.recyclerComponent.CompositeListAdapter
 
-typealias BookClickListener = (Book, BookOverviewClick) -> Unit
+typealias BookClickListener = (Uri, BookOverviewClick) -> Unit
 
 class BookOverviewAdapter(
   bookClickListener: BookClickListener,

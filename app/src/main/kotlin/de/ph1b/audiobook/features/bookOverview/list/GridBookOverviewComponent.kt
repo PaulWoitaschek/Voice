@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -8,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.common.CoverReplacement
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
 import de.ph1b.audiobook.databinding.BookOverviewRowListBinding
 import de.ph1b.audiobook.misc.RoundRectOutlineProvider
@@ -93,7 +93,7 @@ class BookOverviewHolder(
   private val listener: BookClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-  private var boundBook: Book? = null
+  private var boundBook: Uri? = null
 
   init {
     binding.cover.clipToOutline = true
@@ -112,7 +112,7 @@ class BookOverviewHolder(
   }
 
   fun bind(model: BookOverviewViewState) {
-    // todo  boundBook = model.book
+    boundBook = model.id
     val name = model.name
     binding.title.text = name
     binding.author?.text = model.author

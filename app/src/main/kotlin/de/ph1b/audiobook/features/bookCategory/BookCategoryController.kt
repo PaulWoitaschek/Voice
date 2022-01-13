@@ -72,16 +72,16 @@ class BookCategoryController(bundle: Bundle) :
     }
     binding.toolbar.setNavigationOnClickListener { popOrBack() }
 
-    val adapter = BookCategoryAdapter { book, clickType ->
+    val adapter = BookCategoryAdapter { bookId, clickType ->
       when (clickType) {
         BookOverviewClick.REGULAR -> {
           val changeHandler = BookChangeHandler().apply {
-            transitionName = book.coverTransitionName
+            transitionName = bookId.toString()
           }
-          router.replaceTopController(BookPlayController(book.id).asTransaction(changeHandler, changeHandler))
+          router.replaceTopController(BookPlayController(bookId).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
-          EditBookBottomSheetController(this, book).showDialog(router)
+          // todo EditBookBottomSheetController(this, book).showDialog(router)
         }
       }
     }.also { adapter = it }
