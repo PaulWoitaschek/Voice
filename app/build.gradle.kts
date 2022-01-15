@@ -106,8 +106,6 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.materialCab)
 
-  implementation(libs.floatingActionButton)
-
   implementation(libs.dagger.core)
   kapt(libs.dagger.compiler)
 

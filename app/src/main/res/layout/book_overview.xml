@@ -40,7 +40,6 @@
       android:contentDescription="@string/play_pause"
       android:theme="@style/PlayButtonStyle"
       android:transitionName="@string/fab_transition"
-      app:fab_size="normal"
       tools:ignore="UnusedAttribute" />
 
     <View
