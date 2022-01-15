@@ -3,7 +3,6 @@ package voice.playbackScreen
 import android.net.Uri
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepo2
@@ -61,11 +60,6 @@ class BookPlayViewModel
         skipSilence = book.content.skipSilence
       )
     }
-  }
-
-  private fun Book.hasMoreThanOneChapter(): Boolean {
-    val chapterCount = content.chapters.sumOf { it.chapterMarks.size }
-    return chapterCount > 1
   }
 
   fun next() {
