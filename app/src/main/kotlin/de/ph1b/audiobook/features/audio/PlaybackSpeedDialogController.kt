@@ -2,27 +2,28 @@ package de.ph1b.audiobook.features.audio
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
+import androidx.datastore.core.DataStore
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
-import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.text.DecimalFormat
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Dialog for setting the playback speed of the current book.
@@ -30,9 +31,11 @@ import javax.inject.Named
 class PlaybackSpeedDialogController : DialogController() {
 
   @Inject
-  lateinit var repo: BookRepository
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<UUID>
+  lateinit var repo: BookRepo2
+
+  @field:[Inject CurrentBook]
+  lateinit var currentBook: DataStore<Uri?>
+
   @Inject
   lateinit var playerController: PlayerController
 
@@ -40,11 +43,9 @@ class PlaybackSpeedDialogController : DialogController() {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    // init views
     val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
-    // setting current speed
-    val book = repo.bookById(currentBookIdPref.value)
+    val book = runBlocking { currentBook.data.first()?.let { repo.flow(it).first() } }
       ?: error("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
     binding.seekBar.max = ((MAX - MIN) * FACTOR).toInt()
