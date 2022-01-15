@@ -14,7 +14,7 @@ import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackComponent
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.rootComponent
-import de.ph1b.audiobook.scanner.MediaScanner
+import de.ph1b.audiobook.scanner.MediaScanTrigger
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ import javax.inject.Named
 class App : Application(), PlaybackComponentFactoryProvider {
 
   @Inject
-  lateinit var mediaScanner: MediaScanner
+  lateinit var mediaScanner: MediaScanTrigger
 
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
@@ -68,7 +68,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
       }
     }
 
-    mediaScanner.scanForFiles()
+    mediaScanner.scan()
 
     autoConnectedReceiver.register(this)
 

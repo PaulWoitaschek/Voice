@@ -1,396 +1,95 @@
 package de.ph1b.audiobook.scanner
 
-import android.Manifest
-import android.content.Context
-import android.net.Uri
-import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
-import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.common.permission.hasPermission
-import de.ph1b.audiobook.common.pref.AudiobookFolders
-import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.common.storageMounted
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.BookMetaData
-import de.ph1b.audiobook.data.BookSettings
-import de.ph1b.audiobook.data.Chapter
-import de.ph1b.audiobook.data.repo.BookRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.File
-import java.util.ArrayList
-import java.util.UUID
-import java.util.concurrent.CancellationException
-import java.util.concurrent.Executors
+import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.repo.BookContentRepo
+import de.ph1b.audiobook.data.repo.ChapterRepo
+import java.time.Instant
 import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
-import kotlin.system.measureTimeMillis
 
-@Singleton
 class MediaScanner
 @Inject constructor(
-  private val context: Context,
-  private val repo: BookRepository,
-  private val coverCollector: CoverFromDiscCollector,
+  private val bookContentRepo: BookContentRepo,
+  private val chapterRepo: ChapterRepo,
   private val mediaAnalyzer: MediaAnalyzer,
-  @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
-  private val singleBookFolderPref: Pref<Set<String>>,
-  @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  private val collectionBookFolderPref: Pref<Set<String>>,
-  @AudiobookFolders
-  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  private val scanner2: MediaScanner2,
 ) {
 
-  private val _scannerActive = MutableStateFlow(false)
-  val scannerActive: Flow<Boolean> = _scannerActive
-
-  private val scanningDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
-  init {
-    GlobalScope.launch {
-      combine(collectionBookFolderPref.flow, singleBookFolderPref.flow, audiobookFolders.data) { _, _, _ -> }
-        .collect {
-          scanForFiles(restartIfScanning = true)
-        }
-    }
+  suspend fun scan(folders: List<DocumentFile>) {
+    val allFiles = folders.flatMap { it.listFiles().toList() }
+    bookContentRepo.setAllInactiveExcept(allFiles.map { it.uri })
+    allFiles.forEach { scan(it) }
   }
 
-  private var scanningJob: Job? = null
-
-  fun scanForFiles(restartIfScanning: Boolean = false) {
-    Timber.i("scanForFiles with restartIfScanning=$restartIfScanning")
-    if (scanningJob?.isActive == true && !restartIfScanning) {
-      return
-    }
-    GlobalScope.launch {
-      scanningJob?.cancelAndJoin()
-      scanningJob = launch(scanningDispatcher) {
-        _scannerActive.value = true
-
-        scanner2.scan(audiobookFolders.data.first().map { DocumentFile.fromTreeUri(context, it)!! })
-        deleteOldBooks()
-        measureTimeMillis {
-          checkForBooks()
-        }.also {
-          Timber.i("checkForBooks took $it ms")
-        }
-        coverCollector.findCovers(repo.activeBooks())
-      }.also {
-        it.invokeOnCompletion {
-          _scannerActive.value = false
-        }
-      }
-    }
-  }
-
-  // check for new books
-  private suspend fun checkForBooks() {
-    val singleBooks = singleBookFiles
-    for (f in singleBooks) {
-      if (f.isFile && f.canRead()) {
-        checkBook(f, Book.Type.SINGLE_FILE)
-      } else if (f.isDirectory && f.canRead()) {
-        checkBook(f, Book.Type.SINGLE_FOLDER)
-      }
-    }
-
-    val collectionBooks = collectionBookFiles
-    for (f in collectionBooks) {
-      if (f.isFile && f.canRead()) {
-        checkBook(f, Book.Type.COLLECTION_FILE)
-      } else if (f.isDirectory && f.canRead()) {
-        checkBook(f, Book.Type.COLLECTION_FOLDER)
-      }
-    }
-  }
-
-  private val singleBookFiles: List<File>
-    get() = singleBookFolderPref.value
-      .map(::File)
-      .sortedWith(NaturalOrderComparator.fileComparator)
-
-  private val collectionBookFiles: List<File>
-    get() = collectionBookFolderPref.value
-      .map(::File)
-      .flatMap { it.listFiles(FileRecognition.folderAndMusicFilter)?.toList() ?: emptyList() }
-      .sortedWith(NaturalOrderComparator.fileComparator)
-
-  private suspend fun deleteOldBooks() {
-    val singleBookFiles = singleBookFiles
-    val collectionBookFolders = collectionBookFiles
-
-    // getting books to remove
-    val booksToRemove = ArrayList<Book>(20)
-    for (book in repo.activeBooks()) {
-      var bookExists = false
-      when (book.type) {
-        Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
-          if (it.isFile) {
-            val chapters = book.content.chapters
-            val singleBookChapterFile = chapters.first().file
-            if (singleBookChapterFile == it) {
-              bookExists = true
-            }
-          }
-        }
-        Book.Type.COLLECTION_FOLDER -> collectionBookFolders.forEach {
-          if (it.isDirectory) {
-            // multi file book
-            if (book.root == it.absolutePath) {
-              bookExists = true
-            }
-          }
-        }
-        Book.Type.SINGLE_FILE -> singleBookFiles.forEach {
-          if (it.isFile) {
-            val chapters = book.content.chapters
-            val singleBookChapterFile = chapters.first().file
-            if (singleBookChapterFile == it) {
-              bookExists = true
-            }
-          }
-        }
-        Book.Type.SINGLE_FOLDER -> singleBookFiles.forEach {
-          if (it.isDirectory) {
-            // multi file book
-            if (book.root == it.absolutePath) {
-              bookExists = true
-            }
-          }
-        }
-      }
-
-      if (!bookExists) {
-        booksToRemove.add(book)
-      }
-    }
-
-    if (!storageMounted()) {
-      throw CancellationException("Storage is not mounted")
-    }
-    booksToRemove.forEach {
-      repo.setBookActive(it.id, false)
-    }
-  }
-
-  // adds a new book
-  private suspend fun addNewBook(
-    rootFile: File,
-    bookId: UUID,
-    newChapters: List<Chapter>,
-    type: Book.Type
-  ) {
-    val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent!!
-
-    val result = mediaAnalyzer.analyze(newChapters.first().uri) ?: return
-
-    var bookName = result.bookName
-    if (bookName.isNullOrEmpty()) {
-      bookName = result.chapterName
-      if (bookName.isNullOrEmpty()) {
-        val withoutExtension = rootFile.nameWithoutExtension
-        bookName = if (withoutExtension.isEmpty()) {
-          @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
-          rootFile.name!!
+  private suspend fun scan(file: DocumentFile) {
+    val fileName = file.name ?: return
+    val chapters = file.parseChapters()
+    if (chapters.isEmpty()) return
+    val chapterUris = chapters.map { it.uri }
+    val content = bookContentRepo.getOrPut(file.uri) {
+      BookContent2(
+        uri = file.uri,
+        isActive = true,
+        addedAt = Instant.now(),
+        author = mediaAnalyzer.analyze(chapterUris.first())?.author,
+        lastPlayedAt = Instant.EPOCH,
+        name = fileName,
+        playbackSpeed = 1F,
+        position = 0,
+        duration = chapters.sumOf { it.duration },
+        skipSilence = false,
+        type = if (file.isFile) {
+          BookContent2.Type.File
         } else {
-          withoutExtension
-        }
-      }
-    }
-
-    val existingBook = getBookFromDb(rootFile, type)
-    if (existingBook == null) {
-      val newBook = Book(
-        id = bookId,
-        metaData = BookMetaData(
-          type = type,
-          author = result.author,
-          name = bookName,
-          root = bookRoot,
-          id = bookId,
-          addedAtMillis = System.currentTimeMillis()
-        ),
-        content = BookContent(
-          settings = BookSettings(
-            currentFile = newChapters.first().file,
-            positionInChapter = 0,
-            id = bookId,
-            active = true,
-            lastPlayedAtMillis = 0
-          ),
-          chapters = newChapters.withBookId(bookId),
-          id = bookId
-        )
+          BookContent2.Type.Folder
+        },
+        chapters = chapterUris,
+        positionInChapter = 0L,
+        currentChapter = chapters.first().uri,
+        cover = null
       )
-      repo.addBook(newBook)
-    } else {
-      // checks if current path is still valid.
-      val oldCurrentFile = existingBook.content.currentFile
-      val oldCurrentFileValid = newChapters.any { it.file == oldCurrentFile }
+    }
 
-      // if the file is not valid, update time and position
-      val time = if (oldCurrentFileValid) existingBook.content.positionInChapter else 0
-      val currentFile = if (oldCurrentFileValid) {
-        existingBook.content.currentFile
-      } else {
-        newChapters.first().file
-      }
+    val currentChapterGone = content.currentChapter !in chapterUris
+    val updated = content.copy(
+      duration = chapters.sumOf { it.duration },
+      chapters = chapterUris,
+      currentChapter = if (currentChapterGone) chapterUris.first() else content.currentChapter,
+      positionInChapter = if (currentChapterGone) 0 else content.positionInChapter,
+      isActive = true,
+    )
+    if (content != updated) {
+      bookContentRepo.put(updated)
+    }
+  }
 
-      val withUpdatedContent = existingBook.updateContent {
-        copy(
-          settings = settings.copy(
-            positionInChapter = time,
-            currentFile = currentFile
-          ),
-          chapters = newChapters.withBookId(existingBook.id)
+  private suspend fun DocumentFile.parseChapters(): List<Chapter2> {
+    val result = mutableListOf<Chapter2>()
+    parseChapters(file = this, result = result)
+    return result
+  }
+
+  private suspend fun parseChapters(file: DocumentFile, result: MutableList<Chapter2>) {
+    if (file.isFile && file.type?.startsWith("audio/") == true) {
+      val chapter = chapterRepo.getOrPut(file.uri, Instant.ofEpochMilli(file.lastModified())) {
+        val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
+        Chapter2(
+          uri = file.uri,
+          duration = metaData.duration,
+          fileLastModified = Instant.ofEpochMilli(file.lastModified()),
+          name = metaData.chapterName,
+          markData = metaData.chapters
         )
       }
-      repo.addBook(withUpdatedContent)
-    }
-  }
-
-  /** Updates a book. Adds the new chapters to the book and corrects the
-   * [BookContent.currentFile] and [BookContent.positionInChapter]. **/
-  private suspend fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
-    var bookToUpdate = bookExisting.update(updateSettings = { copy(active = true) })
-    val bookHasChanged = (bookToUpdate.content.chapters != newChapters) || !bookExisting.content.settings.active
-    // sort chapters
-    if (bookHasChanged) {
-      // check if the chapter set as the current still exists
-      var currentPathIsGone = true
-      val currentFile = bookToUpdate.content.currentFile
-      val currentTime = bookToUpdate.content.positionInChapter
-      newChapters.forEach {
-        if (it.file == currentFile) {
-          if (it.duration < currentTime) {
-            bookToUpdate = bookToUpdate.updateContent {
-              copy(
-                settings = settings.copy(positionInChapter = 0)
-              )
-            }
-          }
-          currentPathIsGone = false
+      if (chapter != null) {
+        result.add(chapter)
+      }
+    } else if (file.isDirectory) {
+      file.listFiles().sortedWith(NaturalOrderComparator.documentFileComparator)
+        .forEach {
+          parseChapters(it, result)
         }
-      }
-
-      // set new bookmarks and chapters.
-      // if the current path is gone, reset it correctly.
-      bookToUpdate = bookToUpdate.updateContent {
-        copy(
-          chapters = newChapters.withBookId(bookToUpdate.id),
-          settings = settings.copy(
-            currentFile = if (currentPathIsGone) newChapters.first().file else currentFile,
-            positionInChapter = if (currentPathIsGone) 0 else positionInChapter
-          )
-        )
-      }
-      repo.addBook(bookToUpdate)
-    }
-  }
-
-  /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
-   * exist any longer **/
-  private suspend fun checkBook(rootFile: File, type: Book.Type) {
-    val bookExisting = getBookFromDb(rootFile, type)
-    val bookId = bookExisting?.id ?: UUID.randomUUID()
-    val newChapters = getChaptersByRootFile(bookId, rootFile)
-
-    if (!storageMounted()) {
-      throw CancellationException("Storage not mounted")
-    }
-
-    if (newChapters.isEmpty()) {
-      // there are no chapters
-      if (bookExisting != null) {
-        // so delete book if available
-        repo.setBookActive(bookExisting.id, false)
-      }
-    } else {
-      // there are chapters
-      if (bookExisting == null) {
-        // there is no active book.
-        addNewBook(rootFile, bookId, newChapters, type)
-      } else {
-        // there is a book, so update it if necessary
-        updateBook(bookExisting, newChapters)
-      }
-    }
-  }
-
-  // Returns all the chapters matching to a Book root
-  private suspend fun getChaptersByRootFile(bookId: UUID, rootFile: File): List<Chapter> {
-    val containingFiles = rootFile.walk()
-      .filter { FileRecognition.musicFilter.accept(it) }
-      .sortedWith(NaturalOrderComparator.fileComparator)
-      .toList()
-
-    val containingMedia = ArrayList<Chapter>(containingFiles.size)
-    for (file in containingFiles) {
-      // check for existing chapter first so we can skip parsing
-      val existingChapter = repo.chapterByFile(file)
-      val lastModified = file.lastModified()
-      if (existingChapter?.fileLastModified == lastModified) {
-        containingMedia.add(existingChapter)
-        continue
-      }
-
-      // else parse and add
-      Timber.i("analyze $file")
-      val result = mediaAnalyzer.analyze(file.toUri())
-      Timber.i("analyzed $file.")
-      if (result != null) {
-        containingMedia.add(
-          Chapter(
-            file = file,
-            name = result.chapterName,
-            duration = result.duration,
-            fileLastModified = lastModified,
-            markData = result.chapters,
-            bookId = bookId
-          )
-        )
-      }
-    }
-    return containingMedia
-  }
-
-  private fun getBookFromDb(rootFile: File, type: Book.Type): Book? {
-    val books = repo.allBooks()
-    return when {
-      rootFile.isDirectory -> {
-        books.firstOrNull {
-          rootFile.absolutePath == it.root && type === it.type
-        }
-      }
-      rootFile.isFile -> {
-        books.firstOrNull { book ->
-          rootFile.parentFile?.absolutePath == book.root && type === book.type && book.content.chapters.first().file == rootFile
-        }
-      }
-      else -> null
-    }
-  }
-}
-
-private fun Iterable<Chapter>.withBookId(bookId: UUID): List<Chapter> {
-  return map { chapter ->
-    if (chapter.bookId == bookId) {
-      chapter
-    } else {
-      chapter.copy(bookId = bookId)
     }
   }
 }

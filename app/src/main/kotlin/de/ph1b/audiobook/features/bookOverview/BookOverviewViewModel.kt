@@ -14,7 +14,7 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
 import de.ph1b.audiobook.scanner.CoverFromDiscCollector
-import de.ph1b.audiobook.scanner.MediaScanner
+import de.ph1b.audiobook.scanner.MediaScanTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,7 +28,7 @@ class BookOverviewViewModel
 @Inject
 constructor(
   private val repo: BookRepo2,
-  private val mediaScanner: MediaScanner,
+  private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
@@ -40,7 +40,7 @@ constructor(
 ) {
 
   fun attach() {
-    mediaScanner.scanForFiles()
+    mediaScanner.scan()
   }
 
   fun useGrid(useGrid: Boolean) {

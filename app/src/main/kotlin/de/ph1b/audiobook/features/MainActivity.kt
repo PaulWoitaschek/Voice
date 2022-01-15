@@ -12,11 +12,7 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.permission.PermissionHelper
-import de.ph1b.audiobook.common.permission.Permissions
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
@@ -30,24 +26,14 @@ import de.ph1b.audiobook.playback.session.search.BookSearchParser
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Activity that coordinates the book shelf and play screens.
  */
 class MainActivity : AppCompatActivity(), RouterProvider {
 
-  private lateinit var permissionHelper: PermissionHelper
-  private lateinit var permissions: Permissions
-
   @field:[Inject CurrentBook]
   lateinit var currentBook: DataStore<Uri?>
-
-  @field:[Inject Named(PrefKeys.SINGLE_BOOK_FOLDERS)]
-  lateinit var singleBookFolderPref: Pref<Set<String>>
-
-  @field:[Inject Named(PrefKeys.COLLECTION_BOOK_FOLDERS)]
-  lateinit var collectionBookFolderPref: Pref<Set<String>>
 
   @Inject
   lateinit var repo: BookRepository
@@ -68,9 +54,6 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     super.onCreate(savedInstanceState)
     val binding = ActivityBookBinding.inflate(layoutInflater)
     setContentView(binding.root)
-
-    permissions = Permissions(this)
-    permissionHelper = PermissionHelper(this, permissions)
 
     router = Conductor.attachRouter(this, binding.root, savedInstanceState)
     if (!router.hasRootController()) {
@@ -139,25 +122,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     router.setRoot(rootTransaction)
   }
 
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
-  }
-
   override fun provideRouter() = router
-
-  override fun onStart() {
-    super.onStart()
-
-    val anyFolderSet = collectionBookFolderPref.value.size + singleBookFolderPref.value.size > 0
-    if (anyFolderSet) {
-      permissionHelper.storagePermission()
-    }
-  }
 
   override fun onBackPressed() {
     if (router.backstackSize == 1) {

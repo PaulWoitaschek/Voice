@@ -23,7 +23,7 @@ import java.io.File
 import java.nio.file.Files
 
 @RunWith(AndroidJUnit4::class)
-class MediaScanner2Test {
+class MediaScannerTest {
 
   init {
     Shadows.shadowOf(MimeTypeMap.getSingleton())
@@ -121,7 +121,7 @@ class MediaScanner2Test {
     val bookContentRepo = BookContentRepo()
     private val chapterRepo = ChapterRepo()
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
-    private val scanner = MediaScanner2(bookContentRepo, chapterRepo, mediaAnalyzer)
+    private val scanner = MediaScanner(bookContentRepo, chapterRepo, mediaAnalyzer)
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 

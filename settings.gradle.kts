@@ -22,11 +22,11 @@ dependencyResolutionManagement {
       }
       filter {
         includeGroupByRegex("com.github.PaulWoitaschek.*")
+        includeModule("com.github.lisawray.groupie", "groupie")
       }
     }
 
     mavenCentral().mavenContent { releasesOnly() }
-    jcenter().mavenContent { releasesOnly() }
   }
 }
 
