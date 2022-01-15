@@ -16,6 +16,7 @@ import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
+import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.CircleOutlineProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
@@ -139,14 +140,14 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun setupClicks() {
-    binding.play.setOnClickListener { this.viewModel.playPause() }
-    binding.rewind.setOnClickListener { this.viewModel.rewind() }
-    binding.fastForward.setOnClickListener { this.viewModel.fastForward() }
+    binding.play.setOnClickListener { viewModel.playPause() }
+    binding.rewind.setOnClickListener { viewModel.rewind() }
+    binding.fastForward.setOnClickListener { viewModel.fastForward() }
     binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
-    binding.previous.setOnClickListener { this.viewModel.previous() }
-    binding.next.setOnClickListener { this.viewModel.next() }
+    binding.previous.setOnClickListener { viewModel.previous() }
+    binding.next.setOnClickListener { viewModel.next() }
     binding.currentChapterContainer.setOnClickListener {
-      // todo SelectChapterDialog(bookId).showDialog(router)
+      SelectChapterDialog(bookId).showDialog(router)
     }
 
     val detector = GestureDetectorCompat(

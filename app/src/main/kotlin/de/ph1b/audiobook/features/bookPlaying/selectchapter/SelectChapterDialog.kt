@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookPlaying.selectchapter
 
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -13,11 +14,8 @@ import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.ChapterMark
 import de.ph1b.audiobook.databinding.SelectChapterRowBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.getUUID
 import de.ph1b.audiobook.misc.groupie.BindingItem
-import de.ph1b.audiobook.misc.putUUID
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 private const val NI_BOOK_ID = "ni#bookId"
@@ -27,15 +25,15 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var viewModel: SelectChapterViewModel
 
-  constructor(bookId: UUID) : this(
+  constructor(bookId: Uri) : this(
     Bundle().apply {
-      putUUID(NI_BOOK_ID, bookId)
+      putString(NI_BOOK_ID, bookId.toString())
     }
   )
 
   init {
     appComponent.inject(this)
-    viewModel.bookId = args.getUUID(NI_BOOK_ID)
+    viewModel.bookId = Uri.parse(args.getString(NI_BOOK_ID)!!)
   }
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {

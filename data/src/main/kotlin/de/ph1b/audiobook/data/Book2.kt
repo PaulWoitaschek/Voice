@@ -10,6 +10,7 @@ data class Book2(
   val nextChapter = chapters.getOrNull(content.currentChapterIndex + 1)
 
   val nextMark = currentChapter.nextMark(content.positionInChapter)
+  val currentMark = currentChapter.markForPosition(content.positionInChapter)
 
   inline fun update(update: (BookContent2) -> BookContent2): Book2 {
     return copy(content = update(content))
