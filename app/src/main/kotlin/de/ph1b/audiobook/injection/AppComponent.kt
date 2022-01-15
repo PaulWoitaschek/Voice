@@ -17,8 +17,6 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkPresenter
-import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
-import de.ph1b.audiobook.features.folderOverview.FolderOverviewPresenter
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.features.widget.BaseWidgetProvider
 import de.ph1b.audiobook.playback.di.PlaybackComponent
@@ -46,8 +44,6 @@ interface AppComponent {
   fun inject(target: EditBookBottomSheetController)
   fun inject(target: EditBookTitleDialogController)
   fun inject(target: EditCoverDialogController)
-  fun inject(target: FolderChooserPresenter)
-  fun inject(target: FolderOverviewPresenter)
   fun inject(target: MainActivity)
   fun inject(target: PlaybackSpeedDialogController)
   fun inject(target: SeekDialogController)

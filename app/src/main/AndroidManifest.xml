@@ -52,18 +52,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-          android:name=".features.externalStorageMissing.NoExternalStorageActivity"
-          android:label="@string/no_external_storage_action_bar_title" />
-
-        <activity
-          android:name=".features.folderChooser.FolderChooserActivity"
-          android:parentActivityName=".features.MainActivity">
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".features.MainActivity" />
-        </activity>
-
         <service
           android:name=".playback.session.PlaybackService"
           android:exported="true"

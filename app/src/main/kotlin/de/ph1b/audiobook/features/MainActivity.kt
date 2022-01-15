@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
@@ -34,7 +35,7 @@ import javax.inject.Named
 /**
  * Activity that coordinates the book shelf and play screens.
  */
-class MainActivity : BaseActivity(), RouterProvider {
+class MainActivity : AppCompatActivity(), RouterProvider {
 
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
