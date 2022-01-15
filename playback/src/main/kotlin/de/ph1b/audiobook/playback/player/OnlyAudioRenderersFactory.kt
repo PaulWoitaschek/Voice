@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.playback
+package de.ph1b.audiobook.playback.player
 
 import android.content.Context
 import android.os.Handler

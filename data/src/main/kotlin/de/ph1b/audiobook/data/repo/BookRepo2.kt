@@ -23,6 +23,10 @@ class BookRepo2
 
   fun flow(): Flow<List<BookContent2>> = contentRepo.flow()
 
+  fun updateBook(content: BookContent2) {
+    contentRepo.put(content)
+  }
+
   fun flow(uri: Uri): Flow<Book2?> = contentRepo.flow()
     .map { contents ->
       val content = contents.find { it.uri == uri } ?: return@map null

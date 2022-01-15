@@ -5,14 +5,22 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
+import com.google.android.exoplayer2.SimpleExoPlayer
 import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
+import de.ph1b.audiobook.playback.player.DataSourceConverter
 import de.ph1b.audiobook.playback.player.MediaPlayer
+import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -30,12 +38,20 @@ class MediaSessionCallback
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,
-  private val player: MediaPlayer
+  private val player: MediaPlayer,
+  private val player2: SimpleExoPlayer,
+  @CurrentBook
+  private val currentBook: DataStore<Uri?>,
+  private val bookRepo2: BookRepo2,
+  private val dataSourceConverter: DataSourceConverter,
+  private val playbackStateManager: PlayStateManager,
 ) : MediaSessionCompat.Callback() {
+
+  private var preparedBook: Uri? = null
 
   override fun onSkipToQueueItem(id: Long) {
     Timber.i("onSkipToQueueItem $id")
-    val chapter = player.bookContent
+    val chapter = player.book
       ?.chapters?.getOrNull(id.toInt()) ?: return
     player.changePosition(0, chapter.uri)
     player.play()
@@ -110,6 +126,18 @@ class MediaSessionCallback
     player.setPlaybackSpeed(speed)
   }
 
+  private fun prepare() {
+    runBlocking {
+      val targetUri = currentBook.data.first() ?: bookRepo2.flow().first().firstOrNull()?.uri ?: return@runBlocking
+      if (targetUri != preparedBook) {
+        val book = bookRepo2.flow(targetUri).first() ?: return@runBlocking
+        player2.setMediaSource(dataSourceConverter.toMediaSource(book))
+        player2.prepare()
+        preparedBook = targetUri
+      }
+    }
+  }
+
   override fun onCustomAction(action: String?, extras: Bundle?) {
     Timber.i("onCustomAction $action")
     when (action) {
@@ -117,7 +145,10 @@ class MediaSessionCallback
       ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
       ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
       ANDROID_AUTO_ACTION_REWIND -> onRewind()
-      PLAY_PAUSE_ACTION -> player.playPause()
+      PLAY_PAUSE_ACTION -> {
+        prepare()
+        player2.playWhenReady = !player2.playWhenReady
+      }
       SKIP_SILENCE_ACTION -> {
         val skip = extras!!.getBoolean(SKIP_SILENCE_EXTRA)
         player.setSkipSilences(skip)

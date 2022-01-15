@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -12,11 +13,13 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
 import androidx.media.MediaBrowserServiceCompat
 import de.paulwoitaschek.flowpref.Pref
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.androidauto.NotifyOnAutoConnectionChange
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.playback.misc.flowBroadcastReceiver
@@ -32,12 +35,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -50,14 +52,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-  @field:[Inject Named(PrefKeys.CURRENT_BOOK)]
-  lateinit var currentBookIdPref: Pref<UUID>
+  @field:[Inject CurrentBook]
+  lateinit var currentBookIdPref: DataStore<Uri?>
 
   @Inject
   lateinit var player: MediaPlayer
 
   @Inject
-  lateinit var repo: BookRepository
+  lateinit var repo: BookRepo2
 
   @Inject
   lateinit var notificationManager: NotificationManager
@@ -114,14 +116,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaController.registerCallback(MediaControllerCallback())
 
     scope.launch {
-      player.bookContentFlow
-        .distinctUntilChangedBy { it.settings }
-        .collect { content ->
-          val updatedBook = repo.updateBookContent(content)
-          if (updatedBook != null) {
-            changeNotifier.updateMetadata(updatedBook)
-            updateNotification(updatedBook)
-          }
+      player.bookFlow
+        .collect { book ->
+          repo.updateBook(book.content)
+          changeNotifier.updateMetadata(book)
+          updateNotification(book)
         }
     }
 
@@ -153,7 +152,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-  private suspend fun updateNotification(book: Book): Notification {
+  private suspend fun updateNotification(book: Book2): Notification {
     return notificationCreator.createNotification(book).also {
       notificationManager.notify(NOTIFICATION_ID, it)
     }
@@ -204,10 +203,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private suspend fun updateNotification(state: PlaybackStateCompat) {
     val updatedState = state.state
 
-    val book = repo.bookById(currentBookIdPref.value)
-    val notification = if (book != null &&
-      updatedState != PlaybackStateCompat.STATE_NONE
-    ) {
+    val book = currentBookIdPref.data.first()
+      ?.let { repo.flow(it).first() }
+    val notification = if (book != null && updatedState != PlaybackStateCompat.STATE_NONE) {
       notificationCreator.createNotification(book)
     } else {
       null

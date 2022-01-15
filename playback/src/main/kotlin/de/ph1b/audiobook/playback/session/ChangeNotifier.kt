@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback.session
 
 import android.content.Context
+import android.net.Uri
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -9,16 +10,14 @@ import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UN
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.common.ImageHelper
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -37,7 +36,7 @@ class ChangeNotifier
 
   /** The last file the [.notifyChange] has used to update the metadata. **/
   @Volatile
-  private var lastFileForMetaData = File("")
+  private var lastFileForMetaData: Uri? = null
 
   private val playbackStateBuilder = PlaybackStateCompat.Builder()
     .setActions(
@@ -88,32 +87,43 @@ class ChangeNotifier
       R.drawable.ic_skip_next
     )
 
-  fun updatePlaybackState(@PlaybackStateCompat.State state: Int, content: BookContent?) {
-    val playbackState = (if (autoConnectedReceiver.connected) playbackStateBuilderForAuto else playbackStateBuilder)
-      .setState(state, content?.positionInChapter ?: PLAYBACK_POSITION_UNKNOWN, content?.playbackSpeed ?: 1F)
+  fun updatePlaybackState(@PlaybackStateCompat.State state: Int, book: Book2?) {
+    val builder = if (autoConnectedReceiver.connected) {
+      playbackStateBuilderForAuto
+    } else {
+      playbackStateBuilder
+    }
+    val playbackState = builder
       .apply {
-        if (content != null) {
-          setActiveQueueItemId(content.chapters.indexOf(content.currentChapter).toLong())
+        setState(
+          state,
+          book?.content?.positionInChapter ?: PLAYBACK_POSITION_UNKNOWN,
+          book?.content?.playbackSpeed ?: 1F
+        )
+
+        if (book != null) {
+          setActiveQueueItemId(book.chapters.indexOf(book.currentChapter).toLong())
         }
       }
       .build()
     mediaSession.setPlaybackState(playbackState)
   }
 
-  suspend fun updateMetadata(book: Book) {
-    val currentChapter = book.content.currentChapter
+  suspend fun updateMetadata(book: Book2) {
+    val content = book.content
+    val currentChapter = book.currentChapter
 
-    val bookName = book.name
+    val bookName = content.name
     val chapterName = currentChapter.name
-    val author = book.author
+    val author = content.author
 
-    if (lastFileForMetaData != book.content.currentFile) {
+    if (lastFileForMetaData != content.currentChapter) {
       appendQueue(book)
       // this check is necessary. Else the lockscreen controls will flicker due to
       // an updated picture
       var bitmap = withContext(IO) {
-        val coverFile = book.coverFile(context)
-        if (coverFile.exists() && coverFile.canRead()) {
+        val coverFile = content.cover
+        if (coverFile != null) {
           try {
             Picasso.get()
               .load(coverFile)
@@ -134,7 +144,7 @@ class ChangeNotifier
       }
 
       if (bitmap == null) {
-        val replacement = CoverReplacement(book.name, context)
+        val replacement = CoverReplacement(content.name, context)
         bitmap = imageHelper.drawableToBitmap(
           replacement,
           imageHelper.smallerScreenSize,
@@ -148,9 +158,9 @@ class ChangeNotifier
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration)
         .putLong(
           MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-          (book.content.currentChapterIndex + 1).toLong()
+          (content.currentChapterIndex + 1).toLong()
         )
-        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.content.chapters.size.toLong())
+        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
@@ -161,25 +171,25 @@ class ChangeNotifier
         .build()
       mediaSession.setMetadata(mediaMetaData)
 
-      lastFileForMetaData = book.content.currentFile
+      lastFileForMetaData = content.currentChapter
     }
   }
 
-  private fun appendQueue(book: Book) {
-    val queue = book.content.chapters.mapIndexed { index, chapter ->
+  private fun appendQueue(book: Book2) {
+    val queue = book.chapters.mapIndexed { index, chapter ->
       MediaSessionCompat.QueueItem(chapter.toMediaDescription(book), index.toLong())
     }
 
     if (queue.isNotEmpty()) {
       mediaSession.setQueue(queue)
-      mediaSession.setQueueTitle(book.name)
+      mediaSession.setQueueTitle(book.content.name)
     }
   }
 
-  private fun Chapter.toMediaDescription(book: Book): MediaDescriptionCompat {
+  private fun Chapter2.toMediaDescription(book: Book2): MediaDescriptionCompat {
     return MediaDescriptionCompat.Builder()
       .setTitle(name)
-      .setMediaId(bookUriConverter.chapterId(book.id, id))
+      // todo .setMediaId(bookUriConverter.chapterId(book.id, id))
       .build()
   }
 }

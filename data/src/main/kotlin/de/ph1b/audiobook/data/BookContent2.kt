@@ -20,8 +20,10 @@ data class BookContent2(
   val chapters: List<Uri>,
   val currentChapter: Uri,
   val positionInChapter: Long,
-  val cover : File?,
+  val cover: File?,
 ) {
+
+  val currentChapterIndex = chapters.indexOf(currentChapter).also { require(it != -1) }
 
   init {
     require(currentChapter in chapters)

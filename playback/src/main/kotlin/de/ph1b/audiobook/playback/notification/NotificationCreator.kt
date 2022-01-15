@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -72,7 +72,7 @@ class NotificationCreator
 
   private var cachedImage: CachedImage? = null
 
-  suspend fun createNotification(book: Book): Notification {
+  suspend fun createNotification(book: Book2): Notification {
     val mediaStyle = MediaStyle()
       .setShowActionsInCompactView(0, 1, 2)
       .setCancelButtonIntent(stopIntent())
@@ -97,7 +97,7 @@ class NotificationCreator
       .build()
   }
 
-  private suspend fun cover(book: Book): Bitmap {
+  private suspend fun cover(book: Book2): Bitmap {
     // first try to get use a cached image
     cachedImage?.let {
       if (it.matches(book)) return it.cover
@@ -107,9 +107,9 @@ class NotificationCreator
     val height = imageHelper.smallerScreenSize
 
     // get the cover or fallback to a replacement
-    val coverFile = book.coverFile(context)
+    val coverFile = book.content.cover
     val picassoCover = withContext(Dispatchers.IO) {
-      if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
+      if (coverFile != null && coverFile.length() < MAX_IMAGE_SIZE) {
         try {
           @Suppress("BlockingMethodInNonBlockingContext")
           Picasso.get()
@@ -123,28 +123,28 @@ class NotificationCreator
       } else null
     }
     val cover = picassoCover ?: imageHelper.drawableToBitmap(
-      CoverReplacement(book.name, context),
+      CoverReplacement(book.content.name, context),
       width,
       height
     )
 
     // add a cache entry
-    cachedImage = CachedImage(book.id, cover)
+    cachedImage = CachedImage(book.content.cover, cover)
     return cover
   }
 
-  private suspend fun Builder.setLargeIcon(book: Book): Builder {
+  private suspend fun Builder.setLargeIcon(book: Book2): Builder {
     setLargeIcon(cover(book))
     return this
   }
 
-  private fun Builder.setContentTitle(book: Book): Builder {
-    setContentTitle(book.name)
+  private fun Builder.setContentTitle(book: Book2): Builder {
+    setContentTitle(book.content.name)
     return this
   }
 
-  private fun contentIntent(book: Book): PendingIntent {
-    val contentIntent = toBookIntentProvider.goToBookIntent(book.id)
+  private fun contentIntent(book: Book2): PendingIntent {
+    val contentIntent = toBookIntentProvider.goToBookIntent(book.content.uri)
     return PendingIntent.getActivity(
       context,
       0,
@@ -153,12 +153,12 @@ class NotificationCreator
     )
   }
 
-  private fun Builder.setChapterInfo(book: Book): Builder {
+  private fun Builder.setChapterInfo(book: Book2): Builder {
     val chapters = book.content.chapters
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.
       setContentInfo("${(book.content.currentChapterIndex + 1)}/${chapters.size}")
-      setContentText(book.content.currentChapter.name)
+      setContentText(book.currentChapter.name)
     } else {
       setContentInfo(null)
       setContentText(null)

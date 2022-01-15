@@ -28,7 +28,6 @@ import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -169,7 +168,7 @@ class MainActivity : BaseActivity(), RouterProvider {
     private const val NI_GO_TO_BOOK = "niGotoBook"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(context: Context, bookId: UUID) = Intent(context, MainActivity::class.java).apply {
+    fun goToBookIntent(context: Context, bookId: Uri) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId.toString())
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
