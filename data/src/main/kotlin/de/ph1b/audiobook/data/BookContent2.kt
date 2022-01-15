@@ -7,7 +7,6 @@ import java.time.Instant
 data class BookContent2(
   val uri: Uri,
   val playbackSpeed: Float,
-  val loudnessGain: Int,
   val skipSilence: Boolean,
   val isActive: Boolean,
   val lastPlayedAt: Instant,

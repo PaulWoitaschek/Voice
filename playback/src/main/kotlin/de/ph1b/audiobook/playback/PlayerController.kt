@@ -9,7 +9,6 @@ import de.ph1b.audiobook.playback.session.PlaybackService
 import de.ph1b.audiobook.playback.session.forcedNext
 import de.ph1b.audiobook.playback.session.forcedPrevious
 import de.ph1b.audiobook.playback.session.playPause
-import de.ph1b.audiobook.playback.session.setLoudnessGain
 import de.ph1b.audiobook.playback.session.setPosition
 import de.ph1b.audiobook.playback.session.skipSilence
 import timber.log.Timber
@@ -54,8 +53,6 @@ class PlayerController
   }
 
   fun setPosition(time: Long, uri: Uri) = execute { it.setPosition(time, uri) }
-
-  fun setLoudnessGain(mB: Int) = execute { it.setLoudnessGain(mB) }
 
   fun skipSilence(skip: Boolean) = execute { it.skipSilence(skip) }
 

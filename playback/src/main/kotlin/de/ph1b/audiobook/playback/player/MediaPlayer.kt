@@ -51,8 +51,6 @@ constructor(
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
-  private val equalizer: Equalizer,
-  private val loudnessGain: LoudnessGain,
   private val dataSourceConverter: DataSourceConverter,
   private val player: SimpleExoPlayer,
   private val changeNotifier: ChangeNotifier,
@@ -114,12 +112,6 @@ constructor(
           currentChapter = chapters[index]
         )
       }
-    }
-
-    // update equalizer with new audio session upon arrival
-    player.onAudioSessionId {
-      equalizer.update(it)
-      loudnessGain.update(it)
     }
 
     scope.launch {
@@ -201,15 +193,6 @@ constructor(
     } else {
       play()
     }
-  }
-
-  fun setLoudnessGain(mB: Int) {
-    Timber.v("setLoudnessGain to $mB mB")
-
-    updateBook {
-      copy(loudnessGain = mB)
-    }
-    loudnessGain.gainmB = mB
   }
 
   fun play() {
@@ -322,7 +305,6 @@ constructor(
     player.seekTo(book.content.currentChapterIndex, book.content.positionInChapter)
     player.setPlaybackSpeed(book.content.playbackSpeed)
     player.skipSilenceEnabled = book.content.skipSilence
-    loudnessGain.gainmB = book.content.loudnessGain
     state = PlayerState.PAUSED
   }
 

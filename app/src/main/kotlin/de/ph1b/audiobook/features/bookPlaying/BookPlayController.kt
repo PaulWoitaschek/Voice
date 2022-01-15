@@ -22,14 +22,12 @@ import de.ph1b.audiobook.misc.CircleOutlineProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.formatTime
-import de.ph1b.audiobook.playback.player.Equalizer
 import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import voice.playbackScreen.BookPlayViewEffect
 import voice.playbackScreen.BookPlayViewModel
 import voice.playbackScreen.BookPlayViewState
-import voice.playbackScreen.JumpToPositionDialogController
 import voice.settings.SettingsController
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -43,9 +41,6 @@ private const val NI_BOOK_ID = "niBookId"
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
   constructor(bookId: Uri) : this(Bundle().apply { putParcelable(NI_BOOK_ID, bookId) })
-
-  @Inject
-  lateinit var equalizer: Equalizer
 
   @Inject
   lateinit var viewModel: BookPlayViewModel
@@ -143,7 +138,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.play.setOnClickListener { viewModel.playPause() }
     binding.rewind.setOnClickListener { viewModel.rewind() }
     binding.fastForward.setOnClickListener { viewModel.fastForward() }
-    binding.playedTime.setOnClickListener { launchJumpToPositionDialog() }
     binding.previous.setOnClickListener { viewModel.previous() }
     binding.next.setOnClickListener { viewModel.next() }
     binding.currentChapterContainer.setOnClickListener {
@@ -190,8 +184,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     val menu = binding.toolbar.menu
 
     sleepTimerItem = menu.findItem(R.id.action_sleep)
-    val equalizerItem = menu.findItem(R.id.action_equalizer)
-    equalizerItem.isVisible = equalizer.exists
 
     skipSilenceItem = menu.findItem(R.id.action_skip_silence)
 
@@ -208,10 +200,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           router.pushController(SettingsController().asTransaction())
           true
         }
-        R.id.action_time_change -> {
-          launchJumpToPositionDialog()
-          true
-        }
         R.id.action_sleep -> {
           this.viewModel.toggleSleepTimer()
           true
@@ -225,25 +213,13 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           //  router.pushController(bookmarkController)
           true
         }
-        R.id.action_equalizer -> {
-          equalizer.launch(activity!!)
-          true
-        }
         R.id.action_skip_silence -> {
           this.viewModel.toggleSkipSilence()
-          true
-        }
-        R.id.loudness -> {
-          // todo LoudnessDialog(bookId).showDialog(router)
           true
         }
         else -> false
       }
     }
-  }
-
-  private fun launchJumpToPositionDialog() {
-    JumpToPositionDialogController().showDialog(router)
   }
 
   private fun showLeftSleepTime(binding: BookPlayBinding, duration: Duration) {

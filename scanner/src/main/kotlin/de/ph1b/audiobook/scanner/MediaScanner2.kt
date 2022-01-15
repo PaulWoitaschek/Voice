@@ -36,7 +36,6 @@ class MediaScanner2
         addedAt = Instant.now(),
         author = mediaAnalyzer.analyze(chapterUris.first())?.author,
         lastPlayedAt = Instant.EPOCH,
-        loudnessGain = 0,
         name = fileName,
         playbackSpeed = 1F,
         position = 0,

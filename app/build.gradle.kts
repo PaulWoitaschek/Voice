@@ -88,7 +88,6 @@ dependencies {
   implementation(projects.scanner)
   implementation(projects.playbackScreen)
   implementation(projects.sleepTimer)
-  implementation(projects.loudness)
   implementation(projects.settings)
   implementation(projects.folderPicker)
 

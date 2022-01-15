@@ -4,9 +4,7 @@ import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.Timeline
-import com.google.android.exoplayer2.analytics.AnalyticsListener
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.playstate.PlayerState
 
@@ -66,14 +64,6 @@ inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit)
       }
     }
   )
-}
-
-inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
-  addAnalyticsListener(object : AnalyticsListener {
-    override fun onAudioSessionIdChanged(eventTime: AnalyticsListener.EventTime, audioSessionId: Int) {
-      action(audioSessionId)
-    }
-  })
 }
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
