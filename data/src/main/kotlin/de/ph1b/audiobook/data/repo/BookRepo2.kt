@@ -15,12 +15,6 @@ class BookRepo2
   private val chapterRepo: ChapterRepo,
 ) {
 
-  fun book(uri: Uri): Book2? {
-    val content = contentRepo[uri] ?: return null
-    val chapters = content.chapters.mapNotNull { chapterRepo.get(uri) }
-    return Book2(content, chapters = chapters)
-  }
-
   fun flow(): Flow<List<BookContent2>> = contentRepo.flow()
 
   fun updateBook(content: BookContent2) {

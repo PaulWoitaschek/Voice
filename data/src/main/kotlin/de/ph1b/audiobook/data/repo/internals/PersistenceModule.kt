@@ -10,6 +10,7 @@ import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.data.repo.internals.dao.BookMetaDataDao
 import de.ph1b.audiobook.data.repo.internals.dao.BookSettingsDao
 import de.ph1b.audiobook.data.repo.internals.dao.BookmarkDao
+import de.ph1b.audiobook.data.repo.internals.dao.Chapter2Dao
 import de.ph1b.audiobook.data.repo.internals.dao.ChapterDao
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration23to24
 import de.ph1b.audiobook.data.repo.internals.migrations.Migration24to25
@@ -55,6 +56,9 @@ object PersistenceModule {
 
   @Provides
   fun bookSettingsDao(appDb: AppDb): BookSettingsDao = appDb.bookSettingsDao()
+
+  @Provides
+  fun chapter2Dao(appDb: AppDb): Chapter2Dao = appDb.chapter2Dao()
 
   @Provides
   @Singleton

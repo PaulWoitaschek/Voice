@@ -1,11 +1,17 @@
 package de.ph1b.audiobook.data
 
 import android.net.Uri
+import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.time.Instant
 
+@Entity(
+  tableName = "chapters2",
+)
 data class Chapter2(
+  @PrimaryKey
   val uri: Uri,
   val name: String,
   val duration: Long,

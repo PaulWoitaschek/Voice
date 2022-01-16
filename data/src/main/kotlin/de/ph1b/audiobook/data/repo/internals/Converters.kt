@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.data.repo.internals
 
+import android.net.Uri
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.MarkData
@@ -47,4 +48,10 @@ class Converters {
   fun toInstant(string: String): Instant {
     return Instant.parse(string)
   }
+
+  @TypeConverter
+  fun fromUri(uri: Uri): String = uri.toString()
+
+  @TypeConverter
+  fun toUri(string: String): Uri = Uri.parse(string)
 }
