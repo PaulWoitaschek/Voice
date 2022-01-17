@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback.player
 
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Timeline
@@ -56,10 +56,10 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   )
 }
 
-inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
+inline fun ExoPlayer.onError(crossinline action: (PlaybackException) -> Unit) {
   addListener(
     object : Player.Listener {
-      override fun onPlayerError(error: ExoPlaybackException) {
+      override fun onPlayerError(error: PlaybackException) {
         action(error)
       }
     }

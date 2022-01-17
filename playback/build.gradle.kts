@@ -23,5 +23,4 @@ dependencies {
   implementation(libs.dagger.core)
 
   implementation(libs.exoPlayer.core)
-  implementation(libs.exoPlayer.flac) { isTransitive = false }
 }

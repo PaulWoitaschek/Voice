@@ -121,7 +121,6 @@ dependencies {
   implementation(libs.timber)
 
   implementation(libs.exoPlayer.core)
-  implementation(libs.exoPlayer.flac) { isTransitive = false }
 
   implementation(libs.conductor.core)
   implementation(libs.conductor.transition)
