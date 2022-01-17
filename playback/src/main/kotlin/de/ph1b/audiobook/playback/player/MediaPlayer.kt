@@ -3,8 +3,8 @@ package de.ph1b.audiobook.playback.player
 import android.net.Uri
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.datastore.core.DataStore
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
@@ -52,7 +52,7 @@ constructor(
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
   private val dataSourceConverter: DataSourceConverter,
-  private val player: SimpleExoPlayer,
+  private val player: ExoPlayer,
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepo2,
   @CurrentBook
@@ -106,7 +106,7 @@ constructor(
       Timber.i("onPositionDiscontinuity with currentPos=$position")
 
       updateContentWithBook {
-        val index = player.currentWindowIndex
+        val index = player.currentMediaItemIndex
         contentWithNewPosition(
           positionInChapter = position,
           currentChapter = content.chapters[index]
@@ -142,7 +142,7 @@ constructor(
         }
         .collect { time ->
           updateContentWithBook {
-            val index = player.currentWindowIndex
+            val index = player.currentMediaItemIndex
             contentWithNewPosition(
               positionInChapter = time,
               currentChapter = content.chapters[index],

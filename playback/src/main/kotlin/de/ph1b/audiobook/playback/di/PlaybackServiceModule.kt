@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
@@ -30,12 +30,12 @@ object PlaybackServiceModule {
 
   @Provides
   @PlaybackScope
-  fun exoPlayer(context: Context, onlyAudioRenderersFactory: OnlyAudioRenderersFactory): SimpleExoPlayer {
+  fun exoPlayer(context: Context, onlyAudioRenderersFactory: OnlyAudioRenderersFactory): ExoPlayer {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
-    return SimpleExoPlayer.Builder(context, onlyAudioRenderersFactory)
+    return ExoPlayer.Builder(context, onlyAudioRenderersFactory)
       .setAudioAttributes(audioAttributes, true)
       .build()
   }
