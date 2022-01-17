@@ -96,6 +96,6 @@ compose = [
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.3.10-1-6-0" }
-ktlint = "org.jlleitschuh.gradle.ktlint:10.1.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
 gradleVersions = "com.github.ben-manes.versions:0.41.0"
 ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
