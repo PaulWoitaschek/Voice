@@ -5,6 +5,14 @@ data class Book2(
   val chapters: List<Chapter2>,
 ) {
 
+  init {
+    if (BuildConfig.DEBUG) {
+      val actualPosition = chapters.takeWhile { it.uri != content.uri }
+        .sumOf { it.duration } + content.positionInChapter
+      check(actualPosition == content.position)
+    }
+  }
+
   val currentChapter = chapters[content.currentChapterIndex]
   val previousChapter = chapters.getOrNull(content.currentChapterIndex - 1)
   val nextChapter = chapters.getOrNull(content.currentChapterIndex + 1)

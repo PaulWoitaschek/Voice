@@ -105,11 +105,11 @@ constructor(
         .coerceAtLeast(0)
       Timber.i("onPositionDiscontinuity with currentPos=$position")
 
-      updateBook {
+      updateContentWithBook {
         val index = player.currentWindowIndex
-        copy(
+        contentWithNewPosition(
           positionInChapter = position,
-          currentChapter = chapters[index]
+          currentChapter = content.chapters[index]
         )
       }
     }
@@ -141,11 +141,11 @@ constructor(
           it / 1000
         }
         .collect { time ->
-          updateBook {
+          updateContentWithBook {
             val index = player.currentWindowIndex
-            copy(
+            contentWithNewPosition(
               positionInChapter = time,
-              currentChapter = chapters[index],
+              currentChapter = content.chapters[index],
             )
           }
         }
@@ -161,12 +161,6 @@ constructor(
       combine(notIdleFlow, chaptersChanged) { _, _ -> }
         .collect { prepare() }
     }
-  }
-
-  private fun updateBook(update: BookContent2.() -> BookContent2) {
-    val book = book ?: return
-    val updated = book.copy(content = update(book.content))
-    this.book = updated
   }
 
   fun updateMediaSessionPlaybackState() {
@@ -198,7 +192,7 @@ constructor(
   fun play() {
     Timber.v("play called in state $state, currentFile=${book?.currentChapter}")
     prepare()
-    updateBook {
+    updateContent {
       copy(lastPlayedAt = Instant.now())
     }
     val book = book ?: return
@@ -369,10 +363,10 @@ constructor(
     prepare()
     if (state == PlayerState.IDLE)
       return
-    updateBook {
-      val newChapter = changedUri ?: currentChapter
-      player.seekTo(chapters.indexOf(newChapter), time)
-      copy(positionInChapter = time, currentChapter = newChapter)
+    updateContentWithBook {
+      val newChapter = changedUri ?: content.currentChapter
+      player.seekTo(content.chapters.indexOf(newChapter), time)
+      contentWithNewPosition(positionInChapter = time, currentChapter = newChapter)
     }
   }
 
@@ -380,7 +374,7 @@ constructor(
   fun setPlaybackSpeed(speed: Float) {
     checkMainThread()
     prepare()
-    updateBook { copy(playbackSpeed = speed) }
+    updateContent { copy(playbackSpeed = speed) }
     player.setPlaybackSpeed(speed)
   }
 
@@ -388,7 +382,7 @@ constructor(
     checkMainThread()
     Timber.v("setSkipSilences to $skip")
     prepare()
-    updateBook { copy(skipSilence = skip) }
+    updateContent { copy(skipSilence = skip) }
     player.skipSilenceEnabled = skip
   }
 
@@ -396,4 +390,24 @@ constructor(
     player.release()
     scope.cancel()
   }
+
+  private fun updateContent(update: BookContent2.() -> BookContent2) {
+    val book = book ?: return
+    val updated = book.copy(content = update(book.content))
+    this.book = updated
+  }
+
+  private fun updateContentWithBook(update: Book2.() -> BookContent2) {
+    val book = book ?: return
+    this.book = book.copy(content = update(book))
+  }
+}
+
+private fun Book2.contentWithNewPosition(positionInChapter: Long, currentChapter: Uri): BookContent2 {
+  return content.copy(
+    positionInChapter = positionInChapter,
+    currentChapter = currentChapter,
+    position = chapters.takeWhile { it.uri != currentChapter }
+      .sumOf { it.duration } + positionInChapter
+  )
 }
