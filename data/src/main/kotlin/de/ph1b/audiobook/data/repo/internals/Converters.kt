@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.MarkData
@@ -53,5 +54,15 @@ class Converters {
   fun fromUri(uri: Uri): String = uri.toString()
 
   @TypeConverter
-  fun toUri(string: String): Uri = Uri.parse(string)
+  fun toUri(string: String): Uri = string.toUri()
+
+  @TypeConverter
+  fun fromUriList(list: List<Uri>): String {
+    return json.encodeToString(ListSerializer(UriSerializer), list)
+  }
+
+  @TypeConverter
+  fun toUriList(string: String): List<Uri> {
+    return json.decodeFromString(ListSerializer(UriSerializer), string)
+  }
 }

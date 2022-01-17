@@ -17,7 +17,7 @@ class BookRepo2
 
   fun flow(): Flow<List<BookContent2>> = contentRepo.flow()
 
-  fun updateBook(content: BookContent2) {
+  suspend fun updateBook(content: BookContent2) {
     contentRepo.put(content)
   }
 

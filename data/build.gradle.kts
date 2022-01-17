@@ -1,24 +1,22 @@
 plugins {
   id("voice-android-library")
   alias(libs.plugins.kotlin.serialization)
-  id("kotlin-kapt")
   alias(libs.plugins.anvil)
+  alias(libs.plugins.ksp)
 }
 
 anvil {
   generateDaggerFactories.set(true)
 }
 
+ksp {
+  arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
 
   defaultConfig {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-    javaCompileOptions {
-      annotationProcessorOptions {
-        argument("room.schemaLocation", "$projectDir/schemas")
-      }
-    }
   }
 
   sourceSets {
@@ -44,7 +42,7 @@ dependencies {
   implementation(libs.serialization.json)
 
   api(libs.room.runtime)
-  kapt(libs.room.compiler)
+  ksp(libs.room.compiler)
 
   implementation(libs.dagger.core)
 

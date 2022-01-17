@@ -7,9 +7,7 @@ import androidx.room.PrimaryKey
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.time.Instant
 
-@Entity(
-  tableName = "chapters2",
-)
+@Entity(tableName = "chapters2")
 data class Chapter2(
   @PrimaryKey
   val uri: Uri,

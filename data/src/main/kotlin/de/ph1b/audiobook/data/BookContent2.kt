@@ -1,10 +1,15 @@
 package de.ph1b.audiobook.data
 
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import java.io.File
 import java.time.Instant
 
+@Entity(tableName = "content2")
 data class BookContent2(
+  @PrimaryKey
   val uri: Uri,
   val playbackSpeed: Float,
   val skipSilence: Boolean,
@@ -22,6 +27,7 @@ data class BookContent2(
   val cover: File?,
 ) {
 
+  @Ignore
   val currentChapterIndex = chapters.indexOf(currentChapter).also { require(it != -1) }
 
   init {

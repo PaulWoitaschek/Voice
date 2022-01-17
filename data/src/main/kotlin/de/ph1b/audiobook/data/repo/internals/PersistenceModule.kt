@@ -7,6 +7,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import de.ph1b.audiobook.AppScope
+import de.ph1b.audiobook.data.repo.internals.dao.BookContent2Dao
 import de.ph1b.audiobook.data.repo.internals.dao.BookMetaDataDao
 import de.ph1b.audiobook.data.repo.internals.dao.BookSettingsDao
 import de.ph1b.audiobook.data.repo.internals.dao.BookmarkDao
@@ -59,6 +60,9 @@ object PersistenceModule {
 
   @Provides
   fun chapter2Dao(appDb: AppDb): Chapter2Dao = appDb.chapter2Dao()
+
+  @Provides
+  fun bookContent2Dao(appDb: AppDb): BookContent2Dao = appDb.bookContent2Dao()
 
   @Provides
   @Singleton
