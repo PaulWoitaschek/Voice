@@ -6,6 +6,10 @@ import android.support.v4.media.session.MediaSessionCompat
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -30,12 +34,25 @@ object PlaybackServiceModule {
 
   @Provides
   @PlaybackScope
-  fun exoPlayer(context: Context, onlyAudioRenderersFactory: OnlyAudioRenderersFactory): ExoPlayer {
+  fun mediaSourceFactory(context: Context): MediaSourceFactory {
+    val dataSourceFactory = DefaultDataSource.Factory(context)
+    val extractorsFactory = DefaultExtractorsFactory()
+      .setConstantBitrateSeekingEnabled(true)
+    return ProgressiveMediaSource.Factory(dataSourceFactory, extractorsFactory)
+  }
+
+  @Provides
+  @PlaybackScope
+  fun exoPlayer(
+    context: Context,
+    onlyAudioRenderersFactory: OnlyAudioRenderersFactory,
+    mediaSourceFactory: MediaSourceFactory,
+  ): ExoPlayer {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
-    return ExoPlayer.Builder(context, onlyAudioRenderersFactory)
+    return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
       .build()
   }
