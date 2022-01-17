@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Handler
 import com.google.android.exoplayer2.Renderer
 import com.google.android.exoplayer2.RenderersFactory
+import com.google.android.exoplayer2.audio.AudioCapabilities
 import com.google.android.exoplayer2.audio.AudioRendererEventListener
+import com.google.android.exoplayer2.audio.DefaultAudioSink
+import com.google.android.exoplayer2.audio.DefaultAudioSink.DefaultAudioProcessorChain
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector
 import com.google.android.exoplayer2.metadata.MetadataOutput
@@ -25,7 +28,17 @@ class OnlyAudioRenderersFactory
     metadataRendererOutput: MetadataOutput
   ): Array<Renderer> {
     return arrayOf(
-      MediaCodecAudioRenderer(context, MediaCodecSelector.DEFAULT, eventHandler, audioRendererEventListener)
+      MediaCodecAudioRenderer(context,
+        MediaCodecSelector.DEFAULT,
+        eventHandler,
+        audioRendererEventListener,
+        DefaultAudioSink(
+          AudioCapabilities.getCapabilities(context),
+          DefaultAudioProcessorChain(),
+          false,
+          false,
+          DefaultAudioSink.OFFLOAD_MODE_ENABLED_GAPLESS_REQUIRED)
+      )
     )
   }
 }
