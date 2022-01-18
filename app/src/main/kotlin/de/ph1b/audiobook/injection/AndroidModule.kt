@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import android.hardware.SensorManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.os.PowerManager
@@ -64,12 +63,6 @@ object AndroidModule {
   @Singleton
   fun provideNotificationManager(context: Context): NotificationManager {
     return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-  }
-
-  @Provides
-  @Singleton
-  fun provideSensorManager(context: Context): SensorManager? {
-    return context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
   }
 
   @Provides

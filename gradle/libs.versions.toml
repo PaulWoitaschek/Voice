@@ -37,6 +37,7 @@ desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
 koTest-assert = "io.kotest:kotest-assertions-core:5.0.3"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
+seismic = "com.squareup:seismic:1.0.3"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }

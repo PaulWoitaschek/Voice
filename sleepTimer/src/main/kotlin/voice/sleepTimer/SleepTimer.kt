@@ -66,7 +66,7 @@ class SleepTimer
       val shakeToResetTime = 30.seconds
       Timber.d("Wait for $shakeToResetTime for a shake")
       withTimeout(shakeToResetTime) {
-        shakeDetector.detect().first()
+        shakeDetector.detect()
         Timber.i("Shake detected. Reset sleep time")
         playerController.play()
         start()

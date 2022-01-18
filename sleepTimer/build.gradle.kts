@@ -28,6 +28,7 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.constraintLayout)
   implementation(libs.material)
+  implementation(libs.seismic)
 
   implementation(libs.dagger.core)
 }
