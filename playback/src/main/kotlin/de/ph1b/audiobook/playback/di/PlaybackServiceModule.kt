@@ -55,8 +55,5 @@ object PlaybackServiceModule {
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
       .build()
-      .also {
-        it.experimentalSetOffloadSchedulingEnabled(true)
-      }
   }
 }
