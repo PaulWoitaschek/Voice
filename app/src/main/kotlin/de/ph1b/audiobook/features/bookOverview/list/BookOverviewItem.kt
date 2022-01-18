@@ -30,7 +30,7 @@ data class BookOverviewViewState(
   constructor(book: BookContent2, amountOfColumns: Int, currentBookId: Uri?) : this(
     name = book.name,
     author = book.author,
-    transitionName = book.name,
+    transitionName = book.uri.toString(),
     progress = book.progress(),
     remainingTimeInMs = book.remainingTimeInMs(),
     isCurrentBook = book.uri == currentBookId,

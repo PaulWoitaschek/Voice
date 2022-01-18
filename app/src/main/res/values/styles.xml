@@ -37,7 +37,7 @@
         <item name="android:scaleType">centerCrop</item>
     </style>
 
-    <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+    <style name="AppToolbar" parent="Widget.Material3.Toolbar.Surface">
         <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
     </style>
 
