@@ -3,9 +3,9 @@ package voice.sleepTimer
 import android.content.Context
 import android.hardware.SensorManager
 import dagger.Reusable
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import kotlin.coroutines.resume
 import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 @Reusable
@@ -16,18 +16,17 @@ class ShakeDetector
    * This function returns once a shake was detected
    */
   suspend fun detect() {
-    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
-      ?: awaitCancellation()
-    val shakeDetected = CompletableDeferred<Unit>()
-    val listener = SeismicShakeDetector.Listener {
-      shakeDetected.complete(Unit)
-    }
-    val shakeDetector = SeismicShakeDetector(listener)
-    try {
+    suspendCancellableCoroutine<Unit> { cont ->
+      val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+        ?: return@suspendCancellableCoroutine
+      val listener = SeismicShakeDetector.Listener {
+        cont.resume(Unit)
+      }
+      val shakeDetector = SeismicShakeDetector(listener)
       shakeDetector.start(sensorManager)
-      shakeDetected.await()
-    } finally {
-      shakeDetector.stop()
+      cont.invokeOnCancellation {
+        shakeDetector.stop()
+      }
     }
   }
 }
