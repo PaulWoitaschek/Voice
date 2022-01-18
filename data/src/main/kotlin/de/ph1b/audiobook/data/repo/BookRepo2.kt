@@ -24,7 +24,9 @@ class BookRepo2
   fun flow(uri: Uri): Flow<Book2?> = contentRepo.flow()
     .map { contents ->
       val content = contents.find { it.uri == uri } ?: return@map null
-      val chapters = content.chapters.mapNotNull { chapterRepo.get(uri) }
+      val chapters = content.chapters.map { chapterUri ->
+        chapterRepo.get(chapterUri) ?: error("Chapter for $chapterUri not found")
+      }
       Book2(content = content, chapters = chapters)
     }
 }

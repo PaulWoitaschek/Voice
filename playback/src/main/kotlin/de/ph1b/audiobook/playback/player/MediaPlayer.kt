@@ -11,6 +11,7 @@ import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.bookPosition
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -407,7 +408,6 @@ private fun Book2.contentWithNewPosition(positionInChapter: Long, currentChapter
   return content.copy(
     positionInChapter = positionInChapter,
     currentChapter = currentChapter,
-    position = chapters.takeWhile { it.uri != currentChapter }
-      .sumOf { it.duration } + positionInChapter
+    position = bookPosition(chapters, positionInChapter, currentChapter)
   )
 }

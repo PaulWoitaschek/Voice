@@ -2,8 +2,10 @@ package de.ph1b.audiobook.scanner
 
 import androidx.documentfile.provider.DocumentFile
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.bookPosition
 import de.ph1b.audiobook.data.repo.BookContentRepo
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import java.time.Instant
@@ -28,7 +30,7 @@ class MediaScanner
     if (chapters.isEmpty()) return
     val chapterUris = chapters.map { it.uri }
     val content = bookContentRepo.getOrPut(file.uri) {
-      BookContent2(
+      val content = BookContent2(
         uri = file.uri,
         isActive = true,
         addedAt = Instant.now(),
@@ -49,19 +51,32 @@ class MediaScanner
         currentChapter = chapters.first().uri,
         cover = null
       )
+
+      validateIntegrity(content, chapters)
+
+      content
     }
 
     val currentChapterGone = content.currentChapter !in chapterUris
+    val currentChapter = if (currentChapterGone) chapterUris.first() else content.currentChapter
+    val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
     val updated = content.copy(
       duration = chapters.sumOf { it.duration },
       chapters = chapterUris,
-      currentChapter = if (currentChapterGone) chapterUris.first() else content.currentChapter,
-      positionInChapter = if (currentChapterGone) 0 else content.positionInChapter,
+      currentChapter = currentChapter,
+      positionInChapter = positionInChapter,
       isActive = true,
+      position = bookPosition(chapters, positionInChapter, currentChapter),
     )
     if (content != updated) {
+      validateIntegrity(updated, chapters)
       bookContentRepo.put(updated)
     }
+  }
+
+  private fun validateIntegrity(content: BookContent2, chapters: List<Chapter2>) {
+    // the init block performs integrity validation
+    Book2(content, chapters)
   }
 
   private suspend fun DocumentFile.parseChapters(): List<Chapter2> {
