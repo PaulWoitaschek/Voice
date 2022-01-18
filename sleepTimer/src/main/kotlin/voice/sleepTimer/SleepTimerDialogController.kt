@@ -2,6 +2,7 @@ package voice.sleepTimer
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -15,11 +16,7 @@ import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.rootComponentAs
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import voice.sleepTimer.databinding.DialogSleepBinding
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -31,9 +28,9 @@ private const val SI_MINUTES = "si#time"
  */
 class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(bookId: UUID) : this(
+  constructor(bookId: Uri) : this(
     Bundle().apply {
-      putSerializable(NI_BOOK_ID, bookId)
+      putString(NI_BOOK_ID, bookId.toString())
     }
   )
 
@@ -104,12 +101,12 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       true
     }
 
-    val bookId = args.getSerializable(NI_BOOK_ID) as UUID
-    val book = repo.bookById(bookId)!!
 
     binding.fab.setOnClickListener {
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
+/* todo
+    val bookId = args.getString(NI_BOOK_ID)!!.toUri()
       GlobalScope.launch(Dispatchers.IO) {
         bookmarkRepo.addBookmarkAtBookPosition(
           book = book,
@@ -117,6 +114,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
           title = null
         )
       }
+*/
 
       sleepTimer.setActive(true)
       dismissDialog()

@@ -29,6 +29,7 @@ import voice.playbackScreen.BookPlayViewEffect
 import voice.playbackScreen.BookPlayViewModel
 import voice.playbackScreen.BookPlayViewState
 import voice.settings.SettingsController
+import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -230,7 +231,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun openSleepTimeDialog() {
-    // todo SleepTimerDialogController(bookId)
-    // .showDialog(router)
+    SleepTimerDialogController(bookId)
+      .showDialog(router)
   }
 }
