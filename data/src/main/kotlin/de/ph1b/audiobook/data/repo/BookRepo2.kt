@@ -17,6 +17,15 @@ class BookRepo2
 
   fun flow(): Flow<List<BookContent2>> = contentRepo.flow()
 
+  fun flowBooks(): Flow<List<Book2>> = contentRepo.flow().map { contents ->
+    contents.map { content ->
+      val chapters = content.chapters.map { chapterUri ->
+        chapterRepo.get(chapterUri) ?: error("Chapter for $chapterUri not found")
+      }
+      Book2(content = content, chapters = chapters)
+    }
+  }
+
   suspend fun updateBook(content: BookContent2) {
     contentRepo.put(content)
   }

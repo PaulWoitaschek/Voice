@@ -8,5 +8,4 @@ data class BookSearch(
   val mediaFocus: String? = null,
   val album: String? = null,
   val artist: String? = null,
-  val playList: String? = null
 )

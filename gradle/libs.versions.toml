@@ -94,6 +94,16 @@ compose = [
   "compose-activity",
 ]
 
+testing-jvm = [
+  "androidX-test-runner",
+  "androidX-test-junit",
+  "androidX-test-core",
+  "robolectric",
+  "coroutines-test",
+  "mockk",
+  "koTest-assert"
+]
+
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.3.10-1-6-0" }

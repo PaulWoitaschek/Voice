@@ -5,18 +5,17 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.net.toUri
-import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.pref.PrefKeys
+import androidx.datastore.core.DataStore
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.player.MediaPlayer
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Media session callback that handles playback controls.
@@ -25,8 +24,8 @@ import javax.inject.Named
 class MediaSessionCallback
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
+  @CurrentBook
+  private val currentBook: DataStore<Uri?>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,
@@ -46,7 +45,9 @@ class MediaSessionCallback
     mediaId ?: return
     val parsed = bookUriConverter.parse(mediaId)
     if (parsed is BookUriConverter.Parsed.Book) {
-      currentBookIdPref.value = parsed.id
+      runBlocking {
+        currentBook.updateData { parsed.id }
+      }
       onPlay()
     } else {
       Timber.e("Didn't handle $parsed")
@@ -56,7 +57,9 @@ class MediaSessionCallback
   override fun onPlayFromSearch(query: String?, extras: Bundle?) {
     Timber.i("onPlayFromSearch $query")
     val bookSearch = bookSearchParser.parse(query, extras)
-    bookSearchHandler.handle(bookSearch)
+    runBlocking {
+      bookSearchHandler.handle(bookSearch)
+    }
   }
 
   override fun onSkipToNext() {

@@ -1,12 +1,8 @@
 package de.ph1b.audiobook.playback.session
 
 import android.net.Uri
-import java.util.UUID
+import androidx.core.net.toUri
 import javax.inject.Inject
-
-/**
- * Helper class for converting book and chapter ids to media ids.
- */
 
 private const val SCHEME = "voice"
 
@@ -19,14 +15,14 @@ class BookUriConverter
     return baseUri.toString()
   }
 
-  fun chapterId(bookId: UUID, chapterId: Long): String {
+  fun chapterId(bookId: Uri, chapterId: Uri): String {
     return baseUri.buildUpon()
       .appendPath(bookId.toString())
       .appendPath(chapterId.toString())
       .toString()
   }
 
-  fun bookId(id: UUID): String {
+  fun bookId(id: Uri): String {
     return baseUri.buildUpon()
       .appendPath(id.toString())
       .toString()
@@ -39,10 +35,10 @@ class BookUriConverter
     }
     val pathSegments = uri.pathSegments
 
-    val bookId = pathSegments.firstOrNull()?.toUuidOrNull()
+    val bookId = pathSegments.firstOrNull()?.toUri()
       ?: return Parsed.AllBooks
 
-    val chapterId = pathSegments.getOrNull(1)?.toLongOrNull()
+    val chapterId = pathSegments.getOrNull(1)?.toUri()
     return if (chapterId == null) {
       Parsed.Book(bookId)
     } else {
@@ -50,17 +46,9 @@ class BookUriConverter
     }
   }
 
-  private fun String?.toUuidOrNull(): UUID? {
-    return try {
-      UUID.fromString(this)
-    } catch (e: IllegalArgumentException) {
-      null
-    }
-  }
-
   sealed class Parsed {
     object AllBooks : Parsed()
-    data class Book(val id: UUID) : Parsed()
-    data class Chapter(val bookId: UUID, val chapterId: Long) : Parsed()
+    data class Book(val id: Uri) : Parsed()
+    data class Chapter(val bookId: Uri, val chapterId: Uri) : Parsed()
   }
 }

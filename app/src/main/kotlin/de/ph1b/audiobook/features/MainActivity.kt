@@ -93,7 +93,11 @@ class MainActivity : AppCompatActivity(), RouterProvider {
   }
 
   private fun setupFromIntent(intent: Intent?) {
-    bookSearchParser.parse(intent)?.let { bookSearchHandler.handle(it) }
+    bookSearchParser.parse(intent)?.let {
+      runBlocking {
+        bookSearchHandler.handle(it)
+      }
+    }
   }
 
   private fun setupRouter() {

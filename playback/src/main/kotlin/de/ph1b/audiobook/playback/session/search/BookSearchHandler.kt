@@ -1,16 +1,16 @@
 package de.ph1b.audiobook.playback.session.search
 
+import android.net.Uri
 import android.provider.MediaStore
+import androidx.datastore.core.DataStore
 import dagger.Reusable
-import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.common.pref.CurrentBook
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.PlayerController
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * This class provides a single point of entry to find and play a book by a search query
@@ -18,30 +18,28 @@ import javax.inject.Named
 @Reusable
 class BookSearchHandler
 @Inject constructor(
-  private val repo: BookRepository,
+  private val repo: BookRepo2,
   private val player: PlayerController,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>
+  @CurrentBook
+  private val currentBook: DataStore<Uri?>,
 ) {
 
-  fun handle(search: BookSearch) {
+  suspend fun handle(search: BookSearch) {
     Timber.i("handle $search")
     when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
-      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE, "vnd.android.cursor.item/audio" -> {
-        playAlbum(search)
-      }
-      MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE -> playAlbum(search)
+      MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
+      MediaStore.Audio.Media.ENTRY_CONTENT_TYPE -> playAlbum(search)
       else -> playUnstructuredSearch(search.query)
     }
   }
 
-  private fun playAlbum(search: BookSearch) {
+  private suspend fun playAlbum(search: BookSearch) {
     if (search.album != null) {
       val foundMatch = findAndPlayFirstMatch {
-        val nameMatches = it.name.contains(search.album, ignoreCase = true)
+        val nameMatches = it.content.name.contains(search.album, ignoreCase = true)
         val artistMatches =
-          search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
+          search.artist == null || it.content.author?.contains(search.artist, ignoreCase = true) == true
         nameMatches && artistMatches
       }
       if (foundMatch) return
@@ -51,12 +49,12 @@ class BookSearchHandler
   }
 
   // Look for anything that might match the query
-  private fun playUnstructuredSearch(query: String?) {
+  private suspend fun playUnstructuredSearch(query: String?) {
     if (query != null) {
       val foundMatch = findAndPlayFirstMatch {
-        val bookNameMatches = it.name.contains(query, ignoreCase = true)
-        val authorMatches = it.author?.contains(query, ignoreCase = true) == true
-        val chapterNameMatches = it.content.chapters.any { chapter ->
+        val bookNameMatches = it.content.name.contains(query, ignoreCase = true)
+        val authorMatches = it.content.author?.contains(query, ignoreCase = true) == true
+        val chapterNameMatches = it.chapters.any { chapter ->
           chapter.name.contains(query, ignoreCase = true)
         }
         bookNameMatches || authorMatches || chapterNameMatches
@@ -66,22 +64,24 @@ class BookSearchHandler
 
     // continue playback
     Timber.i("continuing from search without query")
-    val currentId = currentBookIdPref.value
-    val activeBooks = repo.activeBooks()
-    val noBookInitialized = activeBooks.none { it.id == currentId }
+    val currentId = currentBook.data.first()
+    val activeBooks = repo.flowBooks().first()
+    val noBookInitialized = activeBooks.none { it.content.uri == currentId }
     if (noBookInitialized) {
-      activeBooks.firstOrNull()?.id?.let {
-        currentBookIdPref.value = it
+
+      activeBooks.firstOrNull()?.content?.uri?.let { uri ->
+        currentBook.updateData { uri }
       }
     }
     player.play()
   }
 
-  private fun playArtist(search: BookSearch) {
+  private suspend fun playArtist(search: BookSearch) {
     Timber.i("playArtist")
     if (search.artist != null) {
-      val foundMatch =
-        findAndPlayFirstMatch { it.author?.contains(search.artist, ignoreCase = true) == true }
+      val foundMatch = findAndPlayFirstMatch {
+        it.content.author?.contains(search.artist, ignoreCase = true) == true
+      }
       if (foundMatch) return
     }
 
@@ -89,11 +89,11 @@ class BookSearchHandler
   }
 
   // Play the first book that matches to a selector. Returns if a book is being played
-  private inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
-    val book = repo.activeBooks().firstOrNull(selector)
+  private suspend inline fun findAndPlayFirstMatch(selector: (Book2) -> Boolean): Boolean {
+    val book = repo.flowBooks().first().firstOrNull(selector)
     return if (book != null) {
-      Timber.i("found a match ${book.name}")
-      currentBookIdPref.value = book.id
+      Timber.i("found a match ${book.content.name}")
+      currentBook.updateData { book.content.uri }
       player.play()
       true
     } else false
