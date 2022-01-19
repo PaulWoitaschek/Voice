@@ -2,14 +2,15 @@ package voice.settings.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,11 +52,12 @@ private fun SettingsPreview() {
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
   Scaffold(
     topBar = {
-      TopAppBar(
+      SmallTopAppBar(
         title = {
           Text(stringResource(R.string.action_settings))
         },
@@ -100,59 +102,14 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
       }
       Dialog(viewState, listener)
     }
-  }}
+  }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Settings(viewModel: SettingsViewModel) {
   val viewState by viewModel.viewState().collectAsState(SettingsViewState.Empty)
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = {
-          Text(stringResource(R.string.action_settings))
-        },
-        actions = {
-          IconButton(
-            onClick = {
-              viewModel.onLikeClicked()
-            },
-            content = {
-              Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = stringResource(R.string.pref_support_title)
-              )
-            }
-          )
-        },
-        navigationIcon = {
-          IconButton(
-            onClick = {
-              viewModel.close()
-            }
-          ) {
-            Icon(
-              imageVector = Icons.Default.Close,
-              contentDescription = stringResource(R.string.close)
-            )
-          }
-        }
-      )
-    }
-  ) {
-    Column(Modifier.padding(vertical = 8.dp)) {
-      if (viewState.showDarkThemePref) {
-        DarkThemeRow(viewState.useDarkTheme, viewModel::toggleDarkTheme)
-      }
-      ResumeOnReplugRow(viewState.resumeOnReplug, viewModel::toggleResumeOnReplug)
-      SeekTimeRow(viewState.seekTimeInSeconds) {
-        viewModel.onSeekAmountRowClicked()
-      }
-      AutoRewindRow(viewState.autoRewindInSeconds) {
-        viewModel.onAutoRewindRowClicked()
-      }
-      Dialog(viewState, viewModel)
-    }
-  }
+  Settings(viewState, viewModel)
 }
 
 @Composable

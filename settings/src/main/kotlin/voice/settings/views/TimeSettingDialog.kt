@@ -2,12 +2,10 @@ package voice.settings.views
 
 import androidx.annotation.PluralsRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Slider
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,29 +28,25 @@ fun TimeSettingDialog(
   AlertDialog(
     onDismissRequest = onDismiss,
     title = {
-      ProvideTextStyle(MaterialTheme.typography.h6) {
-        Text(text = title)
-      }
+      Text(text = title)
     },
     text = {
       Column {
-        ProvideTextStyle(MaterialTheme.typography.body1) {
-          Text(
-            LocalContext.current.resources.getQuantityString(
-              textPluralRes,
-              sliderValue.value.roundToInt(),
-              sliderValue.value.roundToInt()
-            )
+        Text(
+          LocalContext.current.resources.getQuantityString(
+            textPluralRes,
+            sliderValue.value.roundToInt(),
+            sliderValue.value.roundToInt()
           )
-        }
-        Slider(
-          valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
-          value = sliderValue.value,
-          onValueChange = {
-            sliderValue.value = it
-          }
         )
       }
+      Slider(
+        valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
+        value = sliderValue.value,
+        onValueChange = {
+          sliderValue.value = it
+        }
+      )
     },
     confirmButton = {
       TextButton(
