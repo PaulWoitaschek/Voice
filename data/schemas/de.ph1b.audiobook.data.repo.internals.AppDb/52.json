@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 52,
-    "identityHash": "a493a53cd465fd20f63bcdace86a0a76",
+    "identityHash": "0d49b9d8c2a600270ef1941887600df0",
     "entities": [
       {
         "tableName": "bookmark",
@@ -278,7 +278,7 @@
       },
       {
         "tableName": "content2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `type` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `cover` TEXT, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `cover` TEXT, PRIMARY KEY(`uri`))",
         "fields": [
           {
             "fieldPath": "uri",
@@ -307,12 +307,6 @@
           {
             "fieldPath": "lastPlayedAt",
             "columnName": "lastPlayedAt",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -372,7 +366,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a493a53cd465fd20f63bcdace86a0a76')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d49b9d8c2a600270ef1941887600df0')"
     ]
   }
 }

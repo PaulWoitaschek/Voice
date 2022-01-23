@@ -40,11 +40,6 @@ class MediaScanner
         name = fileName,
         playbackSpeed = 1F,
         skipSilence = false,
-        type = if (file.isFile) {
-          BookContent2.Type.File
-        } else {
-          BookContent2.Type.Folder
-        },
         chapters = chapterUris,
         positionInChapter = 0L,
         currentChapter = chapters.first().uri,

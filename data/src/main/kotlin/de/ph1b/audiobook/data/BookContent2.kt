@@ -15,7 +15,6 @@ data class BookContent2(
   val skipSilence: Boolean,
   val isActive: Boolean,
   val lastPlayedAt: Instant,
-  val type: Type,
   val author: String?,
   val name: String,
   val addedAt: Instant,
@@ -30,9 +29,5 @@ data class BookContent2(
 
   init {
     require(currentChapter in chapters)
-  }
-
-  enum class Type {
-    File, Folder
   }
 }
