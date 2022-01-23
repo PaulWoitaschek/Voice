@@ -2,7 +2,7 @@ package de.ph1b.audiobook.features.bookOverview.list
 
 import android.net.Uri
 import androidx.annotation.FloatRange
-import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import timber.log.Timber
 import java.io.File
@@ -27,16 +27,16 @@ data class BookOverviewViewState(
   val cover: File?,
 ) : BookOverviewItem() {
 
-  constructor(book: BookContent2, amountOfColumns: Int, currentBookId: Uri?) : this(
-    name = book.name,
-    author = book.author,
-    transitionName = book.uri.toString(),
+  constructor(book: Book2, amountOfColumns: Int, currentBookId: Uri?) : this(
+    name = book.content.name,
+    author = book.content.author,
+    transitionName = book.transitionName,
     progress = book.progress(),
     remainingTimeInMs = book.remainingTimeInMs(),
-    isCurrentBook = book.uri == currentBookId,
+    isCurrentBook = book.id == currentBookId,
     useGridView = amountOfColumns > 1,
-    id = book.uri,
-    cover = book.cover,
+    id = book.id,
+    cover = book.content.cover,
   )
 
   fun areContentsTheSame(other: BookOverviewViewState): Boolean {
@@ -48,9 +48,9 @@ data class BookOverviewViewState(
   }
 }
 
-private fun BookContent2.progress(): Float {
-  val globalPosition = position
-  val totalDuration = duration
+private fun Book2.progress(): Float {
+  val globalPosition = content.position
+  val totalDuration = content.duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
     Timber.e("Couldn't determine progress for book=$this")
@@ -58,6 +58,6 @@ private fun BookContent2.progress(): Float {
   return progress.coerceIn(0F, 1F)
 }
 
-private fun BookContent2.remainingTimeInMs(): Long {
-  return duration - position
+private fun Book2.remainingTimeInMs(): Long {
+  return content.duration - content.position
 }

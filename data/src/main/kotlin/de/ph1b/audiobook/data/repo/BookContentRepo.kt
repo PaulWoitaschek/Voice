@@ -3,9 +3,7 @@ package de.ph1b.audiobook.data.repo
 import android.net.Uri
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.repo.internals.dao.BookContent2Dao
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,20 +25,6 @@ class BookContentRepo
         put(uri, content)
       }
       content
-    }
-  }
-
-  fun all(): List<BookContent2> {
-    return cache.value.values
-      .filterNotNull()
-      .filter { it.isActive }
-  }
-
-  fun flow(): Flow<List<BookContent2>> {
-    return cache.map {
-      it.values.toList()
-        .filterNotNull()
-        .filter { book -> book.isActive }
     }
   }
 

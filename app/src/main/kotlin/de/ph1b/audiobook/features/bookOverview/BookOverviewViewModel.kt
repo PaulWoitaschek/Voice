@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
@@ -71,7 +71,7 @@ constructor(
   }
 
   private fun state(
-    books: List<BookContent2>,
+    books: List<Book2>,
     scannerActive: Boolean,
     currentBookId: Uri?,
     playing: Boolean,
@@ -94,12 +94,12 @@ constructor(
   }
 
   private fun content(
-    books: List<BookContent2>,
+    books: List<Book2>,
     currentBookId: Uri?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState.Content {
-    val currentBookPresent = books.any { it.uri == currentBookId }
+    val currentBookPresent = books.any { it.id == currentBookId }
 
     val amountOfColumns = gridCount.gridColumnCount(gridMode)
 
@@ -120,7 +120,7 @@ constructor(
   }
 
   private fun content(
-    books: List<BookContent2>,
+    books: List<Book2>,
     category: BookOverviewCategory,
     currentBookId: Uri?,
     amountOfColumns: Int

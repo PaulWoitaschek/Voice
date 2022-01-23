@@ -10,8 +10,8 @@ import androidx.datastore.core.DataStore
 import dagger.Reusable
 import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.common.pref.CurrentBook
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookComparator
-import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.R
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +50,7 @@ class MediaBrowserHelper
       val allBooks = repo.flow().first()
         .sortedWith(BookComparator.BY_LAST_PLAYED)
       val currentBookId = currentBookId.data.first()
-      val currentBook = allBooks.find { it.uri == currentBookId }
+      val currentBook = allBooks.find { it.id == currentBookId }
       return if (currentBook == null) {
         allBooks.map { it.toMediaDescription() }
       } else {
@@ -69,13 +69,13 @@ class MediaBrowserHelper
 
   private fun currentBookTitlePrefix() = "${context.getString(R.string.current_book)}: "
 
-  private suspend fun BookContent2.toMediaDescription(
+  private suspend fun Book2.toMediaDescription(
     titlePrefix: String = ""
   ): MediaBrowserCompat.MediaItem {
-    val iconUri = cover?.let { fileProviderUri(it) }
-    val mediaId = bookUriConverter.bookId(uri)
+    val iconUri = content.cover?.let { fileProviderUri(it) }
+    val mediaId = bookUriConverter.bookId(id)
     val description = MediaDescriptionCompat.Builder()
-      .setTitle(titlePrefix + name)
+      .setTitle(titlePrefix + content.name)
       .setMediaId(mediaId)
       .setIconUri(iconUri)
       .build()

@@ -2,13 +2,13 @@ package de.ph1b.audiobook.features.bookOverview.list.header
 
 import androidx.annotation.StringRes
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookComparator
-import de.ph1b.audiobook.data.BookContent2
 import java.util.concurrent.TimeUnit.SECONDS
 
 enum class BookOverviewCategory(
   @StringRes val nameRes: Int,
-  val comparator: Comparator<BookContent2>
+  val comparator: Comparator<Book2>
 ) {
   CURRENT(
     nameRes = R.string.book_header_current,
@@ -23,16 +23,16 @@ enum class BookOverviewCategory(
     comparator = BookComparator.BY_LAST_PLAYED
   );
 
-  val filter: (BookContent2) -> Boolean = { it.category == this }
+  val filter: (Book2) -> Boolean = { it.category == this }
 }
 
-val BookContent2.category: BookOverviewCategory
+val Book2.category: BookOverviewCategory
   get() {
-    val position = position
+    val position = content.position
     return if (position == 0L) {
       BookOverviewCategory.NOT_STARTED
     } else {
-      val duration = duration
+      val duration = content.duration
       if (position > duration - SECONDS.toMillis(1)) {
         BookOverviewCategory.FINISHED
       } else {

@@ -7,6 +7,10 @@ data class Book2(
   val chapters: List<Chapter2>,
 ) {
 
+  val id: Uri = content.uri
+
+  val transitionName: String = id.toString()
+
   init {
     if (BuildConfig.DEBUG) {
       val actualPosition = bookPosition(chapters, content.positionInChapter, content.currentChapter)

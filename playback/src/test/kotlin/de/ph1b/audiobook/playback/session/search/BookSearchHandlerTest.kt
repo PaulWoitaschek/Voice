@@ -40,7 +40,7 @@ class BookSearchHandlerTest {
   private val bookToFind = book(listOf(chapter(), chapter()))
 
   init {
-    coEvery { repo.flowBooks() } returns flowOf(listOf(anotherBook, bookToFind))
+    coEvery { repo.flow() } returns flowOf(listOf(anotherBook, bookToFind))
 
     searchHandler = BookSearchHandler(repo, player, currentBookId)
   }
@@ -104,7 +104,7 @@ class BookSearchHandlerTest {
         author = null,
         name = "The book of Tim")
     )
-    coEvery { repo.flowBooks() } returns flowOf(listOf(bookToFind))
+    coEvery { repo.flow() } returns flowOf(listOf(bookToFind))
 
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,

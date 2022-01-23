@@ -15,4 +15,7 @@ interface BookContent2Dao {
 
   @Query("SELECT * FROM content2 WHERE uri = :id")
   suspend fun byId(id: Uri): BookContent2?
+
+  @Query("SELECT * FROM content2 WHERE isActive = :isActive")
+  suspend fun all(isActive: Boolean): List<BookContent2>
 }

@@ -65,7 +65,7 @@ class BookSearchHandler
     // continue playback
     Timber.i("continuing from search without query")
     val currentId = currentBook.data.first()
-    val activeBooks = repo.flowBooks().first()
+    val activeBooks = repo.flow().first()
     val noBookInitialized = activeBooks.none { it.content.uri == currentId }
     if (noBookInitialized) {
 
@@ -90,7 +90,7 @@ class BookSearchHandler
 
   // Play the first book that matches to a selector. Returns if a book is being played
   private suspend inline fun findAndPlayFirstMatch(selector: (Book2) -> Boolean): Boolean {
-    val book = repo.flowBooks().first().firstOrNull(selector)
+    val book = repo.flow().first().firstOrNull(selector)
     return if (book != null) {
       Timber.i("found a match ${book.content.name}")
       currentBook.updateData { book.content.uri }
