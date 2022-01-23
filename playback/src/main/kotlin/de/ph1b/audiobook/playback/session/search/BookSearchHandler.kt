@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback.session.search
 
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import dagger.Reusable
@@ -21,7 +20,7 @@ class BookSearchHandler
   private val repo: BookRepo2,
   private val player: PlayerController,
   @CurrentBook
-  private val currentBook: DataStore<Uri?>,
+  private val currentBook: DataStore<Book2.Id?>,
 ) {
 
   suspend fun handle(search: BookSearch) {
@@ -66,11 +65,11 @@ class BookSearchHandler
     Timber.i("continuing from search without query")
     val currentId = currentBook.data.first()
     val activeBooks = repo.flow().first()
-    val noBookInitialized = activeBooks.none { it.content.uri == currentId }
+    val noBookInitialized = activeBooks.none { it.content.id == currentId }
     if (noBookInitialized) {
 
-      activeBooks.firstOrNull()?.content?.uri?.let { uri ->
-        currentBook.updateData { uri }
+      activeBooks.firstOrNull()?.content?.id?.let { id ->
+        currentBook.updateData { id }
       }
     }
     player.play()

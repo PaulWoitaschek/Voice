@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.features.bookCategory
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.features.bookOverview.GridMode
@@ -20,7 +20,7 @@ class BookCategoryViewModel
 @Inject constructor(
   private val repo: BookRepo2,
   @CurrentBook
-  private val currentBookId: DataStore<Uri?>,
+  private val currentBookId: DataStore<Book2.Id?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,

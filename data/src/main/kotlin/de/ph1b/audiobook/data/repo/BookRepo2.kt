@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo
 
-import android.net.Uri
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.repo.internals.dao.BookContent2Dao
@@ -47,12 +46,12 @@ class BookRepo2
     return cache.onStart { fillCache() }
   }
 
-  suspend fun setAllInactiveExcept(uris: List<Uri>) {
+  suspend fun setAllInactiveExcept(ids: List<Book2.Id>) {
     fillCache()
 
     val currentBooks = cache.value
 
-    val (active, inactive) = currentBooks.partition { it.id in uris }
+    val (active, inactive) = currentBooks.partition { it.id in ids }
     contentDao.insert(
       inactive.map { book ->
         book.content.copy(isActive = false)
@@ -66,7 +65,7 @@ class BookRepo2
     cache.update {
       it.toMutableList().apply {
         val book = find { book ->
-          book.id == content.uri
+          book.id == content.id
         }
         if (book != null) {
           remove(book)
@@ -77,9 +76,9 @@ class BookRepo2
     contentDao.insert(content)
   }
 
-  fun flow(uri: Uri): Flow<Book2?> {
+  fun flow(id: Book2.Id): Flow<Book2?> {
     return flow().map { books ->
-      books.find { it.id == uri }
+      books.find { it.id == id }
     }
   }
 }

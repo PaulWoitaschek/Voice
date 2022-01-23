@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying.selectchapter
 
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -11,7 +10,10 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.ChapterMark
+import de.ph1b.audiobook.data.getBookId
+import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.SelectChapterRowBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.groupie.BindingItem
@@ -25,15 +27,15 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var viewModel: SelectChapterViewModel
 
-  constructor(bookId: Uri) : this(
+  constructor(bookId: Book2.Id) : this(
     Bundle().apply {
-      putString(NI_BOOK_ID, bookId.toString())
+      putBookId(NI_BOOK_ID, bookId)
     }
   )
 
   init {
     appComponent.inject(this)
-    viewModel.bookId = Uri.parse(args.getString(NI_BOOK_ID)!!)
+    viewModel.bookId = args.getBookId(NI_BOOK_ID)!!
   }
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {

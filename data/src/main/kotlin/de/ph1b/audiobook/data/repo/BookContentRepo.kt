@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.data.repo
 
-import android.net.Uri
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.repo.internals.dao.BookContent2Dao
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,16 +13,16 @@ class BookContentRepo
   private val dao: BookContent2Dao
 ) {
 
-  private val cache = MutableStateFlow(mapOf<Uri, BookContent2?>())
+  private val cache = MutableStateFlow(mapOf<Book2.Id, BookContent2?>())
 
-  suspend fun get(uri: Uri): BookContent2? {
+  suspend fun get(id: Book2.Id): BookContent2? {
     val cached = cache.value
-    return if (cached.containsKey(uri)) {
-      cached[uri]
+    return if (cached.containsKey(id)) {
+      cached[id]
     } else {
-      val content = dao.byId(uri)
+      val content = dao.byId(id)
       cache.value = cached.toMutableMap().apply {
-        put(uri, content)
+        put(id, content)
       }
       content
     }
@@ -31,11 +31,11 @@ class BookContentRepo
   suspend fun put(content2: BookContent2) {
     cache.value = cache.value.toMutableMap().apply {
       dao.insert(content2)
-      this[content2.uri] = content2
+      this[content2.id] = content2
     }
   }
 
-  suspend inline fun getOrPut(uri: Uri, defaultValue: () -> BookContent2): BookContent2 {
-    return get(uri) ?: defaultValue().also { put(it) }
+  suspend inline fun getOrPut(id: Book2.Id, defaultValue: () -> BookContent2): BookContent2 {
+    return get(id) ?: defaultValue().also { put(it) }
   }
 }

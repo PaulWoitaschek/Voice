@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.audio
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
 import androidx.datastore.core.DataStore
 import com.afollestad.materialdialogs.MaterialDialog
@@ -11,6 +10,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
@@ -34,7 +34,7 @@ class PlaybackSpeedDialogController : DialogController() {
   lateinit var repo: BookRepo2
 
   @field:[Inject CurrentBook]
-  lateinit var currentBook: DataStore<Uri?>
+  lateinit var currentBook: DataStore<Book2.Id?>
 
   @Inject
   lateinit var playerController: PlayerController

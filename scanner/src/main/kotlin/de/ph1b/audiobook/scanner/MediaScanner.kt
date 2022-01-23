@@ -21,7 +21,7 @@ class MediaScanner
 
   suspend fun scan(folders: List<DocumentFile>) {
     val allFiles = folders.flatMap { it.listFiles().toList() }
-    bookRepo.setAllInactiveExcept(allFiles.map { it.uri })
+    bookRepo.setAllInactiveExcept(allFiles.map { Book2.Id(it.uri) })
     allFiles.forEach { scan(it) }
   }
 
@@ -30,9 +30,10 @@ class MediaScanner
     val chapters = file.parseChapters()
     if (chapters.isEmpty()) return
     val chapterUris = chapters.map { it.uri }
-    val content = bookContentRepo.getOrPut(file.uri) {
+    val id = Book2.Id(file.uri)
+    val content = bookContentRepo.getOrPut(id) {
       val content = BookContent2(
-        uri = file.uri,
+        id = id,
         isActive = true,
         addedAt = Instant.now(),
         author = mediaAnalyzer.analyze(chapterUris.first())?.author,

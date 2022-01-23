@@ -7,6 +7,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -25,7 +26,7 @@ class MediaSessionCallback
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   @CurrentBook
-  private val currentBook: DataStore<Uri?>,
+  private val currentBook: DataStore<Book2.Id?>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,

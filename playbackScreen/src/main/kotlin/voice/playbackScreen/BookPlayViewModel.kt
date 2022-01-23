@@ -1,8 +1,8 @@
 package voice.playbackScreen
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepo2
@@ -28,7 +28,7 @@ class BookPlayViewModel
   private val playStateManager: PlayStateManager,
   private val bookmarkRepo: BookmarkRepo,
   @CurrentBook
-  private val currentBookId: DataStore<Uri?>,
+  private val currentBookId: DataStore<Book2.Id?>,
 ) {
 
   private val scope = MainScope()
@@ -36,7 +36,7 @@ class BookPlayViewModel
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
-  lateinit var bookId: Uri
+  lateinit var bookId: Book2.Id
 
   fun viewState(): Flow<BookPlayViewState> {
     scope.launch {

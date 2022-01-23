@@ -30,7 +30,7 @@ class MediaBrowserHelper
   private val bookUriConverter: BookUriConverter,
   private val repo: BookRepo2,
   @CurrentBook
-  private val currentBookId: DataStore<Uri?>,
+  private val currentBookId: DataStore<Book2.Id?>,
   private val context: Context,
   private val applicationIdProvider: ApplicationIdProvider
 ) {

@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.features.bookPlaying.selectchapter
 
-import android.net.Uri
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.MainScope
@@ -23,7 +23,7 @@ class SelectChapterViewModel
   private val _viewEffects = MutableSharedFlow<SelectChapterViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<SelectChapterViewEffect> get() = _viewEffects
 
-  lateinit var bookId: Uri
+  lateinit var bookId: Book2.Id
 
   fun viewState(): SelectChapterViewState {
     val book = runBlocking { bookRepository.flow(bookId).first() }

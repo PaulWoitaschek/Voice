@@ -1,15 +1,17 @@
 package de.ph1b.audiobook.data
 
 import android.net.Uri
+import android.os.Bundle
+import kotlinx.serialization.Serializable
 
 data class Book2(
   val content: BookContent2,
   val chapters: List<Chapter2>,
 ) {
 
-  val id: Uri = content.uri
+  val id: Id = content.id
 
-  val transitionName: String = id.toString()
+  val transitionName: String = id.transitionName
 
   init {
     if (BuildConfig.DEBUG) {
@@ -36,6 +38,14 @@ data class Book2(
   inline fun update(update: (BookContent2) -> BookContent2): Book2 {
     return copy(content = update(content))
   }
+
+  @Serializable
+  data class Id(val value: String) {
+
+    val transitionName: String get() = value
+
+    constructor(uri: Uri) : this(uri.toString())
+  }
 }
 
 private fun Chapter2.nextMark(positionInChapterMs: Long): ChapterMark? {
@@ -47,4 +57,12 @@ private fun Chapter2.nextMark(positionInChapterMs: Long): ChapterMark? {
   } else {
     null
   }
+}
+
+fun Bundle.putBookId(key: String, id: Book2.Id) {
+  putString(key, id.value)
+}
+
+fun Bundle.getBookId(key: String): Book2.Id? {
+  return getString(key)?.let(Book2::Id)
 }

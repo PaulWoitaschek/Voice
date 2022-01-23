@@ -10,7 +10,7 @@ import java.time.Instant
 @Entity(tableName = "content2")
 data class BookContent2(
   @PrimaryKey
-  val uri: Uri,
+  val id: Book2.Id,
   val playbackSpeed: Float,
   val skipSilence: Boolean,
   val isActive: Boolean,
@@ -23,6 +23,8 @@ data class BookContent2(
   val positionInChapter: Long,
   val cover: File?,
 ) {
+
+  val uri: Book2.Id get() = id
 
   @Ignore
   val currentChapterIndex = chapters.indexOf(currentChapter).also { require(it != -1) }

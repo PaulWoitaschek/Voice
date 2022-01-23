@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.session
 
 import android.net.Uri
 import androidx.core.net.toUri
+import de.ph1b.audiobook.data.Book2
 import javax.inject.Inject
 
 private const val SCHEME = "voice"
@@ -22,9 +23,9 @@ class BookUriConverter
       .toString()
   }
 
-  fun bookId(id: Uri): String {
+  fun bookId(id: Book2.Id): String {
     return baseUri.buildUpon()
-      .appendPath(id.toString())
+      .appendPath(id.value)
       .toString()
   }
 
@@ -35,7 +36,7 @@ class BookUriConverter
     }
     val pathSegments = uri.pathSegments
 
-    val bookId = pathSegments.firstOrNull()?.toUri()
+    val bookId = pathSegments.firstOrNull()?.toUri()?.let(Book2::Id)
       ?: return Parsed.AllBooks
 
     val chapterId = pathSegments.getOrNull(1)?.toUri()
@@ -48,7 +49,7 @@ class BookUriConverter
 
   sealed class Parsed {
     object AllBooks : Parsed()
-    data class Book(val id: Uri) : Parsed()
-    data class Chapter(val bookId: Uri, val chapterId: Uri) : Parsed()
+    data class Book(val id: Book2.Id) : Parsed()
+    data class Chapter(val bookId: Book2.Id, val chapterId: Uri) : Parsed()
   }
 }

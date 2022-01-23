@@ -1,9 +1,8 @@
 package de.ph1b.audiobook.playback.notification
 
 import android.content.Intent
-import android.net.Uri
-import java.util.UUID
+import de.ph1b.audiobook.data.Book2
 
 interface ToBookIntentProvider {
-  fun goToBookIntent(id: Uri): Intent
+  fun goToBookIntent(id: Book2.Id): Intent
 }

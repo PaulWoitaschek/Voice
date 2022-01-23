@@ -76,7 +76,7 @@ class BookCategoryController(bundle: Bundle) :
       when (clickType) {
         BookOverviewClick.REGULAR -> {
           val changeHandler = BookChangeHandler().apply {
-            transitionName = bookId.toString()
+            transitionName = bookId.transitionName
           }
           router.replaceTopController(BookPlayController(bookId).asTransaction(changeHandler, changeHandler))
         }

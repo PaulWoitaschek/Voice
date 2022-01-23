@@ -2,7 +2,6 @@ package voice.sleepTimer
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -13,6 +12,8 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.rootComponentAs
@@ -28,9 +29,9 @@ private const val SI_MINUTES = "si#time"
  */
 class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(bookId: Uri) : this(
+  constructor(bookId: Book2.Id) : this(
     Bundle().apply {
-      putString(NI_BOOK_ID, bookId.toString())
+      putBookId(NI_BOOK_ID, bookId)
     }
   )
 

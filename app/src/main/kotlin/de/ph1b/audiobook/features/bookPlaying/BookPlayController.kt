@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MenuItem
@@ -13,6 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.CoverReplacement
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.getBookId
+import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.BookPlayBinding
 import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
@@ -41,12 +43,12 @@ private const val NI_BOOK_ID = "niBookId"
  */
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
-  constructor(bookId: Uri) : this(Bundle().apply { putParcelable(NI_BOOK_ID, bookId) })
+  constructor(bookId: Book2.Id) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
   @Inject
   lateinit var viewModel: BookPlayViewModel
 
-  private val bookId: Uri = bundle.getParcelable(NI_BOOK_ID)!!
+  private val bookId: Book2.Id = bundle.getBookId(NI_BOOK_ID)!!
   private var coverLoaded = false
 
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()

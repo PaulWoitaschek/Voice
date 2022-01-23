@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.playback.androidauto
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.session.ChangeNotifier
@@ -20,7 +20,7 @@ class NotifyOnAutoConnectionChange
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepo2,
   @CurrentBook
-  private val currentBook: DataStore<Uri?>,
+  private val currentBook: DataStore<Book2.Id?>,
   private val autoConnection: AndroidAutoConnectedReceiver
 ) {
 

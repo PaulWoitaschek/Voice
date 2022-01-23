@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.net.Uri
 import androidx.annotation.FloatRange
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
@@ -23,11 +22,11 @@ data class BookOverviewViewState(
   val remainingTimeInMs: Long,
   val isCurrentBook: Boolean,
   val useGridView: Boolean,
-  val id: Uri,
+  val id: Book2.Id,
   val cover: File?,
 ) : BookOverviewItem() {
 
-  constructor(book: Book2, amountOfColumns: Int, currentBookId: Uri?) : this(
+  constructor(book: Book2, amountOfColumns: Int, currentBookId: Book2.Id?) : this(
     name = book.content.name,
     author = book.content.author,
     transitionName = book.transitionName,

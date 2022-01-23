@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookOverview
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
@@ -33,7 +32,7 @@ constructor(
   private val playerController: PlayerController,
   coverFromDiscCollector: CoverFromDiscCollector,
   @CurrentBook
-  private val currentBookDataStore: DataStore<Uri?>,
+  private val currentBookDataStore: DataStore<Book2.Id?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
@@ -73,7 +72,7 @@ constructor(
   private fun state(
     books: List<Book2>,
     scannerActive: Boolean,
-    currentBookId: Uri?,
+    currentBookId: Book2.Id?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState {
@@ -95,7 +94,7 @@ constructor(
 
   private fun content(
     books: List<Book2>,
-    currentBookId: Uri?,
+    currentBookId: Book2.Id?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState.Content {
@@ -122,7 +121,7 @@ constructor(
   private fun content(
     books: List<Book2>,
     category: BookOverviewCategory,
-    currentBookId: Uri?,
+    currentBookId: Book2.Id?,
     amountOfColumns: Int
   ): BookOverviewCategoryContent? {
     val booksOfCategory = books.filter(category.filter).sortedWith(category.comparator)

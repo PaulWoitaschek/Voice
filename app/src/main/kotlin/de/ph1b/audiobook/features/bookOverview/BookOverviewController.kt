@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.bookOverview
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
@@ -15,6 +14,7 @@ import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.ViewBindingController
@@ -57,7 +57,7 @@ class BookOverviewController :
   }
 
   @field:[Inject CurrentBook]
-  lateinit var currentBookIdPref: DataStore<Uri?>
+  lateinit var currentBookIdPref: DataStore<Book2.Id?>
 
   @Inject
   lateinit var viewModel: BookOverviewViewModel
@@ -157,7 +157,7 @@ class BookOverviewController :
     }
   }
 
-  private fun invokeBookSelectionCallback(bookId: Uri) {
+  private fun invokeBookSelectionCallback(bookId: Book2.Id) {
     runBlocking {
       currentBookIdPref.updateData { bookId }
     }
@@ -254,7 +254,7 @@ class BookOverviewController :
     )
   }
 
-  private fun BookOverviewBinding.bookCoverChanged(bookId: Uri) {
+  private fun BookOverviewBinding.bookCoverChanged(bookId: Book2.Id) {
     // there is an issue where notifyDataSetChanges throws:
     // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
     recyclerView.postedIfComputingLayout {

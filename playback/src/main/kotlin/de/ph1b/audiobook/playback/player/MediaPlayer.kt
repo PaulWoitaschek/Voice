@@ -56,7 +56,7 @@ constructor(
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepo2,
   @CurrentBook
-  private val currentBook: DataStore<Uri?>,
+  private val currentBook: DataStore<Book2.Id?>,
 ) {
 
   private val scope = MainScope()

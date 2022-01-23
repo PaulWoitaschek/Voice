@@ -144,7 +144,7 @@ class NotificationCreator
   }
 
   private fun contentIntent(book: Book2): PendingIntent {
-    val contentIntent = toBookIntentProvider.goToBookIntent(book.content.uri)
+    val contentIntent = toBookIntentProvider.goToBookIntent(book.content.id)
     return PendingIntent.getActivity(
       context,
       0,

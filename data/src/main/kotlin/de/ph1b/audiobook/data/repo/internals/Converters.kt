@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.MarkData
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -65,4 +66,10 @@ class Converters {
   fun toUriList(string: String): List<Uri> {
     return json.decodeFromString(ListSerializer(UriSerializer), string)
   }
+
+  @TypeConverter
+  fun toBookId(value: String): Book2.Id = Book2.Id(value)
+
+  @TypeConverter
+  fun fromBookId(id: Book2.Id): String = id.value
 }

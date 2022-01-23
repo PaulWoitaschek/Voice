@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.features.bookCategory
 
-import android.net.Uri
 import androidx.recyclerview.widget.DiffUtil
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.bookOverview.list.BookClickListener
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.GridBookOverviewComponent
@@ -16,7 +16,7 @@ class BookCategoryAdapter(listener: BookClickListener) :
     addComponent(ListBookOverviewComponent(listener))
   }
 
-  fun notifyCoverChanged(bookId: Uri) {
+  fun notifyCoverChanged(bookId: Book2.Id) {
     for (i in 0 until itemCount) {
       val item = getItem(i)
       if (item.id == bookId) {

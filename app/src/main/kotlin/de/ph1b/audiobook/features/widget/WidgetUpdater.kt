@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
@@ -24,6 +23,7 @@ import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.misc.coverFile
@@ -166,7 +166,7 @@ class WidgetUpdater @Inject constructor(
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = MainActivity.goToBookIntent(context, Uri.parse("todo")) // todo
+    val wholeWidgetClickI = MainActivity.goToBookIntent(context, Book2.Id("todo")) // todo
     val wholeWidgetClickPI = PendingIntent.getActivity(
       context,
       System.currentTimeMillis().toInt(),

@@ -1,12 +1,11 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import android.net.Uri
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderComponent
 import de.ph1b.audiobook.features.bookOverview.list.header.OpenCategoryListener
 import de.ph1b.audiobook.misc.recyclerComponent.CompositeListAdapter
 
-typealias BookClickListener = (Uri, BookOverviewClick) -> Unit
+typealias BookClickListener = (Book2.Id, BookOverviewClick) -> Unit
 
 class BookOverviewAdapter(
   bookClickListener: BookClickListener,
@@ -19,7 +18,7 @@ class BookOverviewAdapter(
     addComponent(BookOverviewHeaderComponent(openCategoryListener))
   }
 
-  fun reloadBookCover(bookId: Uri) {
+  fun reloadBookCover(bookId: Book2.Id) {
     for (i in 0 until itemCount) {
       val item = getItem(i)
       if (item is BookOverviewViewState && item.id == bookId) {
