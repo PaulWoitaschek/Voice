@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Singleton
 class BookRepo2
 @Inject constructor(
-  private val contentRepo: BookContentRepo,
   private val chapterRepo: ChapterRepo,
   private val contentDao: BookContent2Dao,
 ) {
@@ -75,7 +74,7 @@ class BookRepo2
         }
       }
     }
-    contentRepo.put(content)
+    contentDao.insert(content)
   }
 
   fun flow(uri: Uri): Flow<Book2?> {
