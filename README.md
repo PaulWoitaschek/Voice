@@ -19,7 +19,7 @@ There are still some components outdated.
 
 If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
 
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/master/Images/front.png" width="400" ></a>
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/main/Images/front.png" width="400" ></a>
 
 # <a name="contrib">Contribution</a>
 
@@ -41,4 +41,4 @@ Or you can start translating a new language if you speak it ;-)
 # License
 Copyright (C) 2014 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
-The license is [GNU GPLv3](https://github.com/PaulWoitaschek/Voice/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
+The license is [GNU GPLv3](https://github.com/PaulWoitaschek/Voice/blob/main/LICENSE.md). With contributing you agree to license your code under the same conditions.
