@@ -38,15 +38,4 @@ class BookContentRepo
   suspend inline fun getOrPut(uri: Uri, defaultValue: () -> BookContent2): BookContent2 {
     return get(uri) ?: defaultValue().also { put(it) }
   }
-
-  suspend fun setAllInactiveExcept(uris: List<Uri>) {
-    cache.value = cache.value.toMutableMap().apply {
-      (keys - uris.toSet()).forEach {
-        val content = getValue(it) ?: return@forEach
-        val updated = content.copy(isActive = false)
-        dao.insert(updated)
-        this[it] = updated
-      }
-    }
-  }
 }

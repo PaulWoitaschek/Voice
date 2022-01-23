@@ -48,6 +48,20 @@ class BookRepo2
     return cache.onStart { fillCache() }
   }
 
+  suspend fun setAllInactiveExcept(uris: List<Uri>) {
+    fillCache()
+
+    val currentBooks = cache.value
+
+    val (active, inactive) = currentBooks.partition { it.id in uris }
+    contentDao.insert(
+      inactive.map { book ->
+        book.content.copy(isActive = false)
+      }
+    )
+    cache.value = active
+  }
+
   suspend fun updateBook(content: BookContent2) {
     fillCache()
     cache.update {

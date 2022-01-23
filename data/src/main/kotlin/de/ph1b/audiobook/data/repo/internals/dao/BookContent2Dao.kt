@@ -13,6 +13,9 @@ interface BookContent2Dao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insert(content2: BookContent2)
 
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insert(content2: List<BookContent2>)
+
   @Query("SELECT * FROM content2 WHERE uri = :id")
   suspend fun byId(id: Uri): BookContent2?
 

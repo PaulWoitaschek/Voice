@@ -6,6 +6,7 @@ import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.repo.BookContentRepo
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import java.time.Instant
 import javax.inject.Inject
@@ -15,11 +16,12 @@ class MediaScanner
   private val bookContentRepo: BookContentRepo,
   private val chapterRepo: ChapterRepo,
   private val mediaAnalyzer: MediaAnalyzer,
+  private val bookRepo: BookRepo2,
 ) {
 
   suspend fun scan(folders: List<DocumentFile>) {
     val allFiles = folders.flatMap { it.listFiles().toList() }
-    bookContentRepo.setAllInactiveExcept(allFiles.map { it.uri })
+    bookRepo.setAllInactiveExcept(allFiles.map { it.uri })
     allFiles.forEach { scan(it) }
   }
 
