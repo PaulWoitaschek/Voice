@@ -49,8 +49,8 @@ data class BookOverviewViewState(
 }
 
 private fun Book2.progress(): Float {
-  val globalPosition = content.position
-  val totalDuration = content.duration
+  val globalPosition = position
+  val totalDuration = duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
     Timber.e("Couldn't determine progress for book=$this")
@@ -59,5 +59,5 @@ private fun Book2.progress(): Float {
 }
 
 private fun Book2.remainingTimeInMs(): Long {
-  return content.duration - content.position
+  return duration - position
 }

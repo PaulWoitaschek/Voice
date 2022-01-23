@@ -11,7 +11,6 @@ import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
-import de.ph1b.audiobook.data.bookPosition
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -106,11 +105,10 @@ constructor(
         .coerceAtLeast(0)
       Timber.i("onPositionDiscontinuity with currentPos=$position")
 
-      updateContentWithBook {
-        val index = player.currentMediaItemIndex
-        contentWithNewPosition(
+      updateContent {
+        copy(
           positionInChapter = position,
-          currentChapter = content.chapters[index]
+          currentChapter = chapters[player.currentMediaItemIndex]
         )
       }
     }
@@ -142,11 +140,10 @@ constructor(
           it / 1000
         }
         .collect { time ->
-          updateContentWithBook {
-            val index = player.currentMediaItemIndex
-            contentWithNewPosition(
+          updateContent {
+            copy(
               positionInChapter = time,
-              currentChapter = content.chapters[index],
+              currentChapter = chapters[player.currentMediaItemIndex],
             )
           }
         }
@@ -364,10 +361,10 @@ constructor(
     prepare()
     if (state == PlayerState.IDLE)
       return
-    updateContentWithBook {
-      val newChapter = changedUri ?: content.currentChapter
-      player.seekTo(content.chapters.indexOf(newChapter), time)
-      contentWithNewPosition(positionInChapter = time, currentChapter = newChapter)
+    updateContent {
+      val newChapter = changedUri ?: currentChapter
+      player.seekTo(chapters.indexOf(newChapter), time)
+      copy(positionInChapter = time, currentChapter = newChapter)
     }
   }
 
@@ -397,17 +394,4 @@ constructor(
     val updated = book.copy(content = update(book.content))
     this.book = updated
   }
-
-  private fun updateContentWithBook(update: Book2.() -> BookContent2) {
-    val book = book ?: return
-    this.book = book.copy(content = update(book))
-  }
-}
-
-private fun Book2.contentWithNewPosition(positionInChapter: Long, currentChapter: Uri): BookContent2 {
-  return content.copy(
-    positionInChapter = positionInChapter,
-    currentChapter = currentChapter,
-    position = bookPosition(chapters, positionInChapter, currentChapter)
-  )
 }

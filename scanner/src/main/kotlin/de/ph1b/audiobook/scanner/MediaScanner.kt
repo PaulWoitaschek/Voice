@@ -5,7 +5,6 @@ import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.Chapter2
-import de.ph1b.audiobook.data.bookPosition
 import de.ph1b.audiobook.data.repo.BookContentRepo
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import java.time.Instant
@@ -38,8 +37,6 @@ class MediaScanner
         lastPlayedAt = Instant.EPOCH,
         name = fileName,
         playbackSpeed = 1F,
-        position = 0,
-        duration = chapters.sumOf { it.duration },
         skipSilence = false,
         type = if (file.isFile) {
           BookContent2.Type.File
@@ -61,12 +58,10 @@ class MediaScanner
     val currentChapter = if (currentChapterGone) chapterUris.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
     val updated = content.copy(
-      duration = chapters.sumOf { it.duration },
       chapters = chapterUris,
       currentChapter = currentChapter,
       positionInChapter = positionInChapter,
       isActive = true,
-      position = bookPosition(chapters, positionInChapter, currentChapter),
     )
     if (content != updated) {
       validateIntegrity(updated, chapters)

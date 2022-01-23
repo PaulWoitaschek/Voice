@@ -13,35 +13,29 @@ data class Book2(
 
   init {
     if (BuildConfig.DEBUG) {
-      val actualPosition = bookPosition(chapters, content.positionInChapter, content.currentChapter)
       check(chapters.size == content.chapters.size) {
         "Different chapter count in $this"
       }
       check(chapters.map { it.uri } == content.chapters) {
         "Different chapter order in $this"
       }
-      check(actualPosition == content.position) {
-        "Invalid position. expectedPosition=$actualPosition in $this"
-      }
     }
   }
 
-  val currentChapter = chapters[content.currentChapterIndex]
-  val previousChapter = chapters.getOrNull(content.currentChapterIndex - 1)
-  val nextChapter = chapters.getOrNull(content.currentChapterIndex + 1)
+  val currentChapter: Chapter2 = chapters[content.currentChapterIndex]
+  val previousChapter: Chapter2? = chapters.getOrNull(content.currentChapterIndex - 1)
+  val nextChapter: Chapter2? = chapters.getOrNull(content.currentChapterIndex + 1)
 
-  val nextMark = currentChapter.nextMark(content.positionInChapter)
-  val currentMark = currentChapter.markForPosition(content.positionInChapter)
+  val nextMark: ChapterMark? = currentChapter.nextMark(content.positionInChapter)
+  val currentMark: ChapterMark = currentChapter.markForPosition(content.positionInChapter)
+
+  val position: Long = chapters.takeWhile { it.uri != content.currentChapter }
+    .sumOf { it.duration } + content.positionInChapter
+  val duration: Long = chapters.sumOf { it.duration }
 
   inline fun update(update: (BookContent2) -> BookContent2): Book2 {
     return copy(content = update(content))
   }
-}
-
-fun bookPosition(chapters: List<Chapter2>, positionInChapter: Long, currentChapter: Uri): Long {
-  require(chapters.isNotEmpty())
-  return chapters.takeWhile { it.uri != currentChapter }
-    .sumOf { it.duration } + positionInChapter
 }
 
 private fun Chapter2.nextMark(positionInChapterMs: Long): ChapterMark? {

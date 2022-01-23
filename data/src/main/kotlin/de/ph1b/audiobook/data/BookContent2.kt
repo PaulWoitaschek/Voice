@@ -19,8 +19,6 @@ data class BookContent2(
   val author: String?,
   val name: String,
   val addedAt: Instant,
-  val position: Long,
-  val duration: Long,
   val chapters: List<Uri>,
   val currentChapter: Uri,
   val positionInChapter: Long,
