@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.data
 
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.matchers.longs.shouldBeExactly
@@ -34,6 +35,27 @@ class Book2Test {
     position shouldBeExactly 1500
   }
 
+  @Suppress("SameParameterValue")
+  private fun bookPosition(chapters: List<Chapter2>, currentChapter: Uri, positionInChapter: Long): Long {
+    return Book2(
+      content = BookContent2(
+        author = UUID.randomUUID().toString(),
+        name = UUID.randomUUID().toString(),
+        positionInChapter = positionInChapter,
+        playbackSpeed = 1F,
+        addedAt = Instant.EPOCH,
+        chapters = chapters.map { it.uri },
+        cover = null,
+        currentChapter = currentChapter,
+        isActive = true,
+        lastPlayedAt = Instant.EPOCH,
+        skipSilence = false,
+        id = Book2.Id(UUID.randomUUID().toString())
+      ),
+      chapters = chapters,
+    ).position
+  }
+
   private fun chapter(duration: Long): Chapter2 {
     return Chapter2(
       uri = "http://${UUID.randomUUID()}".toUri(),
@@ -44,3 +66,4 @@ class Book2Test {
     )
   }
 }
+

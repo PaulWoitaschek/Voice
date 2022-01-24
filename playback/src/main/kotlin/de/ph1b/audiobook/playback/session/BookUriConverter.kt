@@ -12,16 +12,7 @@ class BookUriConverter
 
   private val baseUri = Uri.Builder().scheme(SCHEME).build()
 
-  fun allBooksId(): String {
-    return baseUri.toString()
-  }
-
-  fun chapterId(bookId: Uri, chapterId: Uri): String {
-    return baseUri.buildUpon()
-      .appendPath(bookId.toString())
-      .appendPath(chapterId.toString())
-      .toString()
-  }
+  fun allBooksId(): String = baseUri.toString()
 
   fun bookId(id: Book2.Id): String {
     return baseUri.buildUpon()
@@ -37,19 +28,16 @@ class BookUriConverter
     val pathSegments = uri.pathSegments
 
     val bookId = pathSegments.firstOrNull()?.toUri()?.let(Book2::Id)
-      ?: return Parsed.AllBooks
 
-    val chapterId = pathSegments.getOrNull(1)?.toUri()
-    return if (chapterId == null) {
-      Parsed.Book(bookId)
+    return if (bookId == null) {
+      Parsed.AllBooks
     } else {
-      Parsed.Chapter(bookId, chapterId)
+      Parsed.Book(bookId)
     }
   }
 
   sealed class Parsed {
     object AllBooks : Parsed()
     data class Book(val id: Book2.Id) : Parsed()
-    data class Chapter(val bookId: Book2.Id, val chapterId: Uri) : Parsed()
   }
 }

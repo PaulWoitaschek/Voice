@@ -1,10 +1,13 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import de.ph1b.audiobook.data.BookComparator
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class BookComparatorTest {
 
   private val b1 = BookFactory.create(lastPlayedAtMillis = 0, name = "A", addedAtMillis = 2)

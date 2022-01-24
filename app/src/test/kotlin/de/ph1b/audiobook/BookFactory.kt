@@ -1,11 +1,13 @@
 package de.ph1b.audiobook
 
+import androidx.core.net.toUri
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.BookContent
-import de.ph1b.audiobook.data.BookMetaData
-import de.ph1b.audiobook.data.BookSettings
-import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.Chapter2
+import java.time.Instant
 import java.util.UUID
+import kotlin.time.Duration.Companion.minutes
 
 internal object BookFactory {
 
@@ -19,41 +21,38 @@ internal object BookFactory {
     playbackSpeed: Float = 1F,
     loudnessGain: Int = 500,
     skipSilence: Boolean = false,
-    chapters: List<Chapter> = listOf(
-      ChapterFactory.create(bookId = id, file = "1.mp3"),
-      ChapterFactory.create(bookId = id, file = "2.mp3")
+    chapters: List<Chapter2> = listOf(
+      chapter(), chapter(),
     ),
     lastPlayedAtMillis: Long = 0L,
     addedAtMillis: Long = 0L
-  ): Book {
-
-    val currentFile = chapters[currentFileIndex].file
-    val root = if (currentFile.parent != null) currentFile.parent else "fakeRoot"
-
-    return Book(
-      id = id,
-      metaData = BookMetaData(
-        id = id,
-        type = type,
-        author = author,
+  ): Book2 {
+    return Book2(
+      content = BookContent2(
+        author = UUID.randomUUID().toString(),
         name = name,
-        root = root,
-        addedAtMillis = addedAtMillis
+        positionInChapter = 42,
+        playbackSpeed = 1F,
+        addedAt = Instant.ofEpochMilli(addedAtMillis),
+        chapters = chapters.map { it.uri },
+        cover = null,
+        currentChapter = chapters.first().uri,
+        isActive = true,
+        lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
+        skipSilence = false,
+        id = Book2.Id(UUID.randomUUID().toString())
       ),
-      content = BookContent(
-        id = id,
-        settings = BookSettings(
-          id = id,
-          currentFile = currentFile,
-          positionInChapter = time,
-          playbackSpeed = playbackSpeed,
-          loudnessGain = loudnessGain,
-          skipSilence = skipSilence,
-          active = true,
-          lastPlayedAtMillis = lastPlayedAtMillis
-        ),
-        chapters = chapters
-      )
+      chapters = chapters,
     )
   }
+}
+
+private fun chapter(): Chapter2 {
+  return Chapter2(
+    uri = "http://${UUID.randomUUID()}".toUri(),
+    duration = 5.minutes.inWholeMilliseconds,
+    fileLastModified = Instant.EPOCH,
+    markData = emptyList(),
+    name = "name"
+  )
 }

@@ -1,8 +1,11 @@
 package de.ph1b.audiobook.data
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.UUID
 
+@RunWith(AndroidJUnit4::class)
 class BookTest {
 
   @Test
@@ -68,10 +71,10 @@ class BookTest {
     val bookId = UUID.randomUUID()
     val book = BookFactory.create(
       chapters = listOf(
-        ChapterFactory.create(file = "ch1", duration = 123, bookId = bookId),
-        ChapterFactory.create(file = "ch2", duration = 234, bookId = bookId),
-        ChapterFactory.create(file = "ch3", duration = 345, bookId = bookId),
-        ChapterFactory.create(file = "ch4", duration = 456, bookId = bookId)
+        ChapterFactory.create(file = "/ch1", duration = 123, bookId = bookId),
+        ChapterFactory.create(file = "/ch2", duration = 234, bookId = bookId),
+        ChapterFactory.create(file = "/ch3", duration = 345, bookId = bookId),
+        ChapterFactory.create(file = "/ch4", duration = 456, bookId = bookId)
       ),
       id = bookId
     )

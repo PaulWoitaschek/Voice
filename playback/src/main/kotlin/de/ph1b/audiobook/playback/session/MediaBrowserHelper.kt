@@ -21,9 +21,6 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-/**
- * Helper class for MediaBrowserServiceCompat handling
- */
 @Reusable
 class MediaBrowserHelper
 @Inject constructor(

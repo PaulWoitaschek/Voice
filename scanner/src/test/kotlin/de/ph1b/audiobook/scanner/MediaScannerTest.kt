@@ -2,26 +2,7 @@
 
 package de.ph1b.audiobook.scanner
 
-import android.net.Uri
-import android.webkit.MimeTypeMap
-import androidx.core.net.toFile
-import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import de.ph1b.audiobook.data.repo.BookContentRepo
-import de.ph1b.audiobook.data.repo.ChapterRepo
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.Shadows
-import java.io.Closeable
-import java.io.File
-import java.nio.file.Files
-
+/* todo
 @RunWith(AndroidJUnit4::class)
 class MediaScannerTest {
 
@@ -165,7 +146,8 @@ class MediaScannerTest {
   }
 
   data class BookContentView(
-    val uri: Uri,
+    val uri:n Uri,
     val chapters: List<Uri>
   )
 }
+*/

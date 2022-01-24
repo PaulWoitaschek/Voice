@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.utils
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.playback.session.BookUriConverter
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,17 +24,9 @@ class BookUriConverterTest {
 
   @Test
   fun book() {
-    val bookId = UUID.randomUUID()
+    val bookId = Book2.Id(UUID.randomUUID().toString())
     val id = converter.bookId(bookId)
     val parsed = converter.parse(id)
     assertThat(parsed).isEqualTo(BookUriConverter.Parsed.Book(bookId))
-  }
-
-  @Test
-  fun chapter() {
-    val bookId = UUID.randomUUID()
-    val id = converter.chapterId(bookId, 5L)
-    val parsed = converter.parse(id)
-    assertThat(parsed).isEqualTo(BookUriConverter.Parsed.Chapter(bookId, 5L))
   }
 }

@@ -24,9 +24,6 @@ import org.junit.runner.RunWith
 import java.time.Instant
 import java.util.UUID
 
-/**
- * A test case to easily test the voice search functionality for Android auto (and OK google commands)
- */
 @RunWith(AndroidJUnit4::class)
 class BookSearchHandlerTest {
 
@@ -34,7 +31,7 @@ class BookSearchHandlerTest {
 
   private val repo = mockk<BookRepo2>()
   private val player = mockk<PlayerController>(relaxUnitFun = true)
-  private val currentBookId = MemoryDataStore<Uri?>(null)
+  private val currentBookId = MemoryDataStore<Book2.Id?>(null)
 
   private val anotherBook = book(listOf(chapter(), chapter()))
   private val bookToFind = book(listOf(chapter(), chapter()))
@@ -132,11 +129,10 @@ class BookSearchHandlerTest {
   }
 }
 
-private fun book(chapters: List<Chapter2>): Book2 {
+fun book(chapters: List<Chapter2>): Book2 {
   return Book2(
     content = BookContent2(
       author = UUID.randomUUID().toString(),
-      type = BookContent2.Type.File,
       name = UUID.randomUUID().toString(),
       positionInChapter = 42,
       playbackSpeed = 1F,
@@ -144,12 +140,10 @@ private fun book(chapters: List<Chapter2>): Book2 {
       chapters = chapters.map { it.uri },
       cover = null,
       currentChapter = chapters.first().uri,
-      duration = 5000,
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      position = 42,
-      uri = Uri.parse(UUID.randomUUID().toString())
+      id = Book2.Id(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )
