@@ -20,12 +20,12 @@ groupie = "com.github.lisawray.groupie:groupie:2.10.0"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:4.5.1-1"
 timber = "com.jakewharton.timber:timber:5.0.1"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.12.1"
+mockk = "io.mockk:mockk:1.12.2"
 truth = "com.google.truth:truth:1.1.3"
 robolectric = "org.robolectric:robolectric:4.7.3"
 coil = "io.coil-kt:coil-compose:1.4.0"
-appCompat = "androidx.appcompat:appcompat:1.4.0"
-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.2"
+appCompat = "androidx.appcompat:appcompat:1.4.1"
+constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
 transitions = "androidx.transition:transition:1.4.1"
 palette = "androidx.palette:palette:1.0.0"
@@ -35,7 +35,7 @@ kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin",
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
-koTest-assert = "io.kotest:kotest-assertions-core:5.0.3"
+koTest-assert = "io.kotest:kotest-assertions-core:5.1.0"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 
@@ -50,7 +50,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 androidX-test-runner = "androidx.test:runner:1.4.0"
-androidX-test-junit = "androidx.test.ext:junit:1.1.2"
+androidX-test-junit = "androidx.test.ext:junit:1.1.3"
 androidX-test-core = "androidx.test:core:1.4.0"
 
 conductor-core = { module = "com.bluelinelabs:conductor", version.ref = "conductor" }
