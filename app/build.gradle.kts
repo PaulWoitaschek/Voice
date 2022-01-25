@@ -62,9 +62,9 @@ android {
   }
 
   lint {
-    isCheckDependencies = true
-    isIgnoreTestSources = true
-    isWarningsAsErrors = true
+    checkDependencies = true
+    ignoreTestSources = true
+    warningsAsErrors = true
   }
 
   packagingOptions {
