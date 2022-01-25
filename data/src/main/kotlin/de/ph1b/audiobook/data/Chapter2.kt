@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -15,7 +14,7 @@ data class Chapter2(
   val duration: Long,
   val fileLastModified: Instant,
   val markData: List<MarkData>,
-) : Comparable<Chapter2> {
+) {
 
   init {
     require(name.isNotEmpty())
@@ -34,6 +33,4 @@ data class Chapter2(
       ChapterMark(name = name, startMs = start, endMs = end)
     }
   }
-
-  override fun compareTo(other: Chapter2): Int = NaturalOrderComparator.uriComparator.compare(uri, other.uri)
 }
