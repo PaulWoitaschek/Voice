@@ -5,7 +5,13 @@ import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -36,10 +42,22 @@ data class Chapter2(
     }
   }
 
-  @Serializable
+  @Serializable(with = Id.IdSerializer::class)
   data class Id(val value: String) {
 
     constructor(uri: Uri) : this(uri.toString())
+
+    companion object IdSerializer : KSerializer<Id> {
+
+      override val descriptor: SerialDescriptor
+        get() = PrimitiveSerialDescriptor("chapterId", PrimitiveKind.STRING)
+
+      override fun deserialize(decoder: Decoder): Id = Id(decoder.decodeString())
+
+      override fun serialize(encoder: Encoder, value: Id) {
+        encoder.encodeString(value.value)
+      }
+    }
   }
 }
 
