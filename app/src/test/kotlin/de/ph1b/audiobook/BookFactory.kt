@@ -1,6 +1,5 @@
 package de.ph1b.audiobook
 
-import androidx.core.net.toUri
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
@@ -34,9 +33,9 @@ internal object BookFactory {
         positionInChapter = 42,
         playbackSpeed = 1F,
         addedAt = Instant.ofEpochMilli(addedAtMillis),
-        chapters = chapters.map { it.uri },
+        chapters = chapters.map { it.id },
         cover = null,
-        currentChapter = chapters.first().uri,
+        currentChapter = chapters.first().id,
         isActive = true,
         lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
         skipSilence = false,
@@ -49,7 +48,7 @@ internal object BookFactory {
 
 private fun chapter(): Chapter2 {
   return Chapter2(
-    uri = "http://${UUID.randomUUID()}".toUri(),
+    id = Chapter2.Id("http://${UUID.randomUUID()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),

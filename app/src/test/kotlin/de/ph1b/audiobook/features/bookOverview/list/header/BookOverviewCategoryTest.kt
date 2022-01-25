@@ -1,12 +1,9 @@
 package de.ph1b.audiobook.features.bookOverview.list.header
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.BookFactory
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class BookOverviewCategoryTest {
 
   @Test
@@ -15,7 +12,7 @@ class BookOverviewCategoryTest {
       val lastChapter = book.chapters.last()
       book.copy(
         content = book.content.copy(
-          currentChapter = lastChapter.uri,
+          currentChapter = lastChapter.id,
           positionInChapter = lastChapter.duration
         )
       )
@@ -29,7 +26,7 @@ class BookOverviewCategoryTest {
       val firstChapter = book.chapters.first()
       book.copy(
         content = book.content.copy(
-          currentChapter = firstChapter.uri,
+          currentChapter = firstChapter.id,
           positionInChapter = 0
         )
       )
@@ -42,7 +39,7 @@ class BookOverviewCategoryTest {
     val book = BookFactory.create().let { book ->
       book.copy(
         content = book.content.copy(
-          currentChapter = book.chapters.last().uri,
+          currentChapter = book.chapters.last().id,
           positionInChapter = 0
         )
       )

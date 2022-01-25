@@ -42,23 +42,24 @@ data class Chapter2(
     }
   }
 
-  @Serializable(with = Id.IdSerializer::class)
+  @Serializable(with = ChapterIdSerializer::class)
   data class Id(val value: String) {
 
     constructor(uri: Uri) : this(uri.toString())
-
-    companion object IdSerializer : KSerializer<Id> {
-
-      override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("chapterId", PrimitiveKind.STRING)
-
-      override fun deserialize(decoder: Decoder): Id = Id(decoder.decodeString())
-
-      override fun serialize(encoder: Encoder, value: Id) {
-        encoder.encodeString(value.value)
-      }
-    }
   }
 }
+
+object ChapterIdSerializer : KSerializer<Chapter2.Id> {
+
+  override val descriptor: SerialDescriptor
+    get() = PrimitiveSerialDescriptor("chapterId", PrimitiveKind.STRING)
+
+  override fun deserialize(decoder: Decoder): Chapter2.Id = Chapter2.Id(decoder.decodeString())
+
+  override fun serialize(encoder: Encoder, value: Chapter2.Id) {
+    encoder.encodeString(value.value)
+  }
+}
+
 
 fun Chapter2.Id.toUri(): Uri = value.toUri()

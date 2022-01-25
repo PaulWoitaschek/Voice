@@ -45,26 +45,27 @@ data class Book2(
     return copy(content = update(content))
   }
 
-  @Serializable(with = Id.IdSerializer::class)
+  @Serializable(with = BookIdSerializer::class)
   data class Id(val value: String) {
 
     val transitionName: String get() = value
 
     constructor(uri: Uri) : this(uri.toString())
-
-    companion object IdSerializer : KSerializer<Id> {
-
-      override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("bookId", PrimitiveKind.STRING)
-
-      override fun deserialize(decoder: Decoder): Id = Id(decoder.decodeString())
-
-      override fun serialize(encoder: Encoder, value: Id) {
-        encoder.encodeString(value.value)
-      }
-    }
   }
 }
+
+object BookIdSerializer : KSerializer<Book2.Id> {
+
+  override val descriptor: SerialDescriptor
+    get() = PrimitiveSerialDescriptor("bookId", PrimitiveKind.STRING)
+
+  override fun deserialize(decoder: Decoder): Book2.Id = Book2.Id(decoder.decodeString())
+
+  override fun serialize(encoder: Encoder, value: Book2.Id) {
+    encoder.encodeString(value.value)
+  }
+}
+
 
 private fun Chapter2.nextMark(positionInChapterMs: Long): ChapterMark? {
   val markForPosition = markForPosition(positionInChapterMs)

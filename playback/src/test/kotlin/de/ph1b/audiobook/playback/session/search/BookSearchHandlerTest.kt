@@ -1,9 +1,7 @@
 package de.ph1b.audiobook.playback.session.search
 
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
 import de.ph1b.audiobook.data.Chapter2
@@ -20,11 +18,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.time.Instant
 import java.util.UUID
 
-@RunWith(AndroidJUnit4::class)
 class BookSearchHandlerTest {
 
   private val searchHandler: BookSearchHandler
@@ -137,9 +133,9 @@ fun book(chapters: List<Chapter2>): Book2 {
       positionInChapter = 42,
       playbackSpeed = 1F,
       addedAt = Instant.EPOCH,
-      chapters = chapters.map { it.uri },
+      chapters = chapters.map { it.id },
       cover = null,
-      currentChapter = chapters.first().uri,
+      currentChapter = chapters.first().id,
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
@@ -151,7 +147,7 @@ fun book(chapters: List<Chapter2>): Book2 {
 
 private fun chapter(): Chapter2 {
   return Chapter2(
-    uri = Uri.parse(UUID.randomUUID().toString()),
+    id = Chapter2.Id(UUID.randomUUID().toString()),
     name = UUID.randomUUID().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,
