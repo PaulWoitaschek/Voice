@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data.repo
 
-import android.net.Uri
 import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.repo.internals.dao.Chapter2Dao
 import timber.log.Timber
@@ -14,26 +13,26 @@ class ChapterRepo
   private val dao: Chapter2Dao
 ) {
 
-  private val cache = mutableMapOf<Uri, Chapter2?>()
+  private val cache = mutableMapOf<Chapter2.Id, Chapter2?>()
 
-  suspend fun get(uri: Uri, lastModified: Instant? = null): Chapter2? {
-    if (!cache.containsKey(uri)) {
-      cache[uri] = dao.chapter(uri).also {
-        Timber.d("Chapter for $uri wasn't in the map, fetched $it")
+  suspend fun get(id: Chapter2.Id, lastModified: Instant? = null): Chapter2? {
+    if (!cache.containsKey(id)) {
+      cache[id] = dao.chapter(id).also {
+        Timber.d("Chapter for $id wasn't in the map, fetched $it")
       }
     }
-    return cache[uri]?.takeIf {
+    return cache[id]?.takeIf {
       lastModified == null || it.fileLastModified == lastModified
     }
   }
 
   suspend fun put(chapter: Chapter2) {
     dao.insert(chapter)
-    cache[chapter.uri] = chapter
+    cache[chapter.id] = chapter
   }
 
-  suspend inline fun getOrPut(uri: Uri, lastModified: Instant, defaultValue: () -> Chapter2?): Chapter2? {
-    return get(uri, lastModified)
+  suspend inline fun getOrPut(id: Chapter2.Id, lastModified: Instant, defaultValue: () -> Chapter2?): Chapter2? {
+    return get(id, lastModified)
       ?: defaultValue()?.also { put(it) }
   }
 }

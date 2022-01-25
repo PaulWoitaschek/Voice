@@ -60,7 +60,7 @@ class BookmarkPresenter
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
 
     currentBookIdPref.value = bookId
-    playerController.setPosition(bookmark.time, bookmark.mediaUri)
+    // todo playerController.setPosition(bookmark.time, bookmark.mediaUri)
 
     if (wasPlaying) {
       playerController.play()

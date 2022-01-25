@@ -50,7 +50,7 @@ class SelectChapterViewModel
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
           if (currentIndex == index) {
-            player.setPosition(mark.startMs, chapter.uri)
+            player.setPosition(mark.startMs, chapter.id)
             _viewEffects.tryEmit(SelectChapterViewEffect.CloseScreen)
             return@launch
           }

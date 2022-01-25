@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.MarkData
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -58,13 +59,13 @@ class Converters {
   fun toUri(string: String): Uri = string.toUri()
 
   @TypeConverter
-  fun fromUriList(list: List<Uri>): String {
-    return json.encodeToString(ListSerializer(UriSerializer), list)
+  fun fromChapterList(list: List<Chapter2.Id>): String {
+    return json.encodeToString(ListSerializer(Chapter2.Id.serializer()), list)
   }
 
   @TypeConverter
-  fun toUriList(string: String): List<Uri> {
-    return json.decodeFromString(ListSerializer(UriSerializer), string)
+  fun toChapterList(string: String): List<Chapter2.Id> {
+    return json.decodeFromString(ListSerializer(Chapter2.Id.serializer()), string)
   }
 
   @TypeConverter
@@ -72,4 +73,10 @@ class Converters {
 
   @TypeConverter
   fun fromBookId(id: Book2.Id): String = id.value
+
+  @TypeConverter
+  fun toChapterId(value: String): Chapter2.Id = Chapter2.Id(value)
+
+  @TypeConverter
+  fun fromChapterId(id: Chapter2.Id): String = id.value
 }

@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.data
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -18,8 +17,8 @@ data class BookContent2(
   val author: String?,
   val name: String,
   val addedAt: Instant,
-  val chapters: List<Uri>,
-  val currentChapter: Uri,
+  val chapters: List<Chapter2.Id>,
+  val currentChapter: Chapter2.Id,
   val positionInChapter: Long,
   val cover: File?,
 ) {

@@ -1,15 +1,17 @@
 package de.ph1b.audiobook.data
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
 data class Chapter2(
   @PrimaryKey
-  val uri: Uri,
+  val id: Id,
   val name: String,
   val duration: Long,
   val fileLastModified: Instant,
@@ -33,4 +35,12 @@ data class Chapter2(
       ChapterMark(name = name, startMs = start, endMs = end)
     }
   }
+
+  @Serializable
+  data class Id(val value: String) {
+
+    constructor(uri: Uri) : this(uri.toString())
+  }
 }
+
+fun Chapter2.Id.toUri(): Uri = value.toUri()

@@ -102,7 +102,7 @@ todo
       val book = repo.flow(bookId).first() ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      player.setPosition(currentMark.startMs + ms, currentChapter.uri)
+      player.setPosition(currentMark.startMs + ms, currentChapter.id)
     }
   }
 

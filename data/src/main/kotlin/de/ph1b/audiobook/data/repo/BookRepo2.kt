@@ -32,8 +32,8 @@ class BookRepo2
     cacheMutex.withLock {
       val contents = contentDao.all(isActive = true)
         .map { content ->
-          val chapters = content.chapters.map { chapterUri ->
-            chapterRepo.get(chapterUri) ?: error("Chapter for $chapterUri not found")
+          val chapters = content.chapters.map { chapterId ->
+            chapterRepo.get(chapterId) ?: error("Chapter for $chapterId not found")
           }
           Book2(content, chapters)
         }

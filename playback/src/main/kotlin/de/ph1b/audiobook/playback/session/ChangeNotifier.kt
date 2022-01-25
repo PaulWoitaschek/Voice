@@ -12,6 +12,7 @@ import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.toUri
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -117,7 +118,7 @@ class ChangeNotifier
     val chapterName = currentChapter.name
     val author = content.author
 
-    if (lastFileForMetaData != content.currentChapter) {
+    if (lastFileForMetaData != content.currentChapter.toUri()) {
       appendQueue(book)
       // this check is necessary. Else the lockscreen controls will flicker due to
       // an updated picture
@@ -171,7 +172,7 @@ class ChangeNotifier
         .build()
       mediaSession.setMetadata(mediaMetaData)
 
-      lastFileForMetaData = content.currentChapter
+      lastFileForMetaData = content.currentChapter.toUri()
     }
   }
 

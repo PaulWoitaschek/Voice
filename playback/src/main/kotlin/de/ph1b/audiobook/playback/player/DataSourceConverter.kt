@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.toUri
 import javax.inject.Inject
 
 class DataSourceConverter
@@ -26,7 +27,7 @@ class DataSourceConverter
 
   private fun Chapter2.toMediaSource(): MediaSource {
     val item = MediaItem.Builder()
-      .setUri(uri)
+      .setUri(id.toUri())
       .build()
     return mediaSourceFactory.createMediaSource(item)
   }

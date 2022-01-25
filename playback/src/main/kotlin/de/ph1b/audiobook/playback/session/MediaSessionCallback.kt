@@ -1,13 +1,12 @@
 package de.ph1b.audiobook.playback.session
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -37,7 +36,7 @@ class MediaSessionCallback
     Timber.i("onSkipToQueueItem $id")
     val chapter = player.book
       ?.chapters?.getOrNull(id.toInt()) ?: return
-    player.changePosition(0, chapter.uri)
+    player.changePosition(0, chapter.id)
     player.play()
   }
 
@@ -127,9 +126,9 @@ class MediaSessionCallback
         player.setSkipSilences(skip)
       }
       SET_POSITION_ACTION -> {
-        val uri = extras!!.getString(SET_POSITION_EXTRA_URI)!!.toUri()
+        val id = Chapter2.Id(extras!!.getString(SET_POSITION_EXTRA_CHAPTER)!!)
         val time = extras.getLong(SET_POSITION_EXTRA_TIME)
-        player.changePosition(time, uri)
+        player.changePosition(time, id)
       }
       FORCED_PREVIOUS -> {
         player.previous(toNullOfNewTrack = true)
@@ -161,10 +160,10 @@ fun TransportControls.skipSilence(skip: Boolean) = sendCustomAction(SKIP_SILENCE
 
 private const val SET_POSITION_ACTION = "setPosition"
 private const val SET_POSITION_EXTRA_TIME = "$SET_POSITION_ACTION#time"
-private const val SET_POSITION_EXTRA_URI = "$SET_POSITION_ACTION#uri"
+private const val SET_POSITION_EXTRA_CHAPTER = "$SET_POSITION_ACTION#uri"
 
-fun TransportControls.setPosition(time: Long, uri: Uri) = sendCustomAction(SET_POSITION_ACTION) {
-  putString(SET_POSITION_EXTRA_URI, uri.toString())
+fun TransportControls.setPosition(time: Long, id: Chapter2.Id) = sendCustomAction(SET_POSITION_ACTION) {
+  putString(SET_POSITION_EXTRA_CHAPTER, id.value)
   putLong(SET_POSITION_EXTRA_TIME, time)
 }
 

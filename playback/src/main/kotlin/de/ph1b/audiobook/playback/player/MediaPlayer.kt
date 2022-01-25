@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback.player
 
-import android.net.Uri
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.datastore.core.DataStore
 import com.google.android.exoplayer2.ExoPlayer
@@ -11,6 +10,7 @@ import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookContent2
+import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -196,7 +196,7 @@ constructor(
     val book = book ?: return
     if (state == PlayerState.ENDED) {
       Timber.i("play in state ended. Back to the beginning")
-      changePosition(0, book.chapters.first().uri)
+      changePosition(0, book.chapters.first().id)
     }
 
     if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
@@ -252,11 +252,11 @@ constructor(
       changePosition(0)
     } else {
       if (toNullOfNewTrack) {
-        changePosition(0, previousChapter.uri)
+        changePosition(0, previousChapter.id)
       } else {
         val time = (previousChapter.duration.milliseconds - seekTime)
           .coerceAtLeast(Duration.ZERO)
-        changePosition(time.inWholeMilliseconds, previousChapter.uri)
+        changePosition(time.inWholeMilliseconds, previousChapter.id)
       }
     }
   }
@@ -350,19 +350,19 @@ constructor(
     if (nextMark != null) {
       changePosition(nextMark.startMs)
     } else {
-      book.nextChapter?.let { changePosition(0, it.uri) }
+      book.nextChapter?.let { changePosition(0, it.id) }
     }
   }
 
   /** Changes the current position in book. */
-  fun changePosition(time: Long, changedUri: Uri? = null) {
+  fun changePosition(time: Long, changedChapter: Chapter2.Id? = null) {
     checkMainThread()
-    Timber.v("changePosition with time $time and file $changedUri")
+    Timber.v("changePosition with time $time and file $changedChapter")
     prepare()
     if (state == PlayerState.IDLE)
       return
     updateContent {
-      val newChapter = changedUri ?: currentChapter
+      val newChapter = changedChapter ?: currentChapter
       player.seekTo(chapters.indexOf(newChapter), time)
       copy(positionInChapter = time, currentChapter = newChapter)
     }
