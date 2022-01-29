@@ -6,7 +6,7 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.40.3"
 kotlin = "1.6.10"
-compose = "1.1.0-rc01"
+compose = "1.1.0-rc03"
 composeCompiler = "1.1.0-rc02"
 
 [libraries]
@@ -76,7 +76,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha03"
+compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha04"
 compose-activity = "androidx.activity:activity-compose:1.4.0"
 
 [bundles]
