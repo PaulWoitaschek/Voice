@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
   dependencies {
     classpath(libs.androidPluginForGradle)
@@ -13,11 +15,10 @@ plugins {
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
-  gradleVersion = "7.3.3"
 }
 
 allprojects {
-  tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+  tasks.withType<KotlinCompile> {
     kotlinOptions {
       freeCompilerArgs = listOf(
         "-progressive",
