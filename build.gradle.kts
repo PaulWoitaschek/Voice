@@ -8,7 +8,6 @@ buildscript {
 }
 
 plugins {
-  alias(libs.plugins.gradleVersions)
   alias(libs.plugins.ktlint)
 }
 
@@ -70,29 +69,5 @@ tasks {
     val artifactFolder = File("${rootDir.absolutePath}/artifacts")
     destinationDir = File(artifactFolder, "testResults")
     reportOn(tests)
-  }
-}
-
-enum class DependencyStability(private val regex: Regex) {
-  Dev(".*dev.*".toRegex()),
-  Eap("eap".toRegex()),
-  Milestone("M1".toRegex()),
-  Alpha("alpha".toRegex()),
-  Beta("beta".toRegex()),
-  Rc("rc".toRegex()),
-  Stable(".*".toRegex());
-
-  companion object {
-    fun ofVersion(version: String): DependencyStability {
-      return values().first {
-        it.regex.containsMatchIn(version)
-      }
-    }
-  }
-}
-
-tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
-  rejectVersionIf {
-    DependencyStability.ofVersion(candidate.version) < DependencyStability.ofVersion(currentVersion)
   }
 }
