@@ -14,9 +14,7 @@
   <string name="play">پخش</string>
   <string name="pause">توقف</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">حافظه‌ی داخلی در دسترس نیست. از اتصال آن به دستگاه و عدم اتصال به رایانه اطمینان حاصل کنید.</string>
-  <string name="no_external_storage_action_bar_title">حافظه‌ی خارجی</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">انتخاب</string>
   <string name="dialog_cancel">انصراف</string>
   <!--EditBookDialog-->

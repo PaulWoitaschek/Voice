@@ -16,13 +16,9 @@
   <string name="next_track">다음 트랙</string>
   <string name="play">재생</string>
   <string name="pause">정지</string>
-  <string name="equalizer">이퀄라이저</string>
-  <string name="volume_boost">음량 키우기</string>
-  <string name="skip_silence">무음 건너뛰기</string>
+    <string name="skip_silence">무음 건너뛰기</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
-  <string name="no_external_storage_action_bar_title">외부저장공간</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">결정</string>
   <string name="dialog_cancel">취소</string>
   <!--EditBookDialog-->

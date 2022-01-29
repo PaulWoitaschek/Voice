@@ -16,13 +16,9 @@
   <string name="next_track">Następna ścieżka</string>
   <string name="play">Odtwórz</string>
   <string name="pause">Pauza</string>
-  <string name="equalizer">Equalizer</string>
-  <string name="volume_boost">Volume Boost</string>
-  <string name="skip_silence">Pomiń ciszę</string>
+    <string name="skip_silence">Pomiń ciszę</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
-  <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Wybierz</string>
   <string name="dialog_cancel">Anuluj</string>
   <!--EditBookDialog-->

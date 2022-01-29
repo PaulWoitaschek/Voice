@@ -3,32 +3,28 @@
   <!--BookShelf-->
   <string name="current_book">Libro actual</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Cubierta</string>
-  <string name="play_pause">Reproducir / Pausar</string>
-  <string name="action_sleep">Temporizador</string>
-  <string name="rewind">Retrasar</string>
-  <string name="fast_forward">Adelantar</string>
-  <string name="previous_track">Pista anterior</string>
-  <string name="next_track">Pista siguiente</string>
-  <string name="play">Reproducir</string>
-  <string name="pause">Pausar</string>
-  <string name="equalizer">Ecualizador</string>
-  <string name="volume_boost">Aumentar el volumen</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">El dispositivo de Almacenamiento Externo no está disponible. Asegúrate de que esté conectado a tu computadora.</string>
-  <string name="no_external_storage_action_bar_title">Almacenamiento Externo</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Establecer</string>
-  <string name="dialog_cancel">Cancelar</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Muestra la cubierta seleccionada</string>
-  <string name="change_book_name">Cambiar nombre del libro</string>
-  <string name="download_book_cover">Cubierta de Internet</string>
-  <string name="pick_book_cover">Cubierta desde el sistema de archivos</string>
-  <string name="edit_book_title">Editar libro</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Saltar a</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Cubierta</string>
+    <string name="play_pause">Reproducir / Pausar</string>
+    <string name="action_sleep">Temporizador</string>
+    <string name="rewind">Retrasar</string>
+    <string name="fast_forward">Adelantar</string>
+    <string name="previous_track">Pista anterior</string>
+    <string name="next_track">Pista siguiente</string>
+    <string name="play">Reproducir</string>
+    <string name="pause">Pausar</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Establecer</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Muestra la cubierta seleccionada</string>
+    <string name="change_book_name">Cambiar nombre del libro</string>
+    <string name="download_book_cover">Cubierta de Internet</string>
+    <string name="pick_book_cover">Cubierta desde el sistema de archivos</string>
+    <string name="edit_book_title">Editar libro</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Saltar a</string>
   <!--BookAdding-->
   <string name="adding_failed_subfolder">Los directorios no deben ser subdirectorios del mismo:</string>
   <string name="audiobook_folders_title">Directorios de audiolibros</string>

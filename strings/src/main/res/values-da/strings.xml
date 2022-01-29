@@ -16,13 +16,9 @@
   <string name="next_track">Næste nummer</string>
   <string name="play">Afspil</string>
   <string name="pause">Pause</string>
-  <string name="equalizer">Equalizer</string>
-  <string name="volume_boost">Volumenforøgelse</string>
-  <string name="skip_silence">Spring stilhed over</string>
+    <string name="skip_silence">Spring stilhed over</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Ekstern hukommelse er ikke tilgængeligt. Tjek om det er tilsluttet og ikke mounted i din computer.</string>
-  <string name="no_external_storage_action_bar_title">Ekstern hukommelse</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Sæt</string>
   <string name="dialog_cancel">Annuller</string>
   <!--EditBookDialog-->

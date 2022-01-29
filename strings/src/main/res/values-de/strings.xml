@@ -16,13 +16,9 @@
   <string name="next_track">Nächster Song</string>
   <string name="play">Abspielen</string>
   <string name="pause">Pause</string>
-  <string name="equalizer">Equalizer</string>
-  <string name="volume_boost">Lautstärke erhöhen</string>
-  <string name="skip_silence">Stille überspringen</string>
+    <string name="skip_silence">Stille überspringen</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
-  <string name="no_external_storage_action_bar_title">Externer Speicher</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Okay</string>
   <string name="dialog_cancel">Abbrechen</string>
   <!--EditBookDialog-->

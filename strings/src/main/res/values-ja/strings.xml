@@ -13,13 +13,9 @@
   <string name="next_track">次のトラック</string>
   <string name="play">再生</string>
   <string name="pause">一時停止</string>
-  <string name="equalizer">イコライザー</string>
-  <string name="volume_boost">音量ブースト</string>
-  <string name="skip_silence">無音をスキップ</string>
+    <string name="skip_silence">無音をスキップ</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">外部ストレージが使用できません。コンピュータに接続されていること、マウントされていないことを確認してください。</string>
-  <string name="no_external_storage_action_bar_title">外部ストレージ</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">設定</string>
   <string name="dialog_cancel">キャンセル</string>
   <!--EditBookDialog-->

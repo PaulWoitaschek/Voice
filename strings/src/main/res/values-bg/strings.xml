@@ -3,32 +3,28 @@
   <!--BookShelf-->
   <string name="current_book">Текуща книга</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Обложка</string>
-  <string name="play_pause">Възпроизвеждане / Пауза</string>
-  <string name="action_sleep">Таймер за пауза</string>
-  <string name="rewind">Пренавиване</string>
-  <string name="fast_forward">Прескачане напред</string>
-  <string name="previous_track">Предишен запис</string>
-  <string name="next_track">Следващ запис</string>
-  <string name="play">Възпроизвеждане</string>
-  <string name="pause">Пауза</string>
-  <string name="equalizer">Еквилайзер</string>
-  <string name="volume_boost">Усилване на звука</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Външното хранилище не е достъпно. Моля уверете се че не е свързано и не се ползва от компютъра Ви.</string>
-  <string name="no_external_storage_action_bar_title">Външно хранилище</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Да</string>
-  <string name="dialog_cancel">Не</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Избор на обложка</string>
-  <string name="change_book_name">Заглавие</string>
-  <string name="download_book_cover">Обложка от интернет</string>
-  <string name="pick_book_cover">Обложка от хранилището</string>
-  <string name="edit_book_title">Редактиране на книга</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Прескочи до</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Обложка</string>
+    <string name="play_pause">Възпроизвеждане / Пауза</string>
+    <string name="action_sleep">Таймер за пауза</string>
+    <string name="rewind">Пренавиване</string>
+    <string name="fast_forward">Прескачане напред</string>
+    <string name="previous_track">Предишен запис</string>
+    <string name="next_track">Следващ запис</string>
+    <string name="play">Възпроизвеждане</string>
+    <string name="pause">Пауза</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Да</string>
+    <string name="dialog_cancel">Не</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Избор на обложка</string>
+    <string name="change_book_name">Заглавие</string>
+    <string name="download_book_cover">Обложка от интернет</string>
+    <string name="pick_book_cover">Обложка от хранилището</string>
+    <string name="edit_book_title">Редактиране на книга</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Прескочи до</string>
   <!--BookAdding-->
   <string name="adding_failed_subfolder">Папките не могат да бъдат подпапки една на друга</string>
   <string name="audiobook_folders_title">Папка за аудио книги</string>

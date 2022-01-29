@@ -16,13 +16,9 @@
   <string name="next_track">Nasledujúca skladba</string>
   <string name="play">Prehrať</string>
   <string name="pause">Pozastaviť</string>
-  <string name="equalizer">Ekvalizér</string>
-  <string name="volume_boost">Zosíliť hlasitosť</string>
-  <string name="skip_silence">Preskočiť ticho</string>
+    <string name="skip_silence">Preskočiť ticho</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Externé úložisko nie je dostupné. Uistite sa prosím, že je napojené a načítané vo vašom počítači.</string>
-  <string name="no_external_storage_action_bar_title">Externé úložisko</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Nastaviť</string>
   <string name="dialog_cancel">Zrušiť</string>
   <!--EditBookDialog-->

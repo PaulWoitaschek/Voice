@@ -3,31 +3,28 @@
   <!--BookShelf-->
   <string name="current_book">Trenutna knjiga</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Platnica</string>
-  <string name="play_pause">Predvajaj / Ustavi</string>
-  <string name="action_sleep">Odštevalnik za spanje</string>
-  <string name="rewind">Previj nazaj</string>
-  <string name="fast_forward">Previj naprej</string>
-  <string name="previous_track">Prejšnji posnetek</string>
-  <string name="next_track">Naslednji posnetek</string>
-  <string name="play">Predvajaj</string>
-  <string name="pause">Ustavi</string>
-  <string name="equalizer">Izenačevalnik</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Zunanji pomnilnik ni na voljo. Poskrbite, prosim, da je povezan in ne priključen na računalnik.</string>
-  <string name="no_external_storage_action_bar_title">Zunanji pomnilnik</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Nastavi</string>
-  <string name="dialog_cancel">Prekliči</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Prikaže naslednjo naslovnico</string>
-  <string name="change_book_name">Ime</string>
-  <string name="download_book_cover">Naslovnica s spleta</string>
-  <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
-  <string name="edit_book_title">Uredi knjigo</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Previj do</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Platnica</string>
+    <string name="play_pause">Predvajaj / Ustavi</string>
+    <string name="action_sleep">Odštevalnik za spanje</string>
+    <string name="rewind">Previj nazaj</string>
+    <string name="fast_forward">Previj naprej</string>
+    <string name="previous_track">Prejšnji posnetek</string>
+    <string name="next_track">Naslednji posnetek</string>
+    <string name="play">Predvajaj</string>
+    <string name="pause">Ustavi</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Nastavi</string>
+    <string name="dialog_cancel">Prekliči</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Prikaže naslednjo naslovnico</string>
+    <string name="change_book_name">Ime</string>
+    <string name="download_book_cover">Naslovnica s spleta</string>
+    <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
+    <string name="edit_book_title">Uredi knjigo</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Previj do</string>
   <!--BookAdding-->
   <string name="adding_failed_subfolder">Mape ne smejo biti podmape samih sebe.</string>
   <string name="audiobook_folders_title">Mape zvočnih knjig</string>

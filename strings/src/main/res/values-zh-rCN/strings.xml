@@ -16,13 +16,9 @@
   <string name="next_track">下一节</string>
   <string name="play">播放</string>
   <string name="pause">暂停</string>
-  <string name="equalizer">均衡器</string>
-  <string name="volume_boost">音量提升</string>
-  <string name="skip_silence">跳过空白部分</string>
+    <string name="skip_silence">跳过空白部分</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">外部存储不可用。请确保外部存储已连接且没有被挂载在您的计算机上。</string>
-  <string name="no_external_storage_action_bar_title">外部存储</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">设定</string>
   <string name="dialog_cancel">取消</string>
   <!--EditBookDialog-->

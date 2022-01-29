@@ -3,31 +3,28 @@
   <!--BookShelf-->
   <string name="current_book">वर्तमान किताब</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">कवर</string>
-  <string name="play_pause">चलायें / रोकें</string>
-  <string name="action_sleep">नींद-टाइमर</string>
-  <string name="rewind">पीछे जाएँ</string>
-  <string name="fast_forward">आगे बढ़ें</string>
-  <string name="previous_track">पिछला ट्रैक</string>
-  <string name="next_track">अगला ट्रैक</string>
-  <string name="play">चलायें</string>
-  <string name="pause">रोकें</string>
-  <string name="equalizer">ध्वनी प्रभाव</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">बाहरी स्टोरेज उपलभ्ध नहीं है। कृपया बाहरी स्टोरेज की जांच करें ।</string>
-  <string name="no_external_storage_action_bar_title">बाहरी स्टोरेज</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">सेट करें</string>
-  <string name="dialog_cancel">रहने दें</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
-  <string name="change_book_name">नाम</string>
-  <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
-  <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
-  <string name="edit_book_title">किताब में बदलाव करें</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">यहां से चलाएं</string>
+    <!--BookPlayFragment-->
+    <string name="cover">कवर</string>
+    <string name="play_pause">चलायें / रोकें</string>
+    <string name="action_sleep">नींद-टाइमर</string>
+    <string name="rewind">पीछे जाएँ</string>
+    <string name="fast_forward">आगे बढ़ें</string>
+    <string name="previous_track">पिछला ट्रैक</string>
+    <string name="next_track">अगला ट्रैक</string>
+    <string name="play">चलायें</string>
+    <string name="pause">रोकें</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">सेट करें</string>
+    <string name="dialog_cancel">रहने दें</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
+    <string name="change_book_name">नाम</string>
+    <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
+    <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
+    <string name="edit_book_title">किताब में बदलाव करें</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">यहां से चलाएं</string>
   <!--BookAdding-->
   <string name="adding_failed_subfolder">फोल्डर एक दुसरे के अंदर नहीं हो सकते</string>
   <string name="audiobook_folders_title">ऑडिओबुक के फोल्डर</string>

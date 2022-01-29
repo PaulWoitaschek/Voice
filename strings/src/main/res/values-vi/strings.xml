@@ -16,13 +16,9 @@
   <string name="next_track">Chương sau</string>
   <string name="play">Phát</string>
   <string name="pause">Ngừng</string>
-  <string name="equalizer">Bộ chỉnh nhạc</string>
-  <string name="volume_boost">Tăng cường âm lượng</string>
-  <string name="skip_silence">Bỏ qua khoảng lặng</string>
+    <string name="skip_silence">Bỏ qua khoảng lặng</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Bộ nhớ ngoài không khả dụng. Hãy chắc chắn là nó đã được kết nối và không gắn vào máy tính</string>
-  <string name="no_external_storage_action_bar_title">Bộ nhớ ngoài</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Thiết đặt</string>
   <string name="dialog_cancel">Hủy</string>
   <!--EditBookDialog-->

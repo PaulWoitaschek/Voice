@@ -16,13 +16,9 @@
   <string name="next_track">Traccia successiva</string>
   <string name="play">Play</string>
   <string name="pause">Pausa</string>
-  <string name="equalizer">Equalizzatore</string>
-  <string name="volume_boost">Boost Volume</string>
-  <string name="skip_silence">Salta Silenzio</string>
+    <string name="skip_silence">Salta Silenzio</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Memoria Esterna non disponibile. Per favore assicurarsi che sia collegata e non montata sul computer.</string>
-  <string name="no_external_storage_action_bar_title">Memoria Esterna</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Imposta</string>
   <string name="dialog_cancel">Annulla</string>
   <!--EditBookDialog-->

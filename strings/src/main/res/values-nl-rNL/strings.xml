@@ -16,13 +16,9 @@
   <string name="next_track">Volgend gedeelte</string>
   <string name="play">Afspelen</string>
   <string name="pause">Pauzeren</string>
-  <string name="equalizer">Equalizer</string>
-  <string name="volume_boost">Volume verhogen</string>
-  <string name="skip_silence">Stilte overslaan</string>
+    <string name="skip_silence">Stilte overslaan</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">De externe opslag is niet beschikbaar. Zorg ervoor dat deze verbonden is en niet is aangekoppeld aan je computer.</string>
-  <string name="no_external_storage_action_bar_title">Externe opslag</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Instellen</string>
   <string name="dialog_cancel">Annuleren</string>
   <!--EditBookDialog-->

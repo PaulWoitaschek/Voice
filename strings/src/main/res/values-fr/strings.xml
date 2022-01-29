@@ -16,13 +16,9 @@
   <string name="next_track">Piste suivante</string>
   <string name="play">Lecture</string>
   <string name="pause">Pause</string>
-  <string name="equalizer">Egaliseur</string>
-  <string name="volume_boost">Booster le volume</string>
-  <string name="skip_silence">Sauter les silences</string>
+    <string name="skip_silence">Sauter les silences</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Le stockage externe n\'est pas disponible. Assurez vous qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
-  <string name="no_external_storage_action_bar_title">Stockage externe</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Définir</string>
   <string name="dialog_cancel">Annuler</string>
   <!--EditBookDialog-->

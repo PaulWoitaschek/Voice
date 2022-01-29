@@ -13,13 +13,9 @@
   <string name="next_track">Volgende snit</string>
   <string name="play">Speel</string>
   <string name="pause">Breek</string>
-  <string name="equalizer">Gelykmaker</string>
-  <string name="volume_boost">Volume Boost</string>
-  <string name="skip_silence">Skip Stilte</string>
+    <string name="skip_silence">Skip Stilte</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Eksterna stoor spasie is nie beskikbaar nie. Maak asseblief seker dit is gekonnekteer en nie gemonteer op die rekenaar nie.</string>
-  <string name="no_external_storage_action_bar_title">Eksterna stoor spasie</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Stel</string>
   <string name="dialog_cancel">Kanselleer</string>
   <!--EditBookDialog-->

@@ -13,13 +13,9 @@
   <string name="next_track">Наступний файл</string>
   <string name="play">Програвати</string>
   <string name="pause">Призупинити</string>
-  <string name="equalizer">Еквалайзер</string>
-  <string name="volume_boost">Підвищення гучності </string>
-  <string name="skip_silence">Пропускати тишу</string>
+    <string name="skip_silence">Пропускати тишу</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
-  <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Встановити</string>
   <string name="dialog_cancel">Відмінити</string>
   <!--EditBookDialog-->

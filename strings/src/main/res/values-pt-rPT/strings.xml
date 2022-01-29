@@ -1,30 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Mostrar todos</string>
-  <!--BookPlayFragment-->
-  <string name="cover">Capa</string>
-  <string name="play_pause">Tocar / Pausar</string>
-  <string name="rewind">Retroceder</string>
-  <string name="previous_track">Capítulo anterior</string>
-  <string name="next_track">Próximo capítulo</string>
-  <string name="play">Tocar</string>
-  <string name="pause">Pausar</string>
-  <string name="equalizer">Equalizador</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage_action_bar_title">Armazenamento Externo</string>
-  <!--Dialogs-->
-  <string name="dialog_cancel">Cancelar</string>
-  <!--EditBookDialog-->
-  <string name="change_book_name">Título</string>
-  <string name="download_book_cover">Capa da internet</string>
-  <string name="pick_book_cover">Capa do gestor de ficheiros</string>
-  <string name="edit_book_title">Editar livro</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">As pastas não devem ser subpastas de si próprias:</string>
-  <string name="chosen_folder_description">Pasta escolhida:</string>
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <string name="show_all">Mostrar todos</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Capa</string>
+    <string name="play_pause">Tocar / Pausar</string>
+    <string name="rewind">Retroceder</string>
+    <string name="previous_track">Capítulo anterior</string>
+    <string name="next_track">Próximo capítulo</string>
+    <string name="play">Tocar</string>
+    <string name="pause">Pausar</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="change_book_name">Título</string>
+    <string name="download_book_cover">Capa da internet</string>
+    <string name="pick_book_cover">Capa do gestor de ficheiros</string>
+    <string name="edit_book_title">Editar livro</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">As pastas não devem ser subpastas de si próprias:</string>
+    <string name="chosen_folder_description">Pasta escolhida:</string>
   <string name="delete_folder">Remover da Biblioteca?</string>
   <string name="folder_add_collection">Pasta com vários livros</string>
   <string name="for_example">p.ex.</string>

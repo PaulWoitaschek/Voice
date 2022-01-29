@@ -12,4 +12,5 @@
     <issue id="UnusedAttribute">
         <ignore regexp="android:foreground" />
     </issue>
+    <issue id="UnusedResources" severity="ignore" />
 </lint>

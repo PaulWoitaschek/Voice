@@ -16,13 +16,9 @@
   <string name="next_track">Kitas takelis</string>
   <string name="play">Atkurti</string>
   <string name="pause">Pristabdyti</string>
-  <string name="equalizer">Glodintuvas</string>
-  <string name="volume_boost">Garsio padidinimas</string>
-  <string name="skip_silence">Peršokti tylą</string>
+    <string name="skip_silence">Peršokti tylą</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Nėra prieinamų išorinių laikmenų. Įsitikinkite, jog ji prijungta ir nėra primontuota jūsų kompiuteryje.</string>
-  <string name="no_external_storage_action_bar_title">Išorinė laikmena</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Nustatyti</string>
   <string name="dialog_cancel">Atšaukti</string>
   <!--EditBookDialog-->

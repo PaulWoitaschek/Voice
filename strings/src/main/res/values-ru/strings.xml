@@ -16,13 +16,9 @@
   <string name="next_track">Следующий файл</string>
   <string name="play">Воспроизвести</string>
   <string name="pause">Пауза</string>
-  <string name="equalizer">Эквалайзер</string>
-  <string name="volume_boost">Усиление звука</string>
-  <string name="skip_silence">Пропускать тишину</string>
+    <string name="skip_silence">Пропускать тишину</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и не используется компьютером в данный момент.</string>
-  <string name="no_external_storage_action_bar_title">Карта памяти</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Установить</string>
   <string name="dialog_cancel">Отмена</string>
   <!--EditBookDialog-->

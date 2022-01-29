@@ -12,9 +12,7 @@
   <string name="rewind">Rudisha Nyuma</string>
   <string name="play">Chaza</string>
   <string name="pause">Sitisha</string>
-  <string name="equalizer">Usawa</string>
-  <string name="volume_boost">Kuongeza nguvu</string>
-  <string name="skip_silence">ruka ukimya</string>
+    <string name="skip_silence">ruka ukimya</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">weka</string>

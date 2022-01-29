@@ -16,13 +16,9 @@
   <string name="next_track">Sonraki parça</string>
   <string name="play">Oynat</string>
   <string name="pause">Duraklat</string>
-  <string name="equalizer">Ekolayzer</string>
-  <string name="volume_boost">Ses Yükseltme</string>
-  <string name="skip_silence">Sessizliği Geç</string>
+    <string name="skip_silence">Sessizliği Geç</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Harici Depolama Birimi mevcut değil. Lütfen bağlı olduğundan ve bilgisayarınıza takılı olmadığından emin olun.</string>
-  <string name="no_external_storage_action_bar_title">Harici Depolama</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Kur</string>
   <string name="dialog_cancel">İptal</string>
   <!--EditBookDialog-->

@@ -16,13 +16,9 @@
   <string name="next_track">Επόμενο κομμάτι </string>
   <string name="play">Αναπαραγωγή</string>
   <string name="pause">Παύση</string>
-  <string name="equalizer">Ισοσταθμιστής</string>
-  <string name="volume_boost">Ώθηση έντασης ήχου</string>
-  <string name="skip_silence">Παράλειψη ησυχίας</string>
+    <string name="skip_silence">Παράλειψη ησυχίας</string>
   <!--NoExternalStorage-->
-  <string name="no_external_storage">Τα εξωτερικά μέσα αποθήκευσης δεν είναι διαθέσιμα. Παρακαλούμε βεβαιωθείτε ότι είναι συνδεδεμένα και όχι τοποθετημένα στον υπολογιστή σας.</string>
-  <string name="no_external_storage_action_bar_title">Εξωτερικά μέσα αποθήκευσης</string>
-  <!--Dialogs-->
+    <!--Dialogs-->
   <string name="dialog_confirm">Ορισμός</string>
   <string name="dialog_cancel">Ακύρωση</string>
   <!--EditBookDialog-->
