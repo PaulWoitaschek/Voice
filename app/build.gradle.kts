@@ -65,6 +65,7 @@ android {
     checkDependencies = true
     ignoreTestSources = true
     warningsAsErrors = true
+    lintConfig = rootProject.file("lint.xml")
   }
 
   packagingOptions {

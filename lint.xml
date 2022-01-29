@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-
-    <issue id="NewApi" severity="fatal">
-        <ignore regexp="BaseBundle#getInt" />
-        <ignore regexp="BaseBundle#getString" />
-        <ignore regexp="BaseBundle#putBoolean" />
-        <ignore regexp="BaseBundle#putDouble" />
-        <ignore regexp="BaseBundle#putInt" />
-        <ignore regexp="BaseBundle#putLong" />
-        <ignore regexp="BaseBundle#putString" />
-    </issue>
-
     <issue id="Typos" severity="ignore" />
     <issue id="TypographyEllipsis" severity="ignore" />
     <issue id="MissingTranslation" severity="ignore" />
-    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+    <issue id="MissingQuantity">
+        <ignore regexp=".*?French.*?many" />
+    </issue>
+
     <issue id="Overdraw" severity="ignore" />
-    <issue id="UnusedQuantity" severity="ignore" />
-
-    <!-- necessary because a bug in lint that casues all
-    viewbinding references layouts to be recognized as ignored-->
-    <issue id="UnusedResources" severity="ignore" />
-
+    <issue id="RestrictedApi" severity="ignore" />
     <issue id="UnusedAttribute">
         <ignore regexp="android:foreground" />
     </issue>

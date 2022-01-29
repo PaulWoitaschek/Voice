@@ -6,21 +6,16 @@
     <color name="colorOnSurface">@color/black</color>
     <color name="red700">#D32F2F</color>
     <color name="red900">#B71C1C</color>
-    <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>
     <!-- copied private resources from appcompat -->
     <color name="copy_primary_text_disabled_material_dark">#4Dffffff</color>
-    <color name="copy_primary_text_disabled_material_light">#39000000</color>
     <color name="copy_primary_text_default_material_dark">#ffffffff</color>
-    <color name="copy_primary_text_default_material_light">#de000000</color>
     <color name="copy_background_material_dark">@color/material_grey_850</color>
     <color name="copy_secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="copy_secondary_text_default_material_dark">#b3ffffff</color>
 
-
     <color name="ic_shortcut_play_background">#FFFFFF</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
-    <color name="progressColor">#E0E0E0</color>
     <color name="navBarColor">@color/white</color>
     <color name="statusBarColor">@color/white</color>
 </resources>

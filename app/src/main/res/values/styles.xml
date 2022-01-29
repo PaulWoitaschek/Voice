@@ -4,7 +4,6 @@
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="background_overlay">@color/copy_primary_text_disabled_material_light</item>
 
         <item name="colorPrimary">@color/red700</item>
         <item name="colorPrimaryDark">@color/red900</item>
@@ -39,11 +38,6 @@
 
     <style name="AppToolbar" parent="Widget.Material3.Toolbar.Surface">
         <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
-    </style>
-
-    <style name="fab_label_style">
-        <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">@color/copy_abc_primary_text_material_dark</item>
     </style>
 
     <style name="timer_text_view_style">
