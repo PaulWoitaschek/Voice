@@ -1,110 +1,110 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <string name="current_book">Aktualna książka</string>
-    <string name="layout_grid">Układ Siatki</string>
-    <string name="layout_list">Układ Listy</string>
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <string name="show_all">Pokaż wszystko</string>
-    <!--BookPlayFragment-->
-    <string name="cover">Okładka</string>
-    <string name="play_pause">Odtwarzaj/Pauza</string>
-    <string name="action_sleep">Wyłącznik czasowy</string>
-    <string name="rewind">Przewiń</string>
-    <string name="fast_forward">Do przodu</string>
-    <string name="previous_track">Poprzednia ścieżka</string>
-    <string name="next_track">Następna ścieżka</string>
-    <string name="play">Odtwórz</string>
-    <string name="pause">Pauza</string>
-    <string name="equalizer">Equalizer</string>
-    <string name="volume_boost">Volume Boost</string>
-    <string name="skip_silence">Pomiń ciszę</string>
-    <!--NoExternalStorage-->
-    <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
-    <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
-    <!--Dialogs-->
-    <string name="dialog_confirm">Wybierz</string>
-    <string name="dialog_cancel">Anuluj</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">Pokazuje okładki do wyboru</string>
-    <string name="change_book_name">Nazwa</string>
-    <string name="download_book_cover">Okładka z internetu</string>
-    <string name="pick_book_cover">Okładka z pamięci telefonu</string>
-    <string name="edit_book_title">Edytuj książkę</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">Skocz do</string>
-    <!--BookAdding-->
-    <string name="adding_failed_subfolder">Te foldery nie mogą być swoimi podfolderami:</string>
-    <string name="audiobook_folders_title">Foldery audiobooków</string>
-    <string name="chosen_folder_description">Wybrany folder: </string>
-    <string name="delete_folder">Usunąć z Biblioteki?</string>
-    <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
-    <string name="folder_add_single_book">Jedna książka</string>
-    <string name="folder_add_collection">Folder z wieloma książkami</string>
-    <string name="for_example">np.</string>
-    <string name="content_add_book">Dodaj książkę</string>
-    <string name="content_is_folder">Folder</string>
-    <string name="content_is_file">Plik</string>
-    <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
-    <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
-    <string name="permission_retry">Powtórzyć?</string>
-    <string name="permission_goto_settings">Ustawienia</string>
-    <string name="storage_pre_device">Przestrzeń dyskowa:</string>
-    <string name="storage_all">Wszystko</string>
-    <!--PlaybackSpeed-->
-    <string name="playback_speed">Szybkość odtwarzania</string>
-    <!--Bookmarks-->
-    <string name="bookmark">Zakładki</string>
-    <string name="shake_to_reset">Wstrząśnij by zrestartować</string>
-    <string name="bookmark_edit_title">Edytuj zakładkę</string>
-    <string name="bookmark_edit_hint">Nazwa zakładki</string>
-    <string name="bookmark_added">Zakładka dodana</string>
-    <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
-    <!--Settings-->
-    <string name="action_settings">Preferencje</string>
-    <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
-    <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
-    <plurals name="seconds">
-        <item quantity="one">%d sekunda</item>
-        <item quantity="few">%d sekundy</item>
-        <item quantity="many">%d sekund</item>
-        <item quantity="other">%d sekund</item>
-    </plurals>
-    <string name="pref_seek_time">Przewiń o</string>
-    <string name="pref_root_folder_title">Folder audiobooków</string>
-    <string name="pref_theme_dark">Ciemna stylizacja</string>
-    <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
-    <plurals name="pref_auto_rewind_summary">
-        <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
-        <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
-        <item quantity="many">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
-        <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
-    </plurals>
-    <string name="pref_support_title">Wsparcie</string>
-    <string name="pref_support_translations">Tłumaczenia</string>
-    <string name="pref_support_contribute">Wsparcie i propozycje</string>
-    <!--Misc-->
-    <string name="popup_edit">Edytuj</string>
-    <string name="remove">Usuń</string>
-    <string name="play_current">Odtwórz aktualne</string>
-    <!--hide folder dialog-->
-    <!--license activity-->
-    <string name="refresh">Odśwież</string>
-    <string name="reset">Reset</string>
-    <string name="no_network">Brak sieci?</string>
-    <string name="network_top">To nie zadziałało...</string>
-    <string name="cover_crop">Przytnij okładkę</string>
-    <string name="music_notification">Odtwarzanie</string>
-    <string name="onboarding_title">Witaj!</string>
-    <string name="onboarding_content">Zacznijmy od dodania twojego pierwszego audiobooka.</string>
-    <!--book category-->
-    <string name="book_header_current">Aktualna</string>
-    <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
-    <string name="book_header_completed">Odsłuchana</string>
-    <string name="book_category_sort">Sortowanie</string>
-    <string name="book_category_sort_by_name">Nazwa</string>
-    <string name="book_category_sort_by_last_played">Ostatnio odtwarzane</string>
-    <string name="book_category_sort_by_added">Dodane</string>
+  <!--BookShelf-->
+  <string name="current_book">Aktualna książka</string>
+  <string name="layout_grid">Układ Siatki</string>
+  <string name="layout_list">Układ Listy</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <string name="show_all">Pokaż wszystko</string>
+  <!--BookPlayFragment-->
+  <string name="cover">Okładka</string>
+  <string name="play_pause">Odtwarzaj/Pauza</string>
+  <string name="action_sleep">Wyłącznik czasowy</string>
+  <string name="rewind">Przewiń</string>
+  <string name="fast_forward">Do przodu</string>
+  <string name="previous_track">Poprzednia ścieżka</string>
+  <string name="next_track">Następna ścieżka</string>
+  <string name="play">Odtwórz</string>
+  <string name="pause">Pauza</string>
+  <string name="equalizer">Equalizer</string>
+  <string name="volume_boost">Volume Boost</string>
+  <string name="skip_silence">Pomiń ciszę</string>
+  <!--NoExternalStorage-->
+  <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
+  <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
+  <!--Dialogs-->
+  <string name="dialog_confirm">Wybierz</string>
+  <string name="dialog_cancel">Anuluj</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Pokazuje okładki do wyboru</string>
+  <string name="change_book_name">Nazwa</string>
+  <string name="download_book_cover">Okładka z internetu</string>
+  <string name="pick_book_cover">Okładka z pamięci telefonu</string>
+  <string name="edit_book_title">Edytuj książkę</string>
+  <!--JumpToPosition-->
+  <string name="action_time_change">Skocz do</string>
+  <!--BookAdding-->
+  <string name="adding_failed_subfolder">Te foldery nie mogą być swoimi podfolderami:</string>
+  <string name="audiobook_folders_title">Foldery audiobooków</string>
+  <string name="chosen_folder_description">Wybrany folder: </string>
+  <string name="delete_folder">Usunąć z Biblioteki?</string>
+  <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
+  <string name="folder_add_single_book">Jedna książka</string>
+  <string name="folder_add_collection">Folder z wieloma książkami</string>
+  <string name="for_example">np.</string>
+  <string name="content_add_book">Dodaj książkę</string>
+  <string name="content_is_folder">Folder</string>
+  <string name="content_is_file">Plik</string>
+  <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
+  <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
+  <string name="permission_retry">Powtórzyć?</string>
+  <string name="permission_goto_settings">Ustawienia</string>
+  <string name="storage_pre_device">Przestrzeń dyskowa:</string>
+  <string name="storage_all">Wszystko</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Szybkość odtwarzania</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Zakładki</string>
+  <string name="shake_to_reset">Wstrząśnij by zrestartować</string>
+  <string name="bookmark_edit_title">Edytuj zakładkę</string>
+  <string name="bookmark_edit_hint">Nazwa zakładki</string>
+  <string name="bookmark_added">Zakładka dodana</string>
+  <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
+  <!--Settings-->
+  <string name="action_settings">Preferencje</string>
+  <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
+  <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
+  <string name="min">%s min</string>
+  <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
+  <plurals name="seconds">
+    <item quantity="one">%d sekunda</item>
+    <item quantity="few">%d sekundy</item>
+    <item quantity="many">%d sekund</item>
+    <item quantity="other">%d sekund</item>
+  </plurals>
+  <string name="pref_seek_time">Przewiń o</string>
+  <string name="pref_root_folder_title">Folder audiobooków</string>
+  <string name="pref_theme_dark">Ciemna stylizacja</string>
+  <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
+  <plurals name="pref_auto_rewind_summary">
+    <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
+    <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
+    <item quantity="many">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
+    <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
+  </plurals>
+  <string name="pref_support_title">Wsparcie</string>
+  <string name="pref_support_translations">Tłumaczenia</string>
+  <string name="pref_support_contribute">Wsparcie i propozycje</string>
+  <!--Misc-->
+  <string name="popup_edit">Edytuj</string>
+  <string name="remove">Usuń</string>
+  <string name="play_current">Odtwórz aktualne</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Odśwież</string>
+  <string name="reset">Reset</string>
+  <string name="no_network">Brak sieci?</string>
+  <string name="network_top">To nie zadziałało...</string>
+  <string name="cover_crop">Przytnij okładkę</string>
+  <string name="music_notification">Odtwarzanie</string>
+  <string name="onboarding_title">Witaj!</string>
+  <string name="onboarding_content">Zacznijmy od dodania twojego pierwszego audiobooka.</string>
+  <!--book category-->
+  <string name="book_header_current">Aktualna</string>
+  <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
+  <string name="book_header_completed">Odsłuchana</string>
+  <string name="book_category_sort">Sortowanie</string>
+  <string name="book_category_sort_by_name">Nazwa</string>
+  <string name="book_category_sort_by_last_played">Ostatnio odtwarzane</string>
+  <string name="book_category_sort_by_added">Dodane</string>
 </resources>

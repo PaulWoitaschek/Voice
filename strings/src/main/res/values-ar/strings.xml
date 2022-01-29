@@ -1,57 +1,57 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <string name="current_book">الكتاب الحالي</string>
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
-    <string name="cover">الغطاء</string>
-    <string name="play_pause">العب / توقف</string>
-    <string name="action_sleep">وقت النوم</string>
-    <string name="rewind">إرجاع</string>
-    <string name="fast_forward">بسرعة للأمام</string>
-    <string name="previous_track">الشريط السابق</string>
-    <string name="next_track">الشريط التالي</string>
-    <string name="play">إلعب</string>
-    <string name="pause">توقف</string>
-    <string name="equalizer">المعادل</string>
-    <!--NoExternalStorage-->
-    <string name="no_external_storage">المخزن الخارجة غير متور. من فضلك تأكد أنه متصل و تأكد أنه متصل بجهازك.</string>
-    <string name="no_external_storage_action_bar_title">المخزن الخارجي</string>
-    <!--Dialogs-->
-    <string name="dialog_confirm">إعداد</string>
-    <string name="dialog_cancel">إلغاء</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">أظهر الغطاء للإختياره</string>
-    <string name="change_book_name">الأسم</string>
-    <string name="download_book_cover">الغلاف من الإنترنت</string>
-    <string name="pick_book_cover">الغلاف من ملف نظام</string>
-    <string name="edit_book_title">عدل الكتاب</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">إقفز إلي</string>
-    <!--BookAdding-->
-    <string name="adding_failed_subfolder">المجلد يجب أن لا يكون مجلد فرعي لكلاً منهما:</string>
-    <string name="audiobook_folders_title">مجلد الكتب الصوتية</string>
-    <string name="content_add_book">إضافة كتاب</string>
-    <string name="content_is_folder">مجلد</string>
-    <string name="content_is_file">ملف</string>
-    <!--PlaybackSpeed-->
-    <!--Bookmarks-->
-    <!--Settings-->
-    <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
-    <string name="pref_support_title">الدعم</string>
-    <string name="pref_support_translations">الترجمة</string>
-    <string name="pref_support_contribute">الدعم و الإقتراحات</string>
-    <!--Misc-->
-    <string name="popup_edit">عدل</string>
-    <string name="remove">إمسح</string>
-    <string name="play_current">شغل الحالي</string>
-    <!--hide folder dialog-->
-    <!--license activity-->
-    <string name="refresh">تحديث</string>
-    <string name="reset">أعادة</string>
-    <string name="no_network">لا شبكة؟</string>
-    <string name="network_top">هذا لا يعمل بشكل جيد جداً</string>
-    <string name="cover_crop">إقتصاص الغطاء</string>
-    <string name="onboarding_title">مرحباً!</string>
-    <!--book category-->
+  <!--BookShelf-->
+  <string name="current_book">الكتاب الحالي</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">الغطاء</string>
+  <string name="play_pause">العب / توقف</string>
+  <string name="action_sleep">وقت النوم</string>
+  <string name="rewind">إرجاع</string>
+  <string name="fast_forward">بسرعة للأمام</string>
+  <string name="previous_track">الشريط السابق</string>
+  <string name="next_track">الشريط التالي</string>
+  <string name="play">إلعب</string>
+  <string name="pause">توقف</string>
+  <string name="equalizer">المعادل</string>
+  <!--NoExternalStorage-->
+  <string name="no_external_storage">المخزن الخارجة غير متور. من فضلك تأكد أنه متصل و تأكد أنه متصل بجهازك.</string>
+  <string name="no_external_storage_action_bar_title">المخزن الخارجي</string>
+  <!--Dialogs-->
+  <string name="dialog_confirm">إعداد</string>
+  <string name="dialog_cancel">إلغاء</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">أظهر الغطاء للإختياره</string>
+  <string name="change_book_name">الأسم</string>
+  <string name="download_book_cover">الغلاف من الإنترنت</string>
+  <string name="pick_book_cover">الغلاف من ملف نظام</string>
+  <string name="edit_book_title">عدل الكتاب</string>
+  <!--JumpToPosition-->
+  <string name="action_time_change">إقفز إلي</string>
+  <!--BookAdding-->
+  <string name="adding_failed_subfolder">المجلد يجب أن لا يكون مجلد فرعي لكلاً منهما:</string>
+  <string name="audiobook_folders_title">مجلد الكتب الصوتية</string>
+  <string name="content_add_book">إضافة كتاب</string>
+  <string name="content_is_folder">مجلد</string>
+  <string name="content_is_file">ملف</string>
+  <!--PlaybackSpeed-->
+  <!--Bookmarks-->
+  <!--Settings-->
+  <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
+  <string name="pref_support_title">الدعم</string>
+  <string name="pref_support_translations">الترجمة</string>
+  <string name="pref_support_contribute">الدعم و الإقتراحات</string>
+  <!--Misc-->
+  <string name="popup_edit">عدل</string>
+  <string name="remove">إمسح</string>
+  <string name="play_current">شغل الحالي</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">تحديث</string>
+  <string name="reset">أعادة</string>
+  <string name="no_network">لا شبكة؟</string>
+  <string name="network_top">هذا لا يعمل بشكل جيد جداً</string>
+  <string name="cover_crop">إقتصاص الغطاء</string>
+  <string name="onboarding_title">مرحباً!</string>
+  <!--book category-->
 </resources>

@@ -1,110 +1,110 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <string name="current_book">Текущая книга</string>
-    <string name="layout_grid">Сетка</string>
-    <string name="layout_list">Список</string>
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <string name="show_all">Показать все</string>
-    <!--BookPlayFragment-->
-    <string name="cover">Обложка</string>
-    <string name="play_pause">Воспроизвести / Пауза</string>
-    <string name="action_sleep">Таймер сна</string>
-    <string name="rewind">Перемотать назад</string>
-    <string name="fast_forward">Перемотать вперёд</string>
-    <string name="previous_track">Предыдущий файл</string>
-    <string name="next_track">Следующий файл</string>
-    <string name="play">Воспроизвести</string>
-    <string name="pause">Пауза</string>
-    <string name="equalizer">Эквалайзер</string>
-    <string name="volume_boost">Усиление звука</string>
-    <string name="skip_silence">Пропускать тишину</string>
-    <!--NoExternalStorage-->
-    <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и не используется компьютером в данный момент.</string>
-    <string name="no_external_storage_action_bar_title">Карта памяти</string>
-    <!--Dialogs-->
-    <string name="dialog_confirm">Установить</string>
-    <string name="dialog_cancel">Отмена</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">Показать выбранную обложку</string>
-    <string name="change_book_name">Название</string>
-    <string name="download_book_cover">Получить обложку из интернета</string>
-    <string name="pick_book_cover">Получить обложку из системы</string>
-    <string name="edit_book_title">Редактировать книгу</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">Перейти к</string>
-    <!--BookAdding-->
-    <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
-    <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-    <string name="chosen_folder_description">Выбранная папка:</string>
-    <string name="delete_folder">Удалить из библиотеки?</string>
-    <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
-    <string name="folder_add_single_book">Одиночная книга</string>
-    <string name="folder_add_collection">Несколько книг в одной папке</string>
-    <string name="for_example">например</string>
-    <string name="content_add_book">Добавить книгу</string>
-    <string name="content_is_folder">Папка</string>
-    <string name="content_is_file">Файл</string>
-    <string name="content_navigate_up">Перейти на папку выше</string>
-    <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
-    <string name="permission_retry">Повторить?</string>
-    <string name="permission_goto_settings">Настройки</string>
-    <string name="storage_pre_device">Хранилище:</string>
-    <string name="storage_all">Всё</string>
-    <!--PlaybackSpeed-->
-    <string name="playback_speed">Скорость воспроизведения</string>
-    <!--Bookmarks-->
-    <string name="bookmark">Закладки</string>
-    <string name="shake_to_reset">Встряхнуть для сброса</string>
-    <string name="bookmark_edit_title">Редактировать</string>
-    <string name="bookmark_edit_hint">Название закладки</string>
-    <string name="bookmark_added">Закладка добавлена</string>
-    <string name="bookmark_delete_title">Удалить эту закладку?</string>
-    <!--Settings-->
-    <string name="action_settings">Настройки</string>
-    <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
-    <string name="pref_resume_on_replug_hint">Продолжить воспроизведение при повторном подключении наушников.</string>
-    <string name="min">%s минут</string>
-    <string name="delete_last_number">Удаляет последнее введенное число</string>
-    <plurals name="seconds">
-        <item quantity="one">%d секунда</item>
-        <item quantity="few">%d секунды</item>
-        <item quantity="many">%d секунд</item>
-        <item quantity="other">%d секунд</item>
-    </plurals>
-    <string name="pref_seek_time">Ускоренная перемотка</string>
-    <string name="pref_root_folder_title">Папки с аудиокнигами</string>
-    <string name="pref_theme_dark">Тёмная тема</string>
-    <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
-    <plurals name="pref_auto_rewind_summary">
-        <item quantity="one">Автоматически перемотать назад на %d секунду после ручного приостановления.</item>
-        <item quantity="few">Автоматически перемотать назад на %d секунды после ручного приостановления.</item>
-        <item quantity="many">Автоматически перемотать назад на %d секунд после ручного приостановления.</item>
-        <item quantity="other">Автоматически перемотать назад на %d секунд после использования паузы.</item>
-    </plurals>
-    <string name="pref_support_title">Поддержка</string>
-    <string name="pref_support_translations">Переводы</string>
-    <string name="pref_support_contribute">Поддержка и предложения</string>
-    <!--Misc-->
-    <string name="popup_edit">Редактировать</string>
-    <string name="remove">Удалить</string>
-    <string name="play_current">Играть текущую книгу</string>
-    <!--hide folder dialog-->
-    <!--license activity-->
-    <string name="refresh">Обновить</string>
-    <string name="reset">Сброс</string>
-    <string name="no_network">Нет сети?</string>
-    <string name="network_top">Что-то пошло не так…</string>
-    <string name="cover_crop">Обрезать обложку</string>
-    <string name="music_notification">Воспроизведение</string>
-    <string name="onboarding_title">Добро пожаловать!</string>
-    <string name="onboarding_content">Давайте добавим вашу первую аудиокнигу.</string>
-    <!--book category-->
-    <string name="book_header_current">Слушаю</string>
-    <string name="book_header_not_started">Поледние добавленные</string>
-    <string name="book_header_completed">Прослушанные</string>
-    <string name="book_category_sort">Сортировка</string>
-    <string name="book_category_sort_by_name">Название</string>
-    <string name="book_category_sort_by_last_played">Посл. прослуш.</string>
-    <string name="book_category_sort_by_added">Дата</string>
+  <!--BookShelf-->
+  <string name="current_book">Текущая книга</string>
+  <string name="layout_grid">Сетка</string>
+  <string name="layout_list">Список</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <string name="show_all">Показать все</string>
+  <!--BookPlayFragment-->
+  <string name="cover">Обложка</string>
+  <string name="play_pause">Воспроизвести / Пауза</string>
+  <string name="action_sleep">Таймер сна</string>
+  <string name="rewind">Перемотать назад</string>
+  <string name="fast_forward">Перемотать вперёд</string>
+  <string name="previous_track">Предыдущий файл</string>
+  <string name="next_track">Следующий файл</string>
+  <string name="play">Воспроизвести</string>
+  <string name="pause">Пауза</string>
+  <string name="equalizer">Эквалайзер</string>
+  <string name="volume_boost">Усиление звука</string>
+  <string name="skip_silence">Пропускать тишину</string>
+  <!--NoExternalStorage-->
+  <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и не используется компьютером в данный момент.</string>
+  <string name="no_external_storage_action_bar_title">Карта памяти</string>
+  <!--Dialogs-->
+  <string name="dialog_confirm">Установить</string>
+  <string name="dialog_cancel">Отмена</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Показать выбранную обложку</string>
+  <string name="change_book_name">Название</string>
+  <string name="download_book_cover">Получить обложку из интернета</string>
+  <string name="pick_book_cover">Получить обложку из системы</string>
+  <string name="edit_book_title">Редактировать книгу</string>
+  <!--JumpToPosition-->
+  <string name="action_time_change">Перейти к</string>
+  <!--BookAdding-->
+  <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
+  <string name="audiobook_folders_title">Папки с аудиокнигами</string>
+  <string name="chosen_folder_description">Выбранная папка:</string>
+  <string name="delete_folder">Удалить из библиотеки?</string>
+  <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
+  <string name="folder_add_single_book">Одиночная книга</string>
+  <string name="folder_add_collection">Несколько книг в одной папке</string>
+  <string name="for_example">например</string>
+  <string name="content_add_book">Добавить книгу</string>
+  <string name="content_is_folder">Папка</string>
+  <string name="content_is_file">Файл</string>
+  <string name="content_navigate_up">Перейти на папку выше</string>
+  <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
+  <string name="permission_retry">Повторить?</string>
+  <string name="permission_goto_settings">Настройки</string>
+  <string name="storage_pre_device">Хранилище:</string>
+  <string name="storage_all">Всё</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Скорость воспроизведения</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Закладки</string>
+  <string name="shake_to_reset">Встряхнуть для сброса</string>
+  <string name="bookmark_edit_title">Редактировать</string>
+  <string name="bookmark_edit_hint">Название закладки</string>
+  <string name="bookmark_added">Закладка добавлена</string>
+  <string name="bookmark_delete_title">Удалить эту закладку?</string>
+  <!--Settings-->
+  <string name="action_settings">Настройки</string>
+  <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
+  <string name="pref_resume_on_replug_hint">Продолжить воспроизведение при повторном подключении наушников.</string>
+  <string name="min">%s минут</string>
+  <string name="delete_last_number">Удаляет последнее введенное число</string>
+  <plurals name="seconds">
+    <item quantity="one">%d секунда</item>
+    <item quantity="few">%d секунды</item>
+    <item quantity="many">%d секунд</item>
+    <item quantity="other">%d секунд</item>
+  </plurals>
+  <string name="pref_seek_time">Ускоренная перемотка</string>
+  <string name="pref_root_folder_title">Папки с аудиокнигами</string>
+  <string name="pref_theme_dark">Тёмная тема</string>
+  <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
+  <plurals name="pref_auto_rewind_summary">
+    <item quantity="one">Автоматически перемотать назад на %d секунду после ручного приостановления.</item>
+    <item quantity="few">Автоматически перемотать назад на %d секунды после ручного приостановления.</item>
+    <item quantity="many">Автоматически перемотать назад на %d секунд после ручного приостановления.</item>
+    <item quantity="other">Автоматически перемотать назад на %d секунд после использования паузы.</item>
+  </plurals>
+  <string name="pref_support_title">Поддержка</string>
+  <string name="pref_support_translations">Переводы</string>
+  <string name="pref_support_contribute">Поддержка и предложения</string>
+  <!--Misc-->
+  <string name="popup_edit">Редактировать</string>
+  <string name="remove">Удалить</string>
+  <string name="play_current">Играть текущую книгу</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Обновить</string>
+  <string name="reset">Сброс</string>
+  <string name="no_network">Нет сети?</string>
+  <string name="network_top">Что-то пошло не так…</string>
+  <string name="cover_crop">Обрезать обложку</string>
+  <string name="music_notification">Воспроизведение</string>
+  <string name="onboarding_title">Добро пожаловать!</string>
+  <string name="onboarding_content">Давайте добавим вашу первую аудиокнигу.</string>
+  <!--book category-->
+  <string name="book_header_current">Слушаю</string>
+  <string name="book_header_not_started">Поледние добавленные</string>
+  <string name="book_header_completed">Прослушанные</string>
+  <string name="book_category_sort">Сортировка</string>
+  <string name="book_category_sort_by_name">Название</string>
+  <string name="book_category_sort_by_last_played">Посл. прослуш.</string>
+  <string name="book_category_sort_by_added">Дата</string>
 </resources>

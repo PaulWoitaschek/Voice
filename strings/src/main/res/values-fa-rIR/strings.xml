@@ -1,86 +1,86 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <string name="current_book">کتاب فعلی</string>
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
-    <string name="cover">جلد</string>
-    <string name="play_pause">پخش / توقف</string>
-    <string name="action_sleep">تایمر خواب</string>
-    <string name="rewind">بازپخش</string>
-    <string name="fast_forward">پخش سریع</string>
-    <string name="previous_track">قطعه قبلی</string>
-    <string name="next_track">قطعه بعدی</string>
-    <string name="play">پخش</string>
-    <string name="pause">توقف</string>
-    <!--NoExternalStorage-->
-    <string name="no_external_storage">حافظه‌ی داخلی در دسترس نیست. از اتصال آن به دستگاه و عدم اتصال به رایانه اطمینان حاصل کنید.</string>
-    <string name="no_external_storage_action_bar_title">حافظه‌ی خارجی</string>
-    <!--Dialogs-->
-    <string name="dialog_confirm">انتخاب</string>
-    <string name="dialog_cancel">انصراف</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">جلدی را برای انتخاب نمایش می‌دهد</string>
-    <string name="change_book_name">نام</string>
-    <string name="download_book_cover">دریافت جلد از اینترنت</string>
-    <string name="pick_book_cover">دریافت جلد از حافظه</string>
-    <string name="edit_book_title">ویرایش کتاب</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">پریدن به</string>
-    <!--BookAdding-->
-    <string name="adding_failed_subfolder">پوشه‌ها نباید داخل یکدیگر باشند:</string>
-    <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
-    <string name="chosen_folder_description">پوشه را انتخاب کنید:</string>
-    <string name="delete_folder">از کتابخانه حذف شود؟</string>
-    <string name="delete_folder_content">آیا می‌خواهید این پوشه از کتابخانه حذف شود؟</string>
-    <string name="folder_add_single_book">تک کتاب</string>
-    <string name="folder_add_collection">پوشه حاوی چند کتاب</string>
-    <string name="for_example">مانند</string>
-    <string name="content_add_book">اضافه کردن یک کتاب</string>
-    <string name="content_is_folder">پوشه</string>
-    <string name="content_is_file">فایل</string>
-    <string name="content_navigate_up">رفتن به پوشه‌ی والد</string>
-    <string name="permission_external_new_explanation">بدون دسترسی، امکان خواندن کتاب‌ها وجود ندارد.</string>
-    <string name="permission_retry">تلاش مجدد؟</string>
-    <string name="permission_goto_settings">تنظیمات</string>
-    <string name="storage_pre_device">حافظه:</string>
-    <string name="storage_all">همه</string>
-    <!--PlaybackSpeed-->
-    <string name="playback_speed">سرعت پخش</string>
-    <!--Bookmarks-->
-    <string name="bookmark">نشان‌گذاری</string>
-    <string name="shake_to_reset">برای بازنشانی تکان دهید</string>
-    <string name="bookmark_edit_title">ویرایش نشانه </string>
-    <string name="bookmark_edit_hint">نام نشانه</string>
-    <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
-    <string name="bookmark_delete_title">این نشانه حذف شود؟</string>
-    <!--Settings-->
-    <string name="action_settings">تنظیمات</string>
-    <string name="pref_resume_on_replug">ادامه پخش</string>
-    <string name="pref_resume_on_replug_hint">اگر با بیرون کشیدن هدست قطعه متوقف شود، با اتصال مجدد شروع به پخش خواهد کرد.</string>
-    <plurals name="seconds">
-        <item quantity="one">%d ثانیه</item>
-        <item quantity="other">%d ثانیه</item>
-    </plurals>
-    <string name="pref_seek_time">میزان پرش</string>
-    <string name="pref_root_folder_title">پوشه‌ی کتاب‌صوتی</string>
-    <string name="pref_auto_rewind_title">بازپخش خودکار</string>
-    <plurals name="pref_auto_rewind_summary">
-        <item quantity="one">پس از قطع دستی، به صورت خودکار %d ثانیه بازپخش انجام شود.</item>
-        <item quantity="other">پس از قطع دستی، به صورت خودکار %d ثانیه بازپخش انجام شود.</item>
-    </plurals>
-    <string name="pref_support_title">پشتیبانی</string>
-    <string name="pref_support_translations">ترجمه‌ها</string>
-    <string name="pref_support_contribute">پشتیبانی و پیشنهادات</string>
-    <!--Misc-->
-    <string name="popup_edit">ویرایش</string>
-    <string name="remove">حذف</string>
-    <!--hide folder dialog-->
-    <!--license activity-->
-    <string name="refresh">تازه سازی</string>
-    <string name="reset">باز نشانی</string>
-    <string name="no_network">به شبکه متصل نیستید؟</string>
-    <string name="network_top">این کار خیلی خوب پیش نرفت...</string>
-    <string name="cover_crop">بریدن جلد</string>
-    <!--book category-->
+  <!--BookShelf-->
+  <string name="current_book">کتاب فعلی</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">جلد</string>
+  <string name="play_pause">پخش / توقف</string>
+  <string name="action_sleep">تایمر خواب</string>
+  <string name="rewind">بازپخش</string>
+  <string name="fast_forward">پخش سریع</string>
+  <string name="previous_track">قطعه قبلی</string>
+  <string name="next_track">قطعه بعدی</string>
+  <string name="play">پخش</string>
+  <string name="pause">توقف</string>
+  <!--NoExternalStorage-->
+  <string name="no_external_storage">حافظه‌ی داخلی در دسترس نیست. از اتصال آن به دستگاه و عدم اتصال به رایانه اطمینان حاصل کنید.</string>
+  <string name="no_external_storage_action_bar_title">حافظه‌ی خارجی</string>
+  <!--Dialogs-->
+  <string name="dialog_confirm">انتخاب</string>
+  <string name="dialog_cancel">انصراف</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">جلدی را برای انتخاب نمایش می‌دهد</string>
+  <string name="change_book_name">نام</string>
+  <string name="download_book_cover">دریافت جلد از اینترنت</string>
+  <string name="pick_book_cover">دریافت جلد از حافظه</string>
+  <string name="edit_book_title">ویرایش کتاب</string>
+  <!--JumpToPosition-->
+  <string name="action_time_change">پریدن به</string>
+  <!--BookAdding-->
+  <string name="adding_failed_subfolder">پوشه‌ها نباید داخل یکدیگر باشند:</string>
+  <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
+  <string name="chosen_folder_description">پوشه را انتخاب کنید:</string>
+  <string name="delete_folder">از کتابخانه حذف شود؟</string>
+  <string name="delete_folder_content">آیا می‌خواهید این پوشه از کتابخانه حذف شود؟</string>
+  <string name="folder_add_single_book">تک کتاب</string>
+  <string name="folder_add_collection">پوشه حاوی چند کتاب</string>
+  <string name="for_example">مانند</string>
+  <string name="content_add_book">اضافه کردن یک کتاب</string>
+  <string name="content_is_folder">پوشه</string>
+  <string name="content_is_file">فایل</string>
+  <string name="content_navigate_up">رفتن به پوشه‌ی والد</string>
+  <string name="permission_external_new_explanation">بدون دسترسی، امکان خواندن کتاب‌ها وجود ندارد.</string>
+  <string name="permission_retry">تلاش مجدد؟</string>
+  <string name="permission_goto_settings">تنظیمات</string>
+  <string name="storage_pre_device">حافظه:</string>
+  <string name="storage_all">همه</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">سرعت پخش</string>
+  <!--Bookmarks-->
+  <string name="bookmark">نشان‌گذاری</string>
+  <string name="shake_to_reset">برای بازنشانی تکان دهید</string>
+  <string name="bookmark_edit_title">ویرایش نشانه </string>
+  <string name="bookmark_edit_hint">نام نشانه</string>
+  <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
+  <string name="bookmark_delete_title">این نشانه حذف شود؟</string>
+  <!--Settings-->
+  <string name="action_settings">تنظیمات</string>
+  <string name="pref_resume_on_replug">ادامه پخش</string>
+  <string name="pref_resume_on_replug_hint">اگر با بیرون کشیدن هدست قطعه متوقف شود، با اتصال مجدد شروع به پخش خواهد کرد.</string>
+  <plurals name="seconds">
+    <item quantity="one">%d ثانیه</item>
+    <item quantity="other">%d ثانیه</item>
+  </plurals>
+  <string name="pref_seek_time">میزان پرش</string>
+  <string name="pref_root_folder_title">پوشه‌ی کتاب‌صوتی</string>
+  <string name="pref_auto_rewind_title">بازپخش خودکار</string>
+  <plurals name="pref_auto_rewind_summary">
+    <item quantity="one">پس از قطع دستی، به صورت خودکار %d ثانیه بازپخش انجام شود.</item>
+    <item quantity="other">پس از قطع دستی، به صورت خودکار %d ثانیه بازپخش انجام شود.</item>
+  </plurals>
+  <string name="pref_support_title">پشتیبانی</string>
+  <string name="pref_support_translations">ترجمه‌ها</string>
+  <string name="pref_support_contribute">پشتیبانی و پیشنهادات</string>
+  <!--Misc-->
+  <string name="popup_edit">ویرایش</string>
+  <string name="remove">حذف</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">تازه سازی</string>
+  <string name="reset">باز نشانی</string>
+  <string name="no_network">به شبکه متصل نیستید؟</string>
+  <string name="network_top">این کار خیلی خوب پیش نرفت...</string>
+  <string name="cover_crop">بریدن جلد</string>
+  <!--book category-->
 </resources>
