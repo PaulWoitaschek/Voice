@@ -26,6 +26,7 @@ dependencies {
   implementation(libs.prefs.core)
   api(libs.conductor.core)
   implementation(libs.androidxCore)
+  implementation(libs.viewBinding)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import de.ph1b.audiobook.features.InflateBinding
+import voice.common.conductor.InflateBinding
 
 abstract class ViewBindingHolder<B : ViewBinding>(val binding: B) : RecyclerView.ViewHolder(binding.root) {
 

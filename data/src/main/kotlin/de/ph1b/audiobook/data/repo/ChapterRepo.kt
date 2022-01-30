@@ -2,6 +2,8 @@ package de.ph1b.audiobook.data.repo
 
 import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.repo.internals.dao.Chapter2Dao
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import timber.log.Timber
 import java.time.Instant
 import javax.inject.Inject
@@ -14,6 +16,9 @@ class ChapterRepo
 ) {
 
   private val cache = mutableMapOf<Chapter2.Id, Chapter2?>()
+
+  private val _chapterChanged = MutableSharedFlow<Chapter2.Id>()
+  val chapterChanged: Flow<Chapter2.Id> get() = _chapterChanged
 
   suspend fun get(id: Chapter2.Id, lastModified: Instant? = null): Chapter2? {
     if (!cache.containsKey(id)) {
@@ -28,7 +33,11 @@ class ChapterRepo
 
   suspend fun put(chapter: Chapter2) {
     dao.insert(chapter)
+    val oldChapter = cache[chapter.id]
     cache[chapter.id] = chapter
+    if (oldChapter != chapter) {
+      _chapterChanged.emit(chapter.id)
+    }
   }
 
   suspend inline fun getOrPut(id: Chapter2.Id, lastModified: Instant, defaultValue: () -> Chapter2?): Chapter2? {

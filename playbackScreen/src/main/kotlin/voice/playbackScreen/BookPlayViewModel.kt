@@ -29,6 +29,7 @@ class BookPlayViewModel
   private val bookmarkRepo: BookmarkRepo,
   @CurrentBook
   private val currentBookId: DataStore<Book2.Id?>,
+  private val navigator: BookPlayNavigator
 ) {
 
   private val scope = MainScope()
@@ -82,19 +83,20 @@ class BookPlayViewModel
     player.fastForward()
   }
 
-  fun addBookmark() {
-    scope.launch {
-/*
-todo
-      val book = repo.bookById(bookId) ?: return@launch
-      bookmarkRepo.addBookmarkAtBookPosition(
-        book = book,
-        title = null,
-        setBySleepTimer = false
-      )
-      _viewEffects.emit(BookPlayViewEffect.BookmarkAdded)
-*/
-    }
+  fun onSettingsClicked() {
+    navigator.toSettings()
+  }
+
+  fun onCurrentChapterClicked() {
+    navigator.toSelectChapters(bookId)
+  }
+
+  fun onPlaybackSpeedIconClicked() {
+    navigator.toChangePlaybackSpeed()
+  }
+
+  fun onBookmarkClicked() {
+    navigator.toBookmarkDialog(bookId)
   }
 
   fun seekTo(ms: Long) {

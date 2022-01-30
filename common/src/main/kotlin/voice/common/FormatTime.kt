@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package voice.common
 
 import java.util.concurrent.TimeUnit
 

@@ -25,31 +25,8 @@
         <item name="md_color_button_text">@color/accent</item>
     </style>
 
-    <style name="PlayButtonStyle">
-        <item name="colorControlNormal">?attr/colorOnSecondary</item>
-    </style>
-
-    <style name="FastForwardRewindStyle">
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
-        <item name="android:scaleType">centerCrop</item>
-    </style>
-
     <style name="AppToolbar" parent="Widget.Material3.Toolbar.Surface">
         <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
-    </style>
-
-    <style name="timer_text_view_style">
-        <item name="android:layout_width">60dp</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:layout_gravity">right|end</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="android:background">@drawable/current_playing_circle_background</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:lines">1</item>
     </style>
 
     <!-- style for the bottom sheet items -->

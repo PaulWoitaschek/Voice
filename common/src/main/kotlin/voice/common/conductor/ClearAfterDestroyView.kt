@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc.conductor
+package voice.common.conductor
 
 import com.bluelinelabs.conductor.Controller
 import timber.log.Timber

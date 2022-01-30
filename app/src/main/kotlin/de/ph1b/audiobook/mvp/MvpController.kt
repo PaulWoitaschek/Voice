@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.bluelinelabs.conductor.Controller
-import de.ph1b.audiobook.features.InflateBinding
-import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.misc.checkMainThread
+import voice.common.conductor.InflateBinding
+import voice.common.conductor.ViewBindingController
 
 /**
  * Base controller that provides a convenient way for binding a view to a presenter

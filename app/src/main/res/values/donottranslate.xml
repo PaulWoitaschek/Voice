@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Voice</string>
-    <string name="zeroTime" translatable="false">0:00:00</string>
-    <string name="fab_transition" translatable="false">FAB_TRANSITION</string>
     <string name="format_bookmarks_n_of" translatable="false">(%1$d / %2$d)</string>
 </resources>

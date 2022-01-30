@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.misc
+package voice.common
 
 import android.graphics.Outline
 import android.view.View

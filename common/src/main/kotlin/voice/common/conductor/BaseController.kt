@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features
+package voice.common.conductor
 
 import android.os.Bundle
 import androidx.lifecycle.Lifecycle

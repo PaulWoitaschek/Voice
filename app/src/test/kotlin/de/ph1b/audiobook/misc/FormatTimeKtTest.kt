@@ -2,6 +2,7 @@ package de.ph1b.audiobook.misc
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import voice.common.formatTime
 import java.util.concurrent.TimeUnit
 
 class FormatTimeKtTest {

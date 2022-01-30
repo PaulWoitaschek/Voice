@@ -19,7 +19,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ImagePickerBinding
-import de.ph1b.audiobook.features.ViewBindingController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.misc.coverFile
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import voice.common.conductor.ViewBindingController
 import java.net.URLEncoder
 import java.util.UUID
 import javax.inject.Inject

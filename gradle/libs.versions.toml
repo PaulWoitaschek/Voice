@@ -8,9 +8,10 @@ dagger = "2.40.3"
 kotlin = "1.6.10"
 compose = "1.1.0-rc03"
 composeCompiler = "1.1.0-rc02"
+agp = "7.1.0"
 
 [libraries]
-androidPluginForGradle = "com.android.tools.build:gradle:7.1.0"
+androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 material = "com.google.android.material:material:1.5.0"
 materialCab = "com.afollestad:material-cab:2.0.1"
 picasso = "com.squareup.picasso:picasso:2.8"
@@ -38,6 +39,7 @@ documentFile = "androidx.documentfile:documentfile:1.0.1"
 koTest-assert = "io.kotest:kotest-assertions-core:5.1.0"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
+viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }

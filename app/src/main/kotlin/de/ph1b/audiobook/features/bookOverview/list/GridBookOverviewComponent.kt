@@ -13,10 +13,10 @@ import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
 import de.ph1b.audiobook.databinding.BookOverviewRowListBinding
 import de.ph1b.audiobook.misc.RoundRectOutlineProvider
 import de.ph1b.audiobook.misc.dpToPx
-import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.SquareProgressView
+import voice.common.formatTime
 
 class GridBookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<BookOverviewViewState, BookOverviewHolder>(BookOverviewViewState::class) {

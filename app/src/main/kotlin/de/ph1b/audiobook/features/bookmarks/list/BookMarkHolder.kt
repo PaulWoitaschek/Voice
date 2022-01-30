@@ -7,8 +7,8 @@ import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
-import de.ph1b.audiobook.misc.formatTime
 import de.ph1b.audiobook.uitools.ViewBindingHolder
+import voice.common.formatTime
 
 class BookMarkHolder(
   parent: ViewGroup,

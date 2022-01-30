@@ -16,20 +16,19 @@ import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
-import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.conductor.asTransaction
+import de.ph1b.audiobook.navigation.Navigator
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.session.search.BookSearchHandler
 import de.ph1b.audiobook.playback.session.search.BookSearchParser
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import voice.playbackScreen.BookPlayController
 import javax.inject.Inject
 
-/**
- * Activity that coordinates the book shelf and play screens.
- */
+
 class MainActivity : AppCompatActivity(), RouterProvider {
 
   @field:[Inject CurrentBook]
@@ -46,6 +45,9 @@ class MainActivity : AppCompatActivity(), RouterProvider {
 
   @Inject
   lateinit var playerController: PlayerController
+
+  @Inject
+  lateinit var navigator: Navigator
 
   private lateinit var router: Router
 
@@ -83,6 +85,8 @@ class MainActivity : AppCompatActivity(), RouterProvider {
         }
       }
     )
+
+    navigator.setRoutingComponents(this, router)
 
     setupFromIntent(intent)
   }
@@ -132,6 +136,11 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     if (router.backstackSize == 1) {
       super.onBackPressed()
     } else router.handleBack()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    navigator.clear(this)
   }
 
   companion object {

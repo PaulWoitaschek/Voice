@@ -1,9 +1,9 @@
-package de.ph1b.audiobook.uitools
+package voice.common
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.common.R
 
 class PlayPauseDrawableSetter(private val fab: ImageView) {
 

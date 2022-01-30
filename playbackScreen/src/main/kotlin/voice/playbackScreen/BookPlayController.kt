@@ -1,36 +1,29 @@
-package de.ph1b.audiobook.features.bookPlaying
+package voice.playbackScreen
 
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.R
+import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
-import de.ph1b.audiobook.databinding.BookPlayBinding
-import de.ph1b.audiobook.features.ViewBindingController
-import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
-import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
-import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.CircleOutlineProvider
-import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
-import de.ph1b.audiobook.misc.formatTime
-import de.ph1b.audiobook.uitools.PlayPauseDrawableSetter
+import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import voice.playbackScreen.BookPlayViewEffect
-import voice.playbackScreen.BookPlayViewModel
-import voice.playbackScreen.BookPlayViewState
-import voice.settings.SettingsController
+import voice.common.CircleOutlineProvider
+import voice.common.PlayPauseDrawableSetter
+import voice.common.conductor.ViewBindingController
+import voice.common.conductor.clearAfterDestroyView
+import voice.common.formatTime
+import voice.playbackScreen.databinding.BookPlayBinding
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -38,9 +31,6 @@ import kotlin.time.DurationUnit
 
 private const val NI_BOOK_ID = "niBookId"
 
-/**
- * Base class for book playing interaction.
- */
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
   constructor(bookId: Book2.Id) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
@@ -57,7 +47,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   private var playPauseDrawableSetter by clearAfterDestroyView<PlayPauseDrawableSetter>()
 
   init {
-    appComponent.inject(this)
+    rootComponentAs<Component>().inject(this)
     this.viewModel.bookId = bookId
   }
 
@@ -129,6 +119,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         Picasso.get().cancelRequest(cover)
         cover.setImageDrawable(placeholder)
       } else {
+
         Picasso.get()
           .load(coverFile)
           .placeholder(placeholder)
@@ -144,7 +135,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.previous.setOnClickListener { viewModel.previous() }
     binding.next.setOnClickListener { viewModel.next() }
     binding.currentChapterContainer.setOnClickListener {
-      SelectChapterDialog(bookId).showDialog(router)
+      viewModel.onCurrentChapterClicked()
     }
 
     val detector = GestureDetectorCompat(
@@ -190,28 +181,23 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
     skipSilenceItem = menu.findItem(R.id.action_skip_silence)
 
-    binding.toolbar.findViewById<View>(R.id.action_bookmark)
-      .setOnLongClickListener {
-        this.viewModel.addBookmark()
-        true
-      }
-
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_settings -> {
-          router.pushController(SettingsController().asTransaction())
+          viewModel.onSettingsClicked()
           true
         }
         R.id.action_sleep -> {
-          this.viewModel.toggleSleepTimer()
+          viewModel.toggleSleepTimer()
           true
         }
         R.id.action_time_lapse -> {
-          PlaybackSpeedDialogController().showDialog(router)
+          viewModel.onPlaybackSpeedIconClicked()
           true
         }
         R.id.action_bookmark -> {
+          viewModel.onBookmarkClicked()
           // todo val bookmarkController = BookmarkController(bookId).asTransaction()
           //  router.pushController(bookmarkController)
           true
@@ -236,4 +222,10 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     SleepTimerDialogController(bookId)
       .showDialog(router)
   }
+
+  @ContributesTo(AppScope::class)
+  interface Component {
+    fun inject(target: BookPlayController)
+  }
+
 }

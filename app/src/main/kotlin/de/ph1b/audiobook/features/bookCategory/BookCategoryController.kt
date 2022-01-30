@@ -12,20 +12,20 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.databinding.BookCategoryBinding
-import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookOverview.EditBookBottomSheetController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
-import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
-import de.ph1b.audiobook.misc.conductor.clearAfterDestroyView
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.uitools.BookChangeHandler
 import kotlinx.coroutines.launch
+import voice.common.conductor.BaseController
+import voice.common.conductor.clearAfterDestroyView
+import voice.playbackScreen.BookPlayController
 import java.util.UUID
 import javax.inject.Inject
 
