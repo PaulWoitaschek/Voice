@@ -12,14 +12,11 @@ import de.ph1b.audiobook.features.gridCount.GridCount
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
-import de.ph1b.audiobook.scanner.CoverFromDiscCollector
 import de.ph1b.audiobook.scanner.MediaScanTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import java.util.LinkedHashMap
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -30,7 +27,6 @@ constructor(
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
-  coverFromDiscCollector: CoverFromDiscCollector,
   @CurrentBook
   private val currentBookDataStore: DataStore<Book2.Id?>,
   @Named(PrefKeys.GRID_MODE)
@@ -45,8 +41,6 @@ constructor(
   fun useGrid(useGrid: Boolean) {
     gridModePref.value = if (useGrid) GridMode.GRID else GridMode.LIST
   }
-
-  val coverChanged: Flow<UUID> = coverFromDiscCollector.coverChanged()
 
   fun state(): Flow<BookOverviewState> {
     val playingStream = playStateManager.playStateFlow()

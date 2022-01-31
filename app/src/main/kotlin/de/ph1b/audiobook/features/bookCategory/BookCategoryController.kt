@@ -9,7 +9,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.databinding.BookCategoryBinding
 import de.ph1b.audiobook.features.GalleryPicker
@@ -26,16 +26,13 @@ import kotlinx.coroutines.launch
 import voice.common.conductor.BaseController
 import voice.common.conductor.clearAfterDestroyView
 import voice.playbackScreen.BookPlayController
-import java.util.UUID
 import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
 class BookCategoryController(bundle: Bundle) :
   BaseController(bundle),
-  EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback,
-  EditCoverDialogController.Callback {
+  EditBookBottomSheetController.Callback {
 
   @Inject
   lateinit var viewModel: BookCategoryViewModel
@@ -81,7 +78,7 @@ class BookCategoryController(bundle: Bundle) :
           router.replaceTopController(BookPlayController(bookId).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
-          // todo EditBookBottomSheetController(this, book).showDialog(router)
+          EditBookBottomSheetController(this, bookId).showDialog(router)
         }
       }
     }.also { adapter = it }
@@ -122,23 +119,19 @@ class BookCategoryController(bundle: Bundle) :
     }
   }
 
-  override fun onInternetCoverRequested(book: Book) {
-    router.pushController(CoverFromInternetController(book.id, this).asTransaction())
-  }
-
-  override fun onBookCoverChanged(bookId: UUID) {
-    // todo adapter.notifyCoverChanged(bookId)
+  override fun onInternetCoverRequested(book: Book2.Id) {
+    router.pushController(CoverFromInternetController(book).asTransaction())
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val arguments = galleryPicker.parse(requestCode, resultCode, data)
     if (arguments != null) {
-      EditCoverDialogController(this, arguments).showDialog(router)
+      EditCoverDialogController(arguments).showDialog(router)
     }
   }
 
-  override fun onFileCoverRequested(book: Book) {
-    galleryPicker.pick(book.id, this)
+  override fun onFileCoverRequested(book: Book2.Id) {
+    galleryPicker.pick(book, this)
   }
 }
 

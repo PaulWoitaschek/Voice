@@ -18,16 +18,6 @@ class BookOverviewAdapter(
     addComponent(BookOverviewHeaderComponent(openCategoryListener))
   }
 
-  fun reloadBookCover(bookId: Book2.Id) {
-    for (i in 0 until itemCount) {
-      val item = getItem(i)
-      if (item is BookOverviewViewState && item.id == bookId) {
-        notifyItemChanged(i)
-        break
-      }
-    }
-  }
-
   fun itemAtPositionIsHeader(position: Int): Boolean {
     val item = getItem(position)
     return item is BookOverviewHeaderModel

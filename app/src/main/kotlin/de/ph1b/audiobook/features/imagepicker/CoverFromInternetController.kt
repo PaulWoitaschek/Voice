@@ -13,50 +13,56 @@ import androidx.core.view.isVisible
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
-import com.bluelinelabs.conductor.Controller
-import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.ImageHelper
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.getBookId
+import de.ph1b.audiobook.data.putBookId
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.ImagePickerBinding
+import de.ph1b.audiobook.features.CoverSaver
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
-import de.ph1b.audiobook.misc.coverFile
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import voice.common.conductor.ViewBindingController
 import java.net.URLEncoder
-import java.util.UUID
 import javax.inject.Inject
 
+private const val NI_BOOK_ID = "ni"
+private const val ABOUT_BLANK = "about:blank"
+private const val SI_URL = "savedUrl"
+
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
+
+  constructor(bookId: Book2.Id) : this(Bundle().apply {
+    putBookId(NI_BOOK_ID, bookId)
+  })
 
   init {
     appComponent.inject(this)
   }
 
   @Inject
-  lateinit var repo: BookRepository
+  lateinit var repo: BookRepo2
 
   @Inject
-  lateinit var imageHelper: ImageHelper
+  lateinit var coverSaver: CoverSaver
 
   private var cab: AttachedCab? = null
 
   private var webViewIsLoading = MutableStateFlow(false)
   private val book by lazy {
-    val id = bundle.getUUID(NI_BOOK_ID)
-    repo.bookById(id)!!
+    val id = bundle.getBookId(NI_BOOK_ID)!!
+    runBlocking {
+      repo.flow(id).first()!!
+    }
   }
   private val originalUrl by lazy {
-    val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
+    val encodedSearch = URLEncoder.encode("${book.content.name} cover", Charsets.UTF_8.name())
     "https://www.google.com/search?safe=on&site=imghp" +
       "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
@@ -133,10 +139,12 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       closeDrawable(R.drawable.close)
       onSelection { item ->
         if (item.itemId == R.id.confirm) {
-          val bitmap = takeWebViewScreenshot()
-          saveCover(bitmap)
-          this.destroy()
-          router.popCurrentController()
+          lifecycleScope.launch {
+            val bitmap = takeWebViewScreenshot()
+            saveCover(bitmap)
+            destroy()
+            router.popCurrentController()
+          }
           true
         } else {
           false
@@ -161,34 +169,24 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     return bitmap
   }
 
-  private fun ImagePickerBinding.saveCover(bitmap: Bitmap) {
+  private suspend fun ImagePickerBinding.saveCover(bitmap: Bitmap) {
     val cropRect = cropOverlay.selectedRect
     val left = cropRect.left
     val top = cropRect.top
     val width = cropRect.width()
     val height = cropRect.height()
 
-    GlobalScope.launch {
-      val screenShot = Bitmap.createBitmap(
-        bitmap,
-        left,
-        top,
-        width,
-        height
-      )
-      bitmap.recycle()
-      val coverFile = book.coverFile()
-      imageHelper.saveCover(screenShot, coverFile)
-      screenShot.recycle()
-      Picasso.get().invalidate(coverFile)
-      val targetController = targetController
-      withContext(Dispatchers.Main) {
-        if (targetController?.isAttached == true) {
-          targetController as Callback
-          targetController.onBookCoverChanged(book.id)
-        }
-      }
-    }
+    val screenShot = Bitmap.createBitmap(
+      bitmap,
+      left,
+      top,
+      width,
+      height
+    )
+    bitmap.recycle()
+
+    coverSaver.save(book.id, screenShot)
+    screenShot.recycle()
   }
 
   @SuppressLint("InflateParams")
@@ -279,28 +277,5 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     if (binding.webView.url != ABOUT_BLANK) {
       outState.putString(SI_URL, binding.webView.url)
     }
-  }
-
-  companion object {
-
-    operator fun <T> invoke(
-      bookId: UUID,
-      target: T
-    ): CoverFromInternetController where T : Controller, T : Callback {
-      val args = Bundle().apply {
-        putUUID(NI_BOOK_ID, bookId)
-      }
-      return CoverFromInternetController(args).apply {
-        targetController = target
-      }
-    }
-
-    private const val NI_BOOK_ID = "ni"
-    private const val ABOUT_BLANK = "about:blank"
-    private const val SI_URL = "savedUrl"
-  }
-
-  interface Callback {
-    fun onBookCoverChanged(bookId: UUID)
   }
 }

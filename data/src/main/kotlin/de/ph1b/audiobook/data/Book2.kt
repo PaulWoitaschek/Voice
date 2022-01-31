@@ -2,6 +2,8 @@ package de.ph1b.audiobook.data
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -46,7 +48,8 @@ data class Book2(
   }
 
   @Serializable(with = BookIdSerializer::class)
-  data class Id(val value: String) {
+  @Parcelize
+  data class Id(val value: String) : Parcelable {
 
     val transitionName: String get() = value
 

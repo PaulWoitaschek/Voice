@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -75,6 +76,23 @@ class BookRepo2
     }
     contentDao.insert(content)
   }
+
+  suspend fun updateBook(id: Book2.Id, update: (BookContent2) -> BookContent2) {
+    fillCache()
+    val books = cache.updateAndGet {
+      it.toMutableList().apply {
+        val book = find { book -> book.id == id }
+          ?: return
+        remove(book)
+        add(book.copy(content = update(book.content)))
+      }
+    }
+    val updated = books.find { it.id == id }?.content
+    if (updated != null) {
+      contentDao.insert(updated)
+    }
+  }
+
 
   fun flow(id: Book2.Id): Flow<Book2?> {
     return flow().map { books ->

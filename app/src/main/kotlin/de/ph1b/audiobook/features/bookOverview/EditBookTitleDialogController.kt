@@ -7,35 +7,36 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.getBookId
+import de.ph1b.audiobook.data.putBookId
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-private const val NI_PRESET_NAME = "niPresetName"
 private const val NI_BOOK_ID = "niBookId"
 
 class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
 
-  constructor(book: Book) : this(
+  constructor(bookId: Book2.Id) : this(
     Bundle().apply {
-      putString(NI_PRESET_NAME, book.name)
-      putUUID(NI_BOOK_ID, book.id)
+      putBookId(NI_BOOK_ID, bookId)
     }
   )
 
   @Inject
-  lateinit var repo: BookRepository
+  lateinit var repo: BookRepo2
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val presetName = args.getString(NI_PRESET_NAME)
-    val bookId = args.getUUID(NI_BOOK_ID)
+    val bookId = args.getBookId(NI_BOOK_ID)!!
+    val presetName = runBlocking {
+      repo.flow(bookId).first()?.content?.name ?: ""
+    }
 
     return MaterialDialog(activity!!).apply {
       title(R.string.edit_book_title)
@@ -49,8 +50,10 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
       ) { _, text ->
         val newText = text.toString()
         if (newText != presetName) {
-          GlobalScope.launch {
-            repo.updateBookName(bookId, newText)
+          lifecycleScope.launch {
+            repo.updateBook(bookId) {
+              it.copy(name = newText)
+            }
           }
         }
         positiveButton(R.string.dialog_confirm)

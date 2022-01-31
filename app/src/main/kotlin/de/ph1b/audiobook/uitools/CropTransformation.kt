@@ -3,7 +3,9 @@ package de.ph1b.audiobook.uitools
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.widget.ImageView
-import com.squareup.picasso.Transformation
+import coil.bitmap.BitmapPool
+import coil.size.Size
+import coil.transform.Transformation
 import de.ph1b.audiobook.features.imagepicker.CropOverlay
 
 /**
@@ -16,13 +18,13 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
 
   override fun key(): String = "cropTransformation"
 
-  override fun transform(source: Bitmap): Bitmap {
-    val scaleFactor: Float = source.width.toFloat() / cropSource.measuredWidth
+  override suspend fun transform(pool: BitmapPool, input: Bitmap, size: Size): Bitmap {
+    val scaleFactor: Float = input.width.toFloat() / cropSource.measuredWidth
     scaleRect(rect, scaleFactor)
     return try {
-      Bitmap.createBitmap(source, rect.left, rect.top, rect.width(), rect.height())
+      Bitmap.createBitmap(input, rect.left, rect.top, rect.width(), rect.height())
     } finally {
-      source.recycle()
+      input.recycle()
     }
   }
 
