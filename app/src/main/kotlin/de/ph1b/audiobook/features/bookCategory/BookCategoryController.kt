@@ -123,7 +123,7 @@ class BookCategoryController(bundle: Bundle) :
   }
 
   override fun onInternetCoverRequested(book: Book2.Id) {
-    // todo router.pushController(CoverFromInternetController(book.id, this).asTransaction())
+    router.pushController(CoverFromInternetController(book, this).asTransaction())
   }
 
   override fun onBookCoverChanged(bookId: UUID) {

@@ -15,20 +15,16 @@ import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
+import de.ph1b.audiobook.features.CoverSaver
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.uitools.CropTransformation
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -41,7 +37,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   lateinit var repo: BookRepo2
 
   @Inject
-  lateinit var imageHelper: ImageHelper
+  lateinit var coverSaver: CoverSaver
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
@@ -73,19 +69,8 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
                 .build()
             )
             .drawable!!.toBitmap()
-          val newCover = File(context.filesDir, UUID.randomUUID().toString() + ".webp")
-          imageHelper.saveCover(bitmap, newCover)
 
-          val oldCover = repo.flow(arguments.bookId).first()?.content?.cover
-          if (oldCover != null) {
-            withContext(Dispatchers.IO) {
-              oldCover.delete()
-            }
-          }
-
-          repo.updateBook(arguments.bookId) {
-            it.copy(cover = newCover)
-          }
+          coverSaver.save(arguments.bookId, bitmap)
 
           dismissDialog()
         }

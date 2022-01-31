@@ -268,7 +268,10 @@ class BookOverviewController :
   }
 
   override fun onInternetCoverRequested(book: Book2.Id) {
-    // todo  router.pushController(CoverFromInternetController(book.id, this).asTransaction())
+    router.pushController(
+      CoverFromInternetController(book, this)
+        .asTransaction()
+    )
   }
 
   override fun onFileCoverRequested(book: Book2.Id) {

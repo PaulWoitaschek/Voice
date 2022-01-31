@@ -3,8 +3,7 @@ package de.ph1b.audiobook.common
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.WindowManager
 import androidx.core.net.toUri
 import de.ph1b.audiobook.ffmpeg.ffmpeg
@@ -19,9 +18,6 @@ import javax.inject.Provider
 import javax.inject.Singleton
 import kotlin.math.min
 
-// 500 kb
-const val MAX_IMAGE_SIZE = 500 * 1024
-
 @Singleton
 class ImageHelper
 @Inject
@@ -30,39 +26,38 @@ constructor(
   private val context: Context
 ) {
 
-  fun drawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
-  }
-
-  suspend fun saveCover(bitmap: Bitmap, destination: File) = withContext(Dispatchers.IO) {
-    var bitmapToSave = bitmap
-    // make bitmap square
-    val width = bitmapToSave.width
-    val height = bitmapToSave.height
-    val size = min(width, height)
-    if (width != height) {
-      bitmapToSave = Bitmap.createBitmap(bitmapToSave, 0, 0, size, size)
-    }
-
-    // scale down if bitmap is too large
-    val preferredSize = smallerScreenSize
-    if (size > preferredSize) {
-      bitmapToSave = Bitmap.createScaledBitmap(bitmapToSave, preferredSize, preferredSize, true)
-    }
-
-    // save bitmap to storage
-    try {
-      @Suppress("BlockingMethodInNonBlockingContext")
-      FileOutputStream(destination).use {
-        bitmapToSave.compress(Bitmap.CompressFormat.WEBP, 70, it)
-        it.flush()
+  suspend fun saveCover(bitmap: Bitmap, destination: File) {
+    withContext(Dispatchers.IO) {
+      var bitmapToSave = bitmap
+      // make bitmap square
+      val width = bitmapToSave.width
+      val height = bitmapToSave.height
+      val size = min(width, height)
+      if (width != height) {
+        bitmapToSave = Bitmap.createBitmap(bitmapToSave, 0, 0, size, size)
       }
-    } catch (e: IOException) {
-      Timber.e(e, "Error at saving image with destination=$destination")
+
+      // scale down if bitmap is too large
+      val preferredSize = smallerScreenSize
+      if (size > preferredSize) {
+        bitmapToSave = Bitmap.createScaledBitmap(bitmapToSave, preferredSize, preferredSize, true)
+      }
+
+      try {
+        @Suppress("BlockingMethodInNonBlockingContext")
+        FileOutputStream(destination).use {
+          val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Bitmap.CompressFormat.WEBP_LOSSLESS
+          } else {
+            @Suppress("DEPRECATION")
+            Bitmap.CompressFormat.WEBP
+          }
+          bitmapToSave.compress(compressFormat, 70, it)
+          it.flush()
+        }
+      } catch (e: IOException) {
+        Timber.e(e, "Error at saving image with destination=$destination")
+      }
     }
   }
 
