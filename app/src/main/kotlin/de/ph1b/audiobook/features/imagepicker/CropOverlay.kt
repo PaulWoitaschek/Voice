@@ -17,6 +17,9 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.misc.layoutInflater
 import timber.log.Timber
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
@@ -58,14 +61,14 @@ class CropOverlay @JvmOverloads constructor(
       override fun onScale(detector: ScaleGestureDetector): Boolean {
         val dx = detector.currentSpanX - detector.previousSpanX
         val dy = detector.currentSpanY - detector.previousSpanY
-        val max = Math.max(dx, dy)
+        val max = max(dx, dy)
         dragRect.squareInset(-max)
         return max != 0f
       }
     }
   )
 
-  var selectionOn = false
+  var selectionOn = true
     set(value) {
       if (value != field) {
         field = value
@@ -88,7 +91,7 @@ class CropOverlay @JvmOverloads constructor(
       isVisible = false
     }
 
-  private fun minRectSize() = Math.min(bounds.width(), bounds.height()) / 3f
+  private fun minRectSize() = min(bounds.width(), bounds.height()) / 3f
 
   private infix fun Float.inRangeOf(target: Float) =
     this >= (target - touchOffset) && this <= (target + touchOffset)
@@ -113,8 +116,6 @@ class CropOverlay @JvmOverloads constructor(
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    if (!selectionOn) return super.onTouchEvent(event)
-
     // use the cache rect to detect changes
     dragRectCache.set(dragRect)
 
@@ -218,7 +219,7 @@ class CropOverlay @JvmOverloads constructor(
 
     // preserve max size
     val dragW = dragRect.width()
-    val boundsSize = Math.min(bounds.width(), bounds.height()) - circleSize
+    val boundsSize = min(bounds.width(), bounds.height()) - circleSize
     val diff = dragW - boundsSize
     if (diff > 0) {
       dragRect.squareInset(diff / 2f)
@@ -234,7 +235,7 @@ class CropOverlay @JvmOverloads constructor(
     val wf = w.toFloat()
     val hf = h.toFloat()
     bounds.set(0f, 0f, wf, hf)
-    val dragSize = Math.min(wf, hf) / 2f
+    val dragSize = min(wf, hf) / 2f
 
     dragRect.set(0f, 0f, dragSize, dragSize)
     dragRect.offset(bounds.centerX() - dragSize / 2f, bounds.centerY() - dragSize / 2f)
@@ -248,18 +249,16 @@ class CropOverlay @JvmOverloads constructor(
     get() {
       val widthScaleFactor = 1
       val heightScaleFactor = 1
-      val realLeft = Math.round(dragRect.left * widthScaleFactor)
-      val realTop = Math.round(dragRect.top * heightScaleFactor)
-      val realRight = Math.round(dragRect.right * widthScaleFactor)
-      val realBottom = Math.round(dragRect.bottom * heightScaleFactor)
+      val realLeft = (dragRect.left * widthScaleFactor).roundToInt()
+      val realTop = (dragRect.top * heightScaleFactor).roundToInt()
+      val realRight = (dragRect.right * widthScaleFactor).roundToInt()
+      val realBottom = (dragRect.bottom * heightScaleFactor).roundToInt()
 
       return Rect(realLeft, realTop, realRight, realBottom)
     }
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
-
-    if (!selectionOn) return
 
     if (!bounds.isEmpty) {
       val boundsHeight = bounds.height()

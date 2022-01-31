@@ -9,7 +9,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.BookComparator
 import de.ph1b.audiobook.databinding.BookCategoryBinding
 import de.ph1b.audiobook.features.GalleryPicker
@@ -122,8 +122,8 @@ class BookCategoryController(bundle: Bundle) :
     }
   }
 
-  override fun onInternetCoverRequested(book: Book) {
-    router.pushController(CoverFromInternetController(book.id, this).asTransaction())
+  override fun onInternetCoverRequested(book: Book2.Id) {
+    // todo router.pushController(CoverFromInternetController(book.id, this).asTransaction())
   }
 
   override fun onBookCoverChanged(bookId: UUID) {
@@ -137,8 +137,8 @@ class BookCategoryController(bundle: Bundle) :
     }
   }
 
-  override fun onFileCoverRequested(book: Book) {
-    galleryPicker.pick(book.id, this)
+  override fun onFileCoverRequested(book: Book2.Id) {
+    galleryPicker.pick(book, this)
   }
 }
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
@@ -28,11 +27,11 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
       dismissDialog()
     }
     binding.internetCover.setOnClickListener {
-      // todo callback().onInternetCoverRequested(book)
+      callback().onInternetCoverRequested(bookId)
       dismissDialog()
     }
     binding.fileCover.setOnClickListener {
-      // todo callback().onFileCoverRequested(book)
+      callback().onFileCoverRequested(bookId)
       dismissDialog()
     }
     binding.bookmark.setOnClickListener {
@@ -64,7 +63,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onInternetCoverRequested(book: Book)
-    fun onFileCoverRequested(book: Book)
+    fun onInternetCoverRequested(book: Book2.Id)
+    fun onFileCoverRequested(book: Book2.Id)
   }
 }

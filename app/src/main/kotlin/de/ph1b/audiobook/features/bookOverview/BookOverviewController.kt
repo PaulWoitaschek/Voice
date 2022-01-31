@@ -13,7 +13,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
@@ -268,12 +267,12 @@ class BookOverviewController :
     }
   }
 
-  override fun onInternetCoverRequested(book: Book) {
-    router.pushController(CoverFromInternetController(book.id, this).asTransaction())
+  override fun onInternetCoverRequested(book: Book2.Id) {
+    // todo  router.pushController(CoverFromInternetController(book.id, this).asTransaction())
   }
 
-  override fun onFileCoverRequested(book: Book) {
-    galleryPicker.pick(book.id, this)
+  override fun onFileCoverRequested(book: Book2.Id) {
+    galleryPicker.pick(book, this)
   }
 
   override fun onDestroyView() {

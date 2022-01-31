@@ -2,34 +2,35 @@ package de.ph1b.audiobook.features.bookOverview
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.core.view.isVisible
+import androidx.core.graphics.drawable.toBitmap
+import coil.imageLoader
+import coil.load
+import coil.request.ImageRequest
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import com.bluelinelabs.conductor.Controller
-import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
 import de.ph1b.audiobook.injection.appComponent
-import de.ph1b.audiobook.misc.coverFile
+import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.uitools.CropTransformation
-import de.ph1b.audiobook.uitools.SimpleTarget
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import java.io.File
 import java.util.UUID
 import javax.inject.Inject
-import com.squareup.picasso.Callback as PicassoCallback
 
 /**
  * Simple dialog to edit the cover of a book.
@@ -37,7 +38,7 @@ import com.squareup.picasso.Callback as PicassoCallback
 class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @Inject
-  lateinit var repo: BookRepository
+  lateinit var repo: BookRepo2
 
   @Inject
   lateinit var imageHelper: ImageHelper
@@ -46,29 +47,12 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)
 
-    val picasso = Picasso.get()
-
     val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
     // init values
     val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
-    val book = repo.bookById(arguments.bookId)!!
 
-    binding.coverReplacement.isVisible = true
     binding.cropOverlay.selectionOn = false
-    picasso.load(arguments.coverUri)
-      .into(
-        binding.coverImage,
-        object : PicassoCallback {
-          override fun onError(e: Exception?) {
-            dismissDialog()
-          }
-
-          override fun onSuccess() {
-            binding.cropOverlay.selectionOn = true
-            binding.coverReplacement.isVisible = false
-          }
-        }
-      )
+    binding.coverImage.load(arguments.coverUri)
 
     val dialog = MaterialDialog(activity!!).apply {
       customView(view = binding.root)
@@ -80,28 +64,34 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     dialog.getActionButton(WhichButton.POSITIVE).setOnClickListener {
       val r = binding.cropOverlay.selectedRect
       if (!r.isEmpty) {
-        val target = object : SimpleTarget {
-          override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-            GlobalScope.launch(Dispatchers.Main) {
-              val coverFile = book.coverFile()
-              imageHelper.saveCover(bitmap, coverFile)
-              picasso.invalidate(coverFile)
-              val callback = targetController as Callback
-              callback.onBookCoverChanged(book.id)
-              dismissDialog()
+        lifecycleScope.launch {
+          val bitmap = context.imageLoader
+            .execute(
+              ImageRequest.Builder(context)
+                .data(arguments.coverUri)
+                .transformations(CropTransformation(binding.cropOverlay, binding.coverImage))
+                .build()
+            )
+            .drawable!!.toBitmap()
+          val newCover = File(context.filesDir, UUID.randomUUID().toString() + ".webp")
+          imageHelper.saveCover(bitmap, newCover)
+
+          val oldCover = repo.flow(arguments.bookId).first()?.content?.cover
+          if (oldCover != null) {
+            withContext(Dispatchers.IO) {
+              oldCover.delete()
             }
           }
 
-          override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-            dismissDialog()
+          repo.updateBook(arguments.bookId) {
+            it.copy(cover = newCover)
           }
+
+          dismissDialog()
         }
-        // picasso only holds a weak reference so we have to protect against gc
-        binding.coverImage.tag = target
-        picasso.load(arguments.coverUri)
-          .transform(CropTransformation(binding.cropOverlay, binding.coverImage))
-          .into(target)
-      } else dismissDialog()
+      } else {
+        dismissDialog()
+      }
     }
     return dialog
   }
@@ -126,6 +116,6 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   @Parcelize
   data class Arguments(
     val coverUri: Uri,
-    val bookId: UUID
+    val bookId: Book2.Id
   ) : Parcelable
 }
