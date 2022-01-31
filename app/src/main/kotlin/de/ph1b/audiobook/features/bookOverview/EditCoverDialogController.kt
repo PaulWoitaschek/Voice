@@ -13,7 +13,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
-import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Book2
@@ -25,13 +24,15 @@ import de.ph1b.audiobook.misc.conductor.context
 import de.ph1b.audiobook.uitools.CropTransformation
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.util.UUID
 import javax.inject.Inject
 
-/**
- * Simple dialog to edit the cover of a book.
- */
+private const val NI_ARGS = "ni#bundle"
+
 class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
+
+  constructor(args: Arguments) : this(Bundle().apply {
+    putParcelable(NI_ARGS, args)
+  })
 
   @Inject
   lateinit var repo: BookRepo2
@@ -79,23 +80,6 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
       }
     }
     return dialog
-  }
-
-  interface Callback {
-    fun onBookCoverChanged(bookId: UUID)
-  }
-
-  companion object {
-    private const val NI_ARGS = "ni#bundle"
-
-    operator fun <T> invoke(target: T, args: Arguments): EditCoverDialogController where T : Controller, T : Callback {
-      val bundle = Bundle().apply {
-        putParcelable(NI_ARGS, args)
-      }
-      return EditCoverDialogController(bundle).apply {
-        targetController = target
-      }
-    }
   }
 
   @Parcelize

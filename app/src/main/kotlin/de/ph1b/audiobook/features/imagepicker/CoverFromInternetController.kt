@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
-import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.getBookId
@@ -23,20 +22,25 @@ import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.features.CoverSaver
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import voice.common.conductor.ViewBindingController
 import java.net.URLEncoder
-import java.util.UUID
 import javax.inject.Inject
 
+private const val NI_BOOK_ID = "ni"
+private const val ABOUT_BLANK = "about:blank"
+private const val SI_URL = "savedUrl"
+
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
+
+  constructor(bookId: Book2.Id) : this(Bundle().apply {
+    putBookId(NI_BOOK_ID, bookId)
+  })
 
   init {
     appComponent.inject(this)
@@ -183,13 +187,6 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
 
     coverSaver.save(book.id, screenShot)
     screenShot.recycle()
-    val targetController = targetController
-    withContext(Dispatchers.Main) {
-      if (targetController?.isAttached == true) {
-        targetController as Callback
-        // todo     targetController.onBookCoverChanged(book.id)
-      }
-    }
   }
 
   @SuppressLint("InflateParams")
@@ -280,28 +277,5 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     if (binding.webView.url != ABOUT_BLANK) {
       outState.putString(SI_URL, binding.webView.url)
     }
-  }
-
-  companion object {
-
-    operator fun <T> invoke(
-      bookId: Book2.Id,
-      target: T
-    ): CoverFromInternetController where T : Controller, T : Callback {
-      val args = Bundle().apply {
-        putBookId(NI_BOOK_ID, bookId)
-      }
-      return CoverFromInternetController(args).apply {
-        targetController = target
-      }
-    }
-
-    private const val NI_BOOK_ID = "ni"
-    private const val ABOUT_BLANK = "about:blank"
-    private const val SI_URL = "savedUrl"
-  }
-
-  interface Callback {
-    fun onBookCoverChanged(bookId: UUID)
   }
 }

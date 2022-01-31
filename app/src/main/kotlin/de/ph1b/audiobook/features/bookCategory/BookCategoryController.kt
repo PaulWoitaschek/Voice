@@ -26,16 +26,13 @@ import kotlinx.coroutines.launch
 import voice.common.conductor.BaseController
 import voice.common.conductor.clearAfterDestroyView
 import voice.playbackScreen.BookPlayController
-import java.util.UUID
 import javax.inject.Inject
 
 private const val NI_CATEGORY = "ni#category"
 
 class BookCategoryController(bundle: Bundle) :
   BaseController(bundle),
-  EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback,
-  EditCoverDialogController.Callback {
+  EditBookBottomSheetController.Callback {
 
   @Inject
   lateinit var viewModel: BookCategoryViewModel
@@ -123,17 +120,13 @@ class BookCategoryController(bundle: Bundle) :
   }
 
   override fun onInternetCoverRequested(book: Book2.Id) {
-    router.pushController(CoverFromInternetController(book, this).asTransaction())
-  }
-
-  override fun onBookCoverChanged(bookId: UUID) {
-    // todo adapter.notifyCoverChanged(bookId)
+    router.pushController(CoverFromInternetController(book).asTransaction())
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val arguments = galleryPicker.parse(requestCode, resultCode, data)
     if (arguments != null) {
-      EditCoverDialogController(this, arguments).showDialog(router)
+      EditCoverDialogController(arguments).showDialog(router)
     }
   }
 

@@ -25,9 +25,7 @@ import de.ph1b.audiobook.features.imagepicker.CoverFromInternetController
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.asTransaction
 import de.ph1b.audiobook.misc.conductor.clearAfterDestroyViewNullable
-import de.ph1b.audiobook.misc.postedIfComputingLayout
 import de.ph1b.audiobook.uitools.BookChangeHandler
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -37,7 +35,6 @@ import voice.common.conductor.clearAfterDestroyView
 import voice.folderPicker.FolderPickerController
 import voice.playbackScreen.BookPlayController
 import voice.settings.SettingsController
-import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -47,9 +44,7 @@ import kotlin.collections.component2
  */
 class BookOverviewController :
   ViewBindingController<BookOverviewBinding>(BookOverviewBinding::inflate),
-  EditCoverDialogController.Callback,
-  EditBookBottomSheetController.Callback,
-  CoverFromInternetController.Callback {
+  EditBookBottomSheetController.Callback {
 
   init {
     appComponent.inject(this)
@@ -73,12 +68,6 @@ class BookOverviewController :
     setupToolbar()
     setupFab()
     setupRecyclerView()
-    lifecycleScope.launch {
-      viewModel.coverChanged.collect {
-        ensureActive()
-        // todo bookCoverChanged(it)
-      }
-    }
   }
 
   private fun BookOverviewBinding.setupFab() {
@@ -152,7 +141,7 @@ class BookOverviewController :
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val arguments = galleryPicker.parse(requestCode, resultCode, data)
     if (arguments != null) {
-      EditCoverDialogController(this, arguments).showDialog(router)
+      EditCoverDialogController(arguments).showDialog(router)
     }
   }
 
@@ -253,23 +242,9 @@ class BookOverviewController :
     )
   }
 
-  private fun BookOverviewBinding.bookCoverChanged(bookId: Book2.Id) {
-    // there is an issue where notifyDataSetChanges throws:
-    // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-    recyclerView.postedIfComputingLayout {
-      adapter.reloadBookCover(bookId)
-    }
-  }
-
-  override fun onBookCoverChanged(bookId: UUID) {
-    binding.recyclerView.postedIfComputingLayout {
-      // todo adapter.reloadBookCover(bookId)
-    }
-  }
-
   override fun onInternetCoverRequested(book: Book2.Id) {
     router.pushController(
-      CoverFromInternetController(book, this)
+      CoverFromInternetController(book)
         .asTransaction()
     )
   }
