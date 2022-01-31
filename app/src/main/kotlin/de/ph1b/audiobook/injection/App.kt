@@ -3,6 +3,7 @@ package de.ph1b.audiobook.injection
 import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.color.DynamicColors
 import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
@@ -40,6 +41,8 @@ class App : Application(), PlaybackComponentFactoryProvider {
     super.onCreate()
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
+
+    DynamicColors.applyToActivitiesIfAvailable(this)
 
     if (!alreadyCreated) {
       // robolectric creates multiple instances of the Application so we need to prevent

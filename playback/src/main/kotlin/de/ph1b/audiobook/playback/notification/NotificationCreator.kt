@@ -12,20 +12,15 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_STOP
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
+import androidx.core.graphics.drawable.toBitmap
 import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
-import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.common.CoverReplacement
-import de.ph1b.audiobook.common.ImageHelper
-import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
+import coil.imageLoader
+import coil.request.ImageRequest
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -35,7 +30,6 @@ import javax.inject.Inject
 class NotificationCreator
 @Inject constructor(
   private val context: Context,
-  private val imageHelper: ImageHelper,
   private val playStateManager: PlayStateManager,
   private val mediaSession: MediaSessionCompat,
   notificationChannelCreator: NotificationChannelCreator,
@@ -98,37 +92,22 @@ class NotificationCreator
   }
 
   private suspend fun cover(book: Book2): Bitmap {
-    // first try to get use a cached image
     cachedImage?.let {
       if (it.matches(book)) return it.cover
     }
 
-    val width = imageHelper.smallerScreenSize
-    val height = imageHelper.smallerScreenSize
-
-    // get the cover or fallback to a replacement
     val coverFile = book.content.cover
-    val picassoCover = withContext(Dispatchers.IO) {
-      if (coverFile != null && coverFile.length() < MAX_IMAGE_SIZE) {
-        try {
-          @Suppress("BlockingMethodInNonBlockingContext")
-          Picasso.get()
-            .load(coverFile)
-            .resize(width, height)
-            .get()
-        } catch (e: IOException) {
-          Timber.e(e, "Can't decode $coverFile")
-          null
-        }
-      } else null
-    }
-    val cover = picassoCover ?: imageHelper.drawableToBitmap(
-      CoverReplacement(book.content.name, context),
-      width,
-      height
-    )
+    val cover = context.imageLoader
+      .execute(ImageRequest.Builder(context)
+        .data(coverFile ?: R.drawable.default_album_art)
+        .size(width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
+          height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height))
+        .fallback(R.drawable.default_album_art)
+        .allowHardware(false)
+        .build()
+      )
+      .drawable!!.toBitmap()
 
-    // add a cache entry
     cachedImage = CachedImage(book.content.cover, cover)
     return cover
   }

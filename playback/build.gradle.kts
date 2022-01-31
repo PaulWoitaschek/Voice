@@ -19,6 +19,7 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
   implementation(libs.datastore)
+  implementation(libs.coil)
 
   implementation(libs.dagger.core)
 

@@ -6,19 +6,17 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
+import coil.load
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.AppScope
-import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import voice.common.CircleOutlineProvider
 import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
@@ -57,10 +55,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     setupClicks()
     setupSlider()
     setupToolbar()
-    play.apply {
-      outlineProvider = CircleOutlineProvider()
-      clipToOutline = true
-    }
   }
 
   override fun BookPlayBinding.onAttach() {
@@ -90,7 +84,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
 
   private fun BookPlayBinding.render(viewState: BookPlayViewState) {
     Timber.d("render $viewState")
-    toolbar.title = viewState.title
+    binding.title.text = viewState.title
     currentChapterText.text = viewState.chapterName
     currentChapterContainer.isVisible = viewState.chapterName != null
     previous.isVisible = viewState.showPreviousNextButtons
@@ -114,16 +108,12 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     if (!coverLoaded) {
       coverLoaded = true
       val coverFile = viewState.cover
-      val placeholder = CoverReplacement(viewState.title, root.context)
       if (coverFile == null) {
-        Picasso.get().cancelRequest(cover)
-        cover.setImageDrawable(placeholder)
+        cover.load(R.drawable.default_album_art)
       } else {
-
-        Picasso.get()
-          .load(coverFile)
-          .placeholder(placeholder)
-          .into(cover)
+        cover.load(coverFile) {
+          fallback(R.drawable.default_album_art)
+        }
       }
     }
   }

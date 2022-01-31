@@ -6,8 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.common.CoverReplacement
+import coil.load
+import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
 import de.ph1b.audiobook.databinding.BookOverviewRowListBinding
@@ -122,14 +122,12 @@ class BookOverviewHolder(
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = model.progress
     val cover = model.cover
-    val coverReplacement = CoverReplacement(name, itemView.context)
     if (cover == null) {
-      Picasso.get().cancelRequest(binding.cover)
-      binding.cover.setImageDrawable(coverReplacement)
+      binding.cover.load(R.drawable.default_album_art)
     } else {
-      Picasso.get().load(cover)
-        .placeholder(coverReplacement)
-        .into(binding.cover)
+      binding.cover.load(cover) {
+        fallback(R.drawable.default_album_art)
+      }
     }
     binding.playingIndicator.isVisible = model.isCurrentBook
   }

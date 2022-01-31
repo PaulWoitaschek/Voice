@@ -35,9 +35,20 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:menu="@menu/book_play"
-      app:navigationIcon="@drawable/ic_arrow_back" />
+      app:navigationIcon="@drawable/ic_arrow_back">
 
-    <ImageView
+        <TextView
+          android:layout_width="match_parent"
+          tools:text="Title"
+          android:layout_marginTop="?attr/actionBarSize"
+          android:textColor="?attr/colorOnSurface"
+          android:textAppearance="?attr/textAppearanceDisplayLarge"
+          android:id="@+id/title"
+          android:layout_height="wrap_content" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/play"
       android:layout_width="94dp"
       android:layout_height="94dp"
@@ -48,7 +59,6 @@
       android:elevation="8dp"
       android:foreground="?attr/selectableItemBackground"
       android:padding="16dp"
-      android:theme="@style/PlayButtonStyle"
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/x75"
@@ -57,7 +67,8 @@
 
     <ImageView
       android:id="@+id/rewind"
-      style="@style/FastForwardRewindStyle"
+      android:layout_height="36dp"
+      android:layout_width="36dp"
       android:layout_marginEnd="16dp"
       android:contentDescription="@string/rewind"
       android:src="@drawable/ic_fast_rewind"
@@ -67,7 +78,8 @@
 
     <ImageView
       android:id="@+id/fastForward"
-      style="@style/FastForwardRewindStyle"
+      android:layout_height="36dp"
+      android:layout_width="36dp"
       android:layout_marginStart="16dp"
       android:contentDescription="@string/fast_forward"
       android:src="@drawable/ic_fast_forward"
@@ -184,7 +196,14 @@
 
     <TextView
       android:id="@+id/timerCountdownView"
-      style="@style/timer_text_view_style"
+      android:layout_width="60dp"
+      android:gravity="center"
+      android:lines="1"
+      android:layout_marginEnd="16dp"
+      android:layout_marginTop="16dp"
+      android:textColor="@android:color/white"
+      android:background="@drawable/current_playing_circle_background"
+      android:layout_height="60dp"
       app:layout_constraintEnd_toEndOf="@+id/cover"
       app:layout_constraintTop_toBottomOf="@+id/toolbar"
       tools:text="00:34" />

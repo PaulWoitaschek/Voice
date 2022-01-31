@@ -38,6 +38,7 @@ fun VoiceTheme(
     )
   }) {
     androidx.compose.material3.MaterialTheme(colorScheme = if (isDarkTheme()) {
+
       darkColorScheme()
     } else {
       lightColorScheme()

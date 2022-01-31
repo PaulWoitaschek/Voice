@@ -7,8 +7,9 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN
-import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.common.CoverReplacement
+import androidx.core.graphics.drawable.toBitmap
+import coil.imageLoader
+import coil.request.ImageRequest
 import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.Chapter2
@@ -16,10 +17,6 @@ import de.ph1b.audiobook.data.toUri
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -120,42 +117,19 @@ class ChangeNotifier
 
     if (lastFileForMetaData != content.currentChapter.toUri()) {
       appendQueue(book)
-      // this check is necessary. Else the lockscreen controls will flicker due to
-      // an updated picture
-      var bitmap = withContext(IO) {
-        val coverFile = content.cover
-        if (coverFile != null) {
-          try {
-            Picasso.get()
-              .load(coverFile)
-              .get()
-              .run {
-                // we make a copy because we do not want to use picassos bitmap, since
-                // MediaSessionCompat recycles our bitmap eventually which would make
-                // picassos cached bitmap useless.
-                copy(config, false)
-              }
-          } catch (e: IOException) {
-            Timber.e(e)
-            null
-          }
-        } else {
-          null
-        }
-      }
-
-      if (bitmap == null) {
-        val replacement = CoverReplacement(content.name, context)
-        bitmap = imageHelper.drawableToBitmap(
-          replacement,
-          imageHelper.smallerScreenSize,
-          imageHelper.smallerScreenSize
+      val cover = context.imageLoader
+        .execute(ImageRequest.Builder(context)
+          .data(content.cover ?: R.drawable.default_album_art)
+          .size(width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
+            height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height))
+          .fallback(R.drawable.default_album_art)
+          .allowHardware(false)
+          .build()
         )
-      }
-
+        .drawable!!.toBitmap()
       val mediaMetaData = MediaMetadataCompat.Builder()
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, cover)
+        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, cover)
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration)
         .putLong(
           MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,

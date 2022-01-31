@@ -106,6 +106,7 @@ dependencies {
   implementation(libs.materialDialog.core)
   implementation(libs.materialDialog.input)
   implementation(libs.materialCab)
+  implementation(libs.coil)
 
   implementation(libs.dagger.core)
   kapt(libs.dagger.compiler)

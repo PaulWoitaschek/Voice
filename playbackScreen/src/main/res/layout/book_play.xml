@@ -3,39 +3,57 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/bookPlayRoot"
+  android:background="?attr/colorSurface"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/appBar"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:menu="@menu/book_play"
-      app:navigationIcon="@drawable/ic_arrow_back" />
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-    <ImageView
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:menu="@menu/book_play"
+          app:navigationIcon="@drawable/ic_arrow_back">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          tools:text="I am the very long book title"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:textColor="?attr/colorOnSurface"
+          android:textAppearance="?attr/textAppearanceHeadlineMedium"
+          android:id="@+id/title"
+          android:layout_height="wrap_content" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/play"
-      android:layout_width="94dp"
-      android:layout_height="94dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_marginBottom="36dp"
-      android:background="@drawable/play_button"
+      android:src="@drawable/play_button"
       android:contentDescription="@string/play_pause"
-      android:elevation="8dp"
-      android:foreground="?attr/selectableItemBackground"
-      android:padding="16dp"
-      android:theme="@style/PlayButtonStyle"
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:tint="@android:color/white" />
+      app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
       android:id="@+id/rewind"
-      style="@style/FastForwardRewindStyle"
+      android:layout_height="36dp"
+      android:layout_width="36dp"
       android:layout_marginEnd="16dp"
       android:contentDescription="@string/rewind"
       android:src="@drawable/ic_fast_rewind"
@@ -44,8 +62,9 @@
       app:layout_constraintTop_toTopOf="@id/play" />
 
     <ImageView
+      android:layout_height="36dp"
+      android:layout_width="36dp"
       android:id="@+id/fastForward"
-      style="@style/FastForwardRewindStyle"
       android:layout_marginStart="16dp"
       android:contentDescription="@string/fast_forward"
       android:src="@drawable/ic_fast_forward"
@@ -59,7 +78,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:text="@string/zeroTime"
-      android:textAppearance="?textAppearanceBodySmall"
+      android:textAppearance="?textAppearanceCaption"
       app:layout_constraintBottom_toBottomOf="@+id/slider"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintTop_toTopOf="@+id/slider" />
@@ -70,7 +89,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="16dp"
       android:text="@string/zeroTime"
-      android:textAppearance="?textAppearanceBodySmall"
+      android:textAppearance="?textAppearanceCaption"
       app:layout_constraintBottom_toBottomOf="@+id/slider"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="@+id/slider" />
@@ -88,8 +107,8 @@
 
     <ImageView
       android:id="@+id/previous"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
       android:contentDescription="@string/previous_track"
       android:foreground="?attr/selectableItemBackgroundBorderless"
       android:padding="12dp"
@@ -100,8 +119,8 @@
 
     <ImageView
       android:id="@+id/next"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
       android:contentDescription="@string/next_track"
       android:foreground="?attr/selectableItemBackgroundBorderless"
       android:padding="12dp"
@@ -137,7 +156,7 @@
           android:minHeight="56dp"
           android:paddingTop="16dp"
           android:paddingBottom="16dp"
-          android:textAppearance="?textAppearanceBodyLarge"
+          android:textAppearance="?textAppearanceBody1"
           app:layout_constrainedWidth="true"
           app:layout_constraintBottom_toTopOf="@+id/slider"
           app:layout_constraintEnd_toStartOf="@+id/next"
@@ -152,22 +171,29 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginBottom="8dp"
-      android:adjustViewBounds="true"
-      android:contentDescription="@string/cover"
       android:scaleType="centerCrop"
+      android:contentDescription="@string/cover"
       app:layout_constraintBottom_toTopOf="@+id/currentChapterContainer"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/appBar"
       app:layout_goneMarginBottom="16dp"
       tools:ignore="UnusedAttribute"
       tools:src="@android:color/darker_gray" />
 
     <TextView
       android:id="@+id/timerCountdownView"
-      style="@style/timer_text_view_style"
+      android:layout_width="60dp"
+      android:gravity="center"
+      android:lines="1"
+      android:layout_marginEnd="16dp"
+      android:layout_marginTop="16dp"
+      android:textColor="@android:color/white"
+      android:background="@drawable/current_playing_circle_background"
+      android:layout_height="60dp"
+      android:textAppearance="?attr/textAppearanceCaption"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/toolbar"
+      app:layout_constraintTop_toBottomOf="@+id/appBar"
       tools:text="00:34" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
