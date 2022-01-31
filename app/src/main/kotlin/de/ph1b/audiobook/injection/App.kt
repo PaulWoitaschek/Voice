@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.color.DynamicColors
-import com.squareup.picasso.Picasso
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
@@ -44,13 +43,6 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
     DynamicColors.applyToActivitiesIfAvailable(this)
 
-    if (!alreadyCreated) {
-      // robolectric creates multiple instances of the Application so we need to prevent
-      // additional initializations
-      alreadyCreated = true
-      Picasso.setSingletonInstance(Picasso.Builder(this).build())
-    }
-
     if (BuildConfig.DEBUG) {
       Timber.plant(Timber.DebugTree())
     }
@@ -80,11 +72,6 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
   override fun factory(): PlaybackComponent.Factory {
     return appComponent.playbackComponentFactory()
-  }
-
-  companion object {
-
-    private var alreadyCreated = false
   }
 }
 
