@@ -13,14 +13,14 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
 import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
+import androidx.core.graphics.drawable.toBitmap
 import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
-import com.squareup.picasso.Picasso
+import coil.imageLoader
+import coil.request.ImageRequest
 import dagger.Reusable
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.CoverReplacement
 import de.ph1b.audiobook.common.ImageHelper
-import de.ph1b.audiobook.common.MAX_IMAGE_SIZE
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
@@ -33,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
@@ -65,7 +64,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private fun updateWidgetForId(book: Book?, widgetId: Int) {
+  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -73,7 +72,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private fun initWidgetForPresentBook(widgetId: Int, book: Book) {
+  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -114,13 +113,7 @@ class WidgetUpdater @Inject constructor(
       wholeWidgetClickI,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
-    val coverReplacement = CoverReplacement("V", context)
-    val cover = imageHelper.drawableToBitmap(
-      coverReplacement,
-      imageHelper.smallerScreenSize,
-      imageHelper.smallerScreenSize
-    )
-    remoteViews.setImageViewBitmap(R.id.imageView, cover)
+    remoteViews.setImageViewResource(R.id.imageView, R.drawable.default_album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
   }
@@ -144,7 +137,7 @@ class WidgetUpdater @Inject constructor(
           )
     }
 
-  private fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
+  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
@@ -175,32 +168,24 @@ class WidgetUpdater @Inject constructor(
     )
 
     val coverFile = book.coverFile()
-    var cover = if (coverFile.canRead() && coverFile.length() < MAX_IMAGE_SIZE) {
-      val sizeForPicasso = coverSize.takeIf { it > 0 }
-        ?: context.dpToPxRounded(56F)
-      try {
-        Picasso.get()
-          .load(coverFile)
-          .resize(sizeForPicasso, sizeForPicasso)
-          .get()
-      } catch (e: IOException) {
-        Timber.e(e)
-        null
-      }
+    if (coverFile == null) {
+      remoteViews.setImageViewResource(R.id.imageView, R.drawable.default_album_art)
     } else {
-      null
+      val bitmap = context.imageLoader
+        .execute(ImageRequest.Builder(context)
+          .data(coverFile)
+          .size(
+            width = context.dpToPxRounded(56F),
+            height = context.dpToPxRounded(56f)
+          )
+          .fallback(de.ph1b.audiobook.playback.R.drawable.default_album_art)
+          .allowHardware(false)
+          .build()
+        )
+        .drawable!!.toBitmap()
+      remoteViews.setImageViewBitmap(R.id.imageView, bitmap)
     }
 
-    if (cover == null) {
-      val coverReplacement = CoverReplacement(book.name, context)
-      cover = imageHelper.drawableToBitmap(
-        coverReplacement,
-        imageHelper.smallerScreenSize,
-        imageHelper.smallerScreenSize
-      )
-    }
-
-    remoteViews.setImageViewBitmap(R.id.imageView, cover)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
   }
 
