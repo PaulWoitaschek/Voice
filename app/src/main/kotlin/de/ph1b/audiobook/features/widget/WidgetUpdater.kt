@@ -179,6 +179,7 @@ class WidgetUpdater @Inject constructor(
             height = context.dpToPxRounded(56f)
           )
           .fallback(de.ph1b.audiobook.playback.R.drawable.default_album_art)
+          .error(de.ph1b.audiobook.playback.R.drawable.default_album_art)
           .allowHardware(false)
           .build()
         )

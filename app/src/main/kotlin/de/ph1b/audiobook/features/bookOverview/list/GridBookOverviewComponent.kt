@@ -122,12 +122,9 @@ class BookOverviewHolder(
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = model.progress
     val cover = model.cover
-    if (cover == null) {
-      binding.cover.load(R.drawable.default_album_art)
-    } else {
-      binding.cover.load(cover) {
-        fallback(R.drawable.default_album_art)
-      }
+    binding.cover.load(cover) {
+      fallback(R.drawable.default_album_art)
+      error(R.drawable.default_album_art)
     }
     binding.playingIndicator.isVisible = model.isCurrentBook
   }
