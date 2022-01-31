@@ -17,6 +17,7 @@ import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.SquareProgressView
 import voice.common.formatTime
+import java.io.File
 
 class GridBookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<BookOverviewViewState, BookOverviewHolder>(BookOverviewViewState::class) {
@@ -94,6 +95,7 @@ class BookOverviewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
   private var boundBook: Book2.Id? = null
+  private var boundCover: File? = null
 
   init {
     binding.cover.clipToOutline = true
@@ -112,7 +114,6 @@ class BookOverviewHolder(
   }
 
   fun bind(model: BookOverviewViewState) {
-    boundBook = model.id
     val name = model.name
     binding.title.text = name
     binding.author?.text = model.author
@@ -122,10 +123,15 @@ class BookOverviewHolder(
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = model.progress
     val cover = model.cover
-    binding.cover.load(cover) {
-      fallback(R.drawable.default_album_art)
-      error(R.drawable.default_album_art)
+    if (boundCover != cover || boundBook != model.id) {
+      binding.cover.load(cover) {
+        fallback(R.drawable.default_album_art)
+        error(R.drawable.default_album_art)
+      }
     }
     binding.playingIndicator.isVisible = model.isCurrentBook
+
+    boundBook = model.id
+    boundCover = cover
   }
 }
