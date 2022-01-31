@@ -94,7 +94,7 @@ class BookOverviewController :
         when (clickType) {
           BookOverviewClick.REGULAR -> invokeBookSelectionCallback(bookId)
           BookOverviewClick.MENU -> {
-            // todo EditBookBottomSheetController(this@BookOverviewController, bookId).showDialog(router)
+            EditBookBottomSheetController(this@BookOverviewController, bookId).showDialog(router)
           }
         }
       },

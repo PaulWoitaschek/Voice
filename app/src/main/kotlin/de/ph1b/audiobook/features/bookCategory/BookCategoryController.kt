@@ -81,7 +81,7 @@ class BookCategoryController(bundle: Bundle) :
           router.replaceTopController(BookPlayController(bookId).asTransaction(changeHandler, changeHandler))
         }
         BookOverviewClick.MENU -> {
-          // todo EditBookBottomSheetController(this, book).showDialog(router)
+          EditBookBottomSheetController(this, bookId).showDialog(router)
         }
       }
     }.also { adapter = it }
