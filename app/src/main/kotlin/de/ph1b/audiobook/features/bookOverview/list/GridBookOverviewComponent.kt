@@ -16,6 +16,7 @@ import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
 import de.ph1b.audiobook.uitools.SquareProgressView
+import voice.common.colorFromAttr
 import voice.common.formatTime
 import java.io.File
 
@@ -122,6 +123,9 @@ class BookOverviewHolder(
     binding.cover.transitionName = model.transitionName
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = model.progress
+    binding.progress.color = itemView.context.colorFromAttr(
+      if (model.isCurrentBook) R.attr.colorPrimary else R.attr.colorSecondary
+    )
     val cover = model.cover
     if (boundCover != cover || boundBook != model.id) {
       binding.cover.load(cover) {

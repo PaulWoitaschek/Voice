@@ -34,13 +34,6 @@ class SquareProgressView @JvmOverloads constructor(
     }
   }
 
-  init {
-    if (isInEditMode) {
-      color = Color.BLUE
-      progress = 0.33F
-    }
-  }
-
   override fun onDraw(canvas: Canvas) {
     canvas.drawRect(0F, 0F, measuredWidth * progress, measuredHeight.toFloat(), paint)
   }
