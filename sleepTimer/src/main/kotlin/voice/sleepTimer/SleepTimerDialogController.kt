@@ -13,10 +13,13 @@ import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.rootComponentAs
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import voice.sleepTimer.databinding.DialogSleepBinding
 import javax.inject.Inject
 import javax.inject.Named
@@ -42,7 +45,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   lateinit var sleepTimer: SleepTimer
 
   @Inject
-  lateinit var repo: BookRepository
+  lateinit var bookRepo: BookRepo2
 
   init {
     rootComponentAs<Component>().inject(this)
@@ -106,16 +109,13 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
     binding.fab.setOnClickListener {
       require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       sleepTimePref.value = selectedMinutes
-/* todo
-    val bookId = args.getString(NI_BOOK_ID)!!.toUri()
-      GlobalScope.launch(Dispatchers.IO) {
-        bookmarkRepo.addBookmarkAtBookPosition(
-          book = book,
+
+      lifecycleScope.launch {
+        val book = bookRepo.flow(args.getBookId(NI_BOOK_ID)!!).first() ?: return@launch
+        bookmarkRepo.addBookmarkAtBookPosition(book = book,
           setBySleepTimer = true,
-          title = null
-        )
+          title = null)
       }
-*/
 
       sleepTimer.setActive(true)
       dismissDialog()

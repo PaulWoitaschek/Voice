@@ -185,8 +185,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         }
         R.id.action_bookmark -> {
           viewModel.onBookmarkClicked()
-          // todo val bookmarkController = BookmarkController(bookId).asTransaction()
-          //  router.pushController(bookmarkController)
           true
         }
         R.id.action_skip_silence -> {

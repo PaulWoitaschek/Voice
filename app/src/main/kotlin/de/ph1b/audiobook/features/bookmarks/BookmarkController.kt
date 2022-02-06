@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Bookmark
-import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Bookmark2
+import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.getBookId
+import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.BookmarkBinding
 import de.ph1b.audiobook.features.bookmarks.dialogs.AddBookmarkDialog
 import de.ph1b.audiobook.features.bookmarks.dialogs.EditBookmarkDialog
@@ -19,10 +22,7 @@ import de.ph1b.audiobook.features.bookmarks.list.BookmarkAdapter
 import de.ph1b.audiobook.features.bookmarks.list.BookmarkClickListener
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.context
-import de.ph1b.audiobook.misc.getUUID
-import de.ph1b.audiobook.misc.putUUID
 import de.ph1b.audiobook.mvp.MvpController
-import java.util.UUID
 
 /**
  * Dialog for creating a bookmark
@@ -36,36 +36,36 @@ class BookmarkController(args: Bundle) :
   AddBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
-  constructor(bookId: UUID) : this(
+  constructor(bookId: Book2.Id) : this(
     Bundle().apply {
-      putUUID(NI_BOOK_ID, bookId)
+      putBookId(NI_BOOK_ID, bookId)
     }
   )
 
-  private val bookId = args.getUUID(NI_BOOK_ID)
+  private val bookId = args.getBookId(NI_BOOK_ID)!!
   private val adapter = BookmarkAdapter(this)
 
   override fun createPresenter() = appComponent.bookmarkPresenter.apply {
     bookId = this@BookmarkController.bookId
   }
 
-  override fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
+  override fun render(bookmarks: List<Bookmark2>, chapters: List<Chapter2>) {
     adapter.newData(bookmarks, chapters)
   }
 
-  override fun showBookmarkAdded(bookmark: Bookmark) {
+  override fun showBookmarkAdded(bookmark: Bookmark2) {
     val index = adapter.indexOf(bookmark)
     binding.recycler.smoothScrollToPosition(index)
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
   }
 
-  override fun onBookmarkClicked(bookmark: Bookmark) {
+  override fun onBookmarkClicked(bookmark: Bookmark2) {
     presenter.selectBookmark(bookmark.id)
     router.popController(this)
   }
 
-  override fun onEditBookmark(id: UUID, title: String) {
+  override fun onEditBookmark(id: Bookmark2.Id, title: String) {
     presenter.editBookmark(id, title)
   }
 
@@ -121,7 +121,7 @@ class BookmarkController(args: Bundle) :
     ItemTouchHelper(swipeCallback).attachToRecyclerView(recycler)
   }
 
-  override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
+  override fun onOptionsMenuClicked(bookmark: Bookmark2, v: View) {
     val popup = PopupMenu(context, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {
@@ -140,7 +140,7 @@ class BookmarkController(args: Bundle) :
     popup.show()
   }
 
-  private fun showEditBookmarkDialog(bookmark: Bookmark) {
+  private fun showEditBookmarkDialog(bookmark: Bookmark2) {
     EditBookmarkDialog(this, bookmark).showDialog(router)
   }
 

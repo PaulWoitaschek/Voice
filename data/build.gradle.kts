@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   id("voice-android-library")
   id("kotlin-parcelize")
@@ -31,6 +33,11 @@ android {
     animationsDisabled = true
     unitTests.isIncludeAndroidResources = true
   }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+  // workaround for https://youtrack.jetbrains.com/issue/KT-38576
+  usePreciseJavaTracking = false
 }
 
 dependencies {

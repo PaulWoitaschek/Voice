@@ -1,14 +1,14 @@
 package de.ph1b.audiobook.features.bookmarks.list
 
 import androidx.recyclerview.widget.DiffUtil
-import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Bookmark2
 
 /**
  * Calculates the diff between two bookmark lists.
  */
 class BookmarkDiffUtilCallback(
-  private val oldItems: List<Bookmark>,
-  private val newItems: List<Bookmark>
+  private val oldItems: List<Bookmark2>,
+  private val newItems: List<Bookmark2>
 ) : DiffUtil.Callback() {
 
   override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

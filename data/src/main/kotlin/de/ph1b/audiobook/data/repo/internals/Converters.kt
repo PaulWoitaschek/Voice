@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Bookmark2
 import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.MarkData
 import kotlinx.serialization.builtins.ListSerializer
@@ -79,4 +80,10 @@ class Converters {
 
   @TypeConverter
   fun fromChapterId(id: Chapter2.Id): String = id.value
+
+  @TypeConverter
+  fun toBookmarkId(value: String): Bookmark2.Id = Bookmark2.Id(UUID.fromString(value))
+
+  @TypeConverter
+  fun fromBookmarkId(id: Bookmark2.Id): String = id.value.toString()
 }
