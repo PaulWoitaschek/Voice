@@ -5,6 +5,7 @@ import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import voice.playbackScreen.BookPlayNavigator
 import voice.settings.SettingsController
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class BookPlayNavigatorImpl
   }
 
   override fun toBookmarkDialog(id: Book2.Id) {
-    // todo
+    navigator.push(BookmarkController(id))
   }
 
   override fun toSelectChapters(id: Book2.Id) {

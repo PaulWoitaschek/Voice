@@ -9,7 +9,9 @@ import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
+import de.ph1b.audiobook.features.bookmarks.BookmarkController
 import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.conductor.asTransaction
 
 class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
 
@@ -36,8 +38,8 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
     }
     binding.bookmark.setOnClickListener {
       val router = (activity as RouterProvider).provideRouter()
-      // todo val controller = BookmarkController(book.id)
-      // router.pushController(controller.asTransaction())
+      val controller = BookmarkController(bookId)
+      router.pushController(controller.asTransaction())
 
       dismissDialog()
     }
