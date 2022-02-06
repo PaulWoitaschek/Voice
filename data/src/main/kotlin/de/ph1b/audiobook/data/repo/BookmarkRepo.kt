@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,7 +38,7 @@ class BookmarkRepo
         title = title,
         time = book.content.positionInChapter,
         id = Bookmark2.Id.random(),
-        addedAt = Instant.now(),
+        addedAt = Instant.now().minus(2, ChronoUnit.DAYS),
         setBySleepTimer = setBySleepTimer,
         chapterId = book.content.currentChapter,
         bookId = book.id

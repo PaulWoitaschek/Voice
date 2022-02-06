@@ -9,6 +9,11 @@ import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.uitools.ViewBindingHolder
 import voice.common.formatTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 class BookMarkHolder(
   parent: ViewGroup,
@@ -37,7 +42,18 @@ class BookMarkHolder(
     val bookmarkTitle = bookmark.title
     binding.title.text = when {
       bookmark.setBySleepTimer -> {
-        DateUtils.formatDateTime(itemView.context, bookmark.addedAt.toEpochMilli(), DateUtils.FORMAT_SHOW_TIME)
+        val justNowThreshold = 1.minutes
+        if (ChronoUnit.MILLIS.between(bookmark.addedAt, Instant.now()).milliseconds < justNowThreshold) {
+          itemView.context.getString(R.string.bookmark_just_now)
+        } else {
+          DateUtils.getRelativeDateTimeString(
+            itemView.context,
+            bookmark.addedAt.toEpochMilli(),
+            justNowThreshold.inWholeMilliseconds,
+            2.days.inWholeMilliseconds,
+            0
+          )
+        }
       }
       bookmarkTitle != null && bookmarkTitle.isNotEmpty() -> bookmarkTitle
       else -> currentChapter.markForPosition(bookmark.time).name

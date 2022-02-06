@@ -103,4 +103,7 @@
     <string name="book_category_sort_by_added">Added</string>
 
     <string name="close">Close</string>
+
+    <!-- will be shown as the time for a bookmark that was just created -->
+    <string name="bookmark_just_now">Just now</string>
 </resources>
