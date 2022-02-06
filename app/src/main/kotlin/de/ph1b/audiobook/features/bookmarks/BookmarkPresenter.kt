@@ -33,7 +33,10 @@ class BookmarkPresenter
     onAttachScope.launch {
       val book = repo.flow(bookId).first() ?: return@launch
       bookmarks.clear()
-      bookmarks.addAll(bookmarkRepo.bookmarks(book.content).reversed())
+      bookmarks.addAll(
+        bookmarkRepo.bookmarks(book.content)
+          .sortedByDescending { it.addedAt }
+      )
       chapters.clear()
       chapters.addAll(book.chapters)
 
