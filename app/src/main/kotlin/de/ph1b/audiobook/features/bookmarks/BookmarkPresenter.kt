@@ -72,7 +72,8 @@ class BookmarkPresenter
     scope.launch {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(
-          title = newTitle
+          title = newTitle,
+          setBySleepTimer = false,
         )
         bookmarkRepo.addBookmark(withNewTitle)
         val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
