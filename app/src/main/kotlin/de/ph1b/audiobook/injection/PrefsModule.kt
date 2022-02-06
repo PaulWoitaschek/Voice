@@ -20,12 +20,10 @@ import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.features.bookOverview.GridMode
-import de.ph1b.audiobook.misc.UUIDAdapter
 import de.ph1b.audiobook.serialization.SerializableDataStoreFactory
 import de.ph1b.audiobook.serialization.UriSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
-import java.util.UUID
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -92,13 +90,6 @@ object PrefsModule {
   @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
   fun provideCollectionFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
     return prefs.stringSet(PrefKeys.COLLECTION_BOOK_FOLDERS, emptySet())
-  }
-
-  @Provides
-  @Singleton
-  @Named(PrefKeys.CURRENT_BOOK)
-  fun provideCurrentBookIdPreference(prefs: AndroidPreferences): Pref<UUID> {
-    return prefs.create(PrefKeys.CURRENT_BOOK, UUID.randomUUID(), UUIDAdapter)
   }
 
   @Provides

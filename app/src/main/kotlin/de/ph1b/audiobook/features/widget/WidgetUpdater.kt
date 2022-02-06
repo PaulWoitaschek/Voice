@@ -11,50 +11,46 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
 import android.view.View
-import android.view.WindowManager
 import android.widget.RemoteViews
 import androidx.core.graphics.drawable.toBitmap
+import androidx.datastore.core.DataStore
 import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import coil.imageLoader
 import coil.request.ImageRequest
 import dagger.Reusable
-import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.common.ImageHelper
-import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.features.MainActivity
-import de.ph1b.audiobook.misc.coverFile
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Provider
 
 @Reusable
 class WidgetUpdater @Inject constructor(
   private val context: Context,
-  private val repo: BookRepository,
-  @Named(PrefKeys.CURRENT_BOOK)
-  private val currentBookIdPref: Pref<UUID>,
-  private val imageHelper: ImageHelper,
+  private val repo: BookRepo2,
+  @CurrentBook
+  private val currentBook: DataStore<Book2.Id?>,
   private val playStateManager: PlayStateManager,
-  private val windowManager: Provider<WindowManager>
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
 
+  private val scope = CoroutineScope(Dispatchers.IO)
+
   fun update() {
-    GlobalScope.launch(Dispatchers.IO) {
-      val book = repo.bookById(currentBookIdPref.value)
-      Timber.i("update with book ${book?.name}")
+    scope.launch {
+      val book = currentBook.data.first()?.let {
+        repo.flow(it).first()
+      }
+      Timber.i("update with book ${book?.content?.name}")
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
       val ids = appWidgetManager.getAppWidgetIds(componentName)
 
@@ -64,7 +60,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
+  private suspend fun updateWidgetForId(book: Book2?, widgetId: Int) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -72,7 +68,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
+  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book2) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -121,23 +117,10 @@ class WidgetUpdater @Inject constructor(
   private val isPortrait: Boolean
     get() {
       val orientation = context.resources.configuration.orientation
-      val window = windowManager.get()
-      val display = window.defaultDisplay
-
-      @Suppress("DEPRECATION")
-      val displayWidth = display.width
-
-      @Suppress("DEPRECATION")
-      val displayHeight = display.height
-
-      return orientation != Configuration.ORIENTATION_LANDSCAPE &&
-        (
-          orientation == Configuration.ORIENTATION_PORTRAIT ||
-            displayWidth == displayHeight || displayWidth < displayHeight
-          )
+      return orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
-  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
+  private suspend fun initElements(remoteViews: RemoteViews, book: Book2, coverSize: Int) {
     val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
@@ -154,12 +137,12 @@ class WidgetUpdater @Inject constructor(
 
     // if we have any book, init the views and have a click on the whole widget start BookPlay.
     // if we have no book, simply have a click on the whole widget start BookChoose.
-    remoteViews.setTextViewText(R.id.title, book.name)
-    val name = book.content.currentChapter.name
+    remoteViews.setTextViewText(R.id.title, book.content.name)
+    val name = book.currentChapter.name
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = MainActivity.goToBookIntent(context, Book2.Id("todo")) // todo
+    val wholeWidgetClickI = MainActivity.goToBookIntent(context, book.id)
     val wholeWidgetClickPI = PendingIntent.getActivity(
       context,
       System.currentTimeMillis().toInt(),
@@ -167,19 +150,16 @@ class WidgetUpdater @Inject constructor(
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
-    val coverFile = book.coverFile()
+    val coverFile = book.content.cover
     if (coverFile == null) {
       remoteViews.setImageViewResource(R.id.imageView, R.drawable.default_album_art)
     } else {
       val bitmap = context.imageLoader
         .execute(ImageRequest.Builder(context)
           .data(coverFile)
-          .size(
-            width = context.dpToPxRounded(56F),
-            height = context.dpToPxRounded(56f)
-          )
-          .fallback(de.ph1b.audiobook.playback.R.drawable.default_album_art)
-          .error(de.ph1b.audiobook.playback.R.drawable.default_album_art)
+          .size(coverSize, coverSize)
+          .fallback(R.drawable.default_album_art)
+          .error(R.drawable.default_album_art)
           .allowHardware(false)
           .build()
         )
