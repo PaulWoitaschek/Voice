@@ -9,14 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ListItem
-import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,12 +23,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,12 +66,14 @@ fun FolderPickerView(
     LazyColumn {
       viewState.explanationCard?.let { text ->
         item {
-          Material3Card(
+          Card(
             modifier = Modifier
               .fillMaxWidth()
               .padding(horizontal = 8.dp),
           ) {
-            Column(Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
+            Column(Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 16.dp)) {
               Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium
@@ -108,22 +107,4 @@ fun FolderPickerView(
       }
     }
   }
-}
-
-@Composable
-fun Material3Card(
-  modifier: Modifier = Modifier,
-  backgroundColor: Color = MaterialTheme.colorScheme.surface,
-  contentColor: Color = contentColorFor(backgroundColor),
-  content: @Composable () -> Unit,
-) {
-  Surface(
-    tonalElevation = 1.dp,
-    shadowElevation = 1.dp,
-    modifier = modifier,
-    shape = RoundedCornerShape(12.dp),
-    color = backgroundColor,
-    contentColor = contentColor,
-    content = content
-  )
 }
