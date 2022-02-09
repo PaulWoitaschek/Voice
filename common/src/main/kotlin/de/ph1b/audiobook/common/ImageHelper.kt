@@ -46,11 +46,15 @@ constructor(
       try {
         @Suppress("BlockingMethodInNonBlockingContext")
         FileOutputStream(destination).use {
-          val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Bitmap.CompressFormat.WEBP_LOSSLESS
-          } else {
-            @Suppress("DEPRECATION")
-            Bitmap.CompressFormat.WEBP
+          val compressFormat = when (destination.extension) {
+            "png" -> Bitmap.CompressFormat.PNG
+            "webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+              Bitmap.CompressFormat.WEBP_LOSSLESS
+            } else {
+              @Suppress("DEPRECATION")
+              Bitmap.CompressFormat.WEBP
+            }
+            else -> error("Unhandled image extension for $destination")
           }
           bitmapToSave.compress(compressFormat, 70, it)
           it.flush()

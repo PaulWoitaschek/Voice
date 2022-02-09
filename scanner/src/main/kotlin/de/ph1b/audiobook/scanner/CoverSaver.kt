@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features
+package de.ph1b.audiobook.scanner
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -20,13 +20,20 @@ class CoverSaver
 ) {
 
   suspend fun save(bookId: Book2.Id, cover: Bitmap) {
+    val newCover = newBookCoverFile()
+    imageHelper.saveCover(cover, newCover)
+    setBookCover(newCover, bookId)
+  }
+
+  suspend fun newBookCoverFile(): File {
     val coversFolder = withContext(Dispatchers.IO) {
       File(context.filesDir, "bookCovers")
         .also { coverFolder -> coverFolder.mkdirs() }
     }
-    val newCover = File(coversFolder, "${UUID.randomUUID()}.webp")
-    imageHelper.saveCover(cover, newCover)
+    return File(coversFolder, "${UUID.randomUUID()}.png")
+  }
 
+  suspend fun setBookCover(cover: File, bookId: Book2.Id) {
     val oldCover = repo.flow(bookId).first()?.content?.cover
     if (oldCover != null) {
       withContext(Dispatchers.IO) {
@@ -35,7 +42,7 @@ class CoverSaver
     }
 
     repo.updateBook(bookId) {
-      it.copy(cover = newCover)
+      it.copy(cover = cover)
     }
   }
 }

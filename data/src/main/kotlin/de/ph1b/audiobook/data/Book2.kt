@@ -3,6 +3,7 @@ package de.ph1b.audiobook.data
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.net.toUri
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -54,6 +55,10 @@ data class Book2(
     val transitionName: String get() = value
 
     constructor(uri: Uri) : this(uri.toString())
+
+    fun toUri(): Uri {
+      return value.toUri()
+    }
   }
 }
 

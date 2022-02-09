@@ -19,9 +19,9 @@ import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.ImagePickerBinding
-import de.ph1b.audiobook.features.CoverSaver
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
+import de.ph1b.audiobook.scanner.CoverSaver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first

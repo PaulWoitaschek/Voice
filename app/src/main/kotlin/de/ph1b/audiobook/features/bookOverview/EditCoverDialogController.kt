@@ -18,9 +18,9 @@ import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
-import de.ph1b.audiobook.features.CoverSaver
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.context
+import de.ph1b.audiobook.scanner.CoverSaver
 import de.ph1b.audiobook.uitools.CropTransformation
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
