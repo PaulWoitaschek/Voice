@@ -10,14 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-import javax.inject.Singleton
 
-/**
- * Provides access to bookmarks.
- */
-@Singleton
 class BookmarkRepo
 @Inject constructor(
   private val dao: BookmarkDao2,
@@ -38,7 +32,7 @@ class BookmarkRepo
         title = title,
         time = book.content.positionInChapter,
         id = Bookmark2.Id.random(),
-        addedAt = Instant.now().minus(2, ChronoUnit.DAYS),
+        addedAt = Instant.now(),
         setBySleepTimer = setBySleepTimer,
         chapterId = book.content.currentChapter,
         bookId = book.id
