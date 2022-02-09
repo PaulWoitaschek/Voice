@@ -8,7 +8,6 @@ import dagger.Component
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
-import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.features.bookOverview.EditBookTitleDialogController
 import de.ph1b.audiobook.features.bookOverview.EditCoverDialogController
@@ -30,7 +29,6 @@ interface AppComponent {
 
   fun inject(target: App)
   fun inject(target: BaseWidgetProvider)
-  fun inject(target: BookCategoryController)
   fun inject(target: BookOverviewController)
   fun inject(target: CoverFromInternetController)
   fun inject(target: SelectChapterDialog)

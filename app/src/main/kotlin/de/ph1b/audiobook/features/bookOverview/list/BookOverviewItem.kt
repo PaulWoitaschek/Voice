@@ -10,7 +10,6 @@ sealed class BookOverviewItem
 
 data class BookOverviewHeaderModel(
   val category: BookOverviewCategory,
-  val hasMore: Boolean
 ) : BookOverviewItem()
 
 data class BookOverviewViewState(

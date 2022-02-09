@@ -16,7 +16,6 @@ import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
-import de.ph1b.audiobook.features.bookCategory.BookCategoryController
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewClick
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewHeaderModel
@@ -86,10 +85,6 @@ class BookOverviewController :
           }
         }
       },
-      openCategoryListener = { category ->
-        Timber.i("open $category")
-        router.pushController(BookCategoryController(category).asTransaction())
-      }
     )
     recyclerView.adapter = adapter
     // without this the item would blink on every change
@@ -162,7 +157,7 @@ class BookOverviewController :
     val adapterContent = when (state) {
       is BookOverviewState.Content -> buildList {
         state.categoriesWithContents.forEach { (category, content) ->
-          add(BookOverviewHeaderModel(category, content.hasMore))
+          add(BookOverviewHeaderModel(category))
           addAll(content.books)
         }
       }

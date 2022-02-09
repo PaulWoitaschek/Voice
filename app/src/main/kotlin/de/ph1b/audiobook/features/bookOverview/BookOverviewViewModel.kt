@@ -122,16 +122,10 @@ constructor(
     if (booksOfCategory.isEmpty()) {
       return null
     }
-    val rows = when (category) {
-      BookOverviewCategory.CURRENT -> 4
-      BookOverviewCategory.NOT_STARTED -> 4
-      BookOverviewCategory.FINISHED -> 2
-    }
-    val models = booksOfCategory.take(rows * amountOfColumns).map { book ->
+    val models = booksOfCategory.map { book ->
       BookOverviewViewState(book, amountOfColumns, currentBookId)
     }
-    val hasMore = models.size != booksOfCategory.size
-    return BookOverviewCategoryContent(models, hasMore)
+    return BookOverviewCategoryContent(models)
   }
 
   fun playPause() {

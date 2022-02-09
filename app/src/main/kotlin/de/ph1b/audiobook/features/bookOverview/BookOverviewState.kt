@@ -21,6 +21,5 @@ sealed class BookOverviewState {
 }
 
 data class BookOverviewCategoryContent(
-        val books: List<BookOverviewViewState>,
-        val hasMore: Boolean
+  val books: List<BookOverviewViewState>,
 )
