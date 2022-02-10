@@ -20,6 +20,7 @@ import timber.log.Timber
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.properties.Delegates
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
@@ -46,15 +47,6 @@ class CropOverlay @JvmOverloads constructor(
     setARGB(120, 0, 0, 0)
   }
 
-  init {
-    setWillNotDraw(false)
-
-    addView(leftCircle)
-    addView(topCircle)
-    addView(rightCircle)
-    addView(bottomCircle)
-  }
-
   private val scaleGestureDetector = ScaleGestureDetector(
     context,
     object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -68,19 +60,31 @@ class CropOverlay @JvmOverloads constructor(
     }
   )
 
-  var selectionOn = true
-    set(value) {
-      if (value != field) {
-        field = value
-
-        leftCircle.isVisible = value
-        rightCircle.isVisible = value
-        topCircle.isVisible = value
-        bottomCircle.isVisible = value
-
-        invalidate()
-      }
+  var selectionOn: Boolean by Delegates.observable(false) { _, old, new ->
+    if (old != new) {
+      updateForSelectionState()
     }
+  }
+
+  init {
+    setWillNotDraw(false)
+
+    addView(leftCircle)
+    addView(topCircle)
+    addView(rightCircle)
+    addView(bottomCircle)
+
+    updateForSelectionState()
+  }
+
+  private fun updateForSelectionState() {
+    leftCircle.isVisible = selectionOn
+    rightCircle.isVisible = selectionOn
+    topCircle.isVisible = selectionOn
+    bottomCircle.isVisible = selectionOn
+
+    invalidate()
+  }
 
   private var eventType: EventType? = null
   private var resizeType: Resize? = null
@@ -116,6 +120,8 @@ class CropOverlay @JvmOverloads constructor(
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (!selectionOn) return super.onTouchEvent(event)
+
     // use the cache rect to detect changes
     dragRectCache.set(dragRect)
 
@@ -259,6 +265,8 @@ class CropOverlay @JvmOverloads constructor(
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
+
+    if (!selectionOn) return
 
     if (!bounds.isEmpty) {
       val boundsHeight = bounds.height()

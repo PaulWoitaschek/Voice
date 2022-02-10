@@ -48,7 +48,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     // init values
     val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
 
-    binding.cropOverlay.selectionOn = false
+    binding.cropOverlay.selectionOn = true
     binding.coverImage.load(arguments.coverUri)
 
     val dialog = MaterialDialog(activity!!).apply {
