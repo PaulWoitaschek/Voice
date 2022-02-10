@@ -21,7 +21,6 @@ import de.ph1b.audiobook.playback.session.ChangeNotifier
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -67,8 +66,6 @@ constructor(
     private set(value) {
       _book.value = value
     }
-  val bookFlow: Flow<Book2>
-    get() = _book.filterNotNull()
 
   private val _state = MutableStateFlow(PlayerState.IDLE)
   private var state: PlayerState
@@ -393,5 +390,8 @@ constructor(
     val book = book ?: return
     val updated = book.copy(content = update(book.content))
     this.book = updated
+    runBlocking {
+      repo.updateBook(book.id, update)
+    }
   }
 }

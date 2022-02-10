@@ -35,7 +35,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -115,9 +117,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
     mediaController.registerCallback(MediaControllerCallback())
 
     scope.launch {
-      player.bookFlow
+      currentBookIdPref.data
+        .filterNotNull()
+        .distinctUntilChanged()
+        .flatMapLatest { repo.flow(it).filterNotNull() }
+        .distinctUntilChanged()
         .collect { book ->
-          repo.updateBook(book.content)
           changeNotifier.updateMetadata(book)
           updateNotification(book)
         }
