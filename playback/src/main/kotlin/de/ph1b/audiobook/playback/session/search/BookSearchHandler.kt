@@ -92,7 +92,7 @@ class BookSearchHandler
     val book = repo.flow().first().firstOrNull(selector)
     return if (book != null) {
       Timber.i("found a match ${book.content.name}")
-      currentBook.updateData { book.content.uri }
+      currentBook.updateData { book.content.id }
       player.play()
       true
     } else false

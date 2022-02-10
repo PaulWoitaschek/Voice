@@ -23,8 +23,6 @@ data class BookContent2(
   val cover: File?,
 ) {
 
-  val uri: Book2.Id get() = id
-
   @Ignore
   val currentChapterIndex = chapters.indexOf(currentChapter).also { require(it != -1) }
 

@@ -48,7 +48,7 @@ class BookSearchHandlerTest {
   }
 
   private suspend fun currentBookIdShouldBe(book2: Book2 = bookToFind) {
-    currentBookId.data.first() shouldBe book2.content.uri
+    currentBookId.data.first() shouldBe book2.content.id
   }
 
   @Test
