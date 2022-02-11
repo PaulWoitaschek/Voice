@@ -3,6 +3,8 @@ package de.ph1b.audiobook.injection
 import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import coil.Coil
+import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.BuildConfig
@@ -40,6 +42,12 @@ class App : Application(), PlaybackComponentFactoryProvider {
     super.onCreate()
 
     if (BuildConfig.DEBUG) StrictModeInit.init()
+
+    Coil.setImageLoader(
+      ImageLoader.Builder(this)
+        .addLastModifiedToFileCacheKey(false)
+        .build()
+    )
 
     DynamicColors.applyToActivitiesIfAvailable(this)
 
