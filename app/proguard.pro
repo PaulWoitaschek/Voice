@@ -5,24 +5,5 @@
 -dontnote
 -dontwarn okio.**
 
-# rxJava
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-   long producerIndex;
-   long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
-
-# picasso
--dontwarn com.squareup.picasso.OkHttpDownloader
--dontwarn okhttp3.internal.platform.*
-
-# chapterreader
--dontwarn org.slf4j.**
-
 # dagger
 -dontwarn com.google.errorprone.annotations.*

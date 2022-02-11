@@ -23,7 +23,6 @@ dependencies {
   implementation(libs.datastore)
   implementation(libs.timber)
   implementation(libs.coroutines.core)
-  implementation(libs.picasso)
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)

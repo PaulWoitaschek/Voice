@@ -23,7 +23,6 @@ dependencies {
   implementation(libs.timber)
   implementation(libs.datastore)
   implementation(libs.coroutines.core)
-  implementation(libs.picasso)
   implementation(libs.coil)
   implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)

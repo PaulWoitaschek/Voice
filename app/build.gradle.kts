@@ -100,7 +100,6 @@ dependencies {
   implementation(libs.media)
   implementation(libs.datastore)
 
-  implementation(libs.picasso)
   implementation(libs.serialization.json)
 
   implementation(libs.materialDialog.core)

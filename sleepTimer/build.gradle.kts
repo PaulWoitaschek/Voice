@@ -21,7 +21,6 @@ dependencies {
 
   implementation(libs.timber)
   implementation(libs.coroutines.core)
-  implementation(libs.picasso)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)
