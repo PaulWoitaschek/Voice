@@ -21,4 +21,7 @@ interface BookContent2Dao {
 
   @Query("SELECT * FROM content2 WHERE isActive = :isActive")
   suspend fun all(isActive: Boolean): List<BookContent2>
+
+  @Query("SELECT * FROM content2")
+  suspend fun all(): List<BookContent2>
 }

@@ -62,4 +62,5 @@ dependencies {
   testImplementation(libs.robolectric)
   testImplementation(libs.truth)
   testImplementation(libs.koTest.assert)
+  testImplementation(libs.coroutines.test)
 }
