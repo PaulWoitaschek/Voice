@@ -1,9 +1,9 @@
-package de.ph1b.audiobook.playback.utils
+package de.ph1b.audiobook.playback.session
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth.assertThat
 import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.playback.session.BookUriConverter
+import de.ph1b.audiobook.data.Chapter2
+import io.kotest.matchers.shouldBe
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -19,14 +19,23 @@ class BookUriConverterTest {
   fun allBooksType() {
     val allBooksId = converter.allBooksId()
     val parsed = converter.parse(allBooksId)
-    assertThat(parsed).isEqualTo(BookUriConverter.Parsed.AllBooks)
+    parsed shouldBe BookUriConverter.Parsed.AllBooks
   }
 
   @Test
   fun book() {
     val bookId = Book2.Id(UUID.randomUUID().toString())
-    val id = converter.bookId(bookId)
+    val id = converter.book(bookId)
     val parsed = converter.parse(id)
-    assertThat(parsed).isEqualTo(BookUriConverter.Parsed.Book(bookId))
+    parsed shouldBe BookUriConverter.Parsed.Book(bookId)
+  }
+
+  @Test
+  fun chapter() {
+    val bookId = Book2.Id(UUID.randomUUID().toString())
+    val chapterId = Chapter2.Id(UUID.randomUUID().toString())
+    val id = converter.chapter(bookId, chapterId)
+    val parsed = converter.parse(id)
+    parsed shouldBe BookUriConverter.Parsed.Chapter(bookId, chapterId)
   }
 }

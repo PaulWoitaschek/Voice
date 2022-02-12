@@ -10,7 +10,6 @@ import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UN
 import androidx.core.graphics.drawable.toBitmap
 import coil.imageLoader
 import coil.request.ImageRequest
-import de.ph1b.audiobook.common.ImageHelper
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.data.Chapter2
 import de.ph1b.audiobook.data.toUri
@@ -27,7 +26,6 @@ class ChangeNotifier
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   private val mediaSession: MediaSessionCompat,
-  private val imageHelper: ImageHelper,
   private val context: Context,
   private val autoConnectedReceiver: AndroidAutoConnectedReceiver
 ) {
@@ -165,7 +163,7 @@ class ChangeNotifier
   private fun Chapter2.toMediaDescription(book: Book2): MediaDescriptionCompat {
     return MediaDescriptionCompat.Builder()
       .setTitle(name)
-      // todo .setMediaId(bookUriConverter.chapterId(book.id, id))
+      .setMediaId(bookUriConverter.chapter(book.id, id))
       .build()
   }
 }

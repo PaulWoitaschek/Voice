@@ -43,14 +43,24 @@ class MediaSessionCallback
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
     Timber.i("onPlayFromMediaId $mediaId")
     mediaId ?: return
-    val parsed = bookUriConverter.parse(mediaId)
-    if (parsed is BookUriConverter.Parsed.Book) {
-      runBlocking {
-        currentBook.updateData { parsed.id }
+    when (val parsed = bookUriConverter.parse(mediaId)) {
+      is BookUriConverter.Parsed.Book -> {
+        runBlocking {
+          currentBook.updateData { parsed.bookId }
+        }
+        onPlay()
       }
-      onPlay()
-    } else {
-      Timber.e("Didn't handle $parsed")
+      is BookUriConverter.Parsed.Chapter -> {
+        runBlocking {
+          currentBook.updateData { parsed.bookId }
+        }
+        player.changePosition(parsed.chapterId)
+        onPlay()
+      }
+      BookUriConverter.Parsed.AllBooks -> {
+        Timber.e("Didn't handle $parsed")
+      }
+      null -> {}
     }
   }
 

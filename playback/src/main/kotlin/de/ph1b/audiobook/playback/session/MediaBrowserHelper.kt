@@ -43,24 +43,28 @@ class MediaBrowserHelper
   private suspend fun mediaItems(parentId: String): List<MediaBrowserCompat.MediaItem>? {
     val type = bookUriConverter.parse(parentId)
       ?: return null
-    if (type is BookUriConverter.Parsed.AllBooks) {
-      val allBooks = repo.flow().first()
-        .sortedWith(BookComparator.BY_LAST_PLAYED)
-      val currentBookId = currentBookId.data.first()
-      val currentBook = allBooks.find { it.id == currentBookId }
-      return if (currentBook == null) {
-        allBooks.map { it.toMediaDescription() }
-      } else {
-        // do NOT return the current book twice as this will break the listing due to stable IDs
-        val booksWithoutCurrent = allBooks
-          .filter { it != currentBook }
-          .map { it.toMediaDescription() }
+    return when (type) {
+      is BookUriConverter.Parsed.AllBooks -> {
+        val allBooks = repo.flow().first()
+          .sortedWith(BookComparator.BY_LAST_PLAYED)
+        val currentBookId = currentBookId.data.first()
+        val currentBook = allBooks.find { it.id == currentBookId }
+        if (currentBook == null) {
+          allBooks.map { it.toMediaDescription() }
+        } else {
+          // do NOT return the current book twice as this will break the listing due to stable IDs
+          val booksWithoutCurrent = allBooks
+            .filter { it != currentBook }
+            .map { it.toMediaDescription() }
 
-        listOf(currentBook.toMediaDescription(currentBookTitlePrefix())) + booksWithoutCurrent
+          listOf(currentBook.toMediaDescription(currentBookTitlePrefix())) + booksWithoutCurrent
+        }
       }
-    } else {
-      Timber.e("Didn't handle $parentId")
-      return null
+      is BookUriConverter.Parsed.Book,
+      is BookUriConverter.Parsed.Chapter -> {
+        Timber.e("Didn't handle $parentId")
+        null
+      }
     }
   }
 
@@ -70,7 +74,7 @@ class MediaBrowserHelper
     titlePrefix: String = ""
   ): MediaBrowserCompat.MediaItem {
     val iconUri = content.cover?.let { fileProviderUri(it) }
-    val mediaId = bookUriConverter.bookId(id)
+    val mediaId = bookUriConverter.book(id)
     val description = MediaDescriptionCompat.Builder()
       .setTitle(titlePrefix + content.name)
       .setMediaId(mediaId)

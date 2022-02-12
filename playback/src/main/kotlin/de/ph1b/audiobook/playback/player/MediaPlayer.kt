@@ -351,9 +351,7 @@ constructor(
     }
   }
 
-  /** Changes the current position in book. */
   fun changePosition(time: Long, changedChapter: Chapter2.Id? = null) {
-    checkMainThread()
     Timber.v("changePosition with time $time and file $changedChapter")
     prepare()
     if (state == PlayerState.IDLE)
@@ -364,6 +362,22 @@ constructor(
       copy(positionInChapter = time, currentChapter = newChapter)
     }
   }
+
+  fun changePosition(chapter: Chapter2.Id) {
+    checkMainThread()
+    Timber.v("chapterPosition($chapter)")
+    prepare()
+    if (state == PlayerState.IDLE)
+      return
+    updateContent {
+      if (chapter !in chapters || currentChapter == chapter) {
+        return@updateContent this
+      }
+      player.seekTo(chapters.indexOf(chapter), 0)
+      copy(positionInChapter = 0, currentChapter = chapter)
+    }
+  }
+
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
