@@ -50,11 +50,11 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/play"
-      android:layout_width="94dp"
-      android:layout_height="94dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_marginBottom="24dp"
-      android:adjustViewBounds="true"
-      android:background="@drawable/play_button"
+      android:src="@drawable/avd_play_to_pause"
+      android:tint="@android:color/white"
       android:contentDescription="@string/play_pause"
       android:elevation="8dp"
       android:foreground="?attr/selectableItemBackground"
@@ -62,8 +62,7 @@
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/x75"
-      app:layout_constraintStart_toStartOf="@+id/x75"
-      app:tint="@android:color/white" />
+      app:layout_constraintStart_toStartOf="@+id/x75" />
 
     <ImageView
       android:id="@+id/rewind"
