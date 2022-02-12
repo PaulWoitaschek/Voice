@@ -109,7 +109,7 @@ class WidgetUpdater @Inject constructor(
       wholeWidgetClickI,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
-    remoteViews.setImageViewResource(R.id.imageView, R.drawable.default_album_art)
+    remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
   }
@@ -152,14 +152,14 @@ class WidgetUpdater @Inject constructor(
 
     val coverFile = book.content.cover
     if (coverFile == null) {
-      remoteViews.setImageViewResource(R.id.imageView, R.drawable.default_album_art)
+      remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
     } else {
       val bitmap = context.imageLoader
         .execute(ImageRequest.Builder(context)
           .data(coverFile)
           .size(coverSize, coverSize)
-          .fallback(R.drawable.default_album_art)
-          .error(R.drawable.default_album_art)
+          .fallback(R.drawable.album_art)
+          .error(R.drawable.album_art)
           .allowHardware(false)
           .build()
         )

@@ -109,8 +109,8 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       coverLoaded = true
       val coverFile = viewState.cover
       cover.load(coverFile) {
-        fallback(R.drawable.default_album_art)
-        error(R.drawable.default_album_art)
+        fallback(R.drawable.album_art)
+        error(R.drawable.album_art)
       }
     }
   }

@@ -129,8 +129,8 @@ class BookOverviewHolder(
     val cover = model.cover
     if (boundCover != cover || boundBook != model.id) {
       binding.cover.load(cover) {
-        fallback(R.drawable.default_album_art)
-        error(R.drawable.default_album_art)
+        fallback(R.drawable.album_art)
+        error(R.drawable.album_art)
       }
     }
     binding.playingIndicator.isVisible = model.isCurrentBook
