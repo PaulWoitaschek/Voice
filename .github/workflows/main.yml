@@ -25,8 +25,8 @@ jobs:
           name: "Artifacts"
           path: "artifacts"
 
-      - uses: actions/upload-artifact@v2
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v2
         if: always()
         with:
-          name: "Tests"
-          path: "**/test-results/**/TEST-*.xml"
+          report_paths: '**/test-results/**/TEST-*.xml'
