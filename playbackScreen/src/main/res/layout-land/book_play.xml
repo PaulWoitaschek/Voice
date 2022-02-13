@@ -55,6 +55,7 @@
       android:layout_marginBottom="24dp"
       android:src="@drawable/avd_play_to_pause"
       android:tint="@android:color/white"
+      app:fabCustomSize="80dp"
       android:contentDescription="@string/play_pause"
       android:elevation="8dp"
       android:foreground="?attr/selectableItemBackground"

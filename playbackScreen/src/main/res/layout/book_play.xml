@@ -44,6 +44,7 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="36dp"
       android:src="@drawable/avd_play_to_pause"
+      app:fabCustomSize="80dp"
       android:contentDescription="@string/play_pause"
       android:transitionName="@string/fab_transition"
       app:layout_constraintBottom_toBottomOf="parent"
