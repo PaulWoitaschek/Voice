@@ -6,8 +6,7 @@ platform :android do
   ARTIFACT_FOLDER = 'artifacts'
   RELEASE_FOLDER = 'releases'
 
-  lane :ci do
-    build_apks
+  lane :tests do
     unit_tests
     lint
     ktLint
@@ -34,21 +33,12 @@ platform :android do
     )
   end
 
-  lane :build_apks do
-    gradle_with_default_flags(task: 'app:assembleRelease -x lint -x lintVitalRelease')
-    folder = ARTIFACT_FOLDER + '/apk'
-    copy_artifacts(
-      target_path: folder,
-      artifacts: ['app/build/outputs/apk/*/release/*.apk', 'app/build/outputs/mapping/*/release/mapping.txt']
-    )
-  end
-
   lane :unit_tests do
     gradle_with_default_flags(task: 'allUnitTests')
   end
 
   lane :lint do
-    gradle_with_default_flags(task: 'app:lintRelease')
+    gradle_with_default_flags(task: 'app:lintDebug')
   ensure
     folder = ARTIFACT_FOLDER + '/lint'
     copy_artifacts(
