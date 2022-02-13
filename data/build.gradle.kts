@@ -27,12 +27,6 @@ android {
       assets.srcDir(project.file("schemas"))
     }
   }
-
-  testOptions {
-    unitTests.isReturnDefaultValues = true
-    animationsDisabled = true
-    unitTests.isIncludeAndroidResources = true
-  }
 }
 
 tasks.withType<KotlinCompile>().configureEach {

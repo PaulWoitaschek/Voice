@@ -28,6 +28,11 @@ android {
   kotlinOptions {
     jvmTarget = VoiceVersions.javaCompileVersion.toString()
   }
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+    animationsDisabled = true
+    unitTests.isIncludeAndroidResources = true
+  }
 
   composeOptions {
     kotlinCompilerExtensionVersion = libs.composeVersion

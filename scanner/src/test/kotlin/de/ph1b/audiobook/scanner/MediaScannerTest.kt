@@ -2,7 +2,34 @@
 
 package de.ph1b.audiobook.scanner
 
-/* todo
+import android.net.Uri
+import android.webkit.MimeTypeMap
+import androidx.core.net.toFile
+import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.repo.BookContentRepo
+import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.ChapterRepo
+import de.ph1b.audiobook.data.repo.internals.AppDb
+import de.ph1b.audiobook.data.toUri
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.Shadows
+import java.io.Closeable
+import java.io.File
+import java.nio.file.Files
+
 @RunWith(AndroidJUnit4::class)
 class MediaScannerTest {
 
@@ -30,29 +57,32 @@ class MediaScannerTest {
 
     assertBookContents(
       BookContentView(
-        uri = book1.toUri(),
+        id = Book2.Id(book1.toUri()),
         chapters = book1Chapters.drop(1)
       )
     )
   }
+
 
   @Test
   fun metadataPreservedOnDeletion() = test {
     val audiobookFolder = folder("audiobooks")
 
     val book1 = File(audiobookFolder, "book1")
+    val book1Id = Book2.Id(book1.toUri())
     val book1Chapters = listOf(
       file(book1, "1.mp3"),
       file(book1, "2.mp3"),
       file(book1, "10.mp3"),
-    )
+    ).map(Chapter2::Id)
 
     scan(audiobookFolder)
 
-    val contentWithPositionAtLastChapter = bookContentRepo[book1.toUri()]!!.copy(currentChapter = book1Chapters.last())
+    bookRepo.flow(Book2.Id(book1.toUri())).first()
+    val contentWithPositionAtLastChapter = bookContentRepo.get(Book2.Id(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
     bookContentRepo.put(contentWithPositionAtLastChapter)
 
-    book1Chapters.forEach { it.toFile().delete() }
+    book1Chapters.forEach { it.toUri().toFile().delete() }
 
     scan(audiobookFolder)
 
@@ -60,8 +90,9 @@ class MediaScannerTest {
     file(book1, "2.mp3")
     file(book1, "10.mp3")
 
-    bookContentRepo[book1.toUri()] shouldBe contentWithPositionAtLastChapter
+    bookContentRepo.get(book1Id) shouldBe contentWithPositionAtLastChapter
   }
+
 
   @Test
   fun multipleRoots() = test {
@@ -85,9 +116,9 @@ class MediaScannerTest {
     scan(audiobookFolder1, audiobookFolder2)
 
     assertBookContents(
-      BookContentView(topFileBook, chapters = listOf(topFileBook)),
-      BookContentView(book1.toUri(), chapters = book1Chapters),
-      BookContentView(book2.toUri(), chapters = book2Chapters),
+      BookContentView(topFileBook.let(Book2::Id), chapters = listOf(topFileBook)),
+      BookContentView(book1.toUri().let(Book2::Id), chapters = book1Chapters),
+      BookContentView(book2.toUri().let(Book2::Id), chapters = book2Chapters),
     )
   }
 
@@ -99,10 +130,15 @@ class MediaScannerTest {
 
   private class TestEnvironment : Closeable {
 
-    val bookContentRepo = BookContentRepo()
-    private val chapterRepo = ChapterRepo()
+    private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
+      .allowMainThreadQueries()
+      .build()
+    val bookContentRepo = BookContentRepo(db.bookContent2Dao())
+    private val chapterRepo = ChapterRepo(db.chapter2Dao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     private val scanner = MediaScanner(bookContentRepo, chapterRepo, mediaAnalyzer)
+
+    val bookRepo = BookRepo2(chapterRepo, bookContentRepo)
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
@@ -133,11 +169,15 @@ class MediaScannerTest {
         .also { it.mkdirs() }
     }
 
-    fun assertBookContents(vararg expected: BookContentView) {
-      val actual = bookContentRepo.all()
-        .filter { it.isActive }
-        .map { BookContentView(uri = it.uri, chapters = it.chapters) }
-      actual shouldContainExactly expected.toList()
+    suspend fun assertBookContents(vararg expected: BookContentView) {
+      bookRepo.flow().first()
+        .map {
+          BookContentView(id = it.id,
+            chapters = it.content.chapters.map { chapter ->
+              chapter.toUri()
+            })
+        }
+        .shouldContainExactly(expected.toList())
     }
 
     override fun close() {
@@ -146,8 +186,7 @@ class MediaScannerTest {
   }
 
   data class BookContentView(
-    val uri:n Uri,
+    val id: Book2.Id,
     val chapters: List<Uri>
   )
 }
-*/
