@@ -25,17 +25,15 @@ android {
 
   signingConfigs {
     create("release") {
-      val props = Properties()
-      var propsFile = File(rootDir, "signing/signing.properties")
-      if (!propsFile.canRead()) {
-        println("Use CI keystore.")
-        propsFile = File(rootDir, "signing/ci/signing.properties")
-      }
-      props.load(propsFile.inputStream())
-      storeFile = File(propsFile.parentFile, props["STORE_FILE"] as String)
-      storePassword = props["STORE_PASSWORD"] as String
-      keyAlias = props["KEY_ALIAS"] as String
-      keyPassword = props["KEY_PASSWORD"] as String
+      val properties = Properties()
+      val propertiesFile = rootProject.file("signing/actual/signing.properties")
+        .takeIf { it.canRead() }
+        ?: rootProject.file("signing/ci/signing.properties")
+      properties.load(propertiesFile.inputStream())
+      storeFile = File(propertiesFile.parentFile, "signing.keystore")
+      storePassword = properties["STORE_PASSWORD"] as String
+      keyAlias = properties["KEY_ALIAS"] as String
+      keyPassword = properties["KEY_PASSWORD"] as String
     }
   }
 

@@ -13,6 +13,27 @@ platform :android do
     ktLint
   end
 
+  lane :publish_play do
+    File.write('play.json', ENV['PLAY_PUBLISH'])
+    File.write('../signing/actual/signing.keystore', Base64.decode64(ENV['SIGNING_KEYSTORE']))
+    File.write('../signing/actual/signing.properties', ENV['SIGNING_PROPERTIES'])
+
+    gradle_with_default_flags(task: 'app:bundleRelease -x lint -x lintVitalRelease')
+
+    upload_to_play_store(
+      json_key: 'play.json',
+      track: 'internal',
+      package_name: 'de.ph1b.audiobook',
+      skip_upload_images: true,
+      skip_upload_metadata: true,
+      skip_upload_screenshots: true,
+      skip_upload_apk: true,
+      timeout: 600,
+      aab: '../app/build/outputs/bundle/release/app-release.aab ',
+      mapping: '../app/build/outputs/mapping/release/mapping.txt '
+    )
+  end
+
   lane :build_apks do
     gradle_with_default_flags(task: 'app:assembleRelease -x lint -x lintVitalRelease')
     folder = ARTIFACT_FOLDER + '/apk'
@@ -27,15 +48,13 @@ platform :android do
   end
 
   lane :lint do
-    begin
-      gradle_with_default_flags(task: 'app:lintRelease')
-    ensure
-      folder = ARTIFACT_FOLDER + '/lint'
-      copy_artifacts(
-        target_path: folder,
-        artifacts: ['app/build/reports/*.html']
-      )
-    end
+    gradle_with_default_flags(task: 'app:lintRelease')
+  ensure
+    folder = ARTIFACT_FOLDER + '/lint'
+    copy_artifacts(
+      target_path: folder,
+      artifacts: ['app/build/reports/*.html']
+    )
   end
 
   lane :ktLint do

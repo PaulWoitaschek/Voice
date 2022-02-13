@@ -13,7 +13,6 @@ MaterialAudiobookPlayer.iml
 reports
 mainframer.sh
 .mainframer
-*.keystore
 artifacts
 testResults
 Gemfile.lock
