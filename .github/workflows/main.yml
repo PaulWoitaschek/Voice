@@ -25,8 +25,8 @@ jobs:
           name: "Artifacts"
           path: "artifacts"
 
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+      - uses: actions/upload-artifact@v2
         if: always()
         with:
-          files: ./**/test-results/test/**/TEST-*.xml
+          name: "Tests"
+          path: "**/test-results/**/TEST-*.xml"
