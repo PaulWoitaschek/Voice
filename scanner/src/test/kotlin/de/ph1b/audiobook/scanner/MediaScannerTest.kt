@@ -17,7 +17,7 @@ import de.ph1b.audiobook.data.repo.BookRepo2
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import de.ph1b.audiobook.data.repo.internals.AppDb
 import de.ph1b.audiobook.data.toUri
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -177,7 +177,7 @@ class MediaScannerTest {
               chapter.toUri()
             })
         }
-        .shouldContainExactly(expected.toList())
+        .shouldContainExactlyInAnyOrder(expected.toList())
     }
 
     override fun close() {
