@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [ push ]
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
 jobs:
@@ -10,17 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '2.7.2'
-        bundler-cache: true
-        
-    - run: bundle exec fastlane ci
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+          bundler-cache: true
 
-    - uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: "Artifacts"
-        path: "artifacts"
+      - run: bundle exec fastlane ci
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: "Artifacts"
+          path: "artifacts"
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: "TestResults"
+          path: ./**/test-results/test/**/TEST-*.xml
