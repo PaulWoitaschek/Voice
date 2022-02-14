@@ -30,8 +30,8 @@ platform :android do
       skip_upload_screenshots: true,
       skip_upload_apk: true,
       timeout: 600,
-      aab: '../app/build/outputs/bundle/release/app-release.aab ',
-      mapping: '../app/build/outputs/mapping/release/mapping.txt '
+      aab: 'app/build/outputs/bundle/release/app-release.aab',
+      mapping: 'app/build/outputs/mapping/release/mapping.txt'
     )
   end
 
