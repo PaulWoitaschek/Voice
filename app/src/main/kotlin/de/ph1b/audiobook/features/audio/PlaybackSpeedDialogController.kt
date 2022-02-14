@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import androidx.datastore.core.DataStore
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
@@ -51,10 +50,10 @@ class PlaybackSpeedDialogController : DialogController() {
     })
     binding.slider.value = speed
 
-    return MaterialDialog(activity!!).apply {
-      title(R.string.playback_speed)
-      customView(view = binding.root, scrollable = true)
-    }
+    return MaterialAlertDialogBuilder(activity!!)
+      .setTitle(R.string.playback_speed)
+      .setView(binding.root)
+      .create()
   }
 
   companion object {
