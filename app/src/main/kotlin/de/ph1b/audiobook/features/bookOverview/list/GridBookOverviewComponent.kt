@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.data.Book2
 import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
@@ -15,10 +16,10 @@ import de.ph1b.audiobook.misc.RoundRectOutlineProvider
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.recyclerComponent.AdapterComponent
-import de.ph1b.audiobook.uitools.SquareProgressView
 import voice.common.colorFromAttr
 import voice.common.formatTime
 import java.io.File
+import kotlin.math.roundToInt
 
 class GridBookOverviewComponent(private val listener: BookClickListener) :
   AdapterComponent<BookOverviewViewState, BookOverviewHolder>(BookOverviewViewState::class) {
@@ -87,7 +88,7 @@ data class BookOverviewBinding(
   val author: TextView?,
   val remainingTime: TextView,
   val playingIndicator: View,
-  val progress: SquareProgressView
+  val progress: LinearProgressIndicator
 )
 
 class BookOverviewHolder(
@@ -122,10 +123,11 @@ class BookOverviewHolder(
     binding.title.maxLines = if (binding.author?.isVisible == true) 1 else 2
     binding.cover.transitionName = model.transitionName
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
-    binding.progress.progress = model.progress
-    binding.progress.color = itemView.context.colorFromAttr(
+    binding.progress.progress = (model.progress * 100).roundToInt()
+    binding.progress.setIndicatorColor(itemView.context.colorFromAttr(
       if (model.isCurrentBook) R.attr.colorPrimary else R.attr.colorSecondary
-    )
+    ))
+
     val cover = model.cover
     if (boundCover != cover || boundBook != model.id) {
       binding.cover.load(cover) {

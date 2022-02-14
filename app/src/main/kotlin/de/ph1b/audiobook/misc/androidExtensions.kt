@@ -6,9 +6,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.injection.appComponent
-import java.io.File
 import kotlin.math.roundToInt
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
@@ -24,7 +21,5 @@ fun checkMainThread() {
     "Is not on ui thread!"
   }
 }
-
-fun Book.coverFile(): File = coverFile(appComponent.context)
 
 fun LayoutInflater.inflate(@LayoutRes resource: Int): View = inflate(resource, null, false)

@@ -70,9 +70,10 @@
           app:layout_constraintTop_toTopOf="@+id/remainingTime"
           tools:ignore="ContentDescription" />
 
-        <de.ph1b.audiobook.uitools.SquareProgressView
+        <com.google.android.material.progressindicator.LinearProgressIndicator
           android:id="@+id/progress"
           android:layout_width="0dp"
+          app:trackColor="@android:color/transparent"
           android:layout_height="wrap_content"
           app:layout_constraintBottom_toBottomOf="@+id/background"
           app:layout_constraintEnd_toEndOf="parent"

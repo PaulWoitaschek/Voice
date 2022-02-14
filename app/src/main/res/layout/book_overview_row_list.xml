@@ -80,10 +80,11 @@
           app:layout_constraintTop_toTopOf="@+id/clock"
           tools:text="32:01" />
 
-        <de.ph1b.audiobook.uitools.SquareProgressView
+        <com.google.android.material.progressindicator.LinearProgressIndicator
           android:id="@+id/progress"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          app:trackColor="@android:color/transparent"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent" />
