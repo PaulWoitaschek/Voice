@@ -39,14 +39,14 @@ fun TimeSettingDialog(
             sliderValue.value.roundToInt()
           )
         )
+        Slider(
+          valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
+          value = sliderValue.value,
+          onValueChange = {
+            sliderValue.value = it
+          }
+        )
       }
-      Slider(
-        valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
-        value = sliderValue.value,
-        onValueChange = {
-          sliderValue.value = it
-        }
-      )
     },
     confirmButton = {
       TextButton(
