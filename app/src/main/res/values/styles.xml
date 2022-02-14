@@ -4,6 +4,8 @@
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">@bool/use_light_status</item>
     </style>
 
     <!-- style for the bottom sheet items -->
