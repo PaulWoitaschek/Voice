@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'fileutils'
 
 default_platform(:android)
 
@@ -14,6 +15,7 @@ platform :android do
 
   lane :publish_play do
     File.write('play.json', ENV['PLAY_PUBLISH'])
+    FileUtils.mkdir_p('../signing/actual')
     File.write('../signing/actual/signing.keystore', Base64.decode64(ENV['SIGNING_KEYSTORE']))
     File.write('../signing/actual/signing.properties', ENV['SIGNING_PROPERTIES'])
 
