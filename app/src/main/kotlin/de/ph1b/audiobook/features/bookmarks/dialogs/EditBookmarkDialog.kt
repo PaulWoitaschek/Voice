@@ -25,8 +25,10 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
     val dialog = MaterialDialog(activity!!).apply {
       title(R.string.bookmark_edit_title)
-      val inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
-        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      val inputType = InputType.TYPE_CLASS_TEXT or
+        InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
+        InputType.TYPE_TEXT_FLAG_MULTI_LINE
       @Suppress("CheckResult")
       input(
         hintRes = R.string.bookmark_edit_hint,

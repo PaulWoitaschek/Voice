@@ -16,7 +16,8 @@ class AddBookmarkDialog : DialogController() {
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     val inputType = InputType.TYPE_CLASS_TEXT or
       InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
-      InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+      InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
+      InputType.TYPE_TEXT_FLAG_MULTI_LINE
     val dialog = MaterialDialog(activity!!).apply {
 
       title(R.string.bookmark)

@@ -58,15 +58,7 @@ class BookMarkHolder(
       bookmarkTitle != null && bookmarkTitle.isNotEmpty() -> bookmarkTitle
       else -> currentChapter.markForPosition(bookmark.time).name
     }
-    binding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(if (bookmark.setBySleepTimer) R.drawable.ic_sleep else 0, 0, 0, 0)
-    val size = chapters.size
-    val index = chapters.indexOf(currentChapter)
-
-    binding.summary.text = itemView.context.getString(
-      R.string.format_bookmarks_n_of,
-      index + 1,
-      size
-    )
+    binding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, if (bookmark.setBySleepTimer) R.drawable.ic_sleep else 0, 0)
     binding.time.text = formatTime(bookmark.time)
   }
 }
