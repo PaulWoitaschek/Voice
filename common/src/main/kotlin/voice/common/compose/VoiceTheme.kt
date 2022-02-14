@@ -9,40 +9,57 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.Dispatchers
-
-object VoiceColors {
-  val Red700 = Color(0xFFD32F2F)
-}
+import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
 fun VoiceTheme(
   content: @Composable () -> Unit
 ) {
-  MaterialTheme(colors = if (isDarkTheme()) {
-    darkColors(
-      primary = Color.Black,
-      onPrimary = Color.White,
-      secondary = VoiceColors.Red700,
-      secondaryVariant = VoiceColors.Red700
-    )
-  } else {
-    lightColors(
-      primary = Color.White,
-      onPrimary = Color.Black,
-      secondary = VoiceColors.Red700,
-      secondaryVariant = VoiceColors.Red700
-    )
-  }) {
-    androidx.compose.material3.MaterialTheme(colorScheme = if (isDarkTheme()) {
+  Material3Theme(
+    colorScheme = if (isDarkTheme()) {
       dynamicDarkColorScheme(LocalContext.current)
     } else {
       dynamicLightColorScheme(LocalContext.current)
-    }) {
+    }
+  ) {
+    val colorScheme = Material3Theme.colorScheme
+    MaterialTheme(
+      colors = if (isDarkTheme()) {
+        darkColors(
+          primary = colorScheme.primary,
+          primaryVariant = colorScheme.primary,
+          secondary = colorScheme.secondary,
+          secondaryVariant = colorScheme.secondary,
+          background = colorScheme.background,
+          surface = colorScheme.surface,
+          error = colorScheme.error,
+          onPrimary = colorScheme.onPrimary,
+          onSecondary = colorScheme.onSecondary,
+          onBackground = colorScheme.onBackground,
+          onSurface = colorScheme.onSurface,
+          onError = colorScheme.onError,
+        )
+      } else {
+        lightColors(
+          primary = colorScheme.primary,
+          primaryVariant = colorScheme.primary,
+          secondary = colorScheme.secondary,
+          secondaryVariant = colorScheme.secondary,
+          background = colorScheme.background,
+          surface = colorScheme.surface,
+          error = colorScheme.error,
+          onPrimary = colorScheme.onPrimary,
+          onSecondary = colorScheme.onSecondary,
+          onBackground = colorScheme.onBackground,
+          onSurface = colorScheme.onSurface,
+          onError = colorScheme.onError,
+        )
+      }
+    ) {
       content()
     }
   }
