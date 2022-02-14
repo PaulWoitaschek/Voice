@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.common.comparator
 
-import java.util.Comparator
-
 /**
  * Simple copy of IntelliJs-Community naturalCompare.
  * Licensed as Apache v2.

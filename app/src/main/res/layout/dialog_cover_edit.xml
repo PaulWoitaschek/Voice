@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/coverImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_cover" />
+      android:id="@+id/coverImage"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:adjustViewBounds="true"
+      android:contentDescription="@string/content_cover" />
 
     <de.ph1b.audiobook.features.imagepicker.CropOverlay
-        android:id="@+id/cropOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+      android:id="@+id/cropOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
 </FrameLayout>

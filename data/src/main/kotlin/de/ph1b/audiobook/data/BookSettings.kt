@@ -31,7 +31,7 @@ data class BookSettings(
 ) {
 
   @Ignore
-  val currentUri : Uri = currentFile.toUri()
+  val currentUri: Uri = currentFile.toUri()
 
   init {
     require(playbackSpeed >= Book.SPEED_MIN) { "speed $playbackSpeed must be >= ${Book.SPEED_MIN}" }

@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
-import java.util.ArrayList
 
 /**
  * Corrects media paths that have been falsely set.

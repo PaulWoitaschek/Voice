@@ -14,7 +14,6 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
 import java.util.InvalidPropertiesFormatException
 
 /**

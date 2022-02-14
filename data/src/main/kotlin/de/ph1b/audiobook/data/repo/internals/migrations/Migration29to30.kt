@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import de.ph1b.audiobook.data.repo.internals.moveToNextLoop
 import org.json.JSONObject
-import java.util.ArrayList
 
 // tables
 private const val TABLE_BOOK = "tableBooks"

@@ -2,7 +2,6 @@ package de.ph1b.audiobook.data.repo.internals.migrations
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
-import java.util.ArrayList
 
 /**
  * A previous version caused empty books to be added. So we delete them now.

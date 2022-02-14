@@ -3,8 +3,6 @@ package de.ph1b.audiobook.common.comparator
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
-import java.util.ArrayList
-import kotlin.Comparator
 
 
 object NaturalOrderComparator {
