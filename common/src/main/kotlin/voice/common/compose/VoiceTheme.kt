@@ -4,12 +4,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
 import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.Dispatchers
@@ -38,10 +39,9 @@ fun VoiceTheme(
     )
   }) {
     androidx.compose.material3.MaterialTheme(colorScheme = if (isDarkTheme()) {
-
-      darkColorScheme()
+      dynamicDarkColorScheme(LocalContext.current)
     } else {
-      lightColorScheme()
+      dynamicLightColorScheme(LocalContext.current)
     }) {
       content()
     }
