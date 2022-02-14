@@ -14,7 +14,7 @@ platform :android do
   end
 
   lane :publish_play do
-    File.write('play.json', ENV['PLAY_PUBLISH'])
+    File.write('../play.json', ENV['PLAY_PUBLISH'])
     FileUtils.mkdir_p('../signing/actual')
     File.write('../signing/actual/signing.keystore', Base64.decode64(ENV['SIGNING_KEYSTORE']))
     File.write('../signing/actual/signing.properties', ENV['SIGNING_PROPERTIES'])
