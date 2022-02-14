@@ -12,11 +12,11 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
-      android:textAppearance="?textAppearanceTitleMedium"
+      android:textAppearance="?textAppearanceBodyLarge"
       tools:text="10 seconds" />
 
-    <SeekBar
-      android:id="@+id/seekBar"
+    <com.google.android.material.slider.Slider
+      android:id="@+id/slider"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
