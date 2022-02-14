@@ -30,7 +30,7 @@
       android:maxLines="1"
       android:paddingTop="8dp"
       android:paddingBottom="8dp"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+      android:textAppearance="?textAppearanceHeadlineLarge"
       android:textColor="?android:attr/textColorPrimary"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"

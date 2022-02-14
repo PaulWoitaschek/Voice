@@ -11,28 +11,28 @@
       android:id="@+id/title"
       style="@style/BottomSheetRow"
       android:text="@string/change_book_name"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      android:textAppearance="?textAppearanceBodyMedium"
       app:drawableStartCompat="@drawable/format_text" />
 
     <TextView
       android:id="@+id/internetCover"
       style="@style/BottomSheetRow"
       android:text="@string/download_book_cover"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      android:textAppearance="?textAppearanceBodyMedium"
       app:drawableStartCompat="@drawable/ic_download" />
 
     <TextView
       android:id="@+id/fileCover"
       style="@style/BottomSheetRow"
       android:text="@string/pick_book_cover"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      android:textAppearance="?textAppearanceBodyMedium"
       app:drawableStartCompat="@drawable/ic_image" />
 
     <TextView
       android:id="@+id/bookmark"
       style="@style/BottomSheetRow"
       android:text="@string/bookmark"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+      android:textAppearance="?textAppearanceBodyMedium"
       app:drawableStartCompat="@drawable/bookmark" />
 
 </LinearLayout>

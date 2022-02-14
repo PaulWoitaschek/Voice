@@ -27,71 +27,30 @@
     </FrameLayout>
 
     <FrameLayout
+      android:id="@+id/webViewContainer"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-        <LinearLayout
-          android:id="@+id/noNetwork"
+        <WebView
+          android:id="@+id/webView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="#009688"
-          android:gravity="center"
-          android:orientation="vertical"
-          android:visibility="gone">
+          android:layout_height="match_parent" />
 
-            <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="16dp"
-              android:text="@string/network_top"
-              android:textColor="@android:color/white"
-              android:textSize="28sp" />
-
-            <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center_horizontal"
-              android:contentDescription="@string/no_network"
-              android:src="@drawable/wifi_off"
-              app:tint="@android:color/white" />
-
-        </LinearLayout>
-
-        <FrameLayout
-          android:id="@+id/webViewContainer"
+        <de.ph1b.audiobook.features.imagepicker.CropOverlay
+          android:id="@+id/cropOverlay"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:visibility="invisible">
+          android:layout_height="match_parent" />
 
-            <WebView
-              android:id="@+id/webView"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" />
-
-            <de.ph1b.audiobook.features.imagepicker.CropOverlay
-              android:id="@+id/cropOverlay"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-              android:id="@+id/fab"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="right|end|bottom"
-              android:layout_margin="16dp"
-              android:contentDescription="@string/cover_crop"
-              android:src="@drawable/crop"
-              tools:ignore="RtlHardcoded" />
-
-        </FrameLayout>
-
-        <ProgressBar
-          android:id="@+id/progressBar"
-          style="@style/Base.Widget.AppCompat.ProgressBar"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+          android:id="@+id/fab"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:indeterminate="true" />
+          android:layout_gravity="right|end|bottom"
+          android:text="@string/cover_crop"
+          app:icon="@drawable/crop"
+          android:layout_margin="16dp"
+          android:contentDescription="@string/cover_crop"
+          tools:ignore="RtlHardcoded" />
 
     </FrameLayout>
 

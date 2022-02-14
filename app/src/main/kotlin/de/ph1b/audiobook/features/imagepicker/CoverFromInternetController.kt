@@ -3,13 +3,9 @@ package de.ph1b.audiobook.features.imagepicker
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.view.isVisible
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
@@ -22,18 +18,14 @@ import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
 import de.ph1b.audiobook.scanner.CoverSaver
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import voice.common.conductor.ViewBindingController
 import java.net.URLEncoder
 import javax.inject.Inject
 
 private const val NI_BOOK_ID = "ni"
-private const val ABOUT_BLANK = "about:blank"
 private const val SI_URL = "savedUrl"
 
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
@@ -54,7 +46,6 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
 
   private var cab: AttachedCab? = null
 
-  private var webViewIsLoading = MutableStateFlow(false)
   private val book by lazy {
     val id = bundle.getBookId(NI_BOOK_ID)!!
     runBlocking {
@@ -74,25 +65,8 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       builtInZoomControls = true
       displayZoomControls = false
       javaScriptEnabled = true
-      userAgentString =
-        "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) " +
-          "AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     }
     webView.webViewClient = object : WebViewClient() {
-
-      override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-        super.onPageStarted(view, url, favicon)
-
-        Timber.i("page started with $url")
-        webViewIsLoading.value = true
-      }
-
-      override fun onPageFinished(view: WebView?, url: String?) {
-        super.onPageFinished(view, url)
-
-        Timber.i("page stopped with $url")
-        webViewIsLoading.value = false
-      }
 
       @Suppress("OverridingDeprecatedMember")
       override fun onReceivedError(
@@ -101,25 +75,8 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         description: String?,
         failingUrl: String?
       ) {
-        Timber.d("received webViewError. Set webView invisible")
-        view.loadUrl(ABOUT_BLANK)
-        progressBar.isVisible = false
-        noNetwork.isVisible = true
-        webViewContainer.isVisible = false
+        view.loadUrl(originalUrl)
       }
-    }
-
-    // after first successful load set visibilities
-    lifecycleScope.launch {
-      webViewIsLoading
-        .filter { it }
-        .collect {
-          // sets progressbar and webviews visibilities correctly once the page is loaded
-          Timber.i("WebView is now loading. Set webView visible")
-          progressBar.isVisible = false
-          noNetwork.isVisible = false
-          webViewContainer.isVisible = true
-        }
     }
 
     webView.loadUrl(originalUrl)
@@ -198,54 +155,13 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
           webView.loadUrl(originalUrl)
           true
         }
+        R.id.refresh -> {
+          webView.reload()
+          true
+        }
         else -> false
       }
     }
-
-    // set the rotating icon
-    val menu = toolbar.menu
-    val refreshItem = menu.findItem(R.id.refresh)
-    val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
-      repeatCount = Animation.INFINITE
-    }
-    val rotateView = LayoutInflater.from(activity).inflate(R.layout.rotate_view, null).apply {
-      animation = rotation
-      setOnClickListener { webView.reload() }
-    }
-    rotateView.setOnClickListener {
-      if (webView.url == ABOUT_BLANK) {
-        webView.loadUrl(originalUrl)
-      } else webView.reload()
-    }
-    refreshItem.actionView = rotateView
-
-    lifecycleScope.launch {
-      webViewIsLoading
-        .filter { it }
-        .filter { !rotation.hasStarted() }
-        .collect {
-          Timber.i("is loading. Start animation")
-          rotation.start()
-        }
-    }
-
-    rotation.setAnimationListener(
-      object : Animation.AnimationListener {
-        override fun onAnimationRepeat(p0: Animation?) {
-          if (!webViewIsLoading.value) {
-            Timber.i("we are in the refresh round. cancel now.")
-            rotation.cancel()
-            rotation.reset()
-          }
-        }
-
-        override fun onAnimationEnd(p0: Animation?) {
-        }
-
-        override fun onAnimationStart(p0: Animation?) {
-        }
-      }
-    )
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
@@ -261,21 +177,10 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       return true
     }
 
-    if (binding.noNetwork.isVisible) {
-      return false
-    }
-
-    if (binding.webView.canGoBack()) {
-      binding.webView.goBack()
-      return true
-    }
-
     return false
   }
 
   override fun onSaveViewState(view: View, outState: Bundle) {
-    if (binding.webView.url != ABOUT_BLANK) {
-      outState.putString(SI_URL, binding.webView.url)
-    }
+    outState.putString(SI_URL, binding.webView.url)
   }
 }

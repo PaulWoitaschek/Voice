@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-        tools:text="10 seconds" />
+      android:textAppearance="?textAppearanceTitleMedium"
+      tools:text="10 seconds" />
 
     <SeekBar
         android:id="@+id/seekBar"
