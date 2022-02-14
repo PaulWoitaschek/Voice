@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo
 
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.BookContent2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.Chapter
 import java.time.Instant
 import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
@@ -12,12 +12,12 @@ fun book(
   name: String = "TestBook",
   lastPlayedAtMillis: Long = 0L,
   addedAtMillis: Long = 0L
-): Book2 {
+): Book {
   val chapters = listOf(
     chapter(), chapter(),
   )
-  return Book2(
-    content = BookContent2(
+  return Book(
+    content = BookContent(
       author = UUID.randomUUID().toString(),
       name = name,
       positionInChapter = 42,
@@ -29,15 +29,15 @@ fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = Book2.Id(UUID.randomUUID().toString())
+      id = Book.Id(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )
 }
 
-private fun chapter(): Chapter2 {
-  return Chapter2(
-    id = Chapter2.Id("http://${UUID.randomUUID()}"),
+private fun chapter(): Chapter {
+  return Chapter(
+    id = Chapter.Id("http://${UUID.randomUUID()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),

@@ -10,7 +10,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.ChapterMark
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
@@ -27,7 +27,7 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var viewModel: SelectChapterViewModel
 
-  constructor(bookId: Book2.Id) : this(
+  constructor(bookId: Book.Id) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }

@@ -9,19 +9,19 @@ class BookSubject private constructor(failureMetaData: FailureMetadata, private 
   Subject(failureMetaData, actual) {
 
   fun positionIs(position: Long) {
-    if (actual?.content?.position != position) {
+    if (actual?.position != position) {
       failWithActual("position", position)
     }
   }
 
   fun durationIs(duration: Long) {
-    if (actual?.content?.duration != duration) {
+    if (actual?.duration != duration) {
       failWithActual("duration", duration)
     }
   }
 
   fun currentChapterIs(currentChapter: Chapter) {
-    if (actual?.content?.currentChapter != currentChapter) {
+    if (actual?.currentChapter != currentChapter) {
       failWithActual("currentChapter", currentChapter)
     }
   }
@@ -33,13 +33,13 @@ class BookSubject private constructor(failureMetaData: FailureMetadata, private 
   }
 
   fun nextChapterIs(nextChapter: Chapter?) {
-    if (actual?.content?.nextChapter != nextChapter) {
+    if (actual?.nextChapter != nextChapter) {
       failWithActual("nextChapter", arrayOf(nextChapter))
     }
   }
 
   fun previousChapterIs(previousChapter: Chapter?) {
-    if (actual?.content?.previousChapter != previousChapter) {
+    if (actual?.previousChapter != previousChapter) {
       failWithActual("previousChapter", arrayOf(previousChapter))
     }
   }

@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
 import de.ph1b.audiobook.common.pref.AudiobookFolders
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +26,7 @@ class MediaScanTrigger
   private val scanner: MediaScanner,
   private val context: Context,
   private val coverScanner: CoverScanner,
-  private val bookRepo: BookRepo2,
+  private val bookRepo: BookRepository,
 ) {
 
   private val _scannerActive = MutableStateFlow(false)

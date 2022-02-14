@@ -17,7 +17,7 @@ import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import coil.imageLoader
 import coil.request.ImageRequest
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -66,7 +66,7 @@ class NotificationCreator
 
   private var cachedImage: CachedImage? = null
 
-  suspend fun createNotification(book: Book2): Notification {
+  suspend fun createNotification(book: Book): Notification {
     val mediaStyle = MediaStyle()
       .setShowActionsInCompactView(0, 1, 2)
       .setCancelButtonIntent(stopIntent())
@@ -91,7 +91,7 @@ class NotificationCreator
       .build()
   }
 
-  private suspend fun cover(book: Book2): Bitmap {
+  private suspend fun cover(book: Book): Bitmap {
     cachedImage?.let {
       if (it.matches(book)) return it.cover
     }
@@ -115,17 +115,17 @@ class NotificationCreator
     return cover
   }
 
-  private suspend fun Builder.setLargeIcon(book: Book2): Builder {
+  private suspend fun Builder.setLargeIcon(book: Book): Builder {
     setLargeIcon(cover(book))
     return this
   }
 
-  private fun Builder.setContentTitle(book: Book2): Builder {
+  private fun Builder.setContentTitle(book: Book): Builder {
     setContentTitle(book.content.name)
     return this
   }
 
-  private fun contentIntent(book: Book2): PendingIntent {
+  private fun contentIntent(book: Book): PendingIntent {
     val contentIntent = toBookIntentProvider.goToBookIntent(book.content.id)
     return PendingIntent.getActivity(
       context,
@@ -135,7 +135,7 @@ class NotificationCreator
     )
   }
 
-  private fun Builder.setChapterInfo(book: Book2): Builder {
+  private fun Builder.setChapterInfo(book: Book): Builder {
     val chapters = book.content.chapters
     if (chapters.size > 1) {
       // we need the current chapter title and number only if there is more than one chapter.

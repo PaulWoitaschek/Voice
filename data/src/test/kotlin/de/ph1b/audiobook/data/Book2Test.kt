@@ -31,9 +31,9 @@ class Book2Test {
   }
 
   @Suppress("SameParameterValue")
-  private fun bookPosition(chapters: List<Chapter2>, currentChapter: Chapter2.Id, positionInChapter: Long): Long {
-    return Book2(
-      content = BookContent2(
+  private fun bookPosition(chapters: List<Chapter>, currentChapter: Chapter.Id, positionInChapter: Long): Long {
+    return Book(
+      content = BookContent(
         author = UUID.randomUUID().toString(),
         name = UUID.randomUUID().toString(),
         positionInChapter = positionInChapter,
@@ -45,15 +45,15 @@ class Book2Test {
         isActive = true,
         lastPlayedAt = Instant.EPOCH,
         skipSilence = false,
-        id = Book2.Id(UUID.randomUUID().toString())
+        id = Book.Id(UUID.randomUUID().toString())
       ),
       chapters = chapters,
     ).position
   }
 
-  private fun chapter(duration: Long): Chapter2 {
-    return Chapter2(
-      id = Chapter2.Id("http://${UUID.randomUUID()}"),
+  private fun chapter(duration: Long): Chapter {
+    return Chapter(
+      id = Chapter.Id("http://${UUID.randomUUID()}"),
       duration = duration,
       fileLastModified = Instant.EPOCH,
       markData = emptyList(),

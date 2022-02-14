@@ -11,7 +11,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.anvil.annotations.ContributesTo
 import de.ph1b.audiobook.AppScope
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.rootComponentAs
@@ -31,12 +31,12 @@ private const val NI_BOOK_ID = "niBookId"
 
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
-  constructor(bookId: Book2.Id) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
+  constructor(bookId: Book.Id) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
   @Inject
   lateinit var viewModel: BookPlayViewModel
 
-  private val bookId: Book2.Id = bundle.getBookId(NI_BOOK_ID)!!
+  private val bookId: Book.Id = bundle.getBookId(NI_BOOK_ID)!!
   private var coverLoaded = false
 
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()

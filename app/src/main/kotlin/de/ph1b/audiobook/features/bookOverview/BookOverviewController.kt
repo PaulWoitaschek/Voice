@@ -13,7 +13,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewBinding
 import de.ph1b.audiobook.features.GalleryPicker
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewAdapter
@@ -50,7 +50,7 @@ class BookOverviewController :
   }
 
   @field:[Inject CurrentBook]
-  lateinit var currentBookIdPref: DataStore<Book2.Id?>
+  lateinit var currentBookIdPref: DataStore<Book.Id?>
 
   @Inject
   lateinit var viewModel: BookOverviewViewModel
@@ -140,7 +140,7 @@ class BookOverviewController :
     }
   }
 
-  private fun invokeBookSelectionCallback(bookId: Book2.Id) {
+  private fun invokeBookSelectionCallback(bookId: Book.Id) {
     runBlocking {
       currentBookIdPref.updateData { bookId }
     }
@@ -237,14 +237,14 @@ class BookOverviewController :
     )
   }
 
-  override fun onInternetCoverRequested(book: Book2.Id) {
+  override fun onInternetCoverRequested(book: Book.Id) {
     router.pushController(
       CoverFromInternetController(book)
         .asTransaction()
     )
   }
 
-  override fun onFileCoverRequested(book: Book2.Id) {
+  override fun onFileCoverRequested(book: Book.Id) {
     galleryPicker.pick(book, this)
   }
 

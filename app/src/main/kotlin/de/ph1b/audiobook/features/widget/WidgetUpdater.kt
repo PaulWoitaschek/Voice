@@ -20,8 +20,8 @@ import coil.request.ImageRequest
 import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.misc.dpToPxRounded
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
@@ -35,9 +35,9 @@ import javax.inject.Inject
 @Reusable
 class WidgetUpdater @Inject constructor(
   private val context: Context,
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
+  private val currentBook: DataStore<Book.Id?>,
   private val playStateManager: PlayStateManager,
 ) {
 
@@ -60,7 +60,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun updateWidgetForId(book: Book2?, widgetId: Int) {
+  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -68,7 +68,7 @@ class WidgetUpdater @Inject constructor(
     }
   }
 
-  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book2) {
+  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -120,7 +120,7 @@ class WidgetUpdater @Inject constructor(
       return orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
-  private suspend fun initElements(remoteViews: RemoteViews, book: Book2, coverSize: Int) {
+  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
     val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 

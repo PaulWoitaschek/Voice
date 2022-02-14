@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features.bookmarks.list
 import android.text.format.DateUtils
 import android.view.ViewGroup
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Bookmark2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.markForPosition
 import de.ph1b.audiobook.databinding.BookmarkRowLayoutBinding
 import de.ph1b.audiobook.uitools.ViewBindingHolder
@@ -20,7 +20,7 @@ class BookMarkHolder(
   private val listener: BookmarkClickListener
 ) : ViewBindingHolder<BookmarkRowLayoutBinding>(parent, BookmarkRowLayoutBinding::inflate) {
 
-  var boundBookmark: Bookmark2? = null
+  var boundBookmark: Bookmark? = null
     private set
 
   init {
@@ -36,7 +36,7 @@ class BookMarkHolder(
     }
   }
 
-  fun bind(bookmark: Bookmark2, chapters: List<Chapter2>) {
+  fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
     boundBookmark = bookmark
     val currentChapter = chapters.single { it.id == bookmark.chapterId }
     val bookmarkTitle = bookmark.title

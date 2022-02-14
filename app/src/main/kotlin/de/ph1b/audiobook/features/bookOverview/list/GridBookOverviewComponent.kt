@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.BookOverviewRowGridBinding
 import de.ph1b.audiobook.databinding.BookOverviewRowListBinding
 import de.ph1b.audiobook.misc.RoundRectOutlineProvider
@@ -96,7 +96,7 @@ class BookOverviewHolder(
   private val listener: BookClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-  private var boundBook: Book2.Id? = null
+  private var boundBook: Book.Id? = null
   private var boundCover: File? = null
 
   init {

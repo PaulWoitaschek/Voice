@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.scanner
 
 import android.content.Context
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.toUri
 import de.ph1b.audiobook.ffmpeg.ffmpeg
 import javax.inject.Inject
@@ -12,11 +12,11 @@ class CoverScanner
   private val coverSaver: CoverSaver,
 ) {
 
-  suspend fun scan(books: List<Book2>) {
+  suspend fun scan(books: List<Book>) {
     books.forEach { findCoverForBook(it) }
   }
 
-  private suspend fun findCoverForBook(book: Book2) {
+  private suspend fun findCoverForBook(book: Book) {
     val coverFile = book.content.cover
     if (coverFile != null && coverFile.exists())
       return
@@ -28,7 +28,7 @@ class CoverScanner
     scanForEmbeddedCover(book)
   }
 
-  private suspend fun findAndSaveCoverFromDisc(book: Book2): Boolean {
+  private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean {
 /*    withContext(Dispatchers.IO){
       val chapters = book.content.chapters todo
 
@@ -50,7 +50,7 @@ class CoverScanner
     return false
   }
 
-  private suspend fun scanForEmbeddedCover(book: Book2) {
+  private suspend fun scanForEmbeddedCover(book: Book) {
     val coverFile = coverSaver.newBookCoverFile()
     book.chapters
       .take(5).forEach { chapter ->

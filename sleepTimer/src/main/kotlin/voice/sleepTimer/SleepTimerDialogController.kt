@@ -12,10 +12,10 @@ import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.AppScope
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.flow.first
@@ -32,7 +32,7 @@ private const val SI_MINUTES = "si#time"
  */
 class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(bookId: Book2.Id) : this(
+  constructor(bookId: Book.Id) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }
@@ -45,7 +45,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   lateinit var sleepTimer: SleepTimer
 
   @Inject
-  lateinit var bookRepo: BookRepo2
+  lateinit var bookRepo: BookRepository
 
   init {
     rootComponentAs<Component>().inject(this)

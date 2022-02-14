@@ -10,10 +10,10 @@ import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.ImagePickerBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.popOrBack
@@ -30,7 +30,7 @@ private const val SI_URL = "savedUrl"
 
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
 
-  constructor(bookId: Book2.Id) : this(Bundle().apply {
+  constructor(bookId: Book.Id) : this(Bundle().apply {
     putBookId(NI_BOOK_ID, bookId)
   })
 
@@ -39,7 +39,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   }
 
   @Inject
-  lateinit var repo: BookRepo2
+  lateinit var repo: BookRepository
 
   @Inject
   lateinit var coverSaver: CoverSaver

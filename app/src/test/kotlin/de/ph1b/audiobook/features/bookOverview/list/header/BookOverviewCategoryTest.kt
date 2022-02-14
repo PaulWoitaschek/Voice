@@ -44,8 +44,6 @@ class BookOverviewCategoryTest {
         )
       )
     }
-    println(book.position)
-    println(book.duration)
     assertThat(book.category).isEqualTo(BookOverviewCategory.CURRENT)
   }
 }

@@ -10,9 +10,9 @@ import androidx.datastore.core.DataStore
 import dagger.Reusable
 import de.ph1b.audiobook.common.ApplicationIdProvider
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.BookComparator
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -25,9 +25,9 @@ import javax.inject.Inject
 class MediaBrowserHelper
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   @CurrentBook
-  private val currentBookId: DataStore<Book2.Id?>,
+  private val currentBookId: DataStore<Book.Id?>,
   private val context: Context,
   private val applicationIdProvider: ApplicationIdProvider
 ) {
@@ -46,7 +46,7 @@ class MediaBrowserHelper
     return when (type) {
       is BookUriConverter.Parsed.AllBooks -> {
         val allBooks = repo.flow().first()
-          .sortedWith(BookComparator.BY_LAST_PLAYED)
+          .sortedWith(BookComparator.ByLastPlayed)
         val currentBookId = currentBookId.data.first()
         val currentBook = allBooks.find { it.id == currentBookId }
         if (currentBook == null) {
@@ -70,7 +70,7 @@ class MediaBrowserHelper
 
   private fun currentBookTitlePrefix() = "${context.getString(R.string.current_book)}: "
 
-  private suspend fun Book2.toMediaDescription(
+  private suspend fun Book.toMediaDescription(
     titlePrefix: String = ""
   ): MediaBrowserCompat.MediaItem {
     val iconUri = content.cover?.let { fileProviderUri(it) }

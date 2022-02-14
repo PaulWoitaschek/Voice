@@ -1,9 +1,10 @@
 package de.ph1b.audiobook.playback.session
 
 import android.net.Uri
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Chapter
 import javax.inject.Inject
+import de.ph1b.audiobook.data.Book.Id as BookId
+import de.ph1b.audiobook.data.Chapter.Id as ChapterId
 
 private const val SCHEME = "voice"
 private const val BOOK_ID = "book"
@@ -15,11 +16,11 @@ class BookUriConverter
 
   fun allBooksId(): String = uri { }
 
-  fun book(book: Book2.Id): String = uri {
+  fun book(book: BookId): String = uri {
     appendQueryParameter(BOOK_ID, book.value)
   }
 
-  fun chapter(book: Book2.Id, chapter: Chapter2.Id): String = uri {
+  fun chapter(book: BookId, chapter: Chapter.Id): String = uri {
     appendQueryParameter(BOOK_ID, book.value)
     appendQueryParameter(CHAPTER_ID, chapter.value)
   }
@@ -39,8 +40,8 @@ class BookUriConverter
       return null
     }
 
-    val bookId = uri.getQueryParameter(BOOK_ID)?.let(Book2::Id)
-    val chapterId = uri.getQueryParameter(CHAPTER_ID)?.let(Chapter2::Id)
+    val bookId = uri.getQueryParameter(BOOK_ID)?.let(::BookId)
+    val chapterId = uri.getQueryParameter(CHAPTER_ID)?.let(::ChapterId)
 
     return when {
       bookId == null -> Parsed.AllBooks
@@ -54,8 +55,8 @@ class BookUriConverter
     object AllBooks : Parsed
 
     @JvmInline
-    value class Book(val bookId: Book2.Id) : Parsed
+    value class Book(val bookId: BookId) : Parsed
 
-    data class Chapter(val bookId: Book2.Id, val chapterId: Chapter2.Id) : Parsed
+    data class Chapter(val bookId: BookId, val chapterId: ChapterId) : Parsed
   }
 }

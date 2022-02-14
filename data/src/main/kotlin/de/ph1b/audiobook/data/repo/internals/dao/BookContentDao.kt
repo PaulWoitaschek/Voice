@@ -4,14 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.BookContent
 
 @Dao
-interface Chapter2Dao {
-
-  @Query("SELECT * FROM chapters2 WHERE id = :id")
-  suspend fun chapter(id: Chapter2.Id): Chapter2?
+interface BookContentDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insert(chapter2: Chapter2)
+  suspend fun insert(content: BookContent)
+
+  @Query("SELECT * FROM content2")
+  suspend fun all(): List<BookContent>
 }

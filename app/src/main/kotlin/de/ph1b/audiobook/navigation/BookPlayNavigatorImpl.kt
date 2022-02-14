@@ -2,7 +2,7 @@ package de.ph1b.audiobook.navigation
 
 import com.squareup.anvil.annotations.ContributesBinding
 import de.ph1b.audiobook.AppScope
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.audio.PlaybackSpeedDialogController
 import de.ph1b.audiobook.features.bookPlaying.selectchapter.SelectChapterDialog
 import de.ph1b.audiobook.features.bookmarks.BookmarkController
@@ -24,11 +24,11 @@ class BookPlayNavigatorImpl
     navigator.push(PlaybackSpeedDialogController())
   }
 
-  override fun toBookmarkDialog(id: Book2.Id) {
+  override fun toBookmarkDialog(id: Book.Id) {
     navigator.push(BookmarkController(id))
   }
 
-  override fun toSelectChapters(id: Book2.Id) {
+  override fun toSelectChapters(id: Book.Id) {
     navigator.push(SelectChapterDialog(id))
   }
 }

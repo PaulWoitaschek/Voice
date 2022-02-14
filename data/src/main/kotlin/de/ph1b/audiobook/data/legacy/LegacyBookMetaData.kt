@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.data
+package de.ph1b.audiobook.data.legacy
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 import java.util.UUID
 
 @Entity(tableName = "bookMetaData")
-data class BookMetaData(
+data class LegacyBookMetaData(
   @ColumnInfo(name = "id")
   @PrimaryKey
   val id: UUID,
   @ColumnInfo(name = "type")
-  val type: Book.Type,
+  val type: LegacyBookType,
   @ColumnInfo(name = "author")
   val author: String?,
   @ColumnInfo(name = "name")

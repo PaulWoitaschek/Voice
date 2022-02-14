@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Bookmark2
+import de.ph1b.audiobook.data.Bookmark
 import de.ph1b.audiobook.data.getBookmarkId
 import de.ph1b.audiobook.data.putBookmarkId
 
@@ -56,7 +56,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onEditBookmark(id: Bookmark2.Id, title: String)
+    fun onEditBookmark(id: Bookmark.Id, title: String)
   }
 
   companion object {
@@ -66,7 +66,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
     operator fun <T> invoke(
       target: T,
-      bookmark: Bookmark2
+      bookmark: Bookmark
     ): EditBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
         putBookmarkId(NI_BOOKMARK_ID, bookmark.id)

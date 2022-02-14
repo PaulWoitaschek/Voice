@@ -2,8 +2,8 @@ package de.ph1b.audiobook.playback.androidauto
 
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.session.ChangeNotifier
 import kotlinx.coroutines.flow.filter
@@ -18,9 +18,9 @@ import javax.inject.Inject
 class NotifyOnAutoConnectionChange
 @Inject constructor(
   private val changeNotifier: ChangeNotifier,
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
+  private val currentBook: DataStore<Book.Id?>,
   private val autoConnection: AndroidAutoConnectedReceiver
 ) {
 

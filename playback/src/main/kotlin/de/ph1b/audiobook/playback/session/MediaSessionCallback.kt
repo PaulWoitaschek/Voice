@@ -5,8 +5,8 @@ import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.playback.BuildConfig
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
 import de.ph1b.audiobook.playback.di.PlaybackScope
@@ -25,7 +25,7 @@ class MediaSessionCallback
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
+  private val currentBook: DataStore<Book.Id?>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,
@@ -136,7 +136,7 @@ class MediaSessionCallback
         player.setSkipSilences(skip)
       }
       SET_POSITION_ACTION -> {
-        val id = Chapter2.Id(extras!!.getString(SET_POSITION_EXTRA_CHAPTER)!!)
+        val id = Chapter.Id(extras!!.getString(SET_POSITION_EXTRA_CHAPTER)!!)
         val time = extras.getLong(SET_POSITION_EXTRA_TIME)
         player.changePosition(time, id)
       }
@@ -172,7 +172,7 @@ private const val SET_POSITION_ACTION = "setPosition"
 private const val SET_POSITION_EXTRA_TIME = "$SET_POSITION_ACTION#time"
 private const val SET_POSITION_EXTRA_CHAPTER = "$SET_POSITION_ACTION#uri"
 
-fun TransportControls.setPosition(time: Long, id: Chapter2.Id) = sendCustomAction(SET_POSITION_ACTION) {
+fun TransportControls.setPosition(time: Long, id: Chapter.Id) = sendCustomAction(SET_POSITION_ACTION) {
   putString(SET_POSITION_EXTRA_CHAPTER, id.value)
   putLong(SET_POSITION_EXTRA_TIME, time)
 }

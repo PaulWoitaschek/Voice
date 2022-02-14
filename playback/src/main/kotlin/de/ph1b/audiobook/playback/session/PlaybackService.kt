@@ -17,8 +17,8 @@ import androidx.media.MediaBrowserServiceCompat
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.androidauto.NotifyOnAutoConnectionChange
 import de.ph1b.audiobook.playback.di.PlaybackComponentFactoryProvider
 import de.ph1b.audiobook.playback.misc.flowBroadcastReceiver
@@ -54,13 +54,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
   @field:[Inject CurrentBook]
-  lateinit var currentBookIdPref: DataStore<Book2.Id?>
+  lateinit var currentBookIdPref: DataStore<Book.Id?>
 
   @Inject
   lateinit var player: MediaPlayer
 
   @Inject
-  lateinit var repo: BookRepo2
+  lateinit var repo: BookRepository
 
   @Inject
   lateinit var notificationManager: NotificationManager
@@ -156,7 +156,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
   }
 
-  private suspend fun updateNotification(book: Book2): Notification {
+  private suspend fun updateNotification(book: Book): Notification {
     return notificationCreator.createNotification(book).also {
       notificationManager.notify(NOTIFICATION_ID, it)
     }

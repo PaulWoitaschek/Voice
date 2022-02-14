@@ -2,11 +2,10 @@ package voice.playbackScreen
 
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.durationMs
 import de.ph1b.audiobook.data.markForPosition
-import de.ph1b.audiobook.data.repo.BookRepo2
-import de.ph1b.audiobook.data.repo.BookmarkRepo
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import kotlinx.coroutines.MainScope
@@ -22,13 +21,12 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class BookPlayViewModel
 @Inject constructor(
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   private val player: PlayerController,
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
-  private val bookmarkRepo: BookmarkRepo,
   @CurrentBook
-  private val currentBookId: DataStore<Book2.Id?>,
+  private val currentBookId: DataStore<Book.Id?>,
   private val navigator: BookPlayNavigator
 ) {
 
@@ -37,7 +35,7 @@ class BookPlayViewModel
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
-  lateinit var bookId: Book2.Id
+  lateinit var bookId: Book.Id
 
   fun viewState(): Flow<BookPlayViewState> {
     scope.launch {

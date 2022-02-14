@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.playback.session.PlaybackService
 import de.ph1b.audiobook.playback.session.forcedNext
 import de.ph1b.audiobook.playback.session.forcedPrevious
@@ -52,7 +52,7 @@ class PlayerController
     browser.connect()
   }
 
-  fun setPosition(time: Long, id: Chapter2.Id) = execute { it.setPosition(time, id) }
+  fun setPosition(time: Long, id: Chapter.Id) = execute { it.setPosition(time, id) }
 
   fun skipSilence(skip: Boolean) = execute { it.skipSilence(skip) }
 

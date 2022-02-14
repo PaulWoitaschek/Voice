@@ -61,8 +61,7 @@ tasks {
     val tests = subprojects.mapNotNull { subProject ->
       val tasks = subProject.tasks
       (
-        tasks.findByName("testReleaseUnitTest")
-          ?: tasks.findByName("testDebugUnitTest")
+        tasks.findByName("testDebugUnitTest")
           ?: tasks.findByName("test")
         ) as? Test
     }

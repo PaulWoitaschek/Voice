@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.data.repo.internals
 
 import com.google.common.truth.Truth.assertThat
-import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.MarkData
+import de.ph1b.audiobook.data.legacy.LegacyBookType
 import org.junit.Test
 import java.io.File
 import java.time.Instant
@@ -27,7 +27,7 @@ class ConvertersTest {
 
   @Test
   fun bookType() {
-    Book.Type.values().forEach { bookType ->
+    LegacyBookType.values().forEach { bookType ->
       test(bookType, Converters::fromBookType, Converters::toBookType)
     }
   }

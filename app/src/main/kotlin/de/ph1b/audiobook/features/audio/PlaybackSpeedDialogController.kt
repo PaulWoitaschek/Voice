@@ -10,8 +10,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogAmountChooserBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.progressChangedStream
@@ -31,10 +30,10 @@ import javax.inject.Inject
 class PlaybackSpeedDialogController : DialogController() {
 
   @Inject
-  lateinit var repo: BookRepo2
+  lateinit var repo: BookRepository
 
   @field:[Inject CurrentBook]
-  lateinit var currentBook: DataStore<Book2.Id?>
+  lateinit var currentBook: DataStore<Book.Id?>
 
   @Inject
   lateinit var playerController: PlayerController

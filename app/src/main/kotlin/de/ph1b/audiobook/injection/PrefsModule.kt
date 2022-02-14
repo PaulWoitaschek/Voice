@@ -18,7 +18,7 @@ import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.common.pref.AudiobookFolders
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.GridMode
 import de.ph1b.audiobook.serialization.SerializableDataStoreFactory
 import de.ph1b.audiobook.serialization.UriSerializer
@@ -113,9 +113,9 @@ object PrefsModule {
   @Provides
   @Singleton
   @CurrentBook
-  fun currentBook(factory: SerializableDataStoreFactory): DataStore<Book2.Id?> {
+  fun currentBook(factory: SerializableDataStoreFactory): DataStore<Book.Id?> {
     return factory.create(
-      serializer = Book2.Id.serializer().nullable,
+      serializer = Book.Id.serializer().nullable,
       fileName = "currentBook",
       defaultValue = null
     )

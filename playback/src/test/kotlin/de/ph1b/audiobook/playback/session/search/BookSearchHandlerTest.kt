@@ -2,10 +2,10 @@ package de.ph1b.audiobook.playback.session.search
 
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.BookContent2
-import de.ph1b.audiobook.data.Chapter2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -25,9 +25,9 @@ class BookSearchHandlerTest {
 
   private val searchHandler: BookSearchHandler
 
-  private val repo = mockk<BookRepo2>()
+  private val repo = mockk<BookRepository>()
   private val player = mockk<PlayerController>(relaxUnitFun = true)
-  private val currentBookId = MemoryDataStore<Book2.Id?>(null)
+  private val currentBookId = MemoryDataStore<Book.Id?>(null)
 
   private val anotherBook = book(listOf(chapter(), chapter()))
   private val bookToFind = book(listOf(chapter(), chapter()))
@@ -47,8 +47,8 @@ class BookSearchHandlerTest {
     verify(exactly = 1) { player.play() }
   }
 
-  private suspend fun currentBookIdShouldBe(book2: Book2 = bookToFind) {
-    currentBookId.data.first() shouldBe book2.content.id
+  private suspend fun currentBookIdShouldBe(book: Book = bookToFind) {
+    currentBookId.data.first() shouldBe book.content.id
   }
 
   @Test
@@ -125,9 +125,9 @@ class BookSearchHandlerTest {
   }
 }
 
-fun book(chapters: List<Chapter2>): Book2 {
-  return Book2(
-    content = BookContent2(
+fun book(chapters: List<Chapter>): Book {
+  return Book(
+    content = BookContent(
       author = UUID.randomUUID().toString(),
       name = UUID.randomUUID().toString(),
       positionInChapter = 42,
@@ -139,15 +139,15 @@ fun book(chapters: List<Chapter2>): Book2 {
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = Book2.Id(UUID.randomUUID().toString())
+      id = Book.Id(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )
 }
 
-private fun chapter(): Chapter2 {
-  return Chapter2(
-    id = Chapter2.Id(UUID.randomUUID().toString()),
+private fun chapter(): Chapter {
+  return Chapter(
+    id = Chapter.Id(UUID.randomUUID().toString()),
     name = UUID.randomUUID().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,

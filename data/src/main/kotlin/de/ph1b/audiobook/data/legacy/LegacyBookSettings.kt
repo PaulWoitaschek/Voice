@@ -1,16 +1,13 @@
-package de.ph1b.audiobook.data
+package de.ph1b.audiobook.data.legacy
 
-import android.net.Uri
-import androidx.core.net.toUri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.io.File
 import java.util.UUID
 
 @Entity(tableName = "bookSettings")
-data class BookSettings(
+data class LegacyBookSettings(
   @ColumnInfo(name = "id")
   @PrimaryKey
   val id: UUID,
@@ -28,15 +25,4 @@ data class BookSettings(
   val active: Boolean,
   @ColumnInfo(name = "lastPlayedAtMillis")
   val lastPlayedAtMillis: Long
-) {
-
-  @Ignore
-  val currentUri: Uri = currentFile.toUri()
-
-  init {
-    require(playbackSpeed >= Book.SPEED_MIN) { "speed $playbackSpeed must be >= ${Book.SPEED_MIN}" }
-    require(playbackSpeed <= Book.SPEED_MAX) { "speed $playbackSpeed must be <= ${Book.SPEED_MAX}" }
-    require(positionInChapter >= 0) { "positionInChapter must not be negative" }
-    require(loudnessGain >= 0) { "loudnessGain must not be negative" }
-  }
-}
+)

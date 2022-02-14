@@ -25,7 +25,7 @@ object SortingModule {
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.CURRENT)
   fun currentComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
-    return prefs.enum(BookOverviewCategory.CURRENT.name, BookComparator.BY_NAME)
+    return prefs.enum(BookOverviewCategory.CURRENT.name, BookComparator.ByName)
   }
 
   @Provides
@@ -33,7 +33,7 @@ object SortingModule {
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.NOT_STARTED)
   fun notStartedComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
-    return prefs.enum(BookOverviewCategory.NOT_STARTED.name, BookComparator.BY_NAME, BookComparator::class.java)
+    return prefs.enum(BookOverviewCategory.NOT_STARTED.name, BookComparator.ByName, BookComparator::class.java)
   }
 
   @Provides
@@ -41,6 +41,6 @@ object SortingModule {
   @IntoMap
   @BookOverviewCategoryKey(BookOverviewCategory.FINISHED)
   fun finishedComparatorPref(prefs: AndroidPreferences): Pref<BookComparator> {
-    return prefs.enum(BookOverviewCategory.FINISHED.name, BookComparator.BY_NAME, BookComparator::class.java)
+    return prefs.enum(BookOverviewCategory.FINISHED.name, BookComparator.ByName, BookComparator::class.java)
   }
 }

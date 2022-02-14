@@ -8,11 +8,11 @@ import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.BookContent2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.markForPosition
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.di.PlaybackScope
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState
@@ -53,15 +53,15 @@ constructor(
   private val dataSourceConverter: DataSourceConverter,
   private val player: ExoPlayer,
   private val changeNotifier: ChangeNotifier,
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
+  private val currentBook: DataStore<Book.Id?>,
 ) {
 
   private val scope = MainScope()
 
-  private val _book = MutableStateFlow<Book2?>(null)
-  var book: Book2?
+  private val _book = MutableStateFlow<Book?>(null)
+  var book: Book?
     get() = _book.value
     private set(value) {
       _book.value = value
@@ -170,7 +170,7 @@ constructor(
     changeNotifier.updatePlaybackState(playbackStateCompat, book)
   }
 
-  private fun alreadyInitializedChapters(book: Book2): Boolean {
+  private fun alreadyInitializedChapters(book: Book): Boolean {
     val currentBook = this.book
       ?: return false
     return currentBook.chapters == book.chapters
@@ -241,7 +241,7 @@ constructor(
     }
   }
 
-  private fun previousByFile(content: Book2, toNullOfNewTrack: Boolean) {
+  private fun previousByFile(content: Book, toNullOfNewTrack: Boolean) {
     checkMainThread()
     val previousChapter = content.previousChapter
     if (player.currentPosition > 2000 || previousChapter == null) {
@@ -258,7 +258,7 @@ constructor(
     }
   }
 
-  private fun previousByMarks(content: Book2): Boolean {
+  private fun previousByMarks(content: Book): Boolean {
     val currentChapter = content.currentChapter
     val currentMark = currentChapter.markForPosition(content.content.positionInChapter)
     val timePlayedInMark = content.content.positionInChapter - currentMark.startMs
@@ -351,7 +351,7 @@ constructor(
     }
   }
 
-  fun changePosition(time: Long, changedChapter: Chapter2.Id? = null) {
+  fun changePosition(time: Long, changedChapter: Chapter.Id? = null) {
     Timber.v("changePosition with time $time and file $changedChapter")
     prepare()
     if (state == PlayerState.IDLE)
@@ -363,7 +363,7 @@ constructor(
     }
   }
 
-  fun changePosition(chapter: Chapter2.Id) {
+  fun changePosition(chapter: Chapter.Id) {
     checkMainThread()
     Timber.v("chapterPosition($chapter)")
     prepare()
@@ -400,7 +400,7 @@ constructor(
     scope.cancel()
   }
 
-  private fun updateContent(update: BookContent2.() -> BookContent2) {
+  private fun updateContent(update: BookContent.() -> BookContent) {
     val book = book ?: return
     val updated = book.copy(content = update(book.content))
     this.book = updated

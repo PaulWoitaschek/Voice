@@ -4,8 +4,8 @@ import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import de.ph1b.audiobook.common.pref.CurrentBook
 import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.features.bookOverview.list.BookOverviewViewState
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewCategory
 import de.ph1b.audiobook.features.gridCount.GridCount
@@ -23,12 +23,12 @@ import javax.inject.Named
 class BookOverviewViewModel
 @Inject
 constructor(
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   @CurrentBook
-  private val currentBookDataStore: DataStore<Book2.Id?>,
+  private val currentBookDataStore: DataStore<Book.Id?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
@@ -64,9 +64,9 @@ constructor(
   }
 
   private fun state(
-    books: List<Book2>,
+    books: List<Book>,
     scannerActive: Boolean,
-    currentBookId: Book2.Id?,
+    currentBookId: Book.Id?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState {
@@ -87,8 +87,8 @@ constructor(
   }
 
   private fun content(
-    books: List<Book2>,
-    currentBookId: Book2.Id?,
+    books: List<Book>,
+    currentBookId: Book.Id?,
     playing: Boolean,
     gridMode: GridMode
   ): BookOverviewState.Content {
@@ -113,9 +113,9 @@ constructor(
   }
 
   private fun content(
-    books: List<Book2>,
+    books: List<Book>,
     category: BookOverviewCategory,
-    currentBookId: Book2.Id?,
+    currentBookId: Book.Id?,
     amountOfColumns: Int
   ): BookOverviewCategoryContent? {
     val booksOfCategory = books.filter(category.filter).sortedWith(category.comparator)

@@ -10,8 +10,8 @@ import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UN
 import androidx.core.graphics.drawable.toBitmap
 import coil.imageLoader
 import coil.request.ImageRequest
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.toUri
 import de.ph1b.audiobook.playback.R
 import de.ph1b.audiobook.playback.androidauto.AndroidAutoConnectedReceiver
@@ -83,7 +83,7 @@ class ChangeNotifier
       R.drawable.ic_skip_next
     )
 
-  fun updatePlaybackState(@PlaybackStateCompat.State state: Int, book: Book2?) {
+  fun updatePlaybackState(@PlaybackStateCompat.State state: Int, book: Book?) {
     val builder = if (autoConnectedReceiver.connected) {
       playbackStateBuilderForAuto
     } else {
@@ -105,7 +105,7 @@ class ChangeNotifier
     mediaSession.setPlaybackState(playbackState)
   }
 
-  suspend fun updateMetadata(book: Book2) {
+  suspend fun updateMetadata(book: Book) {
     val content = book.content
     val currentChapter = book.currentChapter
 
@@ -149,7 +149,7 @@ class ChangeNotifier
     }
   }
 
-  private fun appendQueue(book: Book2) {
+  private fun appendQueue(book: Book) {
     val queue = book.chapters.mapIndexed { index, chapter ->
       MediaSessionCompat.QueueItem(chapter.toMediaDescription(book), index.toLong())
     }
@@ -160,7 +160,7 @@ class ChangeNotifier
     }
   }
 
-  private fun Chapter2.toMediaDescription(book: Book2): MediaDescriptionCompat {
+  private fun Chapter.toMediaDescription(book: Book): MediaDescriptionCompat {
     return MediaDescriptionCompat.Builder()
       .setTitle(name)
       .setMediaId(bookUriConverter.chapter(book.id, id))

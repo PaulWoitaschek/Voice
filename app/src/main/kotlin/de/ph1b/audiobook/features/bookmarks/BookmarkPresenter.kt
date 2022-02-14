@@ -2,10 +2,10 @@ package de.ph1b.audiobook.features.bookmarks
 
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Bookmark2
-import de.ph1b.audiobook.data.Chapter2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.BookmarkRepo
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.playback.PlayerController
@@ -18,16 +18,16 @@ import javax.inject.Inject
 class BookmarkPresenter
 @Inject constructor(
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
-  private val repo: BookRepo2,
+  private val currentBook: DataStore<Book.Id?>,
+  private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
-  lateinit var bookId: Book2.Id
-  private val bookmarks = ArrayList<Bookmark2>()
-  private val chapters = ArrayList<Chapter2>()
+  lateinit var bookId: Book.Id
+  private val bookmarks = ArrayList<Bookmark>()
+  private val chapters = ArrayList<Chapter>()
 
   override fun onAttach(view: BookmarkView) {
     onAttachScope.launch {
@@ -44,7 +44,7 @@ class BookmarkPresenter
     }
   }
 
-  fun deleteBookmark(id: Bookmark2.Id) {
+  fun deleteBookmark(id: Bookmark.Id) {
     scope.launch {
       bookmarkRepo.deleteBookmark(id)
       bookmarks.removeAll { it.id == id }
@@ -53,7 +53,7 @@ class BookmarkPresenter
     }
   }
 
-  fun selectBookmark(id: Bookmark2.Id) {
+  fun selectBookmark(id: Bookmark.Id) {
     val bookmark = bookmarks.find { it.id == id }
       ?: return
 
@@ -71,7 +71,7 @@ class BookmarkPresenter
     view.finish()
   }
 
-  fun editBookmark(id: Bookmark2.Id, newTitle: String) {
+  fun editBookmark(id: Bookmark.Id, newTitle: String) {
     scope.launch {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(

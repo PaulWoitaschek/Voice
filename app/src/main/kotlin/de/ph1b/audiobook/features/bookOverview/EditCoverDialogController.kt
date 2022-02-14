@@ -15,8 +15,8 @@ import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.databinding.DialogCoverEditBinding
 import de.ph1b.audiobook.injection.appComponent
 import de.ph1b.audiobook.misc.conductor.context
@@ -35,7 +35,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   })
 
   @Inject
-  lateinit var repo: BookRepo2
+  lateinit var repo: BookRepository
 
   @Inject
   lateinit var coverSaver: CoverSaver
@@ -85,6 +85,6 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   @Parcelize
   data class Arguments(
     val coverUri: Uri,
-    val bookId: Book2.Id
+    val bookId: Book.Id
   ) : Parcelable
 }

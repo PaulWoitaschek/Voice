@@ -3,8 +3,8 @@ package de.ph1b.audiobook.features.bookmarks.list
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import de.ph1b.audiobook.data.Bookmark2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 
 /**
  * Adapter for displaying a list of bookmarks.
@@ -13,10 +13,10 @@ class BookmarkAdapter(
   private val listener: BookmarkClickListener
 ) : RecyclerView.Adapter<BookMarkHolder>() {
 
-  private val bookmarks = ArrayList<Bookmark2>()
-  private val chapters = ArrayList<Chapter2>()
+  private val bookmarks = ArrayList<Bookmark>()
+  private val chapters = ArrayList<Chapter>()
 
-  fun newData(bookmarks: List<Bookmark2>, chapters: List<Chapter2>) {
+  fun newData(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
     this.chapters.clear()
     this.chapters.addAll(chapters)
 
@@ -28,7 +28,7 @@ class BookmarkAdapter(
     diff.dispatchUpdatesTo(this)
   }
 
-  fun indexOf(bookmark: Bookmark2) = bookmarks.indexOf(bookmark)
+  fun indexOf(bookmark: Bookmark) = bookmarks.indexOf(bookmark)
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     BookMarkHolder(parent, listener)

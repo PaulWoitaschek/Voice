@@ -1,10 +1,10 @@
 package de.ph1b.audiobook.features.bookOverview.list
 
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.features.bookOverview.list.header.BookOverviewHeaderComponent
 import de.ph1b.audiobook.misc.recyclerComponent.CompositeListAdapter
 
-typealias BookClickListener = (Book2.Id, BookOverviewClick) -> Unit
+typealias BookClickListener = (Book.Id, BookOverviewClick) -> Unit
 
 class BookOverviewAdapter(
   bookClickListener: BookClickListener,

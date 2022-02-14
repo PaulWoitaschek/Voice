@@ -2,43 +2,27 @@ package de.ph1b.audiobook.data
 
 import android.net.Uri
 import androidx.core.net.toUri
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import java.io.File
-import java.util.UUID
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import java.time.Instant
 
-/**
- * Represents a chapter in a book.
- */
-@Entity(
-  tableName = "chapters",
-  indices = [(Index(value = ["bookId"]))]
-)
+@Entity(tableName = "chapters2")
 data class Chapter(
-  @ColumnInfo(name = "file")
-  val file: File,
-  @ColumnInfo(name = "name")
+  @PrimaryKey
+  val id: Id,
   val name: String,
-  @ColumnInfo(name = "duration")
   val duration: Long,
-  @ColumnInfo(name = "fileLastModified")
-  val fileLastModified: Long,
-  @ColumnInfo(name = "marks")
+  val fileLastModified: Instant,
   val markData: List<MarkData>,
-  @ColumnInfo(name = "bookId")
-  val bookId: UUID,
-  @ColumnInfo(name = "id")
-  @PrimaryKey(autoGenerate = true)
-  val id: Long = 0L
-) : Comparable<Chapter> {
-
-  @Ignore
-  val uri: Uri = file.toUri()
+) {
 
   init {
     require(name.isNotEmpty())
@@ -58,35 +42,24 @@ data class Chapter(
     }
   }
 
-  override fun compareTo(other: Chapter): Int = NaturalOrderComparator.uriComparator.compare(uri, other.uri)
-}
+  @Serializable(with = ChapterIdSerializer::class)
+  data class Id(val value: String) {
 
-@Serializable
-data class MarkData(
-  val startMs: Long,
-  val name: String
-) : Comparable<MarkData> {
-  override fun compareTo(other: MarkData): Int {
-    return startMs.compareTo(other.startMs)
+    constructor(uri: Uri) : this(uri.toString())
   }
 }
 
-class ChapterMark(
-  val name: String,
-  val startMs: Long,
-  val endMs: Long
-)
+object ChapterIdSerializer : KSerializer<Chapter.Id> {
 
-val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)
+  override val descriptor: SerialDescriptor
+    get() = PrimitiveSerialDescriptor("chapterId", PrimitiveKind.STRING)
 
-fun Chapter.markForPosition(positionInChapterMs: Long): ChapterMark {
-  return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
-    ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
-    ?: chapterMarks.first()
+  override fun deserialize(decoder: Decoder): Chapter.Id = Chapter.Id(decoder.decodeString())
+
+  override fun serialize(encoder: Encoder, value: Chapter.Id) {
+    encoder.encodeString(value.value)
+  }
 }
 
-fun Chapter2.markForPosition(positionInChapterMs: Long): ChapterMark {
-  return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
-    ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
-    ?: chapterMarks.first()
-}
+
+fun Chapter.Id.toUri(): Uri = value.toUri()

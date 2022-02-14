@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.BookMoreBottomSheetBinding
@@ -53,7 +53,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
     private const val NI_BOOK = "ni#book"
     operator fun <T> invoke(
       target: T,
-      id: Book2.Id
+      id: Book.Id
     ): EditBookBottomSheetController where T : Controller, T : Callback {
       val args = Bundle().apply {
         putBookId(NI_BOOK, id)
@@ -65,7 +65,7 @@ class EditBookBottomSheetController(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onInternetCoverRequested(book: Book2.Id)
-    fun onFileCoverRequested(book: Book2.Id)
+    fun onInternetCoverRequested(book: Book.Id)
+    fun onFileCoverRequested(book: Book.Id)
   }
 }

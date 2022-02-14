@@ -7,10 +7,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.common.conductor.DialogController
-import de.ph1b.audiobook.data.Book2
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.injection.appComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,14 +21,14 @@ private const val NI_BOOK_ID = "niBookId"
 
 class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
 
-  constructor(bookId: Book2.Id) : this(
+  constructor(bookId: Book.Id) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }
   )
 
   @Inject
-  lateinit var repo: BookRepo2
+  lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
     appComponent.inject(this)

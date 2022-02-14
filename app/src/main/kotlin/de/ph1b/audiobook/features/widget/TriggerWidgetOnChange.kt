@@ -2,8 +2,8 @@ package de.ph1b.audiobook.features.widget
 
 import androidx.datastore.core.DataStore
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
@@ -19,8 +19,8 @@ import javax.inject.Singleton
 class TriggerWidgetOnChange
 @Inject constructor(
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
-  private val repo: BookRepo2,
+  private val currentBook: DataStore<Book.Id?>,
+  private val repo: BookRepository,
   private val playStateManager: PlayStateManager,
   private val widgetUpdater: WidgetUpdater
 ) {
@@ -37,7 +37,7 @@ class TriggerWidgetOnChange
     return merge(currentBookChanged(), playStateChanged(), bookIdChanged())
   }
 
-  private fun bookIdChanged(): Flow<Book2.Id?> {
+  private fun bookIdChanged(): Flow<Book.Id?> {
     return currentBook.data.distinctUntilChanged()
   }
 
@@ -45,7 +45,7 @@ class TriggerWidgetOnChange
     return playStateManager.playStateFlow().distinctUntilChanged()
   }
 
-  private fun currentBookChanged(): Flow<Book2> {
+  private fun currentBookChanged(): Flow<Book> {
     return currentBook.data.filterNotNull()
       .flatMapLatest { id ->
         repo.flow(id)

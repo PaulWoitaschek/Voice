@@ -5,18 +5,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import de.ph1b.audiobook.data.Bookmark
-import java.io.File
-import java.util.UUID
+import de.ph1b.audiobook.data.Chapter
 
 @Dao
 interface BookmarkDao {
 
-  @Query("DELETE FROM bookmark WHERE id = :id")
-  suspend fun deleteBookmark(id: UUID)
+  @Query("DELETE FROM bookmark2 WHERE id = :id")
+  suspend fun deleteBookmark(id: Bookmark.Id)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addBookmark(bookmark: Bookmark)
 
-  @Query("SELECT * FROM bookmark WHERE file IN(:files)")
-  suspend fun allForFiles(files: List<@JvmSuppressWildcards File>): List<Bookmark>
+  @Query("SELECT * FROM bookmark2 WHERE chapterId IN(:chapters)")
+  suspend fun allForChapters(chapters: List<@JvmSuppressWildcards Chapter.Id>): List<Bookmark>
 }

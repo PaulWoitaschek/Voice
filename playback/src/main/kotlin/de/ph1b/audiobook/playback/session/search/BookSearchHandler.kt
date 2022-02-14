@@ -4,8 +4,8 @@ import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import dagger.Reusable
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
@@ -17,10 +17,10 @@ import javax.inject.Inject
 @Reusable
 class BookSearchHandler
 @Inject constructor(
-  private val repo: BookRepo2,
+  private val repo: BookRepository,
   private val player: PlayerController,
   @CurrentBook
-  private val currentBook: DataStore<Book2.Id?>,
+  private val currentBook: DataStore<Book.Id?>,
 ) {
 
   suspend fun handle(search: BookSearch) {
@@ -88,7 +88,7 @@ class BookSearchHandler
   }
 
   // Play the first book that matches to a selector. Returns if a book is being played
-  private suspend inline fun findAndPlayFirstMatch(selector: (Book2) -> Boolean): Boolean {
+  private suspend inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
     val book = repo.flow().first().firstOrNull(selector)
     return if (book != null) {
       Timber.i("found a match ${book.content.name}")

@@ -3,80 +3,73 @@ package de.ph1b.audiobook.data
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class BookTest {
 
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsFirst() {
-    val bookId = UUID.randomUUID()
-    val book = BookFactory.create(
+    val chapters = listOf(chapter(duration = 12345), chapter())
+    val book = book(
       time = 0,
-      chapters = listOf(ChapterFactory.create(duration = 12345, bookId = bookId)),
-      currentFileIndex = 0,
-      id = bookId
+      chapters = chapters,
+      currentChapter = chapters.first().id,
     )
     book.assertThat().positionIs(0)
   }
 
   @Test
   fun globalPositionWhenTimeIsNot0AndCurrentFileIsFirst() {
-    val bookId = UUID.randomUUID()
-    val book = BookFactory.create(
+    val chapters = listOf(chapter(duration = 12345), chapter())
+    val book = book(
       time = 23,
-      chapters = listOf(ChapterFactory.create(duration = 12345, bookId = bookId)),
-      currentFileIndex = 0,
-      id = bookId
+      chapters = chapters,
+      currentChapter = chapters.first().id,
     )
     book.assertThat().positionIs(23)
   }
 
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsNotFirst() {
-    val bookId = UUID.randomUUID()
-    val book = BookFactory.create(
+    val lastChapterId = Chapter.Id("lastChapter")
+    val book = book(
       time = 0,
       chapters = listOf(
-        ChapterFactory.create(file = "ch1", duration = 123, bookId = bookId),
-        ChapterFactory.create(file = "ch2", duration = 234, bookId = bookId),
-        ChapterFactory.create(file = "ch3", duration = 345, bookId = bookId),
-        ChapterFactory.create(file = "ch4", duration = 456, bookId = bookId)
+        chapter(duration = 123),
+        chapter(duration = 234),
+        chapter(duration = 345),
+        chapter(duration = 456, id = lastChapterId)
       ),
-      currentFileIndex = 3,
-      id = bookId
+      currentChapter = lastChapterId,
     )
     book.assertThat().positionIs(123 + 234 + 345)
   }
 
   @Test
   fun globalPositionWhenTimeIsNot0AndCurrentFileIsNotFirst() {
-    val bookId = UUID.randomUUID()
-    val book = BookFactory.create(
+    val targetChapter = Chapter.Id("target")
+    val book = book(
       time = 23,
       chapters = listOf(
-        ChapterFactory.create(file = "ch1", duration = 123, bookId = bookId),
-        ChapterFactory.create(file = "ch2", duration = 234, bookId = bookId),
-        ChapterFactory.create(file = "ch3", duration = 345, bookId = bookId),
-        ChapterFactory.create(file = "ch4", duration = 456, bookId = bookId)
+        chapter(duration = 123),
+        chapter(duration = 234),
+        chapter(duration = 345, id = targetChapter),
+        chapter(duration = 456)
       ),
-      currentFileIndex = 2,
-      id = bookId
+      currentChapter = targetChapter,
     )
     book.assertThat().positionIs(123 + 234 + 23)
   }
 
   @Test
   fun totalDuration() {
-    val bookId = UUID.randomUUID()
-    val book = BookFactory.create(
+    val book = book(
       chapters = listOf(
-        ChapterFactory.create(file = "/ch1", duration = 123, bookId = bookId),
-        ChapterFactory.create(file = "/ch2", duration = 234, bookId = bookId),
-        ChapterFactory.create(file = "/ch3", duration = 345, bookId = bookId),
-        ChapterFactory.create(file = "/ch4", duration = 456, bookId = bookId)
+        chapter(duration = 123),
+        chapter(duration = 234),
+        chapter(duration = 345),
+        chapter(duration = 456)
       ),
-      id = bookId
     )
 
     book.assertThat().durationIs(123 + 234 + 345 + 456)
@@ -84,28 +77,24 @@ class BookTest {
 
   @Test
   fun currentChapter() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 1,
-      id = bookId
+      currentChapter = ch2.id,
     )
     book.assertThat().currentChapterIs(ch2)
   }
 
   @Test
   fun currentChapterIndex() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 1,
-      id = bookId
+      currentChapter = ch2.id
     )
 
     book.assertThat().currentChapterIndexIs(1)
@@ -113,14 +102,12 @@ class BookTest {
 
   @Test
   fun nextChapterOnNonLastChapter() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 1,
-      id = bookId
+      currentChapter = ch2.id
     )
 
     book.assertThat().nextChapterIs(ch3)
@@ -128,14 +115,12 @@ class BookTest {
 
   @Test
   fun nextChapterOnLastChapter() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 2,
-      id = bookId
+      currentChapter = ch3.id
     )
 
     book.assertThat().nextChapterIs(null)
@@ -143,28 +128,24 @@ class BookTest {
 
   @Test
   fun previousChapterOnNonFirstChapter() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 1,
-      id = bookId
+      currentChapter = ch2.id,
     )
     book.assertThat().previousChapterIs(ch1)
   }
 
   @Test
   fun previousChapterOnFirstChapter() {
-    val bookId = UUID.randomUUID()
-    val ch1 = ChapterFactory.create(file = "ch1", bookId = bookId)
-    val ch2 = ChapterFactory.create(file = "ch2", bookId = bookId)
-    val ch3 = ChapterFactory.create(file = "ch3", bookId = bookId)
-    val book = BookFactory.create(
+    val ch1 = chapter()
+    val ch2 = chapter()
+    val ch3 = chapter()
+    val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentFileIndex = 0,
-      id = bookId
+      currentChapter = ch1.id,
     )
     book.assertThat().previousChapterIs(null)
   }

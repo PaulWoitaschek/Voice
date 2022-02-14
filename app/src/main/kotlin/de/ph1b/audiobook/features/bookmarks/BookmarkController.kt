@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Bookmark2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Bookmark
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.getBookId
 import de.ph1b.audiobook.data.putBookId
 import de.ph1b.audiobook.databinding.BookmarkBinding
@@ -36,7 +36,7 @@ class BookmarkController(args: Bundle) :
   AddBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
-  constructor(bookId: Book2.Id) : this(
+  constructor(bookId: Book.Id) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }
@@ -49,23 +49,23 @@ class BookmarkController(args: Bundle) :
     bookId = this@BookmarkController.bookId
   }
 
-  override fun render(bookmarks: List<Bookmark2>, chapters: List<Chapter2>) {
+  override fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
     adapter.newData(bookmarks, chapters)
   }
 
-  override fun showBookmarkAdded(bookmark: Bookmark2) {
+  override fun showBookmarkAdded(bookmark: Bookmark) {
     val index = adapter.indexOf(bookmark)
     binding.recycler.smoothScrollToPosition(index)
     Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
   }
 
-  override fun onBookmarkClicked(bookmark: Bookmark2) {
+  override fun onBookmarkClicked(bookmark: Bookmark) {
     presenter.selectBookmark(bookmark.id)
     router.popController(this)
   }
 
-  override fun onEditBookmark(id: Bookmark2.Id, title: String) {
+  override fun onEditBookmark(id: Bookmark.Id, title: String) {
     presenter.editBookmark(id, title)
   }
 
@@ -121,7 +121,7 @@ class BookmarkController(args: Bundle) :
     ItemTouchHelper(swipeCallback).attachToRecyclerView(recycler)
   }
 
-  override fun onOptionsMenuClicked(bookmark: Bookmark2, v: View) {
+  override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
     val popup = PopupMenu(context, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {
@@ -140,7 +140,7 @@ class BookmarkController(args: Bundle) :
     popup.show()
   }
 
-  private fun showEditBookmarkDialog(bookmark: Bookmark2) {
+  private fun showEditBookmarkDialog(bookmark: Bookmark) {
     EditBookmarkDialog(this, bookmark).showDialog(router)
   }
 

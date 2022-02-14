@@ -10,10 +10,10 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookContentRepo
-import de.ph1b.audiobook.data.repo.BookRepo2
+import de.ph1b.audiobook.data.repo.BookRepository
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import de.ph1b.audiobook.data.repo.internals.AppDb
 import de.ph1b.audiobook.data.toUri
@@ -57,7 +57,7 @@ class MediaScannerTest {
 
     assertBookContents(
       BookContentView(
-        id = Book2.Id(book1.toUri()),
+        id = Book.Id(book1.toUri()),
         chapters = book1Chapters.drop(1)
       )
     )
@@ -69,17 +69,17 @@ class MediaScannerTest {
     val audiobookFolder = folder("audiobooks")
 
     val book1 = File(audiobookFolder, "book1")
-    val book1Id = Book2.Id(book1.toUri())
+    val book1Id = Book.Id(book1.toUri())
     val book1Chapters = listOf(
       file(book1, "1.mp3"),
       file(book1, "2.mp3"),
       file(book1, "10.mp3"),
-    ).map(Chapter2::Id)
+    ).map(Chapter::Id)
 
     scan(audiobookFolder)
 
-    bookRepo.flow(Book2.Id(book1.toUri())).first()
-    val contentWithPositionAtLastChapter = bookContentRepo.get(Book2.Id(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
+    bookRepo.flow(Book.Id(book1.toUri())).first()
+    val contentWithPositionAtLastChapter = bookContentRepo.get(Book.Id(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
     bookContentRepo.put(contentWithPositionAtLastChapter)
 
     book1Chapters.forEach { it.toUri().toFile().delete() }
@@ -116,9 +116,9 @@ class MediaScannerTest {
     scan(audiobookFolder1, audiobookFolder2)
 
     assertBookContents(
-      BookContentView(topFileBook.let(Book2::Id), chapters = listOf(topFileBook)),
-      BookContentView(book1.toUri().let(Book2::Id), chapters = book1Chapters),
-      BookContentView(book2.toUri().let(Book2::Id), chapters = book2Chapters),
+      BookContentView(topFileBook.let(Book::Id), chapters = listOf(topFileBook)),
+      BookContentView(book1.toUri().let(Book::Id), chapters = book1Chapters),
+      BookContentView(book2.toUri().let(Book::Id), chapters = book2Chapters),
     )
   }
 
@@ -133,12 +133,12 @@ class MediaScannerTest {
     private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .allowMainThreadQueries()
       .build()
-    val bookContentRepo = BookContentRepo(db.bookContent2Dao())
-    private val chapterRepo = ChapterRepo(db.chapter2Dao())
+    val bookContentRepo = BookContentRepo(db.bookContentDao())
+    private val chapterRepo = ChapterRepo(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     private val scanner = MediaScanner(bookContentRepo, chapterRepo, mediaAnalyzer)
 
-    val bookRepo = BookRepo2(chapterRepo, bookContentRepo)
+    val bookRepo = BookRepository(chapterRepo, bookContentRepo)
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
@@ -186,7 +186,7 @@ class MediaScannerTest {
   }
 
   data class BookContentView(
-    val id: Book2.Id,
+    val id: Book.Id,
     val chapters: List<Uri>
   )
 }

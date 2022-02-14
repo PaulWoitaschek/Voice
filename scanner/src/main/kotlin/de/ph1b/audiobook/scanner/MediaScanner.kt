@@ -2,9 +2,9 @@ package de.ph1b.audiobook.scanner
 
 import androidx.documentfile.provider.DocumentFile
 import de.ph1b.audiobook.common.comparator.NaturalOrderComparator
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.BookContent2
-import de.ph1b.audiobook.data.Chapter2
+import de.ph1b.audiobook.data.Book
+import de.ph1b.audiobook.data.BookContent
+import de.ph1b.audiobook.data.Chapter
 import de.ph1b.audiobook.data.repo.BookContentRepo
 import de.ph1b.audiobook.data.repo.ChapterRepo
 import de.ph1b.audiobook.data.toUri
@@ -20,7 +20,7 @@ class MediaScanner
 
   suspend fun scan(folders: List<DocumentFile>) {
     val allFiles = folders.flatMap { it.listFiles().toList() }
-    contentRepo.setAllInactiveExcept(allFiles.map { Book2.Id(it.uri) })
+    contentRepo.setAllInactiveExcept(allFiles.map { Book.Id(it.uri) })
     allFiles.forEach { scan(it) }
   }
 
@@ -29,9 +29,9 @@ class MediaScanner
     val chapters = file.parseChapters()
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
-    val id = Book2.Id(file.uri)
+    val id = Book.Id(file.uri)
     val content = contentRepo.getOrPut(id) {
-      val content = BookContent2(
+      val content = BookContent(
         id = id,
         isActive = true,
         addedAt = Instant.now(),
@@ -66,23 +66,23 @@ class MediaScanner
     }
   }
 
-  private fun validateIntegrity(content: BookContent2, chapters: List<Chapter2>) {
+  private fun validateIntegrity(content: BookContent, chapters: List<Chapter>) {
     // the init block performs integrity validation
-    Book2(content, chapters)
+    Book(content, chapters)
   }
 
-  private suspend fun DocumentFile.parseChapters(): List<Chapter2> {
-    val result = mutableListOf<Chapter2>()
+  private suspend fun DocumentFile.parseChapters(): List<Chapter> {
+    val result = mutableListOf<Chapter>()
     parseChapters(file = this, result = result)
     return result
   }
 
-  private suspend fun parseChapters(file: DocumentFile, result: MutableList<Chapter2>) {
+  private suspend fun parseChapters(file: DocumentFile, result: MutableList<Chapter>) {
     if (file.isFile && file.type?.startsWith("audio/") == true) {
-      val id = Chapter2.Id(file.uri)
+      val id = Chapter.Id(file.uri)
       val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
         val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
-        Chapter2(
+        Chapter(
           id = id,
           duration = metaData.duration,
           fileLastModified = Instant.ofEpochMilli(file.lastModified()),

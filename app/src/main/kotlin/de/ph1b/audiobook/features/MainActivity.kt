@@ -12,8 +12,7 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book2
-import de.ph1b.audiobook.data.repo.BookRepository
+import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.databinding.ActivityBookBinding
 import de.ph1b.audiobook.features.bookOverview.BookOverviewController
 import de.ph1b.audiobook.injection.appComponent
@@ -32,10 +31,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), RouterProvider {
 
   @field:[Inject CurrentBook]
-  lateinit var currentBook: DataStore<Book2.Id?>
-
-  @Inject
-  lateinit var repo: BookRepository
+  lateinit var currentBook: DataStore<Book.Id?>
 
   @Inject
   lateinit var bookSearchParser: BookSearchParser
@@ -108,7 +104,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     // if we should enter a book set the backstack and return early
     intent.getStringExtra(NI_GO_TO_BOOK)
       ?.let {
-        val bookId = Book2.Id(it)
+        val bookId = Book.Id(it)
         val bookShelf = RouterTransaction.with(BookOverviewController())
         val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
@@ -147,7 +143,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     private const val NI_GO_TO_BOOK = "niGotoBook"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(context: Context, bookId: Book2.Id) = Intent(context, MainActivity::class.java).apply {
+    fun goToBookIntent(context: Context, bookId: Book.Id) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId.value)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
