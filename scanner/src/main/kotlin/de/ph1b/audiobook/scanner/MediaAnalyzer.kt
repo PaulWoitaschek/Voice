@@ -39,14 +39,13 @@ class MediaAnalyzer
         "-select_streams", "a" // only select the audio stream
       )
     )
-    if (!result.success) {
-      Timber.e("Unable to parse $uri, ${result.message}")
+    if (result == null) {
+      Timber.e("Unable to parse $uri.")
       return null
     }
-    Timber.v(result.message)
 
     val parsed = try {
-      json.decodeFromString(MetaDataScanResult.serializer(), result.message)
+      json.decodeFromString(MetaDataScanResult.serializer(), result)
     } catch (e: SerializationException) {
       Timber.e(e, "Unable to parse $uri")
       return null

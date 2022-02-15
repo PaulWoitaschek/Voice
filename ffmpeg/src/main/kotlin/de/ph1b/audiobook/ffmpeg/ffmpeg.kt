@@ -10,34 +10,38 @@ import com.arthenica.ffmpegkit.SessionState
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-suspend fun ffprobe(input: Uri, context: Context, command: List<String>): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
-  val probeSession = FFprobeKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
-    when (session.state) {
-      SessionState.COMPLETED -> {
-        cont.resume(FfmpegCommandResult(session.output, success = true))
+suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String? {
+  return suspendCancellableCoroutine { cont ->
+    val probeSession = FFprobeKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
+      when (session.state) {
+        SessionState.COMPLETED -> {
+          cont.resume(session.output)
+        }
+        SessionState.FAILED -> {
+          cont.resume(null)
+        }
+        else -> {}
       }
-      SessionState.FAILED -> {
-        cont.resume(FfmpegCommandResult(session.output, success = false))
-      }
-      else -> {}
     }
+    cont.invokeOnCancellation { probeSession.cancel() }
   }
-  cont.invokeOnCancellation { probeSession.cancel() }
 }
 
-suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): FfmpegCommandResult = suspendCancellableCoroutine { cont ->
-  val probeSession = FFmpegKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
-    when (session.state) {
-      SessionState.COMPLETED -> {
-        cont.resume(FfmpegCommandResult(session.output, success = true))
+suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String? {
+  return suspendCancellableCoroutine { cont ->
+    val probeSession = FFmpegKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
+      when (session.state) {
+        SessionState.COMPLETED -> {
+          cont.resume(session.output)
+        }
+        SessionState.FAILED -> {
+          cont.resume(null)
+        }
+        else -> {}
       }
-      SessionState.FAILED -> {
-        cont.resume(FfmpegCommandResult(session.output, success = false))
-      }
-      else -> {}
     }
+    cont.invokeOnCancellation { probeSession.cancel() }
   }
-  cont.invokeOnCancellation { probeSession.cancel() }
 }
 
 private fun fullCommand(input: Uri, context: Context, command: List<String>): List<String> {
@@ -48,8 +52,3 @@ private fun fullCommand(input: Uri, context: Context, command: List<String>): Li
   }
   return listOf("-i", mappedInput) + command
 }
-
-data class FfmpegCommandResult(
-  val message: String,
-  val success: Boolean
-)
