@@ -17,12 +17,15 @@ object StrictModeInit {
     .detectFileUriExposure()
     .detectCleartextNetwork()
     .apply {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      if (Build.VERSION.SDK_INT >= 26) {
         detectContentUriWithoutPermission()
         detectUntaggedSockets()
       }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      if (Build.VERSION.SDK_INT >= 29) {
         detectCredentialProtectedWhileLocked()
+      }
+      if (Build.VERSION.SDK_INT >= 28) {
+        detectNonSdkApiUsage()
       }
     }
     .penaltyLog()

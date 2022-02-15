@@ -13,7 +13,7 @@ val VersionCatalog.desugar: Provider<MinimalExternalModuleDependency> get() = fi
 object VoiceVersions {
   const val compileSdk = 31
   const val minSdk = 24
-  const val targetSdk = 30
+  const val targetSdk = 31
   val javaCompileVersion = JavaVersion.VERSION_11
   val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
 }
