@@ -39,6 +39,7 @@ jobs:
       PLAY_PUBLISH: ${{ secrets.PLAY_PUBLISH }}
       SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
       SIGNING_PROPERTIES: ${{ secrets.SIGNING_PROPERTIES }}
+      GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
     steps:
       - uses: actions/checkout@v2
 

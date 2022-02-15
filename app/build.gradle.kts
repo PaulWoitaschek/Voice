@@ -6,6 +6,14 @@ plugins {
   alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")
   alias(libs.plugins.anvil)
+  alias(libs.plugins.crashlytics) apply false
+  alias(libs.plugins.googleServices) apply false
+}
+
+val enableCrashlytics = project.hasProperty("enableCrashlytics")
+if (enableCrashlytics) {
+  pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
+  pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
 
 android {
@@ -105,6 +113,10 @@ dependencies {
   implementation(libs.materialCab)
   implementation(libs.coil)
 
+  if (enableCrashlytics) {
+    implementation(libs.crashlytics)
+  }
+
   implementation(libs.dagger.core)
   kapt(libs.dagger.compiler)
 
@@ -144,5 +156,3 @@ dependencies {
   androidTestImplementation(libs.androidX.test.core)
   androidTestImplementation(libs.androidX.test.junit)
 }
-
-tasks.create("fdroid").dependsOn(":app:assembleOpensourceRelease")

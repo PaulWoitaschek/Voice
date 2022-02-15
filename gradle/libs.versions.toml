@@ -44,6 +44,8 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
+crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.8"
+
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -110,3 +112,5 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 anvil = { id = "com.squareup.anvil", version = "2.3.11-1-6-10" }
 ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
 ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
+googleServices = { id = "com.google.gms.google-services", version = "4.3.10" }
