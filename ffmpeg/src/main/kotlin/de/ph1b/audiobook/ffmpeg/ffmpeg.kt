@@ -8,11 +8,13 @@ import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.SessionState
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import kotlin.coroutines.resume
 
 suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String? {
+  val fullCommand = fullCommand(input, context, command) ?: return null
   return suspendCancellableCoroutine { cont ->
-    val probeSession = FFprobeKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
+    val probeSession = FFprobeKit.executeWithArgumentsAsync(fullCommand.toTypedArray()) { session ->
       when (session.state) {
         SessionState.COMPLETED -> {
           cont.resume(session.output)
@@ -28,8 +30,9 @@ suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String
 }
 
 suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String? {
+  val fullCommand = fullCommand(input, context, command) ?: return null
   return suspendCancellableCoroutine { cont ->
-    val probeSession = FFmpegKit.executeWithArgumentsAsync(fullCommand(input, context, command).toTypedArray()) { session ->
+    val probeSession = FFmpegKit.executeWithArgumentsAsync(fullCommand.toTypedArray()) { session ->
       when (session.state) {
         SessionState.COMPLETED -> {
           cont.resume(session.output)
@@ -44,9 +47,14 @@ suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String?
   }
 }
 
-private fun fullCommand(input: Uri, context: Context, command: List<String>): List<String> {
+private fun fullCommand(input: Uri, context: Context, command: List<String>): List<String>? {
   val mappedInput = if (input.scheme == "content") {
-    FFmpegKitConfig.getSafParameterForRead(context, input)
+    try {
+      FFmpegKitConfig.getSafParameterForRead(context, input)
+    } catch (e: SecurityException) {
+      Timber.e(e, "Could not get saf parameter for $input")
+      return null
+    }
   } else {
     input.toFile().absolutePath
   }

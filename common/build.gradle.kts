@@ -20,7 +20,6 @@ dependencies {
   implementation(libs.coroutines.core)
   implementation(libs.dagger.core)
   implementation(libs.timber)
-  implementation(libs.appCompat)
   implementation(libs.material)
   implementation(libs.bundles.compose)
   implementation(libs.prefs.core)
