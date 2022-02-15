@@ -25,19 +25,28 @@ class MediaScanner
   }
 
   private suspend fun scan(file: DocumentFile) {
-    val fileName = file.name ?: return
     val chapters = file.parseChapters()
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
     val id = Book.Id(file.uri)
     val content = contentRepo.getOrPut(id) {
+      val analyzed = mediaAnalyzer.analyze(chapterIds.first().toUri())
+      val name = analyzed?.bookName
+        ?: file.name?.let { name ->
+          if (file.isFile) {
+            name.substringBeforeLast(".")
+          } else {
+            name
+          }
+        }
+        ?: return
       val content = BookContent(
         id = id,
         isActive = true,
         addedAt = Instant.now(),
-        author = mediaAnalyzer.analyze(chapterIds.first().toUri())?.author,
+        author = analyzed?.author,
         lastPlayedAt = Instant.EPOCH,
-        name = fileName,
+        name = name,
         playbackSpeed = 1F,
         skipSilence = false,
         chapters = chapterIds,

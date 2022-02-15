@@ -43,7 +43,7 @@ class MediaAnalyzer
       Timber.e("Unable to parse $uri, ${result.message}")
       return null
     }
-    Timber.d(result.message)
+    Timber.v(result.message)
 
     val parsed = try {
       json.decodeFromString(MetaDataScanResult.serializer(), result.message)
