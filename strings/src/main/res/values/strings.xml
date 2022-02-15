@@ -103,6 +103,10 @@
     <string name="book_category_sort_by_added">Added</string>
 
     <string name="close">Close</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="audiobook_folder_card_text">Voice expects a folder structure where every folder within your selected audiobook folder is one book, for example:</string>
+    <string name="got_audiobook_folder_card_action">Got it</string>
 
     <!-- will be shown as the time for a bookmark that was just created -->
     <string name="bookmark_just_now">Just now</string>

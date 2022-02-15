@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,11 +43,14 @@ fun FolderPickerView(
     topBar = {
       MediumTopAppBar(
         title = {
-          Text(text = "Audioboook Folders")
+          Text(text = stringResource(R.string.audiobook_folders_title))
         },
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Close")
+            Icon(
+              imageVector = Icons.Default.ArrowBack,
+              contentDescription = stringResource(R.string.close)
+            )
           }
         }
       )
@@ -54,11 +58,14 @@ fun FolderPickerView(
     floatingActionButton = {
       ExtendedFloatingActionButton(
         text = {
-          Text(text = "Add")
+          Text(stringResource(R.string.add))
         },
         onClick = onAddClick,
         icon = {
-          Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+          Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(R.string.add)
+          )
         }
       )
     }
@@ -76,14 +83,14 @@ fun FolderPickerView(
               .padding(horizontal = 16.dp, vertical = 16.dp)) {
               Text(
                 text = text,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
               )
               Spacer(modifier = Modifier.size(16.dp))
               Button(
                 modifier = Modifier.align(End),
                 onClick = onDismissExplanationCardClick
               ) {
-                Text(text = "Got it")
+                Text(text = stringResource(R.string.got_audiobook_folder_card_action))
               }
             }
           }
@@ -98,7 +105,10 @@ fun FolderPickerView(
                 onDeleteClick(item.id)
               },
               content = {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                Icon(
+                  imageVector = Icons.Default.Delete,
+                  contentDescription = stringResource(R.string.delete)
+                )
               }
             )
           }) {

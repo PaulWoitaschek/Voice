@@ -13,21 +13,25 @@ import de.ph1b.audiobook.common.pref.AudiobookFolders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Qualifier
+
+@Qualifier
+annotation class ExplanationCardSeen
 
 class FolderPickerViewModel
 @Inject constructor(
   private val context: Context,
   @AudiobookFolders
-  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>
+  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @ExplanationCardSeen
+  private val explanationCardSeen: DataStore<Boolean>,
 ) {
 
   private val scope = MainScope()
-  private val explanationCardSeenFlow = MutableStateFlow(false)
 
   @Composable
   fun viewState(): FolderPickerViewState {
@@ -45,8 +49,16 @@ class FolderPickerViewModel
           }
         }
     }.collectAsState(initial = emptyList())
-    val explanationCardSeen by explanationCardSeenFlow.collectAsState()
-    val explanationCard = if(explanationCardSeen) null else "Hey Cats"
+    val explanationCardSeen by explanationCardSeen.data.collectAsState(true)
+    val explanationCard = if (explanationCardSeen) {
+      null
+    } else {
+      """
+        ${context.getString(R.string.audiobook_folder_card_text)}
+
+        audiobooks/Harry Potter 1
+        audiobooks/Harry Potter 2""".trimIndent()
+    }
     return FolderPickerViewState(explanationCard = explanationCard, folders)
   }
 
@@ -68,8 +80,10 @@ class FolderPickerViewModel
     }
   }
 
-  fun dismissExplanationCard(){
-    explanationCardSeenFlow.value = true
+  fun dismissExplanationCard() {
+    scope.launch {
+      explanationCardSeen.updateData { true }
+    }
   }
 
   fun destroy() {

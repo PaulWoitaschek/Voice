@@ -24,6 +24,8 @@ import de.ph1b.audiobook.serialization.SerializableDataStoreFactory
 import de.ph1b.audiobook.serialization.UriSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.builtins.serializer
+import voice.folderPicker.ExplanationCardSeen
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -119,5 +121,12 @@ object PrefsModule {
       fileName = "currentBook",
       defaultValue = null
     )
+  }
+
+  @Provides
+  @Singleton
+  @ExplanationCardSeen
+  fun explanationCardSeen(factory: SerializableDataStoreFactory): DataStore<Boolean> {
+    return factory.create(Boolean.serializer(), false, "explanationCardSeen")
   }
 }
