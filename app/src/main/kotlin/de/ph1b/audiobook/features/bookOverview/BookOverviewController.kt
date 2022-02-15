@@ -75,7 +75,6 @@ class BookOverviewController :
   }
 
   private fun BookOverviewBinding.setupRecyclerView() {
-    recyclerView.setHasFixedSize(true)
     adapter = BookOverviewAdapter(
       bookClickListener = { bookId, clickType ->
         when (clickType) {

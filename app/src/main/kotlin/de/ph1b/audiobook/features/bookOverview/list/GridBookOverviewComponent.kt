@@ -120,7 +120,11 @@ class BookOverviewHolder(
     binding.title.text = name
     binding.author?.text = model.author
     binding.author?.isVisible = model.author != null
-    binding.title.maxLines = if (binding.author?.isVisible == true) 1 else 2
+    binding.title.maxLines = if (model.useGridView) {
+      if (binding.author?.isVisible == true) 1 else 2
+    } else {
+      Int.MAX_VALUE
+    }
     binding.cover.transitionName = model.transitionName
     binding.remainingTime.text = formatTime(model.remainingTimeInMs)
     binding.progress.progress = (model.progress * 100).roundToInt()
