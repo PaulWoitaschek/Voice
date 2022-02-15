@@ -1,4 +1,4 @@
-Voice ![CI](https://github.com/PaulWoitaschek/Voice/workflows/CI/badge.svg)
+Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg)
 =======================
 
 <a href="https://f-droid.org/packages/de.ph1b.audiobook/">
