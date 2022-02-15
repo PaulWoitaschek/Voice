@@ -1,9 +1,14 @@
 package de.ph1b.audiobook.scanner
 
 import android.content.Context
+import androidx.documentfile.provider.DocumentFile
 import de.ph1b.audiobook.data.Book
 import de.ph1b.audiobook.data.toUri
 import de.ph1b.audiobook.ffmpeg.ffmpeg
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class CoverScanner
@@ -29,24 +34,25 @@ class CoverScanner
   }
 
   private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean {
-/*    withContext(Dispatchers.IO){
-      val chapters = book.content.chapters todo
-
-      val meop = book.id
-    }
-    if (book.type === Book.Type.COLLECTION_FOLDER || book.type === Book.Type.SINGLE_FOLDER) {
-      val root = File(book.root)
-      if (root.exists()) {
-        val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
-        getCoverFromDisk(images.toList())?.let {
-          val coverFile = book.coverFile(context)
-          imageHelper.saveCover(it, coverFile)
-          picasso.invalidate(coverFile)
-          coverChanged.emit(book.id)
-          return true
+    withContext(Dispatchers.IO) {
+      val documentFile = DocumentFile.fromTreeUri(context, book.id.toUri()) ?: return@withContext false
+      if (!documentFile.isDirectory) return@withContext false
+      documentFile.listFiles().forEach { child ->
+        if (child.isFile && child.canRead() && child.type?.startsWith("image/") == true) {
+          val coverFile = coverSaver.newBookCoverFile()
+          try {
+            context.contentResolver.openInputStream(child.uri)?.use { input ->
+              coverFile.outputStream().use { output ->
+                input.copyTo(output)
+              }
+            }
+            coverSaver.setBookCover(coverFile, book.id)
+          } catch (e: IOException) {
+            Timber.e(e, "Error while copying the cover from ${child.uri}")
+          }
         }
       }
-    }*/
+    }
     return false
   }
 
@@ -65,29 +71,4 @@ class CoverScanner
         }
       }
   }
-
-/*
-  */
-  /** Returns the first bitmap that could be parsed from an image file *//*
-
-  private fun getCoverFromDisk(coverFiles: List<File>): Bitmap? {
-    // if there are images, get the first one.
-    val mi = ActivityManager.MemoryInfo() todo
-    activityManager.getMemoryInfo(mi)
-    val dimen = imageHelper.smallerScreenSize
-    // only read cover if its size is less than a third of the available memory
-    coverFiles.filter { it.length() < (mi.availMem / 3L) }.forEach {
-      try {
-        return picasso.load(it)
-          .resize(dimen, dimen)
-          .onlyScaleDown()
-          .centerCrop()
-          .get()
-      } catch (ex: IOException) {
-        Timber.e(ex, "Error when saving cover $it")
-      }
-    }
-    return null
-  }
-*/
 }
