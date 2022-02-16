@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cover_dynamic_neutral10">@color/material_dynamic_neutral10</color>
+    <color name="cover_dynamic_neutral30">@color/material_dynamic_neutral30</color>
+    <color name="cover_dynamic_neutral40">@color/material_dynamic_neutral40</color>
+    <color name="cover_dynamic_neutral50">@color/material_dynamic_neutral50</color>
+</resources>
