@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.common.pref.AudiobookFolders
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,7 +36,7 @@ class MediaScanTrigger
   private var scanningJob: Job? = null
 
   fun scan(restartIfScanning: Boolean = false) {
-    Timber.i("scanForFiles with restartIfScanning=$restartIfScanning")
+    Logger.i("scanForFiles with restartIfScanning=$restartIfScanning")
     if (scanningJob?.isActive == true && !restartIfScanning) {
       return
     }

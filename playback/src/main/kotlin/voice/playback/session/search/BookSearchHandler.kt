@@ -4,10 +4,10 @@ import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import dagger.Reusable
 import kotlinx.coroutines.flow.first
-import timber.log.Timber
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class BookSearchHandler
 ) {
 
   suspend fun handle(search: BookSearch) {
-    Timber.i("handle $search")
+    Logger.i("handle $search")
     when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
@@ -62,7 +62,7 @@ class BookSearchHandler
     }
 
     // continue playback
-    Timber.i("continuing from search without query")
+    Logger.i("continuing from search without query")
     val currentId = currentBook.data.first()
     val activeBooks = repo.flow().first()
     val noBookInitialized = activeBooks.none { it.content.id == currentId }
@@ -76,7 +76,7 @@ class BookSearchHandler
   }
 
   private suspend fun playArtist(search: BookSearch) {
-    Timber.i("playArtist")
+    Logger.i("playArtist")
     if (search.artist != null) {
       val foundMatch = findAndPlayFirstMatch {
         it.content.author?.contains(search.artist, ignoreCase = true) == true
@@ -91,7 +91,7 @@ class BookSearchHandler
   private suspend inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
     val book = repo.flow().first().firstOrNull(selector)
     return if (book != null) {
-      Timber.i("found a match ${book.content.name}")
+      Logger.i("found a match ${book.content.name}")
       currentBook.updateData { book.content.id }
       player.play()
       true

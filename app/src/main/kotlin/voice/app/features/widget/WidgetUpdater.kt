@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.app.R
 import voice.app.features.MainActivity
 import voice.app.misc.dpToPxRounded
@@ -50,7 +49,6 @@ class WidgetUpdater @Inject constructor(
       val book = currentBook.data.first()?.let {
         repo.flow(it).first()
       }
-      Timber.i("update with book ${book?.content?.name}")
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
       val ids = appWidgetManager.getAppWidgetIds(componentName)
 

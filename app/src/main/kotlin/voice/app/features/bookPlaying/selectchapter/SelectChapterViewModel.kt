@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class SelectChapterViewModel
     val book = runBlocking { bookRepository.flow(bookId).first() }
 
     if (book == null) {
-      Timber.d("no book found for $bookId. CloseScreen")
+      Logger.d("no book found for $bookId. CloseScreen")
       _viewEffects.tryEmit(SelectChapterViewEffect.CloseScreen)
       return SelectChapterViewState(emptyList(), null)
     }

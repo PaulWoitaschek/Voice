@@ -1,9 +1,9 @@
 package voice.app.features.bookOverview.list
 
 import androidx.annotation.FloatRange
-import timber.log.Timber
 import voice.app.features.bookOverview.list.header.BookOverviewCategory
 import voice.data.Book
+import voice.logging.core.Logger
 import java.io.File
 
 sealed class BookOverviewItem
@@ -51,7 +51,7 @@ private fun Book.progress(): Float {
   val totalDuration = duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
-    Timber.e("Couldn't determine progress for book=$this")
+    Logger.w("Couldn't determine progress for book=$this")
   }
   return progress.coerceIn(0F, 1F)
 }

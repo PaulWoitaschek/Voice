@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import voice.data.MarkData
 import voice.ffmpeg.ffprobe
+import voice.logging.core.Logger
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -24,7 +24,7 @@ class MediaAnalyzer
   }
 
   suspend fun analyze(uri: Uri): Metadata? {
-    Timber.d("analyze $uri")
+    Logger.d("analyze $uri")
 
     val result = ffprobe(
       input = uri,
@@ -40,14 +40,14 @@ class MediaAnalyzer
       )
     )
     if (result == null) {
-      Timber.e("Unable to parse $uri.")
+      Logger.w("Unable to parse $uri.")
       return null
     }
 
     val parsed = try {
       json.decodeFromString(MetaDataScanResult.serializer(), result)
     } catch (e: SerializationException) {
-      Timber.e(e, "Unable to parse $uri")
+      Logger.w(e, "Unable to parse $uri")
       return null
     }
 
@@ -66,7 +66,7 @@ class MediaAnalyzer
         }
       )
     } else {
-      Timber.e("Unable to parse $uri")
+      Logger.w("Unable to parse $uri")
       null
     }
   }

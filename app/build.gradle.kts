@@ -107,6 +107,7 @@ dependencies {
   implementation(libs.constraintLayout)
   implementation(libs.media)
   implementation(libs.datastore)
+  implementation(libs.appStartup)
 
   implementation(libs.serialization.json)
 
@@ -118,7 +119,11 @@ dependencies {
   if (enableCrashlytics) {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+    implementation(projects.logging.crashlytics)
   }
+
+  implementation(projects.logging.core)
+  debugImplementation(projects.logging.debug)
 
   implementation(libs.dagger.core)
   kapt(libs.dagger.compiler)
@@ -131,8 +136,6 @@ dependencies {
 
   implementation(libs.coroutines.core)
   implementation(libs.coroutines.android)
-
-  implementation(libs.timber)
 
   implementation(libs.exoPlayer.core)
 

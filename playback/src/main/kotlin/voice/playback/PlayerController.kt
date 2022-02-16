@@ -4,8 +4,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
-import timber.log.Timber
 import voice.data.Chapter
+import voice.logging.core.Logger
 import voice.playback.session.PlaybackService
 import voice.playback.session.forcedNext
 import voice.playback.session.forcedPrevious
@@ -24,19 +24,19 @@ class PlayerController
   private val callback = object : MediaBrowserCompat.ConnectionCallback() {
     override fun onConnected() {
       super.onConnected()
-      Timber.d("onConnected")
+      Logger.v("onConnected")
       _controller = MediaControllerCompat(context, browser.sessionToken)
     }
 
     override fun onConnectionSuspended() {
       super.onConnectionSuspended()
-      Timber.d("onConnectionSuspended")
+      Logger.v("onConnectionSuspended")
       _controller = null
     }
 
     override fun onConnectionFailed() {
       super.onConnectionFailed()
-      Timber.d("onConnectionFailed")
+      Logger.d("onConnectionFailed")
       _controller = null
     }
   }

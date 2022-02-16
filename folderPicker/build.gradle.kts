@@ -20,7 +20,6 @@ dependencies {
   implementation(projects.data)
   implementation(projects.sleepTimer)
 
-  implementation(libs.timber)
   implementation(libs.datastore)
   implementation(libs.coroutines.core)
   implementation(libs.coil)

@@ -8,8 +8,8 @@ import android.view.WindowManager
 import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import voice.ffmpeg.ffmpeg
+import voice.logging.core.Logger
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -60,7 +60,7 @@ constructor(
           it.flush()
         }
       } catch (e: IOException) {
-        Timber.e(e, "Error at saving image with destination=$destination")
+        Logger.w(e, "Error at saving image with destination=$destination")
       }
     }
   }

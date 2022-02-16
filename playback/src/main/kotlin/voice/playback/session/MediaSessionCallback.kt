@@ -5,10 +5,10 @@ import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.Chapter
+import voice.logging.core.Logger
 import voice.playback.BuildConfig
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
 import voice.playback.di.PlaybackScope
@@ -33,7 +33,7 @@ class MediaSessionCallback
 ) : MediaSessionCompat.Callback() {
 
   override fun onSkipToQueueItem(id: Long) {
-    Timber.i("onSkipToQueueItem $id")
+    Logger.i("onSkipToQueueItem $id")
     val chapter = player.book
       ?.chapters?.getOrNull(id.toInt()) ?: return
     player.changePosition(0, chapter.id)
@@ -41,7 +41,7 @@ class MediaSessionCallback
   }
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-    Timber.i("onPlayFromMediaId $mediaId")
+    Logger.i("onPlayFromMediaId $mediaId")
     mediaId ?: return
     when (val parsed = bookUriConverter.parse(mediaId)) {
       is BookUriConverter.Parsed.Book -> {
@@ -58,14 +58,14 @@ class MediaSessionCallback
         onPlay()
       }
       BookUriConverter.Parsed.AllBooks -> {
-        Timber.e("Didn't handle $parsed")
+        Logger.w("Didn't handle $parsed")
       }
       null -> {}
     }
   }
 
   override fun onPlayFromSearch(query: String?, extras: Bundle?) {
-    Timber.i("onPlayFromSearch $query")
+    Logger.i("onPlayFromSearch $query")
     val bookSearch = bookSearchParser.parse(query, extras)
     runBlocking {
       bookSearchHandler.handle(bookSearch)
@@ -73,7 +73,7 @@ class MediaSessionCallback
   }
 
   override fun onSkipToNext() {
-    Timber.i("onSkipToNext")
+    Logger.i("onSkipToNext")
     if (autoConnection.connected) {
       player.next()
     } else {
@@ -82,12 +82,12 @@ class MediaSessionCallback
   }
 
   override fun onRewind() {
-    Timber.i("onRewind")
+    Logger.i("onRewind")
     player.skip(forward = false)
   }
 
   override fun onSkipToPrevious() {
-    Timber.i("onSkipToPrevious")
+    Logger.i("onSkipToPrevious")
     if (autoConnection.connected) {
       player.previous(toNullOfNewTrack = true)
     } else {
@@ -96,22 +96,22 @@ class MediaSessionCallback
   }
 
   override fun onFastForward() {
-    Timber.i("onFastForward")
+    Logger.i("onFastForward")
     player.skip(forward = true)
   }
 
   override fun onStop() {
-    Timber.i("onStop")
+    Logger.i("onStop")
     player.stop()
   }
 
   override fun onPause() {
-    Timber.i("onPause")
+    Logger.i("onPause")
     player.pause(rewind = true)
   }
 
   override fun onPlay() {
-    Timber.i("onPlay")
+    Logger.i("onPlay")
     player.play()
   }
 
@@ -124,7 +124,7 @@ class MediaSessionCallback
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {
-    Timber.i("onCustomAction $action")
+    Logger.i("onCustomAction $action")
     when (action) {
       ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
       ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()

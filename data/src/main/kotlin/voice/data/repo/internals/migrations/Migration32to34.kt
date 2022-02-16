@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import timber.log.Timber
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
+import voice.logging.core.Logger
 
 private const val BOOKMARK_TABLE_NAME = "tableBookmarks"
 private const val BM_PATH = "bookmarkPath"
@@ -43,14 +43,14 @@ class Migration32to34 : Migration(32, 34) {
       val time = getLong(BM_TIME)
       Holder(path, title, time)
     }
-    Timber.i("Restored bookmarks=$entries")
+    Logger.i("Restored bookmarks=$entries")
 
     // delete table
     db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
 
     // create new bookmark scheme
     db.execSQL(CREATE_TABLE_BOOKMARKS)
-    Timber.i("Created $CREATE_TABLE_BOOKMARKS")
+    Logger.i("Created $CREATE_TABLE_BOOKMARKS")
 
     // add old bookmarks to new bookmark scheme
     db.transaction {
@@ -61,7 +61,7 @@ class Migration32to34 : Migration(32, 34) {
           put(TIME, it.time)
         }
         db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
-        Timber.i("Inserted $cv to $TABLE_NAME")
+        Logger.i("Inserted $cv to $TABLE_NAME")
       }
     }
   }

@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -29,6 +28,7 @@ import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.di.PlaybackScope
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState
@@ -92,7 +92,7 @@ constructor(
     }
 
     player.onError {
-      Timber.e("onError")
+      Logger.w("onError")
       player.playWhenReady = false
     }
 
@@ -100,7 +100,7 @@ constructor(
     player.onPositionDiscontinuity {
       val position = player.currentPosition
         .coerceAtLeast(0)
-      Timber.i("onPositionDiscontinuity with currentPos=$position")
+      Logger.v("onPositionDiscontinuity with currentPos=$position")
 
       updateContent {
         copy(
@@ -112,10 +112,10 @@ constructor(
 
     scope.launch {
       _state.collect {
-        Timber.i("state changed to $it")
+        Logger.v("state changed to $it")
         // upon end stop the player
         if (it == PlayerState.ENDED) {
-          Timber.v("onEnded. Stopping player")
+          Logger.v("onEnded. Stopping player")
           checkMainThread()
           player.playWhenReady = false
         }
@@ -185,21 +185,21 @@ constructor(
   }
 
   fun play() {
-    Timber.v("play called in state $state, currentFile=${book?.currentChapter}")
+    Logger.v("play called in state $state, currentFile=${book?.currentChapter}")
     prepare()
     updateContent {
       copy(lastPlayedAt = Instant.now())
     }
     val book = book ?: return
     if (state == PlayerState.ENDED) {
-      Timber.i("play in state ended. Back to the beginning")
+      Logger.d("play in state ended. Back to the beginning")
       changePosition(0, book.chapters.first().id)
     }
 
     if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
       checkMainThread()
       player.playWhenReady = true
-    } else Timber.d("ignore play in state $state")
+    } else Logger.d("ignore play in state $state")
   }
 
   private fun skip(skipAmount: Duration) {
@@ -214,7 +214,7 @@ constructor(
       val duration = player.duration.milliseconds
 
       val seekTo = currentPos + skipAmount
-      Timber.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
+      Logger.v("currentPos=$currentPos, seekTo=$seekTo, duration=$duration")
       when {
         seekTo < Duration.ZERO -> previous(false)
         seekTo > duration -> next()
@@ -224,13 +224,13 @@ constructor(
   }
 
   fun skip(forward: Boolean) {
-    Timber.v("skip forward=$forward")
+    Logger.v("skip forward=$forward")
     skip(skipAmount = if (forward) seekTime else -seekTime)
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
-    Timber.i("previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state")
+    Logger.i("previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state")
     prepare()
     if (state == PlayerState.IDLE)
       return
@@ -245,7 +245,7 @@ constructor(
     checkMainThread()
     val previousChapter = content.previousChapter
     if (player.currentPosition > 2000 || previousChapter == null) {
-      Timber.i("seekTo beginning")
+      Logger.i("seekTo beginning")
       changePosition(0)
     } else {
       if (toNullOfNewTrack) {
@@ -285,7 +285,7 @@ constructor(
     if (!shouldInitialize) {
       return
     }
-    Timber.i("prepare $book")
+    Logger.v("prepare $book")
     this.book = book
     checkMainThread()
     player.playWhenReady = false
@@ -303,7 +303,7 @@ constructor(
   }
 
   fun pause(rewind: Boolean) {
-    Timber.v("pause")
+    Logger.v("pause")
     checkMainThread()
     when (state) {
       PlayerState.PLAYING -> {
@@ -334,7 +334,7 @@ constructor(
           }
         }
       }
-      else -> Timber.d("pause ignored because of $state")
+      else -> Logger.d("pause ignored because of $state")
     }
   }
 
@@ -352,7 +352,7 @@ constructor(
   }
 
   fun changePosition(time: Long, changedChapter: Chapter.Id? = null) {
-    Timber.v("changePosition with time $time and file $changedChapter")
+    Logger.v("changePosition with time $time and file $changedChapter")
     prepare()
     if (state == PlayerState.IDLE)
       return
@@ -365,7 +365,7 @@ constructor(
 
   fun changePosition(chapter: Chapter.Id) {
     checkMainThread()
-    Timber.v("chapterPosition($chapter)")
+    Logger.v("chapterPosition($chapter)")
     prepare()
     if (state == PlayerState.IDLE)
       return
@@ -389,7 +389,7 @@ constructor(
 
   fun setSkipSilences(skip: Boolean) {
     checkMainThread()
-    Timber.v("setSkipSilences to $skip")
+    Logger.v("setSkipSilences to $skip")
     prepare()
     updateContent { copy(skipSilence = skip) }
     player.skipSilenceEnabled = skip

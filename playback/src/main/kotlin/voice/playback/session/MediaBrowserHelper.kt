@@ -11,12 +11,12 @@ import dagger.Reusable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import voice.common.ApplicationIdProvider
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.BookComparator
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.R
 import java.io.File
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class MediaBrowserHelper
 
   suspend fun loadChildren(parentId: String): List<MediaBrowserCompat.MediaItem>? {
     val items = mediaItems(parentId)
-    Timber.d("sending result $items")
+    Logger.v("sending result $items")
     return items
   }
 
@@ -62,7 +62,7 @@ class MediaBrowserHelper
       }
       is BookUriConverter.Parsed.Book,
       is BookUriConverter.Parsed.Chapter -> {
-        Timber.e("Didn't handle $parentId")
+        Logger.w("Didn't handle $parentId")
         null
       }
     }

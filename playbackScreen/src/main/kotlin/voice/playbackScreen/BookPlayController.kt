@@ -11,7 +11,6 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
@@ -21,6 +20,7 @@ import voice.core.rootComponentAs
 import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId
+import voice.logging.core.Logger
 import voice.playbackScreen.databinding.BookPlayBinding
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
@@ -83,7 +83,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun BookPlayBinding.render(viewState: BookPlayViewState) {
-    Timber.d("render $viewState")
+    Logger.d("render $viewState")
     binding.title.text = viewState.title
     currentChapterText.text = viewState.chapterName
     currentChapterContainer.isVisible = viewState.chapterName != null

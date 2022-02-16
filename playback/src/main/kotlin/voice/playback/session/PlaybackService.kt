@@ -26,11 +26,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.androidauto.NotifyOnAutoConnectionChange
 import voice.playback.di.PlaybackComponentFactoryProvider
 import voice.playback.misc.flowBroadcastReceiver
@@ -171,7 +171,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private fun audioBecomingNoisy() {
-    Timber.d("audio becoming noisy. playState=${playStateManager.playState}")
+    Logger.d("audio becoming noisy. playState=${playStateManager.playState}")
     if (playStateManager.playState === PlayState.Playing) {
       playStateManager.pauseReason = PauseReason.BecauseHeadset
       player.pause(true)

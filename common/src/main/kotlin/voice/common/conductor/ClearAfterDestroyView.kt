@@ -1,7 +1,7 @@
 package voice.common.conductor
 
 import com.bluelinelabs.conductor.Controller
-import timber.log.Timber
+import voice.logging.core.Logger
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -15,7 +15,7 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
       object : Controller.LifecycleListener() {
         override fun postDestroyView(controller: Controller) {
           if (controller.isDestroyed || controller.isBeingDestroyed) {
-            Timber.d("We are in teardown. Defer releasing the reference.")
+            Logger.d("We are in teardown. Defer releasing the reference.")
           } else value = null
         }
 

@@ -8,10 +8,10 @@ import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.common.compose.ComposeController
 import voice.core.AppScope
 import voice.core.rootComponentAs
+import voice.logging.core.Logger
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -51,7 +51,7 @@ class SettingsController : ComposeController() {
     try {
       startActivity(Intent(Intent.ACTION_VIEW, uri))
     } catch (exception: ActivityNotFoundException) {
-      Timber.e(exception)
+      Logger.w(exception)
     }
   }
 

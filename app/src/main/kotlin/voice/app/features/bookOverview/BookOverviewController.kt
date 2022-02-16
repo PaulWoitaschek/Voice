@@ -13,7 +13,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import voice.app.R
 import voice.app.databinding.BookOverviewBinding
 import voice.app.features.GalleryPicker
@@ -32,6 +31,7 @@ import voice.common.conductor.clearAfterDestroyView
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.folderPicker.FolderPickerController
+import voice.logging.core.Logger
 import voice.playbackScreen.BookPlayController
 import voice.settings.SettingsController
 import javax.inject.Inject
@@ -64,6 +64,8 @@ class BookOverviewController :
   private var useGrid = false
 
   override fun BookOverviewBinding.onBindingCreated() {
+    Logger.w("Hello loggy")
+    Logger.e(AssertionError("Boom"), "Hey crashlytics log")
     setupToolbar()
     setupFab()
     setupRecyclerView()
@@ -152,7 +154,7 @@ class BookOverviewController :
   }
 
   private fun BookOverviewBinding.render(state: BookOverviewState, gridMenuItem: MenuItem) {
-    Timber.i("render ${state.javaClass.simpleName}")
+    Logger.i("render ${state.javaClass.simpleName}")
     val adapterContent = when (state) {
       is BookOverviewState.Content -> buildList {
         state.categoriesWithContents.forEach { (category, content) ->
@@ -196,7 +198,7 @@ class BookOverviewController :
   }
 
   private fun showPlaying(playing: Boolean) {
-    Timber.i("Called showPlaying $playing")
+    Logger.i("Called showPlaying $playing")
     playPauseDrawableSetter.setPlaying(playing = playing)
   }
 

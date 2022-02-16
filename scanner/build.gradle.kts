@@ -17,7 +17,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.coroutines.core)
   implementation(libs.dagger.core)
-  implementation(libs.timber)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)

@@ -10,8 +10,8 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import timber.log.Timber
 import voice.data.repo.internals.moveToNextLoop
+import voice.logging.core.Logger
 import java.io.File
 import java.io.IOException
 import java.util.InvalidPropertiesFormatException
@@ -224,7 +224,7 @@ class Migration24to25(
         book.put("time", currentTime)
         book.put("playbackSpeed", speed.toDouble())
 
-        Timber.d("upgrade24 restored book=$book")
+        Logger.d("upgrade24 restored book=$book")
         val cv = ContentValues()
         cv.put("BOOK_JSON", book.toString())
         val newBookId = db.insert(newBookTable, SQLiteDatabase.CONFLICT_FAIL, cv)

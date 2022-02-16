@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import timber.log.Timber
 import voice.common.pref.PrefKeys
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
@@ -49,7 +49,7 @@ class SleepTimer
   private var sleepJob: Job? = null
 
   fun setActive(enable: Boolean) {
-    Timber.i("enable=$enable")
+    Logger.i("enable=$enable")
     if (enable) {
       start()
     } else {
@@ -58,20 +58,20 @@ class SleepTimer
   }
 
   private fun start() {
-    Timber.i("Starting sleepTimer. Pause in $sleepTime.")
+    Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     sleepJob?.cancel()
     sleepJob = scope.launch {
       startSleepTimerCountdown()
       val shakeToResetTime = 30.seconds
-      Timber.d("Wait for $shakeToResetTime for a shake")
+      Logger.d("Wait for $shakeToResetTime for a shake")
       withTimeout(shakeToResetTime) {
         shakeDetector.detect()
-        Timber.i("Shake detected. Reset sleep time")
+        Logger.i("Shake detected. Reset sleep time")
         playerController.play()
         start()
       }
-      Timber.i("exiting")
+      Logger.i("exiting")
     }
   }
 
@@ -87,11 +87,11 @@ class SleepTimer
 
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
-      Timber.i("Not playing. Wait for Playback to continue.")
+      Logger.i("Not playing. Wait for Playback to continue.")
       playStateManager.flow
         .filter { it == Playing }
         .first()
-      Timber.i("Playback continued.")
+      Logger.i("Playback continued.")
     }
   }
 

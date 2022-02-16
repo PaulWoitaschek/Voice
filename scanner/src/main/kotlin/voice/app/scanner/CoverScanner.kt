@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import voice.data.Book
 import voice.data.toUri
 import voice.ffmpeg.ffmpeg
+import voice.logging.core.Logger
 import java.io.IOException
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class CoverScanner
             }
             coverSaver.setBookCover(coverFile, book.id)
           } catch (e: IOException) {
-            Timber.e(e, "Error while copying the cover from ${child.uri}")
+            Logger.w(e, "Error while copying the cover from ${child.uri}")
           }
         }
       }

@@ -2,7 +2,7 @@ package voice.playback.playstate
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import timber.log.Timber
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +21,7 @@ constructor() {
   var playState: PlayState
     set(value) {
       if (_playState.value != value) {
-        Timber.i("playState set to $value")
+        Logger.i("playState set to $value")
         _playState.value = value
         if (value == PlayState.Playing || value == PlayState.Stopped) {
           pauseReason = PauseReason.None

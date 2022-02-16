@@ -2,13 +2,13 @@ package voice.data.repo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.repo.internals.AppDb
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.transaction
+import voice.logging.core.Logger
 import java.time.Instant
 import javax.inject.Inject
 
@@ -38,7 +38,7 @@ class BookmarkRepo
         bookId = book.id
       )
       addBookmark(bookMark)
-      Timber.v("Added bookmark=$bookMark")
+      Logger.v("Added bookmark=$bookMark")
       bookMark
     }
   }

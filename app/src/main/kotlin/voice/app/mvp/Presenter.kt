@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import timber.log.Timber
 import voice.app.misc.checkMainThread
+import voice.logging.core.Logger
 
 abstract class Presenter<V : Any> {
 
@@ -31,7 +31,7 @@ abstract class Presenter<V : Any> {
   }
 
   fun attach(view: V) {
-    Timber.i("attach $view")
+    Logger.i("attach $view")
     checkMainThread()
     check(internalView == null) {
       "$internalView already bound."
@@ -43,7 +43,7 @@ abstract class Presenter<V : Any> {
   }
 
   fun detach() {
-    Timber.i("detach $internalView")
+    Logger.i("detach $internalView")
     checkMainThread()
     onAttachScope.cancel()
     internalView = null

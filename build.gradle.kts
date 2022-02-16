@@ -39,6 +39,9 @@ subprojects {
   fun addCoreDependencies() {
     if (path != ":core") {
       dependencies.add("implementation", projects.core)
+      if (path != ":logging:core") {
+        dependencies.add("implementation", projects.logging.core)
+      }
     }
   }
   apply(plugin = "org.jlleitschuh.gradle.ktlint")

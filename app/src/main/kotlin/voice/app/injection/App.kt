@@ -10,7 +10,6 @@ import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import voice.app.BuildConfig
 import voice.app.features.widget.TriggerWidgetOnChange
 import voice.app.misc.StrictModeInit
@@ -18,6 +17,7 @@ import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.PrefKeys
 import voice.core.rootComponent
+import voice.logging.core.Logger
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
 import voice.playback.di.PlaybackComponent
 import voice.playback.di.PlaybackComponentFactoryProvider
@@ -49,11 +49,9 @@ class App : Application(), PlaybackComponentFactoryProvider {
         .build()
     )
 
-    DynamicColors.applyToActivitiesIfAvailable(this)
+    Logger.d("Hey dogs")
 
-    if (BuildConfig.DEBUG) {
-      Timber.plant(Timber.DebugTree())
-    }
+    DynamicColors.applyToActivitiesIfAvailable(this)
 
     appComponent = AppComponent.factory()
       .create(this)

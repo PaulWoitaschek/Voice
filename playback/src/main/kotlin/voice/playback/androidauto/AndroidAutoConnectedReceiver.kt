@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import timber.log.Timber
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,11 +24,11 @@ class AndroidAutoConnectedReceiver @Inject constructor() {
     override fun onReceive(context: Context?, intent: Intent?) {
       when (intent?.getStringExtra("media_connection_status")) {
         "media_connected" -> {
-          Timber.i("connected")
+          Logger.i("connected")
           _connected.value = true
         }
         "media_disconnected" -> {
-          Timber.i("disconnected")
+          Logger.i("disconnected")
           _connected.value = false
         }
       }

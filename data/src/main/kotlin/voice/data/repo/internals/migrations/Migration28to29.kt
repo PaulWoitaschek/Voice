@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
-import timber.log.Timber
+import voice.logging.core.Logger
 import java.io.File
 
 class Migration28to29 : IncrementalMigration(28) {
@@ -27,7 +27,7 @@ class Migration28to29 : IncrementalMigration(28) {
             chapter.put("name", chapterName)
           }
           val cv = ContentValues()
-          Timber.d("so saving book=$book")
+          Logger.d("so saving book=$book")
           cv.put("BOOK_JSON", book.toString())
           db.update(
             "TABLE_BOOK",

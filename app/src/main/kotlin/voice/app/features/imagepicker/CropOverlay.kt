@@ -13,7 +13,6 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import timber.log.Timber
 import voice.app.R
 import voice.app.misc.dpToPxRounded
 import voice.app.misc.layoutInflater
@@ -127,7 +126,6 @@ class CropOverlay @JvmOverloads constructor(
 
     scaleGestureDetector.onTouchEvent(event)
     val gestureDetectorIsHandling = scaleGestureDetector.isInProgress
-    Timber.i("Gesture detector is handling=$gestureDetectorIsHandling")
     if (gestureDetectorIsHandling) {
       // pinch handles this
       resizeType = null
@@ -170,7 +168,6 @@ class CropOverlay @JvmOverloads constructor(
               Resize.BOTTOM -> dragRect.bottom - y
               Resize.LEFT -> x - dragRect.left
             }
-            Timber.i("inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y")
             dragRect.squareInset(inset)
           }
         }
@@ -220,7 +217,6 @@ class CropOverlay @JvmOverloads constructor(
     if (w < minSize) {
       val diff = minSize - w
       dragRect.squareInset(-diff / 2f)
-      Timber.i("preserving min size with diff=$diff")
     }
 
     // preserve max size
@@ -229,7 +225,6 @@ class CropOverlay @JvmOverloads constructor(
     val diff = dragW - boundsSize
     if (diff > 0) {
       dragRect.squareInset(diff / 2f)
-      Timber.i("preserve max size, insetting with diff=$diff, dragW=$dragW, boundsSize=$boundsSize")
     }
   }
 
