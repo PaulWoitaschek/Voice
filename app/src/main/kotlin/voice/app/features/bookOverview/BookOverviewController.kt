@@ -64,8 +64,6 @@ class BookOverviewController :
   private var useGrid = false
 
   override fun BookOverviewBinding.onBindingCreated() {
-    Logger.w("Hello loggy")
-    Logger.e(AssertionError("Boom"), "Hey crashlytics log")
     setupToolbar()
     setupFab()
     setupRecyclerView()
