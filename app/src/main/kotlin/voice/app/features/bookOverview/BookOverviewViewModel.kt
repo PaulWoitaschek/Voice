@@ -43,7 +43,7 @@ constructor(
   }
 
   fun state(): Flow<BookOverviewState> {
-    val playingStream = playStateManager.playStateFlow()
+    val playingStream = playStateManager.flow
       .map { it == PlayState.Playing }
       .distinctUntilChanged()
     return combine(

@@ -88,7 +88,7 @@ class SleepTimer
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
       Timber.i("Not playing. Wait for Playback to continue.")
-      playStateManager.playStateFlow()
+      playStateManager.flow
         .filter { it == Playing }
         .first()
       Timber.i("Playback continued.")

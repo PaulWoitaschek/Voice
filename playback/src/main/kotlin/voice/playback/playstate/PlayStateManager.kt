@@ -1,50 +1,35 @@
 package voice.playback.playstate
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manages the playback state and is able to inform subscriber.
- * Also manages the reason for pausing and sets it to none if the state gets stopped is playing.
- */
 @Singleton
 class PlayStateManager
 @Inject
 constructor() {
 
-  private val playStateChannel = MutableStateFlow(PlayState.Stopped)
+  private val _playState = MutableStateFlow(PlayState.Stopped)
 
-  init {
-    @Suppress("CheckResult")
-    GlobalScope.launch(Dispatchers.Main) {
-      playStateChannel.collect {
-        if (it == PlayState.Playing || it == PlayState.Stopped) {
+  var pauseReason = PauseReason.None
+
+  val flow: Flow<PlayState>
+    get() = _playState
+
+  var playState: PlayState
+    set(value) {
+      if (_playState.value != value) {
+        Timber.i("playState set to $value")
+        _playState.value = value
+        if (value == PlayState.Playing || value == PlayState.Stopped) {
           pauseReason = PauseReason.None
         }
       }
     }
-  }
+    get() = _playState.value
 
-  var pauseReason = PauseReason.None
-
-  fun playStateFlow(): Flow<PlayState> = playStateChannel
-
-  var playState: PlayState
-    set(value) {
-      if (playStateChannel.value != value) {
-        Timber.i("playState set to $value")
-        playStateChannel.value = value
-      }
-    }
-    get() = playStateChannel.value
-
-  /** Represents the play states for the playback.  */
   enum class PlayState {
     Playing,
     Paused,

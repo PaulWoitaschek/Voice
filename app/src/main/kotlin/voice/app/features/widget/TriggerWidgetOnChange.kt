@@ -42,7 +42,7 @@ class TriggerWidgetOnChange
   }
 
   private fun playStateChanged(): Flow<PlayStateManager.PlayState> {
-    return playStateManager.playStateFlow().distinctUntilChanged()
+    return playStateManager.flow.distinctUntilChanged()
   }
 
   private fun currentBookChanged(): Flow<Book> {
