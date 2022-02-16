@@ -54,7 +54,7 @@ private fun fullCommand(input: Uri, context: Context, command: List<String>): Li
   val mappedInput = if (input.scheme == "content") {
     try {
       FFmpegKitConfig.getSafParameterForRead(context, input)
-    } catch (e: SecurityException) {
+    } catch (e: Exception) {
       Logger.e(e, "Could not get saf parameter for $input")
       return null
     }
