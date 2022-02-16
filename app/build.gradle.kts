@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.util.Properties
 
 plugins {
@@ -114,7 +116,8 @@ dependencies {
   implementation(libs.coil)
 
   if (enableCrashlytics) {
-    implementation(libs.crashlytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
   }
 
   implementation(libs.dagger.core)
