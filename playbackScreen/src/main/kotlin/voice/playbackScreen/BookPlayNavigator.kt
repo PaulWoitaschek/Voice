@@ -1,6 +1,6 @@
 package voice.playbackScreen
 
-import de.ph1b.audiobook.data.Book
+import voice.data.Book
 
 interface BookPlayNavigator {
 

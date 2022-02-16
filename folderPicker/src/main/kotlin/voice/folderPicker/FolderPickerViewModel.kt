@@ -9,13 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
-import de.ph1b.audiobook.common.pref.AudiobookFolders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import voice.common.pref.AudiobookFolders
 import javax.inject.Inject
 import javax.inject.Qualifier
 

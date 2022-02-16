@@ -1,13 +1,6 @@
 package voice.playbackScreen
 
 import androidx.datastore.core.DataStore
-import de.ph1b.audiobook.common.pref.CurrentBook
-import de.ph1b.audiobook.data.Book
-import de.ph1b.audiobook.data.durationMs
-import de.ph1b.audiobook.data.markForPosition
-import de.ph1b.audiobook.data.repo.BookRepository
-import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.playstate.PlayStateManager
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,6 +8,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import voice.common.pref.CurrentBook
+import voice.data.Book
+import voice.data.durationMs
+import voice.data.markForPosition
+import voice.data.repo.BookRepository
+import voice.playback.PlayerController
+import voice.playback.playstate.PlayStateManager
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds

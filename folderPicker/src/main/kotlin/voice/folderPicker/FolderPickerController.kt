@@ -4,9 +4,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import com.squareup.anvil.annotations.ContributesTo
-import de.ph1b.audiobook.AppScope
-import de.ph1b.audiobook.rootComponentAs
 import voice.common.compose.ComposeController
+import voice.core.AppScope
+import voice.core.rootComponentAs
 import javax.inject.Inject
 
 

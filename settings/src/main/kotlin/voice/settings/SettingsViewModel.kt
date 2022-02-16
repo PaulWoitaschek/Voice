@@ -1,12 +1,12 @@
 package voice.settings
 
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.DARK_THEME_SETTABLE
-import de.ph1b.audiobook.common.pref.PrefKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import voice.common.DARK_THEME_SETTABLE
+import voice.common.pref.PrefKeys
 import javax.inject.Inject
 import javax.inject.Named
 

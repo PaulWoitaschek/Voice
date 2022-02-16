@@ -1,10 +1,6 @@
 package voice.sleepTimer
 
 import de.paulwoitaschek.flowpref.Pref
-import de.ph1b.audiobook.common.pref.PrefKeys
-import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.playback.playstate.PlayStateManager
-import de.ph1b.audiobook.playback.playstate.PlayStateManager.PlayState.Playing
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -15,6 +11,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import timber.log.Timber
+import voice.common.pref.PrefKeys
+import voice.playback.PlayerController
+import voice.playback.playstate.PlayStateManager
+import voice.playback.playstate.PlayStateManager.PlayState.Playing
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton

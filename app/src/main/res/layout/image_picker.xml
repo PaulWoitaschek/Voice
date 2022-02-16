@@ -36,7 +36,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent" />
 
-        <de.ph1b.audiobook.features.imagepicker.CropOverlay
+        <voice.app.features.imagepicker.CropOverlay
           android:id="@+id/cropOverlay"
           android:layout_width="match_parent"
           android:layout_height="match_parent" />

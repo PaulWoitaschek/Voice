@@ -1,16 +1,16 @@
 Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg)
 =======================
 
-<a href="https://f-droid.org/packages/de.ph1b.audiobook/">
+<a href="https://f-droid.org/packages/voice.audiobook/">
   <img alt="Get it on F-Droid"
        height="80"
        src="https://f-droid.org/badge/get-it-on.png" />
 </a>
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">
+<a href="https://play.google.com/store/apps/details?id=voice.app">
   <img alt="Get it on Google Play"
        height="80"
        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
-</a>  
+</a>
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
@@ -19,7 +19,7 @@ There are still some components outdated.
 
 If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
 
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/main/Images/front.png" width="400" ></a>
+<a href="https://play.google.com/store/apps/details?id=voice.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/main/Images/front.png" width="400" ></a>
 
 # <a name="contrib">Contribution</a>
 

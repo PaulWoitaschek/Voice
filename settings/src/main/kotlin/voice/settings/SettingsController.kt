@@ -6,12 +6,12 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesTo
-import de.ph1b.audiobook.AppScope
-import de.ph1b.audiobook.rootComponentAs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import voice.common.compose.ComposeController
+import voice.core.AppScope
+import voice.core.rootComponentAs
 import voice.settings.views.Settings
 import javax.inject.Inject
 
