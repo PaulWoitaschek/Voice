@@ -2,26 +2,59 @@ package voice.app.scanner
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import voice.common.ImageHelper
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.math.max
 
 class CoverSaver
 @Inject constructor(
-  private val imageHelper: ImageHelper,
   private val repo: BookRepository,
   private val context: Context,
 ) {
 
   suspend fun save(bookId: Book.Id, cover: Bitmap) {
     val newCover = newBookCoverFile()
-    imageHelper.saveCover(cover, newCover)
+
+    withContext(Dispatchers.IO) {
+      // scale down if bitmap is too large
+      val preferredSize = 1920
+      val bitmapToSave = if (max(cover.width, cover.height) > preferredSize) {
+        Bitmap.createScaledBitmap(cover, preferredSize, preferredSize, true)
+      } else {
+        cover
+      }
+
+      try {
+        @Suppress("BlockingMethodInNonBlockingContext")
+        FileOutputStream(newCover).use {
+          val compressFormat = when (newCover.extension) {
+            "png" -> Bitmap.CompressFormat.PNG
+            "webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+              Bitmap.CompressFormat.WEBP_LOSSLESS
+            } else {
+              @Suppress("DEPRECATION")
+              Bitmap.CompressFormat.WEBP
+            }
+            else -> error("Unhandled image extension for $newCover")
+          }
+          bitmapToSave.compress(compressFormat, 70, it)
+          it.flush()
+        }
+      } catch (e: IOException) {
+        Logger.w(e, "Error at saving image with destination=$newCover")
+      }
+    }
+
     setBookCover(newCover, bookId)
   }
 

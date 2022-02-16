@@ -14,7 +14,6 @@ android {
 }
 
 dependencies {
-  implementation(projects.ffmpeg)
   implementation(projects.strings)
   implementation(libs.appCompat)
   implementation(libs.coroutines.core)
