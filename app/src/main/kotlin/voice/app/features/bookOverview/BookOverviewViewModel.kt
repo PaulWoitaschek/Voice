@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import voice.app.features.bookOverview.list.BookOverviewViewState
-import voice.app.features.bookOverview.list.header.BookOverviewCategory
 import voice.app.features.gridCount.GridCount
 import voice.app.scanner.MediaScanTrigger
+import voice.bookOverview.BookOverviewCategory
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book

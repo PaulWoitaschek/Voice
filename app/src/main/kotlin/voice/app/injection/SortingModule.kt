@@ -8,7 +8,7 @@ import dagger.multibindings.IntoMap
 import de.paulwoitaschek.flowpref.Pref
 import de.paulwoitaschek.flowpref.android.AndroidPreferences
 import de.paulwoitaschek.flowpref.android.enum
-import voice.app.features.bookOverview.list.header.BookOverviewCategory
+import voice.bookOverview.BookOverviewCategory
 import voice.core.AppScope
 import voice.data.BookComparator
 import javax.inject.Singleton

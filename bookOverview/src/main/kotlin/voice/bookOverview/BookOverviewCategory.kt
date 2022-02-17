@@ -1,7 +1,6 @@
-package voice.app.features.bookOverview.list.header
+package voice.bookOverview
 
 import androidx.annotation.StringRes
-import voice.app.R
 import voice.data.Book
 import voice.data.BookComparator
 import java.util.concurrent.TimeUnit.SECONDS

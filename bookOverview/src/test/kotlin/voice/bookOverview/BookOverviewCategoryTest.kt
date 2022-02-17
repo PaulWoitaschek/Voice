@@ -1,8 +1,7 @@
-package voice.app.features.bookOverview.list.header
+package voice.bookOverview
 
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import voice.app.book
 
 class BookOverviewCategoryTest {
 
@@ -17,7 +16,7 @@ class BookOverviewCategoryTest {
         )
       )
     }
-    assertThat(book.category).isEqualTo(BookOverviewCategory.FINISHED)
+    book.category shouldBe BookOverviewCategory.FINISHED
   }
 
   @Test
@@ -31,7 +30,7 @@ class BookOverviewCategoryTest {
         )
       )
     }
-    assertThat(book.category).isEqualTo(BookOverviewCategory.NOT_STARTED)
+    book.category shouldBe BookOverviewCategory.NOT_STARTED
   }
 
   @Test
@@ -44,6 +43,6 @@ class BookOverviewCategoryTest {
         )
       )
     }
-    assertThat(book.category).isEqualTo(BookOverviewCategory.CURRENT)
+    book.category shouldBe BookOverviewCategory.CURRENT
   }
 }

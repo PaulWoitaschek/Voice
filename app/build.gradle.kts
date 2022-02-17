@@ -99,6 +99,7 @@ dependencies {
   implementation(projects.sleepTimer)
   implementation(projects.settings)
   implementation(projects.folderPicker)
+  implementation(projects.bookOverview)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

@@ -7,7 +7,6 @@ import java.time.Instant
 import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 
-
 fun book(
   name: String = "TestBook",
   lastPlayedAtMillis: Long = 0L,
