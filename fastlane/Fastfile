@@ -25,7 +25,7 @@ platform :android do
     upload_to_play_store(
       json_key: 'play.json',
       track: 'internal',
-      package_name: 'voice.audiobook',
+      package_name: 'de.ph1b.audiobook',
       skip_upload_images: true,
       skip_upload_metadata: true,
       skip_upload_screenshots: true,
