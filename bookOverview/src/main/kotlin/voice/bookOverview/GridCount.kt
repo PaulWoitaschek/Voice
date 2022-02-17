@@ -1,11 +1,10 @@
-package voice.app.features.gridCount
+package voice.bookOverview
 
 import android.content.Context
-import voice.app.features.bookOverview.GridMode
-import voice.app.features.bookOverview.GridMode.FOLLOW_DEVICE
-import voice.app.features.bookOverview.GridMode.GRID
-import voice.app.features.bookOverview.GridMode.LIST
-import voice.app.misc.dpToPx
+import voice.bookOverview.GridMode.FOLLOW_DEVICE
+import voice.bookOverview.GridMode.GRID
+import voice.bookOverview.GridMode.LIST
+import voice.common.dpToPx
 import javax.inject.Inject
 import kotlin.math.roundToInt
 

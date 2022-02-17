@@ -1,4 +1,4 @@
-package voice.app.misc
+package voice.common
 
 import android.content.Context
 import android.os.Looper

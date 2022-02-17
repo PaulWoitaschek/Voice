@@ -17,9 +17,9 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
-import voice.app.features.bookOverview.GridMode
 import voice.app.serialization.SerializableDataStoreFactory
 import voice.app.serialization.UriSerializer
+import voice.bookOverview.GridMode
 import voice.common.pref.AudiobookFolders
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys

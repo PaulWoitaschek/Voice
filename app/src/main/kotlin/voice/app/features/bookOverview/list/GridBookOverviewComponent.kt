@@ -12,11 +12,12 @@ import voice.app.R
 import voice.app.databinding.BookOverviewRowGridBinding
 import voice.app.databinding.BookOverviewRowListBinding
 import voice.app.misc.RoundRectOutlineProvider
-import voice.app.misc.dpToPx
-import voice.app.misc.layoutInflater
 import voice.app.misc.recyclerComponent.AdapterComponent
+import voice.bookOverview.BookOverviewViewState
 import voice.common.colorFromAttr
+import voice.common.dpToPx
 import voice.common.formatTime
+import voice.common.layoutInflater
 import voice.data.Book
 import java.io.File
 import kotlin.math.roundToInt

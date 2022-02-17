@@ -1,7 +1,4 @@
-package voice.app.features.bookOverview
-
-import voice.app.features.bookOverview.list.BookOverviewViewState
-import voice.bookOverview.BookOverviewCategory
+package voice.bookOverview
 
 sealed class BookOverviewState {
 

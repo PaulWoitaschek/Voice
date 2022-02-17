@@ -14,8 +14,8 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import voice.app.R
-import voice.app.misc.dpToPxRounded
-import voice.app.misc.layoutInflater
+import voice.common.dpToPxRounded
+import voice.common.layoutInflater
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.bluelinelabs.conductor.Controller
-import voice.app.misc.checkMainThread
+import voice.common.checkMainThread
 import voice.common.conductor.InflateBinding
 import voice.common.conductor.ViewBindingController
 

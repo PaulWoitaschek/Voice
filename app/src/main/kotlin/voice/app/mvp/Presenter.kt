@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import voice.app.misc.checkMainThread
+import voice.common.checkMainThread
 import voice.logging.core.Logger
 
 abstract class Presenter<V : Any> {

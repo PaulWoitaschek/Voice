@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import voice.app.features.bookOverview.list.header.BookOverviewHeaderHolder
-import voice.app.misc.dpToPxRounded
+import voice.common.dpToPxRounded
 
 class BookOverviewItemDecoration(
   context: Context,

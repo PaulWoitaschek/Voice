@@ -19,9 +19,12 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.data)
   implementation(projects.sleepTimer)
+  implementation(projects.scanner)
 
   implementation(libs.dagger.core)
   implementation(libs.bundles.compose)
+  implementation(libs.datastore)
+  implementation(libs.prefs.core)
 
   testImplementation(libs.bundles.testing.jvm)
 }

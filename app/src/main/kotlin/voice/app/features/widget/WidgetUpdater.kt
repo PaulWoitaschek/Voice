@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
-import voice.app.misc.dpToPxRounded
+import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository

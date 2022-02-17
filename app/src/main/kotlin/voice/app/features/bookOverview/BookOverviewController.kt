@@ -18,13 +18,15 @@ import voice.app.databinding.BookOverviewBinding
 import voice.app.features.GalleryPicker
 import voice.app.features.bookOverview.list.BookOverviewAdapter
 import voice.app.features.bookOverview.list.BookOverviewClick
-import voice.app.features.bookOverview.list.BookOverviewHeaderModel
 import voice.app.features.bookOverview.list.BookOverviewItemDecoration
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
 import voice.app.misc.conductor.clearAfterDestroyViewNullable
 import voice.app.uitools.BookChangeHandler
+import voice.bookOverview.BookOverviewHeaderModel
+import voice.bookOverview.BookOverviewState
+import voice.bookOverview.BookOverviewViewModel
 import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView

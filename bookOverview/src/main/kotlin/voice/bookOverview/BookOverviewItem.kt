@@ -1,7 +1,6 @@
-package voice.app.features.bookOverview.list
+package voice.bookOverview
 
 import androidx.annotation.FloatRange
-import voice.bookOverview.BookOverviewCategory
 import voice.data.Book
 import voice.logging.core.Logger
 import java.io.File

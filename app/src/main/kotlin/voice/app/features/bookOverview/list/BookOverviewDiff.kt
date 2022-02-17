@@ -1,6 +1,8 @@
 package voice.app.features.bookOverview.list
 
 import androidx.recyclerview.widget.DiffUtil
+import voice.bookOverview.BookOverviewItem
+import voice.bookOverview.BookOverviewViewState
 
 class BookOverviewDiff : DiffUtil.ItemCallback<BookOverviewItem>() {
 
