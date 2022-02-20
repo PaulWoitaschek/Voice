@@ -4,7 +4,6 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.datastore.core.DataStore
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.util.Assertions.checkMainThread
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -102,11 +100,13 @@ constructor(
         .coerceAtLeast(0)
       Logger.v("onPositionDiscontinuity with currentPos=$position")
 
-      updateContent {
-        copy(
-          positionInChapter = position,
-          currentChapter = chapters[player.currentMediaItemIndex]
-        )
+      scope.launch {
+        updateContent {
+          copy(
+            positionInChapter = position,
+            currentChapter = chapters[player.currentMediaItemIndex]
+          )
+        }
       }
     }
 
@@ -116,7 +116,6 @@ constructor(
         // upon end stop the player
         if (it == PlayerState.ENDED) {
           Logger.v("onEnded. Stopping player")
-          checkMainThread()
           player.playWhenReady = false
         }
       }
@@ -176,7 +175,7 @@ constructor(
     return currentBook.chapters == book.chapters
   }
 
-  fun playPause() {
+  suspend fun playPause() {
     if (state == PlayerState.PLAYING) {
       pause(rewind = true)
     } else {
@@ -184,7 +183,7 @@ constructor(
     }
   }
 
-  fun play() {
+  suspend fun play() {
     Logger.v("play called in state $state, currentFile=${book?.currentChapter}")
     prepare()
     updateContent {
@@ -197,13 +196,11 @@ constructor(
     }
 
     if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
-      checkMainThread()
       player.playWhenReady = true
     } else Logger.d("ignore play in state $state")
   }
 
-  private fun skip(skipAmount: Duration) {
-    checkMainThread()
+  private suspend fun skip(skipAmount: Duration) {
     prepare()
     if (state == PlayerState.IDLE)
       return
@@ -223,26 +220,28 @@ constructor(
     }
   }
 
-  fun skip(forward: Boolean) {
+  suspend fun skip(forward: Boolean) {
     Logger.v("skip forward=$forward")
     skip(skipAmount = if (forward) seekTime else -seekTime)
   }
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
-  fun previous(toNullOfNewTrack: Boolean) {
+  suspend fun previous(toNullOfNewTrack: Boolean) {
     Logger.i("previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state")
     prepare()
     if (state == PlayerState.IDLE)
       return
 
     book?.let {
+      previousByMarks(it)
       val handled = previousByMarks(it)
-      if (!handled) previousByFile(it, toNullOfNewTrack)
+      if (!handled) {
+        previousByFile(it, toNullOfNewTrack)
+      }
     }
   }
 
-  private fun previousByFile(content: Book, toNullOfNewTrack: Boolean) {
-    checkMainThread()
+  private suspend fun previousByFile(content: Book, toNullOfNewTrack: Boolean) {
     val previousChapter = content.previousChapter
     if (player.currentPosition > 2000 || previousChapter == null) {
       Logger.i("seekTo beginning")
@@ -258,7 +257,7 @@ constructor(
     }
   }
 
-  private fun previousByMarks(content: Book): Boolean {
+  private suspend fun previousByMarks(content: Book): Boolean {
     val currentChapter = content.currentChapter
     val currentMark = currentChapter.markForPosition(content.content.positionInChapter)
     val timePlayedInMark = content.content.positionInChapter - currentMark.startMs
@@ -276,18 +275,15 @@ constructor(
     return false
   }
 
-  private fun prepare() {
-    val book = runBlocking {
-      val id = currentBook.data.first() ?: return@runBlocking null
-      repo.flow(id).first()
-    } ?: return
+  private suspend fun prepare() {
+    val id = currentBook.data.first() ?: return
+    val book = repo.flow(id).first() ?: return
     val shouldInitialize = player.playbackState == Player.STATE_IDLE || !alreadyInitializedChapters(book)
     if (!shouldInitialize) {
       return
     }
     Logger.v("prepare $book")
     this.book = book
-    checkMainThread()
     player.playWhenReady = false
     player.setMediaSource(dataSourceConverter.toMediaSource(book))
     player.prepare()
@@ -298,13 +294,11 @@ constructor(
   }
 
   fun stop() {
-    checkMainThread()
     player.stop()
   }
 
-  fun pause(rewind: Boolean) {
+  suspend fun pause(rewind: Boolean) {
     Logger.v("pause")
-    checkMainThread()
     when (state) {
       PlayerState.PLAYING -> {
         book?.let {
@@ -338,8 +332,7 @@ constructor(
     }
   }
 
-  fun next() {
-    checkMainThread()
+  suspend fun next() {
     prepare()
     val book = book
       ?: return
@@ -351,7 +344,7 @@ constructor(
     }
   }
 
-  fun changePosition(time: Long, changedChapter: Chapter.Id? = null) {
+  suspend fun changePosition(time: Long, changedChapter: Chapter.Id? = null) {
     Logger.v("changePosition with time $time and file $changedChapter")
     prepare()
     if (state == PlayerState.IDLE)
@@ -363,8 +356,7 @@ constructor(
     }
   }
 
-  fun changePosition(chapter: Chapter.Id) {
-    checkMainThread()
+  suspend fun changePosition(chapter: Chapter.Id) {
     Logger.v("chapterPosition($chapter)")
     prepare()
     if (state == PlayerState.IDLE)
@@ -380,15 +372,13 @@ constructor(
 
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
-  fun setPlaybackSpeed(speed: Float) {
-    checkMainThread()
+  suspend fun setPlaybackSpeed(speed: Float) {
     prepare()
     updateContent { copy(playbackSpeed = speed) }
     player.setPlaybackSpeed(speed)
   }
 
-  fun setSkipSilences(skip: Boolean) {
-    checkMainThread()
+  suspend fun setSkipSilences(skip: Boolean) {
     Logger.v("setSkipSilences to $skip")
     prepare()
     updateContent { copy(skipSilence = skip) }
@@ -400,12 +390,10 @@ constructor(
     scope.cancel()
   }
 
-  private fun updateContent(update: BookContent.() -> BookContent) {
+  private suspend fun updateContent(update: BookContent.() -> BookContent) {
     val book = book ?: return
     val updated = book.copy(content = update(book.content))
     this.book = updated
-    runBlocking {
-      repo.updateBook(book.id, update)
-    }
+    repo.updateBook(book.id, update)
   }
 }

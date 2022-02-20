@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat.TransportControls
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.datastore.core.DataStore
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.Chapter
@@ -32,72 +33,82 @@ class MediaSessionCallback
   private val player: MediaPlayer,
 ) : MediaSessionCompat.Callback() {
 
+  private val scope = MainScope()
+
   override fun onSkipToQueueItem(id: Long) {
-    Logger.i("onSkipToQueueItem $id")
-    val chapter = player.book
-      ?.chapters?.getOrNull(id.toInt()) ?: return
-    player.changePosition(0, chapter.id)
-    player.play()
+    scope.launch {
+      Logger.i("onSkipToQueueItem $id")
+      val chapter = player.book
+        ?.chapters?.getOrNull(id.toInt()) ?: return@launch
+      player.changePosition(0, chapter.id)
+      player.play()
+    }
   }
 
   override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-    Logger.i("onPlayFromMediaId $mediaId")
-    mediaId ?: return
-    when (val parsed = bookUriConverter.parse(mediaId)) {
-      is BookUriConverter.Parsed.Book -> {
-        runBlocking {
+    scope.launch {
+      Logger.i("onPlayFromMediaId $mediaId")
+      mediaId ?: return@launch
+      when (val parsed = bookUriConverter.parse(mediaId)) {
+        is BookUriConverter.Parsed.Book -> {
           currentBook.updateData { parsed.bookId }
+          onPlay()
         }
-        onPlay()
-      }
-      is BookUriConverter.Parsed.Chapter -> {
-        runBlocking {
+        is BookUriConverter.Parsed.Chapter -> {
           currentBook.updateData { parsed.bookId }
+          player.changePosition(parsed.chapterId)
+          onPlay()
         }
-        player.changePosition(parsed.chapterId)
-        onPlay()
+        BookUriConverter.Parsed.AllBooks -> {
+          Logger.w("Didn't handle $parsed")
+        }
+        null -> {}
       }
-      BookUriConverter.Parsed.AllBooks -> {
-        Logger.w("Didn't handle $parsed")
-      }
-      null -> {}
     }
   }
 
   override fun onPlayFromSearch(query: String?, extras: Bundle?) {
     Logger.i("onPlayFromSearch $query")
-    val bookSearch = bookSearchParser.parse(query, extras)
-    runBlocking {
+    scope.launch {
+      val bookSearch = bookSearchParser.parse(query, extras)
       bookSearchHandler.handle(bookSearch)
     }
   }
 
   override fun onSkipToNext() {
     Logger.i("onSkipToNext")
-    if (autoConnection.connected) {
-      player.next()
-    } else {
-      onFastForward()
+    scope.launch {
+      if (autoConnection.connected) {
+        player.next()
+      } else {
+        onFastForward()
+      }
     }
   }
 
   override fun onRewind() {
     Logger.i("onRewind")
-    player.skip(forward = false)
+    scope.launch {
+      player.skip(forward = false)
+    }
   }
 
   override fun onSkipToPrevious() {
     Logger.i("onSkipToPrevious")
-    if (autoConnection.connected) {
-      player.previous(toNullOfNewTrack = true)
-    } else {
-      onRewind()
+    scope.launch {
+      if (autoConnection.connected) {
+        player.previous(toNullOfNewTrack = true)
+      } else {
+        onRewind()
+      }
     }
   }
 
   override fun onFastForward() {
     Logger.i("onFastForward")
-    player.skip(forward = true)
+    scope.launch {
+      player.skip(forward = true)
+    }
   }
 
   override fun onStop() {
@@ -107,47 +118,57 @@ class MediaSessionCallback
 
   override fun onPause() {
     Logger.i("onPause")
-    player.pause(rewind = true)
+    scope.launch {
+      player.pause(rewind = true)
+    }
   }
 
   override fun onPlay() {
     Logger.i("onPlay")
-    player.play()
+    scope.launch {
+      player.play()
+    }
   }
 
   override fun onSeekTo(pos: Long) {
-    player.changePosition(pos)
+    scope.launch {
+      player.changePosition(pos)
+    }
   }
 
   override fun onSetPlaybackSpeed(speed: Float) {
-    player.setPlaybackSpeed(speed)
+    scope.launch {
+      player.setPlaybackSpeed(speed)
+    }
   }
 
   override fun onCustomAction(action: String?, extras: Bundle?) {
     Logger.i("onCustomAction $action")
-    when (action) {
-      ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
-      ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
-      ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
-      ANDROID_AUTO_ACTION_REWIND -> onRewind()
-      PLAY_PAUSE_ACTION -> player.playPause()
-      SKIP_SILENCE_ACTION -> {
-        val skip = extras!!.getBoolean(SKIP_SILENCE_EXTRA)
-        player.setSkipSilences(skip)
-      }
-      SET_POSITION_ACTION -> {
-        val id = Chapter.Id(extras!!.getString(SET_POSITION_EXTRA_CHAPTER)!!)
-        val time = extras.getLong(SET_POSITION_EXTRA_TIME)
-        player.changePosition(time, id)
-      }
-      FORCED_PREVIOUS -> {
-        player.previous(toNullOfNewTrack = true)
-      }
-      FORCED_NEXT -> {
-        player.next()
-      }
-      else -> if (BuildConfig.DEBUG) {
-        error("Didn't handle $action")
+    scope.launch {
+      when (action) {
+        ANDROID_AUTO_ACTION_NEXT -> onSkipToNext()
+        ANDROID_AUTO_ACTION_PREVIOUS -> onSkipToPrevious()
+        ANDROID_AUTO_ACTION_FAST_FORWARD -> onFastForward()
+        ANDROID_AUTO_ACTION_REWIND -> onRewind()
+        PLAY_PAUSE_ACTION -> player.playPause()
+        SKIP_SILENCE_ACTION -> {
+          val skip = extras!!.getBoolean(SKIP_SILENCE_EXTRA)
+          player.setSkipSilences(skip)
+        }
+        SET_POSITION_ACTION -> {
+          val id = Chapter.Id(extras!!.getString(SET_POSITION_EXTRA_CHAPTER)!!)
+          val time = extras.getLong(SET_POSITION_EXTRA_TIME)
+          player.changePosition(time, id)
+        }
+        FORCED_PREVIOUS -> {
+          player.previous(toNullOfNewTrack = true)
+        }
+        FORCED_NEXT -> {
+          player.next()
+        }
+        else -> if (BuildConfig.DEBUG) {
+          error("Didn't handle $action")
+        }
       }
     }
   }

@@ -172,9 +172,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private fun audioBecomingNoisy() {
     Logger.d("audio becoming noisy. playState=${playStateManager.playState}")
-    if (playStateManager.playState === PlayState.Playing) {
-      playStateManager.pauseReason = PauseReason.BecauseHeadset
-      player.pause(true)
+    scope.launch {
+      if (playStateManager.playState === PlayState.Playing) {
+        playStateManager.pauseReason = PauseReason.BecauseHeadset
+        player.pause(true)
+      }
     }
   }
 
@@ -193,9 +195,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     clientPackageName: String,
     clientUid: Int,
     rootHints: Bundle?
-  ): BrowserRoot {
-    return BrowserRoot(mediaBrowserHelper.root(), null)
-  }
+  ): BrowserRoot = BrowserRoot(mediaBrowserHelper.root(), null)
 
   override fun onDestroy() {
     scope.cancel()
