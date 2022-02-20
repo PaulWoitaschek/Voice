@@ -28,9 +28,6 @@ data class BookContent(
 
   init {
     require(currentChapter in chapters)
-    require(chapters.sorted() == chapters) {
-      "Invalid sorting in $this"
-    }
   }
 }
 
