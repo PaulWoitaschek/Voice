@@ -4,7 +4,7 @@ package voice.common.comparator
  * Simple copy of IntelliJs-Community naturalCompare.
  * Licensed as Apache v2.
  */
-class IntelliJStringComparator : Comparator<String> {
+internal object IntelliJStringComparator : Comparator<String> {
 
   private fun isDecimalDigit(c: Char) = c in '0'..'9'
 
