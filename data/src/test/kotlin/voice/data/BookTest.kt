@@ -1,11 +1,33 @@
 package voice.data
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.kotest.matchers.longs.shouldBeExactly
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class BookTest {
+
+  @Test
+  fun bookPositionForSingleFile() {
+    val chapter = chapter(1000)
+    val position = bookPosition(chapters = listOf(chapter), currentChapter = chapter.id, positionInChapter = 500)
+    position shouldBeExactly 500
+  }
+
+  @Test
+  fun bookPositionForFirstChapterInMultipleFiles() {
+    val chapterOne = chapter(1000)
+    val chapterTwo = chapter(500)
+    val position = bookPosition(chapters = listOf(chapterOne, chapterTwo), currentChapter = chapterOne.id, positionInChapter = 500)
+    position shouldBeExactly 500
+  }
+
+  @Test
+  fun bookPositionForLastChapterInMultipleFiles() {
+    val chapterOne = chapter(1000)
+    val chapterTwo = chapter(500)
+    val position = bookPosition(chapters = listOf(chapterOne, chapterTwo), currentChapter = chapterTwo.id, positionInChapter = 500)
+    position shouldBeExactly 1500
+  }
+
 
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsFirst() {
@@ -149,4 +171,14 @@ class BookTest {
     )
     book.assertThat().previousChapterIs(null)
   }
+
+  @Suppress("SameParameterValue")
+  private fun bookPosition(chapters: List<Chapter>, currentChapter: Chapter.Id, positionInChapter: Long): Long {
+    return book(
+      chapters = chapters,
+      time = positionInChapter,
+      currentChapter = currentChapter
+    ).position
+  }
 }
+

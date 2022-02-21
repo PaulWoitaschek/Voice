@@ -65,6 +65,10 @@ class BookContentRepo
   }
 
   suspend fun put(content: BookContent) {
+    require(content.chapters.sorted() == content.chapters) {
+      "Inserted content $content not sorted."
+    }
+
     fillCache()
     cache.update { contents ->
       val newContents = contents!!.toMutableList()

@@ -1,7 +1,6 @@
 package voice.app.scanner
 
 import androidx.documentfile.provider.DocumentFile
-import voice.common.comparator.NaturalOrderComparator
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
@@ -25,7 +24,7 @@ class MediaScanner
   }
 
   private suspend fun scan(file: DocumentFile) {
-    val chapters = file.parseChapters()
+    val chapters = file.parseChapters().sorted()
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
     val id = Book.Id(file.uri)
@@ -103,7 +102,7 @@ class MediaScanner
         result.add(chapter)
       }
     } else if (file.isDirectory) {
-      file.listFiles().sortedWith(NaturalOrderComparator.documentFileComparator)
+      file.listFiles()
         .forEach {
           parseChapters(it, result)
         }

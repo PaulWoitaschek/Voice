@@ -24,13 +24,6 @@ class NaturalOrderComparatorTest {
     testFolder.create()
   }
 
-  @Test
-  fun fileComparator() {
-    val expected = testFiles()
-    val sorted = expected.sortedWith(NaturalOrderComparator.fileComparator)
-    assertThat(sorted).isEqualTo(expected)
-  }
-
   private fun testFiles(): List<File> {
     testFolder.newFolder("folder", "subfolder", "subsubfolder")
     testFolder.newFolder("storage", "emulated", "0")
@@ -126,7 +119,6 @@ class NaturalOrderComparatorTest {
       .containsExactlyElementsIn(uris)
       .inOrder()
   }
-
 
   @After
   fun tearDown() {

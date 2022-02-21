@@ -99,7 +99,8 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     )
     slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
     if (!slider.isPressed) {
-      slider.value = viewState.playedTime.toDouble(DurationUnit.MILLISECONDS).toFloat()
+      slider.value = viewState.playedTime.coerceAtMost(viewState.duration)
+        .toDouble(DurationUnit.MILLISECONDS).toFloat()
     }
     skipSilenceItem.isChecked = viewState.skipSilence
     playPauseDrawableSetter.setPlaying(viewState.playing)
