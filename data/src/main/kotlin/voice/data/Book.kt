@@ -12,6 +12,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import voice.logging.core.Logger
 
 data class Book(
   val content: BookContent,
@@ -44,6 +45,16 @@ data class Book(
 
   inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
+  }
+
+  fun progress(): Float {
+    val globalPosition = position
+    val totalDuration = duration
+    val progress = globalPosition.toFloat() / totalDuration.toFloat()
+    if (progress < 0F) {
+      Logger.w("Couldn't determine progress for book=$this")
+    }
+    return progress.coerceIn(0F, 1F)
   }
 
   @Serializable(with = BookIdSerializer::class)

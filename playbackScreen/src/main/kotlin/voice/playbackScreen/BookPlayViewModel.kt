@@ -56,7 +56,10 @@ class BookPlayViewModel
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
         cover = book.content.cover,
-        skipSilence = book.content.skipSilence
+        skipSilence = book.content.skipSilence,
+        bookDuration = book.duration.milliseconds,
+        bookPlayedTime = book.position.milliseconds,
+        bookProgress = book.progress()
       )
     }
   }

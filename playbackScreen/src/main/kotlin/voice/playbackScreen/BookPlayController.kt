@@ -26,6 +26,7 @@ import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
+import kotlin.math.roundToInt
 
 private const val NI_BOOK_ID = "niBookId"
 
@@ -97,6 +98,16 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       viewState.duration.inWholeMilliseconds,
       viewState.duration.inWholeMilliseconds
     )
+
+    bookPlayed.text = formatTime(
+      viewState.bookPlayedTime.inWholeMilliseconds,
+      viewState.bookDuration.inWholeMilliseconds
+    )
+    bookLength.text = formatTime(
+      viewState.bookDuration.inWholeMilliseconds,
+      viewState.bookDuration.inWholeMilliseconds
+    )
+    bookProgress.progress = (viewState.bookProgress * 100).roundToInt()
     slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
     if (!slider.isPressed) {
       slider.value = viewState.playedTime.coerceAtMost(viewState.duration)

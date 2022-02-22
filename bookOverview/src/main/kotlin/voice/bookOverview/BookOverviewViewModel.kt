@@ -118,13 +118,3 @@ constructor(
     playerController.playPause()
   }
 }
-
-private fun Book.progress(): Float {
-  val globalPosition = position
-  val totalDuration = duration
-  val progress = globalPosition.toFloat() / totalDuration.toFloat()
-  if (progress < 0F) {
-    Logger.w("Couldn't determine progress for book=$this")
-  }
-  return progress.coerceIn(0F, 1F)
-}

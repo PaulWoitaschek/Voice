@@ -2,6 +2,7 @@ package voice.playbackScreen
 
 import java.io.File
 import kotlin.time.Duration
+import androidx.annotation.FloatRange
 
 data class BookPlayViewState(
   val chapterName: String?,
@@ -12,5 +13,9 @@ data class BookPlayViewState(
   val duration: Duration,
   val playing: Boolean,
   val cover: File?,
-  val skipSilence: Boolean
+  val skipSilence: Boolean,
+  val bookDuration: Duration,
+  val bookPlayedTime: Duration,
+  @FloatRange(from = 0.0, to = 1.0)
+  val bookProgress: Float,
 )
