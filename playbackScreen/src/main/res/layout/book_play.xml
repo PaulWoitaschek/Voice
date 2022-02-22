@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/bookPlayRoot"
@@ -12,6 +13,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
@@ -20,9 +22,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           app:menu="@menu/book_play"
-          app:navigationIcon="@drawable/ic_arrow_back">
-
-        </com.google.android.material.appbar.MaterialToolbar>
+          app:navigationIcon="@drawable/ic_arrow_back" />
 
         <TextView
           android:layout_width="match_parent"
@@ -35,6 +35,45 @@
           android:textAppearance="?attr/textAppearanceHeadlineMedium"
           android:id="@+id/title"
           android:layout_height="wrap_content" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:app="http://schemas.android.com/apk/res-auto"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:layout_marginBottom="4dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginStart="16dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/bookPlayed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zeroTime"
+            android:textAppearance="?textAppearanceCaption"
+            app:layout_constraintStart_toStartOf="parent" />
+
+          <TextView
+            android:id="@+id/bookLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zeroTime"
+            android:textAppearance="?textAppearanceCaption"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+          <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/bookProgress"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/bookPlayed"
+            app:layout_constraintRight_toLeftOf="@id/bookLength"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

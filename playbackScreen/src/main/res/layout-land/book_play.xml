@@ -120,6 +120,48 @@
       app:layout_constraintEnd_toStartOf="@+id/maxTime"
       app:layout_constraintStart_toEndOf="@+id/playedTime" />
 
+      <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/x50"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <TextView
+          android:id="@+id/bookPlayed"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/zeroTime"
+          android:textAppearance="?textAppearanceCaption"
+          app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+          android:id="@+id/bookLength"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/zeroTime"
+          android:textAppearance="?textAppearanceCaption"
+          app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+          android:id="@+id/bookProgress"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="8dp"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          app:layout_constraintLeft_toRightOf="@id/bookPlayed"
+          app:layout_constraintRight_toLeftOf="@id/bookLength"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
       android:id="@+id/previous"
       android:layout_width="48dp"
