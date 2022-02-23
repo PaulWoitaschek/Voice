@@ -33,7 +33,7 @@ import voice.data.Book
 internal fun ListBooks(viewState: BookOverviewViewState.Content, onBookClick: (Book.Id) -> Unit) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 16.dp, bottom = 16.dp)
+    contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
   ) {
     viewState.books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
