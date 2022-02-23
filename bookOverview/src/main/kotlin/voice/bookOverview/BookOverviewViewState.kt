@@ -7,10 +7,12 @@ sealed interface BookOverviewViewState {
 
   val layoutIcon: Content.LayoutIcon?
   val playButtonState: PlayButtonState?
+  val showAddBookHint: Boolean
 
   object Loading : BookOverviewViewState {
     override val playButtonState: PlayButtonState? = null
     override val layoutIcon: Content.LayoutIcon? = null
+    override val showAddBookHint: Boolean = false
   }
 
   data class Content(
@@ -18,6 +20,7 @@ sealed interface BookOverviewViewState {
     val layoutMode: LayoutMode,
     override val layoutIcon: LayoutIcon?,
     override val playButtonState: PlayButtonState?,
+    override val showAddBookHint: Boolean,
   ) : BookOverviewViewState {
 
     data class BookViewState(

@@ -6,11 +6,17 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewList
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -20,12 +26,29 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathOperation
+import androidx.compose.ui.graphics.addOutline
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
@@ -50,7 +73,18 @@ fun BookOverview(
           Text(text = stringResource(id = R.string.app_name))
         },
         actions = {
-          BookFolderIcon(onBookFolderClick)
+          Box {
+            var bookIconCenter: Float? by remember { mutableStateOf(null) }
+            BookFolderIcon(
+              modifier = Modifier.onGloballyPositioned {
+                bookIconCenter = it.positionInWindow().x + it.size.width / 2F
+              },
+              onClick = onBookFolderClick
+            )
+            if (viewState.showAddBookHint) {
+              AddBookHint(bookIconCenter)
+            }
+          }
           val layoutIcon = viewState.layoutIcon
           if (layoutIcon != null) {
             LayoutIcon(layoutIcon, onLayoutIconClick)
@@ -89,6 +123,64 @@ fun BookOverview(
 }
 
 @Composable
+private fun AddBookHint(bookIconCenterX: Float?) {
+  val density = LocalDensity.current
+  val rightMargin = with(density) {
+    16.dp.toPx()
+  }
+  var flagC by remember { mutableStateOf(0F) }
+  Popup(popupPositionProvider = object : PopupPositionProvider {
+    override fun calculatePosition(
+      anchorBounds: IntRect,
+      windowSize: IntSize,
+      layoutDirection: LayoutDirection,
+      popupContentSize: IntSize
+    ): IntOffset {
+      var offset = IntOffset(anchorBounds.center.x - popupContentSize.width / 2, anchorBounds.bottom)
+      if ((offset.x + popupContentSize.width + rightMargin) > windowSize.width) {
+        offset -= IntOffset(rightMargin.toInt() + (offset.x + popupContentSize.width - windowSize.width), 0)
+      }
+      if (bookIconCenterX != null) {
+        flagC = bookIconCenterX - offset.x
+      }
+      return offset
+    }
+  }) {
+    val triangleSize = with(density) {
+      28.dp.toPx()
+    }
+    Card(
+      modifier = Modifier.widthIn(max = 240.dp),
+      elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+      shape = GenericShape { size, layoutDirection ->
+        addOutline(RoundedCornerShape(12.0.dp).createOutline(size, layoutDirection, density))
+        val trianglePath = Path().apply {
+          moveTo(
+            x = flagC - triangleSize / 2F,
+            y = 0F
+          )
+          lineTo(
+            x = flagC,
+            y = -triangleSize / 2F
+          )
+          lineTo(
+            x = flagC + triangleSize / 2F,
+            y = 0F
+          )
+          close()
+        }
+        op(this, trianglePath, PathOperation.Union)
+      }
+    ) {
+      Text(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        text = stringResource(R.string.voice_intro_first_book)
+      )
+    }
+  }
+}
+
+@Composable
 private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
   FloatingActionButton(onClick = onClick) {
     Icon(
@@ -105,8 +197,8 @@ private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
 
 
 @Composable
-private fun BookFolderIcon(onClick: () -> Unit) {
-  IconButton(onClick) {
+private fun BookFolderIcon(modifier: Modifier = Modifier, onClick: () -> Unit) {
+  IconButton(modifier = modifier, onClick = onClick) {
     Icon(
       imageVector = Icons.Outlined.Book,
       contentDescription = stringResource(R.string.audiobook_folders_title)
@@ -182,7 +274,8 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         BookOverviewCategory.FINISHED to listOf(book(), book()),
       ),
       layoutMode = BookOverviewViewState.Content.LayoutMode.List,
-      playButtonState = BookOverviewViewState.PlayButtonState.Paused
+      playButtonState = BookOverviewViewState.PlayButtonState.Paused,
+      showAddBookHint = true,
     )
   )
 }

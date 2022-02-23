@@ -62,14 +62,19 @@ constructor(
     if (books.isEmpty() && scannerActive) {
       return BookOverviewViewState.Loading
     }
+    val noBooks = !scannerActive && books.isEmpty()
     return BookOverviewViewState.Content(
-      layoutIcon = when (gridMode) {
-        GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
-        GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
-        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-          BookOverviewViewState.Content.LayoutIcon.List
-        } else {
-          BookOverviewViewState.Content.LayoutIcon.Grid
+      layoutIcon = if (noBooks) {
+        null
+      } else {
+        when (gridMode) {
+          GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
+          GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
+          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+            BookOverviewViewState.Content.LayoutIcon.List
+          } else {
+            BookOverviewViewState.Content.LayoutIcon.Grid
+          }
         }
       },
       layoutMode = when (gridMode) {
@@ -104,7 +109,8 @@ constructor(
         BookOverviewViewState.PlayButtonState.Playing
       } else {
         BookOverviewViewState.PlayButtonState.Paused
-      }.takeIf { currentBookId != null }
+      }.takeIf { currentBookId != null },
+      showAddBookHint = noBooks
     )
   }
 
