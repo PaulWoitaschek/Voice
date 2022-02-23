@@ -128,7 +128,7 @@ private fun AddBookHint(bookIconCenterX: Float?) {
   val rightMargin = with(density) {
     16.dp.toPx()
   }
-  var flagC by remember { mutableStateOf(0F) }
+  var flagGlobalCenterX by remember { mutableStateOf(0F) }
   Popup(popupPositionProvider = object : PopupPositionProvider {
     override fun calculatePosition(
       anchorBounds: IntRect,
@@ -141,7 +141,7 @@ private fun AddBookHint(bookIconCenterX: Float?) {
         offset -= IntOffset(rightMargin.toInt() + (offset.x + popupContentSize.width - windowSize.width), 0)
       }
       if (bookIconCenterX != null) {
-        flagC = bookIconCenterX - offset.x
+        flagGlobalCenterX = bookIconCenterX - offset.x
       }
       return offset
     }
@@ -156,15 +156,15 @@ private fun AddBookHint(bookIconCenterX: Float?) {
         addOutline(RoundedCornerShape(12.0.dp).createOutline(size, layoutDirection, density))
         val trianglePath = Path().apply {
           moveTo(
-            x = flagC - triangleSize / 2F,
+            x = flagGlobalCenterX - triangleSize / 2F,
             y = 0F
           )
           lineTo(
-            x = flagC,
+            x = flagGlobalCenterX,
             y = -triangleSize / 2F
           )
           lineTo(
-            x = flagC + triangleSize / 2F,
+            x = flagGlobalCenterX + triangleSize / 2F,
             y = 0F
           )
           close()
