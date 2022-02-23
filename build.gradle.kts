@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
   dependencies {
     classpath(libs.androidPluginForGradle)
@@ -15,24 +13,6 @@ plugins {
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
-}
-
-allprojects {
-  tasks.withType<KotlinCompile> {
-    kotlinOptions {
-      freeCompilerArgs = listOf(
-        "-progressive",
-        "-Xopt-in=kotlin.RequiresOptIn",
-        "-Xopt-in=kotlin.ExperimentalStdlibApi",
-        "-Xopt-in=kotlin.time.ExperimentalTime",
-        "-Xopt-in=kotlinx.coroutines.FlowPreview",
-        "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
-        "-Xopt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-      )
-    }
-  }
 }
 
 subprojects {

@@ -56,6 +56,7 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
+      applicationIdSuffix = ".debug"
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -85,6 +86,7 @@ android {
 
   buildFeatures {
     viewBinding = true
+    compose = true
   }
 }
 
@@ -150,7 +152,6 @@ dependencies {
   implementation(libs.prefs.android)
   testImplementation(libs.prefs.inMemory)
 
-  implementation(libs.tapTarget)
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.core)

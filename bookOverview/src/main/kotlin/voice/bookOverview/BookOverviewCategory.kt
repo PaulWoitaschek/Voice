@@ -15,14 +15,12 @@ enum class BookOverviewCategory(
   ),
   NOT_STARTED(
     nameRes = R.string.book_header_not_started,
-    comparator = BookComparator.ByDateAdded
+    comparator = BookComparator.ByLastPlayed.then(BookComparator.ByDateAdded).then(BookComparator.ByName)
   ),
   FINISHED(
     nameRes = R.string.book_header_completed,
     comparator = BookComparator.ByLastPlayed
   );
-
-  val filter: (Book) -> Boolean = { it.category == this }
 }
 
 val Book.category: BookOverviewCategory

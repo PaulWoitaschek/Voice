@@ -14,15 +14,15 @@ class BookComparatorTest {
   private val books = listOf(b1, b2, b3, b4, b5)
 
   @Test
-  fun byLastPlayed_thenName() {
+  fun byLastPlayed() {
     val sorted = books.sortedWith(BookComparator.ByLastPlayed)
-    assertThat(sorted).containsExactly(b5, b4, b3, b1, b2).inOrder()
+    assertThat(sorted).containsExactly(b4, b5, b3, b1, b2).inOrder()
   }
 
   @Test
-  fun byName_thenLastTime() {
+  fun byName() {
     val sorted = books.sortedWith(BookComparator.ByName)
-    assertThat(sorted).containsExactly(b1, b3, b2, b5, b4).inOrder()
+    assertThat(sorted).containsExactly(b1, b2, b3, b5, b4).inOrder()
   }
 
   @Test

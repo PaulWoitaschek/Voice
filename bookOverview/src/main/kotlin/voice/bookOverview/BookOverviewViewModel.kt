@@ -1,19 +1,20 @@
 package voice.bookOverview
 
+import android.text.format.DateUtils
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import voice.app.scanner.MediaScanTrigger
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
-import voice.playback.playstate.PlayStateManager.PlayState
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,97 +36,89 @@ constructor(
     mediaScanner.scan()
   }
 
-  fun useGrid(useGrid: Boolean) {
-    gridModePref.value = if (useGrid) GridMode.GRID else GridMode.LIST
-  }
-
-  fun state(): Flow<BookOverviewState> {
-    val playingStream = playStateManager.flow
-      .map { it == PlayState.Playing }
-      .distinctUntilChanged()
-    return combine(
-      repo.flow(),
-      currentBookDataStore.data,
-      playingStream,
-      mediaScanner.scannerActive,
-      gridModePref.flow
-    ) { books, currentBookId, playing, scannerActive, gridMode ->
-      state(
-        books = books,
-        scannerActive = scannerActive,
-        currentBookId = currentBookId,
-        playing = playing,
-        gridMode = gridMode
-      )
-    }
-  }
-
-  private fun state(
-    books: List<Book>,
-    scannerActive: Boolean,
-    currentBookId: Book.Id?,
-    playing: Boolean,
-    gridMode: GridMode
-  ): BookOverviewState {
-    if (books.isEmpty()) {
-      return if (scannerActive) {
-        BookOverviewState.Loading
+  fun toggleGrid() {
+    gridModePref.value = when (gridModePref.value) {
+      GridMode.LIST -> GridMode.GRID
+      GridMode.GRID -> GridMode.LIST
+      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+        GridMode.LIST
       } else {
-        BookOverviewState.NoFolderSet
+        GridMode.GRID
       }
     }
-
-    return content(
-      books = books,
-      currentBookId = currentBookId,
-      playing = playing,
-      gridMode = gridMode
-    )
   }
 
-  private fun content(
-    books: List<Book>,
-    currentBookId: Book.Id?,
-    playing: Boolean,
-    gridMode: GridMode
-  ): BookOverviewState.Content {
-    val currentBookPresent = books.any { it.id == currentBookId }
-
-    val amountOfColumns = gridCount.gridColumnCount(gridMode)
-
-    val categoriesWithContents = LinkedHashMap<BookOverviewCategory, BookOverviewCategoryContent>()
-    BookOverviewCategory.values().forEach { category ->
-      val content = content(books, category, currentBookId, amountOfColumns)
-      if (content != null) {
-        categoriesWithContents[category] = content
-      }
+  @Composable
+  fun state(): BookOverviewViewState {
+    val playState = remember { playStateManager.flow }.collectAsState(initial = null).value
+      ?: return BookOverviewViewState.Loading
+    val books = remember { repo.flow() }.collectAsState(null).value
+      ?: return BookOverviewViewState.Loading
+    val currentBookId by remember { currentBookDataStore.data }.collectAsState(initial = null)
+    val scannerActive = remember { mediaScanner.scannerActive }.collectAsState(null).value
+      ?: return BookOverviewViewState.Loading
+    val gridMode = remember { gridModePref.flow }.collectAsState(null).value
+      ?: return BookOverviewViewState.Loading
+    if (books.isEmpty() && scannerActive) {
+      return BookOverviewViewState.Loading
     }
-
-    return BookOverviewState.Content(
-      playing = playing,
-      currentBookPresent = currentBookPresent,
-      categoriesWithContents = categoriesWithContents,
-      columnCount = amountOfColumns
+    return BookOverviewViewState.Content(
+      layoutIcon = when (gridMode) {
+        GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
+        GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
+        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+          BookOverviewViewState.Content.LayoutIcon.List
+        } else {
+          BookOverviewViewState.Content.LayoutIcon.Grid
+        }
+      },
+      layoutMode = when (gridMode) {
+        GridMode.LIST -> BookOverviewViewState.Content.LayoutMode.List
+        GridMode.GRID -> BookOverviewViewState.Content.LayoutMode.Grid
+        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+          BookOverviewViewState.Content.LayoutMode.Grid
+        } else {
+          BookOverviewViewState.Content.LayoutMode.List
+        }
+      },
+      books = books
+        .groupBy {
+          it.category
+        }
+        .mapValues { (category, books) ->
+          books
+            .sortedWith(category.comparator)
+            .map { book ->
+              BookOverviewViewState.Content.BookViewState(
+                name = book.content.name,
+                author = book.content.author,
+                cover = book.content.cover,
+                id = book.id,
+                progress = book.progress(),
+                remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)
+              )
+            }
+        }
+        .toSortedMap(),
+      playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
+        BookOverviewViewState.PlayButtonState.Playing
+      } else {
+        BookOverviewViewState.PlayButtonState.Paused
+      }.takeIf { currentBookId != null }
     )
-  }
-
-  private fun content(
-    books: List<Book>,
-    category: BookOverviewCategory,
-    currentBookId: Book.Id?,
-    amountOfColumns: Int
-  ): BookOverviewCategoryContent? {
-    val booksOfCategory = books.filter(category.filter).sortedWith(category.comparator)
-    if (booksOfCategory.isEmpty()) {
-      return null
-    }
-    val models = booksOfCategory.map { book ->
-      BookOverviewViewState(book, amountOfColumns, currentBookId)
-    }
-    return BookOverviewCategoryContent(models)
   }
 
   fun playPause() {
     playerController.playPause()
   }
+}
+
+private fun Book.progress(): Float {
+  val globalPosition = position
+  val totalDuration = duration
+  val progress = globalPosition.toFloat() / totalDuration.toFloat()
+  if (progress < 0F) {
+    Logger.w("Couldn't determine progress for book=$this")
+  }
+  return progress.coerceIn(0F, 1F)
 }

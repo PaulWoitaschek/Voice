@@ -6,7 +6,7 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.41"
 kotlin = "1.6.10"
-compose = "1.1.0"
+compose = "1.2.0-alpha04"
 composeCompiler = "1.1.0"
 agp = "7.1.1"
 
@@ -14,7 +14,6 @@ agp = "7.1.1"
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 material = "com.google.android.material:material:1.5.0"
 materialCab = "com.afollestad:material-cab:2.0.1"
-tapTarget = "com.getkeepsafe.taptargetview:taptargetview:1.13.3"
 lifecycle = "androidx.lifecycle:lifecycle-common-java8:2.4.1"
 groupie = "com.github.lisawray.groupie:groupie:2.10.0"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:4.5.1-1"
@@ -79,7 +78,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha05"
+compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha06"
 compose-activity = "androidx.activity:activity-compose:1.4.0"
 
 [bundles]
@@ -95,6 +94,7 @@ compose = [
   "androidxCore",
   "compose-material3",
   "compose-activity",
+  "coil",
 ]
 
 testing-jvm = [
@@ -111,6 +111,6 @@ testing-jvm = [
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.3.11-1-6-10" }
 ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
-ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
+ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.4" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.10" }

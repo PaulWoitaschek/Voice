@@ -13,6 +13,8 @@ kotlin {
   }
 }
 
+baseSetup()
+
 android {
   defaultConfig {
     multiDexEnabled = true
@@ -24,9 +26,6 @@ android {
     isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = VoiceVersions.javaCompileVersion
     targetCompatibility = VoiceVersions.javaCompileVersion
-  }
-  kotlinOptions {
-    jvmTarget = VoiceVersions.javaCompileVersion.toString()
   }
 
   composeOptions {
