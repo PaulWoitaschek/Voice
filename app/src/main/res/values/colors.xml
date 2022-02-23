@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accent">@color/red700</color>
-    <color name="accentDark">@color/red900</color>
-    <color name="primary">@color/white</color>
-    <color name="colorOnSurface">@color/black</color>
-    <color name="red700">#D32F2F</color>
-    <color name="red900">#B71C1C</color>
     <!-- copied private resources from appcompat -->
     <color name="copy_primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="copy_primary_text_default_material_dark">#ffffffff</color>
@@ -14,8 +8,4 @@
     <color name="copy_secondary_text_default_material_dark">#b3ffffff</color>
 
     <color name="ic_shortcut_play_background">#FFFFFF</color>
-    <color name="white">#FFF</color>
-    <color name="black">#000</color>
-    <color name="navBarColor">@color/white</color>
-    <color name="statusBarColor">@color/white</color>
 </resources>
