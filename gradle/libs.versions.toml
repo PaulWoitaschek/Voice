@@ -1,6 +1,6 @@
 [versions]
 coroutines = "1.6.0"
-room = "2.4.1"
+room = "2.4.2"
 conductor = "3.1.4"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
