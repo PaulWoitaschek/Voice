@@ -28,6 +28,7 @@ import coil.compose.rememberImagePainter
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
 import voice.data.Book
+import kotlin.math.roundToInt
 
 @Composable
 internal fun ListBooks(viewState: BookOverviewViewState.Content, onBookClick: (Book.Id) -> Unit) {
@@ -90,6 +91,7 @@ private fun ListBookRow(
         )
         Column(
           Modifier
+            .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
             .align(Alignment.CenterVertically)
         ) {
@@ -104,10 +106,22 @@ private fun ListBookRow(
             text = book.name,
             style = MaterialTheme.typography.bodyMedium
           )
-          Text(
-            text = book.remainingTime,
-            style = MaterialTheme.typography.bodySmall
-          )
+          Row (
+            Modifier
+              .fillMaxWidth(),
+            Arrangement.SpaceBetween
+          ) {
+            Text(
+              text = book.remainingTime,
+              style = MaterialTheme.typography.bodySmall
+            )
+            if (book.isStarted) {
+              Text(
+                text = "${(book.progress*100).roundToInt()}%",
+                style = MaterialTheme.typography.bodySmall
+              )
+            }
+          }
         }
       }
     }

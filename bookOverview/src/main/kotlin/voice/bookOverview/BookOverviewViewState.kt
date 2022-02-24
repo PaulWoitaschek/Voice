@@ -30,6 +30,7 @@ sealed interface BookOverviewViewState {
       val progress: Float,
       val id: Book.Id,
       val remainingTime: String,
+      val isStarted: Boolean,
     )
 
     enum class LayoutMode {

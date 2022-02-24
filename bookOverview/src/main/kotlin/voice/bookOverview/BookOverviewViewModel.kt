@@ -100,7 +100,8 @@ constructor(
                 cover = book.content.cover,
                 id = book.id,
                 progress = book.progress(),
-                remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)
+                remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000),
+                isStarted = book.category == BookOverviewCategory.CURRENT,
               )
             }
         }

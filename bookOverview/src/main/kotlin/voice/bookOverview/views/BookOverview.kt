@@ -261,7 +261,8 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       cover = null,
       progress = 0.8F,
       id = Book.Id(UUID.randomUUID().toString()),
-      remainingTime = "01:04"
+      remainingTime = "01:04",
+      isStarted = true,
     )
   }
 
