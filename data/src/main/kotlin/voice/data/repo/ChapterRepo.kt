@@ -22,6 +22,11 @@ class ChapterRepo
     return cache[id]
   }
 
+  suspend fun warmup(ids: List<Chapter.Id>) {
+    val missing = ids.filter { it !in cache }
+    dao.chapters(missing).onEach { cache[it.id] = it }
+  }
+
   suspend fun put(chapter: Chapter) {
     dao.insert(chapter)
     cache[chapter.id] = chapter

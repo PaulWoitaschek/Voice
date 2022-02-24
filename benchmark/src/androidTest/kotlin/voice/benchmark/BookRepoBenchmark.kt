@@ -21,7 +21,7 @@ class BookRepoBenchmark {
   val benchmark = BenchmarkRule()
 
   @Test
-  fun firstCollection() = benchmark.measureRepeated {
+  fun firstCollectionWithWarmup() = benchmark.measureRepeated {
     runWithTimingDisabled {
       val db = database()
       db.clearAllTables()
@@ -46,6 +46,7 @@ class BookRepoBenchmark {
     val repo = runWithTimingDisabled {
       BookRepository(ChapterRepo(db.chapterDao()), BookContentRepo(db.bookContentDao()))
     }
+    repo.warmupEnabled = true
 
     runBlocking {
       repo.flow().first()
@@ -55,6 +56,44 @@ class BookRepoBenchmark {
       db.close()
     }
   }
+
+  @Test
+  fun firstCollectionWithoutWarmup() = benchmark.measureRepeated {
+    runWithTimingDisabled {
+      val db = database()
+      db.clearAllTables()
+
+      val chapterDao = db.chapterDao()
+      val contentDao = db.bookContentDao()
+
+      runBlocking {
+        repeat(100) {
+          val book = book()
+          contentDao.insert(book.content)
+          book.chapters.forEach {
+            chapterDao.insert(it)
+          }
+        }
+      }
+      db.close()
+    }
+    val db = runWithTimingDisabled {
+      database()
+    }
+    val repo = runWithTimingDisabled {
+      BookRepository(ChapterRepo(db.chapterDao()), BookContentRepo(db.bookContentDao()))
+    }
+    repo.warmupEnabled = false
+
+    runBlocking {
+      repo.flow().first()
+    }
+
+    runWithTimingDisabled {
+      db.close()
+    }
+  }
+
 
   private fun database(): AppDb {
     return Room.databaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java, "benchmarkDb")
