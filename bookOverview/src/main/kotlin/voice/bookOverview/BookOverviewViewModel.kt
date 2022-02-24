@@ -1,12 +1,10 @@
 package voice.bookOverview
 
 import android.text.format.DateUtils
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import voice.app.scanner.MediaScanTrigger
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
@@ -48,70 +46,65 @@ constructor(
     }
   }
 
-  @Composable
-  fun state(): BookOverviewViewState {
-    val playState = remember { playStateManager.flow }.collectAsState(initial = null).value
-      ?: return BookOverviewViewState.Loading
-    val books = remember { repo.flow() }.collectAsState(null).value
-      ?: return BookOverviewViewState.Loading
-    val currentBookId by remember { currentBookDataStore.data }.collectAsState(initial = null)
-    val scannerActive = remember { mediaScanner.scannerActive }.collectAsState(null).value
-      ?: return BookOverviewViewState.Loading
-    val gridMode = remember { gridModePref.flow }.collectAsState(null).value
-      ?: return BookOverviewViewState.Loading
-    if (books.isEmpty() && scannerActive) {
-      return BookOverviewViewState.Loading
-    }
-    val noBooks = !scannerActive && books.isEmpty()
-    return BookOverviewViewState.Content(
-      layoutIcon = if (noBooks) {
-        null
-      } else {
-        when (gridMode) {
-          GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
-          GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
-          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-            BookOverviewViewState.Content.LayoutIcon.List
-          } else {
-            BookOverviewViewState.Content.LayoutIcon.Grid
-          }
-        }
-      },
-      layoutMode = when (gridMode) {
-        GridMode.LIST -> BookOverviewViewState.Content.LayoutMode.List
-        GridMode.GRID -> BookOverviewViewState.Content.LayoutMode.Grid
-        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-          BookOverviewViewState.Content.LayoutMode.Grid
+  fun state(): Flow<BookOverviewViewState.Content> {
+    return combine(
+      playStateManager.flow,
+      repo.flow(),
+      currentBookDataStore.data,
+      mediaScanner.scannerActive,
+      gridModePref.flow
+    ) { playState, books, currentBookId, scannerActive, gridMode ->
+      val noBooks = !scannerActive && books.isEmpty()
+      BookOverviewViewState.Content(
+        layoutIcon = if (noBooks) {
+          null
         } else {
-          BookOverviewViewState.Content.LayoutMode.List
-        }
-      },
-      books = books
-        .groupBy {
-          it.category
-        }
-        .mapValues { (category, books) ->
-          books
-            .sortedWith(category.comparator)
-            .map { book ->
-              BookOverviewViewState.Content.BookViewState(
-                name = book.content.name,
-                author = book.content.author,
-                cover = book.content.cover,
-                id = book.id,
-                progress = book.progress(),
-                remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)
-              )
+          when (gridMode) {
+            GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
+            GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
+            GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+              BookOverviewViewState.Content.LayoutIcon.List
+            } else {
+              BookOverviewViewState.Content.LayoutIcon.Grid
             }
-        }
-        .toSortedMap(),
-      playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
-        BookOverviewViewState.PlayButtonState.Playing
-      } else {
-        BookOverviewViewState.PlayButtonState.Paused
-      }.takeIf { currentBookId != null },
-      showAddBookHint = noBooks
-    )
+          }
+        },
+        layoutMode = when (gridMode) {
+          GridMode.LIST -> BookOverviewViewState.Content.LayoutMode.List
+          GridMode.GRID -> BookOverviewViewState.Content.LayoutMode.Grid
+          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+            BookOverviewViewState.Content.LayoutMode.Grid
+          } else {
+            BookOverviewViewState.Content.LayoutMode.List
+          }
+        },
+        books = books
+          .groupBy {
+            it.category
+          }
+          .mapValues { (category, books) ->
+            books
+              .sortedWith(category.comparator)
+              .map { book ->
+                BookOverviewViewState.Content.BookViewState(
+                  name = book.content.name,
+                  author = book.content.author,
+                  cover = book.content.cover,
+                  id = book.id,
+                  progress = book.progress(),
+                  remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)
+                )
+              }
+          }
+          .toSortedMap(),
+        playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
+          BookOverviewViewState.PlayButtonState.Playing
+        } else {
+          BookOverviewViewState.PlayButtonState.Paused
+        }.takeIf { currentBookId != null },
+        showAddBookHint = noBooks
+      )
+    }
   }
 
   fun playPause() {
