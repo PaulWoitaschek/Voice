@@ -14,16 +14,12 @@ class ChapterRepo
 
   private val cache = mutableMapOf<Chapter.Id, Chapter?>()
 
-  suspend fun get(
-    id: Chapter.Id,
-    lastModified: Instant? = null
-  ): Chapter? {
+  suspend fun get(id: Chapter.Id): Chapter? {
+    // this does not use getOrPut because a `null` value should also be cached
     if (!cache.containsKey(id)) {
       cache[id] = dao.chapter(id)
     }
-    return cache[id]?.takeIf { chapter ->
-      lastModified == null || chapter.fileLastModified == lastModified
-    }
+    return cache[id]
   }
 
   suspend fun put(chapter: Chapter) {
@@ -36,7 +32,10 @@ class ChapterRepo
     lastModified: Instant,
     defaultValue: () -> Chapter?
   ): Chapter? {
-    return get(id, lastModified)
-      ?: defaultValue()?.also { put(it) }
+    val chapter = get(id)
+    if (chapter != null && chapter.fileLastModified == lastModified) {
+      return chapter
+    }
+    return defaultValue()?.also { put(it) }
   }
 }
