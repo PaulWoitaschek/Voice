@@ -36,12 +36,6 @@ android {
   composeOptions {
     kotlinCompilerExtensionVersion = libs.composeVersion
   }
-
-  variantFilter {
-    if (name == "release") {
-      ignore = true
-    }
-  }
 }
 
 dependencies {
