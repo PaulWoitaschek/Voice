@@ -14,9 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.addOutline
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
@@ -24,67 +23,66 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
-import voice.logging.core.Logger
 
 @Composable
 internal fun ExplanationTooltip(content: @Composable ColumnScope.() -> Unit) {
-  val density = LocalDensity.current
-  val rightMargin = with(density) {
-    16.dp.toPx()
-  }
-  var bookIconCenterX: Float? by remember { mutableStateOf(null) }
   var flagGlobalCenterX: Float? by remember { mutableStateOf(null) }
-  Popup(popupPositionProvider = object : PopupPositionProvider {
-    override fun calculatePosition(
-      anchorBounds: IntRect,
-      windowSize: IntSize,
-      layoutDirection: LayoutDirection,
-      popupContentSize: IntSize
-    ): IntOffset {
-      var offset = IntOffset(anchorBounds.center.x - popupContentSize.width / 2, anchorBounds.bottom)
-      if ((offset.x + popupContentSize.width + rightMargin) > windowSize.width) {
-        offset -= IntOffset(rightMargin.toInt() + (offset.x + popupContentSize.width - windowSize.width), 0)
-      }
-
-      bookIconCenterX = anchorBounds.center.x.toFloat()
-      bookIconCenterX?.let { bookIconCenterX ->
-        flagGlobalCenterX = bookIconCenterX - offset.x
-      }
-      return offset
-    }
-  }) {
-    val triangleSize = with(density) {
-      28.dp.toPx()
-    }
+  val popupPositionProvider = ExplanationTooltipPopupPositionProvider(LocalDensity.current) {
+    flagGlobalCenterX = it.toFloat()
+  }
+  Popup(popupPositionProvider = popupPositionProvider) {
     Card(
-      modifier = Modifier
-        .widthIn(max = 240.dp)
-        .onGloballyPositioned {
-          Logger.w("""positionInRoot=${it.positionInRoot()}, """)
-        },
-      shape = GenericShape { size, layoutDirection ->
-        addOutline(RoundedCornerShape(12.0.dp).createOutline(size, layoutDirection, density))
-        flagGlobalCenterX?.let { flagGlobalCenterX ->
-          val trianglePath = Path().apply {
-            moveTo(
-              x = flagGlobalCenterX - triangleSize / 2F,
-              y = 0F
-            )
-            lineTo(
-              x = flagGlobalCenterX,
-              y = -triangleSize / 2F
-            )
-            lineTo(
-              x = flagGlobalCenterX + triangleSize / 2F,
-              y = 0F
-            )
-            close()
-          }
-          op(this, trianglePath, PathOperation.Union)
-        }
-      }
+      modifier = Modifier.widthIn(max = 240.dp),
+      shape = explanationTooltipShape(flagGlobalCenterX, LocalDensity.current)
     ) {
       content()
+    }
+  }
+}
+
+private class ExplanationTooltipPopupPositionProvider(
+  private val density: Density,
+  private val onFlagCenterX: (Int) -> Unit,
+) : PopupPositionProvider {
+  override fun calculatePosition(anchorBounds: IntRect, windowSize: IntSize, layoutDirection: LayoutDirection, popupContentSize: IntSize): IntOffset {
+    val rightMargin = with(density) { 16.dp.toPx() }
+    var offset = IntOffset(anchorBounds.center.x - popupContentSize.width / 2, anchorBounds.bottom)
+    if ((offset.x + popupContentSize.width + rightMargin) > windowSize.width) {
+      offset -= IntOffset(rightMargin.toInt() + (offset.x + popupContentSize.width - windowSize.width), 0)
+    }
+
+    onFlagCenterX(anchorBounds.center.x - offset.x)
+
+    return offset
+  }
+}
+
+private fun explanationTooltipShape(flagGlobalCenterX: Float?, density: Density): GenericShape {
+  val triangleSize = with(density) {
+    28.dp.toPx()
+  }
+  return GenericShape { size, layoutDirection ->
+    addOutline(
+      RoundedCornerShape(12.0.dp)
+        .createOutline(size, layoutDirection, density)
+    )
+    if (flagGlobalCenterX != null) {
+      val trianglePath = Path().apply {
+        moveTo(
+          x = flagGlobalCenterX - triangleSize / 2F,
+          y = 0F
+        )
+        lineTo(
+          x = flagGlobalCenterX,
+          y = -triangleSize / 2F
+        )
+        lineTo(
+          x = flagGlobalCenterX + triangleSize / 2F,
+          y = 0F
+        )
+        close()
+      }
+      op(this, trianglePath, PathOperation.Union)
     }
   }
 }
