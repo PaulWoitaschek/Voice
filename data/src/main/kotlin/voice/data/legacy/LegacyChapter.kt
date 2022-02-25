@@ -1,9 +1,10 @@
-package voice.data
+package voice.data.legacy
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import voice.data.MarkData
 import java.io.File
 import java.util.UUID
 
@@ -28,4 +29,3 @@ data class LegacyChapter(
   @PrimaryKey(autoGenerate = true)
   val id: Long = 0L
 )
-

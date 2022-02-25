@@ -53,7 +53,9 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       onSettingsClick = ::toSettings,
       onBookClick = ::toBook,
       onBookFolderClick = ::toFolderOverview,
-      onPlayButtonClick = viewModel::playPause
+      onPlayButtonClick = viewModel::playPause,
+      onBookMigrationClick = ::toBookMigration,
+      onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick
     )
   }
 
@@ -64,6 +66,11 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
   private fun toFolderOverview() {
     val controller = FolderPickerController()
     router.pushController(controller.asTransaction())
+  }
+
+  private fun toBookMigration() {
+    viewModel.onBoomMigrationHelperConfirmClick()
+    // todo
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -79,7 +86,6 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       router.pushController(BookPlayController(bookId).asTransaction())
     }
   }
-
 
   override fun onInternetCoverRequested(book: Book.Id) {
     router.pushController(
