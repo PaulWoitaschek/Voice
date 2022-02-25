@@ -27,15 +27,15 @@ import androidx.compose.ui.window.PopupPositionProvider
 
 @Composable
 internal fun ExplanationTooltip(content: @Composable ColumnScope.() -> Unit) {
-  var flagGlobalCenterX: Float? by remember { mutableStateOf(null) }
+  var triangleCenterX: Float? by remember { mutableStateOf(null) }
   val popupPositionProvider = ExplanationTooltipPopupPositionProvider(LocalDensity.current) {
-    flagGlobalCenterX = it.toFloat()
+    triangleCenterX = it.toFloat()
   }
   Popup(popupPositionProvider = popupPositionProvider) {
     Card(
       modifier = Modifier.widthIn(max = 240.dp),
       elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-      shape = explanationTooltipShape(flagGlobalCenterX, LocalDensity.current)
+      shape = explanationTooltipShape(triangleCenterX, LocalDensity.current)
     ) {
       content()
     }
@@ -44,7 +44,7 @@ internal fun ExplanationTooltip(content: @Composable ColumnScope.() -> Unit) {
 
 private class ExplanationTooltipPopupPositionProvider(
   private val density: Density,
-  private val onFlagCenterX: (Int) -> Unit,
+  private val onTriangleCenterX: (Int) -> Unit,
 ) : PopupPositionProvider {
   override fun calculatePosition(anchorBounds: IntRect, windowSize: IntSize, layoutDirection: LayoutDirection, popupContentSize: IntSize): IntOffset {
     val rightMargin = with(density) { 16.dp.toPx() }
@@ -53,13 +53,13 @@ private class ExplanationTooltipPopupPositionProvider(
       offset -= IntOffset(rightMargin.toInt() + (offset.x + popupContentSize.width - windowSize.width), 0)
     }
 
-    onFlagCenterX(anchorBounds.center.x - offset.x)
+    onTriangleCenterX(anchorBounds.center.x - offset.x)
 
     return offset
   }
 }
 
-private fun explanationTooltipShape(flagGlobalCenterX: Float?, density: Density): GenericShape {
+private fun explanationTooltipShape(triangleCenterX: Float?, density: Density): GenericShape {
   val triangleSize = with(density) {
     28.dp.toPx()
   }
@@ -68,18 +68,18 @@ private fun explanationTooltipShape(flagGlobalCenterX: Float?, density: Density)
       RoundedCornerShape(12.0.dp)
         .createOutline(size, layoutDirection, density)
     )
-    if (flagGlobalCenterX != null) {
+    if (triangleCenterX != null) {
       val trianglePath = Path().apply {
         moveTo(
-          x = flagGlobalCenterX - triangleSize / 2F,
+          x = triangleCenterX - triangleSize / 2F,
           y = 0F
         )
         lineTo(
-          x = flagGlobalCenterX,
+          x = triangleCenterX,
           y = -triangleSize / 2F
         )
         lineTo(
-          x = flagGlobalCenterX + triangleSize / 2F,
+          x = triangleCenterX + triangleSize / 2F,
           y = 0F
         )
         close()
