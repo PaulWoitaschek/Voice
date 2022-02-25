@@ -17,7 +17,6 @@ class BookRepository
   private val contentRepo: BookContentRepo,
 ) {
 
-  var warmupEnabled = true
   private var warmedUp = false
   private val warmupMutex = Mutex()
 
@@ -55,7 +54,7 @@ class BookRepository
   }
 
   private suspend fun BookContent.book(): Book {
-    if (warmupEnabled) warmUp()
+    warmUp()
     return Book(
       content = this,
       chapters = chapters.map { chapterId ->

@@ -22,7 +22,6 @@ class BookContentRepo
   private val dao: BookContentDao
 ) {
 
-  var validateBookContent = false
   private val cacheMutex = Mutex()
   private var cacheFilled = false
   private val cache = MutableStateFlow<List<BookContent>?>(null)
@@ -65,12 +64,6 @@ class BookContentRepo
   }
 
   suspend fun put(content: BookContent) {
-    if (validateBookContent) {
-      require(content.chapters.sorted() == content.chapters) {
-        "Inserted content $content not sorted."
-      }
-    }
-
     fillCache()
     cache.update { contents ->
       val newContents = contents!!.toMutableList()

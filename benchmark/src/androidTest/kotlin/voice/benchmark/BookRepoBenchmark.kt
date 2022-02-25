@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import voice.app.book
+import voice.data.Book
 import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
@@ -22,172 +23,70 @@ class BookRepoBenchmark {
   val benchmark = BenchmarkRule()
 
   @Test
-  fun firstCollectionWithWarmup() = benchmark.measureRepeated {
-    runWithTimingDisabled {
-      val db = database()
-      db.clearAllTables()
-
-      val chapterDao = db.chapterDao()
-      val contentDao = db.bookContentDao()
-
-      runBlocking {
-        repeat(100) {
-          val book = book()
-          contentDao.insert(book.content)
-          book.chapters.forEach {
-            chapterDao.insert(it)
-          }
-        }
-      }
-      db.close()
-    }
-    val db = runWithTimingDisabled {
-      database()
-    }
-    val repo = runWithTimingDisabled {
-      BookRepository(ChapterRepo(db.chapterDao()), BookContentRepo(db.bookContentDao()))
-    }
-    repo.warmupEnabled = true
-
-    runBlocking {
-      repo.flow().first()
-    }
-
-    runWithTimingDisabled {
-      db.close()
-    }
+  fun flow() = runBenchmark { repo, _ ->
+    repo.flow().first()
   }
 
   @Test
-  fun firstCollectionWithoutWarmup() = benchmark.measureRepeated {
-    runWithTimingDisabled {
-      val db = database()
-      db.clearAllTables()
-
-      val chapterDao = db.chapterDao()
-      val contentDao = db.bookContentDao()
-
-      runBlocking {
-        repeat(100) {
-          val book = book()
-          contentDao.insert(book.content)
-          book.chapters.forEach {
-            chapterDao.insert(it)
-          }
-        }
+  fun update() = runBenchmark { repo, books ->
+    books.forEach {
+      repo.updateBook(it.id) { book ->
+        book.copy(lastPlayedAt = Instant.now())
       }
-      db.close()
-    }
-    val db = runWithTimingDisabled {
-      database()
-    }
-    val repo = runWithTimingDisabled {
-      BookRepository(ChapterRepo(db.chapterDao()), BookContentRepo(db.bookContentDao()))
-    }
-    repo.warmupEnabled = false
-
-    runBlocking {
-      repo.flow().first()
-    }
-
-    runWithTimingDisabled {
-      db.close()
     }
   }
 
-  @Test
-  fun insertWithValidatingBookContent() = benchmark.measureRepeated {
-    runWithTimingDisabled {
-      val db = database()
-      db.clearAllTables()
-
-      val chapterDao = db.chapterDao()
-      val contentDao = db.bookContentDao()
-
-      runBlocking {
-        repeat(100) {
-          val book = book()
-          contentDao.insert(book.content)
-          book.chapters.forEach {
-            chapterDao.insert(it)
-          }
+  private inline fun runBenchmark(crossinline block: suspend (BookRepository, List<Book>) -> Unit) {
+    val databaseName = "benchmarkDb"
+    benchmark.measureRepeated {
+      val books = runWithTimingDisabled {
+        (0..100).map {
+          book()
         }
       }
-      db.close()
-    }
-    val db = runWithTimingDisabled {
-      database()
-    }
-    val repo = runWithTimingDisabled {
-      val contentRepo = BookContentRepo(db.bookContentDao())
-      contentRepo.validateBookContent = true
-      BookRepository(ChapterRepo(db.chapterDao()), contentRepo)
-    }
-    val bookIds = runWithTimingDisabled {
-      runBlocking {
-        repo.flow().first().map { it.id }
-      }
-    }
 
-    runBlocking {
-      bookIds.forEach {
-        repo.updateBook(it) { it.copy(lastPlayedAt = Instant.now()) }
-      }
-    }
+      runWithTimingDisabled {
+        val db = Room.databaseBuilder(
+          ApplicationProvider.getApplicationContext(),
+          AppDb::class.java,
+          databaseName
+        )
+          .build()
+        db.clearAllTables()
 
-    runWithTimingDisabled {
-      db.close()
-    }
-  }
+        val chapterDao = db.chapterDao()
+        val contentDao = db.bookContentDao()
 
-  @Test
-  fun insertWithoutValidatingBookContent() = benchmark.measureRepeated {
-    runWithTimingDisabled {
-      val db = database()
-      db.clearAllTables()
-
-      val chapterDao = db.chapterDao()
-      val contentDao = db.bookContentDao()
-
-      runBlocking {
-        repeat(100) {
-          val book = book()
-          contentDao.insert(book.content)
-          book.chapters.forEach {
-            chapterDao.insert(it)
+        runBlocking {
+          books.forEach { book ->
+            contentDao.insert(book.content)
+            book.chapters.forEach {
+              chapterDao.insert(it)
+            }
           }
         }
+        db.close()
       }
-      db.close()
-    }
-    val db = runWithTimingDisabled {
-      database()
-    }
-    val repo = runWithTimingDisabled {
-      val contentRepo = BookContentRepo(db.bookContentDao())
-      contentRepo.validateBookContent = false
-      BookRepository(ChapterRepo(db.chapterDao()), contentRepo)
-    }
-    val bookIds = runWithTimingDisabled {
+
+      val freshDb = runWithTimingDisabled {
+        Room.databaseBuilder(
+          ApplicationProvider.getApplicationContext(),
+          AppDb::class.java,
+          databaseName
+        )
+          .build()
+      }
+      val repo = runWithTimingDisabled {
+        BookRepository(ChapterRepo(freshDb.chapterDao()), BookContentRepo(freshDb.bookContentDao()))
+      }
+
       runBlocking {
-        repo.flow().first().map { it.id }
+        block(repo, books)
+      }
+
+      runWithTimingDisabled {
+        freshDb.close()
       }
     }
-
-    runBlocking {
-      bookIds.forEach {
-        repo.updateBook(it) { it.copy(lastPlayedAt = Instant.now()) }
-      }
-    }
-
-    runWithTimingDisabled {
-      db.close()
-    }
-  }
-
-
-  private fun database(): AppDb {
-    return Room.databaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java, "benchmarkDb")
-      .build()
   }
 }
