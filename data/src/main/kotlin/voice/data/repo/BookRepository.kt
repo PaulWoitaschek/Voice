@@ -53,6 +53,12 @@ class BookRepository
     contentRepo.put(updated)
   }
 
+  suspend fun updateBook2(id: Book.Id, update: (BookContent) -> BookContent) {
+    val content = contentRepo.get(id) ?: return
+    val updated = update(content)
+    contentRepo.put(updated)
+  }
+
   private suspend fun BookContent.book(): Book {
     warmUp()
     return Book(
