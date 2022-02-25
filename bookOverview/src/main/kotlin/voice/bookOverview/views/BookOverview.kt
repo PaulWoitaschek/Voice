@@ -16,7 +16,6 @@ import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -151,7 +150,6 @@ private fun AddBookHint(bookIconCenterX: Float?) {
     }
     Card(
       modifier = Modifier.widthIn(max = 240.dp),
-      elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
       shape = GenericShape { size, layoutDirection ->
         addOutline(RoundedCornerShape(12.0.dp).createOutline(size, layoutDirection, density))
         val trianglePath = Path().apply {
