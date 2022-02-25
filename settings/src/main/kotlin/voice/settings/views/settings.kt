@@ -3,8 +3,8 @@ package voice.settings.views
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,7 +68,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             },
             content = {
               Icon(
-                imageVector = Icons.Default.Favorite,
+                imageVector = Icons.Outlined.Favorite,
                 contentDescription = stringResource(R.string.pref_support_title)
               )
             }
@@ -81,7 +81,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             }
           ) {
             Icon(
-              imageVector = Icons.Default.Close,
+              imageVector = Icons.Outlined.Close,
               contentDescription = stringResource(R.string.close)
             )
           }

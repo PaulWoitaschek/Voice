@@ -9,7 +9,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.anvil.annotations.ContributesTo
 import de.paulwoitaschek.flowpref.Pref
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.conductor.DialogController
 import voice.common.pref.PrefKeys
@@ -111,10 +110,12 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       sleepTimePref.value = selectedMinutes
 
       lifecycleScope.launch {
-        val book = bookRepo.flow(args.getBookId(NI_BOOK_ID)!!).first() ?: return@launch
-        bookmarkRepo.addBookmarkAtBookPosition(book = book,
+        val book = bookRepo.get(args.getBookId(NI_BOOK_ID)!!) ?: return@launch
+        bookmarkRepo.addBookmarkAtBookPosition(
+          book = book,
           setBySleepTimer = true,
-          title = null)
+          title = null
+        )
       }
 
       sleepTimer.setActive(true)

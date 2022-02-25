@@ -39,7 +39,7 @@ class PlaybackSpeedDialogController : DialogController() {
 
     val binding = DialogAmountChooserBinding.inflate(activity!!.layoutInflater)
 
-    val book = runBlocking { currentBook.data.first()?.let { repo.flow(it).first() } }
+    val book = runBlocking { currentBook.data.first()?.let { repo.get(it) } }
       ?: error("Cannot instantiate ${javaClass.name} without a current book")
     val speed = book.content.playbackSpeed
     binding.slider.valueFrom = Book.SPEED_MIN

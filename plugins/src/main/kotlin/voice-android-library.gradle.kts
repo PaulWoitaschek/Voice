@@ -7,6 +7,8 @@ plugins {
 
 val libs: VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+baseSetup()
+
 kotlin {
   jvmToolchain {
     (this as JavaToolchainSpec).languageVersion.set(VoiceVersions.javaLanguageVersion)
@@ -25,9 +27,6 @@ android {
     sourceCompatibility = VoiceVersions.javaCompileVersion
     targetCompatibility = VoiceVersions.javaCompileVersion
   }
-  kotlinOptions {
-    jvmTarget = VoiceVersions.javaCompileVersion.toString()
-  }
   testOptions {
     unitTests.isReturnDefaultValues = true
     animationsDisabled = true
@@ -36,12 +35,6 @@ android {
 
   composeOptions {
     kotlinCompilerExtensionVersion = libs.composeVersion
-  }
-
-  variantFilter {
-    if (name == "release") {
-      ignore = true
-    }
   }
 }
 

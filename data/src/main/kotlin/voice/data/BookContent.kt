@@ -30,3 +30,4 @@ data class BookContent(
     require(currentChapter in chapters)
   }
 }
+

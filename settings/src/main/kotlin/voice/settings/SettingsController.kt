@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesTo
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import voice.common.compose.ComposeController
 import voice.core.AppScope
@@ -24,8 +23,8 @@ class SettingsController : ComposeController() {
     rootComponentAs<Component>().inject(this)
   }
 
-  override fun onCreateView(scope: CoroutineScope) {
-    scope.launch {
+  override fun onCreateView() {
+    lifecycleScope.launch {
       viewModel.viewEffects.collect {
         when (it) {
           SettingsViewEffect.CloseScreen -> {

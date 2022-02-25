@@ -64,7 +64,7 @@ class BookSearchHandler
     // continue playback
     Logger.i("continuing from search without query")
     val currentId = currentBook.data.first()
-    val activeBooks = repo.flow().first()
+    val activeBooks = repo.all()
     val noBookInitialized = activeBooks.none { it.content.id == currentId }
     if (noBookInitialized) {
 
@@ -89,7 +89,7 @@ class BookSearchHandler
 
   // Play the first book that matches to a selector. Returns if a book is being played
   private suspend inline fun findAndPlayFirstMatch(selector: (Book) -> Boolean): Boolean {
-    val book = repo.flow().first().firstOrNull(selector)
+    val book = repo.all().firstOrNull(selector)
     return if (book != null) {
       Logger.i("found a match ${book.content.name}")
       currentBook.updateData { book.content.id }

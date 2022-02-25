@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.R
@@ -35,7 +34,7 @@ class EditBookTitleDialogController(args: Bundle) : DialogController(args) {
 
     val bookId = args.getBookId(NI_BOOK_ID)!!
     val presetName = runBlocking {
-      repo.flow(bookId).first()?.content?.name ?: ""
+      repo.get(bookId)?.content?.name ?: ""
     }
 
     return MaterialDialog(activity!!).apply {

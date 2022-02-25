@@ -110,4 +110,6 @@
 
     <!-- will be shown as the time for a bookmark that was just created -->
     <string name="bookmark_just_now">Just now</string>
+
+    <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
 </resources>

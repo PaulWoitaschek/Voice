@@ -12,6 +12,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import voice.common.comparator.NaturalOrderComparator
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -22,7 +23,7 @@ data class Chapter(
   val duration: Long,
   val fileLastModified: Instant,
   val markData: List<MarkData>,
-) {
+) : Comparable<Chapter> {
 
   init {
     require(name.isNotEmpty())
@@ -43,9 +44,16 @@ data class Chapter(
   }
 
   @Serializable(with = ChapterIdSerializer::class)
-  data class Id(val value: String) {
-
+  data class Id(val value: String) : Comparable<Id> {
     constructor(uri: Uri) : this(uri.toString())
+
+    override fun compareTo(other: Id): Int {
+      return NaturalOrderComparator.uriComparator.compare(value.toUri(), other.value.toUri())
+    }
+  }
+
+  override fun compareTo(other: Chapter): Int {
+    return id.compareTo(other.id)
   }
 }
 

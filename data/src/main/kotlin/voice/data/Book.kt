@@ -23,13 +23,11 @@ data class Book(
   val transitionName: String = id.transitionName
 
   init {
-    if (BuildConfig.DEBUG) {
-      check(chapters.size == content.chapters.size) {
-        "Different chapter count in $this"
-      }
-      check(chapters.map { it.id } == content.chapters) {
-        "Different chapter order in $this"
-      }
+    check(chapters.size == content.chapters.size) {
+      "Different chapter count in $this"
+    }
+    check(chapters.map { it.id } == content.chapters) {
+      "Different chapter order in $this"
     }
   }
 

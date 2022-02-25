@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name" translatable="false">Voice</string>
-    <string name="format_bookmarks_n_of" translatable="false">(%1$d / %2$d)</string>
-</resources>

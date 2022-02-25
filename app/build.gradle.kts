@@ -22,8 +22,8 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionCode = 3060349
-    versionName = "6.0.0-alpha10"
+    versionCode = 3060351
+    versionName = "6.0.0-alpha12"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -49,13 +49,13 @@ android {
 
   buildTypes {
     getByName("release") {
-      matchingFallbacks += "debug"
       isMinifyEnabled = true
       isShrinkResources = true
     }
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
+      applicationIdSuffix = ".debug"
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -85,6 +85,7 @@ android {
 
   buildFeatures {
     viewBinding = true
+    compose = true
   }
 }
 
@@ -99,6 +100,7 @@ dependencies {
   implementation(projects.sleepTimer)
   implementation(projects.settings)
   implementation(projects.folderPicker)
+  implementation(projects.bookOverview)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
@@ -149,7 +151,6 @@ dependencies {
   implementation(libs.prefs.android)
   testImplementation(libs.prefs.inMemory)
 
-  implementation(libs.tapTarget)
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.core)

@@ -9,7 +9,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -33,7 +32,7 @@ class BookSearchHandlerTest {
   private val bookToFind = book(listOf(chapter(), chapter()))
 
   init {
-    coEvery { repo.flow() } returns flowOf(listOf(anotherBook, bookToFind))
+    coEvery { repo.all() } coAnswers { listOf(anotherBook, bookToFind) }
 
     searchHandler = BookSearchHandler(repo, player, currentBookId)
   }
@@ -95,9 +94,10 @@ class BookSearchHandlerTest {
     val bookToFind = bookToFind.copy(
       content = bookToFind.content.copy(
         author = null,
-        name = "The book of Tim")
+        name = "The book of Tim"
+      )
     )
-    coEvery { repo.flow() } returns flowOf(listOf(bookToFind))
+    coEvery { repo.all() } coAnswers { listOf(bookToFind) }
 
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,

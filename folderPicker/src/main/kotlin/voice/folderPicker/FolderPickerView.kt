@@ -11,9 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,7 +48,7 @@ fun FolderPickerView(
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              imageVector = Icons.Default.ArrowBack,
+              imageVector = Icons.Outlined.ArrowBack,
               contentDescription = stringResource(R.string.close)
             )
           }
@@ -63,7 +63,7 @@ fun FolderPickerView(
         onClick = onAddClick,
         icon = {
           Icon(
-            imageVector = Icons.Default.Add,
+            imageVector = Icons.Outlined.Add,
             contentDescription = stringResource(R.string.add)
           )
         }
@@ -78,9 +78,11 @@ fun FolderPickerView(
               .fillMaxWidth()
               .padding(horizontal = 8.dp),
           ) {
-            Column(Modifier
-              .fillMaxWidth()
-              .padding(horizontal = 16.dp, vertical = 16.dp)) {
+            Column(
+              Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+            ) {
               Text(
                 text = text,
                 style = MaterialTheme.typography.bodyLarge
@@ -106,7 +108,7 @@ fun FolderPickerView(
               },
               content = {
                 Icon(
-                  imageVector = Icons.Default.Delete,
+                  imageVector = Icons.Outlined.Delete,
                   contentDescription = stringResource(R.string.delete)
                 )
               }

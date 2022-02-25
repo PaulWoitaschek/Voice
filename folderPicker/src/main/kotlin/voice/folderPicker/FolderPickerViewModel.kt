@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import voice.common.pref.AudiobookFolders
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Qualifier
 
@@ -72,7 +73,11 @@ class FolderPickerViewModel
   }
 
   fun removeFolder(uri: Uri) {
-    context.contentResolver.releasePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    try {
+      context.contentResolver.releasePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    } catch (e: SecurityException) {
+      Logger.w("Could not release uri permission for $uri")
+    }
     scope.launch {
       audiobookFolders.updateData {
         it - uri

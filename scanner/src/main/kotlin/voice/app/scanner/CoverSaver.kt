@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import voice.data.Book
 import voice.data.repo.BookRepository
@@ -67,7 +66,7 @@ class CoverSaver
   }
 
   suspend fun setBookCover(cover: File, bookId: Book.Id) {
-    val oldCover = repo.flow(bookId).first()?.content?.cover
+    val oldCover = repo.get(bookId)?.content?.cover
     if (oldCover != null) {
       withContext(Dispatchers.IO) {
         oldCover.delete()
