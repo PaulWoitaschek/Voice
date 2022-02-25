@@ -36,15 +36,6 @@ class BookRepoBenchmark {
     }
   }
 
-  @Test
-  fun update2() = runBenchmark { repo, books ->
-    books.forEach {
-      repo.updateBook2(it.id) { book ->
-        book.copy(lastPlayedAt = Instant.now())
-      }
-    }
-  }
-
   private inline fun runBenchmark(crossinline block: suspend (BookRepository, List<Book>) -> Unit) {
     val databaseName = "benchmarkDb"
     benchmark.measureRepeated {

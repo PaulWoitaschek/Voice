@@ -48,12 +48,6 @@ class BookRepository
   }
 
   suspend fun updateBook(id: Book.Id, update: (BookContent) -> BookContent) {
-    val content = contentRepo.flow(id).first() ?: return
-    val updated = update(content)
-    contentRepo.put(updated)
-  }
-
-  suspend fun updateBook2(id: Book.Id, update: (BookContent) -> BookContent) {
     val content = contentRepo.get(id) ?: return
     val updated = update(content)
     contentRepo.put(updated)
