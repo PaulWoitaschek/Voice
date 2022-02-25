@@ -39,6 +39,11 @@ class BookContentRepo
     return cache.onStart { fillCache() }.filterNotNull()
   }
 
+  suspend fun all(): List<BookContent> {
+    fillCache()
+    return cache.value!!
+  }
+
   fun flow(id: Book.Id): Flow<BookContent?> {
     return cache.onStart { fillCache() }
       .filterNotNull()

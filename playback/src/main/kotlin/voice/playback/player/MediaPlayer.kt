@@ -277,7 +277,7 @@ constructor(
 
   private suspend fun prepare() {
     val id = currentBook.data.first() ?: return
-    val book = repo.flow(id).first() ?: return
+    val book = repo.get(id) ?: return
     val shouldInitialize = player.playbackState == Player.STATE_IDLE || !alreadyInitializedChapters(book)
     if (!shouldInitialize) {
       return

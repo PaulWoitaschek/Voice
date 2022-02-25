@@ -1,7 +1,6 @@
 package voice.data.repo
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -24,7 +23,7 @@ class BookRepository
     if (warmedUp) return
     warmupMutex.withLock {
       if (warmedUp) return@withLock
-      val chapters = contentRepo.flow().first()
+      val chapters = contentRepo.all()
         .filter { it.isActive }
         .flatMap { it.chapters }
       chapterRepo.warmup(chapters)
@@ -42,9 +41,19 @@ class BookRepository
       }
   }
 
+  suspend fun all(): List<Book> {
+    return contentRepo.all()
+      .filter { it.isActive }
+      .map { it.book() }
+  }
+
   fun flow(id: Book.Id): Flow<Book?> {
     return contentRepo.flow(id)
       .map { it?.book() }
+  }
+
+  suspend fun get(id: Book.Id): Book? {
+    return contentRepo.get(id)?.book()
   }
 
   suspend fun updateBook(id: Book.Id, update: (BookContent) -> BookContent) {

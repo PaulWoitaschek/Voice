@@ -28,7 +28,7 @@ class NotifyOnAutoConnectionChange
     autoConnection.stream
       .filter { it }
       .mapNotNull {
-        currentBook.data.first()?.let { repo.flow(it).first() }
+        currentBook.data.first()?.let { repo.get(it) }
       }
       .collect { book ->
         // display the current book but don't play it

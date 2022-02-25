@@ -45,7 +45,7 @@ class MediaBrowserHelper
       ?: return null
     return when (type) {
       is BookUriConverter.Parsed.AllBooks -> {
-        val allBooks = repo.flow().first()
+        val allBooks = repo.all()
           .sortedWith(BookComparator.ByLastPlayed)
         val currentBookId = currentBookId.data.first()
         val currentBook = allBooks.find { it.id == currentBookId }

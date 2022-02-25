@@ -215,7 +215,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     val updatedState = state.state
 
     val book = currentBookIdPref.data.first()
-      ?.let { repo.flow(it).first() }
+      ?.let { repo.get(it) }
     val notification = if (book != null && updatedState != PlaybackStateCompat.STATE_NONE) {
       notificationCreator.createNotification(book)
     } else {

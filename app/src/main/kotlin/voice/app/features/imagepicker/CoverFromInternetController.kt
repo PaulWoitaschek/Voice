@@ -9,7 +9,6 @@ import android.webkit.WebViewClient
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.R
@@ -49,7 +48,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   private val book by lazy {
     val id = bundle.getBookId(NI_BOOK_ID)!!
     runBlocking {
-      repo.flow(id).first()!!
+      repo.get(id)!!
     }
   }
   private val originalUrl by lazy {
