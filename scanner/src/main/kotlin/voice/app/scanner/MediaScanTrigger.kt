@@ -49,7 +49,7 @@ class MediaScanTrigger
         .mapNotNull { DocumentFile.fromTreeUri(context, it) }
       scanner.scan(folders)
 
-      val books = bookRepo.flow().first()
+      val books = bookRepo.all()
       coverScanner.scan(books)
 
       _scannerActive.value = false

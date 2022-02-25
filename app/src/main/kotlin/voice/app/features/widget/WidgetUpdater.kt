@@ -47,7 +47,7 @@ class WidgetUpdater @Inject constructor(
   fun update() {
     scope.launch {
       val book = currentBook.data.first()?.let {
-        repo.flow(it).first()
+        repo.get(it)
       }
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)
       val ids = appWidgetManager.getAppWidgetIds(componentName)
@@ -153,13 +153,14 @@ class WidgetUpdater @Inject constructor(
       remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
     } else {
       val bitmap = context.imageLoader
-        .execute(ImageRequest.Builder(context)
-          .data(coverFile)
-          .size(coverSize, coverSize)
-          .fallback(R.drawable.album_art)
-          .error(R.drawable.album_art)
-          .allowHardware(false)
-          .build()
+        .execute(
+          ImageRequest.Builder(context)
+            .data(coverFile)
+            .size(coverSize, coverSize)
+            .fallback(R.drawable.album_art)
+            .error(R.drawable.album_art)
+            .allowHardware(false)
+            .build()
         )
         .drawable!!.toBitmap()
       remoteViews.setImageViewBitmap(R.id.imageView, bitmap)

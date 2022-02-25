@@ -3,13 +3,20 @@ package voice.app.features.bookOverview
 import android.content.Intent
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.datastore.core.DataStore
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.launch
 import voice.app.features.GalleryPicker
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
 import voice.bookOverview.BookOverviewViewModel
+import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.views.BookOverview
 import voice.common.compose.ComposeController
 import voice.common.pref.CurrentBook
@@ -36,7 +43,10 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
 
   @Composable
   override fun Content() {
-    val viewState = viewModel.state()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewState by remember(lifecycleOwner) {
+      viewModel.state().flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    }.collectAsState(initial = BookOverviewViewState.Loading)
     BookOverview(
       viewState = viewState,
       onLayoutIconClick = viewModel::toggleGrid,

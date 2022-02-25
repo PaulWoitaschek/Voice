@@ -27,10 +27,9 @@ class BookContentRepo
   private val cache = MutableStateFlow<List<BookContent>?>(null)
 
   private suspend fun fillCache() {
-    if (cacheFilled) {
-      return
-    }
+    if (cacheFilled) return
     cacheMutex.withLock {
+      if (cacheFilled) return@withLock
       cache.value = dao.all()
       cacheFilled = true
     }
@@ -38,6 +37,11 @@ class BookContentRepo
 
   fun flow(): Flow<List<BookContent>> {
     return cache.onStart { fillCache() }.filterNotNull()
+  }
+
+  suspend fun all(): List<BookContent> {
+    fillCache()
+    return cache.value!!
   }
 
   fun flow(id: Book.Id): Flow<BookContent?> {
@@ -65,10 +69,6 @@ class BookContentRepo
   }
 
   suspend fun put(content: BookContent) {
-    require(content.chapters.sorted() == content.chapters) {
-      "Inserted content $content not sorted."
-    }
-
     fillCache()
     cache.update { contents ->
       val newContents = contents!!.toMutableList()

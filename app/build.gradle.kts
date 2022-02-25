@@ -49,7 +49,6 @@ android {
 
   buildTypes {
     getByName("release") {
-      matchingFallbacks += "debug"
       isMinifyEnabled = true
       isShrinkResources = true
     }

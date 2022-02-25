@@ -3,7 +3,6 @@ package voice.app.features.bookPlaying.selectchapter
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.data.Book
@@ -26,7 +25,7 @@ class SelectChapterViewModel
   lateinit var bookId: Book.Id
 
   fun viewState(): SelectChapterViewState {
-    val book = runBlocking { bookRepository.flow(bookId).first() }
+    val book = runBlocking { bookRepository.get(bookId) }
 
     if (book == null) {
       Logger.d("no book found for $bookId. CloseScreen")
@@ -44,7 +43,7 @@ class SelectChapterViewModel
 
   fun chapterClicked(index: Int) {
     scope.launch {
-      val book = bookRepository.flow(bookId).first() ?: return@launch
+      val book = bookRepository.get(bookId) ?: return@launch
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->

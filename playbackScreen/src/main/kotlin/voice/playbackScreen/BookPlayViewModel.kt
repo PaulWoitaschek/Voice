@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.pref.CurrentBook
 import voice.data.Book
@@ -99,7 +98,7 @@ class BookPlayViewModel
 
   fun seekTo(ms: Long) {
     scope.launch {
-      val book = repo.flow(bookId).first() ?: return@launch
+      val book = repo.get(bookId) ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
       player.setPosition(currentMark.startMs + ms, currentChapter.id)
@@ -116,7 +115,7 @@ class BookPlayViewModel
 
   fun toggleSkipSilence() {
     scope.launch {
-      val book = repo.flow(bookId).first() ?: return@launch
+      val book = repo.get(bookId) ?: return@launch
       val skipSilence = book.content.skipSilence
       player.skipSilence(!skipSilence)
     }

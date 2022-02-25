@@ -12,9 +12,11 @@ fun book(
   lastPlayedAtMillis: Long = 0L,
   addedAtMillis: Long = 0L
 ): Book {
-  val chapters = listOf(
-    chapter(), chapter(),
-  )
+  val chapters = buildList {
+    repeat(10) {
+      add(chapter())
+    }
+  }
   return Book(
     content = BookContent(
       author = UUID.randomUUID().toString(),

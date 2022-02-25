@@ -14,7 +14,6 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -78,7 +77,6 @@ class MediaScannerTest {
 
     scan(audiobookFolder)
 
-    bookRepo.flow(Book.Id(book1.toUri())).first()
     val contentWithPositionAtLastChapter = bookContentRepo.get(Book.Id(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
     bookContentRepo.put(contentWithPositionAtLastChapter)
 
@@ -92,7 +90,6 @@ class MediaScannerTest {
 
     bookContentRepo.get(book1Id) shouldBe contentWithPositionAtLastChapter
   }
-
 
   @Test
   fun multipleRoots() = test {
@@ -154,11 +151,13 @@ class MediaScannerTest {
         }
         .also {
           coEvery { mediaAnalyzer.analyze(it.toUri()) } coAnswers {
-            MediaAnalyzer.Metadata(duration = 1000L,
+            MediaAnalyzer.Metadata(
+              duration = 1000L,
               author = "Author",
               bookName = "Book Name",
               chapterName = "Chapter",
-              chapters = emptyList())
+              chapters = emptyList()
+            )
           }
         }
         .toUri()
@@ -170,7 +169,7 @@ class MediaScannerTest {
     }
 
     suspend fun assertBookContents(vararg expected: BookContentView) {
-      bookRepo.flow().first()
+      bookRepo.all()
         .map {
           BookContentView(id = it.id,
             chapters = it.content.chapters.map { chapter ->

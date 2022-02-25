@@ -1,7 +1,6 @@
 package voice.app.features.bookmarks
 
 import androidx.datastore.core.DataStore
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.mvp.Presenter
 import voice.common.pref.CurrentBook
@@ -31,7 +30,7 @@ class BookmarkPresenter
 
   override fun onAttach(view: BookmarkView) {
     onAttachScope.launch {
-      val book = repo.flow(bookId).first() ?: return@launch
+      val book = repo.get(bookId) ?: return@launch
       bookmarks.clear()
       bookmarks.addAll(
         bookmarkRepo.bookmarks(book.content)
@@ -88,7 +87,7 @@ class BookmarkPresenter
 
   fun addBookmark(name: String) {
     scope.launch {
-      val book = repo.flow(bookId).first() ?: return@launch
+      val book = repo.get(bookId) ?: return@launch
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
         title = name,
