@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,7 @@ internal fun ExplanationTooltip(content: @Composable ColumnScope.() -> Unit) {
   Popup(popupPositionProvider = popupPositionProvider) {
     Card(
       modifier = Modifier.widthIn(max = 240.dp),
+      elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
       shape = explanationTooltipShape(flagGlobalCenterX, LocalDensity.current)
     ) {
       content()
