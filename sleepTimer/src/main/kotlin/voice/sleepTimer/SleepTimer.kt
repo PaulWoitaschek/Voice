@@ -71,6 +71,12 @@ class SleepTimer
         playerController.play()
         start()
       }
+// proposing edit here:
+      if (playStateManager.playState == Playing) {
+        Logger.i("Sleep timer finished, player is playing, restart timer.")
+        start()
+      }
+// to here.
       Logger.i("exiting")
     }
   }
