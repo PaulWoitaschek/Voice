@@ -18,7 +18,7 @@ jobs:
 
       - run: bundle exec fastlane tests
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: "Artifacts"
