@@ -1,5 +1,6 @@
 package voice.bookOverview
 
+import androidx.compose.runtime.Immutable
 import voice.data.Book
 import java.io.File
 
@@ -23,6 +24,7 @@ sealed interface BookOverviewViewState {
     override val showAddBookHint: Boolean,
   ) : BookOverviewViewState {
 
+    @Immutable
     data class BookViewState(
       val name: String,
       val author: String?,

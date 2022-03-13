@@ -20,8 +20,6 @@ data class Book(
 
   val id: Id = content.id
 
-  val transitionName: String = id.transitionName
-
   init {
     check(chapters.size == content.chapters.size) {
       "Different chapter count in $this"
@@ -49,8 +47,6 @@ data class Book(
   @Serializable(with = BookIdSerializer::class)
   @Parcelize
   data class Id(val value: String) : Parcelable {
-
-    val transitionName: String get() = value
 
     constructor(uri: Uri) : this(uri.toString())
 

@@ -79,10 +79,10 @@ fun BookOverview(
       is BookOverviewViewState.Content -> {
         when (viewState.layoutMode) {
           BookOverviewViewState.Content.LayoutMode.List -> {
-            ListBooks(viewState, onBookClick)
+            ListBooks(viewState.books, onBookClick)
           }
           BookOverviewViewState.Content.LayoutMode.Grid -> {
-            GridBooks(viewState, onBookClick)
+            GridBooks(viewState.books, onBookClick)
           }
         }
       }

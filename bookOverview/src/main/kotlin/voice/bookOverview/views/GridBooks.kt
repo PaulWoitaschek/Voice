@@ -1,7 +1,6 @@
 package voice.bookOverview.views
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,13 +24,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
 import voice.data.Book
 import kotlin.math.roundToInt
 
 @Composable
-internal fun GridBooks(viewState: BookOverviewViewState.Content, onBookClick: (Book.Id) -> Unit) {
+internal fun GridBooks(
+  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  onBookClick: (Book.Id) -> Unit
+) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
     columns = GridCells.Fixed(cellCount),
@@ -39,7 +42,7 @@ internal fun GridBooks(viewState: BookOverviewViewState.Content, onBookClick: (B
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
   ) {
-    viewState.books.forEach { (category, books) ->
+    books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       item(
         span = { GridItemSpan(maxLineSpan) },
@@ -68,9 +71,11 @@ private fun GridBook(
   onBookClick: (Book.Id) -> Unit,
 ) {
   Card(
-    Modifier
-      .fillMaxWidth()
-      .clickable { onBookClick(book.id) }) {
+    onClick = {
+      onBookClick(book.id)
+    },
+    modifier = Modifier.fillMaxWidth()
+  ) {
     Column {
       Image(
         modifier = Modifier
