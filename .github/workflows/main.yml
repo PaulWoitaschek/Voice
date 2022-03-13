@@ -2,7 +2,7 @@ name: Main
 
 on: [ push, pull_request ]
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -XX:MaxMetaspaceSize=1g -Xms512m -XX:+HeapDumpOnOutOfMemoryError"
 jobs:
   test:
     timeout-minutes: 60
