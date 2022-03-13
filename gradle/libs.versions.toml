@@ -1,6 +1,6 @@
 [versions]
-versionCode = "3060351"
-versionName = "6.0.0-alpha12"
+versionCode = "3060352"
+versionName = "6.0.0-alpha13"
 
 coroutines = "1.6.0"
 room = "2.4.2"
