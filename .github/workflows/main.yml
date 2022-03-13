@@ -11,18 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7.2'
-          bundler-cache: true
-
-      - run: bundle exec fastlane tests
+      - run: ./gradlew allUnitTests
+      - run: ./gradlew ktlintCheck
+      - run: ./gradlew app:lintDebug
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: "Artifacts"
-          path: "artifacts"
+          path: |
+            artifacts/
+            app/build/reports/*.html
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v2
@@ -43,9 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7.2'
-          bundler-cache: true
-
-      - run: bundle exec fastlane publish_play
+      - run: echo SIGNING_KEYSTORE | base64 --decode > signing/actual/signing.keystore
+      - run: echo $SIGNING_PROPERTIES > signing/actual/signing.properties
+      - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics
