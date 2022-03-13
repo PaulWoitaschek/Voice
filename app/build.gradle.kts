@@ -28,8 +28,8 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionCode = 3060351
-    versionName = "6.0.0-alpha12"
+    versionCode = libs.versions.versionCode.get().toInt()
+    versionName = libs.versions.versionName.get()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
