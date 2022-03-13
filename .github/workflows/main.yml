@@ -36,7 +36,7 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags')
     env:
-      PLAY_PUBLISH: ${{ secrets.PLAY_PUBLISH }}
+      ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
       SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
       SIGNING_PROPERTIES: ${{ secrets.SIGNING_PROPERTIES }}
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}

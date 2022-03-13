@@ -10,12 +10,18 @@ plugins {
   alias(libs.plugins.anvil)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.playPublish)
 }
 
 val enableCrashlytics = project.hasProperty("enableCrashlytics")
 if (enableCrashlytics) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
+}
+
+play {
+  defaultToAppBundles.value(true)
+  track.value("internal")
 }
 
 android {

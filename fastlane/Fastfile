@@ -14,26 +14,12 @@ platform :android do
   end
 
   lane :publish_play do
-    File.write('../play.json', ENV['PLAY_PUBLISH'])
     FileUtils.mkdir_p('../signing/actual')
     File.write('../signing/actual/signing.keystore', Base64.decode64(ENV['SIGNING_KEYSTORE']))
     File.write('../signing/actual/signing.properties', ENV['SIGNING_PROPERTIES'])
     File.write('../app/google-services.json', ENV['GOOGLE_SERVICES'])
 
-    gradle_with_default_flags(task: 'app:bundleRelease -x lint -x lintVitalRelease -PenableCrashlytics')
-
-    upload_to_play_store(
-      json_key: 'play.json',
-      track: 'internal',
-      package_name: 'de.ph1b.audiobook',
-      skip_upload_images: true,
-      skip_upload_metadata: true,
-      skip_upload_screenshots: true,
-      skip_upload_apk: true,
-      timeout: 600,
-      aab: 'app/build/outputs/bundle/release/app-release.aab',
-      mapping: 'app/build/outputs/mapping/release/mapping.txt'
-    )
+    gradle_with_default_flags(task: 'app:publishReleaseBundle -PenableCrashlytics')
   end
 
   lane :unit_tests do
