@@ -27,10 +27,15 @@ import coil.compose.rememberImagePainter
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.common.compose.ImmutableFile
+import voice.common.recomposeHighlighter
 import voice.data.Book
 
 @Composable
-internal fun ListBooks(books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>, onBookClick: (Book.Id) -> Unit) {
+internal fun ListBooks(
+  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  onBookClick: (Book.Id) -> Unit
+) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
     contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
@@ -70,24 +75,16 @@ private fun ListBookRow(
   onBookClick: (Book.Id) -> Unit,
 ) {
   Card(
-    modifier = modifier.fillMaxWidth(),
+    modifier = modifier
+      .recomposeHighlighter()
+      .fillMaxWidth(),
     onClick = {
       onBookClick(book.id)
     },
   ) {
     Column {
       Row {
-        Image(
-          modifier = Modifier
-            .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
-            .size(76.dp)
-            .clip(RoundedCornerShape(8.dp)),
-          painter = rememberImagePainter(data = book.cover) {
-            fallback(R.drawable.album_art)
-            error(R.drawable.album_art)
-          },
-          contentDescription = null
-        )
+        CoverImage(book.cover)
         Column(
           Modifier
             .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
@@ -118,4 +115,20 @@ private fun ListBookRow(
       )
     }
   }
+}
+
+@Composable
+private fun CoverImage(cover: ImmutableFile?) {
+  Image(
+    modifier = Modifier
+      .recomposeHighlighter()
+      .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
+      .size(76.dp)
+      .clip(RoundedCornerShape(8.dp)),
+    painter = rememberImagePainter(data = cover?.file) {
+      fallback(R.drawable.album_art)
+      error(R.drawable.album_art)
+    },
+    contentDescription = null
+  )
 }
