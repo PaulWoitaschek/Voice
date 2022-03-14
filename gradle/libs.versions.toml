@@ -36,7 +36,7 @@ kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin",
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
-koTest-assert = "io.kotest:kotest-assertions-core:5.2.0"
+koTest-assert = "io.kotest:kotest-assertions-core:5.2.1"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
