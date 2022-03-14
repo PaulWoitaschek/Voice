@@ -6,7 +6,7 @@ fun Project.baseSetup() {
   tasks.withType<KotlinCompile> {
     kotlinOptions {
       jvmTarget = VoiceVersions.javaCompileVersion.toString()
-      freeCompilerArgs = listOf(
+      freeCompilerArgs = freeCompilerArgs + listOf(
         "-progressive",
         "-Xopt-in=kotlin.RequiresOptIn",
         "-Xopt-in=kotlin.ExperimentalStdlibApi",
