@@ -1,5 +1,5 @@
 [versions]
-versionCode = "3060352"
+versionCode = "3060353"
 versionName = "6.0.0-alpha13"
 
 coroutines = "1.6.0"
