@@ -45,4 +45,5 @@ jobs:
       - run: mkdir -p signing/actual
       - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/actual/signing.keystore
       - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/actual/signing.properties
+      - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
       - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics
