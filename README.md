@@ -6,7 +6,7 @@ Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/b
        height="80"
        src="https://f-droid.org/badge/get-it-on.png" />
 </a>
-<a href="https://play.google.com/store/apps/details?id=voice.app">
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook">
   <img alt="Get it on Google Play"
        height="80"
        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
