@@ -1,7 +1,7 @@
 Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg)
 =======================
 
-<a href="https://f-droid.org/en/packages/de.ph1b.audiobook/">
+<a href="https://f-droid.org/packages/de.ph1b.audiobook/">
   <img alt="Get it on F-Droid"
        height="80"
        src="https://f-droid.org/badge/get-it-on.png" />
