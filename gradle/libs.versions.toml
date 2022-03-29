@@ -114,7 +114,7 @@ testing-jvm = [
 
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.3.11-1-6-10" }
+anvil = { id = "com.squareup.anvil", version = "2.4.0" }
 ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
 ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.4" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
