@@ -2,7 +2,7 @@
 versionCode = "3060354"
 versionName = "6.0.0-alpha14"
 
-coroutines = "1.6.0"
+coroutines = "1.6.1"
 room = "2.4.2"
 conductor = "3.1.4"
 prefs = "1.0.1"
