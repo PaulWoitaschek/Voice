@@ -11,7 +11,7 @@ dagger = "2.41"
 kotlin = "1.6.10"
 compose = "1.2.0-alpha07"
 composeCompiler = "1.1.0"
-agp = "7.1.2"
+agp = "7.1.3"
 benchmark = "1.1.0-beta06"
 
 [libraries]
