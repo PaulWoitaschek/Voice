@@ -46,4 +46,9 @@ jobs:
       - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/actual/signing.keystore
       - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/actual/signing.properties
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
-      - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics --no-configuration-cache
+      - run: ./gradlew app:publishReleaseBundle app:assembleRelease -PenableCrashlytics --no-configuration-cache
+
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/release/app-release.apk
