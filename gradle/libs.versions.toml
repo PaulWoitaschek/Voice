@@ -8,9 +8,8 @@ conductor = "3.1.4"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.41"
-kotlin = "1.6.10"
+kotlin = "1.6.20"
 compose = "1.2.0-alpha08"
-composeCompiler = "1.1.0"
 agp = "7.1.3"
 benchmark = "1.1.0-rc01"
 
@@ -116,7 +115,7 @@ testing-jvm = [
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.0" }
 ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
-ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.4" }
+ksp = { id = "com.google.devtools.ksp", version = "1.6.20-1.0.5" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.10" }
 benchmark = { id = "androidx.benchmark", version.ref = "benchmark" }
