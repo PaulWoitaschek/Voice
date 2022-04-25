@@ -83,7 +83,7 @@ private fun GridBook(
           .padding(start = 8.dp, end = 8.dp, top = 8.dp)
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
-        painter = rememberImagePainter(data = book.cover) {
+        painter = rememberImagePainter(data = book.cover?.file) {
           fallback(R.drawable.album_art)
           error(R.drawable.album_art)
         },
