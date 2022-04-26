@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,20 +26,24 @@ import coil.compose.rememberImagePainter
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.common.compose.LongClickableCard
+import voice.common.compose.plus
 import voice.data.Book
 import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBooks(
   books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
-  onBookClick: (Book.Id) -> Unit
+  contentPadding: PaddingValues,
+  onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
     columns = GridCells.Fixed(cellCount),
     verticalArrangement = Arrangement.spacedBy(8.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
+    contentPadding = contentPadding + PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
   ) {
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
@@ -59,7 +62,11 @@ internal fun GridBooks(
         key = { it.id },
         contentType = { "item" }
       ) { book ->
-        GridBook(book, onBookClick)
+        GridBook(
+          book = book,
+          onBookClick = onBookClick,
+          onBookLongClick = onBookLongClick
+        )
       }
     }
   }
@@ -69,10 +76,14 @@ internal fun GridBooks(
 private fun GridBook(
   book: BookOverviewViewState.Content.BookViewState,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
 ) {
-  Card(
+  LongClickableCard(
     onClick = {
       onBookClick(book.id)
+    },
+    onLongClick = {
+      onBookLongClick(book.id)
     },
     modifier = Modifier.fillMaxWidth()
   ) {

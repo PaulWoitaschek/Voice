@@ -68,7 +68,7 @@ fun FolderPickerView(
       )
     }
   ) {
-    LazyColumn {
+    LazyColumn(contentPadding = it) {
       viewState.explanationCard?.let { text ->
         item {
           Card(

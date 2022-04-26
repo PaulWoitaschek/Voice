@@ -39,6 +39,7 @@ fun BookOverview(
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
   onBookFolderClick: () -> Unit,
   onPlayButtonClick: () -> Unit,
 ) {
@@ -71,20 +72,34 @@ fun BookOverview(
         )
       }
     }
-  ) {
+  ) { contentPadding ->
     when (viewState) {
       is BookOverviewViewState.Content -> {
         when (viewState.layoutMode) {
           BookOverviewViewState.Content.LayoutMode.List -> {
-            ListBooks(viewState.books, onBookClick)
+            ListBooks(
+              books = viewState.books,
+              onBookClick = onBookClick,
+              onBookLongClick = onBookLongClick,
+              contentPadding = contentPadding,
+            )
           }
           BookOverviewViewState.Content.LayoutMode.Grid -> {
-            GridBooks(viewState.books, onBookClick)
+            GridBooks(
+              books = viewState.books,
+              onBookClick = onBookClick,
+              onBookLongClick = onBookLongClick,
+              contentPadding = contentPadding,
+            )
           }
         }
       }
       BookOverviewViewState.Loading -> {
-        Box(Modifier.fillMaxSize()) {
+        Box(
+          Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+        ) {
           CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
       }
@@ -169,7 +184,8 @@ private fun BookOverviewPreview(
       onSettingsClick = {},
       onBookClick = {},
       onBookFolderClick = {},
-      onPlayButtonClick = {}
+      onPlayButtonClick = {},
+      onBookLongClick = {},
     )
   }
 }

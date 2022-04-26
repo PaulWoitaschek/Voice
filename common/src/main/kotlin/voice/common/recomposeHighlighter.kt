@@ -30,6 +30,7 @@ import kotlin.math.min
 fun Modifier.recomposeHighlighter(): Modifier {
   return if (BuildConfig.DEBUG) {
     then(recomposeModifier)
+    this
   } else {
     this
   }

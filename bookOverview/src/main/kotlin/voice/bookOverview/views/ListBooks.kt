@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,17 +27,21 @@ import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
 import voice.common.compose.ImmutableFile
+import voice.common.compose.LongClickableCard
+import voice.common.compose.plus
 import voice.common.recomposeHighlighter
 import voice.data.Book
 
 @Composable
 internal fun ListBooks(
+  contentPadding: PaddingValues,
   books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
-  onBookClick: (Book.Id) -> Unit
+  onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
+    contentPadding = contentPadding + PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
   ) {
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
@@ -61,7 +64,8 @@ internal fun ListBooks(
       ) { book ->
         ListBookRow(
           book = book,
-          onBookClick = onBookClick
+          onBookClick = onBookClick,
+          onBookLongClick = onBookLongClick,
         )
       }
     }
@@ -73,14 +77,18 @@ private fun ListBookRow(
   modifier: Modifier = Modifier,
   book: BookOverviewViewState.Content.BookViewState,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
 ) {
-  Card(
-    modifier = modifier
-      .recomposeHighlighter()
-      .fillMaxWidth(),
+  LongClickableCard(
     onClick = {
       onBookClick(book.id)
     },
+    onLongClick = {
+      onBookLongClick(book.id)
+    },
+    modifier = modifier
+      .recomposeHighlighter()
+      .fillMaxWidth()
   ) {
     Column {
       Row {

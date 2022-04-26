@@ -53,7 +53,11 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       onSettingsClick = ::toSettings,
       onBookClick = ::toBook,
       onBookFolderClick = ::toFolderOverview,
-      onPlayButtonClick = viewModel::playPause
+      onPlayButtonClick = viewModel::playPause,
+      onBookLongClick = {
+        EditBookBottomSheetController(this, it)
+          .showDialog(router)
+      }
     )
   }
 

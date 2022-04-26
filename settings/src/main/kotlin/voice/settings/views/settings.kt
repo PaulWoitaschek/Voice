@@ -1,5 +1,6 @@
 package voice.settings.views
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -86,19 +87,21 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         }
       )
     }
-  ) {
-    Column(Modifier.padding(vertical = 8.dp)) {
-      if (viewState.showDarkThemePref) {
-        DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+  ) { contentPadding ->
+    Box(Modifier.padding(contentPadding)) {
+      Column(Modifier.padding(vertical = 8.dp)) {
+        if (viewState.showDarkThemePref) {
+          DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+        }
+        ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
+        SeekTimeRow(viewState.seekTimeInSeconds) {
+          listener.onSeekAmountRowClicked()
+        }
+        AutoRewindRow(viewState.autoRewindInSeconds) {
+          listener.onAutoRewindRowClicked()
+        }
+        Dialog(viewState, listener)
       }
-      ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
-      SeekTimeRow(viewState.seekTimeInSeconds) {
-        listener.onSeekAmountRowClicked()
-      }
-      AutoRewindRow(viewState.autoRewindInSeconds) {
-        listener.onAutoRewindRowClicked()
-      }
-      Dialog(viewState, listener)
     }
   }
 }
