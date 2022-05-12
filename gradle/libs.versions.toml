@@ -48,7 +48,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.10"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:20.1.2"
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
