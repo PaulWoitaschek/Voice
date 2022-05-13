@@ -68,6 +68,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     webView.webViewClient = object : WebViewClient() {
 
       @Suppress("OverridingDeprecatedMember")
+      @Deprecated("")
       override fun onReceivedError(
         view: WebView,
         errorCode: Int,

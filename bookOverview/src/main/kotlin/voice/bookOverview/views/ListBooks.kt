@@ -1,6 +1,5 @@
 package voice.bookOverview.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
@@ -127,16 +127,15 @@ private fun ListBookRow(
 
 @Composable
 private fun CoverImage(cover: ImmutableFile?) {
-  Image(
+  AsyncImage(
     modifier = Modifier
       .recomposeHighlighter()
       .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
       .size(76.dp)
       .clip(RoundedCornerShape(8.dp)),
-    painter = rememberImagePainter(data = cover?.file) {
-      fallback(R.drawable.album_art)
-      error(R.drawable.album_art)
-    },
+    model = cover?.file,
+    placeholder = painterResource(id = R.drawable.album_art),
+    error = painterResource(id = R.drawable.album_art),
     contentDescription = null
   )
 }

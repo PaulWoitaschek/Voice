@@ -1,6 +1,5 @@
 package voice.bookOverview.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,8 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
@@ -88,16 +88,15 @@ private fun GridBook(
     modifier = Modifier.fillMaxWidth()
   ) {
     Column {
-      Image(
+      AsyncImage(
         modifier = Modifier
           .aspectRatio(4F / 3F)
           .padding(start = 8.dp, end = 8.dp, top = 8.dp)
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
-        painter = rememberImagePainter(data = book.cover?.file) {
-          fallback(R.drawable.album_art)
-          error(R.drawable.album_art)
-        },
+        model = book.cover?.file,
+        placeholder = painterResource(id = R.drawable.album_art),
+        error = painterResource(id = R.drawable.album_art),
         contentDescription = null
       )
       Text(
