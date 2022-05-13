@@ -14,11 +14,15 @@ fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
       listener()
     }
 
-    override fun onPositionDiscontinuity(reason: Int) {
+    override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
       listener()
     }
 
-    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+    override fun onPlaybackStateChanged(playbackState: Int) {
+      listener()
+    }
+
+    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
       listener()
     }
 
@@ -35,7 +39,16 @@ fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(
     object : Player.Listener {
-      override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+
+      override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        notifyListener(playbackState, playWhenReady)
+      }
+
+      override fun onPlaybackStateChanged(playbackState: Int) {
+        notifyListener(playbackState, playWhenReady)
+      }
+
+      fun notifyListener(playbackState: Int, playWhenReady: Boolean) {
         val state = when (playbackState) {
           Player.STATE_ENDED -> PlayerState.ENDED
           Player.STATE_IDLE -> PlayerState.IDLE
@@ -50,7 +63,9 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
             null
           }
         }
-        if (state != null) action(state)
+        if (state != null) {
+          action(state)
+        }
       }
     }
   )
@@ -69,7 +84,7 @@ inline fun ExoPlayer.onError(crossinline action: (PlaybackException) -> Unit) {
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(
     object : Player.Listener {
-      override fun onPositionDiscontinuity(reason: Int) {
+      override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
         action()
       }
     }
