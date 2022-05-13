@@ -3,7 +3,6 @@ package voice.bookOverview.views
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,13 +39,13 @@ import voice.common.compose.VoiceTheme
 import voice.data.Book
 import java.util.UUID
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun BookOverview(
   viewState: BookOverviewViewState,
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
   onBookFolderClick: () -> Unit,
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
@@ -85,20 +83,34 @@ fun BookOverview(
         )
       }
     }
-  ) {
+  ) { contentPadding ->
     when (viewState) {
       is BookOverviewViewState.Content -> {
         when (viewState.layoutMode) {
           BookOverviewViewState.Content.LayoutMode.List -> {
-            ListBooks(viewState, onBookClick)
+            ListBooks(
+              books = viewState.books,
+              onBookClick = onBookClick,
+              onBookLongClick = onBookLongClick,
+              contentPadding = contentPadding,
+            )
           }
           BookOverviewViewState.Content.LayoutMode.Grid -> {
-            GridBooks(viewState, onBookClick)
+            GridBooks(
+              books = viewState.books,
+              onBookClick = onBookClick,
+              onBookLongClick = onBookLongClick,
+              contentPadding = contentPadding,
+            )
           }
         }
       }
       BookOverviewViewState.Loading -> {
-        Box(Modifier.fillMaxSize()) {
+        Box(
+          Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+        ) {
           CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
       }
@@ -229,6 +241,7 @@ private fun BookOverviewPreview(
       onBookClick = {},
       onBookFolderClick = {},
       onPlayButtonClick = {},
+      onBookLongClick = {},
       onBoomMigrationHelperConfirmClick = {},
       onBookMigrationClick = {},
     )

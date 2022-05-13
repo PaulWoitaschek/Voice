@@ -149,9 +149,7 @@ class WidgetUpdater @Inject constructor(
     )
 
     val coverFile = book.content.cover
-    if (coverFile == null) {
-      remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
-    } else {
+    if (coverFile != null && coverSize >= 0) {
       val bitmap = context.imageLoader
         .execute(
           ImageRequest.Builder(context)
@@ -164,6 +162,8 @@ class WidgetUpdater @Inject constructor(
         )
         .drawable!!.toBitmap()
       remoteViews.setImageViewBitmap(R.id.imageView, bitmap)
+    } else {
+      remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
     }
 
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

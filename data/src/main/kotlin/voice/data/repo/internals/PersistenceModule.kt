@@ -68,10 +68,10 @@ object PersistenceModule {
   }
 
   @Provides
-  fun migrations(context: Context): Array<Migration> {
+  fun migrations(): Array<Migration> {
     return arrayOf(
       Migration23to24(),
-      Migration24to25(context),
+      Migration24to25(),
       Migration25to26(),
       Migration26to27(),
       Migration27to28(),

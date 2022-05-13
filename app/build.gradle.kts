@@ -10,6 +10,7 @@ plugins {
   alias(libs.plugins.anvil)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.playPublish)
 }
 
 val enableCrashlytics = project.hasProperty("enableCrashlytics")
@@ -18,12 +19,17 @@ if (enableCrashlytics) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
 
+play {
+  defaultToAppBundles.value(true)
+  track.value("internal")
+}
+
 android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionCode = 3060351
-    versionName = "6.0.0-alpha12"
+    versionCode = libs.versions.versionCode.get().toInt()
+    versionName = libs.versions.versionName.get()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

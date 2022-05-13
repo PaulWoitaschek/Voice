@@ -2,30 +2,29 @@ name: Main
 
 on: [ push, pull_request ]
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3000m"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -XX:MaxMetaspaceSize=1g -Xms512m -XX:+HeapDumpOnOutOfMemoryError"
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7.2'
-          bundler-cache: true
+      - run: ./gradlew allUnitTests
+      - run: ./gradlew ktlintCheck
+      - run: ./gradlew app:lintDebug
 
-      - run: bundle exec fastlane tests
-
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: "Artifacts"
-          path: "artifacts"
+          path: |
+            artifacts/
+            app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
+        uses: mikepenz/action-junit-report@v3
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -36,16 +35,20 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags')
     env:
-      PLAY_PUBLISH: ${{ secrets.PLAY_PUBLISH }}
+      ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
       SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
       SIGNING_PROPERTIES: ${{ secrets.SIGNING_PROPERTIES }}
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
+      - run: mkdir -p signing/actual
+      - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/actual/signing.keystore
+      - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/actual/signing.properties
+      - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
+      - run: ./gradlew app:publishReleaseBundle app:assembleRelease -PenableCrashlytics --no-configuration-cache
+
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
         with:
-          ruby-version: '2.7.2'
-          bundler-cache: true
-
-      - run: bundle exec fastlane publish_play
+          files: app/build/outputs/apk/release/app-release.apk

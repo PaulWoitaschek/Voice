@@ -1,19 +1,16 @@
 package voice.bookOverview.views
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,23 +20,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.common.compose.LongClickableCard
+import voice.common.compose.plus
 import voice.data.Book
 import kotlin.math.roundToInt
 
 @Composable
-internal fun GridBooks(viewState: BookOverviewViewState.Content, onBookClick: (Book.Id) -> Unit) {
+internal fun GridBooks(
+  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  contentPadding: PaddingValues,
+  onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit
+) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
-    cells = GridCells.Fixed(cellCount),
+    columns = GridCells.Fixed(cellCount),
     verticalArrangement = Arrangement.spacedBy(8.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
+    contentPadding = contentPadding + PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
   ) {
-    viewState.books.forEach { (category, books) ->
+    books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       item(
         span = { GridItemSpan(maxLineSpan) },
@@ -56,7 +62,11 @@ internal fun GridBooks(viewState: BookOverviewViewState.Content, onBookClick: (B
         key = { it.id },
         contentType = { "item" }
       ) { book ->
-        GridBook(book, onBookClick)
+        GridBook(
+          book = book,
+          onBookClick = onBookClick,
+          onBookLongClick = onBookLongClick
+        )
       }
     }
   }
@@ -66,22 +76,27 @@ internal fun GridBooks(viewState: BookOverviewViewState.Content, onBookClick: (B
 private fun GridBook(
   book: BookOverviewViewState.Content.BookViewState,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
 ) {
-  Card(
-    Modifier
-      .fillMaxWidth()
-      .clickable { onBookClick(book.id) }) {
+  LongClickableCard(
+    onClick = {
+      onBookClick(book.id)
+    },
+    onLongClick = {
+      onBookLongClick(book.id)
+    },
+    modifier = Modifier.fillMaxWidth()
+  ) {
     Column {
-      Image(
+      AsyncImage(
         modifier = Modifier
           .aspectRatio(4F / 3F)
           .padding(start = 8.dp, end = 8.dp, top = 8.dp)
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
-        painter = rememberImagePainter(data = book.cover) {
-          fallback(R.drawable.album_art)
-          error(R.drawable.album_art)
-        },
+        model = book.cover?.file,
+        placeholder = painterResource(id = R.drawable.album_art),
+        error = painterResource(id = R.drawable.album_art),
         contentDescription = null
       )
       Text(

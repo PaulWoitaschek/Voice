@@ -1,8 +1,6 @@
 package voice.bookOverview.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,21 +18,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.common.compose.ImmutableFile
+import voice.common.compose.LongClickableCard
+import voice.common.compose.plus
+import voice.common.recomposeHighlighter
 import voice.data.Book
 
 @Composable
-internal fun ListBooks(viewState: BookOverviewViewState.Content, onBookClick: (Book.Id) -> Unit) {
+internal fun ListBooks(
+  contentPadding: PaddingValues,
+  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
+) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
+    contentPadding = contentPadding + PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
   ) {
-    viewState.books.forEach { (category, books) ->
+    books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       stickyHeader(
         key = category,
@@ -51,13 +59,13 @@ internal fun ListBooks(viewState: BookOverviewViewState.Content, onBookClick: (B
       }
       items(
         items = books,
-        key = { it.id },
+        key = { it.id.value },
         contentType = { "item" }
       ) { book ->
         ListBookRow(
-          modifier = Modifier.animateItemPlacement(),
           book = book,
-          onBookClick = onBookClick
+          onBookClick = onBookClick,
+          onBookLongClick = onBookLongClick,
         )
       }
     }
@@ -69,25 +77,22 @@ private fun ListBookRow(
   modifier: Modifier = Modifier,
   book: BookOverviewViewState.Content.BookViewState,
   onBookClick: (Book.Id) -> Unit,
+  onBookLongClick: (Book.Id) -> Unit,
 ) {
-  Card(
-    modifier
+  LongClickableCard(
+    onClick = {
+      onBookClick(book.id)
+    },
+    onLongClick = {
+      onBookLongClick(book.id)
+    },
+    modifier = modifier
+      .recomposeHighlighter()
       .fillMaxWidth()
-      .clickable { onBookClick(book.id) }
   ) {
     Column {
       Row {
-        Image(
-          modifier = Modifier
-            .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
-            .size(76.dp)
-            .clip(RoundedCornerShape(8.dp)),
-          painter = rememberImagePainter(data = book.cover) {
-            fallback(R.drawable.album_art)
-            error(R.drawable.album_art)
-          },
-          contentDescription = null
-        )
+        CoverImage(book.cover)
         Column(
           Modifier
             .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
@@ -118,4 +123,19 @@ private fun ListBookRow(
       )
     }
   }
+}
+
+@Composable
+private fun CoverImage(cover: ImmutableFile?) {
+  AsyncImage(
+    modifier = Modifier
+      .recomposeHighlighter()
+      .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
+      .size(76.dp)
+      .clip(RoundedCornerShape(8.dp)),
+    model = cover?.file,
+    placeholder = painterResource(id = R.drawable.album_art),
+    error = painterResource(id = R.drawable.album_art),
+    contentDescription = null
+  )
 }

@@ -1,11 +1,11 @@
 package voice.settings.views
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -52,7 +52,6 @@ private fun SettingsPreview() {
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
   Scaffold(
@@ -88,24 +87,25 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         }
       )
     }
-  ) {
-    Column(Modifier.padding(vertical = 8.dp)) {
-      if (viewState.showDarkThemePref) {
-        DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+  ) { contentPadding ->
+    Box(Modifier.padding(contentPadding)) {
+      Column(Modifier.padding(vertical = 8.dp)) {
+        if (viewState.showDarkThemePref) {
+          DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+        }
+        ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
+        SeekTimeRow(viewState.seekTimeInSeconds) {
+          listener.onSeekAmountRowClicked()
+        }
+        AutoRewindRow(viewState.autoRewindInSeconds) {
+          listener.onAutoRewindRowClicked()
+        }
+        Dialog(viewState, listener)
       }
-      ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
-      SeekTimeRow(viewState.seekTimeInSeconds) {
-        listener.onSeekAmountRowClicked()
-      }
-      AutoRewindRow(viewState.autoRewindInSeconds) {
-        listener.onAutoRewindRowClicked()
-      }
-      Dialog(viewState, listener)
     }
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Settings(viewModel: SettingsViewModel) {
   val viewState by viewModel.viewState().collectAsState(SettingsViewState.Empty)

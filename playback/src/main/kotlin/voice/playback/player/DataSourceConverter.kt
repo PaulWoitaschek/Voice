@@ -3,7 +3,6 @@ package voice.playback.player
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.MediaSourceFactory
 import voice.data.Book
 import voice.data.Chapter
 import voice.data.toUri
@@ -11,7 +10,7 @@ import javax.inject.Inject
 
 class DataSourceConverter
 @Inject constructor(
-  private val mediaSourceFactory: MediaSourceFactory
+  private val mediaSourceFactory: MediaSource.Factory
 ) {
 
   fun toMediaSource(content: Book): MediaSource {

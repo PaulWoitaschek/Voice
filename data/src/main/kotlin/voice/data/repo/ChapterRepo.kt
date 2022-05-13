@@ -2,6 +2,7 @@ package voice.data.repo
 
 import voice.data.Chapter
 import voice.data.repo.internals.dao.ChapterDao
+import voice.data.runForMaxSqlVariableNumber
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +25,11 @@ class ChapterRepo
 
   suspend fun warmup(ids: List<Chapter.Id>) {
     val missing = ids.filter { it !in cache }
-    dao.chapters(missing).onEach { cache[it.id] = it }
+    missing
+      .runForMaxSqlVariableNumber {
+        dao.chapters(it)
+      }
+      .forEach { cache[it.id] = it }
   }
 
   suspend fun put(chapter: Chapter) {

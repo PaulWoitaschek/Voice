@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
+import voice.common.compose.ImmutableFile
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.core.combine
@@ -101,7 +102,7 @@ constructor(
                 BookOverviewViewState.Content.BookViewState(
                   name = book.content.name,
                   author = book.content.author,
-                  cover = book.content.cover,
+                  cover = book.content.cover?.let(::ImmutableFile),
                   id = book.id,
                   progress = book.progress(),
                   remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)

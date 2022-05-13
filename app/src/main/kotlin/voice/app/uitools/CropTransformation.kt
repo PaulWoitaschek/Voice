@@ -3,22 +3,18 @@ package voice.app.uitools
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.widget.ImageView
-import coil.bitmap.BitmapPool
 import coil.size.Size
 import coil.transform.Transformation
 import voice.app.features.imagepicker.CropOverlay
 
-/**
- * Performs cropping based on the crop overlay
- */
 class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) :
   Transformation {
 
   private val rect = cropOverlay.selectedRect
 
-  override fun key(): String = "cropTransformation"
+  override val cacheKey: String = "cropTransformation"
 
-  override suspend fun transform(pool: BitmapPool, input: Bitmap, size: Size): Bitmap {
+  override suspend fun transform(input: Bitmap, size: Size): Bitmap {
     val scaleFactor: Float = input.width.toFloat() / cropSource.measuredWidth
     scaleRect(rect, scaleFactor)
     return try {

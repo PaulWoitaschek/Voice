@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -62,7 +62,7 @@ class Migration39to40Test {
       .create()
     val times = db.query(query)
       .mapRows { getInt(BookTable.TIME) }
-    assertThat(times).containsExactly(0, 5000)
+    times.shouldContainExactly(0, 5000)
   }
 
   @SuppressLint("SdCardPath")

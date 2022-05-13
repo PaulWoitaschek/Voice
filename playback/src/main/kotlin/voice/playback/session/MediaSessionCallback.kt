@@ -10,7 +10,6 @@ import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.Chapter
 import voice.logging.core.Logger
-import voice.playback.BuildConfig
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
 import voice.playback.di.PlaybackScope
 import voice.playback.player.MediaPlayer
@@ -166,8 +165,8 @@ class MediaSessionCallback
         FORCED_NEXT -> {
           player.next()
         }
-        else -> if (BuildConfig.DEBUG) {
-          error("Didn't handle $action")
+        else -> {
+          Logger.w("Didn't handle customAction=$action")
         }
       }
     }

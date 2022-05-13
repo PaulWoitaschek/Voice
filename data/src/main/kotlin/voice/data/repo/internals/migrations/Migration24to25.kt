@@ -2,9 +2,7 @@ package voice.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.os.Environment
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import org.json.JSONArray
@@ -20,9 +18,7 @@ import java.util.InvalidPropertiesFormatException
  * Migrate the database so they will be stored as json objects
  */
 @SuppressLint("Recycle")
-class Migration24to25(
-  private val context: Context
-) : IncrementalMigration(24) {
+class Migration24to25 : IncrementalMigration(24) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"
@@ -229,32 +225,6 @@ class Migration24to25(
         cv.put("BOOK_JSON", book.toString())
         val newBookId = db.insert(newBookTable, SQLiteDatabase.CONFLICT_FAIL, cv)
         book.put("id", newBookId)
-
-        // move cover file if possible
-        val coverFile = if (chapterPaths.size == 1) {
-          val fileName = "." + chapterNames.first() + ".jpg"
-          File(root, fileName)
-        } else {
-          val fileName = "." + (File(root).name) + ".jpg"
-          File(root, fileName)
-        }
-        if (coverFile.exists() && coverFile.canWrite()) {
-          try {
-            val externalStoragePath = Environment.getExternalStorageDirectory().absolutePath
-            val newCoverFile = File(
-              "$externalStoragePath/Android/data/${context.packageName}",
-              "$newBookId.jpg"
-            )
-            if (!coverFile.parentFile.exists()) {
-              //noinspection ResultOfMethodCallIgnored
-              coverFile.parentFile.mkdirs()
-            }
-            coverFile.copyTo(newCoverFile)
-            coverFile.delete()
-          } catch (e: IOException) {
-            e.printStackTrace()
-          }
-        }
       } catch (e: JSONException) {
         throw InvalidPropertiesFormatException(e)
       }

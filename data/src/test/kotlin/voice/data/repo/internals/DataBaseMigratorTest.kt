@@ -3,7 +3,6 @@ package voice.data.repo.internals
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
@@ -35,7 +34,7 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule.migrations(getApplicationContext())
+      *PersistenceModule.migrations()
     )
   }
 
@@ -82,7 +81,7 @@ class DataBaseMigratorTest {
       dbName,
       45,
       true,
-      *PersistenceModule.migrations(getApplicationContext())
+      *PersistenceModule.migrations()
     )
 
     val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
@@ -224,7 +223,7 @@ class DataBaseMigratorTest {
       dbName,
       44,
       true,
-      *PersistenceModule.migrations(getApplicationContext())
+      *PersistenceModule.migrations()
     )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")

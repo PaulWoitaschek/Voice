@@ -55,7 +55,11 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       onBookFolderClick = ::toFolderOverview,
       onPlayButtonClick = viewModel::playPause,
       onBookMigrationClick = ::toBookMigration,
-      onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick
+      onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick,
+      onBookLongClick = {
+        EditBookBottomSheetController(this, it)
+          .showDialog(router)
+      }
     )
   }
 

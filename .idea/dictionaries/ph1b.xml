@@ -3,6 +3,7 @@
     <words>
       <w>constraintlayout</w>
       <w>coroutine</w>
+      <w>lerp</w>
       <w>seekable</w>
     </words>
   </dictionary>
