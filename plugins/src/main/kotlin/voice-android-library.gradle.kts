@@ -21,6 +21,7 @@ android {
     minSdk = VoiceVersions.minSdk
     targetSdk = VoiceVersions.targetSdk
   }
+  namespace = "voice." + path.removePrefix(":").replace(':', '.')
   compileSdk = VoiceVersions.compileSdk
   compileOptions {
     isCoreLibraryDesugaringEnabled = true

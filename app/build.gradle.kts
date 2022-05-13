@@ -107,6 +107,7 @@ dependencies {
   implementation(projects.settings)
   implementation(projects.folderPicker)
   implementation(projects.bookOverview)
+  implementation(projects.migration)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

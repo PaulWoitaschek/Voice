@@ -22,6 +22,7 @@ import voice.common.compose.ComposeController
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.folderPicker.FolderPickerController
+import voice.migration.MigrationController
 import voice.playbackScreen.BookPlayController
 import voice.settings.SettingsController
 import javax.inject.Inject
@@ -74,7 +75,7 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
 
   private fun toBookMigration() {
     viewModel.onBoomMigrationHelperConfirmClick()
-    // todo
+    router.pushController(MigrationController().asTransaction())
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
