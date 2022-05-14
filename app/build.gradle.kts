@@ -21,7 +21,7 @@ if (enableCrashlytics) {
 
 play {
   defaultToAppBundles.value(true)
-  track.value("internal")
+  track.value("beta")
 }
 
 android {
