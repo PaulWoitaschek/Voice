@@ -21,7 +21,7 @@ if (enableCrashlytics) {
 
 play {
   defaultToAppBundles.value(true)
-  track.value("beta")
+  track.value("Open Beta")
 }
 
 android {
