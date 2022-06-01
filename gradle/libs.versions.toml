@@ -11,7 +11,7 @@ dagger = "2.42"
 kotlin = "1.6.21"
 compose = "1.2.0-beta02"
 agp = "7.2.1"
-benchmark = "1.1.0-rc02"
+benchmark = "1.1.0-rc03"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
