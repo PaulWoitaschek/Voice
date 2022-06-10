@@ -8,16 +8,16 @@ fun Project.baseSetup() {
       jvmTarget = VoiceVersions.javaCompileVersion.toString()
       freeCompilerArgs = freeCompilerArgs + listOf(
         "-progressive",
-        "-Xopt-in=kotlin.RequiresOptIn",
-        "-Xopt-in=kotlin.ExperimentalStdlibApi",
-        "-Xopt-in=kotlin.time.ExperimentalTime",
-        "-Xopt-in=kotlinx.coroutines.FlowPreview",
-        "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-        "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
-        "-Xopt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-        "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-        "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+        "-opt-in=kotlin.RequiresOptIn",
+        "-opt-in=kotlin.ExperimentalStdlibApi",
+        "-opt-in=kotlin.time.ExperimentalTime",
+        "-opt-in=kotlinx.coroutines.FlowPreview",
+        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-opt-in=kotlin.contracts.ExperimentalContracts",
+        "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+        "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
       )
     }
   }

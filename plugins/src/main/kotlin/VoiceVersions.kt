@@ -11,9 +11,9 @@ val VersionCatalog.composeVersion: String get() = findVersion("compose").get().r
 val VersionCatalog.desugar: Provider<MinimalExternalModuleDependency> get() = findLibrary("desugar").get()
 
 object VoiceVersions {
-  const val compileSdk = 31
+  const val compileSdk = 32
   const val minSdk = 24
-  const val targetSdk = 31
+  const val targetSdk = 32
   val javaCompileVersion = JavaVersion.VERSION_11
   val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
 }
