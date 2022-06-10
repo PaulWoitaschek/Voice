@@ -9,7 +9,7 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.42"
 kotlin = "1.6.21"
-compose = "1.2.0-beta02"
+compose = "1.2.0-beta03"
 agp = "7.2.1"
 benchmark = "1.1.0-rc03"
 
@@ -24,13 +24,13 @@ junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.12.4"
 truth = "com.google.truth:truth:1.1.3"
 robolectric = "org.robolectric:robolectric:4.8.1"
-coil = "io.coil-kt:coil-compose:2.0.0"
+coil = "io.coil-kt:coil-compose:2.1.0"
 appCompat = "androidx.appcompat:appcompat:1.4.2"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
 transitions = "androidx.transition:transition:1.4.1"
 media = "androidx.media:media:1.6.0"
-androidxCore = "androidx.core:core-ktx:1.7.0"
+androidxCore = "androidx.core:core-ktx:1.8.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
@@ -82,7 +82,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha12"
+compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha13"
 compose-activity = "androidx.activity:activity-compose:1.4.0"
 
 [bundles]
@@ -116,7 +116,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 anvil = { id = "com.squareup.anvil", version = "2.4.1-1-6" }
 ktlint = "org.jlleitschuh.gradle.ktlint:10.2.1"
 ksp = { id = "com.google.devtools.ksp", version = "1.6.21-1.0.5" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.0" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.10" }
 benchmark = { id = "androidx.benchmark", version.ref = "benchmark" }
 playPublish = { id = "com.github.triplet.play", version = "3.7.0" }
