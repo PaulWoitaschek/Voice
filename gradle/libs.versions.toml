@@ -4,7 +4,7 @@ versionName = "6.0.0-alpha19"
 
 coroutines = "1.6.2"
 room = "2.4.2"
-conductor = "3.1.4"
+conductor = "3.1.5"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.42"
