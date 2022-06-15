@@ -9,7 +9,7 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.42"
 kotlin = "1.6.21"
-compose = "1.2.0-beta03"
+compose = "1.2.0-rc01"
 agp = "7.2.1"
 benchmark = "1.1.0"
 
