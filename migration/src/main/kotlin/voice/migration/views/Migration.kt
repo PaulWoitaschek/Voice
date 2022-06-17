@@ -3,7 +3,9 @@ package voice.migration.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
 import voice.migration.R
-import java.time.Instant
-import kotlin.random.Random
 
 
 @Composable
@@ -67,37 +67,32 @@ private fun MigrationItem(item: MigrationViewState.Item) {
   Card(
     Modifier.fillMaxWidth()
   ) {
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-      RootLabeledValue("Name") {
-        Text(text = item.name)
-      }
-      RootLabeledValue("Current Chapter") {
-        Text(text = item.currentChapter)
-      }
-      RootLabeledValue("Position in Chapter") {
-        Text(text = item.positionInChapterMs.toString())
-      }
-      RootLabeledValue("Root") {
-        Text(text = item.root)
+    Column(
+      Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+      verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+      LabeledValue("Name", item.name)
+      LabeledValue("Root Folder", item.root)
+      Column {
+        Text("Position", style = MaterialTheme.typography.titleMedium)
+        Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
+          Position(item.position)
+        }
       }
       if (item.bookmarks.isNotEmpty()) {
-        RootLabeledValue("Bookmarks") {
-          Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item.bookmarks.forEach { bookmark ->
-              if (bookmark.title != null) {
-                NestedLabeledValue("Bookmark Title") {
-                  Text(bookmark.title)
-                }
-              }
-              NestedLabeledValue("Chapter") {
-                Text(bookmark.chapter)
-              }
-              NestedLabeledValue("Position") {
-                Text(bookmark.positionMs.toString())
-              }
-              NestedLabeledValue("Added at") {
-                Text(bookmark.addedAt.toString())
-              }
+        Text(text = "Bookmarks", style = MaterialTheme.typography.titleMedium)
+        Column(
+          modifier = Modifier.padding(horizontal = 16.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          item.bookmarks.forEach { bookmark ->
+            if (bookmark.title != null) {
+              LabeledValue("Title", bookmark.title)
+            }
+            Column(Modifier.padding(horizontal = 16.dp)) {
+              LabeledValue("Added at", bookmark.addedAt.toString())
+              Spacer(modifier = Modifier.height(16.dp))
+              Position(bookmark.position)
             }
           }
         }
@@ -107,24 +102,25 @@ private fun MigrationItem(item: MigrationViewState.Item) {
 }
 
 @Composable
-private fun RootLabeledValue(label: String, value: @Composable () -> Unit) {
+private fun LabeledValue(label: String, value: String) {
   Column {
-    Text(text = label, style = MaterialTheme.typography.titleLarge)
-    value()
-  }
-}
-
-@Composable
-private fun NestedLabeledValue(label: String, value: @Composable () -> Unit) {
-  Column(Modifier.padding(horizontal = 16.dp)) {
     Text(text = label, style = MaterialTheme.typography.titleMedium)
-    value()
+    Text(value)
   }
 }
 
-
-@Preview
 @Composable
+private fun Position(viewState: MigrationViewState.Position) {
+  Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LabeledValue("Current File", viewState.currentFile)
+    LabeledValue("Position in File", viewState.positionInFile)
+    LabeledValue("Current Chapter", viewState.currentChapter)
+    LabeledValue("Position in Chapter", viewState.positionInChapter)
+  }
+}
+
+@Composable
+@Preview
 private fun MigrationPreview(
   @PreviewParameter(MigrationViewStatePreviewProvider::class)
   viewState: MigrationViewState
@@ -138,23 +134,25 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
 
   override val values: Sequence<MigrationViewState>
     get() = sequence {
-      fun item() = MigrationViewState.Item(
-        name = "My Book",
-        currentChapter = "Current Chapter",
-        bookmarks = buildList {
-          repeat(3) {
-            add(
-              MigrationViewState.Item.Bookmark(
-                chapter = "Chapter $it",
-                addedAt = Instant.now(),
-                positionMs = 100,
-                title = "Bookmark $it".takeIf { Random.nextBoolean() }
-              ))
-          }
-        },
-        positionInChapterMs = 500000,
-        root = "Root"
-      )
-      yield(MigrationViewState(listOf(item(), item())))
+      /*    fun item() = MigrationViewState.Item( todo
+            name = "My Book",
+            currentChapter = "Current Chapter",
+            bookmarks = buildList {
+              repeat(3) {
+                add(
+                  MigrationViewState.Item.Bookmark(
+                    chapter = "Chapter $it",
+                    addedAt = Instant.now(),
+                    positionMs = 100,
+                    title = "Bookmark $it".takeIf { Random.nextBoolean() }
+                  ))
+              }
+            },
+            positionInChapterMs = 500000,
+            root = "Root",
+            currentFile = "Current File",
+            positionInFileMs = 1234L,
+          )
+          yield(MigrationViewState(listOf(item(), item())))*/
     }
 }

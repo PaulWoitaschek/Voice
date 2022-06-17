@@ -116,7 +116,7 @@ constructor(
           BookOverviewViewState.PlayButtonState.Paused
         }.takeIf { currentBookId != null },
         showAddBookHint = if (showMigrateHint) false else noBooks,
-        showMigrateIcon = hasLegacyBooks || true, // todo, remove always-true
+        showMigrateIcon = hasLegacyBooks,
         showMigrateHint = showMigrateHint,
       )
     }

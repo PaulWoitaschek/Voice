@@ -127,7 +127,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     }
 
     val detector = GestureDetectorCompat(
-      activity,
+      activity!!,
       object : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent?): Boolean {
           viewModel.playPause()
