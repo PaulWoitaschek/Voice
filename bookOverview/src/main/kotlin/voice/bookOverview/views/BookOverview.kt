@@ -122,16 +122,15 @@ fun BookOverview(
 private fun MigrateHint(onClick: () -> Unit) {
   ExplanationTooltip {
     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-      Text(stringResource(R.string.migration_title), style = MaterialTheme.typography.headlineSmall)
+      Text(stringResource(R.string.migration_hint_title), style = MaterialTheme.typography.headlineSmall)
       Spacer(modifier = Modifier.size(8.dp))
-      Text(stringResource(R.string.migration_content) + "\n")
-      Text(stringResource(R.string.migration_content2))
+      Text(stringResource(R.string.migration_hint_content))
       Spacer(modifier = Modifier.size(16.dp))
       Button(
         modifier = Modifier.align(Alignment.End),
         onClick = onClick,
       ) {
-        Text(stringResource(R.string.migration_confirm))
+        Text(stringResource(R.string.migration_hint_confirm))
       }
     }
   }
@@ -190,7 +189,7 @@ private fun MigrateIcon(
     IconButton(modifier = modifier, onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.CompareArrows,
-        contentDescription = stringResource(R.string.migration_title)
+        contentDescription = stringResource(R.string.migration_hint_title)
       )
     }
     if (withHint) {

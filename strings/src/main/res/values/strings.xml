@@ -114,8 +114,18 @@
     <!-- will be shown as a hint when no books have been added -->
     <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
 
-    <string name="migration.title">Accessing old Book positions</string>
-    <string name="migration.content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.</string>
-    <string name="migration.content2">Click on the icon above to view your old book positions.</string>
-    <string name="migration.confirm">Understood</string>
+    <string name="migration_hint_title">Accessing old Book positions</string>
+    <string name="migration_hint_content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.\n\nClick on the icon above to view your old book positions.</string>
+    <string name="migration_hint_confirm">Understood</string>
+
+    <string name="migration_detail_title">Old book positions</string>
+    <string name="migration_detail_content_name">Name</string>
+    <string name="migration_detail_content_root">Root folder</string>
+    <string name="migration_detail_content_position">Position</string>
+    <string name="migration_detail_content_bookmarks">Bookmarks</string>
+    <string name="migration_detail_content_added_at">Added at</string>
+    <string name="migration_detail_content_position_current_file_title">Current File</string>
+    <string name="migration_detail_content_position_current_file_position">Position in File</string>
+    <string name="migration_detail_content_position_current_chapter_title">Current Chapter</string>
+    <string name="migration_detail_content_position_current_chapter_position">Position in Chapter</string>
 </resources>

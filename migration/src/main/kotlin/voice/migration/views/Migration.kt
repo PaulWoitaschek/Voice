@@ -27,7 +27,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
+import voice.common.formatTime
 import voice.migration.R
+import java.time.Instant
+import kotlin.random.Random
 
 
 @Composable
@@ -39,7 +42,7 @@ internal fun Migration(
     topBar = {
       SmallTopAppBar(
         title = {
-          Text("Old Books")
+          Text(stringResource(id = R.string.migration_detail_title))
         },
         navigationIcon = {
           IconButton(
@@ -74,26 +77,44 @@ private fun MigrationItem(item: MigrationViewState.Item) {
       Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
       verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-      LabeledValue("Name", item.name)
-      LabeledValue("Root Folder", item.root)
+      LabeledValue(
+        label = stringResource(id = R.string.migration_detail_content_name),
+        value = item.name
+      )
+      LabeledValue(
+        label = stringResource(id = R.string.migration_detail_content_root),
+        value = item.root
+      )
       Column {
-        Text("Position", style = MaterialTheme.typography.titleMedium)
+        Text(
+          text = stringResource(id = R.string.migration_detail_content_position),
+          style = MaterialTheme.typography.titleMedium
+        )
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
           Position(item.position)
         }
       }
       if (item.bookmarks.isNotEmpty()) {
-        Text(text = "Bookmarks", style = MaterialTheme.typography.titleMedium)
+        Text(
+          text = stringResource(id = R.string.migration_detail_content_bookmarks),
+          style = MaterialTheme.typography.titleMedium
+        )
         Column(
           modifier = Modifier.padding(horizontal = 16.dp),
           verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
           item.bookmarks.forEach { bookmark ->
             if (bookmark.title != null) {
-              LabeledValue("Title", bookmark.title)
+              LabeledValue(
+                label = stringResource(id = R.string.migration_detail_title),
+                value = bookmark.title
+              )
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
-              LabeledValue("Added at", bookmark.addedAt.toString())
+              LabeledValue(
+                label = stringResource(id = R.string.migration_detail_content_added_at),
+                value = bookmark.addedAt.toString()
+              )
               Spacer(modifier = Modifier.height(16.dp))
               Position(bookmark.position)
             }
@@ -115,10 +136,22 @@ private fun LabeledValue(label: String, value: String) {
 @Composable
 private fun Position(viewState: MigrationViewState.Position) {
   Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-    LabeledValue("Current File", viewState.currentFile)
-    LabeledValue("Position in File", viewState.positionInFile)
-    LabeledValue("Current Chapter", viewState.currentChapter)
-    LabeledValue("Position in Chapter", viewState.positionInChapter)
+    LabeledValue(
+      label = stringResource(id = R.string.migration_detail_content_position_current_file_title),
+      value = viewState.currentFile
+    )
+    LabeledValue(
+      label = stringResource(id = R.string.migration_detail_content_position_current_file_position),
+      value = viewState.positionInFile
+    )
+    LabeledValue(
+      label = stringResource(id = R.string.migration_detail_content_position_current_chapter_title),
+      value = viewState.currentChapter
+    )
+    LabeledValue(
+      label = stringResource(id = R.string.migration_detail_content_position_current_chapter_position),
+      value = viewState.positionInChapter
+    )
   }
 }
 
@@ -129,7 +162,10 @@ private fun MigrationPreview(
   viewState: MigrationViewState
 ) {
   VoiceTheme {
-    Migration(viewState, {})
+    Migration(
+      viewState = viewState,
+      onCloseClicked = {}
+    )
   }
 }
 
@@ -137,25 +173,30 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
 
   override val values: Sequence<MigrationViewState>
     get() = sequence {
-      /*    fun item() = MigrationViewState.Item( todo
-            name = "My Book",
-            currentChapter = "Current Chapter",
-            bookmarks = buildList {
-              repeat(3) {
-                add(
-                  MigrationViewState.Item.Bookmark(
-                    chapter = "Chapter $it",
-                    addedAt = Instant.now(),
-                    positionMs = 100,
-                    title = "Bookmark $it".takeIf { Random.nextBoolean() }
-                  ))
-              }
-            },
-            positionInChapterMs = 500000,
-            root = "Root",
-            currentFile = "Current File",
-            positionInFileMs = 1234L,
-          )
-          yield(MigrationViewState(listOf(item(), item())))*/
+      fun position(): MigrationViewState.Position {
+        return MigrationViewState.Position(
+          currentChapter = "Current Chapter",
+          positionInChapter = formatTime(50000),
+          currentFile = "audiobooks/file.mp3",
+          positionInFile = formatTime(70000)
+        )
+      }
+
+      fun item() = MigrationViewState.Item(
+        name = "My Book",
+        bookmarks = buildList {
+          repeat(3) {
+            add(
+              MigrationViewState.Item.Bookmark(
+                position = position(),
+                addedAt = Instant.now(),
+                title = "Bookmark $it".takeIf { Random.nextBoolean() }
+              ))
+          }
+        },
+        root = "Root",
+        position = position()
+      )
+      yield(MigrationViewState(listOf(item(), item())))
     }
 }
