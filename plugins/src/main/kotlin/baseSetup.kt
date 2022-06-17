@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
-  tasks.withType<KotlinCompile> {
+  tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
       jvmTarget = VoiceVersions.javaCompileVersion.toString()
       freeCompilerArgs = freeCompilerArgs + listOf(
