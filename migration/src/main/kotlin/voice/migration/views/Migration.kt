@@ -31,7 +31,10 @@ import voice.migration.R
 
 
 @Composable
-internal fun Migration(viewState: MigrationViewState) {
+internal fun Migration(
+  viewState: MigrationViewState,
+  onCloseClicked: () -> Unit,
+) {
   Scaffold(
     topBar = {
       SmallTopAppBar(
@@ -40,7 +43,7 @@ internal fun Migration(viewState: MigrationViewState) {
         },
         navigationIcon = {
           IconButton(
-            onClick = {}
+            onClick = onCloseClicked
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
@@ -126,7 +129,7 @@ private fun MigrationPreview(
   viewState: MigrationViewState
 ) {
   VoiceTheme {
-    Migration(viewState)
+    Migration(viewState, {})
   }
 }
 

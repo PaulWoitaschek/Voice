@@ -23,7 +23,9 @@ class MigrationController : ComposeController() {
     val viewState = runBlocking {
       viewModel.viewState()
     }
-    Migration(viewState)
+    Migration(viewState) {
+      router.popController(this)
+    }
   }
 
   @ContributesTo(AppScope::class)
