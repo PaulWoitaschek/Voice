@@ -13,4 +13,5 @@
         <ignore regexp="android:foreground" />
     </issue>
     <issue id="UnusedResources" severity="ignore" />
+    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
 </lint>
