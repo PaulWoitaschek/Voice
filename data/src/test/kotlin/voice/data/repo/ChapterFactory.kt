@@ -1,6 +1,6 @@
 package voice.data.repo
 
-import voice.data.LegacyChapter
+import voice.data.legacy.LegacyChapter
 import java.io.File
 import java.util.UUID
 

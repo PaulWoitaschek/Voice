@@ -19,6 +19,8 @@ import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
 import voice.app.serialization.SerializableDataStoreFactory
 import voice.app.serialization.UriSerializer
+import voice.bookOverview.BookMigrationExplanationQualifier
+import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridMode
 import voice.common.pref.AudiobookFolders
 import voice.common.pref.CurrentBook
@@ -128,5 +130,12 @@ object PrefsModule {
   @ExplanationCardSeen
   fun explanationCardSeen(factory: SerializableDataStoreFactory): DataStore<Boolean> {
     return factory.create(Boolean.serializer(), false, "explanationCardSeen")
+  }
+
+  @Provides
+  @Singleton
+  @BookMigrationExplanationQualifier
+  fun bookMigrationExplanationShown(factory: SerializableDataStoreFactory): BookMigrationExplanationShown {
+    return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")
   }
 }

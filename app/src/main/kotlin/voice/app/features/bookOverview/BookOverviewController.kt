@@ -22,6 +22,7 @@ import voice.common.compose.ComposeController
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.folderPicker.FolderPickerController
+import voice.migration.MigrationController
 import voice.playbackScreen.BookPlayController
 import voice.settings.SettingsController
 import javax.inject.Inject
@@ -54,6 +55,8 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       onBookClick = ::toBook,
       onBookFolderClick = ::toFolderOverview,
       onPlayButtonClick = viewModel::playPause,
+      onBookMigrationClick = ::toBookMigration,
+      onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick,
       onBookLongClick = {
         EditBookBottomSheetController(this, it)
           .showDialog(router)
@@ -70,6 +73,11 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
     router.pushController(controller.asTransaction())
   }
 
+  private fun toBookMigration() {
+    viewModel.onBoomMigrationHelperConfirmClick()
+    router.pushController(MigrationController().asTransaction())
+  }
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val arguments = galleryPicker.parse(requestCode, resultCode, data)
     if (arguments != null) {
@@ -83,7 +91,6 @@ class BookOverviewController : ComposeController(), EditBookBottomSheetControlle
       router.pushController(BookPlayController(bookId).asTransaction())
     }
   }
-
 
   override fun onInternetCoverRequested(book: Book.Id) {
     router.pushController(

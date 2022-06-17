@@ -61,7 +61,6 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
-      applicationIdSuffix = ".debug"
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -107,6 +106,7 @@ dependencies {
   implementation(projects.settings)
   implementation(projects.folderPicker)
   implementation(projects.bookOverview)
+  implementation(projects.migration)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

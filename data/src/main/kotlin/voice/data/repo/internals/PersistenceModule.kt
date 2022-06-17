@@ -10,6 +10,7 @@ import voice.core.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
+import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.migrations.Migration23to24
 import voice.data.repo.internals.migrations.Migration24to25
 import voice.data.repo.internals.migrations.Migration25to26
@@ -51,6 +52,9 @@ object PersistenceModule {
 
   @Provides
   fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
+
+  @Provides
+  fun legacyBookDao(appDb: AppDb): LegacyBookDao = appDb.legacyBookDao()
 
   @Provides
   @Singleton

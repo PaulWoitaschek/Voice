@@ -4,17 +4,23 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.CompareArrows
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewList
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
@@ -42,6 +48,8 @@ fun BookOverview(
   onBookLongClick: (Book.Id) -> Unit,
   onBookFolderClick: () -> Unit,
   onPlayButtonClick: () -> Unit,
+  onBookMigrationClick: () -> Unit,
+  onBoomMigrationHelperConfirmClick: () -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -50,12 +58,15 @@ fun BookOverview(
           Text(text = stringResource(id = R.string.app_name))
         },
         actions = {
-          Box {
-            BookFolderIcon(onClick = onBookFolderClick)
-            if (viewState.showAddBookHint) {
-              AddBookHint()
-            }
+          if (viewState.showMigrateIcon) {
+            MigrateIcon(
+              onClick = onBookMigrationClick,
+              withHint = viewState.showMigrateHint,
+              onHintClick = onBoomMigrationHelperConfirmClick
+            )
           }
+          BookFolderIcon(withHint = viewState.showAddBookHint, onClick = onBookFolderClick)
+
           val layoutIcon = viewState.layoutIcon
           if (layoutIcon != null) {
             LayoutIcon(layoutIcon, onLayoutIconClick)
@@ -108,6 +119,26 @@ fun BookOverview(
 }
 
 @Composable
+private fun MigrateHint(onClick: () -> Unit) {
+  ExplanationTooltip {
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+      Text(stringResource(R.string.migration_title), style = MaterialTheme.typography.headlineSmall)
+      Spacer(modifier = Modifier.size(8.dp))
+      Text(stringResource(R.string.migration_content) + "\n")
+      Text(stringResource(R.string.migration_content2))
+      Spacer(modifier = Modifier.size(16.dp))
+      Button(
+        modifier = Modifier.align(Alignment.End),
+        onClick = onClick,
+      ) {
+        Text(stringResource(R.string.migration_confirm))
+      }
+    }
+  }
+}
+
+
+@Composable
 private fun AddBookHint() {
   ExplanationTooltip {
     Text(
@@ -127,19 +158,44 @@ private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
         ),
         atEnd = !playing
       ),
-      contentDescription = "todo"
+      contentDescription = stringResource(R.string.play_pause)
     )
   }
 }
 
 
 @Composable
-private fun BookFolderIcon(modifier: Modifier = Modifier, onClick: () -> Unit) {
-  IconButton(modifier = modifier, onClick = onClick) {
-    Icon(
-      imageVector = Icons.Outlined.Book,
-      contentDescription = stringResource(R.string.audiobook_folders_title)
-    )
+private fun BookFolderIcon(modifier: Modifier = Modifier, withHint: Boolean, onClick: () -> Unit) {
+  Box {
+    IconButton(modifier = modifier, onClick = onClick) {
+      Icon(
+        imageVector = Icons.Outlined.Book,
+        contentDescription = stringResource(R.string.audiobook_folders_title)
+      )
+    }
+    if (withHint) {
+      AddBookHint()
+    }
+  }
+}
+
+@Composable
+private fun MigrateIcon(
+  modifier: Modifier = Modifier,
+  withHint: Boolean,
+  onClick: () -> Unit,
+  onHintClick: () -> Unit
+) {
+  Box {
+    IconButton(modifier = modifier, onClick = onClick) {
+      Icon(
+        imageVector = Icons.Outlined.CompareArrows,
+        contentDescription = stringResource(R.string.migration_title)
+      )
+    }
+    if (withHint) {
+      MigrateHint(onHintClick)
+    }
   }
 }
 
@@ -186,6 +242,8 @@ private fun BookOverviewPreview(
       onBookFolderClick = {},
       onPlayButtonClick = {},
       onBookLongClick = {},
+      onBoomMigrationHelperConfirmClick = {},
+      onBookMigrationClick = {},
     )
   }
 }
@@ -213,7 +271,9 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       ),
       layoutMode = BookOverviewViewState.Content.LayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-      showAddBookHint = true,
+      showAddBookHint = false,
+      showMigrateHint = false,
+      showMigrateIcon = true
     )
   )
 }

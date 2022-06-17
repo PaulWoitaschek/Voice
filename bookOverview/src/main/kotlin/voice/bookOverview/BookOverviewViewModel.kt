@@ -3,14 +3,18 @@ package voice.bookOverview
 import android.text.format.DateUtils
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
 import voice.common.compose.ImmutableFile
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
+import voice.core.combine
 import voice.data.Book
 import voice.data.repo.BookRepository
+import voice.data.repo.internals.dao.LegacyBookDao
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
@@ -29,7 +33,12 @@ constructor(
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
+  @BookMigrationExplanationQualifier
+  private val bookMigrationExplanationShown: BookMigrationExplanationShown,
+  private val legacyBookDao: LegacyBookDao,
 ) {
+
+  private val scope = MainScope()
 
   fun attach() {
     mediaScanner.scan()
@@ -53,9 +62,12 @@ constructor(
       repo.flow(),
       currentBookDataStore.data,
       mediaScanner.scannerActive,
-      gridModePref.flow
-    ) { playState, books, currentBookId, scannerActive, gridMode ->
+      gridModePref.flow,
+      bookMigrationExplanationShown.data,
+      suspend { legacyBookDao.bookMetaDataCount() != 0 }.asFlow()
+    ) { playState, books, currentBookId, scannerActive, gridMode, bookMigrationExplanationShown, hasLegacyBooks ->
       val noBooks = !scannerActive && books.isEmpty()
+      val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
       BookOverviewViewState.Content(
         layoutIcon = if (noBooks) {
           null
@@ -103,8 +115,16 @@ constructor(
         } else {
           BookOverviewViewState.PlayButtonState.Paused
         }.takeIf { currentBookId != null },
-        showAddBookHint = noBooks
+        showAddBookHint = if (showMigrateHint) false else noBooks,
+        showMigrateIcon = hasLegacyBooks,
+        showMigrateHint = showMigrateHint,
       )
+    }
+  }
+
+  fun onBoomMigrationHelperConfirmClick() {
+    scope.launch {
+      bookMigrationExplanationShown.updateData { true }
     }
   }
 
