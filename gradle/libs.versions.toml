@@ -71,7 +71,7 @@ materialDialog-input = { module = "com.afollestad.material-dialogs:input", versi
 dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
-exoPlayer-core = "com.google.android.exoplayer:exoplayer-core:2.17.1"
+exoPlayer = "androidx.media3:media3-exoplayer:1.0.0-beta01"
 benchmark = { module = "androidx.benchmark:benchmark-junit4", version.ref = "benchmark" }
 
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }

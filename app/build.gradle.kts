@@ -145,7 +145,7 @@ dependencies {
   implementation(libs.coroutines.core)
   implementation(libs.coroutines.android)
 
-  implementation(libs.exoPlayer.core)
+  implementation(libs.exoPlayer)
 
   implementation(libs.conductor.core)
   implementation(libs.conductor.transition)

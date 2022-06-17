@@ -21,7 +21,7 @@ dependencies {
 
   implementation(libs.dagger.core)
 
-  implementation(libs.exoPlayer.core)
+  implementation(libs.exoPlayer)
 
   testImplementation(libs.bundles.testing.jvm)
 }
