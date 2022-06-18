@@ -15,10 +15,6 @@ tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
 
-subprojects {
-  apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
-
 tasks {
   register<Exec>("importStrings") {
     executable = "sh"
