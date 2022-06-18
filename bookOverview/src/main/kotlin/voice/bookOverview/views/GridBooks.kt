@@ -49,7 +49,7 @@ internal fun GridBooks(
       if (books.isEmpty()) return@forEach
       item(
         span = { GridItemSpan(maxLineSpan) },
-        key = { category },
+        key = category,
         contentType = "header"
       ) {
         Header(
