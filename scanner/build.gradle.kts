@@ -1,5 +1,5 @@
 plugins {
-  id("voice-android-library")
+  id("voice.library")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
 }

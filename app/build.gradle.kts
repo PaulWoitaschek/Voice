@@ -3,7 +3,7 @@
 import java.util.Properties
 
 plugins {
-  id("voice-android-app")
+  id("voice.app")
   id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")
