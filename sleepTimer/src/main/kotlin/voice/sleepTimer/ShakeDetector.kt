@@ -20,7 +20,9 @@ class ShakeDetector
       val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
         ?: return@suspendCancellableCoroutine
       val listener = SeismicShakeDetector.Listener {
-        cont.resume(Unit)
+        if (!cont.isCompleted) {
+          cont.resume(Unit)
+        }
       }
       val shakeDetector = SeismicShakeDetector(listener)
       shakeDetector.start(sensorManager)
