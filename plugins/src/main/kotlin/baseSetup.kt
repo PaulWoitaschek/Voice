@@ -51,7 +51,7 @@ fun Project.baseSetup() {
       }
       compileSdkVersion(libs.findVersion("sdk-compile").get().requiredVersion.toInt())
       composeOptions {
-        it.kotlinCompilerExtensionVersion = libs.findVersion("compose").get().requiredVersion
+        it.kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().requiredVersion
       }
       testOptions { testOptions ->
         testOptions.unitTests.isReturnDefaultValues = true
