@@ -86,7 +86,12 @@ class MediaScanner
   }
 
   private suspend fun parseChapters(file: DocumentFile, result: MutableList<Chapter>) {
-    if (file.isFile && file.type?.startsWith("audio/") == true) {
+    val mimeType = file.type
+    if (
+      file.isFile &&
+      mimeType != null &&
+      (mimeType.startsWith("audio/") || mimeType.startsWith("video/"))
+    ) {
       val id = Chapter.Id(file.uri)
       val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
         val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
