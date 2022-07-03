@@ -5,7 +5,7 @@
   <string name="layout_grid">Leathan eangaí</string>
   <string name="layout_list">Leathan liosta</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Clúdach</string>
   <string name="play_pause">Seinn / Tabhair sos</string>
   <string name="action_sleep">Orláiste codalta</string>

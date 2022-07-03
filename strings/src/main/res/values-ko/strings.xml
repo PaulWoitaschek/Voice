@@ -5,7 +5,7 @@
   <string name="layout_grid">타일 정렬</string>
   <string name="layout_list">목록 정렬</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">책표지</string>
   <string name="play_pause">재생 / 일시정지</string>
   <string name="action_sleep">취침예약</string>
@@ -47,7 +47,6 @@
   </plurals>
   <string name="pref_seek_time">건너뛸 시간</string>
   <string name="pref_auto_rewind_title">자동 다시감기</string>
-
   <string name="pref_support_title">앱 계발 지원</string>
   <string name="pref_support_translations">번역</string>
   <string name="pref_support_contribute">피드백 </string>

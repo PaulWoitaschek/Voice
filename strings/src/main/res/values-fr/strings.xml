@@ -5,7 +5,7 @@
   <string name="layout_grid">Disposition de la grille</string>
   <string name="layout_list">Agencement en liste</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Couverture</string>
   <string name="play_pause">Lecture / Pause</string>
   <string name="action_sleep">Minuteur</string>
@@ -50,7 +50,6 @@
   <string name="pref_seek_time">Sauter de</string>
   <string name="pref_theme_dark">Dunkles Thema</string>
   <string name="pref_auto_rewind_title">Rembobinage automatique</string>
-
   <string name="pref_support_title">Assistance</string>
   <string name="pref_support_translations">Traductions</string>
   <string name="pref_support_contribute">Assistance et suggestions</string>

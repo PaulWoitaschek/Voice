@@ -5,7 +5,7 @@
   <string name="layout_grid">格状布局</string>
   <string name="layout_list">列表布局</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">封面</string>
   <string name="play_pause">播放 / 暂停</string>
   <string name="action_sleep">睡眠定时器</string>
@@ -48,7 +48,6 @@
   <string name="pref_seek_time">跳过时间</string>
   <string name="pref_theme_dark">暗黑主题</string>
   <string name="pref_auto_rewind_title">自动倒回</string>
-
   <string name="pref_support_title">支持</string>
   <string name="pref_support_translations">翻译</string>
   <string name="pref_support_contribute">支持和建议</string>

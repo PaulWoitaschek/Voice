@@ -48,7 +48,6 @@
   </plurals>
   <string name="pref_seek_time">Пропустити</string>
   <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
-
   <string name="pref_support_title">Підтримка</string>
   <string name="pref_support_translations">Переклади</string>
   <string name="pref_support_contribute">Підтримка та пропозиції</string>

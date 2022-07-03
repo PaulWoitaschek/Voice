@@ -5,7 +5,7 @@
   <string name="layout_grid">Rutnätslayout</string>
   <string name="layout_list">Listlayout</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Omslag</string>
   <string name="play_pause">Spela / Pausa</string>
   <string name="action_sleep">Insomningstidtagare</string>
@@ -49,7 +49,6 @@
   <string name="pref_seek_time">Hoppa över mängd</string>
   <string name="pref_theme_dark">Mörkt tema</string>
   <string name="pref_auto_rewind_title">Automatisk tillbakaspolning</string>
-
   <string name="pref_support_title">Support</string>
   <string name="pref_support_translations">Översättningar</string>
   <string name="pref_support_contribute">Stöd och förslag</string>

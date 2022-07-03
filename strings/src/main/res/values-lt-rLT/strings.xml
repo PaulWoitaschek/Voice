@@ -5,7 +5,7 @@
   <string name="layout_grid">Tinklelio išdėstymas</string>
   <string name="layout_list">Sąrašo išdėstymas</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Viršelis</string>
   <string name="play_pause">Atkurti / pristabdyti</string>
   <string name="action_sleep">Miego laikmatis</string>
@@ -51,7 +51,6 @@
   <string name="pref_seek_time">Peršokimo trukmė</string>
   <string name="pref_theme_dark">Tamsi tema</string>
   <string name="pref_auto_rewind_title">Automatinis atsukimas atgal</string>
-
   <string name="pref_support_title">Palaikymas</string>
   <string name="pref_support_translations">Vertimai</string>
   <string name="pref_support_contribute">Palaikymas ir pasiūlymai</string>

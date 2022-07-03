@@ -5,7 +5,7 @@
   <string name="layout_grid">Mřížkové rozložení</string>
   <string name="layout_list">Seznamové rozložení</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Obal</string>
   <string name="play_pause">Přehrát / Pozastavit</string>
   <string name="action_sleep">Časovač vypnutí</string>
@@ -51,7 +51,6 @@
   </plurals>
   <string name="pref_seek_time">Přeskočit o</string>
   <string name="pref_auto_rewind_title">Automaticky přetočit</string>
-
   <string name="pref_support_title">Podpora</string>
   <string name="pref_support_translations">Překlady</string>
   <string name="pref_support_contribute">Podpora a návrhy</string>

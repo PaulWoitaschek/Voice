@@ -46,7 +46,6 @@
   </plurals>
   <string name="pref_seek_time">Skip hoeveelheid</string>
   <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
-
   <string name="pref_support_title">Ondersteun</string>
   <string name="pref_support_translations">Vertaal</string>
   <string name="pref_support_contribute">Ondersteuning en terugvoering</string>

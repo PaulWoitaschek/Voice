@@ -43,7 +43,6 @@
   </plurals>
   <string name="pref_seek_time">میزان پرش</string>
   <string name="pref_auto_rewind_title">بازپخش خودکار</string>
-
   <string name="pref_support_title">پشتیبانی</string>
   <string name="pref_support_translations">ترجمه‌ها</string>
   <string name="pref_support_contribute">پشتیبانی و پیشنهادات</string>

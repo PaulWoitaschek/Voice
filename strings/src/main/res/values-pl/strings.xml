@@ -5,7 +5,7 @@
   <string name="layout_grid">Układ Siatki</string>
   <string name="layout_list">Układ Listy</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Okładka</string>
   <string name="play_pause">Odtwarzaj/Pauza</string>
   <string name="action_sleep">Wyłącznik czasowy</string>
@@ -51,7 +51,6 @@
   <string name="pref_seek_time">Przewiń o</string>
   <string name="pref_theme_dark">Ciemna stylizacja</string>
   <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
-
   <string name="pref_support_title">Wsparcie</string>
   <string name="pref_support_translations">Tłumaczenia</string>
   <string name="pref_support_contribute">Wsparcie i propozycje</string>

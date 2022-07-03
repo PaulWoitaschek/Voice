@@ -46,7 +46,6 @@
   </plurals>
   <string name="pref_seek_time">Omitir cantidad</string>
   <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
-
   <string name="pref_support_title">Soporte</string>
   <string name="pref_support_translations">Traducciones</string>
   <string name="pref_support_contribute">Soporte y sugerencias</string>

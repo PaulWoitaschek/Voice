@@ -5,7 +5,7 @@
   <string name="layout_grid">Hiển thị dạng lưới</string>
   <string name="layout_list">Hiển thị theo danh sách</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Ảnh Bìa</string>
   <string name="play_pause">Phát/ Ngừng</string>
   <string name="action_sleep">Hẹn giờ Tắt</string>
@@ -47,7 +47,6 @@
   </plurals>
   <string name="pref_seek_time">Thời lượng tua nhanh</string>
   <string name="pref_auto_rewind_title">Tự động phát lại</string>
-
   <string name="pref_support_title">Hỗ trợ</string>
   <string name="pref_support_translations">Dịch thuật</string>
   <string name="pref_support_contribute">Hỗ trợ và góp ý</string>

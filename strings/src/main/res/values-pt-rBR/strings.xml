@@ -5,7 +5,7 @@
   <string name="layout_grid">Grade</string>
   <string name="layout_list">Lista</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Capa</string>
   <string name="play_pause">Tocar / Pausar</string>
   <string name="action_sleep">Desligamento automático</string>
@@ -50,7 +50,6 @@
   <string name="pref_seek_time">Pular para</string>
   <string name="pref_theme_dark">Tema escuro</string>
   <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-
   <string name="pref_support_title">Suporte</string>
   <string name="pref_support_translations">Traduções</string>
   <string name="pref_support_contribute">Suporte e sugestões</string>

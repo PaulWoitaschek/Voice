@@ -47,7 +47,6 @@
   </plurals>
   <string name="pref_seek_time">Dolžina skoka</string>
   <string name="pref_auto_rewind_title">Samodejni skok nazaj</string>
-
   <string name="pref_support_title">Podpora</string>
   <string name="pref_support_translations">Prevodi</string>
   <string name="pref_support_contribute">Podpora in predlogi</string>

@@ -45,7 +45,6 @@
   </plurals>
   <string name="pref_seek_time">आगे कूदने की मात्रा</string>
   <string name="pref_auto_rewind_title">अपने आप रिवाइंड</string>
-
   <string name="pref_support_title">सहायता</string>
   <string name="pref_support_translations">अनुवाद</string>
   <string name="pref_support_contribute">सुझाव और सहायता</string>

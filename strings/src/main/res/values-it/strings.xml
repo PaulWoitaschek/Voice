@@ -5,7 +5,7 @@
   <string name="layout_grid">Layout a Griglia</string>
   <string name="layout_list">Layout a Lista</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
+  <!--BookPlayFragment-->
   <string name="cover">Copertina</string>
   <string name="play_pause">Play / Pausa</string>
   <string name="action_sleep">Timer standby</string>
@@ -50,7 +50,6 @@
   <string name="pref_seek_time">Salta</string>
   <string name="pref_theme_dark">Tema Scuro</string>
   <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
-
   <string name="pref_support_title">Supporto</string>
   <string name="pref_support_translations">Traduzioni</string>
   <string name="pref_support_contribute">Supporto e Suggerimenti</string>
