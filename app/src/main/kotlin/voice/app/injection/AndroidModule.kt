@@ -15,8 +15,8 @@ import dagger.Provides
 import kotlinx.serialization.json.Json
 import voice.app.misc.ApplicationIdProviderImpl
 import voice.app.misc.ToBookIntentProviderImpl
+import voice.common.AppScope
 import voice.common.ApplicationIdProvider
-import voice.core.AppScope
 import voice.playback.notification.ToBookIntentProvider
 import javax.inject.Singleton
 

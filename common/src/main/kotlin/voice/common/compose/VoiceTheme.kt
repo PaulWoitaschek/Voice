@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.Dispatchers
 import voice.common.DARK_THEME_SETTABLE
-import voice.core.rootComponentAs
+import voice.common.rootComponentAs
 import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable

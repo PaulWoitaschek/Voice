@@ -12,8 +12,8 @@ import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.launch
 import voice.common.conductor.DialogController
 import voice.common.pref.PrefKeys
-import voice.core.AppScope
-import voice.core.rootComponentAs
+import voice.common.AppScope
+import voice.common.rootComponentAs
 import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId

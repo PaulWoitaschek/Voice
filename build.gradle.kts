@@ -16,21 +16,7 @@ tasks.wrapper {
 }
 
 subprojects {
-  fun addCoreDependencies() {
-    if (path != ":core") {
-      dependencies.add("implementation", projects.core)
-      if (path != ":logging:core") {
-        dependencies.add("implementation", projects.logging.core)
-      }
-    }
-  }
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
-  plugins.withId("kotlin") {
-    addCoreDependencies()
-  }
-  plugins.withId("kotlin-android") {
-    addCoreDependencies()
-  }
 }
 
 tasks {

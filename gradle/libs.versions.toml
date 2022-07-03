@@ -2,6 +2,10 @@
 versionCode = "3060361"
 versionName = "6.0.0-beta02"
 
+sdk-compile = "32"
+sdk-min = "24"
+sdk-target = "32"
+
 coroutines = "1.6.3"
 room = "2.4.2"
 conductor = "3.1.5"
@@ -33,7 +37,7 @@ media = "androidx.media:media:1.6.0"
 androidxCore = "androidx.core:core-ktx:1.8.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-desugar = "com.android.tools:desugar_jdk_libs:1.2.0"
+desugar = "com.android.tools:desugar_jdk_libs:1.1.6"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
 koTest-assert = "io.kotest:kotest-assertions-core:5.3.2"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"

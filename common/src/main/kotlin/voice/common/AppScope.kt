@@ -1,3 +1,3 @@
-package voice.core
+package voice.common
 
 annotation class AppScope

@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.logging.core)
   implementation(libs.appStartup)
   implementation(libs.firebase.crashlytics)
 }

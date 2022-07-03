@@ -6,7 +6,7 @@ import androidx.room.migration.Migration
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import voice.core.AppScope
+import voice.common.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao

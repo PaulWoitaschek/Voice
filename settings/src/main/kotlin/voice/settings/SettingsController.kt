@@ -8,8 +8,8 @@ import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.launch
 import voice.common.compose.ComposeController
-import voice.core.AppScope
-import voice.core.rootComponentAs
+import voice.common.AppScope
+import voice.common.rootComponentAs
 import voice.logging.core.Logger
 import voice.settings.views.Settings
 import javax.inject.Inject

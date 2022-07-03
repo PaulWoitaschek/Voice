@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -48,7 +47,6 @@ include(":data")
 include(":playback")
 include(":ffmpeg")
 include(":scanner")
-include(":core")
 include(":playbackScreen")
 include(":sleepTimer")
 include(":settings")

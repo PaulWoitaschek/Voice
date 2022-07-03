@@ -4,7 +4,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import voice.app.features.audio.PlaybackSpeedDialogController
 import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
 import voice.app.features.bookmarks.BookmarkController
-import voice.core.AppScope
+import voice.common.AppScope
 import voice.data.Book
 import voice.playbackScreen.BookPlayNavigator
 import voice.settings.SettingsController

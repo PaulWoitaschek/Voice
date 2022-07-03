@@ -2,8 +2,8 @@ package voice.common.compose
 
 import com.squareup.anvil.annotations.ContributesTo
 import de.paulwoitaschek.flowpref.Pref
+import voice.common.AppScope
 import voice.common.pref.PrefKeys
-import voice.core.AppScope
 import javax.inject.Named
 
 @ContributesTo(AppScope::class)

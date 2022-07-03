@@ -14,7 +14,7 @@ import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
 import voice.app.features.bookmarks.BookmarkPresenter
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.features.widget.BaseWidgetProvider
-import voice.core.AppScope
+import voice.common.AppScope
 import voice.playback.di.PlaybackComponent
 import javax.inject.Singleton
 

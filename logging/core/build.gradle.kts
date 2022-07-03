@@ -1,3 +1,3 @@
 plugins {
-  id("voice-jvm")
+  id("voice-android-library")
 }

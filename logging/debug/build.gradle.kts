@@ -3,6 +3,5 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.logging.core)
   implementation(libs.appStartup)
 }

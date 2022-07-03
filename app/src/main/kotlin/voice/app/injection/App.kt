@@ -16,7 +16,7 @@ import voice.app.misc.StrictModeInit
 import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.PrefKeys
-import voice.core.rootComponent
+import voice.common.rootComponent
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
 import voice.playback.di.PlaybackComponent
 import voice.playback.di.PlaybackComponentFactoryProvider

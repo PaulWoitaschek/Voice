@@ -3,9 +3,9 @@ package voice.migration
 import androidx.compose.runtime.Composable
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.runBlocking
+import voice.common.AppScope
 import voice.common.compose.ComposeController
-import voice.core.AppScope
-import voice.core.rootComponentAs
+import voice.common.rootComponentAs
 import voice.migration.views.Migration
 import javax.inject.Inject
 

@@ -22,10 +22,10 @@ import voice.app.serialization.UriSerializer
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridMode
+import voice.common.AppScope
 import voice.common.pref.AudiobookFolders
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
-import voice.core.AppScope
 import voice.data.Book
 import voice.folderPicker.ExplanationCardSeen
 import javax.inject.Named

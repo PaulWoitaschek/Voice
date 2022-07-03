@@ -26,6 +26,8 @@ play {
 
 android {
 
+  namespace = "voice.app"
+
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionCode = libs.versions.versionCode.get().toInt()
@@ -130,7 +132,6 @@ dependencies {
     implementation(projects.logging.crashlytics)
   }
 
-  implementation(projects.logging.core)
   debugImplementation(projects.logging.debug)
 
   implementation(libs.dagger.core)

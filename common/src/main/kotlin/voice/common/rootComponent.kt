@@ -1,4 +1,4 @@
-package voice.core
+package voice.common
 
 lateinit var rootComponent: Any
 

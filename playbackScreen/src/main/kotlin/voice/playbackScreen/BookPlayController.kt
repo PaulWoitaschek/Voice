@@ -15,8 +15,8 @@ import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
 import voice.common.formatTime
-import voice.core.AppScope
-import voice.core.rootComponentAs
+import voice.common.AppScope
+import voice.common.rootComponentAs
 import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId

@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
+import voice.common.combine
 import voice.common.compose.ImmutableFile
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
-import voice.core.combine
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.data.repo.internals.dao.LegacyBookDao
