@@ -2,7 +2,6 @@ package voice.migration
 
 import androidx.compose.runtime.Composable
 import com.squareup.anvil.annotations.ContributesTo
-import kotlinx.coroutines.runBlocking
 import voice.common.AppScope
 import voice.common.compose.ComposeController
 import voice.common.rootComponentAs
@@ -20,9 +19,7 @@ class MigrationController : ComposeController() {
 
   @Composable
   override fun Content() {
-    val viewState = runBlocking {
-      viewModel.viewState()
-    }
+    val viewState = viewModel.viewState()
     Migration(viewState) {
       router.popController(this)
     }

@@ -1,5 +1,11 @@
 package voice.migration
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
 import voice.data.legacy.LegacyBookMetaData
@@ -19,12 +25,19 @@ class MigrationViewModel
   private val dao: LegacyBookDao
 ) {
 
-  internal suspend fun viewState(): MigrationViewState {
-    val migrationData = migrationData()
-    val items = migrationData.metaData.mapNotNull { metaData ->
-      migrationItem(metaData, migrationData)
+  @Composable
+  internal fun viewState(): MigrationViewState {
+    var viewState: MigrationViewState by remember {
+      mutableStateOf(MigrationViewState(emptyList()))
     }
-    return MigrationViewState(items)
+    LaunchedEffect(Unit) {
+      val migrationData = migrationData()
+      val items = migrationData.metaData.mapNotNull { metaData ->
+        migrationItem(metaData, migrationData)
+      }
+      viewState = MigrationViewState(items)
+    }
+    return viewState
   }
 
   private suspend fun migrationData(): MigrationData {
