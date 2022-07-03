@@ -5,20 +5,19 @@
   <string name="layout_grid">Rasterindeling</string>
   <string name="layout_list">Lijstindeling</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Alles tonen</string>
   <!--BookPlayFragment-->
   <string name="cover">Omslag</string>
-  <string name="play_pause">Afspelen / Pauzeren</string>
-  <string name="action_sleep">Slaaptimer</string>
+  <string name="play_pause">Afspelen/Pauzeren</string>
+  <string name="action_sleep">Tijdklok</string>
   <string name="rewind">Terugspoelen</string>
   <string name="fast_forward">Vooruitspoelen</string>
   <string name="previous_track">Vorig gedeelte</string>
   <string name="next_track">Volgend gedeelte</string>
   <string name="play">Afspelen</string>
   <string name="pause">Pauzeren</string>
-    <string name="skip_silence">Stilte overslaan</string>
+  <string name="skip_silence">Stilte overslaan</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Instellen</string>
   <string name="dialog_cancel">Annuleren</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Omslag ophalen uit bestandssysteem</string>
   <string name="edit_book_title">Boek bewerken</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Bladeren naar</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">De mappen mogen geen submap van elkaar zijn:</string>
   <string name="audiobook_folders_title">Audioboek-mappen</string>
-  <string name="chosen_folder_description">Gekozen map:</string>
-  <string name="delete_folder">Verwijderen uit bibliotheek?</string>
-  <string name="delete_folder_content">Wil je de volgende map verwijderen uit je bibliotheek?</string>
-  <string name="folder_add_single_book">Los boek</string>
-  <string name="folder_add_collection">Map met meerdere boeken</string>
-  <string name="for_example">bijv.</string>
-  <string name="content_add_book">Boek toevoegen</string>
-  <string name="content_is_folder">Map</string>
-  <string name="content_is_file">Bestand</string>
-  <string name="content_navigate_up">Ga naar bovenliggende map</string>
-  <string name="permission_external_new_explanation">Boeken kunnen niet worden gelezen zonder machtiging</string>
-  <string name="permission_retry">Opnieuw proberen?</string>
-  <string name="permission_goto_settings">Instellingen</string>
-  <string name="storage_pre_device">Opslag:</string>
-  <string name="storage_all">Alles</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Afspeelsnelheid</string>
   <!--Bookmarks-->
   <string name="bookmark">Bladwijzer toevoegen</string>
-  <string name="shake_to_reset">Schudden om te herstellen</string>
   <string name="bookmark_edit_title">Bladwijzer bewerken</string>
   <string name="bookmark_edit_hint">Bladwijzernaam</string>
   <string name="bookmark_added">Bladwijzer is toegevoegd</string>
-  <string name="bookmark_delete_title">Wil je deze bladwijzer verwijderen?</string>
   <!--Settings-->
   <string name="action_settings">Voorkeuren</string>
   <string name="pref_resume_on_replug">Afspelen hervatten</string>
@@ -67,13 +47,9 @@
     <item quantity="other">%d seconden</item>
   </plurals>
   <string name="pref_seek_time">Aantal overslaan</string>
-  <string name="pref_root_folder_title">Audioboek-map</string>
   <string name="pref_theme_dark">Donker thema</string>
   <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Automatisch %d seconde terugspoelen na handmatig pauzeren.</item>
-    <item quantity="other">Automatisch %d seconden terugspoelen na handmatig pauzeren.</item>
-  </plurals>
+
   <string name="pref_support_title">Ondersteuning</string>
   <string name="pref_support_translations">Vertalingen</string>
   <string name="pref_support_contribute">Ondersteuning en suggesties</string>
@@ -85,18 +61,12 @@
   <!--license activity-->
   <string name="refresh">Verversen</string>
   <string name="reset">Herstellen</string>
-  <string name="no_network">Geen internetverbinding?</string>
-  <string name="network_top">Dit ging niet zo goed...</string>
   <string name="cover_crop">Omslag bijsnijden</string>
   <string name="music_notification">Afspelen</string>
-  <string name="onboarding_title">Welkom!</string>
-  <string name="onboarding_content">Laten we beginnen met het toevoegen van je eerste audioboek.</string>
   <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog niet begonnen</string>
   <string name="book_header_completed">Voltooid</string>
-  <string name="book_category_sort">Sortering</string>
-  <string name="book_category_sort_by_name">Naam</string>
-  <string name="book_category_sort_by_last_played">Laatst afgespeeld</string>
-  <string name="book_category_sort_by_added">Toegevoegd</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

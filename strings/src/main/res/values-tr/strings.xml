@@ -5,8 +5,7 @@
   <string name="layout_grid">Izgara Görünümü</string>
   <string name="layout_list">Liste Görünümü</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Hepsini göster</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Kapak</string>
   <string name="play_pause">Oynat / Durdur</string>
   <string name="action_sleep">Uyku zamanlama</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Sonraki parça</string>
   <string name="play">Oynat</string>
   <string name="pause">Duraklat</string>
-    <string name="skip_silence">Sessizliği Geç</string>
+  <string name="skip_silence">Sessizliği Geç</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Kur</string>
   <string name="dialog_cancel">İptal</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Dosyalardan kapak</string>
   <string name="edit_book_title">Kitabı düzenle</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Şuna git:</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Dizinler birbirinin alt dizini olamaz:</string>
   <string name="audiobook_folders_title">Sesli kitap dizinleri</string>
-  <string name="chosen_folder_description">Seçilen dizin:</string>
-  <string name="delete_folder">Kütüphaneden kaldırılsın mı?</string>
-  <string name="delete_folder_content">Aşağıdaki dizini kitaplığınızdan kaldırmak istiyor musunuz?</string>
-  <string name="folder_add_single_book">Tek kitap</string>
-  <string name="folder_add_collection">Birden fazla kitap içeren dizin</string>
-  <string name="for_example">örn.</string>
-  <string name="content_add_book">Bir kitap ekle</string>
-  <string name="content_is_folder">Dizin</string>
-  <string name="content_is_file">Dosya</string>
-  <string name="content_navigate_up">Üst dizine gidin</string>
-  <string name="permission_external_new_explanation">İzin olmadan kitaplar okunamıyor</string>
-  <string name="permission_retry">Yine dene?</string>
-  <string name="permission_goto_settings">Ayarlar</string>
-  <string name="storage_pre_device">Depolama:</string>
-  <string name="storage_all">Tümü</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Geriye oynatım hızı</string>
   <!--Bookmarks-->
   <string name="bookmark">Yerimi</string>
-  <string name="shake_to_reset">Sıfırlamak için sallayın</string>
   <string name="bookmark_edit_title">Yer imini düzenle</string>
   <string name="bookmark_edit_hint">Yer imi adı</string>
   <string name="bookmark_added">Yer imi eklendi</string>
-  <string name="bookmark_delete_title">Bu yer imi silinsin mi?</string>
   <!--Settings-->
   <string name="action_settings">Tercihler</string>
   <string name="pref_resume_on_replug">Geriye oynatıma devam et</string>
@@ -67,13 +47,9 @@
     <item quantity="other">%d saniye</item>
   </plurals>
   <string name="pref_seek_time">Değeri atla</string>
-  <string name="pref_root_folder_title">Sesli kitap dizini</string>
   <string name="pref_theme_dark">Karanlık Tema</string>
   <string name="pref_auto_rewind_title">Otomatik geri sarma</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Elle duraklatıldıktan sonra %d saniye otomatik olarak geri sarar.</item>
-    <item quantity="other">Elle duraklatıldıktan sonra %d saniye otomatik olarak geri sarar.</item>
-  </plurals>
+
   <string name="pref_support_title">Destek</string>
   <string name="pref_support_translations">Çeviriler</string>
   <string name="pref_support_contribute">Destek ve öneriler</string>
@@ -85,18 +61,12 @@
   <!--license activity-->
   <string name="refresh">Yenile</string>
   <string name="reset">Sıfırla</string>
-  <string name="no_network">Ağ yok?</string>
-  <string name="network_top">Bu iş çok iyi sonuç vermedi ...</string>
   <string name="cover_crop">Kapağı kırp</string>
   <string name="music_notification">Geriye oynatım</string>
-  <string name="onboarding_title">Hoşgeldin!</string>
-  <string name="onboarding_content">İlk sesli kitabını eklemekle başlayalım.</string>
   <!--book category-->
   <string name="book_header_current">Şu anki</string>
   <string name="book_header_not_started">Henüz başlamadı</string>
   <string name="book_header_completed">Tamamlandı</string>
-  <string name="book_category_sort">Sıralıyor</string>
-  <string name="book_category_sort_by_name">Ad</string>
-  <string name="book_category_sort_by_last_played">Son Oynatılan</string>
-  <string name="book_category_sort_by_added">Eklendi</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

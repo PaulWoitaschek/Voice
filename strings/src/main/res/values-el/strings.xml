@@ -5,8 +5,7 @@
   <string name="layout_grid">Διάταξη Πλέγματος</string>
   <string name="layout_list">Διάταξη Λίστας</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Εμφάνιση όλων</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Εξώφυλλο</string>
   <string name="play_pause">Αναπαραγωγή / Παύση</string>
   <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Επόμενο κομμάτι </string>
   <string name="play">Αναπαραγωγή</string>
   <string name="pause">Παύση</string>
-    <string name="skip_silence">Παράλειψη ησυχίας</string>
+  <string name="skip_silence">Παράλειψη ησυχίας</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Ορισμός</string>
   <string name="dialog_cancel">Ακύρωση</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Εξώφυλλο από αρχεία του συστήματος </string>
   <string name="edit_book_title">Επεξεργασία βιβλίου</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Μετάβαση σε</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Οι φάκελοι δεν πρέπει να είναι ο ένας υποφάκελος του άλλου:</string>
   <string name="audiobook_folders_title">Φάκελοι Audiobook</string>
-  <string name="chosen_folder_description">Επιλεγμένος φάκελος:</string>
-  <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
-  <string name="delete_folder_content">Θέλετε να αφαιρέσετε τον ακόλουθο φάκελο από τη βιβλιοθήκη;</string>
-  <string name="folder_add_single_book">Μονό βιβλίο</string>
-  <string name="folder_add_collection">Φάκελος με πολλαπλά βιβλία</string>
-  <string name="for_example">π.χ.</string>
-  <string name="content_add_book">Προσθήκη βιβλίου</string>
-  <string name="content_is_folder">Φάκελος</string>
-  <string name="content_is_file">Αρχείο</string>
-  <string name="content_navigate_up">Μετάβαση στον παραπάνω φάκελο</string>
-  <string name="permission_external_new_explanation">Δεν είναι δυνατή η ανάγνωση βιβλίων χωρίς άδεια</string>
-  <string name="permission_retry">Επανάληψη; </string>
-  <string name="permission_goto_settings">Ρυθμίσεις</string>
-  <string name="storage_pre_device">Αποθηκευτικός χώρος:</string>
-  <string name="storage_all">Όλα</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Ταχύτητα αναπαραγωγής</string>
   <!--Bookmarks-->
   <string name="bookmark">Σελιδοδείκτης</string>
-  <string name="shake_to_reset">Ταρακούνημα για παύση</string>
   <string name="bookmark_edit_title">Επεξεργασία σελιδοδείκτη</string>
   <string name="bookmark_edit_hint">Ονομα του σελιδοδείκτη</string>
   <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
-  <string name="bookmark_delete_title">Διαγραφή αυτου του σελιδοδείκτη;</string>
   <!--Settings-->
   <string name="action_settings">Προτιμήσεις</string>
   <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
@@ -66,12 +46,8 @@
     <item quantity="other">%d δευτερόλεπτα</item>
   </plurals>
   <string name="pref_seek_time">Μεταφορά ποσότητας</string>
-  <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>
   <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Ξαναγυρνάει αυτόματα %d δευτερόλεπτο πίσω μετά από μια χειροκίνητη παύση.</item>
-    <item quantity="other">Ξαναγυρνάει αυτόματα %d δευτερόλεπτα πίσω μετά από μια χειροκίνητη παύση.</item>
-  </plurals>
+
   <string name="pref_support_title">Υποστήριξη</string>
   <string name="pref_support_translations">Μεταφράσεις</string>
   <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
@@ -83,18 +59,12 @@
   <!--license activity-->
   <string name="refresh">Ανανέωση</string>
   <string name="reset">Επαναφορά</string>
-  <string name="no_network">Χωρίς δίκτυο;</string>
-  <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
   <string name="cover_crop">Περικοπή εξωφύλλου</string>
   <string name="music_notification">Αναπαραγωγή</string>
-  <string name="onboarding_title">Καλώς Ήλθατε!</string>
-  <string name="onboarding_content">Ας ξεκινήσουμε προσθέτοντας το πρώτο σου audiobook.</string>
   <!--book category-->
   <string name="book_header_current">Τρέχον</string>
   <string name="book_header_not_started">Μη διαβασμένα</string>
   <string name="book_header_completed">Ολοκληρωμένα </string>
-  <string name="book_category_sort">Διάταξη </string>
-  <string name="book_category_sort_by_name">Όνομα</string>
-  <string name="book_category_sort_by_last_played">Ακούστηκαν τελευταία</string>
-  <string name="book_category_sort_by_added">Προσθήκη</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

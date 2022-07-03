@@ -1,131 +1,99 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
-    <!--BookShelf-->
-    <string name="current_book">Current book</string>
-    <string name="layout_grid">Grid Layout</string>
-    <string name="layout_list">List Layout</string>
-    <!-- in the book-overview the show-all button which displays all books of a category -->
-    <string name="show_all">Show all</string>
-    <!--BookPlayFragment-->
-    <string name="cover">Cover</string>
-    <string name="play_pause">Play / Pause</string>
-    <string name="action_sleep">Sleep-Timer</string>
-    <string name="rewind">Rewind</string>
-    <string name="fast_forward">Fast forward</string>
-    <string name="previous_track">Previous track</string>
-    <string name="next_track">Next track</string>
-    <string name="play">Play</string>
-    <string name="pause">Pause</string>
-    <string name="skip_silence">Skip Silence</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
-    <string name="dialog_confirm">Set</string>
-    <string name="dialog_cancel">Cancel</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">Shows cover to choose</string>
-    <string name="change_book_name">Name</string>
-    <string name="download_book_cover">Cover from internet</string>
-    <string name="pick_book_cover">Cover from file system</string>
-    <string name="edit_book_title">Edit book</string>
-    l    <!--JumpToPosition-->
-    <string name="action_time_change">Jump to</string>
-    <!--BookAdding-->
-    <string name="adding_failed_subfolder">The folders must not be a subfolder of each other:</string>
-    <string name="audiobook_folders_title">Audiobook folders</string>
-    <string name="chosen_folder_description">Chosen folder:</string>
-    <string name="delete_folder">Remove from Library?</string>
-    <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
-    <string name="folder_add_single_book">Single book</string>
-    <string name="folder_add_collection">Folder with multiple books</string>
-    <string name="for_example">e.g.</string>
-    <string name="content_add_book">Add a book</string>
-    <string name="content_is_folder">Folder</string>
-    <string name="content_is_file">File</string>
-    <string name="content_navigate_up">Go to parent folder</string>
-    <string name="permission_external_new_explanation">Can\'t read books without permission</string>
-    <string name="permission_retry">Retry?</string>
-    <string name="permission_goto_settings">Settings</string>
-    <string name="storage_pre_device">Storage:</string>
-    <string name="storage_all">All</string>
-    <!--PlaybackSpeed-->
-    <string name="playback_speed">Playback speed</string>
-    <!--Bookmarks-->
-    <string name="bookmark">Bookmark</string>
-    <string name="shake_to_reset">Shake to reset</string>
-    <string name="bookmark_edit_title">Edit bookmark</string>
-    <string name="bookmark_edit_hint">Bookmark name</string>
-    <string name="bookmark_added">Bookmark added</string>
-    <string name="bookmark_delete_title">Delete this bookmark?</string>
-    <!--Settings-->
-    <string name="action_settings">Preferences</string>
-    <string name="pref_resume_on_replug">Resume playback</string>
-    <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Deletes the last entered number</string>
-    <plurals name="seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
-    </plurals>
-    <string name="pref_seek_time">Skip amount</string>
-    <string name="pref_root_folder_title">Audiobook folder</string>
-    <string name="pref_theme_dark">Dark Theme</string>
-    <string name="pref_auto_rewind_title">Auto rewind</string>
-    <plurals name="pref_auto_rewind_summary">
-        <item quantity="one">Automatically rewinds %d second after manual pausing.</item>
-        <item quantity="other">Automatically rewinds %d seconds after manual pausing.</item>
-    </plurals>
-    <string name="pref_support_title">Support</string>
-    <string name="pref_support_translations">Translations</string>
-    <string name="pref_support_contribute">Support and suggestions</string>
-    <!--Misc-->
-    <string name="popup_edit">Edit</string>
-    <string name="remove">Remove</string>
-    <string name="play_current">Play current</string>
-    <!-- hide folder dialog -->
-    <!-- license activity -->
-    <string name="refresh">Refresh</string>
-    <string name="reset">Reset</string>
-    <string name="no_network">No network?</string>
-    <string name="network_top">This didn\'t work too well…</string>
-    <string name="cover_crop">Crop cover</string>
-    <string name="music_notification">Playback</string>
+  <!--BookShelf-->
+  <string name="current_book">Current book</string>
+  <string name="layout_grid">Grid Layout</string>
+  <string name="layout_list">List Layout</string>
+  <!-- in the book-overview the show-all button which displays all books of a category -->
+  <!--BookPlayFragment-->
+  <string name="cover">Cover</string>
+  <string name="play_pause">Play / Pause</string>
+  <string name="action_sleep">Sleep-Timer</string>
+  <string name="rewind">Rewind</string>
+  <string name="fast_forward">Fast forward</string>
+  <string name="previous_track">Previous track</string>
+  <string name="next_track">Next track</string>
+  <string name="play">Play</string>
+  <string name="pause">Pause</string>
+  <string name="skip_silence">Skip Silence</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Set</string>
+  <string name="dialog_cancel">Cancel</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Shows cover to choose</string>
+  <string name="change_book_name">Name</string>
+  <string name="download_book_cover">Cover from internet</string>
+  <string name="pick_book_cover">Cover from file system</string>
+  <string name="edit_book_title">Edit book</string>
+  l    <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">Audiobook folders</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Playback speed</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Bookmark</string>
+  <string name="bookmark_edit_title">Edit bookmark</string>
+  <string name="bookmark_edit_hint">Bookmark name</string>
+  <string name="bookmark_added">Bookmark added</string>
+  <!--Settings-->
+  <string name="action_settings">Preferences</string>
+  <string name="pref_resume_on_replug">Resume playback</string>
+  <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
+  <string name="min">%s min</string>
+  <string name="delete_last_number">Deletes the last entered number</string>
+  <plurals name="seconds">
+    <item quantity="one">%d second</item>
+    <item quantity="other">%d seconds</item>
+  </plurals>
+  <string name="pref_seek_time">Skip amount</string>
+  <string name="pref_theme_dark">Dark Theme</string>
+  <string name="pref_auto_rewind_title">Auto rewind</string>
 
-    <string name="onboarding_title">Welcome!</string>
-    <string name="onboarding_content">Let\'s get started by adding your first audio book.</string>
+  <string name="pref_support_title">Support</string>
+  <string name="pref_support_translations">Translations</string>
+  <string name="pref_support_contribute">Support and suggestions</string>
+  <!--Misc-->
+  <string name="popup_edit">Edit</string>
+  <string name="remove">Remove</string>
+  <string name="play_current">Play current</string>
+  <!-- hide folder dialog -->
+  <!-- license activity -->
+  <string name="refresh">Refresh</string>
+  <string name="reset">Reset</string>
+  <string name="cover_crop">Crop cover</string>
+  <string name="music_notification">Playback</string>
 
-    <!-- book category -->
-    <string name="book_header_current">Current</string>
-    <string name="book_header_not_started">Not started Yet</string>
-    <string name="book_header_completed">Completed</string>
-    <string name="book_category_sort">Sorting</string>
-    <string name="book_category_sort_by_name">Name</string>
-    <string name="book_category_sort_by_last_played">Last Played</string>
-    <string name="book_category_sort_by_added">Added</string>
 
-    <string name="close">Close</string>
-    <string name="add">Add</string>
-    <string name="delete">Delete</string>
-    <string name="audiobook_folder_card_text">Voice expects a folder structure where every folder within your selected audiobook folder is one book, for example:</string>
-    <string name="got_audiobook_folder_card_action">Got it</string>
+  <!-- book category -->
+  <string name="book_header_current">Current</string>
+  <string name="book_header_not_started">Not started Yet</string>
+  <string name="book_header_completed">Completed</string>
 
-    <!-- will be shown as the time for a bookmark that was just created -->
-    <string name="bookmark_just_now">Just now</string>
+  <string name="close">Close</string>
+  <string name="add">Add</string>
+  <string name="delete">Delete</string>
+  <string name="audiobook_folder_card_text">Voice expects a folder structure where every folder within your selected audiobook folder is one book, for example:</string>
+  <string name="got_audiobook_folder_card_action">Got it</string>
 
-    <!-- will be shown as a hint when no books have been added -->
-    <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
+  <!-- will be shown as the time for a bookmark that was just created -->
+  <string name="bookmark_just_now">Just now</string>
 
-    <string name="migration_hint_title">Accessing old Book positions</string>
-    <string name="migration_hint_content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.\n\nClick on the icon above to view your old book positions.</string>
-    <string name="migration_hint_confirm">Understood</string>
+  <!-- will be shown as a hint when no books have been added -->
+  <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
 
-    <string name="migration_detail_title">Old book positions</string>
-    <string name="migration_detail_content_name">Name</string>
-    <string name="migration_detail_content_root">Root folder</string>
-    <string name="migration_detail_content_position">Position</string>
-    <string name="migration_detail_content_bookmarks">Bookmarks</string>
-    <string name="migration_detail_content_added_at">Added at</string>
-    <string name="migration_detail_content_position_current_file_title">Current File</string>
-    <string name="migration_detail_content_position_current_file_position">Position in File</string>
-    <string name="migration_detail_content_position_current_chapter_title">Current Chapter</string>
-    <string name="migration_detail_content_position_current_chapter_position">Position in Chapter</string>
+  <string name="migration_hint_title">Accessing old Book positions</string>
+  <string name="migration_hint_content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.\n\nClick on the icon above to view your old book positions.</string>
+  <string name="migration_hint_confirm">Understood</string>
+
+  <string name="migration_detail_title">Old book positions</string>
+  <string name="migration_detail_content_name">Name</string>
+  <string name="migration_detail_content_root">Root folder</string>
+  <string name="migration_detail_content_position">Position</string>
+  <string name="migration_detail_content_bookmarks">Bookmarks</string>
+  <string name="migration_detail_content_added_at">Added at</string>
+  <string name="migration_detail_content_position_current_file_title">Current File</string>
+  <string name="migration_detail_content_position_current_file_position">Position in File</string>
+  <string name="migration_detail_content_position_current_chapter_title">Current Chapter</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position in Chapter</string>
 </resources>

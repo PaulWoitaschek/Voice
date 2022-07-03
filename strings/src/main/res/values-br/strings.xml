@@ -10,10 +10,6 @@
   <string name="change_book_name">Anv</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="content_is_folder">Teuliad</string>
-  <string name="content_is_file">Restr</string>
-  <string name="permission_goto_settings">Arventennoù</string>
-  <string name="storage_all">An holl</string>
   <!--PlaybackSpeed-->
   <!--Bookmarks-->
   <!--Settings-->
@@ -22,6 +18,7 @@
   <!--Misc-->
   <!--hide folder dialog-->
   <!--license activity-->
-  <string name="onboarding_title">Degemer mat ! </string>
   <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

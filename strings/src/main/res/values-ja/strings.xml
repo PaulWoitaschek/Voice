@@ -13,9 +13,9 @@
   <string name="next_track">次のトラック</string>
   <string name="play">再生</string>
   <string name="pause">一時停止</string>
-    <string name="skip_silence">無音をスキップ</string>
+  <string name="skip_silence">無音をスキップ</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">設定</string>
   <string name="dialog_cancel">キャンセル</string>
   <!--EditBookDialog-->
@@ -25,34 +25,15 @@
   <string name="pick_book_cover">ファイルシステムからのカバー</string>
   <string name="edit_book_title">ブックを編集</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">移動</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">フォルダーを、互いのサブフォルダーにすることはできません:</string>
   <string name="audiobook_folders_title">オーディオブック フォルダー</string>
-  <string name="chosen_folder_description">選択したフォルダー:</string>
-  <string name="delete_folder">ライブラリーから削除しますか?</string>
-  <string name="delete_folder_content">ライブラリーから次のフォルダーを削除しますか?</string>
-  <string name="folder_add_single_book">単一のブック</string>
-  <string name="folder_add_collection">複数のブックを含むフォルダー</string>
-  <string name="for_example">例</string>
-  <string name="content_add_book">ブックを追加</string>
-  <string name="content_is_folder">フォルダー</string>
-  <string name="content_is_file">ファイル</string>
-  <string name="content_navigate_up">親のフォルダーに移動</string>
-  <string name="permission_external_new_explanation">アクセス許可がないとブックを読むことができません</string>
-  <string name="permission_retry">再試行?</string>
-  <string name="permission_goto_settings">設定</string>
-  <string name="storage_pre_device">ストレージ:</string>
-  <string name="storage_all">すべて</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">再生速度</string>
   <!--Bookmarks-->
   <string name="bookmark">ブックマーク</string>
-  <string name="shake_to_reset">シェイクしてリセット</string>
   <string name="bookmark_edit_title">ブックマークを編集</string>
   <string name="bookmark_edit_hint">ブックマーク名</string>
   <string name="bookmark_added">ブックマークを追加しました</string>
-  <string name="bookmark_delete_title">このブックマークを削除しますか?</string>
   <!--Settings-->
   <string name="action_settings">設定</string>
   <string name="pref_resume_on_replug">再生を再開</string>
@@ -63,11 +44,8 @@
     <item quantity="other">%d 秒</item>
   </plurals>
   <string name="pref_seek_time">スキップ量</string>
-  <string name="pref_root_folder_title">オーディオブック フォルダー</string>
   <string name="pref_auto_rewind_title">自動巻き戻し</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="other">手動で一時停止した後、自動的に %d 秒巻き戻します。</item>
-  </plurals>
+
   <string name="pref_support_title">サポート</string>
   <string name="pref_support_translations">翻訳</string>
   <string name="pref_support_contribute">サポートと提案</string>
@@ -79,14 +57,12 @@
   <!--license activity-->
   <string name="refresh">更新</string>
   <string name="reset">リセット</string>
-  <string name="no_network">ネットワークなし?</string>
-  <string name="network_top">うまく動作しませんでした…</string>
   <string name="cover_crop">カバーをトリミング</string>
   <string name="music_notification">再生</string>
-  <string name="onboarding_title">ようこそ!</string>
-  <string name="onboarding_content">オーディオブックを追加して始めましょう。</string>
   <!--book category-->
   <string name="book_header_current">現在</string>
   <string name="book_header_not_started">まだ開始していません</string>
   <string name="book_header_completed">完了</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

@@ -13,8 +13,8 @@ tasks.wrapper {
 
 tasks {
   register<Exec>("importStrings") {
-    executable = "sh"
-    args("-c", "tx pull -af --minimum-perc=5")
+    executable = "tx"
+    args("pull")
     finalizedBy(":app:lintDebug")
   }
 

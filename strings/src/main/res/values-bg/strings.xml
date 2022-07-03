@@ -3,55 +3,36 @@
   <!--BookShelf-->
   <string name="current_book">Текуща книга</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
-    <string name="cover">Обложка</string>
-    <string name="play_pause">Възпроизвеждане / Пауза</string>
-    <string name="action_sleep">Таймер за пауза</string>
-    <string name="rewind">Пренавиване</string>
-    <string name="fast_forward">Прескачане напред</string>
-    <string name="previous_track">Предишен запис</string>
-    <string name="next_track">Следващ запис</string>
-    <string name="play">Възпроизвеждане</string>
-    <string name="pause">Пауза</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
-    <string name="dialog_confirm">Да</string>
-    <string name="dialog_cancel">Не</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">Избор на обложка</string>
-    <string name="change_book_name">Заглавие</string>
-    <string name="download_book_cover">Обложка от интернет</string>
-    <string name="pick_book_cover">Обложка от хранилището</string>
-    <string name="edit_book_title">Редактиране на книга</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">Прескочи до</string>
+  <!--BookPlayFragment-->
+  <string name="cover">Обложка</string>
+  <string name="play_pause">Възпроизвеждане / Пауза</string>
+  <string name="action_sleep">Таймер за пауза</string>
+  <string name="rewind">Пренавиване</string>
+  <string name="fast_forward">Прескачане напред</string>
+  <string name="previous_track">Предишен запис</string>
+  <string name="next_track">Следващ запис</string>
+  <string name="play">Възпроизвеждане</string>
+  <string name="pause">Пауза</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Да</string>
+  <string name="dialog_cancel">Не</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Избор на обложка</string>
+  <string name="change_book_name">Заглавие</string>
+  <string name="download_book_cover">Обложка от интернет</string>
+  <string name="pick_book_cover">Обложка от хранилището</string>
+  <string name="edit_book_title">Редактиране на книга</string>
+  <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Папките не могат да бъдат подпапки една на друга</string>
   <string name="audiobook_folders_title">Папка за аудио книги</string>
-  <string name="chosen_folder_description">Избрана папка:</string>
-  <string name="delete_folder">Отстраняване от Библиотеката?</string>
-  <string name="delete_folder_content">Желаете ли да премахнете следната папка от Библиотеката?</string>
-  <string name="folder_add_single_book">Единична книга</string>
-  <string name="folder_add_collection">Папка с множество книги</string>
-  <string name="for_example">например</string>
-  <string name="content_add_book">Добавяне на книга</string>
-  <string name="content_is_folder">Папка</string>
-  <string name="content_is_file">Файл</string>
-  <string name="content_navigate_up">Към главната папка</string>
-  <string name="permission_external_new_explanation">Не могат да се разчитат книги без позволение</string>
-  <string name="permission_retry">Повторен опит?</string>
-  <string name="permission_goto_settings">Настройки</string>
-  <string name="storage_pre_device">Хранилище</string>
-  <string name="storage_all">Всички</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Скорост на възпроизвеждане</string>
   <!--Bookmarks-->
   <string name="bookmark">Отметка</string>
-  <string name="shake_to_reset">Разклатете за нулиране</string>
   <string name="bookmark_edit_title">Редактиране на отметка</string>
   <string name="bookmark_edit_hint">Име на отметката</string>
   <string name="bookmark_added">Отметката бе добавена</string>
-  <string name="bookmark_delete_title">Да се изтрие ли тази отметка?</string>
   <!--Settings-->
   <string name="action_settings">Настройки</string>
   <string name="pref_resume_on_replug">Продължи възпроизвеждането</string>
@@ -63,12 +44,8 @@
     <item quantity="other">%d секунди</item>
   </plurals>
   <string name="pref_seek_time">Количестество на прескачане</string>
-  <string name="pref_root_folder_title">Папка с аудио книги</string>
   <string name="pref_auto_rewind_title">Авто пренавиване</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Автоматично пренавива %d секунда след ръчно паузиране</item>
-    <item quantity="other">Автоматично пренавива %d секунди след ръчно поставяне на пауза.</item>
-  </plurals>
+
   <string name="pref_support_title">Поддръжка</string>
   <string name="pref_support_translations">Преводи</string>
   <string name="pref_support_contribute">Поддръжка и предложения</string>
@@ -80,11 +57,9 @@
   <!--license activity-->
   <string name="refresh">Опресняване</string>
   <string name="reset">Нулиране</string>
-  <string name="no_network">Няма връзка с интернет?</string>
-  <string name="network_top">Това май не проработи...</string>
   <string name="cover_crop">Изрязване на обложката</string>
   <string name="music_notification">Възпроизвеждане</string>
-  <string name="onboarding_title">Добре дошли!</string>
-  <string name="onboarding_content">Нека започнем като добавим първата Ви аудиокнига.</string>
   <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

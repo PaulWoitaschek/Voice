@@ -5,8 +5,7 @@
   <string name="layout_grid">타일 정렬</string>
   <string name="layout_list">목록 정렬</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">모두 보여주기</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">책표지</string>
   <string name="play_pause">재생 / 일시정지</string>
   <string name="action_sleep">취침예약</string>
@@ -16,9 +15,9 @@
   <string name="next_track">다음 트랙</string>
   <string name="play">재생</string>
   <string name="pause">정지</string>
-    <string name="skip_silence">무음 건너뛰기</string>
+  <string name="skip_silence">무음 건너뛰기</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">결정</string>
   <string name="dialog_cancel">취소</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">기기의 앨범커버</string>
   <string name="edit_book_title">제목 수정</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">이동</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">선택한 폴더의 하위폴더를 재선택하시면 안됩니다:</string>
   <string name="audiobook_folders_title">오디오북 폴더</string>
-  <string name="chosen_folder_description">선택된 폴더:</string>
-  <string name="delete_folder">서재에서 제거합니까?</string>
-  <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>
-  <string name="folder_add_single_book">폴더에 책 한권</string>
-  <string name="folder_add_collection">폴더에 책 여러 권</string>
-  <string name="for_example">예시 </string>
-  <string name="content_add_book">책 추가</string>
-  <string name="content_is_folder">폴더</string>
-  <string name="content_is_file">파일</string>
-  <string name="content_navigate_up">윗 폴더로 가기</string>
-  <string name="permission_external_new_explanation">읽기 권한이 없습니다</string>
-  <string name="permission_retry">재시도?</string>
-  <string name="permission_goto_settings">설정</string>
-  <string name="storage_pre_device">저장공간</string>
-  <string name="storage_all">전부다</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">재생 속도</string>
   <!--Bookmarks-->
   <string name="bookmark">책갈피</string>
-  <string name="shake_to_reset">흔들어 초기화하기</string>
   <string name="bookmark_edit_title">책갈피 편집</string>
   <string name="bookmark_edit_hint">책갈피 이름</string>
   <string name="bookmark_added">책갈피 추가됨</string>
-  <string name="bookmark_delete_title">책갈피 제거할까요?</string>
   <!--Settings-->
   <string name="action_settings">설정</string>
   <string name="pref_resume_on_replug">이어서 재생</string>
@@ -66,11 +46,8 @@
     <item quantity="other">%d 초</item>
   </plurals>
   <string name="pref_seek_time">건너뛸 시간</string>
-  <string name="pref_root_folder_title">오디오북 폴더</string>
   <string name="pref_auto_rewind_title">자동 다시감기</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="other"> 일시정지 후 %d 초 앞에서 시작합니다</item>
-  </plurals>
+
   <string name="pref_support_title">앱 계발 지원</string>
   <string name="pref_support_translations">번역</string>
   <string name="pref_support_contribute">피드백 </string>
@@ -82,18 +59,12 @@
   <!--license activity-->
   <string name="refresh">새로고침</string>
   <string name="reset">초기화</string>
-  <string name="no_network">인터넷끊김?</string>
-  <string name="network_top">미안, 에러가 났어...</string>
   <string name="cover_crop">책표지 자르기</string>
   <string name="music_notification">재생</string>
-  <string name="onboarding_title">어서오세요!</string>
-  <string name="onboarding_content">오디오북이 들어있는 폴더를 추가해보세요.</string>
   <!--book category-->
   <string name="book_header_current">현재</string>
   <string name="book_header_not_started">아직 재생 안 됨</string>
   <string name="book_header_completed">완료됨</string>
-  <string name="book_category_sort">정렬</string>
-  <string name="book_category_sort_by_name">이름</string>
-  <string name="book_category_sort_by_last_played">최근에 재생됨</string>
-  <string name="book_category_sort_by_added">추가됨</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

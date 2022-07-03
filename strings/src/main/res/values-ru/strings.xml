@@ -5,8 +5,7 @@
   <string name="layout_grid">Сетка</string>
   <string name="layout_list">Список</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Показать все</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Обложка</string>
   <string name="play_pause">Воспроизвести / Пауза</string>
   <string name="action_sleep">Таймер сна</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Следующий файл</string>
   <string name="play">Воспроизвести</string>
   <string name="pause">Пауза</string>
-    <string name="skip_silence">Пропускать тишину</string>
+  <string name="skip_silence">Пропускать тишину</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Установить</string>
   <string name="dialog_cancel">Отмена</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Получить обложку из системы</string>
   <string name="edit_book_title">Редактировать книгу</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Перейти к</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
   <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-  <string name="chosen_folder_description">Выбранная папка:</string>
-  <string name="delete_folder">Удалить из библиотеки?</string>
-  <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
-  <string name="folder_add_single_book">Одиночная книга</string>
-  <string name="folder_add_collection">Несколько книг в одной папке</string>
-  <string name="for_example">например</string>
-  <string name="content_add_book">Добавить книгу</string>
-  <string name="content_is_folder">Папка</string>
-  <string name="content_is_file">Файл</string>
-  <string name="content_navigate_up">Перейти на папку выше</string>
-  <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
-  <string name="permission_retry">Повторить?</string>
-  <string name="permission_goto_settings">Настройки</string>
-  <string name="storage_pre_device">Хранилище:</string>
-  <string name="storage_all">Всё</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Скорость воспроизведения</string>
   <!--Bookmarks-->
   <string name="bookmark">Закладки</string>
-  <string name="shake_to_reset">Встряхнуть для сброса</string>
   <string name="bookmark_edit_title">Редактировать</string>
   <string name="bookmark_edit_hint">Название закладки</string>
   <string name="bookmark_added">Закладка добавлена</string>
-  <string name="bookmark_delete_title">Удалить эту закладку?</string>
   <!--Settings-->
   <string name="action_settings">Настройки</string>
   <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
@@ -69,15 +49,9 @@
     <item quantity="other">%d секунд</item>
   </plurals>
   <string name="pref_seek_time">Ускоренная перемотка</string>
-  <string name="pref_root_folder_title">Папки с аудиокнигами</string>
   <string name="pref_theme_dark">Тёмная тема</string>
   <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Автоматически перемотать назад на %d секунду после ручного приостановления.</item>
-    <item quantity="few">Автоматически перемотать назад на %d секунды после ручного приостановления.</item>
-    <item quantity="many">Автоматически перемотать назад на %d секунд после ручного приостановления.</item>
-    <item quantity="other">Автоматически перемотать назад на %d секунд после использования паузы.</item>
-  </plurals>
+
   <string name="pref_support_title">Поддержка</string>
   <string name="pref_support_translations">Переводы</string>
   <string name="pref_support_contribute">Поддержка и предложения</string>
@@ -89,18 +63,12 @@
   <!--license activity-->
   <string name="refresh">Обновить</string>
   <string name="reset">Сброс</string>
-  <string name="no_network">Нет сети?</string>
-  <string name="network_top">Что-то пошло не так…</string>
   <string name="cover_crop">Обрезать обложку</string>
   <string name="music_notification">Воспроизведение</string>
-  <string name="onboarding_title">Добро пожаловать!</string>
-  <string name="onboarding_content">Давайте добавим вашу первую аудиокнигу.</string>
   <!--book category-->
   <string name="book_header_current">Слушаю</string>
   <string name="book_header_not_started">Поледние добавленные</string>
   <string name="book_header_completed">Прослушанные</string>
-  <string name="book_category_sort">Сортировка</string>
-  <string name="book_category_sort_by_name">Название</string>
-  <string name="book_category_sort_by_last_played">Посл. прослуш.</string>
-  <string name="book_category_sort_by_added">Дата</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

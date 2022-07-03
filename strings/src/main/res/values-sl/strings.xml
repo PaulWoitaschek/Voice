@@ -3,55 +3,36 @@
   <!--BookShelf-->
   <string name="current_book">Trenutna knjiga</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
-    <string name="cover">Platnica</string>
-    <string name="play_pause">Predvajaj / Ustavi</string>
-    <string name="action_sleep">Odštevalnik za spanje</string>
-    <string name="rewind">Previj nazaj</string>
-    <string name="fast_forward">Previj naprej</string>
-    <string name="previous_track">Prejšnji posnetek</string>
-    <string name="next_track">Naslednji posnetek</string>
-    <string name="play">Predvajaj</string>
-    <string name="pause">Ustavi</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
-    <string name="dialog_confirm">Nastavi</string>
-    <string name="dialog_cancel">Prekliči</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">Prikaže naslednjo naslovnico</string>
-    <string name="change_book_name">Ime</string>
-    <string name="download_book_cover">Naslovnica s spleta</string>
-    <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
-    <string name="edit_book_title">Uredi knjigo</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">Previj do</string>
+  <!--BookPlayFragment-->
+  <string name="cover">Platnica</string>
+  <string name="play_pause">Predvajaj / Ustavi</string>
+  <string name="action_sleep">Odštevalnik za spanje</string>
+  <string name="rewind">Previj nazaj</string>
+  <string name="fast_forward">Previj naprej</string>
+  <string name="previous_track">Prejšnji posnetek</string>
+  <string name="next_track">Naslednji posnetek</string>
+  <string name="play">Predvajaj</string>
+  <string name="pause">Ustavi</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Nastavi</string>
+  <string name="dialog_cancel">Prekliči</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Prikaže naslednjo naslovnico</string>
+  <string name="change_book_name">Ime</string>
+  <string name="download_book_cover">Naslovnica s spleta</string>
+  <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
+  <string name="edit_book_title">Uredi knjigo</string>
+  <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Mape ne smejo biti podmape samih sebe.</string>
   <string name="audiobook_folders_title">Mape zvočnih knjig</string>
-  <string name="chosen_folder_description">Izbrana mapa:</string>
-  <string name="delete_folder">Odstranitev iz knjižnice?</string>
-  <string name="delete_folder_content">Želite odstraniti to mapo iz knjižnice?</string>
-  <string name="folder_add_single_book">Ena knjiga</string>
-  <string name="folder_add_collection">Mapa z več knjigami</string>
-  <string name="for_example">npr.</string>
-  <string name="content_add_book">Dodaj knjigo</string>
-  <string name="content_is_folder">Mapa</string>
-  <string name="content_is_file">Datoteka</string>
-  <string name="content_navigate_up">Pojdi v višjo mapo</string>
-  <string name="permission_external_new_explanation">Ni mogoče brati knjig brez dovoljenja.</string>
-  <string name="permission_retry">Ponovno poskusi?</string>
-  <string name="permission_goto_settings">Možnosti</string>
-  <string name="storage_pre_device">Pomnilnik:</string>
-  <string name="storage_all">Vse</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Hitrost predvajanja</string>
   <!--Bookmarks-->
   <string name="bookmark">Zaznamek</string>
-  <string name="shake_to_reset">Stresi za ponastavitev</string>
   <string name="bookmark_edit_title">Uredi zaznamek</string>
   <string name="bookmark_edit_hint">Ime zaznamka</string>
   <string name="bookmark_added">Zaznamek dodan</string>
-  <string name="bookmark_delete_title">Izbriši zaznamek?</string>
   <!--Settings-->
   <string name="action_settings">Nastavitve</string>
   <string name="pref_resume_on_replug">Nadaljuj predvajaje</string>
@@ -65,14 +46,8 @@
     <item quantity="other">%d sekund</item>
   </plurals>
   <string name="pref_seek_time">Dolžina skoka</string>
-  <string name="pref_root_folder_title">Mapa zvočnih knjig</string>
   <string name="pref_auto_rewind_title">Samodejni skok nazaj</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Samodejno previj %d sekundo nazaj po ročni ustavitvi.</item>
-    <item quantity="two">Samodejno previj %d sekundi nazaj po ročni ustavitvi.</item>
-    <item quantity="few">Samodejno previj %d sekund nazaj po ročni ustavitvi.</item>
-    <item quantity="other">Samodejno previj %d sekund nazaj po ročni ustavitvi.</item>
-  </plurals>
+
   <string name="pref_support_title">Podpora</string>
   <string name="pref_support_translations">Prevodi</string>
   <string name="pref_support_contribute">Podpora in predlogi</string>
@@ -84,8 +59,8 @@
   <!--license activity-->
   <string name="refresh">Osveži</string>
   <string name="reset">Ponastavi</string>
-  <string name="no_network">Ni povezave?</string>
-  <string name="network_top">To se ni izšlo...</string>
   <string name="cover_crop">Prireži naslovnico</string>
   <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

@@ -5,8 +5,7 @@
   <string name="layout_grid">Kacheln</string>
   <string name="layout_list">Liste</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Weitere</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Cover</string>
   <string name="play_pause">Play / Pause</string>
   <string name="action_sleep">Einschlaf-Timer</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Nächster Song</string>
   <string name="play">Abspielen</string>
   <string name="pause">Pause</string>
-    <string name="skip_silence">Stille überspringen</string>
+  <string name="skip_silence">Stille überspringen</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Okay</string>
   <string name="dialog_cancel">Abbrechen</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Cover (Lokal)</string>
   <string name="edit_book_title">Buch bearbeiten</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Zu Stelle springen</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
   <string name="audiobook_folders_title">Hörbuch Ordner</string>
-  <string name="chosen_folder_description">Gewählter Ordner: </string>
-  <string name="delete_folder">Ordner entfernen</string>
-  <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
-  <string name="folder_add_single_book">Einzelnes Buch</string>
-  <string name="folder_add_collection">Ordner mit mehreren Büchern</string>
-  <string name="for_example">z.B.</string>
-  <string name="content_add_book">Buch hinzufügen</string>
-  <string name="content_is_folder">Ordner</string>
-  <string name="content_is_file">Datei</string>
-  <string name="content_navigate_up">Zum übergeordneten Ordner</string>
-  <string name="permission_external_new_explanation">Kann keine Bücher lesen</string>
-  <string name="permission_retry">Erneut versuchen?</string>
-  <string name="permission_goto_settings">Einstellungen</string>
-  <string name="storage_pre_device">Speicher:</string>
-  <string name="storage_all">Alle</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Geschwindigkeit</string>
   <!--Bookmarks-->
   <string name="bookmark">Lesezeichen</string>
-  <string name="shake_to_reset">Schütteln zum Zurücksetzen</string>
   <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
   <string name="bookmark_edit_hint">Lesezeichenname</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
-  <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
   <!--Settings-->
   <string name="action_settings">Einstellungen</string>
   <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
@@ -67,13 +47,9 @@
     <item quantity="other">%d Sekunden</item>
   </plurals>
   <string name="pref_seek_time">Vor- und zurückspulen</string>
-  <string name="pref_root_folder_title">Hörbuch Ordner</string>
   <string name="pref_theme_dark">Dunkles Design</string>
   <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Spult nach manuellem Pausieren automatisch um %d Sekunde zurück.</item>
-    <item quantity="other">Spult nach manuellem Pausieren automatisch um %d Sekunden zurück.</item>
-  </plurals>
+
   <string name="pref_support_title">Support</string>
   <string name="pref_support_translations">Übersetzungen</string>
   <string name="pref_support_contribute">Support und Vorschläge</string>
@@ -85,18 +61,32 @@
   <!--license activity-->
   <string name="refresh">Neu laden</string>
   <string name="reset">Zurücksetzen</string>
-  <string name="no_network">Kein Internet?</string>
-  <string name="network_top">Das lief nicht besonders gut...</string>
   <string name="cover_crop">Cover zurechtschneiden</string>
   <string name="music_notification">Musik</string>
-  <string name="onboarding_title">Willkommen!</string>
-  <string name="onboarding_content">Lass uns loslegen und dein erstes Hörbuch hinzufügen.</string>
   <!--book category-->
   <string name="book_header_current">Aktuelles</string>
   <string name="book_header_not_started">Neu</string>
   <string name="book_header_completed">Zu Ende</string>
-  <string name="book_category_sort">Sortierung</string>
-  <string name="book_category_sort_by_name">Name</string>
-  <string name="book_category_sort_by_last_played">Zuletzt gespielt</string>
-  <string name="book_category_sort_by_added">Hinzugefügt</string>
+  <string name="close">Schließen</string>
+  <string name="add">Hinzufügen</string>
+  <string name="delete">Löschen</string>
+  <string name="audiobook_folder_card_text">Voice erwartet eine Ordnerstruktur, in der jeder Ordner in deinem gewählten Hörbuchordner einem Buch entspricht, zum Beispiel:</string>
+  <string name="got_audiobook_folder_card_action">Verstanden</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Gerade eben</string>
+  <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">Fügen wir Ihren Hörbuchordner hinzu, damit Sie mit dem Hören beginnen können!</string>
+  <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
+  <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, Ihren Hörbuchordner mit dem Systempicker auszuwählen.\n\nKlicken Sie auf das Symbol oben, um Ihre alten Buchpositionen zu sehen.</string>
+  <string name="migration_hint_confirm">Verstanden</string>
+  <string name="migration_detail_title">Alte Buch Positionen</string>
+  <string name="migration_detail_content_name">Name</string>
+  <string name="migration_detail_content_root">Wurzelordner</string>
+  <string name="migration_detail_content_position">Position</string>
+  <string name="migration_detail_content_bookmarks">Lesezeichen</string>
+  <string name="migration_detail_content_added_at">Hinzugefügt</string>
+  <string name="migration_detail_content_position_current_file_title">Aktuelle Datei</string>
+  <string name="migration_detail_content_position_current_file_position">Position in Datei</string>
+  <string name="migration_detail_content_position_current_chapter_title">Aktuelles Kapitel</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position im Kapitel</string>
 </resources>

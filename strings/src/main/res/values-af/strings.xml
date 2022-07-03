@@ -13,9 +13,9 @@
   <string name="next_track">Volgende snit</string>
   <string name="play">Speel</string>
   <string name="pause">Breek</string>
-    <string name="skip_silence">Skip Stilte</string>
+  <string name="skip_silence">Skip Stilte</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Stel</string>
   <string name="dialog_cancel">Kanselleer</string>
   <!--EditBookDialog-->
@@ -25,34 +25,15 @@
   <string name="pick_book_cover">Dekblad vanaf leêr stelsel</string>
   <string name="edit_book_title">Wysig boek</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Spring na</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Die gidse moet nie /\'n subgids van mekaar wees nie:</string>
   <string name="audiobook_folders_title">Klankboekgids</string>
-  <string name="chosen_folder_description">Verkose gids:</string>
-  <string name="delete_folder">Verwyder uit biblioteek?</string>
-  <string name="delete_folder_content">Wil jy die volgende gids verwyder uit die biblioteek?</string>
-  <string name="folder_add_single_book">Enkele boek</string>
-  <string name="folder_add_collection">Gids met verskeie boeke</string>
-  <string name="for_example">bv.</string>
-  <string name="content_add_book">Voeg /\'n boek by</string>
-  <string name="content_is_folder">Gids</string>
-  <string name="content_is_file">Lêer</string>
-  <string name="content_navigate_up">Gaan na ouer gids</string>
-  <string name="permission_external_new_explanation">Kan nie boeke lees sonder toestemming nie</string>
-  <string name="permission_retry">Probeer weer?</string>
-  <string name="permission_goto_settings">Instellings</string>
-  <string name="storage_pre_device">Stoor:</string>
-  <string name="storage_all">Alle</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Terugspeel spoed</string>
   <!--Bookmarks-->
   <string name="bookmark">Boekmerk</string>
-  <string name="shake_to_reset">Skud om te herstel</string>
   <string name="bookmark_edit_title">Wysig boekmerk</string>
   <string name="bookmark_edit_hint">Boekmerk naam</string>
   <string name="bookmark_added">Boekmerk bygevoeg</string>
-  <string name="bookmark_delete_title">Verwyder die boekmerk?</string>
   <!--Settings-->
   <string name="action_settings">Voorkeure</string>
   <string name="pref_resume_on_replug">Hervat terugspeling</string>
@@ -64,12 +45,8 @@
     <item quantity="other">%d sekondes</item>
   </plurals>
   <string name="pref_seek_time">Skip hoeveelheid</string>
-  <string name="pref_root_folder_title">Klankboek gids</string>
   <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Outomastiese terugdraai van %d sekonde na /\'n breek.</item>
-    <item quantity="other">Outomastiese terugdraai van %d sekondes na /\'n breek.</item>
-  </plurals>
+
   <string name="pref_support_title">Ondersteun</string>
   <string name="pref_support_translations">Vertaal</string>
   <string name="pref_support_contribute">Ondersteuning en terugvoering</string>
@@ -81,14 +58,12 @@
   <!--license activity-->
   <string name="refresh">Verfris</string>
   <string name="reset">Herstel</string>
-  <string name="no_network">Geen netwerk?</string>
-  <string name="network_top">Hierdie het nie te goed gewerk nie...</string>
   <string name="cover_crop">Sny bedekblad</string>
   <string name="music_notification">Terugspeel</string>
-  <string name="onboarding_title">Welkom!</string>
-  <string name="onboarding_content">Kom ons begin deur jou eerste klankboek by te voeg.</string>
   <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog nie begin nie</string>
   <string name="book_header_completed">Voltooi</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

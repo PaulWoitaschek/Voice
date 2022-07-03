@@ -12,5 +12,3 @@ max_line_length = 140
 [*.{kt, kts}]
 disabled_rules = import-ordering
 
-[*.xml]
-indent_size = 4

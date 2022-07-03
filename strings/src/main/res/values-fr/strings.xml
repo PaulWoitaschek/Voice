@@ -5,8 +5,7 @@
   <string name="layout_grid">Disposition de la grille</string>
   <string name="layout_list">Agencement en liste</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Tout montrer</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Couverture</string>
   <string name="play_pause">Lecture / Pause</string>
   <string name="action_sleep">Minuteur</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Piste suivante</string>
   <string name="play">Lecture</string>
   <string name="pause">Pause</string>
-    <string name="skip_silence">Sauter les silences</string>
+  <string name="skip_silence">Sauter les silences</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Définir</string>
   <string name="dialog_cancel">Annuler</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Couverture depuis l\'arborescence</string>
   <string name="edit_book_title">Modifier le livre</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Aller à</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Les dossiers ne doivent pas être des sous-dossiers l\'un de l\'autre :</string>
   <string name="audiobook_folders_title">Dossiers de livres audio</string>
-  <string name="chosen_folder_description">Dossier choisi :</string>
-  <string name="delete_folder">Enlever de la bibliothèque ?</string>
-  <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque ?</string>
-  <string name="folder_add_single_book">Livre simple</string>
-  <string name="folder_add_collection">Dossier de plusieurs livres</string>
-  <string name="for_example">par ex.</string>
-  <string name="content_add_book">Ajouter un livre</string>
-  <string name="content_is_folder">Dossier</string>
-  <string name="content_is_file">Fichier</string>
-  <string name="content_navigate_up">Aller au dossier parent</string>
-  <string name="permission_external_new_explanation">Impossible de lire des livres sans autorisation</string>
-  <string name="permission_retry">Réessayer ?</string>
-  <string name="permission_goto_settings">Paramètres</string>
-  <string name="storage_pre_device">Stockage :</string>
-  <string name="storage_all">Tous</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Vitesse de lecture</string>
   <!--Bookmarks-->
   <string name="bookmark">Marque-page</string>
-  <string name="shake_to_reset">Agitez pour réinitialiser</string>
   <string name="bookmark_edit_title">Modifier le marque-page</string>
   <string name="bookmark_edit_hint">Nom du marque-page</string>
   <string name="bookmark_added">Marque-page ajouté</string>
-  <string name="bookmark_delete_title">Supprimer ce marque-page ?</string>
   <!--Settings-->
   <string name="action_settings">Préférences</string>
   <string name="pref_resume_on_replug">Reprendre la lecture</string>
@@ -64,16 +44,13 @@
   <string name="delete_last_number">Supprime le dernier nombre saisi</string>
   <plurals name="seconds">
     <item quantity="one">%d seconde</item>
+    <item quantity="many">%d secondes</item>
     <item quantity="other">%d secondes</item>
   </plurals>
   <string name="pref_seek_time">Sauter de</string>
-  <string name="pref_root_folder_title">Dossier de livre audio</string>
   <string name="pref_theme_dark">Dunkles Thema</string>
   <string name="pref_auto_rewind_title">Rembobinage automatique</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Rembobine automatiquement de %d seconde après une pause manuelle.</item>
-    <item quantity="other">Rembobine automatiquement de %d secondes après une pause manuelle.</item>
-  </plurals>
+
   <string name="pref_support_title">Assistance</string>
   <string name="pref_support_translations">Traductions</string>
   <string name="pref_support_contribute">Assistance et suggestions</string>
@@ -85,18 +62,12 @@
   <!--license activity-->
   <string name="refresh">Rafraîchir</string>
   <string name="reset">Réinitialiser</string>
-  <string name="no_network">Pas de connexion réseau ?</string>
-  <string name="network_top">Ca n\'a pas marché...</string>
   <string name="cover_crop">Recadrer la couverture</string>
   <string name="music_notification">Lecture</string>
-  <string name="onboarding_title">Bienvenue</string>
-  <string name="onboarding_content">Commençons par ajouter votre premier livre audio.</string>
   <!--book category-->
   <string name="book_header_current">En cours</string>
   <string name="book_header_not_started">Pas encore commencé</string>
   <string name="book_header_completed">Complété</string>
-  <string name="book_category_sort">Tri</string>
-  <string name="book_category_sort_by_name">Nom</string>
-  <string name="book_category_sort_by_last_played">Dernière lecture</string>
-  <string name="book_category_sort_by_added">Ajouté</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

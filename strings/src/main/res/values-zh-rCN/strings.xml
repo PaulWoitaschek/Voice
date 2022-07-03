@@ -5,8 +5,7 @@
   <string name="layout_grid">格状布局</string>
   <string name="layout_list">列表布局</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">显示全部</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">封面</string>
   <string name="play_pause">播放 / 暂停</string>
   <string name="action_sleep">睡眠定时器</string>
@@ -16,9 +15,9 @@
   <string name="next_track">下一节</string>
   <string name="play">播放</string>
   <string name="pause">暂停</string>
-    <string name="skip_silence">跳过空白部分</string>
+  <string name="skip_silence">跳过空白部分</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">设定</string>
   <string name="dialog_cancel">取消</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">从本机目录寻找封面图片</string>
   <string name="edit_book_title">编辑书名</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">跳转到</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">目录不应该互为子目录：</string>
   <string name="audiobook_folders_title">有声书目录</string>
-  <string name="chosen_folder_description">选择目录：</string>
-  <string name="delete_folder">从书库中删除吗？</string>
-  <string name="delete_folder_content">要从书库中删除以下目录吗？</string>
-  <string name="folder_add_single_book">单册书籍</string>
-  <string name="folder_add_collection">包含多册书籍的目录</string>
-  <string name="for_example">例如</string>
-  <string name="content_add_book">添加书籍</string>
-  <string name="content_is_folder">目录</string>
-  <string name="content_is_file">文件</string>
-  <string name="content_navigate_up">跳转到上级目录</string>
-  <string name="permission_external_new_explanation">权限不足，无法读取书籍</string>
-  <string name="permission_retry">重试？</string>
-  <string name="permission_goto_settings">配置选项</string>
-  <string name="storage_pre_device">内置存储：</string>
-  <string name="storage_all">所有音频</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">播放速度</string>
   <!--Bookmarks-->
   <string name="bookmark">书签</string>
-  <string name="shake_to_reset">摇一摇以重置</string>
   <string name="bookmark_edit_title">编辑书签</string>
   <string name="bookmark_edit_hint">书签名</string>
   <string name="bookmark_added">书签已添加</string>
-  <string name="bookmark_delete_title">删除书签吗？</string>
   <!--Settings-->
   <string name="action_settings">偏好设置</string>
   <string name="pref_resume_on_replug">继续播放</string>
@@ -66,12 +46,9 @@
     <item quantity="other">%d 秒</item>
   </plurals>
   <string name="pref_seek_time">跳过时间</string>
-  <string name="pref_root_folder_title">有声书目录</string>
   <string name="pref_theme_dark">暗黑主题</string>
   <string name="pref_auto_rewind_title">自动倒回</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="other">手动暂停后自动倒回 %d 秒。</item>
-  </plurals>
+
   <string name="pref_support_title">支持</string>
   <string name="pref_support_translations">翻译</string>
   <string name="pref_support_contribute">支持和建议</string>
@@ -83,18 +60,12 @@
   <!--license activity-->
   <string name="refresh">刷新</string>
   <string name="reset">重置</string>
-  <string name="no_network">没有网络连接？</string>
-  <string name="network_top">出了一些小问题...</string>
   <string name="cover_crop">封面裁剪</string>
   <string name="music_notification">播放</string>
-  <string name="onboarding_title">欢迎！</string>
-  <string name="onboarding_content">请从加入您的第一部有声书开始。</string>
   <!--book category-->
   <string name="book_header_current">正在播放</string>
   <string name="book_header_not_started">尚未开始播放</string>
   <string name="book_header_completed">已经播放完毕</string>
-  <string name="book_category_sort">排序中</string>
-  <string name="book_category_sort_by_name">名</string>
-  <string name="book_category_sort_by_last_played">上一次播放</string>
-  <string name="book_category_sort_by_added">已添加</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

@@ -5,8 +5,7 @@
   <string name="layout_grid">Mřížkové rozložení</string>
   <string name="layout_list">Seznamové rozložení</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Zobrazit vše</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Obal</string>
   <string name="play_pause">Přehrát / Pozastavit</string>
   <string name="action_sleep">Časovač vypnutí</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Následující skladba</string>
   <string name="play">Spustit</string>
   <string name="pause">Pozastavit</string>
-    <string name="skip_silence">Přeskočit ticho</string>
+  <string name="skip_silence">Přeskočit ticho</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Nastavit</string>
   <string name="dialog_cancel">Ukončit</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Obal ze souborového systému</string>
   <string name="edit_book_title">Upravit knihu</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Přeskočit na</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Adresáře nesmí být podadresáři sebe samých:</string>
   <string name="audiobook_folders_title">Adresáře s audioknihami</string>
-  <string name="chosen_folder_description">Vybraný adresář:</string>
-  <string name="delete_folder">Odstranit z knihovny?</string>
-  <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
-  <string name="folder_add_single_book">Jedna kniha</string>
-  <string name="folder_add_collection">Adresář s vícero knihami</string>
-  <string name="for_example">např.</string>
-  <string name="content_add_book">Přidat knihu</string>
-  <string name="content_is_folder">Adresář</string>
-  <string name="content_is_file">Soubor</string>
-  <string name="content_navigate_up">Přejít o adresář výše</string>
-  <string name="permission_external_new_explanation">Nelze načíst knihy bez oprávnění</string>
-  <string name="permission_retry">Opakovat?</string>
-  <string name="permission_goto_settings">Nastavení</string>
-  <string name="storage_pre_device">Úložiště:</string>
-  <string name="storage_all">Vše</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Rychlost přehrávání</string>
   <!--Bookmarks-->
   <string name="bookmark">Záložka</string>
-  <string name="shake_to_reset">Potřesením resetovat</string>
   <string name="bookmark_edit_title">Upravit záložku</string>
   <string name="bookmark_edit_hint">Jméno záložky</string>
   <string name="bookmark_added">Záložka přidána</string>
-  <string name="bookmark_delete_title">Smazat tuto záložku?</string>
   <!--Settings-->
   <string name="action_settings">Nastavení</string>
   <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
@@ -70,14 +50,8 @@
     <item quantity="other">%dsekund </item>
   </plurals>
   <string name="pref_seek_time">Přeskočit o</string>
-  <string name="pref_root_folder_title">Adresář audioknihy</string>
   <string name="pref_auto_rewind_title">Automaticky přetočit</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Automaticky přetočí o %d sekundu po ručním pozastavení.</item>
-    <item quantity="few">Automaticky přetočí o %d sekundy po ručním pozastavení.</item>
-    <item quantity="many">Automaticky přetočí o %d sekund po ručním pozastavení.</item>
-    <item quantity="other">Automaticky přetočí o %d sekund po ručním pozastavení.</item>
-  </plurals>
+
   <string name="pref_support_title">Podpora</string>
   <string name="pref_support_translations">Překlady</string>
   <string name="pref_support_contribute">Podpora a návrhy</string>
@@ -89,18 +63,12 @@
   <!--license activity-->
   <string name="refresh">Obnovit</string>
   <string name="reset">Reset</string>
-  <string name="no_network">Źádné připojení?</string>
-  <string name="network_top">Tak tohle moc dobře nedopadlo...</string>
   <string name="cover_crop">Oříznout obal</string>
   <string name="music_notification">Přehrávka</string>
-  <string name="onboarding_title">Vítejte!</string>
-  <string name="onboarding_content">Začněme tím, že přidáme svou první audio knihu.</string>
   <!--book category-->
   <string name="book_header_current">Aktuální</string>
   <string name="book_header_not_started">Doposud nespuštěno</string>
   <string name="book_header_completed">Dokončeno</string>
-  <string name="book_category_sort">Uspořádat</string>
-  <string name="book_category_sort_by_name">Jména</string>
-  <string name="book_category_sort_by_last_played">Posledně přehrávané</string>
-  <string name="book_category_sort_by_added">Přidáno</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

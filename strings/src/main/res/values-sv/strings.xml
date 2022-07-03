@@ -5,8 +5,7 @@
   <string name="layout_grid">Rutnätslayout</string>
   <string name="layout_list">Listlayout</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Visa alla</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Omslag</string>
   <string name="play_pause">Spela / Pausa</string>
   <string name="action_sleep">Insomningstidtagare</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Nästa spår</string>
   <string name="play">Spela</string>
   <string name="pause">Pausa</string>
-    <string name="skip_silence">Hoppa över tystnad</string>
+  <string name="skip_silence">Hoppa över tystnad</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Ställ in</string>
   <string name="dialog_cancel">Avbryt</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Omslag från filsystem</string>
   <string name="edit_book_title">Redigera bok</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Hoppa till</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Mapparna får inte vara en undermapp till varandra:</string>
   <string name="audiobook_folders_title">Ljudboksmappar</string>
-  <string name="chosen_folder_description">Vald mapp:</string>
-  <string name="delete_folder">Ta bort från bibliotek?</string>
-  <string name="delete_folder_content">Vill du ta bort följande mappen från biblioteket?</string>
-  <string name="folder_add_single_book">En bok</string>
-  <string name="folder_add_collection">Mapp med flera böcker</string>
-  <string name="for_example">t.ex.</string>
-  <string name="content_add_book">Lägg till en bok</string>
-  <string name="content_is_folder">Mapp</string>
-  <string name="content_is_file">Fil</string>
-  <string name="content_navigate_up">Gå till överordnad mapp</string>
-  <string name="permission_external_new_explanation">Det går inte att läsa böcker utan tillstånd</string>
-  <string name="permission_retry">Försök igen?</string>
-  <string name="permission_goto_settings">Inställningar</string>
-  <string name="storage_pre_device">Lagring:</string>
-  <string name="storage_all">Alla</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Uppspelningshastighet</string>
   <!--Bookmarks-->
   <string name="bookmark">Bokmärke</string>
-  <string name="shake_to_reset">Skaka för att nollställa</string>
   <string name="bookmark_edit_title">Redigera bokmärke</string>
   <string name="bookmark_edit_hint">Namn på bokmärke</string>
   <string name="bookmark_added">Bokmärke tillagt</string>
-  <string name="bookmark_delete_title">Ta bort detta bokmärke?</string>
   <!--Settings-->
   <string name="action_settings">Inställningar</string>
   <string name="pref_resume_on_replug">Återuppta uppspelning</string>
@@ -67,13 +47,9 @@
     <item quantity="other">%d sekunder</item>
   </plurals>
   <string name="pref_seek_time">Hoppa över mängd</string>
-  <string name="pref_root_folder_title">Ljudboksmapp</string>
   <string name="pref_theme_dark">Mörkt tema</string>
   <string name="pref_auto_rewind_title">Automatisk tillbakaspolning</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Spola automatiskt tillbaka %d sekund efter manuell paus.</item>
-    <item quantity="other">Spola automatiskt tillbaka %d sekunder efter manuell paus.</item>
-  </plurals>
+
   <string name="pref_support_title">Support</string>
   <string name="pref_support_translations">Översättningar</string>
   <string name="pref_support_contribute">Stöd och förslag</string>
@@ -85,18 +61,12 @@
   <!--license activity-->
   <string name="refresh">Uppdatera</string>
   <string name="reset">Återställ</string>
-  <string name="no_network">Inget nätverk?</string>
-  <string name="network_top">Detta fungerade inte alltför väl...</string>
   <string name="cover_crop">Beskär omslag</string>
   <string name="music_notification">Uppspelning</string>
-  <string name="onboarding_title">Välkommen!</string>
-  <string name="onboarding_content">Låt oss börja med att lägga till din första ljudbok.</string>
   <!--book category-->
   <string name="book_header_current">Aktuella</string>
   <string name="book_header_not_started">Inte påbörjad ännu</string>
   <string name="book_header_completed">Färdig</string>
-  <string name="book_category_sort">Sortering</string>
-  <string name="book_category_sort_by_name">Namn</string>
-  <string name="book_category_sort_by_last_played">Senast spelade</string>
-  <string name="book_category_sort_by_added">Tillagd</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

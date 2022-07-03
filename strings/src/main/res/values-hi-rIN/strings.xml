@@ -3,55 +3,36 @@
   <!--BookShelf-->
   <string name="current_book">वर्तमान किताब</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
-    <string name="cover">कवर</string>
-    <string name="play_pause">चलायें / रोकें</string>
-    <string name="action_sleep">नींद-टाइमर</string>
-    <string name="rewind">पीछे जाएँ</string>
-    <string name="fast_forward">आगे बढ़ें</string>
-    <string name="previous_track">पिछला ट्रैक</string>
-    <string name="next_track">अगला ट्रैक</string>
-    <string name="play">चलायें</string>
-    <string name="pause">रोकें</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
-    <string name="dialog_confirm">सेट करें</string>
-    <string name="dialog_cancel">रहने दें</string>
-    <!--EditBookDialog-->
-    <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
-    <string name="change_book_name">नाम</string>
-    <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
-    <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
-    <string name="edit_book_title">किताब में बदलाव करें</string>
-    <!--JumpToPosition-->
-    <string name="action_time_change">यहां से चलाएं</string>
+  <!--BookPlayFragment-->
+  <string name="cover">कवर</string>
+  <string name="play_pause">चलायें / रोकें</string>
+  <string name="action_sleep">नींद-टाइमर</string>
+  <string name="rewind">पीछे जाएँ</string>
+  <string name="fast_forward">आगे बढ़ें</string>
+  <string name="previous_track">पिछला ट्रैक</string>
+  <string name="next_track">अगला ट्रैक</string>
+  <string name="play">चलायें</string>
+  <string name="pause">रोकें</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">सेट करें</string>
+  <string name="dialog_cancel">रहने दें</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
+  <string name="change_book_name">नाम</string>
+  <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
+  <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
+  <string name="edit_book_title">किताब में बदलाव करें</string>
+  <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">फोल्डर एक दुसरे के अंदर नहीं हो सकते</string>
   <string name="audiobook_folders_title">ऑडिओबुक के फोल्डर</string>
-  <string name="chosen_folder_description">चुना गया फोल्डर :</string>
-  <string name="delete_folder">लाइब्रेरी से हटाएं ?</string>
-  <string name="delete_folder_content">क्या आप यह फोल्डर लाइब्रेरी से हटाना चाहते हैं ?</string>
-  <string name="folder_add_single_book">एक किताब</string>
-  <string name="folder_add_collection">अनेक किताबों वाला फोल्डर</string>
-  <string name="for_example">जैसे की : </string>
-  <string name="content_add_book">किताब डालें </string>
-  <string name="content_is_folder">फोल्डर </string>
-  <string name="content_is_file">फाइल </string>
-  <string name="content_navigate_up">एक फोल्डर ऊपर जाएँ </string>
-  <string name="permission_external_new_explanation">बिना अनुमति के किताबें नहीं पढ़ी जा सकतीं </string>
-  <string name="permission_retry">दोबारा प्रयास किया जाए ?</string>
-  <string name="permission_goto_settings">सेटिंग</string>
-  <string name="storage_pre_device">स्टोरेज : </string>
-  <string name="storage_all">सारा </string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">प्लेबैक की गति</string>
   <!--Bookmarks-->
   <string name="bookmark">बुकमार्क</string>
-  <string name="shake_to_reset">हिला के रिसेट</string>
   <string name="bookmark_edit_title">बुकमार्क सम्पादित करें</string>
   <string name="bookmark_edit_hint">बुकमार्क का नाम</string>
   <string name="bookmark_added">बुकमार्क डाला गया</string>
-  <string name="bookmark_delete_title">यह बुकमार्क हटाएं ?</string>
   <!--Settings-->
   <string name="action_settings">पसंदें</string>
   <string name="pref_resume_on_replug">प्लेबैक पुनः आरम्भ करें</string>
@@ -63,12 +44,8 @@
     <item quantity="other">%d सेकंड</item>
   </plurals>
   <string name="pref_seek_time">आगे कूदने की मात्रा</string>
-  <string name="pref_root_folder_title">किताबों का फोल्डर</string>
   <string name="pref_auto_rewind_title">अपने आप रिवाइंड</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">पॉज़ करने पर अपने आप %d सेकंड रिवाइंड हो जायेगा।</item>
-    <item quantity="other">पॉज़ करने पर अपने आप %d सेकंड रिवाइंड हो जायेगा।</item>
-  </plurals>
+
   <string name="pref_support_title">सहायता</string>
   <string name="pref_support_translations">अनुवाद</string>
   <string name="pref_support_contribute">सुझाव और सहायता</string>
@@ -80,8 +57,8 @@
   <!--license activity-->
   <string name="refresh">ताज़ा करें</string>
   <string name="reset">रिसेट करें</string>
-  <string name="no_network">नेटवर्क नहीं है?</string>
-  <string name="network_top">यह सही से नहीं चला...</string>
   <string name="cover_crop">कवर काटें</string>
   <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

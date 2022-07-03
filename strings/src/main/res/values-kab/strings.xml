@@ -24,7 +24,7 @@
   <!--hide folder dialog-->
   <!--license activity-->
   <string name="reset">Ales awennez</string>
-  <string name="no_network">Ulac aẓeṭṭa?</string>
-  <string name="onboarding_title">Anṣuf!</string>
   <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>

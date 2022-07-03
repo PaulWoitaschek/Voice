@@ -5,8 +5,7 @@
   <string name="layout_grid">Tinklelio išdėstymas</string>
   <string name="layout_list">Sąrašo išdėstymas</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
-  <string name="show_all">Rodyti visas</string>
-  <!--BookPlayFragment-->
+    <!--BookPlayFragment-->
   <string name="cover">Viršelis</string>
   <string name="play_pause">Atkurti / pristabdyti</string>
   <string name="action_sleep">Miego laikmatis</string>
@@ -16,9 +15,9 @@
   <string name="next_track">Kitas takelis</string>
   <string name="play">Atkurti</string>
   <string name="pause">Pristabdyti</string>
-    <string name="skip_silence">Peršokti tylą</string>
+  <string name="skip_silence">Peršokti tylą</string>
   <!--NoExternalStorage-->
-    <!--Dialogs-->
+  <!--Dialogs-->
   <string name="dialog_confirm">Nustatyti</string>
   <string name="dialog_cancel">Atšaukti</string>
   <!--EditBookDialog-->
@@ -28,34 +27,15 @@
   <string name="pick_book_cover">Viršelis iš failų sistemos</string>
   <string name="edit_book_title">Redaguoti knygą</string>
   <!--JumpToPosition-->
-  <string name="action_time_change">Peršokti iki...</string>
   <!--BookAdding-->
-  <string name="adding_failed_subfolder">Aplankai negali būti vienas kito poaplankiai:</string>
   <string name="audiobook_folders_title">Audioknygų aplankai</string>
-  <string name="chosen_folder_description">Pasirinktas aplankas:</string>
-  <string name="delete_folder">Pašalinti iš bibliotekos?</string>
-  <string name="delete_folder_content">Norite pašalinti šį aplanką iš bibliotekos?</string>
-  <string name="folder_add_single_book">Viena knyga</string>
-  <string name="folder_add_collection">Aplankas su keliomis knygomis</string>
-  <string name="for_example">pvz.</string>
-  <string name="content_add_book">Pridėti knygą</string>
-  <string name="content_is_folder">Aplankas</string>
-  <string name="content_is_file">Failas</string>
-  <string name="content_navigate_up">Eiti į viršaplankį</string>
-  <string name="permission_external_new_explanation">Neturint leidimo negalima nuskaityti knygų</string>
-  <string name="permission_retry">Bandyti dar kartą?</string>
-  <string name="permission_goto_settings">Nustatymai</string>
-  <string name="storage_pre_device">Laikmena:</string>
-  <string name="storage_all">Visos</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Atkūrimo sparta</string>
   <!--Bookmarks-->
   <string name="bookmark">Žymelės</string>
-  <string name="shake_to_reset">Pakratykite, kad nustatyti iš naujo</string>
   <string name="bookmark_edit_title">Redaguoti žymelę</string>
   <string name="bookmark_edit_hint">Žymelės pavadinimas</string>
   <string name="bookmark_added">Žymelė išsaugota</string>
-  <string name="bookmark_delete_title">Pašalinti šią žymelę?</string>
   <!--Settings-->
   <string name="action_settings">Nustatymai</string>
   <string name="pref_resume_on_replug">Pratęsti atkūrimą</string>
@@ -69,15 +49,9 @@
     <item quantity="other">%d sekundės</item>
   </plurals>
   <string name="pref_seek_time">Peršokimo trukmė</string>
-  <string name="pref_root_folder_title">Audioknygų aplankas</string>
   <string name="pref_theme_dark">Tamsi tema</string>
   <string name="pref_auto_rewind_title">Automatinis atsukimas atgal</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Po rankinio pristabdymo automatiškai atsukti kyngą %d sekundę atgal.</item>
-    <item quantity="few">Po rankinio pristabdymo automatiškai atsukti kyngą %d sekundžių atgal.</item>
-    <item quantity="many">Po rankinio pristabdymo automatiškai atsukti knygą %d sekundžių atgal.</item>
-    <item quantity="other">Po rankinio pristabdymo automatiškai atsukti knygą %d sekundžių atgal.</item>
-  </plurals>
+
   <string name="pref_support_title">Palaikymas</string>
   <string name="pref_support_translations">Vertimai</string>
   <string name="pref_support_contribute">Palaikymas ir pasiūlymai</string>
@@ -89,18 +63,12 @@
   <!--license activity-->
   <string name="refresh">Atnaujinti</string>
   <string name="reset">Nustatyti iš naujo</string>
-  <string name="no_network">Nėra interneto ryšio?</string>
-  <string name="network_top">Kažkas nesuveikė...</string>
   <string name="cover_crop">Apkarpyti viršelį</string>
   <string name="music_notification">Atkūrimas</string>
-  <string name="onboarding_title">Sveiki!</string>
-  <string name="onboarding_content">Pradėkite pridėdami pirmąją audioknygą.</string>
   <!--book category-->
   <string name="book_header_current">Dabartinės</string>
   <string name="book_header_not_started">Dar nepradėtos</string>
   <string name="book_header_completed">Užbaigtos</string>
-  <string name="book_category_sort">Rikiavimas</string>
-  <string name="book_category_sort_by_name">Pavadinimas</string>
-  <string name="book_category_sort_by_last_played">Paskutinio atkūrimo data</string>
-  <string name="book_category_sort_by_added">Pridėjimo data</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
 </resources>
