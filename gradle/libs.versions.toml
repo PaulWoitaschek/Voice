@@ -83,7 +83,7 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
-compose-activity = "androidx.activity:activity-compose:1.4.0"
+compose-activity = "androidx.activity:activity-compose:1.5.0"
 
 [bundles]
 compose = [
