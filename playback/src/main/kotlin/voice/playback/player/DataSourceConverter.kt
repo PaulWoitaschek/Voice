@@ -1,8 +1,8 @@
 package voice.playback.player
 
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.source.ConcatenatingMediaSource
-import androidx.media3.exoplayer.source.MediaSource
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.MediaSource
 import voice.data.Book
 import voice.data.Chapter
 import voice.data.toUri
