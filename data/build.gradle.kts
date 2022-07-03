@@ -6,7 +6,6 @@ plugins {
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
   alias(libs.plugins.ksp)
-  `java-test-fixtures`
 }
 
 anvil {

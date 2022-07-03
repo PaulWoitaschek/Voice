@@ -5,8 +5,8 @@ import java.util.Properties
 plugins {
   id("voice.app")
   id("kotlin-parcelize")
-  alias(libs.plugins.kotlin.serialization)
   id("kotlin-kapt")
+  alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false

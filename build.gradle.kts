@@ -1,14 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
-buildscript {
-  dependencies {
-    classpath(libs.androidPluginForGradle)
-    classpath(libs.kotlin.pluginForGradle)
-  }
-}
-
 plugins {
   alias(libs.plugins.ktlint)
+  alias(libs.plugins.kotlin.android) apply false
+  alias(libs.plugins.android.app) apply false
+  alias(libs.plugins.android.library) apply false
 }
 
 tasks.wrapper {
