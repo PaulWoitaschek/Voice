@@ -2,66 +2,92 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Поточна книга</string>
+  <string name="layout_grid">Сітка</string>
+  <string name="layout_list">Список</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Обкладинка</string>
-  <string name="play_pause">Програвати / Призупинити</string>
+  <string name="play_pause">Відтворити/призупинити</string>
   <string name="action_sleep">Таймер сну</string>
-  <string name="rewind">Прокрутити назад</string>
-  <string name="fast_forward">Прокрутити вперед</string>
-  <string name="previous_track">Попередній файл</string>
-  <string name="next_track">Наступний файл</string>
-  <string name="play">Програвати</string>
+  <string name="rewind">Перемотати назад</string>
+  <string name="fast_forward">Перемотати вперед</string>
+  <string name="previous_track">Попередній запис</string>
+  <string name="next_track">Наступний запис</string>
+  <string name="play">Відтворити</string>
   <string name="pause">Призупинити</string>
   <string name="skip_silence">Пропускати тишу</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
-  <string name="dialog_confirm">Встановити</string>
-  <string name="dialog_cancel">Відмінити</string>
+  <string name="dialog_confirm">Установити</string>
+  <string name="dialog_cancel">Скасувати</string>
   <!--EditBookDialog-->
-  <string name="content_cover">Показати обрану обкладинку</string>
+  <string name="content_cover">Показує вибір обкладинки</string>
   <string name="change_book_name">Назва</string>
-  <string name="download_book_cover">Обкладинка з інтернету</string>
+  <string name="download_book_cover">Обкладинка з Інтернету</string>
   <string name="pick_book_cover">Обкладинка з файлу</string>
   <string name="edit_book_title">Редагувати книгу</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Папки з аудіокнигами</string>
   <!--PlaybackSpeed-->
-  <string name="playback_speed">Швидкість програвання</string>
+  <string name="playback_speed">Швидкість відтворення</string>
   <!--Bookmarks-->
   <string name="bookmark">Закладка</string>
   <string name="bookmark_edit_title">Редагувати закладку</string>
   <string name="bookmark_edit_hint">Назва закладки</string>
-  <string name="bookmark_added">Закладка додана</string>
+  <string name="bookmark_added">Закладку додано</string>
   <!--Settings-->
-  <string name="action_settings">Параметри</string>
-  <string name="pref_resume_on_replug">Відновити програвання</string>
-  <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
+  <string name="action_settings">Налаштування</string>
+  <string name="pref_resume_on_replug">Відновлювати відтворення</string>
+  <string name="pref_resume_on_replug_hint">Якщо відтворення було призупинено через відключення навушників, його буде відновлено, щойно ви підключите їх знову.</string>
   <string name="min">%s хв</string>
   <string name="delete_last_number">Видаляє останнє введене число</string>
   <plurals name="seconds">
     <item quantity="one">%d секунда</item>
     <item quantity="few">%d секунд</item>
     <item quantity="many">%d секунд</item>
-    <item quantity="other">%d секунд</item>
+    <item quantity="other">%d с</item>
   </plurals>
-  <string name="pref_seek_time">Пропустити</string>
-  <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
+  <string name="pref_seek_time">Інтервал перемотування</string>
+  <string name="pref_theme_dark">Темна тема</string>
+  <string name="pref_auto_rewind_title">Інтервал автовідмотування</string>
   <string name="pref_support_title">Підтримка</string>
   <string name="pref_support_translations">Переклади</string>
   <string name="pref_support_contribute">Підтримка та пропозиції</string>
   <!--Misc-->
   <string name="popup_edit">Редагувати</string>
-  <string name="remove">Видалити</string>
-  <string name="play_current">Програти поточну</string>
+  <string name="remove">Вилучити</string>
+  <string name="play_current">Відтворити поточну</string>
   <!--hide folder dialog-->
   <!--license activity-->
   <string name="refresh">Оновити</string>
   <string name="reset">Скинути</string>
-  <string name="cover_crop">Обкладинка</string>
+  <string name="cover_crop">Кадрувати обкладинку</string>
   <string name="music_notification">Відтворення</string>
   <!--book category-->
+  <string name="book_header_current">Поточні</string>
+  <string name="book_header_not_started">Ще не початі</string>
+  <string name="book_header_completed">Завершені</string>
+  <string name="close">Закрити</string>
+  <string name="add">Додати</string>
+  <string name="delete">Видалити</string>
+  <string name="audiobook_folder_card_text">Щоб використовувати додаток Voice, помістіть кожну аудіокнигу в окрему папку.</string>
+  <string name="got_audiobook_folder_card_action">OK</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Щойно</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">Давайте додамо папку з аудіокнигами, щоб ви могли почати прослуховування!</string>
+  <string name="migration_hint_title">Триває читання старих місць відтворення книг</string>
+  <string name="migration_hint_content">Через зміни в нових версіях Android папку з аудіокнигами потрібно вибирати за допомогою системного диспетчера файлів.\n\nНатисніть значок вгорі, щоб переглянути ваші старі місця відтворення книг.</string>
+  <string name="migration_hint_confirm">OK</string>
+  <string name="migration_detail_title">Старі місця відтворення книг</string>
+  <string name="migration_detail_content_name">Назва</string>
+  <string name="migration_detail_content_root">Коренева папка</string>
+  <string name="migration_detail_content_position">Місце відтворення</string>
+  <string name="migration_detail_content_bookmarks">Закладки</string>
+  <string name="migration_detail_content_added_at">Дата додавання</string>
+  <string name="migration_detail_content_position_current_file_title">Поточний файл</string>
+  <string name="migration_detail_content_position_current_file_position">Місце відтворення у файлі</string>
+  <string name="migration_detail_content_position_current_chapter_title">Поточна глава</string>
+  <string name="migration_detail_content_position_current_chapter_position">Місце відтворення в главі</string>
 </resources>
