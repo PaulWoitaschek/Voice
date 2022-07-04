@@ -1,12 +1,14 @@
 package voice.sleepTimer
 
 import de.paulwoitaschek.flowpref.Pref
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import voice.common.DispatcherProvider
 import voice.common.pref.PrefKeys
 import voice.data.Book
 import voice.data.repo.BookRepository
@@ -20,10 +22,11 @@ class SleepTimerDialogViewModel
   private val sleepTimer: SleepTimer,
   private val bookRepo: BookRepository,
   @Named(PrefKeys.SLEEP_TIME)
-  private val sleepTimePref: Pref<Int>
+  private val sleepTimePref: Pref<Int>,
+  dispatcherProvider: DispatcherProvider,
 ) {
 
-  private val scope = MainScope()
+  private val scope = CoroutineScope(dispatcherProvider.main + SupervisorJob())
 
   private val selectedMinutes = MutableStateFlow(sleepTimePref.value)
 
@@ -44,7 +47,6 @@ class SleepTimerDialogViewModel
       if (newValue > 999) {
         oldValue
       } else {
-        sleepTimePref.value = newValue
         newValue
       }
     }
@@ -60,7 +62,7 @@ class SleepTimerDialogViewModel
 
   fun onConfirmButtonClicked(bookId: Book.Id) {
     check(selectedMinutes.value > 0)
-
+    sleepTimePref.value = selectedMinutes.value
     scope.launch {
       val book = bookRepo.get(bookId) ?: return@launch
       bookmarkRepo.addBookmarkAtBookPosition(

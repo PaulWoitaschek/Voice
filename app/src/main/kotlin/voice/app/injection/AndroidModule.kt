@@ -12,11 +12,13 @@ import android.view.WindowManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.ApplicationIdProviderImpl
 import voice.app.misc.ToBookIntentProviderImpl
 import voice.common.AppScope
 import voice.common.ApplicationIdProvider
+import voice.common.DispatcherProvider
 import voice.playback.notification.ToBookIntentProvider
 import javax.inject.Singleton
 
@@ -81,5 +83,11 @@ object AndroidModule {
   @Singleton
   fun json(): Json {
     return Json.Default
+  }
+
+  @Provides
+  @Singleton
+  fun dispatcherProvider(): DispatcherProvider {
+    return DispatcherProvider(Dispatchers.Main)
   }
 }

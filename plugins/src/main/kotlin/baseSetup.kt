@@ -65,5 +65,15 @@ fun Project.baseSetup() {
     if (project.path != ":logging:core") {
       add("implementation", project(":logging:core"))
     }
+
+    listOf(
+      "junit",
+      "koTest.assert",
+      "mockk",
+      "turbine",
+      "coroutines.test"
+    ).forEach {
+      add("testImplementation", libs.findLibrary(it).get())
+    }
   }
 }

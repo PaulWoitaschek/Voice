@@ -29,4 +29,6 @@ dependencies {
   implementation(libs.seismic)
 
   implementation(libs.dagger.core)
+
+  testImplementation(libs.prefs.inMemory)
 }
