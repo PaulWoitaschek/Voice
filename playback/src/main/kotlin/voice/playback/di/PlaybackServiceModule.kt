@@ -49,7 +49,7 @@ object PlaybackServiceModule {
     mediaSourceFactory: MediaSource.Factory,
   ): ExoPlayer {
     val audioAttributes = AudioAttributes.Builder()
-      .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
+      .setContentType(C.CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
