@@ -2,6 +2,8 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Libro actual</string>
+  <string name="layout_grid">Diseño de cuadrícula</string>
+  <string name="layout_list">Diseño de lista</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cubierta</string>
@@ -13,6 +15,7 @@
   <string name="next_track">Pista siguiente</string>
   <string name="play">Reproducir</string>
   <string name="pause">Pausar</string>
+  <string name="skip_silence">Saltar silencio</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Establecer</string>
@@ -45,6 +48,7 @@
     <item quantity="other">%d segundos</item>
   </plurals>
   <string name="pref_seek_time">Omitir cantidad</string>
+  <string name="pref_theme_dark">Tema oscuro</string>
   <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
   <string name="pref_support_title">Soporte</string>
   <string name="pref_support_translations">Traducciones</string>
@@ -60,6 +64,29 @@
   <string name="cover_crop">Recortar cubierta</string>
   <string name="music_notification">Reproducir</string>
   <!--book category-->
+  <string name="book_header_current">Actual</string>
+  <string name="book_header_not_started">Aún no comenzado</string>
+  <string name="book_header_completed">Completado</string>
+  <string name="close">Cerrar</string>
+  <string name="add">Agregar</string>
+  <string name="delete">Borrar</string>
+  <string name="audiobook_folder_card_text">Voice espera un directorio donde cada subdirectorio contenga un libro, por ejemplo:</string>
+  <string name="got_audiobook_folder_card_action">Entendido</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Justo ahora</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">Agreguemos tu directorio de audio libros para que puedas empezar a escucharlos!</string>
+  <string name="migration_hint_title">Accesando posición en libros viejos</string>
+  <string name="migration_hint_content">Debido a cambios en las versiones má nuevas de Androide, es necesario seleccionar tu directorio de audio libros utilizando el seleccionador del systema.\nHaz click en el icono arriba para ver las posiciones antiguas de tus libros.</string>
+  <string name="migration_hint_confirm">Entendido</string>
+  <string name="migration_detail_title">Posiciones antiguas</string>
+  <string name="migration_detail_content_name">Nombre</string>
+  <string name="migration_detail_content_root">Directorio raíz</string>
+  <string name="migration_detail_content_position">Posición</string>
+  <string name="migration_detail_content_bookmarks">Marcadores de libros</string>
+  <string name="migration_detail_content_added_at">Agregado a</string>
+  <string name="migration_detail_content_position_current_file_title">Archivo actual</string>
+  <string name="migration_detail_content_position_current_file_position">Posición en el archivo</string>
+  <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
+  <string name="migration_detail_content_position_current_chapter_position">Posición en el capítulo</string>
 </resources>
