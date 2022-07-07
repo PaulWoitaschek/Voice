@@ -96,4 +96,9 @@
   <string name="migration_detail_content_position_current_file_position">Position in File</string>
   <string name="migration_detail_content_position_current_chapter_title">Current Chapter</string>
   <string name="migration_detail_content_position_current_chapter_position">Position in Chapter</string>
+
+  <string name="migration_delete_dialog_title">Delete Positions</string>
+  <string name="migration_delete_dialog_content">Once you delete the old positions you won\'t be able to recover your old playback positions.</string>
+  <string name="migration_delete_dialog_action_delete">Delete</string>
+  <string name="migration_delete_dialog_action_keep">Keep</string>
 </resources>

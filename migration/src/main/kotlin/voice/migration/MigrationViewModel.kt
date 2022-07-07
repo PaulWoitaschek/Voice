@@ -5,7 +5,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
 import voice.data.legacy.LegacyBookMetaData
@@ -27,17 +29,40 @@ class MigrationViewModel
 
   @Composable
   internal fun viewState(): MigrationViewState {
-    var viewState: MigrationViewState by remember {
-      mutableStateOf(MigrationViewState(emptyList()))
+    var showDeletionConfirmationDialog by remember {
+      mutableStateOf(false)
+    }
+    val onDeleteClicked = {
+      showDeletionConfirmationDialog = true
+    }
+    val onDeletionAborted = {
+      showDeletionConfirmationDialog = false
+    }
+    var items by remember {
+      mutableStateOf(listOf<MigrationViewState.Item>())
+    }
+    val scope = rememberCoroutineScope()
+    val onDeletionConfirmed: () -> Unit = {
+      showDeletionConfirmationDialog = false
+      scope.launch {
+        dao.deleteAll()
+        items = emptyList()
+      }
     }
     LaunchedEffect(Unit) {
       val migrationData = migrationData()
-      val items = migrationData.metaData.mapNotNull { metaData ->
+      items = migrationData.metaData.mapNotNull { metaData ->
         migrationItem(metaData, migrationData)
       }
-      viewState = MigrationViewState(items)
     }
-    return viewState
+
+    return MigrationViewState(
+      items = items,
+      onDeleteClicked = onDeleteClicked,
+      showDeletionConfirmationDialog = showDeletionConfirmationDialog,
+      onDeletionConfirmed = onDeletionConfirmed,
+      onDeletionAborted = onDeletionAborted,
+    )
   }
 
   private suspend fun migrationData(): MigrationData {

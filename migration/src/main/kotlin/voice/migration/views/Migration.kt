@@ -11,13 +11,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -55,6 +60,14 @@ internal fun Migration(
           }
         }
       )
+    },
+    floatingActionButton = {
+      FloatingActionButton(onClick = viewState.onDeleteClicked) {
+        Icon(
+          imageVector = Icons.Outlined.Delete,
+          contentDescription = stringResource(id = R.string.delete)
+        )
+      }
     }
   ) { contentPadding ->
     LazyColumn(
@@ -65,7 +78,39 @@ internal fun Migration(
         MigrationItem(item)
       }
     }
+    if (viewState.showDeletionConfirmationDialog) {
+      DeletionConfirmationDialog(
+        onCancel = viewState.onDeletionAborted,
+        onConfirm = viewState.onDeletionConfirmed
+      )
+    }
   }
+}
+
+@Composable
+private fun DeletionConfirmationDialog(
+  onCancel: () -> Unit,
+  onConfirm: () -> Unit,
+) {
+  AlertDialog(
+    onDismissRequest = onCancel,
+    title = {
+      Text(stringResource(R.string.migration_delete_dialog_title))
+    },
+    text = {
+      Text(stringResource(R.string.migration_delete_dialog_content))
+    },
+    confirmButton = {
+      Button(onConfirm) {
+        Text(stringResource(R.string.migration_delete_dialog_action_delete))
+      }
+    },
+    dismissButton = {
+      TextButton(onConfirm) {
+        Text(stringResource(R.string.migration_delete_dialog_action_keep))
+      }
+    },
+  )
 }
 
 @Composable
@@ -197,6 +242,12 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
         root = "Root",
         position = position()
       )
-      yield(MigrationViewState(listOf(item(), item())))
+      yield(MigrationViewState(
+        items = listOf(item(), item()),
+        onDeleteClicked = {},
+        showDeletionConfirmationDialog = false,
+        onDeletionConfirmed = {},
+        onDeletionAborted = {}
+      ))
     }
 }

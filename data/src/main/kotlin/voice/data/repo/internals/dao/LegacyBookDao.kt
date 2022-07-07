@@ -24,4 +24,22 @@ interface LegacyBookDao {
 
   @Query("SELECT * FROM bookmark")
   suspend fun bookmarks(): List<LegacyBookmark>
+
+  @Query("DELETE FROM bookmark")
+  suspend fun deleteBookmarks()
+
+  @Query("DELETE FROM chapters")
+  suspend fun deleteChapters()
+
+  @Query("DELETE FROM bookSettings")
+  suspend fun deleteSettings()
+
+  @Query("DELETE FROM bookMetaData")
+  suspend fun deleteBookMetaData()
+  suspend fun deleteAll() {
+    deleteBookMetaData()
+    deleteSettings()
+    deleteChapters()
+    deleteBookmarks()
+  }
 }
