@@ -80,10 +80,6 @@ class BookPlayViewModel
     player.fastForward()
   }
 
-  fun onSettingsClicked() {
-    navigator.toSettings()
-  }
-
   fun onCurrentChapterClicked() {
     navigator.toSelectChapters(bookId)
   }

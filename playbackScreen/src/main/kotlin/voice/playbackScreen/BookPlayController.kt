@@ -11,11 +11,11 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.launch
+import voice.common.AppScope
 import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
 import voice.common.formatTime
-import voice.common.AppScope
 import voice.common.rootComponentAs
 import voice.data.Book
 import voice.data.getBookId
@@ -172,10 +172,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
-        R.id.action_settings -> {
-          viewModel.onSettingsClicked()
-          true
-        }
         R.id.action_sleep -> {
           viewModel.toggleSleepTimer()
           true
@@ -213,5 +209,4 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   interface Component {
     fun inject(target: BookPlayController)
   }
-
 }

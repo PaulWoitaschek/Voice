@@ -10,7 +10,6 @@ import voice.common.conductor.BaseController
 
 abstract class ComposeController(args: Bundle = Bundle()) : BaseController(args) {
 
-
   final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
     onCreateView()
     return ComposeView(container.context).also {

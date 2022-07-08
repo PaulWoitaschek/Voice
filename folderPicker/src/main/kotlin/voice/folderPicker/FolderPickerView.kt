@@ -2,6 +2,8 @@ package voice.folderPicker
 
 
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,10 +26,48 @@ import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.squareup.anvil.annotations.ContributesTo
+import voice.common.AppScope
+import voice.common.rootComponentAs
+
+@ContributesTo(AppScope::class)
+interface FolderPickerComponent {
+  val folderPickerViewModel: FolderPickerViewModel
+}
+
+@Composable
+fun FolderPicker(
+  onCloseClick: () -> Unit,
+) {
+  val viewModel = remember {
+    rootComponentAs<FolderPickerComponent>()
+      .folderPickerViewModel
+  }
+  val viewState = viewModel.viewState()
+  val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+    if (uri != null) {
+      viewModel.addFolder(uri)
+    }
+  }
+  FolderPickerView(
+    viewState = viewState,
+    onAddClick = {
+      launcher.launch(null)
+    },
+    onDeleteClick = {
+      viewModel.removeFolder(it)
+    },
+    onDismissExplanationCardClick = {
+      viewModel.dismissExplanationCard()
+    },
+    onCloseClick = onCloseClick,
+  )
+}
 
 @Composable
 fun FolderPickerView(
