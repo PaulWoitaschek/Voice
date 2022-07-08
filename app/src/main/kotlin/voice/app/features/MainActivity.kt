@@ -13,8 +13,8 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
-import voice.app.features.bookOverview.BookOverviewController
 import voice.app.injection.appComponent
 import voice.app.misc.RouterProvider
 import voice.app.misc.conductor.asTransaction
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     intent.getStringExtra(NI_GO_TO_BOOK)
       ?.let {
         val bookId = Book.Id(it)
-        val bookShelf = RouterTransaction.with(BookOverviewController())
+        val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         return
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     // if we should play the current book, set the backstack and return early
     if (intent?.action == "playCurrent") {
       runBlocking { currentBook.data.first() }?.let { bookId ->
-        val bookShelf = RouterTransaction.with(BookOverviewController())
+        val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         playerController.play()
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), RouterProvider {
       }
     }
 
-    val rootTransaction = RouterTransaction.with(BookOverviewController())
+    val rootTransaction = RouterTransaction.with(AppController())
     router.setRoot(rootTransaction)
   }
 

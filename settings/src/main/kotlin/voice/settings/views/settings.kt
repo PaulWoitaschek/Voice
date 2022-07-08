@@ -12,15 +12,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.squareup.anvil.annotations.ContributesTo
+import voice.common.AppScope
 import voice.common.compose.VoiceTheme
+import voice.common.rootComponentAs
 import voice.settings.R
 import voice.settings.SettingsListener
+import voice.settings.SettingsViewEffect
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
 
@@ -106,9 +113,30 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
   }
 }
 
+@ContributesTo(AppScope::class)
+interface SettingsComponent {
+  val settingsViewModel: SettingsViewModel
+}
+
 @Composable
-internal fun Settings(viewModel: SettingsViewModel) {
-  val viewState by viewModel.viewState().collectAsState(SettingsViewState.Empty)
+fun Settings(
+  onCloseScreenClicked: () -> Unit,
+  toSupport: () -> Unit,
+  toTranslations: () -> Unit,
+) {
+  val viewModel by remember { mutableStateOf(rootComponentAs<SettingsComponent>().settingsViewModel) }
+
+  LaunchedEffect(viewModel) {
+    viewModel.viewEffects.collect {
+      when (it) {
+        SettingsViewEffect.CloseScreen -> onCloseScreenClicked()
+        SettingsViewEffect.ToSupport -> toSupport()
+        SettingsViewEffect.ToTranslations -> toTranslations()
+      }
+    }
+  }
+  val viewState = remember(viewModel) { viewModel.viewState() }
+    .collectAsState(SettingsViewState.Empty).value
   Settings(viewState, viewModel)
 }
 

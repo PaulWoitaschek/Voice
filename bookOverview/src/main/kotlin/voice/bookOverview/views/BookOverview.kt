@@ -25,22 +25,74 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import com.squareup.anvil.annotations.ContributesTo
 import voice.bookOverview.BookOverviewCategory
+import voice.bookOverview.BookOverviewViewModel
 import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.common.AppScope
 import voice.common.compose.VoiceTheme
+import voice.common.rootComponentAs
 import voice.data.Book
 import java.util.UUID
 
+@ContributesTo(AppScope::class)
+interface BookOverviewComponent {
+  val bookOverviewViewModel: BookOverviewViewModel
+}
+
 @Composable
 fun BookOverview(
+  onSettingsClick: () -> Unit,
+  onBookMigrationClick: () -> Unit,
+  toFolderOverview: () -> Unit,
+  toEditBook: (Book.Id) -> Unit,
+  toBook: (Book.Id) -> Unit,
+) {
+  val viewModel = remember {
+    rootComponentAs<BookOverviewComponent>()
+      .bookOverviewViewModel
+  }
+  LaunchedEffect(Unit) {
+    viewModel.attach()
+  }
+  val lifecycleOwner = LocalLifecycleOwner.current
+  val viewState by remember(lifecycleOwner, viewModel) {
+    viewModel.state().flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+  }.collectAsState(initial = BookOverviewViewState.Loading)
+  BookOverview(
+    viewState = viewState,
+    onLayoutIconClick = viewModel::toggleGrid,
+    onSettingsClick = onSettingsClick,
+    onBookClick = toBook,
+    onBookFolderClick = toFolderOverview,
+    onPlayButtonClick = viewModel::playPause,
+    onBookMigrationClick = {
+      viewModel.onBoomMigrationHelperConfirmClick()
+      onBookMigrationClick()
+    },
+    onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick,
+    onBookLongClick = toEditBook
+  )
+}
+
+
+@Composable
+internal fun BookOverview(
   viewState: BookOverviewViewState,
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,

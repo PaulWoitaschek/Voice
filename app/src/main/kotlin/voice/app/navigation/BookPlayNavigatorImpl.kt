@@ -7,7 +7,6 @@ import voice.app.features.bookmarks.BookmarkController
 import voice.common.AppScope
 import voice.data.Book
 import voice.playbackScreen.BookPlayNavigator
-import voice.settings.SettingsController
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -15,10 +14,6 @@ class BookPlayNavigatorImpl
 @Inject constructor(
   private val navigator: Navigator
 ) : BookPlayNavigator {
-
-  override fun toSettings() {
-    navigator.push(SettingsController())
-  }
 
   override fun toChangePlaybackSpeed() {
     navigator.push(PlaybackSpeedDialogController())
