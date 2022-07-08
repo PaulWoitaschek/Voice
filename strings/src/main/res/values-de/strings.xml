@@ -88,4 +88,8 @@
   <string name="migration_detail_content_position_current_file_position">Position in Datei</string>
   <string name="migration_detail_content_position_current_chapter_title">Aktuelles Kapitel</string>
   <string name="migration_detail_content_position_current_chapter_position">Position im Kapitel</string>
+  <string name="migration_delete_dialog_title">Positionen löschen</string>
+  <string name="migration_delete_dialog_content">Sobald Sie die alten Positionen gelöscht haben, können Sie die alten Abspielpositionen nicht mehr einsehen.</string>
+  <string name="migration_delete_dialog_action_delete">Löschen</string>
+  <string name="migration_delete_dialog_action_keep">Behalten</string>
 </resources>
