@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import coil.load
@@ -168,6 +169,12 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     sleepTimerItem = menu.findItem(R.id.action_sleep)
 
     skipSilenceItem = menu.findItem(R.id.action_skip_silence)
+
+    binding.toolbar.findViewById<View>(R.id.action_bookmark)
+      .setOnLongClickListener {
+        viewModel.onBookmarkLongClicked()
+        true
+      }
 
     binding.toolbar.setNavigationOnClickListener { router.popController(this) }
     binding.toolbar.setOnMenuItemClickListener {

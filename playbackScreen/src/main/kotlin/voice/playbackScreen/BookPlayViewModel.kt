@@ -12,6 +12,7 @@ import voice.data.Book
 import voice.data.durationMs
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
+import voice.data.repo.BookmarkRepo
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.sleepTimer.SleepTimer
@@ -26,7 +27,8 @@ class BookPlayViewModel
   private val playStateManager: PlayStateManager,
   @CurrentBook
   private val currentBookId: DataStore<Book.Id?>,
-  private val navigator: BookPlayNavigator
+  private val navigator: BookPlayNavigator,
+  private val bookmarkRepo: BookmarkRepo,
 ) {
 
   private val scope = MainScope()
@@ -90,6 +92,18 @@ class BookPlayViewModel
 
   fun onBookmarkClicked() {
     navigator.toBookmarkDialog(bookId)
+  }
+
+  fun onBookmarkLongClicked() {
+    scope.launch {
+      val book = repo.get(bookId) ?: return@launch
+      bookmarkRepo.addBookmarkAtBookPosition(
+        book = book,
+        title = null,
+        setBySleepTimer = false
+      )
+      _viewEffects.tryEmit(BookPlayViewEffect.BookmarkAdded)
+    }
   }
 
   fun seekTo(ms: Long) {
