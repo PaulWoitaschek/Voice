@@ -9,10 +9,13 @@ import voice.logging.core.Logger
 import voice.playback.session.PlaybackService
 import voice.playback.session.forcedNext
 import voice.playback.session.forcedPrevious
+import voice.playback.session.pauseWithRewind
 import voice.playback.session.playPause
 import voice.playback.session.setPosition
+import voice.playback.session.setVolume
 import voice.playback.session.skipSilence
 import javax.inject.Inject
+import kotlin.time.Duration
 
 class PlayerController
 @Inject constructor(
@@ -68,9 +71,14 @@ class PlayerController
 
   fun playPause() = execute { it.playPause() }
 
-  fun pause() = execute { it.pause() }
+  fun pauseWithRewind(rewind: Duration) = execute { it.pauseWithRewind(rewind) }
 
   fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
+
+  fun setVolume(volume: Float) = execute {
+    require(volume in 0F..1F)
+    it.setVolume(volume)
+  }
 
   private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
     _controller?.transportControls?.let(action)

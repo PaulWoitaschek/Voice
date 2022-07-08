@@ -1,5 +1,6 @@
 package voice.sleepTimer
 
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -35,6 +36,7 @@ class SleepTimer
 
   private val scope = MainScope()
   private val sleepTime: Duration get() = sleepTimePref.value.minutes
+  private val fadeOutDuration = 10.seconds
 
   private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
   private var leftSleepTime: Duration
@@ -60,6 +62,7 @@ class SleepTimer
   private fun start() {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
+    playerController.setVolume(1F)
     sleepJob?.cancel()
     sleepJob = scope.launch {
       startSleepTimerCountdown()
@@ -76,13 +79,29 @@ class SleepTimer
   }
 
   private suspend fun startSleepTimerCountdown() {
-    val interval = 500.milliseconds
+    var interval = 500.milliseconds
     while (leftSleepTime > Duration.ZERO) {
       suspendUntilPlaying()
+      if (leftSleepTime < fadeOutDuration) {
+        interval = 200.milliseconds
+        updateVolumeForSleepTime()
+      }
       delay(interval)
       leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
     }
-    playerController.pause()
+    playerController.pauseWithRewind(fadeOutDuration)
+    playerController.setVolume(1F)
+  }
+
+  private fun updateVolumeForSleepTime() {
+    val percentageOfTimeLeft = if (leftSleepTime == Duration.ZERO) {
+      0F
+    } else {
+      (leftSleepTime / fadeOutDuration).toFloat()
+    }.coerceIn(0F, 1F)
+
+    val volume = 1 - FastOutSlowInInterpolator().getInterpolation(1 - percentageOfTimeLeft)
+    playerController.setVolume(volume)
   }
 
   private suspend fun suspendUntilPlaying() {
@@ -98,5 +117,6 @@ class SleepTimer
   private fun cancel() {
     sleepJob?.cancel()
     leftSleepTime = Duration.ZERO
+    playerController.setVolume(1F)
   }
 }

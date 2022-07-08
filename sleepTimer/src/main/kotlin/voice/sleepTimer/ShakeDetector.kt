@@ -25,7 +25,7 @@ class ShakeDetector
         }
       }
       val shakeDetector = SeismicShakeDetector(listener)
-      shakeDetector.start(sensorManager)
+      shakeDetector.start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
       cont.invokeOnCancellation {
         shakeDetector.stop()
       }

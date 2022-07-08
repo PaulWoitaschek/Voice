@@ -16,6 +16,8 @@ import voice.playback.player.MediaPlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Media session callback that handles playback controls.
@@ -165,6 +167,14 @@ class MediaSessionCallback
         FORCED_NEXT -> {
           player.next()
         }
+        SET_VOLUME -> {
+          val volume = extras!!.getFloat(SET_VOLUME_EXTRA_VOLUME)
+          player.setVolume(volume)
+        }
+        PAUSE_WITH_REWIND -> {
+          val rewindAmount = extras!!.getLong(PAUSE_WITH_REWIND_EXTRA_DURATION).milliseconds
+          player.pause(rewindAmount)
+        }
         else -> {
           Logger.w("Didn't handle customAction=$action")
         }
@@ -197,6 +207,13 @@ fun TransportControls.setPosition(time: Long, id: Chapter.Id) = sendCustomAction
   putLong(SET_POSITION_EXTRA_TIME, time)
 }
 
+private const val SET_VOLUME = "setVolume"
+private const val SET_VOLUME_EXTRA_VOLUME = "$SET_VOLUME#volume"
+
+fun TransportControls.setVolume(volume: Float) = sendCustomAction(SET_VOLUME) {
+  putFloat(SET_VOLUME_EXTRA_VOLUME, volume)
+}
+
 const val ANDROID_AUTO_ACTION_FAST_FORWARD = "fast_forward"
 const val ANDROID_AUTO_ACTION_REWIND = "rewind"
 const val ANDROID_AUTO_ACTION_NEXT = "next"
@@ -207,3 +224,10 @@ fun TransportControls.forcedPrevious() = sendCustomAction(FORCED_PREVIOUS)
 
 private const val FORCED_NEXT = "forcedNext"
 fun TransportControls.forcedNext() = sendCustomAction(FORCED_NEXT)
+
+private const val PAUSE_WITH_REWIND = "pauseWithRewind"
+private const val PAUSE_WITH_REWIND_EXTRA_DURATION = "$PAUSE_WITH_REWIND#duration"
+
+fun TransportControls.pauseWithRewind(rewind: Duration) = sendCustomAction(PAUSE_WITH_REWIND) {
+  putLong(PAUSE_WITH_REWIND_EXTRA_DURATION, rewind.inWholeMilliseconds)
+}

@@ -298,33 +298,40 @@ constructor(
   }
 
   suspend fun pause(rewind: Boolean) {
-    Logger.v("pause")
+    pause(
+      rewindAmount = if (rewind) {
+        autoRewindAmount.seconds
+      } else {
+        Duration.ZERO
+      }
+    )
+  }
+
+  suspend fun pause(rewindAmount: Duration) {
+    Logger.v("pause(rewindAmount=$rewindAmount)")
     when (state) {
       PlayerState.PLAYING -> {
         book?.let {
           player.playWhenReady = false
 
-          if (rewind) {
-            val autoRewind = autoRewindAmount * 1000
-            if (autoRewind != 0) {
-              // get the raw position with rewinding applied
-              val currentPosition = player.currentPosition
-                .coerceAtLeast(0)
-              var maybeSeekTo = (currentPosition - autoRewind)
-                .coerceAtLeast(0) // make sure not to get into negative time
+          if (rewindAmount > Duration.ZERO) {
+            // get the raw position with rewinding applied
+            val currentPosition = player.currentPosition
+              .coerceAtLeast(0)
+            var maybeSeekTo = (currentPosition - rewindAmount.inWholeMilliseconds)
+              .coerceAtLeast(0) // make sure not to get into negative time
 
-              // now try to find the current chapter mark and make sure we don't auto-rewind
-              // to a previous mark
-              val currentChapter = it.currentChapter
-              val currentMark = currentChapter.markForPosition(currentPosition)
-              val markForSeeking = currentChapter.markForPosition(maybeSeekTo)
-              if (markForSeeking != currentMark) {
-                maybeSeekTo = maybeSeekTo.coerceAtLeast(currentMark.startMs)
-              }
-
-              // finally change position
-              changePosition(maybeSeekTo)
+            // now try to find the current chapter mark and make sure we don't auto-rewind
+            // to a previous mark
+            val currentChapter = it.currentChapter
+            val currentMark = currentChapter.markForPosition(currentPosition)
+            val markForSeeking = currentChapter.markForPosition(maybeSeekTo)
+            if (markForSeeking != currentMark) {
+              maybeSeekTo = maybeSeekTo.coerceAtLeast(currentMark.startMs)
             }
+
+            // finally change position
+            changePosition(maybeSeekTo)
           }
         }
       }
@@ -376,6 +383,11 @@ constructor(
     prepare()
     updateContent { copy(playbackSpeed = speed) }
     player.setPlaybackSpeed(speed)
+  }
+
+  fun setVolume(volume: Float) {
+    require(volume in 0F..1F)
+    player.volume = volume
   }
 
   suspend fun setSkipSilences(skip: Boolean) {
