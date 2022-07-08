@@ -16,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
 import voice.app.injection.appComponent
-import voice.app.misc.RouterProvider
 import voice.app.misc.conductor.asTransaction
 import voice.app.navigation.Navigator
 import voice.common.pref.CurrentBook
@@ -28,7 +27,7 @@ import voice.playbackScreen.BookPlayController
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), RouterProvider {
+class MainActivity : AppCompatActivity() {
 
   @field:[Inject CurrentBook]
   lateinit var currentBook: DataStore<Book.Id?>
@@ -125,8 +124,6 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     val rootTransaction = RouterTransaction.with(AppController())
     router.setRoot(rootTransaction)
   }
-
-  override fun provideRouter() = router
 
   override fun onBackPressed() {
     if (router.backstackSize == 1) {

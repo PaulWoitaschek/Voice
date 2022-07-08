@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import voice.app.features.GalleryPicker
-import voice.app.features.bookOverview.EditBookBottomSheetController
+import voice.app.features.bookOverview.EditBookTitleDialogController
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
@@ -28,7 +28,7 @@ import voice.playbackScreen.BookPlayController
 import voice.settings.views.Settings
 import javax.inject.Inject
 
-class AppController : ComposeController(), EditBookBottomSheetController.Callback {
+class AppController : ComposeController() {
 
   init {
     appComponent.inject(this)
@@ -61,11 +61,18 @@ class AppController : ComposeController(), EditBookBottomSheetController.Callbac
               router.pushController(BookPlayController(bookId).asTransaction())
             }
           },
-          toEditBook = {
-            EditBookBottomSheetController(this@AppController, it)
-              .showDialog(router)
+          onTitleClick = { bookId ->
+            EditBookTitleDialogController(bookId).showDialog(router)
+          },
+          onCoverFromInternetClick = { bookId ->
+            router.pushController(
+              CoverFromInternetController(bookId)
+                .asTransaction()
+            )
           }
-        )
+        ) { bookId ->
+          galleryPicker.pick(bookId, this@AppController)
+        }
       }
       composable(Screen.Settings.route) {
         Settings(
@@ -110,16 +117,5 @@ class AppController : ComposeController(), EditBookBottomSheetController.Callbac
     } catch (exception: ActivityNotFoundException) {
       Logger.w(exception)
     }
-  }
-
-  override fun onInternetCoverRequested(book: Book.Id) {
-    router.pushController(
-      CoverFromInternetController(book)
-        .asTransaction()
-    )
-  }
-
-  override fun onFileCoverRequested(book: Book.Id) {
-    galleryPicker.pick(book, this)
   }
 }

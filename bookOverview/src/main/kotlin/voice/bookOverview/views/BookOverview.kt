@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CompareArrows
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewList
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
@@ -28,7 +31,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -40,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.squareup.anvil.annotations.ContributesTo
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import voice.bookOverview.BookOverviewCategory
 import voice.bookOverview.BookOverviewViewModel
 import voice.bookOverview.BookOverviewViewState
@@ -60,8 +68,10 @@ fun BookOverview(
   onSettingsClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
   toFolderOverview: () -> Unit,
-  toEditBook: (Book.Id) -> Unit,
   toBook: (Book.Id) -> Unit,
+  onTitleClick: (Book.Id) -> Unit,
+  onCoverFromInternetClick: (Book.Id) -> Unit,
+  onFileCoverClick: (Book.Id) -> Unit,
 ) {
   val viewModel = remember {
     rootComponentAs<BookOverviewComponent>()
@@ -74,22 +84,47 @@ fun BookOverview(
   val viewState by remember(lifecycleOwner, viewModel) {
     viewModel.state().flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
   }.collectAsState(initial = BookOverviewViewState.Loading)
-  BookOverview(
-    viewState = viewState,
-    onLayoutIconClick = viewModel::toggleGrid,
-    onSettingsClick = onSettingsClick,
-    onBookClick = toBook,
-    onBookFolderClick = toFolderOverview,
-    onPlayButtonClick = viewModel::playPause,
-    onBookMigrationClick = {
-      viewModel.onBoomMigrationHelperConfirmClick()
-      onBookMigrationClick()
-    },
-    onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick,
-    onBookLongClick = toEditBook
-  )
-}
 
+  val scope = rememberCoroutineScope()
+
+  var editingBook by remember { mutableStateOf<Book.Id?>(null) }
+  val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+  ModalBottomSheetLayout(
+    sheetState = bottomSheetState,
+    sheetContent = {
+      BottomSheetContent { item ->
+        scope.launch {
+          delay(300)
+          bottomSheetState.hide()
+          when (item) {
+            BottomSheetItem.Title -> editingBook?.let(onTitleClick)
+            BottomSheetItem.InternetCover -> editingBook?.let(onCoverFromInternetClick)
+            BottomSheetItem.FileCover -> editingBook?.let(onFileCoverClick)
+          }
+        }
+      }
+    }) {
+    BookOverview(
+      viewState = viewState,
+      onLayoutIconClick = viewModel::toggleGrid,
+      onSettingsClick = onSettingsClick,
+      onBookClick = toBook,
+      onBookFolderClick = toFolderOverview,
+      onPlayButtonClick = viewModel::playPause,
+      onBookMigrationClick = {
+        viewModel.onBoomMigrationHelperConfirmClick()
+        onBookMigrationClick()
+      },
+      onBoomMigrationHelperConfirmClick = viewModel::onBoomMigrationHelperConfirmClick,
+      onBookLongClick = { bookId ->
+        scope.launch {
+          editingBook = bookId
+          bottomSheetState.show()
+        }
+      }
+    )
+  }
+}
 
 @Composable
 internal fun BookOverview(
