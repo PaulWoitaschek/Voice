@@ -88,4 +88,8 @@
   <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
   <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
   <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
+  <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
+  <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
+  <string name="migration_delete_dialog_action_delete">Verwijderen</string>
+  <string name="migration_delete_dialog_action_keep">Behouden</string>
 </resources>
