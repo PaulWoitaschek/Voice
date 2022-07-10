@@ -53,6 +53,14 @@ fun Migration(
 ) {
   val viewModel = remember { rootComponentAs<MigrationComponent>().migrationViewModel }
   val viewState = viewModel.viewState()
+  Migration(viewState, onCloseClicked)
+}
+
+@Composable
+internal fun Migration(
+  viewState: MigrationViewState,
+  onCloseClicked: () -> Unit,
+) {
   Scaffold(
     topBar = {
       SmallTopAppBar(
@@ -217,7 +225,7 @@ private fun MigrationPreview(
   viewState: MigrationViewState
 ) {
   VoiceTheme {
-    Migration(onCloseClicked = {})
+    Migration(viewState, onCloseClicked = {})
   }
 }
 
