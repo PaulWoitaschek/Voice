@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
-  pluginManager.apply("org.jlleitschuh.gradle.ktlint")
+  pluginManager.apply("org.jmailen.kotlinter")
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType(KotlinCompile::class.java).configureEach { kotlinCompile ->
     kotlinCompile.kotlinOptions {

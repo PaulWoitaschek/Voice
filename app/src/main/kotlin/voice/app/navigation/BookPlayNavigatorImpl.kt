@@ -27,4 +27,3 @@ class BookPlayNavigatorImpl
     navigator.push(SelectChapterDialog(id))
   }
 }
-

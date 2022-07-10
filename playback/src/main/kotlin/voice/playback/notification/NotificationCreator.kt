@@ -98,16 +98,17 @@ class NotificationCreator
 
     val coverFile = book.content.cover
     val cover = context.imageLoader
-      .execute(ImageRequest.Builder(context)
-        .data(coverFile)
-        .size(
-          width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
-          height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height)
-        )
-        .fallback(R.drawable.album_art)
-        .error(R.drawable.album_art)
-        .allowHardware(false)
-        .build()
+      .execute(
+        ImageRequest.Builder(context)
+          .data(coverFile)
+          .size(
+            width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
+            height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height)
+          )
+          .fallback(R.drawable.album_art)
+          .error(R.drawable.album_art)
+          .allowHardware(false)
+          .build()
       )
       .drawable!!.toBitmap()
 

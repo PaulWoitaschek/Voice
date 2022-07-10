@@ -103,7 +103,8 @@ fun BookOverview(
           }
         }
       }
-    }) {
+    }
+  ) {
     BookOverview(
       viewState = viewState,
       onLayoutIconClick = viewModel::toggleGrid,
@@ -223,7 +224,6 @@ private fun MigrateHint(onClick: () -> Unit) {
   }
 }
 
-
 @Composable
 private fun AddBookHint() {
   ExplanationTooltip {
@@ -248,7 +248,6 @@ private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
     )
   }
 }
-
 
 @Composable
 private fun BookFolderIcon(modifier: Modifier = Modifier, withHint: Boolean, onClick: () -> Unit) {

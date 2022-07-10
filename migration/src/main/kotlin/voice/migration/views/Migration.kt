@@ -53,6 +53,14 @@ fun Migration(
 ) {
   val viewModel = remember { rootComponentAs<MigrationComponent>().migrationViewModel }
   val viewState = viewModel.viewState()
+  Migration(viewState, onCloseClicked)
+}
+
+@Composable
+internal fun Migration(
+  viewState: MigrationViewState,
+  onCloseClicked: () -> Unit,
+) {
   Scaffold(
     topBar = {
       SmallTopAppBar(
@@ -217,7 +225,7 @@ private fun MigrationPreview(
   viewState: MigrationViewState
 ) {
   VoiceTheme {
-    Migration(onCloseClicked = {})
+    Migration(viewState, onCloseClicked = {})
   }
 }
 
@@ -243,18 +251,21 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
                 position = position(),
                 addedAt = Instant.now(),
                 title = "Bookmark $it".takeIf { Random.nextBoolean() }
-              ))
+              )
+            )
           }
         },
         root = "Root",
         position = position()
       )
-      yield(MigrationViewState(
-        items = listOf(item(), item()),
-        onDeleteClicked = {},
-        showDeletionConfirmationDialog = false,
-        onDeletionConfirmed = {},
-        onDeletionAborted = {}
-      ))
+      yield(
+        MigrationViewState(
+          items = listOf(item(), item()),
+          onDeleteClicked = {},
+          showDeletionConfirmationDialog = false,
+          onDeletionConfirmed = {},
+          onDeletionAborted = {}
+        )
+      )
     }
 }

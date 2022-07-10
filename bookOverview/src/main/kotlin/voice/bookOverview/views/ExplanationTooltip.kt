@@ -46,7 +46,12 @@ private class ExplanationTooltipPopupPositionProvider(
   private val density: Density,
   private val onTriangleCenterX: (Int) -> Unit,
 ) : PopupPositionProvider {
-  override fun calculatePosition(anchorBounds: IntRect, windowSize: IntSize, layoutDirection: LayoutDirection, popupContentSize: IntSize): IntOffset {
+  override fun calculatePosition(
+    anchorBounds: IntRect,
+    windowSize: IntSize,
+    layoutDirection: LayoutDirection,
+    popupContentSize: IntSize
+  ): IntOffset {
     val rightMargin = with(density) { 16.dp.toPx() }
     var offset = IntOffset(anchorBounds.center.x - popupContentSize.width / 2, anchorBounds.bottom)
     if ((offset.x + popupContentSize.width + rightMargin) > windowSize.width) {

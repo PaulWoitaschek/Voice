@@ -73,7 +73,8 @@ class Migration29to30 : IncrementalMigration(29) {
   override fun migrate(db: SupportSQLiteDatabase) {
     // fetching old contents
     val cursor = db.query(
-      "TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE")
+      "TABLE_BOOK",
+      arrayOf("BOOK_JSON", "BOOK_ACTIVE")
     )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)

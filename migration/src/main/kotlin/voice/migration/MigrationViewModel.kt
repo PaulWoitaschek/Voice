@@ -108,7 +108,8 @@ private fun migrationItem(metaData: LegacyBookMetaData, migrationData: Migration
 
   return if (bookmarks.isEmpty() &&
     chapters.indexOf(currentChapter) == 0 &&
-    settings.positionInChapter == 0L) {
+    settings.positionInChapter == 0L
+  ) {
     null
   } else {
     MigrationViewState.Item(

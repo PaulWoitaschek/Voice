@@ -1,5 +1,6 @@
 root = true
 
+# noinspection EditorConfigKeyCorrectness
 [*]
 end_of_line = lf
 insert_final_newline = true
@@ -9,6 +10,6 @@ continuation_indent_size = 2
 trim_trailing_whitespace = true
 max_line_length = 140
 
+# noinspection EditorConfigKeyCorrectness
 [*.{kt, kts}]
-disabled_rules = import-ordering
-
+disabled_rules = import-ordering, trailing-comma

@@ -6,7 +6,7 @@ import androidx.viewbinding.ViewBinding
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 
-typealias BindLayout <B> = (View) -> B
+typealias BindLayout<B> = (View) -> B
 
 class BindingItem<B : ViewBinding, D>(
   private val data: D,

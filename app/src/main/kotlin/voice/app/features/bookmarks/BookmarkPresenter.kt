@@ -13,7 +13,6 @@ import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import javax.inject.Inject
 
-
 class BookmarkPresenter
 @Inject constructor(
   @CurrentBook

@@ -1,6 +1,5 @@
 package voice.folderPicker
 
-
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -151,7 +150,8 @@ fun FolderPickerView(
                 )
               }
             )
-          }) {
+          }
+        ) {
           Text(text = item.name, style = MaterialTheme.typography.bodyLarge)
         }
       }

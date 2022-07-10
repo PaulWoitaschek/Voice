@@ -29,9 +29,11 @@ private const val SI_URL = "savedUrl"
 
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
 
-  constructor(bookId: Book.Id) : this(Bundle().apply {
-    putBookId(NI_BOOK_ID, bookId)
-  })
+  constructor(bookId: Book.Id) : this(
+    Bundle().apply {
+      putBookId(NI_BOOK_ID, bookId)
+    }
+  )
 
   init {
     appComponent.inject(this)

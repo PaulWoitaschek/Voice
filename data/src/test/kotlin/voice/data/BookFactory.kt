@@ -1,30 +1,26 @@
-package voice.data.repo
+package voice.data
 
-import voice.data.Book
-import voice.data.BookContent
-import voice.data.Chapter
 import java.time.Instant
 import java.util.UUID
-import kotlin.time.Duration.Companion.minutes
 
 fun book(
-  name: String = "TestBook",
-  lastPlayedAtMillis: Long = 0L,
-  addedAtMillis: Long = 0L
+  name: String = UUID.randomUUID().toString(),
+  chapters: List<Chapter> = listOf(chapter(), chapter()),
+  time: Long = 42,
+  currentChapter: Chapter.Id = chapters.first().id,
+  lastPlayedAtMillis: Long = 0,
+  addedAtMillis: Long = 0,
 ): Book {
-  val chapters = listOf(
-    chapter(), chapter(),
-  )
   return Book(
     content = BookContent(
       author = UUID.randomUUID().toString(),
       name = name,
-      positionInChapter = 42,
+      positionInChapter = time,
       playbackSpeed = 1F,
       addedAt = Instant.ofEpochMilli(addedAtMillis),
       chapters = chapters.map { it.id },
       cover = null,
-      currentChapter = chapters.first().id,
+      currentChapter = currentChapter,
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
@@ -34,12 +30,15 @@ fun book(
   )
 }
 
-private fun chapter(): Chapter {
+fun chapter(
+  duration: Long = 10000,
+  id: Chapter.Id = Chapter.Id(UUID.randomUUID().toString())
+): Chapter {
   return Chapter(
-    id = Chapter.Id("http://${UUID.randomUUID()}"),
-    duration = 5.minutes.inWholeMilliseconds,
+    id = id,
+    name = UUID.randomUUID().toString(),
+    duration = duration,
     fileLastModified = Instant.EPOCH,
-    markData = emptyList(),
-    name = "name"
+    markData = emptyList()
   )
 }

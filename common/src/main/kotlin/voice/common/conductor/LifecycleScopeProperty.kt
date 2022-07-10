@@ -41,7 +41,8 @@ class LifecycleScopeProperty(private val lifecycle: Lifecycle) : ReadOnlyPropert
             }
           }
         }
-      })
+      }
+    )
   }
 
   private fun initScope(state: Lifecycle.State) {

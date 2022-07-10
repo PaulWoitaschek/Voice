@@ -73,7 +73,6 @@ object BookIdSerializer : KSerializer<Book.Id> {
   }
 }
 
-
 private fun Chapter.nextMark(positionInChapterMs: Long): ChapterMark? {
   val markForPosition = markForPosition(positionInChapterMs)
   val marks = chapterMarks

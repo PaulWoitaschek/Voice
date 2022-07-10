@@ -26,7 +26,6 @@ import voice.playback.session.search.BookSearchParser
 import voice.playbackScreen.BookPlayController
 import javax.inject.Inject
 
-
 class MainActivity : AppCompatActivity() {
 
   @field:[Inject CurrentBook]
