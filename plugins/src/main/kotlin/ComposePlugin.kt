@@ -34,11 +34,12 @@ class ComposePlugin : Plugin<Project> {
       kotlinCompile.kotlinOptions {
         allWarningsAsErrors = true
         freeCompilerArgs = freeCompilerArgs + listOf(
-          "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-          "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-          "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-          "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-        )
+          "androidx.compose.material.ExperimentalMaterialApi",
+          "androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
+          "androidx.compose.material3.ExperimentalMaterial3Api",
+          "androidx.compose.foundation.ExperimentalFoundationApi",
+          "androidx.compose.ui.ExperimentalComposeUiApi",
+        ).map { "-opt-in=$it" }
       }
     }
   }
