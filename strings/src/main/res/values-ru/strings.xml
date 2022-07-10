@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Текущая книга</string>
+  <string name="current_book">Открытая книга</string>
   <string name="layout_grid">Сетка</string>
   <string name="layout_list">Список</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
@@ -57,7 +57,7 @@
   <!--Misc-->
   <string name="popup_edit">Редактировать</string>
   <string name="remove">Удалить</string>
-  <string name="play_current">Читать текущую книгу</string>
+  <string name="play_current">Читать открытую</string>
   <!--hide folder dialog-->
   <!--license activity-->
   <string name="refresh">Обновить</string>
@@ -85,8 +85,8 @@
   <string name="migration_detail_content_position">Место</string>
   <string name="migration_detail_content_bookmarks">Закладки</string>
   <string name="migration_detail_content_added_at">Добавлено</string>
-  <string name="migration_detail_content_position_current_file_title">Текущий файл</string>
+  <string name="migration_detail_content_position_current_file_title">Открытый файл</string>
   <string name="migration_detail_content_position_current_file_position">Место в файле</string>
-  <string name="migration_detail_content_position_current_chapter_title">Текущая глава</string>
+  <string name="migration_detail_content_position_current_chapter_title">Открытая глава</string>
   <string name="migration_detail_content_position_current_chapter_position">Место в главе</string>
 </resources>
