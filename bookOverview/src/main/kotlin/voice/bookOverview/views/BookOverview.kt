@@ -117,7 +117,7 @@ fun BookOverviewScreen(
       EditBookTitleDialog(
         onDismissEditTitleClick = editBookTitleViewModel::onDismissEditTitle,
         onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
-        editBookTitleState = editBookTitleState,
+        viewState = editBookTitleState,
         onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle
       )
     }

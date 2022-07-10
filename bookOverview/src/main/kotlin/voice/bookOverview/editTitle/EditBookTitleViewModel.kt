@@ -24,7 +24,7 @@ constructor(
       val book = repo.get(id) ?: return@launch
       _state.value = EditBookTitleState(
         title = book.content.name,
-        bookId = id
+        bookId = id,
       )
     }
   }
@@ -40,6 +40,7 @@ constructor(
   internal fun onConfirmEditTitle() {
     val state = _state.value
     if (state != null) {
+      check(state.confirmButtonEnabled)
       scope.launch {
         repo.updateBook(state.bookId) {
           it.copy(name = state.title.trim())

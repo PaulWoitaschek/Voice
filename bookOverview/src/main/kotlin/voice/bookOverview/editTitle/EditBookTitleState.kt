@@ -4,5 +4,8 @@ import voice.data.Book
 
 internal data class EditBookTitleState(
   val title: String,
-  val bookId: Book.Id
-)
+  val bookId: Book.Id,
+) {
+
+  val confirmButtonEnabled: Boolean = title.trim().isNotEmpty()
+}

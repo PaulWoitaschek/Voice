@@ -14,7 +14,7 @@ import voice.bookOverview.editTitle.EditBookTitleState
 internal fun EditBookTitleDialog(
   onDismissEditTitleClick: () -> Unit,
   onConfirmEditTitle: () -> Unit,
-  editBookTitleState: EditBookTitleState,
+  viewState: EditBookTitleState,
   onUpdateEditTitle: (String) -> Unit
 ) {
   AlertDialog(
@@ -23,7 +23,10 @@ internal fun EditBookTitleDialog(
       Text(text = stringResource(R.string.edit_book_title))
     },
     confirmButton = {
-      Button(onClick = onConfirmEditTitle) {
+      Button(
+        onClick = onConfirmEditTitle,
+        enabled = viewState.confirmButtonEnabled
+      ) {
         Text(stringResource(id = R.string.dialog_confirm))
       }
     },
@@ -34,7 +37,7 @@ internal fun EditBookTitleDialog(
     },
     text = {
       TextField(
-        value = editBookTitleState.title,
+        value = viewState.title,
         onValueChange = onUpdateEditTitle,
         label = {
           Text(stringResource(R.string.change_book_name))
