@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:filename")
+
 package voice.common.compose
 
 import androidx.compose.foundation.layout.PaddingValues

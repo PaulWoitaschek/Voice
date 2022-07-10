@@ -67,7 +67,6 @@ class BookSearchHandler
     val activeBooks = repo.all()
     val noBookInitialized = activeBooks.none { it.content.id == currentId }
     if (noBookInitialized) {
-
       activeBooks.firstOrNull()?.content?.id?.let { id ->
         currentBook.updateData { id }
       }

@@ -21,14 +21,16 @@ class Migration49 : IncrementalMigration(49) {
         |`time` INTEGER NOT NULL,
         |`addedAt` TEXT NOT NULL,
         |`setBySleepTimer` INTEGER NOT NULL,
-        |`id` TEXT NOT NULL, PRIMARY KEY(`id`))""".trimMargin()
+        |`id` TEXT NOT NULL, PRIMARY KEY(`id`))
+        """.trimMargin()
       )
       query("SELECT * FROM bookmark_old").moveToNextLoop {
         val file = getString("file")
         val time = getInt("time")
         val title = getString("title")
         insert(
-          "bookmark", SQLiteDatabase.CONFLICT_FAIL,
+          "bookmark",
+          SQLiteDatabase.CONFLICT_FAIL,
           ContentValues().apply {
             put("file", file)
             put("title", title)

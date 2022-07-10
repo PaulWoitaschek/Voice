@@ -28,7 +28,6 @@ class BookTest {
     position shouldBeExactly 1500
   }
 
-
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsFirst() {
     val chapters = listOf(chapter(duration = 12345), chapter())
@@ -181,4 +180,3 @@ class BookTest {
     ).position
   }
 }
-

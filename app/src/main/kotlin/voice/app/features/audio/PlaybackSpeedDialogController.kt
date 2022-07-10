@@ -44,10 +44,12 @@ class PlaybackSpeedDialogController : DialogController() {
     val speed = book.content.playbackSpeed
     binding.slider.valueFrom = Book.SPEED_MIN
     binding.slider.valueTo = Book.SPEED_MAX
-    binding.slider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
-      binding.textView.text = "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(value)}"
-      playerController.setSpeed(value)
-    })
+    binding.slider.addOnChangeListener(
+      Slider.OnChangeListener { _, value, _ ->
+        binding.textView.text = "${activity!!.getString(R.string.playback_speed)}: ${speedFormatter.format(value)}"
+        playerController.setSpeed(value)
+      }
+    )
     binding.slider.value = speed
 
     return MaterialAlertDialogBuilder(activity!!)

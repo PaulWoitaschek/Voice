@@ -19,7 +19,6 @@ class AddBookmarkDialog : DialogController() {
       InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
       InputType.TYPE_TEXT_FLAG_MULTI_LINE
     val dialog = MaterialDialog(activity!!).apply {
-
       title(R.string.bookmark)
       @Suppress("CheckResult")
       input(hintRes = R.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->

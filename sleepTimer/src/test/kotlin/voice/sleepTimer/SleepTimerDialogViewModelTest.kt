@@ -117,7 +117,8 @@ private fun book(
   addedAtMillis: Long = 0L
 ): Book {
   val chapters = listOf(
-    chapter(), chapter(),
+    chapter(),
+    chapter(),
   )
   return Book(
     content = BookContent(

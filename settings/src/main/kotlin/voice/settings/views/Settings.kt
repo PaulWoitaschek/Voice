@@ -43,19 +43,22 @@ private fun SettingsPreview() {
     dialog = null
   )
   VoiceTheme {
-    Settings(viewState, object : SettingsListener {
-      override fun close() {}
-      override fun toggleResumeOnReplug() {}
-      override fun toggleDarkTheme() {}
-      override fun seekAmountChanged(seconds: Int) {}
-      override fun onSeekAmountRowClicked() {}
-      override fun autoRewindAmountChanged(seconds: Int) {}
-      override fun onAutoRewindRowClicked() {}
-      override fun onLikeClicked() {}
-      override fun dismissDialog() {}
-      override fun openSupport() {}
-      override fun openTranslations() {}
-    })
+    Settings(
+      viewState,
+      object : SettingsListener {
+        override fun close() {}
+        override fun toggleResumeOnReplug() {}
+        override fun toggleDarkTheme() {}
+        override fun seekAmountChanged(seconds: Int) {}
+        override fun onSeekAmountRowClicked() {}
+        override fun autoRewindAmountChanged(seconds: Int) {}
+        override fun onAutoRewindRowClicked() {}
+        override fun onLikeClicked() {}
+        override fun dismissDialog() {}
+        override fun openSupport() {}
+        override fun openTranslations() {}
+      }
+    )
   }
 }
 

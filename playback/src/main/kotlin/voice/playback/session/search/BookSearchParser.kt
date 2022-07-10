@@ -11,10 +11,12 @@ import javax.inject.Inject
 class BookSearchParser @Inject constructor() {
 
   fun parse(query: String?, extras: Bundle?): BookSearch {
-    return BookSearch(query = query,
+    return BookSearch(
+      query = query,
       mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS),
       album = extras?.getString(MediaStore.EXTRA_MEDIA_ALBUM),
-      artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST))
+      artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST)
+    )
   }
 
   fun parse(intent: Intent?): BookSearch? {

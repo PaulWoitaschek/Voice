@@ -117,7 +117,6 @@ internal fun ColorScheme.surfaceColorAtElevation(
   return surfaceTint.copy(alpha = alpha).compositeOver(surface)
 }
 
-
 private fun Modifier.surface(
   shape: Shape,
   backgroundColor: Color,
@@ -129,7 +128,6 @@ private fun Modifier.surface(
   .background(color = backgroundColor, shape = shape)
   .clip(shape)
 
-
 @Composable
 private fun surfaceColorAtElevation(color: Color, elevation: Dp): Color {
   return if (color == MaterialTheme.colorScheme.surface) {
@@ -138,4 +136,3 @@ private fun surfaceColorAtElevation(color: Color, elevation: Dp): Color {
     color
   }
 }
-

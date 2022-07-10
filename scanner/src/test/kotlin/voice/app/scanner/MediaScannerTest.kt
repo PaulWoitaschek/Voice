@@ -62,7 +62,6 @@ class MediaScannerTest {
     )
   }
 
-
   @Test
   fun metadataPreservedOnDeletion() = test {
     val audiobookFolder = folder("audiobooks")
@@ -93,7 +92,6 @@ class MediaScannerTest {
 
   @Test
   fun multipleRoots() = test {
-
     val audiobookFolder1 = folder("audiobooks1")
 
     val topFileBook = file(parent = audiobookFolder1, "test.mp3")
@@ -171,10 +169,12 @@ class MediaScannerTest {
     suspend fun assertBookContents(vararg expected: BookContentView) {
       bookRepo.all()
         .map {
-          BookContentView(id = it.id,
+          BookContentView(
+            id = it.id,
             chapters = it.content.chapters.map { chapter ->
               chapter.toUri()
-            })
+            }
+          )
         }
         .shouldContainExactlyInAnyOrder(expected.toList())
     }

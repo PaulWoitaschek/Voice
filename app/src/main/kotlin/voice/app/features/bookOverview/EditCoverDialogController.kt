@@ -30,9 +30,11 @@ private const val NI_ARGS = "ni#bundle"
 
 class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(args: Arguments) : this(Bundle().apply {
-    putParcelable(NI_ARGS, args)
-  })
+  constructor(args: Arguments) : this(
+    Bundle().apply {
+      putParcelable(NI_ARGS, args)
+    }
+  )
 
   @Inject
   lateinit var repo: BookRepository

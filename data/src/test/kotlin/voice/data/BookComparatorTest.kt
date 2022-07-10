@@ -2,7 +2,6 @@ package voice.data
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import voice.data.repo.book
 
 class BookComparatorTest {
 

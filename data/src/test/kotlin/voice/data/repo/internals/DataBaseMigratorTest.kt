@@ -92,7 +92,8 @@ class DataBaseMigratorTest {
       )
     }
     assertThat(migratedBookSettings).containsExactly(
-      correctBookSettings, BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0)
+      correctBookSettings,
+      BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0)
     ).inOrder()
   }
 
@@ -121,7 +122,8 @@ class DataBaseMigratorTest {
     }
     bookmarks.forEach {
       db.insert(
-        BookmarkTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+        BookmarkTable.TABLE_NAME,
+        SQLiteDatabase.CONFLICT_FAIL,
         ContentValues().apply {
           put(BookmarkTable.PATH, it.path)
           put(BookmarkTable.TITLE, it.title)
@@ -190,7 +192,8 @@ class DataBaseMigratorTest {
     books.forEach { book ->
       val bookId =
         db.insert(
-          BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+          BookTable.TABLE_NAME,
+          SQLiteDatabase.CONFLICT_FAIL,
           ContentValues().apply {
             put(BookTable.AUTHOR, book.author)
             put(BookTable.NAME, book.name)
@@ -205,7 +208,8 @@ class DataBaseMigratorTest {
         )
       book.chapters.forEach { chapter ->
         db.insert(
-          ChapterTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL,
+          ChapterTable.TABLE_NAME,
+          SQLiteDatabase.CONFLICT_FAIL,
           ContentValues().apply {
             put(ChapterTable.DURATION, chapter.duration)
             put(ChapterTable.NAME, chapter.name)

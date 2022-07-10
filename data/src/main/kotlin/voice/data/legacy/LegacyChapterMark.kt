@@ -17,5 +17,3 @@ data class LegacyChapterMark(
   val startMs: Long,
   val endMs: Long
 )
-
-

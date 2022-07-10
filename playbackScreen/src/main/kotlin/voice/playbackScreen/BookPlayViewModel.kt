@@ -44,7 +44,9 @@ class BookPlayViewModel
     }
 
     return combine(
-      repo.flow(bookId).filterNotNull(), playStateManager.flow, sleepTimer.leftSleepTimeFlow
+      repo.flow(bookId).filterNotNull(),
+      playStateManager.flow,
+      sleepTimer.leftSleepTimeFlow
     ) { book, playState, sleepTime ->
       val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1

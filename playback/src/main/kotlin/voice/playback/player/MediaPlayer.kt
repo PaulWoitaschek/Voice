@@ -202,8 +202,9 @@ constructor(
 
   private suspend fun skip(skipAmount: Duration) {
     prepare()
-    if (state == PlayerState.IDLE)
+    if (state == PlayerState.IDLE) {
       return
+    }
 
     book?.let {
       val currentPos = player.currentPosition.milliseconds
@@ -229,8 +230,9 @@ constructor(
   suspend fun previous(toNullOfNewTrack: Boolean) {
     Logger.i("previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state")
     prepare()
-    if (state == PlayerState.IDLE)
+    if (state == PlayerState.IDLE) {
       return
+    }
 
     book?.let {
       previousByMarks(it)
@@ -354,8 +356,9 @@ constructor(
   suspend fun changePosition(time: Long, changedChapter: Chapter.Id? = null) {
     Logger.v("changePosition with time $time and file $changedChapter")
     prepare()
-    if (state == PlayerState.IDLE)
+    if (state == PlayerState.IDLE) {
       return
+    }
     updateContent {
       val newChapter = changedChapter ?: currentChapter
       player.seekTo(chapters.indexOf(newChapter), time)
@@ -366,8 +369,9 @@ constructor(
   suspend fun changePosition(chapter: Chapter.Id) {
     Logger.v("chapterPosition($chapter)")
     prepare()
-    if (state == PlayerState.IDLE)
+    if (state == PlayerState.IDLE) {
       return
+    }
     updateContent {
       if (chapter !in chapters || currentChapter == chapter) {
         return@updateContent this
@@ -376,7 +380,6 @@ constructor(
       copy(positionInChapter = 0, currentChapter = chapter)
     }
   }
-
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   suspend fun setPlaybackSpeed(speed: Float) {

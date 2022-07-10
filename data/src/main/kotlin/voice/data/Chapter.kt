@@ -69,5 +69,4 @@ object ChapterIdSerializer : KSerializer<Chapter.Id> {
   }
 }
 
-
 fun Chapter.Id.toUri(): Uri = value.toUri()

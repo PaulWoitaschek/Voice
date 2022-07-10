@@ -11,7 +11,6 @@ import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,7 +57,8 @@ class FolderPickerViewModel
         ${context.getString(R.string.audiobook_folder_card_text)}
 
         audiobooks/Harry Potter 1
-        audiobooks/Harry Potter 2""".trimIndent()
+        audiobooks/Harry Potter 2
+      """.trimIndent()
     }
     return FolderPickerViewState(explanationCard = explanationCard, folders)
   }
@@ -89,9 +89,5 @@ class FolderPickerViewModel
     scope.launch {
       explanationCardSeen.updateData { true }
     }
-  }
-
-  fun destroy() {
-    scope.cancel()
   }
 }

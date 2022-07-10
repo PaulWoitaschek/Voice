@@ -23,12 +23,14 @@ class CoverScanner
 
   private suspend fun findCoverForBook(book: Book) {
     val coverFile = book.content.cover
-    if (coverFile != null && coverFile.exists())
+    if (coverFile != null && coverFile.exists()) {
       return
+    }
 
     val foundOnDisc = findAndSaveCoverFromDisc(book)
-    if (foundOnDisc)
+    if (foundOnDisc) {
       return
+    }
 
     scanForEmbeddedCover(book)
   }

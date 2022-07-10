@@ -243,18 +243,21 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
                 position = position(),
                 addedAt = Instant.now(),
                 title = "Bookmark $it".takeIf { Random.nextBoolean() }
-              ))
+              )
+            )
           }
         },
         root = "Root",
         position = position()
       )
-      yield(MigrationViewState(
-        items = listOf(item(), item()),
-        onDeleteClicked = {},
-        showDeletionConfirmationDialog = false,
-        onDeletionConfirmed = {},
-        onDeletionAborted = {}
-      ))
+      yield(
+        MigrationViewState(
+          items = listOf(item(), item()),
+          onDeleteClicked = {},
+          showDeletionConfirmationDialog = false,
+          onDeletionConfirmed = {},
+          onDeletionAborted = {}
+        )
+      )
     }
 }

@@ -2,7 +2,6 @@ package voice.data
 
 import androidx.annotation.VisibleForTesting
 
-
 private const val SQLITE_MAX_VARIABLE_NUMBER = 990
 
 // we can only query SQLITE_MAX_VARIABLE_NUMBER at once (999 bugs on some devices so we use a number a little smaller.)
