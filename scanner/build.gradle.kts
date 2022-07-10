@@ -15,7 +15,6 @@ dependencies {
   implementation(projects.common)
   implementation(libs.prefs.core)
   implementation(libs.appCompat)
-  implementation(libs.coroutines.core)
   implementation(libs.dagger.core)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)

@@ -15,20 +15,17 @@ fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType(KotlinCompile::class.java).configureEach { kotlinCompile ->
     kotlinCompile.kotlinOptions {
+      allWarningsAsErrors = true
       jvmTarget = JavaVersion.VERSION_11.toString()
-      freeCompilerArgs = freeCompilerArgs + listOf(
-        "-progressive",
-        "-opt-in=kotlin.RequiresOptIn",
-        "-opt-in=kotlin.ExperimentalStdlibApi",
-        "-opt-in=kotlin.time.ExperimentalTime",
-        "-opt-in=kotlinx.coroutines.FlowPreview",
-        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=kotlin.contracts.ExperimentalContracts",
-        "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-        "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+      val optIns = listOf(
+        "kotlin.RequiresOptIn",
+        "kotlin.ExperimentalStdlibApi",
+        "kotlin.contracts.ExperimentalContracts",
+        "kotlin.time.ExperimentalTime",
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "kotlinx.coroutines.FlowPreview",
       )
+      freeCompilerArgs = (freeCompilerArgs + listOf("-progressive") + optIns.map { "-opt-in=$it" })
     }
   }
   extensions.configure(KotlinProjectExtension::class.java) { kotlin ->
@@ -50,9 +47,6 @@ fun Project.baseSetup() {
         defaultConfig.targetSdk = libs.findVersion("sdk-target").get().requiredVersion.toInt()
       }
       compileSdkVersion(libs.findVersion("sdk-compile").get().requiredVersion.toInt())
-      composeOptions {
-        it.kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().requiredVersion
-      }
       testOptions { testOptions ->
         testOptions.unitTests.isReturnDefaultValues = true
         testOptions.animationsDisabled = true
@@ -64,6 +58,13 @@ fun Project.baseSetup() {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
     if (project.path != ":logging:core") {
       add("implementation", project(":logging:core"))
+    }
+
+    listOf(
+      "coroutines.core",
+      "coroutines.android",
+    ).forEach {
+      add("implementation", libs.findLibrary(it).get())
     }
 
     listOf(

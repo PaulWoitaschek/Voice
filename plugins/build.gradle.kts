@@ -24,5 +24,9 @@ gradlePlugin {
       id = "voice.app"
       implementationClass = "AppPlugin"
     }
+    create("compose") {
+      id = "voice.compose"
+      implementationClass = "ComposePlugin"
+    }
   }
 }

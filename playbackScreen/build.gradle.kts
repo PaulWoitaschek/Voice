@@ -21,7 +21,6 @@ dependencies {
   implementation(projects.sleepTimer)
 
   implementation(libs.datastore)
-  implementation(libs.coroutines.core)
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
@@ -30,6 +29,4 @@ dependencies {
   implementation(libs.material)
 
   implementation(libs.dagger.core)
-
-  implementation(libs.bundles.compose)
 }

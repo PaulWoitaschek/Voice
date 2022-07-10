@@ -4,6 +4,7 @@ import java.util.Properties
 
 plugins {
   id("voice.app")
+  id("voice.compose")
   id("kotlin-parcelize")
   id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
@@ -92,7 +93,6 @@ android {
 
   buildFeatures {
     viewBinding = true
-    compose = true
   }
 }
 
@@ -142,11 +142,6 @@ dependencies {
   testImplementation(libs.junit)
   testImplementation(libs.truth)
   testImplementation(libs.mockk)
-
-  implementation(libs.coroutines.core)
-  implementation(libs.coroutines.android)
-
-  implementation(libs.bundles.compose)
 
   implementation(libs.exoPlayer.core)
 

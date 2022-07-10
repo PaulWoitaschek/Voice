@@ -1,16 +1,11 @@
 plugins {
   id("voice.library")
+  id("voice.compose")
   alias(libs.plugins.anvil)
 }
 
 anvil {
   generateDaggerFactories.set(true)
-}
-
-android {
-  buildFeatures {
-    compose = true
-  }
 }
 
 dependencies {
@@ -22,7 +17,6 @@ dependencies {
   implementation(projects.scanner)
 
   implementation(libs.dagger.core)
-  implementation(libs.bundles.compose)
   implementation(libs.datastore)
   implementation(libs.prefs.core)
 

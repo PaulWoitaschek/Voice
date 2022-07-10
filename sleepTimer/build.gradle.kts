@@ -19,7 +19,6 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.data)
 
-  implementation(libs.coroutines.core)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)

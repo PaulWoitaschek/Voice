@@ -37,8 +37,6 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
   implementation(projects.common)
   implementation(libs.appCompat)
-  implementation(libs.coroutines.core)
-  implementation(libs.coroutines.android)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
 
