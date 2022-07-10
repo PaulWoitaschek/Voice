@@ -11,7 +11,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import voice.app.features.GalleryPicker
-import voice.app.features.bookOverview.EditBookTitleDialogController
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
@@ -61,15 +60,12 @@ class AppController : ComposeController() {
               router.pushController(BookPlayController(bookId).asTransaction())
             }
           },
-          onTitleClick = { bookId ->
-            EditBookTitleDialogController(bookId).showDialog(router)
-          },
           onCoverFromInternetClick = { bookId ->
             router.pushController(
               CoverFromInternetController(bookId)
                 .asTransaction()
             )
-          }
+          },
         ) { bookId ->
           galleryPicker.pick(bookId, this@AppController)
         }

@@ -29,7 +29,13 @@ sealed interface BookOverviewViewState {
     override val showAddBookHint: Boolean,
     override val showMigrateHint: Boolean,
     override val showMigrateIcon: Boolean,
+    val editBookTitleState: EditBookTitleState?,
   ) : BookOverviewViewState {
+
+    data class EditBookTitleState(
+      val title: String,
+      val bookId: Book.Id
+    )
 
     @Immutable
     data class BookViewState(

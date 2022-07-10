@@ -69,7 +69,6 @@ fun BookOverview(
   onBookMigrationClick: () -> Unit,
   toFolderOverview: () -> Unit,
   toBook: (Book.Id) -> Unit,
-  onTitleClick: (Book.Id) -> Unit,
   onCoverFromInternetClick: (Book.Id) -> Unit,
   onFileCoverClick: (Book.Id) -> Unit,
 ) {
@@ -97,7 +96,9 @@ fun BookOverview(
           delay(300)
           bottomSheetState.hide()
           when (item) {
-            BottomSheetItem.Title -> editingBook?.let(onTitleClick)
+            BottomSheetItem.Title -> {
+              editingBook?.let(viewModel::onEditBookTitleClick)
+            }
             BottomSheetItem.InternetCover -> editingBook?.let(onCoverFromInternetClick)
             BottomSheetItem.FileCover -> editingBook?.let(onFileCoverClick)
           }
@@ -122,7 +123,10 @@ fun BookOverview(
           editingBook = bookId
           bottomSheetState.show()
         }
-      }
+      },
+      onDismissEditTitleClick = viewModel::onDismissEditTitle,
+      onUpdateEditTitle = viewModel::onUpdateEditTitle,
+      onConfirmEditTitle = viewModel::onConfirmEditTitle,
     )
   }
 }
@@ -138,6 +142,9 @@ internal fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
+  onDismissEditTitleClick: () -> Unit,
+  onUpdateEditTitle: (String) -> Unit,
+  onConfirmEditTitle: () -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -191,6 +198,15 @@ internal fun BookOverview(
               contentPadding = contentPadding,
             )
           }
+        }
+
+        if (viewState.editBookTitleState != null) {
+          EditBookTitleDialog(
+            onDismissEditTitleClick = onDismissEditTitleClick,
+            onConfirmEditTitle = onConfirmEditTitle,
+            editBookTitleState = viewState.editBookTitleState,
+            onUpdateEditTitle = onUpdateEditTitle
+          )
         }
       }
       BookOverviewViewState.Loading -> {
@@ -329,6 +345,9 @@ private fun BookOverviewPreview(
       onBookLongClick = {},
       onBoomMigrationHelperConfirmClick = {},
       onBookMigrationClick = {},
+      onConfirmEditTitle = {},
+      onDismissEditTitleClick = {},
+      onUpdateEditTitle = {},
     )
   }
 }
@@ -358,7 +377,8 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
       showMigrateHint = false,
-      showMigrateIcon = true
+      showMigrateIcon = true,
+      editBookTitleState = null,
     )
   )
 }
