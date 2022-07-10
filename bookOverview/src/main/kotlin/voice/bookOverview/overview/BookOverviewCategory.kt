@@ -1,6 +1,7 @@
-package voice.bookOverview
+package voice.bookOverview.overview
 
 import androidx.annotation.StringRes
+import voice.bookOverview.R
 import voice.data.Book
 import voice.data.BookComparator
 import java.util.concurrent.TimeUnit.SECONDS

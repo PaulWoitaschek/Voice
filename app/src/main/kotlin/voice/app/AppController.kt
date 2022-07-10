@@ -15,7 +15,7 @@ import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
-import voice.bookOverview.views.BookOverview
+import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
 import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
@@ -44,7 +44,7 @@ class AppController : ComposeController() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.BookOverview.route) {
       composable(Screen.BookOverview.route) {
-        BookOverview(
+        BookOverviewScreen(
           onSettingsClick = {
             navController.navigate(Screen.Settings.route)
           },

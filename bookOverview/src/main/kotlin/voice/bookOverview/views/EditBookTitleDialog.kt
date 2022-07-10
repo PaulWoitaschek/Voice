@@ -7,14 +7,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.bookOverview.editTitle.EditBookTitleState
 
 @Composable
 internal fun EditBookTitleDialog(
   onDismissEditTitleClick: () -> Unit,
   onConfirmEditTitle: () -> Unit,
-  editBookTitleState: BookOverviewViewState.Content.EditBookTitleState,
+  editBookTitleState: EditBookTitleState,
   onUpdateEditTitle: (String) -> Unit
 ) {
   AlertDialog(

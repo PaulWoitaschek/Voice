@@ -2,6 +2,8 @@ package voice.bookOverview
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test
+import voice.bookOverview.overview.BookOverviewCategory
+import voice.bookOverview.overview.category
 
 class BookOverviewCategoryTest {
 

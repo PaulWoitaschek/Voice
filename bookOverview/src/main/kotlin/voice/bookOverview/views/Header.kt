@@ -5,7 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.bookOverview.BookOverviewCategory
+import voice.bookOverview.overview.BookOverviewCategory
 
 @Composable
 internal fun Header(

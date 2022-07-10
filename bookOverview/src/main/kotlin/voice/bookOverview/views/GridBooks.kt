@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import voice.bookOverview.BookOverviewCategory
-import voice.bookOverview.BookOverviewViewState
 import voice.bookOverview.R
+import voice.bookOverview.overview.BookOverviewCategory
+import voice.bookOverview.overview.BookOverviewViewState
 import voice.common.compose.LongClickableCard
 import voice.common.compose.plus
 import voice.data.Book

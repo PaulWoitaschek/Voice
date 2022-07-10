@@ -1,15 +1,17 @@
-package voice.bookOverview
+package voice.bookOverview.overview
 
 import android.text.format.DateUtils
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
+import voice.bookOverview.BookMigrationExplanationQualifier
+import voice.bookOverview.BookMigrationExplanationShown
+import voice.bookOverview.GridCount
+import voice.bookOverview.GridMode
 import voice.common.combine
 import voice.common.compose.ImmutableFile
 import voice.common.pref.CurrentBook
@@ -42,8 +44,6 @@ constructor(
 
   private val scope = MainScope()
 
-  private val editBookTitleState = MutableStateFlow<BookOverviewViewState.Content.EditBookTitleState?>(null)
-
   fun attach() {
     mediaScanner.scan()
   }
@@ -60,38 +60,6 @@ constructor(
     }
   }
 
-  fun onEditBookTitleClick(id: Book.Id) {
-    scope.launch {
-      val book = repo.get(id) ?: return@launch
-      editBookTitleState.value = BookOverviewViewState.Content.EditBookTitleState(
-        title = book.content.name,
-        bookId = id
-      )
-    }
-  }
-
-  fun onDismissEditTitle() {
-    editBookTitleState.value = null
-  }
-
-  fun onUpdateEditTitle(title: String) {
-    editBookTitleState.update {
-      it?.copy(title = title)
-    }
-  }
-
-  fun onConfirmEditTitle() {
-    val state = editBookTitleState.value
-    if (state != null) {
-      scope.launch {
-        repo.updateBook(state.bookId) {
-          it.copy(name = state.title.trim())
-        }
-      }
-    }
-    editBookTitleState.value = null
-  }
-
   fun state(): Flow<BookOverviewViewState.Content> {
     return combine(
       playStateManager.flow,
@@ -101,8 +69,7 @@ constructor(
       gridModePref.flow,
       bookMigrationExplanationShown.data,
       suspend { legacyBookDao.bookMetaDataCount() != 0 }.asFlow(),
-      editBookTitleState,
-    ) { playState, books, currentBookId, scannerActive, gridMode, bookMigrationExplanationShown, hasLegacyBooks, editBookTitleState ->
+    ) { playState, books, currentBookId, scannerActive, gridMode, bookMigrationExplanationShown, hasLegacyBooks ->
       val noBooks = !scannerActive && books.isEmpty()
       val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
       BookOverviewViewState.Content(
@@ -155,7 +122,6 @@ constructor(
         showAddBookHint = if (showMigrateHint) false else noBooks,
         showMigrateIcon = hasLegacyBooks,
         showMigrateHint = showMigrateHint,
-        editBookTitleState = editBookTitleState,
       )
     }
   }
