@@ -2,6 +2,9 @@ package voice.common.compose
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -33,9 +36,16 @@ fun VoiceTheme(
         lightColorScheme()
       }
     }
-
   ) {
-    content()
+    MaterialTheme(
+      colors = if (isDarkTheme()) {
+        darkColors()
+      } else {
+        lightColors()
+      }
+    ) {
+      content()
+    }
   }
 }
 

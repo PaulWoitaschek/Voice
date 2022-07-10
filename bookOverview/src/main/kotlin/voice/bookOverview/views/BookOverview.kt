@@ -9,6 +9,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -78,16 +79,18 @@ fun BookOverviewScreen(
   ModalBottomSheetLayout(
     sheetState = bottomSheetState,
     sheetContent = {
-      BottomSheetContent { item ->
-        scope.launch {
-          delay(300)
-          bottomSheetState.hide()
-          when (item) {
-            BottomSheetItem.Title -> {
-              editingBook?.let(editBookTitleViewModel::onEditBookTitleClick)
+      Surface {
+        BottomSheetContent { item ->
+          scope.launch {
+            delay(300)
+            bottomSheetState.hide()
+            when (item) {
+              BottomSheetItem.Title -> {
+                editingBook?.let(editBookTitleViewModel::onEditBookTitleClick)
+              }
+              BottomSheetItem.InternetCover -> editingBook?.let(onCoverFromInternetClick)
+              BottomSheetItem.FileCover -> editingBook?.let(onFileCoverClick)
             }
-            BottomSheetItem.InternetCover -> editingBook?.let(onCoverFromInternetClick)
-            BottomSheetItem.FileCover -> editingBook?.let(onFileCoverClick)
           }
         }
       }
