@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="GitHub Issue Template configuration">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="GitHub Issue Template configuration" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/github-issue-config.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/ISSUE_TEMPLATE/config.yml" />
+                  </Item>
+                  <Item>
+                    <option name="path" value=".github/ISSUE_TEMPLATE/bug.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
