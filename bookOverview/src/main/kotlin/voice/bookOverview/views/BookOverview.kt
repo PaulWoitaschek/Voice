@@ -203,7 +203,6 @@ internal fun BookOverview(
   }
 }
 
-
 @Preview
 @Composable
 private fun BookOverviewPreview(
