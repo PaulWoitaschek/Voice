@@ -91,6 +91,7 @@ compose-animation-animation = { module = "androidx.compose.animation:animation",
 compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
 compose-activity = "androidx.activity:activity-compose:1.5.0"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.0"
+compose-navigation-animation = "com.google.accompanist:accompanist-navigation-animation:0.24.13-rc"
 
 
 [bundles]
@@ -104,6 +105,7 @@ compose = [
   "compose-material-icons-extended",
   "compose-animation-graphics",
   "compose-animation-animation",
+  "compose-navigation-animation",
   "androidxCore",
   "compose-material3",
   "compose-activity",

@@ -6,9 +6,9 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
 import voice.app.features.GalleryPicker
 import voice.app.features.bookOverview.EditCoverDialogController
@@ -41,8 +41,8 @@ class AppController : ComposeController() {
 
   @Composable
   override fun Content() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.BookOverview.route) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(navController = navController, startDestination = Screen.BookOverview.route) {
       composable(Screen.BookOverview.route) {
         BookOverviewScreen(
           onSettingsClick = {
