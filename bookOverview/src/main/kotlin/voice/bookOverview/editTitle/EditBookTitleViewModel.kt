@@ -20,6 +20,9 @@ constructor(
   private val repo: BookRepository,
 ) : BottomSheetItemViewModel {
 
+  override val menuOrder: Int
+    get() = BottomSheetItem.Title.ordinal
+
   private val scope = MainScope()
 
   private val _state = mutableStateOf<EditBookTitleState?>(null)
@@ -29,8 +32,8 @@ constructor(
     return listOf(BottomSheetItem.Title)
   }
 
-  override fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
-    if (item != BottomSheetItem.Title) return
+  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem): Boolean {
+    if (item != BottomSheetItem.Title) return false
     scope.launch {
       val book = repo.get(bookId) ?: return@launch
       _state.value = EditBookTitleState(
@@ -38,6 +41,8 @@ constructor(
         bookId = bookId,
       )
     }
+
+    return true
   }
 
   internal fun onDismissEditTitle() {

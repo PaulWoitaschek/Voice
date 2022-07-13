@@ -23,17 +23,16 @@ class BottomSheetViewModel
   internal fun bookSelected(bookId: Book.Id) {
     this.bookId = bookId
     scope.launch {
-      val items = viewModels.flatMap { it.items(bookId) }
-        .toSet()
-        .sorted()
+      val items = viewModels.sortedBy { it.menuOrder }
+        .flatMap { it.items(bookId) }
       _state.value = EditBookBottomSheetState(items)
     }
   }
 
-  internal fun onItemClick(item: BottomSheetItem) {
+  internal suspend fun onItemClick(item: BottomSheetItem) {
     val bookId = bookId ?: return
     viewModels.forEach {
-      it.onItemClicked(bookId, item)
+      if (it.onItemClicked(bookId, item)) return@forEach
     }
   }
 }

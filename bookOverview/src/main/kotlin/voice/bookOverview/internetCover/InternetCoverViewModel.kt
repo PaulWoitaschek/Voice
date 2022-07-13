@@ -16,13 +16,19 @@ constructor(
   private val navigator: BookOverviewNavigator
 ) : BottomSheetItemViewModel {
 
+  override val menuOrder: Int
+    get() = BottomSheetItem.InternetCover.ordinal
+
   override suspend fun items(bookId: Book.Id): List<BottomSheetItem> {
     return listOf(BottomSheetItem.InternetCover)
   }
 
-  override fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem): Boolean {
     if (item == BottomSheetItem.InternetCover) {
       navigator.onCoverFromInternetClick(bookId)
+      return true
     }
+
+    return false
   }
 }
