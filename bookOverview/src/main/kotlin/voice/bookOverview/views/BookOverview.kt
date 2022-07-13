@@ -15,10 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -28,41 +26,34 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.bookOverview.R
-import voice.bookOverview.editTitle.EditBookTitleViewModel
+import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.overview.BookOverviewCategory
-import voice.bookOverview.overview.BookOverviewViewModel
+import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewState
-import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.rootComponentAs
 import voice.data.Book
 import java.util.UUID
 
-@ContributesTo(AppScope::class)
-interface BookOverviewComponent {
-  val bookOverviewViewModel: BookOverviewViewModel
-  val editBookTitleViewModel: EditBookTitleViewModel
-}
-
 @Composable
 fun BookOverviewScreen(
-  onSettingsClick: () -> Unit,
-  onBookMigrationClick: () -> Unit,
-  toFolderOverview: () -> Unit,
-  toBook: (Book.Id) -> Unit,
-  onCoverFromInternetClick: (Book.Id) -> Unit,
-  onFileCoverClick: (Book.Id) -> Unit,
+  navigator: BookOverviewNavigator,
 ) {
-  val bookComponent = remember { rootComponentAs<BookOverviewComponent>() }
+  val bookComponent = remember(navigator) {
+    rootComponentAs<BookOverviewComponent.Factory.Provider>()
+      .bookOverviewComponentProviderFactory.create(navigator)
+  }
   val bookOverviewViewModel = remember {
     bookComponent.bookOverviewViewModel
   }
   val editBookTitleViewModel = remember {
     bookComponent.editBookTitleViewModel
+  }
+  val bottomSheetViewModel = remember {
+    bookComponent.bottomSheetViewModel
   }
   LaunchedEffect(Unit) {
     bookOverviewViewModel.attach()
@@ -74,23 +65,16 @@ fun BookOverviewScreen(
 
   val scope = rememberCoroutineScope()
 
-  var editingBook by remember { mutableStateOf<Book.Id?>(null) }
   val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
   ModalBottomSheetLayout(
     sheetState = bottomSheetState,
     sheetContent = {
       Surface {
-        BottomSheetContent { item ->
+        BottomSheetContent(bottomSheetViewModel.state.value) { item ->
           scope.launch {
             delay(300)
             bottomSheetState.hide()
-            when (item) {
-              BottomSheetItem.Title -> {
-                editingBook?.let(editBookTitleViewModel::onEditBookTitleClick)
-              }
-              BottomSheetItem.InternetCover -> editingBook?.let(onCoverFromInternetClick)
-              BottomSheetItem.FileCover -> editingBook?.let(onFileCoverClick)
-            }
+            bottomSheetViewModel.onItemClick(item)
           }
         }
       }
@@ -99,19 +83,19 @@ fun BookOverviewScreen(
     BookOverview(
       viewState = viewState,
       onLayoutIconClick = bookOverviewViewModel::toggleGrid,
-      onSettingsClick = onSettingsClick,
-      onBookClick = toBook,
+      onSettingsClick = navigator::onSettingsClick,
+      onBookClick = navigator::toBook,
       onBookLongClick = { bookId ->
         scope.launch {
-          editingBook = bookId
+          bottomSheetViewModel.bookSelected(bookId)
           bottomSheetState.show()
         }
       },
-      onBookFolderClick = toFolderOverview,
+      onBookFolderClick = navigator::toFolderOverview,
       onPlayButtonClick = bookOverviewViewModel::playPause,
       onBookMigrationClick = {
         bookOverviewViewModel.onBoomMigrationHelperConfirmClick()
-        onBookMigrationClick()
+        navigator.onBookMigrationClick()
       },
       onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
     )

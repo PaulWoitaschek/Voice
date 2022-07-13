@@ -15,6 +15,7 @@ import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
+import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
 import voice.common.navigation.Screen
@@ -45,30 +46,38 @@ class AppController : ComposeController() {
     AnimatedNavHost(navController = navController, startDestination = Screen.BookOverview.route) {
       composable(Screen.BookOverview.route) {
         BookOverviewScreen(
-          onSettingsClick = {
-            navController.navigate(Screen.Settings.route)
-          },
-          onBookMigrationClick = {
-            navController.navigate(Screen.Migration.route)
-          },
-          toFolderOverview = {
-            navController.navigate(Screen.FolderPicker.route)
-          },
-          toBook = { bookId ->
-            lifecycleScope.launch {
-              currentBookIdPref.updateData { bookId }
-              router.pushController(BookPlayController(bookId).asTransaction())
+          object : BookOverviewNavigator {
+            override fun onSettingsClick() {
+              navController.navigate(Screen.Settings.route)
             }
-          },
-          onCoverFromInternetClick = { bookId ->
-            router.pushController(
-              CoverFromInternetController(bookId)
-                .asTransaction()
-            )
-          },
-        ) { bookId ->
-          galleryPicker.pick(bookId, this@AppController)
-        }
+
+            override fun onBookMigrationClick() {
+              navController.navigate(Screen.Migration.route)
+            }
+
+            override fun toFolderOverview() {
+              navController.navigate(Screen.FolderPicker.route)
+            }
+
+            override fun toBook(id: Book.Id) {
+              lifecycleScope.launch {
+                currentBookIdPref.updateData { id }
+                router.pushController(BookPlayController(id).asTransaction())
+              }
+            }
+
+            override fun onCoverFromInternetClick(id: Book.Id) {
+              router.pushController(
+                CoverFromInternetController(id)
+                  .asTransaction()
+              )
+            }
+
+            override fun onFileCoverClick(id: Book.Id) {
+              galleryPicker.pick(id, this@AppController)
+            }
+          }
+        )
       }
       composable(Screen.Settings.route) {
         Settings(
