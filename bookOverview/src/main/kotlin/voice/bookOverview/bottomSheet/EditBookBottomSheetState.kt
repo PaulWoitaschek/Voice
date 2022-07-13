@@ -12,7 +12,7 @@ internal data class EditBookBottomSheetState(
   val items: List<BottomSheetItem>
 )
 
-internal enum class BottomSheetItem(
+enum class BottomSheetItem(
   @StringRes val titleRes: Int,
   val icon: ImageVector
 ) {

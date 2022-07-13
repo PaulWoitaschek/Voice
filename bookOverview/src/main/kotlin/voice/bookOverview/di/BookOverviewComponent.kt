@@ -1,8 +1,8 @@
 package voice.bookOverview.di
 
+import com.squareup.anvil.annotations.ContributesSubcomponent
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.BindsInstance
-import dagger.Subcomponent
 import voice.bookOverview.bottomSheet.BottomSheetViewModel
 import voice.bookOverview.editTitle.EditBookTitleViewModel
 import voice.bookOverview.overview.BookOverviewNavigator
@@ -13,14 +13,14 @@ import javax.inject.Scope
 @Scope
 annotation class BookOverviewScope
 
-@Subcomponent
+@ContributesSubcomponent(scope = BookOverviewScope::class, parentScope = AppScope::class)
 @BookOverviewScope
 interface BookOverviewComponent {
   val bookOverviewViewModel: BookOverviewViewModel
   val editBookTitleViewModel: EditBookTitleViewModel
   val bottomSheetViewModel: BottomSheetViewModel
 
-  @Subcomponent.Factory
+  @ContributesSubcomponent.Factory
   interface Factory {
     fun create(
       @BindsInstance
