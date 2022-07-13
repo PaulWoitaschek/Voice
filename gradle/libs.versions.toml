@@ -6,7 +6,7 @@ sdk-compile = "32"
 sdk-min = "24"
 sdk-target = "32"
 
-coroutines = "1.6.3"
+coroutines = "1.6.4"
 room = "2.4.2"
 conductor = "3.1.5"
 prefs = "1.0.1"
