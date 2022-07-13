@@ -13,7 +13,7 @@ import voice.data.repo.BookRepository
 import javax.inject.Inject
 
 @BookOverviewScope
-@ContributesMultibinding(BookOverviewScope::class, boundType = BottomSheetItemViewModel::class)
+@ContributesMultibinding(BookOverviewScope::class)
 class EditBookTitleViewModel
 @Inject
 constructor(
