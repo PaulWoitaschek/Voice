@@ -9,26 +9,20 @@ import voice.bookOverview.di.BookOverviewScope
 import voice.data.repo.BookRepository
 import javax.inject.Inject
 
-interface EditBookTitleListener {
-  fun onDismissEditTitle()
-  fun onUpdateEditTitle(title: String)
-  fun onConfirmEditTitle()
-}
-
 @BookOverviewScope
 class EditBookTitleViewModel
 @Inject
 constructor(
   private val repo: BookRepository,
   private val stateHolder: BottomSheetSelectionStateHolder,
-) : EditBookTitleListener {
+) {
 
   private val scope = MainScope()
 
   private val _state = mutableStateOf<EditBookTitleState?>(null)
   internal val state: State<EditBookTitleState?> get() = _state
 
-  fun onEditBookTitleClick() {
+  internal fun onEditBookTitleClick() {
     val id = stateHolder.selectedBook ?: return
     scope.launch {
       val book = repo.get(id) ?: return@launch
@@ -39,15 +33,15 @@ constructor(
     }
   }
 
-  override fun onDismissEditTitle() {
+  internal fun onDismissEditTitle() {
     _state.value = null
   }
 
-  override fun onUpdateEditTitle(title: String) {
+  internal fun onUpdateEditTitle(title: String) {
     _state.value = _state.value?.copy(title = title)
   }
 
-  override fun onConfirmEditTitle() {
+  internal fun onConfirmEditTitle() {
     val state = _state.value
     if (state != null) {
       check(state.confirmButtonEnabled)

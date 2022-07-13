@@ -3,7 +3,6 @@ package voice.bookOverview.bottomSheet
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import voice.bookOverview.editTitle.EditBookTitleListener
 import voice.bookOverview.editTitle.EditBookTitleViewModel
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.data.Book
@@ -14,7 +13,7 @@ class BottomSheetViewModel
   private val editBookTitleViewModel: EditBookTitleViewModel,
   private val stateHolder: BottomSheetSelectionStateHolder,
   private val navigator: BookOverviewNavigator,
-) : EditBookTitleListener by editBookTitleViewModel {
+) {
 
   private val _state: MutableState<EditBookBottomSheetState> = mutableStateOf(EditBookBottomSheetState(emptyList()))
   internal val state: State<EditBookBottomSheetState> get() = _state
