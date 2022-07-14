@@ -26,7 +26,10 @@
   <string name="download_book_cover">Cover from internet</string>
   <string name="pick_book_cover">Cover from file system</string>
   <string name="edit_book_title">Edit book</string>
-  l    <!--JumpToPosition-->
+  <string name="mark_as_completed">Mark as Completed</string>
+  <string name="mark_as_current">Mark as Current</string>
+  <string name="mark_as_not_started">Mark as Not Started Yet</string>
+  <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Audiobook folders</string>
   <!--PlaybackSpeed-->

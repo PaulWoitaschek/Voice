@@ -4,6 +4,7 @@ import com.squareup.anvil.annotations.ContributesSubcomponent
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.BindsInstance
 import voice.bookOverview.bottomSheet.BottomSheetViewModel
+import voice.bookOverview.editBookCategory.EditBookCategoryViewModel
 import voice.bookOverview.editTitle.EditBookTitleViewModel
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewModel
@@ -18,6 +19,7 @@ annotation class BookOverviewScope
 interface BookOverviewComponent {
   val bookOverviewViewModel: BookOverviewViewModel
   val editBookTitleViewModel: EditBookTitleViewModel
+  val editBookCategoryViewModel: EditBookCategoryViewModel
   val bottomSheetViewModel: BottomSheetViewModel
 
   @ContributesSubcomponent.Factory
