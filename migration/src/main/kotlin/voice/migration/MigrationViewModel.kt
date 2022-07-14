@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
@@ -25,7 +26,7 @@ private const val COMMON_STORAGE_PREFIX = "/storage/emulated/0/"
 class MigrationViewModel
 @Inject constructor(
   private val dao: LegacyBookDao
-) {
+) : ViewModel() {
 
   @Composable
   internal fun viewState(): MigrationViewState {

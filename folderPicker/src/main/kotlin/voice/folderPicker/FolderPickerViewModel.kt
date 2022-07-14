@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.map
@@ -29,7 +30,7 @@ class FolderPickerViewModel
   private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   @ExplanationCardSeen
   private val explanationCardSeen: DataStore<Boolean>,
-) {
+) : ViewModel() {
 
   private val scope = MainScope()
 

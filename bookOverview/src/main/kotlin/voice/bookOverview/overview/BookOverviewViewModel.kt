@@ -2,6 +2,7 @@ package voice.bookOverview.overview
 
 import android.text.format.DateUtils
 import androidx.datastore.core.DataStore
+import androidx.lifecycle.ViewModel
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +41,7 @@ constructor(
   @BookMigrationExplanationQualifier
   private val bookMigrationExplanationShown: BookMigrationExplanationShown,
   private val legacyBookDao: LegacyBookDao,
-) {
+) : ViewModel() {
 
   private val scope = MainScope()
 

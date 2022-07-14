@@ -25,13 +25,13 @@ import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
+import voice.common.compose.viewModel
 import voice.common.rootComponentAs
 
 @ContributesTo(AppScope::class)
@@ -43,7 +43,7 @@ interface FolderPickerComponent {
 fun FolderPicker(
   onCloseClick: () -> Unit,
 ) {
-  val viewModel = remember {
+  val viewModel = viewModel {
     rootComponentAs<FolderPickerComponent>()
       .folderPickerViewModel
   }

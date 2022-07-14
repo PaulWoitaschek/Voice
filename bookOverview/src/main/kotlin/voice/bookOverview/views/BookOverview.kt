@@ -34,6 +34,7 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.common.compose.VoiceTheme
+import voice.common.compose.viewModel
 import voice.common.rootComponentAs
 import voice.data.Book
 import java.util.UUID
@@ -46,13 +47,13 @@ fun BookOverviewScreen(
     rootComponentAs<BookOverviewComponent.Factory.Provider>()
       .bookOverviewComponentProviderFactory.create(navigator)
   }
-  val bookOverviewViewModel = remember {
+  val bookOverviewViewModel = viewModel {
     bookComponent.bookOverviewViewModel
   }
-  val editBookTitleViewModel = remember {
+  val editBookTitleViewModel = viewModel {
     bookComponent.editBookTitleViewModel
   }
-  val bottomSheetViewModel = remember {
+  val bottomSheetViewModel = viewModel {
     bookComponent.bottomSheetViewModel
   }
   LaunchedEffect(Unit) {
