@@ -88,7 +88,9 @@ fun BookOverviewScreen(
           scope.launch {
             delay(300)
             bottomSheetState.hide()
-            bottomSheetViewModel.onItemClick(item)
+
+            val book = selectedBook.value ?: return@launch
+            bottomSheetViewModel.onItemClick(book, item)
           }
         }
       }

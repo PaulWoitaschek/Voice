@@ -17,11 +17,9 @@ class BottomSheetViewModel
 
   private val _state: MutableState<EditBookBottomSheetState> = mutableStateOf(EditBookBottomSheetState(emptyList()))
   internal val state: State<EditBookBottomSheetState> get() = _state
-  private var bookId: Book.Id? = null
   private val scope = MainScope()
 
   internal fun bookSelected(bookId: Book.Id) {
-    this.bookId = bookId
     scope.launch {
       val items = viewModels.flatMap { it.items(bookId) }
         .toSet()
@@ -30,8 +28,7 @@ class BottomSheetViewModel
     }
   }
 
-  internal fun onItemClick(item: BottomSheetItem) {
-    val bookId = bookId ?: return
+  internal fun onItemClick(bookId: Book.Id, item: BottomSheetItem) {
     viewModels.forEach {
       it.onItemClicked(bookId, item)
     }
