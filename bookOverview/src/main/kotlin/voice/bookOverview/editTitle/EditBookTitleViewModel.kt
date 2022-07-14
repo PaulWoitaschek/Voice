@@ -2,33 +2,40 @@ package voice.bookOverview.editTitle
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import com.squareup.anvil.annotations.ContributesMultibinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import voice.bookOverview.bottomSheet.BottomSheetSelectionStateHolder
+import voice.bookOverview.bottomSheet.BottomSheetItem
+import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
+import voice.data.Book
 import voice.data.repo.BookRepository
 import javax.inject.Inject
 
 @BookOverviewScope
+@ContributesMultibinding(BookOverviewScope::class)
 class EditBookTitleViewModel
 @Inject
 constructor(
   private val repo: BookRepository,
-  private val stateHolder: BottomSheetSelectionStateHolder,
-) {
+) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 
   private val _state = mutableStateOf<EditBookTitleState?>(null)
   internal val state: State<EditBookTitleState?> get() = _state
 
-  internal fun onEditBookTitleClick() {
-    val id = stateHolder.selectedBook ?: return
+  override suspend fun items(bookId: Book.Id): List<BottomSheetItem> {
+    return listOf(BottomSheetItem.Title)
+  }
+
+  override fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+    if (item != BottomSheetItem.Title) return
     scope.launch {
-      val book = repo.get(id) ?: return@launch
+      val book = repo.get(bookId) ?: return@launch
       _state.value = EditBookTitleState(
         title = book.content.name,
-        bookId = id,
+        bookId = bookId,
       )
     }
   }
