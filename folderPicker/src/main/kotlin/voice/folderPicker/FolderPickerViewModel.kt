@@ -1,6 +1,6 @@
 package voice.folderPicker
 
-import android.content.Context
+import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
@@ -25,7 +25,7 @@ annotation class ExplanationCardSeen
 
 class FolderPickerViewModel
 @Inject constructor(
-  private val context: Context,
+  private val context: Application,
   @AudiobookFolders
   private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   @ExplanationCardSeen
