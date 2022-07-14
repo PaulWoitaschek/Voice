@@ -8,6 +8,8 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+// declared in the build.gradle.file
+@Suppress("unused")
 class ComposePlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
