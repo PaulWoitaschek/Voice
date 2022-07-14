@@ -13,10 +13,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -66,6 +69,17 @@ fun BookOverviewScreen(
   val scope = rememberCoroutineScope()
 
   val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+  val selectedBook: MutableState<Book.Id?> = rememberSaveable { mutableStateOf(null) }
+
+  LaunchedEffect(bottomSheetState.isVisible) {
+    val book = selectedBook.value ?: return@LaunchedEffect
+
+    scope.launch {
+      bottomSheetViewModel.bookSelected(book)
+    }
+  }
+
   ModalBottomSheetLayout(
     sheetState = bottomSheetState,
     sheetContent = {
@@ -87,7 +101,7 @@ fun BookOverviewScreen(
       onBookClick = navigator::toBook,
       onBookLongClick = { bookId ->
         scope.launch {
-          bottomSheetViewModel.bookSelected(bookId)
+          selectedBook.value = bookId
           bottomSheetState.show()
         }
       },
