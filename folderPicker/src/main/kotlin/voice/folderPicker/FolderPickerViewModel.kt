@@ -68,7 +68,7 @@ class FolderPickerViewModel
     context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
     scope.launch {
       audiobookFolders.updateData {
-        it + uri
+        (it + uri).distinct()
       }
     }
   }
