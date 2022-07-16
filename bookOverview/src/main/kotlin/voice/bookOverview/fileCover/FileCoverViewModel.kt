@@ -20,7 +20,7 @@ constructor(
     return listOf(BottomSheetItem.FileCover)
   }
 
-  override fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
     if (item == BottomSheetItem.FileCover) {
       navigator.onFileCoverClick(bookId)
     }

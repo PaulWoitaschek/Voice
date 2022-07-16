@@ -33,15 +33,13 @@ constructor(
     return listOf(BottomSheetItem.Title)
   }
 
-  override fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
     if (item != BottomSheetItem.Title) return
-    scope.launch {
-      val book = repo.get(bookId) ?: return@launch
-      _state.value = EditBookTitleState(
-        title = book.content.name,
-        bookId = bookId,
-      )
-    }
+    val book = repo.get(bookId) ?: return
+    _state.value = EditBookTitleState(
+      title = book.content.name,
+      bookId = bookId,
+    )
   }
 
   internal fun onDismissEditTitle() {
