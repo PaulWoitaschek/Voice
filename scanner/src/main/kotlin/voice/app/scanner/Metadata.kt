@@ -7,9 +7,9 @@ import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class MetaDataScanResult(
-  val streams: List<MetaDataStream>,
-  val chapters: List<MetaDataChapter>,
-  val format: MetaDataFormat?
+  val streams: List<MetaDataStream> = emptyList(),
+  val chapters: List<MetaDataChapter> = emptyList(),
+  val format: MetaDataFormat? = null,
 )
 
 enum class TagType {
