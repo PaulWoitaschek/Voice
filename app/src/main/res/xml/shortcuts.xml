@@ -1,13 +1,13 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   tools:targetApi="n_mr1">
-    <shortcut
-      android:icon="@mipmap/ic_shortcut_play"
-      android:shortcutId="playCurrent"
-      android:shortcutShortLabel="@string/play_current">
-        <intent
-          android:action="playCurrent"
-          android:targetClass="voice.audiobook.features.MainActivity"
-          android:targetPackage="voice.audiobook" />
-    </shortcut>
+  <shortcut
+    android:icon="@mipmap/ic_shortcut_play"
+    android:shortcutId="playCurrent"
+    android:shortcutShortLabel="@string/play_current">
+    <intent
+      android:action="playCurrent"
+      android:targetClass="voice.app.features.MainActivity"
+      android:targetPackage="de.ph1b.audiobook" />
+  </shortcut>
 </shortcuts>
