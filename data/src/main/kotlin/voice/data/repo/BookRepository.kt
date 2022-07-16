@@ -6,6 +6,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.data.Book
 import voice.data.BookContent
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +36,7 @@ class BookRepository
     return contentRepo.flow()
       .map { contents ->
         contents.filter { it.isActive }
-          .map { content ->
+          .mapNotNull { content ->
             content.book()
           }
       }
@@ -44,7 +45,7 @@ class BookRepository
   suspend fun all(): List<Book> {
     return contentRepo.all()
       .filter { it.isActive }
-      .map { it.book() }
+      .mapNotNull { it.book() }
   }
 
   fun flow(id: Book.Id): Flow<Book?> {
@@ -62,12 +63,17 @@ class BookRepository
     contentRepo.put(updated)
   }
 
-  private suspend fun BookContent.book(): Book {
+  private suspend fun BookContent.book(): Book? {
     warmUp()
     return Book(
       content = this,
       chapters = chapters.map { chapterId ->
-        chapterRepo.get(chapterId)!!
+        val chapter = chapterRepo.get(chapterId)
+        if (chapter == null) {
+          Logger.e("Missing chapter with id=$chapterId for $this")
+          return null
+        }
+        chapter
       }
     )
   }
