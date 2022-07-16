@@ -26,6 +26,9 @@
   <string name="download_book_cover">Cover (Internet)</string>
   <string name="pick_book_cover">Cover (Lokal)</string>
   <string name="edit_book_title">Buch bearbeiten</string>
+  <string name="mark_as_completed">Als \"Zu Ende\" markieren</string>
+  <string name="mark_as_current">Als \"Aktuelles\" markieren</string>
+  <string name="mark_as_not_started">Als \"Neu\" markieren</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Hörbuch Ordner</string>

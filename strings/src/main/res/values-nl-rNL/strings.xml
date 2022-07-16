@@ -26,6 +26,9 @@
   <string name="download_book_cover">Omslag ophalen van internet</string>
   <string name="pick_book_cover">Omslag kiezen van bestandssysteem</string>
   <string name="edit_book_title">Boek bewerken</string>
+  <string name="mark_as_completed">Markeren als afgerond</string>
+  <string name="mark_as_current">Markeren als huidig boek</string>
+  <string name="mark_as_not_started">Markeren als nog niet aan begonnen</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Luisterboekmappen</string>
