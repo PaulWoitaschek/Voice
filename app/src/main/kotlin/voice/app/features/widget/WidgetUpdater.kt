@@ -149,7 +149,7 @@ class WidgetUpdater @Inject constructor(
     )
 
     val coverFile = book.content.cover
-    if (coverFile != null && coverSize >= 0) {
+    if (coverFile != null && coverSize > 0) {
       val bitmap = context.imageLoader
         .execute(
           ImageRequest.Builder(context)
