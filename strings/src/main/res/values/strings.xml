@@ -104,4 +104,9 @@
   <string name="migration_delete_dialog_content">Once you delete the old positions you won\'t be able to recover your old playback positions.</string>
   <string name="migration_delete_dialog_action_delete">Delete</string>
   <string name="migration_delete_dialog_action_keep">Keep</string>
+
+  <string name="delete_book_bottom_sheet_title">Delete Book</string>
+  <string name="delete_book_dialog_title">Delete Book</string>
+  <string name="delete_book_dialog_deletion_confirmation">Delete my files</string>
+  <string name="delete_book_dialog_content">This will delete the files on your device.</string>
 </resources>

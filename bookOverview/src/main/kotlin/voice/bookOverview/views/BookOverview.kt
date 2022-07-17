@@ -26,15 +26,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.bookOverview.R
+import voice.bookOverview.deleteBook.DeleteBookDialog
 import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.common.compose.VoiceTheme
-import voice.common.compose.viewModel
 import voice.common.rootComponentAs
 import voice.data.Book
 import java.util.UUID
@@ -55,6 +56,9 @@ fun BookOverviewScreen(
   }
   val bottomSheetViewModel = viewModel {
     bookComponent.bottomSheetViewModel
+  }
+  val deleteBookViewModel = viewModel {
+    bookComponent.deleteBookViewModel
   }
   LaunchedEffect(Unit) {
     bookOverviewViewModel.attach()
@@ -100,6 +104,15 @@ fun BookOverviewScreen(
       },
       onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
     )
+    val deleteBookViewState = deleteBookViewModel.state.value
+    if (deleteBookViewState != null) {
+      DeleteBookDialog(
+        viewState = deleteBookViewState,
+        onDismiss = deleteBookViewModel::onDismiss,
+        onConfirmDeletion = deleteBookViewModel::onConfirmDeletion,
+        onDeleteCheckBoxChecked = deleteBookViewModel::onDeleteCheckBoxChecked
+      )
+    }
     val editBookTitleState = editBookTitleViewModel.state.value
     if (editBookTitleState != null) {
       EditBookTitleDialog(
