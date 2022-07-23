@@ -26,6 +26,9 @@
   <string name="download_book_cover">Omslag från internet</string>
   <string name="pick_book_cover">Omslag från filsystem</string>
   <string name="edit_book_title">Redigera bok</string>
+  <string name="mark_as_completed">Markera som avslutad</string>
+  <string name="mark_as_current">Markera som aktuell</string>
+  <string name="mark_as_not_started">Markera som inte påbörjad ännu</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Ljudboksmappar</string>
