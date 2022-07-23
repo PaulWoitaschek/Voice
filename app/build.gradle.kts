@@ -25,6 +25,14 @@ play {
   track.value("Open Beta")
 }
 
+kapt {
+  arguments {
+    arg("dagger.fastInit", "enabled")
+    arg("dagger.fullBindingGraphValidation", "ERROR")
+  }
+}
+
+
 android {
 
   namespace = "voice.app"
