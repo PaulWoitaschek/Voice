@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
-import voice.data.Book
+import voice.common.BookId
 import voice.data.repo.BookRepository
 import javax.inject.Inject
 
@@ -29,11 +29,11 @@ constructor(
   private val _state = mutableStateOf<EditBookTitleState?>(null)
   internal val state: State<EditBookTitleState?> get() = _state
 
-  override suspend fun items(bookId: Book.Id): List<BottomSheetItem> {
+  override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     return listOf(BottomSheetItem.Title)
   }
 
-  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     if (item != BottomSheetItem.Title) return
     val book = repo.get(bookId) ?: return
     _state.value = EditBookTitleState(

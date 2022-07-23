@@ -16,8 +16,8 @@ import voice.app.databinding.ImagePickerBinding
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.popOrBack
 import voice.app.scanner.CoverSaver
+import voice.common.BookId
 import voice.common.conductor.ViewBindingController
-import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.data.repo.BookRepository
@@ -29,7 +29,7 @@ private const val SI_URL = "savedUrl"
 
 class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImagePickerBinding>(bundle, ImagePickerBinding::inflate) {
 
-  constructor(bookId: Book.Id) : this(
+  constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }

@@ -1,6 +1,7 @@
 package voice.app.scanner
 
 import androidx.documentfile.provider.DocumentFile
+import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
@@ -19,7 +20,7 @@ class MediaScanner
 
   suspend fun scan(folders: List<DocumentFile>) {
     val allFiles = folders.flatMap { it.listFiles().toList() }
-    contentRepo.setAllInactiveExcept(allFiles.map { Book.Id(it.uri) })
+    contentRepo.setAllInactiveExcept(allFiles.map { BookId(it.uri) })
     allFiles.forEach { scan(it) }
   }
 
@@ -27,7 +28,7 @@ class MediaScanner
     val chapters = file.parseChapters().sorted()
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
-    val id = Book.Id(file.uri)
+    val id = BookId(file.uri)
     val content = contentRepo.getOrPut(id) {
       val analyzed = mediaAnalyzer.analyze(chapterIds.first().toUri())
       val name = analyzed?.bookName

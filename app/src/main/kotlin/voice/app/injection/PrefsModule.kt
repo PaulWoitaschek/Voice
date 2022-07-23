@@ -23,10 +23,10 @@ import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridMode
 import voice.common.AppScope
+import voice.common.BookId
 import voice.common.pref.AudiobookFolders
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
-import voice.data.Book
 import voice.folderPicker.ExplanationCardSeen
 import javax.inject.Named
 import javax.inject.Singleton
@@ -117,9 +117,9 @@ object PrefsModule {
   @Provides
   @Singleton
   @CurrentBook
-  fun currentBook(factory: SerializableDataStoreFactory): DataStore<Book.Id?> {
+  fun currentBook(factory: SerializableDataStoreFactory): DataStore<BookId?> {
     return factory.create(
-      serializer = Book.Id.serializer().nullable,
+      serializer = BookId.serializer().nullable,
       fileName = "currentBook",
       defaultValue = null
     )

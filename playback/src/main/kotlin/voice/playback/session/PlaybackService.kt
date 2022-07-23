@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -55,7 +56,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
   @field:[Inject CurrentBook]
-  lateinit var currentBookIdPref: DataStore<Book.Id?>
+  lateinit var currentBookIdPref: DataStore<BookId?>
 
   @Inject
   lateinit var player: MediaPlayer

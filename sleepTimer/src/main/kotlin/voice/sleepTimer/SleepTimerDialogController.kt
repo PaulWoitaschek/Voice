@@ -10,9 +10,9 @@ import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import voice.common.AppScope
+import voice.common.BookId
 import voice.common.conductor.DialogController
 import voice.common.rootComponentAs
-import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.sleepTimer.databinding.DialogSleepBinding
@@ -22,7 +22,7 @@ private const val NI_BOOK_ID = "ni#bookId"
 
 class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
-  constructor(bookId: Book.Id) : this(
+  constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }

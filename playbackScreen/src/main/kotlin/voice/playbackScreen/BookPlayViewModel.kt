@@ -7,8 +7,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import voice.common.BookId
+import voice.common.navigation.Navigator
+import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.data.durationMs
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
@@ -26,8 +28,8 @@ class BookPlayViewModel
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
   @CurrentBook
-  private val currentBookId: DataStore<Book.Id?>,
-  private val navigator: BookPlayNavigator,
+  private val currentBookId: DataStore<BookId?>,
+  private val navigator: Navigator,
   private val bookmarkRepo: BookmarkRepo,
 ) {
 
@@ -36,7 +38,7 @@ class BookPlayViewModel
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
-  lateinit var bookId: Book.Id
+  lateinit var bookId: BookId
 
   fun viewState(): Flow<BookPlayViewState> {
     scope.launch {
@@ -85,15 +87,15 @@ class BookPlayViewModel
   }
 
   fun onCurrentChapterClicked() {
-    navigator.toSelectChapters(bookId)
+    navigator.toScreen(Screen.SelectChapterDialog(bookId))
   }
 
   fun onPlaybackSpeedIconClicked() {
-    navigator.toChangePlaybackSpeed()
+    navigator.toScreen(Screen.PlaybackSpeedDialog)
   }
 
   fun onBookmarkClicked() {
-    navigator.toBookmarkDialog(bookId)
+    navigator.toScreen(Screen.BookmarkDialog(bookId))
   }
 
   fun onBookmarkLongClicked() {

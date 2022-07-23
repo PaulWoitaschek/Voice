@@ -6,8 +6,8 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.data.Chapter
 import voice.logging.core.Logger
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
@@ -27,7 +27,7 @@ class MediaSessionCallback
 @Inject constructor(
   private val bookUriConverter: BookUriConverter,
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
   private val bookSearchHandler: BookSearchHandler,
   private val autoConnection: AndroidAutoConnectedReceiver,
   private val bookSearchParser: BookSearchParser,

@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import voice.data.Book
+import voice.common.BookId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import java.io.File
@@ -21,7 +21,7 @@ class CoverSaver
   private val context: Context,
 ) {
 
-  suspend fun save(bookId: Book.Id, cover: Bitmap) {
+  suspend fun save(bookId: BookId, cover: Bitmap) {
     val newCover = newBookCoverFile()
 
     withContext(Dispatchers.IO) {
@@ -65,7 +65,7 @@ class CoverSaver
     return File(coversFolder, "${UUID.randomUUID()}.png")
   }
 
-  suspend fun setBookCover(cover: File, bookId: Book.Id) {
+  suspend fun setBookCover(cover: File, bookId: BookId) {
     val oldCover = repo.get(bookId)?.content?.cover
     if (oldCover != null) {
       withContext(Dispatchers.IO) {

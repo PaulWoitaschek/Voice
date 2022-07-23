@@ -1,10 +1,10 @@
 package voice.bookOverview.editTitle
 
-import voice.data.Book
+import voice.common.BookId
 
 internal data class EditBookTitleState(
   val title: String,
-  val bookId: Book.Id,
+  val bookId: BookId,
 ) {
 
   val confirmButtonEnabled: Boolean = title.trim().isNotEmpty()

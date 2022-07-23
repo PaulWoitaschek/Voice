@@ -18,7 +18,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
-import voice.data.Book
+import voice.common.BookId
 import voice.data.Chapter
 import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
@@ -56,7 +56,7 @@ class MediaScannerTest {
 
     assertBookContents(
       BookContentView(
-        id = Book.Id(book1.toUri()),
+        id = BookId(book1.toUri()),
         chapters = book1Chapters.drop(1)
       )
     )
@@ -67,7 +67,7 @@ class MediaScannerTest {
     val audiobookFolder = folder("audiobooks")
 
     val book1 = File(audiobookFolder, "book1")
-    val book1Id = Book.Id(book1.toUri())
+    val book1Id = BookId(book1.toUri())
     val book1Chapters = listOf(
       file(book1, "1.mp3"),
       file(book1, "2.mp3"),
@@ -76,7 +76,7 @@ class MediaScannerTest {
 
     scan(audiobookFolder)
 
-    val contentWithPositionAtLastChapter = bookContentRepo.get(Book.Id(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
+    val contentWithPositionAtLastChapter = bookContentRepo.get(BookId(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
     bookContentRepo.put(contentWithPositionAtLastChapter)
 
     book1Chapters.forEach { it.toUri().toFile().delete() }
@@ -111,9 +111,9 @@ class MediaScannerTest {
     scan(audiobookFolder1, audiobookFolder2)
 
     assertBookContents(
-      BookContentView(topFileBook.let(Book::Id), chapters = listOf(topFileBook)),
-      BookContentView(book1.toUri().let(Book::Id), chapters = book1Chapters),
-      BookContentView(book2.toUri().let(Book::Id), chapters = book2Chapters),
+      BookContentView(topFileBook.let(::BookId), chapters = listOf(topFileBook)),
+      BookContentView(book1.toUri().let(::BookId), chapters = book1Chapters),
+      BookContentView(book2.toUri().let(::BookId), chapters = book2Chapters),
     )
   }
 
@@ -185,7 +185,7 @@ class MediaScannerTest {
   }
 
   data class BookContentView(
-    val id: Book.Id,
+    val id: BookId,
     val chapters: List<Uri>
   )
 }

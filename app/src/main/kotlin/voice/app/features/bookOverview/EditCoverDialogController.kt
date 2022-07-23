@@ -21,8 +21,8 @@ import voice.app.injection.appComponent
 import voice.app.misc.conductor.context
 import voice.app.scanner.CoverSaver
 import voice.app.uitools.CropTransformation
+import voice.common.BookId
 import voice.common.conductor.DialogController
-import voice.data.Book
 import voice.data.repo.BookRepository
 import javax.inject.Inject
 
@@ -87,6 +87,6 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   @Parcelize
   data class Arguments(
     val coverUri: Uri,
-    val bookId: Book.Id
+    val bookId: BookId
   ) : Parcelable
 }

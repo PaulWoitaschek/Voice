@@ -13,12 +13,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.launch
 import voice.common.AppScope
+import voice.common.BookId
 import voice.common.PlayPauseDrawableSetter
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
 import voice.common.formatTime
 import voice.common.rootComponentAs
-import voice.data.Book
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
@@ -32,12 +32,12 @@ private const val NI_BOOK_ID = "niBookId"
 
 class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
 
-  constructor(bookId: Book.Id) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
+  constructor(bookId: BookId) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
   @Inject
   lateinit var viewModel: BookPlayViewModel
 
-  private val bookId: Book.Id = bundle.getBookId(NI_BOOK_ID)!!
+  private val bookId: BookId = bundle.getBookId(NI_BOOK_ID)!!
   private var coverLoaded = false
 
   private var sleepTimerItem: MenuItem by clearAfterDestroyView()

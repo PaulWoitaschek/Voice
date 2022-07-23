@@ -13,8 +13,8 @@ import voice.app.R
 import voice.app.databinding.SelectChapterRowBinding
 import voice.app.injection.appComponent
 import voice.app.misc.groupie.BindingItem
+import voice.common.BookId
 import voice.common.conductor.DialogController
-import voice.data.Book
 import voice.data.ChapterMark
 import voice.data.getBookId
 import voice.data.putBookId
@@ -27,7 +27,7 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   @Inject
   lateinit var viewModel: SelectChapterViewModel
 
-  constructor(bookId: Book.Id) : this(
+  constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }

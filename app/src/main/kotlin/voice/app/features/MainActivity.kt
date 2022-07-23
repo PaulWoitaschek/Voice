@@ -6,20 +6,26 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
+import androidx.lifecycle.lifecycleScope
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
+import voice.app.features.audio.PlaybackSpeedDialogController
+import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
+import voice.app.features.bookmarks.BookmarkController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
-import voice.app.navigation.Navigator
+import voice.common.BookId
+import voice.common.navigation.Navigator
+import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.playback.PlayerController
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
@@ -29,7 +35,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
   @field:[Inject CurrentBook]
-  lateinit var currentBook: DataStore<Book.Id?>
+  lateinit var currentBook: DataStore<BookId?>
 
   @Inject
   lateinit var bookSearchParser: BookSearchParser
@@ -80,7 +86,21 @@ class MainActivity : AppCompatActivity() {
       }
     )
 
-    navigator.setRoutingComponents(this, router)
+    lifecycleScope.launch {
+      navigator.conductorCommands.collect { screen ->
+        when (screen) {
+          Screen.PlaybackSpeedDialog -> {
+            PlaybackSpeedDialogController().showDialog(router)
+          }
+          is Screen.BookmarkDialog -> {
+            router.pushController(BookmarkController(screen.bookId).asTransaction())
+          }
+          is Screen.SelectChapterDialog -> {
+            SelectChapterDialog(screen.bookId).showDialog(router)
+          }
+        }
+      }
+    }
 
     setupFromIntent(intent)
   }
@@ -102,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     // if we should enter a book set the backstack and return early
     intent.getStringExtra(NI_GO_TO_BOOK)
       ?.let {
-        val bookId = Book.Id(it)
+        val bookId = BookId(it)
         val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
@@ -130,16 +150,11 @@ class MainActivity : AppCompatActivity() {
     } else router.handleBack()
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    navigator.clear(this)
-  }
-
   companion object {
     private const val NI_GO_TO_BOOK = "niGotoBook"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(context: Context, bookId: Book.Id) = Intent(context, MainActivity::class.java).apply {
+    fun goToBookIntent(context: Context, bookId: BookId) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId.value)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }

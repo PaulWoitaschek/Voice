@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.data.Book
 import voice.data.BookContent
@@ -133,7 +134,7 @@ private fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = Book.Id(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )

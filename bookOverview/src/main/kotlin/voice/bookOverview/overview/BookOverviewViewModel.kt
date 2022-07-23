@@ -13,6 +13,7 @@ import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridCount
 import voice.bookOverview.GridMode
+import voice.common.BookId
 import voice.common.combine
 import voice.common.compose.ImmutableFile
 import voice.common.pref.CurrentBook
@@ -34,7 +35,7 @@ constructor(
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   @CurrentBook
-  private val currentBookDataStore: DataStore<Book.Id?>,
+  private val currentBookDataStore: DataStore<BookId?>,
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,

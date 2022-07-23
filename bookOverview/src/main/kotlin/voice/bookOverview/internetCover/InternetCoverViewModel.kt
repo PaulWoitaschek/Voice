@@ -5,7 +5,7 @@ import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.bookOverview.overview.BookOverviewNavigator
-import voice.data.Book
+import voice.common.BookId
 import javax.inject.Inject
 
 @BookOverviewScope
@@ -16,11 +16,11 @@ constructor(
   private val navigator: BookOverviewNavigator
 ) : BottomSheetItemViewModel {
 
-  override suspend fun items(bookId: Book.Id): List<BottomSheetItem> {
+  override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     return listOf(BottomSheetItem.InternetCover)
   }
 
-  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     if (item == BottomSheetItem.InternetCover) {
       navigator.onCoverFromInternetClick(bookId)
     }

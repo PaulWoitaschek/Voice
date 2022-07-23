@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
@@ -26,7 +27,7 @@ class BookSearchHandlerTest {
 
   private val repo = mockk<BookRepository>()
   private val player = mockk<PlayerController>(relaxUnitFun = true)
-  private val currentBookId = MemoryDataStore<Book.Id?>(null)
+  private val currentBookId = MemoryDataStore<BookId?>(null)
 
   private val anotherBook = book(listOf(chapter(), chapter()))
   private val bookToFind = book(listOf(chapter(), chapter()))
@@ -139,7 +140,7 @@ fun book(chapters: List<Chapter>): Book {
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = Book.Id(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )

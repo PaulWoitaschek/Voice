@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import com.bluelinelabs.conductor.Controller
 import voice.app.features.bookOverview.EditCoverDialogController
-import voice.data.Book
+import voice.common.BookId
 import javax.inject.Inject
 
 private const val REQUEST_CODE = 7
@@ -12,9 +12,9 @@ private const val REQUEST_CODE = 7
 class GalleryPicker
 @Inject constructor() {
 
-  private var pickForBookId: Book.Id? = null
+  private var pickForBookId: BookId? = null
 
-  fun pick(bookId: Book.Id, controller: Controller) {
+  fun pick(bookId: BookId, controller: Controller) {
     pickForBookId = bookId
     val intent = Intent(Intent.ACTION_PICK)
       .setType("image/*")

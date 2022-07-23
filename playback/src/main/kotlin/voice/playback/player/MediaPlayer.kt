@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -53,7 +54,7 @@ constructor(
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
 ) {
 
   private val scope = MainScope()

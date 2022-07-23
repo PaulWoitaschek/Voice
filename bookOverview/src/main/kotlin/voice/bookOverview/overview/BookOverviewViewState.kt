@@ -1,8 +1,8 @@
 package voice.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
+import voice.common.BookId
 import voice.common.compose.ImmutableFile
-import voice.data.Book
 
 sealed interface BookOverviewViewState {
 
@@ -37,7 +37,7 @@ sealed interface BookOverviewViewState {
       val author: String?,
       val cover: ImmutableFile?,
       val progress: Float,
-      val id: Book.Id,
+      val id: BookId,
       val remainingTime: String,
     )
 

@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import voice.common.ApplicationIdProvider
+import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.BookComparator
@@ -27,7 +28,7 @@ class MediaBrowserHelper
   private val bookUriConverter: BookUriConverter,
   private val repo: BookRepository,
   @CurrentBook
-  private val currentBookId: DataStore<Book.Id?>,
+  private val currentBookId: DataStore<BookId?>,
   private val context: Context,
   private val applicationIdProvider: ApplicationIdProvider
 ) {

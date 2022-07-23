@@ -4,8 +4,8 @@ import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
+import voice.common.BookId
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.di.PlaybackScope
 import voice.playback.session.ChangeNotifier
@@ -20,7 +20,7 @@ class NotifyOnAutoConnectionChange
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
   private val autoConnection: AndroidAutoConnectedReceiver
 ) {
 

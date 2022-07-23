@@ -35,9 +35,9 @@ import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewState
+import voice.common.BookId
 import voice.common.compose.VoiceTheme
 import voice.common.rootComponentAs
-import voice.data.Book
 import java.util.UUID
 
 @Composable
@@ -130,8 +130,8 @@ internal fun BookOverview(
   viewState: BookOverviewViewState,
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
-  onBookClick: (Book.Id) -> Unit,
-  onBookLongClick: (Book.Id) -> Unit,
+  onBookClick: (BookId) -> Unit,
+  onBookLongClick: (BookId) -> Unit,
   onBookFolderClick: () -> Unit,
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
@@ -232,7 +232,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       author = "Author",
       cover = null,
       progress = 0.8F,
-      id = Book.Id(UUID.randomUUID().toString()),
+      id = BookId(UUID.randomUUID().toString()),
       remainingTime = "01:04"
     )
   }

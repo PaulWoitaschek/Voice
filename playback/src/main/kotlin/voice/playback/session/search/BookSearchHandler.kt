@@ -4,6 +4,7 @@ import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import dagger.Reusable
 import kotlinx.coroutines.flow.first
+import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
@@ -20,7 +21,7 @@ class BookSearchHandler
   private val repo: BookRepository,
   private val player: PlayerController,
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
 ) {
 
   suspend fun handle(search: BookSearch) {

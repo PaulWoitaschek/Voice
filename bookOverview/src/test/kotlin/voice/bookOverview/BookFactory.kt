@@ -1,5 +1,6 @@
 package voice.bookOverview
 
+import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
@@ -24,7 +25,7 @@ fun book(
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = Book.Id(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )

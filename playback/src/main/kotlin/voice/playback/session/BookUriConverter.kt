@@ -1,9 +1,9 @@
 package voice.playback.session
 
 import android.net.Uri
+import voice.common.BookId
 import voice.data.Chapter
 import javax.inject.Inject
-import voice.data.Book.Id as BookId
 import voice.data.Chapter.Id as ChapterId
 
 private const val SCHEME = "voice"

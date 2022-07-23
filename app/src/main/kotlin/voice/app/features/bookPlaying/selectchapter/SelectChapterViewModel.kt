@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import voice.data.Book
+import voice.common.BookId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.PlayerController
@@ -22,7 +22,7 @@ class SelectChapterViewModel
   private val _viewEffects = MutableSharedFlow<SelectChapterViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<SelectChapterViewEffect> get() = _viewEffects
 
-  lateinit var bookId: Book.Id
+  lateinit var bookId: BookId
 
   fun viewState(): SelectChapterViewState {
     val book = runBlocking { bookRepository.get(bookId) }

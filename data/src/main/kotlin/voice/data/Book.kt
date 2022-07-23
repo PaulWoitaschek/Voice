@@ -1,24 +1,14 @@
 package voice.data
 
-import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
-import androidx.core.net.toUri
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import voice.common.BookId
 
 data class Book(
   val content: BookContent,
   val chapters: List<Chapter>,
 ) {
 
-  val id: Id = content.id
+  val id: BookId = content.id
 
   init {
     check(chapters.size == content.chapters.size) {
@@ -44,32 +34,9 @@ data class Book(
     return copy(content = update(content))
   }
 
-  @Serializable(with = BookIdSerializer::class)
-  @Parcelize
-  data class Id(val value: String) : Parcelable {
-
-    constructor(uri: Uri) : this(uri.toString())
-
-    fun toUri(): Uri {
-      return value.toUri()
-    }
-  }
-
   companion object {
     const val SPEED_MAX = 2.5F
     const val SPEED_MIN = 0.5F
-  }
-}
-
-object BookIdSerializer : KSerializer<Book.Id> {
-
-  override val descriptor: SerialDescriptor
-    get() = PrimitiveSerialDescriptor("bookId", PrimitiveKind.STRING)
-
-  override fun deserialize(decoder: Decoder): Book.Id = Book.Id(decoder.decodeString())
-
-  override fun serialize(encoder: Encoder, value: Book.Id) {
-    encoder.encodeString(value.value)
   }
 }
 
@@ -84,10 +51,10 @@ private fun Chapter.nextMark(positionInChapterMs: Long): ChapterMark? {
   }
 }
 
-fun Bundle.putBookId(key: String, id: Book.Id) {
+fun Bundle.putBookId(key: String, id: BookId) {
   putString(key, id.value)
 }
 
-fun Bundle.getBookId(key: String): Book.Id? {
-  return getString(key)?.let(Book::Id)
+fun Bundle.getBookId(key: String): BookId? {
+  return getString(key)?.let(::BookId)
 }

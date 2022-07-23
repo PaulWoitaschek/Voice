@@ -1,7 +1,9 @@
 plugins {
   id("voice.library")
   id("voice.compose")
+  id("kotlin-parcelize")
   alias(libs.plugins.anvil)
+  alias(libs.plugins.kotlin.serialization)
 }
 
 anvil {
@@ -17,6 +19,7 @@ dependencies {
   api(libs.conductor.core)
   implementation(libs.androidxCore)
   implementation(libs.viewBinding)
+  implementation(libs.serialization.json)
 
   testImplementation(libs.truth)
   testImplementation(libs.junit)

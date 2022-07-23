@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import voice.data.Book
+import voice.common.BookId
 import voice.data.BookContent
 import voice.data.repo.internals.dao.BookContentDao
 import javax.inject.Inject
@@ -44,19 +44,19 @@ class BookContentRepo
     return cache.value!!
   }
 
-  fun flow(id: Book.Id): Flow<BookContent?> {
+  fun flow(id: BookId): Flow<BookContent?> {
     return cache.onStart { fillCache() }
       .filterNotNull()
       .map { contents -> contents.find { it.id == id } }
       .distinctUntilChanged()
   }
 
-  suspend fun get(id: Book.Id): BookContent? {
+  suspend fun get(id: BookId): BookContent? {
     fillCache()
     return cache.value!!.find { it.id == id }
   }
 
-  suspend fun setAllInactiveExcept(ids: List<Book.Id>) {
+  suspend fun setAllInactiveExcept(ids: List<BookId>) {
     fillCache()
 
     cache
@@ -79,7 +79,7 @@ class BookContentRepo
     }
   }
 
-  suspend inline fun getOrPut(id: Book.Id, defaultValue: () -> BookContent): BookContent {
+  suspend inline fun getOrPut(id: BookId, defaultValue: () -> BookContent): BookContent {
     return get(id) ?: defaultValue().also { put(it) }
   }
 }

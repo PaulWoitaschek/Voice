@@ -1,8 +1,8 @@
 package voice.playback.notification
 
 import android.content.Intent
-import voice.data.Book
+import voice.common.BookId
 
 interface ToBookIntentProvider {
-  fun goToBookIntent(id: Book.Id): Intent
+  fun goToBookIntent(id: BookId): Intent
 }

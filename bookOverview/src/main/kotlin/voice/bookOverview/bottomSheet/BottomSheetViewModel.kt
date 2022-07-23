@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.di.BookOverviewScope
-import voice.data.Book
+import voice.common.BookId
 import javax.inject.Inject
 
 @BookOverviewScope
@@ -18,9 +18,9 @@ class BottomSheetViewModel
 
   private val _state: MutableState<EditBookBottomSheetState> = mutableStateOf(EditBookBottomSheetState(emptyList()))
   internal val state: State<EditBookBottomSheetState> get() = _state
-  private var bookId: Book.Id? = null
+  private var bookId: BookId? = null
 
-  internal fun bookSelected(bookId: Book.Id) {
+  internal fun bookSelected(bookId: BookId) {
     this.bookId = bookId
     viewModelScope.launch {
       val items = viewModels.flatMap { it.items(bookId) }

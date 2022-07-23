@@ -5,7 +5,7 @@ import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import voice.data.Book
+import voice.common.BookId
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.MarkData
@@ -77,10 +77,10 @@ class Converters {
   }
 
   @TypeConverter
-  fun toBookId(value: String): Book.Id = Book.Id(value)
+  fun toBookId(value: String): BookId = BookId(value)
 
   @TypeConverter
-  fun fromBookId(id: Book.Id): String = id.value
+  fun fromBookId(id: BookId): String = id.value
 
   @TypeConverter
   fun toChapterId(value: String): Chapter.Id = Chapter.Id(value)

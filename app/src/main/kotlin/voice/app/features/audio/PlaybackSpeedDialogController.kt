@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import voice.app.R
 import voice.app.databinding.DialogAmountChooserBinding
 import voice.app.injection.appComponent
+import voice.common.BookId
 import voice.common.conductor.DialogController
 import voice.common.pref.CurrentBook
 import voice.data.Book
@@ -28,7 +29,7 @@ class PlaybackSpeedDialogController : DialogController() {
   lateinit var repo: BookRepository
 
   @field:[Inject CurrentBook]
-  lateinit var currentBook: DataStore<Book.Id?>
+  lateinit var currentBook: DataStore<BookId?>
 
   @Inject
   lateinit var playerController: PlayerController

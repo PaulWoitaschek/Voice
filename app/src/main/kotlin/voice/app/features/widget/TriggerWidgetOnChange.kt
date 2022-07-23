@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 class TriggerWidgetOnChange
 @Inject constructor(
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
   private val repo: BookRepository,
   private val playStateManager: PlayStateManager,
   private val widgetUpdater: WidgetUpdater
@@ -37,7 +38,7 @@ class TriggerWidgetOnChange
     return merge(currentBookChanged(), playStateChanged(), bookIdChanged())
   }
 
-  private fun bookIdChanged(): Flow<Book.Id?> {
+  private fun bookIdChanged(): Flow<BookId?> {
     return currentBook.data.distinctUntilChanged()
   }
 

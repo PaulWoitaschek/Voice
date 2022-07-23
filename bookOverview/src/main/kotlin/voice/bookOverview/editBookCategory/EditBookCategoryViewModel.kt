@@ -7,7 +7,7 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.category
-import voice.data.Book
+import voice.common.BookId
 import voice.data.repo.BookRepository
 import java.time.Instant
 import javax.inject.Inject
@@ -23,7 +23,7 @@ constructor(
   private val repo: BookRepository,
 ) : ViewModel(), BottomSheetItemViewModel {
 
-  override suspend fun items(bookId: Book.Id): List<BottomSheetItem> {
+  override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     val book = repo.get(bookId) ?: return emptyList()
     return when (book.category) {
       BookOverviewCategory.CURRENT -> listOf(
@@ -41,7 +41,7 @@ constructor(
     }
   }
 
-  override suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem) {
+  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     val book = repo.get(bookId) ?: return
 
     val (currentChapter, positionInChapter) = when (item) {

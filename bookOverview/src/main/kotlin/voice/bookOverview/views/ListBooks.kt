@@ -26,18 +26,18 @@ import coil.compose.AsyncImage
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewViewState
+import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.compose.LongClickableCard
 import voice.common.compose.plus
 import voice.common.recomposeHighlighter
-import voice.data.Book
 
 @Composable
 internal fun ListBooks(
   contentPadding: PaddingValues,
   books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
-  onBookClick: (Book.Id) -> Unit,
-  onBookLongClick: (Book.Id) -> Unit,
+  onBookClick: (BookId) -> Unit,
+  onBookLongClick: (BookId) -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -76,8 +76,8 @@ internal fun ListBooks(
 private fun ListBookRow(
   modifier: Modifier = Modifier,
   book: BookOverviewViewState.Content.BookViewState,
-  onBookClick: (Book.Id) -> Unit,
-  onBookLongClick: (Book.Id) -> Unit,
+  onBookClick: (BookId) -> Unit,
+  onBookLongClick: (BookId) -> Unit,
 ) {
   LongClickableCard(
     onClick = {

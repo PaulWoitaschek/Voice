@@ -3,13 +3,14 @@ package voice.data
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import voice.common.BookId
 import java.io.File
 import java.time.Instant
 
 @Entity(tableName = "content2")
 data class BookContent(
   @PrimaryKey
-  val id: Book.Id,
+  val id: BookId,
   val playbackSpeed: Float,
   val skipSilence: Boolean,
   val isActive: Boolean,

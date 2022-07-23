@@ -26,17 +26,17 @@ import coil.compose.AsyncImage
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewViewState
+import voice.common.BookId
 import voice.common.compose.LongClickableCard
 import voice.common.compose.plus
-import voice.data.Book
 import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBooks(
   books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
   contentPadding: PaddingValues,
-  onBookClick: (Book.Id) -> Unit,
-  onBookLongClick: (Book.Id) -> Unit
+  onBookClick: (BookId) -> Unit,
+  onBookLongClick: (BookId) -> Unit
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
@@ -75,8 +75,8 @@ internal fun GridBooks(
 @Composable
 private fun GridBook(
   book: BookOverviewViewState.Content.BookViewState,
-  onBookClick: (Book.Id) -> Unit,
-  onBookLongClick: (Book.Id) -> Unit,
+  onBookClick: (BookId) -> Unit,
+  onBookLongClick: (BookId) -> Unit,
 ) {
   LongClickableCard(
     onClick = {

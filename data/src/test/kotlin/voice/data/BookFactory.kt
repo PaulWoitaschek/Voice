@@ -1,5 +1,6 @@
 package voice.data
 
+import voice.common.BookId
 import java.time.Instant
 import java.util.UUID
 
@@ -24,7 +25,7 @@ fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = Book.Id(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString())
     ),
     chapters = chapters,
   )

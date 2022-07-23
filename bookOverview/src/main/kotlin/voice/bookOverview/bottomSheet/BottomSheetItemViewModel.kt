@@ -1,9 +1,9 @@
 package voice.bookOverview.bottomSheet
 
-import voice.data.Book
+import voice.common.BookId
 
 interface BottomSheetItemViewModel {
 
-  suspend fun items(bookId: Book.Id): List<BottomSheetItem>
-  suspend fun onItemClicked(bookId: Book.Id, item: BottomSheetItem)
+  suspend fun items(bookId: BookId): List<BottomSheetItem>
+  suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem)
 }

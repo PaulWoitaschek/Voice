@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
+import voice.common.BookId
 import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBook
 import voice.data.Book
@@ -36,7 +37,7 @@ class WidgetUpdater @Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
   private val playStateManager: PlayStateManager,
 ) {
 

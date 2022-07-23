@@ -3,12 +3,13 @@ package voice.data
 import android.os.Bundle
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import voice.common.BookId
 import java.time.Instant
 import java.util.UUID
 
 @Entity(tableName = "bookmark2")
 data class Bookmark(
-  val bookId: Book.Id,
+  val bookId: BookId,
   val chapterId: Chapter.Id,
   val title: String?,
   val time: Long,

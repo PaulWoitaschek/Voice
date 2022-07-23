@@ -3,8 +3,8 @@ package voice.app.features.bookmarks
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.launch
 import voice.app.mvp.Presenter
+import voice.common.BookId
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.repo.BookRepository
@@ -16,14 +16,14 @@ import javax.inject.Inject
 class BookmarkPresenter
 @Inject constructor(
   @CurrentBook
-  private val currentBook: DataStore<Book.Id?>,
+  private val currentBook: DataStore<BookId?>,
   private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController
 ) : Presenter<BookmarkView>() {
 
-  lateinit var bookId: Book.Id
+  lateinit var bookId: BookId
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
 

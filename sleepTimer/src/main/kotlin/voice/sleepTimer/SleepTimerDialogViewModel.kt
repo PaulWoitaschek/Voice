@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.pref.PrefKeys
-import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class SleepTimerDialogViewModel
     selectedMinutes.update { 0 }
   }
 
-  fun onConfirmButtonClicked(bookId: Book.Id) {
+  fun onConfirmButtonClicked(bookId: BookId) {
     check(selectedMinutes.value > 0)
     sleepTimePref.value = selectedMinutes.value
     scope.launch {

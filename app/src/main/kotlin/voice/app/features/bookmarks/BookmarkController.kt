@@ -18,7 +18,7 @@ import voice.app.features.bookmarks.list.BookmarkClickListener
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.context
 import voice.app.mvp.MvpController
-import voice.data.Book
+import voice.common.BookId
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.getBookId
@@ -36,7 +36,7 @@ class BookmarkController(args: Bundle) :
   AddBookmarkDialog.Callback,
   EditBookmarkDialog.Callback {
 
-  constructor(bookId: Book.Id) : this(
+  constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
     }

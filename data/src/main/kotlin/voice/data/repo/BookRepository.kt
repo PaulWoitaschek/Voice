@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.logging.core.Logger
@@ -48,16 +49,16 @@ class BookRepository
       .mapNotNull { it.book() }
   }
 
-  fun flow(id: Book.Id): Flow<Book?> {
+  fun flow(id: BookId): Flow<Book?> {
     return contentRepo.flow(id)
       .map { it?.book() }
   }
 
-  suspend fun get(id: Book.Id): Book? {
+  suspend fun get(id: BookId): Book? {
     return contentRepo.get(id)?.book()
   }
 
-  suspend fun updateBook(id: Book.Id, update: (BookContent) -> BookContent) {
+  suspend fun updateBook(id: BookId, update: (BookContent) -> BookContent) {
     val content = contentRepo.get(id) ?: return
     val updated = update(content)
     contentRepo.put(updated)

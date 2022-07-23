@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -17,10 +18,11 @@ import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
 import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.views.BookOverviewScreen
+import voice.common.BookId
 import voice.common.compose.ComposeController
+import voice.common.navigation.Navigator
 import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
-import voice.data.Book
 import voice.folderPicker.FolderPicker
 import voice.logging.core.Logger
 import voice.migration.views.Migration
@@ -35,10 +37,13 @@ class AppController : ComposeController() {
   }
 
   @field:[Inject CurrentBook]
-  lateinit var currentBookIdPref: DataStore<Book.Id?>
+  lateinit var currentBookIdPref: DataStore<BookId?>
 
   @Inject
   lateinit var galleryPicker: GalleryPicker
+
+  @Inject
+  lateinit var navigator: Navigator
 
   @Composable
   override fun Content() {
@@ -59,21 +64,21 @@ class AppController : ComposeController() {
               navController.navigate(Screen.FolderPicker.route)
             }
 
-            override fun toBook(id: Book.Id) {
+            override fun toBook(id: BookId) {
               lifecycleScope.launch {
                 currentBookIdPref.updateData { id }
                 router.pushController(BookPlayController(id).asTransaction())
               }
             }
 
-            override fun onCoverFromInternetClick(id: Book.Id) {
+            override fun onCoverFromInternetClick(id: BookId) {
               router.pushController(
                 CoverFromInternetController(id)
                   .asTransaction()
               )
             }
 
-            override fun onFileCoverClick(id: Book.Id) {
+            override fun onFileCoverClick(id: BookId) {
               galleryPicker.pick(id, this@AppController)
             }
           }
@@ -105,6 +110,12 @@ class AppController : ComposeController() {
             navController.popBackStack()
           }
         )
+      }
+    }
+
+    LaunchedEffect(navigator) {
+      navigator.composeCommands.collect { screen ->
+        navController.navigate(screen.route)
       }
     }
   }
