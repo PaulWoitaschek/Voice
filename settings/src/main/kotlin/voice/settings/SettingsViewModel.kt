@@ -1,5 +1,6 @@
 package voice.settings
 
+import androidx.lifecycle.ViewModel
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +21,7 @@ class SettingsViewModel
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>
-) : SettingsListener {
+) : ViewModel(), SettingsListener {
 
   private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
