@@ -29,9 +29,9 @@ import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
-import voice.common.compose.viewModel
 import voice.common.rootComponentAs
 
 @ContributesTo(AppScope::class)

@@ -10,13 +10,7 @@ import androidx.datastore.core.DataStore
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import kotlinx.coroutines.launch
-import voice.app.features.GalleryPicker
-import voice.app.features.bookOverview.EditCoverDialogController
-import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
-import voice.app.misc.conductor.asTransaction
-import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.BookId
 import voice.common.compose.ComposeController
@@ -26,7 +20,6 @@ import voice.common.pref.CurrentBook
 import voice.folderPicker.FolderPicker
 import voice.logging.core.Logger
 import voice.migration.views.Migration
-import voice.playbackScreen.BookPlayController
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -40,9 +33,6 @@ class AppController : ComposeController() {
   lateinit var currentBookIdPref: DataStore<BookId?>
 
   @Inject
-  lateinit var galleryPicker: GalleryPicker
-
-  @Inject
   lateinit var navigator: Navigator
 
   @Composable
@@ -50,39 +40,7 @@ class AppController : ComposeController() {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController = navController, startDestination = Screen.BookOverview.route) {
       composable(Screen.BookOverview.route) {
-        BookOverviewScreen(
-          object : BookOverviewNavigator {
-            override fun onSettingsClick() {
-              navController.navigate(Screen.Settings.route)
-            }
-
-            override fun onBookMigrationClick() {
-              navController.navigate(Screen.Migration.route)
-            }
-
-            override fun toFolderOverview() {
-              navController.navigate(Screen.FolderPicker.route)
-            }
-
-            override fun toBook(id: BookId) {
-              lifecycleScope.launch {
-                currentBookIdPref.updateData { id }
-                router.pushController(BookPlayController(id).asTransaction())
-              }
-            }
-
-            override fun onCoverFromInternetClick(id: BookId) {
-              router.pushController(
-                CoverFromInternetController(id)
-                  .asTransaction()
-              )
-            }
-
-            override fun onFileCoverClick(id: BookId) {
-              galleryPicker.pick(id, this@AppController)
-            }
-          }
-        )
+        BookOverviewScreen()
       }
       composable(Screen.Settings.route) {
         Settings(
@@ -117,13 +75,6 @@ class AppController : ComposeController() {
       navigator.composeCommands.collect { screen ->
         navController.navigate(screen.route)
       }
-    }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    val arguments = galleryPicker.parse(requestCode, resultCode, data)
-    if (arguments != null) {
-      EditCoverDialogController(arguments).showDialog(router)
     }
   }
 

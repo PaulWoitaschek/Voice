@@ -16,6 +16,8 @@ import voice.bookOverview.GridMode
 import voice.common.BookId
 import voice.common.combine
 import voice.common.compose.ImmutableFile
+import voice.common.navigation.Navigator
+import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -42,6 +44,7 @@ constructor(
   @BookMigrationExplanationQualifier
   private val bookMigrationExplanationShown: BookMigrationExplanationShown,
   private val legacyBookDao: LegacyBookDao,
+  private val navigator: Navigator,
 ) : ViewModel() {
 
   private val scope = MainScope()
@@ -126,6 +129,22 @@ constructor(
         showMigrateHint = showMigrateHint,
       )
     }
+  }
+
+  fun onSettingsClick() {
+    navigator.toScreen(Screen.Settings)
+  }
+
+  fun onBookClick(id: BookId) {
+    navigator.toScreen(Screen.Playback(id))
+  }
+
+  fun onBookFolderClick() {
+    navigator.toScreen(Screen.FolderPicker)
+  }
+
+  fun onBookMigrationClick() {
+    navigator.toScreen(Screen.Migration)
   }
 
   fun onBoomMigrationHelperConfirmClick() {

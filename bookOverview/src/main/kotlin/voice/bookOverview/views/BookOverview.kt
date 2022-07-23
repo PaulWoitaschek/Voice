@@ -33,20 +33,18 @@ import voice.bookOverview.R
 import voice.bookOverview.deleteBook.DeleteBookDialog
 import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.overview.BookOverviewCategory
-import voice.bookOverview.overview.BookOverviewNavigator
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
+import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import java.util.UUID
 
 @Composable
-fun BookOverviewScreen(
-  navigator: BookOverviewNavigator,
-) {
-  val bookComponent = remember(navigator) {
+fun BookOverviewScreen() {
+  val bookComponent = rememberScoped {
     rootComponentAs<BookOverviewComponent.Factory.Provider>()
-      .bookOverviewComponentProviderFactory.create(navigator)
+      .bookOverviewComponentProviderFactory.create()
   }
   val bookOverviewViewModel = viewModel {
     bookComponent.bookOverviewViewModel
@@ -88,19 +86,19 @@ fun BookOverviewScreen(
     BookOverview(
       viewState = viewState,
       onLayoutIconClick = bookOverviewViewModel::toggleGrid,
-      onSettingsClick = navigator::onSettingsClick,
-      onBookClick = navigator::toBook,
+      onSettingsClick = bookOverviewViewModel::onSettingsClick,
+      onBookClick = bookOverviewViewModel::onBookClick,
       onBookLongClick = { bookId ->
         scope.launch {
           bottomSheetViewModel.bookSelected(bookId)
           bottomSheetState.show()
         }
       },
-      onBookFolderClick = navigator::toFolderOverview,
+      onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
       onPlayButtonClick = bookOverviewViewModel::playPause,
       onBookMigrationClick = {
         bookOverviewViewModel.onBoomMigrationHelperConfirmClick()
-        navigator.onBookMigrationClick()
+        bookOverviewViewModel.onBookMigrationClick()
       },
       onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
     )

@@ -2,23 +2,24 @@ package voice.app.features
 
 import android.app.Activity
 import android.content.Intent
-import com.bluelinelabs.conductor.Controller
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.common.BookId
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val REQUEST_CODE = 7
 
+@Singleton
 class GalleryPicker
 @Inject constructor() {
 
   private var pickForBookId: BookId? = null
 
-  fun pick(bookId: BookId, controller: Controller) {
+  fun pick(bookId: BookId, activity: Activity) {
     pickForBookId = bookId
     val intent = Intent(Intent.ACTION_PICK)
       .setType("image/*")
-    controller.startActivityForResult(intent, REQUEST_CODE)
+    activity.startActivityForResult(intent, REQUEST_CODE)
   }
 
   fun parse(requestCode: Int, resultCode: Int, data: Intent?): EditCoverDialogController.Arguments? {

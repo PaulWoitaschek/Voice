@@ -18,8 +18,10 @@ import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
 import voice.app.features.audio.PlaybackSpeedDialogController
+import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
 import voice.app.features.bookmarks.BookmarkController
+import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
 import voice.common.BookId
@@ -48,6 +50,9 @@ class MainActivity : AppCompatActivity() {
 
   @Inject
   lateinit var navigator: Navigator
+
+  @Inject
+  lateinit var galleryPicker: GalleryPicker
 
   private lateinit var router: Router
 
@@ -98,6 +103,18 @@ class MainActivity : AppCompatActivity() {
           is Screen.SelectChapterDialog -> {
             SelectChapterDialog(screen.bookId).showDialog(router)
           }
+          is Screen.CoverFromFiles -> {
+            galleryPicker.pick(screen.bookId, this@MainActivity)
+          }
+          is Screen.CoverFromInternet -> {
+            router.pushController(CoverFromInternetController(screen.bookId).asTransaction())
+          }
+          is Screen.Playback -> {
+            lifecycleScope.launch {
+              currentBook.updateData { screen.bookId }
+              router.pushController(BookPlayController(screen.bookId).asTransaction())
+            }
+          }
         }
       }
     }
@@ -142,6 +159,16 @@ class MainActivity : AppCompatActivity() {
 
     val rootTransaction = RouterTransaction.with(AppController())
     router.setRoot(rootTransaction)
+  }
+
+
+  @Deprecated("Deprecated in Java")
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    val arguments = galleryPicker.parse(requestCode, resultCode, data)
+    if (arguments != null) {
+      EditCoverDialogController(arguments).showDialog(router)
+    }
   }
 
   override fun onBackPressed() {
