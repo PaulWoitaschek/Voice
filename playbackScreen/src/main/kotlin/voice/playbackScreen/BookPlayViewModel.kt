@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import voice.common.BookId
+import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
 import voice.data.durationMs
 import voice.data.markForPosition
@@ -87,15 +87,15 @@ class BookPlayViewModel
   }
 
   fun onCurrentChapterClicked() {
-    navigator.toScreen(Screen.SelectChapterDialog(bookId))
+    navigator.goTo(Destination.SelectChapterDialog(bookId))
   }
 
   fun onPlaybackSpeedIconClicked() {
-    navigator.toScreen(Screen.PlaybackSpeedDialog)
+    navigator.goTo(Destination.PlaybackSpeedDialog)
   }
 
   fun onBookmarkClicked() {
-    navigator.toScreen(Screen.BookmarkDialog(bookId))
+    navigator.goTo(Destination.Bookmarks(bookId))
   }
 
   fun onBookmarkLongClicked() {

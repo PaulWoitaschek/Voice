@@ -3,10 +3,11 @@ package voice.settings
 import androidx.lifecycle.ViewModel
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import voice.common.DARK_THEME_SETTABLE
+import voice.common.navigation.Destination
+import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
 import javax.inject.Inject
 import javax.inject.Named
@@ -20,11 +21,9 @@ class SettingsViewModel
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
-  private val seekTimePref: Pref<Int>
+  private val seekTimePref: Pref<Int>,
+  private val navigator: Navigator,
 ) : ViewModel(), SettingsListener {
-
-  private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
-  val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
 
   private val dialog = MutableStateFlow<SettingsViewState.Dialog?>(null)
 
@@ -48,7 +47,7 @@ class SettingsViewModel
   }
 
   override fun close() {
-    SettingsViewEffect.CloseScreen.emit()
+    navigator.goBack()
   }
 
   override fun toggleResumeOnReplug() {
@@ -85,15 +84,11 @@ class SettingsViewModel
 
   override fun openSupport() {
     dismissDialog()
-    SettingsViewEffect.ToSupport.emit()
+    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice"))
   }
 
   override fun openTranslations() {
     dismissDialog()
-    SettingsViewEffect.ToTranslations.emit()
-  }
-
-  private fun SettingsViewEffect.emit() {
-    _viewEffects.tryEmit(this)
+    navigator.goTo(Destination.Website("https://www.transifex.com/projects/p/voice"))
   }
 }

@@ -1,11 +1,7 @@
 package voice.app
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -14,11 +10,11 @@ import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.BookId
 import voice.common.compose.ComposeController
+import voice.common.navigation.Destination
+import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
 import voice.folderPicker.FolderPicker
-import voice.logging.core.Logger
 import voice.migration.views.Migration
 import voice.settings.views.Settings
 import javax.inject.Inject
@@ -38,31 +34,17 @@ class AppController : ComposeController() {
   @Composable
   override fun Content() {
     val navController = rememberAnimatedNavController()
-    AnimatedNavHost(navController = navController, startDestination = Screen.BookOverview.route) {
-      composable(Screen.BookOverview.route) {
+    AnimatedNavHost(navController = navController, startDestination = Destination.BookOverview.route) {
+      composable(Destination.BookOverview.route) {
         BookOverviewScreen()
       }
-      composable(Screen.Settings.route) {
-        Settings(
-          onCloseScreenClicked = {
-            navController.popBackStack()
-          },
-          toSupport = {
-            visitUri("https://github.com/PaulWoitaschek/Voice".toUri())
-          },
-          toTranslations = {
-            visitUri("https://www.transifex.com/projects/p/voice".toUri())
-          }
-        )
+      composable(Destination.Settings.route) {
+        Settings()
       }
-      composable(Screen.Migration.route) {
-        Migration(
-          onCloseClicked = {
-            navController.popBackStack()
-          }
-        )
+      composable(Destination.Migration.route) {
+        Migration()
       }
-      composable(Screen.FolderPicker.route) {
+      composable(Destination.FolderPicker.route) {
         FolderPicker(
           onCloseClick = {
             navController.popBackStack()
@@ -72,17 +54,23 @@ class AppController : ComposeController() {
     }
 
     LaunchedEffect(navigator) {
-      navigator.composeCommands.collect { screen ->
-        navController.navigate(screen.route)
+      navigator.navigationCommands.collect { command ->
+        when (command) {
+          is NavigationCommand.GoTo -> {
+            when (val destination = command.destination) {
+              is Destination.Compose -> {
+                navController.navigate(destination.route)
+              }
+              else -> {
+                // no-op
+              }
+            }
+          }
+          NavigationCommand.GoBack -> {
+            navController.popBackStack()
+          }
+        }
       }
-    }
-  }
-
-  private fun visitUri(uri: Uri) {
-    try {
-      startActivity(Intent(Intent.ACTION_VIEW, uri))
-    } catch (exception: ActivityNotFoundException) {
-      Logger.w(exception)
     }
   }
 }

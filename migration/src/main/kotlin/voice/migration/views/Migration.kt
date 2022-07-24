@@ -48,12 +48,15 @@ interface MigrationComponent {
 }
 
 @Composable
-fun Migration(
-  onCloseClicked: () -> Unit,
-) {
+fun Migration() {
   val viewModel = viewModel { rootComponentAs<MigrationComponent>().migrationViewModel }
   val viewState = viewModel.viewState()
-  Migration(viewState, onCloseClicked)
+  Migration(
+    viewState = viewState,
+    onCloseClicked = {
+      viewModel.onCloseClick()
+    }
+  )
 }
 
 @Composable

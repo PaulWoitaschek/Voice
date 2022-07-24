@@ -16,8 +16,8 @@ import voice.bookOverview.GridMode
 import voice.common.BookId
 import voice.common.combine
 import voice.common.compose.ImmutableFile
+import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.Book
@@ -132,19 +132,19 @@ constructor(
   }
 
   fun onSettingsClick() {
-    navigator.toScreen(Screen.Settings)
+    navigator.goTo(Destination.Settings)
   }
 
   fun onBookClick(id: BookId) {
-    navigator.toScreen(Screen.Playback(id))
+    navigator.goTo(Destination.Playback(id))
   }
 
   fun onBookFolderClick() {
-    navigator.toScreen(Screen.FolderPicker)
+    navigator.goTo(Destination.FolderPicker)
   }
 
   fun onBookMigrationClick() {
-    navigator.toScreen(Screen.Migration)
+    navigator.goTo(Destination.Migration)
   }
 
   fun onBoomMigrationHelperConfirmClick() {

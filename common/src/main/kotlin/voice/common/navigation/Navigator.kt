@@ -1,8 +1,9 @@
 package voice.common.navigation
 
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,11 +11,20 @@ import javax.inject.Singleton
 class Navigator
 @Inject constructor() {
 
-  private val _navigationCommands = MutableSharedFlow<Screen>(extraBufferCapacity = 1)
-  val composeCommands: Flow<ComposeScreen> get() = _navigationCommands.filterIsInstance()
-  val conductorCommands: Flow<ConductorScreen> get() = _navigationCommands.filterIsInstance()
+  private val _navigationCommands = MutableSharedFlow<NavigationCommand>(extraBufferCapacity = 10)
+  val navigationCommands: Flow<NavigationCommand> get() = _navigationCommands
 
-  fun toScreen(screen: Screen) {
-    _navigationCommands.tryEmit(screen)
+  private val scope = MainScope()
+
+  fun goTo(destination: Destination) {
+    scope.launch {
+      _navigationCommands.emit(NavigationCommand.GoTo(destination))
+    }
+  }
+
+  fun goBack() {
+    scope.launch {
+      _navigationCommands.emit(NavigationCommand.GoBack)
+    }
   }
 }

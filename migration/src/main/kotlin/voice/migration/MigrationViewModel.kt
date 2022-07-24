@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
+import voice.common.navigation.Navigator
 import voice.data.legacy.LegacyBookMetaData
 import voice.data.legacy.LegacyBookSettings
 import voice.data.legacy.LegacyBookmark
@@ -25,7 +26,8 @@ private const val COMMON_STORAGE_PREFIX = "/storage/emulated/0/"
 
 class MigrationViewModel
 @Inject constructor(
-  private val dao: LegacyBookDao
+  private val dao: LegacyBookDao,
+  private val navigator: Navigator,
 ) : ViewModel() {
 
   @Composable
@@ -64,6 +66,10 @@ class MigrationViewModel
       onDeletionConfirmed = onDeletionConfirmed,
       onDeletionAborted = onDeletionAborted,
     )
+  }
+
+  internal fun onCloseClick() {
+    navigator.goBack()
   }
 
   private suspend fun migrationData(): MigrationData {

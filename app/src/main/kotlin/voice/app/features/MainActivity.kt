@@ -1,10 +1,12 @@
 package voice.app.features
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.lifecycleScope
 import com.bluelinelabs.conductor.Conductor
@@ -25,9 +27,11 @@ import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asTransaction
 import voice.common.BookId
+import voice.common.navigation.Destination
+import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.common.navigation.Screen
 import voice.common.pref.CurrentBook
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
@@ -92,27 +96,48 @@ class MainActivity : AppCompatActivity() {
     )
 
     lifecycleScope.launch {
-      navigator.conductorCommands.collect { screen ->
-        when (screen) {
-          Screen.PlaybackSpeedDialog -> {
-            PlaybackSpeedDialogController().showDialog(router)
+      navigator.navigationCommands.collect { command ->
+        when (command) {
+          NavigationCommand.GoBack -> {
+            if (router.backstack.lastOrNull()?.controller is AppController) {
+              // AppController handles it's own navigation commands
+            } else {
+              router.popCurrentController()
+            }
           }
-          is Screen.BookmarkDialog -> {
-            router.pushController(BookmarkController(screen.bookId).asTransaction())
-          }
-          is Screen.SelectChapterDialog -> {
-            SelectChapterDialog(screen.bookId).showDialog(router)
-          }
-          is Screen.CoverFromFiles -> {
-            galleryPicker.pick(screen.bookId, this@MainActivity)
-          }
-          is Screen.CoverFromInternet -> {
-            router.pushController(CoverFromInternetController(screen.bookId).asTransaction())
-          }
-          is Screen.Playback -> {
-            lifecycleScope.launch {
-              currentBook.updateData { screen.bookId }
-              router.pushController(BookPlayController(screen.bookId).asTransaction())
+          is NavigationCommand.GoTo -> {
+            when (val destination = command.destination) {
+              is Destination.Compose -> {
+                // no-op
+              }
+              is Destination.Bookmarks -> {
+                router.pushController(BookmarkController(destination.bookId).asTransaction())
+              }
+              is Destination.CoverFromFiles -> {
+                galleryPicker.pick(destination.bookId, this@MainActivity)
+              }
+              is Destination.CoverFromInternet -> {
+                router.pushController(CoverFromInternetController(destination.bookId).asTransaction())
+              }
+              is Destination.Playback -> {
+                lifecycleScope.launch {
+                  currentBook.updateData { destination.bookId }
+                  router.pushController(BookPlayController(destination.bookId).asTransaction())
+                }
+              }
+              Destination.PlaybackSpeedDialog -> {
+                PlaybackSpeedDialogController().showDialog(router)
+              }
+              is Destination.SelectChapterDialog -> {
+                SelectChapterDialog(destination.bookId).showDialog(router)
+              }
+              is Destination.Website -> {
+                try {
+                  startActivity(Intent(Intent.ACTION_VIEW, destination.url.toUri()))
+                } catch (exception: ActivityNotFoundException) {
+                  Logger.w(exception)
+                }
+              }
             }
           }
         }

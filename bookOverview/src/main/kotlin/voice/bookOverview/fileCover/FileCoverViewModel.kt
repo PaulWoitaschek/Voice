@@ -5,8 +5,8 @@ import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
+import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.navigation.Screen
 import javax.inject.Inject
 
 @BookOverviewScope
@@ -23,7 +23,7 @@ constructor(
 
   override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     if (item == BottomSheetItem.FileCover) {
-      navigator.toScreen(Screen.CoverFromFiles(bookId))
+      navigator.goTo(Destination.CoverFromFiles(bookId))
     }
   }
 }
