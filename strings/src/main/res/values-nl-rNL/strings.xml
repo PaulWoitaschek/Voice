@@ -95,4 +95,8 @@
   <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
   <string name="migration_delete_dialog_action_delete">Verwijderen</string>
   <string name="migration_delete_dialog_action_keep">Behouden</string>
+  <string name="delete_book_bottom_sheet_title">Boek verwijderen</string>
+  <string name="delete_book_dialog_title">Boek verwijderen</string>
+  <string name="delete_book_dialog_deletion_confirmation">Mijn bestanden verwijderen</string>
+  <string name="delete_book_dialog_content">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
 </resources>
