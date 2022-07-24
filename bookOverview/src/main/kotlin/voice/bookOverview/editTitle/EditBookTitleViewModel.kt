@@ -2,7 +2,6 @@ package voice.bookOverview.editTitle
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -22,7 +21,7 @@ class EditBookTitleViewModel
 @Inject
 constructor(
   private val repo: BookRepository,
-) : ViewModel(), BottomSheetItemViewModel {
+) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 

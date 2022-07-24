@@ -28,7 +28,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.bookOverview.R
@@ -51,11 +50,11 @@ fun BookOverviewScreen() {
     rootComponentAs<BookOverviewComponent.Factory.Provider>()
       .bookOverviewComponentProviderFactory.create()
   }
-  val bookOverviewViewModel = viewModel { bookComponent.bookOverviewViewModel }
-  val editBookTitleViewModel = viewModel { bookComponent.editBookTitleViewModel }
-  val bottomSheetViewModel = viewModel { bookComponent.bottomSheetViewModel }
-  val deleteBookViewModel = viewModel { bookComponent.deleteBookViewModel }
-  val fileCoverViewModel = viewModel { bookComponent.fileCoverViewModel }
+  val bookOverviewViewModel = bookComponent.bookOverviewViewModel
+  val editBookTitleViewModel = bookComponent.editBookTitleViewModel
+  val bottomSheetViewModel = bookComponent.bottomSheetViewModel
+  val deleteBookViewModel = bookComponent.deleteBookViewModel
+  val fileCoverViewModel = bookComponent.fileCoverViewModel
   LaunchedEffect(Unit) {
     bookOverviewViewModel.attach()
   }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
@@ -28,7 +27,7 @@ class MigrationViewModel
 @Inject constructor(
   private val dao: LegacyBookDao,
   private val navigator: Navigator,
-) : ViewModel() {
+) {
 
   @Composable
   internal fun viewState(): MigrationViewState {

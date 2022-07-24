@@ -1,6 +1,5 @@
 package voice.settings
 
-import androidx.lifecycle.ViewModel
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +22,7 @@ class SettingsViewModel
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
   private val navigator: Navigator,
-) : ViewModel(), SettingsListener {
+) : SettingsListener {
 
   private val dialog = MutableStateFlow<SettingsViewState.Dialog?>(null)
 

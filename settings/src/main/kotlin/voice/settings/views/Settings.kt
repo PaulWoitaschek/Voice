@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
+import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.settings.R
 import voice.settings.SettingsListener
@@ -120,7 +120,7 @@ interface SettingsComponent {
 
 @Composable
 fun Settings() {
-  val viewModel = viewModel { rootComponentAs<SettingsComponent>().settingsViewModel }
+  val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
   val viewState = remember(viewModel) { viewModel.viewState() }
     .collectAsState(SettingsViewState.Empty).value
   Settings(viewState, viewModel)

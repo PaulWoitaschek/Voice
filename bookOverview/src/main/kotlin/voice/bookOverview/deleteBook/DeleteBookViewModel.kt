@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ class DeleteBookViewModel
 constructor(
   private val application: Application,
   private val mediaScanTrigger: MediaScanTrigger,
-) : ViewModel(), BottomSheetItemViewModel {
+) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 

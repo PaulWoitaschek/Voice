@@ -1,6 +1,5 @@
 package voice.bookOverview.editBookCategory
 
-import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -21,7 +20,7 @@ class EditBookCategoryViewModel
 @Inject
 constructor(
   private val repo: BookRepository,
-) : ViewModel(), BottomSheetItemViewModel {
+) : BottomSheetItemViewModel {
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     val book = repo.get(bookId) ?: return emptyList()

@@ -1,7 +1,6 @@
 package voice.bookOverview.fileCover
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -17,7 +16,7 @@ class FileCoverViewModel
 @Inject
 constructor(
   private val navigator: Navigator
-) : ViewModel(), BottomSheetItemViewModel {
+) : BottomSheetItemViewModel {
 
   private var bookId: BookId? = null
 

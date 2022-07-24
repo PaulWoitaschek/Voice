@@ -30,11 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
+import voice.common.compose.rememberScoped
 import voice.common.formatTime
 import voice.common.rootComponentAs
 import voice.migration.MigrationViewModel
@@ -49,7 +49,7 @@ interface MigrationComponent {
 
 @Composable
 fun Migration() {
-  val viewModel = viewModel { rootComponentAs<MigrationComponent>().migrationViewModel }
+  val viewModel = rememberScoped { rootComponentAs<MigrationComponent>().migrationViewModel }
   val viewState = viewModel.viewState()
   Migration(
     viewState = viewState,
