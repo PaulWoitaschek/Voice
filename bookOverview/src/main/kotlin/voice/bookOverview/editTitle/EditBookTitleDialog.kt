@@ -1,4 +1,4 @@
-package voice.bookOverview.views
+package voice.bookOverview.editTitle
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -8,7 +8,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import voice.bookOverview.R
-import voice.bookOverview.editTitle.EditBookTitleState
 
 @Composable
 internal fun EditBookTitleDialog(
