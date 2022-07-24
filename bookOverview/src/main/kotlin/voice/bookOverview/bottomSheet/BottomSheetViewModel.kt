@@ -18,7 +18,8 @@ class BottomSheetViewModel
 
   private val _state: MutableState<EditBookBottomSheetState> = mutableStateOf(EditBookBottomSheetState(emptyList()))
   internal val state: State<EditBookBottomSheetState> get() = _state
-  private var bookId: BookId? = null
+  var bookId: BookId? = null
+    private set
 
   internal fun bookSelected(bookId: BookId) {
     this.bookId = bookId

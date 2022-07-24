@@ -1,5 +1,7 @@
 package voice.bookOverview.fileCover
 
+import android.net.Uri
+import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -10,12 +12,14 @@ import voice.common.navigation.Navigator
 import javax.inject.Inject
 
 @BookOverviewScope
-@ContributesMultibinding(BookOverviewScope::class)
+@ContributesMultibinding(BookOverviewScope::class, boundType = BottomSheetItemViewModel::class)
 class FileCoverViewModel
 @Inject
 constructor(
   private val navigator: Navigator
-) : BottomSheetItemViewModel {
+) : ViewModel(), BottomSheetItemViewModel {
+
+  private var bookId: BookId? = null
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     return listOf(BottomSheetItem.FileCover)
@@ -23,7 +27,12 @@ constructor(
 
   override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     if (item == BottomSheetItem.FileCover) {
-      navigator.goTo(Destination.CoverFromFiles(bookId))
+      this.bookId = bookId
     }
+  }
+
+  fun onImagePicked(uri: Uri) {
+    val bookId = bookId ?: return
+    navigator.goTo(Destination.EditCover(bookId, uri))
   }
 }

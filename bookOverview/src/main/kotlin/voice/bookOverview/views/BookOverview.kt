@@ -1,5 +1,7 @@
 package voice.bookOverview.views
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,6 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.bookOverview.R
 import voice.bookOverview.bottomSheet.BottomSheetContent
+import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.deleteBook.DeleteBookDialog
 import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.editTitle.EditBookTitleDialog
@@ -48,18 +51,11 @@ fun BookOverviewScreen() {
     rootComponentAs<BookOverviewComponent.Factory.Provider>()
       .bookOverviewComponentProviderFactory.create()
   }
-  val bookOverviewViewModel = viewModel {
-    bookComponent.bookOverviewViewModel
-  }
-  val editBookTitleViewModel = viewModel {
-    bookComponent.editBookTitleViewModel
-  }
-  val bottomSheetViewModel = viewModel {
-    bookComponent.bottomSheetViewModel
-  }
-  val deleteBookViewModel = viewModel {
-    bookComponent.deleteBookViewModel
-  }
+  val bookOverviewViewModel = viewModel { bookComponent.bookOverviewViewModel }
+  val editBookTitleViewModel = viewModel { bookComponent.editBookTitleViewModel }
+  val bottomSheetViewModel = viewModel { bookComponent.bottomSheetViewModel }
+  val deleteBookViewModel = viewModel { bookComponent.deleteBookViewModel }
+  val fileCoverViewModel = viewModel { bookComponent.fileCoverViewModel }
   LaunchedEffect(Unit) {
     bookOverviewViewModel.attach()
   }
@@ -70,12 +66,24 @@ fun BookOverviewScreen() {
 
   val scope = rememberCoroutineScope()
 
+  val getContentLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.GetContent(),
+    onResult = { uri ->
+      if (uri != null) {
+        fileCoverViewModel.onImagePicked(uri)
+      }
+    }
+  )
+
   val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
   ModalBottomSheetLayout(
     sheetState = bottomSheetState,
     sheetContent = {
       Surface {
         BottomSheetContent(bottomSheetViewModel.state.value) { item ->
+          if (item == BottomSheetItem.FileCover) {
+            getContentLauncher.launch("image/*")
+          }
           scope.launch {
             delay(300)
             bottomSheetState.hide()

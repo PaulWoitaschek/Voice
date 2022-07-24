@@ -55,9 +55,6 @@ class MainActivity : AppCompatActivity() {
   @Inject
   lateinit var navigator: Navigator
 
-  @Inject
-  lateinit var galleryPicker: GalleryPicker
-
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,9 +110,6 @@ class MainActivity : AppCompatActivity() {
               is Destination.Bookmarks -> {
                 router.pushController(BookmarkController(destination.bookId).asTransaction())
               }
-              is Destination.CoverFromFiles -> {
-                galleryPicker.pick(destination.bookId, this@MainActivity)
-              }
               is Destination.CoverFromInternet -> {
                 router.pushController(CoverFromInternetController(destination.bookId).asTransaction())
               }
@@ -137,6 +131,10 @@ class MainActivity : AppCompatActivity() {
                 } catch (exception: ActivityNotFoundException) {
                   Logger.w(exception)
                 }
+              }
+              is Destination.EditCover -> {
+                val args = EditCoverDialogController.Arguments(destination.cover, destination.bookId)
+                EditCoverDialogController(args).showDialog(router)
               }
             }
           }
@@ -184,16 +182,6 @@ class MainActivity : AppCompatActivity() {
 
     val rootTransaction = RouterTransaction.with(AppController())
     router.setRoot(rootTransaction)
-  }
-
-
-  @Deprecated("Deprecated in Java")
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    val arguments = galleryPicker.parse(requestCode, resultCode, data)
-    if (arguments != null) {
-      EditCoverDialogController(arguments).showDialog(router)
-    }
   }
 
   override fun onBackPressed() {
