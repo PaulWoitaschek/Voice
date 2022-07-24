@@ -36,17 +36,22 @@ jobs:
     if: startsWith(github.ref, 'refs/tags')
     env:
       ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
-      SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
-      SIGNING_PROPERTIES: ${{ secrets.SIGNING_PROPERTIES }}
+      SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
+      SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
+      SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
+      SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
     steps:
       - uses: actions/checkout@v3
 
       - run: mkdir -p signing/actual
-      - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/actual/signing.keystore
-      - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/actual/signing.properties
+      - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/play/signing.keystore
+      - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/play/signing.properties
+      - run: echo $SIGNING_KEYSTORE_GITHUB | base64 --decode > signing/github/signing.keystore
+      - run: echo $SIGNING_PROPERTIES_GITHUB | base64 --decode > signing/github/signing.properties
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
-      - run: ./gradlew app:publishReleaseBundle app:assembleRelease -PenableCrashlytics --no-configuration-cache
+      - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics --no-configuration-cache
+      - run: ./gradlew app:assembleRelease -PenableCrashlytics -Pvoice.signing.play=false --no-configuration-cache
 
       - name: Github Release
         uses: softprops/action-gh-release@v1

@@ -53,7 +53,12 @@ android {
   signingConfigs {
     create("release") {
       val properties = Properties()
-      val propertiesFile = rootProject.file("signing/actual/signing.properties")
+      val keyStoreName = if (providers.gradleProperty("voice.signing.play").get().toBoolean()) {
+        "play"
+      } else {
+        "github"
+      }
+      val propertiesFile = rootProject.file("signing/$keyStoreName/signing.properties")
         .takeIf { it.canRead() }
         ?: rootProject.file("signing/ci/signing.properties")
       properties.load(propertiesFile.inputStream())
