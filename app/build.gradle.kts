@@ -75,7 +75,7 @@ android {
     }
     all {
       signingConfig = signingConfigs.getByName("release")
-      setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard.pro"))
+      setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard.pro"))
     }
   }
 
