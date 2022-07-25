@@ -14,7 +14,7 @@ tasks.wrapper {
 tasks {
   register<Exec>("importStrings") {
     executable = "tx"
-    args("pull")
+    args("pull", "-a", "--parallel", "--minimum-perc", "1")
     finalizedBy(":app:lintDebug")
   }
 
