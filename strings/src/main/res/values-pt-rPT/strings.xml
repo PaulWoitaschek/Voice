@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">Capa</string>
+  <string name="play_pause">Tocar / Pausar</string>
+  <string name="rewind">Retroceder</string>
+  <string name="previous_track">Capítulo anterior</string>
+  <string name="next_track">Próximo capítulo</string>
+  <string name="play">Tocar</string>
+  <string name="pause">Pausar</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_cancel">Cancelar</string>
+  <!--EditBookDialog-->
+  <string name="change_book_name">Título</string>
+  <string name="download_book_cover">Capa da internet</string>
+  <string name="pick_book_cover">Capa do gestor de ficheiros</string>
+  <string name="edit_book_title">Editar livro</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Velocidade de reprodução</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Marcador</string>
+  <string name="bookmark_edit_title">Editar marcador</string>
+  <string name="bookmark_edit_hint">Título do marcador</string>
+  <string name="bookmark_added">Marcador adicionado</string>
+  <!--Settings-->
+  <string name="action_settings">Preferências</string>
+  <string name="min">%s min</string>
+  <plurals name="seconds">
+    <item quantity="one">%d segundo</item>
+    <item quantity="many">%d segundos</item>
+    <item quantity="other">%d segundos</item>
+  </plurals>
+  <string name="pref_support_title">Suporte</string>
+  <string name="pref_support_translations">Traduções</string>
+  <string name="pref_support_contribute">Suporte e sugestões</string>
+  <!--Misc-->
+  <string name="popup_edit">Editar</string>
+  <string name="remove">Remover</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Actualizar</string>
+  <string name="music_notification">Reproduzir</string>
+  <!--book category-->
+  <string name="book_header_current">Actual</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
+</resources>

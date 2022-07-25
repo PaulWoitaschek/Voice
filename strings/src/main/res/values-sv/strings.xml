@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <string name="current_book">Aktuell bok</string>
+  <string name="layout_grid">Rutnätslayout</string>
+  <string name="layout_list">Listlayout</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">Omslag</string>
+  <string name="play_pause">Spela / Pausa</string>
+  <string name="action_sleep">Insomningstimer</string>
+  <string name="rewind">Spola bakåt</string>
+  <string name="fast_forward">Snabbspola</string>
+  <string name="previous_track">Föregående spår</string>
+  <string name="next_track">Nästa spår</string>
+  <string name="play">Spela</string>
+  <string name="pause">Pausa</string>
+  <string name="skip_silence">Hoppa över tystnad</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Ställ in</string>
+  <string name="dialog_cancel">Avbryt</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Visar omslag att välja</string>
+  <string name="change_book_name">Namn</string>
+  <string name="download_book_cover">Omslag från internet</string>
+  <string name="pick_book_cover">Omslag från filsystem</string>
+  <string name="edit_book_title">Redigera bok</string>
+  <string name="mark_as_completed">Markera som avslutad</string>
+  <string name="mark_as_current">Markera som aktuell</string>
+  <string name="mark_as_not_started">Markera som inte påbörjad ännu</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">Ljudboksmappar</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Uppspelningshastighet</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Bokmärke</string>
+  <string name="bookmark_edit_title">Redigera bokmärke</string>
+  <string name="bookmark_edit_hint">Namn på bokmärke</string>
+  <string name="bookmark_added">Bokmärke tillagt</string>
+  <!--Settings-->
+  <string name="action_settings">Inställningar</string>
+  <string name="pref_resume_on_replug">Återuppta uppspelning</string>
+  <string name="pref_resume_on_replug_hint">Om du pausade genom att koppla ur hörlurarna kommer det att återupptas när du kopplar in dem igen.</string>
+  <string name="min">%s min</string>
+  <string name="delete_last_number">Tar bort det senast angivna numret</string>
+  <plurals name="seconds">
+    <item quantity="one">%d sekund</item>
+    <item quantity="other">%d sekunder</item>
+  </plurals>
+  <string name="pref_seek_time">Hoppa över mängd</string>
+  <string name="pref_theme_dark">Mörkt tema</string>
+  <string name="pref_auto_rewind_title">Automatisk bakåtspolning</string>
+  <string name="pref_support_title">Support</string>
+  <string name="pref_support_translations">Översättningar</string>
+  <string name="pref_support_contribute">Support och förslag</string>
+  <!--Misc-->
+  <string name="popup_edit">Redigera</string>
+  <string name="remove">Ta bort</string>
+  <string name="play_current">Spela aktuell</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Uppdatera</string>
+  <string name="reset">Återställ</string>
+  <string name="cover_crop">Beskär omslag</string>
+  <string name="music_notification">Uppspelning</string>
+  <!--book category-->
+  <string name="book_header_current">Aktuella</string>
+  <string name="book_header_not_started">Inte påbörjad ännu</string>
+  <string name="book_header_completed">Avslutad</string>
+  <string name="close">Stäng</string>
+  <string name="add">Lägg till</string>
+  <string name="delete">Ta bort</string>
+  <string name="audiobook_folder_card_text">Voice förväntar sig en mappstruktur där varje mapp i din valda ljudboksmapp är en bok, till exempel:</string>
+  <string name="got_audiobook_folder_card_action">Förstått</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Precis nu</string>
+  <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">Lägg till din ljudboksmapp så att du kan börja lyssna!</string>
+  <string name="migration_hint_title">Åtkomst till gamla bokpositioner</string>
+  <string name="migration_hint_content">På grund av ändringar i nyare Android-versioner är det nödvändigt att välja din ljudboksmapp med hjälp av systemväljaren.\n\nKlicka på ikonen ovan för att se dina gamla bokpositioner.</string>
+  <string name="migration_hint_confirm">Förstått</string>
+  <string name="migration_detail_title">Gamla bokpositioner</string>
+  <string name="migration_detail_content_name">Namn</string>
+  <string name="migration_detail_content_root">Rotmapp</string>
+  <string name="migration_detail_content_position">Position</string>
+  <string name="migration_detail_content_bookmarks">Bokmärken</string>
+  <string name="migration_detail_content_added_at">Tillagd vid</string>
+  <string name="migration_detail_content_position_current_file_title">Aktuell fil</string>
+  <string name="migration_detail_content_position_current_file_position">Position i fil</string>
+  <string name="migration_detail_content_position_current_chapter_title">Aktuellt kapitel</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position i kapitel</string>
+  <string name="migration_delete_dialog_title">Ta bort positioner</string>
+  <string name="migration_delete_dialog_content">När du har tagit bort de gamla positionerna kommer du inte att kunna återställa dina gamla uppspelningspositioner.</string>
+  <string name="migration_delete_dialog_action_delete">Ta bort</string>
+  <string name="migration_delete_dialog_action_keep">Behåll</string>
+</resources>

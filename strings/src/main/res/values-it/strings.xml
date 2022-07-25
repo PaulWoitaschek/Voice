@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <string name="current_book">Libro corrente</string>
+  <string name="layout_grid">Layout a Griglia</string>
+  <string name="layout_list">Layout a Lista</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">Copertina</string>
+  <string name="play_pause">Play / Pausa</string>
+  <string name="action_sleep">Timer standby</string>
+  <string name="rewind">Riavvolgi</string>
+  <string name="fast_forward">Avanti veloce</string>
+  <string name="previous_track">Traccia precedente</string>
+  <string name="next_track">Traccia successiva</string>
+  <string name="play">Play</string>
+  <string name="pause">Pausa</string>
+  <string name="skip_silence">Salta Silenzio</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Imposta</string>
+  <string name="dialog_cancel">Annulla</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Mostra la copertina da scegliere</string>
+  <string name="change_book_name">Nome</string>
+  <string name="download_book_cover">Copertina da Internet</string>
+  <string name="pick_book_cover">Copertina da file nel sistema</string>
+  <string name="edit_book_title">Modifica libro</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">Cartelle audiolibro</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Velocità di riproduzione</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Segnalibro</string>
+  <string name="bookmark_edit_title">Modifica segnalibro</string>
+  <string name="bookmark_edit_hint">Nome segnalibro</string>
+  <string name="bookmark_added">Segnalibro aggiunto</string>
+  <!--Settings-->
+  <string name="action_settings">Preferenze</string>
+  <string name="pref_resume_on_replug">Riprendi la riproduzione</string>
+  <string name="pref_resume_on_replug_hint">Se hai messo in pausa disinserendo le cuffie, la riproduzione continuerà una volta reinserite.</string>
+  <string name="min">%s min</string>
+  <string name="delete_last_number">Cancella l\'ultimo numero inserito</string>
+  <plurals name="seconds">
+    <item quantity="one">%d secondo</item>
+    <item quantity="many">%d secondi</item>
+    <item quantity="other">%d secondi</item>
+  </plurals>
+  <string name="pref_seek_time">Salta</string>
+  <string name="pref_theme_dark">Tema Scuro</string>
+  <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
+  <string name="pref_support_title">Supporto</string>
+  <string name="pref_support_translations">Traduzioni</string>
+  <string name="pref_support_contribute">Supporto e Suggerimenti</string>
+  <!--Misc-->
+  <string name="popup_edit">Modifica</string>
+  <string name="remove">Rimuovi</string>
+  <string name="play_current">Riproduci corrente</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Aggiorna</string>
+  <string name="reset">Resetta</string>
+  <string name="cover_crop">Taglia copertina</string>
+  <string name="music_notification">Riproduzione</string>
+  <!--book category-->
+  <string name="book_header_current">Corrente</string>
+  <string name="book_header_not_started">Non ancora iniziato</string>
+  <string name="book_header_completed">Completato</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
+</resources>

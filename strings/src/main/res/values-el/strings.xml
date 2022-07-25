@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <string name="current_book">Τρέχον βιβλίο</string>
+  <string name="layout_grid">Διάταξη Πλέγματος</string>
+  <string name="layout_list">Διάταξη Λίστας</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">Εξώφυλλο</string>
+  <string name="play_pause">Αναπαραγωγή / Παύση</string>
+  <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
+  <string name="rewind">Επανάληψη </string>
+  <string name="fast_forward">Γρήγορη προώθηση</string>
+  <string name="previous_track">Προηγούμενο κομμάτι</string>
+  <string name="next_track">Επόμενο κομμάτι </string>
+  <string name="play">Αναπαραγωγή</string>
+  <string name="pause">Παύση</string>
+  <string name="skip_silence">Παράλειψη ησυχίας</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Ορισμός</string>
+  <string name="dialog_cancel">Ακύρωση</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
+  <string name="change_book_name">Όνομα</string>
+  <string name="download_book_cover">Εξώφυλλο από το Διαδίκτυο</string>
+  <string name="pick_book_cover">Εξώφυλλο από αρχεία του συστήματος </string>
+  <string name="edit_book_title">Επεξεργασία βιβλίου</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">Φάκελοι Audiobook</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Ταχύτητα αναπαραγωγής</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Σελιδοδείκτης</string>
+  <string name="bookmark_edit_title">Επεξεργασία σελιδοδείκτη</string>
+  <string name="bookmark_edit_hint">Ονομα του σελιδοδείκτη</string>
+  <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
+  <!--Settings-->
+  <string name="action_settings">Προτιμήσεις</string>
+  <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
+  <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
+  <string name="min">%s λεπτά</string>
+  <plurals name="seconds">
+    <item quantity="one">%d δευτερόλεπτο</item>
+    <item quantity="other">%d δευτερόλεπτα</item>
+  </plurals>
+  <string name="pref_seek_time">Μεταφορά ποσότητας</string>
+  <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
+  <string name="pref_support_title">Υποστήριξη</string>
+  <string name="pref_support_translations">Μεταφράσεις</string>
+  <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
+  <!--Misc-->
+  <string name="popup_edit">Επεξεργασία </string>
+  <string name="remove">Αφαίρεση</string>
+  <string name="play_current">Αναπαραγωγή τρέχοντος</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Ανανέωση</string>
+  <string name="reset">Επαναφορά</string>
+  <string name="cover_crop">Περικοπή εξωφύλλου</string>
+  <string name="music_notification">Αναπαραγωγή</string>
+  <!--book category-->
+  <string name="book_header_current">Τρέχον</string>
+  <string name="book_header_not_started">Μη διαβασμένα</string>
+  <string name="book_header_completed">Ολοκληρωμένα </string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
+</resources>

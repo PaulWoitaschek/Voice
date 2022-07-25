@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <string name="current_book">کتاب فعلی</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">جلد</string>
+  <string name="play_pause">پخش / توقف</string>
+  <string name="action_sleep">تایمر خواب</string>
+  <string name="rewind">بازپخش</string>
+  <string name="fast_forward">پخش سریع</string>
+  <string name="previous_track">قطعه قبلی</string>
+  <string name="next_track">قطعه بعدی</string>
+  <string name="play">پخش</string>
+  <string name="pause">توقف</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">انتخاب</string>
+  <string name="dialog_cancel">انصراف</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">جلدی را برای انتخاب نمایش می‌دهد</string>
+  <string name="change_book_name">نام</string>
+  <string name="download_book_cover">دریافت جلد از اینترنت</string>
+  <string name="pick_book_cover">دریافت جلد از حافظه</string>
+  <string name="edit_book_title">ویرایش کتاب</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">سرعت پخش</string>
+  <!--Bookmarks-->
+  <string name="bookmark">نشان‌گذاری</string>
+  <string name="bookmark_edit_title">ویرایش نشانه </string>
+  <string name="bookmark_edit_hint">نام نشانه</string>
+  <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
+  <!--Settings-->
+  <string name="action_settings">تنظیمات</string>
+  <string name="pref_resume_on_replug">ادامه پخش</string>
+  <string name="pref_resume_on_replug_hint">اگر با بیرون کشیدن هدست قطعه متوقف شود، با اتصال مجدد شروع به پخش خواهد کرد.</string>
+  <plurals name="seconds">
+    <item quantity="one">%d ثانیه</item>
+    <item quantity="other">%d ثانیه</item>
+  </plurals>
+  <string name="pref_seek_time">میزان پرش</string>
+  <string name="pref_auto_rewind_title">بازپخش خودکار</string>
+  <string name="pref_support_title">پشتیبانی</string>
+  <string name="pref_support_translations">ترجمه‌ها</string>
+  <string name="pref_support_contribute">پشتیبانی و پیشنهادات</string>
+  <!--Misc-->
+  <string name="popup_edit">ویرایش</string>
+  <string name="remove">حذف</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">تازه سازی</string>
+  <string name="reset">باز نشانی</string>
+  <string name="cover_crop">بریدن جلد</string>
+  <!--book category-->
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
+</resources>

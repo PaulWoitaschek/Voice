@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--BookShelf-->
+  <string name="current_book">Aktuelle bog</string>
+  <string name="layout_grid">Tabellayout</string>
+  <string name="layout_list">Listelayout</string>
+  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!--BookPlayFragment-->
+  <string name="cover">Cover</string>
+  <string name="play_pause">Afspil / Pause</string>
+  <string name="action_sleep">Sleep-Timer</string>
+  <string name="rewind">Spol tilbage</string>
+  <string name="fast_forward">Spol fremad</string>
+  <string name="previous_track">Forrige nummer</string>
+  <string name="next_track">Næste nummer</string>
+  <string name="play">Afspil</string>
+  <string name="pause">Pause</string>
+  <string name="skip_silence">Spring stilhed over</string>
+  <!--NoExternalStorage-->
+  <!--Dialogs-->
+  <string name="dialog_confirm">Sæt</string>
+  <string name="dialog_cancel">Annuller</string>
+  <!--EditBookDialog-->
+  <string name="content_cover">Viser cover der kan vælges</string>
+  <string name="change_book_name">Navn</string>
+  <string name="download_book_cover">Cover fra internettet</string>
+  <string name="pick_book_cover">Cover fra filsystemet</string>
+  <string name="edit_book_title">Rediger bog</string>
+  <!--JumpToPosition-->
+  <!--BookAdding-->
+  <string name="audiobook_folders_title">Lydbogs mapper</string>
+  <!--PlaybackSpeed-->
+  <string name="playback_speed">Afspilningshastighed</string>
+  <!--Bookmarks-->
+  <string name="bookmark">Bogmærke</string>
+  <string name="bookmark_edit_title">Rediger bogmærke</string>
+  <string name="bookmark_edit_hint">Bogmærke navn</string>
+  <string name="bookmark_added">Bogmærke tilføjet</string>
+  <!--Settings-->
+  <string name="action_settings">Indstillinger</string>
+  <string name="pref_resume_on_replug">Genoptag afspilning</string>
+  <string name="pref_resume_on_replug_hint">Hvis du pausede ved at trække høretelefoner ud, vil den fortsætte når det sættes i igen.</string>
+  <string name="min">%s min</string>
+  <string name="delete_last_number">Sletter det sidst indtastede nummer</string>
+  <plurals name="seconds">
+    <item quantity="one">%d sekund</item>
+    <item quantity="other">%d sekunder</item>
+  </plurals>
+  <string name="pref_seek_time">Spring over mængde</string>
+  <string name="pref_theme_dark">Mørkt tema</string>
+  <string name="pref_auto_rewind_title">Auto tilbagespoling</string>
+  <string name="pref_support_title">Support</string>
+  <string name="pref_support_translations">Oversættelser</string>
+  <string name="pref_support_contribute">Support og forslag</string>
+  <!--Misc-->
+  <string name="popup_edit">Rediger</string>
+  <string name="remove">Fjern</string>
+  <string name="play_current">Spil nuværende</string>
+  <!--hide folder dialog-->
+  <!--license activity-->
+  <string name="refresh">Opfrisk</string>
+  <string name="reset">Nulstil</string>
+  <string name="cover_crop">Skær cover til</string>
+  <string name="music_notification">Afspilning</string>
+  <!--book category-->
+  <string name="book_header_current">Nuværende</string>
+  <string name="book_header_not_started">Ikke startet endnu</string>
+  <string name="book_header_completed">afsluttet</string>
+  <!--will be shown as the time for a bookmark that was just created-->
+  <!--will be shown as a hint when no books have been added-->
+</resources>
