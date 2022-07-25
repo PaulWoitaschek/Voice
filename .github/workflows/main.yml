@@ -46,8 +46,8 @@ jobs:
 
       - run: mkdir -p signing/play
       - run: mkdir -p signing/github
-      - run: echo $SIGNING_KEYSTORE | base64 --decode > signing/play/signing.keystore
-      - run: echo $SIGNING_PROPERTIES | base64 --decode > signing/play/signing.properties
+      - run: echo $SIGNING_KEYSTORE_PLAY | base64 --decode > signing/play/signing.keystore
+      - run: echo $SIGNING_PROPERTIES_PLAY | base64 --decode > signing/play/signing.properties
       - run: echo $SIGNING_KEYSTORE_GITHUB | base64 --decode > signing/github/signing.keystore
       - run: echo $SIGNING_PROPERTIES_GITHUB | base64 --decode > signing/github/signing.properties
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
