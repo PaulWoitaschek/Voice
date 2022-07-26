@@ -1,9 +1,30 @@
 [main]
 host = https://www.transifex.com
-lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE,fa_IR:fa-rIR,hi_IN:hi-rIN,lt_LT:lt-rLT,nl_NL:nl-rNL,pt_PT:pt-rPT
 
 [voice.strings]
 file_filter = strings/src/main/res/values-<lang>/strings.xml
 source_file = strings/src/main/res/values/strings.xml
 source_lang = en
 type = ANDROID
+lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE,fa_IR:fa-rIR,hi_IN:hi-rIN,lt_LT:lt-rLT,nl_NL:nl-rNL,pt_PT:pt-rPT,da_DK:da-rDK,es_VE:es-rVE,es_CL:es-rCL,pl_PL:pl-rPL
+
+[voice.play-store-description]
+file_filter = app/src/main/play/listings/<lang>/full-description.txt
+source_file = app/src/main/play/listings/en-US/full-description.txt
+source_lang = en
+type = TXT
+lang_map = de:de-DE,hu:hu-HU
+
+[voice.play-store-teaser]
+file_filter = app/src/main/play/listings/<lang>/short-description.txt
+source_file = app/src/main/play/listings/en-US/short-description.txt
+source_lang = en
+type = TXT
+lang_map = de:de-DE,hu:hu-HU
+
+[voice.play-store-title]
+file_filter = app/src/main/play/listings/<lang>/title.txt
+source_file = app/src/main/play/listings/en-US/title.txt
+source_lang = en
+type = TXT
+lang_map = de:de-DE,hu:hu-HU

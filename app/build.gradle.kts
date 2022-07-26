@@ -23,6 +23,10 @@ if (enableCrashlytics) {
 play {
   defaultToAppBundles.value(true)
   track.value("Open Beta")
+  val serviceAccountJson = file("play_service_account.json")
+  if (serviceAccountJson.exists()) {
+    serviceAccountCredentials.set(serviceAccountJson)
+  }
 }
 
 kapt {

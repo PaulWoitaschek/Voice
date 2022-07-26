@@ -1,0 +1,19 @@
+Are you looking for a simple, minimal audiobook player that just works?
+One that lets you focus on what you actually want to do: Listen to audiobooks?
+You simply add your main audiobook folder, and each folder in it is recognized as a single book. This keeps your library simple and uncluttered.
+
+What it can do:
+- Remembers the last position
+- Set playback speed
+- Beautiful material design
+- Day & night theme. Easy on the eyes
+- Bookmarks
+- Android Auto
+- Sleep Timer. No need to turn off the player in the middle of the night.
+
+Voice is free and open source. This means that everyone can see what it does. It uses minimal permissions.
+
+If you have suggestions or find bugs, report them here:
+https://github.com/PaulWoitaschek/Voice/issues
+
+The open source license is Gnu GPLv3

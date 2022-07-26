@@ -26,6 +26,9 @@
   <string name="download_book_cover">Borító az internetről</string>
   <string name="pick_book_cover">Fájlrendszerből származó borító</string>
   <string name="edit_book_title">Könyv szerkesztése</string>
+  <string name="mark_as_completed">Jelölés meghallgatottnak</string>
+  <string name="mark_as_current">Megjelölés aktuálisként</string>
+  <string name="mark_as_not_started">Megjelölés még el nem kezdettként</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Hangoskönyv mappák</string>
@@ -92,4 +95,8 @@
   <string name="migration_delete_dialog_content">Ha törli a régi pozíciókat, nem fogja tudni visszaállítani a régi lejátszási pozíciókat.</string>
   <string name="migration_delete_dialog_action_delete">Törlés</string>
   <string name="migration_delete_dialog_action_keep">Megtartás</string>
+  <string name="delete_book_bottom_sheet_title">Könyv törlése</string>
+  <string name="delete_book_dialog_title">Könyv törlése</string>
+  <string name="delete_book_dialog_deletion_confirmation">Fájlok törlése</string>
+  <string name="delete_book_dialog_content">Ezzel törli a fájlokat az eszközön.</string>
 </resources>
