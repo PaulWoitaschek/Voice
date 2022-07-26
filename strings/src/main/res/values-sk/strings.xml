@@ -68,6 +68,10 @@
   <string name="book_header_current">Aktuáne</string>
   <string name="book_header_not_started">Ešte nepočúvané</string>
   <string name="book_header_completed">Dokončené</string>
+  <string name="close">Zavriet</string>
+  <string name="add">Pridať</string>
+  <string name="delete">Vymazať</string>
+  <string name="audiobook_folder_card_text">Voice očakáva adresárovú štruktúru kde každý adresár vybratej audioknihy je jedna kniha, napríklad:</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->
 </resources>

@@ -95,4 +95,8 @@
   <string name="migration_delete_dialog_content">När du har tagit bort de gamla positionerna kommer du inte att kunna återställa dina gamla uppspelningspositioner.</string>
   <string name="migration_delete_dialog_action_delete">Ta bort</string>
   <string name="migration_delete_dialog_action_keep">Behåll</string>
+  <string name="delete_book_bottom_sheet_title">Ta bort bok</string>
+  <string name="delete_book_dialog_title">Ta bort bok</string>
+  <string name="delete_book_dialog_deletion_confirmation">Ta bort mina filer</string>
+  <string name="delete_book_dialog_content">Detta kommer att radera filerna på din enhet.</string>
 </resources>

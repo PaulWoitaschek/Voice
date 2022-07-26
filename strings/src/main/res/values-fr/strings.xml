@@ -26,6 +26,9 @@
   <string name="download_book_cover">Couverture depuis internet</string>
   <string name="pick_book_cover">Couverture depuis l\'arborescence</string>
   <string name="edit_book_title">Modifier le livre</string>
+  <string name="mark_as_completed">Marquer comme Terminé</string>
+  <string name="mark_as_current">Marquer comme En cours</string>
+  <string name="mark_as_not_started">Marquer comme Non Commencé</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Dossiers de livres audio</string>
@@ -77,4 +80,24 @@
   <!--will be shown as a hint when no books have been added-->
   <string name="voice_intro_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
   <string name="migration_hint_title">Accès aux anciennes positions de lecture</string>
+  <string name="migration_hint_content">Du fait de modifications dans les nouvelles versions d\'Android, il est nécessaire de sélectionner votre dossier de livres audio à l\'aide de la boîte de dialogue système.\n\nCliquez sur l\'icône ci-dessus pour voir vos anciennes positions de lecture.</string>
+  <string name="migration_hint_confirm">Compris</string>
+  <string name="migration_detail_title">Anciennes positions de lecture</string>
+  <string name="migration_detail_content_name">Nom</string>
+  <string name="migration_detail_content_root">Dossier racine</string>
+  <string name="migration_detail_content_position">Position</string>
+  <string name="migration_detail_content_bookmarks">Marque-pages</string>
+  <string name="migration_detail_content_added_at">Ajouté le</string>
+  <string name="migration_detail_content_position_current_file_title">Fichier en cours</string>
+  <string name="migration_detail_content_position_current_file_position">Position dans le fichier</string>
+  <string name="migration_detail_content_position_current_chapter_title">Chapitre en cours</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position dans le chapitre</string>
+  <string name="migration_delete_dialog_title">Supprimer les positions</string>
+  <string name="migration_delete_dialog_content">Une fois les anciennes positions supprimées, vous ne pourrez plus accéder à vos anciennes positions de lecture.</string>
+  <string name="migration_delete_dialog_action_delete">Supprimer</string>
+  <string name="migration_delete_dialog_action_keep">Garder</string>
+  <string name="delete_book_bottom_sheet_title">Supprimer le livre</string>
+  <string name="delete_book_dialog_title">Supprimer le livre</string>
+  <string name="delete_book_dialog_deletion_confirmation">Supprimer mes fichiers</string>
+  <string name="delete_book_dialog_content">Ceci supprimera vos fichiers sur cet appareil.</string>
 </resources>
