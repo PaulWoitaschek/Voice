@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: ./gradlew allUnitTests
+      - run: ./gradlew testDebugUnitTest
       - run: ./gradlew lintKotlin
       - run: ./gradlew app:lintDebug
 

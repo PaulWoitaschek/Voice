@@ -43,17 +43,4 @@ tasks {
     mustRunAfter(pullStrings, removeEmptyListings)
     finalizedBy(":app:lintDebug")
   }
-
-  register<TestReport>("allUnitTests") {
-    val tests = subprojects.mapNotNull { subProject ->
-      val tasks = subProject.tasks
-      (
-        tasks.findByName("testDebugUnitTest")
-          ?: tasks.findByName("test")
-        ) as? Test
-    }
-    val artifactFolder = File("${rootDir.absolutePath}/artifacts")
-    destinationDir = File(artifactFolder, "testResults")
-    reportOn(tests)
-  }
 }
