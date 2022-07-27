@@ -15,7 +15,7 @@ dagger = "2.42"
 kotlin = "1.7.0"
 compose-compiler = "1.2.0"
 compose-ui = "1.2.0-rc03"
-compose-material = "1.2.0-rc03"
+compose-material = "1.2.0"
 compose-animation = "1.2.0-rc03"
 agp = "7.2.1"
 
