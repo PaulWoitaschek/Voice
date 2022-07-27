@@ -26,6 +26,9 @@
   <string name="download_book_cover">Обкладинка з Інтернету</string>
   <string name="pick_book_cover">Обкладинка з файлу</string>
   <string name="edit_book_title">Редагувати книгу</string>
+  <string name="mark_as_completed">Позначити як завершене</string>
+  <string name="mark_as_current">Позначити як поточне</string>
+  <string name="mark_as_not_started">Позначити як ще не почате</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Папки з аудіокнигами</string>
@@ -90,4 +93,12 @@
   <string name="migration_detail_content_position_current_file_position">Місце відтворення у файлі</string>
   <string name="migration_detail_content_position_current_chapter_title">Поточна глава</string>
   <string name="migration_detail_content_position_current_chapter_position">Місце відтворення в главі</string>
+  <string name="migration_delete_dialog_title">Видалити місця відтворення </string>
+  <string name="migration_delete_dialog_content">Якщо ви видалите старі місця відтворення, відновити їх буде неможливо.</string>
+  <string name="migration_delete_dialog_action_delete">Видалити</string>
+  <string name="migration_delete_dialog_action_keep">Зберегти</string>
+  <string name="delete_book_bottom_sheet_title">Видалити книгу</string>
+  <string name="delete_book_dialog_title">Видалити книгу</string>
+  <string name="delete_book_dialog_deletion_confirmation">Видалити мої файли </string>
+  <string name="delete_book_dialog_content">Файли на вашому пристрої буде видалено.</string>
 </resources>
