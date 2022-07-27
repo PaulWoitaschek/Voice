@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">当前书籍</string>
+  <string name="current_book">当前有声书</string>
   <string name="layout_grid">格状布局</string>
   <string name="layout_list">列表布局</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
@@ -9,7 +9,7 @@
   <string name="cover">封面</string>
   <string name="play_pause">播放 / 暂停</string>
   <string name="action_sleep">睡眠定时器</string>
-  <string name="rewind">倒回</string>
+  <string name="rewind">回退</string>
   <string name="fast_forward">快进</string>
   <string name="previous_track">上一节</string>
   <string name="next_track">下一节</string>
@@ -18,43 +18,46 @@
   <string name="skip_silence">跳过空白部分</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
-  <string name="dialog_confirm">设定</string>
+  <string name="dialog_confirm">设置</string>
   <string name="dialog_cancel">取消</string>
   <!--EditBookDialog-->
   <string name="content_cover">显示可选封面</string>
   <string name="change_book_name">名称</string>
   <string name="download_book_cover">从互联网寻找封面图片</string>
-  <string name="pick_book_cover">从本机目录寻找封面图片</string>
+  <string name="pick_book_cover">从本机寻找封面图片</string>
   <string name="edit_book_title">编辑书名</string>
+  <string name="mark_as_completed">标记为已结束播放</string>
+  <string name="mark_as_current">标记为正在播放</string>
+  <string name="mark_as_not_started">标记为尚未开始播放</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="audiobook_folders_title">有声书目录</string>
+  <string name="audiobook_folders_title">有声书文件夹</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">播放速度</string>
   <!--Bookmarks-->
   <string name="bookmark">书签</string>
   <string name="bookmark_edit_title">编辑书签</string>
   <string name="bookmark_edit_hint">书签名</string>
-  <string name="bookmark_added">书签已添加</string>
+  <string name="bookmark_added">已添加书签</string>
   <!--Settings-->
   <string name="action_settings">偏好设置</string>
   <string name="pref_resume_on_replug">继续播放</string>
   <string name="pref_resume_on_replug_hint">若因拔出耳机而暂停，插入耳机后将继续播放。</string>
-  <string name="min">%s 分钟</string>
+  <string name="min">%s 分</string>
   <string name="delete_last_number">删除最后输入的数字</string>
   <plurals name="seconds">
     <item quantity="other">%d 秒</item>
   </plurals>
   <string name="pref_seek_time">跳过时间</string>
   <string name="pref_theme_dark">暗黑主题</string>
-  <string name="pref_auto_rewind_title">自动倒回</string>
+  <string name="pref_auto_rewind_title">自动回退</string>
   <string name="pref_support_title">支持</string>
   <string name="pref_support_translations">翻译</string>
   <string name="pref_support_contribute">支持和建议</string>
   <!--Misc-->
   <string name="popup_edit">编辑</string>
   <string name="remove">删除</string>
-  <string name="play_current">播放当前书籍</string>
+  <string name="play_current">播放当前有声书</string>
   <!--hide folder dialog-->
   <!--license activity-->
   <string name="refresh">刷新</string>
@@ -62,9 +65,37 @@
   <string name="cover_crop">封面裁剪</string>
   <string name="music_notification">播放</string>
   <!--book category-->
-  <string name="book_header_current">正在播放</string>
+  <string name="book_header_current">正在播放中</string>
   <string name="book_header_not_started">尚未开始播放</string>
-  <string name="book_header_completed">已经播放完毕</string>
+  <string name="book_header_completed">已结束播放</string>
+  <string name="close">关闭</string>
+  <string name="add">添加</string>
+  <string name="delete">删除</string>
+  <string name="audiobook_folder_card_text">Voice要求在文件夹结构中您选择的每一个文件夹是一本书，例如：</string>
+  <string name="got_audiobook_folder_card_action">知道了</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">刚才</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
+  <string name="migration_hint_title">正在读取旧书位置</string>
+  <string name="migration_hint_content">由于较新Android版本中的改变，需要使用系统选择器选择您的有声书文件夹。\n\n单击上面的图标以查看您的旧书位置。</string>
+  <string name="migration_hint_confirm">明白</string>
+  <string name="migration_detail_title">旧书位置</string>
+  <string name="migration_detail_content_name">名称</string>
+  <string name="migration_detail_content_root">根文件夹</string>
+  <string name="migration_detail_content_position">位置</string>
+  <string name="migration_detail_content_bookmarks">书签</string>
+  <string name="migration_detail_content_added_at">添加于</string>
+  <string name="migration_detail_content_position_current_file_title">当前文件</string>
+  <string name="migration_detail_content_position_current_file_position">文件中的位置</string>
+  <string name="migration_detail_content_position_current_chapter_title">当前章节</string>
+  <string name="migration_detail_content_position_current_chapter_position">本章节中的位置</string>
+  <string name="migration_delete_dialog_title">删除位置</string>
+  <string name="migration_delete_dialog_content">删除旧位置后，您将无法恢复旧的播放位置。</string>
+  <string name="migration_delete_dialog_action_delete">删除</string>
+  <string name="migration_delete_dialog_action_keep">保留</string>
+  <string name="delete_book_bottom_sheet_title">删除书签</string>
+  <string name="delete_book_dialog_title">删除书签</string>
+  <string name="delete_book_dialog_deletion_confirmation">删除我的文件</string>
+  <string name="delete_book_dialog_content">这样做将从您的设备上删除文件。</string>
 </resources>
