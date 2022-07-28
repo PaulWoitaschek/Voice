@@ -13,12 +13,11 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -26,12 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlin.math.ln
 
 @Composable
 fun LongClickableCard(
@@ -69,7 +67,7 @@ private fun LongClickableSurface(
   onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
   enabled: Boolean = true,
-  shape: Shape = Shapes.None,
+  shape: Shape = RectangleShape,
   color: Color = MaterialTheme.colorScheme.surface,
   contentColor: Color = contentColorFor(color),
   tonalElevation: Dp = 0.dp,
@@ -107,14 +105,6 @@ private fun LongClickableSurface(
       content()
     }
   }
-}
-
-internal fun ColorScheme.surfaceColorAtElevation(
-  elevation: Dp,
-): Color {
-  if (elevation == 0.dp) return surface
-  val alpha = ((4.5f * ln(elevation.value + 1)) + 2f) / 100f
-  return surfaceTint.copy(alpha = alpha).compositeOver(surface)
 }
 
 private fun Modifier.surface(
