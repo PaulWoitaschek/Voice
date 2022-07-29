@@ -1,0 +1,19 @@
+Ieškote paprastos, minimalistinės audioknygų leistuvės, kuri tiesiog veikia?
+Tokios, kuri leistų sutelkti dėmesį į tai, ką išties norite daryti, tai yra klausytis audioknygų?
+Tiesiog nurodykite pagrindinį savo audioknygų aplanką ir kiekvienas jo poaplankis bus atpažintas kaip atskira knyga. Taip jūsų biblioteka išliks paprasta ir tvarkinga.
+
+Ši programėlė geba:
+- Prisimena paskutinio atkūrimo poziciją
+- Reguliuojama atkūrimo sparta
+- Gražus „Material“ dizainas
+- Dienos ir nakties temos. Nevargina akių
+- Žymelės
+- „Android Auto“
+- Miego laikmatis. Jums nebereiks sustabdyti leistuvės vidury nakties.
+
+Audioknygų leistuvė „Voice“ yra laisva ir atvirojo kodo. Tai reiškia, jog visi gali pamatyti, kaip ji veikia. Reikalauja minimalių leidimų.
+
+Jei turite pasiūlymų ar aptikote riktą, praneškite apie juos čia:
+https://github.com/PaulWoitaschek/Voice/issues
+
+Atvirojo kodo GNU GPLv3 licencija
