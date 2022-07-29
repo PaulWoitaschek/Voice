@@ -115,12 +115,13 @@ private fun ListBookRow(
           )
         }
       }
-    }
-    if (book.progress > 0.05) {
-      LinearProgressIndicator(
-        modifier = Modifier.fillMaxWidth(),
-        progress = book.progress
-      )
+
+      if (book.progress > 0.05) {
+        LinearProgressIndicator(
+          modifier = Modifier.fillMaxWidth(),
+          progress = book.progress
+        )
+      }
     }
   }
 }
