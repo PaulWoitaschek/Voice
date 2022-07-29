@@ -51,7 +51,7 @@ jobs:
       - run: echo $SIGNING_KEYSTORE_GITHUB | base64 --decode > signing/github/signing.keystore
       - run: echo $SIGNING_PROPERTIES_GITHUB | base64 --decode > signing/github/signing.properties
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
-      - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics --no-configuration-cache
+      - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics -Pvoice.signing.play=true --no-configuration-cache
       - run: ./gradlew app:assembleRelease -PenableCrashlytics -Pvoice.signing.play=false --no-configuration-cache
 
       - name: Github Release
