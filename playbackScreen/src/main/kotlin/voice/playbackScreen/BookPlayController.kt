@@ -21,7 +21,6 @@ import voice.common.formatTime
 import voice.common.rootComponentAs
 import voice.data.getBookId
 import voice.data.putBookId
-import voice.logging.core.Logger
 import voice.playbackScreen.databinding.BookPlayBinding
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
@@ -84,7 +83,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   }
 
   private fun BookPlayBinding.render(viewState: BookPlayViewState) {
-    Logger.d("render $viewState")
     binding.title.text = viewState.title
     currentChapterText.text = viewState.chapterName
     currentChapterContainer.isVisible = viewState.chapterName != null
