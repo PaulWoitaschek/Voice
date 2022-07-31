@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
 import voice.common.navigation.Navigator
@@ -52,10 +54,7 @@ class MigrationViewModel
       }
     }
     LaunchedEffect(Unit) {
-      val migrationData = migrationData()
-      items = migrationData.metaData.mapNotNull { metaData ->
-        migrationItem(metaData, migrationData)
-      }
+      items = migrationItems()
     }
 
     return MigrationViewState(
@@ -65,6 +64,13 @@ class MigrationViewModel
       onDeletionConfirmed = onDeletionConfirmed,
       onDeletionAborted = onDeletionAborted,
     )
+  }
+
+  private suspend fun migrationItems(): List<MigrationViewState.Item> = withContext(Dispatchers.IO) {
+    val migrationData = migrationData()
+    migrationData.metaData.mapNotNull { metaData ->
+      migrationItem(metaData, migrationData)
+    }
   }
 
   internal fun onCloseClick() {
