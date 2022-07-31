@@ -362,8 +362,14 @@ constructor(
     }
     updateContent {
       val newChapter = changedChapter ?: currentChapter
-      player.seekTo(chapters.indexOf(newChapter), time)
-      copy(positionInChapter = time, currentChapter = newChapter)
+      val index = chapters.indexOf(newChapter)
+      if (index != -1) {
+        player.seekTo(index, time)
+        copy(positionInChapter = time, currentChapter = newChapter)
+      } else {
+        Logger.e("Illegal seek command. Content=$this, changedChapter=$changedChapter, currentChapter=$currentChapter")
+        this
+      }
     }
   }
 
