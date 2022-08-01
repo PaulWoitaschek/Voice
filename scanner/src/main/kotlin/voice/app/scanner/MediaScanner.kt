@@ -2,21 +2,14 @@ package voice.app.scanner
 
 import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
-import voice.data.Book
-import voice.data.BookContent
-import voice.data.Chapter
 import voice.data.repo.BookContentRepo
-import voice.data.repo.ChapterRepo
-import voice.data.toUri
-import voice.logging.core.Logger
-import java.time.Instant
 import javax.inject.Inject
 
 class MediaScanner
 @Inject constructor(
   private val contentRepo: BookContentRepo,
-  private val chapterRepo: ChapterRepo,
-  private val mediaAnalyzer: MediaAnalyzer,
+  private val chapterParser: ChapterParser,
+  private val bookParser: BookParser,
 ) {
 
   suspend fun scan(folders: List<DocumentFile>) {
@@ -26,32 +19,12 @@ class MediaScanner
   }
 
   private suspend fun scan(file: DocumentFile) {
-    val chapters = file.parseChapters().sorted()
+    val chapters = chapterParser.parse(file)
     if (chapters.isEmpty()) return
+
+    val content = bookParser.getOrPut(chapters, file)
+
     val chapterIds = chapters.map { it.id }
-    val id = BookId(file.uri)
-    val content = contentRepo.getOrPut(id) {
-      val analyzed = mediaAnalyzer.analyze(chapterIds.first().toUri())
-      val content = BookContent(
-        id = id,
-        isActive = true,
-        addedAt = Instant.now(),
-        author = analyzed?.author,
-        lastPlayedAt = Instant.EPOCH,
-        name = analyzed?.bookName ?: file.bookName(),
-        playbackSpeed = 1F,
-        skipSilence = false,
-        chapters = chapterIds,
-        positionInChapter = 0L,
-        currentChapter = chapters.first().id,
-        cover = null
-      )
-
-      validateIntegrity(content, chapters)
-
-      content
-    }
-
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
@@ -64,65 +37,6 @@ class MediaScanner
     if (content != updated) {
       validateIntegrity(updated, chapters)
       contentRepo.put(updated)
-    }
-  }
-
-  private fun DocumentFile.bookName(): String {
-    val fileName = name
-    return if (fileName == null) {
-      uri.toString()
-        .removePrefix("/storage/emulated/0/")
-        .removePrefix("/storage/emulated/")
-        .removePrefix("/storage/")
-        .also {
-          Logger.e("Could not parse fileName from $this. Fallback to $it")
-        }
-    } else {
-      if (isFile) {
-        fileName.substringBeforeLast(".")
-      } else {
-        fileName
-      }
-    }
-  }
-
-  private fun validateIntegrity(content: BookContent, chapters: List<Chapter>) {
-    // the init block performs integrity validation
-    Book(content, chapters)
-  }
-
-  private suspend fun DocumentFile.parseChapters(): List<Chapter> {
-    val result = mutableListOf<Chapter>()
-    parseChapters(file = this, result = result)
-    return result
-  }
-
-  private suspend fun parseChapters(file: DocumentFile, result: MutableList<Chapter>) {
-    val mimeType = file.type
-    if (
-      file.isFile &&
-      mimeType != null &&
-      (mimeType.startsWith("audio/") || mimeType.startsWith("video/"))
-    ) {
-      val id = Chapter.Id(file.uri)
-      val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
-        val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
-        Chapter(
-          id = id,
-          duration = metaData.duration,
-          fileLastModified = Instant.ofEpochMilli(file.lastModified()),
-          name = metaData.chapterName,
-          markData = metaData.chapters
-        )
-      }
-      if (chapter != null) {
-        result.add(chapter)
-      }
-    } else if (file.isDirectory) {
-      file.listFiles()
-        .forEach {
-          parseChapters(it, result)
-        }
     }
   }
 }

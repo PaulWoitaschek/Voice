@@ -131,7 +131,20 @@ class MediaScannerTest {
     val bookContentRepo = BookContentRepo(db.bookContentDao())
     private val chapterRepo = ChapterRepo(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
-    private val scanner = MediaScanner(bookContentRepo, chapterRepo, mediaAnalyzer)
+    private val scanner = MediaScanner(
+      contentRepo = bookContentRepo,
+      chapterParser = ChapterParser(
+        chapterRepo = chapterRepo,
+        mediaAnalyzer = mediaAnalyzer
+      ),
+      bookParser = BookParser(
+        contentRepo = bookContentRepo,
+        mediaAnalyzer = mediaAnalyzer,
+        application = ApplicationProvider.getApplicationContext(),
+        bookmarkDao = db.bookmarkDao(),
+        legacyBookDao = db.legacyBookDao(),
+      )
+    )
 
     val bookRepo = BookRepository(chapterRepo, bookContentRepo)
 
