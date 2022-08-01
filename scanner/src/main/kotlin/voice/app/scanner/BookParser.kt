@@ -6,12 +6,9 @@ import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
-import voice.data.Bookmark
 import voice.data.Chapter
-import voice.data.legacy.LegacyBookMetaData
 import voice.data.legacy.LegacyBookSettings
 import voice.data.repo.BookContentRepo
-import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.toUri
 import voice.logging.core.Logger
@@ -25,7 +22,7 @@ class BookParser
   private val mediaAnalyzer: MediaAnalyzer,
   private val legacyBookDao: LegacyBookDao,
   private val application: Application,
-  private val bookmarkDao: BookmarkDao,
+  private val bookmarkMigrator: BookmarkMigrator,
 ) {
 
   suspend fun parseAndStore(chapters: List<Chapter>, file: DocumentFile): BookContent {
@@ -43,7 +40,7 @@ class BookParser
       }
 
       if (migrationMetaData != null) {
-        migrateBookmarks(migrationMetaData, chapters, id)
+        bookmarkMigrator.migrate(migrationMetaData, chapters, id)
       }
 
       val migratedPlaybackPosition = migrationSettings?.let { findMigratedPlaybackPosition(it, chapters) }
@@ -94,37 +91,6 @@ class BookParser
     val playbackPosition: Long,
   )
 
-  private suspend fun migrateBookmarks(migrationMetaData: LegacyBookMetaData, chapters: List<Chapter>, id: BookId) {
-    val legacyChapters = legacyBookDao.chapters()
-      .filter {
-        it.bookId == migrationMetaData.id
-      }
-
-    legacyBookDao.bookmarksByFiles(legacyChapters.map { it.file })
-      .forEach { legacyBookmark ->
-        val legacyChapter = legacyChapters.find { it.file == legacyBookmark.mediaFile }
-        if (legacyChapter != null) {
-          val matchingChapter = chapters.find {
-            val chapterFilePath = it.id.toUri().filePath() ?: return@find false
-            legacyChapter.file.absolutePath.endsWith(chapterFilePath)
-          }
-          if (matchingChapter != null) {
-            bookmarkDao.addBookmark(
-              Bookmark(
-                bookId = id,
-                addedAt = legacyBookmark.addedAt,
-                chapterId = matchingChapter.id,
-                id = Bookmark.Id.random(),
-                setBySleepTimer = legacyBookmark.setBySleepTimer,
-                time = legacyBookmark.time,
-                title = legacyBookmark.title,
-              ),
-            )
-          }
-        }
-      }
-  }
-
   private fun DocumentFile.bookName(): String {
     val fileName = name
     return if (fileName == null) {
@@ -150,7 +116,7 @@ internal fun validateIntegrity(content: BookContent, chapters: List<Chapter>) {
   Book(content, chapters)
 }
 
-private fun Uri.filePath(): String? {
+internal fun Uri.filePath(): String? {
   return pathSegments.lastOrNull()
     ?.dropWhile { it != ':' }
     ?.removePrefix(":")

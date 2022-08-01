@@ -141,8 +141,11 @@ class MediaScannerTest {
         contentRepo = bookContentRepo,
         mediaAnalyzer = mediaAnalyzer,
         application = ApplicationProvider.getApplicationContext(),
-        bookmarkDao = db.bookmarkDao(),
         legacyBookDao = db.legacyBookDao(),
+        bookmarkMigrator = BookmarkMigrator(
+          legacyBookDao = db.legacyBookDao(),
+          bookmarkDao = db.bookmarkDao(),
+        ),
       ),
     )
 
