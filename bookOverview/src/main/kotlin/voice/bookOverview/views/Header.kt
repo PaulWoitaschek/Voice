@@ -10,11 +10,11 @@ import voice.bookOverview.overview.BookOverviewCategory
 @Composable
 internal fun Header(
   modifier: Modifier = Modifier,
-  category: BookOverviewCategory
+  category: BookOverviewCategory,
 ) {
   Text(
     modifier = modifier,
     text = stringResource(id = category.nameRes),
-    style = MaterialTheme.typography.headlineSmall
+    style = MaterialTheme.typography.headlineSmall,
   )
 }

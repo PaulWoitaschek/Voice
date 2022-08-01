@@ -65,7 +65,7 @@ class CoverScanner
         ffmpeg(
           input = chapter.id.toUri(),
           context = context,
-          command = listOf("-an", coverFile.absolutePath)
+          command = listOf("-an", coverFile.absolutePath),
         )
         if (coverFile.exists() && coverFile.length() > 0) {
           coverSaver.setBookCover(coverFile, bookId = book.id)

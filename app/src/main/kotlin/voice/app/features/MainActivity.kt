@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
           from: Controller?,
           isPush: Boolean,
           container: ViewGroup,
-          handler: ControllerChangeHandler
+          handler: ControllerChangeHandler,
         ) {
           from?.setOptionsMenuHidden(true)
         }
@@ -85,11 +85,11 @@ class MainActivity : AppCompatActivity() {
           from: Controller?,
           isPush: Boolean,
           container: ViewGroup,
-          handler: ControllerChangeHandler
+          handler: ControllerChangeHandler,
         ) {
           from?.setOptionsMenuHidden(false)
         }
-      }
+      },
     )
 
     lifecycleScope.launch {

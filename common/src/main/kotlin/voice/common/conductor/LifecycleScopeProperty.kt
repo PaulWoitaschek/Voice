@@ -36,12 +36,13 @@ class LifecycleScopeProperty(private val lifecycle: Lifecycle) : ReadOnlyPropert
             ON_STOP -> cancelScope(STARTED)
             ON_DESTROY -> cancelScope(CREATED)
             Lifecycle.Event.ON_CREATE,
-            Lifecycle.Event.ON_ANY -> {
+            Lifecycle.Event.ON_ANY,
+            -> {
               // no-op
             }
           }
         }
-      }
+      },
     )
   }
 

@@ -106,7 +106,7 @@ class WidgetUpdater @Inject constructor(
       context,
       System.currentTimeMillis().toInt(),
       wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
     remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
@@ -146,7 +146,7 @@ class WidgetUpdater @Inject constructor(
       context,
       System.currentTimeMillis().toInt(),
       wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
     val coverFile = book.content.cover
@@ -159,7 +159,7 @@ class WidgetUpdater @Inject constructor(
             .fallback(R.drawable.album_art)
             .error(R.drawable.album_art)
             .allowHardware(false)
-            .build()
+            .build(),
         )
         .drawable!!.toBitmap()
       remoteViews.setImageViewBitmap(R.id.imageView, bitmap)
@@ -174,7 +174,7 @@ class WidgetUpdater @Inject constructor(
     remoteViews: RemoteViews,
     width: Int,
     height: Int,
-    singleChapter: Boolean
+    singleChapter: Boolean,
   ) {
     setHorizontalVisibility(remoteViews, width, height)
     setVerticalVisibility(remoteViews, height, singleChapter)
@@ -211,7 +211,7 @@ class WidgetUpdater @Inject constructor(
   private fun setVerticalVisibility(
     remoteViews: RemoteViews,
     widgetHeight: Int,
-    singleChapter: Boolean
+    singleChapter: Boolean,
   ) {
     val buttonSize = context.dpToPxRounded(8F + 36F + 8F)
     val titleSize = context.resources.getDimensionPixelSize(R.dimen.list_text_primary_size)

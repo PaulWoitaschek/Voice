@@ -43,17 +43,17 @@ class ConvertersTest {
       value = listOf(
         MarkData(0L, "Hello"),
         MarkData(5L, "World"),
-        MarkData(Long.MIN_VALUE, "")
+        MarkData(Long.MIN_VALUE, ""),
       ),
       serialize = Converters::fromMarks,
-      deSerialize = Converters::toMarks
+      deSerialize = Converters::toMarks,
     )
   }
 
   private fun <S, D> test(
     value: D,
     serialize: (Converters.(D) -> S),
-    deSerialize: (Converters.(S) -> D)
+    deSerialize: (Converters.(S) -> D),
   ) {
     val converters = Converters()
     val serialized: S = converters.serialize(value)

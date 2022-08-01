@@ -33,7 +33,7 @@ class Migration43to44 : IncrementalMigration(43) {
       `title` TEXT NOT NULL,
       `time` INTEGER NOT NULL,
       `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
-      """.trimIndent()
+      """.trimIndent(),
     )
     db.execSQL(
       """
@@ -45,7 +45,7 @@ class Migration43to44 : IncrementalMigration(43) {
       `marks` TEXT NOT NULL,
       `bookId` TEXT NOT NULL,
       `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
-      """.trimIndent()
+      """.trimIndent(),
     )
     db.execSQL("CREATE  INDEX `index_chapters_bookId` ON `chapters` (`bookId`)")
     db.execSQL(
@@ -57,7 +57,7 @@ class Migration43to44 : IncrementalMigration(43) {
       `name` TEXT NOT NULL,
       `root` TEXT NOT NULL,
       `addedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
-      """.trimIndent()
+      """.trimIndent(),
     )
     db.execSQL(
       """
@@ -70,7 +70,7 @@ class Migration43to44 : IncrementalMigration(43) {
       `skipSilence` INTEGER NOT NULL,
       `active` INTEGER NOT NULL,
       `lastPlayedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -143,8 +143,8 @@ class Migration43to44 : IncrementalMigration(43) {
             "duration" to duration,
             "fileLastModified" to lastModified,
             "marks" to marks,
-            "bookId" to newId
-          )
+            "bookId" to newId,
+          ),
         )
       }
     }
@@ -152,7 +152,7 @@ class Migration43to44 : IncrementalMigration(43) {
 
   private fun SupportSQLiteDatabase.insert(
     tableName: String,
-    contentValues: (ContentValues).() -> Unit
+    contentValues: (ContentValues).() -> Unit,
   ) {
     val cv = ContentValues()
     contentValues(cv)

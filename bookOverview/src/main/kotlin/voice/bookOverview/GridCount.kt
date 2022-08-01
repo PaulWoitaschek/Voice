@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class GridCount
 @Inject constructor(
-  private val context: Context
+  private val context: Context,
 ) {
 
   fun useGridAsDefault(): Boolean {

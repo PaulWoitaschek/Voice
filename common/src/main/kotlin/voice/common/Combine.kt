@@ -11,7 +11,7 @@ fun <T1, T2, T3, T4, T5, T6, T7, R> combine(
   flow5: Flow<T5>,
   flow6: Flow<T6>,
   flow7: Flow<T7>,
-  transform: suspend (T1, T2, T3, T4, T5, T6, T7) -> R
+  transform: suspend (T1, T2, T3, T4, T5, T6, T7) -> R,
 ): Flow<R> {
   return combine(flow, flow2, flow3, flow4, flow5, flow6, flow7) { args ->
     @Suppress("UNCHECKED_CAST")

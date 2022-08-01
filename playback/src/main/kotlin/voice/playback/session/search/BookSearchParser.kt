@@ -15,7 +15,7 @@ class BookSearchParser @Inject constructor() {
       query = query,
       mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS),
       album = extras?.getString(MediaStore.EXTRA_MEDIA_ALBUM),
-      artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST)
+      artist = extras?.getString(MediaStore.EXTRA_MEDIA_ARTIST),
     )
   }
 

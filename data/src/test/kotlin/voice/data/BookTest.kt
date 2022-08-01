@@ -59,7 +59,7 @@ class BookTest {
         chapter(duration = 123),
         chapter(duration = 234),
         chapter(duration = 345),
-        chapter(duration = 456, id = lastChapterId)
+        chapter(duration = 456, id = lastChapterId),
       ),
       currentChapter = lastChapterId,
     )
@@ -75,7 +75,7 @@ class BookTest {
         chapter(duration = 123),
         chapter(duration = 234),
         chapter(duration = 345, id = targetChapter),
-        chapter(duration = 456)
+        chapter(duration = 456),
       ),
       currentChapter = targetChapter,
     )
@@ -89,7 +89,7 @@ class BookTest {
         chapter(duration = 123),
         chapter(duration = 234),
         chapter(duration = 345),
-        chapter(duration = 456)
+        chapter(duration = 456),
       ),
     )
 
@@ -115,7 +115,7 @@ class BookTest {
     val ch3 = chapter()
     val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch2.id
+      currentChapter = ch2.id,
     )
 
     book.assertThat().currentChapterIndexIs(1)
@@ -128,7 +128,7 @@ class BookTest {
     val ch3 = chapter()
     val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch2.id
+      currentChapter = ch2.id,
     )
 
     book.assertThat().nextChapterIs(ch3)
@@ -141,7 +141,7 @@ class BookTest {
     val ch3 = chapter()
     val book = book(
       chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch3.id
+      currentChapter = ch3.id,
     )
 
     book.assertThat().nextChapterIs(null)
@@ -176,7 +176,7 @@ class BookTest {
     return book(
       chapters = chapters,
       time = positionInChapter,
-      currentChapter = currentChapter
+      currentChapter = currentChapter,
     ).position
   }
 }

@@ -43,14 +43,14 @@ fun Map<String, String>.find(tagType: TagType): String? {
 
 @Serializable
 data class MetaDataStream(
-  val tags: Map<String, String>? = null
+  val tags: Map<String, String>? = null,
 )
 
 @Serializable
 data class MetaDataChapter(
   @SerialName("start_time")
   private val startInSeconds: Double,
-  val tags: Map<String, String>? = null
+  val tags: Map<String, String>? = null,
 ) {
 
   val start: Duration get() = startInSeconds.seconds
@@ -59,5 +59,5 @@ data class MetaDataChapter(
 @Serializable
 data class MetaDataFormat(
   val duration: Double? = null,
-  val tags: Map<String, String>? = null
+  val tags: Map<String, String>? = null,
 )

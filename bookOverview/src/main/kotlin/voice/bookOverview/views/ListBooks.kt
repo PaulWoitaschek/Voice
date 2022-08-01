@@ -41,26 +41,26 @@ internal fun ListBooks(
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = contentPadding + PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
+    contentPadding = contentPadding + PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
   ) {
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       stickyHeader(
         key = category,
-        contentType = "header"
+        contentType = "header",
       ) {
         Header(
           modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 8.dp, horizontal = 8.dp),
-          category = category
+          category = category,
         )
       }
       items(
         items = books,
         key = { it.id.value },
-        contentType = { "item" }
+        contentType = { "item" },
       ) { book ->
         ListBookRow(
           book = book,
@@ -88,7 +88,7 @@ private fun ListBookRow(
     },
     modifier = modifier
       .recomposeHighlighter()
-      .fillMaxWidth()
+      .fillMaxWidth(),
   ) {
     Column {
       Row {
@@ -96,22 +96,22 @@ private fun ListBookRow(
         Column(
           Modifier
             .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-            .align(Alignment.CenterVertically)
+            .align(Alignment.CenterVertically),
         ) {
           if (book.author != null) {
             Text(
               text = book.author.toUpperCase(LocaleList.current),
               style = MaterialTheme.typography.labelSmall,
-              maxLines = 1
+              maxLines = 1,
             )
           }
           Text(
             text = book.name,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
           )
           Text(
             text = book.remainingTime,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
           )
         }
       }
@@ -119,7 +119,7 @@ private fun ListBookRow(
       if (book.progress > 0.05) {
         LinearProgressIndicator(
           modifier = Modifier.fillMaxWidth(),
-          progress = book.progress
+          progress = book.progress,
         )
       }
     }
@@ -137,6 +137,6 @@ private fun CoverImage(cover: ImmutableFile?) {
     model = cover?.file,
     placeholder = painterResource(id = R.drawable.album_art),
     error = painterResource(id = R.drawable.album_art),
-    contentDescription = null
+    contentDescription = null,
   )
 }

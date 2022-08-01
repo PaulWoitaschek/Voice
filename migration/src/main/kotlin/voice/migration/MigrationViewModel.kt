@@ -133,7 +133,7 @@ private fun migrationItem(metaData: LegacyBookMetaData, migrationData: Migration
         positionInChapter = formatTime(positionInMark),
         currentFile = currentChapter.name,
         positionInFile = formatTime(settings.positionInChapter),
-      )
+      ),
     )
   }
 }
@@ -141,7 +141,7 @@ private fun migrationItem(metaData: LegacyBookMetaData, migrationData: Migration
 private fun bookmark(
   chapters: List<LegacyChapter>,
   bookmark: LegacyBookmark,
-  currentMark: LegacyChapterMark
+  currentMark: LegacyChapterMark,
 ): MigrationViewState.Item.Bookmark? {
   val bookmarkChapter = chapters.find { it.file == bookmark.mediaFile }
   return if (bookmarkChapter == null) {

@@ -24,7 +24,7 @@ class Migration30to31 : IncrementalMigration(30) {
       val chapterCursor = db.query(
         SupportSQLiteQueryBuilder.builder(tableChapters)
           .selection("$bookIdColumn=?", arrayOf(bookId))
-          .create()
+          .create(),
       )
       chapterCursor.moveToNextLoop {
         chapterCount++

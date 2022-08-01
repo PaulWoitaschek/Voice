@@ -13,7 +13,7 @@ import voice.common.conductor.ViewBindingController
  */
 abstract class MvpController<V : Any, out P, B : ViewBinding>(
   inflateBinding: InflateBinding<B>,
-  args: Bundle = Bundle()
+  args: Bundle = Bundle(),
 ) : ViewBindingController<B>(args, inflateBinding) where P : Presenter<V> {
 
   private var internalPresenter: P? = null
@@ -50,7 +50,7 @@ abstract class MvpController<V : Any, out P, B : ViewBinding>(
         override fun postDestroy(controller: Controller) {
           internalPresenter = null
         }
-      }
+      },
     )
   }
 

@@ -60,7 +60,7 @@ object PersistenceModule {
   @Singleton
   fun appDb(
     context: Context,
-    migrations: Array<Migration>
+    migrations: Array<Migration>,
   ): AppDb {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
       .addMigrations(*migrations)
@@ -96,7 +96,7 @@ object PersistenceModule {
       Migration47(),
       Migration48(),
       Migration49(),
-      Migration50()
+      Migration50(),
     )
   }
 }

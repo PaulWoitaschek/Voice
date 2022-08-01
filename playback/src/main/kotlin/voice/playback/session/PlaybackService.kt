@@ -190,7 +190,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   override fun onLoadChildren(
     parentId: String,
-    result: Result<List<MediaBrowserCompat.MediaItem>>
+    result: Result<List<MediaBrowserCompat.MediaItem>>,
   ) {
     result.detach()
     scope.launch {
@@ -202,7 +202,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onGetRoot(
     clientPackageName: String,
     clientUid: Int,
-    rootHints: Bundle?
+    rootHints: Bundle?,
   ): BrowserRoot = BrowserRoot(mediaBrowserHelper.root(), null)
 
   override fun onDestroy() {
@@ -225,14 +225,15 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     when (updatedState) {
       PlaybackStateCompat.STATE_BUFFERING,
-      PlaybackStateCompat.STATE_PLAYING -> {
+      PlaybackStateCompat.STATE_PLAYING,
+      -> {
         if (notification != null) {
           notificationManager.notify(NOTIFICATION_ID, notification)
 
           if (!isForeground) {
             ContextCompat.startForegroundService(
               applicationContext,
-              Intent(applicationContext, this@PlaybackService.javaClass)
+              Intent(applicationContext, this@PlaybackService.javaClass),
             )
             startForeground(NOTIFICATION_ID, notification)
             isForeground = true

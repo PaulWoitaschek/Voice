@@ -26,10 +26,10 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
         text = LocalContext.current.resources.getQuantityString(
           R.plurals.seconds,
           autoRewindInSeconds,
-          autoRewindInSeconds
-        )
+          autoRewindInSeconds,
+        ),
       )
-    }
+    },
   )
 }
 
@@ -37,7 +37,7 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
 internal fun AutoRewindAmountDialog(
   currentSeconds: Int,
   onSecondsConfirmed: (Int) -> Unit,
-  onDismiss: () -> Unit
+  onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
     title = stringResource(R.string.pref_seek_time),
@@ -46,6 +46,6 @@ internal fun AutoRewindAmountDialog(
     maxSeconds = 20,
     textPluralRes = R.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed,
-    onDismiss = onDismiss
+    onDismiss = onDismiss,
   )
 }

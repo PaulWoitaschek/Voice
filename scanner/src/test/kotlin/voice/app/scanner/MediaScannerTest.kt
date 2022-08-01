@@ -57,8 +57,8 @@ class MediaScannerTest {
     assertBookContents(
       BookContentView(
         id = BookId(book1.toUri()),
-        chapters = book1Chapters.drop(1)
-      )
+        chapters = book1Chapters.drop(1),
+      ),
     )
   }
 
@@ -135,7 +135,7 @@ class MediaScannerTest {
       contentRepo = bookContentRepo,
       chapterParser = ChapterParser(
         chapterRepo = chapterRepo,
-        mediaAnalyzer = mediaAnalyzer
+        mediaAnalyzer = mediaAnalyzer,
       ),
       bookParser = BookParser(
         contentRepo = bookContentRepo,
@@ -143,7 +143,7 @@ class MediaScannerTest {
         application = ApplicationProvider.getApplicationContext(),
         bookmarkDao = db.bookmarkDao(),
         legacyBookDao = db.legacyBookDao(),
-      )
+      ),
     )
 
     val bookRepo = BookRepository(chapterRepo, bookContentRepo)
@@ -167,7 +167,7 @@ class MediaScannerTest {
               author = "Author",
               bookName = "Book Name",
               chapterName = "Chapter",
-              chapters = emptyList()
+              chapters = emptyList(),
             )
           }
         }
@@ -186,7 +186,7 @@ class MediaScannerTest {
             id = it.id,
             chapters = it.content.chapters.map { chapter ->
               chapter.toUri()
-            }
+            },
           )
         }
         .shouldContainExactlyInAnyOrder(expected.toList())
@@ -199,6 +199,6 @@ class MediaScannerTest {
 
   data class BookContentView(
     val id: BookId,
-    val chapters: List<Uri>
+    val chapters: List<Uri>,
   )
 }

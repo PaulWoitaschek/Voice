@@ -21,5 +21,5 @@ data class LegacyBookmark(
   val setBySleepTimer: Boolean,
   @ColumnInfo(name = "id")
   @PrimaryKey
-  val id: UUID
+  val id: UUID,
 )

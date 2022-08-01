@@ -29,6 +29,6 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
       (rect.left * scaleFactor).toInt(),
       (rect.top * scaleFactor).toInt(),
       (rect.right * scaleFactor).toInt(),
-      (rect.bottom * scaleFactor).toInt()
+      (rect.bottom * scaleFactor).toInt(),
     )
 }

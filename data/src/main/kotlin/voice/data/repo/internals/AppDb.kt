@@ -27,7 +27,7 @@ import voice.data.repo.internals.dao.LegacyBookDao
     Bookmark::class,
   ],
   version = AppDb.VERSION,
-  autoMigrations = [AutoMigration(from = 51, to = 52)]
+  autoMigrations = [AutoMigration(from = 51, to = 52)],
 )
 @TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {

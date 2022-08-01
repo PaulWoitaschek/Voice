@@ -9,31 +9,33 @@ import voice.playback.BuildConfig
 import voice.playback.playstate.PlayerState
 
 fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
-  addListener(object : Player.Listener {
-    override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
-      listener()
-    }
+  addListener(
+    object : Player.Listener {
+      override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+        listener()
+      }
 
-    override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
-      listener()
-    }
+      override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+        listener()
+      }
 
-    override fun onPlaybackStateChanged(playbackState: Int) {
-      listener()
-    }
+      override fun onPlaybackStateChanged(playbackState: Int) {
+        listener()
+      }
 
-    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-      listener()
-    }
+      override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        listener()
+      }
 
-    override fun onIsPlayingChanged(isPlaying: Boolean) {
-      listener()
-    }
+      override fun onIsPlayingChanged(isPlaying: Boolean) {
+        listener()
+      }
 
-    override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-      listener()
-    }
-  })
+      override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+        listener()
+      }
+    },
+  )
 }
 
 inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
@@ -67,7 +69,7 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
           action(state)
         }
       }
-    }
+    },
   )
 }
 
@@ -77,7 +79,7 @@ inline fun ExoPlayer.onError(crossinline action: (PlaybackException) -> Unit) {
       override fun onPlayerError(error: PlaybackException) {
         action(error)
       }
-    }
+    },
   )
 }
 
@@ -87,6 +89,6 @@ inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
       override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
         action()
       }
-    }
+    },
   )
 }

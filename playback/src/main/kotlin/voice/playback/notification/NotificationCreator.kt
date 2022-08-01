@@ -33,31 +33,31 @@ class NotificationCreator
   private val playStateManager: PlayStateManager,
   private val mediaSession: MediaSessionCompat,
   notificationChannelCreator: NotificationChannelCreator,
-  private val toBookIntentProvider: ToBookIntentProvider
+  private val toBookIntentProvider: ToBookIntentProvider,
 ) {
 
   private val fastForwardAction = NotificationCompat.Action(
     R.drawable.ic_fast_forward_white_36dp,
     context.getString(R.string.fast_forward),
-    buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
+    buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD),
   )
 
   private val rewindAction = NotificationCompat.Action(
     R.drawable.ic_rewind_white_36dp,
     context.getString(R.string.rewind),
-    buildMediaButtonPendingIntent(context, ACTION_REWIND)
+    buildMediaButtonPendingIntent(context, ACTION_REWIND),
   )
 
   private val playAction = NotificationCompat.Action(
     R.drawable.ic_play_white_36dp,
     context.getString(R.string.play),
-    buildMediaButtonPendingIntent(context, ACTION_PLAY)
+    buildMediaButtonPendingIntent(context, ACTION_PLAY),
   )
 
   private val pauseAction = NotificationCompat.Action(
     R.drawable.ic_pause_white_36dp,
     context.getString(R.string.pause),
-    buildMediaButtonPendingIntent(context, ACTION_PAUSE)
+    buildMediaButtonPendingIntent(context, ACTION_PAUSE),
   )
 
   init {
@@ -103,12 +103,12 @@ class NotificationCreator
           .data(coverFile)
           .size(
             width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
-            height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height)
+            height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height),
           )
           .fallback(R.drawable.album_art)
           .error(R.drawable.album_art)
           .allowHardware(false)
-          .build()
+          .build(),
       )
       .drawable!!.toBitmap()
 
@@ -132,7 +132,7 @@ class NotificationCreator
       context,
       0,
       contentIntent,
-      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
   }
 

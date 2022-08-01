@@ -20,7 +20,7 @@ import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
 fun VoiceTheme(
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   Material3Theme(
     colorScheme = if (isDarkTheme()) {
@@ -35,14 +35,14 @@ fun VoiceTheme(
       } else {
         lightColorScheme()
       }
-    }
+    },
   ) {
     MaterialTheme(
       colors = if (isDarkTheme()) {
         darkColors()
       } else {
         lightColors()
-      }
+      },
     ) {
       content()
     }

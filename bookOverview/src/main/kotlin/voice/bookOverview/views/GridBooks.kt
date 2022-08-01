@@ -36,7 +36,7 @@ internal fun GridBooks(
   books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
   contentPadding: PaddingValues,
   onBookClick: (BookId) -> Unit,
-  onBookLongClick: (BookId) -> Unit
+  onBookLongClick: (BookId) -> Unit,
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
@@ -50,22 +50,22 @@ internal fun GridBooks(
       item(
         span = { GridItemSpan(maxLineSpan) },
         key = category,
-        contentType = "header"
+        contentType = "header",
       ) {
         Header(
           modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 8.dp, end = 8.dp),
-          category = category
+          category = category,
         )
       }
       items(
         items = books,
         key = { it.id },
-        contentType = { "item" }
+        contentType = { "item" },
       ) { book ->
         GridBook(
           book = book,
           onBookClick = onBookClick,
-          onBookLongClick = onBookLongClick
+          onBookLongClick = onBookLongClick,
         )
       }
     }
@@ -85,7 +85,7 @@ private fun GridBook(
     onLongClick = {
       onBookLongClick(book.id)
     },
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.fillMaxWidth(),
   ) {
     Column {
       AsyncImage(
@@ -97,7 +97,7 @@ private fun GridBook(
         model = book.cover?.file,
         placeholder = painterResource(id = R.drawable.album_art),
         error = painterResource(id = R.drawable.album_art),
-        contentDescription = null
+        contentDescription = null,
       )
       Text(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
@@ -114,7 +114,7 @@ private fun GridBook(
       if (book.progress > 0F) {
         LinearProgressIndicator(
           modifier = Modifier.fillMaxWidth(),
-          progress = book.progress
+          progress = book.progress,
         )
       }
     }

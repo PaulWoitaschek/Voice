@@ -16,7 +16,7 @@ fun LongClickableCard(
   onClick: () -> Unit,
   onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   Card(modifier = modifier) {
     Box(
@@ -29,7 +29,7 @@ fun LongClickableCard(
           role = Role.Button,
           onClick = onClick,
           onLongClick = onLongClick,
-        )
+        ),
     ) {
       content()
     }

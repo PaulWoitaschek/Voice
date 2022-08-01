@@ -19,7 +19,7 @@ data class LegacyBookMetaData(
   @ColumnInfo(name = "root")
   val root: String,
   @ColumnInfo(name = "addedAtMillis")
-  val addedAtMillis: Long
+  val addedAtMillis: Long,
 ) {
 
   init {

@@ -17,8 +17,8 @@ class SqlStatementSplitterTest {
     recordedChunks.shouldContainExactly(
       listOf(
         listOf(1, 2),
-        listOf(3)
-      )
+        listOf(3),
+      ),
     )
     result.shouldContainExactly("1", "2", "3")
   }
@@ -33,8 +33,8 @@ class SqlStatementSplitterTest {
     }
     recordedChunks.shouldContainExactly(
       listOf(
-        listOf(1, 2, 3)
-      )
+        listOf(1, 2, 3),
+      ),
     )
     result.shouldContainExactly("1", "2", "3")
   }

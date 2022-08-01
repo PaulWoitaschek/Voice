@@ -32,7 +32,7 @@ class SettingsViewModel
       resumeOnReplugPref.flow,
       autoRewindAmountPref.flow,
       seekTimePref.flow,
-      dialog
+      dialog,
     ) { useDarkTheme, resumeOnReplug, autoRewindAmount, seekTime, dialog ->
       SettingsViewState(
         useDarkTheme = useDarkTheme,
@@ -40,7 +40,7 @@ class SettingsViewModel
         resumeOnReplug = resumeOnReplug,
         seekTimeInSeconds = seekTime,
         autoRewindInSeconds = autoRewindAmount,
-        dialog = dialog
+        dialog = dialog,
       )
     }
   }

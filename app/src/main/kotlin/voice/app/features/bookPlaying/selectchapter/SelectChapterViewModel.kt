@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SelectChapterViewModel
 @Inject constructor(
   private val bookRepository: BookRepository,
-  private val player: PlayerController
+  private val player: PlayerController,
 ) {
 
   private val scope = MainScope()

@@ -15,7 +15,7 @@ import voice.settings.R
 internal fun ContributeDialog(
   suggestionsClicked: () -> Unit,
   translationsClicked: () -> Unit,
-  onDismiss: () -> Unit
+  onDismiss: () -> Unit,
 ) {
   AlertDialog(
     onDismissRequest = onDismiss,
@@ -46,6 +46,6 @@ internal fun ContributeDialog(
         )
       }
     },
-    confirmButton = {}
+    confirmButton = {},
   )
 }

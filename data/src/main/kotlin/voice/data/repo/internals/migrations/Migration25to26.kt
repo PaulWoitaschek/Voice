@@ -12,7 +12,7 @@ class Migration25to26 : IncrementalMigration(25) {
     // get all books
     val cursor = db.query(
       "TABLE_BOOK",
-      arrayOf("BOOK_ID", "BOOK_JSON")
+      arrayOf("BOOK_ID", "BOOK_JSON"),
     )
     val allBooks = ArrayList<JSONObject>(cursor.count)
     cursor.use {

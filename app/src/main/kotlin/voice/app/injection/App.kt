@@ -45,7 +45,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
     Coil.setImageLoader(
       ImageLoader.Builder(this)
         .addLastModifiedToFileCacheKey(false)
-        .build()
+        .build(),
     )
 
     DynamicColors.applyToActivitiesIfAvailable(this)

@@ -35,7 +35,7 @@ class SleepTimerDialogViewModel
       .map { selectedMinutes ->
         SleepTimerDialogViewState(
           selectedMinutes = selectedMinutes,
-          showFab = selectedMinutes > 0
+          showFab = selectedMinutes > 0,
         )
       }
   }
@@ -68,7 +68,7 @@ class SleepTimerDialogViewModel
       bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
         setBySleepTimer = true,
-        title = null
+        title = null,
       )
     }
     sleepTimer.setActive(true)

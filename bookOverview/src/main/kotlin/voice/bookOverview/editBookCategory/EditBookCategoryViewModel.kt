@@ -14,7 +14,7 @@ import javax.inject.Inject
 @BookOverviewScope
 @ContributesMultibinding(
   scope = BookOverviewScope::class,
-  boundType = BottomSheetItemViewModel::class
+  boundType = BottomSheetItemViewModel::class,
 )
 class EditBookCategoryViewModel
 @Inject
@@ -27,15 +27,15 @@ constructor(
     return when (book.category) {
       BookOverviewCategory.CURRENT -> listOf(
         BottomSheetItem.BookCategoryMarkAsNotStarted,
-        BottomSheetItem.BookCategoryMarkAsCompleted
+        BottomSheetItem.BookCategoryMarkAsCompleted,
       )
       BookOverviewCategory.NOT_STARTED -> listOf(
         BottomSheetItem.BookCategoryMarkAsCurrent,
-        BottomSheetItem.BookCategoryMarkAsCompleted
+        BottomSheetItem.BookCategoryMarkAsCompleted,
       )
       BookOverviewCategory.FINISHED -> listOf(
         BottomSheetItem.BookCategoryMarkAsCurrent,
-        BottomSheetItem.BookCategoryMarkAsNotStarted
+        BottomSheetItem.BookCategoryMarkAsNotStarted,
       )
     }
   }

@@ -22,8 +22,8 @@ internal fun LayoutIcon(layoutIcon: BookOverviewViewState.Content.LayoutIcon, on
         when (layoutIcon) {
           BookOverviewViewState.Content.LayoutIcon.List -> R.string.layout_list
           BookOverviewViewState.Content.LayoutIcon.Grid -> R.string.layout_grid
-        }
-      )
+        },
+      ),
     )
   }
 }

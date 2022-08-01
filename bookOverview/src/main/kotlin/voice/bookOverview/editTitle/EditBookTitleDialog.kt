@@ -14,7 +14,7 @@ internal fun EditBookTitleDialog(
   onDismissEditTitleClick: () -> Unit,
   onConfirmEditTitle: () -> Unit,
   viewState: EditBookTitleState,
-  onUpdateEditTitle: (String) -> Unit
+  onUpdateEditTitle: (String) -> Unit,
 ) {
   AlertDialog(
     onDismissRequest = onDismissEditTitleClick,
@@ -24,7 +24,7 @@ internal fun EditBookTitleDialog(
     confirmButton = {
       Button(
         onClick = onConfirmEditTitle,
-        enabled = viewState.confirmButtonEnabled
+        enabled = viewState.confirmButtonEnabled,
       ) {
         Text(stringResource(id = R.string.dialog_confirm))
       }
@@ -40,8 +40,8 @@ internal fun EditBookTitleDialog(
         onValueChange = onUpdateEditTitle,
         label = {
           Text(stringResource(R.string.change_book_name))
-        }
+        },
       )
-    }
+    },
   )
 }

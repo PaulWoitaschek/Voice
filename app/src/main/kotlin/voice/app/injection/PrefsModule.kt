@@ -110,7 +110,7 @@ object PrefsModule {
     return factory.create(
       serializer = ListSerializer(UriSerializer),
       fileName = "audiobookFolders",
-      defaultValue = emptyList()
+      defaultValue = emptyList(),
     )
   }
 
@@ -121,7 +121,7 @@ object PrefsModule {
     return factory.create(
       serializer = BookId.serializer().nullable,
       fileName = "currentBook",
-      defaultValue = null
+      defaultValue = null,
     )
   }
 

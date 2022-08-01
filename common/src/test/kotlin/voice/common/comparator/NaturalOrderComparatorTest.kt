@@ -39,7 +39,7 @@ class NaturalOrderComparatorTest {
       testFolder.newFile("storage/emulated/0/2.ogg"),
       testFolder.newFile("xFolder/d.jpg"),
       testFolder.newFile("1.mp3"),
-      testFolder.newFile("a.jpg")
+      testFolder.newFile("a.jpg"),
     )
   }
 

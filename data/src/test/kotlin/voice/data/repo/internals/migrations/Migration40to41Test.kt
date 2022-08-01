@@ -33,14 +33,16 @@ class Migration40to41Test {
   fun setUp() {
     val config = SupportSQLiteOpenHelper.Configuration
       .builder(getApplicationContext())
-      .callback(object : SupportSQLiteOpenHelper.Callback(39) {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-          db.execSQL(BookTable.CREATE_TABLE)
-        }
+      .callback(
+        object : SupportSQLiteOpenHelper.Callback(39) {
+          override fun onCreate(db: SupportSQLiteDatabase) {
+            db.execSQL(BookTable.CREATE_TABLE)
+          }
 
-        override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        }
-      })
+          override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+          }
+        },
+      )
       .build()
     helper = FrameworkSQLiteOpenHelperFactory().create(config)
     db = helper.writableDatabase
@@ -68,7 +70,7 @@ class Migration40to41Test {
       SQLiteDatabase.CONFLICT_FAIL,
       loudnessGainCv,
       "${BookTable.ID}=?",
-      arrayOf(id)
+      arrayOf(id),
     )
 
     val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)

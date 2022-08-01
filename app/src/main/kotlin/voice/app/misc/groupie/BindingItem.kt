@@ -12,7 +12,7 @@ class BindingItem<B : ViewBinding, D>(
   private val data: D,
   @LayoutRes private val layoutId: Int,
   private val bindLayout: BindLayout<B>,
-  private val bind: B.(D, Int) -> Unit
+  private val bind: B.(D, Int) -> Unit,
 ) : Item<ViewBindingGroupieViewHolder<B>>() {
 
   override fun getLayout(): Int = layoutId

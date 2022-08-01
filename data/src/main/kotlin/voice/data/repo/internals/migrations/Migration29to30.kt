@@ -74,7 +74,7 @@ class Migration29to30 : IncrementalMigration(29) {
     // fetching old contents
     val cursor = db.query(
       "TABLE_BOOK",
-      arrayOf("BOOK_JSON", "BOOK_ACTIVE")
+      arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
     )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)

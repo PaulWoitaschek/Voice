@@ -15,11 +15,11 @@ internal fun PlayButton(playing: Boolean, onClick: () -> Unit) {
     Icon(
       painter = rememberAnimatedVectorPainter(
         animatedImageVector = AnimatedImageVector.animatedVectorResource(
-          id = R.drawable.avd_pause_to_play
+          id = R.drawable.avd_pause_to_play,
         ),
-        atEnd = !playing
+        atEnd = !playing,
       ),
-      contentDescription = stringResource(R.string.play_pause)
+      contentDescription = stringResource(R.string.play_pause),
     )
   }
 }

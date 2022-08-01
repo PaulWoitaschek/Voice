@@ -8,19 +8,19 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 enum class BookOverviewCategory(
   @StringRes val nameRes: Int,
-  val comparator: Comparator<Book>
+  val comparator: Comparator<Book>,
 ) {
   CURRENT(
     nameRes = R.string.book_header_current,
-    comparator = BookComparator.ByLastPlayed
+    comparator = BookComparator.ByLastPlayed,
   ),
   NOT_STARTED(
     nameRes = R.string.book_header_not_started,
-    comparator = BookComparator.ByLastPlayed.then(BookComparator.ByDateAdded).then(BookComparator.ByName)
+    comparator = BookComparator.ByLastPlayed.then(BookComparator.ByDateAdded).then(BookComparator.ByName),
   ),
   FINISHED(
     nameRes = R.string.book_header_completed,
-    comparator = BookComparator.ByLastPlayed
+    comparator = BookComparator.ByLastPlayed,
   );
 }
 

@@ -22,7 +22,7 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
         override fun postDestroy(controller: Controller) {
           value = null
         }
-      }
+      },
     )
   }
 
@@ -31,7 +31,7 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
   override fun getValue(thisRef: Controller, property: KProperty<*>): T {
     return value
       ?: throw UninitializedPropertyAccessException(
-        "Property ${property.name} is not initialized."
+        "Property ${property.name} is not initialized.",
       )
   }
 
@@ -42,5 +42,5 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
 
 fun <T : Any> Controller.clearAfterDestroyView(): ReadWriteProperty<Controller, T> =
   ClearAfterDestroyView(
-    this
+    this,
   )

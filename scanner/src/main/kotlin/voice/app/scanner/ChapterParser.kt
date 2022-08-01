@@ -30,7 +30,7 @@ class ChapterParser
             duration = metaData.duration,
             fileLastModified = Instant.ofEpochMilli(file.lastModified()),
             name = metaData.chapterName,
-            markData = metaData.chapters
+            markData = metaData.chapters,
           )
         }
         if (chapter != null) {

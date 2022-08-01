@@ -26,8 +26,8 @@ internal fun DarkThemeRow(useDarkTheme: Boolean, toggle: () -> Unit) {
         checked = useDarkTheme,
         onCheckedChange = {
           toggle()
-        }
+        },
       )
-    }
+    },
   )
 }

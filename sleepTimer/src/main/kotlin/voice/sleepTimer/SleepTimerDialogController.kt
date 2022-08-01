@@ -25,7 +25,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
   constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
-    }
+    },
   )
 
   @Inject

@@ -75,7 +75,7 @@ class BookRepository
           return null
         }
         chapter
-      }
+      },
     )
   }
 }

@@ -21,7 +21,7 @@ class NotifyOnAutoConnectionChange
   private val repo: BookRepository,
   @CurrentBook
   private val currentBook: DataStore<BookId?>,
-  private val autoConnection: AndroidAutoConnectedReceiver
+  private val autoConnection: AndroidAutoConnectedReceiver,
 ) {
 
   suspend fun listen() {

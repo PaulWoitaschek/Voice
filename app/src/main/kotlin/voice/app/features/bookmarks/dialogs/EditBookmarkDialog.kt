@@ -34,7 +34,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
         hintRes = R.string.bookmark_edit_hint,
         prefill = bookmarkTitle,
         allowEmpty = false,
-        inputType = inputType
+        inputType = inputType,
       ) { _, charSequence ->
         val callback = targetController as Callback
         val newTitle = charSequence.toString()
@@ -66,7 +66,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
     operator fun <T> invoke(
       target: T,
-      bookmark: Bookmark
+      bookmark: Bookmark,
     ): EditBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
         putBookmarkId(NI_BOOKMARK_ID, bookmark.id)

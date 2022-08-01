@@ -64,7 +64,7 @@ class BookParser
                   setBySleepTimer = legacyBookmark.setBySleepTimer,
                   time = legacyBookmark.time,
                   title = legacyBookmark.title,
-                )
+                ),
               )
             }
           }
@@ -108,7 +108,7 @@ class BookParser
         cover = migrationSettings?.id?.let {
           File(application.filesDir, id.toString())
             .takeIf { it.canRead() }
-        }
+        },
       ).also {
         validateIntegrity(it, chapters)
       }

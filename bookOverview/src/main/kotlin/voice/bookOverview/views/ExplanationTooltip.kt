@@ -35,7 +35,7 @@ internal fun ExplanationTooltip(content: @Composable ColumnScope.() -> Unit) {
     Card(
       modifier = Modifier.widthIn(max = 240.dp),
       elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-      shape = explanationTooltipShape(triangleCenterX, LocalDensity.current)
+      shape = explanationTooltipShape(triangleCenterX, LocalDensity.current),
     ) {
       content()
     }
@@ -50,7 +50,7 @@ private class ExplanationTooltipPopupPositionProvider(
     anchorBounds: IntRect,
     windowSize: IntSize,
     layoutDirection: LayoutDirection,
-    popupContentSize: IntSize
+    popupContentSize: IntSize,
   ): IntOffset {
     val rightMargin = with(density) { 16.dp.toPx() }
     var offset = IntOffset(anchorBounds.center.x - popupContentSize.width / 2, anchorBounds.bottom)
@@ -71,21 +71,21 @@ private fun explanationTooltipShape(triangleCenterX: Float?, density: Density): 
   return GenericShape { size, layoutDirection ->
     addOutline(
       RoundedCornerShape(12.0.dp)
-        .createOutline(size, layoutDirection, density)
+        .createOutline(size, layoutDirection, density),
     )
     if (triangleCenterX != null) {
       val trianglePath = Path().apply {
         moveTo(
           x = triangleCenterX - triangleSize / 2F,
-          y = 0F
+          y = 0F,
         )
         lineTo(
           x = triangleCenterX,
-          y = -triangleSize / 2F
+          y = -triangleSize / 2F,
         )
         lineTo(
           x = triangleCenterX + triangleSize / 2F,
-          y = 0F
+          y = 0F,
         )
         close()
       }

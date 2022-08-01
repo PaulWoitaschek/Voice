@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class ChapterRepo
 @Inject constructor(
-  private val dao: ChapterDao
+  private val dao: ChapterDao,
 ) {
 
   private val cache = mutableMapOf<Chapter.Id, Chapter?>()
@@ -40,7 +40,7 @@ class ChapterRepo
   suspend inline fun getOrPut(
     id: Chapter.Id,
     lastModified: Instant,
-    defaultValue: () -> Chapter?
+    defaultValue: () -> Chapter?,
   ): Chapter? {
     val chapter = get(id)
     if (chapter != null && chapter.fileLastModified == lastModified) {

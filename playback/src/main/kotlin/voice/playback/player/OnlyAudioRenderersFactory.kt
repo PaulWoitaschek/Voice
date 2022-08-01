@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class OnlyAudioRenderersFactory
 @Inject constructor(
-  private val context: Context
+  private val context: Context,
 ) : RenderersFactory {
 
   override fun createRenderers(
@@ -22,7 +22,7 @@ class OnlyAudioRenderersFactory
     videoRendererEventListener: VideoRendererEventListener,
     audioRendererEventListener: AudioRendererEventListener,
     textRendererOutput: TextOutput,
-    metadataRendererOutput: MetadataOutput
+    metadataRendererOutput: MetadataOutput,
   ): Array<Renderer> {
     return arrayOf(
       MediaCodecAudioRenderer(
@@ -30,7 +30,7 @@ class OnlyAudioRenderersFactory
         MediaCodecSelector.DEFAULT,
         eventHandler,
         audioRendererEventListener,
-      )
+      ),
     )
   }
 }

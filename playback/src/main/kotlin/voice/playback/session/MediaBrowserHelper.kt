@@ -30,7 +30,7 @@ class MediaBrowserHelper
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
   private val context: Context,
-  private val applicationIdProvider: ApplicationIdProvider
+  private val applicationIdProvider: ApplicationIdProvider,
 ) {
 
   fun root(): String = bookUriConverter.allBooksId()
@@ -62,7 +62,8 @@ class MediaBrowserHelper
         }
       }
       is BookUriConverter.Parsed.Book,
-      is BookUriConverter.Parsed.Chapter -> {
+      is BookUriConverter.Parsed.Chapter,
+      -> {
         Logger.w("Didn't handle $parentId")
         null
       }
@@ -72,7 +73,7 @@ class MediaBrowserHelper
   private fun currentBookTitlePrefix() = "${context.getString(R.string.current_book)}: "
 
   private suspend fun Book.toMediaDescription(
-    titlePrefix: String = ""
+    titlePrefix: String = "",
   ): MediaBrowserCompat.MediaItem {
     val iconUri = content.cover?.let { fileProviderUri(it) }
     val mediaId = bookUriConverter.book(id)
@@ -92,12 +93,12 @@ class MediaBrowserHelper
             context.grantUriPermission(
               "com.google.android.wearable.app",
               this,
-              Intent.FLAG_GRANT_READ_URI_PERMISSION
+              Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
             context.grantUriPermission(
               "com.google.android.projection.gearhead",
               this,
-              Intent.FLAG_GRANT_READ_URI_PERMISSION
+              Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
           }
       } else null

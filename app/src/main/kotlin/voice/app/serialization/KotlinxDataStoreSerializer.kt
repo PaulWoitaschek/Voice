@@ -13,7 +13,7 @@ import java.io.OutputStream
 class KotlinxDataStoreSerializer<T>(
   override val defaultValue: T,
   private val json: Json,
-  private val serializer: KSerializer<T>
+  private val serializer: KSerializer<T>,
 ) : Serializer<T> {
 
   override suspend fun readFrom(input: InputStream): T = json.decodeFromStream(serializer, input)

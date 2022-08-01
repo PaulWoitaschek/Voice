@@ -48,7 +48,7 @@ class AppController : ComposeController() {
         FolderPicker(
           onCloseClick = {
             navController.popBackStack()
-          }
+          },
         )
       }
     }

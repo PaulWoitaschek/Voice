@@ -36,7 +36,7 @@ inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
 
 inline fun <T> SupportSQLiteDatabase.transaction(
   exclusive: Boolean = true,
-  body: SupportSQLiteDatabase.() -> T
+  body: SupportSQLiteDatabase.() -> T,
 ): T {
   if (exclusive) {
     beginTransaction()
@@ -81,7 +81,7 @@ fun SQLiteDatabase.query(
   having: String? = null,
   orderBy: String? = null,
   limit: String? = null,
-  distinct: Boolean = false
+  distinct: Boolean = false,
 ): Cursor {
   val argsAsString = selectionArgs?.map(Any::toString)?.toTypedArray()
   return query(
@@ -93,7 +93,7 @@ fun SQLiteDatabase.query(
     groupBy,
     having,
     orderBy,
-    limit
+    limit,
   )
 }
 
@@ -101,7 +101,7 @@ fun SQLiteDatabase.update(
   table: String,
   values: ContentValues,
   whereClause: String,
-  vararg whereArgs: Any
+  vararg whereArgs: Any,
 ): Int {
   val whereArgsMapped = whereArgs.map(Any::toString).toTypedArray()
   return update(table, values, whereClause, whereArgsMapped)

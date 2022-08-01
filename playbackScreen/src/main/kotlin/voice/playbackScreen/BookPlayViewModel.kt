@@ -48,7 +48,7 @@ class BookPlayViewModel
     return combine(
       repo.flow(bookId).filterNotNull(),
       playStateManager.flow,
-      sleepTimer.leftSleepTimeFlow
+      sleepTimer.leftSleepTimeFlow,
     ) { book, playState, sleepTime ->
       val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
@@ -61,7 +61,7 @@ class BookPlayViewModel
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
         cover = book.content.cover,
-        skipSilence = book.content.skipSilence
+        skipSilence = book.content.skipSilence,
       )
     }
   }
@@ -104,7 +104,7 @@ class BookPlayViewModel
       bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
         title = null,
-        setBySleepTimer = false
+        setBySleepTimer = false,
       )
       _viewEffects.tryEmit(BookPlayViewEffect.BookmarkAdded)
     }

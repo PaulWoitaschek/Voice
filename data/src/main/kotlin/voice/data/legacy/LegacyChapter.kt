@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Entity(
   tableName = "chapters",
-  indices = [(Index(value = ["bookId"]))]
+  indices = [(Index(value = ["bookId"]))],
 )
 data class LegacyChapter(
   @ColumnInfo(name = "file")
@@ -27,7 +27,7 @@ data class LegacyChapter(
   val bookId: UUID,
   @ColumnInfo(name = "id")
   @PrimaryKey(autoGenerate = true)
-  val id: Long = 0L
+  val id: Long = 0L,
 ) {
 
   @Ignore

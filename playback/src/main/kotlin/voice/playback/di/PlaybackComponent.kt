@@ -7,7 +7,7 @@ import voice.playback.session.PlaybackService
 
 @PlaybackScope
 @MergeSubcomponent(
-  scope = PlaybackScope::class
+  scope = PlaybackScope::class,
 )
 interface PlaybackComponent {
 

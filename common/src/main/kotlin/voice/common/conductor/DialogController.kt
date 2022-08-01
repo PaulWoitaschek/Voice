@@ -33,7 +33,7 @@ abstract class DialogController(args: Bundle = Bundle()) : Controller(args), Lif
   final override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup,
-    savedViewState: Bundle?
+    savedViewState: Bundle?,
   ): View {
     dialog = onCreateDialog(savedViewState).apply {
       setOwnerActivity(activity!!)
@@ -80,7 +80,7 @@ abstract class DialogController(args: Bundle = Bundle()) : Controller(args), Lif
     dismissed = false
     router.pushController(
       RouterTransaction.with(this)
-        .pushChangeHandler(SimpleSwapChangeHandler(false))
+        .pushChangeHandler(SimpleSwapChangeHandler(false)),
     )
   }
 

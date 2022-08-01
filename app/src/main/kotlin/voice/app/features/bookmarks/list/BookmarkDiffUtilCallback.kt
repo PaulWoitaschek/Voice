@@ -8,7 +8,7 @@ import voice.data.Bookmark
  */
 class BookmarkDiffUtilCallback(
   private val oldItems: List<Bookmark>,
-  private val newItems: List<Bookmark>
+  private val newItems: List<Bookmark>,
 ) : DiffUtil.Callback() {
 
   override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

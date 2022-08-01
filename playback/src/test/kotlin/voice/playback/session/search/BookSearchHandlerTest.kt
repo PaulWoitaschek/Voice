@@ -82,7 +82,7 @@ class BookSearchHandlerTest {
   fun mediaFocusArtist() = runTest {
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-      artist = bookToFind.content.author
+      artist = bookToFind.content.author,
     )
     searchHandler.handle(bookSearch)
 
@@ -95,15 +95,15 @@ class BookSearchHandlerTest {
     val bookToFind = bookToFind.copy(
       content = bookToFind.content.copy(
         author = null,
-        name = "The book of Tim"
-      )
+        name = "The book of Tim",
+      ),
     )
     coEvery { repo.all() } coAnswers { listOf(bookToFind) }
 
     val bookSearch = BookSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
       query = "Tim",
-      artist = "Tim"
+      artist = "Tim",
     )
     searchHandler.handle(bookSearch)
 
@@ -117,7 +117,7 @@ class BookSearchHandlerTest {
       mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
       artist = bookToFind.content.author,
       album = bookToFind.content.name,
-      query = null
+      query = null,
     )
     searchHandler.handle(bookSearch)
 
@@ -140,7 +140,7 @@ fun book(chapters: List<Chapter>): Book {
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = BookId(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString()),
     ),
     chapters = chapters,
   )
@@ -152,7 +152,7 @@ private fun chapter(): Chapter {
     name = UUID.randomUUID().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,
-    markData = emptyList()
+    markData = emptyList(),
   )
 }
 

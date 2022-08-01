@@ -9,7 +9,5 @@ indent_size = 2
 continuation_indent_size = 2
 trim_trailing_whitespace = true
 max_line_length = 140
-
-# noinspection EditorConfigKeyCorrectness
-[*.{kt, kts}]
-disabled_rules = import-ordering, trailing-comma
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true

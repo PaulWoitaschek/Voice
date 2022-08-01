@@ -41,7 +41,7 @@ class SleepTimerDialogViewModelTest {
       it.addBookmarkAtBookPosition(
         book = book,
         title = null,
-        setBySleepTimer = true
+        setBySleepTimer = true,
       )
     } returns mockk()
   }
@@ -50,7 +50,7 @@ class SleepTimerDialogViewModelTest {
     sleepTimer = sleepTimer,
     bookRepo = bookRepo,
     sleepTimePref = sleepTimePref,
-    dispatcherProvider = DispatcherProvider(scope.coroutineContext)
+    dispatcherProvider = DispatcherProvider(scope.coroutineContext),
   )
 
   @Test
@@ -74,7 +74,7 @@ class SleepTimerDialogViewModelTest {
       suspend fun expect(selectedMinutes: Int, showFab: Boolean = true) {
         awaitItem() shouldBe SleepTimerDialogViewState(
           selectedMinutes = selectedMinutes,
-          showFab = showFab
+          showFab = showFab,
         )
       }
       expect(42)
@@ -115,7 +115,7 @@ class SleepTimerDialogViewModelTest {
 private fun book(
   name: String = "TestBook",
   lastPlayedAtMillis: Long = 0L,
-  addedAtMillis: Long = 0L
+  addedAtMillis: Long = 0L,
 ): Book {
   val chapters = listOf(
     chapter(),
@@ -134,7 +134,7 @@ private fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = BookId(UUID.randomUUID().toString())
+      id = BookId(UUID.randomUUID().toString()),
     ),
     chapters = chapters,
   )
@@ -146,6 +146,6 @@ private fun chapter(): Chapter {
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),
-    name = "name"
+    name = "name",
   )
 }

@@ -29,7 +29,8 @@ class BookSearchHandler
     when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-      MediaStore.Audio.Media.ENTRY_CONTENT_TYPE -> playAlbum(search)
+      MediaStore.Audio.Media.ENTRY_CONTENT_TYPE,
+      -> playAlbum(search)
       else -> playUnstructuredSearch(search.query)
     }
   }

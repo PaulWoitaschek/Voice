@@ -13,7 +13,7 @@ internal fun AddBookHint() {
   ExplanationTooltip {
     Text(
       modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-      text = stringResource(R.string.voice_intro_first_book)
+      text = stringResource(R.string.voice_intro_first_book),
     )
   }
 }

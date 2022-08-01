@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun BottomSheetContent(
   state: EditBookBottomSheetState,
-  onItemClicked: (BottomSheetItem) -> Unit
+  onItemClicked: (BottomSheetItem) -> Unit,
 ) {
   Column(Modifier.padding(vertical = 8.dp)) {
     state.items.forEach { item ->
@@ -31,12 +31,12 @@ internal fun BottomSheetContent(
           }
           .padding(horizontal = 16.dp)
           .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
       ) {
         Icon(
           imageVector = item.icon,
           contentDescription = stringResource(item.titleRes),
-          modifier = Modifier.size(24.dp)
+          modifier = Modifier.size(24.dp),
         )
         Spacer(modifier = Modifier.size(32.dp))
         Text(text = stringResource(item.titleRes))

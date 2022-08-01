@@ -16,7 +16,7 @@ data class Bookmark(
   val addedAt: Instant,
   val setBySleepTimer: Boolean,
   @PrimaryKey
-  val id: Id
+  val id: Id,
 ) {
 
   data class Id(val value: UUID) {

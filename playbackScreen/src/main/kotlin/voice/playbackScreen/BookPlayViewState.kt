@@ -12,5 +12,5 @@ data class BookPlayViewState(
   val duration: Duration,
   val playing: Boolean,
   val cover: File?,
-  val skipSilence: Boolean
+  val skipSilence: Boolean,
 )

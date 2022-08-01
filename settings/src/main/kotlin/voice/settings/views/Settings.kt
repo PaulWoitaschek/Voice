@@ -37,7 +37,7 @@ private fun SettingsPreview() {
     resumeOnReplug = true,
     seekTimeInSeconds = 42,
     autoRewindInSeconds = 12,
-    dialog = null
+    dialog = null,
   )
   VoiceTheme {
     Settings(
@@ -54,7 +54,7 @@ private fun SettingsPreview() {
         override fun dismissDialog() {}
         override fun openSupport() {}
         override fun openTranslations() {}
-      }
+      },
     )
   }
 }
@@ -75,25 +75,25 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             content = {
               Icon(
                 imageVector = Icons.Outlined.Favorite,
-                contentDescription = stringResource(R.string.pref_support_title)
+                contentDescription = stringResource(R.string.pref_support_title),
               )
-            }
+            },
           )
         },
         navigationIcon = {
           IconButton(
             onClick = {
               listener.close()
-            }
+            },
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(R.string.close)
+              contentDescription = stringResource(R.string.close),
             )
           }
-        }
+        },
       )
-    }
+    },
   ) { contentPadding ->
     Box(Modifier.padding(contentPadding)) {
       Column(Modifier.padding(vertical = 8.dp)) {
@@ -129,7 +129,7 @@ fun Settings() {
 @Composable
 private fun Dialog(
   viewState: SettingsViewState,
-  listener: SettingsListener
+  listener: SettingsListener,
 ) {
   val dialog = viewState.dialog ?: return
   when (dialog) {
@@ -137,21 +137,21 @@ private fun Dialog(
       ContributeDialog(
         suggestionsClicked = { listener.openSupport() },
         translationsClicked = { listener.openTranslations() },
-        onDismiss = { listener.dismissDialog() }
+        onDismiss = { listener.dismissDialog() },
       )
     }
     SettingsViewState.Dialog.AutoRewindAmount -> {
       AutoRewindAmountDialog(
         currentSeconds = viewState.autoRewindInSeconds,
         onSecondsConfirmed = listener::autoRewindAmountChanged,
-        onDismiss = listener::dismissDialog
+        onDismiss = listener::dismissDialog,
       )
     }
     SettingsViewState.Dialog.SeekTime -> {
       SeekAmountDialog(
         currentSeconds = viewState.seekTimeInSeconds,
         onSecondsConfirmed = listener::seekAmountChanged,
-        onDismiss = listener::dismissDialog
+        onDismiss = listener::dismissDialog,
       )
     }
   }

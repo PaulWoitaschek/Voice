@@ -22,7 +22,7 @@ class Migration39to40 : IncrementalMigration(39) {
       SQLiteDatabase.CONFLICT_FAIL,
       positionZeroContentValues,
       "$BOOK_TIME < ?",
-      arrayOf(0)
+      arrayOf(0),
     )
   }
 }

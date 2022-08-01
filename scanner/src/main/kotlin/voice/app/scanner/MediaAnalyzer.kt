@@ -36,8 +36,8 @@ class MediaAnalyzer
         "-show_entries", "format=duration",
         "-show_entries", "format_tags=artist,title,album",
         "-show_entries", "stream_tags=artist,title,album",
-        "-select_streams", "a" // only select the audio stream
-      )
+        "-select_streams", "a", // only select the audio stream
+      ),
     )
     if (result == null) {
       Logger.w("Unable to parse $uri.")
@@ -61,9 +61,9 @@ class MediaAnalyzer
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
             startMs = metaDataChapter.start.inWholeMilliseconds,
-            name = metaDataChapter.tags?.find(TagType.Title) ?: (index + 1).toString()
+            name = metaDataChapter.tags?.find(TagType.Title) ?: (index + 1).toString(),
           )
-        }
+        },
       )
     } else {
       Logger.w("Unable to parse $uri")
@@ -76,7 +76,7 @@ class MediaAnalyzer
     val chapterName: String,
     val author: String?,
     val bookName: String?,
-    val chapters: List<MarkData>
+    val chapters: List<MarkData>,
   )
 }
 

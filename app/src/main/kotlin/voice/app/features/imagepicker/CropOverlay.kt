@@ -27,11 +27,11 @@ import kotlin.properties.Delegates
 class CropOverlay @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyleAttr: Int = 0
+  defStyleAttr: Int = 0,
 ) : FrameLayout(
   context,
   attrs,
-  defStyleAttr
+  defStyleAttr,
 ) {
 
   private val leftCircle = newCircle()
@@ -56,7 +56,7 @@ class CropOverlay @JvmOverloads constructor(
         dragRect.squareInset(-max)
         return max != 0f
       }
-    }
+    },
   )
 
   var selectionOn: Boolean by Delegates.observable(false) { _, old, new ->

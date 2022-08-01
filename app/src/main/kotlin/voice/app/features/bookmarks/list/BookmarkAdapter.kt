@@ -10,7 +10,7 @@ import voice.data.Chapter
  * Adapter for displaying a list of bookmarks.
  */
 class BookmarkAdapter(
-  private val listener: BookmarkClickListener
+  private val listener: BookmarkClickListener,
 ) : RecyclerView.Adapter<BookMarkHolder>() {
 
   private val bookmarks = ArrayList<Bookmark>()

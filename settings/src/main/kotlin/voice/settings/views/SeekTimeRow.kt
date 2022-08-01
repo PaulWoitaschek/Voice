@@ -26,10 +26,10 @@ internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit)
         text = LocalContext.current.resources.getQuantityString(
           R.plurals.seconds,
           seekTimeInSeconds,
-          seekTimeInSeconds
-        )
+          seekTimeInSeconds,
+        ),
       )
-    }
+    },
   )
 }
 
@@ -37,7 +37,7 @@ internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit)
 internal fun SeekAmountDialog(
   currentSeconds: Int,
   onSecondsConfirmed: (Int) -> Unit,
-  onDismiss: () -> Unit
+  onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
     title = stringResource(R.string.pref_seek_time),
@@ -46,6 +46,6 @@ internal fun SeekAmountDialog(
     maxSeconds = 60,
     textPluralRes = R.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed,
-    onDismiss = onDismiss
+    onDismiss = onDismiss,
   )
 }

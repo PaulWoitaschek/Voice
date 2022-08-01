@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.minutes
 
 class BookMarkHolder(
   parent: ViewGroup,
-  private val listener: BookmarkClickListener
+  private val listener: BookmarkClickListener,
 ) : ViewBindingHolder<BookmarkRowLayoutBinding>(parent, BookmarkRowLayoutBinding::inflate) {
 
   var boundBookmark: Bookmark? = null
@@ -51,7 +51,7 @@ class BookMarkHolder(
             bookmark.addedAt.toEpochMilli(),
             justNowThreshold.inWholeMilliseconds,
             2.days.inWholeMilliseconds,
-            0
+            0,
           )
         }
       }

@@ -32,7 +32,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
-    }
+    },
   )
 
   init {
@@ -75,7 +75,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         view: WebView,
         errorCode: Int,
         description: String?,
-        failingUrl: String?
+        failingUrl: String?,
       ) {
         view.loadUrl(originalUrl)
       }
@@ -140,7 +140,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       left,
       top,
       width,
-      height
+      height,
     )
     bitmap.recycle()
 

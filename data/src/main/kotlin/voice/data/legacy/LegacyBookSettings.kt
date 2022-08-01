@@ -24,5 +24,5 @@ data class LegacyBookSettings(
   @ColumnInfo(name = "active")
   val active: Boolean,
   @ColumnInfo(name = "lastPlayedAtMillis")
-  val lastPlayedAtMillis: Long
+  val lastPlayedAtMillis: Long,
 )

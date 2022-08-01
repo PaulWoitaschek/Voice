@@ -34,7 +34,7 @@ class Migration45 : IncrementalMigration(45) {
                   put("positionInChapter", 0)
                 },
                 "id =?",
-                arrayOf(bookId)
+                arrayOf(bookId),
               )
             }
           }

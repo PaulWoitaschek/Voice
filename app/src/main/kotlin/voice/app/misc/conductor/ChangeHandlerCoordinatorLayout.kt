@@ -21,7 +21,7 @@ class ChangeHandlerCoordinatorLayout :
   constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
     context,
     attrs,
-    defStyleAttr
+    defStyleAttr,
   )
 
   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean =
@@ -32,7 +32,7 @@ class ChangeHandlerCoordinatorLayout :
     from: Controller?,
     isPush: Boolean,
     container: ViewGroup,
-    handler: ControllerChangeHandler
+    handler: ControllerChangeHandler,
   ) {
     inProgressTransactionCount++
   }
@@ -42,7 +42,7 @@ class ChangeHandlerCoordinatorLayout :
     from: Controller?,
     isPush: Boolean,
     container: ViewGroup,
-    handler: ControllerChangeHandler
+    handler: ControllerChangeHandler,
   ) {
     inProgressTransactionCount--
   }

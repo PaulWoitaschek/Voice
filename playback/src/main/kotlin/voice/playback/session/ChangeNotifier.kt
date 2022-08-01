@@ -27,7 +27,7 @@ class ChangeNotifier
   private val bookUriConverter: BookUriConverter,
   private val mediaSession: MediaSessionCompat,
   private val context: Context,
-  private val autoConnectedReceiver: AndroidAutoConnectedReceiver
+  private val autoConnectedReceiver: AndroidAutoConnectedReceiver,
 ) {
 
   /** The last file the [.notifyChange] has used to update the metadata. **/
@@ -47,7 +47,7 @@ class ChangeNotifier
         PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
         PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
         PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
-        PlaybackStateCompat.ACTION_STOP
+        PlaybackStateCompat.ACTION_STOP,
     )
 
   // use a different feature set for Android Auto
@@ -60,27 +60,27 @@ class ChangeNotifier
         PlaybackStateCompat.ACTION_PLAY_PAUSE or
         PlaybackStateCompat.ACTION_SEEK_TO or
         PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM or
-        PlaybackStateCompat.ACTION_STOP
+        PlaybackStateCompat.ACTION_STOP,
     )
     .addCustomAction(
       ANDROID_AUTO_ACTION_REWIND,
       context.getString(R.string.rewind),
-      R.drawable.ic_fast_rewind
+      R.drawable.ic_fast_rewind,
     )
     .addCustomAction(
       ANDROID_AUTO_ACTION_FAST_FORWARD,
       context.getString(R.string.fast_forward),
-      R.drawable.ic_fast_forward
+      R.drawable.ic_fast_forward,
     )
     .addCustomAction(
       ANDROID_AUTO_ACTION_PREVIOUS,
       context.getString(R.string.previous_track),
-      R.drawable.ic_skip_previous
+      R.drawable.ic_skip_previous,
     )
     .addCustomAction(
       ANDROID_AUTO_ACTION_NEXT,
       context.getString(R.string.next_track),
-      R.drawable.ic_skip_next
+      R.drawable.ic_skip_next,
     )
 
   fun updatePlaybackState(@PlaybackStateCompat.State state: Int, book: Book?) {
@@ -94,7 +94,7 @@ class ChangeNotifier
         setState(
           state,
           book?.content?.positionInChapter ?: PLAYBACK_POSITION_UNKNOWN,
-          book?.content?.playbackSpeed ?: 1F
+          book?.content?.playbackSpeed ?: 1F,
         )
 
         if (book != null) {
@@ -121,12 +121,12 @@ class ChangeNotifier
             .data(content.cover)
             .size(
               width = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_width),
-              height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height)
+              height = context.resources.getDimensionPixelSize(R.dimen.compat_notification_large_icon_max_height),
             )
             .fallback(R.drawable.album_art)
             .error(R.drawable.album_art)
             .allowHardware(false)
-            .build()
+            .build(),
         )
         .drawable!!.toBitmap()
       val mediaMetaData = MediaMetadataCompat.Builder()
@@ -135,7 +135,7 @@ class ChangeNotifier
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, currentChapter.duration)
         .putLong(
           MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-          (content.currentChapterIndex + 1).toLong()
+          (content.currentChapterIndex + 1).toLong(),
         )
         .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)

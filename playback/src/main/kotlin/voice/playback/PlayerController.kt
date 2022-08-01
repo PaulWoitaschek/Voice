@@ -19,7 +19,7 @@ import kotlin.time.Duration
 
 class PlayerController
 @Inject constructor(
-  private val context: Context
+  private val context: Context,
 ) {
 
   private var _controller: MediaControllerCompat? = null
@@ -48,7 +48,7 @@ class PlayerController
     context,
     ComponentName(context, PlaybackService::class.java),
     callback,
-    null
+    null,
   )
 
   init {

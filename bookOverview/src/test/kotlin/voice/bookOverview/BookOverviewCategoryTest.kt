@@ -14,8 +14,8 @@ class BookOverviewCategoryTest {
       book.copy(
         content = book.content.copy(
           currentChapter = lastChapter.id,
-          positionInChapter = lastChapter.duration
-        )
+          positionInChapter = lastChapter.duration,
+        ),
       )
     }
     book.category shouldBe BookOverviewCategory.FINISHED
@@ -28,8 +28,8 @@ class BookOverviewCategoryTest {
       book.copy(
         content = book.content.copy(
           currentChapter = firstChapter.id,
-          positionInChapter = 0
-        )
+          positionInChapter = 0,
+        ),
       )
     }
     book.category shouldBe BookOverviewCategory.NOT_STARTED
@@ -41,8 +41,8 @@ class BookOverviewCategoryTest {
       book.copy(
         content = book.content.copy(
           currentChapter = book.chapters.last().id,
-          positionInChapter = 0
-        )
+          positionInChapter = 0,
+        ),
       )
     }
     book.category shouldBe BookOverviewCategory.CURRENT

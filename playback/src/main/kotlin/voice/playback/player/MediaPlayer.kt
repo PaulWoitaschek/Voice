@@ -105,7 +105,7 @@ constructor(
         updateContent {
           copy(
             positionInChapter = position,
-            currentChapter = chapters[player.currentMediaItemIndex]
+            currentChapter = chapters[player.currentMediaItemIndex],
           )
         }
       }
@@ -306,7 +306,7 @@ constructor(
         autoRewindAmount.seconds
       } else {
         Duration.ZERO
-      }
+      },
     )
   }
 

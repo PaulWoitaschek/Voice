@@ -23,7 +23,7 @@ class TriggerWidgetOnChange
   private val currentBook: DataStore<BookId?>,
   private val repo: BookRepository,
   private val playStateManager: PlayStateManager,
-  private val widgetUpdater: WidgetUpdater
+  private val widgetUpdater: WidgetUpdater,
 ) {
 
   fun init() {

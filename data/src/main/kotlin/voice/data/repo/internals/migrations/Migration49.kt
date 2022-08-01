@@ -22,7 +22,7 @@ class Migration49 : IncrementalMigration(49) {
         |`addedAt` TEXT NOT NULL,
         |`setBySleepTimer` INTEGER NOT NULL,
         |`id` TEXT NOT NULL, PRIMARY KEY(`id`))
-        """.trimMargin()
+        """.trimMargin(),
       )
       query("SELECT * FROM bookmark_old").moveToNextLoop {
         val file = getString("file")
@@ -38,7 +38,7 @@ class Migration49 : IncrementalMigration(49) {
             put("addedAt", Instant.EPOCH.toString())
             put("setBySleepTimer", false)
             put("id", UUID.randomUUID().toString())
-          }
+          },
         )
       }
       execSQL("DROP TABLE bookmark_old")

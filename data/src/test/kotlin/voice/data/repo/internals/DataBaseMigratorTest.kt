@@ -34,7 +34,7 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule.migrations()
+      *PersistenceModule.migrations(),
     )
   }
 
@@ -50,7 +50,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `bookSettings`(`id`,`currentFile`,`positionInChapter`,`playbackSpeed`,`loudnessGain`,`skipSilence`," +
           "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
-        arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0)
+        arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0),
       )
     }
 
@@ -58,7 +58,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `chapters`(`file`,`name`,`duration`,`fileLastModified`,`marks`,`bookId`,`id`) " +
           "VALUES (?,?,?,?,?,?,nullif(?, 0))",
-        arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId)
+        arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId),
       )
     }
 
@@ -81,19 +81,19 @@ class DataBaseMigratorTest {
       dbName,
       45,
       true,
-      *PersistenceModule.migrations()
+      *PersistenceModule.migrations(),
     )
 
     val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
       BookSetting(
         id = getString("id"),
         currentFile = getString("currentFile"),
-        positionInChapter = getInt("positionInChapter")
+        positionInChapter = getInt("positionInChapter"),
       )
     }
     assertThat(migratedBookSettings).containsExactly(
       correctBookSettings,
-      BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0)
+      BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
     ).inOrder()
   }
 
@@ -111,13 +111,13 @@ class DataBaseMigratorTest {
     data class Bookmark(
       val path: String,
       val title: String,
-      val time: Int
+      val time: Int,
     )
 
     val bookmarks = run {
       listOf(
         Bookmark(randomString(), randomString(), randomInt()),
-        Bookmark(randomString(), randomString(), randomInt())
+        Bookmark(randomString(), randomString(), randomInt()),
       )
     }
     bookmarks.forEach {
@@ -128,7 +128,7 @@ class DataBaseMigratorTest {
           put(BookmarkTable.PATH, it.path)
           put(BookmarkTable.TITLE, it.title)
           put(BookmarkTable.TIME, it.time)
-        }
+        },
       )
     }
 
@@ -137,7 +137,7 @@ class DataBaseMigratorTest {
       val name: String,
       val path: String,
       val lastModified: Int,
-      val marks: String?
+      val marks: String?,
     )
 
     data class Book(
@@ -150,13 +150,13 @@ class DataBaseMigratorTest {
       val loudnessGain: Int,
       val active: Int,
       val time: Int,
-      val chapters: List<Chapter>
+      val chapters: List<Chapter>,
     )
 
     fun chapters(): List<Chapter> {
       return listOf(
         Chapter(randomInt(), randomString(), randomString(), randomInt(), randomString()),
-        Chapter(randomInt(), randomString(), randomString(), randomInt(), null)
+        Chapter(randomInt(), randomString(), randomString(), randomInt(), null),
       )
     }
 
@@ -171,7 +171,7 @@ class DataBaseMigratorTest {
         loudnessGain = randomInt(),
         active = 1,
         time = randomInt(),
-        chapters = chapters()
+        chapters = chapters(),
       )
       val secondBook = Book(
         author = null,
@@ -183,7 +183,7 @@ class DataBaseMigratorTest {
         loudnessGain = randomInt(),
         active = 0,
         time = randomInt(),
-        chapters = emptyList()
+        chapters = emptyList(),
       )
 
       listOf(firstBook, secondBook)
@@ -204,7 +204,7 @@ class DataBaseMigratorTest {
             put(BookTable.TYPE, book.type)
             put(BookTable.LOUDNESS_GAIN, book.loudnessGain)
             put(BookTable.ACTIVE, book.active)
-          }
+          },
         )
       book.chapters.forEach { chapter ->
         db.insert(
@@ -217,7 +217,7 @@ class DataBaseMigratorTest {
             put(ChapterTable.LAST_MODIFIED, chapter.lastModified)
             put(ChapterTable.MARKS, chapter.marks)
             put(ChapterTable.BOOK_ID, bookId)
-          }
+          },
         )
       }
     }
@@ -227,7 +227,7 @@ class DataBaseMigratorTest {
       dbName,
       44,
       true,
-      *PersistenceModule.migrations()
+      *PersistenceModule.migrations(),
     )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")

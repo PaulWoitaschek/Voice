@@ -18,7 +18,7 @@ class Migration23to24 : IncrementalMigration(23) {
         BOOK_TYPE TEXT NOT NULL,
         BOOK_ROOT TEXT NOT NULL
       )
-    """
+    """,
     )
     db.execSQL(
       """
@@ -30,7 +30,7 @@ class Migration23to24 : IncrementalMigration(23) {
         BOOK_ID INTEGER NOT NULL,
         FOREIGN KEY(BOOK_ID) REFERENCES TABLE_BOOK(BOOK_ID)
     )
-    """
+    """,
     )
   }
 }

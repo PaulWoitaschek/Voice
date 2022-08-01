@@ -113,7 +113,7 @@ constructor(
                   cover = book.content.cover?.let(::ImmutableFile),
                   id = book.id,
                   progress = book.progress(),
-                  remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000)
+                  remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000),
                 )
               }
           }

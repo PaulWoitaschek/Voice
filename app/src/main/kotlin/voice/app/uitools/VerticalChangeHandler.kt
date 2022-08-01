@@ -19,7 +19,7 @@ class VerticalChangeHandler : AnimatorChangeHandler() {
     from: View?,
     to: View?,
     isPush: Boolean,
-    toAddedToContainer: Boolean
+    toAddedToContainer: Boolean,
   ): Animator {
     return if (isPush && to != null) {
       animateFloat(to.height / 2F, 0F) { value, fraction ->

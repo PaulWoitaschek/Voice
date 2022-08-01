@@ -71,7 +71,7 @@ fun BookOverviewScreen() {
       if (uri != null) {
         fileCoverViewModel.onImagePicked(uri)
       }
-    }
+    },
   )
 
   val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -90,7 +90,7 @@ fun BookOverviewScreen() {
           }
         }
       }
-    }
+    },
   ) {
     BookOverview(
       viewState = viewState,
@@ -117,7 +117,7 @@ fun BookOverviewScreen() {
         viewState = deleteBookViewState,
         onDismiss = deleteBookViewModel::onDismiss,
         onConfirmDeletion = deleteBookViewModel::onConfirmDeletion,
-        onDeleteCheckBoxChecked = deleteBookViewModel::onDeleteCheckBoxChecked
+        onDeleteCheckBoxChecked = deleteBookViewModel::onDeleteCheckBoxChecked,
       )
     }
     val editBookTitleState = editBookTitleViewModel.state.value
@@ -126,7 +126,7 @@ fun BookOverviewScreen() {
         onDismissEditTitleClick = editBookTitleViewModel::onDismissEditTitle,
         onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
         viewState = editBookTitleState,
-        onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle
+        onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle,
       )
     }
   }
@@ -155,7 +155,7 @@ internal fun BookOverview(
             MigrateIcon(
               onClick = onBookMigrationClick,
               withHint = viewState.showMigrateHint,
-              onHintClick = onBoomMigrationHelperConfirmClick
+              onHintClick = onBoomMigrationHelperConfirmClick,
             )
           }
           BookFolderIcon(withHint = viewState.showAddBookHint, onClick = onBookFolderClick)
@@ -165,17 +165,17 @@ internal fun BookOverview(
             LayoutIcon(layoutIcon, onLayoutIconClick)
           }
           SettingsIcon(onSettingsClick)
-        }
+        },
       )
     },
     floatingActionButton = {
       if (viewState.playButtonState != null) {
         PlayButton(
           playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          onClick = onPlayButtonClick
+          onClick = onPlayButtonClick,
         )
       }
-    }
+    },
   ) { contentPadding ->
     when (viewState) {
       is BookOverviewViewState.Content -> {
@@ -202,7 +202,7 @@ internal fun BookOverview(
         Box(
           Modifier
             .fillMaxSize()
-            .padding(contentPadding)
+            .padding(contentPadding),
         ) {
           CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
@@ -215,7 +215,7 @@ internal fun BookOverview(
 @Composable
 private fun BookOverviewPreview(
   @PreviewParameter(BookOverviewPreviewParameterProvider::class)
-  viewState: BookOverviewViewState
+  viewState: BookOverviewViewState,
 ) {
   VoiceTheme {
     BookOverview(
@@ -240,7 +240,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       cover = null,
       progress = 0.8F,
       id = BookId(UUID.randomUUID().toString()),
-      remainingTime = "01:04"
+      remainingTime = "01:04",
     )
   }
 
@@ -257,6 +257,6 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showAddBookHint = false,
       showMigrateHint = false,
       showMigrateIcon = true,
-    )
+    ),
   )
 }

@@ -16,7 +16,7 @@ const val MUSIC_CHANNEL_ID = "musicChannel4"
 class NotificationChannelCreator
 @Inject constructor(
   private val notificationManager: NotificationManager,
-  private val context: Context
+  private val context: Context,
 ) {
 
   private var created = AtomicBoolean()
@@ -31,7 +31,7 @@ class NotificationChannelCreator
       val channel = NotificationChannel(
         MUSIC_CHANNEL_ID,
         name,
-        NotificationManager.IMPORTANCE_LOW
+        NotificationManager.IMPORTANCE_LOW,
       ).apply {
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         setShowBadge(false)

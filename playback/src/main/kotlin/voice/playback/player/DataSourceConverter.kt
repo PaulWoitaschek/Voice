@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class DataSourceConverter
 @Inject constructor(
-  private val mediaSourceFactory: MediaSource.Factory
+  private val mediaSourceFactory: MediaSource.Factory,
 ) {
 
   fun toMediaSource(content: Book): MediaSource {

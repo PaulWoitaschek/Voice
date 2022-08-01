@@ -13,7 +13,7 @@ internal fun SettingsIcon(onSettingsClick: () -> Unit) {
   IconButton(onSettingsClick) {
     Icon(
       imageVector = Icons.Outlined.Settings,
-      contentDescription = stringResource(R.string.action_settings)
+      contentDescription = stringResource(R.string.action_settings),
     )
   }
 }

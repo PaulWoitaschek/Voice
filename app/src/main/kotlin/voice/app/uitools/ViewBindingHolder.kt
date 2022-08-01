@@ -9,6 +9,6 @@ import voice.common.conductor.InflateBinding
 abstract class ViewBindingHolder<B : ViewBinding>(val binding: B) : RecyclerView.ViewHolder(binding.root) {
 
   constructor(parent: ViewGroup, inflateBinding: InflateBinding<B>) : this(
-    inflateBinding(LayoutInflater.from(parent.context), parent, false)
+    inflateBinding(LayoutInflater.from(parent.context), parent, false),
   )
 }

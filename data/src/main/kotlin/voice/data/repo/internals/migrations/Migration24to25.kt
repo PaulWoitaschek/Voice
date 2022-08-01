@@ -36,7 +36,7 @@ class Migration24to25 : IncrementalMigration(24) {
 
     val bookCursor = db.query(
       copyBookTableName,
-      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE")
+      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
     )
 
     bookCursor.moveToNextLoop {
@@ -48,7 +48,7 @@ class Migration24to25 : IncrementalMigration(24) {
         SupportSQLiteQueryBuilder.builder("copyChapterTableName")
           .columns(arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"))
           .selection("BOOK_ID" + "=?", arrayOf(bookId))
-          .create()
+          .create(),
       )
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)

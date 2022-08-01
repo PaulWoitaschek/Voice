@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MarkData(
   val startMs: Long,
-  val name: String
+  val name: String,
 ) : Comparable<MarkData> {
   override fun compareTo(other: MarkData): Int {
     return startMs.compareTo(other.startMs)
@@ -15,7 +15,7 @@ data class MarkData(
 data class ChapterMark(
   val name: String,
   val startMs: Long,
-  val endMs: Long
+  val endMs: Long,
 )
 
 val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)

@@ -6,7 +6,7 @@ data class SettingsViewState(
   val resumeOnReplug: Boolean,
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
-  val dialog: Dialog?
+  val dialog: Dialog?,
 ) {
 
   companion object {
@@ -16,7 +16,7 @@ data class SettingsViewState(
       resumeOnReplug = false,
       seekTimeInSeconds = 0,
       autoRewindInSeconds = 0,
-      dialog = null
+      dialog = null,
     )
   }
 

@@ -74,7 +74,7 @@ fun FolderPickerView(
   onAddClick: () -> Unit,
   onDeleteClick: (Uri) -> Unit,
   onDismissExplanationCardClick: () -> Unit,
-  onCloseClick: () -> Unit
+  onCloseClick: () -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -86,10 +86,10 @@ fun FolderPickerView(
           IconButton(onClick = onCloseClick) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = stringResource(R.string.close)
+              contentDescription = stringResource(R.string.close),
             )
           }
-        }
+        },
       )
     },
     floatingActionButton = {
@@ -101,11 +101,11 @@ fun FolderPickerView(
         icon = {
           Icon(
             imageVector = Icons.Outlined.Add,
-            contentDescription = stringResource(R.string.add)
+            contentDescription = stringResource(R.string.add),
           )
-        }
+        },
       )
-    }
+    },
   ) {
     LazyColumn(contentPadding = it) {
       viewState.explanationCard?.let { text ->
@@ -118,16 +118,16 @@ fun FolderPickerView(
             Column(
               Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             ) {
               Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
               )
               Spacer(modifier = Modifier.size(16.dp))
               Button(
                 modifier = Modifier.align(End),
-                onClick = onDismissExplanationCardClick
+                onClick = onDismissExplanationCardClick,
               ) {
                 Text(text = stringResource(R.string.got_audiobook_folder_card_action))
               }
@@ -146,11 +146,11 @@ fun FolderPickerView(
               content = {
                 Icon(
                   imageVector = Icons.Outlined.Delete,
-                  contentDescription = stringResource(R.string.delete)
+                  contentDescription = stringResource(R.string.delete),
                 )
-              }
+              },
             )
-          }
+          },
         ) {
           Text(text = item.name, style = MaterialTheme.typography.bodyLarge)
         }

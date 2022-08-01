@@ -55,7 +55,7 @@ fun Migration() {
     viewState = viewState,
     onCloseClicked = {
       viewModel.onCloseClick()
-    }
+    },
   )
 }
 
@@ -72,28 +72,28 @@ internal fun Migration(
         },
         navigationIcon = {
           IconButton(
-            onClick = onCloseClicked
+            onClick = onCloseClicked,
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(R.string.close)
+              contentDescription = stringResource(R.string.close),
             )
           }
-        }
+        },
       )
     },
     floatingActionButton = {
       FloatingActionButton(onClick = viewState.onDeleteClicked) {
         Icon(
           imageVector = Icons.Outlined.Delete,
-          contentDescription = stringResource(id = R.string.delete)
+          contentDescription = stringResource(id = R.string.delete),
         )
       }
-    }
+    },
   ) { contentPadding ->
     LazyColumn(
       contentPadding = contentPadding + PaddingValues(horizontal = 16.dp, vertical = 24.dp),
-      verticalArrangement = Arrangement.spacedBy(8.dp)
+      verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       items(viewState.items) { item ->
         MigrationItem(item)
@@ -102,7 +102,7 @@ internal fun Migration(
     if (viewState.showDeletionConfirmationDialog) {
       DeletionConfirmationDialog(
         onCancel = viewState.onDeletionAborted,
-        onConfirm = viewState.onDeletionConfirmed
+        onConfirm = viewState.onDeletionConfirmed,
       )
     }
   }
@@ -137,24 +137,24 @@ private fun DeletionConfirmationDialog(
 @Composable
 private fun MigrationItem(item: MigrationViewState.Item) {
   Card(
-    Modifier.fillMaxWidth()
+    Modifier.fillMaxWidth(),
   ) {
     Column(
       Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-      verticalArrangement = Arrangement.spacedBy(16.dp)
+      verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       LabeledValue(
         label = stringResource(id = R.string.migration_detail_content_name),
-        value = item.name
+        value = item.name,
       )
       LabeledValue(
         label = stringResource(id = R.string.migration_detail_content_root),
-        value = item.root
+        value = item.root,
       )
       Column {
         Text(
           text = stringResource(id = R.string.migration_detail_content_position),
-          style = MaterialTheme.typography.titleMedium
+          style = MaterialTheme.typography.titleMedium,
         )
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
           Position(item.position)
@@ -163,23 +163,23 @@ private fun MigrationItem(item: MigrationViewState.Item) {
       if (item.bookmarks.isNotEmpty()) {
         Text(
           text = stringResource(id = R.string.migration_detail_content_bookmarks),
-          style = MaterialTheme.typography.titleMedium
+          style = MaterialTheme.typography.titleMedium,
         )
         Column(
           modifier = Modifier.padding(horizontal = 16.dp),
-          verticalArrangement = Arrangement.spacedBy(8.dp)
+          verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
           item.bookmarks.forEach { bookmark ->
             if (bookmark.title != null) {
               LabeledValue(
                 label = stringResource(id = R.string.migration_detail_title),
-                value = bookmark.title
+                value = bookmark.title,
               )
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
               LabeledValue(
                 label = stringResource(id = R.string.migration_detail_content_added_at),
-                value = bookmark.addedAt.toString()
+                value = bookmark.addedAt.toString(),
               )
               Spacer(modifier = Modifier.height(16.dp))
               Position(bookmark.position)
@@ -204,19 +204,19 @@ private fun Position(viewState: MigrationViewState.Position) {
   Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
     LabeledValue(
       label = stringResource(id = R.string.migration_detail_content_position_current_file_title),
-      value = viewState.currentFile
+      value = viewState.currentFile,
     )
     LabeledValue(
       label = stringResource(id = R.string.migration_detail_content_position_current_file_position),
-      value = viewState.positionInFile
+      value = viewState.positionInFile,
     )
     LabeledValue(
       label = stringResource(id = R.string.migration_detail_content_position_current_chapter_title),
-      value = viewState.currentChapter
+      value = viewState.currentChapter,
     )
     LabeledValue(
       label = stringResource(id = R.string.migration_detail_content_position_current_chapter_position),
-      value = viewState.positionInChapter
+      value = viewState.positionInChapter,
     )
   }
 }
@@ -225,7 +225,7 @@ private fun Position(viewState: MigrationViewState.Position) {
 @Preview
 private fun MigrationPreview(
   @PreviewParameter(MigrationViewStatePreviewProvider::class)
-  viewState: MigrationViewState
+  viewState: MigrationViewState,
 ) {
   VoiceTheme {
     Migration(viewState, onCloseClicked = {})
@@ -241,7 +241,7 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
           currentChapter = "Current Chapter",
           positionInChapter = formatTime(50000),
           currentFile = "audiobooks/file.mp3",
-          positionInFile = formatTime(70000)
+          positionInFile = formatTime(70000),
         )
       }
 
@@ -253,13 +253,13 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
               MigrationViewState.Item.Bookmark(
                 position = position(),
                 addedAt = Instant.now(),
-                title = "Bookmark $it".takeIf { Random.nextBoolean() }
-              )
+                title = "Bookmark $it".takeIf { Random.nextBoolean() },
+              ),
             )
           }
         },
         root = "Root",
-        position = position()
+        position = position(),
       )
       yield(
         MigrationViewState(
@@ -267,8 +267,8 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
           onDeleteClicked = {},
           showDeletionConfirmationDialog = false,
           onDeletionConfirmed = {},
-          onDeletionAborted = {}
-        )
+          onDeletionAborted = {},
+        ),
       )
     }
 }

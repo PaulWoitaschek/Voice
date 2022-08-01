@@ -20,7 +20,7 @@ class BookmarkPresenter
   private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
-  private val playerController: PlayerController
+  private val playerController: PlayerController,
 ) : Presenter<BookmarkView>() {
 
   lateinit var bookId: BookId
@@ -33,7 +33,7 @@ class BookmarkPresenter
       bookmarks.clear()
       bookmarks.addAll(
         bookmarkRepo.bookmarks(book.content)
-          .sortedByDescending { it.addedAt }
+          .sortedByDescending { it.addedAt },
       )
       chapters.clear()
       chapters.addAll(book.chapters)
@@ -90,7 +90,7 @@ class BookmarkPresenter
       val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
         title = name,
-        setBySleepTimer = false
+        setBySleepTimer = false,
       )
       bookmarks.add(addedBookmark)
       if (attached) renderView()

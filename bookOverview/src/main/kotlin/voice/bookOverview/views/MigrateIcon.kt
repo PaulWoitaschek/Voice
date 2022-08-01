@@ -15,13 +15,13 @@ internal fun MigrateIcon(
   modifier: Modifier = Modifier,
   withHint: Boolean,
   onClick: () -> Unit,
-  onHintClick: () -> Unit
+  onHintClick: () -> Unit,
 ) {
   Box {
     IconButton(modifier = modifier, onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.CompareArrows,
-        contentDescription = stringResource(R.string.migration_hint_title)
+        contentDescription = stringResource(R.string.migration_hint_title),
       )
     }
     if (withHint) {

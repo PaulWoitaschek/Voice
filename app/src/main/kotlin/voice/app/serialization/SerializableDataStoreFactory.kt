@@ -17,14 +17,14 @@ class SerializableDataStoreFactory
   fun <T> create(
     serializer: KSerializer<T>,
     defaultValue: T,
-    fileName: String
+    fileName: String,
   ): DataStore<T> {
     return DataStoreFactory.create(
       serializer = KotlinxDataStoreSerializer(
         defaultValue = defaultValue,
         json = json,
-        serializer = serializer
-      )
+        serializer = serializer,
+      ),
     ) {
       context.dataStoreFile(fileName)
     }

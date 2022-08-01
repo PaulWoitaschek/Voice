@@ -15,7 +15,7 @@ import javax.inject.Inject
 @BookOverviewScope
 @ContributesMultibinding(
   scope = BookOverviewScope::class,
-  boundType = BottomSheetItemViewModel::class
+  boundType = BottomSheetItemViewModel::class,
 )
 class EditBookTitleViewModel
 @Inject

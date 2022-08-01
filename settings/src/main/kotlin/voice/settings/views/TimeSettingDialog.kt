@@ -22,7 +22,7 @@ fun TimeSettingDialog(
   minSeconds: Int,
   maxSeconds: Int,
   onSecondsConfirmed: (Int) -> Unit,
-  onDismiss: () -> Unit
+  onDismiss: () -> Unit,
 ) {
   val sliderValue = remember { mutableStateOf(currentSeconds.toFloat()) }
   AlertDialog(
@@ -36,15 +36,15 @@ fun TimeSettingDialog(
           LocalContext.current.resources.getQuantityString(
             textPluralRes,
             sliderValue.value.roundToInt(),
-            sliderValue.value.roundToInt()
-          )
+            sliderValue.value.roundToInt(),
+          ),
         )
         Slider(
           valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
           value = sliderValue.value,
           onValueChange = {
             sliderValue.value = it
-          }
+          },
         )
       }
     },
@@ -53,7 +53,7 @@ fun TimeSettingDialog(
         onClick = {
           onSecondsConfirmed(sliderValue.value.roundToInt())
           onDismiss()
-        }
+        },
       ) {
         Text(stringResource(R.string.dialog_confirm))
       }
@@ -62,10 +62,10 @@ fun TimeSettingDialog(
       TextButton(
         onClick = {
           onDismiss()
-        }
+        },
       ) {
         Text(stringResource(R.string.dialog_cancel))
       }
-    }
+    },
   )
 }

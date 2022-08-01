@@ -10,7 +10,7 @@ typealias InflateBinding<B> = (LayoutInflater, ViewGroup?, Boolean) -> B
 
 abstract class ViewBindingController<B : ViewBinding>(
   args: Bundle = Bundle(),
-  private val inflateBinding: InflateBinding<B>
+  private val inflateBinding: InflateBinding<B>,
 ) : BaseController(args) {
 
   private var _binding: B? = null
@@ -19,7 +19,7 @@ abstract class ViewBindingController<B : ViewBinding>(
   final override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup,
-    savedViewState: Bundle?
+    savedViewState: Bundle?,
   ): View {
     return inflateBinding(inflater, container, false)
       .also {

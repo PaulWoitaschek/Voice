@@ -22,7 +22,7 @@ class Migration31to32 : IncrementalMigration(31) {
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query(
       TABLE_BOOK,
-      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH)
+      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
     ).moveToNextLoop {
       val bookId = getLong(0)
       val bookmarkCurrentMediaPath = getString(1)
@@ -31,7 +31,7 @@ class Migration31to32 : IncrementalMigration(31) {
         SupportSQLiteQueryBuilder.builder(TABLE_CHAPTERS)
           .columns(arrayOf(CHAPTER_PATH))
           .selection("$BOOK_ID=?", arrayOf(bookId))
-          .create()
+          .create(),
       )
       val chapterPaths = ArrayList<String>(chapterCursor.count)
       chapterCursor.moveToNextLoop {
@@ -51,7 +51,7 @@ class Migration31to32 : IncrementalMigration(31) {
             SQLiteDatabase.CONFLICT_FAIL,
             cv,
             "$BOOK_ID=?",
-            arrayOf(bookId.toString())
+            arrayOf(bookId.toString()),
           )
         }
       }

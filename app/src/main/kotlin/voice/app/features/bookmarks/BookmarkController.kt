@@ -39,7 +39,7 @@ class BookmarkController(args: Bundle) :
   constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
-    }
+    },
   )
 
   private val bookId = args.getBookId(NI_BOOK_ID)!!
@@ -108,7 +108,7 @@ class BookmarkController(args: Bundle) :
       override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
+        target: RecyclerView.ViewHolder,
       ): Boolean {
         return false
       }

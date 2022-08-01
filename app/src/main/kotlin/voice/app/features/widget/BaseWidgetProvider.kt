@@ -21,7 +21,7 @@ class BaseWidgetProvider : AppWidgetProvider() {
   override fun onUpdate(
     context: Context,
     appWidgetManager: AppWidgetManager,
-    appWidgetIds: IntArray
+    appWidgetIds: IntArray,
   ) {
     widgetUpdater.update()
   }
@@ -30,7 +30,7 @@ class BaseWidgetProvider : AppWidgetProvider() {
     context: Context,
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int,
-    newOptions: Bundle
+    newOptions: Bundle,
   ) {
     widgetUpdater.update()
   }

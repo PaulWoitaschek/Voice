@@ -14,7 +14,7 @@ import voice.settings.R
 @Composable
 internal fun ResumeOnReplugRow(
   resumeOnReplug: Boolean,
-  toggle: () -> Unit
+  toggle: () -> Unit,
 ) {
   ListItem(
     modifier = Modifier
@@ -26,13 +26,13 @@ internal fun ResumeOnReplugRow(
     text = {
       Text(
         text = stringResource(R.string.pref_resume_on_replug),
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge,
       )
     },
     secondaryText = {
       Text(
         text = stringResource(R.string.pref_resume_on_replug_hint),
-        style = MaterialTheme.typography.bodyMedium
+        style = MaterialTheme.typography.bodyMedium,
       )
     },
     trailing = {
@@ -40,8 +40,8 @@ internal fun ResumeOnReplugRow(
         checked = resumeOnReplug,
         onCheckedChange = {
           toggle()
-        }
+        },
       )
-    }
+    },
   )
 }

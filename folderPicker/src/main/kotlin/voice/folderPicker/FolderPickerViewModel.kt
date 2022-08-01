@@ -43,7 +43,7 @@ class FolderPickerViewModel
               val documentFile = DocumentFile.fromTreeUri(context, uri)
               FolderPickerViewState.Item(
                 name = documentFile?.name ?: "",
-                id = uri
+                id = uri,
               )
             }
           }
@@ -66,7 +66,7 @@ class FolderPickerViewModel
   fun addFolder(uri: Uri) {
     context.contentResolver.takePersistableUriPermission(
       uri,
-      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
     )
     scope.launch {
       audiobookFolders.updateData {
@@ -79,7 +79,7 @@ class FolderPickerViewModel
     try {
       context.contentResolver.releasePersistableUriPermission(
         uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
       )
     } catch (e: SecurityException) {
       Logger.w("Could not release uri permission for $uri")

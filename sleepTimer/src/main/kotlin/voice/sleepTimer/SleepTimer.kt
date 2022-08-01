@@ -31,7 +31,7 @@ class SleepTimer
   private val shakeDetector: ShakeDetector,
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
-  private val playerController: PlayerController
+  private val playerController: PlayerController,
 ) {
 
   private val scope = MainScope()

@@ -19,7 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 @MergeComponent(
-  scope = AppScope::class
+  scope = AppScope::class,
 )
 interface AppComponent {
 

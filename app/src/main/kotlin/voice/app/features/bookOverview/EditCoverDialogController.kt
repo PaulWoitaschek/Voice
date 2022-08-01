@@ -33,7 +33,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   constructor(args: Arguments) : this(
     Bundle().apply {
       putParcelable(NI_ARGS, args)
-    }
+    },
   )
 
   @Inject
@@ -69,7 +69,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
               ImageRequest.Builder(context)
                 .data(arguments.coverUri)
                 .transformations(CropTransformation(binding.cropOverlay, binding.coverImage))
-                .build()
+                .build(),
             )
             .drawable!!.toBitmap()
 
@@ -87,6 +87,6 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
   @Parcelize
   data class Arguments(
     val coverUri: Uri,
-    val bookId: BookId
+    val bookId: BookId,
   ) : Parcelable
 }

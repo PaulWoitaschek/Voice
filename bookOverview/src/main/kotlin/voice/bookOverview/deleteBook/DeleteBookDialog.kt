@@ -24,7 +24,7 @@ internal fun DeleteBookDialog(
   viewState: DeleteBookViewState,
   onDismiss: () -> Unit,
   onConfirmDeletion: () -> Unit,
-  onDeleteCheckBoxChecked: (Boolean) -> Unit
+  onDeleteCheckBoxChecked: (Boolean) -> Unit,
 ) {
   AlertDialog(
     onDismissRequest = onDismiss,
@@ -37,7 +37,7 @@ internal fun DeleteBookDialog(
         enabled = viewState.deleteCheckBoxChecked,
         colors = ButtonDefaults.buttonColors(
           containerColor = MaterialTheme.colorScheme.errorContainer,
-          contentColor = MaterialTheme.colorScheme.error
+          contentColor = MaterialTheme.colorScheme.error,
         ),
       ) {
         Text(stringResource(id = R.string.delete))
@@ -60,15 +60,15 @@ internal fun DeleteBookDialog(
             .fillMaxWidth()
             .clickable {
               onDeleteCheckBoxChecked(!viewState.deleteCheckBoxChecked)
-            }
+            },
         ) {
           Checkbox(
             checked = viewState.deleteCheckBoxChecked,
-            onCheckedChange = onDeleteCheckBoxChecked
+            onCheckedChange = onDeleteCheckBoxChecked,
           )
           Text(stringResource(id = R.string.delete_book_dialog_deletion_confirmation))
         }
       }
-    }
+    },
   )
 }

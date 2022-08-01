@@ -16,7 +16,7 @@ internal fun BookFolderIcon(modifier: Modifier = Modifier, withHint: Boolean, on
     IconButton(modifier = modifier, onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.Book,
-        contentDescription = stringResource(R.string.audiobook_folders_title)
+        contentDescription = stringResource(R.string.audiobook_folders_title),
       )
     }
     if (withHint) {

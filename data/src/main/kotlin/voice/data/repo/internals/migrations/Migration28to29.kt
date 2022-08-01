@@ -34,7 +34,7 @@ class Migration28to29 : IncrementalMigration(28) {
             SQLiteDatabase.CONFLICT_FAIL,
             cv,
             "BOOK_ID" + "=?",
-            arrayOf(cursor.getLong(1).toString())
+            arrayOf(cursor.getLong(1).toString()),
           )
         }
       }

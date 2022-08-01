@@ -49,7 +49,7 @@ class Migration35to36 : IncrementalMigration(35) {
           getString(ROOT),
           getLong(TIME),
           getString(TYPE),
-          getInt(ACTIVE)
+          getInt(ACTIVE),
         )
       }
     db.transaction {
@@ -81,6 +81,6 @@ class Migration35to36 : IncrementalMigration(35) {
     val root: String,
     val time: Long,
     val type: String,
-    val active: Int
+    val active: Int,
   )
 }

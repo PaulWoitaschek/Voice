@@ -16,7 +16,7 @@ import javax.inject.Inject
 class BookmarkRepo
 @Inject constructor(
   private val dao: BookmarkDao,
-  private val appDb: AppDb
+  private val appDb: AppDb,
 ) {
 
   suspend fun deleteBookmark(id: Bookmark.Id) {
@@ -36,7 +36,7 @@ class BookmarkRepo
         addedAt = Instant.now(),
         setBySleepTimer = setBySleepTimer,
         chapterId = book.content.currentChapter,
-        bookId = book.id
+        bookId = book.id,
       )
       addBookmark(bookMark)
       Logger.v("Added bookmark=$bookMark")

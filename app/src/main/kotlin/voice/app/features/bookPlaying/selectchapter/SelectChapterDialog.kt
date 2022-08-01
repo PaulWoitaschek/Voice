@@ -30,7 +30,7 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
   constructor(bookId: BookId) : this(
     Bundle().apply {
       putBookId(NI_BOOK_ID, bookId)
-    }
+    },
   )
 
   init {
@@ -47,7 +47,7 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
       BindingItem<SelectChapterRowBinding, ChapterMark>(
         mark,
         R.layout.select_chapter_row,
-        SelectChapterRowBinding::bind
+        SelectChapterRowBinding::bind,
       ) { data, position ->
         root.setOnClickListener(listener)
         @Suppress("SetTextI18n")
@@ -56,7 +56,7 @@ class SelectChapterDialog(bundle: Bundle) : DialogController(bundle) {
           0,
           0,
           if (position == viewState.selectedIndex) R.drawable.ic_equalizer else 0,
-          0
+          0,
         )
       }
     }

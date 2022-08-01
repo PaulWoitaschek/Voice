@@ -90,11 +90,11 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     next.isVisible = viewState.showPreviousNextButtons
     playedTime.text = formatTime(
       viewState.playedTime.inWholeMilliseconds,
-      viewState.duration.inWholeMilliseconds
+      viewState.duration.inWholeMilliseconds,
     )
     maxTime.text = formatTime(
       viewState.duration.inWholeMilliseconds,
-      viewState.duration.inWholeMilliseconds
+      viewState.duration.inWholeMilliseconds,
     )
     slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
     if (!slider.isPressed) {
@@ -132,7 +132,7 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           viewModel.playPause()
           return true
         }
-      }
+      },
     )
     binding.cover.isClickable = true
     @Suppress("ClickableViewAccessibility")
@@ -150,15 +150,17 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         binding.playedTime.text = formatTime(value.toLong(), slider.valueTo.toLong())
       }
     }
-    binding.slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-      override fun onStartTrackingTouch(slider: Slider) {
-      }
+    binding.slider.addOnSliderTouchListener(
+      object : Slider.OnSliderTouchListener {
+        override fun onStartTrackingTouch(slider: Slider) {
+        }
 
-      override fun onStopTrackingTouch(slider: Slider) {
-        val progress = slider.value.toLong()
-        this@BookPlayController.viewModel.seekTo(progress)
-      }
-    })
+        override fun onStopTrackingTouch(slider: Slider) {
+          val progress = slider.value.toLong()
+          this@BookPlayController.viewModel.seekTo(progress)
+        }
+      },
+    )
   }
 
   private fun setupToolbar() {

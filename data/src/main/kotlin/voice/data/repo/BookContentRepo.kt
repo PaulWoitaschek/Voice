@@ -19,7 +19,7 @@ import javax.inject.Singleton
 @Singleton
 class BookContentRepo
 @Inject constructor(
-  private val dao: BookContentDao
+  private val dao: BookContentDao,
 ) {
 
   private val cacheMutex = Mutex()
