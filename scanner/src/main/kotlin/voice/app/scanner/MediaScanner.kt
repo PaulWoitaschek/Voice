@@ -22,7 +22,7 @@ class MediaScanner
     val chapters = chapterParser.parse(file)
     if (chapters.isEmpty()) return
 
-    val content = bookParser.getOrPut(chapters, file)
+    val content = bookParser.parseAndStore(chapters, file)
 
     val chapterIds = chapters.map { it.id }
     val currentChapterGone = content.currentChapter !in chapterIds
