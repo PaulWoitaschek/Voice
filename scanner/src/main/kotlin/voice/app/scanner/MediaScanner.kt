@@ -8,6 +8,7 @@ import voice.data.Chapter
 import voice.data.repo.BookContentRepo
 import voice.data.repo.ChapterRepo
 import voice.data.toUri
+import voice.logging.core.Logger
 import java.time.Instant
 import javax.inject.Inject
 
@@ -31,22 +32,13 @@ class MediaScanner
     val id = BookId(file.uri)
     val content = contentRepo.getOrPut(id) {
       val analyzed = mediaAnalyzer.analyze(chapterIds.first().toUri())
-      val name = analyzed?.bookName
-        ?: file.name?.let { name ->
-          if (file.isFile) {
-            name.substringBeforeLast(".")
-          } else {
-            name
-          }
-        }
-        ?: return
       val content = BookContent(
         id = id,
         isActive = true,
         addedAt = Instant.now(),
         author = analyzed?.author,
         lastPlayedAt = Instant.EPOCH,
-        name = name,
+        name = analyzed?.bookName ?: file.bookName(),
         playbackSpeed = 1F,
         skipSilence = false,
         chapters = chapterIds,
@@ -72,6 +64,25 @@ class MediaScanner
     if (content != updated) {
       validateIntegrity(updated, chapters)
       contentRepo.put(updated)
+    }
+  }
+
+  private fun DocumentFile.bookName(): String {
+    val fileName = name
+    return if (fileName == null) {
+      uri.toString()
+        .removePrefix("/storage/emulated/0/")
+        .removePrefix("/storage/emulated/")
+        .removePrefix("/storage/")
+        .also {
+          Logger.e("Could not parse fileName from $this. Fallback to $it")
+        }
+    } else {
+      if (isFile) {
+        fileName.substringBeforeLast(".")
+      } else {
+        fileName
+      }
     }
   }
 
