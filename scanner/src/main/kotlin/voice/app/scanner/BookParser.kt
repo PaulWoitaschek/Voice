@@ -46,7 +46,7 @@ class BookParser
         migrateBookmarks(migrationMetaData, chapters, id)
       }
 
-      val (currentChapter, positionInChapter) = findMigratedPlaybackPosition(migrationSettings, chapters)
+      val migratedPlaybackPosition = migrationSettings?.let { findMigratedPlaybackPosition(it, chapters) }
 
       BookContent(
         id = id,
@@ -62,8 +62,8 @@ class BookParser
         skipSilence = migrationSettings?.skipSilence
           ?: false,
         chapters = chapters.map { it.id },
-        positionInChapter = positionInChapter,
-        currentChapter = currentChapter,
+        positionInChapter = migratedPlaybackPosition?.playbackPosition ?: 0L,
+        currentChapter = migratedPlaybackPosition?.chapterId ?: chapters.first().id,
         cover = migrationSettings?.id?.let {
           File(application.filesDir, id.toString())
             .takeIf { it.canRead() }
@@ -74,25 +74,25 @@ class BookParser
     }
   }
 
-  private fun findMigratedPlaybackPosition(migrationSettings: LegacyBookSettings?, chapters: List<Chapter>): Pair<Chapter.Id, Long> {
-    return if (migrationSettings != null) {
-      val currentChapter = chapters.find {
-        val chapterFilePath = it.id.toUri().filePath()
-        if (chapterFilePath == null) {
-          false
-        } else {
-          migrationSettings.currentFile.absolutePath.endsWith(chapterFilePath)
-        }
-      }
-      if (currentChapter != null) {
-        currentChapter.id to migrationSettings.positionInChapter
+  private fun findMigratedPlaybackPosition(
+    settings: LegacyBookSettings,
+    chapters: List<Chapter>,
+  ): MigratedPlaybackPosition? {
+    val currentChapter = chapters.find {
+      val chapterFilePath = it.id.toUri().filePath()
+      if (chapterFilePath == null) {
+        false
       } else {
-        chapters.first().id to 0L
+        settings.currentFile.absolutePath.endsWith(chapterFilePath)
       }
-    } else {
-      chapters.first().id to 0L
-    }
+    } ?: return null
+    return MigratedPlaybackPosition(currentChapter.id, settings.positionInChapter)
   }
+
+  private data class MigratedPlaybackPosition(
+    val chapterId: Chapter.Id,
+    val playbackPosition: Long,
+  )
 
   private suspend fun migrateBookmarks(migrationMetaData: LegacyBookMetaData, chapters: List<Chapter>, id: BookId) {
     val legacyChapters = legacyBookDao.chapters()
