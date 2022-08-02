@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="Typos" severity="ignore" />
-    <issue id="TypographyEllipsis" severity="ignore" />
-    <issue id="MissingTranslation" severity="ignore" />
-    <issue id="MissingQuantity">
-        <ignore regexp=".*?French.*?many" />
-    </issue>
+  <issue id="Typos" severity="ignore" />
+  <issue id="TypographyEllipsis" severity="ignore" />
+  <issue id="MissingTranslation" severity="ignore" />
+  <issue id="MissingQuantity">
+    <ignore regexp=".*?French.*?many" />
+  </issue>
 
-    <issue id="Overdraw" severity="ignore" />
-    <issue id="RestrictedApi" severity="ignore" />
-    <issue id="UnusedAttribute">
-        <ignore regexp="android:foreground" />
-    </issue>
-    <issue id="UnusedQuantity" severity="ignore" />
-    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+  <issue id="Overdraw" severity="ignore" />
+  <issue id="RestrictedApi" severity="ignore" />
+  <issue id="UnusedAttribute">
+    <ignore regexp="android:foreground" />
+  </issue>
+  <issue id="UnusedQuantity" severity="ignore" />
+  <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+  <issue id="UnsafeOptInUsageError">
+    <ignore regexp='\(markerClass = androidx\.media3\.common\.util\.UnstableApi\.class\)' />
+  </issue>
 </lint>

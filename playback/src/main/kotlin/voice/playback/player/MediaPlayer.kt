@@ -2,8 +2,8 @@ package voice.playback.player
 
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.datastore.core.DataStore
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.Player
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
