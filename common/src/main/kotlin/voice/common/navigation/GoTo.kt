@@ -9,7 +9,6 @@ sealed interface NavigationCommand {
 }
 
 sealed interface Destination {
-  object PlaybackSpeedDialog : Destination
   data class Playback(val bookId: BookId) : Destination
   data class Bookmarks(val bookId: BookId) : Destination
   data class SelectChapterDialog(val bookId: BookId) : Destination

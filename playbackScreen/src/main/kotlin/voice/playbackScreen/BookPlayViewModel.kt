@@ -1,5 +1,7 @@
 package voice.playbackScreen
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +23,7 @@ import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
+
 class BookPlayViewModel
 @Inject constructor(
   private val repo: BookRepository,
@@ -39,6 +42,9 @@ class BookPlayViewModel
   val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
   lateinit var bookId: BookId
+
+  private val _dialogState = mutableStateOf<BookPlayDialogViewState?>(null)
+  internal val dialogState: State<BookPlayDialogViewState?> get() = _dialogState
 
   fun viewState(): Flow<BookPlayViewState> {
     scope.launch {
@@ -66,6 +72,15 @@ class BookPlayViewModel
     }
   }
 
+  fun dismissDialog() {
+    _dialogState.value = null
+  }
+
+  fun onPlaybackSpeedChanged(speed: Float) {
+    _dialogState.value = BookPlayDialogViewState.SpeedDialog(speed)
+    player.setSpeed(speed)
+  }
+
   fun next() {
     player.next()
   }
@@ -91,7 +106,12 @@ class BookPlayViewModel
   }
 
   fun onPlaybackSpeedIconClicked() {
-    navigator.goTo(Destination.PlaybackSpeedDialog)
+    scope.launch {
+      val playbackSpeed = repo.get(bookId)?.content?.playbackSpeed
+      if (playbackSpeed != null) {
+        _dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
+      }
+    }
   }
 
   fun onBookmarkClicked() {

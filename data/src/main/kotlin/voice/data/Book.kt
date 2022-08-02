@@ -33,11 +33,6 @@ data class Book(
   inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
   }
-
-  companion object {
-    const val SPEED_MAX = 2.5F
-    const val SPEED_MIN = 0.5F
-  }
 }
 
 private fun Chapter.nextMark(positionInChapterMs: Long): ChapterMark? {

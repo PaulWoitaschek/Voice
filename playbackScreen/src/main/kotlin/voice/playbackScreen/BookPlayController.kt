@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import voice.common.AppScope
 import voice.common.BookId
 import voice.common.PlayPauseDrawableSetter
+import voice.common.compose.VoiceTheme
 import voice.common.conductor.ViewBindingController
 import voice.common.conductor.clearAfterDestroyView
 import voice.common.formatTime
@@ -55,6 +56,17 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
     setupClicks()
     setupSlider()
     setupToolbar()
+
+    binding.composeView.setContent {
+      VoiceTheme {
+        val dialogState = viewModel.dialogState.value ?: return@VoiceTheme
+        when (dialogState) {
+          is BookPlayDialogViewState.SpeedDialog -> {
+            SpeedDialog(dialogState, viewModel)
+          }
+        }
+      }
+    }
   }
 
   override fun BookPlayBinding.onAttach() {

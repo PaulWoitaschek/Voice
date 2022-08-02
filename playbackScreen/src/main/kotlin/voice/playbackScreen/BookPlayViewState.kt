@@ -14,3 +14,12 @@ data class BookPlayViewState(
   val cover: File?,
   val skipSilence: Boolean,
 )
+
+internal sealed interface BookPlayDialogViewState {
+  data class SpeedDialog(
+    val speed: Float,
+  ) : BookPlayDialogViewState {
+
+    val maxSpeed: Float get() = if (speed < 2F) 2F else 3.5F
+  }
+}

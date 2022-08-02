@@ -1,5 +1,6 @@
 plugins {
   id("voice.library")
+  id("voice.compose")
   alias(libs.plugins.anvil)
 }
 

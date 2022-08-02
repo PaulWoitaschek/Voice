@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
-import voice.app.features.audio.PlaybackSpeedDialogController
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
 import voice.app.features.bookmarks.BookmarkController
@@ -118,9 +117,6 @@ class MainActivity : AppCompatActivity() {
                   currentBook.updateData { destination.bookId }
                   router.pushController(BookPlayController(destination.bookId).asTransaction())
                 }
-              }
-              Destination.PlaybackSpeedDialog -> {
-                PlaybackSpeedDialogController().showDialog(router)
               }
               is Destination.SelectChapterDialog -> {
                 SelectChapterDialog(destination.bookId).showDialog(router)
