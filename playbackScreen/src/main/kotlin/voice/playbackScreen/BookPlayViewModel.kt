@@ -23,7 +23,6 @@ import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-
 class BookPlayViewModel
 @Inject constructor(
   private val repo: BookRepository,

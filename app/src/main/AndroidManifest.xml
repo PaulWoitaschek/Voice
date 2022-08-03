@@ -50,6 +50,7 @@
         <service
           android:name="voice.playback.session.PlaybackService"
           android:exported="true"
+          android:foregroundServiceType="mediaPlayback"
           tools:ignore="ExportedService">
 
             <intent-filter>
