@@ -14,6 +14,7 @@
   </issue>
   <issue id="UnusedQuantity" severity="ignore" />
   <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+  <issue id="UnknownIssueId" severity="ignore" />
   <issue id="UnsafeOptInUsageError">
     <ignore regexp='\(markerClass = androidx\.media3\.common\.util\.UnstableApi\.class\)' />
   </issue>
