@@ -41,6 +41,7 @@ jobs:
       SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
       SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+      TAG: ${GITHUB_REF#refs/*/}
     steps:
       - uses: actions/checkout@v3
 
@@ -52,7 +53,7 @@ jobs:
       - run: echo $SIGNING_PROPERTIES_GITHUB | base64 --decode > signing/github/signing.properties
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
       # if the tag does not contain any suffixes (i.e no -rc1), promote it to release, else to beta.
-      - run: if [[ ${GITHUB_REF_NAME} =~ ^[0-9.]+$ ]]; then export TRACK="release"; else export TRACK="Open Beta"; fi
+      - run: if [[ ${TAG} =~ ^[0-9.]+$ ]]; then export TRACK="release"; else export TRACK="Open Beta"; fi
       - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics -Pvoice.signing.play=true -Pvoice.play-track=${TRACK} --no-configuration-cache
       - run: ./gradlew app:assembleRelease -PenableCrashlytics -Pvoice.signing.play=false --no-configuration-cache
 
