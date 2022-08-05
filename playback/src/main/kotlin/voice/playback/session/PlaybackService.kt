@@ -4,7 +4,9 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -235,7 +237,12 @@ class PlaybackService : MediaBrowserServiceCompat() {
               applicationContext,
               Intent(applicationContext, this@PlaybackService.javaClass),
             )
-            startForeground(NOTIFICATION_ID, notification)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+              startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            } else {
+              startForeground(NOTIFICATION_ID, notification)
+            }
             isForeground = true
           }
         }
