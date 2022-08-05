@@ -1,5 +1,6 @@
 package voice.folderPicker
 
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,6 +34,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
+import voice.logging.core.Logger
 
 @ContributesTo(AppScope::class)
 interface FolderPickerComponent {
@@ -56,7 +58,11 @@ fun FolderPicker(
   FolderPickerView(
     viewState = viewState,
     onAddClick = {
-      launcher.launch(null)
+      try {
+        launcher.launch(null)
+      } catch (e: ActivityNotFoundException) {
+        Logger.e(e, "No activity found for ACTION_OPEN_DOCUMENT_TREE. Broken device.")
+      }
     },
     onDeleteClick = {
       viewModel.removeFolder(it)
