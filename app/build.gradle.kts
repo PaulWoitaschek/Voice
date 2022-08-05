@@ -22,7 +22,7 @@ if (enableCrashlytics) {
 
 play {
   defaultToAppBundles.value(true)
-  track.value("Open Beta")
+  track.value(providers.gradleProperty("voice.play-track"))
   val serviceAccountJson = file("play_service_account.json")
   if (serviceAccountJson.exists()) {
     serviceAccountCredentials.set(serviceAccountJson)
