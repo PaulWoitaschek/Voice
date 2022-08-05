@@ -81,7 +81,8 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 exoPlayer-core = "androidx.media3:media3-exoplayer:1.0.0-beta02"
 
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
+compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
 compose-foundation = "androidx.compose.foundation:foundation:1.2.0"
 compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose-material" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "compose-material" }
@@ -97,7 +98,7 @@ compose-navigation-animation = "com.google.accompanist:accompanist-navigation-an
 [bundles]
 compose = [
   "compose-ui-ui",
-  "compose-ui-tooling",
+  "compose-ui-tooling-preview",
   "compose-foundation",
   "compose-navigation",
   "compose-material-core",
