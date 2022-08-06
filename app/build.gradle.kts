@@ -22,13 +22,6 @@ if (enableCrashlytics) {
 
 play {
   defaultToAppBundles.value(true)
-  val trackProperty = providers.gradleProperty("voice.play-track")
-  track.value(trackProperty)
-  userFraction.value(
-    trackProperty.map {
-      if (it == "release") 0.01 else 1.0
-    },
-  )
   val serviceAccountJson = file("play_service_account.json")
   if (serviceAccountJson.exists()) {
     serviceAccountCredentials.set(serviceAccountJson)
