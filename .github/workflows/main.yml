@@ -54,6 +54,8 @@ jobs:
       - run: echo $GOOGLE_SERVICES | base64 --decode > app/google-services.json
       # if the tag does not contain any suffixes (i.e no -rc1), promote it to release, else to beta.
       - run: if [[ ${TAG} =~ ^[0-9.]+$ ]]; then export TRACK="release"; else export TRACK="Open Beta"; fi
+      - run: echo $TAG
+      - run: echo $TRACK
       - run: ./gradlew app:publishReleaseBundle -PenableCrashlytics -Pvoice.signing.play=true -Pvoice.play-track=${TRACK} --no-configuration-cache
       - run: ./gradlew app:assembleRelease -PenableCrashlytics -Pvoice.signing.play=false --no-configuration-cache
 
