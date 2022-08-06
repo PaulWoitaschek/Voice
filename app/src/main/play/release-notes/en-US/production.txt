@@ -1,5 +1,10 @@
-* Show an icon if a bookmark was added by the sleep timer. Starting the sleep timer now always creates a bookmark
-* Add an icon on the current playing chapter to indicate that you can click on it to see the list of chapters.
-* Various playback and metadata issue fixed
-* After the sleep timer ended, for 30 seconds you have the chance to shake the phone to restart the playback. The feature is now always active without a toggle.
-* Fixed the skip silence not always working
+After a long time, Voice has finally returned!
+
+Voice is now compatible with the latest Android Versions and comes with a brand new Material 3 Design!
+
+Due to changes in the Android System, it will be necessary to select your Books again. Voice does it's best to restore the your data.
+
+Additionally, we also have a few new features:
+Long click on a book in the overview and you can:
+- Delete it
+- Mark the Book as Played / Not started or Completed
