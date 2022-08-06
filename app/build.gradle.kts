@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.dsl.ManagedVirtualDevice
 import java.util.Properties
 
 plugins {
@@ -91,6 +92,24 @@ android {
     unitTests.isReturnDefaultValues = true
     animationsDisabled = true
     unitTests.isIncludeAndroidResources = true
+    execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    managedDevices {
+      devices.create<ManagedVirtualDevice>("pixel5") {
+        device = "Pixel 5"
+        apiLevel = 31
+      }
+      devices.create<ManagedVirtualDevice>("nexus7") {
+        device = "Nexus 7"
+        apiLevel = 31
+      }
+      devices.create<ManagedVirtualDevice>("nexus10") {
+        device = "Nexus 10"
+        apiLevel = 31
+      }
+      deviceGroups.create("screenshotDevices") {
+        targetDevices.addAll(devices.toList())
+      }
+    }
   }
 
   lint {
@@ -177,9 +196,19 @@ dependencies {
   testImplementation(libs.robolectric)
   testImplementation(libs.coroutines.test)
 
+  androidTestUtil(libs.androidTest.orchestrator)
+  androidTestUtil(libs.androidTest.services.testServices)
+  androidTestImplementation(libs.androidTest.services.storage)
+
+  androidTestImplementation(libs.androidTest.espresso)
+  androidTestImplementation(libs.androidTest.rules)
   androidTestImplementation(libs.truth)
   androidTestImplementation(libs.junit)
+  androidTestImplementation(libs.compose.ui.test)
+  debugImplementation(libs.compose.ui.testManifest)
+  androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.androidX.test.runner)
   androidTestImplementation(libs.androidX.test.core)
   androidTestImplementation(libs.androidX.test.junit)
+  androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
 }

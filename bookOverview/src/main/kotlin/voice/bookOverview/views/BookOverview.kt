@@ -133,7 +133,7 @@ fun BookOverviewScreen() {
 }
 
 @Composable
-internal fun BookOverview(
+fun BookOverview(
   viewState: BookOverviewViewState,
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
@@ -213,7 +213,7 @@ internal fun BookOverview(
 
 @Preview
 @Composable
-private fun BookOverviewPreview(
+fun BookOverviewPreview(
   @PreviewParameter(BookOverviewPreviewParameterProvider::class)
   viewState: BookOverviewViewState,
 ) {

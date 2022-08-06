@@ -1,0 +1,2 @@
+app/src/main/play/listings/**/*.png filter=lfs diff=lfs merge=lfs -text
+app/src/androidTest/assets/covers/** filter=lfs diff=lfs merge=lfs -text

@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
@@ -162,5 +163,28 @@ fun FolderPickerView(
         }
       }
     }
+  }
+}
+
+@Composable
+@Preview
+fun FolderPickerPreview() {
+  FolderPickerView(
+    viewState = FolderPickerViewState(
+      explanationCard =
+      """
+        ${stringResource(R.string.audiobook_folder_card_text)}
+
+        audiobooks/Harry Potter 1
+        audiobooks/Harry Potter 2
+      """.trimIndent(),
+      items = listOf(
+        FolderPickerViewState.Item("Audiobooks", Uri.EMPTY),
+      ),
+    ),
+    onAddClick = { },
+    onDeleteClick = {},
+    onDismissExplanationCardClick = { },
+  ) {
   }
 }
