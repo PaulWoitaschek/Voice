@@ -1,6 +1,9 @@
 Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg)
 =======================
 
+<a href="https://play.google.com/store/apps/details?id=voice.audiobook"><img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/app/src/main/play/listings/en-US/graphics/feature-graphic/1.jpg" width="600" ></a>
+
+
 <a href="https://f-droid.org/packages/de.ph1b.audiobook/">
   <img alt="Get it on F-Droid"
        height="80"
@@ -18,8 +21,6 @@ At the same time I want to provide an audiobook player which is really easy in u
 There are still some components outdated.
 
 If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
-
-<a href="https://play.google.com/store/apps/details?id=voice.audiobook"><img src="https://github.com/PaulWoitaschek/Voice/blob/main/Images/front.png" width="400" ></a>
 
 # <a name="contrib">Contribution</a>
 
