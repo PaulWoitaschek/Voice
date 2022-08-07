@@ -35,27 +35,40 @@ class CoverScanner
     scanForEmbeddedCover(book)
   }
 
-  private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean {
-    withContext(Dispatchers.IO) {
-      val documentFile = DocumentFile.fromTreeUri(context, book.id.toUri()) ?: return@withContext false
-      if (!documentFile.isDirectory) return@withContext false
-      documentFile.listFiles().forEach { child ->
-        if (child.isFile && child.canRead() && child.type?.startsWith("image/") == true) {
-          val coverFile = coverSaver.newBookCoverFile()
-          try {
-            context.contentResolver.openInputStream(child.uri)?.use { input ->
-              coverFile.outputStream().use { output ->
-                input.copyTo(output)
-              }
+  private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean = withContext(Dispatchers.IO) {
+    val documentFile = DocumentFile.fromTreeUri(context, book.id.toUri())
+      ?: return@withContext false
+
+    if (!documentFile.isDirectory) {
+      return@withContext false
+    }
+
+    documentFile.listFiles().forEach { child ->
+      if (child.isFile && child.canRead() && child.type?.startsWith("image/") == true) {
+        val coverFile = coverSaver.newBookCoverFile()
+        val worked = try {
+          context.contentResolver.openInputStream(child.uri)?.use { input ->
+            coverFile.outputStream().use { output ->
+              input.copyTo(output)
             }
-            coverSaver.setBookCover(coverFile, book.id)
-          } catch (e: IOException) {
-            Logger.w(e, "Error while copying the cover from ${child.uri}")
           }
+          true
+        } catch (e: IOException) {
+          Logger.w(e, "Error while copying the cover from ${child.uri}")
+          false
+        } catch (e: IllegalStateException) {
+          // On some Samsung Devices, openInputStream throws this though it should not.
+          Logger.w(e, "Error while copying the cover from ${child.uri}")
+          false
+        }
+        if (worked) {
+          coverSaver.setBookCover(coverFile, book.id)
+          return@withContext true
         }
       }
     }
-    return false
+
+    false
   }
 
   private suspend fun scanForEmbeddedCover(book: Book) {
