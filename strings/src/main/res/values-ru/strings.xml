@@ -71,8 +71,6 @@
   <string name="close">Закрыть</string>
   <string name="add">Добавить</string>
   <string name="delete">Удалить</string>
-  <string name="audiobook_folder_card_text">Voice использует структуру папок, где каждая папка в выбранной вами папке с аудиокнигами содержит одну книгу, например:</string>
-  <string name="got_audiobook_folder_card_action">Понятно</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Только что</string>
   <!--will be shown as a hint when no books have been added-->

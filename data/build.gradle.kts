@@ -44,6 +44,8 @@ dependencies {
   ksp(libs.room.compiler)
 
   implementation(libs.dagger.core)
+  implementation(libs.datastore)
+  implementation(libs.documentFile)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)

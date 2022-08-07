@@ -17,7 +17,7 @@ compose-compiler = "1.2.0"
 compose-ui = "1.2.0"
 compose-material = "1.2.0"
 compose-animation = "1.2.0"
-agp = "7.3.0-beta05"
+agp = "7.4.0-alpha09"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }

@@ -71,8 +71,6 @@
   <string name="close">关闭</string>
   <string name="add">添加</string>
   <string name="delete">删除</string>
-  <string name="audiobook_folder_card_text">Voice要求在文件夹结构中您选择的每一个文件夹是一本书，例如：</string>
-  <string name="got_audiobook_folder_card_action">知道了</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">刚才</string>
   <!--will be shown as a hint when no books have been added-->

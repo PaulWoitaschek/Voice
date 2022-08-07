@@ -72,8 +72,6 @@
   <string name="close">Schließen</string>
   <string name="add">Hinzufügen</string>
   <string name="delete">Löschen</string>
-  <string name="audiobook_folder_card_text">Voice erwartet eine Ordnerstruktur, in der jeder Ordner in deinem gewählten Hörbuchordner einem Buch entspricht, zum Beispiel:</string>
-  <string name="got_audiobook_folder_card_action">Verstanden</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Gerade eben</string>
   <!--will be shown as a hint when no books have been added-->

@@ -1,9 +1,5 @@
 package voice.app.scanner
 
-import android.content.Context
-import android.net.Uri
-import androidx.datastore.core.DataStore
-import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import voice.common.pref.AudiobookFolders
+import voice.data.folders.AudiobookFolders
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import javax.inject.Inject
@@ -21,10 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class MediaScanTrigger
 @Inject constructor(
-  @AudiobookFolders
-  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val audiobookFolders: AudiobookFolders,
   private val scanner: MediaScanner,
-  private val context: Context,
   private val coverScanner: CoverScanner,
   private val bookRepo: BookRepository,
 ) {
@@ -45,8 +39,7 @@ class MediaScanTrigger
       _scannerActive.value = true
       oldJob?.cancelAndJoin()
 
-      val folders = audiobookFolders.data.first()
-        .mapNotNull { DocumentFile.fromTreeUri(context, it) }
+      val folders = audiobookFolders.all().first()
       scanner.scan(folders)
 
       val books = bookRepo.all()

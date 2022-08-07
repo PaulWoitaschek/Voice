@@ -72,8 +72,6 @@
   <string name="close">Stäng</string>
   <string name="add">Lägg till</string>
   <string name="delete">Ta bort</string>
-  <string name="audiobook_folder_card_text">Voice förväntar sig en mappstruktur där varje mapp i din valda ljudboksmapp är en bok, till exempel:</string>
-  <string name="got_audiobook_folder_card_action">Förstått</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Precis nu</string>
   <!--will be shown as a hint when no books have been added-->

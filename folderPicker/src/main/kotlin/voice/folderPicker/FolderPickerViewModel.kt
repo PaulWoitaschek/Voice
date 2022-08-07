@@ -1,99 +1,64 @@
 package voice.folderPicker
 
-import android.app.Application
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import voice.common.pref.AudiobookFolders
-import voice.logging.core.Logger
+import voice.data.folders.AudiobookFolders
+import voice.data.folders.FolderType
 import javax.inject.Inject
-import javax.inject.Qualifier
-
-@Qualifier
-annotation class ExplanationCardSeen
 
 class FolderPickerViewModel
 @Inject constructor(
-  private val context: Application,
-  @AudiobookFolders
-  private val audiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  @ExplanationCardSeen
-  private val explanationCardSeen: DataStore<Boolean>,
+  private val audiobookFolders: AudiobookFolders,
 ) {
-
-  private val scope = MainScope()
 
   @Composable
   fun viewState(): FolderPickerViewState {
-    val folders by remember {
-      audiobookFolders.data
+    val folders: List<FolderPickerViewState.Item> by remember {
+      audiobookFolders.all()
         .map { folders ->
           withContext(Dispatchers.IO) {
-            folders.map { uri ->
-              val documentFile = DocumentFile.fromTreeUri(context, uri)
-              FolderPickerViewState.Item(
-                name = documentFile?.name ?: "",
-                id = uri,
-              )
-            }
+            folders.flatMap { (folderType, folders) ->
+              folders.map { documentFile ->
+                FolderPickerViewState.Item(
+                  name = documentFile.displayName(),
+                  id = documentFile.uri,
+                  folderType = folderType,
+                )
+              }
+            }.sortedDescending()
           }
         }
     }.collectAsState(initial = emptyList())
-    val explanationCardSeen by explanationCardSeen.data.collectAsState(true)
-    val explanationCard = if (explanationCardSeen) {
-      null
-    } else {
-      """
-        ${context.getString(R.string.audiobook_folder_card_text)}
-
-        audiobooks/Harry Potter 1
-        audiobooks/Harry Potter 2
-      """.trimIndent()
-    }
-    return FolderPickerViewState(explanationCard = explanationCard, folders)
+    return FolderPickerViewState(folders)
   }
 
-  fun addFolder(uri: Uri) {
-    context.contentResolver.takePersistableUriPermission(
-      uri,
-      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
-    )
-    scope.launch {
-      audiobookFolders.updateData {
-        (it + uri).distinct()
-      }
-    }
+  fun add(uri: Uri, type: FolderType) {
+    audiobookFolders.add(uri, type)
   }
 
-  fun removeFolder(uri: Uri) {
-    try {
-      context.contentResolver.releasePersistableUriPermission(
-        uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
-      )
-    } catch (e: SecurityException) {
-      Logger.w("Could not release uri permission for $uri")
-    }
-    scope.launch {
-      audiobookFolders.updateData {
-        it - uri
-      }
-    }
+  fun removeFolder(item: FolderPickerViewState.Item) {
+    audiobookFolders.remove(item.id, item.folderType)
   }
+}
 
-  fun dismissExplanationCard() {
-    scope.launch {
-      explanationCardSeen.updateData { true }
-    }
+private fun DocumentFile.displayName(): String {
+  val name = name
+  return if (name == null) {
+    uri.pathSegments.lastOrNull()
+      ?.dropWhile { it != ':' }
+      ?.removePrefix(":")
+      ?.takeUnless { it.isBlank() }
+      ?: uri.toString()
+  } else {
+    name.substringBeforeLast(".")
+      .takeUnless { it.isEmpty() }
+      ?: name
   }
 }

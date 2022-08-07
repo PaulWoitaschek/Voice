@@ -20,6 +20,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Shadows
 import voice.common.BookId
 import voice.data.Chapter
+import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
@@ -154,7 +155,7 @@ class MediaScannerTest {
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
     suspend fun scan(vararg roots: File) {
-      scanner.scan(roots.map(DocumentFile::fromFile))
+      scanner.scan(mapOf(FolderType.Root to roots.map(DocumentFile::fromFile)))
     }
 
     fun file(parent: File, name: String): Uri {

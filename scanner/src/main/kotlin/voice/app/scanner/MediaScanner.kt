@@ -2,6 +2,7 @@ package voice.app.scanner
 
 import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
+import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
 import javax.inject.Inject
 
@@ -12,10 +13,23 @@ class MediaScanner
   private val bookParser: BookParser,
 ) {
 
-  suspend fun scan(folders: List<DocumentFile>) {
-    val allFiles = folders.flatMap { it.listFiles().toList() }
-    contentRepo.setAllInactiveExcept(allFiles.map { BookId(it.uri) })
-    allFiles.forEach { scan(it) }
+  suspend fun scan(folders: Map<FolderType, List<DocumentFile>>) {
+    val files = folders.flatMap { (folderType, files) ->
+      when (folderType) {
+        FolderType.SingleFile, FolderType.SingleFolder -> {
+          files
+        }
+        FolderType.Root -> {
+          files.flatMap { file ->
+            file.listFiles().toList()
+          }
+        }
+      }
+    }
+
+    contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
+
+    files.forEach { scan(it) }
   }
 
   private suspend fun scan(file: DocumentFile) {
