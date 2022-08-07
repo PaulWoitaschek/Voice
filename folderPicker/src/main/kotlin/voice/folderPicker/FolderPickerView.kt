@@ -98,7 +98,7 @@ fun FolderPicker(
 }
 
 @Composable
-fun FolderPickerView(
+private fun FolderPickerView(
   viewState: FolderPickerViewState,
   onAddClick: (FolderType) -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,

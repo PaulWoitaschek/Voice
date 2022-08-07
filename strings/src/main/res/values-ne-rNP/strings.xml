@@ -27,7 +27,6 @@
   <string name="book_header_not_started">सुरु भएको छैन</string>
   <string name="book_header_completed">सम्पन्न भयो</string>
   <string name="close">बन्द गर्नुहोस</string>
-  <string name="add">जोड्नुहोस</string>
   <string name="delete">हटाउनुहोस</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">भर्खरै</string>

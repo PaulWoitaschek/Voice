@@ -70,7 +70,6 @@
   <string name="book_header_not_started">Neu</string>
   <string name="book_header_completed">Zu Ende</string>
   <string name="close">Schließen</string>
-  <string name="add">Hinzufügen</string>
   <string name="delete">Löschen</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Gerade eben</string>

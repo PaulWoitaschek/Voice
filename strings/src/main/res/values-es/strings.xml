@@ -68,7 +68,6 @@
   <string name="book_header_not_started">Aún no comenzado</string>
   <string name="book_header_completed">Completado</string>
   <string name="close">Cerrar</string>
-  <string name="add">Agregar</string>
   <string name="delete">Borrar</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Justo ahora</string>

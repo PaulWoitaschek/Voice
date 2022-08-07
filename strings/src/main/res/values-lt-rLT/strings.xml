@@ -72,7 +72,6 @@
   <string name="book_header_not_started">Dar nepradėtos</string>
   <string name="book_header_completed">Užbaigtos</string>
   <string name="close">Uždaryti</string>
-  <string name="add">Pridėti</string>
   <string name="delete">Pašalinti</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Ką tik</string>

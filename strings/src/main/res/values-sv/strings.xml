@@ -70,7 +70,6 @@
   <string name="book_header_not_started">Inte påbörjad ännu</string>
   <string name="book_header_completed">Avslutad</string>
   <string name="close">Stäng</string>
-  <string name="add">Lägg till</string>
   <string name="delete">Ta bort</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Precis nu</string>

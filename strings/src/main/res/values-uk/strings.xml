@@ -72,7 +72,6 @@
   <string name="book_header_not_started">Ще не початі</string>
   <string name="book_header_completed">Завершені</string>
   <string name="close">Закрити</string>
-  <string name="add">Додати</string>
   <string name="delete">Видалити</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Щойно</string>

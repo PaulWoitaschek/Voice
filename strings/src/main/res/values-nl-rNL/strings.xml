@@ -70,7 +70,6 @@
   <string name="book_header_not_started">Nog niet begonnen</string>
   <string name="book_header_completed">Voltooid</string>
   <string name="close">Sluiten</string>
-  <string name="add">Toevoegen</string>
   <string name="delete">Verwijderen</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Zojuist</string>
