@@ -16,12 +16,7 @@ class ChapterParser
     val result = mutableListOf<Chapter>()
 
     suspend fun parseChapters(file: DocumentFile) {
-      val mimeType = file.type
-      if (
-        file.isFile &&
-        mimeType != null &&
-        (mimeType.startsWith("audio/") || mimeType.startsWith("video/"))
-      ) {
+      if (file.isFile) {
         val id = Chapter.Id(file.uri)
         val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
           val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
