@@ -89,7 +89,7 @@ exoPlayer-core = "androidx.media3:media3-exoplayer:1.0.0-beta02"
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
-compose-foundation = "androidx.compose.foundation:foundation:1.2.0"
+compose-foundation = "androidx.compose.foundation:foundation:1.2.1"
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "compose-ui" }
 compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4", version = "1.2.0" }
