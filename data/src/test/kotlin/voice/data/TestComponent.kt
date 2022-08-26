@@ -10,7 +10,6 @@ import voice.common.pref.PrefKeys
 import javax.inject.Named
 import javax.inject.Singleton
 
-
 @Singleton
 @MergeComponent(
   scope = AppScope::class,
@@ -24,7 +23,8 @@ interface TestComponent {
 
     fun create(
       @BindsInstance
-      @Named(PrefKeys.DARK_THEME) darkThemePref: Pref<Boolean>,
+      @Named(PrefKeys.DARK_THEME)
+      darkThemePref: Pref<Boolean>,
     ): TestComponent
   }
 }

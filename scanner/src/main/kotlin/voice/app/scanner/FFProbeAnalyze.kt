@@ -44,5 +44,4 @@ class FFProbeAnalyze
       return null
     }
   }
-
 }

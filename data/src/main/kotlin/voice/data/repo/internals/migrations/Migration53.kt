@@ -9,11 +9,11 @@ import voice.common.AppScope
 import java.time.Instant
 import javax.inject.Inject
 
+// clear the fileLastModified to trigger a rescan of the chapters
 @ContributesMultibinding(
   scope = AppScope::class,
   boundType = Migration::class,
 )
-// clear the fileLastModified to trigger a rescan of the chapters
 class Migration53
 @Inject constructor() : IncrementalMigration(53) {
 
