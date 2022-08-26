@@ -1,6 +1,6 @@
 [versions]
-versionCode = "3060390"
-versionName = "6.0.9"
+versionCode = "3060391"
+versionName = "6.0.10"
 
 sdk-compile = "33"
 sdk-min = "24"
