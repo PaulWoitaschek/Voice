@@ -2,6 +2,7 @@ package voice.app.scanner
 
 import android.content.Context
 import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import voice.data.MarkData
@@ -55,7 +56,7 @@ class MediaAnalyzer
     return if (duration != null && duration > 0) {
       Metadata(
         duration = duration.seconds.inWholeMilliseconds,
-        chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(uri),
+        chapterName = parsed.findTag(TagType.Title) ?: chapterNameFallback(uri, context),
         author = parsed.findTag(TagType.Artist),
         bookName = parsed.findTag(TagType.Album),
         chapters = parsed.chapters.mapIndexed { index, metaDataChapter ->
@@ -80,8 +81,9 @@ class MediaAnalyzer
   )
 }
 
-private fun chapterNameFallback(file: Uri): String {
-  val name = file.lastPathSegment ?: "Chapter"
+private fun chapterNameFallback(uri: Uri, context: Context): String {
+  val file = DocumentFile.fromSingleUri(context, uri)
+  val name = file?.name ?: "Chapter"
   return name.substringBeforeLast(".")
     .trim()
     .takeUnless { it.isEmpty() }
