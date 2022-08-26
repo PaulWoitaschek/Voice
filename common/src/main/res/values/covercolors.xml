@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cover_dynamic_neutral10">#1b1b1b</color>
-    <color name="cover_dynamic_neutral30">#464646</color>
-    <color name="cover_dynamic_neutral40">#5e5e5e</color>
-    <color name="cover_dynamic_neutral50">#757575</color>
+  <color name="cover_dynamic_neutral10">#1b1b1b</color>
+  <color name="cover_dynamic_neutral30">#464646</color>
+  <color name="cover_dynamic_neutral40">#5e5e5e</color>
+  <color name="cover_dynamic_neutral50">#757575</color>
 </resources>

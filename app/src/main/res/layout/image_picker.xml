@@ -8,51 +8,51 @@
   android:background="?android:attr/windowBackground"
   android:orientation="vertical">
 
-    <FrameLayout
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="?attr/actionBarSize"
+      app:menu="@menu/image_picker"
+      app:navigationIcon="@drawable/close"
+      app:title="@string/cover" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-          android:id="@+id/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          app:menu="@menu/image_picker"
-          app:navigationIcon="@drawable/close"
-          app:title="@string/cover" />
-
-        <ViewStub
-          android:id="@+id/cabStub"
-          android:layout_width="match_parent"
-          android:layout_height="?actionBarSize" />
-
-    </FrameLayout>
-
-    <FrameLayout
-      android:id="@+id/webViewContainer"
+    <ViewStub
+      android:id="@+id/cabStub"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="?actionBarSize" />
 
-        <WebView
-          android:id="@+id/webView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
+  </FrameLayout>
 
-        <voice.app.features.imagepicker.CropOverlay
-          android:id="@+id/cropOverlay"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
+  <FrameLayout
+    android:id="@+id/webViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-          android:id="@+id/fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="right|end|bottom"
-          android:text="@string/cover_crop"
-          app:icon="@drawable/crop"
-          android:layout_margin="16dp"
-          android:contentDescription="@string/cover_crop"
-          tools:ignore="RtlHardcoded" />
+    <WebView
+      android:id="@+id/webView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
-    </FrameLayout>
+    <voice.app.features.imagepicker.CropOverlay
+      android:id="@+id/cropOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right|end|bottom"
+      android:text="@string/cover_crop"
+      app:icon="@drawable/crop"
+      android:layout_margin="16dp"
+      android:contentDescription="@string/cover_crop"
+      tools:ignore="RtlHardcoded" />
+
+  </FrameLayout>
 
 </LinearLayout>
