@@ -146,6 +146,7 @@ class MediaScannerTest {
           legacyBookDao = db.legacyBookDao(),
           bookmarkDao = db.bookmarkDao(),
         ),
+        context = ApplicationProvider.getApplicationContext(),
       ),
     )
 
@@ -164,7 +165,7 @@ class MediaScannerTest {
           check(it.createNewFile())
         }
         .also {
-          coEvery { mediaAnalyzer.analyze(it.toUri()) } coAnswers {
+          coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
             MediaAnalyzer.Metadata(
               duration = 1000L,
               author = "Author",

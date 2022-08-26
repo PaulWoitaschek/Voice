@@ -1,7 +1,7 @@
 package voice.app.misc
 
 import androidx.annotation.RawRes
-import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,17 +11,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
+import voice.app.scanner.FFProbeAnalyze
 import voice.app.scanner.MediaAnalyzer
 import voice.app.test.R
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class MediaAnalyzerTest {
+class MediaAnalyzerInstrumentationTest {
 
   @get:Rule
   val temporaryFolder = TemporaryFolder()
 
-  private val mediaAnalyzer = MediaAnalyzer(ApplicationProvider.getApplicationContext())
+  private val mediaAnalyzer = MediaAnalyzer(FFProbeAnalyze(ApplicationProvider.getApplicationContext()))
 
   @Test(timeout = 1000)
   fun defectFile_noDuration() {
@@ -45,7 +46,7 @@ class MediaAnalyzerTest {
   private fun durationOfResource(@RawRes resource: Int): Long? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      mediaAnalyzer.analyze(file.toUri())?.duration
+      mediaAnalyzer.analyze(DocumentFile.fromFile(file))?.duration
     }
   }
 
