@@ -2,13 +2,19 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.getString
+import javax.inject.Inject
 
-/**
- * Because of an an issue in synchronization, there are inconsistent books which have bookSettings that point to absent chapters.
- */
-class Migration45 : IncrementalMigration(45) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration45
+@Inject constructor() : IncrementalMigration(45) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("SELECT * FROM bookSettings").use { bookSettingsCursor ->

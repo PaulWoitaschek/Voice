@@ -2,12 +2,18 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
+import javax.inject.Inject
 
-/**
- * The duration parsing changed so we trigger a file rescan.
- */
-class Migration46 : IncrementalMigration(46) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration46
+@Inject constructor() : IncrementalMigration(46) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned

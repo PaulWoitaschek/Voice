@@ -1,12 +1,18 @@
 package voice.data.repo.internals.migrations
 
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
 import org.json.JSONObject
+import voice.common.AppScope
+import javax.inject.Inject
 
-/**
- * A previous version caused empty books to be added. So we delete them now.
- */
-class Migration25to26 : IncrementalMigration(25) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration25to26
+@Inject constructor() : IncrementalMigration(25) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // get all books

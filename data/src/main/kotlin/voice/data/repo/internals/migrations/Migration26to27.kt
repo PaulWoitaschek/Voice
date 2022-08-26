@@ -3,13 +3,19 @@ package voice.data.repo.internals.migrations
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
+import javax.inject.Inject
 
-/**
- * Adds a new column indicating if the book should be actively shown or hidden.
- */
-class Migration26to27 : IncrementalMigration(26) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration26to27
+@Inject constructor() : IncrementalMigration(26) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

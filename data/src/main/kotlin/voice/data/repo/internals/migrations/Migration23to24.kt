@@ -1,11 +1,17 @@
 package voice.data.repo.internals.migrations
 
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
+import javax.inject.Inject
 
-/**
- * Drops all tables and creates new ones.
- */
-class Migration23to24 : IncrementalMigration(23) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration23to24
+@Inject constructor() : IncrementalMigration(23) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK")

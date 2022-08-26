@@ -2,12 +2,21 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
 import org.json.JSONObject
+import voice.common.AppScope
 import voice.logging.core.Logger
 import java.io.File
+import javax.inject.Inject
 
-class Migration28to29 : IncrementalMigration(28) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration28to29
+@Inject constructor() : IncrementalMigration(28) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"))

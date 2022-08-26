@@ -9,6 +9,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import voice.data.allMigrations
 import java.util.UUID
 import kotlin.random.Random
 
@@ -34,7 +35,7 @@ class DataBaseMigratorTest {
       dbName,
       AppDb.VERSION,
       true,
-      *PersistenceModule.migrations(),
+      *allMigrations(),
     )
   }
 
@@ -81,7 +82,7 @@ class DataBaseMigratorTest {
       dbName,
       45,
       true,
-      *PersistenceModule.migrations(),
+      *allMigrations(),
     )
 
     val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
@@ -227,7 +228,7 @@ class DataBaseMigratorTest {
       dbName,
       44,
       true,
-      *PersistenceModule.migrations(),
+      *allMigrations(),
     )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")

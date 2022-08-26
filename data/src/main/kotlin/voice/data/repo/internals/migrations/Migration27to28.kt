@@ -1,11 +1,17 @@
 package voice.data.repo.internals.migrations
 
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
+import javax.inject.Inject
 
-/**
- * Deletes the table if that failed previously due to a bug in [.upgrade26]
- */
-class Migration27to28 : IncrementalMigration(27) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration27to28
+@Inject constructor() : IncrementalMigration(27) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK_COPY")
