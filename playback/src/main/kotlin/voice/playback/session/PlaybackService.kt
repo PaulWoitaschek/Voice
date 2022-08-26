@@ -249,7 +249,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
       else -> {
         if (isForeground) {
-          stopForeground(false)
+          stopForeground(STOP_FOREGROUND_DETACH)
           isForeground = false
 
           if (updatedState == PlaybackStateCompat.STATE_NONE) {

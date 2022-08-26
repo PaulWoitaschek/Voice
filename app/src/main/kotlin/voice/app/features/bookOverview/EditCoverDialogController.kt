@@ -23,6 +23,7 @@ import voice.app.scanner.CoverSaver
 import voice.app.uitools.CropTransformation
 import voice.common.BookId
 import voice.common.conductor.DialogController
+import voice.common.parcelable
 import voice.data.repo.BookRepository
 import javax.inject.Inject
 
@@ -47,8 +48,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     appComponent.inject(this)
 
     val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
-    // init values
-    val arguments = args.getParcelable<Arguments>(NI_ARGS)!!
+    val arguments = args.parcelable<Arguments>(NI_ARGS)!!
 
     binding.cropOverlay.selectionOn = true
     binding.coverImage.load(arguments.coverUri)

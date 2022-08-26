@@ -1,6 +1,7 @@
 package voice.app.misc.conductor
 
 import android.content.Context
+import androidx.activity.OnBackPressedDispatcherOwner
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.RouterTransaction
@@ -17,7 +18,9 @@ fun Controller.asTransaction(
 
 fun Controller.popOrBack() {
   val hasRemaining = router.popController(this)
-  if (!hasRemaining) activity?.onBackPressed()
+  if (!hasRemaining) {
+    (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher.onBackPressed()
+  }
 }
 
 val Controller.context: Context get() = activity!!

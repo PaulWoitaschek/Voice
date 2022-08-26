@@ -2,7 +2,7 @@
 versionCode = "3060390"
 versionName = "6.0.9"
 
-sdk-compile = "32"
+sdk-compile = "33"
 sdk-min = "24"
 sdk-target = "32"
 
