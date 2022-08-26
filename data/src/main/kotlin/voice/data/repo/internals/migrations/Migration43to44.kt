@@ -3,7 +3,10 @@ package voice.data.repo.internals.migrations
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.content.contentValuesOf
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.consumeEach
 import voice.data.repo.internals.getFloat
 import voice.data.repo.internals.getInt
@@ -13,11 +16,14 @@ import voice.data.repo.internals.getString
 import voice.data.repo.internals.getStringOrNull
 import voice.data.repo.internals.moveToNextLoop
 import java.util.UUID
+import javax.inject.Inject
 
-/**
- * Initial Room Migration
- */
-class Migration43to44 : IncrementalMigration(43) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration43to44
+@Inject constructor() : IncrementalMigration(43) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     createNewTables(db)

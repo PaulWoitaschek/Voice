@@ -1,6 +1,7 @@
 package voice.app.scanner
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
@@ -23,13 +24,16 @@ class BookParser
   private val legacyBookDao: LegacyBookDao,
   private val application: Application,
   private val bookmarkMigrator: BookmarkMigrator,
+  private val context: Context,
 ) {
 
   suspend fun parseAndStore(chapters: List<Chapter>, file: DocumentFile): BookContent {
     val id = BookId(file.uri)
     return contentRepo.getOrPut(id) {
-      val analyzed = mediaAnalyzer.analyze(chapters.first().id.toUri())
-
+      val uri = chapters.first().id.toUri()
+      val analyzed = DocumentFile.fromSingleUri(context, uri)?.let {
+        mediaAnalyzer.analyze(it)
+      }
       val filePath = file.uri.filePath()
       val migrationMetaData = filePath?.let {
         legacyBookDao.bookMetaData()

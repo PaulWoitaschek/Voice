@@ -85,6 +85,7 @@ class NotificationCreator
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setShowWhen(false)
       .setSmallIcon(R.drawable.ic_notification)
+      .setSilent(true)
       .setStyle(mediaStyle)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setWhen(0)

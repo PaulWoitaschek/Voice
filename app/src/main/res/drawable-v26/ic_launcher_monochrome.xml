@@ -4,15 +4,14 @@
   android:height="108dp"
   android:viewportWidth="108"
   android:viewportHeight="108">
-  <path
-    android:fillColor="@color/gradient_launcher_shadow"
-    android:pathData="M89.05 39.17a12.59 12.59 0 0 0-7.7-3.64S71.08 38.44 68.89 44L61 64a11.93 11.93 0 0 1-19.52 4L41 67.79l-0.11-0.37a12.15 12.15 0 0 1-2-3.4l-0.93 0.37a13 13 0 0 0 3.25 4.79L80 108h28V58.11z" />
+
   <path
     android:pathData="M-21.26 64a11.9 11.9 0 0 0 22.13 0l7.92-20a11.9 11.9 0 0 1 22.12 0l7.92 20A11.9 11.9 0 0 0 61 64l7.93-20A11.9 11.9 0 0 1 91 44l7.93 20a11.9 11.9 0 0 0 22.12 0"
-    android:strokeWidth="2"
+    android:strokeWidth="3"
     android:strokeColor="#fff"
     android:strokeMiterLimit="10" />
   <path
-    android:fillColor="@color/gradient_launcher_finish"
-    android:pathData="M0 0h108v108H0V0z" />
+    android:pathData="M-11.91 64.5a11.9 11.9 0 0 0 22.12 0l7.93-20a11.9 11.9 0 0 1 22.12 0l7.93 20a11.9 11.9 0 0 0 22.12 0l7.93-20.05a11.9 11.9 0 0 1 22.12 0l7.93 20.06a11.9 11.9 0 0 0 22.12 0"
+    android:strokeWidth="3"
+    android:strokeColor="#fff" />
 </vector>

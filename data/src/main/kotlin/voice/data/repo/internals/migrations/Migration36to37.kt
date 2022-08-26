@@ -2,11 +2,15 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
+import javax.inject.Inject
 
 private const val TABLE_NAME = "tableChapters"
 private const val DURATION = "chapterDuration"
@@ -25,10 +29,12 @@ private const val CREATE_TABLE = """
       )
   """
 
-/**
- * The field LAST_MODIFIED was added to the chapters
- */
-class Migration36to37 : IncrementalMigration(36) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration36to37
+@Inject constructor() : IncrementalMigration(36) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val data = db.query("SELECT * FROM $TABLE_NAME").mapRows {
@@ -51,5 +57,10 @@ class Migration36to37 : IncrementalMigration(36) {
     }
   }
 
-  private data class Holder(val duration: Long, val name: String, val path: String, val bookId: Long)
+  private data class Holder(
+    val duration: Long,
+    val name: String,
+    val path: String,
+    val bookId: Long,
+  )
 }

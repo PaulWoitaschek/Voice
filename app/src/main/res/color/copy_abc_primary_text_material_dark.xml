@@ -13,6 +13,6 @@
      limitations under the License.
 --><!-- this is a copy of AppCompat's color selector so we don't use private resources-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/copy_primary_text_disabled_material_dark" android:state_enabled="false" />
-    <item android:color="@color/copy_primary_text_default_material_dark" />
+  <item android:color="@color/copy_primary_text_disabled_material_dark" android:state_enabled="false" />
+  <item android:color="@color/copy_primary_text_default_material_dark" />
 </selector>

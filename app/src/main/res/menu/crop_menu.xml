@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-      android:id="@+id/confirm"
-      android:icon="@drawable/check"
-      android:title="@string/cover_crop"
-      app:showAsAction="always" />
+  <item
+    android:id="@+id/confirm"
+    android:icon="@drawable/check"
+    android:title="@string/cover_crop"
+    app:showAsAction="always" />
 
 </menu>

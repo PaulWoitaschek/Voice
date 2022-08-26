@@ -2,10 +2,19 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.transaction
+import javax.inject.Inject
 
-class Migration37to38 : IncrementalMigration(37) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration37to38
+@Inject constructor() : IncrementalMigration(37) {
   override fun migrate(db: SupportSQLiteDatabase) {
     db.transaction {
       // add new chapter mark table

@@ -3,16 +3,16 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
 
-    <ImageView
-      android:id="@+id/coverImage"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:adjustViewBounds="true"
-      android:contentDescription="@string/content_cover" />
+  <ImageView
+    android:id="@+id/coverImage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/content_cover" />
 
-    <voice.app.features.imagepicker.CropOverlay
-      android:id="@+id/cropOverlay"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+  <voice.app.features.imagepicker.CropOverlay
+    android:id="@+id/cropOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 
 </FrameLayout>

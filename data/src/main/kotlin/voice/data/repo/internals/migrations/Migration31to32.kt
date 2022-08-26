@@ -3,15 +3,21 @@ package voice.data.repo.internals.migrations
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
+import javax.inject.Inject
 
-/**
- * Corrects media paths that have been falsely set.
- */
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
 @SuppressLint("Recycle")
-class Migration31to32 : IncrementalMigration(31) {
+class Migration31to32
+@Inject constructor() : IncrementalMigration(31) {
 
   private val BOOK_ID = "bookId"
   private val TABLE_BOOK = "tableBooks"

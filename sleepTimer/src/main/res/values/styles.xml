@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="sleep_number">
-        <item name="android:padding">4dp</item>
-        <item name="android:textAppearance">?textAppearanceHeadlineMedium</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:gravity">center</item>
-    </style>
+  <style name="sleep_number">
+    <item name="android:padding">4dp</item>
+    <item name="android:textAppearance">?textAppearanceHeadlineMedium</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:gravity">center</item>
+  </style>
 </resources>

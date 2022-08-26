@@ -1,15 +1,21 @@
 package voice.data.repo.internals.migrations
 
 import android.annotation.SuppressLint
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
+import javax.inject.Inject
 
-/**
- * Queries through all books and removes the ones that were added empty by a bug.
- */
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
 @SuppressLint("Recycle")
-class Migration30to31 : IncrementalMigration(30) {
+class Migration30to31
+@Inject constructor() : IncrementalMigration(30) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // book keys

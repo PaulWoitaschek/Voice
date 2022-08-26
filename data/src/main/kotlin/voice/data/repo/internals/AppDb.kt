@@ -27,7 +27,10 @@ import voice.data.repo.internals.dao.LegacyBookDao
     Bookmark::class,
   ],
   version = AppDb.VERSION,
-  autoMigrations = [AutoMigration(from = 51, to = 52)],
+  autoMigrations = [
+    AutoMigration(from = 51, to = 52),
+    AutoMigration(from = 52, to = 53),
+  ],
 )
 @TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {
@@ -38,7 +41,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun legacyBookDao(): LegacyBookDao
 
   companion object {
-    const val VERSION = 52
+    const val VERSION = 54
     const val DATABASE_NAME = "autoBookDB"
   }
 }

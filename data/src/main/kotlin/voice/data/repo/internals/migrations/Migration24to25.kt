@@ -3,22 +3,28 @@ package voice.data.repo.internals.migrations
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.squareup.anvil.annotations.ContributesMultibinding
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
 import voice.logging.core.Logger
 import java.io.File
 import java.io.IOException
 import java.util.InvalidPropertiesFormatException
+import javax.inject.Inject
 
-/**
- * Migrate the database so they will be stored as json objects
- */
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
 @SuppressLint("Recycle")
-class Migration24to25 : IncrementalMigration(24) {
+class Migration24to25
+@Inject constructor() : IncrementalMigration(24) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"
@@ -160,14 +166,7 @@ class Migration24to25 : IncrementalMigration(24) {
         currentTime = 0
       }
 
-      var speed = 1.0f
-      try {
-        speed = java.lang.Float.valueOf(playingInformation.getString(jsonSpeed))
-      } catch (e: JSONException) {
-        e.printStackTrace()
-      } catch (e: NumberFormatException) {
-        e.printStackTrace()
-      }
+      val speed = playingInformation.getString(jsonSpeed).toFloatOrNull() ?: 1F
 
       var name = ""
       try {

@@ -1,8 +1,8 @@
 [versions]
-versionCode = "3060385"
-versionName = "6.0.8"
+versionCode = "3060391"
+versionName = "6.0.10"
 
-sdk-compile = "32"
+sdk-compile = "33"
 sdk-min = "24"
 sdk-target = "32"
 
@@ -14,10 +14,10 @@ materialDialog = "3.3.0"
 dagger = "2.43.2"
 kotlin = "1.7.0"
 compose-compiler = "1.2.0"
-compose-ui = "1.2.0"
-compose-material = "1.2.0"
-compose-animation = "1.2.0"
-agp = "7.3.0-beta05"
+compose-ui = "1.2.1"
+compose-material = "1.2.1"
+compose-animation = "1.2.1"
+agp = "7.3.0-rc01"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -27,11 +27,11 @@ lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 groupie = "com.github.lisawray.groupie:groupie:2.10.1"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:4.5.1-1"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.12.5"
+mockk = "io.mockk:mockk:1.12.7"
 truth = "com.google.truth:truth:1.1.3"
-robolectric = "org.robolectric:robolectric:4.8.1"
-coil = "io.coil-kt:coil-compose:2.1.0"
-appCompat = "androidx.appcompat:appcompat:1.4.2"
+robolectric = "org.robolectric:robolectric:4.8.2"
+coil = "io.coil-kt:coil-compose:2.2.0"
+appCompat = "androidx.appcompat:appcompat:1.5.0"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
 transitions = "androidx.transition:transition:1.4.1"
@@ -39,9 +39,9 @@ media = "androidx.media:media:1.6.0"
 androidxCore = "androidx.core:core-ktx:1.8.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-desugar = "com.android.tools:desugar_jdk_libs:1.1.6"
+desugar = "com.android.tools:desugar_jdk_libs:1.2.2"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
-koTest-assert = "io.kotest:kotest-assertions-core:5.4.1"
+koTest-assert = "io.kotest:kotest-assertions-core:5.4.2"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
@@ -55,7 +55,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.12"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.1.0"
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -89,20 +89,20 @@ exoPlayer-core = "androidx.media3:media3-exoplayer:1.0.0-beta02"
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
-compose-foundation = "androidx.compose.foundation:foundation:1.2.0"
+compose-foundation = "androidx.compose.foundation:foundation:1.2.1"
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "compose-ui" }
-compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4", version = "1.2.0" }
-compose-ui-testManifest = "androidx.compose.ui:ui-test-manifest:1.2.0"
+compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4", version = "1.2.1" }
+compose-ui-testManifest = "androidx.compose.ui:ui-test-manifest:1.2.1"
 compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose-material" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "compose-material" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose-animation" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-animation" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha15"
+compose-material3 = "androidx.compose.material3:material3:1.0.0-beta01"
 compose-activity = "androidx.activity:activity-compose:1.5.1"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.1"
-compose-navigation-animation = "com.google.accompanist:accompanist-navigation-animation:0.25.0"
+compose-navigation-animation = "com.google.accompanist:accompanist-navigation-animation:0.25.1"
 
 [bundles]
 compose = [
@@ -136,7 +136,7 @@ testing-jvm = [
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.4.1" }
+anvil = { id = "com.squareup.anvil", version = "2.4.2" }
 ktlint = { id = "org.jmailen.kotlinter", version = "3.11.1" }
 ksp = { id = "com.google.devtools.ksp", version = "1.7.0-1.0.6" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.1" }
