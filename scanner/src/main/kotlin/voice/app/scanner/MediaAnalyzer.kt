@@ -12,7 +12,7 @@ class MediaAnalyzer
 ) {
 
   suspend fun analyze(file: DocumentFile): Metadata? {
-    Logger.d("analyze $file")
+    Logger.d("analyze ${file.uri}")
     val result = ffProbeAnalyze.analyze(file) ?: return null
     val duration = result.format?.duration
     return if (duration != null && duration > 0) {
