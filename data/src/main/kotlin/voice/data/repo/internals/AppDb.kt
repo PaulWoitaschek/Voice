@@ -41,7 +41,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun legacyBookDao(): LegacyBookDao
 
   companion object {
-    const val VERSION = 53
+    const val VERSION = 54
     const val DATABASE_NAME = "autoBookDB"
   }
 }
