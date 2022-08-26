@@ -19,15 +19,11 @@ import java.time.Instant
 data class Chapter(
   @PrimaryKey
   val id: Id,
-  val name: String,
+  val name: String?,
   val duration: Long,
   val fileLastModified: Instant,
   val markData: List<MarkData>,
 ) : Comparable<Chapter> {
-
-  init {
-    require(name.isNotEmpty())
-  }
 
   @Ignore
   val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {

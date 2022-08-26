@@ -56,7 +56,8 @@ class BookSearchHandler
         val bookNameMatches = it.content.name.contains(query, ignoreCase = true)
         val authorMatches = it.content.author?.contains(query, ignoreCase = true) == true
         val chapterNameMatches = it.chapters.any { chapter ->
-          chapter.name.contains(query, ignoreCase = true)
+          val chapterName = chapter.name
+          chapterName != null && chapterName.contains(query, ignoreCase = true)
         }
         bookNameMatches || authorMatches || chapterNameMatches
       }

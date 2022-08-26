@@ -13,7 +13,7 @@ data class MarkData(
 }
 
 data class ChapterMark(
-  val name: String,
+  val name: String?,
   val startMs: Long,
   val endMs: Long,
 )
