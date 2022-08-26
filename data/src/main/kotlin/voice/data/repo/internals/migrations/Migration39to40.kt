@@ -2,13 +2,18 @@ package voice.data.repo.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.anvil.annotations.ContributesMultibinding
+import voice.common.AppScope
+import javax.inject.Inject
 
-/**
- * From DB version 39, the position of a book must no longer be negative. So all negative positions
- * get set to 0.
- */
-class Migration39to40 : IncrementalMigration(39) {
+@ContributesMultibinding(
+  scope = AppScope::class,
+  boundType = Migration::class,
+)
+class Migration39to40
+@Inject constructor() : IncrementalMigration(39) {
 
   private val BOOK_TABLE_NAME = "tableBooks"
   private val BOOK_TIME = "bookTime"

@@ -19,7 +19,7 @@ class ChapterParser
       if (file.isFile) {
         val id = Chapter.Id(file.uri)
         val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
-          val metaData = mediaAnalyzer.analyze(file.uri) ?: return@getOrPut null
+          val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
           Chapter(
             id = id,
             duration = metaData.duration,

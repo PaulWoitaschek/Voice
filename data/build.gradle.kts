@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   id("voice.library")
   id("kotlin-parcelize")
+  id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
   alias(libs.plugins.ksp)
@@ -39,11 +40,13 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
+  implementation(libs.prefs.core)
 
   api(libs.room.runtime)
   ksp(libs.room.compiler)
 
   implementation(libs.dagger.core)
+  kaptTest(libs.dagger.compiler)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)
@@ -52,6 +55,7 @@ dependencies {
   testImplementation(libs.junit)
   testImplementation(libs.robolectric)
   testImplementation(libs.truth)
+  testImplementation(libs.prefs.inMemory)
   testImplementation(libs.koTest.assert)
   testImplementation(libs.coroutines.test)
 }
