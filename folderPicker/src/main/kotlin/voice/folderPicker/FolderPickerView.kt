@@ -1,17 +1,15 @@
 package voice.folderPicker
 
-import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AudioFile
 import androidx.compose.material.icons.outlined.Delete
@@ -29,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -40,7 +37,6 @@ import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.folders.FolderType
-import voice.logging.core.Logger
 
 @ContributesTo(AppScope::class)
 interface FolderPickerComponent {
@@ -51,44 +47,50 @@ interface FolderPickerComponent {
 fun FolderPicker(
   onCloseClick: () -> Unit,
 ) {
-  val viewModel = rememberScoped {
+  val viewModel: FolderPickerViewModel = rememberScoped {
     rootComponentAs<FolderPickerComponent>()
       .folderPickerViewModel
   }
   val viewState = viewModel.viewState()
-  var launchedFolderType by remember {
-    mutableStateOf<FolderType?>(null)
+
+  var showSelectFileDialog by remember {
+    mutableStateOf(false)
   }
-  val onLaunchResult: (Uri?) -> Unit = { uri ->
-    val folderType = launchedFolderType
-    if (uri != null && folderType != null) {
-      viewModel.add(uri, folderType)
+  val openDocumentLauncher = rememberLauncherForActivityResult(
+    ActivityResultContracts.OpenDocument(),
+  ) { uri ->
+    if (uri != null) {
+      viewModel.add(uri, FileTypeSelection.File)
     }
   }
-  val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument(), onLaunchResult)
-  val documentTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree(), onLaunchResult)
+  val documentTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+    if (uri != null) {
+      viewModel.add(uri, FileTypeSelection.Folder)
+    }
+  }
+
+  if (showSelectFileDialog) {
+    FileTypeSelectionDialog(
+      onDismiss = {
+        showSelectFileDialog = false
+      },
+      onSelected = { selection ->
+        when (selection) {
+          FileTypeSelection.File -> {
+            openDocumentLauncher.launch(arrayOf("*/*"))
+          }
+          FileTypeSelection.Folder -> {
+            documentTreeLauncher.launch(null)
+          }
+        }
+      },
+    )
+  }
+
   FolderPickerView(
     viewState = viewState,
-    onAddClick = { folderType ->
-      launchedFolderType = folderType
-      when (folderType) {
-        FolderType.SingleFile -> {
-          try {
-            openDocumentLauncher.launch(arrayOf("audio/*", "video/*"))
-          } catch (e: ActivityNotFoundException) {
-            Logger.e(e, "No activity found for ACTION_OPEN_DOCUMENT. Broken device.")
-          }
-        }
-        FolderType.SingleFolder,
-        FolderType.Root,
-        -> {
-          try {
-            documentTreeLauncher.launch(null)
-          } catch (e: ActivityNotFoundException) {
-            Logger.e(e, "No activity found for ACTION_OPEN_DOCUMENT_TREE. Broken device.")
-          }
-        }
-      }
+    onAddClick = {
+      showSelectFileDialog = true
     },
     onDeleteClick = {
       viewModel.removeFolder(it)
@@ -100,7 +102,7 @@ fun FolderPicker(
 @Composable
 private fun FolderPickerView(
   viewState: FolderPickerViewState,
-  onAddClick: (FolderType) -> Unit,
+  onAddClick: () -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
   onCloseClick: () -> Unit,
 ) {
@@ -121,17 +123,21 @@ private fun FolderPickerView(
       )
     },
     floatingActionButton = {
-      Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.End,
-      ) {
-        FolderType.values().forEach { folderType ->
-          FolderButton(
-            folderType = folderType,
-            onAddClick = onAddClick,
+      val text = stringResource(id = R.string.add)
+      ExtendedFloatingActionButton(
+        text = {
+          Text(text)
+        },
+        onClick = {
+          onAddClick()
+        },
+        icon = {
+          Icon(
+            imageVector = Icons.Outlined.Add,
+            contentDescription = text,
           )
-        }
-      }
+        },
+      )
     },
   ) {
     LazyColumn(contentPadding = it) {
@@ -163,28 +169,6 @@ private fun FolderPickerView(
       }
     }
   }
-}
-
-@Composable
-private fun FolderButton(
-  folderType: FolderType,
-  onAddClick: (FolderType) -> Unit,
-) {
-  val text = folderType.text()
-  ExtendedFloatingActionButton(
-    text = {
-      Text(text)
-    },
-    onClick = {
-      onAddClick(folderType)
-    },
-    icon = {
-      Icon(
-        imageVector = folderType.icon(),
-        contentDescription = text,
-      )
-    },
-  )
 }
 
 @Composable

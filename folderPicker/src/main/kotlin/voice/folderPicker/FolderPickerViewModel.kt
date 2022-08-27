@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import voice.data.folders.AudiobookFolders
@@ -21,26 +22,36 @@ class FolderPickerViewModel
   @Composable
   fun viewState(): FolderPickerViewState {
     val folders: List<FolderPickerViewState.Item> by remember {
-      audiobookFolders.all()
-        .map { folders ->
-          withContext(Dispatchers.IO) {
-            folders.flatMap { (folderType, folders) ->
-              folders.map { documentFile ->
-                FolderPickerViewState.Item(
-                  name = documentFile.displayName(),
-                  id = documentFile.uri,
-                  folderType = folderType,
-                )
-              }
-            }.sortedDescending()
-          }
-        }
+      items()
     }.collectAsState(initial = emptyList())
     return FolderPickerViewState(folders)
   }
 
-  fun add(uri: Uri, type: FolderType) {
-    audiobookFolders.add(uri, type)
+  private fun items(): Flow<List<FolderPickerViewState.Item>> {
+    return audiobookFolders.all().map { folders ->
+      withContext(Dispatchers.IO) {
+        folders.flatMap { (folderType, folders) ->
+          folders.map { documentFile ->
+            FolderPickerViewState.Item(
+              name = documentFile.displayName(),
+              id = documentFile.uri,
+              folderType = folderType,
+            )
+          }
+        }.sortedDescending()
+      }
+    }
+  }
+
+  internal fun add(uri: Uri, type: FileTypeSelection) {
+    when (type) {
+      FileTypeSelection.File -> {
+        audiobookFolders.add(uri, FolderType.SingleFile)
+      }
+      FileTypeSelection.Folder -> {
+        // todo
+      }
+    }
   }
 
   fun removeFolder(item: FolderPickerViewState.Item) {

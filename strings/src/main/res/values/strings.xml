@@ -72,10 +72,13 @@
 
   <string name="close">Close</string>
   <string name="delete">Delete</string>
+  <string name="add">Add</string>
 
   <string name="folder_type_audiobooks">Audiobooks folder</string>
   <string name="folder_type_single_folder">Single folder</string>
   <string name="folder_type_single_file">Single file</string>
+  <string name="folder_type_dialog_title">What do you want to add?</string>
+
 
   <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">Just now</string>
