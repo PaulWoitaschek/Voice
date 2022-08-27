@@ -1,4 +1,4 @@
-package voice.folderPicker
+package voice.folderPicker.folderPicker
 
 import android.net.Uri
 import voice.data.folders.FolderType

@@ -79,6 +79,7 @@
   <string name="folder_type_single_file">Single file</string>
   <string name="folder_type_dialog_title">What do you want to add?</string>
 
+  <string name="folder_type_title">How are your files structured?</string>
 
   <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">Just now</string>

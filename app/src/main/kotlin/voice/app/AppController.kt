@@ -14,7 +14,8 @@ import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
-import voice.folderPicker.FolderPicker
+import voice.folderPicker.folderPicker.FolderPicker
+import voice.folderPicker.selectType.SelectFolderType
 import voice.migration.views.Migration
 import voice.settings.views.Settings
 import javax.inject.Inject
@@ -50,6 +51,10 @@ class AppController : ComposeController() {
             navController.popBackStack()
           },
         )
+      }
+      composable(Destination.SelectFolderType.route) { backStackEntry ->
+        val destination = Destination.SelectFolderType.parse(backStackEntry.arguments!!)
+        SelectFolderType(uri = destination.uri)
       }
     }
 

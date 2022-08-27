@@ -21,7 +21,7 @@ import voice.bookOverview.views.BookOverviewPreview
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.formatTime
-import voice.folderPicker.FolderPickerPreview
+import voice.folderPicker.folderPicker.FolderPickerPreview
 import voice.logging.core.Logger
 import voice.settings.views.Settings
 import java.io.File

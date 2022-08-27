@@ -1,4 +1,4 @@
-package voice.folderPicker
+package voice.folderPicker.folderPicker
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -39,6 +39,7 @@ import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.folders.FolderType
+import voice.folderPicker.R
 
 @ContributesTo(AppScope::class)
 interface FolderPickerComponent {
