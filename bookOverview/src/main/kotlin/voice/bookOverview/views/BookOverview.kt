@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -144,12 +146,15 @@ fun BookOverview(
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
 ) {
+  val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
   Scaffold(
+    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       SmallTopAppBar(
         title = {
           Text(text = stringResource(id = R.string.app_name))
         },
+        scrollBehavior = scrollBehavior,
         actions = {
           if (viewState.showMigrateIcon) {
             MigrateIcon(
