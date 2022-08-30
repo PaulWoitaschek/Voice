@@ -64,7 +64,9 @@ private fun FolderModeColumn(
     Spacer(Modifier.size(16.dp))
     Text(
       text = stringResource(id = folderMode.title()),
-      modifier = Modifier.weight(1F),
+      modifier = Modifier
+        .weight(1F)
+        .padding(vertical = 8.dp),
     )
     FolderTypeIcon(
       folderType = when (folderMode) {
