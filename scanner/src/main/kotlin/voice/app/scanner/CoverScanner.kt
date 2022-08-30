@@ -36,8 +36,11 @@ class CoverScanner
   }
 
   private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean = withContext(Dispatchers.IO) {
-    val documentFile = DocumentFile.fromTreeUri(context, book.id.toUri())
-      ?: return@withContext false
+    val documentFile = try {
+      DocumentFile.fromTreeUri(context, book.id.toUri())
+    } catch (e: IllegalArgumentException) {
+      null
+    } ?: return@withContext false
 
     if (!documentFile.isDirectory) {
       return@withContext false

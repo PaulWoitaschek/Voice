@@ -1,6 +1,5 @@
 package voice.logging.debug
 
-import android.os.Build
 import android.util.Log
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
@@ -52,7 +51,6 @@ private val fqcnIgnore = listOf(
 )
 
 private const val MAX_LOG_LENGTH = 4000
-private const val MAX_TAG_LENGTH = 23
 private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
 
 private fun createStackElementTag(element: StackTraceElement): String {
@@ -61,13 +59,7 @@ private fun createStackElementTag(element: StackTraceElement): String {
   if (matcher.find()) {
     tag = matcher.replaceAll("")
   }
-  // Tag length limit was removed in API 26.
-  val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || Build.VERSION.SDK_INT >= 26) {
-    tag
-  } else {
-    tag.substring(0, MAX_TAG_LENGTH)
-  }
-  return "$trimmedTag:${element.lineNumber}"
+  return "$tag:${element.lineNumber}"
 }
 
 private val Logger.Severity.priority: Int

@@ -71,10 +71,7 @@
   <string name="book_header_not_started">Pas encore commencé</string>
   <string name="book_header_completed">Complété</string>
   <string name="close">Fermer</string>
-  <string name="add">Ajouter</string>
   <string name="delete">Supprimer</string>
-  <string name="audiobook_folder_card_text">Voice nécessite une arborescence dans laquelle chaque sous-dossier de votre dossier de livres audio est un livre, par exemple : </string>
-  <string name="got_audiobook_folder_card_action">Compris</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">A l\'instant</string>
   <!--will be shown as a hint when no books have been added-->

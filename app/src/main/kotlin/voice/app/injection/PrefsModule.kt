@@ -24,10 +24,11 @@ import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridMode
 import voice.common.AppScope
 import voice.common.BookId
-import voice.common.pref.AudiobookFolders
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
-import voice.folderPicker.ExplanationCardSeen
+import voice.common.pref.RootAudiobookFolders
+import voice.common.pref.SingleFileAudiobookFolders
+import voice.common.pref.SingleFolderAudiobookFolders
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -105,13 +106,23 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  @AudiobookFolders
+  @RootAudiobookFolders
   fun audiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
-    return factory.create(
-      serializer = ListSerializer(UriSerializer),
-      fileName = "audiobookFolders",
-      defaultValue = emptyList(),
-    )
+    return factory.createUriList("audiobookFolders")
+  }
+
+  @Provides
+  @Singleton
+  @SingleFolderAudiobookFolders
+  fun singleFolderAudiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+    return factory.createUriList("SingleFolderAudiobookFolders")
+  }
+
+  @Provides
+  @Singleton
+  @SingleFileAudiobookFolders
+  fun singleFileAudiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+    return factory.createUriList("SingleFileAudiobookFolders")
   }
 
   @Provides
@@ -127,15 +138,16 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  @ExplanationCardSeen
-  fun explanationCardSeen(factory: SerializableDataStoreFactory): DataStore<Boolean> {
-    return factory.create(Boolean.serializer(), false, "explanationCardSeen")
-  }
-
-  @Provides
-  @Singleton
   @BookMigrationExplanationQualifier
   fun bookMigrationExplanationShown(factory: SerializableDataStoreFactory): BookMigrationExplanationShown {
     return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")
   }
 }
+
+private fun SerializableDataStoreFactory.createUriList(
+  name: String,
+): DataStore<List<Uri>> = create(
+  serializer = ListSerializer(UriSerializer),
+  fileName = name,
+  defaultValue = emptyList(),
+)

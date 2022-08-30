@@ -1,6 +1,7 @@
 package voice.common.navigation
 
 import android.net.Uri
+import android.os.Bundle
 import voice.common.BookId
 
 sealed interface NavigationCommand {
@@ -21,4 +22,16 @@ sealed interface Destination {
   object Settings : Compose("settings")
   object BookOverview : Compose("bookOverview")
   object FolderPicker : Compose("folderPicker")
+  data class SelectFolderType(val uri: Uri) : Compose("$baseRoute/${uri.toString().base64Encoded()}") {
+    companion object {
+      private const val baseRoute = "selectFolderType"
+      private const val uriArg = "uri"
+      const val route = "$baseRoute/{$uriArg}"
+
+      fun parse(bundle: Bundle): SelectFolderType {
+        val uriString = bundle.getString(uriArg)!!.base64Decoded()
+        return SelectFolderType(Uri.parse(uriString))
+      }
+    }
+  }
 }

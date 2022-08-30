@@ -72,10 +72,7 @@
   <string name="book_header_not_started">Dar nepradėtos</string>
   <string name="book_header_completed">Užbaigtos</string>
   <string name="close">Uždaryti</string>
-  <string name="add">Pridėti</string>
   <string name="delete">Pašalinti</string>
-  <string name="audiobook_folder_card_text">„Voice“ tikisi aplankų struktūros, kur kiekvienas aplankas pasirinktame audioknygų aplanke yra viena knyga, pavyzdžiui:</string>
-  <string name="got_audiobook_folder_card_action">Supratau</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Ką tik</string>
   <!--will be shown as a hint when no books have been added-->

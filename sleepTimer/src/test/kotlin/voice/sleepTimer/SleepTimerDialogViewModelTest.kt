@@ -50,7 +50,7 @@ class SleepTimerDialogViewModelTest {
     sleepTimer = sleepTimer,
     bookRepo = bookRepo,
     sleepTimePref = sleepTimePref,
-    dispatcherProvider = DispatcherProvider(scope.coroutineContext),
+    dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
   )
 
   @Test

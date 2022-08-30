@@ -69,10 +69,7 @@
   <string name="book_header_not_started">未再生</string>
   <string name="book_header_completed">完了</string>
   <string name="close">閉じる</string>
-  <string name="add">追加</string>
   <string name="delete">削除</string>
-  <string name="audiobook_folder_card_text">Voiceは、選択したオーディオブックフォルダー内の各フォルダーを1つのブックとして取り扱います。例えば、次の通り：</string>
-  <string name="got_audiobook_folder_card_action">了解</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">少し前</string>
   <!--will be shown as a hint when no books have been added-->

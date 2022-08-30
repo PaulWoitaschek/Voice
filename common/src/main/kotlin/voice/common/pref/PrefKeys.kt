@@ -15,7 +15,13 @@ object PrefKeys {
 }
 
 @Qualifier
-annotation class AudiobookFolders
+annotation class RootAudiobookFolders
+
+@Qualifier
+annotation class SingleFolderAudiobookFolders
+
+@Qualifier
+annotation class SingleFileAudiobookFolders
 
 @Qualifier
 annotation class CurrentBook

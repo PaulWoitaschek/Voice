@@ -47,9 +47,7 @@
   <string name="book_header_not_started">Pas encara començat</string>
   <string name="book_header_completed">Acabat</string>
   <string name="close">Tampar</string>
-  <string name="add">Apondre</string>
   <string name="delete">Suprimir</string>
-  <string name="got_audiobook_folder_card_action">Plan comprés</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Ara meteis</string>
   <!--will be shown as a hint when no books have been added-->

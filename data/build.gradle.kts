@@ -47,6 +47,8 @@ dependencies {
 
   implementation(libs.dagger.core)
   kaptTest(libs.dagger.compiler)
+  implementation(libs.datastore)
+  implementation(libs.documentFile)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)

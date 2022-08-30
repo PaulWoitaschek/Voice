@@ -72,10 +72,7 @@
   <string name="book_header_not_started">Ще не початі</string>
   <string name="book_header_completed">Завершені</string>
   <string name="close">Закрити</string>
-  <string name="add">Додати</string>
   <string name="delete">Видалити</string>
-  <string name="audiobook_folder_card_text">Щоб використовувати додаток Voice, помістіть кожну аудіокнигу в окрему папку.</string>
-  <string name="got_audiobook_folder_card_action">OK</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Щойно</string>
   <!--will be shown as a hint when no books have been added-->

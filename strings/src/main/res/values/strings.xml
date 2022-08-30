@@ -56,12 +56,9 @@
   <string name="pref_support_title">Support</string>
   <string name="pref_support_translations">Translations</string>
   <string name="pref_support_contribute">Support and suggestions</string>
-  <!--Misc-->
   <string name="popup_edit">Edit</string>
   <string name="remove">Remove</string>
   <string name="play_current">Play current</string>
-  <!-- hide folder dialog -->
-  <!-- license activity -->
   <string name="refresh">Refresh</string>
   <string name="reset">Reset</string>
   <string name="cover_crop">Crop cover</string>
@@ -74,10 +71,24 @@
   <string name="book_header_completed">Completed</string>
 
   <string name="close">Close</string>
-  <string name="add">Add</string>
   <string name="delete">Delete</string>
-  <string name="audiobook_folder_card_text">Voice expects a folder structure where every folder within your selected audiobook folder is one book, for example:</string>
-  <string name="got_audiobook_folder_card_action">Got it</string>
+  <string name="add">Add</string>
+
+  <string name="folder_type_audiobooks">Audiobooks folder</string>
+  <string name="folder_type_single_folder">Single folder</string>
+  <string name="folder_type_single_file">Single file</string>
+  <string name="folder_type_dialog_title">What do you want to add?</string>
+
+  <string name="folder_mode_root">Root audiobook Folder. One subfolder = one book.</string>
+  <string name="folder_mode_single">Single audiobook folder</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">One audio file</item>
+    <item quantity="other">%d audio files</item>
+  </plurals>
+  <string name="folder_type_book_example_header">This would lead to the following books being detected:</string>
+  <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
+
+  <string name="folder_type_title">How are your files structured?</string>
 
   <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">Just now</string>

@@ -70,10 +70,7 @@
   <string name="book_header_not_started">Még nem elkezdett</string>
   <string name="book_header_completed">Befejezett</string>
   <string name="close">Bezárás</string>
-  <string name="add">Hozzáadás</string>
   <string name="delete">Törlés</string>
-  <string name="audiobook_folder_card_text">A Voice olyan mappastruktúrát vár el, amelyben a kiválasztott hangoskönyvmappán belül minden mappa egy könyv, például:</string>
-  <string name="got_audiobook_folder_card_action">Értem</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Éppen most</string>
   <!--will be shown as a hint when no books have been added-->

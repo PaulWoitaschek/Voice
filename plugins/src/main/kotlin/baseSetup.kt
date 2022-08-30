@@ -67,14 +67,6 @@ fun Project.baseSetup() {
       add("implementation", libs.findLibrary(it).get())
     }
 
-    listOf(
-      "junit",
-      "koTest.assert",
-      "mockk",
-      "turbine",
-      "coroutines.test"
-    ).forEach {
-      add("testImplementation", libs.findLibrary(it).get())
-    }
+    add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }
