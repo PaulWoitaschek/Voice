@@ -29,12 +29,15 @@ class AudiobookFolders
 
   private val scope = MainScope()
 
-  fun all(): Flow<Map<FolderType, List<DocumentFile>>> {
+  fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
     val flows = FolderType.values()
       .map { folderType ->
         dataStore(folderType).data.map { uris ->
           val documentFiles = uris.mapNotNull { uri ->
-            uri.toDocumentFile(folderType)
+            val documentFile = uri.toDocumentFile(folderType)
+            documentFile?.let {
+              DocumentFileWithUri(it, uri)
+            }
           }
           folderType to documentFiles
         }
@@ -78,15 +81,7 @@ class AudiobookFolders
     }
     scope.launch {
       dataStore(folderType).updateData { folders ->
-        val documentFiles = folders.mapNotNull { uri ->
-          uri.toDocumentFile(folderType)
-        }
-        val uriDocumentFile = uri.toDocumentFile(folderType)
-        if (uriDocumentFile == null) {
-          documentFiles.map { it.uri }
-        } else {
-          documentFiles.map { it.uri } - uriDocumentFile.uri
-        }
+        folders - uri
       }
     }
   }
@@ -97,3 +92,8 @@ class AudiobookFolders
     FolderType.Root -> rootAudioBookFolders
   }
 }
+
+data class DocumentFileWithUri(
+  val documentFile: DocumentFile,
+  val uri: Uri,
+)

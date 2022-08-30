@@ -34,10 +34,10 @@ class FolderPickerViewModel
     return audiobookFolders.all().map { folders ->
       withContext(Dispatchers.IO) {
         folders.flatMap { (folderType, folders) ->
-          folders.map { documentFile ->
+          folders.map { (documentFile, uri) ->
             FolderPickerViewState.Item(
               name = documentFile.displayName(),
-              id = documentFile.uri,
+              id = uri,
               folderType = folderType,
             )
           }
