@@ -129,7 +129,8 @@ testing-jvm = [
   "robolectric",
   "coroutines-test",
   "mockk",
-  "koTest-assert"
+  "koTest-assert",
+  "turbine",
 ]
 
 [plugins]

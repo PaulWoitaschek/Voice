@@ -22,5 +22,7 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
 
+  testImplementation("app.cash.molecule:molecule-runtime:0.4.0")
+
   implementation(libs.dagger.core)
 }

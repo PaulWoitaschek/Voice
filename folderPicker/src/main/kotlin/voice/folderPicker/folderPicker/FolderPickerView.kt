@@ -11,10 +11,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.AudioFile
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +35,7 @@ import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.folders.FolderType
+import voice.folderPicker.FolderTypeIcon
 import voice.folderPicker.R
 
 @ContributesTo(AppScope::class)
@@ -151,10 +148,7 @@ private fun FolderPickerView(
       items(viewState.items) { item ->
         ListItem(
           icon = {
-            Icon(
-              imageVector = item.folderType.icon(),
-              contentDescription = item.folderType.text(),
-            )
+            FolderTypeIcon(folderType = item.folderType)
           },
           trailing = {
             IconButton(
@@ -175,23 +169,6 @@ private fun FolderPickerView(
       }
     }
   }
-}
-
-@Composable
-private fun FolderType.icon(): ImageVector = when (this) {
-  FolderType.SingleFile -> Icons.Outlined.AudioFile
-  FolderType.SingleFolder -> Icons.Outlined.Folder
-  FolderType.Root -> Icons.Outlined.LibraryBooks
-}
-
-@Composable
-private fun FolderType.text(): String {
-  val res = when (this) {
-    FolderType.SingleFile -> R.string.folder_type_single_file
-    FolderType.SingleFolder -> R.string.folder_type_single_folder
-    FolderType.Root -> R.string.folder_type_audiobooks
-  }
-  return stringResource(res)
 }
 
 @Composable

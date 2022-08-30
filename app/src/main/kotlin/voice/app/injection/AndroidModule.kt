@@ -88,6 +88,6 @@ object AndroidModule {
   @Provides
   @Singleton
   fun dispatcherProvider(): DispatcherProvider {
-    return DispatcherProvider(Dispatchers.Main)
+    return DispatcherProvider(Dispatchers.Main, Dispatchers.IO)
   }
 }

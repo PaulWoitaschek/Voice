@@ -79,6 +79,15 @@
   <string name="folder_type_single_file">Single file</string>
   <string name="folder_type_dialog_title">What do you want to add?</string>
 
+  <string name="folder_mode_root">Root audiobook Folder. One subfolder = one book.</string>
+  <string name="folder_mode_single">Single audiobook folder</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">One audio file</item>
+    <item quantity="other">%d audio files</item>
+  </plurals>
+  <string name="folder_type_book_example_header">This would lead to the following books being detected:</string>
+  <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
+
   <string name="folder_type_title">How are your files structured?</string>
 
   <!-- will be shown as the time for a bookmark that was just created -->
