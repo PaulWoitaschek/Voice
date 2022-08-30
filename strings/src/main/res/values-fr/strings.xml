@@ -53,15 +53,9 @@
   <string name="pref_seek_time">Sauter de</string>
   <string name="pref_theme_dark">Dunkles Thema</string>
   <string name="pref_auto_rewind_title">Rembobinage automatique</string>
-  <string name="pref_support_title">Assistance</string>
-  <string name="pref_support_translations">Traductions</string>
-  <string name="pref_support_contribute">Assistance et suggestions</string>
-  <!--Misc-->
   <string name="popup_edit">Modifer</string>
   <string name="remove">Enlever</string>
   <string name="play_current">Lire l\'actuel</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Rafraîchir</string>
   <string name="reset">Réinitialiser</string>
   <string name="cover_crop">Recadrer la couverture</string>
@@ -72,6 +66,7 @@
   <string name="book_header_completed">Complété</string>
   <string name="close">Fermer</string>
   <string name="delete">Supprimer</string>
+  <string name="add">Ajouter</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">A l\'instant</string>
   <!--will be shown as a hint when no books have been added-->
@@ -85,10 +80,6 @@
   <string name="migration_detail_content_position">Position</string>
   <string name="migration_detail_content_bookmarks">Marque-pages</string>
   <string name="migration_detail_content_added_at">Ajouté le</string>
-  <string name="migration_detail_content_position_current_file_title">Fichier en cours</string>
-  <string name="migration_detail_content_position_current_file_position">Position dans le fichier</string>
-  <string name="migration_detail_content_position_current_chapter_title">Chapitre en cours</string>
-  <string name="migration_detail_content_position_current_chapter_position">Position dans le chapitre</string>
   <string name="migration_delete_dialog_title">Supprimer les positions</string>
   <string name="migration_delete_dialog_content">Une fois les anciennes positions supprimées, vous ne pourrez plus accéder à vos anciennes positions de lecture.</string>
   <string name="migration_delete_dialog_action_delete">Supprimer</string>

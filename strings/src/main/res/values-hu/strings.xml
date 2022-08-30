@@ -52,15 +52,9 @@
   <string name="pref_seek_time">Kihagyás mértéke</string>
   <string name="pref_theme_dark">Sötét téma</string>
   <string name="pref_auto_rewind_title">Automatikus visszatekerés</string>
-  <string name="pref_support_title">Támogatás</string>
-  <string name="pref_support_translations">Fordítások</string>
-  <string name="pref_support_contribute">Támogatás és javaslatok</string>
-  <!--Misc-->
   <string name="popup_edit">Szerkesztés</string>
   <string name="remove">Eltávolítás</string>
   <string name="play_current">Jelenlegi lejátszása</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Frissítés</string>
   <string name="reset">Visszaállítás</string>
   <string name="cover_crop">Borító kivágása</string>
@@ -71,6 +65,7 @@
   <string name="book_header_completed">Befejezett</string>
   <string name="close">Bezárás</string>
   <string name="delete">Törlés</string>
+  <string name="add">Hozzáadás</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Éppen most</string>
   <!--will be shown as a hint when no books have been added-->
@@ -84,10 +79,6 @@
   <string name="migration_detail_content_position">Hely</string>
   <string name="migration_detail_content_bookmarks">Könyvjelzők</string>
   <string name="migration_detail_content_added_at">Hozzáadva:</string>
-  <string name="migration_detail_content_position_current_file_title">Jelenlegi fájl</string>
-  <string name="migration_detail_content_position_current_file_position">Fájl pozíciója</string>
-  <string name="migration_detail_content_position_current_chapter_title">Aktuális fejezet</string>
-  <string name="migration_detail_content_position_current_chapter_position">Pozíció a fejezetben</string>
   <string name="migration_delete_dialog_title">Pozíciók törlése</string>
   <string name="migration_delete_dialog_content">Ha törli a régi pozíciókat, nem fogja tudni visszaállítani a régi lejátszási pozíciókat.</string>
   <string name="migration_delete_dialog_action_delete">Törlés</string>

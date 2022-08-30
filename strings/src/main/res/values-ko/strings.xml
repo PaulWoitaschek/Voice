@@ -47,15 +47,9 @@
   </plurals>
   <string name="pref_seek_time">건너뛸 시간</string>
   <string name="pref_auto_rewind_title">자동 다시감기</string>
-  <string name="pref_support_title">앱 계발 지원</string>
-  <string name="pref_support_translations">번역</string>
-  <string name="pref_support_contribute">피드백 </string>
-  <!--Misc-->
   <string name="popup_edit">수정</string>
   <string name="remove">삭제</string>
   <string name="play_current">재생 재시작</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">새로고침</string>
   <string name="reset">초기화</string>
   <string name="cover_crop">책표지 자르기</string>

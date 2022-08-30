@@ -49,15 +49,9 @@
   <string name="pref_seek_time">Değeri atla</string>
   <string name="pref_theme_dark">Karanlık Tema</string>
   <string name="pref_auto_rewind_title">Otomatik geri sarma</string>
-  <string name="pref_support_title">Destek</string>
-  <string name="pref_support_translations">Çeviriler</string>
-  <string name="pref_support_contribute">Destek ve öneriler</string>
-  <!--Misc-->
   <string name="popup_edit">Düzenle</string>
   <string name="remove">Kaldır</string>
   <string name="play_current">Geçerli oynatma</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Yenile</string>
   <string name="reset">Sıfırla</string>
   <string name="cover_crop">Kapağı kırp</string>

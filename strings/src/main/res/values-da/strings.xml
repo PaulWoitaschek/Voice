@@ -49,15 +49,9 @@
   <string name="pref_seek_time">Spring over mængde</string>
   <string name="pref_theme_dark">Mørkt tema</string>
   <string name="pref_auto_rewind_title">Auto tilbagespoling</string>
-  <string name="pref_support_title">Support</string>
-  <string name="pref_support_translations">Oversættelser</string>
-  <string name="pref_support_contribute">Support og forslag</string>
-  <!--Misc-->
   <string name="popup_edit">Rediger</string>
   <string name="remove">Fjern</string>
   <string name="play_current">Spil nuværende</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Opfrisk</string>
   <string name="reset">Nulstil</string>
   <string name="cover_crop">Skær cover til</string>

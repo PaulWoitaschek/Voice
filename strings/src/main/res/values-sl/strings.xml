@@ -47,15 +47,9 @@
   </plurals>
   <string name="pref_seek_time">Dolžina skoka</string>
   <string name="pref_auto_rewind_title">Samodejni skok nazaj</string>
-  <string name="pref_support_title">Podpora</string>
-  <string name="pref_support_translations">Prevodi</string>
-  <string name="pref_support_contribute">Podpora in predlogi</string>
-  <!--Misc-->
   <string name="popup_edit">Uredi</string>
   <string name="remove">Odstrani</string>
   <string name="play_current">Predvajaj trenutno</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Osveži</string>
   <string name="reset">Ponastavi</string>
   <string name="cover_crop">Prireži naslovnico</string>

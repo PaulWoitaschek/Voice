@@ -45,15 +45,9 @@
   </plurals>
   <string name="pref_seek_time">Количестество на прескачане</string>
   <string name="pref_auto_rewind_title">Авто пренавиване</string>
-  <string name="pref_support_title">Поддръжка</string>
-  <string name="pref_support_translations">Преводи</string>
-  <string name="pref_support_contribute">Поддръжка и предложения</string>
-  <!--Misc-->
   <string name="popup_edit">Редактиране</string>
   <string name="remove">Премахване</string>
   <string name="play_current">Възпроизвеждане на текущата</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Опресняване</string>
   <string name="reset">Нулиране</string>
   <string name="cover_crop">Изрязване на обложката</string>

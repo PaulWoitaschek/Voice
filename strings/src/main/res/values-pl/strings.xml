@@ -51,15 +51,9 @@
   <string name="pref_seek_time">Przewiń o</string>
   <string name="pref_theme_dark">Ciemna stylizacja</string>
   <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
-  <string name="pref_support_title">Wsparcie</string>
-  <string name="pref_support_translations">Tłumaczenia</string>
-  <string name="pref_support_contribute">Wsparcie i propozycje</string>
-  <!--Misc-->
   <string name="popup_edit">Edytuj</string>
   <string name="remove">Usuń</string>
   <string name="play_current">Odtwórz aktualne</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Odśwież</string>
   <string name="reset">Reset</string>
   <string name="cover_crop">Przytnij okładkę</string>

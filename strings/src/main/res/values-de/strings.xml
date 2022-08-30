@@ -52,15 +52,14 @@
   <string name="pref_seek_time">Vor- und zurückspulen</string>
   <string name="pref_theme_dark">Dunkles Design</string>
   <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
-  <string name="pref_support_title">Support</string>
-  <string name="pref_support_translations">Übersetzungen</string>
-  <string name="pref_support_contribute">Support und Vorschläge</string>
-  <!--Misc-->
+  <string name="pref_suggest_idea">Schlag eine Idee vor</string>
+  <string name="pref_report_issue">Melde ein Problem</string>
+  <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
+  <string name="pref_get_support">Hol dir Hilfe</string>
+  <string name="pref_app_version">App Version</string>
   <string name="popup_edit">Bearbeiten</string>
   <string name="remove">Löschen</string>
   <string name="play_current">Spiel aktuelles</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Neu laden</string>
   <string name="reset">Zurücksetzen</string>
   <string name="cover_crop">Cover zurechtschneiden</string>
@@ -71,6 +70,20 @@
   <string name="book_header_completed">Zu Ende</string>
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
+  <string name="add">Hinzufügen</string>
+  <string name="folder_type_audiobooks">Hörbuch Ordner</string>
+  <string name="folder_type_single_folder">Einzelner Ordner</string>
+  <string name="folder_type_single_file">Einzelne Datei</string>
+  <string name="folder_type_dialog_title">Was möchtest du hinzufügen?</string>
+  <string name="folder_mode_root">Wurzel Hörbuch Ordner. Ein Unterordner = ein Buch</string>
+  <string name="folder_mode_single">Einzelnes Hörbuch</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">Eine Audiodatei</item>
+    <item quantity="other">%d Audio Dateien</item>
+  </plurals>
+  <string name="folder_type_book_example_header">Dies würde dazu führen, dass die folgenden Bücher erkannt werden</string>
+  <string name="folder_type_no_books">Voice konnte keine Bücher erkennen. Gibt es Audio Dateien?</string>
+  <string name="folder_type_title">Wie sind deine Dateien organisiert?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Gerade eben</string>
   <!--will be shown as a hint when no books have been added-->
@@ -92,4 +105,8 @@
   <string name="migration_delete_dialog_content">Sobald Sie die alten Positionen gelöscht haben, können Sie die alten Abspielpositionen nicht mehr einsehen.</string>
   <string name="migration_delete_dialog_action_delete">Löschen</string>
   <string name="migration_delete_dialog_action_keep">Behalten</string>
+  <string name="delete_book_bottom_sheet_title">Buch löschen</string>
+  <string name="delete_book_dialog_title">Buch löschen</string>
+  <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
+  <string name="delete_book_dialog_content">Das wird die Dateien von deinem Gerät löschen.</string>
 </resources>

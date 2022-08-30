@@ -30,15 +30,9 @@
   <!--Bookmarks-->
   <!--Settings-->
   <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
-  <string name="pref_support_title">الدعم</string>
-  <string name="pref_support_translations">الترجمة</string>
-  <string name="pref_support_contribute">الدعم و الإقتراحات</string>
-  <!--Misc-->
   <string name="popup_edit">عدل</string>
   <string name="remove">إمسح</string>
   <string name="play_current">شغل الحالي</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">تحديث</string>
   <string name="reset">أعادة</string>
   <string name="cover_crop">إقتصاص الغطاء</string>

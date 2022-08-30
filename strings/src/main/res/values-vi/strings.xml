@@ -47,15 +47,9 @@
   </plurals>
   <string name="pref_seek_time">Thời lượng tua nhanh</string>
   <string name="pref_auto_rewind_title">Tự động phát lại</string>
-  <string name="pref_support_title">Hỗ trợ</string>
-  <string name="pref_support_translations">Dịch thuật</string>
-  <string name="pref_support_contribute">Hỗ trợ và góp ý</string>
-  <!--Misc-->
   <string name="popup_edit">Chỉnh sửa</string>
   <string name="remove">Gỡ bỏ</string>
   <string name="play_current">Tiếp tục nghe sách hiện tại</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Làm mới</string>
   <string name="reset">Khởi động lại</string>
   <string name="cover_crop">Cắt ảnh bìa</string>

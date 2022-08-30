@@ -51,15 +51,9 @@
   <string name="pref_seek_time">跳过时间</string>
   <string name="pref_theme_dark">暗黑主题</string>
   <string name="pref_auto_rewind_title">自动回退</string>
-  <string name="pref_support_title">支持</string>
-  <string name="pref_support_translations">翻译</string>
-  <string name="pref_support_contribute">支持和建议</string>
-  <!--Misc-->
   <string name="popup_edit">编辑</string>
   <string name="remove">删除</string>
   <string name="play_current">播放当前有声书</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">刷新</string>
   <string name="reset">重置</string>
   <string name="cover_crop">封面裁剪</string>
@@ -70,6 +64,7 @@
   <string name="book_header_completed">已结束播放</string>
   <string name="close">关闭</string>
   <string name="delete">删除</string>
+  <string name="add">添加</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">刚才</string>
   <!--will be shown as a hint when no books have been added-->
@@ -83,10 +78,6 @@
   <string name="migration_detail_content_position">位置</string>
   <string name="migration_detail_content_bookmarks">书签</string>
   <string name="migration_detail_content_added_at">添加于</string>
-  <string name="migration_detail_content_position_current_file_title">当前文件</string>
-  <string name="migration_detail_content_position_current_file_position">文件中的位置</string>
-  <string name="migration_detail_content_position_current_chapter_title">当前章节</string>
-  <string name="migration_detail_content_position_current_chapter_position">本章节中的位置</string>
   <string name="migration_delete_dialog_title">删除位置</string>
   <string name="migration_delete_dialog_content">删除旧位置后，您将无法恢复旧的播放位置。</string>
   <string name="migration_delete_dialog_action_delete">删除</string>

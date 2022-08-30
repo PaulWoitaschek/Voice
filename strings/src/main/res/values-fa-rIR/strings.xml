@@ -43,14 +43,8 @@
   </plurals>
   <string name="pref_seek_time">میزان پرش</string>
   <string name="pref_auto_rewind_title">بازپخش خودکار</string>
-  <string name="pref_support_title">پشتیبانی</string>
-  <string name="pref_support_translations">ترجمه‌ها</string>
-  <string name="pref_support_contribute">پشتیبانی و پیشنهادات</string>
-  <!--Misc-->
   <string name="popup_edit">ویرایش</string>
   <string name="remove">حذف</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">تازه سازی</string>
   <string name="reset">باز نشانی</string>
   <string name="cover_crop">بریدن جلد</string>

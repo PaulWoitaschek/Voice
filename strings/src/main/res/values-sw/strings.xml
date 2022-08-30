@@ -41,14 +41,9 @@
   </plurals>
   <string name="pref_seek_time">ruka kiaci</string>
   <string name="pref_theme_dark">Mada ya giza</string>
-  <string name="pref_support_title">Unga Mkono</string>
-  <string name="pref_support_translations">Tafsiri</string>
-  <!--Misc-->
   <string name="popup_edit">Badili</string>
   <string name="remove">Toa</string>
   <string name="play_current">Chaza Iliyomo</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Rudisha nyuma</string>
   <string name="reset">Weka Upya</string>
   <string name="music_notification">Uchezaji</string>

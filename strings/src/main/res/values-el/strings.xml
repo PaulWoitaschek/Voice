@@ -47,15 +47,9 @@
   </plurals>
   <string name="pref_seek_time">Μεταφορά ποσότητας</string>
   <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
-  <string name="pref_support_title">Υποστήριξη</string>
-  <string name="pref_support_translations">Μεταφράσεις</string>
-  <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
-  <!--Misc-->
   <string name="popup_edit">Επεξεργασία </string>
   <string name="remove">Αφαίρεση</string>
   <string name="play_current">Αναπαραγωγή τρέχοντος</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Ανανέωση</string>
   <string name="reset">Επαναφορά</string>
   <string name="cover_crop">Περικοπή εξωφύλλου</string>

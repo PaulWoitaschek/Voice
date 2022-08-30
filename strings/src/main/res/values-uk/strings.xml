@@ -54,15 +54,9 @@
   <string name="pref_seek_time">Інтервал перемотування</string>
   <string name="pref_theme_dark">Темна тема</string>
   <string name="pref_auto_rewind_title">Інтервал автовідмотування</string>
-  <string name="pref_support_title">Підтримка</string>
-  <string name="pref_support_translations">Переклади</string>
-  <string name="pref_support_contribute">Підтримка та пропозиції</string>
-  <!--Misc-->
   <string name="popup_edit">Редагувати</string>
   <string name="remove">Вилучити</string>
   <string name="play_current">Відтворити поточну</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Оновити</string>
   <string name="reset">Скинути</string>
   <string name="cover_crop">Кадрувати обкладинку</string>
@@ -73,6 +67,7 @@
   <string name="book_header_completed">Завершені</string>
   <string name="close">Закрити</string>
   <string name="delete">Видалити</string>
+  <string name="add">Додати</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Щойно</string>
   <!--will be shown as a hint when no books have been added-->
@@ -86,10 +81,6 @@
   <string name="migration_detail_content_position">Місце відтворення</string>
   <string name="migration_detail_content_bookmarks">Закладки</string>
   <string name="migration_detail_content_added_at">Дата додавання</string>
-  <string name="migration_detail_content_position_current_file_title">Поточний файл</string>
-  <string name="migration_detail_content_position_current_file_position">Місце відтворення у файлі</string>
-  <string name="migration_detail_content_position_current_chapter_title">Поточна глава</string>
-  <string name="migration_detail_content_position_current_chapter_position">Місце відтворення в главі</string>
   <string name="migration_delete_dialog_title">Видалити місця відтворення </string>
   <string name="migration_delete_dialog_content">Якщо ви видалите старі місця відтворення, відновити їх буде неможливо.</string>
   <string name="migration_delete_dialog_action_delete">Видалити</string>

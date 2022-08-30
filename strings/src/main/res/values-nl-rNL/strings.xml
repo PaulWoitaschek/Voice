@@ -52,15 +52,9 @@
   <string name="pref_seek_time">Aantal overslaan</string>
   <string name="pref_theme_dark">Donker thema</string>
   <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
-  <string name="pref_support_title">Ondersteuning</string>
-  <string name="pref_support_translations">Vertalingen</string>
-  <string name="pref_support_contribute">Ondersteuning en suggesties</string>
-  <!--Misc-->
   <string name="popup_edit">Bewerken</string>
   <string name="remove">Verwijderen</string>
   <string name="play_current">Huidig boek afspelen</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Verversen</string>
   <string name="reset">Herstellen</string>
   <string name="cover_crop">Omslag bijsnijden</string>
@@ -71,6 +65,7 @@
   <string name="book_header_completed">Voltooid</string>
   <string name="close">Sluiten</string>
   <string name="delete">Verwijderen</string>
+  <string name="add">Toevoegen</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Zojuist</string>
   <!--will be shown as a hint when no books have been added-->
@@ -84,10 +79,6 @@
   <string name="migration_detail_content_position">Locatie</string>
   <string name="migration_detail_content_bookmarks">Bladwijzers</string>
   <string name="migration_detail_content_added_at">Toegevoegd op</string>
-  <string name="migration_detail_content_position_current_file_title">Huidig bestand</string>
-  <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
-  <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
-  <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
   <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
   <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
   <string name="migration_delete_dialog_action_delete">Verwijderen</string>

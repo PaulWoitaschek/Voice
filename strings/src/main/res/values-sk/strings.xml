@@ -51,15 +51,9 @@
   <string name="pref_seek_time">Preskočiť o</string>
   <string name="pref_theme_dark">Tmavá téma</string>
   <string name="pref_auto_rewind_title">Automaticky pretočiť</string>
-  <string name="pref_support_title">Podpora</string>
-  <string name="pref_support_translations">Preklady</string>
-  <string name="pref_support_contribute">Podpora a návrhy</string>
-  <!--Misc-->
   <string name="popup_edit">Upraviť</string>
   <string name="remove">Zmazať</string>
   <string name="play_current">Prehrať aktuálnu</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Obnoviť</string>
   <string name="reset">Resetovať</string>
   <string name="cover_crop">Orezať obal</string>
@@ -70,6 +64,7 @@
   <string name="book_header_completed">Dokončené</string>
   <string name="close">Zavriet</string>
   <string name="delete">Vymazať</string>
+  <string name="add">Pridať</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->
 </resources>

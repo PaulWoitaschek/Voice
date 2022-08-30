@@ -51,15 +51,9 @@
   <string name="pref_seek_time">スキップ量</string>
   <string name="pref_theme_dark">ダークテーマ</string>
   <string name="pref_auto_rewind_title">自動巻き戻し</string>
-  <string name="pref_support_title">サポート</string>
-  <string name="pref_support_translations">翻訳</string>
-  <string name="pref_support_contribute">サポートと提案</string>
-  <!--Misc-->
   <string name="popup_edit">編集</string>
   <string name="remove">削除</string>
   <string name="play_current">現在を再生</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">更新</string>
   <string name="reset">リセット</string>
   <string name="cover_crop">カバーをトリミング</string>
@@ -70,6 +64,7 @@
   <string name="book_header_completed">完了</string>
   <string name="close">閉じる</string>
   <string name="delete">削除</string>
+  <string name="add">追加</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">少し前</string>
   <!--will be shown as a hint when no books have been added-->
@@ -83,10 +78,6 @@
   <string name="migration_detail_content_position">位置</string>
   <string name="migration_detail_content_bookmarks">ブックマーク</string>
   <string name="migration_detail_content_added_at">追加日時</string>
-  <string name="migration_detail_content_position_current_file_title">現在のファイル</string>
-  <string name="migration_detail_content_position_current_file_position">ファイル内の位置</string>
-  <string name="migration_detail_content_position_current_chapter_title">現在のチャプター</string>
-  <string name="migration_detail_content_position_current_chapter_position">チャプター内の位置</string>
   <string name="migration_delete_dialog_title">位置の削除</string>
   <string name="migration_delete_dialog_content">一度、過去の位置を削除してしまうと、過去の再生位置を復元できなくなってしまいます。</string>
   <string name="migration_delete_dialog_action_delete">削除</string>

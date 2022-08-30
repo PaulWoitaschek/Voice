@@ -52,15 +52,9 @@
   <string name="pref_seek_time">Hoppa över mängd</string>
   <string name="pref_theme_dark">Mörkt tema</string>
   <string name="pref_auto_rewind_title">Automatisk bakåtspolning</string>
-  <string name="pref_support_title">Support</string>
-  <string name="pref_support_translations">Översättningar</string>
-  <string name="pref_support_contribute">Support och förslag</string>
-  <!--Misc-->
   <string name="popup_edit">Redigera</string>
   <string name="remove">Ta bort</string>
   <string name="play_current">Spela aktuell</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Uppdatera</string>
   <string name="reset">Återställ</string>
   <string name="cover_crop">Beskär omslag</string>
@@ -71,6 +65,7 @@
   <string name="book_header_completed">Avslutad</string>
   <string name="close">Stäng</string>
   <string name="delete">Ta bort</string>
+  <string name="add">Lägg till</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Precis nu</string>
   <!--will be shown as a hint when no books have been added-->
@@ -84,10 +79,6 @@
   <string name="migration_detail_content_position">Position</string>
   <string name="migration_detail_content_bookmarks">Bokmärken</string>
   <string name="migration_detail_content_added_at">Tillagd vid</string>
-  <string name="migration_detail_content_position_current_file_title">Aktuell fil</string>
-  <string name="migration_detail_content_position_current_file_position">Position i fil</string>
-  <string name="migration_detail_content_position_current_chapter_title">Aktuellt kapitel</string>
-  <string name="migration_detail_content_position_current_chapter_position">Position i kapitel</string>
   <string name="migration_delete_dialog_title">Ta bort positioner</string>
   <string name="migration_delete_dialog_content">När du har tagit bort de gamla positionerna kommer du inte att kunna återställa dina gamla uppspelningspositioner.</string>
   <string name="migration_delete_dialog_action_delete">Ta bort</string>

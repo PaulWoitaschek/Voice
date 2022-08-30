@@ -26,6 +26,9 @@
   <string name="download_book_cover">Обложка из интернета</string>
   <string name="pick_book_cover">Обложка на устройстве</string>
   <string name="edit_book_title">Редактировать книгу</string>
+  <string name="mark_as_completed">Прослушано</string>
+  <string name="mark_as_current">Отметить как Текущую</string>
+  <string name="mark_as_not_started">Еще не слушали</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Папки с аудиокнигами</string>
@@ -51,15 +54,9 @@
   <string name="pref_seek_time">Интервал перемотки</string>
   <string name="pref_theme_dark">Тёмная тема</string>
   <string name="pref_auto_rewind_title">Автоперемотка назад</string>
-  <string name="pref_support_title">Поддержка</string>
-  <string name="pref_support_translations">Переводы</string>
-  <string name="pref_support_contribute">Поддержка и предложения</string>
-  <!--Misc-->
   <string name="popup_edit">Редактировать</string>
   <string name="remove">Удалить</string>
   <string name="play_current">Читать открытую</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Обновить</string>
   <string name="reset">Сброс</string>
   <string name="cover_crop">Обрезать обложку</string>
@@ -70,6 +67,7 @@
   <string name="book_header_completed">Прослушанные</string>
   <string name="close">Закрыть</string>
   <string name="delete">Удалить</string>
+  <string name="add">Добавить</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Только что</string>
   <!--will be shown as a hint when no books have been added-->
@@ -78,12 +76,17 @@
   <string name="migration_hint_content">Из-за изменений в последних версиях Android, необходимо выбрать папку с аудиокнигами через системный диалог.\n\nНажмине на значке наверху, чтобы посмотреть предыдущее расположение книг.</string>
   <string name="migration_hint_confirm">Понятно</string>
   <string name="migration_detail_title">Предыдущее расположение</string>
+  <string name="migration_detail_content_name">Название</string>
   <string name="migration_detail_content_root">Корневая папка</string>
   <string name="migration_detail_content_position">Место</string>
   <string name="migration_detail_content_bookmarks">Закладки</string>
   <string name="migration_detail_content_added_at">Добавлено</string>
-  <string name="migration_detail_content_position_current_file_title">Открытый файл</string>
-  <string name="migration_detail_content_position_current_file_position">Место в файле</string>
-  <string name="migration_detail_content_position_current_chapter_title">Открытая глава</string>
-  <string name="migration_detail_content_position_current_chapter_position">Место в главе</string>
+  <string name="migration_delete_dialog_title">Удалить закладки</string>
+  <string name="migration_delete_dialog_content">Если вы удалите закладки, восстановить их не получится.</string>
+  <string name="migration_delete_dialog_action_delete">Удалить</string>
+  <string name="migration_delete_dialog_action_keep">Оставить</string>
+  <string name="delete_book_bottom_sheet_title">Удалить книгу</string>
+  <string name="delete_book_dialog_title">Удалить книгу</string>
+  <string name="delete_book_dialog_deletion_confirmation">Удалить файлы</string>
+  <string name="delete_book_dialog_content">Это действие удалит файлы книги с устройства.</string>
 </resources>

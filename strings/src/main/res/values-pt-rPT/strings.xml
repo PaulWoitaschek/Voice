@@ -35,14 +35,8 @@
     <item quantity="many">%d segundos</item>
     <item quantity="other">%d segundos</item>
   </plurals>
-  <string name="pref_support_title">Suporte</string>
-  <string name="pref_support_translations">Traduções</string>
-  <string name="pref_support_contribute">Suporte e sugestões</string>
-  <!--Misc-->
   <string name="popup_edit">Editar</string>
   <string name="remove">Remover</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Actualizar</string>
   <string name="music_notification">Reproduzir</string>
   <!--book category-->

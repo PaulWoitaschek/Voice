@@ -50,15 +50,9 @@
   <string name="pref_seek_time">Pular para</string>
   <string name="pref_theme_dark">Tema escuro</string>
   <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-  <string name="pref_support_title">Suporte</string>
-  <string name="pref_support_translations">Traduções</string>
-  <string name="pref_support_contribute">Suporte e sugestões</string>
-  <!--Misc-->
   <string name="popup_edit">Editar</string>
   <string name="remove">Remover</string>
   <string name="play_current">Reproduzir o atual</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Atualizar</string>
   <string name="reset">Reiniciar</string>
   <string name="cover_crop">Recortar capa</string>

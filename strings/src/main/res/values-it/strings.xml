@@ -50,15 +50,9 @@
   <string name="pref_seek_time">Salta</string>
   <string name="pref_theme_dark">Tema Scuro</string>
   <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
-  <string name="pref_support_title">Supporto</string>
-  <string name="pref_support_translations">Traduzioni</string>
-  <string name="pref_support_contribute">Supporto e Suggerimenti</string>
-  <!--Misc-->
   <string name="popup_edit">Modifica</string>
   <string name="remove">Rimuovi</string>
   <string name="play_current">Riproduci corrente</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Aggiorna</string>
   <string name="reset">Resetta</string>
   <string name="cover_crop">Taglia copertina</string>

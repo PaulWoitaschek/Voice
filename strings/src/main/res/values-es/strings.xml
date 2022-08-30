@@ -50,15 +50,9 @@
   <string name="pref_seek_time">Omitir cantidad</string>
   <string name="pref_theme_dark">Tema oscuro</string>
   <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
-  <string name="pref_support_title">Soporte</string>
-  <string name="pref_support_translations">Traducciones</string>
-  <string name="pref_support_contribute">Soporte y sugerencias</string>
-  <!--Misc-->
   <string name="popup_edit">Editar</string>
   <string name="remove">Eliminar</string>
   <string name="play_current">Reproducir actual</string>
-  <!--hide folder dialog-->
-  <!--license activity-->
   <string name="refresh">Actualizar</string>
   <string name="reset">Reiniciar</string>
   <string name="cover_crop">Recortar cubierta</string>
@@ -69,6 +63,7 @@
   <string name="book_header_completed">Completado</string>
   <string name="close">Cerrar</string>
   <string name="delete">Borrar</string>
+  <string name="add">Agregar</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Justo ahora</string>
   <!--will be shown as a hint when no books have been added-->
@@ -82,8 +77,11 @@
   <string name="migration_detail_content_position">Posición</string>
   <string name="migration_detail_content_bookmarks">Marcadores de libros</string>
   <string name="migration_detail_content_added_at">Agregado a</string>
-  <string name="migration_detail_content_position_current_file_title">Archivo actual</string>
-  <string name="migration_detail_content_position_current_file_position">Posición en el archivo</string>
-  <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
-  <string name="migration_detail_content_position_current_chapter_position">Posición en el capítulo</string>
+  <string name="migration_delete_dialog_title">Borrar Posiciones</string>
+  <string name="migration_delete_dialog_action_delete">Borrar</string>
+  <string name="migration_delete_dialog_action_keep">Guardar</string>
+  <string name="delete_book_bottom_sheet_title">Borrar Libro</string>
+  <string name="delete_book_dialog_title">Borrar Libro</string>
+  <string name="delete_book_dialog_deletion_confirmation">Borrar mis archivos</string>
+  <string name="delete_book_dialog_content">Esto borrará los archivos en tu dispositivo</string>
 </resources>
