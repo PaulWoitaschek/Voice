@@ -1,8 +1,6 @@
-<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  tools:targetApi="n_mr1">
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
   <shortcut
-    android:icon="@mipmap/ic_shortcut_play"
+    android:icon="@drawable/ic_shortcut_play"
     android:shortcutId="playCurrent"
     android:shortcutShortLabel="@string/play_current">
     <intent
