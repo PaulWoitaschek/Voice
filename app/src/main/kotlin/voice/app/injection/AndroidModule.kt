@@ -14,10 +14,10 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
-import voice.app.misc.ApplicationIdProviderImpl
+import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.ToBookIntentProviderImpl
+import voice.common.AppInfoProvider
 import voice.common.AppScope
-import voice.common.ApplicationIdProvider
 import voice.common.DispatcherProvider
 import voice.playback.notification.ToBookIntentProvider
 import javax.inject.Singleton
@@ -77,7 +77,7 @@ object AndroidModule {
   fun toToBookIntentProvider(impl: ToBookIntentProviderImpl): ToBookIntentProvider = impl
 
   @Provides
-  fun applicationIdProvider(impl: ApplicationIdProviderImpl): ApplicationIdProvider = impl
+  fun applicationIdProvider(impl: AppInfoProviderImpl): AppInfoProvider = impl
 
   @Provides
   @Singleton

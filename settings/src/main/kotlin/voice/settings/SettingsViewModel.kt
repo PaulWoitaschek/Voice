@@ -1,9 +1,12 @@
 package voice.settings
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import de.paulwoitaschek.flowpref.Pref
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
+import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
@@ -22,27 +25,26 @@ class SettingsViewModel
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
   private val navigator: Navigator,
+  private val appInfoProvider: AppInfoProvider,
 ) : SettingsListener {
 
-  private val dialog = MutableStateFlow<SettingsViewState.Dialog?>(null)
+  private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
 
-  fun viewState(): Flow<SettingsViewState> {
-    return combine(
-      useDarkTheme.flow,
-      resumeOnReplugPref.flow,
-      autoRewindAmountPref.flow,
-      seekTimePref.flow,
-      dialog,
-    ) { useDarkTheme, resumeOnReplug, autoRewindAmount, seekTime, dialog ->
-      SettingsViewState(
-        useDarkTheme = useDarkTheme,
-        showDarkThemePref = DARK_THEME_SETTABLE,
-        resumeOnReplug = resumeOnReplug,
-        seekTimeInSeconds = seekTime,
-        autoRewindInSeconds = autoRewindAmount,
-        dialog = dialog,
-      )
-    }
+  @Composable
+  fun viewState(): SettingsViewState {
+    val useDarkTheme by remember { useDarkTheme.flow }.collectAsState(initial = false)
+    val resumeOnReplug by remember { resumeOnReplugPref.flow }.collectAsState(initial = false)
+    val autoRewindAmount by remember { autoRewindAmountPref.flow }.collectAsState(initial = 0)
+    val seekTime by remember { seekTimePref.flow }.collectAsState(initial = 0)
+    return SettingsViewState(
+      useDarkTheme = useDarkTheme,
+      showDarkThemePref = DARK_THEME_SETTABLE,
+      resumeOnReplug = resumeOnReplug,
+      seekTimeInSeconds = seekTime,
+      autoRewindInSeconds = autoRewindAmount,
+      dialog = dialog.value,
+      appVersion = appInfoProvider.versionName,
+    )
   }
 
   override fun close() {
@@ -62,7 +64,7 @@ class SettingsViewModel
   }
 
   override fun onSeekAmountRowClicked() {
-    dialog.tryEmit(SettingsViewState.Dialog.SeekTime)
+    dialog.value = SettingsViewState.Dialog.SeekTime
   }
 
   override fun autoRewindAmountChanged(seconds: Int) {
@@ -70,15 +72,15 @@ class SettingsViewModel
   }
 
   override fun onAutoRewindRowClicked() {
-    dialog.tryEmit(SettingsViewState.Dialog.AutoRewindAmount)
+    dialog.value = SettingsViewState.Dialog.AutoRewindAmount
   }
 
   override fun onLikeClicked() {
-    dialog.tryEmit(SettingsViewState.Dialog.Contribute)
+    dialog.value = SettingsViewState.Dialog.Contribute
   }
 
   override fun dismissDialog() {
-    dialog.tryEmit(null)
+    dialog.value = null
   }
 
   override fun openSupport() {

@@ -11,7 +11,7 @@ import dagger.Reusable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import voice.common.ApplicationIdProvider
+import voice.common.AppInfoProvider
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
@@ -30,7 +30,7 @@ class MediaBrowserHelper
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
   private val context: Context,
-  private val applicationIdProvider: ApplicationIdProvider,
+  private val appInfoProvider: AppInfoProvider,
 ) {
 
   fun root(): String = bookUriConverter.allBooksId()
@@ -88,7 +88,7 @@ class MediaBrowserHelper
   private suspend fun fileProviderUri(coverFile: File): Uri? {
     return withContext(Dispatchers.IO) {
       if (coverFile.exists()) {
-        FileProvider.getUriForFile(context, "${applicationIdProvider.applicationID}.coverprovider", coverFile)
+        FileProvider.getUriForFile(context, "${appInfoProvider.applicationID}.coverprovider", coverFile)
           .apply {
             context.grantUriPermission(
               "com.google.android.wearable.app",

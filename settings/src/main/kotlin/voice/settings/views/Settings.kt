@@ -13,8 +13,6 @@ import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -40,6 +38,7 @@ fun SettingsPreview() {
     seekTimeInSeconds = 42,
     autoRewindInSeconds = 12,
     dialog = null,
+    appVersion = "1.2.3",
   )
   VoiceTheme {
     Settings(
@@ -112,6 +111,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         AutoRewindRow(viewState.autoRewindInSeconds) {
           listener.onAutoRewindRowClicked()
         }
+        AppVersion(appVersion = viewState.appVersion)
         Dialog(viewState, listener)
       }
     }
@@ -126,8 +126,7 @@ interface SettingsComponent {
 @Composable
 fun Settings() {
   val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
-  val viewState = remember(viewModel) { viewModel.viewState() }
-    .collectAsState(SettingsViewState.Empty).value
+  val viewState = viewModel.viewState()
   Settings(viewState, viewModel)
 }
 
