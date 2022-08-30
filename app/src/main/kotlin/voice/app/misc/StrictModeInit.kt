@@ -16,11 +16,9 @@ object StrictModeInit {
     .detectLeakedRegistrationObjects()
     .detectFileUriExposure()
     .detectCleartextNetwork()
+    .detectContentUriWithoutPermission()
+    .detectUntaggedSockets()
     .apply {
-      if (Build.VERSION.SDK_INT >= 26) {
-        detectContentUriWithoutPermission()
-        detectUntaggedSockets()
-      }
       if (Build.VERSION.SDK_INT >= 29) {
         detectCredentialProtectedWhileLocked()
       }

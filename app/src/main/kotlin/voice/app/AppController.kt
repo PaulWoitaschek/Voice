@@ -38,7 +38,6 @@ class AppController : ComposeController() {
     AnimatedNavHost(navController = navController, startDestination = Destination.BookOverview.route) {
       composable(Destination.BookOverview.route) {
         BookOverviewScreen()
-        // SelectFolderType(uri = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAudiobooks"))
       }
       composable(Destination.Settings.route) {
         Settings()

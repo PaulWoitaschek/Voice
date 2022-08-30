@@ -38,7 +38,7 @@ class CoverSaver
         FileOutputStream(newCover).use {
           val compressFormat = when (newCover.extension) {
             "png" -> Bitmap.CompressFormat.PNG
-            "webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            "webp" -> if (Build.VERSION.SDK_INT >= 30) {
               Bitmap.CompressFormat.WEBP_LOSSLESS
             } else {
               @Suppress("DEPRECATION")
