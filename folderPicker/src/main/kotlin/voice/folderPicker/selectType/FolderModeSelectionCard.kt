@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.common.compose.VoiceTheme
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
 import voice.folderPicker.R
@@ -78,5 +80,16 @@ private fun FolderMode.title(): Int {
   return when (this) {
     FolderMode.Audiobooks -> R.string.folder_mode_root
     FolderMode.SingleBook -> R.string.folder_mode_single
+  }
+}
+
+@Composable
+@Preview
+private fun FolderModeSelectionCardPreview() {
+  VoiceTheme {
+    FolderModeSelectionCard(
+      onFolderModeSelected = {},
+      selectedFolderMode = FolderMode.Audiobooks,
+    )
   }
 }
