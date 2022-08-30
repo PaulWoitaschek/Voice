@@ -12,10 +12,9 @@ class MediaAnalyzer
 ) {
 
   suspend fun analyze(file: DocumentFile): Metadata? {
-    Logger.d("analyze ${file.uri}")
     val result = ffProbeAnalyze.analyze(file) ?: return null
     val duration = result.format?.duration
-    return if (duration != null && duration > 0) {
+    return if (duration != null && duration > 0 && result.streams.isNotEmpty()) {
       Metadata(
         duration = duration.seconds.inWholeMilliseconds,
         chapterName = result.findTag(TagType.Title) ?: file.chapterNameFallback(),
@@ -29,7 +28,7 @@ class MediaAnalyzer
         },
       )
     } else {
-      Logger.w("Unable to parse $file")
+      Logger.w("Unable to parse ${file.uri}")
       null
     }
   }
