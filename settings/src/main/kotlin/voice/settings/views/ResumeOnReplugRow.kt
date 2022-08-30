@@ -2,6 +2,9 @@ package voice.settings.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Headset
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -22,6 +25,12 @@ internal fun ResumeOnReplugRow(
         toggle()
       }
       .fillMaxWidth(),
+    leadingContent = {
+      Icon(
+        imageVector = Icons.Outlined.Headset,
+        contentDescription = stringResource(R.string.pref_resume_on_replug),
+      )
+    },
     headlineText = {
       Text(
         text = stringResource(R.string.pref_resume_on_replug),

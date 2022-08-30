@@ -53,9 +53,10 @@
   <string name="pref_theme_dark">Dark Theme</string>
   <string name="pref_auto_rewind_title">Auto rewind</string>
 
-  <string name="pref_support_title">Support</string>
-  <string name="pref_support_translations">Translations</string>
-  <string name="pref_support_contribute">Support and suggestions</string>
+  <string name="pref_suggest_idea">Suggest an idea</string>
+  <string name="pref_report_issue">Report a problem</string>
+  <string name="pref_help_translating">Help translating Voice</string>
+  <string name="pref_get_support">Get support</string>
   <string name="pref_app_version">App version</string>
   <string name="popup_edit">Edit</string>
   <string name="remove">Remove</string>
@@ -64,7 +65,6 @@
   <string name="reset">Reset</string>
   <string name="cover_crop">Crop cover</string>
   <string name="music_notification">Playback</string>
-
 
   <!-- book category -->
   <string name="book_header_current">Current</string>

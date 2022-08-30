@@ -75,17 +75,24 @@ class SettingsViewModel
     dialog.value = SettingsViewState.Dialog.AutoRewindAmount
   }
 
-  override fun onLikeClicked() {
-    dialog.value = SettingsViewState.Dialog.Contribute
-  }
-
   override fun dismissDialog() {
     dialog.value = null
   }
 
-  override fun openSupport() {
-    dismissDialog()
-    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice"))
+  override fun getSupport() {
+    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/new?category=q-a"))
+  }
+
+  override fun suggestIdea() {
+    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas"))
+  }
+
+  override fun openBugReport() {
+    navigator.goTo(
+      Destination.Website(
+        "https://github.com/PaulWoitaschek/Voice/issues/new?template=bug.yml&version=${appInfoProvider.versionName}",
+      ),
+    )
   }
 
   override fun openTranslations() {

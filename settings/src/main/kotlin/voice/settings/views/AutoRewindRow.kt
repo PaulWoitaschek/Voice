@@ -2,6 +2,9 @@ package voice.settings.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FastRewind
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +21,12 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
         openAutoRewindDialog()
       }
       .fillMaxWidth(),
+    leadingContent = {
+      Icon(
+        imageVector = Icons.Outlined.FastRewind,
+        contentDescription = stringResource(R.string.pref_auto_rewind_title),
+      )
+    },
     headlineText = {
       Text(text = stringResource(R.string.pref_auto_rewind_title))
     },

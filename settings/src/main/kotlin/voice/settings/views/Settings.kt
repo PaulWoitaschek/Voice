@@ -1,13 +1,18 @@
 package voice.settings.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
@@ -51,10 +56,11 @@ fun SettingsPreview() {
         override fun onSeekAmountRowClicked() {}
         override fun autoRewindAmountChanged(seconds: Int) {}
         override fun onAutoRewindRowClicked() {}
-        override fun onLikeClicked() {}
         override fun dismissDialog() {}
-        override fun openSupport() {}
         override fun openTranslations() {}
+        override fun getSupport() {}
+        override fun suggestIdea() {}
+        override fun openBugReport() {}
       },
     )
   }
@@ -70,19 +76,6 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         scrollBehavior = scrollBehavior,
         title = {
           Text(stringResource(R.string.action_settings))
-        },
-        actions = {
-          IconButton(
-            onClick = {
-              listener.onLikeClicked()
-            },
-            content = {
-              Icon(
-                imageVector = Icons.Outlined.HelpOutline,
-                contentDescription = stringResource(R.string.pref_support_title),
-              )
-            },
-          )
         },
         navigationIcon = {
           IconButton(
@@ -111,6 +104,26 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         AutoRewindRow(viewState.autoRewindInSeconds) {
           listener.onAutoRewindRowClicked()
         }
+        ListItem(
+          modifier = Modifier.clickable { listener.suggestIdea() },
+          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(R.string.pref_suggest_idea)) },
+          headlineText = { Text(stringResource(R.string.pref_suggest_idea)) },
+        )
+        ListItem(
+          modifier = Modifier.clickable { listener.getSupport() },
+          leadingContent = { Icon(Icons.Outlined.HelpOutline, stringResource(R.string.pref_get_support)) },
+          headlineText = { Text(stringResource(R.string.pref_get_support)) },
+        )
+        ListItem(
+          modifier = Modifier.clickable { listener.openBugReport() },
+          leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(R.string.pref_report_issue)) },
+          headlineText = { Text(stringResource(R.string.pref_report_issue)) },
+        )
+        ListItem(
+          modifier = Modifier.clickable { listener.openTranslations() },
+          leadingContent = { Icon(Icons.Outlined.Language, stringResource(R.string.pref_help_translating)) },
+          headlineText = { Text(stringResource(R.string.pref_help_translating)) },
+        )
         AppVersion(appVersion = viewState.appVersion)
         Dialog(viewState, listener)
       }
@@ -137,13 +150,6 @@ private fun Dialog(
 ) {
   val dialog = viewState.dialog ?: return
   when (dialog) {
-    SettingsViewState.Dialog.Contribute -> {
-      ContributeDialog(
-        suggestionsClicked = { listener.openSupport() },
-        translationsClicked = { listener.openTranslations() },
-        onDismiss = { listener.dismissDialog() },
-      )
-    }
     SettingsViewState.Dialog.AutoRewindAmount -> {
       AutoRewindAmountDialog(
         currentSeconds = viewState.autoRewindInSeconds,

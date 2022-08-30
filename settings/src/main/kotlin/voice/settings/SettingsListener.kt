@@ -8,8 +8,9 @@ interface SettingsListener {
   fun onSeekAmountRowClicked()
   fun autoRewindAmountChanged(seconds: Int)
   fun onAutoRewindRowClicked()
-  fun onLikeClicked()
   fun dismissDialog()
-  fun openSupport()
+  fun getSupport()
+  fun suggestIdea()
+  fun openBugReport()
   fun openTranslations()
 }
