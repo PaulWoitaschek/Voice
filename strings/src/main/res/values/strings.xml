@@ -79,13 +79,13 @@
   <string name="folder_type_single_file">Single file</string>
   <string name="folder_type_dialog_title">What do you want to add?</string>
 
-  <string name="folder_mode_root">Root audiobook Folder. One subfolder = one book.</string>
+  <string name="folder_mode_root">Root audiobook folder. One subfolder = one book.</string>
   <string name="folder_mode_single">Single audiobook folder</string>
   <plurals name="folder_type_file_count">
     <item quantity="one">One audio file</item>
     <item quantity="other">%d audio files</item>
   </plurals>
-  <string name="folder_type_book_example_header">This would lead to the following books being detected:</string>
+  <string name="folder_type_book_example_header">This would lead to the following books being detected</string>
   <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
 
   <string name="folder_type_title">How are your files structured?</string>
@@ -106,10 +106,10 @@
   <string name="migration_detail_content_position">Position</string>
   <string name="migration_detail_content_bookmarks">Bookmarks</string>
   <string name="migration_detail_content_added_at">Added at</string>
-  <string name="migration_detail_content_position_current_file_title">Current File</string>
-  <string name="migration_detail_content_position_current_file_position">Position in File</string>
-  <string name="migration_detail_content_position_current_chapter_title">Current Chapter</string>
-  <string name="migration_detail_content_position_current_chapter_position">Position in Chapter</string>
+  <string name="migration_detail_content_position_current_file_title">Current file</string>
+  <string name="migration_detail_content_position_current_file_position">Position in file</string>
+  <string name="migration_detail_content_position_current_chapter_title">Current chapter</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position in chapter</string>
 
   <string name="migration_delete_dialog_title">Delete Positions</string>
   <string name="migration_delete_dialog_content">Once you delete the old positions you won\'t be able to recover your old playback positions.</string>
