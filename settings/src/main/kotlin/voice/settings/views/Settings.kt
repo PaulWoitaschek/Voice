@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -78,7 +78,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             },
             content = {
               Icon(
-                imageVector = Icons.Outlined.Favorite,
+                imageVector = Icons.Outlined.HelpOutline,
                 contentDescription = stringResource(R.string.pref_support_title),
               )
             },
