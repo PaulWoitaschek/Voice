@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -15,7 +14,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -142,15 +141,15 @@ private fun FolderPickerView(
         },
       )
     },
-  ) {
-    LazyColumn(contentPadding = it) {
+  ) { contentPadding ->
+    LazyColumn(contentPadding = contentPadding) {
       item { Spacer(modifier = Modifier.size(16.dp)) }
       items(viewState.items) { item ->
         ListItem(
-          icon = {
+          leadingContent = {
             FolderTypeIcon(folderType = item.folderType)
           },
-          trailing = {
+          trailingContent = {
             IconButton(
               onClick = {
                 onDeleteClick(item)
@@ -163,9 +162,10 @@ private fun FolderPickerView(
               },
             )
           },
-        ) {
-          Text(text = item.name, style = MaterialTheme.typography.bodyLarge)
-        }
+          headlineText = {
+            Text(text = item.name)
+          },
+        )
       }
     }
   }

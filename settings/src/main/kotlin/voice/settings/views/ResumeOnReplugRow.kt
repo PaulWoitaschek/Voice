@@ -2,7 +2,7 @@ package voice.settings.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ListItem
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -22,20 +22,19 @@ internal fun ResumeOnReplugRow(
         toggle()
       }
       .fillMaxWidth(),
-    singleLineSecondaryText = false,
-    text = {
+    headlineText = {
       Text(
         text = stringResource(R.string.pref_resume_on_replug),
         style = MaterialTheme.typography.bodyLarge,
       )
     },
-    secondaryText = {
+    supportingText = {
       Text(
         text = stringResource(R.string.pref_resume_on_replug_hint),
         style = MaterialTheme.typography.bodyMedium,
       )
     },
-    trailing = {
+    trailingContent = {
       Switch(
         checked = resumeOnReplug,
         onCheckedChange = {

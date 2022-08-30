@@ -3,8 +3,8 @@ package voice.settings.views
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ListItem
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +30,7 @@ internal fun ContributeDialog(
               translationsClicked()
             }
             .fillMaxWidth(),
-          text = {
+          headlineText = {
             Text(text = stringResource(R.string.pref_support_translations))
           },
         )
@@ -40,7 +40,7 @@ internal fun ContributeDialog(
               suggestionsClicked()
             }
             .fillMaxWidth(),
-          text = {
+          headlineText = {
             Text(text = stringResource(R.string.pref_support_contribute))
           },
         )
