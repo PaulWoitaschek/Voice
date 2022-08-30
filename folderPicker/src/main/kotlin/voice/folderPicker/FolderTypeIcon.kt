@@ -18,7 +18,6 @@ internal fun FolderTypeIcon(folderType: FolderType) {
   )
 }
 
-@Composable
 private fun FolderType.icon(): ImageVector = when (this) {
   FolderType.SingleFile -> Icons.Outlined.AudioFile
   FolderType.SingleFolder -> Icons.Outlined.Folder
