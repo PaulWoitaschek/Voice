@@ -19,6 +19,7 @@ internal class MediaAnalyzerTest {
     coEvery {
       ffprobe.analyze(any())
     } returns MetaDataScanResult(
+      streams = listOf(MetaDataStream()),
       format = MetaDataFormat(
         tags = mapOf("title" to "MyTitle"),
         duration = 123.45,
@@ -33,6 +34,7 @@ internal class MediaAnalyzerTest {
     coEvery {
       ffprobe.analyze(any())
     } returns MetaDataScanResult(
+      streams = listOf(MetaDataStream()),
       format = MetaDataFormat(
         duration = 123.45,
       ),
