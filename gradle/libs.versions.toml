@@ -17,6 +17,7 @@ compose-compiler = "1.2.0"
 compose-ui = "1.2.1"
 compose-material = "1.2.1"
 compose-animation = "1.2.1"
+media3 = "1.0.0-beta02"
 agp = "7.3.0-rc01"
 
 [libraries]
@@ -85,7 +86,7 @@ materialDialog-input = { module = "com.afollestad.material-dialogs:input", versi
 dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
-exoPlayer-core = "androidx.media3:media3-exoplayer:1.0.0-beta02"
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }

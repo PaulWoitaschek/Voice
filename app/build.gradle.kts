@@ -178,7 +178,7 @@ dependencies {
   testImplementation(libs.truth)
   testImplementation(libs.mockk)
 
-  implementation(libs.exoPlayer.core)
+  implementation(libs.media3.exoplayer)
 
   implementation(libs.conductor.core)
   implementation(libs.conductor.transition)

@@ -20,7 +20,7 @@ dependencies {
 
   implementation(libs.dagger.core)
 
-  implementation(libs.exoPlayer.core)
+  implementation(libs.media3.exoplayer)
 
   testImplementation(libs.bundles.testing.jvm)
 }
