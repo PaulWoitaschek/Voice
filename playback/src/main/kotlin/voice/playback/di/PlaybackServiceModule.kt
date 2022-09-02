@@ -5,6 +5,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.Player
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
@@ -43,11 +44,11 @@ object PlaybackServiceModule {
 
   @Provides
   @PlaybackScope
-  fun exoPlayer(
+  fun player(
     context: Context,
     onlyAudioRenderersFactory: OnlyAudioRenderersFactory,
     mediaSourceFactory: MediaSource.Factory,
-  ): ExoPlayer {
+  ): Player {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)

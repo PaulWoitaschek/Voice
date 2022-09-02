@@ -49,8 +49,7 @@ constructor(
   private val autoRewindAmountPref: Pref<Int>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
-  private val dataSourceConverter: DataSourceConverter,
-  private val player: ExoPlayer,
+  private val player: Player,
   private val changeNotifier: ChangeNotifier,
   private val repo: BookRepository,
   @CurrentBook
@@ -288,11 +287,16 @@ constructor(
     Logger.v("prepare $book")
     this.book = book
     player.playWhenReady = false
-    player.setMediaSource(dataSourceConverter.toMediaSource(book))
+    player.setMediaItems(
+      book.toMediaItems(),
+      book.content.currentChapterIndex,
+      book.content.positionInChapter,
+    )
     player.prepare()
-    player.seekTo(book.content.currentChapterIndex, book.content.positionInChapter)
     player.setPlaybackSpeed(book.content.playbackSpeed)
-    player.skipSilenceEnabled = book.content.skipSilence
+    if (player is ExoPlayer) {
+      player.skipSilenceEnabled = book.content.skipSilence
+    }
     state = PlayerState.PAUSED
   }
 
@@ -404,7 +408,9 @@ constructor(
     Logger.v("setSkipSilences to $skip")
     prepare()
     updateContent { copy(skipSilence = skip) }
-    player.skipSilenceEnabled = skip
+    if (player is ExoPlayer) {
+      player.skipSilenceEnabled = skip
+    }
   }
 
   fun release() {

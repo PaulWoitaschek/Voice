@@ -4,11 +4,10 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
-import androidx.media3.exoplayer.ExoPlayer
 import voice.playback.BuildConfig
 import voice.playback.playstate.PlayerState
 
-fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
+internal fun Player.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
   addListener(
     object : Player.Listener {
       override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
@@ -38,7 +37,7 @@ fun ExoPlayer.onSessionPlaybackStateNeedsUpdate(listener: () -> Unit) {
   )
 }
 
-inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
+internal inline fun Player.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   addListener(
     object : Player.Listener {
 
@@ -73,7 +72,7 @@ inline fun ExoPlayer.onStateChanged(crossinline action: (PlayerState) -> Unit) {
   )
 }
 
-inline fun ExoPlayer.onError(crossinline action: (PlaybackException) -> Unit) {
+internal inline fun Player.onError(crossinline action: (PlaybackException) -> Unit) {
   addListener(
     object : Player.Listener {
       override fun onPlayerError(error: PlaybackException) {
@@ -83,7 +82,7 @@ inline fun ExoPlayer.onError(crossinline action: (PlaybackException) -> Unit) {
   )
 }
 
-inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
+internal inline fun Player.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(
     object : Player.Listener {
       override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
