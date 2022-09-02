@@ -1,6 +1,6 @@
 package voice.data.repo.internals
 
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import org.junit.Test
 import voice.data.MarkData
 import voice.data.legacy.LegacyBookType
@@ -58,6 +58,6 @@ class ConvertersTest {
     val converters = Converters()
     val serialized: S = converters.serialize(value)
     val deSerialized: D = converters.deSerialize(serialized)
-    assertThat(deSerialized).isEqualTo(value)
+    deSerialized shouldBe value
   }
 }

@@ -1,6 +1,6 @@
 package voice.data
 
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.Test
 
 class BookComparatorTest {
@@ -15,18 +15,18 @@ class BookComparatorTest {
   @Test
   fun byLastPlayed() {
     val sorted = books.sortedWith(BookComparator.ByLastPlayed)
-    assertThat(sorted).containsExactly(b4, b5, b3, b1, b2).inOrder()
+    sorted.shouldContainExactly(b4, b5, b3, b1, b2)
   }
 
   @Test
   fun byName() {
     val sorted = books.sortedWith(BookComparator.ByName)
-    assertThat(sorted).containsExactly(b1, b2, b3, b5, b4).inOrder()
+    sorted.shouldContainExactly(b1, b2, b3, b5, b4)
   }
 
   @Test
   fun byDateAdded() {
     val sorted = books.sortedWith(BookComparator.ByDateAdded)
-    assertThat(sorted).containsExactly(b4, b5, b1, b2, b3).inOrder()
+    sorted.shouldContainExactly(b4, b5, b1, b2, b3)
   }
 }

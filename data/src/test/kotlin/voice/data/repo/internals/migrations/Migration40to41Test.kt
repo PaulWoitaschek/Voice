@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -80,7 +80,7 @@ class Migration40to41Test {
       .mapRows {
         getInt("loudnessGain")
       }
-    assertThat(loudnessGains).containsExactly(100)
+    loudnessGains.shouldContainExactly(100)
   }
 
   @SuppressLint("SdCardPath")

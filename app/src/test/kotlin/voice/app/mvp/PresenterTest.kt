@@ -1,6 +1,7 @@
 package voice.app.mvp
 
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -15,11 +16,11 @@ class PresenterTest {
 
   @Test
   fun attached() {
-    assertThat(presenter.attached).isFalse()
+    presenter.attached.shouldBeFalse()
     presenter.attach(View)
-    assertThat(presenter.attached).isTrue()
+    presenter.attached.shouldBeTrue()
     presenter.detach()
-    assertThat(presenter.attached).isFalse()
+    presenter.attached.shouldBeFalse()
   }
 
   private object View

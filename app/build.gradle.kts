@@ -175,7 +175,6 @@ dependencies {
   implementation(libs.androidxCore)
 
   testImplementation(libs.junit)
-  testImplementation(libs.truth)
   testImplementation(libs.mockk)
 
   implementation(libs.media3.exoplayer)
@@ -202,7 +201,7 @@ dependencies {
 
   androidTestImplementation(libs.androidTest.espresso)
   androidTestImplementation(libs.androidTest.rules)
-  androidTestImplementation(libs.truth)
+  androidTestImplementation(libs.koTest.assert)
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.compose.ui.test)
   debugImplementation(libs.compose.ui.testManifest)

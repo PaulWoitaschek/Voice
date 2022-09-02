@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -92,10 +93,10 @@ class DataBaseMigratorTest {
         positionInChapter = getInt("positionInChapter"),
       )
     }
-    assertThat(migratedBookSettings).containsExactly(
+    migratedBookSettings.shouldContainExactly(
       correctBookSettings,
       BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
-    ).inOrder()
+    )
   }
 
   @Test
@@ -234,37 +235,37 @@ class DataBaseMigratorTest {
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")
     val bookSettingsCursor = migratedDb.query("SELECT * FROM bookSettings")
 
-    assertThat(metaDataCursor.count).isEqualTo(books.size)
-    assertThat(bookSettingsCursor.count).isEqualTo(books.size)
+    metaDataCursor.count shouldBe books.size
+    bookSettingsCursor.count shouldBe books.size
 
     books.forEachIndexed { bookIndex, book ->
       metaDataCursor.moveToPosition(bookIndex)
       val metaDataId = metaDataCursor.getString("id")
-      assertThat(metaDataCursor.getStringOrNull("author")).isEqualTo(book.author)
-      assertThat(metaDataCursor.getString("name")).isEqualTo(book.name)
-      assertThat(metaDataCursor.getString("root")).isEqualTo(book.root)
+      metaDataCursor.getStringOrNull("author") shouldBe book.author
+      metaDataCursor.getString("name") shouldBe book.name
+      metaDataCursor.getString("root") shouldBe book.root
 
       bookSettingsCursor.moveToPosition(bookIndex)
       val bookSettingsId = bookSettingsCursor.getString("id")
-      assertThat(bookSettingsCursor.getString("currentFile")).isEqualTo(book.currentMediaPath)
-      assertThat(bookSettingsCursor.getInt("positionInChapter")).isEqualTo(book.time)
-      assertThat(bookSettingsCursor.getFloat("playbackSpeed")).isEqualTo(book.playbackSpeed)
-      assertThat(bookSettingsCursor.getInt("loudnessGain")).isEqualTo(book.loudnessGain)
-      assertThat(bookSettingsCursor.getInt("skipSilence")).isEqualTo(0)
-      assertThat(bookSettingsCursor.getInt("active")).isEqualTo(book.active)
-      assertThat(bookSettingsCursor.getInt("lastPlayedAtMillis")).isEqualTo(0)
+      bookSettingsCursor.getString("currentFile") shouldBe book.currentMediaPath
+      bookSettingsCursor.getInt("positionInChapter") shouldBe book.time
+      bookSettingsCursor.getFloat("playbackSpeed") shouldBe book.playbackSpeed
+      bookSettingsCursor.getInt("loudnessGain") shouldBe book.loudnessGain
+      bookSettingsCursor.getInt("skipSilence") shouldBe 0
+      bookSettingsCursor.getInt("active") shouldBe book.active
+      bookSettingsCursor.getInt("lastPlayedAtMillis") shouldBe 0
 
-      assertThat(metaDataId).isEqualTo(bookSettingsId)
+      metaDataId shouldBe bookSettingsId
 
       val chapterCursor = migratedDb.query("SELECT * FROM chapters WHERE bookId = \"$metaDataId\"")
-      assertThat(chapterCursor.count).isEqualTo(book.chapters.size)
+      chapterCursor.count shouldBe book.chapters.size
       book.chapters.forEachIndexed { chapterIndex, chapter ->
         chapterCursor.moveToPosition(chapterIndex)
-        assertThat(chapterCursor.getString("file")).isEqualTo(chapter.path)
-        assertThat(chapterCursor.getInt("duration")).isEqualTo(chapter.duration)
-        assertThat(chapterCursor.getString("name")).isEqualTo(chapter.name)
-        assertThat(chapterCursor.getInt("fileLastModified")).isEqualTo(chapter.lastModified)
-        assertThat(chapterCursor.getStringOrNull("marks")).isEqualTo(chapter.marks ?: "{}")
+        chapterCursor.getString("file") shouldBe chapter.path
+        chapterCursor.getInt("duration") shouldBe chapter.duration
+        chapterCursor.getString("name") shouldBe chapter.name
+        chapterCursor.getInt("fileLastModified") shouldBe chapter.lastModified
+        chapterCursor.getStringOrNull("marks") shouldBe (chapter.marks ?: "{}")
       }
       chapterCursor.close()
     }
@@ -272,12 +273,12 @@ class DataBaseMigratorTest {
     bookSettingsCursor.close()
 
     val bookmarkCursor = migratedDb.query("SELECT * FROM bookmark")
-    assertThat(bookmarkCursor.count).isEqualTo(bookmarks.size)
+    bookmarkCursor.count shouldBe bookmarks.size
     bookmarks.forEachIndexed { index, bookmark ->
       bookmarkCursor.moveToPosition(index)
-      assertThat(bookmarkCursor.getString("file")).isEqualTo(bookmark.path)
-      assertThat(bookmarkCursor.getInt("time")).isEqualTo(bookmark.time)
-      assertThat(bookmarkCursor.getString("title")).isEqualTo(bookmark.title)
+      bookmarkCursor.getString("file") shouldBe bookmark.path
+      bookmarkCursor.getInt("time") shouldBe bookmark.time
+      bookmarkCursor.getString("title") shouldBe bookmark.title
     }
 
     bookmarkCursor.close()

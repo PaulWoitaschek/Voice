@@ -21,7 +21,6 @@ dependencies {
   implementation(libs.documentFile)
   implementation(libs.datastore)
 
-  testImplementation(libs.truth)
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.core)

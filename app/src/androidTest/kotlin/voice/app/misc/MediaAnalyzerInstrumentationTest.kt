@@ -5,7 +5,8 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -27,20 +28,20 @@ class MediaAnalyzerInstrumentationTest {
   @Test(timeout = 1000)
   fun defectFile_noDuration() {
     val duration = durationOfResource(R.raw.defect)
-    assertThat(duration).isNull()
+    duration.shouldBeNull()
   }
 
   @Test
   fun intactFile_correctDuration() {
     val duration = durationOfResource(R.raw.intact)
-    assertThat(duration).isEqualTo(119040)
+    duration shouldBe 119040
   }
 
   @Test(timeout = 1000)
   fun subsequentCalls() {
-    assertThat(durationOfResource(R.raw.intact)).isEqualTo(119040)
-    assertThat(durationOfResource(R.raw.defect)).isNull()
-    assertThat(durationOfResource(R.raw.intact2)).isEqualTo(119040)
+    durationOfResource(R.raw.intact) shouldBe 119040
+    durationOfResource(R.raw.defect).shouldBeNull()
+    durationOfResource(R.raw.intact2) shouldBe 119040
   }
 
   private fun durationOfResource(@RawRes resource: Int): Long? {

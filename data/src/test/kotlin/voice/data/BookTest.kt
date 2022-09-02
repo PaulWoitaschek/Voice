@@ -1,6 +1,9 @@
 package voice.data
 
+import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.longs.shouldBeExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import org.junit.Test
 
 class BookTest {
@@ -36,7 +39,7 @@ class BookTest {
       chapters = chapters,
       currentChapter = chapters.first().id,
     )
-    book.assertThat().positionIs(0)
+    book.position shouldBeExactly 0L
   }
 
   @Test
@@ -47,7 +50,7 @@ class BookTest {
       chapters = chapters,
       currentChapter = chapters.first().id,
     )
-    book.assertThat().positionIs(23)
+    book.position shouldBeExactly 23
   }
 
   @Test
@@ -63,7 +66,7 @@ class BookTest {
       ),
       currentChapter = lastChapterId,
     )
-    book.assertThat().positionIs(123 + 234 + 345)
+    book.position shouldBeExactly 123 + 234 + 345
   }
 
   @Test
@@ -79,7 +82,7 @@ class BookTest {
       ),
       currentChapter = targetChapter,
     )
-    book.assertThat().positionIs(123 + 234 + 23)
+    book.position shouldBeExactly 123 + 234 + 23
   }
 
   @Test
@@ -93,7 +96,7 @@ class BookTest {
       ),
     )
 
-    book.assertThat().durationIs(123 + 234 + 345 + 456)
+    book.duration shouldBeExactly 123 + 234 + 345 + 456
   }
 
   @Test
@@ -105,7 +108,7 @@ class BookTest {
       chapters = listOf(ch1, ch2, ch3),
       currentChapter = ch2.id,
     )
-    book.assertThat().currentChapterIs(ch2)
+    book.currentChapter shouldBe ch2
   }
 
   @Test
@@ -118,7 +121,7 @@ class BookTest {
       currentChapter = ch2.id,
     )
 
-    book.assertThat().currentChapterIndexIs(1)
+    book.content.currentChapterIndex shouldBeExactly 1
   }
 
   @Test
@@ -131,7 +134,7 @@ class BookTest {
       currentChapter = ch2.id,
     )
 
-    book.assertThat().nextChapterIs(ch3)
+    book.nextChapter shouldBe ch3
   }
 
   @Test
@@ -144,7 +147,7 @@ class BookTest {
       currentChapter = ch3.id,
     )
 
-    book.assertThat().nextChapterIs(null)
+    book.nextChapter.shouldBeNull()
   }
 
   @Test
@@ -156,7 +159,7 @@ class BookTest {
       chapters = listOf(ch1, ch2, ch3),
       currentChapter = ch2.id,
     )
-    book.assertThat().previousChapterIs(ch1)
+    book.previousChapter shouldBe ch1
   }
 
   @Test
@@ -168,7 +171,7 @@ class BookTest {
       chapters = listOf(ch1, ch2, ch3),
       currentChapter = ch1.id,
     )
-    book.assertThat().previousChapterIs(null)
+    book.previousChapter.shouldBeNull()
   }
 
   @Suppress("SameParameterValue")

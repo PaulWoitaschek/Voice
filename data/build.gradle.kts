@@ -56,7 +56,6 @@ dependencies {
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.junit)
   testImplementation(libs.robolectric)
-  testImplementation(libs.truth)
   testImplementation(libs.prefs.inMemory)
   testImplementation(libs.koTest.assert)
   testImplementation(libs.coroutines.test)

@@ -21,7 +21,6 @@ dependencies {
   implementation(libs.viewBinding)
   implementation(libs.serialization.json)
 
-  testImplementation(libs.truth)
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.androidX.test.junit)
