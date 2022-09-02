@@ -106,7 +106,7 @@ android {
         device = "Nexus 10"
         apiLevel = 31
       }
-      deviceGroups.create("screenshotDevices") {
+      groups.create("screenshotDevices") {
         targetDevices.addAll(devices.toList())
       }
     }
