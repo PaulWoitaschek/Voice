@@ -12,6 +12,7 @@ import voice.data.Chapter
 import voice.logging.core.Logger
 import voice.playback.androidauto.AndroidAutoConnectedReceiver
 import voice.playback.di.PlaybackScope
+import voice.playback.misc.Decibel
 import voice.playback.player.MediaPlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
@@ -171,6 +172,10 @@ class MediaSessionCallback
           val volume = extras!!.getFloat(SET_VOLUME_EXTRA_VOLUME)
           player.setVolume(volume)
         }
+        SET_GAIN -> {
+          val gain = Decibel(extras!!.getFloat(SET_GAIN_EXTRA_GAIN))
+          player.setGain(gain)
+        }
         PAUSE_WITH_REWIND -> {
           val rewindAmount = extras!!.getLong(PAUSE_WITH_REWIND_EXTRA_DURATION).milliseconds
           player.pause(rewindAmount)
@@ -212,6 +217,13 @@ private const val SET_VOLUME_EXTRA_VOLUME = "$SET_VOLUME#volume"
 
 fun TransportControls.setVolume(volume: Float) = sendCustomAction(SET_VOLUME) {
   putFloat(SET_VOLUME_EXTRA_VOLUME, volume)
+}
+
+private const val SET_GAIN = "setGain"
+private const val SET_GAIN_EXTRA_GAIN = "$SET_GAIN#volume"
+
+fun TransportControls.setGain(gain: Decibel) = sendCustomAction(SET_GAIN) {
+  putFloat(SET_GAIN_EXTRA_GAIN, gain.value)
 }
 
 const val ANDROID_AUTO_ACTION_FAST_FORWARD = "fast_forward"

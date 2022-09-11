@@ -28,4 +28,9 @@
     android:title="@string/skip_silence"
     app:showAsAction="never" />
 
+  <item
+    android:id="@+id/action_volume_boost"
+    android:title="@string/volume_boost"
+    app:showAsAction="never" />
+
 </menu>

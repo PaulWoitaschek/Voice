@@ -135,6 +135,7 @@ private fun book(
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
       id = BookId(UUID.randomUUID().toString()),
+      gain = 0F,
     ),
     chapters = chapters,
   )

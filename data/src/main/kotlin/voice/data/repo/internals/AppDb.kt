@@ -30,6 +30,7 @@ import voice.data.repo.internals.dao.LegacyBookDao
   autoMigrations = [
     AutoMigration(from = 51, to = 52),
     AutoMigration(from = 52, to = 53),
+    AutoMigration(from = 54, to = 55),
   ],
 )
 @TypeConverters(Converters::class)
@@ -41,7 +42,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun legacyBookDao(): LegacyBookDao
 
   companion object {
-    const val VERSION = 54
+    const val VERSION = 55
     const val DATABASE_NAME = "autoBookDB"
   }
 }

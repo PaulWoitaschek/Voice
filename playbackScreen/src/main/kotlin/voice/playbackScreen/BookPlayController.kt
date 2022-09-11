@@ -64,6 +64,9 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           is BookPlayDialogViewState.SpeedDialog -> {
             SpeedDialog(dialogState, viewModel)
           }
+          is BookPlayDialogViewState.VolumeGainDialog -> {
+            VolumeGainDialog(dialogState, viewModel)
+          }
         }
       }
     }
@@ -197,6 +200,10 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
         }
         R.id.action_time_lapse -> {
           viewModel.onPlaybackSpeedIconClicked()
+          true
+        }
+        R.id.action_volume_boost -> {
+          viewModel.onVolumeGainIconClicked()
           true
         }
         R.id.action_bookmark -> {
