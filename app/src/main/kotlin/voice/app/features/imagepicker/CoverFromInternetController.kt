@@ -54,7 +54,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     }
   }
   private val originalUrl by lazy {
-    val encodedSearch = URLEncoder.encode("${book.content.name} cover", Charsets.UTF_8.name())
+    val encodedSearch = URLEncoder.encode("${book.content.name} audiobook cover", Charsets.UTF_8.name())
     "https://www.google.com/search?safe=on&site=imghp" +
       "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
