@@ -226,7 +226,7 @@ No changelog
 
 # v2.4.0 Detail view
 * Switch between the grid and a detailed view with a global progress
-* Improved accesibility
+* Improved accessibility
 * Performance greatly improved
 * More ripples
 
@@ -243,7 +243,7 @@ No changelog
 # v2.2.3.1 Hotfix
 * Fixed base color tinting
 * Fixed a crash where a wrong attr was referenced
-* Make a .nomedia file insted of a folder
+* Make a .nomedia file instead of a folder
 
 # v2.2.3
 * Added mp3package as file extension
@@ -251,7 +251,7 @@ No changelog
 * Object creation decreased
 * Performance increased
 * Correctly collapse FAM
-* Tint all the icons insted of having multiple icons in different colors
+* Tint all the icons instead of having multiple icons in different colors
 * Replaces CardView with normal grid
 * Add ripples to grid (book shelf)
 * Disable buggy transitions
@@ -311,7 +311,7 @@ No changelog
 * Added polish translation
 * Settings in book grid has ripples now
 * Tint seekbar on pre lollipop
-* Shorter times will be formated to 01:05 instead of 0:01:05
+* Shorter times will be formatted to 01:05 instead of 0:01:05
 * Removed stop after track for sleep timer
 * Multi line spinner in BokoPlay for better overview over books
 * Book Grid layout improved
@@ -374,7 +374,7 @@ No changelog
 
 # v2.1.2.1 Stability
 
-We cant store positions to internal storage since on Android 4.4 there is no permission to write to sd card.
+We can't store positions to internal storage since on Android 4.4 there is no permission to write to sd card.
 So we write back to db.
 
 ## Additions
@@ -517,10 +517,10 @@ The app stores the config for the books directly next to the book. That means yo
 * Now with bookmarks
 * New Icons
 * Automatically backs up preferences
-* Completely rewritten underlaying mediaPlayer code
+* Completely rewritten underlying mediaPlayer code
 * Can now play .oga files
 * Layout improvements
-* Minimize data useage on cover loading
+* Minimize data usage on cover loading
 * Its now possible to use the replacement cover permanently
 * Save speed for each book individually
 * Performance improvements
@@ -625,7 +625,7 @@ The app stores the config for the books directly next to the book. That means yo
 ## Improvements
 * Can change book-sort-order now
 * Automatically downloads missing covers
-* Added possiblity to edit book afterwards
+* Added possibility to edit book afterwards
 * Faster Database access
 * Position changer improved
 * Now shows the whole filename of media to see the file-end

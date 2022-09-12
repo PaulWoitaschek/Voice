@@ -31,7 +31,7 @@ Its always a good idea to talk about what are going to do before you actually st
 
 Some rules for coding:
 * Use the code style the project uses
-* For each feature, make a seperate branch, so it can be reviewed separately
+* For each feature, make a separate branch, so it can be reviewed separately
 * Use commits with a good description, so everyone can see what you did
 
 ## <a name="trans">Translations</a>
