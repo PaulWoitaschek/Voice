@@ -36,7 +36,7 @@ constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
 transitions = "androidx.transition:transition:1.4.1"
 media = "androidx.media:media:1.6.0"
-androidxCore = "androidx.core:core-ktx:1.8.0"
+androidxCore = "androidx.core:core-ktx:1.9.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:1.2.2"
