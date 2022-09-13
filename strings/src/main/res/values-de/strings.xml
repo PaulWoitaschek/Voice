@@ -16,6 +16,7 @@
   <string name="play">Abspielen</string>
   <string name="pause">Pause</string>
   <string name="skip_silence">Stille überspringen</string>
+  <string name="volume_boost">Lautstärke Boost</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Okay</string>
@@ -78,8 +79,8 @@
   <string name="folder_mode_root">Wurzel Hörbuch Ordner. Ein Unterordner = ein Buch</string>
   <string name="folder_mode_single">Einzelnes Hörbuch</string>
   <plurals name="folder_type_file_count">
-    <item quantity="one">Eine Audiodatei</item>
-    <item quantity="other">%d Audio Dateien</item>
+    <item quantity="one">%d Audiodatei</item>
+    <item quantity="other">%d Audiodateien</item>
   </plurals>
   <string name="folder_type_book_example_header">Dies würde dazu führen, dass die folgenden Bücher erkannt werden</string>
   <string name="folder_type_no_books">Voice konnte keine Bücher erkennen. Gibt es Audio Dateien?</string>

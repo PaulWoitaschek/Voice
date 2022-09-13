@@ -52,6 +52,11 @@
   <string name="pref_seek_time">Aantal overslaan</string>
   <string name="pref_theme_dark">Donker thema</string>
   <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
+  <string name="pref_suggest_idea">Idee delen</string>
+  <string name="pref_report_issue">Probleem melden</string>
+  <string name="pref_help_translating">Helpen met vertalen</string>
+  <string name="pref_get_support">Ondersteuning vragen</string>
+  <string name="pref_app_version">Appversie</string>
   <string name="popup_edit">Bewerken</string>
   <string name="remove">Verwijderen</string>
   <string name="play_current">Huidig boek afspelen</string>
@@ -66,6 +71,15 @@
   <string name="close">Sluiten</string>
   <string name="delete">Verwijderen</string>
   <string name="add">Toevoegen</string>
+  <string name="folder_type_audiobooks">Luisterboekmap</string>
+  <string name="folder_type_single_folder">Losse map</string>
+  <string name="folder_type_single_file">Los bestand</string>
+  <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
+  <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
+  <string name="folder_mode_single">Losse luisterboekmap</string>
+  <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
+  <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
+  <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Zojuist</string>
   <!--will be shown as a hint when no books have been added-->
@@ -79,6 +93,10 @@
   <string name="migration_detail_content_position">Locatie</string>
   <string name="migration_detail_content_bookmarks">Bladwijzers</string>
   <string name="migration_detail_content_added_at">Toegevoegd op</string>
+  <string name="migration_detail_content_position_current_file_title">Huidig bestand</string>
+  <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
+  <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
+  <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
   <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
   <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
   <string name="migration_delete_dialog_action_delete">Verwijderen</string>

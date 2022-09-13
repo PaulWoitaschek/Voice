@@ -37,12 +37,12 @@
   <!--Bookmarks-->
   <string name="bookmark">Закладки</string>
   <string name="bookmark_edit_title">Редактировать</string>
-  <string name="bookmark_edit_hint">Название закладки</string>
+  <string name="bookmark_edit_hint">Имя закладки</string>
   <string name="bookmark_added">Закладка добавлена</string>
   <!--Settings-->
   <string name="action_settings">Настройки</string>
   <string name="pref_resume_on_replug">Продолжить чтение</string>
-  <string name="pref_resume_on_replug_hint">Воспроизведение возобновится после подключения наушников.</string>
+  <string name="pref_resume_on_replug_hint">Если вы отключили наушники, и воспроизведение остановилось, оно возобновится после подключения.</string>
   <string name="min">%s мин.</string>
   <string name="delete_last_number">Удаляет последнее введенное число</string>
   <plurals name="seconds">
@@ -54,6 +54,11 @@
   <string name="pref_seek_time">Интервал перемотки</string>
   <string name="pref_theme_dark">Тёмная тема</string>
   <string name="pref_auto_rewind_title">Автоперемотка назад</string>
+  <string name="pref_suggest_idea">Предложить идею</string>
+  <string name="pref_report_issue">Сообщить о проблеме</string>
+  <string name="pref_help_translating">Помочь с переводом</string>
+  <string name="pref_get_support">Поддержка</string>
+  <string name="pref_app_version">Версия приложения</string>
   <string name="popup_edit">Редактировать</string>
   <string name="remove">Удалить</string>
   <string name="play_current">Читать открытую</string>
@@ -63,11 +68,20 @@
   <string name="music_notification">Чтение</string>
   <!--book category-->
   <string name="book_header_current">Слушаю</string>
-  <string name="book_header_not_started">Поледние добавленные</string>
+  <string name="book_header_not_started">Последние добавленные</string>
   <string name="book_header_completed">Прослушанные</string>
   <string name="close">Закрыть</string>
   <string name="delete">Удалить</string>
   <string name="add">Добавить</string>
+  <string name="folder_type_audiobooks">Папки с аудиокнигами</string>
+  <string name="folder_type_single_folder">Папка</string>
+  <string name="folder_type_single_file">Файл</string>
+  <string name="folder_type_dialog_title">Что добавить?</string>
+  <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
+  <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
+  <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
+  <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
+  <string name="folder_type_title">Как упорядочены ваши файлы?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Только что</string>
   <!--will be shown as a hint when no books have been added-->
@@ -81,6 +95,10 @@
   <string name="migration_detail_content_position">Место</string>
   <string name="migration_detail_content_bookmarks">Закладки</string>
   <string name="migration_detail_content_added_at">Добавлено</string>
+  <string name="migration_detail_content_position_current_file_title">Текущий файл</string>
+  <string name="migration_detail_content_position_current_file_position">Позиция в файле</string>
+  <string name="migration_detail_content_position_current_chapter_title">Текущая глава</string>
+  <string name="migration_detail_content_position_current_chapter_position">Позиция в главе</string>
   <string name="migration_delete_dialog_title">Удалить закладки</string>
   <string name="migration_delete_dialog_content">Если вы удалите закладки, восстановить их не получится.</string>
   <string name="migration_delete_dialog_action_delete">Удалить</string>

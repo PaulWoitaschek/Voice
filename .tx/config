@@ -15,7 +15,7 @@ source_file = app/src/main/play/listings/en-US/full-description.txt
 source_lang = en
 type = TXT
 minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU
+lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP
 
 [voice.play-store-teaser]
 file_filter = app/src/main/play/listings/<lang>/short-description.txt
@@ -23,7 +23,7 @@ source_file = app/src/main/play/listings/en-US/short-description.txt
 source_lang = en
 type = TXT
 minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU
+lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP
 
 [voice.play-store-title]
 file_filter = app/src/main/play/listings/<lang>/title.txt
@@ -31,4 +31,4 @@ source_file = app/src/main/play/listings/en-US/title.txt
 source_lang = en
 type = TXT
 minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU
+lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP

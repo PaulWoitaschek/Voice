@@ -24,7 +24,7 @@
   <string name="content_cover">Visar omslag att välja</string>
   <string name="change_book_name">Namn</string>
   <string name="download_book_cover">Omslag från internet</string>
-  <string name="pick_book_cover">Omslag från filsystem</string>
+  <string name="pick_book_cover">Omslag från filsystemet</string>
   <string name="edit_book_title">Redigera bok</string>
   <string name="mark_as_completed">Markera som avslutad</string>
   <string name="mark_as_current">Markera som aktuell</string>
@@ -52,6 +52,11 @@
   <string name="pref_seek_time">Hoppa över mängd</string>
   <string name="pref_theme_dark">Mörkt tema</string>
   <string name="pref_auto_rewind_title">Automatisk bakåtspolning</string>
+  <string name="pref_suggest_idea">Föreslå en idé</string>
+  <string name="pref_report_issue">Rapportera ett problem</string>
+  <string name="pref_help_translating">Hjälp till att översätta Voice</string>
+  <string name="pref_get_support">Få support</string>
+  <string name="pref_app_version">Appversion</string>
   <string name="popup_edit">Redigera</string>
   <string name="remove">Ta bort</string>
   <string name="play_current">Spela aktuell</string>
@@ -66,6 +71,15 @@
   <string name="close">Stäng</string>
   <string name="delete">Ta bort</string>
   <string name="add">Lägg till</string>
+  <string name="folder_type_audiobooks">Mapp för ljudböcker</string>
+  <string name="folder_type_single_folder">Enskild mapp</string>
+  <string name="folder_type_single_file">Enskild fil</string>
+  <string name="folder_type_dialog_title">Vad vill du lägga till?</string>
+  <string name="folder_mode_root">Rotljudboksmapp. En undermapp = en bok.</string>
+  <string name="folder_mode_single">Enskild ljudboksmapp</string>
+  <string name="folder_type_book_example_header">Detta skulle leda till att följande böcker upptäcks</string>
+  <string name="folder_type_no_books">Voice kunde inte upptäcka några böcker. Finns det några ljudfiler?</string>
+  <string name="folder_type_title">Hur är dina filer uppbyggda?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Precis nu</string>
   <!--will be shown as a hint when no books have been added-->
@@ -79,6 +93,10 @@
   <string name="migration_detail_content_position">Position</string>
   <string name="migration_detail_content_bookmarks">Bokmärken</string>
   <string name="migration_detail_content_added_at">Tillagd vid</string>
+  <string name="migration_detail_content_position_current_file_title">Aktuell fil</string>
+  <string name="migration_detail_content_position_current_file_position">Position i fil</string>
+  <string name="migration_detail_content_position_current_chapter_title">Aktuellt kapitel</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position i kapitel</string>
   <string name="migration_delete_dialog_title">Ta bort positioner</string>
   <string name="migration_delete_dialog_content">När du har tagit bort de gamla positionerna kommer du inte att kunna återställa dina gamla uppspelningspositioner.</string>
   <string name="migration_delete_dialog_action_delete">Ta bort</string>

@@ -51,6 +51,11 @@
   <string name="pref_seek_time">スキップ量</string>
   <string name="pref_theme_dark">ダークテーマ</string>
   <string name="pref_auto_rewind_title">自動巻き戻し</string>
+  <string name="pref_suggest_idea">アイデアの提案</string>
+  <string name="pref_report_issue">問題の報告</string>
+  <string name="pref_help_translating">翻訳の手助け</string>
+  <string name="pref_get_support">サポート</string>
+  <string name="pref_app_version">アプリのバージョン</string>
   <string name="popup_edit">編集</string>
   <string name="remove">削除</string>
   <string name="play_current">現在を再生</string>
@@ -65,8 +70,17 @@
   <string name="close">閉じる</string>
   <string name="delete">削除</string>
   <string name="add">追加</string>
+  <string name="folder_type_audiobooks">オーディオブック フォルダー</string>
+  <string name="folder_type_single_folder">単一フォルダー</string>
+  <string name="folder_type_single_file">単一ファイル</string>
+  <string name="folder_type_dialog_title">何を追加しますか？</string>
+  <string name="folder_mode_root">オーディオブックのルートフォルダーです。1つのサブフォルダーが1冊のブックです。</string>
+  <string name="folder_mode_single">単一のオーディオブックフォルダー</string>
+  <string name="folder_type_book_example_header">この場合、以下のブックが検出されます。</string>
+  <string name="folder_type_no_books">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
+  <string name="folder_type_title">ファイルの構成はどうなっていますか？</string>
   <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">少し前</string>
+  <string name="bookmark_just_now">たった今</string>
   <!--will be shown as a hint when no books have been added-->
   <string name="voice_intro_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
   <string name="migration_hint_title">過去のブック位置へのアクセス</string>
@@ -78,6 +92,10 @@
   <string name="migration_detail_content_position">位置</string>
   <string name="migration_detail_content_bookmarks">ブックマーク</string>
   <string name="migration_detail_content_added_at">追加日時</string>
+  <string name="migration_detail_content_position_current_file_title">現在のファイル</string>
+  <string name="migration_detail_content_position_current_file_position">ファイル内の位置</string>
+  <string name="migration_detail_content_position_current_chapter_title">現在のチャプター</string>
+  <string name="migration_detail_content_position_current_chapter_position">チャプター内の位置</string>
   <string name="migration_delete_dialog_title">位置の削除</string>
   <string name="migration_delete_dialog_content">一度、過去の位置を削除してしまうと、過去の再生位置を復元できなくなってしまいます。</string>
   <string name="migration_delete_dialog_action_delete">削除</string>
