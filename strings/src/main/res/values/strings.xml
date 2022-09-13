@@ -84,7 +84,7 @@
   <string name="folder_mode_root">Root audiobook folder. One subfolder = one book.</string>
   <string name="folder_mode_single">Single audiobook folder</string>
   <plurals name="folder_type_file_count">
-    <item quantity="one">One audio file</item>
+    <item quantity="one">%d audio file</item>
     <item quantity="other">%d audio files</item>
   </plurals>
   <string name="folder_type_book_example_header">This would lead to the following books being detected</string>
