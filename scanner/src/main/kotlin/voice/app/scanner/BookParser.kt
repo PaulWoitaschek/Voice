@@ -69,6 +69,7 @@ class BookParser
           File(application.filesDir, id.toString())
             .takeIf { it.canRead() }
         },
+        gain = 0F,
       ).also {
         validateIntegrity(it, chapters)
       }

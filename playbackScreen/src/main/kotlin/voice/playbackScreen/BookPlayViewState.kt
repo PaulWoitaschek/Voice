@@ -1,5 +1,6 @@
 package voice.playbackScreen
 
+import voice.playback.misc.Decibel
 import java.io.File
 import kotlin.time.Duration
 
@@ -22,4 +23,10 @@ internal sealed interface BookPlayDialogViewState {
 
     val maxSpeed: Float get() = if (speed < 2F) 2F else 3.5F
   }
+
+  data class VolumeGainDialog(
+    val gain: Decibel,
+    val valueFormatted: String,
+    val maxGain: Decibel,
+  ) : BookPlayDialogViewState
 }

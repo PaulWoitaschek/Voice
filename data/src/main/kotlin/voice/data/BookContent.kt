@@ -1,5 +1,6 @@
 package voice.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -22,6 +23,8 @@ data class BookContent(
   val currentChapter: Chapter.Id,
   val positionInChapter: Long,
   val cover: File?,
+  @ColumnInfo(defaultValue = "0")
+  val gain: Float,
 ) {
 
   @Ignore

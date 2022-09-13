@@ -13,6 +13,10 @@ object Logger {
     log(severity = Severity.Debug, message = message, throwable = null)
   }
 
+  fun d(throwable: Throwable) {
+    log(severity = Severity.Debug, message = null, throwable = throwable)
+  }
+
   fun i(message: String) {
     log(severity = Severity.Info, message = message, throwable = null)
   }

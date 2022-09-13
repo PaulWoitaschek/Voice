@@ -141,6 +141,7 @@ fun book(chapters: List<Chapter>): Book {
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
       id = BookId(UUID.randomUUID().toString()),
+      gain = 0F,
     ),
     chapters = chapters,
   )

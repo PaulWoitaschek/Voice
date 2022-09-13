@@ -16,6 +16,7 @@
   <string name="play">Play</string>
   <string name="pause">Pause</string>
   <string name="skip_silence">Skip Silence</string>
+  <string name="volume_boost">Volume boost</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Set</string>

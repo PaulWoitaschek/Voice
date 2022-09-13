@@ -6,11 +6,13 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import voice.data.Chapter
 import voice.logging.core.Logger
+import voice.playback.misc.Decibel
 import voice.playback.session.PlaybackService
 import voice.playback.session.forcedNext
 import voice.playback.session.forcedPrevious
 import voice.playback.session.pauseWithRewind
 import voice.playback.session.playPause
+import voice.playback.session.setGain
 import voice.playback.session.setPosition
 import voice.playback.session.setVolume
 import voice.playback.session.skipSilence
@@ -74,6 +76,8 @@ class PlayerController
   fun pauseWithRewind(rewind: Duration) = execute { it.pauseWithRewind(rewind) }
 
   fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
+
+  fun setGain(gain: Decibel) = execute { it.setGain(gain) }
 
   fun setVolume(volume: Float) = execute {
     require(volume in 0F..1F)

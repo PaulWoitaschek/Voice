@@ -29,6 +29,8 @@ import voice.data.markForPosition
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.di.PlaybackScope
+import voice.playback.misc.Decibel
+import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState
 import voice.playback.playstate.PlayerState
@@ -54,6 +56,7 @@ constructor(
   private val repo: BookRepository,
   @CurrentBook
   private val currentBook: DataStore<BookId?>,
+  private val volumeGain: VolumeGain,
 ) {
 
   private val scope = MainScope()
@@ -78,6 +81,9 @@ constructor(
   init {
     player.onSessionPlaybackStateNeedsUpdate {
       updateMediaSessionPlaybackState()
+    }
+    player.onAudioSessionIdChanged {
+      volumeGain.audioSessionId = it
     }
     player.onStateChanged {
       playStateManager.playState = when (it) {
@@ -294,6 +300,7 @@ constructor(
     )
     player.prepare()
     player.setPlaybackSpeed(book.content.playbackSpeed)
+    volumeGain.gain = Decibel(book.content.gain)
     if (player is ExoPlayer) {
       player.skipSilenceEnabled = book.content.skipSilence
     }
@@ -402,6 +409,11 @@ constructor(
   fun setVolume(volume: Float) {
     require(volume in 0F..1F)
     player.volume = volume
+  }
+
+  suspend fun setGain(gain: Decibel) {
+    volumeGain.gain = gain
+    updateContent { copy(gain = gain.value) }
   }
 
   suspend fun setSkipSilences(skip: Boolean) {

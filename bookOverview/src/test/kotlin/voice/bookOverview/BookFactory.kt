@@ -26,6 +26,7 @@ fun book(
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
       id = BookId(UUID.randomUUID().toString()),
+      gain = 0F,
     ),
     chapters = chapters,
   )

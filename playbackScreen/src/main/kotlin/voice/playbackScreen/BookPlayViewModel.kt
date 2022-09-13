@@ -18,6 +18,8 @@ import voice.data.markForPosition
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import voice.playback.PlayerController
+import voice.playback.misc.Decibel
+import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
@@ -33,6 +35,7 @@ class BookPlayViewModel
   private val currentBookId: DataStore<BookId?>,
   private val navigator: Navigator,
   private val bookmarkRepo: BookmarkRepo,
+  private val volumeGainFormatter: VolumeGainFormatter,
 ) {
 
   private val scope = MainScope()
@@ -80,6 +83,11 @@ class BookPlayViewModel
     player.setSpeed(speed)
   }
 
+  fun onVolumeGainChanged(gain: Decibel) {
+    _dialogState.value = volumeGainDialogViewState(gain)
+    player.setGain(gain)
+  }
+
   fun next() {
     player.next()
   }
@@ -111,6 +119,23 @@ class BookPlayViewModel
         _dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
       }
     }
+  }
+
+  fun onVolumeGainIconClicked() {
+    scope.launch {
+      val content = repo.get(bookId)?.content
+      if (content != null) {
+        _dialogState.value = volumeGainDialogViewState(Decibel(content.gain))
+      }
+    }
+  }
+
+  private fun volumeGainDialogViewState(gain: Decibel): BookPlayDialogViewState.VolumeGainDialog {
+    return BookPlayDialogViewState.VolumeGainDialog(
+      gain = gain,
+      maxGain = VolumeGain.MAX_GAIN,
+      valueFormatted = volumeGainFormatter.format(gain),
+    )
   }
 
   fun onBookmarkClicked() {
