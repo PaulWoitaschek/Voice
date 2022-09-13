@@ -4,5 +4,5 @@ enum class PlayerState {
   IDLE,
   ENDED,
   PAUSED,
-  PLAYING
+  PLAYING,
 }

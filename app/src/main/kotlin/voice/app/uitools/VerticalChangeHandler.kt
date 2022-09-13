@@ -35,6 +35,8 @@ class VerticalChangeHandler : AnimatorChangeHandler() {
         duration =
           from.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
       }
-    } else AnimatorSet()
+    } else {
+      AnimatorSet()
+    }
   }
 }

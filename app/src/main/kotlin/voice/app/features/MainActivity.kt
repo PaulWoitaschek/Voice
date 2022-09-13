@@ -39,7 +39,10 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-  @field:[Inject CurrentBook]
+  @field:[
+    Inject
+    CurrentBook
+  ]
   lateinit var currentBook: DataStore<BookId?>
 
   @Inject
@@ -180,10 +183,13 @@ class MainActivity : AppCompatActivity() {
     router.setRoot(rootTransaction)
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
     if (router.backstackSize == 1) {
       super.onBackPressed()
-    } else router.handleBack()
+    } else {
+      router.handleBack()
+    }
   }
 
   companion object {

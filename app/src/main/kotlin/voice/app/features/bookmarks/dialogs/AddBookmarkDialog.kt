@@ -36,7 +36,9 @@ class AddBookmarkDialog : DialogController() {
         callback.onBookmarkNameChosen(title)
         dismissDialog()
         true
-      } else false
+      } else {
+        false
+      }
     }
     return dialog
   }

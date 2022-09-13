@@ -50,7 +50,9 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
         callback.onEditBookmark(bookmarkId, newTitle)
         dismissDialog()
         true
-      } else false
+      } else {
+        false
+      }
     }
     return dialog
   }

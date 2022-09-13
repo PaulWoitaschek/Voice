@@ -16,7 +16,9 @@ class ClearAfterDestroyView<T : Any>(controller: Controller) : ReadWriteProperty
         override fun postDestroyView(controller: Controller) {
           if (controller.isDestroyed || controller.isBeingDestroyed) {
             Logger.d("We are in teardown. Defer releasing the reference.")
-          } else value = null
+          } else {
+            value = null
+          }
         }
 
         override fun postDestroy(controller: Controller) {

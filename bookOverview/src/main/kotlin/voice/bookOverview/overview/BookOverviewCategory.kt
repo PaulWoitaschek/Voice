@@ -21,7 +21,8 @@ enum class BookOverviewCategory(
   FINISHED(
     nameRes = R.string.book_header_completed,
     comparator = BookComparator.ByLastPlayed,
-  );
+  ),
+  ;
 }
 
 val Book.category: BookOverviewCategory

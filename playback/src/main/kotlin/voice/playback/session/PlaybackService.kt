@@ -57,7 +57,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-  @field:[Inject CurrentBook]
+  @field:[
+    Inject
+    CurrentBook
+  ]
   lateinit var currentBookIdPref: DataStore<BookId?>
 
   @Inject
@@ -93,7 +96,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject
   lateinit var notifyOnAutoConnectionChange: NotifyOnAutoConnectionChange
 
-  @field:[Inject Named(PrefKeys.RESUME_ON_REPLUG)]
+  @field:[
+    Inject
+    Named(PrefKeys.RESUME_ON_REPLUG)
+  ]
   lateinit var resumeOnReplugPref: Pref<Boolean>
 
   @Inject

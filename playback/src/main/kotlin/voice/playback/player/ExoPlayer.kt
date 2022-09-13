@@ -56,8 +56,11 @@ internal inline fun Player.onStateChanged(crossinline action: (PlayerState) -> U
           Player.STATE_ENDED -> PlayerState.ENDED
           Player.STATE_IDLE -> PlayerState.IDLE
           Player.STATE_READY, Player.STATE_BUFFERING -> {
-            if (playWhenReady) PlayerState.PLAYING
-            else PlayerState.PAUSED
+            if (playWhenReady) {
+              PlayerState.PLAYING
+            } else {
+              PlayerState.PAUSED
+            }
           }
           else -> {
             if (BuildConfig.DEBUG) {

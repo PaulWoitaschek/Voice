@@ -24,6 +24,8 @@ class BookSearchParser @Inject constructor() {
       val query: String? = intent.getStringExtra(SearchManager.QUERY)
       val extras: Bundle? = intent.extras
       parse(query, extras)
-    } else null
+    } else {
+      null
+    }
   }
 }

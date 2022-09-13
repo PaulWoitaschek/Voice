@@ -293,13 +293,13 @@ class CropOverlay @JvmOverloads constructor(
 
   enum class EventType {
     DRAG,
-    RESIZE
+    RESIZE,
   }
 
   enum class Resize {
     TOP,
     RIGHT,
     BOTTOM,
-    LEFT
+    LEFT,
   }
 }

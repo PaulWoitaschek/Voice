@@ -203,7 +203,9 @@ constructor(
 
     if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
       player.playWhenReady = true
-    } else Logger.d("ignore play in state $state")
+    } else {
+      Logger.d("ignore play in state $state")
+    }
   }
 
   private suspend fun skip(skipAmount: Duration) {

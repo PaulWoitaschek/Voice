@@ -7,6 +7,18 @@ plugins {
   alias(libs.plugins.android.library) apply false
 }
 
+buildscript {
+  configurations.classpath {
+    resolutionStrategy {
+      eachDependency {
+        if (requested.group == "com.pinterest.ktlint") {
+          useVersion(libs.versions.ktlint.get())
+        }
+      }
+    }
+  }
+}
+
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }

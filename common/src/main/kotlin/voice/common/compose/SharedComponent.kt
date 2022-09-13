@@ -9,6 +9,8 @@ import javax.inject.Named
 @ContributesTo(AppScope::class)
 interface SharedComponent {
 
-  @get:[Named(PrefKeys.DARK_THEME)]
+  @get:[
+    Named(PrefKeys.DARK_THEME)
+  ]
   val useDarkTheme: Pref<Boolean>
 }

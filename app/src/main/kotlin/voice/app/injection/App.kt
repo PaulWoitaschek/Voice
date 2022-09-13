@@ -34,7 +34,10 @@ class App : Application(), PlaybackComponentFactoryProvider {
   @Inject
   lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
 
-  @field:[Inject Named(PrefKeys.DARK_THEME)]
+  @field:[
+    Inject
+    Named(PrefKeys.DARK_THEME)
+  ]
   lateinit var useDarkTheme: Pref<Boolean>
 
   override fun onCreate() {

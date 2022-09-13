@@ -26,7 +26,10 @@ class AppController : ComposeController() {
     appComponent.inject(this)
   }
 
-  @field:[Inject CurrentBook]
+  @field:[
+    Inject
+    CurrentBook
+  ]
   lateinit var currentBookIdPref: DataStore<BookId?>
 
   @Inject

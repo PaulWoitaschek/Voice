@@ -79,7 +79,7 @@ object Logger {
     Debug,
     Info,
     Warn,
-    Error
+    Error,
   }
 }
 

@@ -97,6 +97,8 @@ class BookSearchHandler
       currentBook.updateData { book.content.id }
       player.play()
       true
-    } else false
+    } else {
+      false
+    }
   }
 }

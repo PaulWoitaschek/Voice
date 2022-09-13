@@ -29,7 +29,7 @@ import voice.folderPicker.R
 
 internal enum class FileTypeSelection {
   File,
-  Folder
+  Folder,
 }
 
 @Composable

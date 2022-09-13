@@ -33,7 +33,7 @@ constructor() {
   enum class PlayState {
     Playing,
     Paused,
-    Stopped
+    Stopped,
   }
 
   enum class PauseReason {
@@ -44,6 +44,6 @@ constructor() {
     BecauseHeadset,
 
     @Suppress("unused")
-    LossTransient
+    LossTransient,
   }
 }

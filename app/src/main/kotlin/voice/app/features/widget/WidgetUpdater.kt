@@ -84,7 +84,9 @@ class WidgetUpdater @Inject constructor(
   private fun widgetWidth(opts: Bundle): Int {
     val key = if (isPortrait) {
       AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
-    } else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+    } else {
+      AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+    }
     val dp = opts.getInt(key)
     return context.dpToPxRounded(dp.toFloat())
   }
@@ -92,7 +94,9 @@ class WidgetUpdater @Inject constructor(
   private fun widgetHeight(opts: Bundle): Int {
     val key = if (isPortrait) {
       AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-    } else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+    } else {
+      AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+    }
     val dp = opts.getInt(key)
     return context.dpToPxRounded(dp.toFloat())
   }
@@ -131,7 +135,9 @@ class WidgetUpdater @Inject constructor(
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
       R.drawable.ic_pause_white_36dp
-    } else R.drawable.ic_play_white_36dp
+    } else {
+      R.drawable.ic_play_white_36dp
+    }
     remoteViews.setImageViewResource(R.id.playPause, playIcon)
 
     // if we have any book, init the views and have a click on the whole widget start BookPlay.

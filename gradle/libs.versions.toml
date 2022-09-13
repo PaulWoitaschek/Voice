@@ -19,6 +19,7 @@ compose-material = "1.2.1"
 compose-animation = "1.2.1"
 media3 = "1.0.0-beta02"
 agp = "7.3.0-rc01"
+ktlint = "0.47.1"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -87,8 +88,6 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 
-# Only declared so renovate can update it
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
@@ -106,6 +105,10 @@ compose-material3 = "androidx.compose.material3:material3:1.0.0-beta01"
 compose-activity = "androidx.activity:activity-compose:1.5.1"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.2"
 compose-navigation-animation = "com.google.accompanist:accompanist-navigation-animation:0.25.1"
+
+# For these dependencies we only use the version but declare full artifacts so renovate can update the version
+compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
+ktlint = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 
 [bundles]
 compose = [
@@ -141,7 +144,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.2" }
-ktlint = { id = "org.jmailen.kotlinter", version = "3.11.1" }
+ktlint = { id = "org.jmailen.kotlinter", version = "3.12.0" }
 ksp = { id = "com.google.devtools.ksp", version = "1.7.0-1.0.6" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.1" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.13" }
