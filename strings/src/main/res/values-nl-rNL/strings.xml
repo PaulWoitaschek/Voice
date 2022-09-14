@@ -16,6 +16,7 @@
   <string name="play">Afspelen</string>
   <string name="pause">Pauzeren</string>
   <string name="skip_silence">Stilte overslaan</string>
+  <string name="volume_boost">Volumeversterking</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Instellen</string>
@@ -77,6 +78,10 @@
   <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
   <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
   <string name="folder_mode_single">Losse luisterboekmap</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%d audiobestand</item>
+    <item quantity="other">%d audiobestanden</item>
+  </plurals>
   <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
   <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
   <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>

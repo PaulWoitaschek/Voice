@@ -16,6 +16,7 @@
   <string name="play">再生</string>
   <string name="pause">一時停止</string>
   <string name="skip_silence">無音をスキップ</string>
+  <string name="volume_boost">音量ブースト</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">設定</string>
@@ -76,6 +77,9 @@
   <string name="folder_type_dialog_title">何を追加しますか？</string>
   <string name="folder_mode_root">オーディオブックのルートフォルダーです。1つのサブフォルダーが1冊のブックです。</string>
   <string name="folder_mode_single">単一のオーディオブックフォルダー</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="other">%d 音声ファイル</item>
+  </plurals>
   <string name="folder_type_book_example_header">この場合、以下のブックが検出されます。</string>
   <string name="folder_type_no_books">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
   <string name="folder_type_title">ファイルの構成はどうなっていますか？</string>

@@ -16,6 +16,7 @@
   <string name="play">Spela</string>
   <string name="pause">Pausa</string>
   <string name="skip_silence">Hoppa över tystnad</string>
+  <string name="volume_boost">Volymökning</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Ställ in</string>
@@ -77,6 +78,10 @@
   <string name="folder_type_dialog_title">Vad vill du lägga till?</string>
   <string name="folder_mode_root">Rotljudboksmapp. En undermapp = en bok.</string>
   <string name="folder_mode_single">Enskild ljudboksmapp</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%d ljudfil</item>
+    <item quantity="other">%d ljudfiler</item>
+  </plurals>
   <string name="folder_type_book_example_header">Detta skulle leda till att följande böcker upptäcks</string>
   <string name="folder_type_no_books">Voice kunde inte upptäcka några böcker. Finns det några ljudfiler?</string>
   <string name="folder_type_title">Hur är dina filer uppbyggda?</string>
