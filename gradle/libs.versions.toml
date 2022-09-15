@@ -47,7 +47,7 @@ datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
-turbine = "app.cash.turbine:turbine:0.9.0"
+turbine = "app.cash.turbine:turbine:0.10.0"
 molecule = "app.cash.molecule:molecule-runtime:0.4.0"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
