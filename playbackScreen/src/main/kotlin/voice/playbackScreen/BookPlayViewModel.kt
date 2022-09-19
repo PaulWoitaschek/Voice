@@ -79,7 +79,6 @@ class BookPlayViewModel
   }
 
   fun onPlaybackSpeedChanged(speed: Float) {
-    _dialogState.value = BookPlayDialogViewState.SpeedDialog(speed)
     player.setSpeed(speed)
   }
 
@@ -116,7 +115,7 @@ class BookPlayViewModel
     scope.launch {
       val playbackSpeed = repo.get(bookId)?.content?.playbackSpeed
       if (playbackSpeed != null) {
-        _dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
+        _viewEffects.tryEmit(BookPlayViewEffect.ShowPlaybackSpeedDialog(playbackSpeed))
       }
     }
   }

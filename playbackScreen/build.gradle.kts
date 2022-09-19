@@ -20,6 +20,7 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.data)
   implementation(projects.sleepTimer)
+  implementation(projects.playbackSpeed)
 
   implementation(libs.datastore)
   implementation(libs.coil)

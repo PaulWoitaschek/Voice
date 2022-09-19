@@ -139,6 +139,7 @@ dependencies {
   implementation(projects.ffmpeg)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)
+  implementation(projects.playbackSpeed)
   implementation(projects.sleepTimer)
   implementation(projects.settings)
   implementation(projects.folderPicker)

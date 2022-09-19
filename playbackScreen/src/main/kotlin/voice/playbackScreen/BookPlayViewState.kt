@@ -17,13 +17,6 @@ data class BookPlayViewState(
 )
 
 internal sealed interface BookPlayDialogViewState {
-  data class SpeedDialog(
-    val speed: Float,
-  ) : BookPlayDialogViewState {
-
-    val maxSpeed: Float get() = if (speed < 2F) 2F else 3.5F
-  }
-
   data class VolumeGainDialog(
     val gain: Decibel,
     val valueFormatted: String,

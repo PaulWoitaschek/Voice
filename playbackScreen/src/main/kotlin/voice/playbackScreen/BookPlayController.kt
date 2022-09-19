@@ -23,6 +23,8 @@ import voice.common.rootComponentAs
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.playbackScreen.databinding.BookPlayBinding
+import voice.playbackSpeed.PlaybackSpeedController
+import voice.playbackSpeed.showAsBottomSheet
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -61,9 +63,6 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       VoiceTheme {
         val dialogState = viewModel.dialogState.value ?: return@VoiceTheme
         when (dialogState) {
-          is BookPlayDialogViewState.SpeedDialog -> {
-            SpeedDialog(dialogState, viewModel)
-          }
           is BookPlayDialogViewState.VolumeGainDialog -> {
             VolumeGainDialog(dialogState, viewModel)
           }
@@ -93,6 +92,9 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       }
       BookPlayViewEffect.ShowSleepTimeDialog -> {
         openSleepTimeDialog()
+      }
+      is BookPlayViewEffect.ShowPlaybackSpeedDialog -> {
+        openPlaybackSpeedDialog(effect.speed)
       }
     }
   }
@@ -229,6 +231,16 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   private fun openSleepTimeDialog() {
     SleepTimerDialogController(bookId)
       .showDialog(router)
+  }
+
+  private fun openPlaybackSpeedDialog(speed: Float) {
+    activity?.showAsBottomSheet {
+      VoiceTheme {
+        PlaybackSpeedController(speed) { newSpeed ->
+          viewModel.onPlaybackSpeedChanged(newSpeed)
+        }
+      }
+    }
   }
 
   @ContributesTo(AppScope::class)
