@@ -3,7 +3,9 @@ package voice.bookOverview.deleteBook
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -53,6 +55,10 @@ internal fun DeleteBookDialog(
     text = {
       Column {
         Text(stringResource(id = R.string.delete_book_dialog_content))
+
+        Spacer(modifier = Modifier.heightIn(8.dp))
+        Text(viewState.fileToDelete, style = MaterialTheme.typography.bodyLarge)
+
         Row(
           verticalAlignment = Alignment.CenterVertically,
           modifier = Modifier

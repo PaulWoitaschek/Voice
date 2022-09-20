@@ -37,9 +37,22 @@ constructor(
 
   override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
     if (item != BottomSheetItem.DeleteBook) return
+
     _state.value = DeleteBookViewState(
       id = bookId,
       deleteCheckBoxChecked = false,
+      fileToDelete = bookId.toUri().pathSegments
+        .toMutableList()
+        .also { segments ->
+          if (segments.firstOrNull() == "document") {
+            segments.removeFirst()
+          }
+          val path = segments.firstOrNull()
+          if (path != null) {
+            segments[0] = path.removePrefix("primary:")
+          }
+        }
+        .joinToString(separator = "/"),
     )
   }
 
@@ -71,6 +84,7 @@ constructor(
 data class DeleteBookViewState(
   val id: BookId,
   val deleteCheckBoxChecked: Boolean,
+  val fileToDelete: String,
 ) {
 
   val confirmButtonEnabled = deleteCheckBoxChecked
