@@ -11,7 +11,11 @@ import androidx.compose.ui.res.stringResource
 import voice.bookOverview.R
 
 @Composable
-internal fun BookFolderIcon(modifier: Modifier = Modifier, withHint: Boolean, onClick: () -> Unit) {
+internal fun BookFolderIcon(
+  withHint: Boolean,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
   Box {
     IconButton(modifier = modifier, onClick = onClick) {
       Icon(

@@ -74,10 +74,10 @@ internal fun ListBooks(
 
 @Composable
 private fun ListBookRow(
-  modifier: Modifier = Modifier,
   book: BookOverviewViewState.Content.BookViewState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   LongClickableCard(
     onClick = {

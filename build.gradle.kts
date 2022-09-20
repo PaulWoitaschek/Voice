@@ -8,6 +8,9 @@ plugins {
 }
 
 buildscript {
+  dependencies {
+    classpath(libs.compose.ktlint)
+  }
   configurations.classpath {
     resolutionStrategy {
       eachDependency {

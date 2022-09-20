@@ -47,7 +47,7 @@ import voice.common.rootComponentAs
 import java.util.UUID
 
 @Composable
-fun BookOverviewScreen() {
+fun BookOverviewScreen(modifier: Modifier = Modifier) {
   val bookComponent = rememberScoped {
     rootComponentAs<BookOverviewComponent.Factory.Provider>()
       .bookOverviewComponentProviderFactory.create()
@@ -78,6 +78,7 @@ fun BookOverviewScreen() {
 
   val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
   ModalBottomSheetLayout(
+    modifier = modifier,
     sheetState = bottomSheetState,
     sheetContent = {
       Surface {
@@ -145,10 +146,11 @@ fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       TopAppBar(
         title = {
@@ -216,7 +218,7 @@ fun BookOverview(
   }
 }
 
-@Preview
+@Preview // ktlint-disable twitter-compose:preview-public-check
 @Composable
 fun BookOverviewPreview(
   @PreviewParameter(BookOverviewPreviewParameterProvider::class)
@@ -232,7 +234,8 @@ fun BookOverviewPreview(
       onBookFolderClick = {},
       onPlayButtonClick = {},
       onBookMigrationClick = {},
-    ) {}
+      onBoomMigrationHelperConfirmClick = {},
+    )
   }
 }
 

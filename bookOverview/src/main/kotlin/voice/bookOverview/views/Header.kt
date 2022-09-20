@@ -9,8 +9,8 @@ import voice.bookOverview.overview.BookOverviewCategory
 
 @Composable
 internal fun Header(
-  modifier: Modifier = Modifier,
   category: BookOverviewCategory,
+  modifier: Modifier = Modifier,
 ) {
   Text(
     modifier = modifier,

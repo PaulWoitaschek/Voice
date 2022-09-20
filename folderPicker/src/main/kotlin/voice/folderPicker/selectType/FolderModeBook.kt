@@ -19,8 +19,8 @@ import voice.folderPicker.R
 
 @Composable
 internal fun FolderModeBook(
-  modifier: Modifier = Modifier,
   book: SelectFolderTypeViewState.Book,
+  modifier: Modifier = Modifier,
 ) {
   Card(modifier) {
     Column {

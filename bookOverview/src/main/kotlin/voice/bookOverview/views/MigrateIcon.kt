@@ -12,10 +12,10 @@ import voice.bookOverview.R
 
 @Composable
 internal fun MigrateIcon(
-  modifier: Modifier = Modifier,
   withHint: Boolean,
   onClick: () -> Unit,
   onHintClick: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   Box {
     IconButton(modifier = modifier, onClick = onClick) {
