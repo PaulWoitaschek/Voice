@@ -16,6 +16,7 @@
   <string name="play">播放</string>
   <string name="pause">暂停</string>
   <string name="skip_silence">跳过空白部分</string>
+  <string name="volume_boost">音量提升</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">设置</string>
@@ -76,7 +77,10 @@
   <string name="folder_type_dialog_title">希望添加什么？</string>
   <string name="folder_mode_root">有声书根文件夹。一个文件夹 = 一本书。</string>
   <string name="folder_mode_single">单个有声书文件夹</string>
-  <string name="folder_type_book_example_header">这样操作将删除以下有声书</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="other">%d个声音文件</item>
+  </plurals>
+  <string name="folder_type_book_example_header">这样操作将找到以下有声书</string>
   <string name="folder_type_no_books">Voice没有找到任何有声书。声音文件是否存在？</string>
   <string name="folder_type_title">您的文件是如何组织的？</string>
   <!--will be shown as the time for a bookmark that was just created-->
