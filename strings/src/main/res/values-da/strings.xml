@@ -26,6 +26,9 @@
   <string name="download_book_cover">Cover fra internettet</string>
   <string name="pick_book_cover">Cover fra filsystemet</string>
   <string name="edit_book_title">Rediger bog</string>
+  <string name="mark_as_completed">Markér som afsluttet</string>
+  <string name="mark_as_current">Markér som igangværende</string>
+  <string name="mark_as_not_started">Markér som endnu ikke startet</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Lydbogs mapper</string>
@@ -39,7 +42,7 @@
   <!--Settings-->
   <string name="action_settings">Indstillinger</string>
   <string name="pref_resume_on_replug">Genoptag afspilning</string>
-  <string name="pref_resume_on_replug_hint">Hvis du pausede ved at trække høretelefoner ud, vil den fortsætte når det sættes i igen.</string>
+  <string name="pref_resume_on_replug_hint">Hvis du pausede ved at frakoble dine høretelefoner, vil afspilningen fortsætte når de sættes i igen.</string>
   <string name="min">%s min</string>
   <string name="delete_last_number">Sletter det sidst indtastede nummer</string>
   <plurals name="seconds">
@@ -49,6 +52,11 @@
   <string name="pref_seek_time">Spring over mængde</string>
   <string name="pref_theme_dark">Mørkt tema</string>
   <string name="pref_auto_rewind_title">Auto tilbagespoling</string>
+  <string name="pref_suggest_idea">Foreslå en ide</string>
+  <string name="pref_report_issue">Rapporter et problem</string>
+  <string name="pref_help_translating">Hjælp med at oversætte Voice</string>
+  <string name="pref_get_support">Få support</string>
+  <string name="pref_app_version">App version</string>
   <string name="popup_edit">Rediger</string>
   <string name="remove">Fjern</string>
   <string name="play_current">Spil nuværende</string>
@@ -59,7 +67,32 @@
   <!--book category-->
   <string name="book_header_current">Nuværende</string>
   <string name="book_header_not_started">Ikke startet endnu</string>
-  <string name="book_header_completed">afsluttet</string>
+  <string name="book_header_completed">Afsluttet</string>
+  <string name="close">Luk</string>
+  <string name="delete">Slet</string>
+  <string name="add">Tilføj</string>
+  <string name="folder_type_single_folder">Enkelt mappe</string>
+  <string name="folder_type_single_file">Enkelt fil</string>
+  <string name="folder_type_dialog_title">Hvad vil du tilføje?</string>
+  <string name="folder_type_no_books">Voice kunne ikke finde nogle bøger. Ligger der nogle lydfiler?</string>
+  <string name="folder_type_title">Hvordan er dine filer struktureret?</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Lige nu</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="migration_detail_content_name">Navn</string>
+  <string name="migration_detail_content_root">Rodmappe</string>
+  <string name="migration_detail_content_position">Position</string>
+  <string name="migration_detail_content_bookmarks">Bogmærker</string>
+  <string name="migration_detail_content_position_current_file_title">Nuværende fil</string>
+  <string name="migration_detail_content_position_current_file_position">Position i fil</string>
+  <string name="migration_detail_content_position_current_chapter_title">Nuværende kapitel</string>
+  <string name="migration_detail_content_position_current_chapter_position">Position i kapitel</string>
+  <string name="migration_delete_dialog_title">Slet positioner</string>
+  <string name="migration_delete_dialog_content">Når du har slettet de gamle positioner, vil du ikke være i stand til at gendanne dine gamle afspilningspositioner.</string>
+  <string name="migration_delete_dialog_action_delete">Slet</string>
+  <string name="migration_delete_dialog_action_keep">Behold</string>
+  <string name="delete_book_bottom_sheet_title">Slet bog</string>
+  <string name="delete_book_dialog_title">Slet bog</string>
+  <string name="delete_book_dialog_deletion_confirmation">Slet mine filer</string>
+  <string name="delete_book_dialog_content">Dette vil slette filerne på din enhed.</string>
 </resources>
