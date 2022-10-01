@@ -1,11 +1,16 @@
 package voice.bookOverview.overview
 
 import android.text.format.DateUtils
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
 import voice.bookOverview.BookMigrationExplanationQualifier
@@ -13,7 +18,6 @@ import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.GridCount
 import voice.bookOverview.GridMode
 import voice.common.BookId
-import voice.common.combine
 import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
@@ -64,70 +68,83 @@ constructor(
     }
   }
 
-  fun state(): Flow<BookOverviewViewState.Content> {
-    return combine(
-      playStateManager.flow,
-      repo.flow(),
-      currentBookDataStore.data,
-      mediaScanner.scannerActive,
-      gridModePref.flow,
-      bookMigrationExplanationShown.data,
-      suspend { legacyBookDao.bookMetaDataCount() != 0 }.asFlow(),
-    ) { playState, books, currentBookId, scannerActive, gridMode, bookMigrationExplanationShown, hasLegacyBooks ->
-      val noBooks = !scannerActive && books.isEmpty()
-      val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
-      BookOverviewViewState.Content(
-        layoutIcon = if (noBooks) {
-          null
-        } else {
-          when (gridMode) {
-            GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
-            GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
-            GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-              BookOverviewViewState.Content.LayoutIcon.List
-            } else {
-              BookOverviewViewState.Content.LayoutIcon.Grid
-            }
-          }
-        },
-        layoutMode = when (gridMode) {
-          GridMode.LIST -> BookOverviewViewState.Content.LayoutMode.List
-          GridMode.GRID -> BookOverviewViewState.Content.LayoutMode.Grid
-          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-            BookOverviewViewState.Content.LayoutMode.Grid
-          } else {
-            BookOverviewViewState.Content.LayoutMode.List
-          }
-        },
-        books = books
-          .groupBy {
-            it.category
-          }
-          .mapValues { (category, books) ->
-            books
-              .sortedWith(category.comparator)
-              .map { book ->
-                BookOverviewViewState.Content.BookViewState(
-                  name = book.content.name,
-                  author = book.content.author,
-                  cover = book.content.cover?.let(::ImmutableFile),
-                  id = book.id,
-                  progress = book.progress(),
-                  remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000),
-                )
-              }
-          }
-          .toSortedMap(),
-        playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
-          BookOverviewViewState.PlayButtonState.Playing
-        } else {
-          BookOverviewViewState.PlayButtonState.Paused
-        }.takeIf { currentBookId != null },
-        showAddBookHint = if (showMigrateHint) false else noBooks,
-        showMigrateIcon = hasLegacyBooks,
-        showMigrateHint = showMigrateHint,
-      )
+  @Composable
+  private fun <T> suspendingGet(initial: T, get: suspend () -> T): T {
+    var value by remember { mutableStateOf(initial) }
+    LaunchedEffect(Unit) {
+      value = get()
     }
+    return value
+  }
+
+  @Composable
+  fun state(): BookOverviewViewState {
+    val playState = playStateManager.flow.collectAsState(initial = PlayStateManager.PlayState.Stopped).value
+    val books = repo.flow().collectAsState(initial = emptyList()).value
+    val currentBookId = currentBookDataStore.data.collectAsState(initial = null).value
+    val scannerActive = mediaScanner.scannerActive.collectAsState(initial = false).value
+    val gridMode = gridModePref.flow.collectAsState(initial = null).value ?: return BookOverviewViewState.Loading
+    val bookMigrationExplanationShown =
+      bookMigrationExplanationShown.data.collectAsState(initial = null).value ?: return BookOverviewViewState.Loading
+
+    val hasLegacyBooks = suspendingGet(initial = null) {
+      legacyBookDao.bookMetaDataCount() != 0
+    } ?: return BookOverviewViewState.Loading
+
+    val noBooks = !scannerActive && books.isEmpty()
+    val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
+
+    return BookOverviewViewState.Content(
+      layoutIcon = if (noBooks) {
+        null
+      } else {
+        when (gridMode) {
+          GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
+          GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
+          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+            BookOverviewViewState.Content.LayoutIcon.List
+          } else {
+            BookOverviewViewState.Content.LayoutIcon.Grid
+          }
+        }
+      },
+      layoutMode = when (gridMode) {
+        GridMode.LIST -> BookOverviewViewState.Content.LayoutMode.List
+        GridMode.GRID -> BookOverviewViewState.Content.LayoutMode.Grid
+        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+          BookOverviewViewState.Content.LayoutMode.Grid
+        } else {
+          BookOverviewViewState.Content.LayoutMode.List
+        }
+      },
+      books = books
+        .groupBy {
+          it.category
+        }
+        .mapValues { (category, books) ->
+          books
+            .sortedWith(category.comparator)
+            .map { book ->
+              BookOverviewViewState.Content.BookViewState(
+                name = book.content.name,
+                author = book.content.author,
+                cover = book.content.cover?.let(::ImmutableFile),
+                id = book.id,
+                progress = book.progress(),
+                remainingTime = DateUtils.formatElapsedTime((book.duration - book.position) / 1000),
+              )
+            }
+        }
+        .toSortedMap(),
+      playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
+        BookOverviewViewState.PlayButtonState.Playing
+      } else {
+        BookOverviewViewState.PlayButtonState.Paused
+      }.takeIf { currentBookId != null },
+      showAddBookHint = if (showMigrateHint) false else noBooks,
+      showMigrateIcon = hasLegacyBooks,
+      showMigrateHint = showMigrateHint,
+    )
   }
 
   fun onSettingsClick() {
