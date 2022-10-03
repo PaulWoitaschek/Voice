@@ -52,6 +52,7 @@
   <string name="pref_theme_dark">Dunkles Design</string>
   <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
   <string name="pref_suggest_idea">Schlag eine Idee vor</string>
+  <string name="pref_use_grid">Grid Layout</string>
   <string name="pref_report_issue">Melde ein Problem</string>
   <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
   <string name="pref_get_support">Hol dir Hilfe</string>
@@ -108,4 +109,5 @@
   <string name="delete_book_dialog_title">Buch löschen</string>
   <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
   <string name="delete_book_dialog_content">Das wird die Dateien von deinem Gerät löschen.</string>
+  <string name="search_hint">Wonach suchst du?</string>
 </resources>

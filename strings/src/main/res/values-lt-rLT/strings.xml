@@ -52,6 +52,9 @@
   <string name="pref_seek_time">Peršokimo trukmė</string>
   <string name="pref_theme_dark">Tamsi tema</string>
   <string name="pref_auto_rewind_title">Automatinis atsukimas atgal</string>
+  <string name="pref_suggest_idea">Pasiūlyti idėją</string>
+  <string name="pref_report_issue">Pranešti apie problemą</string>
+  <string name="pref_app_version">Programėlės versija</string>
   <string name="popup_edit">Redaguoti</string>
   <string name="remove">Pašalinti</string>
   <string name="play_current">Atkurti dabartinę</string>
@@ -66,6 +69,10 @@
   <string name="close">Uždaryti</string>
   <string name="delete">Pašalinti</string>
   <string name="add">Pridėti</string>
+  <string name="folder_type_audiobooks">Audioknygų aplanką</string>
+  <string name="folder_type_single_folder">Vieną aplanką</string>
+  <string name="folder_type_single_file">Vieną failą</string>
+  <string name="folder_type_dialog_title">Ką norite pridėti?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Ką tik</string>
   <!--will be shown as a hint when no books have been added-->
@@ -79,6 +86,10 @@
   <string name="migration_detail_content_position">Pozicija</string>
   <string name="migration_detail_content_bookmarks">Žymelės</string>
   <string name="migration_detail_content_added_at">Pridėjimo data</string>
+  <string name="migration_detail_content_position_current_file_title">Dabartinis failas</string>
+  <string name="migration_detail_content_position_current_file_position">Pozicija faile</string>
+  <string name="migration_detail_content_position_current_chapter_title">Dabartinis skyrius</string>
+  <string name="migration_detail_content_position_current_chapter_position">Pozicija skyriuje</string>
   <string name="migration_delete_dialog_title">Šalinti pozicijas</string>
   <string name="migration_delete_dialog_content">Pašalinus senąsias pozicijas knygose daugiau nebegalėsite atkurti senųjų pozicijų.</string>
   <string name="migration_delete_dialog_action_delete">Pašalinti</string>
