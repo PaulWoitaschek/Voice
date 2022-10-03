@@ -145,7 +145,7 @@ internal fun BookOverview(
   onSearchClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+  val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
