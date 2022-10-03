@@ -1,4 +1,4 @@
-package voice.bookOverview
+package voice.search
 
 import voice.common.BookId
 import voice.data.Book

@@ -24,7 +24,7 @@ class BookSearchHandler
   private val currentBook: DataStore<BookId?>,
 ) {
 
-  suspend fun handle(search: BookSearch) {
+  suspend fun handle(search: VoiceSearch) {
     Logger.i("handle $search")
     when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> playArtist(search)
@@ -35,7 +35,7 @@ class BookSearchHandler
     }
   }
 
-  private suspend fun playAlbum(search: BookSearch) {
+  private suspend fun playAlbum(search: VoiceSearch) {
     if (search.album != null) {
       val foundMatch = findAndPlayFirstMatch {
         val nameMatches = it.content.name.contains(search.album, ignoreCase = true)
@@ -77,7 +77,7 @@ class BookSearchHandler
     player.play()
   }
 
-  private suspend fun playArtist(search: BookSearch) {
+  private suspend fun playArtist(search: VoiceSearch) {
     Logger.i("playArtist")
     if (search.artist != null) {
       val foundMatch = findAndPlayFirstMatch {

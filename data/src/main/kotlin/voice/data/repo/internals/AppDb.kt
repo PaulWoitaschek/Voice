@@ -12,6 +12,7 @@ import voice.data.legacy.LegacyBookSettings
 import voice.data.legacy.LegacyBookmark
 import voice.data.legacy.LegacyChapter
 import voice.data.repo.internals.dao.BookContentDao
+import voice.data.repo.internals.dao.BookSearchFts
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.repo.internals.dao.LegacyBookDao
@@ -25,12 +26,14 @@ import voice.data.repo.internals.dao.LegacyBookDao
     Chapter::class,
     BookContent::class,
     Bookmark::class,
+    BookSearchFts::class,
   ],
   version = AppDb.VERSION,
   autoMigrations = [
     AutoMigration(from = 51, to = 52),
     AutoMigration(from = 52, to = 53),
     AutoMigration(from = 54, to = 55),
+    AutoMigration(from = 55, to = 56),
   ],
 )
 @TypeConverters(Converters::class)
@@ -42,7 +45,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun legacyBookDao(): LegacyBookDao
 
   companion object {
-    const val VERSION = 55
+    const val VERSION = 56
     const val DATABASE_NAME = "autoBookDB"
   }
 }

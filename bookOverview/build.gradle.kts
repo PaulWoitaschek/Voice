@@ -10,6 +10,7 @@ anvil {
 
 dependencies {
   implementation(projects.common)
+  implementation(projects.search)
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data)

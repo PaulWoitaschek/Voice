@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,6 +37,8 @@ import voice.bookOverview.deleteBook.DeleteBookDialog
 import voice.bookOverview.di.BookOverviewComponent
 import voice.bookOverview.editTitle.EditBookTitleDialog
 import voice.bookOverview.overview.BookOverviewCategory
+import voice.bookOverview.overview.BookOverviewItemViewState
+import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
@@ -104,6 +110,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
         bookOverviewViewModel.onBookMigrationClick()
       },
       onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
+      onSearchClick = bookOverviewViewModel::onSearchClick,
     )
     val deleteBookViewState = deleteBookViewModel.state.value
     if (deleteBookViewState != null) {
@@ -127,7 +134,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BookOverview(
+internal fun BookOverview(
   viewState: BookOverviewViewState,
   onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
@@ -137,6 +144,7 @@ fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
+  onSearchClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -149,6 +157,11 @@ fun BookOverview(
         },
         scrollBehavior = scrollBehavior,
         actions = {
+          if (viewState.showSearchIcon) {
+            IconButton(onClick = onSearchClick) {
+              Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
+            }
+          }
           if (viewState.showMigrateIcon) {
             MigrateIcon(
               onClick = onBookMigrationClick,
@@ -178,7 +191,7 @@ fun BookOverview(
     when (viewState) {
       is BookOverviewViewState.Content -> {
         when (viewState.layoutMode) {
-          BookOverviewViewState.Content.LayoutMode.List -> {
+          BookOverviewLayoutMode.List -> {
             ListBooks(
               books = viewState.books,
               onBookClick = onBookClick,
@@ -186,7 +199,7 @@ fun BookOverview(
               contentPadding = contentPadding,
             )
           }
-          BookOverviewViewState.Content.LayoutMode.Grid -> {
+          BookOverviewLayoutMode.Grid -> {
             GridBooks(
               books = viewState.books,
               onBookClick = onBookClick,
@@ -226,14 +239,15 @@ fun BookOverviewPreview(
       onPlayButtonClick = {},
       onBookMigrationClick = {},
       onBoomMigrationHelperConfirmClick = {},
+      onSearchClick = {},
     )
   }
 }
 
 internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<BookOverviewViewState> {
 
-  fun book(): BookOverviewViewState.Content.BookViewState {
-    return BookOverviewViewState.Content.BookViewState(
+  fun book(): BookOverviewItemViewState {
+    return BookOverviewItemViewState(
       name = "Book",
       author = "Author",
       cover = null,
@@ -251,11 +265,12 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         BookOverviewCategory.CURRENT to buildList { repeat(10) { add(book()) } },
         BookOverviewCategory.FINISHED to listOf(book(), book()),
       ),
-      layoutMode = BookOverviewViewState.Content.LayoutMode.List,
+      layoutMode = BookOverviewLayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
       showMigrateHint = false,
       showMigrateIcon = true,
+      showSearchIcon = true,
     ),
   )
 }

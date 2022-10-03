@@ -122,4 +122,6 @@
   <string name="delete_book_dialog_title">Delete Book</string>
   <string name="delete_book_dialog_deletion_confirmation">Delete my files</string>
   <string name="delete_book_dialog_content">This will delete the files on your device.</string>
+
+  <string name="search_hint">What are you looking for?</string>
 </resources>

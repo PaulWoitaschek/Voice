@@ -144,6 +144,7 @@ dependencies {
   implementation(projects.folderPicker)
   implementation(projects.bookOverview)
   implementation(projects.migration)
+  implementation(projects.search)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

@@ -1,9 +1,6 @@
 package voice.playback.session.search
 
-/**
- * The parsed book search
- */
-data class BookSearch(
+data class VoiceSearch(
   val query: String? = null,
   val mediaFocus: String? = null,
   val album: String? = null,
