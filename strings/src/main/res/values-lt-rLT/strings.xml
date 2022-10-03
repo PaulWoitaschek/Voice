@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Dabartinė knyga</string>
-  <string name="layout_grid">Tinklelio išdėstymas</string>
-  <string name="layout_list">Sąrašo išdėstymas</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Viršelis</string>

@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Τρέχον βιβλίο</string>
-  <string name="layout_grid">Διάταξη Πλέγματος</string>
-  <string name="layout_list">Διάταξη Λίστας</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Εξώφυλλο</string>

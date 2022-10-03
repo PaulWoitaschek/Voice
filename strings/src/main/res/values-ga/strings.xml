@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">An closleabhar reatha</string>
-  <string name="layout_grid">Leathan eangaí</string>
-  <string name="layout_list">Leathan liosta</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Clúdach</string>

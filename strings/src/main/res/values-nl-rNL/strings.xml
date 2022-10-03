@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Huidig boek</string>
-  <string name="layout_grid">Roosterindeling</string>
-  <string name="layout_list">Lijstindeling</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Omslag</string>

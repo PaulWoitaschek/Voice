@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Aktualna książka</string>
-  <string name="layout_grid">Układ Siatki</string>
-  <string name="layout_list">Układ Listy</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Okładka</string>

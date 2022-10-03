@@ -2,8 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
   <!--BookShelf-->
   <string name="current_book">Current book</string>
-  <string name="layout_grid">Grid Layout</string>
-  <string name="layout_list">List Layout</string>
   <!-- in the book-overview the show-all button which displays all books of a category -->
   <!--BookPlayFragment-->
   <string name="cover">Cover</string>

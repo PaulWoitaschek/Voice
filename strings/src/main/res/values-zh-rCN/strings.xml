@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">当前有声书</string>
-  <string name="layout_grid">格状布局</string>
-  <string name="layout_list">列表布局</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">封面</string>

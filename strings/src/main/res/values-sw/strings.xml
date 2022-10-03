@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Kitabu cha sasa</string>
-  <string name="layout_grid">Mpagiliyo wa gridi</string>
-  <string name="layout_list">Mpagiliyo wa Orodha</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Jalada</string>

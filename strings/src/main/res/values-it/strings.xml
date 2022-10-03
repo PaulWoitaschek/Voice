@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Libro corrente</string>
-  <string name="layout_grid">Layout a Griglia</string>
-  <string name="layout_list">Layout a Lista</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Copertina</string>

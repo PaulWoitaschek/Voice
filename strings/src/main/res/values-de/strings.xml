@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Aktuelles Buch</string>
-  <string name="layout_grid">Kacheln</string>
-  <string name="layout_list">Liste</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cover</string>

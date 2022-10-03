@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Открытая книга</string>
-  <string name="layout_grid">Сетка</string>
-  <string name="layout_list">Список</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Обложка</string>

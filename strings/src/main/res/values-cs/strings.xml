@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Aktuální kniha</string>
-  <string name="layout_grid">Mřížkové rozložení</string>
-  <string name="layout_list">Seznamové rozložení</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Obal</string>

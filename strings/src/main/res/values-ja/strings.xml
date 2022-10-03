@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">現在のブック</string>
-  <string name="layout_grid">グリッドレイアウト</string>
-  <string name="layout_list">リストレイアウト</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">カバー</string>

@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Aktuell bok</string>
-  <string name="layout_grid">Rutnätslayout</string>
-  <string name="layout_list">Listlayout</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Omslag</string>

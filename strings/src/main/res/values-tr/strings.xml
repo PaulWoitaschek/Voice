@@ -2,8 +2,6 @@
 <resources>
   <!--BookShelf-->
   <string name="current_book">Şu anki kitap</string>
-  <string name="layout_grid">Izgara Görünümü</string>
-  <string name="layout_list">Liste Görünümü</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Kapak</string>
