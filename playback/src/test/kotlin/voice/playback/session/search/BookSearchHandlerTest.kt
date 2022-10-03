@@ -40,7 +40,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun unstructuredSearchByBook() = runTest {
-    val bookSearch = BookSearch(query = bookToFind.content.name)
+    val bookSearch = VoiceSearch(query = bookToFind.content.name)
     searchHandler.handle(bookSearch)
 
     currentBookIdShouldBe(bookToFind)
@@ -53,7 +53,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun unstructuredSearchByArtist() = runTest {
-    val bookSearch = BookSearch(query = bookToFind.content.author)
+    val bookSearch = VoiceSearch(query = bookToFind.content.author)
     searchHandler.handle(bookSearch)
 
     currentBookIdShouldBe()
@@ -62,7 +62,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun unstructuredSearchByChapter() = runTest {
-    val bookSearch = BookSearch(query = bookToFind.chapters.first().name)
+    val bookSearch = VoiceSearch(query = bookToFind.chapters.first().name)
     searchHandler.handle(bookSearch)
 
     currentBookIdShouldBe()
@@ -71,7 +71,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun mediaFocusAnyNoneFoundButPlayed() = runTest {
-    val bookSearch = BookSearch(mediaFocus = "vnd.android.cursor.item/*")
+    val bookSearch = VoiceSearch(mediaFocus = "vnd.android.cursor.item/*")
     searchHandler.handle(bookSearch)
 
     currentBookIdShouldBe(anotherBook)
@@ -80,7 +80,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun mediaFocusArtist() = runTest {
-    val bookSearch = BookSearch(
+    val bookSearch = VoiceSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
       artist = bookToFind.content.author,
     )
@@ -100,7 +100,7 @@ class BookSearchHandlerTest {
     )
     coEvery { repo.all() } coAnswers { listOf(bookToFind) }
 
-    val bookSearch = BookSearch(
+    val bookSearch = VoiceSearch(
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
       query = "Tim",
       artist = "Tim",
@@ -113,7 +113,7 @@ class BookSearchHandlerTest {
 
   @Test
   fun mediaFocusAlbum() = runTest {
-    val bookSearch = BookSearch(
+    val bookSearch = VoiceSearch(
       mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
       artist = bookToFind.content.author,
       album = bookToFind.content.name,

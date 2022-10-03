@@ -16,6 +16,8 @@ import androidx.test.uiautomator.UiDevice
 import org.junit.Rule
 import org.junit.Test
 import voice.bookOverview.overview.BookOverviewCategory
+import voice.bookOverview.overview.BookOverviewItemViewState
+import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.views.BookOverviewPreview
 import voice.common.BookId
@@ -123,11 +125,11 @@ class ScreenshotCapture {
   private fun screenshotData(): List<Screenshot> {
     val bookOverviewViewState = bookOverviewViewState()
     val bookOverviewList = bookOverviewViewState.copy(
-      layoutMode = BookOverviewViewState.Content.LayoutMode.List,
+      layoutMode = BookOverviewLayoutMode.List,
       layoutIcon = BookOverviewViewState.Content.LayoutIcon.Grid,
     )
     val bookOverviewGrid = bookOverviewViewState.copy(
-      layoutMode = BookOverviewViewState.Content.LayoutMode.Grid,
+      layoutMode = BookOverviewLayoutMode.Grid,
       layoutIcon = BookOverviewViewState.Content.LayoutIcon.List,
     )
     return listOf(
@@ -165,7 +167,7 @@ class ScreenshotCapture {
     }
 
     val books = testData.mapIndexed { index, (name, cover) ->
-      BookOverviewViewState.Content.BookViewState(
+      BookOverviewItemViewState(
         name = name,
         author = foreNames.removeFirst() + " " + sureNames.removeFirst(),
         cover = ImmutableFile(cover),
@@ -179,12 +181,13 @@ class ScreenshotCapture {
         BookOverviewCategory.CURRENT to books.take(3),
         BookOverviewCategory.NOT_STARTED to books.drop(3).map { it.copy(progress = 0F) },
       ),
-      layoutMode = BookOverviewViewState.Content.LayoutMode.List,
+      layoutMode = BookOverviewLayoutMode.List,
       layoutIcon = BookOverviewViewState.Content.LayoutIcon.Grid,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
       showMigrateHint = false,
       showMigrateIcon = false,
+      showSearchIcon = true,
     )
   }
 }

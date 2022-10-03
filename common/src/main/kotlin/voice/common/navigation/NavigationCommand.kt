@@ -22,6 +22,7 @@ sealed interface Destination {
   object Settings : Compose("settings")
   object BookOverview : Compose("bookOverview")
   object FolderPicker : Compose("folderPicker")
+  object BookSearch : Compose("bookSearch")
   data class SelectFolderType(val uri: Uri) : Compose("$baseRoute/${uri.toString().base64Encoded()}") {
     companion object {
       private const val baseRoute = "selectFolderType"

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
-import voice.bookOverview.overview.BookOverviewViewState
+import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.compose.LongClickableCard
@@ -35,7 +35,7 @@ import voice.common.recomposeHighlighter
 @Composable
 internal fun ListBooks(
   contentPadding: PaddingValues,
-  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  books: Map<BookOverviewCategory, List<BookOverviewItemViewState>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
@@ -73,8 +73,8 @@ internal fun ListBooks(
 }
 
 @Composable
-private fun ListBookRow(
-  book: BookOverviewViewState.Content.BookViewState,
+internal fun ListBookRow(
+  book: BookOverviewItemViewState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   modifier: Modifier = Modifier,

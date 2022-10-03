@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
-import voice.bookOverview.overview.BookOverviewViewState
+import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.LongClickableCard
 import voice.common.compose.plus
@@ -33,7 +33,7 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBooks(
-  books: Map<BookOverviewCategory, List<BookOverviewViewState.Content.BookViewState>>,
+  books: Map<BookOverviewCategory, List<BookOverviewItemViewState>>,
   contentPadding: PaddingValues,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
@@ -73,8 +73,8 @@ internal fun GridBooks(
 }
 
 @Composable
-private fun GridBook(
-  book: BookOverviewViewState.Content.BookViewState,
+internal fun GridBook(
+  book: BookOverviewItemViewState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
@@ -122,7 +122,7 @@ private fun GridBook(
 }
 
 @Composable
-private fun gridColumnCount(): Int {
+internal fun gridColumnCount(): Int {
   val displayMetrics = LocalContext.current.resources.displayMetrics
   val widthPx = displayMetrics.widthPixels.toFloat()
   val desiredPx = with(LocalDensity.current) {

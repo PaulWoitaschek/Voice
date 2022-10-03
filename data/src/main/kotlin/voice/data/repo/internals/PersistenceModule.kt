@@ -11,6 +11,7 @@ import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.repo.internals.dao.LegacyBookDao
+import voice.data.repo.internals.dao.RecentBookSearchDao
 import javax.inject.Singleton
 
 @Module
@@ -28,6 +29,9 @@ object PersistenceModule {
 
   @Provides
   fun legacyBookDao(appDb: AppDb): LegacyBookDao = appDb.legacyBookDao()
+
+  @Provides
+  fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
 
   @Provides
   @Singleton
