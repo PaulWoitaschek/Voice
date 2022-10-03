@@ -12,6 +12,7 @@ import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
+import voice.logging.core.Logger
 import javax.inject.Inject
 
 @BookOverviewScope
@@ -42,17 +43,15 @@ constructor(
       id = bookId,
       deleteCheckBoxChecked = false,
       fileToDelete = bookId.toUri().pathSegments
-        .toMutableList()
-        .also { segments ->
-          if (segments.firstOrNull() == "document") {
-            segments.removeFirst()
+        .let { segments ->
+          val result = segments.lastOrNull()?.removePrefix("primary:")
+          if (result.isNullOrEmpty()) {
+            Logger.e("Could not determine path for $segments")
+            segments.joinToString(separator = "\"")
+          } else {
+            result
           }
-          val path = segments.firstOrNull()
-          if (path != null) {
-            segments[0] = path.removePrefix("primary:")
-          }
-        }
-        .joinToString(separator = "/"),
+        },
     )
   }
 
