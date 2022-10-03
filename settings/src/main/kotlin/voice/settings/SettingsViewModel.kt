@@ -1,5 +1,7 @@
 package voice.settings
 
+import android.net.Uri
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -111,11 +113,14 @@ class SettingsViewModel
   }
 
   override fun openBugReport() {
-    navigator.goTo(
-      Destination.Website(
-        "https://github.com/PaulWoitaschek/Voice/issues/new?template=bug.yml&version=${appInfoProvider.versionName}",
-      ),
-    )
+    val url = Uri.parse("https://github.com/PaulWoitaschek/Voice/issues/new")
+      .buildUpon()
+      .appendQueryParameter("template", "bug.yml")
+      .appendQueryParameter("version", appInfoProvider.versionName)
+      .appendQueryParameter("androidversion", Build.VERSION.SDK_INT.toString())
+      .appendQueryParameter("device", Build.MODEL)
+      .toString()
+    navigator.goTo(Destination.Website(url))
   }
 
   override fun openTranslations() {
