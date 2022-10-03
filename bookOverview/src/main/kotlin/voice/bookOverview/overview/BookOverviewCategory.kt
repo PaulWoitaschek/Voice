@@ -16,7 +16,7 @@ enum class BookOverviewCategory(
   ),
   NOT_STARTED(
     nameRes = R.string.book_header_not_started,
-    comparator = BookComparator.ByLastPlayed.then(BookComparator.ByDateAdded).then(BookComparator.ByName),
+    comparator = BookComparator.ByName,
   ),
   FINISHED(
     nameRes = R.string.book_header_completed,

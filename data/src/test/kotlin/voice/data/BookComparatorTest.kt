@@ -23,10 +23,4 @@ class BookComparatorTest {
     val sorted = books.sortedWith(BookComparator.ByName)
     sorted.shouldContainExactly(b1, b2, b3, b5, b4)
   }
-
-  @Test
-  fun byDateAdded() {
-    val sorted = books.sortedWith(BookComparator.ByDateAdded)
-    sorted.shouldContainExactly(b4, b5, b1, b2, b3)
-  }
 }
