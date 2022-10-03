@@ -1,4 +1,4 @@
-package voice.bookOverview
+package voice.common.grid
 
 import android.content.Context
 import javax.inject.Inject

@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
-import voice.bookOverview.GridCount
-import voice.bookOverview.GridMode
 import voice.common.BookId
+import voice.common.grid.GridCount
+import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
@@ -48,18 +48,6 @@ constructor(
     mediaScanner.scan()
   }
 
-  fun toggleGrid() {
-    gridModePref.value = when (gridModePref.value) {
-      GridMode.LIST -> GridMode.GRID
-      GridMode.GRID -> GridMode.LIST
-      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-        GridMode.LIST
-      } else {
-        GridMode.GRID
-      }
-    }
-  }
-
   @Composable
   internal fun state(): BookOverviewViewState {
     val playState = playStateManager.flow.collectAsState(initial = PlayStateManager.PlayState.Stopped).value
@@ -78,19 +66,6 @@ constructor(
     val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
 
     return BookOverviewViewState.Content(
-      layoutIcon = if (noBooks) {
-        null
-      } else {
-        when (gridMode) {
-          GridMode.LIST -> BookOverviewViewState.Content.LayoutIcon.Grid
-          GridMode.GRID -> BookOverviewViewState.Content.LayoutIcon.List
-          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-            BookOverviewViewState.Content.LayoutIcon.List
-          } else {
-            BookOverviewViewState.Content.LayoutIcon.Grid
-          }
-        }
-      },
       layoutMode = when (gridMode) {
         GridMode.LIST -> BookOverviewLayoutMode.List
         GridMode.GRID -> BookOverviewLayoutMode.Grid

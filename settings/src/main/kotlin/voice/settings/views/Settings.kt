@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,6 +47,7 @@ fun SettingsPreview() {
     autoRewindInSeconds = 12,
     dialog = null,
     appVersion = "1.2.3",
+    useGrid = true,
   )
   VoiceTheme {
     Settings(
@@ -61,6 +65,7 @@ fun SettingsPreview() {
         override fun getSupport() {}
         override fun suggestIdea() {}
         override fun openBugReport() {}
+        override fun toggleGrid() {}
       },
     )
   }
@@ -97,6 +102,26 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         if (viewState.showDarkThemePref) {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
+        ListItem(
+          modifier = Modifier.clickable { listener.suggestIdea() },
+          leadingContent = {
+            val imageVector = if (viewState.useGrid) {
+              Icons.Outlined.GridView
+            } else {
+              Icons.Outlined.ViewList
+            }
+            Icon(imageVector, stringResource(R.string.pref_use_grid))
+          },
+          headlineText = { Text(stringResource(R.string.pref_use_grid)) },
+          trailingContent = {
+            Switch(
+              checked = viewState.useGrid,
+              onCheckedChange = {
+                listener.toggleGrid()
+              },
+            )
+          },
+        )
         ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
         SeekTimeRow(viewState.seekTimeInSeconds) {
           listener.onSeekAmountRowClicked()

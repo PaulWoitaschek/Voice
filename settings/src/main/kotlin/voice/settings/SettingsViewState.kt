@@ -8,6 +8,7 @@ data class SettingsViewState(
   val autoRewindInSeconds: Int,
   val appVersion: String,
   val dialog: Dialog?,
+  val useGrid: Boolean,
 ) {
 
   enum class Dialog {

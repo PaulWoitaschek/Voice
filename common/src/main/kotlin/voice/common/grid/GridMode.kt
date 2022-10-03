@@ -1,4 +1,4 @@
-package voice.bookOverview
+package voice.common.grid
 
 enum class GridMode {
   LIST,

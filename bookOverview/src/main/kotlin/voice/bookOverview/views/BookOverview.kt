@@ -94,7 +94,6 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   ) {
     BookOverview(
       viewState = viewState,
-      onLayoutIconClick = bookOverviewViewModel::toggleGrid,
       onSettingsClick = bookOverviewViewModel::onSettingsClick,
       onBookClick = bookOverviewViewModel::onBookClick,
       onBookLongClick = { bookId ->
@@ -136,7 +135,6 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
 @Composable
 internal fun BookOverview(
   viewState: BookOverviewViewState,
-  onLayoutIconClick: () -> Unit,
   onSettingsClick: () -> Unit,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
@@ -171,10 +169,6 @@ internal fun BookOverview(
           }
           BookFolderIcon(withHint = viewState.showAddBookHint, onClick = onBookFolderClick)
 
-          val layoutIcon = viewState.layoutIcon
-          if (layoutIcon != null) {
-            LayoutIcon(layoutIcon, onLayoutIconClick)
-          }
           SettingsIcon(onSettingsClick)
         },
       )
@@ -231,7 +225,6 @@ fun BookOverviewPreview(
   VoiceTheme {
     BookOverview(
       viewState = viewState,
-      onLayoutIconClick = {},
       onSettingsClick = {},
       onBookClick = {},
       onBookLongClick = {},
@@ -260,7 +253,6 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
   override val values = sequenceOf(
     BookOverviewViewState.Loading,
     BookOverviewViewState.Content(
-      layoutIcon = BookOverviewViewState.Content.LayoutIcon.List,
       books = mapOf(
         BookOverviewCategory.CURRENT to buildList { repeat(10) { add(book()) } },
         BookOverviewCategory.FINISHED to listOf(book(), book()),

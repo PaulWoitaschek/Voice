@@ -4,6 +4,7 @@ interface SettingsListener {
   fun close()
   fun toggleResumeOnReplug()
   fun toggleDarkTheme()
+  fun toggleGrid()
   fun seekAmountChanged(seconds: Int)
   fun onSeekAmountRowClicked()
   fun autoRewindAmountChanged(seconds: Int)

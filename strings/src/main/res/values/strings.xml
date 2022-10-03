@@ -55,6 +55,7 @@
   <string name="pref_auto_rewind_title">Auto rewind</string>
 
   <string name="pref_suggest_idea">Suggest an idea</string>
+  <string name="pref_use_grid">Use grid layout</string>
   <string name="pref_report_issue">Report a problem</string>
   <string name="pref_help_translating">Help translating Voice</string>
   <string name="pref_get_support">Get support</string>

@@ -10,12 +10,12 @@ import androidx.compose.runtime.setValue
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import voice.bookOverview.GridCount
-import voice.bookOverview.GridMode
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.toItemViewState
 import voice.common.BookId
+import voice.common.grid.GridCount
+import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys

@@ -21,9 +21,9 @@ import voice.app.serialization.SerializableDataStoreFactory
 import voice.app.serialization.UriSerializer
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
-import voice.bookOverview.GridMode
 import voice.common.AppScope
 import voice.common.BookId
+import voice.common.grid.GridMode
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.common.pref.RootAudiobookFolders

@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import de.paulwoitaschek.flowpref.Pref
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
+import voice.common.grid.GridCount
+import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
@@ -26,6 +28,9 @@ class SettingsViewModel
   private val seekTimePref: Pref<Int>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
+  @Named(PrefKeys.GRID_MODE)
+  private val gridModePref: Pref<GridMode>,
+  private val gridCount: GridCount,
 ) : SettingsListener {
 
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
@@ -36,6 +41,7 @@ class SettingsViewModel
     val resumeOnReplug by remember { resumeOnReplugPref.flow }.collectAsState(initial = false)
     val autoRewindAmount by remember { autoRewindAmountPref.flow }.collectAsState(initial = 0)
     val seekTime by remember { seekTimePref.flow }.collectAsState(initial = 0)
+    val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -44,6 +50,11 @@ class SettingsViewModel
       autoRewindInSeconds = autoRewindAmount,
       dialog = dialog.value,
       appVersion = appInfoProvider.versionName,
+      useGrid = when (gridMode) {
+        GridMode.LIST -> false
+        GridMode.GRID -> true
+        GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
+      },
     )
   }
 
@@ -57,6 +68,18 @@ class SettingsViewModel
 
   override fun toggleDarkTheme() {
     useDarkTheme.value = !useDarkTheme.value
+  }
+
+  override fun toggleGrid() {
+    gridModePref.value = when (gridModePref.value) {
+      GridMode.LIST -> GridMode.GRID
+      GridMode.GRID -> GridMode.LIST
+      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+        GridMode.LIST
+      } else {
+        GridMode.GRID
+      }
+    }
   }
 
   override fun seekAmountChanged(seconds: Int) {
