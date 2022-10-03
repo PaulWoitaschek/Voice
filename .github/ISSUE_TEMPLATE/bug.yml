@@ -21,9 +21,17 @@ body:
       description: On which version of Voice did this bug appear? Please write the exact version as often time multiple versions are live at the same time.
     validations:
       required: true
-  - type: textarea
-    id: logs
+  - type: input
+    id: androidversion
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: Android Version
+      description: What is your Android Version? (i.e. Android 13)
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device Model
+      description: What device do you use (i.e. Pixel 6)
+    validations:
+      required: true
