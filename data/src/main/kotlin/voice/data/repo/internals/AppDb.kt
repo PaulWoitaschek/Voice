@@ -7,6 +7,7 @@ import androidx.room.TypeConverters
 import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.Chapter
+import voice.data.RecentBookSearch
 import voice.data.legacy.LegacyBookMetaData
 import voice.data.legacy.LegacyBookSettings
 import voice.data.legacy.LegacyBookmark
@@ -16,6 +17,7 @@ import voice.data.repo.internals.dao.BookSearchFts
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.repo.internals.dao.LegacyBookDao
+import voice.data.repo.internals.dao.RecentBookSearchDao
 
 @Database(
   entities = [
@@ -27,6 +29,7 @@ import voice.data.repo.internals.dao.LegacyBookDao
     BookContent::class,
     Bookmark::class,
     BookSearchFts::class,
+    RecentBookSearch::class,
   ],
   version = AppDb.VERSION,
   autoMigrations = [
@@ -43,6 +46,7 @@ abstract class AppDb : RoomDatabase() {
   abstract fun bookContentDao(): BookContentDao
   abstract fun bookmarkDao(): BookmarkDao
   abstract fun legacyBookDao(): LegacyBookDao
+  abstract fun recentBookSearchDao(): RecentBookSearchDao
 
   companion object {
     const val VERSION = 56

@@ -1,5 +1,6 @@
 package voice.bookOverview.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +12,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -86,41 +89,68 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
       )
     },
     content = { contentPadding ->
-      when (viewState.layoutMode) {
-        BookOverviewLayoutMode.List -> {
+      when (viewState) {
+        is BookSearchViewState.InactiveSearch -> {
           LazyColumn(
-            contentPadding = PaddingValues(vertical = 16.dp),
-            modifier = Modifier
-              .padding(contentPadding)
-              .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = contentPadding,
             content = {
-              items(viewState.books) { book ->
-                ListBookRow(
-                  book = book,
-                  onBookClick = viewModel::onBookClick,
-                  onBookLongClick = viewModel::onBookClick,
+              items(viewState.recentQueries) { query ->
+                ListItem(
+                  modifier = Modifier.clickable {
+                    viewModel.onNewSearch(query)
+                  },
+                  headlineText = {
+                    Text(text = query)
+                  },
+                  leadingContent = {
+                    Icon(
+                      imageVector = Icons.Outlined.History,
+                      contentDescription = null,
+                    )
+                  },
                 )
               }
             },
           )
         }
-        BookOverviewLayoutMode.Grid -> {
-          LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColumnCount()),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = contentPadding + PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
-            content = {
-              items(viewState.books) { book ->
-                GridBook(
-                  book = book,
-                  onBookClick = viewModel::onBookClick,
-                  onBookLongClick = viewModel::onBookClick,
-                )
-              }
-            },
-          )
+        is BookSearchViewState.SearchResults -> {
+          when (viewState.layoutMode) {
+            BookOverviewLayoutMode.List -> {
+              LazyColumn(
+                contentPadding = PaddingValues(vertical = 16.dp),
+                modifier = Modifier
+                  .padding(contentPadding)
+                  .padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                content = {
+                  items(viewState.books) { book ->
+                    ListBookRow(
+                      book = book,
+                      onBookClick = viewModel::onBookClick,
+                      onBookLongClick = viewModel::onBookClick,
+                    )
+                  }
+                },
+              )
+            }
+            BookOverviewLayoutMode.Grid -> {
+              LazyVerticalGrid(
+                columns = GridCells.Fixed(gridColumnCount()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = contentPadding + PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
+                content = {
+                  items(viewState.books) { book ->
+                    GridBook(
+                      book = book,
+                      onBookClick = viewModel::onBookClick,
+                      onBookLongClick = viewModel::onBookClick,
+                    )
+                  }
+                },
+              )
+            }
+          }
         }
       }
     },
