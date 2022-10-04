@@ -185,8 +185,6 @@ dependencies {
 
   implementation(libs.lifecycle)
 
-  implementation(libs.groupie)
-
   implementation(libs.prefs.android)
   testImplementation(libs.prefs.inMemory)
 

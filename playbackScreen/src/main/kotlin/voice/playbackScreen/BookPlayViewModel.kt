@@ -109,7 +109,34 @@ class BookPlayViewModel
   }
 
   fun onCurrentChapterClicked() {
-    navigator.goTo(Destination.SelectChapterDialog(bookId))
+    scope.launch {
+      val book = repo.get(bookId) ?: return@launch
+      val chapterMarks = book.chapters.flatMap {
+        it.chapterMarks
+      }
+      val selectedIndex = chapterMarks.indexOf(book.currentMark)
+      _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
+        chapters = chapterMarks,
+        selectedIndex = selectedIndex.takeUnless { it == -1 },
+      )
+    }
+  }
+
+  fun onChapterClicked(index: Int) {
+    scope.launch {
+      val book = repo.get(bookId) ?: return@launch
+      var currentIndex = -1
+      book.chapters.forEach { chapter ->
+        chapter.chapterMarks.forEach { mark ->
+          currentIndex++
+          if (currentIndex == index) {
+            player.setPosition(mark.startMs, chapter.id)
+            _dialogState.value = null
+            return@launch
+          }
+        }
+      }
+    }
   }
 
   fun onPlaybackSpeedIconClicked() {

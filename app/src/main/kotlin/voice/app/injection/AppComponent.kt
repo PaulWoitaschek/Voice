@@ -8,7 +8,6 @@ import dagger.Component
 import voice.app.AppController
 import voice.app.features.MainActivity
 import voice.app.features.bookOverview.EditCoverDialogController
-import voice.app.features.bookPlaying.selectchapter.SelectChapterDialog
 import voice.app.features.bookmarks.BookmarkPresenter
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.features.widget.BaseWidgetProvider
@@ -29,7 +28,6 @@ interface AppComponent {
   fun inject(target: BaseWidgetProvider)
   fun inject(target: AppController)
   fun inject(target: CoverFromInternetController)
-  fun inject(target: SelectChapterDialog)
   fun inject(target: EditCoverDialogController)
   fun inject(target: MainActivity)
 

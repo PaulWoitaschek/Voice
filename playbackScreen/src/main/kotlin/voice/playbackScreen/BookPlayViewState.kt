@@ -1,5 +1,6 @@
 package voice.playbackScreen
 
+import voice.data.ChapterMark
 import voice.playback.misc.Decibel
 import java.io.File
 import kotlin.time.Duration
@@ -28,5 +29,10 @@ internal sealed interface BookPlayDialogViewState {
     val gain: Decibel,
     val valueFormatted: String,
     val maxGain: Decibel,
+  ) : BookPlayDialogViewState
+
+  data class SelectChapterDialog(
+    val chapters: List<ChapterMark>,
+    val selectedIndex: Int?,
   ) : BookPlayDialogViewState
 }

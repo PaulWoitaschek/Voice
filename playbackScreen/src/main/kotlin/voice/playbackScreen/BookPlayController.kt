@@ -67,6 +67,9 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
           is BookPlayDialogViewState.VolumeGainDialog -> {
             VolumeGainDialog(dialogState, viewModel)
           }
+          is BookPlayDialogViewState.SelectChapterDialog -> {
+            SelectChapterDialog(dialogState, viewModel)
+          }
         }
       }
     }
