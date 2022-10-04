@@ -7,14 +7,22 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report!
   - type: textarea
-    id: what-happened
     attributes:
-      label: What happened?
-      description: Please describe exactly what the bug and how it should function. Try to describe how to reproduce it.
-      placeholder: Tell us what you see!
+      label: Overview
+      description: Please describe exactly what the bug is and what you expected to happen instead.
     validations:
       required: true
-  - type: input
+  - type: textarea
+    attributes:
+      label: How to reproduce
+      description:  |
+        Describe step by step, how to reproduce the bug. For example:
+        1. Open the App
+        2. Click on Play
+        3. Voice crashes
+    validations:
+      required: true
+- type: input
     id: version
     attributes:
       label: Version
