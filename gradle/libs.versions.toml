@@ -12,8 +12,8 @@ conductor = "3.1.7"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.44"
-kotlin = "1.7.10"
-compose-compiler = "1.3.1"
+kotlin = "1.7.20"
+compose-compiler = "1.3.2"
 compose-ui = "1.2.1"
 compose-material = "1.2.1"
 compose-animation = "1.2.1"
@@ -146,7 +146,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.2" }
 ktlint = { id = "org.jmailen.kotlinter", version = "3.12.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.7.10-1.0.6" }
+ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.6" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.2" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.14" }
 playPublish = { id = "com.github.triplet.play", version = "3.7.0" }
