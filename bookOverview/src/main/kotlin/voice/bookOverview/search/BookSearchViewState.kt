@@ -13,6 +13,7 @@ internal sealed interface BookSearchViewState {
   ) : BookSearchViewState
 
   data class InactiveSearch(
+    val suggestedAuthors: List<String>,
     val recentQueries: List<String>,
     override val query: String,
   ) : BookSearchViewState

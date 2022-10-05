@@ -20,6 +20,7 @@ compose-animation = "1.2.1"
 media3 = "1.0.0-beta02"
 agp = "7.3.0"
 ktlint = "0.47.1"
+accompanist = "0.25.1"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -103,7 +104,8 @@ compose-animation-animation = { module = "androidx.compose.animation:animation",
 compose-material3 = "androidx.compose.material3:material3:1.0.0-beta03"
 compose-activity = "androidx.activity:activity-compose:1.6.0"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.2"
-compose-navigation-animation = "com.google.accompanist:accompanist-navigation-animation:0.25.1"
+compose-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+compose-flow = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 # For these dependencies we only use the version but declare full artifacts so renovate can update the version
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
@@ -124,6 +126,7 @@ compose = [
   "compose-navigation-animation",
   "androidxCore",
   "compose-material3",
+  "compose-flow",
   "compose-activity",
   "coil",
 ]

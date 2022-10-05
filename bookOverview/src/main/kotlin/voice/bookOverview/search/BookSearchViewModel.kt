@@ -14,11 +14,13 @@ import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.toItemViewState
 import voice.common.BookId
+import voice.common.comparator.sortedNaturally
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
+import voice.data.repo.BookContentRepo
 import voice.data.repo.internals.dao.RecentBookSearchDao
 import voice.search.BookSearch
 import javax.inject.Inject
@@ -32,6 +34,7 @@ class BookSearchViewModel
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
   private val recentBookSearchDao: RecentBookSearchDao,
+  private val repo: BookContentRepo,
 ) {
 
   private val query = mutableStateOf("")
@@ -54,22 +57,30 @@ class BookSearchViewModel
     ) {
       value = recentBookSearchDao.recentBookSearch().reversed()
     }
-    var books by remember {
+    var searchBooks by remember {
       mutableStateOf(emptyList<BookOverviewItemViewState>())
     }
     LaunchedEffect(query.value) {
-      books = search.search(query.value).map { it.toItemViewState() }
+      searchBooks = search.search(query.value).map { it.toItemViewState() }
+    }
+    val suggestedAuthors: List<String> by produceState(initialValue = emptyList()) {
+      value = repo.all()
+        .filter { it.isActive }
+        .mapNotNull { it.author }
+        .toSet()
+        .sortedNaturally()
     }
 
     return if (query.value.isNotBlank()) {
       BookSearchViewState.SearchResults(
         query = query.value,
-        books = books,
+        books = searchBooks,
         layoutMode = layoutMode,
       )
     } else {
       BookSearchViewState.InactiveSearch(
         recentQueries = recentBookSearch,
+        suggestedAuthors = suggestedAuthors,
         query = query.value,
       )
     }
