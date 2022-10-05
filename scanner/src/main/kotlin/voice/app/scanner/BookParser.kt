@@ -57,7 +57,7 @@ class BookParser
         author = analyzed?.author,
         lastPlayedAt = migrationSettings?.lastPlayedAtMillis?.let(Instant::ofEpochMilli)
           ?: Instant.EPOCH,
-        name = migrationMetaData?.name ?: analyzed?.bookName ?: file.bookName(),
+        name = migrationMetaData?.name ?: analyzed?.bookName ?: analyzed?.chapterName ?: file.bookName(),
         playbackSpeed = migrationSettings?.playbackSpeed
           ?: 1F,
         skipSilence = migrationSettings?.skipSilence
