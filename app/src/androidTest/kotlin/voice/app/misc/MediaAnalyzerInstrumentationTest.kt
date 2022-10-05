@@ -1,5 +1,3 @@
-package voice.app.misc
-
 import androidx.annotation.RawRes
 import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ApplicationProvider
@@ -15,6 +13,7 @@ import org.junit.runner.RunWith
 import voice.app.scanner.FFProbeAnalyze
 import voice.app.scanner.MediaAnalyzer
 import voice.app.test.R
+import voice.data.MarkData
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -25,29 +24,36 @@ class MediaAnalyzerInstrumentationTest {
 
   private val mediaAnalyzer = MediaAnalyzer(FFProbeAnalyze(ApplicationProvider.getApplicationContext()))
 
-  @Test(timeout = 1000)
-  fun defectFile_noDuration() {
-    val duration = durationOfResource(R.raw.defect)
-    duration.shouldBeNull()
+  @Test
+  fun defectFile() {
+    analyze(R.raw.defect).shouldBeNull()
   }
 
   @Test
-  fun intactFile_correctDuration() {
-    val duration = durationOfResource(R.raw.intact)
-    duration shouldBe 119040
+  fun intactFile() {
+    analyze(R.raw.intact) shouldBe MediaAnalyzer.Metadata(
+      duration = 119040,
+      author = "Auphonic",
+      bookName = "Auphonic Examples",
+      chapterName = "Auphonic Chapter Marks Demo",
+      chapters = listOf(
+        MarkData(0, "Intro"),
+        MarkData(15_000, "Creating a new production"),
+        MarkData(22000, "Sound analysis"),
+        MarkData(34000, "Adaptive leveler"),
+        MarkData(45000, "Global loudness normalization"),
+        MarkData(60000, "Audio restoration algorithms"),
+        MarkData(76000, "Output file formats"),
+        MarkData(94000, "External services"),
+        MarkData(111500, "Get a free account!"),
+      ),
+    )
   }
 
-  @Test(timeout = 1000)
-  fun subsequentCalls() {
-    durationOfResource(R.raw.intact) shouldBe 119040
-    durationOfResource(R.raw.defect).shouldBeNull()
-    durationOfResource(R.raw.intact2) shouldBe 119040
-  }
-
-  private fun durationOfResource(@RawRes resource: Int): Long? {
+  private fun analyze(@RawRes resource: Int): MediaAnalyzer.Metadata? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      mediaAnalyzer.analyze(DocumentFile.fromFile(file))?.duration
+      mediaAnalyzer.analyze(DocumentFile.fromFile(file))
     }
   }
 

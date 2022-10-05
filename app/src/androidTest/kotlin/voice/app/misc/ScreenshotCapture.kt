@@ -126,11 +126,9 @@ class ScreenshotCapture {
     val bookOverviewViewState = bookOverviewViewState()
     val bookOverviewList = bookOverviewViewState.copy(
       layoutMode = BookOverviewLayoutMode.List,
-      layoutIcon = BookOverviewViewState.Content.LayoutIcon.Grid,
     )
     val bookOverviewGrid = bookOverviewViewState.copy(
       layoutMode = BookOverviewLayoutMode.Grid,
-      layoutIcon = BookOverviewViewState.Content.LayoutIcon.List,
     )
     return listOf(
       Screenshot("book_overview_list") {
@@ -182,7 +180,6 @@ class ScreenshotCapture {
         BookOverviewCategory.NOT_STARTED to books.drop(3).map { it.copy(progress = 0F) },
       ),
       layoutMode = BookOverviewLayoutMode.List,
-      layoutIcon = BookOverviewViewState.Content.LayoutIcon.Grid,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
       showMigrateHint = false,
