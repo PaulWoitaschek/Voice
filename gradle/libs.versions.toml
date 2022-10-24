@@ -48,7 +48,7 @@ seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
 turbine = "app.cash.turbine:turbine:0.12.0"
-molecule = "app.cash.molecule:molecule-runtime:0.4.0"
+molecule = "app.cash.molecule:molecule-runtime:0.5.0"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
