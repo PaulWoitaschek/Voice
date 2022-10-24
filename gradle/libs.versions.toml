@@ -101,7 +101,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose-animation" }
 compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-animation" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0-rc01  "
+compose-material3 = "androidx.compose.material3:material3:1.0.0"
 compose-activity = "androidx.activity:activity-compose:1.6.0"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.2"
 compose-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
