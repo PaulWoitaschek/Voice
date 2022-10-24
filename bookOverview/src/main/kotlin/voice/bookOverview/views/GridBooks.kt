@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
@@ -33,7 +34,7 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBooks(
-  books: Map<BookOverviewCategory, List<BookOverviewItemViewState>>,
+  books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
   contentPadding: PaddingValues,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,

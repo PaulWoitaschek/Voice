@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.bookOverview.R
@@ -253,7 +254,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
   override val values = sequenceOf(
     BookOverviewViewState.Loading,
     BookOverviewViewState.Content(
-      books = mapOf(
+      books = persistentMapOf(
         BookOverviewCategory.CURRENT to buildList { repeat(10) { add(book()) } },
         BookOverviewCategory.FINISHED to listOf(book(), book()),
       ),

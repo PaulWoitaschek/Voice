@@ -23,6 +23,7 @@ import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
@@ -35,7 +36,7 @@ import voice.common.recomposeHighlighter
 @Composable
 internal fun ListBooks(
   contentPadding: PaddingValues,
-  books: Map<BookOverviewCategory, List<BookOverviewItemViewState>>,
+  books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {

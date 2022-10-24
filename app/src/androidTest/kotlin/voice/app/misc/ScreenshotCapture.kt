@@ -13,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.services.storage.TestStorage
 import androidx.test.uiautomator.UiDevice
+import kotlinx.collections.immutable.persistentMapOf
 import org.junit.Rule
 import org.junit.Test
 import voice.bookOverview.overview.BookOverviewCategory
@@ -175,7 +176,7 @@ class ScreenshotCapture {
       )
     }
     return BookOverviewViewState.Content(
-      books = mapOf(
+      books = persistentMapOf(
         BookOverviewCategory.CURRENT to books.take(3),
         BookOverviewCategory.NOT_STARTED to books.drop(3).map { it.copy(progress = 0F) },
       ),

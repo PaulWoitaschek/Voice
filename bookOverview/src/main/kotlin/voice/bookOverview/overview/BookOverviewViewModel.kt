@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
@@ -86,7 +87,8 @@ constructor(
               book.toItemViewState()
             }
         }
-        .toSortedMap(),
+        .toSortedMap()
+        .toImmutableMap(),
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
       } else {

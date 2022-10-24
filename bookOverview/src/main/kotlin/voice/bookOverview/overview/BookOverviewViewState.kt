@@ -1,6 +1,7 @@
 package voice.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableMap
 
 sealed interface BookOverviewViewState {
 
@@ -20,7 +21,7 @@ sealed interface BookOverviewViewState {
 
   @Immutable
   data class Content(
-    val books: Map<BookOverviewCategory, List<BookOverviewItemViewState>>,
+    val books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
     val layoutMode: BookOverviewLayoutMode,
     override val playButtonState: PlayButtonState?,
     override val showAddBookHint: Boolean,

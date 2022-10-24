@@ -15,6 +15,7 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.dagger.core)
   implementation(libs.material)
+  api(libs.immutable)
   implementation(libs.prefs.core)
   api(libs.conductor.core)
   implementation(libs.androidxCore)
