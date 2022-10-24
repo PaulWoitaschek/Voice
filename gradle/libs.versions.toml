@@ -70,7 +70,7 @@ androidX-test-core = "androidx.test:core-ktx:1.4.1-alpha07"
 androidTest-orchestrator = "androidx.test:orchestrator:1.4.1"
 androidTest-services-testServices = "androidx.test.services:test-services:1.4.1"
 androidTest-services-storage = "androidx.test.services:storage:1.4.1"
-androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.0-alpha07"
+androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.0-beta02"
 androidTest-rules = "androidx.test:rules:1.4.0"
 
 conductor-core = { module = "com.bluelinelabs:conductor", version.ref = "conductor" }
