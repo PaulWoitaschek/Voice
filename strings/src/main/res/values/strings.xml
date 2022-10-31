@@ -123,4 +123,7 @@
   <string name="delete_book_dialog_content">This will delete the files on your device.</string>
 
   <string name="search_hint">What are you looking for?</string>
+
+  <string name="battery_optimization_rationale">Due to your Power restrictions, playback interruptions might happen.</string>
+  <string name="battery_optimization_action">Update</string>
 </resources>

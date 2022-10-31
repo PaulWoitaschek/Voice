@@ -36,12 +36,15 @@ class BookPlayViewModel
   private val navigator: Navigator,
   private val bookmarkRepo: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
+  private val batteryOptimization: BatteryOptimization,
 ) {
+
+  private var askedToIgnoreBatteryOptimization = false
 
   private val scope = MainScope()
 
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
-  val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
+  internal val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
 
   lateinit var bookId: BookId
 
@@ -97,6 +100,12 @@ class BookPlayViewModel
   }
 
   fun playPause() {
+    if (playStateManager.playState != PlayStateManager.PlayState.Playing && !askedToIgnoreBatteryOptimization) {
+      if (!batteryOptimization.isIgnoringBatteryOptimizations()) {
+        _viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+      }
+      askedToIgnoreBatteryOptimization = true
+    }
     player.playPause()
   }
 

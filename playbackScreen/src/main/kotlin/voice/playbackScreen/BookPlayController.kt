@@ -1,6 +1,10 @@
 package voice.playbackScreen
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.GestureDetector
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -22,6 +26,7 @@ import voice.common.formatTime
 import voice.common.rootComponentAs
 import voice.data.getBookId
 import voice.data.putBookId
+import voice.logging.core.Logger
 import voice.playbackScreen.databinding.BookPlayBinding
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
@@ -96,6 +101,23 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
       }
       BookPlayViewEffect.ShowSleepTimeDialog -> {
         openSleepTimeDialog()
+      }
+      BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
+        Snackbar.make(view!!, R.string.battery_optimization_rationale, Snackbar.LENGTH_LONG)
+          .setAction(R.string.battery_optimization_action) {
+            val intent = Intent()
+              .apply {
+                @Suppress("BatteryLife")
+                action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                data = Uri.parse("package:${activity!!.packageName}")
+              }
+            try {
+              startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+              Logger.e(e, "Can't request ignoring battery optimizations")
+            }
+          }
+          .show()
       }
     }
   }
