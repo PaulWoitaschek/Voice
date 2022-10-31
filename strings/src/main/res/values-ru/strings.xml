@@ -14,6 +14,7 @@
   <string name="play">Читать</string>
   <string name="pause">Пауза</string>
   <string name="skip_silence">Пропускать тишину</string>
+  <string name="volume_boost">Усиление звука</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Установить</string>
@@ -53,6 +54,7 @@
   <string name="pref_theme_dark">Тёмная тема</string>
   <string name="pref_auto_rewind_title">Автоперемотка назад</string>
   <string name="pref_suggest_idea">Предложить идею</string>
+  <string name="pref_use_grid">Использовать сетку</string>
   <string name="pref_report_issue">Сообщить о проблеме</string>
   <string name="pref_help_translating">Помочь с переводом</string>
   <string name="pref_get_support">Поддержка</string>
@@ -77,6 +79,12 @@
   <string name="folder_type_dialog_title">Что добавить?</string>
   <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
   <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%d аудиофайл</item>
+    <item quantity="few">%d аудиофайла</item>
+    <item quantity="many">%d аудиофайлов</item>
+    <item quantity="other">%d аудиофайла</item>
+  </plurals>
   <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
   <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
   <string name="folder_type_title">Как упорядочены ваши файлы?</string>
@@ -105,4 +113,5 @@
   <string name="delete_book_dialog_title">Удалить книгу</string>
   <string name="delete_book_dialog_deletion_confirmation">Удалить файлы</string>
   <string name="delete_book_dialog_content">Это действие удалит файлы книги с устройства.</string>
+  <string name="search_hint">Что вы ищете?</string>
 </resources>

@@ -51,6 +51,7 @@
   <string name="pref_theme_dark">ダークテーマ</string>
   <string name="pref_auto_rewind_title">自動巻き戻し</string>
   <string name="pref_suggest_idea">アイデアの提案</string>
+  <string name="pref_use_grid">グリッド表示の使用</string>
   <string name="pref_report_issue">問題の報告</string>
   <string name="pref_help_translating">翻訳の手助け</string>
   <string name="pref_get_support">サポート</string>
@@ -106,4 +107,5 @@
   <string name="delete_book_dialog_title">ブックの削除</string>
   <string name="delete_book_dialog_deletion_confirmation">ファイルを削除</string>
   <string name="delete_book_dialog_content">これにより、デバイス上のファイルが削除されます。</string>
+  <string name="search_hint">何をお探しですか？</string>
 </resources>

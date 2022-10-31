@@ -14,6 +14,7 @@
   <string name="play">Atkurti</string>
   <string name="pause">Pristabdyti</string>
   <string name="skip_silence">Peršokti tylą</string>
+  <string name="volume_boost">Garsio padidinimas</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Nustatyti</string>
@@ -29,7 +30,7 @@
   <string name="mark_as_not_started">Pažymėti kaip dar nepradėtą</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="audiobook_folders_title">Audioknygų aplankai</string>
+  <string name="audiobook_folders_title">Garsinių knygų aplankai</string>
   <!--PlaybackSpeed-->
   <string name="playback_speed">Atkūrimo sparta</string>
   <!--Bookmarks-->
@@ -46,14 +47,17 @@
   <plurals name="seconds">
     <item quantity="one">%d sekundė</item>
     <item quantity="few">%d sekundės</item>
-    <item quantity="many">%d sekundės</item>
-    <item quantity="other">%d sekundės</item>
+    <item quantity="many">%d sekundė</item>
+    <item quantity="other">%d sekundžių</item>
   </plurals>
   <string name="pref_seek_time">Peršokimo trukmė</string>
   <string name="pref_theme_dark">Tamsi tema</string>
   <string name="pref_auto_rewind_title">Automatinis atsukimas atgal</string>
   <string name="pref_suggest_idea">Pasiūlyti idėją</string>
+  <string name="pref_use_grid">Naudoti tinklelio išdėstymą</string>
   <string name="pref_report_issue">Pranešti apie problemą</string>
+  <string name="pref_help_translating">Padėkite verčiant „Voice“</string>
+  <string name="pref_get_support">Gauti palaikymą</string>
   <string name="pref_app_version">Programėlės versija</string>
   <string name="popup_edit">Redaguoti</string>
   <string name="remove">Pašalinti</string>
@@ -69,16 +73,27 @@
   <string name="close">Uždaryti</string>
   <string name="delete">Pašalinti</string>
   <string name="add">Pridėti</string>
-  <string name="folder_type_audiobooks">Audioknygų aplanką</string>
+  <string name="folder_type_audiobooks">Garsinių knygų aplanką</string>
   <string name="folder_type_single_folder">Vieną aplanką</string>
   <string name="folder_type_single_file">Vieną failą</string>
   <string name="folder_type_dialog_title">Ką norite pridėti?</string>
+  <string name="folder_mode_root">Šakninis garsinių knygų aplankas. Kiekvienas poaplankis = atskira knyga.</string>
+  <string name="folder_mode_single">Vienos garsinės knygos aplankas</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%d garsinis failas</item>
+    <item quantity="few">%d garsiniai failai</item>
+    <item quantity="many">%d garsinis failas</item>
+    <item quantity="other">%d garsinių failų</item>
+  </plurals>
+  <string name="folder_type_book_example_header">Tai leistų aptikti šias knygas</string>
+  <string name="folder_type_no_books">„Voice“ nepavyko aptikti jokių knygų. Ar viduje yra garsinių failų?</string>
+  <string name="folder_type_title">Kokia jūsų failų struktūra?</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Ką tik</string>
   <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">Jei norite pradėti klausytis, pridėkite audioknygų aplanką!</string>
+  <string name="voice_intro_first_book">Jei norite pradėti klausytis, pridėkite garsinių knygų aplanką!</string>
   <string name="migration_hint_title">Skaitomos senosios pozicijos knygose</string>
-  <string name="migration_hint_content">Dėl pokyčių naujesnėse „Android“ versijose, audioknygų aplanką būtina nurodyti naudojant sistemos parinkiklį.\n\nPaspauskite ant aukščiau esančios piktogramos, jei norite peržiūrėti senąsias pozicijas knygose.</string>
+  <string name="migration_hint_content">Dėl pokyčių naujesnėse „Android“ versijose, garsinių knygų aplanką būtina nurodyti naudojant sistemos parinkiklį.\n\nPaspauskite ant aukščiau esančios piktogramos, jei norite peržiūrėti senąsias pozicijas knygose.</string>
   <string name="migration_hint_confirm">Supratau</string>
   <string name="migration_detail_title">Senosios pozicijos knygose</string>
   <string name="migration_detail_content_name">Pavadinimas</string>
@@ -98,4 +113,5 @@
   <string name="delete_book_dialog_title">Pašalinti knygą</string>
   <string name="delete_book_dialog_deletion_confirmation">Pašalinti mano failus</string>
   <string name="delete_book_dialog_content">Jūsų įrenginyje esantys failai bus pašalinti.</string>
+  <string name="search_hint">Ko ieškote?</string>
 </resources>

@@ -1,6 +1,6 @@
-Ieškote paprastos, minimalistinės audioknygų leistuvės, kuri tiesiog veikia?
-Tokios, kuri leistų sutelkti dėmesį į tai, ką išties norite daryti, tai yra klausytis audioknygų?
-Tiesiog nurodykite pagrindinį savo audioknygų aplanką ir kiekvienas jo poaplankis bus atpažintas kaip atskira knyga. Taip jūsų biblioteka išliks paprasta ir tvarkinga.
+Ieškote paprastos, minimalistinės garsinių knygų leistuvės, kuri tiesiog veikia?
+Tokios, kuri leistų sutelkti dėmesį į tai, ką išties norite daryti, tai yra klausytis garsinių knygų?
+Tiesiog nurodykite pagrindinį savo garsinių knygų aplanką ir kiekvienas jo poaplankis bus atpažintas kaip atskira knyga. Taip jūsų biblioteka išliks paprasta ir tvarkinga.
 
 Ši programėlė geba:
 - Prisimena paskutinio atkūrimo poziciją

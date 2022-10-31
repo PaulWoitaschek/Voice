@@ -51,6 +51,7 @@
   <string name="pref_theme_dark">暗黑主题</string>
   <string name="pref_auto_rewind_title">自动回退</string>
   <string name="pref_suggest_idea">提出建议</string>
+  <string name="pref_use_grid">使用网格布局</string>
   <string name="pref_report_issue">报告问题</string>
   <string name="pref_help_translating">帮助翻译</string>
   <string name="pref_get_support">寻求支持</string>
@@ -106,4 +107,5 @@
   <string name="delete_book_dialog_title">删除有声书</string>
   <string name="delete_book_dialog_deletion_confirmation">删除我的文件</string>
   <string name="delete_book_dialog_content">这样做将从您的设备上删除文件。</string>
+  <string name="search_hint">您在找什么？</string>
 </resources>

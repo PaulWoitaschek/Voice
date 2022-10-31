@@ -52,6 +52,7 @@
   <string name="pref_theme_dark">Mörkt tema</string>
   <string name="pref_auto_rewind_title">Automatisk bakåtspolning</string>
   <string name="pref_suggest_idea">Föreslå en idé</string>
+  <string name="pref_use_grid">Använd rutnätslayout</string>
   <string name="pref_report_issue">Rapportera ett problem</string>
   <string name="pref_help_translating">Hjälp till att översätta Voice</string>
   <string name="pref_get_support">Få support</string>
@@ -108,4 +109,5 @@
   <string name="delete_book_dialog_title">Ta bort bok</string>
   <string name="delete_book_dialog_deletion_confirmation">Ta bort mina filer</string>
   <string name="delete_book_dialog_content">Detta kommer att radera filerna på din enhet.</string>
+  <string name="search_hint">Vad letar du efter?</string>
 </resources>
