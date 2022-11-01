@@ -208,5 +208,5 @@ dependencies {
   androidTestImplementation(libs.androidX.test.runner)
   androidTestImplementation(libs.androidX.test.core)
   androidTestImplementation(libs.androidX.test.junit)
-  androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
+  androidTestImplementation(libs.uiautomator)
 }
