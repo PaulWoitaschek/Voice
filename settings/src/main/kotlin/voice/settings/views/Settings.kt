@@ -103,7 +103,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
         ListItem(
-          modifier = Modifier.clickable { listener.suggestIdea() },
+          modifier = Modifier.clickable { listener.toggleGrid() },
           leadingContent = {
             val imageVector = if (viewState.useGrid) {
               Icons.Outlined.GridView
