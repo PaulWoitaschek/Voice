@@ -110,4 +110,6 @@
   <string name="delete_book_dialog_deletion_confirmation">Mijn bestanden verwijderen</string>
   <string name="delete_book_dialog_content">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
   <string name="search_hint">Waar ben je naar op zoek?</string>
+  <string name="battery_optimization_rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
+  <string name="battery_optimization_action">Update</string>
 </resources>

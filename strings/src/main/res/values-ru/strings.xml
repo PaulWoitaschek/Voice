@@ -27,7 +27,7 @@
   <string name="edit_book_title">Редактировать книгу</string>
   <string name="mark_as_completed">Прослушано</string>
   <string name="mark_as_current">Отметить как Текущую</string>
-  <string name="mark_as_not_started">Еще не слушали</string>
+  <string name="mark_as_not_started">Отметить как непрослушанное</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Папки с аудиокнигами</string>
@@ -68,7 +68,7 @@
   <string name="music_notification">Чтение</string>
   <!--book category-->
   <string name="book_header_current">Слушаю</string>
-  <string name="book_header_not_started">Последние добавленные</string>
+  <string name="book_header_not_started">Непрослушанные</string>
   <string name="book_header_completed">Прослушанные</string>
   <string name="close">Закрыть</string>
   <string name="delete">Удалить</string>

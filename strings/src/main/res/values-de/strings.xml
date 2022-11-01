@@ -110,4 +110,6 @@
   <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
   <string name="delete_book_dialog_content">Das wird die Dateien von deinem Gerät löschen.</string>
   <string name="search_hint">Wonach suchst du?</string>
+  <string name="battery_optimization_rationale">Aufgrund deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
+  <string name="battery_optimization_action">Update</string>
 </resources>
