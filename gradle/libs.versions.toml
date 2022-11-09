@@ -66,8 +66,8 @@ androidX-test-junit = "androidx.test.ext:junit:1.1.3"
 androidX-test-core = "androidx.test:core-ktx:1.5.0"
 
 androidTest-orchestrator = "androidx.test:orchestrator:1.4.2"
-androidTest-services-testServices = "androidx.test.services:test-services:1.4.1"
-androidTest-services-storage = "androidx.test.services:storage:1.4.1"
+androidTest-services-testServices = "androidx.test.services:test-services:1.4.2"
+androidTest-services-storage = "androidx.test.services:storage:1.4.2"
 androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.0-rc01"
 androidTest-rules = "androidx.test:rules:1.5.0"
 
