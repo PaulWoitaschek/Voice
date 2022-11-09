@@ -8,7 +8,6 @@ sdk-target = "30"
 
 coroutines = "1.6.4"
 room = "2.4.3"
-conductor = "3.1.7"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.44"
@@ -72,8 +71,7 @@ androidTest-services-storage = "androidx.test.services:storage:1.4.1"
 androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.0-rc01"
 androidTest-rules = "androidx.test:rules:1.5.0"
 
-conductor-core = { module = "com.bluelinelabs:conductor", version.ref = "conductor" }
-conductor-transition = { module = "com.bluelinelabs:conductor-androidx-transition", version.ref = "conductor" }
+conductor = "com.bluelinelabs:conductor:3.1.7"
 
 prefs-core = { module = "com.github.PaulWoitaschek.FlowPref:core", version.ref = "prefs" }
 prefs-android = { module = "com.github.PaulWoitaschek.FlowPref:android", version.ref = "prefs" }

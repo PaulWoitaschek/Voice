@@ -17,7 +17,7 @@ dependencies {
   implementation(libs.material)
   api(libs.immutable)
   implementation(libs.prefs.core)
-  api(libs.conductor.core)
+  api(libs.conductor)
   implementation(libs.androidxCore)
   implementation(libs.viewBinding)
   implementation(libs.serialization.json)

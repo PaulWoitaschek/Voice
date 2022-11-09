@@ -149,7 +149,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
   implementation(libs.material)
-  implementation(libs.transitions)
   implementation(libs.constraintLayout)
   implementation(libs.media)
   implementation(libs.datastore)
@@ -180,8 +179,7 @@ dependencies {
 
   implementation(libs.media3.exoplayer)
 
-  implementation(libs.conductor.core)
-  implementation(libs.conductor.transition)
+  implementation(libs.conductor)
 
   implementation(libs.lifecycle)
 
