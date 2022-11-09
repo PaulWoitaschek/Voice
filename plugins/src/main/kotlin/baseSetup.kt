@@ -59,6 +59,7 @@ fun Project.baseSetup() {
     if (project.path != ":logging:core") {
       add("implementation", project(":logging:core"))
     }
+    add("implementation", platform(libs.findLibrary("compose-bom").get()))
 
     listOf(
       "coroutines.core",

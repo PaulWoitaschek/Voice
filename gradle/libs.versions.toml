@@ -14,9 +14,6 @@ materialDialog = "3.3.0"
 dagger = "2.44"
 kotlin = "1.7.20"
 compose-compiler = "1.3.2"
-compose-ui = "1.3.0"
-compose-material = "1.3.0"
-compose-animation = "1.3.0"
 media3 = "1.0.0-beta02"
 agp = "7.3.1"
 ktlint = "0.47.1"
@@ -90,20 +87,21 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 
-compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
-compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
-compose-foundation = "androidx.compose.foundation:foundation:1.3.0"
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
-compose-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "compose-ui" }
-compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4", version = "1.3.0" }
-compose-ui-testManifest = "androidx.compose.ui:ui-test-manifest:1.3.0"
-compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose-material" }
-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "compose-material" }
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material" }
-compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "compose-animation" }
-compose-animation-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-animation" }
-compose-material3 = "androidx.compose.material3:material3:1.0.0"
+compose-bom = "androidx.compose:compose-bom:2022.10.00"
+compose-ui-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test" }
+compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+compose-material-core = { module = "androidx.compose.material:material" }
+compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
+compose-animation-animation = { module = "androidx.compose.animation:animation" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.6.1"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.3"
 compose-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
