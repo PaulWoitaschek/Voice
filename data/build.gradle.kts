@@ -14,6 +14,8 @@ anvil {
 }
 
 ksp {
+  @Suppress("DEPRECATION")
+  blockOtherCompilerPlugins = false
   arg("room.schemaLocation", "$projectDir/schemas")
 }
 

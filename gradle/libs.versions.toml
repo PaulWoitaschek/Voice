@@ -146,7 +146,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.2" }
 ktlint = { id = "org.jmailen.kotlinter", version = "3.12.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.6" }
+ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.8" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.2" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.14" }
 playPublish = { id = "com.github.triplet.play", version = "3.7.0" }
