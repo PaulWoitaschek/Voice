@@ -108,7 +108,7 @@ compose-flow = { module = "com.google.accompanist:accompanist-flowlayout", versi
 # For these dependencies we only use the version but declare full artifacts so renovate can update the version
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
-compose-ktlint = "com.twitter.compose.rules:ktlint:0.0.23"
+compose-ktlint = "com.twitter.compose.rules:ktlint:0.0.26"
 
 [bundles]
 compose = [
