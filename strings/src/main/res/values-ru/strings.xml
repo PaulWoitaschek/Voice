@@ -25,9 +25,9 @@
   <string name="download_book_cover">Обложка из интернета</string>
   <string name="pick_book_cover">Обложка на устройстве</string>
   <string name="edit_book_title">Редактировать книгу</string>
-  <string name="mark_as_completed">Прослушано</string>
-  <string name="mark_as_current">Отметить как Текущую</string>
-  <string name="mark_as_not_started">Отметить как непрослушанное</string>
+  <string name="mark_as_completed">Пометить как прослушанную</string>
+  <string name="mark_as_current">Пометить как открытую</string>
+  <string name="mark_as_not_started">Пометить как непрослушанную</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Папки с аудиокнигами</string>
@@ -114,4 +114,6 @@
   <string name="delete_book_dialog_deletion_confirmation">Удалить файлы</string>
   <string name="delete_book_dialog_content">Это действие удалит файлы книги с устройства.</string>
   <string name="search_hint">Что вы ищете?</string>
+  <string name="battery_optimization_rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
+  <string name="battery_optimization_action">Обновить</string>
 </resources>

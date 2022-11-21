@@ -110,4 +110,6 @@
   <string name="delete_book_dialog_deletion_confirmation">Ta bort mina filer</string>
   <string name="delete_book_dialog_content">Detta kommer att radera filerna på din enhet.</string>
   <string name="search_hint">Vad letar du efter?</string>
+  <string name="battery_optimization_rationale">På grund av dina strömbegränsningar kan uppspelningsavbrott inträffa.</string>
+  <string name="battery_optimization_action">Uppdatera</string>
 </resources>

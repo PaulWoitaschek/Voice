@@ -108,4 +108,6 @@
   <string name="delete_book_dialog_deletion_confirmation">ファイルを削除</string>
   <string name="delete_book_dialog_content">これにより、デバイス上のファイルが削除されます。</string>
   <string name="search_hint">何をお探しですか？</string>
+  <string name="battery_optimization_rationale">端末側のバッテリー節約設定の制限により、再生が中断されるかもしれません。</string>
+  <string name="battery_optimization_action">更新</string>
 </resources>

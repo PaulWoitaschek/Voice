@@ -5,7 +5,7 @@
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Okładka</string>
-  <string name="play_pause">Odtwarzaj/Pauza</string>
+  <string name="play_pause">Odtwarzaj / Pauza</string>
   <string name="action_sleep">Wyłącznik czasowy</string>
   <string name="rewind">Przewiń</string>
   <string name="fast_forward">Do przodu</string>
@@ -14,6 +14,7 @@
   <string name="play">Odtwórz</string>
   <string name="pause">Pauza</string>
   <string name="skip_silence">Pomiń ciszę</string>
+  <string name="volume_boost">Zwiększ głośność</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Wybierz</string>
@@ -24,6 +25,9 @@
   <string name="download_book_cover">Okładka z internetu</string>
   <string name="pick_book_cover">Okładka z pamięci telefonu</string>
   <string name="edit_book_title">Edytuj książkę</string>
+  <string name="mark_as_completed">Oznacz jako ukończona</string>
+  <string name="mark_as_current">Oznacz jako aktualna</string>
+  <string name="mark_as_not_started">Oznacz jako nierozpoczęta</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Foldery audiobooków</string>
@@ -47,19 +51,69 @@
     <item quantity="other">%d sekund</item>
   </plurals>
   <string name="pref_seek_time">Przewiń o</string>
-  <string name="pref_theme_dark">Ciemna stylizacja</string>
-  <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
+  <string name="pref_theme_dark">Ciemny motyw</string>
+  <string name="pref_auto_rewind_title">Automatyczne cofnięcie</string>
+  <string name="pref_suggest_idea">Zasugeruj pomysł</string>
+  <string name="pref_use_grid">Włącz tryb siatki</string>
+  <string name="pref_report_issue">Zgłoś problem</string>
+  <string name="pref_help_translating">Pomóż w tłumaczeniu</string>
+  <string name="pref_get_support">Wsparcie</string>
+  <string name="pref_app_version">Wersja aplikacji</string>
   <string name="popup_edit">Edytuj</string>
   <string name="remove">Usuń</string>
   <string name="play_current">Odtwórz aktualne</string>
   <string name="refresh">Odśwież</string>
-  <string name="reset">Reset</string>
+  <string name="reset">Zresetuj</string>
   <string name="cover_crop">Przytnij okładkę</string>
   <string name="music_notification">Odtwarzanie</string>
   <!--book category-->
-  <string name="book_header_current">Aktualna</string>
-  <string name="book_header_not_started">Jeszcze nie rozpoczęta</string>
-  <string name="book_header_completed">Odsłuchana</string>
+  <string name="book_header_current">Aktualne</string>
+  <string name="book_header_not_started">Nierozpoczęte</string>
+  <string name="book_header_completed">Ukończone</string>
+  <string name="close">Zamknij</string>
+  <string name="delete">Usuń</string>
+  <string name="add">Dodaj</string>
+  <string name="folder_type_audiobooks">Folder z audiobookami</string>
+  <string name="folder_type_single_folder">Jeden folder</string>
+  <string name="folder_type_single_file">Jeden plik</string>
+  <string name="folder_type_dialog_title">Co chcesz dodać?</string>
+  <string name="folder_mode_root">Folder z wieloma audiobookami. Jeden podfolder = jedna książka.</string>
+  <string name="folder_mode_single">Folder z jednym audiobookiem</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%d plik audio</item>
+    <item quantity="few">%d pliki audio</item>
+    <item quantity="many">%d plików audio</item>
+    <item quantity="other">%d plików audio</item>
+  </plurals>
+  <string name="folder_type_book_example_header">Będzie to skutkowało usunięciem następujących książek</string>
+  <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
+  <string name="folder_type_title">Jaka jest struktura twoich plików?</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">Przed chwilą</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
+  <string name="migration_hint_title">Sprawdzanie starych pozycji książek</string>
+  <string name="migration_hint_content">Z powodu zmian wprowadzonych w nowych wersjach systemu Android wymagane jest wybranie twojego folderu z audiobookami przy użyciu dialogu systemowego.\n\nKliknij na powyższą ikonę aby zobaczyć twoje poprzednie pozycje w książkach.</string>
+  <string name="migration_hint_confirm">Zrozumiano</string>
+  <string name="migration_detail_title">Stare pozycje w ksiażkach</string>
+  <string name="migration_detail_content_name">Nazwa</string>
+  <string name="migration_detail_content_root">Główny folder</string>
+  <string name="migration_detail_content_position">Pozycja</string>
+  <string name="migration_detail_content_bookmarks">Zakładki</string>
+  <string name="migration_detail_content_added_at">Dodano</string>
+  <string name="migration_detail_content_position_current_file_title">Aktualny plik</string>
+  <string name="migration_detail_content_position_current_file_position">Pozycja w pliku</string>
+  <string name="migration_detail_content_position_current_chapter_title">Aktualny rozdział</string>
+  <string name="migration_detail_content_position_current_chapter_position">Pozycja w rozdziale</string>
+  <string name="migration_delete_dialog_title">Usuń pozycje</string>
+  <string name="migration_delete_dialog_content">Po usunięciu starych pozycji nie będziesz w stanie ich odzyskać.</string>
+  <string name="migration_delete_dialog_action_delete">Usuń</string>
+  <string name="migration_delete_dialog_action_keep">Zachowaj</string>
+  <string name="delete_book_bottom_sheet_title">Usuń książkę</string>
+  <string name="delete_book_dialog_title">Usuń książkę</string>
+  <string name="delete_book_dialog_deletion_confirmation">Usuń moje pliki</string>
+  <string name="delete_book_dialog_content">Ta akcja usunie pliki z twojego urządzenia</string>
+  <string name="search_hint">Czego szukasz?</string>
+  <string name="battery_optimization_rationale">Z powodu ustawień ograniczenia zużycia baterii może dojść do przerw w odtwarzaniu.</string>
+  <string name="battery_optimization_action">Zaktualizuj</string>
 </resources>

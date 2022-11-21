@@ -9,8 +9,8 @@
   <string name="action_sleep">Einschlaf-Timer</string>
   <string name="rewind">Zurückspulen</string>
   <string name="fast_forward">Vorspulen</string>
-  <string name="previous_track">Voriger Song</string>
-  <string name="next_track">Nächster Song</string>
+  <string name="previous_track">Vorheriger Track</string>
+  <string name="next_track">Nächster Track</string>
   <string name="play">Abspielen</string>
   <string name="pause">Pause</string>
   <string name="skip_silence">Stille überspringen</string>

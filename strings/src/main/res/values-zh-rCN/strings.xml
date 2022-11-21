@@ -108,4 +108,6 @@
   <string name="delete_book_dialog_deletion_confirmation">删除我的文件</string>
   <string name="delete_book_dialog_content">这样做将从您的设备上删除文件。</string>
   <string name="search_hint">您在找什么？</string>
+  <string name="battery_optimization_rationale">由于您的电源限制，可能会发生播放中断。</string>
+  <string name="battery_optimization_action">更新</string>
 </resources>
