@@ -10,13 +10,13 @@ coroutines = "1.6.4"
 room = "2.4.3"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
-dagger = "2.44"
+dagger = "2.44.2"
 kotlin = "1.7.20"
 compose-compiler = "1.3.2"
 media3 = "1.0.0-beta02"
 agp = "7.3.1"
 ktlint = "0.47.1"
-accompanist = "0.27.0"
+accompanist = "0.27.1"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -44,7 +44,7 @@ seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
 turbine = "app.cash.turbine:turbine:0.12.1"
-molecule = "app.cash.molecule:molecule-runtime:0.6.0"
+molecule = "app.cash.molecule:molecule-runtime:0.6.1"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
@@ -52,7 +52,7 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.1"
+firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.2"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
 
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
@@ -109,7 +109,7 @@ compose-flow = { module = "com.google.accompanist:accompanist-flowlayout", versi
 # For these dependencies we only use the version but declare full artifacts so renovate can update the version
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
-compose-ktlint = "com.twitter.compose.rules:ktlint:0.0.23"
+compose-ktlint = "com.twitter.compose.rules:ktlint:0.0.26"
 
 [bundles]
 compose = [
