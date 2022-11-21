@@ -42,7 +42,8 @@ class ComposePlugin : Plugin<Project> {
           "androidx.compose.material3.ExperimentalMaterial3Api",
           "androidx.compose.foundation.ExperimentalFoundationApi",
           "androidx.compose.ui.ExperimentalComposeUiApi",
-          "androidx.compose.animation.ExperimentalAnimationApi"
+          "androidx.compose.animation.ExperimentalAnimationApi",
+          "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
         ).map { "-opt-in=$it" }
       }
     }

@@ -5,37 +5,31 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.GestureDetector
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
-import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.isVisible
-import coil.load
-import com.google.android.material.slider.Slider
-import com.google.android.material.snackbar.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import com.squareup.anvil.annotations.ContributesTo
-import kotlinx.coroutines.launch
 import voice.common.AppScope
 import voice.common.BookId
-import voice.common.PlayPauseDrawableSetter
-import voice.common.compose.VoiceTheme
-import voice.common.conductor.ViewBindingController
-import voice.common.conductor.clearAfterDestroyView
-import voice.common.formatTime
+import voice.common.compose.ComposeController
 import voice.common.rootComponentAs
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
-import voice.playbackScreen.databinding.BookPlayBinding
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
 
 private const val NI_BOOK_ID = "niBookId"
 
-class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding>(bundle, BookPlayBinding::inflate) {
+class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
 
   constructor(bookId: BookId) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
@@ -43,212 +37,92 @@ class BookPlayController(bundle: Bundle) : ViewBindingController<BookPlayBinding
   lateinit var viewModel: BookPlayViewModel
 
   private val bookId: BookId = bundle.getBookId(NI_BOOK_ID)!!
-  private var coverLoaded = false
-
-  private var sleepTimerItem: MenuItem by clearAfterDestroyView()
-  private var skipSilenceItem: MenuItem by clearAfterDestroyView()
-
-  private var playPauseDrawableSetter by clearAfterDestroyView<PlayPauseDrawableSetter>()
 
   init {
     rootComponentAs<Component>().inject(this)
     this.viewModel.bookId = bookId
   }
 
-  override fun BookPlayBinding.onBindingCreated() {
-    coverLoaded = false
-    playPauseDrawableSetter = PlayPauseDrawableSetter(play)
-    setupClicks()
-    setupSlider()
-    setupToolbar()
-
-    binding.composeView.setContent {
-      VoiceTheme {
-        val dialogState = viewModel.dialogState.value ?: return@VoiceTheme
-        when (dialogState) {
-          is BookPlayDialogViewState.SpeedDialog -> {
-            SpeedDialog(dialogState, viewModel)
+  @Composable
+  override fun Content() {
+    val windowSizeClass: WindowSizeClass = calculateWindowSizeClass(activity = activity!!)
+    val snackbarHostState = remember { SnackbarHostState() }
+    val dialogState = viewModel.dialogState.value
+    val viewState = remember(viewModel) { viewModel.viewState() }
+      .collectAsState(initial = null).value ?: return
+    val context = LocalContext.current
+    LaunchedEffect(viewModel) {
+      viewModel.viewEffects.collect { viewEffect ->
+        when (viewEffect) {
+          BookPlayViewEffect.BookmarkAdded -> {
+            snackbarHostState.showSnackbar(message = context.getString(R.string.bookmark_added))
           }
-          is BookPlayDialogViewState.VolumeGainDialog -> {
-            VolumeGainDialog(dialogState, viewModel)
-          }
-          is BookPlayDialogViewState.SelectChapterDialog -> {
-            SelectChapterDialog(dialogState, viewModel)
-          }
-        }
-      }
-    }
-  }
 
-  override fun BookPlayBinding.onAttach() {
-    lifecycleScope.launch {
-      this@BookPlayController.viewModel.viewState().collect {
-        this@onAttach.render(it)
-      }
-    }
-    lifecycleScope.launch {
-      this@BookPlayController.viewModel.viewEffects.collect {
-        handleViewEffect(it)
-      }
-    }
-  }
-
-  private fun handleViewEffect(effect: BookPlayViewEffect) {
-    when (effect) {
-      BookPlayViewEffect.BookmarkAdded -> {
-        Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
-          .show()
-      }
-      BookPlayViewEffect.ShowSleepTimeDialog -> {
-        openSleepTimeDialog()
-      }
-      BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
-        Snackbar.make(view!!, R.string.battery_optimization_rationale, Snackbar.LENGTH_LONG)
-          .setAction(R.string.battery_optimization_action) {
-            val intent = Intent()
-              .apply {
-                @Suppress("BatteryLife")
-                action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                data = Uri.parse("package:${activity!!.packageName}")
-              }
-            try {
-              startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-              Logger.e(e, "Can't request ignoring battery optimizations")
+          BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
+            val result = snackbarHostState.showSnackbar(
+              message = context.getString(R.string.battery_optimization_rationale),
+              duration = SnackbarDuration.Long,
+              actionLabel = context.getString(R.string.battery_optimization_action),
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+              toBatteryOptimizations()
             }
           }
-          .show()
+
+          BookPlayViewEffect.ShowSleepTimeDialog -> {
+            openSleepTimeDialog()
+          }
+        }
       }
     }
-  }
-
-  private fun BookPlayBinding.render(viewState: BookPlayViewState) {
-    binding.title.text = viewState.title
-    currentChapterText.text = viewState.chapterName
-    currentChapterContainer.isVisible = viewState.chapterName != null
-    previous.isVisible = viewState.showPreviousNextButtons
-    next.isVisible = viewState.showPreviousNextButtons
-    playedTime.text = formatTime(
-      viewState.playedTime.inWholeMilliseconds,
-      viewState.duration.inWholeMilliseconds,
+    BookPlayView(
+      viewState,
+      onPlayClick = { viewModel.playPause() },
+      onFastForwardClick = { viewModel.fastForward() },
+      onRewindClick = { viewModel.rewind() },
+      onSeek = { viewModel.seekTo(it.inWholeMilliseconds) },
+      onBookmarkClick = { viewModel.onBookmarkClicked() },
+      onBookmarkLongClick = { viewModel.onBookmarkLongClicked() },
+      onSkipSilenceClick = { viewModel.toggleSkipSilence() },
+      onSleepTimerClick = { viewModel.toggleSleepTimer() },
+      onVolumeBoostClick = { viewModel.onVolumeGainIconClicked() },
+      onSpeedChangeClick = { viewModel.onPlaybackSpeedIconClicked() },
+      onCloseClick = { router.popController(this@BookPlayController) },
+      onSkipToNext = { viewModel.next() },
+      onSkipToPrevious = { viewModel.previous() },
+      onCurrentChapterClick = { viewModel.onCurrentChapterClicked() },
+      useLandscapeLayout = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact,
+      snackbarHostState = snackbarHostState,
     )
-    maxTime.text = formatTime(
-      viewState.duration.inWholeMilliseconds,
-      viewState.duration.inWholeMilliseconds,
-    )
-    slider.valueTo = viewState.duration.toDouble(DurationUnit.MILLISECONDS).toFloat()
-    if (!slider.isPressed) {
-      slider.value = viewState.playedTime.coerceAtMost(viewState.duration)
-        .toDouble(DurationUnit.MILLISECONDS).toFloat()
-    }
-    skipSilenceItem.isChecked = viewState.skipSilence
-    playPauseDrawableSetter.setPlaying(viewState.playing)
-    showLeftSleepTime(this, viewState.sleepTime)
+    if (dialogState != null) {
+      when (dialogState) {
+        is BookPlayDialogViewState.SpeedDialog -> {
+          SpeedDialog(dialogState, viewModel)
+        }
 
-    if (!coverLoaded) {
-      coverLoaded = true
-      val coverFile = viewState.cover
-      cover.load(coverFile) {
-        fallback(R.drawable.album_art)
-        error(R.drawable.album_art)
+        is BookPlayDialogViewState.VolumeGainDialog -> {
+          VolumeGainDialog(dialogState, viewModel)
+        }
+
+        is BookPlayDialogViewState.SelectChapterDialog -> {
+          SelectChapterDialog(dialogState, viewModel)
+        }
       }
     }
   }
 
-  private fun setupClicks() {
-    binding.play.setOnClickListener { viewModel.playPause() }
-    binding.rewind.setOnClickListener { viewModel.rewind() }
-    binding.fastForward.setOnClickListener { viewModel.fastForward() }
-    binding.previous.setOnClickListener { viewModel.previous() }
-    binding.next.setOnClickListener { viewModel.next() }
-    binding.currentChapterContainer.setOnClickListener {
-      viewModel.onCurrentChapterClicked()
-    }
-
-    val detector = GestureDetectorCompat(
-      activity!!,
-      object : GestureDetector.SimpleOnGestureListener() {
-        override fun onDoubleTap(e: MotionEvent): Boolean {
-          viewModel.playPause()
-          return true
-        }
-      },
-    )
-    binding.cover.isClickable = true
-    @Suppress("ClickableViewAccessibility")
-    binding.cover.setOnTouchListener { _, event ->
-      detector.onTouchEvent(event)
-    }
-  }
-
-  private fun setupSlider() {
-    binding.slider.setLabelFormatter {
-      formatTime(it.toLong(), binding.slider.valueTo.toLong())
-    }
-    binding.slider.addOnChangeListener { slider, value, fromUser ->
-      if (isAttached && !fromUser) {
-        binding.playedTime.text = formatTime(value.toLong(), slider.valueTo.toLong())
+  private fun toBatteryOptimizations() {
+    val intent = Intent()
+      .apply {
+        @Suppress("BatteryLife")
+        action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        data = Uri.parse("package:${activity!!.packageName}")
       }
+    try {
+      startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+      Logger.e(e, "Can't request ignoring battery optimizations")
     }
-    binding.slider.addOnSliderTouchListener(
-      object : Slider.OnSliderTouchListener {
-        override fun onStartTrackingTouch(slider: Slider) {
-        }
-
-        override fun onStopTrackingTouch(slider: Slider) {
-          val progress = slider.value.toLong()
-          this@BookPlayController.viewModel.seekTo(progress)
-        }
-      },
-    )
-  }
-
-  private fun setupToolbar() {
-    val menu = binding.toolbar.menu
-
-    sleepTimerItem = menu.findItem(R.id.action_sleep)
-
-    skipSilenceItem = menu.findItem(R.id.action_skip_silence)
-
-    binding.toolbar.findViewById<View>(R.id.action_bookmark)
-      .setOnLongClickListener {
-        viewModel.onBookmarkLongClicked()
-        true
-      }
-
-    binding.toolbar.setNavigationOnClickListener { router.popController(this) }
-    binding.toolbar.setOnMenuItemClickListener {
-      when (it.itemId) {
-        R.id.action_sleep -> {
-          viewModel.toggleSleepTimer()
-          true
-        }
-        R.id.action_time_lapse -> {
-          viewModel.onPlaybackSpeedIconClicked()
-          true
-        }
-        R.id.action_volume_boost -> {
-          viewModel.onVolumeGainIconClicked()
-          true
-        }
-        R.id.action_bookmark -> {
-          viewModel.onBookmarkClicked()
-          true
-        }
-        R.id.action_skip_silence -> {
-          this.viewModel.toggleSkipSilence()
-          true
-        }
-        else -> false
-      }
-    }
-  }
-
-  private fun showLeftSleepTime(binding: BookPlayBinding, duration: Duration) {
-    val active = duration > Duration.ZERO
-    sleepTimerItem.setIcon(if (active) R.drawable.alarm_off else R.drawable.alarm)
-    binding.timerCountdownView.text = formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
-    binding.timerCountdownView.isVisible = active
   }
 
   private fun openSleepTimeDialog() {

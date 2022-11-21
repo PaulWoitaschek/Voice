@@ -1,10 +1,12 @@
 package voice.playbackScreen
 
+import androidx.compose.runtime.Immutable
 import voice.data.ChapterMark
 import voice.playback.misc.Decibel
 import java.io.File
 import kotlin.time.Duration
 
+@Immutable
 data class BookPlayViewState(
   val chapterName: String?,
   val showPreviousNextButtons: Boolean,

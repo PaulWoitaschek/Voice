@@ -5,6 +5,7 @@
       <w>coroutine</w>
       <w>lerp</w>
       <w>seekable</w>
+      <w>snackbar</w>
     </words>
   </dictionary>
 </component>
