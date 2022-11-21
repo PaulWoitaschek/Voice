@@ -100,6 +100,7 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-windowsize = { module = "androidx.compose.material3:material3-window-size-class" }
 compose-activity = "androidx.activity:activity-compose:1.6.1"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.3"
 compose-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
@@ -116,6 +117,7 @@ compose = [
   "compose-ui-tooling-preview",
   "compose-foundation",
   "compose-navigation",
+  "compose-windowsize",
   "compose-material-core",
   "compose-material-icons-core",
   "compose-material-icons-extended",
