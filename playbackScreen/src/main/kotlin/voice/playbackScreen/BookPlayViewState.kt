@@ -1,9 +1,9 @@
 package voice.playbackScreen
 
 import androidx.compose.runtime.Immutable
+import voice.common.compose.ImmutableFile
 import voice.data.ChapterMark
 import voice.playback.misc.Decibel
-import java.io.File
 import kotlin.time.Duration
 
 @Immutable
@@ -15,7 +15,7 @@ data class BookPlayViewState(
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
-  val cover: File?,
+  val cover: ImmutableFile?,
   val skipSilence: Boolean,
 )
 

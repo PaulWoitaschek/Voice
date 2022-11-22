@@ -67,8 +67,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import voice.common.compose.ImmutableFile
 import voice.common.compose.VoiceTheme
 import voice.common.formatTime
+import voice.common.recomposeHighlighter
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.minutes
@@ -143,8 +145,9 @@ private fun BookPlayContent(
   if (useLandscapeLayout) {
     Row(Modifier.padding(contentPadding)) {
       CoverRow(
-        viewState = viewState,
+        cover = viewState.cover,
         onPlayClick = onPlayClick,
+        sleepTime = viewState.sleepTime,
         modifier = Modifier
           .fillMaxHeight()
           .weight(1F)
@@ -169,7 +172,7 @@ private fun BookPlayContent(
         SliderRow(viewState, onSeek = onSeek)
         Spacer(modifier = Modifier.size(16.dp))
         PlaybackRow(
-          viewState = viewState,
+          playing = viewState.playing,
           onPlayClick = onPlayClick,
           onRewindClick = onRewindClick,
           onFastForwardClick = onFastForwardClick,
@@ -179,8 +182,9 @@ private fun BookPlayContent(
   } else {
     Column(Modifier.padding(contentPadding)) {
       CoverRow(
-        viewState = viewState,
         onPlayClick = onPlayClick,
+        cover = viewState.cover,
+        sleepTime = viewState.sleepTime,
         modifier = Modifier
           .fillMaxWidth()
           .weight(1F)
@@ -200,7 +204,7 @@ private fun BookPlayContent(
       SliderRow(viewState, onSeek = onSeek)
       Spacer(modifier = Modifier.size(16.dp))
       PlaybackRow(
-        viewState = viewState,
+        playing = viewState.playing,
         onPlayClick = onPlayClick,
         onRewindClick = onRewindClick,
         onFastForwardClick = onFastForwardClick,
@@ -305,7 +309,7 @@ private fun OverflowMenu(
   onSkipSilenceClick: () -> Unit,
   onVolumeBoostClick: () -> Unit,
 ) {
-  Box {
+  Box(Modifier.recomposeHighlighter()) {
     var expanded by remember { mutableStateOf(false) }
     IconButton(
       onClick = {
@@ -358,31 +362,14 @@ private fun OverflowMenu(
 
 @Composable
 private fun CoverRow(
-  viewState: BookPlayViewState,
+  cover: ImmutableFile?,
+  sleepTime: Duration,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Box(
-    modifier = modifier,
-  ) {
-    AsyncImage(
-      modifier = Modifier
-        .fillMaxSize()
-        .pointerInput(Unit) {
-          detectTapGestures(
-            onDoubleTap = {
-              onPlayClick()
-            },
-          )
-        }
-        .clip(RoundedCornerShape(20.dp)),
-      contentScale = ContentScale.Crop,
-      model = viewState.cover,
-      placeholder = painterResource(id = R.drawable.album_art),
-      error = painterResource(id = R.drawable.album_art),
-      contentDescription = stringResource(id = R.string.cover),
-    )
-    if (viewState.sleepTime != ZERO) {
+  Box(modifier) {
+    Cover(onDoubleClick = onPlayClick, cover = cover)
+    if (sleepTime != ZERO) {
       Text(
         modifier = Modifier
           .align(Alignment.TopEnd)
@@ -393,13 +380,35 @@ private fun CoverRow(
           )
           .padding(horizontal = 20.dp, vertical = 16.dp),
         text = formatTime(
-          timeMs = viewState.sleepTime.inWholeMilliseconds,
-          durationMs = viewState.sleepTime.inWholeMilliseconds,
+          timeMs = sleepTime.inWholeMilliseconds,
+          durationMs = sleepTime.inWholeMilliseconds,
         ),
         color = Color.White,
       )
     }
   }
+}
+
+@Composable
+private fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
+  AsyncImage(
+    modifier = Modifier
+      .recomposeHighlighter()
+      .fillMaxSize()
+      .pointerInput(Unit) {
+        detectTapGestures(
+          onDoubleTap = {
+            onDoubleClick()
+          },
+        )
+      }
+      .clip(RoundedCornerShape(20.dp)),
+    contentScale = ContentScale.Crop,
+    model = cover?.file,
+    placeholder = painterResource(id = R.drawable.album_art),
+    error = painterResource(id = R.drawable.album_art),
+    contentDescription = stringResource(id = R.string.cover),
+  )
 }
 
 @Composable
@@ -412,6 +421,7 @@ private fun ChapterRow(
 ) {
   Row(
     modifier = Modifier
+      .recomposeHighlighter()
       .fillMaxWidth()
       .padding(horizontal = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
@@ -448,13 +458,15 @@ private fun ChapterRow(
 
 @Composable
 private fun PlaybackRow(
-  viewState: BookPlayViewState,
+  playing: Boolean,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
   onFastForwardClick: () -> Unit,
 ) {
   Row(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier
+      .fillMaxWidth()
+      .recomposeHighlighter(),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center,
   ) {
@@ -466,7 +478,7 @@ private fun PlaybackRow(
     ) {
       Icon(
         modifier = Modifier.size(36.dp),
-        imageVector = if (viewState.playing) {
+        imageVector = if (playing) {
           Icons.Filled.Pause
         } else {
           Icons.Filled.PlayArrow
@@ -485,11 +497,13 @@ private fun SkipButton(
   onClick: () -> Unit,
 ) {
   Column(
-    modifier = Modifier.clickable(
-      interactionSource = remember { MutableInteractionSource() },
-      indication = rememberRipple(bounded = false),
-      onClick = onClick,
-    ),
+    modifier = Modifier
+      .recomposeHighlighter()
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = rememberRipple(bounded = false),
+        onClick = onClick,
+      ),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Icon(
@@ -520,6 +534,7 @@ private fun SliderRow(
 ) {
   Row(
     modifier = Modifier
+      .recomposeHighlighter()
       .fillMaxWidth()
       .padding(horizontal = 16.dp),
     verticalAlignment = Alignment.CenterVertically,

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import voice.common.BookId
+import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
@@ -23,6 +24,7 @@ import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class BookPlayViewModel
@@ -71,7 +73,7 @@ class BookPlayViewModel
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
-        cover = book.content.cover,
+        cover = book.content.cover?.let(::ImmutableFile),
         skipSilence = book.content.skipSilence,
       )
     }
@@ -190,12 +192,12 @@ class BookPlayViewModel
     }
   }
 
-  fun seekTo(ms: Long) {
+  fun seekTo(position: Duration) {
     scope.launch {
       val book = repo.get(bookId) ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      player.setPosition(currentMark.startMs + ms, currentChapter.id)
+      player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
     }
   }
 
