@@ -32,6 +32,19 @@ internal sealed interface CustomCommand {
   }
 }
 
+internal sealed class PublishedCustomCommand {
+
+  abstract val sessionCommand: SessionCommand
+
+  object SeekBackwards : PublishedCustomCommand() {
+    override val sessionCommand: SessionCommand = SessionCommand("voice.seekBackwards", Bundle.EMPTY)
+  }
+
+  object SeekForward : PublishedCustomCommand() {
+    override val sessionCommand: SessionCommand = SessionCommand("voice.seekForward", Bundle.EMPTY)
+  }
+}
+
 internal fun MediaController.sendCustomCommand(command: CustomCommand) {
   val json = Json.encodeToString(CustomCommand.serializer(), command)
   sendCustomCommand(

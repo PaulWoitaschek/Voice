@@ -12,7 +12,6 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.future
-import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
@@ -48,7 +47,6 @@ class LibrarySessionCallback
     browser: MediaSession.ControllerInfo,
     params: MediaLibraryService.LibraryParams?,
   ): ListenableFuture<LibraryResult<MediaItem>> {
-    Logger.v("onGetLibraryRoot")
     return Futures.immediateFuture(LibraryResult.ofItem(mediaItemProvider.root(), params))
   }
 
@@ -57,7 +55,6 @@ class LibrarySessionCallback
     browser: MediaSession.ControllerInfo,
     mediaId: String,
   ): ListenableFuture<LibraryResult<MediaItem>> = scope.future {
-    Logger.v("onGetItem($mediaId)")
     val item = mediaItemProvider.item(mediaId)
     if (item != null) {
       LibraryResult.ofItem(item, null)
@@ -74,14 +71,11 @@ class LibrarySessionCallback
     pageSize: Int,
     params: MediaLibraryService.LibraryParams?,
   ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
-    Logger.v("onGetChildren($parentId)")
     val children = mediaItemProvider.children(parentId)
     if (children != null) {
       LibraryResult.ofItemList(children, params)
     } else {
       LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
-    }.also {
-      Logger.v("getChildren returned $it")
     }
   }
 
@@ -90,6 +84,10 @@ class LibrarySessionCallback
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
       .add(SessionCommand(CustomCommand.CustomCommandAction, Bundle.EMPTY))
+      .also {
+        it.add(PublishedCustomCommand.SeekBackwards.sessionCommand)
+        it.add(PublishedCustomCommand.SeekForward.sessionCommand)
+      }
       .build()
     return MediaSession.ConnectionResult.accept(
       sessionCommands,
@@ -103,17 +101,27 @@ class LibrarySessionCallback
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
-    val command = CustomCommand.parse(customCommand, args)
-      ?: return super.onCustomCommand(session, controller, customCommand, args)
-    when (command) {
-      CustomCommand.ForceSeekToNext -> {
-        player.forceSeekToNext()
+    when (customCommand) {
+      PublishedCustomCommand.SeekForward.sessionCommand -> {
+        player.seekForward()
       }
-      CustomCommand.ForceSeekToPrevious -> {
-        player.forceSeekToPrevious()
+      PublishedCustomCommand.SeekBackwards.sessionCommand -> {
+        player.seekBack()
       }
-      is CustomCommand.SetSkipSilence -> {
-        player.setSkipSilenceEnabled(command.skipSilence)
+      else -> {
+        val command = CustomCommand.parse(customCommand, args)
+          ?: return super.onCustomCommand(session, controller, customCommand, args)
+        when (command) {
+          CustomCommand.ForceSeekToNext -> {
+            player.forceSeekToNext()
+          }
+          CustomCommand.ForceSeekToPrevious -> {
+            player.forceSeekToPrevious()
+          }
+          is CustomCommand.SetSkipSilence -> {
+            player.setSkipSilenceEnabled(command.skipSilence)
+          }
+        }
       }
     }
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))

@@ -11,22 +11,6 @@ class VoicePlayer
   private val player: Player,
 ) : ForwardingPlayer(player) {
 
-  override fun seekToPreviousMediaItem() {
-    seekBack()
-  }
-
-  override fun seekToPrevious() {
-    seekBack()
-  }
-
-  override fun seekToNext() {
-    seekForward()
-  }
-
-  override fun seekToNextMediaItem() {
-    seekForward()
-  }
-
   fun forceSeekToNext() {
     val currentMediaItem = player.currentMediaItem ?: return
     val marks = currentMediaItem.chapterMarks()
@@ -67,6 +51,18 @@ class VoicePlayer
         }
       }
     }
+  }
+
+  override fun getAvailableCommands(): Player.Commands {
+    return super.getAvailableCommands()
+      .buildUpon()
+      .removeAll(
+        Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
+        Player.COMMAND_SEEK_TO_PREVIOUS,
+        Player.COMMAND_SEEK_TO_NEXT,
+        Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+      )
+      .build()
   }
 
   fun setSkipSilenceEnabled(enabled: Boolean): Boolean {
