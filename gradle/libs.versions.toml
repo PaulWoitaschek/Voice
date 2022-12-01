@@ -4,7 +4,7 @@ versionName = "6.5.0"
 
 sdk-compile = "33"
 sdk-min = "26"
-sdk-target = "30"
+sdk-target = "33"
 
 coroutines = "1.6.4"
 room = "2.4.3"
