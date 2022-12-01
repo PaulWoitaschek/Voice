@@ -1,8 +1,6 @@
 package voice.playback.di
 
 import android.content.Context
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
@@ -11,27 +9,25 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
+import androidx.media3.session.MediaLibraryService
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import voice.playback.misc.VolumeGain
 import voice.playback.player.OnlyAudioRenderersFactory
+import voice.playback.player.VoicePlayer
+import voice.playback.player.onAudioSessionIdChanged
+import voice.playback.playstate.PlayStateDelegatingListener
+import voice.playback.playstate.PositionUpdater
+import voice.playback.session.LibrarySessionCallback
 import voice.playback.session.PlaybackService
 
 @Module
 @ContributesTo(PlaybackScope::class)
-object PlaybackServiceModule {
-
-  @Provides
-  @PlaybackScope
-  fun mediaSession(service: PlaybackService): MediaSessionCompat {
-    return MediaSessionCompat(service, PlaybackService::class.java.simpleName)
-  }
-
-  @Provides
-  @PlaybackScope
-  fun mediaController(context: Context, mediaSession: MediaSessionCompat): MediaControllerCompat {
-    return MediaControllerCompat(context, mediaSession)
-  }
+object PlaybackModule {
 
   @Provides
   @PlaybackScope
@@ -48,6 +44,9 @@ object PlaybackServiceModule {
     context: Context,
     onlyAudioRenderersFactory: OnlyAudioRenderersFactory,
     mediaSourceFactory: MediaSource.Factory,
+    playStateDelegatingListener: PlayStateDelegatingListener,
+    positionUpdater: PositionUpdater,
+    volumeGain: VolumeGain,
   ): Player {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
@@ -55,6 +54,28 @@ object PlaybackServiceModule {
       .build()
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
+      .build()
+      .also { player ->
+        playStateDelegatingListener.attachTo(player)
+        positionUpdater.attachTo(player)
+        player.onAudioSessionIdChanged {
+          volumeGain.audioSessionId = it
+        }
+      }
+  }
+
+  @Provides
+  @PlaybackScope
+  fun scope(): CoroutineScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+
+  @Provides
+  @PlaybackScope
+  fun session(
+    service: PlaybackService,
+    player: VoicePlayer,
+    callback: LibrarySessionCallback,
+  ): MediaLibraryService.MediaLibrarySession {
+    return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .build()
   }
 }

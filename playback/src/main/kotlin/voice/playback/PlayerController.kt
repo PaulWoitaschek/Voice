@@ -2,89 +2,143 @@ package voice.playback
 
 import android.content.ComponentName
 import android.content.Context
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.session.MediaControllerCompat
-import voice.data.Chapter
-import voice.logging.core.Logger
+import androidx.datastore.core.DataStore
+import androidx.media3.session.MediaBrowser
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import voice.common.BookId
+import voice.common.pref.CurrentBook
+import voice.data.BookContent
+import voice.data.ChapterId
+import voice.data.repo.BookRepository
 import voice.playback.misc.Decibel
+import voice.playback.misc.VolumeGain
+import voice.playback.session.CustomCommand
+import voice.playback.session.MediaId
 import voice.playback.session.PlaybackService
-import voice.playback.session.forcedNext
-import voice.playback.session.forcedPrevious
-import voice.playback.session.pauseWithRewind
-import voice.playback.session.playPause
-import voice.playback.session.setGain
-import voice.playback.session.setPosition
-import voice.playback.session.setVolume
-import voice.playback.session.skipSilence
+import voice.playback.session.sendCustomCommand
+import voice.playback.session.toMediaIdOrNull
+import voice.playback.session.toMediaItem
 import javax.inject.Inject
 import kotlin.time.Duration
 
 class PlayerController
 @Inject constructor(
-  private val context: Context,
+  context: Context,
+  @CurrentBook
+  private val currentBookId: DataStore<BookId?>,
+  private val bookRepository: BookRepository,
+  private val volumeGain: VolumeGain,
 ) {
 
-  private var _controller: MediaControllerCompat? = null
-
-  private val callback = object : MediaBrowserCompat.ConnectionCallback() {
-    override fun onConnected() {
-      super.onConnected()
-      Logger.v("onConnected")
-      _controller = MediaControllerCompat(context, browser.sessionToken)
-    }
-
-    override fun onConnectionSuspended() {
-      super.onConnectionSuspended()
-      Logger.v("onConnectionSuspended")
-      _controller = null
-    }
-
-    override fun onConnectionFailed() {
-      super.onConnectionFailed()
-      Logger.d("onConnectionFailed")
-      _controller = null
-    }
-  }
-
-  private val browser: MediaBrowserCompat = MediaBrowserCompat(
+  private val browserFuture: ListenableFuture<MediaBrowser> = MediaBrowser.Builder(
     context,
-    ComponentName(context, PlaybackService::class.java),
-    callback,
-    null,
-  )
+    SessionToken(context, ComponentName(context, PlaybackService::class.java)),
+  ).buildAsync()
 
-  init {
-    browser.connect()
+  private val scope = CoroutineScope(Dispatchers.Main.immediate)
+
+  private val controller: MediaBrowser?
+    get() = if (browserFuture.isDone) browserFuture.get() else null
+
+  fun setPosition(time: Long, id: ChapterId) = executeAfterPrepare { controller ->
+    val bookId = currentBookId.data.first() ?: return@executeAfterPrepare
+    val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
+    val index = book.chapters.indexOfFirst { it.id == id }
+    if (index != -1) {
+      controller.seekTo(index, time)
+    }
   }
 
-  fun setPosition(time: Long, id: Chapter.Id) = execute { it.setPosition(time, id) }
+  fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
+    controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
+    updateBook { it.copy(skipSilence = skip) }
+  }
 
-  fun skipSilence(skip: Boolean) = execute { it.skipSilence(skip) }
+  private suspend fun updateBook(update: (BookContent) -> BookContent) {
+    val bookId = currentBookId.data.first() ?: return
+    bookRepository.updateBook(bookId, update)
+  }
 
-  fun fastForward() = execute { it.fastForward() }
+  fun fastForward() = executeAfterPrepare { controller ->
+    controller.seekForward()
+  }
 
-  fun rewind() = execute { it.rewind() }
+  fun rewind() = executeAfterPrepare { controller ->
+    controller.seekBack()
+  }
 
-  fun previous() = execute { it.forcedPrevious() }
+  fun previous() = executeAfterPrepare {
+    it.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
+  }
 
-  fun next() = execute { it.forcedNext() }
+  fun next() = executeAfterPrepare {
+    it.sendCustomCommand(CustomCommand.ForceSeekToNext)
+  }
 
-  fun play() = execute { it.play() }
+  fun play() = executeAfterPrepare { controller ->
+    controller.play()
+  }
 
-  fun playPause() = execute { it.playPause() }
+  fun playPause() = executeAfterPrepare { controller ->
+    if (controller.isPlaying) {
+      controller.pause()
+    } else {
+      controller.play()
+    }
+  }
 
-  fun pauseWithRewind(rewind: Duration) = execute { it.pauseWithRewind(rewind) }
+  private suspend fun maybePrepare(controller: MediaController): Boolean {
+    val bookId = currentBookId.data.first() ?: return false
+    if ((controller.currentMediaItem?.mediaId?.toMediaIdOrNull() as MediaId.Chapter?)?.bookId == bookId) {
+      return true
+    }
+    val book = bookRepository.get(bookId) ?: return false
+    val mediaItems = book.chapters.map { it.toMediaItem(book.content) }
+    controller.setMediaItems(
+      mediaItems,
+      book.content.currentChapterIndex,
+      book.content.positionInChapter,
+    )
+    controller.sendCustomCommand(CustomCommand.SetSkipSilence(book.content.skipSilence))
+    controller.setPlaybackSpeed(book.content.playbackSpeed)
+    controller.prepare()
+    volumeGain.gain = Decibel(book.content.gain)
+    return true
+  }
 
-  fun setSpeed(speed: Float) = execute { it.setPlaybackSpeed(speed) }
+  fun pauseWithRewind(rewind: Duration) = executeAfterPrepare {
+    it.pause()
+    it.seekTo((it.currentPosition - rewind.inWholeMilliseconds.coerceAtLeast(0)))
+  }
 
-  fun setGain(gain: Decibel) = execute { it.setGain(gain) }
+  fun setSpeed(speed: Float) = executeAfterPrepare {
+    it.setPlaybackSpeed(speed)
+  }
 
-  fun setVolume(volume: Float) = execute {
+  fun setGain(gain: Decibel) {
+    scope.launch {
+      updateBook { it.copy(gain = gain.value) }
+      volumeGain.gain = gain
+    }
+  }
+
+  fun setVolume(volume: Float) = executeAfterPrepare {
     require(volume in 0F..1F)
-    it.setVolume(volume)
+    it.volume = volume
   }
 
-  private inline fun execute(action: (MediaControllerCompat.TransportControls) -> Unit) {
-    _controller?.transportControls?.let(action)
+  private inline fun executeAfterPrepare(crossinline action: suspend (MediaBrowser) -> Unit) {
+    val controller = controller ?: return
+    scope.launch {
+      if (maybePrepare(controller)) {
+        action(controller)
+      }
+    }
   }
 }

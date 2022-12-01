@@ -19,6 +19,7 @@ import voice.common.DispatcherProvider
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import java.time.Instant
@@ -143,7 +144,7 @@ private fun book(
 
 private fun chapter(): Chapter {
   return Chapter(
-    id = Chapter.Id("http://${UUID.randomUUID()}"),
+    id = ChapterId("http://${UUID.randomUUID()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),

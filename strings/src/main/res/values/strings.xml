@@ -127,4 +127,6 @@
 
   <string name="battery_optimization_rationale">Due to your Power restrictions, playback interruptions might happen.</string>
   <string name="battery_optimization_action">Update</string>
+
+  <string name="media_session_root">Root</string>
 </resources>

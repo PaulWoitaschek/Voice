@@ -4,13 +4,14 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
+import voice.data.ChapterId
 import java.time.Instant
 import java.util.UUID
 
 fun book(
   chapters: List<Chapter> = listOf(chapter(), chapter()),
   time: Long = 42,
-  currentChapter: Chapter.Id = chapters.first().id,
+  currentChapter: ChapterId = chapters.first().id,
   name: String = UUID.randomUUID().toString(),
   author: String? = UUID.randomUUID().toString(),
 ): Book {
@@ -36,7 +37,7 @@ fun book(
 
 fun chapter(
   duration: Long = 10000,
-  id: Chapter.Id = Chapter.Id(UUID.randomUUID().toString()),
+  id: ChapterId = ChapterId(UUID.randomUUID().toString()),
 ): Chapter {
   return Chapter(
     id = id,

@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import voice.common.BookId
-import voice.data.Chapter
+import voice.data.ChapterId
 import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
@@ -33,7 +33,7 @@ class BookUriConverterTest {
   @Test
   fun chapter() {
     val bookId = BookId(UUID.randomUUID().toString())
-    val chapterId = Chapter.Id(UUID.randomUUID().toString())
+    val chapterId = ChapterId(UUID.randomUUID().toString())
     val id = converter.chapter(bookId, chapterId)
     val parsed = converter.parse(id)
     parsed shouldBe BookUriConverter.Parsed.Chapter(bookId, chapterId)

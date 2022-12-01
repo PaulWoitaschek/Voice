@@ -1,5 +1,7 @@
 package voice.data
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,11 +14,12 @@ data class MarkData(
   }
 }
 
+@Parcelize
 data class ChapterMark(
   val name: String?,
   val startMs: Long,
   val endMs: Long,
-)
+) : Parcelable
 
 val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)
 

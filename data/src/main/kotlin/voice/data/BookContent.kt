@@ -19,8 +19,8 @@ data class BookContent(
   val author: String?,
   val name: String,
   val addedAt: Instant,
-  val chapters: List<Chapter.Id>,
-  val currentChapter: Chapter.Id,
+  val chapters: List<ChapterId>,
+  val currentChapter: ChapterId,
   val positionInChapter: Long,
   val cover: File?,
   @ColumnInfo(defaultValue = "0")
@@ -32,5 +32,6 @@ data class BookContent(
 
   init {
     require(currentChapter in chapters)
+    require(positionInChapter >= 0)
   }
 }

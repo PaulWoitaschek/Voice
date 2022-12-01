@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import voice.data.Bookmark
-import voice.data.Chapter
+import voice.data.ChapterId
 
 @Dao
 interface BookmarkDao {
@@ -17,5 +17,5 @@ interface BookmarkDao {
   suspend fun addBookmark(bookmark: Bookmark)
 
   @Query("SELECT * FROM bookmark2 WHERE chapterId IN(:chapters)")
-  suspend fun allForChapters(chapters: List<@JvmSuppressWildcards Chapter.Id>): List<Bookmark>
+  suspend fun allForChapters(chapters: List<@JvmSuppressWildcards ChapterId>): List<Bookmark>
 }

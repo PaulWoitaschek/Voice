@@ -178,6 +178,7 @@ dependencies {
   testImplementation(libs.mockk)
 
   implementation(libs.media3.exoplayer)
+  implementation(libs.media3.session)
 
   implementation(libs.conductor)
 

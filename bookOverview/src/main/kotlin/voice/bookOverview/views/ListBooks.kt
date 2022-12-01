@@ -131,7 +131,6 @@ internal fun ListBookRow(
 private fun CoverImage(cover: ImmutableFile?) {
   AsyncImage(
     modifier = Modifier
-      .recomposeHighlighter()
       .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
       .size(76.dp)
       .clip(RoundedCornerShape(8.dp)),

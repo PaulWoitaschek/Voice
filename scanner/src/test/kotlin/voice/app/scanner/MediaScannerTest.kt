@@ -19,7 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
 import voice.common.BookId
-import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
@@ -73,7 +73,7 @@ class MediaScannerTest {
       file(book1, "1.mp3"),
       file(book1, "2.mp3"),
       file(book1, "10.mp3"),
-    ).map(Chapter::Id)
+    ).map(::ChapterId)
 
     scan(audiobookFolder)
 

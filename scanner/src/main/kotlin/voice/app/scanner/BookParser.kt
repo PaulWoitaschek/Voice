@@ -8,6 +8,7 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.legacy.LegacyBookSettings
 import voice.data.repo.BookContentRepo
 import voice.data.repo.internals.dao.LegacyBookDao
@@ -92,7 +93,7 @@ class BookParser
   }
 
   private data class MigratedPlaybackPosition(
-    val chapterId: Chapter.Id,
+    val chapterId: ChapterId,
     val playbackPosition: Long,
   )
 

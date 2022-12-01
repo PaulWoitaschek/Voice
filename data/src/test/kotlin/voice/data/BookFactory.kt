@@ -8,7 +8,7 @@ fun book(
   name: String = UUID.randomUUID().toString(),
   chapters: List<Chapter> = listOf(chapter(), chapter()),
   time: Long = 42,
-  currentChapter: Chapter.Id = chapters.first().id,
+  currentChapter: ChapterId = chapters.first().id,
   lastPlayedAtMillis: Long = 0,
   addedAtMillis: Long = 0,
 ): Book {
@@ -34,7 +34,7 @@ fun book(
 
 fun chapter(
   duration: Long = 10000,
-  id: Chapter.Id = Chapter.Id(UUID.randomUUID().toString()),
+  id: ChapterId = ChapterId(UUID.randomUUID().toString()),
 ): Chapter {
   return Chapter(
     id = id,

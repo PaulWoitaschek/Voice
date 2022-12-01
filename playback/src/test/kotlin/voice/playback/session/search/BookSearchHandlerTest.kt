@@ -16,6 +16,7 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.repo.BookRepository
 import voice.playback.PlayerController
 import java.time.Instant
@@ -149,7 +150,7 @@ fun book(chapters: List<Chapter>): Book {
 
 private fun chapter(): Chapter {
   return Chapter(
-    id = Chapter.Id(UUID.randomUUID().toString()),
+    id = ChapterId(UUID.randomUUID().toString()),
     name = UUID.randomUUID().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,
