@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import voice.playback.misc.VolumeGain
+import voice.playback.notification.MainActivityIntentProvider
 import voice.playback.player.OnlyAudioRenderersFactory
 import voice.playback.player.VoicePlayer
 import voice.playback.player.onAudioSessionIdChanged
@@ -74,8 +75,10 @@ object PlaybackModule {
     service: PlaybackService,
     player: VoicePlayer,
     callback: LibrarySessionCallback,
+    mainActivityIntentProvider: MainActivityIntentProvider,
   ): MediaLibraryService.MediaLibrarySession {
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
+      .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
       .build()
   }
 }

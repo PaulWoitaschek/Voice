@@ -145,7 +145,7 @@ class WidgetUpdater
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = MainActivity.goToBookIntent(context, book.id)
+    val wholeWidgetClickI = MainActivity.goToBookIntent(context)
     val wholeWidgetClickPI = PendingIntent.getActivity(
       context,
       System.currentTimeMillis().toInt(),
