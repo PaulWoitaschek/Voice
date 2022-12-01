@@ -14,7 +14,6 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.data)
 
-  implementation(libs.media)
   implementation(libs.androidxCore)
   implementation(libs.prefs.core)
   implementation(libs.datastore)

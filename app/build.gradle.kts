@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.dsl.ManagedVirtualDevice
-import java.util.Properties
+import java.util.*
 
 plugins {
   id("voice.app")
@@ -150,7 +150,6 @@ dependencies {
   implementation(libs.recyclerView)
   implementation(libs.material)
   implementation(libs.constraintLayout)
-  implementation(libs.media)
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
