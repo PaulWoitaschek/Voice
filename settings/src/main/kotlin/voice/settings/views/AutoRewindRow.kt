@@ -49,7 +49,7 @@ internal fun AutoRewindAmountDialog(
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
-    title = stringResource(R.string.pref_seek_time),
+    title = stringResource(R.string.pref_auto_rewind_title),
     currentSeconds = currentSeconds,
     minSeconds = 0,
     maxSeconds = 20,
