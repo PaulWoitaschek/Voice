@@ -73,7 +73,7 @@ class BookPlayViewModel
         chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
         duration = currentMark.durationMs.milliseconds,
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
-        cover = book.content.cover?.let(::ImmutableFile),
+        cover = book.currentChapter.cover?.let(::ImmutableFile),
         skipSilence = book.content.skipSilence,
       )
     }

@@ -75,18 +75,20 @@ class CoverScanner
   }
 
   private suspend fun scanForEmbeddedCover(book: Book) {
-    val coverFile = coverSaver.newBookCoverFile()
+    book.currentChapter.cover?.let { coverSaver.setBookCover(it, bookId = book.id) }
     book.chapters
-      .take(5).forEach { chapter ->
+      .mapNotNull { chapter ->
+        val coverFile = coverSaver.newBookCoverFile()
         ffmpeg(
           input = chapter.id.toUri(),
           context = context,
           command = listOf("-an", coverFile.absolutePath),
         )
         if (coverFile.exists() && coverFile.length() > 0) {
-          coverSaver.setBookCover(coverFile, bookId = book.id)
-          return
-        }
+          chapter to coverFile
+        } else null
+      }.toMap().also {
+        coverSaver.setChapterCover(it)
       }
   }
 }

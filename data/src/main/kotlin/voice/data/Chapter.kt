@@ -13,6 +13,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import voice.common.comparator.NaturalOrderComparator
+import java.io.File
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -23,6 +24,7 @@ data class Chapter(
   val duration: Long,
   val fileLastModified: Instant,
   val markData: List<MarkData>,
+  val cover: File?,
 ) : Comparable<Chapter> {
 
   @Ignore

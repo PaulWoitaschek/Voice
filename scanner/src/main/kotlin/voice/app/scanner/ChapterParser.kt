@@ -27,6 +27,7 @@ class ChapterParser
             fileLastModified = Instant.ofEpochMilli(file.lastModified()),
             name = metaData.chapterName,
             markData = metaData.chapters,
+            cover = null,
           )
         }
         if (chapter != null) {

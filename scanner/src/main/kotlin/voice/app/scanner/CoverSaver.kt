@@ -6,7 +6,9 @@ import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.common.BookId
+import voice.data.Chapter
 import voice.data.repo.BookRepository
+import voice.data.repo.ChapterRepo
 import voice.logging.core.Logger
 import java.io.File
 import java.io.FileOutputStream
@@ -18,6 +20,7 @@ import kotlin.math.max
 class CoverSaver
 @Inject constructor(
   private val repo: BookRepository,
+  private val repoChapter: ChapterRepo,
   private val context: Context,
 ) {
 
@@ -75,6 +78,26 @@ class CoverSaver
 
     repo.updateBook(bookId) {
       it.copy(cover = cover)
+    }
+  }
+
+  suspend fun setChapterCover(chapterIdToCoverFile: Map<Chapter, File>/*cover: File, chapterId: Chapter.Id*/) {
+    chapterIdToCoverFile.forEach { (providedChapter, cover) ->
+      val chapterId = providedChapter.id
+      val chapter = repoChapter.get(chapterId)
+      if (chapter == null) {
+        Logger.e("Missing chapter with id=$chapterId for $this")
+        return@forEach
+      }
+      val oldCover = chapter.cover
+      if (oldCover != null) {
+        withContext(Dispatchers.IO) {
+          oldCover.delete()
+        }
+      }
+      repoChapter.updateChapter(chapterId) {
+        it.copy(cover = cover)
+      }
     }
   }
 }
