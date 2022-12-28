@@ -65,6 +65,12 @@ class VoicePlayer
       .build()
   }
 
+  override fun getPlaybackState(): Int = when (val state = super.getPlaybackState()) {
+    // redirect buffering to ready to prevent visual artifacts on seeking
+    Player.STATE_BUFFERING -> Player.STATE_READY
+    else -> state
+  }
+
   fun setSkipSilenceEnabled(enabled: Boolean): Boolean {
     return if (player is ExoPlayer) {
       player.skipSilenceEnabled = enabled
