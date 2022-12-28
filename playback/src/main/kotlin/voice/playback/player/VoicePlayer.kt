@@ -65,6 +65,22 @@ class VoicePlayer
       .build()
   }
 
+  override fun seekToPreviousMediaItem() {
+    seekBack()
+  }
+
+  override fun seekToPrevious() {
+    seekBack()
+  }
+
+  override fun seekToNext() {
+    seekForward()
+  }
+
+  override fun seekToNextMediaItem() {
+    seekForward()
+  }
+
   override fun getPlaybackState(): Int = when (val state = super.getPlaybackState()) {
     // redirect buffering to ready to prevent visual artifacts on seeking
     Player.STATE_BUFFERING -> Player.STATE_READY
