@@ -34,6 +34,9 @@ internal fun SelectChapterDialog(
               headlineText = {
                 Text(text = chapter.name ?: "")
               },
+              leadingContent = {
+                Text(text = (index + 1).toString())
+              },
               trailingContent = {
                 if (dialogState.selectedIndex == index) {
                   Icon(
