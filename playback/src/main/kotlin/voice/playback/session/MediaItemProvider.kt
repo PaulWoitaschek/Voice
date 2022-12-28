@@ -92,6 +92,7 @@ internal fun Book.toMediaItem() = MediaItem(
   mediaId = MediaId.Book(id),
   folderType = FOLDER_TYPE_TITLES,
   isPlayable = true,
+  imageUri = content.cover?.toUri(),
 )
 
 fun Chapter.toMediaItem(
