@@ -7,9 +7,6 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.MediaMetadata.FOLDER_TYPE_MIXED
-import androidx.media3.common.MediaMetadata.FOLDER_TYPE_NONE
-import androidx.media3.common.MediaMetadata.FOLDER_TYPE_TITLES
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -37,9 +34,10 @@ class MediaItemProvider
 
   fun root(): MediaItem = MediaItem(
     title = application.getString(R.string.media_session_root),
-    folderType = FOLDER_TYPE_MIXED,
+    browsable = true,
     isPlayable = false,
     mediaId = MediaId.Root,
+    mediaType = MediaType.AudioBook,
   )
 
   suspend fun item(id: String): MediaItem? {
@@ -90,9 +88,10 @@ class MediaItemProvider
 internal fun Book.toMediaItem() = MediaItem(
   title = content.name,
   mediaId = MediaId.Book(id),
-  folderType = FOLDER_TYPE_TITLES,
+  browsable = true,
   isPlayable = true,
   imageUri = content.cover?.toUri(),
+  mediaType = MediaType.AudioBook,
 )
 
 fun Chapter.toMediaItem(
@@ -100,11 +99,12 @@ fun Chapter.toMediaItem(
 ) = MediaItem(
   title = name ?: id.value,
   mediaId = MediaId.Chapter(bookId = content.id, chapterId = id),
-  folderType = FOLDER_TYPE_NONE,
+  browsable = false,
   isPlayable = true,
   sourceUri = id.toUri(),
   imageUri = content.cover?.toUri(),
   artist = content.author,
+  mediaType = MediaType.AudioBookChapter,
   extras = Bundle().apply {
     putParcelableArray(EXTRA_CHAPTER_MARKS, chapterMarks.toTypedArray())
   },
@@ -146,17 +146,22 @@ sealed interface MediaId {
   ) : MediaId
 }
 
+private enum class MediaType {
+  AudioBook, AudioBookChapter, AudioBookRoot
+}
+
 private fun MediaItem(
   title: String,
   mediaId: MediaId,
   isPlayable: Boolean,
-  @MediaMetadata.FolderType folderType: Int,
+  browsable: Boolean,
   album: String? = null,
   artist: String? = null,
   genre: String? = null,
   sourceUri: Uri? = null,
   imageUri: Uri? = null,
   extras: Bundle = Bundle.EMPTY,
+  mediaType: MediaType,
 ): MediaItem {
   val metadata =
     MediaMetadata.Builder()
@@ -164,10 +169,17 @@ private fun MediaItem(
       .setTitle(title)
       .setArtist(artist)
       .setGenre(genre)
-      .setFolderType(folderType)
+      .setIsBrowsable(browsable)
       .setIsPlayable(isPlayable)
       .setArtworkUri(imageUri)
       .setExtras(extras)
+      .setMediaType(
+        when (mediaType) {
+          MediaType.AudioBook -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK
+          MediaType.AudioBookChapter -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK_CHAPTER
+          MediaType.AudioBookRoot -> MediaMetadata.MEDIA_TYPE_FOLDER_AUDIO_BOOKS
+        },
+      )
       .build()
 
   return MediaItem.Builder()
