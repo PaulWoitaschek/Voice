@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -54,6 +55,29 @@ class MediaItemProvider
           content = content,
         )
       }
+    }
+  }
+
+  fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
+    val items = book.chapters.map { chapter ->
+      chapter.toMediaItem(
+        content = book.content,
+      )
+    }
+    return MediaItemsWithStartPosition(
+      items,
+      book.content.currentChapterIndex,
+      book.content.positionInChapter,
+    )
+  }
+
+  suspend fun mediaItemsWithStartPosition(id: String): MediaItemsWithStartPosition? {
+    return when (val mediaId = id.toMediaIdOrNull()) {
+      is MediaId.Book -> {
+        val book = bookRepository.get(mediaId.id) ?: return null
+        mediaItemsWithStartPosition(book)
+      }
+      is MediaId.Chapter, MediaId.Root, null -> null
     }
   }
 

@@ -1,6 +1,7 @@
 package voice.playback.session
 
 import android.os.Bundle
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
@@ -11,6 +12,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
@@ -25,20 +27,43 @@ class LibrarySessionCallback
   private val bookSearchParser: BookSearchParser,
   private val bookSearchHandler: BookSearchHandler,
 ) : MediaLibraryService.MediaLibrarySession.Callback {
+
   override fun onAddMediaItems(
     mediaSession: MediaSession,
     controller: MediaSession.ControllerInfo,
     mediaItems: MutableList<MediaItem>,
   ): ListenableFuture<List<MediaItem>> = scope.future {
     mediaItems.map { item ->
-      val searchQuery = item.requestMetadata.searchQuery
-      if (searchQuery != null) {
-        item.requestMetadata.extras
-        val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
-        bookSearchHandler.handle(search)?.toMediaItem() ?: mediaItemProvider.item(item.mediaId) ?: item
-      } else {
-        mediaItemProvider.item(item.mediaId) ?: item
+      mediaItemProvider.item(item.mediaId) ?: item
+    }
+  }
+
+  override fun onSetMediaItems(
+    mediaSession: MediaSession,
+    controller: MediaSession.ControllerInfo,
+    mediaItems: MutableList<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+    val item = mediaItems.singleOrNull()
+    return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
+      scope.future {
+        onSetMediaItemsForSingleItem(item)
+          ?: super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs).await()
       }
+    } else {
+      super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
+    }
+  }
+
+  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaSession.MediaItemsWithStartPosition? {
+    val searchQuery = item.requestMetadata.searchQuery
+    return if (searchQuery != null) {
+      val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
+      val searchResult = bookSearchHandler.handle(search) ?: return null
+      mediaItemProvider.mediaItemsWithStartPosition(searchResult)
+    } else {
+      mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
     }
   }
 
@@ -115,9 +140,11 @@ class LibrarySessionCallback
           CustomCommand.ForceSeekToNext -> {
             player.forceSeekToNext()
           }
+
           CustomCommand.ForceSeekToPrevious -> {
             player.forceSeekToPrevious()
           }
+
           is CustomCommand.SetSkipSilence -> {
             player.setSkipSilenceEnabled(command.skipSilence)
           }
