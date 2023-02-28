@@ -10,6 +10,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
@@ -140,5 +141,9 @@ class PlayerController
         action(controller)
       }
     }
+  }
+
+  suspend fun awaitConnect() {
+    browserFuture.await()
   }
 }

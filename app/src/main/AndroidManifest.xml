@@ -62,6 +62,15 @@
         android:resource="@xml/widget_info" />
     </receiver>
 
+    <receiver
+      android:name=".features.widget.WidgetActionBroadcastReceiver"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="voice.WidgetAction" />
+      </intent-filter>
+    </receiver>
+
+
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.coverprovider"
