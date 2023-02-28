@@ -3,6 +3,7 @@ package voice.playbackScreen
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
+import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,6 +15,7 @@ import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
+import voice.common.pref.PrefKeys
 import voice.data.durationMs
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
@@ -24,8 +26,10 @@ import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class BookPlayViewModel
 @Inject constructor(
@@ -39,6 +43,8 @@ class BookPlayViewModel
   private val bookmarkRepo: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
+  @Named(PrefKeys.SEEK_TIME)
+  private val seekTimePref: Pref<Int>,
 ) {
 
   private var askedToIgnoreBatteryOptimization = false
@@ -65,6 +71,7 @@ class BookPlayViewModel
     ) { book, playState, sleepTime ->
       val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
       val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
+      val seekTime = seekTimePref.value.seconds
       BookPlayViewState(
         sleepTime = sleepTime,
         playing = playState == PlayStateManager.PlayState.Playing,
@@ -75,6 +82,7 @@ class BookPlayViewModel
         playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
         cover = book.content.cover?.let(::ImmutableFile),
         skipSilence = book.content.skipSilence,
+        seekTime = seekTime
       )
     }
   }
