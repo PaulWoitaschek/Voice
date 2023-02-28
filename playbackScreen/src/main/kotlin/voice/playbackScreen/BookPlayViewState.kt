@@ -17,6 +17,7 @@ data class BookPlayViewState(
   val playing: Boolean,
   val cover: ImmutableFile?,
   val skipSilence: Boolean,
+  val seekTime: Duration
 )
 
 internal sealed interface BookPlayDialogViewState {
