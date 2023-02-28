@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">کتاب فعلی</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">جلد</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">پخش سریع</string>
   <string name="previous_track">قطعه قبلی</string>
   <string name="next_track">قطعه بعدی</string>
-  <string name="play">پخش</string>
-  <string name="pause">توقف</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">انتخاب</string>

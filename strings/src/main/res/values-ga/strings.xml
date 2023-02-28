@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">An closleabhar reatha</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Clúdach</string>
@@ -9,8 +8,6 @@
   <string name="action_sleep">Orláiste codalta</string>
   <string name="previous_track">An rian roimhe</string>
   <string name="next_track">An rian ina dhiaidh</string>
-  <string name="play">Seinn</string>
-  <string name="pause">Tabhair sos</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Socraigh</string>

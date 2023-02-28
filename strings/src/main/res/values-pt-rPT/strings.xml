@@ -8,8 +8,6 @@
   <string name="rewind">Retroceder</string>
   <string name="previous_track">Capítulo anterior</string>
   <string name="next_track">Próximo capítulo</string>
-  <string name="play">Tocar</string>
-  <string name="pause">Pausar</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_cancel">Cancelar</string>
@@ -38,8 +36,7 @@
   <string name="popup_edit">Editar</string>
   <string name="remove">Remover</string>
   <string name="refresh">Actualizar</string>
-  <string name="music_notification">Reproduzir</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Actual</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->

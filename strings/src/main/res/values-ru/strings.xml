@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Открытая книга</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Обложка</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Перемотать вперёд</string>
   <string name="previous_track">Предыдущий файл</string>
   <string name="next_track">Следующий файл</string>
-  <string name="play">Читать</string>
-  <string name="pause">Пауза</string>
   <string name="skip_silence">Пропускать тишину</string>
   <string name="volume_boost">Усиление звука</string>
   <!--NoExternalStorage-->
@@ -65,8 +62,7 @@
   <string name="refresh">Обновить</string>
   <string name="reset">Сброс</string>
   <string name="cover_crop">Обрезать обложку</string>
-  <string name="music_notification">Чтение</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Слушаю</string>
   <string name="book_header_not_started">Непрослушанные</string>
   <string name="book_header_completed">Прослушанные</string>

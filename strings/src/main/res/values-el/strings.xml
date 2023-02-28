@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Τρέχον βιβλίο</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Εξώφυλλο</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Γρήγορη προώθηση</string>
   <string name="previous_track">Προηγούμενο κομμάτι</string>
   <string name="next_track">Επόμενο κομμάτι </string>
-  <string name="play">Αναπαραγωγή</string>
-  <string name="pause">Παύση</string>
   <string name="skip_silence">Παράλειψη ησυχίας</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -51,8 +48,7 @@
   <string name="refresh">Ανανέωση</string>
   <string name="reset">Επαναφορά</string>
   <string name="cover_crop">Περικοπή εξωφύλλου</string>
-  <string name="music_notification">Αναπαραγωγή</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Τρέχον</string>
   <string name="book_header_not_started">Μη διαβασμένα</string>
   <string name="book_header_completed">Ολοκληρωμένα </string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">現在のブック</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">カバー</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">早送り</string>
   <string name="previous_track">前のトラック</string>
   <string name="next_track">次のトラック</string>
-  <string name="play">再生</string>
-  <string name="pause">一時停止</string>
   <string name="skip_silence">無音をスキップ</string>
   <string name="volume_boost">音量ブースト</string>
   <!--NoExternalStorage-->
@@ -62,8 +59,7 @@
   <string name="refresh">更新</string>
   <string name="reset">リセット</string>
   <string name="cover_crop">カバーをトリミング</string>
-  <string name="music_notification">再生</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">現在</string>
   <string name="book_header_not_started">未再生</string>
   <string name="book_header_completed">完了</string>

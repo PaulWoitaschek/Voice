@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Livre en cours</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Couverture</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Avance rapide</string>
   <string name="previous_track">Piste précédente</string>
   <string name="next_track">Piste suivante</string>
-  <string name="play">Lecture</string>
-  <string name="pause">Pause</string>
   <string name="skip_silence">Sauter les silences</string>
   <string name="volume_boost">Hausser le volume </string>
   <!--NoExternalStorage-->
@@ -64,8 +61,7 @@
   <string name="refresh">Rafraîchir</string>
   <string name="reset">Réinitialiser</string>
   <string name="cover_crop">Recadrer la couverture</string>
-  <string name="music_notification">Lecture</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">En cours</string>
   <string name="book_header_not_started">Pas encore commencé</string>
   <string name="book_header_completed">Complété</string>

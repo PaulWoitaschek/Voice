@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Adlis amiran</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Taduli</string>
@@ -9,8 +8,6 @@
   <string name="fast_forward">Ar zdat s zreb</string>
   <string name="previous_track">Tafuɣalt iɛeddan</string>
   <string name="next_track">Tafuɣalt d-iteddun</string>
-  <string name="play">Ɣer</string>
-  <string name="pause">Rǧu</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <!--EditBookDialog-->

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Текуща книга</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Обложка</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Прескачане напред</string>
   <string name="previous_track">Предишен запис</string>
   <string name="next_track">Следващ запис</string>
-  <string name="play">Възпроизвеждане</string>
-  <string name="pause">Пауза</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Да</string>
@@ -51,8 +48,7 @@
   <string name="refresh">Опресняване</string>
   <string name="reset">Нулиране</string>
   <string name="cover_crop">Изрязване на обложката</string>
-  <string name="music_notification">Възпроизвеждане</string>
-  <!--book category-->
+    <!--book category-->
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->
 </resources>

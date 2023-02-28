@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Huidige boek</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Voorblad</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Vinnig vorentoe</string>
   <string name="previous_track">Vorige snit</string>
   <string name="next_track">Volgende snit</string>
-  <string name="play">Speel</string>
-  <string name="pause">Breek</string>
   <string name="skip_silence">Skip Stilte</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -52,8 +49,7 @@
   <string name="refresh">Verfris</string>
   <string name="reset">Herstel</string>
   <string name="cover_crop">Sny bedekblad</string>
-  <string name="music_notification">Terugspeel</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog nie begin nie</string>
   <string name="book_header_completed">Voltooi</string>

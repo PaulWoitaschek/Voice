@@ -1,14 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Kitabu cha sasa</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Jalada</string>
   <string name="play_pause">Cheza / Sitisha</string>
   <string name="rewind">Rudisha Nyuma</string>
-  <string name="play">Chaza</string>
-  <string name="pause">Sitisha</string>
   <string name="skip_silence">ruka ukimya</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -44,8 +41,7 @@
   <string name="play_current">Chaza Iliyomo</string>
   <string name="refresh">Rudisha nyuma</string>
   <string name="reset">Weka Upya</string>
-  <string name="music_notification">Uchezaji</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">iliyopo</string>
   <string name="book_header_not_started">Ambayo Haija Anzwa</string>
   <string name="book_header_completed">Iliyo malizwa</string>

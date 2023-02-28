@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Jelenlegi könyv</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Könyvborító</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">előretekerés</string>
   <string name="previous_track">Előző szám</string>
   <string name="next_track">Következő szám</string>
-  <string name="play">Lejátszás</string>
-  <string name="pause">Szünet</string>
   <string name="skip_silence">Csend kihagyása</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -56,8 +53,7 @@
   <string name="refresh">Frissítés</string>
   <string name="reset">Visszaállítás</string>
   <string name="cover_crop">Borító kivágása</string>
-  <string name="music_notification">Lejátszás</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Jelenlegi</string>
   <string name="book_header_not_started">Még nem elkezdett</string>
   <string name="book_header_completed">Befejezett</string>

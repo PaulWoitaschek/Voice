@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Aktuell bok</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Omslag</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Snabbspola</string>
   <string name="previous_track">Föregående spår</string>
   <string name="next_track">Nästa spår</string>
-  <string name="play">Spela</string>
-  <string name="pause">Pausa</string>
   <string name="skip_silence">Hoppa över tystnad</string>
   <string name="volume_boost">Volymökning</string>
   <!--NoExternalStorage-->
@@ -63,8 +60,7 @@
   <string name="refresh">Uppdatera</string>
   <string name="reset">Återställ</string>
   <string name="cover_crop">Beskär omslag</string>
-  <string name="music_notification">Uppspelning</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Aktuella</string>
   <string name="book_header_not_started">Inte påbörjad ännu</string>
   <string name="book_header_completed">Avslutad</string>

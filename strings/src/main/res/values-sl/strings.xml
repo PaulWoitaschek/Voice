@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Trenutna knjiga</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Platnica</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Previj naprej</string>
   <string name="previous_track">Prejšnji posnetek</string>
   <string name="next_track">Naslednji posnetek</string>
-  <string name="play">Predvajaj</string>
-  <string name="pause">Ustavi</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Nastavi</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Aktuálna kniha</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Obal</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Dopredu</string>
   <string name="previous_track">Predchádzajúca skladba</string>
   <string name="next_track">Nasledujúca skladba</string>
-  <string name="play">Prehrať</string>
-  <string name="pause">Pozastaviť</string>
   <string name="skip_silence">Preskočiť ticho</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -55,8 +52,7 @@
   <string name="refresh">Obnoviť</string>
   <string name="reset">Resetovať</string>
   <string name="cover_crop">Orezať obal</string>
-  <string name="music_notification">Prehrávanie</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Aktuáne</string>
   <string name="book_header_not_started">Ešte nepočúvané</string>
   <string name="book_header_completed">Dokončené</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Şu anki kitap</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Kapak</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Hızlı ilerlet</string>
   <string name="previous_track">Önceki parça</string>
   <string name="next_track">Sonraki parça</string>
-  <string name="play">Oynat</string>
-  <string name="pause">Duraklat</string>
   <string name="skip_silence">Sessizliği Geç</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -53,8 +50,7 @@
   <string name="refresh">Yenile</string>
   <string name="reset">Sıfırla</string>
   <string name="cover_crop">Kapağı kırp</string>
-  <string name="music_notification">Geriye oynatım</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Şu anki</string>
   <string name="book_header_not_started">Henüz başlamadı</string>
   <string name="book_header_completed">Tamamlandı</string>

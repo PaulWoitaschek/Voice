@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Поточна книга</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Обкладинка</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Перемотати вперед</string>
   <string name="previous_track">Попередній запис</string>
   <string name="next_track">Наступний запис</string>
-  <string name="play">Відтворити</string>
-  <string name="pause">Призупинити</string>
   <string name="skip_silence">Пропускати тишу</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -58,8 +55,7 @@
   <string name="refresh">Оновити</string>
   <string name="reset">Скинути</string>
   <string name="cover_crop">Кадрувати обкладинку</string>
-  <string name="music_notification">Відтворення</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Поточні</string>
   <string name="book_header_not_started">Ще не початі</string>
   <string name="book_header_completed">Завершені</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Aktuelle bog</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cover</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Spol fremad</string>
   <string name="previous_track">Forrige nummer</string>
   <string name="next_track">Næste nummer</string>
-  <string name="play">Afspil</string>
-  <string name="pause">Pause</string>
   <string name="skip_silence">Spring stilhed over</string>
   <string name="volume_boost">Lydstyrkeforøgelse</string>
   <!--NoExternalStorage-->
@@ -63,8 +60,7 @@
   <string name="refresh">Opfrisk</string>
   <string name="reset">Nulstil</string>
   <string name="cover_crop">Skær cover til</string>
-  <string name="music_notification">Afspilning</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Nuværende</string>
   <string name="book_header_not_started">Endnu ikke startet</string>
   <string name="book_header_completed">Afsluttet</string>

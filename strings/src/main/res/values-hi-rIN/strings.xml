@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">वर्तमान किताब</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">कवर</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">आगे बढ़ें</string>
   <string name="previous_track">पिछला ट्रैक</string>
   <string name="next_track">अगला ट्रैक</string>
-  <string name="play">चलायें</string>
-  <string name="pause">रोकें</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">सेट करें</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">재생 중인 책</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">책표지</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">빨리감기</string>
   <string name="previous_track">이전 트랙</string>
   <string name="next_track">다음 트랙</string>
-  <string name="play">재생</string>
-  <string name="pause">정지</string>
   <string name="skip_silence">무음 건너뛰기</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -51,8 +48,7 @@
   <string name="refresh">새로고침</string>
   <string name="reset">초기화</string>
   <string name="cover_crop">책표지 자르기</string>
-  <string name="music_notification">재생</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">현재</string>
   <string name="book_header_not_started">아직 재생 안 됨</string>
   <string name="book_header_completed">완료됨</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
   <!--BookShelf-->
-  <string name="current_book">Current book</string>
   <!-- in the book-overview the show-all button which displays all books of a category -->
   <!--BookPlayFragment-->
   <string name="cover">Cover</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Fast forward</string>
   <string name="previous_track">Previous track</string>
   <string name="next_track">Next track</string>
-  <string name="play">Play</string>
-  <string name="pause">Pause</string>
   <string name="skip_silence">Skip Silence</string>
   <string name="volume_boost">Volume boost</string>
   <string name="more">More</string>
@@ -65,9 +62,8 @@
   <string name="refresh">Refresh</string>
   <string name="reset">Reset</string>
   <string name="cover_crop">Crop cover</string>
-  <string name="music_notification">Playback</string>
 
-  <!-- book category -->
+    <!-- book category -->
   <string name="book_header_current">Current</string>
   <string name="book_header_not_started">Not started Yet</string>
   <string name="book_header_completed">Completed</string>

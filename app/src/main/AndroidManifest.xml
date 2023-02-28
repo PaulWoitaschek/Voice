@@ -48,6 +48,17 @@
       </intent-filter>
     </activity>
 
+    <service
+      android:name="voice.playback.session.PlaybackService"
+      android:foregroundServiceType="mediaPlayback"
+      android:exported="true"
+      tools:ignore="ExportedService">
+      <intent-filter>
+        <action android:name="androidx.media3.session.MediaSessionService" />
+        <action android:name="android.media.browse.MediaBrowserService" />
+      </intent-filter>
+    </service>
+
     <receiver
       android:name=".features.widget.BaseWidgetProvider"
       android:icon="@drawable/ic_launcher"
@@ -69,7 +80,6 @@
         <action android:name="voice.WidgetAction" />
       </intent-filter>
     </receiver>
-
 
     <provider
       android:name="androidx.core.content.FileProvider"

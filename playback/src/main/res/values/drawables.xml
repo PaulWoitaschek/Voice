@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-  <drawable name="media3_notification_seek_to_previous">@android:drawable/ic_media_rew</drawable>
-  <drawable name="media3_notification_seek_to_next">@android:drawable/ic_media_ff</drawable>
+  <drawable name="media3_notification_seek_to_previous" tools:ignore="UnusedResources">@android:drawable/ic_media_rew</drawable>
+  <drawable name="media3_notification_seek_to_next" tools:ignore="UnusedResources">@android:drawable/ic_media_ff</drawable>
 </resources>
