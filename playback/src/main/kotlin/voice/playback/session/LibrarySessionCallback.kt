@@ -1,6 +1,7 @@
 package voice.playback.session
 
 import android.os.Bundle
+import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.LibraryResult
@@ -14,6 +15,8 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
+import voice.common.BookId
+import voice.common.pref.CurrentBook
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
@@ -26,6 +29,8 @@ class LibrarySessionCallback
   private val player: VoicePlayer,
   private val bookSearchParser: BookSearchParser,
   private val bookSearchHandler: BookSearchHandler,
+  @CurrentBook
+  private val currentBookId: DataStore<BookId?>,
 ) : MediaLibraryService.MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
@@ -61,8 +66,12 @@ class LibrarySessionCallback
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
       val searchResult = bookSearchHandler.handle(search) ?: return null
+      currentBookId.updateData { searchResult.id }
       mediaItemProvider.mediaItemsWithStartPosition(searchResult)
     } else {
+      (item.mediaId.toMediaIdOrNull() as? MediaId.Book)?.let { bookId ->
+        currentBookId.updateData { bookId.id }
+      }
       mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
     }
   }
