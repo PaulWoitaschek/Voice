@@ -23,6 +23,7 @@ import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
 import voice.data.toUri
 import voice.playback.R
+import java.io.File
 import javax.inject.Inject
 
 class MediaItemProvider
@@ -31,6 +32,7 @@ class MediaItemProvider
   private val application: Application,
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
+  private val imageFileProvider: ImageFileProvider,
 ) {
 
   fun root(): MediaItem = MediaItem(
@@ -107,16 +109,18 @@ class MediaItemProvider
       is MediaId.Chapter -> null
     }
   }
-}
 
-internal fun Book.toMediaItem() = MediaItem(
-  title = content.name,
-  mediaId = MediaId.Book(id),
-  browsable = true,
-  isPlayable = true,
-  imageUri = content.cover?.toUri(),
-  mediaType = MediaType.AudioBook,
-)
+  private fun Book.toMediaItem() = MediaItem(
+    title = content.name,
+    mediaId = MediaId.Book(id),
+    browsable = true,
+    isPlayable = true,
+    imageUri = content.cover?.toProvidedUri(),
+    mediaType = MediaType.AudioBook,
+  )
+
+  private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
+}
 
 fun Chapter.toMediaItem(
   content: BookContent,
