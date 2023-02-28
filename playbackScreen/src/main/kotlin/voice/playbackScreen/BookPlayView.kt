@@ -74,6 +74,7 @@ import voice.common.recomposeHighlighter
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun BookPlayView(
@@ -172,6 +173,7 @@ private fun BookPlayContent(
         SliderRow(viewState, onSeek = onSeek)
         Spacer(modifier = Modifier.size(16.dp))
         PlaybackRow(
+          seekTime = viewState.seekTime,
           playing = viewState.playing,
           onPlayClick = onPlayClick,
           onRewindClick = onRewindClick,
@@ -204,6 +206,7 @@ private fun BookPlayContent(
       SliderRow(viewState, onSeek = onSeek)
       Spacer(modifier = Modifier.size(16.dp))
       PlaybackRow(
+        seekTime = viewState.seekTime,
         playing = viewState.playing,
         onPlayClick = onPlayClick,
         onRewindClick = onRewindClick,
@@ -458,6 +461,7 @@ private fun ChapterRow(
 
 @Composable
 private fun PlaybackRow(
+  seekTime: Duration,
   playing: Boolean,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
@@ -470,7 +474,7 @@ private fun PlaybackRow(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center,
   ) {
-    SkipButton(forward = false, onClick = onRewindClick)
+    SkipButton(seekTime, forward = false, onClick = onRewindClick)
     Spacer(modifier = Modifier.size(16.dp))
     FloatingActionButton(
       modifier = Modifier.size(80.dp),
@@ -487,12 +491,13 @@ private fun PlaybackRow(
       )
     }
     Spacer(modifier = Modifier.size(16.dp))
-    SkipButton(forward = true, onClick = onFastForwardClick)
+    SkipButton(seekTime, forward = true, onClick = onFastForwardClick)
   }
 }
 
 @Composable
 private fun SkipButton(
+  seekTime: Duration,
   forward: Boolean,
   onClick: () -> Unit,
 ) {
@@ -521,7 +526,7 @@ private fun SkipButton(
     )
     Text(
       modifier = Modifier.offset(y = (-10).dp),
-      text = "20s",
+      text = seekTime.toString(),
       style = MaterialTheme.typography.bodySmall,
     )
   }
@@ -619,6 +624,7 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       skipSilence = true,
       sleepTime = 4.minutes,
       title = "Das Ende der Welt",
+      seekTime = ZERO
     )
     yield(initial)
     yield(
