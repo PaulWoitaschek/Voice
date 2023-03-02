@@ -58,6 +58,7 @@ object PlaybackModule {
       .build()
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
+      .setHandleAudioBecomingNoisy(true)
       .build()
       .also { player ->
         playStateDelegatingListener.attachTo(player)

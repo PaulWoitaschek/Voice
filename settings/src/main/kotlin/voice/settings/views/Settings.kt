@@ -42,7 +42,6 @@ fun SettingsPreview() {
   val viewState = SettingsViewState(
     useDarkTheme = false,
     showDarkThemePref = true,
-    resumeOnReplug = true,
     seekTimeInSeconds = 42,
     autoRewindInSeconds = 12,
     dialog = null,
@@ -54,7 +53,6 @@ fun SettingsPreview() {
       viewState,
       object : SettingsListener {
         override fun close() {}
-        override fun toggleResumeOnReplug() {}
         override fun toggleDarkTheme() {}
         override fun seekAmountChanged(seconds: Int) {}
         override fun onSeekAmountRowClicked() {}
@@ -122,7 +120,6 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             )
           },
         )
-        ResumeOnReplugRow(viewState.resumeOnReplug, listener::toggleResumeOnReplug)
         SeekTimeRow(viewState.seekTimeInSeconds) {
           listener.onSeekAmountRowClicked()
         }
