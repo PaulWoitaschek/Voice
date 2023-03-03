@@ -91,7 +91,7 @@ internal fun GridBook(
     Column {
       AsyncImage(
         modifier = Modifier
-          .aspectRatio(4F / 3F)
+          .aspectRatio(1F / 1F)
           .padding(start = 8.dp, end = 8.dp, top = 8.dp)
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
