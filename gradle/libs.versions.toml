@@ -16,7 +16,7 @@ compose-compiler = "1.3.2"
 media3 = "1.0.0-rc01"
 agp = "7.4.2"
 ktlint = "0.47.1"
-accompanist = "0.27.1"
+accompanist = "0.28.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
