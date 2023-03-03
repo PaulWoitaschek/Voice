@@ -57,13 +57,6 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  @Named(PrefKeys.RESUME_ON_REPLUG)
-  fun provideResumeOnReplugPreference(prefs: AndroidPreferences): Pref<Boolean> {
-    return prefs.boolean(PrefKeys.RESUME_ON_REPLUG, true)
-  }
-
-  @Provides
-  @Singleton
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.AUTO_REWIND_AMOUNT, 2)

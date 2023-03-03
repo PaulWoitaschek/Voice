@@ -12,7 +12,6 @@ import voice.app.features.bookmarks.BookmarkPresenter
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.features.widget.BaseWidgetProvider
 import voice.common.AppScope
-import voice.playback.di.PlaybackComponent
 import javax.inject.Singleton
 
 @Singleton
@@ -30,8 +29,6 @@ interface AppComponent {
   fun inject(target: CoverFromInternetController)
   fun inject(target: EditCoverDialogController)
   fun inject(target: MainActivity)
-
-  fun playbackComponentFactory(): PlaybackComponent.Factory
 
   @Component.Factory
   interface Factory {

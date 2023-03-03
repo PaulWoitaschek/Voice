@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Libro actual</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cubierta</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Adelantar</string>
   <string name="previous_track">Pista anterior</string>
   <string name="next_track">Pista siguiente</string>
-  <string name="play">Reproducir</string>
-  <string name="pause">Pausar</string>
   <string name="skip_silence">Saltar silencio</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -36,8 +33,6 @@
   <string name="bookmark_added">Marcador añadido</string>
   <!--Settings-->
   <string name="action_settings">Preferencias</string>
-  <string name="pref_resume_on_replug">Reanudar</string>
-  <string name="pref_resume_on_replug_hint">Si pausaste al desconectar tus audífonos, la reproducción continuará cuando los vuelvas a conectar.</string>
   <string name="min">%s min</string>
   <string name="delete_last_number">Borra el último número introducido</string>
   <plurals name="seconds">
@@ -54,8 +49,7 @@
   <string name="refresh">Actualizar</string>
   <string name="reset">Reiniciar</string>
   <string name="cover_crop">Recortar cubierta</string>
-  <string name="music_notification">Reproducir</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Actual</string>
   <string name="book_header_not_started">Aún no comenzado</string>
   <string name="book_header_completed">Completado</string>

@@ -50,23 +50,15 @@
 
     <service
       android:name="voice.playback.session.PlaybackService"
-      android:exported="true"
       android:foregroundServiceType="mediaPlayback"
+      android:exported="true"
+      android:enabled="true"
       tools:ignore="ExportedService">
-
       <intent-filter>
+        <action android:name="androidx.media3.session.MediaLibraryService" />
         <action android:name="android.media.browse.MediaBrowserService" />
       </intent-filter>
-
     </service>
-
-    <receiver
-      android:name="androidx.media.session.MediaButtonReceiver"
-      android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MEDIA_BUTTON" />
-      </intent-filter>
-    </receiver>
 
     <receiver
       android:name=".features.widget.BaseWidgetProvider"
@@ -80,6 +72,14 @@
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/widget_info" />
+    </receiver>
+
+    <receiver
+      android:name=".features.widget.WidgetActionBroadcastReceiver"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="voice.WidgetAction" />
+      </intent-filter>
     </receiver>
 
     <provider

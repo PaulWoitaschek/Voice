@@ -7,14 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_FAST_FORWARD
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_REWIND
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.graphics.drawable.toBitmap
 import androidx.datastore.core.DataStore
-import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import coil.imageLoader
 import coil.request.ImageRequest
 import dagger.Reusable
@@ -33,7 +29,8 @@ import voice.playback.playstate.PlayStateManager
 import javax.inject.Inject
 
 @Reusable
-class WidgetUpdater @Inject constructor(
+class WidgetUpdater
+@Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
   @CurrentBook
@@ -124,13 +121,13 @@ class WidgetUpdater @Inject constructor(
     }
 
   private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
-    val playPausePI = buildMediaButtonPendingIntent(context, ACTION_PLAY_PAUSE)
+    val playPausePI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.PlayPause)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
-    val fastForwardPI = buildMediaButtonPendingIntent(context, ACTION_FAST_FORWARD)
+    val fastForwardPI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.FastForward)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
-    val rewindPI = buildMediaButtonPendingIntent(context, ACTION_REWIND)
+    val rewindPI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.Rewind)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
@@ -147,7 +144,7 @@ class WidgetUpdater @Inject constructor(
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = MainActivity.goToBookIntent(context, book.id)
+    val wholeWidgetClickI = MainActivity.goToBookIntent(context)
     val wholeWidgetClickPI = PendingIntent.getActivity(
       context,
       System.currentTimeMillis().toInt(),

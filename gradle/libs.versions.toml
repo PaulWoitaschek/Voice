@@ -4,7 +4,7 @@ versionName = "6.5.0"
 
 sdk-compile = "33"
 sdk-min = "26"
-sdk-target = "30"
+sdk-target = "33"
 
 coroutines = "1.6.4"
 room = "2.4.3"
@@ -13,8 +13,8 @@ materialDialog = "3.3.0"
 dagger = "2.44.2"
 kotlin = "1.7.20"
 compose-compiler = "1.3.2"
-media3 = "1.0.0-beta03"
-agp = "7.3.1"
+media3 = "1.0.0-rc01"
+agp = "7.4.2"
 ktlint = "0.47.1"
 accompanist = "0.27.1"
 
@@ -32,7 +32,6 @@ appCompat = "androidx.appcompat:appcompat:1.5.1"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
 transitions = "androidx.transition:transition:1.4.1"
-media = "androidx.media:media:1.6.0"
 androidxCore = "androidx.core:core-ktx:1.9.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -49,6 +48,7 @@ immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
@@ -84,6 +84,7 @@ dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 
 compose-bom = "androidx.compose:compose-bom:2022.11.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }

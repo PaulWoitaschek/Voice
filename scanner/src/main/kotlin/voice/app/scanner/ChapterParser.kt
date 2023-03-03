@@ -2,6 +2,7 @@ package voice.app.scanner
 
 import androidx.documentfile.provider.DocumentFile
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.repo.ChapterRepo
 import voice.data.supportedAudioFormats
 import java.time.Instant
@@ -18,7 +19,7 @@ class ChapterParser
 
     suspend fun parseChapters(file: DocumentFile) {
       if (file.isAudioFile()) {
-        val id = Chapter.Id(file.uri)
+        val id = ChapterId(file.uri)
         val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified())) {
           val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
           Chapter(

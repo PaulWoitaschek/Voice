@@ -1,13 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Libre actual</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cobertura</string>
   <string name="play_pause">Lectura / Pausa</string>
-  <string name="play">Lectura</string>
-  <string name="pause">Pausa</string>
   <string name="skip_silence">Sautar los silencis</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->

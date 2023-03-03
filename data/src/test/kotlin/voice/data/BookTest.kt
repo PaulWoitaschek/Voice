@@ -55,7 +55,7 @@ class BookTest {
 
   @Test
   fun globalPositionWhenTimeIs0AndCurrentFileIsNotFirst() {
-    val lastChapterId = Chapter.Id("lastChapter")
+    val lastChapterId = ChapterId("lastChapter")
     val book = book(
       time = 0,
       chapters = listOf(
@@ -71,7 +71,7 @@ class BookTest {
 
   @Test
   fun globalPositionWhenTimeIsNot0AndCurrentFileIsNotFirst() {
-    val targetChapter = Chapter.Id("target")
+    val targetChapter = ChapterId("target")
     val book = book(
       time = 23,
       chapters = listOf(
@@ -175,7 +175,7 @@ class BookTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun bookPosition(chapters: List<Chapter>, currentChapter: Chapter.Id, positionInChapter: Long): Long {
+  private fun bookPosition(chapters: List<Chapter>, currentChapter: ChapterId, positionInChapter: Long): Long {
     return book(
       chapters = chapters,
       time = positionInChapter,

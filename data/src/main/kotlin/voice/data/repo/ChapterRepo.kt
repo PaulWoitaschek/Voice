@@ -1,6 +1,7 @@
 package voice.data.repo
 
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.runForMaxSqlVariableNumber
 import java.time.Instant
@@ -13,9 +14,9 @@ class ChapterRepo
   private val dao: ChapterDao,
 ) {
 
-  private val cache = mutableMapOf<Chapter.Id, Chapter?>()
+  private val cache = mutableMapOf<ChapterId, Chapter?>()
 
-  suspend fun get(id: Chapter.Id): Chapter? {
+  suspend fun get(id: ChapterId): Chapter? {
     // this does not use getOrPut because a `null` value should also be cached
     if (!cache.containsKey(id)) {
       cache[id] = dao.chapter(id)
@@ -23,7 +24,7 @@ class ChapterRepo
     return cache[id]
   }
 
-  suspend fun warmup(ids: List<Chapter.Id>) {
+  suspend fun warmup(ids: List<ChapterId>) {
     val missing = ids.filter { it !in cache }
     missing
       .runForMaxSqlVariableNumber {
@@ -38,7 +39,7 @@ class ChapterRepo
   }
 
   suspend inline fun getOrPut(
-    id: Chapter.Id,
+    id: ChapterId,
     lastModified: Instant,
     defaultValue: () -> Chapter?,
   ): Chapter? {

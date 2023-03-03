@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Sách hiện tại</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Ảnh Bìa</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Tua nhanh</string>
   <string name="previous_track">Chương trước</string>
   <string name="next_track">Chương sau</string>
-  <string name="play">Phát</string>
-  <string name="pause">Ngừng</string>
   <string name="skip_silence">Bỏ qua khoảng lặng</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
@@ -36,8 +33,6 @@
   <string name="bookmark_added">Đánh dấu đã được thêm vào</string>
   <!--Settings-->
   <string name="action_settings">Tùy chọn</string>
-  <string name="pref_resume_on_replug">Tiếp tục phát</string>
-  <string name="pref_resume_on_replug_hint">Nếu bạn dừng phát khi tắt tai nghe, chương trình sẽ phát tiếp khi bạn kết nối lại tai nghe.</string>
   <string name="min">%sphút</string>
   <string name="delete_last_number">Xóa số vừa nhập</string>
   <plurals name="seconds">
@@ -51,8 +46,7 @@
   <string name="refresh">Làm mới</string>
   <string name="reset">Khởi động lại</string>
   <string name="cover_crop">Cắt ảnh bìa</string>
-  <string name="music_notification">Phát lại</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Đang nghe</string>
   <string name="book_header_not_started">Chưa nghe bao giờ</string>
   <string name="book_header_completed">Hoàn thành</string>

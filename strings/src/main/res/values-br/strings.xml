@@ -3,8 +3,7 @@
   <!--BookShelf-->
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
-  <string name="play">Lenn</string>
-  <!--NoExternalStorage-->
+    <!--NoExternalStorage-->
   <!--Dialogs-->
   <!--EditBookDialog-->
   <string name="change_book_name">Anv</string>

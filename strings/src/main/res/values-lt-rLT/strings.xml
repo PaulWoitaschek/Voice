@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">Dabartinė knyga</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Viršelis</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">Persukimas į priekį</string>
   <string name="previous_track">Ankstesnis takelis</string>
   <string name="next_track">Kitas takelis</string>
-  <string name="play">Atkurti</string>
-  <string name="pause">Pristabdyti</string>
   <string name="skip_silence">Peršokti tylą</string>
   <string name="volume_boost">Garsio padidinimas</string>
   <!--NoExternalStorage-->
@@ -40,8 +37,6 @@
   <string name="bookmark_added">Žymelė išsaugota</string>
   <!--Settings-->
   <string name="action_settings">Nustatymai</string>
-  <string name="pref_resume_on_replug">Pratęsti atkūrimą</string>
-  <string name="pref_resume_on_replug_hint">Jei pristabdėte atkūrimą atjungdami ausines, atkūrimas prasitęs vėl jas prijungus.</string>
   <string name="min">%s min.</string>
   <string name="delete_last_number">Pašalina paskutinį įvestą skaičių</string>
   <plurals name="seconds">
@@ -65,8 +60,7 @@
   <string name="refresh">Atnaujinti</string>
   <string name="reset">Nustatyti iš naujo</string>
   <string name="cover_crop">Apkarpyti viršelį</string>
-  <string name="music_notification">Atkūrimas</string>
-  <!--book category-->
+    <!--book category-->
   <string name="book_header_current">Dabartinės</string>
   <string name="book_header_not_started">Dar nepradėtos</string>
   <string name="book_header_completed">Užbaigtos</string>

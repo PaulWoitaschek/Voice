@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Handler
 import androidx.media3.exoplayer.Renderer
 import androidx.media3.exoplayer.RenderersFactory
+import androidx.media3.exoplayer.audio.AudioCapabilities
 import androidx.media3.exoplayer.audio.AudioRendererEventListener
+import androidx.media3.exoplayer.audio.DefaultAudioSink
 import androidx.media3.exoplayer.audio.MediaCodecAudioRenderer
 import androidx.media3.exoplayer.mediacodec.MediaCodecSelector
 import androidx.media3.exoplayer.metadata.MetadataOutput
@@ -24,12 +26,17 @@ class OnlyAudioRenderersFactory
     textRendererOutput: TextOutput,
     metadataRendererOutput: MetadataOutput,
   ): Array<Renderer> {
+    val sink = DefaultAudioSink.Builder()
+      .setAudioCapabilities(AudioCapabilities.getCapabilities(context))
+      .setEnableAudioTrackPlaybackParams(true)
+      .build()
     return arrayOf(
       MediaCodecAudioRenderer(
         context,
         MediaCodecSelector.DEFAULT,
         eventHandler,
         audioRendererEventListener,
+        sink,
       ),
     )
   }

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--BookShelf-->
-  <string name="current_book">الكتاب الحالي</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">الغطاء</string>
@@ -11,8 +10,6 @@
   <string name="fast_forward">بسرعة للأمام</string>
   <string name="previous_track">الشريط السابق</string>
   <string name="next_track">الشريط التالي</string>
-  <string name="play">إلعب</string>
-  <string name="pause">توقف</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">إعداد</string>
@@ -29,8 +26,7 @@
   <!--PlaybackSpeed-->
   <!--Bookmarks-->
   <!--Settings-->
-  <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
-  <string name="popup_edit">عدل</string>
+    <string name="popup_edit">عدل</string>
   <string name="remove">إمسح</string>
   <string name="play_current">شغل الحالي</string>
   <string name="refresh">تحديث</string>
