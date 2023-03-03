@@ -1,5 +1,5 @@
 [versions]
-versionCode = "3603004"
+versionCode = "3603005"
 versionName = "7.0.0"
 
 sdk-compile = "33"
