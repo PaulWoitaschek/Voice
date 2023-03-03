@@ -15,6 +15,7 @@ anvil {
 
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
+  allWarningsAsErrors = true
 }
 
 android {
