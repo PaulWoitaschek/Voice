@@ -86,7 +86,7 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 
-compose-bom = "androidx.compose:compose-bom:2022.11.00"
+compose-bom = "androidx.compose:compose-bom:2023.01.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
