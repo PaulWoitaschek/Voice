@@ -120,12 +120,13 @@ class PlayerController
 
   fun setSpeed(speed: Float) = executeAfterPrepare {
     it.setPlaybackSpeed(speed)
+    updateBook { it.copy(playbackSpeed = speed) }
   }
 
   fun setGain(gain: Decibel) {
+    volumeGain.gain = gain
     scope.launch {
       updateBook { it.copy(gain = gain.value) }
-      volumeGain.gain = gain
     }
   }
 
