@@ -52,7 +52,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.2"
+firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.5"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
 
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
@@ -61,7 +61,7 @@ room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
-androidX-test-runner = "androidx.test:runner:1.5.1"
+androidX-test-runner = "androidx.test:runner:1.5.2"
 androidX-test-junit = "androidx.test.ext:junit:1.1.5"
 androidX-test-core = "androidx.test:core-ktx:1.5.0"
 
