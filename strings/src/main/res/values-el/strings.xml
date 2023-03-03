@@ -33,8 +33,6 @@
   <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
   <!--Settings-->
   <string name="action_settings">Προτιμήσεις</string>
-  <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
-  <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
   <string name="min">%s λεπτά</string>
   <plurals name="seconds">
     <item quantity="one">%d δευτερόλεπτο</item>

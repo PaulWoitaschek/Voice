@@ -37,8 +37,6 @@
   <string name="bookmark_added">ブックマークを追加しました</string>
   <!--Settings-->
   <string name="action_settings">設定</string>
-  <string name="pref_resume_on_replug">再生を再開</string>
-  <string name="pref_resume_on_replug_hint">接続したヘッドセットを取り外して一時停止した場合、再接続したときに再開します。</string>
   <string name="min">%s 分</string>
   <string name="delete_last_number">最後に入力した番号を削除します</string>
   <plurals name="seconds">

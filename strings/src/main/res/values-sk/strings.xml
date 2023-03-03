@@ -33,8 +33,6 @@
   <string name="bookmark_added">Záložka pridaná</string>
   <!--Settings-->
   <string name="action_settings">Predvoľby</string>
-  <string name="pref_resume_on_replug">Obnoviť prehrávanie</string>
-  <string name="pref_resume_on_replug_hint">Ak je pozastavené odpojením slúchadiel, prehrávanie bude obnovené po pripojení.</string>
   <string name="min">%smin.</string>
   <string name="delete_last_number">Vymazať naposledy zadané číslo</string>
   <plurals name="seconds">

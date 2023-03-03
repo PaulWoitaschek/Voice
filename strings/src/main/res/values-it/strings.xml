@@ -33,8 +33,6 @@
   <string name="bookmark_added">Segnalibro aggiunto</string>
   <!--Settings-->
   <string name="action_settings">Preferenze</string>
-  <string name="pref_resume_on_replug">Riprendi la riproduzione</string>
-  <string name="pref_resume_on_replug_hint">Se hai messo in pausa disinserendo le cuffie, la riproduzione continuerà una volta reinserite.</string>
   <string name="min">%s min</string>
   <string name="delete_last_number">Cancella l\'ultimo numero inserito</string>
   <plurals name="seconds">

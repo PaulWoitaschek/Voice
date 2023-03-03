@@ -33,8 +33,6 @@
   <string name="bookmark_added">Đánh dấu đã được thêm vào</string>
   <!--Settings-->
   <string name="action_settings">Tùy chọn</string>
-  <string name="pref_resume_on_replug">Tiếp tục phát</string>
-  <string name="pref_resume_on_replug_hint">Nếu bạn dừng phát khi tắt tai nghe, chương trình sẽ phát tiếp khi bạn kết nối lại tai nghe.</string>
   <string name="min">%sphút</string>
   <string name="delete_last_number">Xóa số vừa nhập</string>
   <plurals name="seconds">

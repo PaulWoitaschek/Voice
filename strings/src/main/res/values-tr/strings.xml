@@ -33,8 +33,6 @@
   <string name="bookmark_added">Yer imi eklendi</string>
   <!--Settings-->
   <string name="action_settings">Tercihler</string>
-  <string name="pref_resume_on_replug">Geriye oynatıma devam et</string>
-  <string name="pref_resume_on_replug_hint">Kulaklığı çıkardığınızda durakladıysa, tekrar taktığınızda devam eder.</string>
   <string name="min">%s dak</string>
   <string name="delete_last_number">Son girilen numarayı siler</string>
   <plurals name="seconds">

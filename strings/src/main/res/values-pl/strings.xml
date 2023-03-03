@@ -37,8 +37,6 @@
   <string name="bookmark_added">Zakładka dodana</string>
   <!--Settings-->
   <string name="action_settings">Preferencje</string>
-  <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
-  <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
   <string name="min">%s min</string>
   <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
   <plurals name="seconds">

@@ -33,8 +33,6 @@
   <string name="bookmark_added">책갈피 추가됨</string>
   <!--Settings-->
   <string name="action_settings">설정</string>
-  <string name="pref_resume_on_replug">이어서 재생</string>
-  <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
   <string name="min">%s 분</string>
   <string name="delete_last_number">방금 입력한 숫자를 지웁니다</string>
   <plurals name="seconds">

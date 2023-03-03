@@ -32,8 +32,6 @@
   <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
   <!--Settings-->
   <string name="action_settings">تنظیمات</string>
-  <string name="pref_resume_on_replug">ادامه پخش</string>
-  <string name="pref_resume_on_replug_hint">اگر با بیرون کشیدن هدست قطعه متوقف شود، با اتصال مجدد شروع به پخش خواهد کرد.</string>
   <plurals name="seconds">
     <item quantity="one">%d ثانیه</item>
     <item quantity="other">%d ثانیه</item>

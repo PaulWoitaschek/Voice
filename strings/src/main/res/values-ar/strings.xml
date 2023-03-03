@@ -26,8 +26,7 @@
   <!--PlaybackSpeed-->
   <!--Bookmarks-->
   <!--Settings-->
-  <string name="pref_resume_on_replug_hint">إذا توقفت بعد نزع </string>
-  <string name="popup_edit">عدل</string>
+    <string name="popup_edit">عدل</string>
   <string name="remove">إمسح</string>
   <string name="play_current">شغل الحالي</string>
   <string name="refresh">تحديث</string>
