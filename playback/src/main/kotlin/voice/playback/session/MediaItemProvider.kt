@@ -67,9 +67,9 @@ class MediaItemProvider
 
       is MediaId.Chapter -> {
         val content = contentRepo.get(mediaId.bookId) ?: return null
-        chapterRepo.get(mediaId.chapterId)?.toMediaItem(
-          content = content,
-        )
+        chapterRepo.get(mediaId.chapterId)?.let {
+          mediaItem(it, content)
+        }
       }
       MediaId.Recent -> recent()
     }
@@ -77,7 +77,7 @@ class MediaItemProvider
 
   fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
     val items = book.chapters.map { chapter ->
-      chapter.toMediaItem(content = book.content)
+      mediaItem(chapter = chapter, content = book.content)
     }
     return MediaItemsWithStartPosition(
       items,
@@ -99,7 +99,8 @@ class MediaItemProvider
   suspend fun chapters(bookId: BookId): List<MediaItem>? {
     val book = bookRepository.get(bookId) ?: return null
     return book.chapters.map { chapter ->
-      chapter.toMediaItem(
+      mediaItem(
+        chapter = chapter,
         content = book.content,
       )
     }
@@ -135,24 +136,25 @@ class MediaItemProvider
     mediaType = MediaType.AudioBook,
   )
 
+  fun mediaItem(
+    chapter: Chapter,
+    content: BookContent,
+  ) = MediaItem(
+    title = chapter.name ?: chapter.id.value,
+    mediaId = MediaId.Chapter(bookId = content.id, chapterId = chapter.id),
+    browsable = false,
+    isPlayable = true,
+    sourceUri = chapter.id.toUri(),
+    imageUri = content.cover?.toUri(),
+    artist = content.author,
+    mediaType = MediaType.AudioBookChapter,
+    extras = Bundle().apply {
+      putParcelableArray(EXTRA_CHAPTER_MARKS, chapter.chapterMarks.toTypedArray())
+    },
+  )
+
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }
-
-fun Chapter.toMediaItem(
-  content: BookContent,
-) = MediaItem(
-  title = name ?: id.value,
-  mediaId = MediaId.Chapter(bookId = content.id, chapterId = id),
-  browsable = false,
-  isPlayable = true,
-  sourceUri = id.toUri(),
-  imageUri = content.cover?.toUri(),
-  artist = content.author,
-  mediaType = MediaType.AudioBookChapter,
-  extras = Bundle().apply {
-    putParcelableArray(EXTRA_CHAPTER_MARKS, chapterMarks.toTypedArray())
-  },
-)
 
 internal fun MediaItem.chapterMarks(): List<ChapterMark> {
   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

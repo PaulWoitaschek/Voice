@@ -20,10 +20,10 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.session.CustomCommand
 import voice.playback.session.MediaId
+import voice.playback.session.MediaItemProvider
 import voice.playback.session.PlaybackService
 import voice.playback.session.sendCustomCommand
 import voice.playback.session.toMediaIdOrNull
-import voice.playback.session.toMediaItem
 import javax.inject.Inject
 import kotlin.time.Duration
 
@@ -34,6 +34,7 @@ class PlayerController
   private val currentBookId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val volumeGain: VolumeGain,
+  private val mediaItemProvider: MediaItemProvider,
 ) {
 
   private val controller: Deferred<MediaController> = MediaController
@@ -100,7 +101,7 @@ class PlayerController
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
-    val mediaItems = book.chapters.map { it.toMediaItem(book.content) }
+    val mediaItems = book.chapters.map { mediaItemProvider.mediaItem(it, book.content) }
     controller.setMediaItems(
       mediaItems,
       book.content.currentChapterIndex,
@@ -118,8 +119,8 @@ class PlayerController
     it.seekTo((it.currentPosition - rewind.inWholeMilliseconds.coerceAtLeast(0)))
   }
 
-  fun setSpeed(speed: Float) = executeAfterPrepare {
-    it.setPlaybackSpeed(speed)
+  fun setSpeed(speed: Float) = executeAfterPrepare { player ->
+    player.setPlaybackSpeed(speed)
     updateBook { it.copy(playbackSpeed = speed) }
   }
 
