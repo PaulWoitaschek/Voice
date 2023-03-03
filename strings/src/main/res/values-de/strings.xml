@@ -12,6 +12,7 @@
   <string name="next_track">Nächster Track</string>
   <string name="skip_silence">Stille überspringen</string>
   <string name="volume_boost">Lautstärke Boost</string>
+  <string name="more">Mehr</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Okay</string>
@@ -58,7 +59,7 @@
   <string name="refresh">Neu laden</string>
   <string name="reset">Zurücksetzen</string>
   <string name="cover_crop">Cover zurechtschneiden</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Aktuelles</string>
   <string name="book_header_not_started">Neu</string>
   <string name="book_header_completed">Zu Ende</string>
@@ -106,4 +107,6 @@
   <string name="search_hint">Wonach suchst du?</string>
   <string name="battery_optimization_rationale">Aufgrund deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
   <string name="battery_optimization_action">Update</string>
+  <string name="media_session_root">Wurzelordner</string>
+  <string name="media_session_recent">Kürzlich</string>
 </resources>

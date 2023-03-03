@@ -12,6 +12,7 @@
   <string name="next_track">Następna ścieżka</string>
   <string name="skip_silence">Pomiń ciszę</string>
   <string name="volume_boost">Zwiększ głośność</string>
+  <string name="more">Więcej</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Wybierz</string>
@@ -60,7 +61,7 @@
   <string name="refresh">Odśwież</string>
   <string name="reset">Zresetuj</string>
   <string name="cover_crop">Przytnij okładkę</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Aktualne</string>
   <string name="book_header_not_started">Nierozpoczęte</string>
   <string name="book_header_completed">Ukończone</string>

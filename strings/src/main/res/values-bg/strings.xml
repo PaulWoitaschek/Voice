@@ -46,7 +46,7 @@
   <string name="refresh">Опресняване</string>
   <string name="reset">Нулиране</string>
   <string name="cover_crop">Изрязване на обложката</string>
-    <!--book category-->
+  <!--book category-->
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->
 </resources>

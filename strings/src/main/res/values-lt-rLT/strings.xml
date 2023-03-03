@@ -60,7 +60,7 @@
   <string name="refresh">Atnaujinti</string>
   <string name="reset">Nustatyti iš naujo</string>
   <string name="cover_crop">Apkarpyti viršelį</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Dabartinės</string>
   <string name="book_header_not_started">Dar nepradėtos</string>
   <string name="book_header_completed">Užbaigtos</string>

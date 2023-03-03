@@ -46,7 +46,7 @@
   <string name="refresh">새로고침</string>
   <string name="reset">초기화</string>
   <string name="cover_crop">책표지 자르기</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">현재</string>
   <string name="book_header_not_started">아직 재생 안 됨</string>
   <string name="book_header_completed">완료됨</string>

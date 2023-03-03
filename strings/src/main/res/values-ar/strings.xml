@@ -4,35 +4,115 @@
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">الغطاء</string>
-  <string name="play_pause">العب / توقف</string>
-  <string name="action_sleep">وقت النوم</string>
-  <string name="rewind">إرجاع</string>
+  <string name="play_pause">شغّل/ ألبث</string>
+  <string name="action_sleep">مؤقت النوم</string>
+  <string name="rewind">أرجع</string>
   <string name="fast_forward">بسرعة للأمام</string>
   <string name="previous_track">الشريط السابق</string>
-  <string name="next_track">الشريط التالي</string>
+  <string name="next_track">المسار التالي</string>
+  <string name="skip_silence">تخطَ الصمت</string>
+  <string name="volume_boost">مكبر الصوت</string>
+  <string name="more">المزيد</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
-  <string name="dialog_confirm">إعداد</string>
-  <string name="dialog_cancel">إلغاء</string>
+  <string name="dialog_confirm">عيّن</string>
+  <string name="dialog_cancel">ألغ</string>
   <!--EditBookDialog-->
-  <string name="content_cover">أظهر الغطاء للإختياره</string>
-  <string name="change_book_name">الأسم</string>
+  <string name="content_cover">أظهر الغطاء للاختياره</string>
+  <string name="change_book_name">الاسم</string>
   <string name="download_book_cover">الغلاف من الإنترنت</string>
-  <string name="pick_book_cover">الغلاف من ملف نظام</string>
-  <string name="edit_book_title">عدل الكتاب</string>
+  <string name="pick_book_cover">الغلاف من ملفات نظام</string>
+  <string name="edit_book_title">حرر كتاب</string>
+  <string name="mark_as_completed">علّمه مكتمل</string>
+  <string name="mark_as_current">علّمه الحالي</string>
+  <string name="mark_as_not_started">علّمه أنه لم يبدأ</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
-  <string name="audiobook_folders_title">مجلد الكتب الصوتية</string>
+  <string name="audiobook_folders_title">مجلدات الكتب الصوتية</string>
   <!--PlaybackSpeed-->
+  <string name="playback_speed">سرعة التشغيل</string>
   <!--Bookmarks-->
+  <string name="bookmark">العلامات المرجعية</string>
+  <string name="bookmark_edit_title">حرر العلامات</string>
+  <string name="bookmark_edit_hint">اسم العلامة</string>
+  <string name="bookmark_added">أضيفت علامة مرجعية</string>
   <!--Settings-->
-    <string name="popup_edit">عدل</string>
-  <string name="remove">إمسح</string>
+  <string name="action_settings">التفضيلات</string>
+  <string name="min">%s د</string>
+  <string name="delete_last_number">تحذف أخر رَقَم مدخل</string>
+  <plurals name="seconds">
+    <item quantity="zero">%dثانية</item>
+    <item quantity="one">%dثانية واحدة</item>
+    <item quantity="two">%dثانيتين</item>
+    <item quantity="few">%dثواني</item>
+    <item quantity="many">%dثانية</item>
+    <item quantity="other">%dثانية</item>
+  </plurals>
+  <string name="pref_seek_time">مقدار القصد</string>
+  <string name="pref_theme_dark">السمة الداكنة</string>
+  <string name="pref_auto_rewind_title">إرجاع آلي</string>
+  <string name="pref_suggest_idea">اقترح فكرة</string>
+  <string name="pref_use_grid">استخدم تخطيط الشبكة</string>
+  <string name="pref_report_issue">أبلغ عن مشكلة</string>
+  <string name="pref_help_translating">ساعد في تعريب فويس</string>
+  <string name="pref_get_support">احصل على دعم</string>
+  <string name="pref_app_version">إصدارة التطبيق</string>
+  <string name="popup_edit">حرر</string>
+  <string name="remove">أزل</string>
   <string name="play_current">شغل الحالي</string>
-  <string name="refresh">تحديث</string>
-  <string name="reset">أعادة</string>
-  <string name="cover_crop">إقتصاص الغطاء</string>
+  <string name="refresh">حدّث</string>
+  <string name="reset">أعد الضبط</string>
+  <string name="cover_crop">اقتص الغطاء</string>
   <!--book category-->
+  <string name="book_header_current">الحالي</string>
+  <string name="book_header_not_started">لم يبدأ بعد</string>
+  <string name="book_header_completed">انتهى</string>
+  <string name="close">أغلق</string>
+  <string name="delete">احذف</string>
+  <string name="add">أضف</string>
+  <string name="folder_type_audiobooks">مجلد الكتاب الصوتي</string>
+  <string name="folder_type_single_folder">مجلد فردي</string>
+  <string name="folder_type_single_file">ملف فردي</string>
+  <string name="folder_type_dialog_title">ماذا تريد أن تضيف؟</string>
+  <string name="folder_mode_root">المجلد الأساسي للكتاب الصوتي. كل مجلد فرعي = كتاب واحد مستقل.</string>
+  <string name="folder_mode_single">مجلد كتاب صوتي فردي</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="zero">%dملف صوتي</item>
+    <item quantity="one">%d ملف صوتي واحد</item>
+    <item quantity="two">%d ملفين صوتيين</item>
+    <item quantity="few">%d ملفات صوتية</item>
+    <item quantity="many">%d ملفاً صوتياً</item>
+    <item quantity="other">%d ملف صوتي</item>
+  </plurals>
+  <string name="folder_type_book_example_header">سيؤدي هذا إلى اكتشاف الكتاب التالي </string>
+  <string name="folder_type_no_books">لم يتمكن فويس من اكتشاف أي كتب. هل هناك أي ملفات صوتية؟</string>
+  <string name="folder_type_title">ما هي هيكلية ملفاتك؟</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">الآن</string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">دعنا نضيف مجلد كتبك الصوتية لتبدأ الاستماع!</string>
+  <string name="migration_hint_title">الوصول إلى مواضع الكتاب القديم</string>
+  <string name="migration_hint_content">نظرًا للتغييرات في إصدارات أندوريد الأحدث، من الضروري تحديد مجلد الكتاب الصوتي باستخدام منتقي النظام.\n\nانقر فوق الرمز أعلاه لعرض مواضع كتابك القديم.</string>
+  <string name="migration_hint_confirm">فهمت</string>
+  <string name="migration_detail_title">مواضع الكتاب القديم</string>
+  <string name="migration_detail_content_name">الاسم</string>
+  <string name="migration_detail_content_root">المجلد الأساسي</string>
+  <string name="migration_detail_content_position">الموضع</string>
+  <string name="migration_detail_content_bookmarks">العلامات المرجعية</string>
+  <string name="migration_detail_content_added_at">مضافة في</string>
+  <string name="migration_detail_content_position_current_file_title">الملف الحالي</string>
+  <string name="migration_detail_content_position_current_file_position">الموضع في الملف</string>
+  <string name="migration_detail_content_position_current_chapter_title">الفصل  الحالي</string>
+  <string name="migration_detail_content_position_current_chapter_position">الموضوع في الفصل</string>
+  <string name="migration_delete_dialog_title">احذف المواضع</string>
+  <string name="migration_delete_dialog_content">بمجرد حذف المواضع القديمة، لن تتمكن من استعادة مواضع التشغيل القديمة.</string>
+  <string name="migration_delete_dialog_action_delete">احذف</string>
+  <string name="migration_delete_dialog_action_keep">احتفظ بها</string>
+  <string name="delete_book_bottom_sheet_title">احذف الكتاب</string>
+  <string name="delete_book_dialog_title">احذف الكتاب</string>
+  <string name="delete_book_dialog_deletion_confirmation">احذف ملفاتي</string>
+  <string name="delete_book_dialog_content">ستحذف هذه الملفات من على جهازك.</string>
+  <string name="search_hint">هل أنت متحقق من ذلك؟</string>
+  <string name="battery_optimization_rationale">نظراً لقيود الطاقة، فقد ينقطع التشغيل.</string>
+  <string name="battery_optimization_action">حدّث</string>
 </resources>

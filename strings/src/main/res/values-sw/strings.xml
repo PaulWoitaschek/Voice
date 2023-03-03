@@ -28,7 +28,7 @@
   <string name="bookmark_added">Alamisho Imeogezwa</string>
   <!--Settings-->
   <string name="action_settings">Mapendeleo</string>
-    <string name="min">Dakika %s</string>
+  <string name="min">Dakika %s</string>
   <plurals name="seconds">
     <item quantity="one">Sekunde %d</item>
     <item quantity="other">Sekunde %d</item>
@@ -40,7 +40,7 @@
   <string name="play_current">Chaza Iliyomo</string>
   <string name="refresh">Rudisha nyuma</string>
   <string name="reset">Weka Upya</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">iliyopo</string>
   <string name="book_header_not_started">Ambayo Haija Anzwa</string>
   <string name="book_header_completed">Iliyo malizwa</string>

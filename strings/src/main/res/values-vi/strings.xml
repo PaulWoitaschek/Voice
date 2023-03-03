@@ -46,7 +46,7 @@
   <string name="refresh">Làm mới</string>
   <string name="reset">Khởi động lại</string>
   <string name="cover_crop">Cắt ảnh bìa</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Đang nghe</string>
   <string name="book_header_not_started">Chưa nghe bao giờ</string>
   <string name="book_header_completed">Hoàn thành</string>

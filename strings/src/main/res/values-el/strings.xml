@@ -46,7 +46,7 @@
   <string name="refresh">Ανανέωση</string>
   <string name="reset">Επαναφορά</string>
   <string name="cover_crop">Περικοπή εξωφύλλου</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Τρέχον</string>
   <string name="book_header_not_started">Μη διαβασμένα</string>
   <string name="book_header_completed">Ολοκληρωμένα </string>

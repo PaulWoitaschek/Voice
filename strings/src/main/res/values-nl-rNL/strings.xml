@@ -12,6 +12,7 @@
   <string name="next_track">Volgend gedeelte</string>
   <string name="skip_silence">Stilte overslaan</string>
   <string name="volume_boost">Volumeversterking</string>
+  <string name="more">Meer</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Instellen</string>
@@ -58,7 +59,7 @@
   <string name="refresh">Verversen</string>
   <string name="reset">Herstellen</string>
   <string name="cover_crop">Omslag bijsnijden</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog niet begonnen</string>
   <string name="book_header_completed">Voltooid</string>

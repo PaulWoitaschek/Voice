@@ -47,7 +47,7 @@
   <string name="refresh">Verfris</string>
   <string name="reset">Herstel</string>
   <string name="cover_crop">Sny bedekblad</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog nie begin nie</string>
   <string name="book_header_completed">Voltooi</string>

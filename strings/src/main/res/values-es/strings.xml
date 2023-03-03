@@ -49,7 +49,7 @@
   <string name="refresh">Actualizar</string>
   <string name="reset">Reiniciar</string>
   <string name="cover_crop">Recortar cubierta</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Actual</string>
   <string name="book_header_not_started">Aún no comenzado</string>
   <string name="book_header_completed">Completado</string>

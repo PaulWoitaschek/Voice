@@ -29,7 +29,7 @@ tasks.wrapper {
 tasks {
   val pullStrings = register<Exec>("pullStrings") {
     executable = "tx"
-    args("pull", "-a", "--parallel")
+    args("pull", "--all")
   }
   val removeEmptyListings = register("removeEmptyListings") {
     dependsOn(pullStrings)

@@ -60,7 +60,7 @@
   <string name="refresh">Обновить</string>
   <string name="reset">Сброс</string>
   <string name="cover_crop">Обрезать обложку</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Слушаю</string>
   <string name="book_header_not_started">Непрослушанные</string>
   <string name="book_header_completed">Прослушанные</string>

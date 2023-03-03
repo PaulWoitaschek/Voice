@@ -51,7 +51,7 @@
   <string name="refresh">Frissítés</string>
   <string name="reset">Visszaállítás</string>
   <string name="cover_crop">Borító kivágása</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Jelenlegi</string>
   <string name="book_header_not_started">Még nem elkezdett</string>
   <string name="book_header_completed">Befejezett</string>

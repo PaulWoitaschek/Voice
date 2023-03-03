@@ -11,6 +11,8 @@
   <string name="previous_track">Předchozí skladba</string>
   <string name="next_track">Následující skladba</string>
   <string name="skip_silence">Přeskočit ticho</string>
+  <string name="volume_boost">Zesílení hlasitosti</string>
+  <string name="more">Více</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Nastavit</string>
@@ -21,6 +23,9 @@
   <string name="download_book_cover">Obal z internetu</string>
   <string name="pick_book_cover">Obal ze souborového systému</string>
   <string name="edit_book_title">Upravit knihu</string>
+  <string name="mark_as_completed">Označit jako dokončené</string>
+  <string name="mark_as_current">Označit jako aktualní</string>
+  <string name="mark_as_not_started">Označit jako dosud nezahájené</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">Adresáře s audioknihami</string>

@@ -12,6 +12,7 @@
   <string name="next_track">Nästa spår</string>
   <string name="skip_silence">Hoppa över tystnad</string>
   <string name="volume_boost">Volymökning</string>
+  <string name="more">Mer</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Ställ in</string>
@@ -58,7 +59,7 @@
   <string name="refresh">Uppdatera</string>
   <string name="reset">Återställ</string>
   <string name="cover_crop">Beskär omslag</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Aktuella</string>
   <string name="book_header_not_started">Inte påbörjad ännu</string>
   <string name="book_header_completed">Avslutad</string>

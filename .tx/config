@@ -1,34 +1,35 @@
 [main]
 host = https://www.transifex.com
 
-[voice.strings]
-file_filter = strings/src/main/res/values-<lang>/strings.xml
-source_file = strings/src/main/res/values/strings.xml
-source_lang = en
-type = ANDROID
+[o:PaulWoitaschek:p:voice:r:play-store-description]
+file_filter  = app/src/main/play/listings/<lang>/full-description.txt
+source_file  = app/src/main/play/listings/en-US/full-description.txt
+source_lang  = en
+type         = TXT
+minimum_perc = 100
+lang_map     = hu: hu-HU, fr: fr-FR, sv: sv-SE, lt_LT: lt, nl_NL: nl-NL, ru: ru-RU, de: de-DE, ja: ja-JP, pl: pl-PL, zh_CN: zh-CN
+
+[o:PaulWoitaschek:p:voice:r:play-store-teaser]
+file_filter  = app/src/main/play/listings/<lang>/short-description.txt
+source_file  = app/src/main/play/listings/en-US/short-description.txt
+source_lang  = en
+type         = TXT
+minimum_perc = 100
+lang_map     = pl: pl-PL, de: de-DE, hu: hu-HU, fr: fr-FR, zh_CN: zh-CN, nl_NL: nl-NL, ru: ru-RU, sv: sv-SE, lt_LT: lt, ja: ja-JP
+
+[o:PaulWoitaschek:p:voice:r:play-store-title]
+file_filter  = app/src/main/play/listings/<lang>/title.txt
+source_file  = app/src/main/play/listings/en-US/title.txt
+source_lang  = en
+type         = TXT
+minimum_perc = 100
+lang_map     = de: de-DE, zh_CN: zh-CN, lt_LT: lt, nl_NL: nl-NL, ru: ru-RU, ja: ja-JP, pl: pl-PL, hu: hu-HU, fr: fr-FR, sv: sv-SE
+
+[o:PaulWoitaschek:p:voice:r:strings]
+file_filter  = strings/src/main/res/values-<lang>/strings.xml
+source_file  = strings/src/main/res/values/strings.xml
+source_lang  = en
+type         = ANDROID
 minimum_perc = 1
-lang_map = es_ES: es-rES,pt_BR: pt-rBR,zh_CN: zh-rCN,sv_SE: sv-rSE,fa_IR: fa-rIR,hi_IN: hi-rIN,lt_LT: lt-rLT,nl_NL: nl-rNL,pt_PT: pt-rPT,da_DK: da-rDK,es_VE: es-rVE,es_CL: es-rCL,pl_PL: pl-rPL,ne_NP: ne-rNP
+lang_map     = da_DK: da-rDK, es_CL: es-rCL, ne_NP: ne-rNP, es_ES: es-rES, pt_BR: pt-rBR, zh_CN: zh-rCN, lt_LT: lt-rLT, nl_NL: nl-rNL, sv_SE: sv-rSE, hi_IN: hi-rIN, fa_IR: fa-rIR, pt_PT: pt-rPT, es_VE: es-rVE, pl_PL: pl-rPL
 
-[voice.play-store-description]
-file_filter = app/src/main/play/listings/<lang>/full-description.txt
-source_file = app/src/main/play/listings/en-US/full-description.txt
-source_lang = en
-type = TXT
-minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP,pl:pl-PL
-
-[voice.play-store-teaser]
-file_filter = app/src/main/play/listings/<lang>/short-description.txt
-source_file = app/src/main/play/listings/en-US/short-description.txt
-source_lang = en
-type = TXT
-minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP,pl:pl-PL
-
-[voice.play-store-title]
-file_filter = app/src/main/play/listings/<lang>/title.txt
-source_file = app/src/main/play/listings/en-US/title.txt
-source_lang = en
-type = TXT
-minimum_perc = 100
-lang_map = de:de-DE,hu:hu-HU,fr:fr-FR,sv:sv-SE,zh_CN:zh-CN,lt_LT:lt,nl_NL:nl-NL,ru:ru-RU,ja:ja-JP,pl:pl-PL

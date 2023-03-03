@@ -48,7 +48,7 @@
   <string name="refresh">Yenile</string>
   <string name="reset">Sıfırla</string>
   <string name="cover_crop">Kapağı kırp</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Şu anki</string>
   <string name="book_header_not_started">Henüz başlamadı</string>
   <string name="book_header_completed">Tamamlandı</string>

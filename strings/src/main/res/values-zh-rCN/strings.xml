@@ -12,6 +12,7 @@
   <string name="next_track">下一节</string>
   <string name="skip_silence">跳过空白部分</string>
   <string name="volume_boost">音量提升</string>
+  <string name="more">更多</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">设置</string>
@@ -57,7 +58,7 @@
   <string name="refresh">刷新</string>
   <string name="reset">重置</string>
   <string name="cover_crop">封面裁剪</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">正在播放中</string>
   <string name="book_header_not_started">尚未开始播放</string>
   <string name="book_header_completed">已结束播放</string>

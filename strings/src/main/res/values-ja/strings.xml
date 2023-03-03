@@ -12,6 +12,7 @@
   <string name="next_track">次のトラック</string>
   <string name="skip_silence">無音をスキップ</string>
   <string name="volume_boost">音量ブースト</string>
+  <string name="more">さらに表示</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">設定</string>
@@ -57,7 +58,7 @@
   <string name="refresh">更新</string>
   <string name="reset">リセット</string>
   <string name="cover_crop">カバーをトリミング</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">現在</string>
   <string name="book_header_not_started">未再生</string>
   <string name="book_header_completed">完了</string>
@@ -68,7 +69,7 @@
   <string name="folder_type_single_folder">単一フォルダー</string>
   <string name="folder_type_single_file">単一ファイル</string>
   <string name="folder_type_dialog_title">何を追加しますか？</string>
-  <string name="folder_mode_root">オーディオブックのルートフォルダーです。1つのサブフォルダーが1冊のブックです。</string>
+  <string name="folder_mode_root">オーディオブックのルートフォルダー (1つのサブフォルダーが1冊のブック)</string>
   <string name="folder_mode_single">単一のオーディオブックフォルダー</string>
   <plurals name="folder_type_file_count">
     <item quantity="other">%d 音声ファイル</item>

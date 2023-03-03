@@ -36,7 +36,7 @@
   <string name="popup_edit">Editar</string>
   <string name="remove">Remover</string>
   <string name="refresh">Actualizar</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Actual</string>
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->

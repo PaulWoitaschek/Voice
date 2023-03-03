@@ -12,6 +12,7 @@
   <string name="next_track">Næste nummer</string>
   <string name="skip_silence">Spring stilhed over</string>
   <string name="volume_boost">Lydstyrkeforøgelse</string>
+  <string name="more">Mere</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Angiv</string>
@@ -58,7 +59,7 @@
   <string name="refresh">Opfrisk</string>
   <string name="reset">Nulstil</string>
   <string name="cover_crop">Skær cover til</string>
-    <!--book category-->
+  <!--book category-->
   <string name="book_header_current">Nuværende</string>
   <string name="book_header_not_started">Endnu ikke startet</string>
   <string name="book_header_completed">Afsluttet</string>
@@ -104,4 +105,5 @@
   <string name="delete_book_dialog_deletion_confirmation">Slet mine filer</string>
   <string name="delete_book_dialog_content">Dette vil slette filerne på din enhed.</string>
   <string name="search_hint">Hvad leder du efter?</string>
+  <string name="battery_optimization_action">Opdatér</string>
 </resources>
