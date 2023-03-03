@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="nl_NL">
   <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!-- in the book-overview the show-all button which displays all books of a category -->
   <!--BookPlayFragment-->
   <string name="cover">Omslag</string>
   <string name="play_pause">Afspelen/Pauzeren</string>
@@ -47,6 +47,7 @@
   <string name="pref_seek_time">Aantal overslaan</string>
   <string name="pref_theme_dark">Donker thema</string>
   <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
+
   <string name="pref_suggest_idea">Idee delen</string>
   <string name="pref_use_grid">Roosterindeling gebruiken</string>
   <string name="pref_report_issue">Probleem melden</string>
@@ -59,17 +60,21 @@
   <string name="refresh">Verversen</string>
   <string name="reset">Herstellen</string>
   <string name="cover_crop">Omslag bijsnijden</string>
-  <!--book category-->
+
+  <!-- book category -->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog niet begonnen</string>
   <string name="book_header_completed">Voltooid</string>
+
   <string name="close">Sluiten</string>
   <string name="delete">Verwijderen</string>
   <string name="add">Toevoegen</string>
+
   <string name="folder_type_audiobooks">Luisterboekmap</string>
   <string name="folder_type_single_folder">Losse map</string>
   <string name="folder_type_single_file">Los bestand</string>
   <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
+
   <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
   <string name="folder_mode_single">Losse luisterboekmap</string>
   <plurals name="folder_type_file_count">
@@ -78,14 +83,19 @@
   </plurals>
   <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
   <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
+
   <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
-  <!--will be shown as the time for a bookmark that was just created-->
+
+  <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">Zojuist</string>
-  <!--will be shown as a hint when no books have been added-->
+
+  <!-- will be shown as a hint when no books have been added -->
   <string name="voice_intro_first_book">Voeg een luisterboekmap toe om te beginnen met luisteren.</string>
+
   <string name="migration_hint_title">Oude leeslocaties</string>
   <string name="migration_hint_content">Door wijzigingen in nieuwere Android-versies, is het noodzakelijk om je luisterboek opnieuw te kiezen via de bestandskiezer.\n\nDruk op bovenstaand pictogram je leeslocaties te bekijken.</string>
   <string name="migration_hint_confirm">Ik begrijp het</string>
+
   <string name="migration_detail_title">Oude leeslocaties</string>
   <string name="migration_detail_content_name">Naam</string>
   <string name="migration_detail_content_root">Hoofdmap</string>
@@ -96,15 +106,22 @@
   <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
   <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
   <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
+
   <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
   <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
   <string name="migration_delete_dialog_action_delete">Verwijderen</string>
   <string name="migration_delete_dialog_action_keep">Behouden</string>
+
   <string name="delete_book_bottom_sheet_title">Boek verwijderen</string>
   <string name="delete_book_dialog_title">Boek verwijderen</string>
   <string name="delete_book_dialog_deletion_confirmation">Mijn bestanden verwijderen</string>
   <string name="delete_book_dialog_content">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
+
   <string name="search_hint">Waar ben je naar op zoek?</string>
+
   <string name="battery_optimization_rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
   <string name="battery_optimization_action">Update</string>
+
+  <string name="media_session_root">Hoofdmap</string>
+  <string name="media_session_recent">Recent</string>
 </resources>
