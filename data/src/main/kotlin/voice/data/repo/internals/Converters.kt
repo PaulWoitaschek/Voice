@@ -18,13 +18,12 @@ import java.util.UUID
 class Converters {
 
   private val json = Json { allowStructuredMapKeys = true }
-  private val markDataListSerializer = ListSerializer(MarkData.serializer())
 
   @TypeConverter
-  fun fromMarks(data: List<MarkData>): String = json.encodeToString(markDataListSerializer, data)
+  fun fromMarks(data: List<MarkData>): String = json.encodeToString(ListSerializer(MarkData.serializer()), data)
 
   @TypeConverter
-  fun toMarks(string: String): List<MarkData> = json.decodeFromString(markDataListSerializer, string)
+  fun toMarks(string: String): List<MarkData> = json.decodeFromString(ListSerializer(MarkData.serializer()), string)
 
   @TypeConverter
   fun fromLegacyMarks(data: List<LegacyMarkData>): String = json.encodeToString(ListSerializer(LegacyMarkData.serializer()), data)
