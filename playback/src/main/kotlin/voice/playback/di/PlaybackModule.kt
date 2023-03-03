@@ -71,7 +71,7 @@ object PlaybackModule {
 
   @Provides
   @PlaybackScope
-  fun scope(): CoroutineScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+  fun scope(): CoroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Provides
   @PlaybackScope

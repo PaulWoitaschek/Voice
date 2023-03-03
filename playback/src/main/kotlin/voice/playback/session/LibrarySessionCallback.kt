@@ -15,12 +15,15 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
+import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
+import voice.playback.PlayerController
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import javax.inject.Inject
+import javax.inject.Provider
 
 class LibrarySessionCallback
 @Inject constructor(
@@ -31,6 +34,7 @@ class LibrarySessionCallback
   private val bookSearchHandler: BookSearchHandler,
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
+  private val playerController: Provider<PlayerController>,
 ) : MediaLibraryService.MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
@@ -81,7 +85,15 @@ class LibrarySessionCallback
     browser: MediaSession.ControllerInfo,
     params: MediaLibraryService.LibraryParams?,
   ): ListenableFuture<LibraryResult<MediaItem>> {
-    return Futures.immediateFuture(LibraryResult.ofItem(mediaItemProvider.root(), params))
+    val mediaItem = if (params?.isRecent == true) {
+      scope.launch {
+        playerController.get().maybePrepare()
+      }
+      mediaItemProvider.recent() ?: mediaItemProvider.root()
+    } else {
+      mediaItemProvider.root()
+    }
+    return Futures.immediateFuture(LibraryResult.ofItem(mediaItem, params))
   }
 
   override fun onGetItem(

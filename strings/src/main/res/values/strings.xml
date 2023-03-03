@@ -63,7 +63,7 @@
   <string name="reset">Reset</string>
   <string name="cover_crop">Crop cover</string>
 
-    <!-- book category -->
+  <!-- book category -->
   <string name="book_header_current">Current</string>
   <string name="book_header_not_started">Not started Yet</string>
   <string name="book_header_completed">Completed</string>
@@ -125,4 +125,5 @@
   <string name="battery_optimization_action">Update</string>
 
   <string name="media_session_root">Root</string>
+  <string name="media_session_recent">Recent</string>
 </resources>

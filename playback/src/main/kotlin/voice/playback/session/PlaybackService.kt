@@ -1,7 +1,10 @@
 package voice.playback.session
 
+import android.content.Intent
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import voice.common.rootComponentAs
 import voice.playback.di.PlaybackComponent
 import voice.playback.player.VoicePlayer
@@ -11,6 +14,9 @@ class PlaybackService : MediaLibraryService() {
 
   @Inject
   lateinit var session: MediaLibrarySession
+
+  @Inject
+  lateinit var scope: CoroutineScope
 
   @Inject
   lateinit var player: VoicePlayer
@@ -25,6 +31,17 @@ class PlaybackService : MediaLibraryService() {
 
   override fun onDestroy() {
     super.onDestroy()
+    release()
+  }
+
+  override fun onTaskRemoved(rootIntent: Intent?) {
+    super.onTaskRemoved(rootIntent)
+    release()
+    stopSelf()
+  }
+
+  private fun release() {
+    scope.cancel()
     player.release()
     session.release()
   }

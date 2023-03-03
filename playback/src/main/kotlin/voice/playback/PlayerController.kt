@@ -3,14 +3,13 @@ package voice.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.media3.session.MediaBrowser
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
@@ -37,15 +36,12 @@ class PlayerController
   private val volumeGain: VolumeGain,
 ) {
 
-  private val browserFuture: ListenableFuture<MediaBrowser> = MediaBrowser.Builder(
-    context,
-    SessionToken(context, ComponentName(context, PlaybackService::class.java)),
-  ).buildAsync()
+  private val controller: Deferred<MediaController> = MediaController
+    .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
+    .buildAsync()
+    .asDeferred()
 
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
-
-  private val controller: MediaBrowser?
-    get() = if (browserFuture.isDone) browserFuture.get() else null
 
   fun setPosition(time: Long, id: ChapterId) = executeAfterPrepare { controller ->
     val bookId = currentBookId.data.first() ?: return@executeAfterPrepare
@@ -94,6 +90,10 @@ class PlayerController
     }
   }
 
+  suspend fun maybePrepare() {
+    maybePrepare(awaitConnect())
+  }
+
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookId.data.first() ?: return false
     if ((controller.currentMediaItem?.mediaId?.toMediaIdOrNull() as MediaId.Chapter?)?.bookId == bookId) {
@@ -134,16 +134,14 @@ class PlayerController
     it.volume = volume
   }
 
-  private inline fun executeAfterPrepare(crossinline action: suspend (MediaBrowser) -> Unit) {
-    val controller = controller ?: return
+  private inline fun executeAfterPrepare(crossinline action: suspend (MediaController) -> Unit) {
     scope.launch {
+      val controller = controller.await()
       if (maybePrepare(controller)) {
         action(controller)
       }
     }
   }
 
-  suspend fun awaitConnect() {
-    browserFuture.await()
-  }
+  suspend fun awaitConnect(): MediaController = controller.await()
 }

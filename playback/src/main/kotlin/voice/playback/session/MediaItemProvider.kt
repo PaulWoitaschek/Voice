@@ -5,14 +5,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import voice.common.BookId
+import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
@@ -33,6 +37,8 @@ class MediaItemProvider
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
   private val imageFileProvider: ImageFileProvider,
+  @CurrentBook
+  private val currentBookId: DataStore<BookId?>,
 ) {
 
   fun root(): MediaItem = MediaItem(
@@ -40,8 +46,16 @@ class MediaItemProvider
     browsable = true,
     isPlayable = false,
     mediaId = MediaId.Root,
-    mediaType = MediaType.AudioBook,
+    mediaType = MediaType.AudioBookRoot,
   )
+
+  fun recent(): MediaItem? = MediaItem(
+    title = application.getString(R.string.media_session_recent),
+    browsable = true,
+    isPlayable = false,
+    mediaId = MediaId.Recent,
+    mediaType = MediaType.AudioBook,
+  ).takeIf { runBlocking { currentBookId.data.first() != null } }
 
   suspend fun item(id: String): MediaItem? {
     val mediaId = id.toMediaIdOrNull() ?: return null
@@ -57,14 +71,13 @@ class MediaItemProvider
           content = content,
         )
       }
+      MediaId.Recent -> recent()
     }
   }
 
   fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
     val items = book.chapters.map { chapter ->
-      chapter.toMediaItem(
-        content = book.content,
-      )
+      chapter.toMediaItem(content = book.content)
     }
     return MediaItemsWithStartPosition(
       items,
@@ -79,7 +92,7 @@ class MediaItemProvider
         val book = bookRepository.get(mediaId.id) ?: return null
         mediaItemsWithStartPosition(book)
       }
-      is MediaId.Chapter, MediaId.Root, null -> null
+      is MediaId.Chapter, MediaId.Root, MediaId.Recent, null -> null
     }
   }
 
@@ -101,19 +114,22 @@ class MediaItemProvider
             book.toMediaItem()
           }
       }
-
       is MediaId.Book -> {
         chapters(mediaId.id)
       }
-
       is MediaId.Chapter -> null
+      MediaId.Recent -> {
+        val bookId = currentBookId.data.first() ?: return null
+        val book = bookRepository.get(bookId) ?: return null
+        listOf(book.toMediaItem())
+      }
     }
   }
 
   private fun Book.toMediaItem() = MediaItem(
     title = content.name,
     mediaId = MediaId.Book(id),
-    browsable = true,
+    browsable = false,
     isPlayable = true,
     imageUri = content.cover?.toProvidedUri(),
     mediaType = MediaType.AudioBook,
@@ -172,6 +188,10 @@ sealed interface MediaId {
     val bookId: BookId,
     val chapterId: ChapterId,
   ) : MediaId
+
+  @Serializable
+  @SerialName("recent")
+  object Recent : MediaId
 }
 
 private enum class MediaType {
