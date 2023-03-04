@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="zh_CN">
   <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!-- in the book-overview the show-all button which displays all books of a category -->
   <!--BookPlayFragment-->
   <string name="cover">封面</string>
   <string name="play_pause">播放 / 暂停</string>
@@ -46,6 +46,7 @@
   <string name="pref_seek_time">跳过时间</string>
   <string name="pref_theme_dark">暗黑主题</string>
   <string name="pref_auto_rewind_title">自动回退</string>
+
   <string name="pref_suggest_idea">提出建议</string>
   <string name="pref_use_grid">使用网格布局</string>
   <string name="pref_report_issue">报告问题</string>
@@ -58,17 +59,21 @@
   <string name="refresh">刷新</string>
   <string name="reset">重置</string>
   <string name="cover_crop">封面裁剪</string>
-  <!--book category-->
+
+  <!-- book category -->
   <string name="book_header_current">正在播放中</string>
   <string name="book_header_not_started">尚未开始播放</string>
   <string name="book_header_completed">已结束播放</string>
+
   <string name="close">关闭</string>
   <string name="delete">删除</string>
   <string name="add">添加</string>
+
   <string name="folder_type_audiobooks">有声书文件夹</string>
   <string name="folder_type_single_folder">一个文件夹</string>
   <string name="folder_type_single_file">一个文件</string>
   <string name="folder_type_dialog_title">希望添加什么？</string>
+
   <string name="folder_mode_root">有声书根文件夹。一个文件夹 = 一本书。</string>
   <string name="folder_mode_single">单个有声书文件夹</string>
   <plurals name="folder_type_file_count">
@@ -76,14 +81,19 @@
   </plurals>
   <string name="folder_type_book_example_header">这样操作将找到以下有声书</string>
   <string name="folder_type_no_books">Voice没有找到任何有声书。声音文件是否存在？</string>
+
   <string name="folder_type_title">您的文件是如何组织的？</string>
-  <!--will be shown as the time for a bookmark that was just created-->
+
+  <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">刚才</string>
-  <!--will be shown as a hint when no books have been added-->
+
+  <!-- will be shown as a hint when no books have been added -->
   <string name="voice_intro_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
+
   <string name="migration_hint_title">正在读取旧书位置</string>
   <string name="migration_hint_content">由于较新Android版本中的改变，需要使用系统选择器选择您的有声书文件夹。\n\n单击上面的图标以查看您的旧书位置。</string>
   <string name="migration_hint_confirm">明白</string>
+
   <string name="migration_detail_title">旧书位置</string>
   <string name="migration_detail_content_name">名称</string>
   <string name="migration_detail_content_root">根文件夹</string>
@@ -94,15 +104,22 @@
   <string name="migration_detail_content_position_current_file_position">文件中的位置</string>
   <string name="migration_detail_content_position_current_chapter_title">当前章节</string>
   <string name="migration_detail_content_position_current_chapter_position">章节中的位置</string>
+
   <string name="migration_delete_dialog_title">删除位置</string>
   <string name="migration_delete_dialog_content">删除旧位置后，您将无法恢复旧的播放位置。</string>
   <string name="migration_delete_dialog_action_delete">删除</string>
   <string name="migration_delete_dialog_action_keep">保留</string>
+
   <string name="delete_book_bottom_sheet_title">删除有声书</string>
   <string name="delete_book_dialog_title">删除有声书</string>
   <string name="delete_book_dialog_deletion_confirmation">删除我的文件</string>
   <string name="delete_book_dialog_content">这样做将从您的设备上删除文件。</string>
+
   <string name="search_hint">您在找什么？</string>
+
   <string name="battery_optimization_rationale">由于您的电源限制，可能会发生播放中断。</string>
   <string name="battery_optimization_action">更新</string>
+
+  <string name="media_session_root">根目录</string>
+  <string name="media_session_recent">最近</string>
 </resources>
