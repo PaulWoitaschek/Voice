@@ -2,7 +2,6 @@ package voice.playback.session
 
 import android.app.Application
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
@@ -14,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import voice.common.BookId
 import voice.common.pref.CurrentBook
@@ -149,7 +149,10 @@ class MediaItemProvider
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
     extras = Bundle().apply {
-      putParcelableArray(EXTRA_CHAPTER_MARKS, chapter.chapterMarks.toTypedArray())
+      putString(
+        EXTRA_CHAPTER_MARKS,
+        Json.encodeToString(ListSerializer(ChapterMark.serializer()), chapter.chapterMarks),
+      )
     },
   )
 
@@ -157,12 +160,10 @@ class MediaItemProvider
 }
 
 internal fun MediaItem.chapterMarks(): List<ChapterMark> {
-  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    mediaMetadata.extras!!.getParcelableArray(EXTRA_CHAPTER_MARKS, ChapterMark::class.java)!!
-  } else {
-    @Suppress("UNCHECKED_CAST", "DEPRECATION")
-    mediaMetadata.extras!!.getParcelableArray(EXTRA_CHAPTER_MARKS) as Array<ChapterMark>
-  }.toList()
+  return Json.decodeFromString(
+    deserializer = ListSerializer(ChapterMark.serializer()),
+    string = mediaMetadata.extras!!.getString(EXTRA_CHAPTER_MARKS)!!,
+  )
 }
 
 private const val EXTRA_CHAPTER_MARKS = "chapterMarks"
