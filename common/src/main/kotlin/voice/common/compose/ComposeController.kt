@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import voice.common.conductor.BaseController
+import com.bluelinelabs.conductor.Controller
 
-abstract class ComposeController(args: Bundle = Bundle()) : BaseController(args) {
+abstract class ComposeController(args: Bundle = Bundle()) : Controller(args) {
 
   final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
     onCreateView()

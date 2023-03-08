@@ -63,7 +63,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
     dialog.getActionButton(WhichButton.POSITIVE).setOnClickListener {
       val r = binding.cropOverlay.selectedRect
       if (!r.isEmpty) {
-        lifecycleScope.launch {
+        onCreateViewScope?.launch {
           val bitmap = context.imageLoader
             .execute(
               ImageRequest.Builder(context)

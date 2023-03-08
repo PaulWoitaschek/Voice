@@ -6,35 +6,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 
 private const val SI_DIALOG = "android:savedDialogState"
 
 /**
  * A wrapper that wraps a dialog in a controller
  */
-abstract class DialogController(args: Bundle = Bundle()) : Controller(args), LifecycleOwner {
-
-  @Suppress("LeakingThis")
-  private val lifecycleOwner = ControllerLifecycleOwner(this)
-
-  override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
-
-  val lifecycleScope by LifecycleScopeProperty(lifecycle)
+abstract class DialogController(args: Bundle = Bundle()) : Controller(args) {
 
   private var dialog: Dialog? = null
   private var dismissed = false
+
+  protected var onCreateViewScope: CoroutineScope? = null
+    private set
 
   final override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup,
     savedViewState: Bundle?,
   ): View {
+    onCreateViewScope = MainScope()
     dialog = onCreateDialog(savedViewState).apply {
       setOwnerActivity(activity!!)
       setOnDismissListener { dismissDialog() }

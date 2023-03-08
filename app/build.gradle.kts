@@ -182,8 +182,6 @@ dependencies {
 
   implementation(libs.conductor)
 
-  implementation(libs.lifecycle)
-
   implementation(libs.prefs.android)
   testImplementation(libs.prefs.inMemory)
 
