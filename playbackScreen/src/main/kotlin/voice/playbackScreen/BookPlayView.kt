@@ -23,8 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Undo
-import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.AlarmOff
+import androidx.compose.material.icons.outlined.Bedtime
+import androidx.compose.material.icons.outlined.BedtimeOff
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Close
@@ -229,9 +229,9 @@ private fun BookPlayAppBar(
     IconButton(onClick = onSleepTimerClick) {
       Icon(
         imageVector = if (viewState.sleepTime == ZERO) {
-          Icons.Outlined.Alarm
+          Icons.Outlined.Bedtime
         } else {
-          Icons.Outlined.AlarmOff
+          Icons.Outlined.BedtimeOff
         },
         contentDescription = stringResource(id = R.string.action_sleep),
       )
