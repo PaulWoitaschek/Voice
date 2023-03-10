@@ -13,6 +13,7 @@ import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.session.chapterMarks
 import java.time.Instant
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class VoicePlayer
   private val currentBookId: DataStore<BookId?>,
   @Named(PrefKeys.SEEK_TIME)
   private val seekTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
+  private val autoRewindAmountPref: Pref<Int>,
 ) : ForwardingPlayer(player) {
 
   private val scope = MainScope()
@@ -145,22 +148,36 @@ class VoicePlayer
   }
 
   override fun play() {
-    updateLastPlayedAt()
-    super.play()
+    playWhenReady = true
   }
 
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     if (playWhenReady) {
       updateLastPlayedAt()
+    } else {
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: Duration.ZERO
+      if (currentPosition > Duration.ZERO) {
+        seekTo(
+          (currentPosition - autoRewindAmountPref.value.seconds)
+            .coerceAtLeast(Duration.ZERO)
+            .inWholeMilliseconds,
+        )
+      }
     }
     super.setPlayWhenReady(playWhenReady)
+  }
+
+  override fun pause() {
+    playWhenReady = false
   }
 
   private fun updateLastPlayedAt() {
     scope.launch {
       currentBookId.data.first()?.let { bookId ->
         repo.updateBook(bookId) {
-          it.copy(lastPlayedAt = Instant.now())
+          val lastPlayedAt = Instant.now()
+          Logger.v("Update ${it.name}: lastPlayedAt to $lastPlayedAt")
+          it.copy(lastPlayedAt = lastPlayedAt)
         }
       }
     }
