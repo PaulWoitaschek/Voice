@@ -1,18 +1,25 @@
 package voice.playback.player
 
 import androidx.datastore.core.DataStore
+import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
+import voice.common.pref.PrefKeys
 import voice.data.repo.BookRepository
 import voice.playback.session.chapterMarks
 import java.time.Instant
 import javax.inject.Inject
+import javax.inject.Named
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class VoicePlayer
 @Inject constructor(
@@ -20,6 +27,8 @@ class VoicePlayer
   private val repo: BookRepository,
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
+  @Named(PrefKeys.SEEK_TIME)
+  private val seekTimePref: Pref<Int>,
 ) : ForwardingPlayer(player) {
 
   private val scope = MainScope()
@@ -101,6 +110,38 @@ class VoicePlayer
 
   override fun seekToNextMediaItem() {
     seekForward()
+  }
+
+  override fun seekForward() {
+    seek(forward = true)
+  }
+
+  override fun seekBack() {
+    seek(forward = false)
+  }
+
+  private fun seek(forward: Boolean) {
+    val rawAmount = seekTimePref.value.seconds
+    val skipAmount = if (forward) {
+      rawAmount
+    } else {
+      -rawAmount
+    }
+
+    val currentPos = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+      ?.milliseconds
+      ?.coerceAtLeast(Duration.ZERO)
+      ?: return
+    val duration = player.duration.takeUnless { it == C.TIME_UNSET }
+      ?.milliseconds
+      ?: return
+
+    val seekTo = currentPos + skipAmount
+    when {
+      seekTo < Duration.ZERO -> forceSeekToPrevious()
+      seekTo > duration -> forceSeekToNext()
+      else -> seekTo(seekTo.inWholeMilliseconds)
+    }
   }
 
   override fun play() {
