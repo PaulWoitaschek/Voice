@@ -32,6 +32,8 @@ data class BookContent(
 
   init {
     require(currentChapter in chapters)
-    require(positionInChapter >= 0)
+    require(positionInChapter >= 0) {
+      "invalid position$positionInChapter"
+    }
   }
 }
