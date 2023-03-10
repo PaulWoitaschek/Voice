@@ -1,6 +1,7 @@
 package voice.sleepTimer
 
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.squareup.anvil.annotations.ContributesBinding
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import voice.common.AppScope
 import voice.common.pref.PrefKeys
 import voice.logging.core.Logger
 import voice.playback.PlayerController
@@ -23,8 +25,10 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import voice.playback.session.SleepTimer as PlaybackSleepTimer
 
 @Singleton
+@ContributesBinding(AppScope::class)
 class SleepTimer
 @Inject constructor(
   private val playStateManager: PlayStateManager,
@@ -32,7 +36,7 @@ class SleepTimer
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
   private val playerController: PlayerController,
-) {
+) : PlaybackSleepTimer {
 
   private val scope = MainScope()
   private val sleepTime: Duration get() = sleepTimePref.value.minutes
@@ -44,13 +48,13 @@ class SleepTimer
     set(value) {
       _leftSleepTime.value = value
     }
-  val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime
+  override val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime
 
-  fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
+  override fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
 
   private var sleepJob: Job? = null
 
-  fun setActive(enable: Boolean) {
+  override fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")
     if (enable) {
       start()

@@ -35,6 +35,8 @@ class LibrarySessionCallback
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
   private val playerController: Provider<PlayerController>,
+  private val sleepTimerCommandUpdater: SleepTimerCommandUpdater,
+  private val sleepTimer: SleepTimer,
 ) : MediaLibraryService.MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
@@ -131,8 +133,7 @@ class LibrarySessionCallback
       .buildUpon()
       .add(SessionCommand(CustomCommand.CustomCommandAction, Bundle.EMPTY))
       .also {
-        it.add(PublishedCustomCommand.SeekBackwards.sessionCommand)
-        it.add(PublishedCustomCommand.SeekForward.sessionCommand)
+        it.add(PublishedCustomCommand.Sleep.sessionCommand)
       }
       .build()
     return MediaSession.ConnectionResult.accept(
@@ -148,11 +149,8 @@ class LibrarySessionCallback
     args: Bundle,
   ): ListenableFuture<SessionResult> {
     when (customCommand) {
-      PublishedCustomCommand.SeekForward.sessionCommand -> {
-        player.seekForward()
-      }
-      PublishedCustomCommand.SeekBackwards.sessionCommand -> {
-        player.seekBack()
+      PublishedCustomCommand.Sleep.sessionCommand -> {
+        sleepTimer.setActive(!sleepTimer.sleepTimerActive())
       }
       else -> {
         val command = CustomCommand.parse(customCommand, args)
@@ -172,6 +170,12 @@ class LibrarySessionCallback
         }
       }
     }
+
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+  }
+
+  override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
+    super.onPostConnect(session, controller)
+    sleepTimerCommandUpdater.update(session, controller, sleepTimer.sleepTimerActive())
   }
 }

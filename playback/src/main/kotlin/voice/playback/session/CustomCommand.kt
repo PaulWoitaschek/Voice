@@ -36,12 +36,8 @@ internal sealed class PublishedCustomCommand {
 
   abstract val sessionCommand: SessionCommand
 
-  object SeekBackwards : PublishedCustomCommand() {
-    override val sessionCommand: SessionCommand = SessionCommand("voice.seekBackwards", Bundle.EMPTY)
-  }
-
-  object SeekForward : PublishedCustomCommand() {
-    override val sessionCommand: SessionCommand = SessionCommand("voice.seekForward", Bundle.EMPTY)
+  object Sleep : PublishedCustomCommand() {
+    override val sessionCommand: SessionCommand = SessionCommand("voice.sleep", Bundle.EMPTY)
   }
 }
 
