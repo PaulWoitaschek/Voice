@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="de">
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--BookShelf-->
-  <!-- in the book-overview the show-all button which displays all books of a category -->
+  <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">Cover</string>
   <string name="play_pause">Play / Pause</string>
@@ -47,12 +47,11 @@
   <string name="pref_seek_time">Vor- und zurückspulen</string>
   <string name="pref_theme_dark">Dunkles Design</string>
   <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
-
   <string name="pref_suggest_idea">Schlag eine Idee vor</string>
   <string name="pref_use_grid">Grid Layout</string>
   <string name="pref_report_issue">Melde ein Problem</string>
   <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
-  <string name="pref_get_support">Hol dir Hilfe</string>
+  <string name="pref_get_support">Hol Dir Hilfe</string>
   <string name="pref_app_version">App Version</string>
   <string name="popup_edit">Bearbeiten</string>
   <string name="remove">Löschen</string>
@@ -60,21 +59,17 @@
   <string name="refresh">Neu laden</string>
   <string name="reset">Zurücksetzen</string>
   <string name="cover_crop">Cover zurechtschneiden</string>
-
-  <!-- book category -->
+  <!--book category-->
   <string name="book_header_current">Aktuelles</string>
   <string name="book_header_not_started">Neu</string>
   <string name="book_header_completed">Zu Ende</string>
-
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
   <string name="add">Hinzufügen</string>
-
   <string name="folder_type_audiobooks">Hörbuch Ordner</string>
   <string name="folder_type_single_folder">Einzelner Ordner</string>
   <string name="folder_type_single_file">Einzelne Datei</string>
   <string name="folder_type_dialog_title">Was möchtest du hinzufügen?</string>
-
   <string name="folder_mode_root">Wurzel Hörbuch Ordner. Ein Unterordner = ein Buch</string>
   <string name="folder_mode_single">Einzelnes Hörbuch</string>
   <plurals name="folder_type_file_count">
@@ -83,19 +78,14 @@
   </plurals>
   <string name="folder_type_book_example_header">Dies würde dazu führen, dass die folgenden Bücher erkannt werden</string>
   <string name="folder_type_no_books">Voice konnte keine Bücher erkennen. Gibt es Audio Dateien?</string>
-
   <string name="folder_type_title">Wie sind deine Dateien organisiert?</string>
-
-  <!-- will be shown as the time for a bookmark that was just created -->
+  <!--will be shown as the time for a bookmark that was just created-->
   <string name="bookmark_just_now">Gerade eben</string>
-
-  <!-- will be shown as a hint when no books have been added -->
+  <!--will be shown as a hint when no books have been added-->
   <string name="voice_intro_first_book">Fügen wir Ihren Hörbuchordner hinzu, damit Sie mit dem Hören beginnen können!</string>
-
   <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
   <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, Ihren Hörbuchordner mit dem Systempicker auszuwählen.\n\nKlicken Sie auf das Symbol oben, um Ihre alten Buchpositionen zu sehen.</string>
   <string name="migration_hint_confirm">Verstanden</string>
-
   <string name="migration_detail_title">Alte Buch Positionen</string>
   <string name="migration_detail_content_name">Name</string>
   <string name="migration_detail_content_root">Wurzelordner</string>
@@ -106,22 +96,19 @@
   <string name="migration_detail_content_position_current_file_position">Position in Datei</string>
   <string name="migration_detail_content_position_current_chapter_title">Aktuelles Kapitel</string>
   <string name="migration_detail_content_position_current_chapter_position">Position im Kapitel</string>
-
   <string name="migration_delete_dialog_title">Positionen löschen</string>
   <string name="migration_delete_dialog_content">Sobald Sie die alten Positionen gelöscht haben, können Sie die alten Abspielpositionen nicht mehr einsehen.</string>
   <string name="migration_delete_dialog_action_delete">Löschen</string>
   <string name="migration_delete_dialog_action_keep">Behalten</string>
-
   <string name="delete_book_bottom_sheet_title">Buch löschen</string>
   <string name="delete_book_dialog_title">Buch löschen</string>
   <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
   <string name="delete_book_dialog_content">Das wird die Dateien von deinem Gerät löschen.</string>
-
   <string name="search_hint">Wonach suchst du?</string>
-
   <string name="battery_optimization_rationale">Aufgrund deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
   <string name="battery_optimization_action">Update</string>
-
   <string name="media_session_root">Wurzelordner</string>
   <string name="media_session_recent">Kürzlich</string>
+  <string name="notification_sleep_timer_enable">Einschlaftimer einschalten</string>
+  <string name="notification_sleep_timer_disable">Einschlaftimer ausschalten</string>
 </resources>
