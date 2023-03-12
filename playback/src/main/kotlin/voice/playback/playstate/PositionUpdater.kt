@@ -1,6 +1,5 @@
 package voice.playback.playstate
 
-import androidx.media3.common.C
 import androidx.media3.common.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -51,7 +50,7 @@ class PositionUpdater
   private suspend fun updatePosition() {
     val mediaItem = player.currentMediaItem ?: return
     val currentPosition = player.currentPosition
-      .takeUnless { it == C.TIME_UNSET } ?: return
+      .takeIf { it >= 0 } ?: return
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
     mediaId as MediaId.Chapter
     bookRepo.updateBook(mediaId.bookId) { content ->
