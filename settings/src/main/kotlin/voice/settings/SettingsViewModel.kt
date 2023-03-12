@@ -1,12 +1,12 @@
 package voice.settings
 
-import android.net.Uri
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
@@ -97,15 +97,15 @@ class SettingsViewModel
   }
 
   override fun getSupport() {
-    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/new?category=q-a"))
+    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/q-a"))
   }
 
   override fun suggestIdea() {
-    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas"))
+    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
   override fun openBugReport() {
-    val url = Uri.parse("https://github.com/PaulWoitaschek/Voice/issues/new")
+    val url = "https://github.com/PaulWoitaschek/Voice/issues/new".toUri()
       .buildUpon()
       .appendQueryParameter("template", "bug.yml")
       .appendQueryParameter("version", appInfoProvider.versionName)
@@ -117,6 +117,6 @@ class SettingsViewModel
 
   override fun openTranslations() {
     dismissDialog()
-    navigator.goTo(Destination.Website("https://www.transifex.com/projects/p/voice"))
+    navigator.goTo(Destination.Website("https://explore.transifex.com/PaulWoitaschek/voice/"))
   }
 }
