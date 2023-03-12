@@ -35,7 +35,7 @@
   <string name="bookmark">बुकमार्क</string>
   <string name="bookmark_edit_title">बुकमार्क सम्पादित करें</string>
   <string name="bookmark_edit_hint">बुकमार्क का नाम</string>
-  <string name="bookmark_added">बुकमार्क डाला गया</string>
+  <string name="bookmark_added">बुकमार्क जोड़ा गया</string>
   <!--Settings-->
   <string name="action_settings">पसंदें</string>
   <string name="min">%s मिनट</string>
