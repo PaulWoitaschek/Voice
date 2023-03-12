@@ -4,6 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
@@ -96,7 +98,12 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
     },
   ) { contentPadding ->
     Box(Modifier.padding(contentPadding)) {
-      Column(Modifier.padding(vertical = 8.dp)) {
+      Column(
+        Modifier
+          .verticalScroll(rememberScrollState())
+          .nestedScroll(scrollBehavior.nestedScrollConnection)
+          .padding(vertical = 8.dp),
+      ) {
         if (viewState.showDarkThemePref) {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
