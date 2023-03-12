@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   id("voice.library")
   id("kotlin-parcelize")
@@ -14,9 +12,8 @@ anvil {
 }
 
 ksp {
-  @Suppress("DEPRECATION")
-  blockOtherCompilerPlugins = false
   arg("room.schemaLocation", "$projectDir/schemas")
+  allWarningsAsErrors = true
 }
 
 android {
@@ -30,11 +27,6 @@ android {
       assets.srcDir(project.file("schemas"))
     }
   }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-  // workaround for https://youtrack.jetbrains.com/issue/KT-38576
-  usePreciseJavaTracking = false
 }
 
 dependencies {

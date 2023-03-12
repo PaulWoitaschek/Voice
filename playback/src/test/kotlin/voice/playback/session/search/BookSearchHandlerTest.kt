@@ -2,13 +2,12 @@ package voice.playback.session.search
 
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -16,8 +15,8 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.repo.BookRepository
-import voice.playback.PlayerController
 import java.time.Instant
 import java.util.UUID
 
@@ -26,7 +25,6 @@ class BookSearchHandlerTest {
   private val searchHandler: BookSearchHandler
 
   private val repo = mockk<BookRepository>()
-  private val player = mockk<PlayerController>(relaxUnitFun = true)
   private val currentBookId = MemoryDataStore<BookId?>(null)
 
   private val anotherBook = book(listOf(chapter(), chapter()))
@@ -35,47 +33,31 @@ class BookSearchHandlerTest {
   init {
     coEvery { repo.all() } coAnswers { listOf(anotherBook, bookToFind) }
 
-    searchHandler = BookSearchHandler(repo, player, currentBookId)
+    searchHandler = BookSearchHandler(repo, currentBookId)
   }
 
   @Test
   fun unstructuredSearchByBook() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.content.name)
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe(bookToFind)
-    verify(exactly = 1) { player.play() }
-  }
-
-  private suspend fun currentBookIdShouldBe(book: Book = bookToFind) {
-    currentBookId.data.first() shouldBe book.content.id
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 
   @Test
   fun unstructuredSearchByArtist() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.content.author)
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe()
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 
   @Test
   fun unstructuredSearchByChapter() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.chapters.first().name)
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe()
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 
   @Test
   fun mediaFocusAnyNoneFoundButPlayed() = runTest {
     val bookSearch = VoiceSearch(mediaFocus = "vnd.android.cursor.item/*")
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe(anotherBook)
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch).shouldBeNull()
   }
 
   @Test
@@ -84,10 +66,7 @@ class BookSearchHandlerTest {
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
       artist = bookToFind.content.author,
     )
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe()
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 
   @Test
@@ -105,10 +84,7 @@ class BookSearchHandlerTest {
       query = "Tim",
       artist = "Tim",
     )
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe()
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 
   @Test
@@ -119,10 +95,7 @@ class BookSearchHandlerTest {
       album = bookToFind.content.name,
       query = null,
     )
-    searchHandler.handle(bookSearch)
-
-    currentBookIdShouldBe()
-    verify(exactly = 1) { player.play() }
+    searchHandler.handle(bookSearch) shouldBe bookToFind
   }
 }
 
@@ -149,7 +122,7 @@ fun book(chapters: List<Chapter>): Book {
 
 private fun chapter(): Chapter {
   return Chapter(
-    id = Chapter.Id(UUID.randomUUID().toString()),
+    id = ChapterId(UUID.randomUUID().toString()),
     name = UUID.randomUUID().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,

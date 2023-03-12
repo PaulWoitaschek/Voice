@@ -1,77 +1,76 @@
 [versions]
-versionCode = "3603003"
-versionName = "6.5.0"
+versionCode = "3603007"
+versionName = "7.0.2"
 
 sdk-compile = "33"
 sdk-min = "26"
-sdk-target = "30"
+sdk-target = "33"
 
 coroutines = "1.6.4"
-room = "2.4.3"
+room = "2.5.0"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
-dagger = "2.44.2"
-kotlin = "1.7.20"
-compose-compiler = "1.3.2"
-media3 = "1.0.0-beta03"
-agp = "7.3.1"
+dagger = "2.45"
+kotlin = "1.8.10"
+compose-compiler = "1.4.3"
+media3 = "1.0.0-rc02"
+agp = "7.4.2"
 ktlint = "0.47.1"
-accompanist = "0.27.1"
+accompanist = "0.28.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-material = "com.google.android.material:material:1.7.0"
+material = "com.google.android.material:material:1.8.0"
 materialCab = "com.afollestad:material-cab:2.0.1"
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:5.1"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.13.2"
-robolectric = "org.robolectric:robolectric:4.9"
+mockk = "io.mockk:mockk:1.13.4"
+robolectric = "org.robolectric:robolectric:4.9.2"
 coil = "io.coil-kt:coil-compose:2.2.2"
-appCompat = "androidx.appcompat:appcompat:1.5.1"
+appCompat = "androidx.appcompat:appcompat:1.6.1"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
-recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
+recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
 transitions = "androidx.transition:transition:1.4.1"
-media = "androidx.media:media:1.6.0"
 androidxCore = "androidx.core:core-ktx:1.9.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-desugar = "com.android.tools:desugar_jdk_libs:1.2.2"
+desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
-koTest-assert = "io.kotest:kotest-assertions-core:5.5.4"
+koTest-assert = "io.kotest:kotest-assertions-core:5.5.5"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
 turbine = "app.cash.turbine:turbine:0.12.1"
-molecule = "app.cash.molecule:molecule-runtime:0.6.1"
+molecule = "app.cash.molecule:molecule-runtime:0.8.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.2"
+firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.5"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
-androidX-test-runner = "androidx.test:runner:1.5.1"
-androidX-test-junit = "androidx.test.ext:junit:1.1.4"
+androidX-test-runner = "androidx.test:runner:1.5.2"
+androidX-test-junit = "androidx.test.ext:junit:1.1.5"
 androidX-test-core = "androidx.test:core-ktx:1.5.0"
 
 androidTest-orchestrator = "androidx.test:orchestrator:1.4.2"
 androidTest-services-testServices = "androidx.test.services:test-services:1.4.2"
 androidTest-services-storage = "androidx.test.services:storage:1.4.2"
-androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.0"
+androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.1"
 androidTest-rules = "androidx.test:rules:1.5.0"
 
-conductor = "com.bluelinelabs:conductor:3.1.8"
+conductor = "com.bluelinelabs:conductor:3.2.0"
 
 prefs-core = { module = "com.github.PaulWoitaschek.FlowPref:core", version.ref = "prefs" }
 prefs-android = { module = "com.github.PaulWoitaschek.FlowPref:android", version.ref = "prefs" }
@@ -84,8 +83,9 @@ dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 
-compose-bom = "androidx.compose:compose-bom:2022.11.00"
+compose-bom = "androidx.compose:compose-bom:2023.01.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -146,11 +146,11 @@ testing-jvm = [
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.4.2" }
-ktlint = { id = "org.jmailen.kotlinter", version = "3.12.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.8" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.2" }
-googleServices = { id = "com.google.gms.google-services", version = "4.3.14" }
-playPublish = { id = "com.github.triplet.play", version = "3.7.0" }
+anvil = { id = "com.squareup.anvil", version = "2.4.4" }
+ktlint = { id = "org.jmailen.kotlinter", version = "3.13.0" }
+ksp = { id = "com.google.devtools.ksp", version = "1.8.10-1.0.9" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.4" }
+googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
+playPublish = { id = "com.github.triplet.play", version = "3.8.1" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }

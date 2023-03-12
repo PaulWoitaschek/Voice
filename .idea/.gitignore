@@ -12,3 +12,5 @@ kotlinScripting.xml
 /misc.xml
 /deploymentTargetDropDown.xml
 /.name
+/kotlinc.xml
+/modules.xml

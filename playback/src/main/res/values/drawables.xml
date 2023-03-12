@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <drawable name="media3_notification_seek_to_previous" tools:ignore="UnusedResources">@drawable/ic_fast_rewind</drawable>
+  <drawable name="media3_notification_seek_to_next" tools:ignore="UnusedResources">@drawable/ic_fast_forward</drawable>
+  <drawable name="media3_notification_pause" tools:ignore="UnusedResources">@drawable/ic_pause</drawable>
+  <drawable name="media3_notification_small_icon" tools:ignore="UnusedResources">@drawable/ic_notification</drawable>
+  <drawable name="media3_notification_play" tools:ignore="UnusedResources">@drawable/ic_play_arrow</drawable>
+</resources>

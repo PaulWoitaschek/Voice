@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--BookShelf-->
-  <string name="current_book">वर्तमान किताब</string>
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
   <string name="cover">कवर</string>
@@ -11,8 +10,9 @@
   <string name="fast_forward">आगे बढ़ें</string>
   <string name="previous_track">पिछला ट्रैक</string>
   <string name="next_track">अगला ट्रैक</string>
-  <string name="play">चलायें</string>
-  <string name="pause">रोकें</string>
+  <string name="skip_silence">शांति हटाएं </string>
+  <string name="volume_boost">आवाज बूस्ट करें</string>
+  <string name="more">अधिक</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">सेट करें</string>
@@ -23,6 +23,9 @@
   <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
   <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
   <string name="edit_book_title">किताब में बदलाव करें</string>
+  <string name="mark_as_completed">पूरा सुन चुके</string>
+  <string name="mark_as_current">वर्तमान के रूप में चिह्नित करें</string>
+  <string name="mark_as_not_started">अभी शुरू नहीं किया के रूप में चिह्नित करें</string>
   <!--JumpToPosition-->
   <!--BookAdding-->
   <string name="audiobook_folders_title">ऑडिओबुक के फोल्डर</string>
@@ -35,23 +38,77 @@
   <string name="bookmark_added">बुकमार्क डाला गया</string>
   <!--Settings-->
   <string name="action_settings">पसंदें</string>
-  <string name="pref_resume_on_replug">प्लेबैक पुनः आरम्भ करें</string>
-  <string name="pref_resume_on_replug_hint">अगर आपने हेडसेट निकल कर पॉज़ किया, तो वापस लगाने पर पुनः आरम्भ होगा।</string>
   <string name="min">%s मिनट</string>
   <string name="delete_last_number">पिछला डाला अंक डिलीट करेगा</string>
   <plurals name="seconds">
     <item quantity="one">%d सेकंड</item>
     <item quantity="other">%d सेकंड</item>
   </plurals>
-  <string name="pref_seek_time">आगे कूदने की मात्रा</string>
+  <string name="pref_seek_time">आगे बढ़ाने की मात्रा</string>
+  <string name="pref_theme_dark">डार्क थीम </string>
   <string name="pref_auto_rewind_title">अपने आप रिवाइंड</string>
+  <string name="pref_suggest_idea">विचार सुझाएं</string>
+  <string name="pref_use_grid">ग्रिड लेआउट </string>
+  <string name="pref_report_issue">समस्या कीआख्या दें</string>
+  <string name="pref_help_translating">वॉइस का अनुवाद करने में सहायता करें</string>
+  <string name="pref_get_support">सहायता लें </string>
+  <string name="pref_app_version">एप्प वर्ज़न </string>
   <string name="popup_edit">संपादन</string>
   <string name="remove">हटाएं</string>
-  <string name="play_current">मौजूदा चलायें</string>
-  <string name="refresh">ताज़ा करें</string>
+  <string name="play_current">वर्तामन चलायें</string>
+  <string name="refresh">रिफ्रेश करें</string>
   <string name="reset">रिसेट करें</string>
   <string name="cover_crop">कवर काटें</string>
   <!--book category-->
+  <string name="book_header_current">वर्तमान </string>
+  <string name="book_header_not_started">अभी प्रारंभ नही किया</string>
+  <string name="book_header_completed">पूरा हो गया </string>
+  <string name="close">बंद </string>
+  <string name="delete">हटाएँ </string>
+  <string name="add">जोड़ें</string>
+  <string name="folder_type_audiobooks">ऑडियोबुक फोल्डर </string>
+  <string name="folder_type_single_folder">एक फोल्डर </string>
+  <string name="folder_type_single_file">एक फाइल </string>
+  <string name="folder_type_dialog_title">आप क्या जोड़ना चाहते हैं </string>
+  <string name="folder_mode_root">रूट ऑडियोबुक फ़ोल्डर। एक सबफ़ोल्डर = एक किताब।</string>
+  <string name="folder_mode_single">एकल ऑडियोबुक फ़ोल्डर</string>
+  <plurals name="folder_type_file_count">
+    <item quantity="one">%dऑडियो फाइल </item>
+    <item quantity="other">%d ऑडियो फाइल</item>
+  </plurals>
+  <string name="folder_type_book_example_header">इससे निम्नलिखित पुस्तकों का पता चलेगा</string>
+  <string name="folder_type_no_books">वॉइस किसी भी किताब का पता नहीं लगा सकी। क्या कोई ऑडियो फाइल है?</string>
+  <string name="folder_type_title">आपकी फाइलें कैसे संरचित हैं?</string>
   <!--will be shown as the time for a bookmark that was just created-->
+  <string name="bookmark_just_now">बस अभी </string>
   <!--will be shown as a hint when no books have been added-->
+  <string name="voice_intro_first_book">चलिए आपका ऑडियोबुक फोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
+  <string name="migration_hint_title">पुरानी पुस्तक स्थिति तक पहुँचना</string>
+  <string name="migration_hint_content">नए एंड्राइड संस्करणों में परिवर्तनों के कारण, सिस्टम पिकर का उपयोग करके अपने ऑडियोबुक फ़ोल्डर का चयन करना आवश्यक है। अपनी पुरानी पुस्तकों की स्थिति देखने के लिए उपरोक्त आइकन पर क्लिक करें।</string>
+  <string name="migration_hint_confirm">समझ गए  </string>
+  <string name="migration_detail_title">पुरानी पुस्तक की स्थिति </string>
+  <string name="migration_detail_content_name">नाम </string>
+  <string name="migration_detail_content_root">रूट फोल्डर </string>
+  <string name="migration_detail_content_position">स्थान </string>
+  <string name="migration_detail_content_bookmarks">बुकमार्क्स </string>
+  <string name="migration_detail_content_added_at">बजे जोड़ा गया</string>
+  <string name="migration_detail_content_position_current_file_title">वर्तमान फ़ाइल</string>
+  <string name="migration_detail_content_position_current_file_position">फ़ाइल में स्थिति</string>
+  <string name="migration_detail_content_position_current_chapter_title">वर्तमान अध्याय</string>
+  <string name="migration_detail_content_position_current_chapter_position">अध्याय में स्थिति</string>
+  <string name="migration_delete_dialog_title">स्थान हटाएं</string>
+  <string name="migration_delete_dialog_content">एक बार जब आप पुरानी स्थितियों को हटा देंगे तो आप अपनी पुरानी प्लेबैक स्थितियों को पुनर्प्राप्त नहीं कर पाएंगे।</string>
+  <string name="migration_delete_dialog_action_delete">हटाएँ </string>
+  <string name="migration_delete_dialog_action_keep">रखना</string>
+  <string name="delete_book_bottom_sheet_title">पुस्तक हटाएँ </string>
+  <string name="delete_book_dialog_title">पुस्तक हटाएँ </string>
+  <string name="delete_book_dialog_deletion_confirmation">मेरी फ़ाइलें हटाएं</string>
+  <string name="delete_book_dialog_content">यह आपके डिवाइस पर मौजूद फाइलों को हटा देगा।</string>
+  <string name="search_hint">आप क्या ढूंढ रहे हैं?</string>
+  <string name="battery_optimization_rationale">आपके पावर प्रतिबंधों के कारण, प्लेबैक रुकावट हो सकती है।</string>
+  <string name="battery_optimization_action">अपडेट </string>
+  <string name="media_session_root">रूट </string>
+  <string name="media_session_recent">हाल ही का</string>
+  <string name="notification_sleep_timer_enable">स्लीप टाइमर चालू करें</string>
+  <string name="notification_sleep_timer_disable">स्लीप टाइमर बंद करें</string>
 </resources>

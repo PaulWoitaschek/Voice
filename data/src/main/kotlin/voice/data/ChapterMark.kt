@@ -12,6 +12,7 @@ data class MarkData(
   }
 }
 
+@Serializable
 data class ChapterMark(
   val name: String?,
   val startMs: Long,

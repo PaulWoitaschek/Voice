@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.bluelinelabs.conductor.Controller
 
 typealias InflateBinding<B> = (LayoutInflater, ViewGroup?, Boolean) -> B
 
 abstract class ViewBindingController<B : ViewBinding>(
   args: Bundle = Bundle(),
   private val inflateBinding: InflateBinding<B>,
-) : BaseController(args) {
+) : Controller(args) {
 
   private var _binding: B? = null
   val binding: B get() = _binding ?: error("No binding present.")

@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="fr">
   <!--BookShelf-->
-  <string name="current_book">Livre en cours</string>
-  <!--in the book-overview the show-all button which displays all books of a category-->
+  <!-- in the book-overview the show-all button which displays all books of a category -->
   <!--BookPlayFragment-->
   <string name="cover">Couverture</string>
   <string name="play_pause">Lecture / Pause</string>
@@ -11,10 +10,9 @@
   <string name="fast_forward">Avance rapide</string>
   <string name="previous_track">Piste précédente</string>
   <string name="next_track">Piste suivante</string>
-  <string name="play">Lecture</string>
-  <string name="pause">Pause</string>
   <string name="skip_silence">Sauter les silences</string>
   <string name="volume_boost">Hausser le volume </string>
+  <string name="more">Plus</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <string name="dialog_confirm">Définir</string>
@@ -40,8 +38,6 @@
   <string name="bookmark_added">Marque-page ajouté</string>
   <!--Settings-->
   <string name="action_settings">Préférences</string>
-  <string name="pref_resume_on_replug">Reprendre la lecture</string>
-  <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
   <string name="min">%s min</string>
   <string name="delete_last_number">Supprime le dernier nombre saisi</string>
   <plurals name="seconds">
@@ -52,6 +48,7 @@
   <string name="pref_seek_time">Sauter de</string>
   <string name="pref_theme_dark">Dunkles Thema</string>
   <string name="pref_auto_rewind_title">Rembobinage automatique</string>
+
   <string name="pref_suggest_idea">Suggestions </string>
   <string name="pref_use_grid">Utiliser la grille de mise en page</string>
   <string name="pref_report_issue">Rapporter un problème </string>
@@ -64,18 +61,21 @@
   <string name="refresh">Rafraîchir</string>
   <string name="reset">Réinitialiser</string>
   <string name="cover_crop">Recadrer la couverture</string>
-  <string name="music_notification">Lecture</string>
-  <!--book category-->
+
+  <!-- book category -->
   <string name="book_header_current">En cours</string>
   <string name="book_header_not_started">Pas encore commencé</string>
   <string name="book_header_completed">Complété</string>
+
   <string name="close">Fermer</string>
   <string name="delete">Supprimer</string>
   <string name="add">Ajouter</string>
+
   <string name="folder_type_audiobooks">Dossier de livres audio</string>
   <string name="folder_type_single_folder">Dossier unique </string>
   <string name="folder_type_single_file">Fichier unique</string>
   <string name="folder_type_dialog_title">Que voulez vous ajouter?</string>
+
   <string name="folder_mode_root">Dossier racine des livres audio. 1 sous-dossier = 1 livre</string>
   <string name="folder_mode_single">Dossier de livre audio unique </string>
   <plurals name="folder_type_file_count">
@@ -85,14 +85,19 @@
   </plurals>
   <string name="folder_type_book_example_header">Cela permettrait que le livre suivant soit détecté</string>
   <string name="folder_type_no_books">Voice n\'a pu détecter aucun livre. Y a t\'il des fichiers audios?</string>
+
   <string name="folder_type_title">Comment vos fichiers sont ils structurés ?</string>
-  <!--will be shown as the time for a bookmark that was just created-->
+
+  <!-- will be shown as the time for a bookmark that was just created -->
   <string name="bookmark_just_now">A l\'instant</string>
-  <!--will be shown as a hint when no books have been added-->
+
+  <!-- will be shown as a hint when no books have been added -->
   <string name="voice_intro_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
+
   <string name="migration_hint_title">Accès aux anciennes positions de lecture</string>
   <string name="migration_hint_content">Du fait de modifications dans les nouvelles versions d\'Android, il est nécessaire de sélectionner votre dossier de livres audio à l\'aide de la boîte de dialogue système.\n\nCliquez sur l\'icône ci-dessus pour voir vos anciennes positions de lecture.</string>
   <string name="migration_hint_confirm">Compris</string>
+
   <string name="migration_detail_title">Anciennes positions de lecture</string>
   <string name="migration_detail_content_name">Nom</string>
   <string name="migration_detail_content_root">Dossier racine</string>
@@ -103,15 +108,22 @@
   <string name="migration_detail_content_position_current_file_position">Position dans le fichier</string>
   <string name="migration_detail_content_position_current_chapter_title">Chapitre en cours</string>
   <string name="migration_detail_content_position_current_chapter_position">Position dans le chapitre</string>
+
   <string name="migration_delete_dialog_title">Supprimer les positions</string>
   <string name="migration_delete_dialog_content">Une fois les anciennes positions supprimées, vous ne pourrez plus accéder à vos anciennes positions de lecture.</string>
   <string name="migration_delete_dialog_action_delete">Supprimer</string>
   <string name="migration_delete_dialog_action_keep">Garder</string>
+
   <string name="delete_book_bottom_sheet_title">Supprimer le livre</string>
   <string name="delete_book_dialog_title">Supprimer le livre</string>
   <string name="delete_book_dialog_deletion_confirmation">Supprimer mes fichiers</string>
   <string name="delete_book_dialog_content">Ceci supprimera vos fichiers sur cet appareil.</string>
+
   <string name="search_hint">Que cherchez-vous ?</string>
+
   <string name="battery_optimization_rationale">A cause des restrictions d\'alimentation, des interruptions de lecture pourrait survenir</string>
   <string name="battery_optimization_action">Mise a jour</string>
+
+  <string name="media_session_root">Racine</string>
+  <string name="media_session_recent">Récent</string>
 </resources>

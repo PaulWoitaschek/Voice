@@ -19,11 +19,11 @@ class BookRepository
 ) {
 
   private var warmedUp = false
-  private val warmupMutex = Mutex()
+  private val mutex = Mutex()
 
   private suspend fun warmUp() {
     if (warmedUp) return
-    warmupMutex.withLock {
+    mutex.withLock {
       if (warmedUp) return@withLock
       val chapters = contentRepo.all()
         .filter { it.isActive }
@@ -59,9 +59,11 @@ class BookRepository
   }
 
   suspend fun updateBook(id: BookId, update: (BookContent) -> BookContent) {
-    val content = contentRepo.get(id) ?: return
-    val updated = update(content)
-    contentRepo.put(updated)
+    mutex.withLock {
+      val content = contentRepo.get(id) ?: return
+      val updated = update(content)
+      contentRepo.put(updated)
+    }
   }
 
   private suspend fun BookContent.book(): Book? {

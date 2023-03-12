@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,8 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Undo
-import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.AlarmOff
+import androidx.compose.material.icons.outlined.Bedtime
+import androidx.compose.material.icons.outlined.BedtimeOff
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Close
@@ -230,9 +229,9 @@ private fun BookPlayAppBar(
     IconButton(onClick = onSleepTimerClick) {
       Icon(
         imageVector = if (viewState.sleepTime == ZERO) {
-          Icons.Outlined.Alarm
+          Icons.Outlined.Bedtime
         } else {
-          Icons.Outlined.AlarmOff
+          Icons.Outlined.BedtimeOff
         },
         contentDescription = stringResource(id = R.string.action_sleep),
       )
@@ -496,35 +495,24 @@ private fun SkipButton(
   forward: Boolean,
   onClick: () -> Unit,
 ) {
-  Column(
+  Icon(
     modifier = Modifier
-      .recomposeHighlighter()
       .clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(bounded = false),
         onClick = onClick,
-      ),
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    Icon(
-      modifier = Modifier
-        .size(50.dp)
-        .scale(scaleX = if (forward) -1f else 1F, scaleY = 1f),
-      imageVector = Icons.Filled.Undo,
-      contentDescription = stringResource(
-        id = if (forward) {
-          R.string.fast_forward
-        } else {
-          R.string.rewind
-        },
-      ),
-    )
-    Text(
-      modifier = Modifier.offset(y = (-10).dp),
-      text = "20s",
-      style = MaterialTheme.typography.bodySmall,
-    )
-  }
+      )
+      .size(50.dp)
+      .scale(scaleX = if (forward) -1f else 1F, scaleY = 1f),
+    imageVector = Icons.Filled.Undo,
+    contentDescription = stringResource(
+      id = if (forward) {
+        R.string.fast_forward
+      } else {
+        R.string.rewind
+      },
+    ),
+  )
 }
 
 @Composable

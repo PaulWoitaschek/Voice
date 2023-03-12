@@ -7,7 +7,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import voice.common.BookId
 import voice.data.Bookmark
-import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.MarkData
 import voice.data.legacy.LegacyBookType
 import voice.data.legacy.LegacyMarkData
@@ -18,13 +18,12 @@ import java.util.UUID
 class Converters {
 
   private val json = Json { allowStructuredMapKeys = true }
-  private val markDataListSerializer = ListSerializer(MarkData.serializer())
 
   @TypeConverter
-  fun fromMarks(data: List<MarkData>): String = json.encodeToString(markDataListSerializer, data)
+  fun fromMarks(data: List<MarkData>): String = json.encodeToString(ListSerializer(MarkData.serializer()), data)
 
   @TypeConverter
-  fun toMarks(string: String): List<MarkData> = json.decodeFromString(markDataListSerializer, string)
+  fun toMarks(string: String): List<MarkData> = json.decodeFromString(ListSerializer(MarkData.serializer()), string)
 
   @TypeConverter
   fun fromLegacyMarks(data: List<LegacyMarkData>): String = json.encodeToString(ListSerializer(LegacyMarkData.serializer()), data)
@@ -67,13 +66,13 @@ class Converters {
   fun toUri(string: String): Uri = string.toUri()
 
   @TypeConverter
-  fun fromChapterList(list: List<Chapter.Id>): String {
-    return json.encodeToString(ListSerializer(Chapter.Id.serializer()), list)
+  fun fromChapterList(list: List<ChapterId>): String {
+    return json.encodeToString(ListSerializer(ChapterId.serializer()), list)
   }
 
   @TypeConverter
-  fun toChapterList(string: String): List<Chapter.Id> {
-    return json.decodeFromString(ListSerializer(Chapter.Id.serializer()), string)
+  fun toChapterList(string: String): List<ChapterId> {
+    return json.decodeFromString(ListSerializer(ChapterId.serializer()), string)
   }
 
   @TypeConverter
@@ -83,10 +82,10 @@ class Converters {
   fun fromBookId(id: BookId): String = id.value
 
   @TypeConverter
-  fun toChapterId(value: String): Chapter.Id = Chapter.Id(value)
+  fun toChapterId(value: String): ChapterId = ChapterId(value)
 
   @TypeConverter
-  fun fromChapterId(id: Chapter.Id): String = id.value
+  fun fromChapterId(id: ChapterId): String = id.value
 
   @TypeConverter
   fun toBookmarkId(value: String): Bookmark.Id = Bookmark.Id(UUID.fromString(value))

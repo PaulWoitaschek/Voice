@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.dsl.ManagedVirtualDevice
-import java.util.Properties
+import java.util.*
 
 plugins {
   id("voice.app")
@@ -79,6 +79,7 @@ android {
       isShrinkResources = true
     }
     getByName("debug") {
+      applicationIdSuffix = ".debug"
       isMinifyEnabled = false
       isShrinkResources = false
     }
@@ -150,7 +151,6 @@ dependencies {
   implementation(libs.recyclerView)
   implementation(libs.material)
   implementation(libs.constraintLayout)
-  implementation(libs.media)
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
@@ -178,10 +178,9 @@ dependencies {
   testImplementation(libs.mockk)
 
   implementation(libs.media3.exoplayer)
+  implementation(libs.media3.session)
 
   implementation(libs.conductor)
-
-  implementation(libs.lifecycle)
 
   implementation(libs.prefs.android)
   testImplementation(libs.prefs.inMemory)

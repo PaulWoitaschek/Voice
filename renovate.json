@@ -1,6 +1,7 @@
 {
   "extends": [
-    "config:base"
+    "config:base",
+    ":dependencyDashboard"
   ],
   "packageRules": [
     {
@@ -14,5 +15,7 @@
         "https://jitpack.io/"
       ]
     }
-  ]
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0
 }

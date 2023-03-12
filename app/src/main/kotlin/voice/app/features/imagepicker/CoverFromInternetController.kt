@@ -9,6 +9,8 @@ import android.webkit.WebViewClient
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.R
@@ -59,8 +61,11 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       "&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
+  private var onCreateViewScope: CoroutineScope? = null
+
   @SuppressLint("SetJavaScriptEnabled")
   override fun ImagePickerBinding.onBindingCreated() {
+    onCreateViewScope = MainScope()
     with(webView.settings) {
       setSupportZoom(true)
       builtInZoomControls = true
@@ -98,7 +103,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
       closeDrawable(R.drawable.close)
       onSelection { item ->
         if (item.itemId == R.id.confirm) {
-          lifecycleScope.launch {
+          onCreateViewScope?.launch {
             val bitmap = takeWebViewScreenshot()
             saveCover(bitmap)
             destroy()

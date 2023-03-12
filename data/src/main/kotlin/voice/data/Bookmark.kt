@@ -10,7 +10,7 @@ import java.util.UUID
 @Entity(tableName = "bookmark2")
 data class Bookmark(
   val bookId: BookId,
-  val chapterId: Chapter.Id,
+  val chapterId: ChapterId,
   val title: String?,
   val time: Long,
   val addedAt: Instant,

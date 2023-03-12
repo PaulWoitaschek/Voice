@@ -63,7 +63,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       true
     }
 
-    lifecycleScope.launch {
+    onCreateViewScope!!.launch {
       viewModel.viewState().collectLatest { viewState ->
         binding.time.text = activity!!.getString(R.string.min, viewState.selectedMinutes.toString())
 

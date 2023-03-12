@@ -3,7 +3,6 @@
   <!--BookShelf-->
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
-  <string name="play">Lenn</string>
   <!--NoExternalStorage-->
   <!--Dialogs-->
   <!--EditBookDialog-->

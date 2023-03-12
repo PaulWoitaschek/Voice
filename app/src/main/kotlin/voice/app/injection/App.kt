@@ -17,22 +17,16 @@ import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.PrefKeys
 import voice.common.rootComponent
-import voice.playback.androidauto.AndroidAutoConnectedReceiver
-import voice.playback.di.PlaybackComponent
-import voice.playback.di.PlaybackComponentFactoryProvider
 import javax.inject.Inject
 import javax.inject.Named
 
-class App : Application(), PlaybackComponentFactoryProvider {
+class App : Application() {
 
   @Inject
   lateinit var mediaScanner: MediaScanTrigger
 
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
-
-  @Inject
-  lateinit var autoConnectedReceiver: AndroidAutoConnectedReceiver
 
   @field:[
     Inject
@@ -71,13 +65,7 @@ class App : Application(), PlaybackComponentFactoryProvider {
 
     mediaScanner.scan()
 
-    autoConnectedReceiver.register(this)
-
     triggerWidgetOnChange.init()
-  }
-
-  override fun factory(): PlaybackComponent.Factory {
-    return appComponent.playbackComponentFactory()
   }
 }
 

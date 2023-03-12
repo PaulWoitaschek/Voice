@@ -155,14 +155,16 @@ class MainActivity : AppCompatActivity() {
 
   private fun setupRouter() {
     // if we should enter a book set the backstack and return early
-    intent.getStringExtra(NI_GO_TO_BOOK)
-      ?.let {
-        val bookId = BookId(it)
+    val goToBook = intent.getBooleanExtra(NI_GO_TO_BOOK, false)
+    if (goToBook) {
+      val bookId = runBlocking { currentBook.data.first() }
+      if (bookId != null) {
         val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         return
       }
+    }
 
     // if we should play the current book, set the backstack and return early
     if (intent?.action == "playCurrent") {
@@ -189,11 +191,11 @@ class MainActivity : AppCompatActivity() {
   }
 
   companion object {
+
     private const val NI_GO_TO_BOOK = "niGotoBook"
 
-    /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(context: Context, bookId: BookId) = Intent(context, MainActivity::class.java).apply {
-      putExtra(NI_GO_TO_BOOK, bookId.value)
+    fun goToBookIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
+      putExtra(NI_GO_TO_BOOK, true)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
   }

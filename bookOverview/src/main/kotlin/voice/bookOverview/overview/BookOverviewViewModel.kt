@@ -51,7 +51,7 @@ constructor(
 
   @Composable
   internal fun state(): BookOverviewViewState {
-    val playState = playStateManager.flow.collectAsState(initial = PlayStateManager.PlayState.Stopped).value
+    val playState = playStateManager.flow.collectAsState(initial = PlayStateManager.PlayState.Paused).value
     val books = repo.flow().collectAsState(initial = emptyList()).value
     val currentBookId = currentBookDataStore.data.collectAsState(initial = null).value
     val scannerActive = mediaScanner.scannerActive.collectAsState(initial = false).value
