@@ -20,7 +20,7 @@
   <!--EditBookDialog-->
   <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
   <string name="change_book_name">नाम</string>
-  <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
+  <string name="download_book_cover">इंटरनेट से कवर फोटो डालें</string>
   <string name="pick_book_cover">फोन से कवर फोटो डालें</string>
   <string name="edit_book_title">किताब में बदलाव करें</string>
   <string name="mark_as_completed">पूरा सुन चुके</string>
