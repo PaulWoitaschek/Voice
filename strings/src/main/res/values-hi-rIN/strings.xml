@@ -20,8 +20,8 @@
   <!--EditBookDialog-->
   <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
   <string name="change_book_name">नाम</string>
-  <string name="download_book_cover">इंटरनेट से कवर तस्वीर डालें</string>
-  <string name="pick_book_cover">फोन से कवर तस्वीर डालें</string>
+  <string name="download_book_cover">इंटरनेट से कवर फोटो डालें</string>
+  <string name="pick_book_cover">फोन से कवर फोटो डालें</string>
   <string name="edit_book_title">किताब में बदलाव करें</string>
   <string name="mark_as_completed">पूरा सुन चुके</string>
   <string name="mark_as_current">वर्तमान के रूप में चिह्नित करें</string>
@@ -35,7 +35,7 @@
   <string name="bookmark">बुकमार्क</string>
   <string name="bookmark_edit_title">बुकमार्क सम्पादित करें</string>
   <string name="bookmark_edit_hint">बुकमार्क का नाम</string>
-  <string name="bookmark_added">बुकमार्क डाला गया</string>
+  <string name="bookmark_added">बुकमार्क जोड़ा गया</string>
   <!--Settings-->
   <string name="action_settings">पसंदें</string>
   <string name="min">%s मिनट</string>
