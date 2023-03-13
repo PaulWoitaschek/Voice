@@ -50,7 +50,7 @@ class ChapterRepo
     return defaultValue()?.also { put(it) }
   }
 
-  suspend fun updateChapter(id: Chapter.Id, update: (Chapter) -> Chapter) {
+  suspend fun updateChapter(id: ChapterId, update: (Chapter) -> Chapter) {
     val content = get(id) ?: return
     val updated = update(content)
     put(updated)
