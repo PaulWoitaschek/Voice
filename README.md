@@ -35,7 +35,7 @@ Some rules for coding:
 * Use commits with a good description, so everyone can see what you did
 
 ## <a name="trans">Translations</a>
-The project page is on [transifex](https://www.transifex.com/PaulWoitaschek/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
+The project page is on [weblate](https://hosted.weblate.org/projects/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
 
 Or you can start translating a new language if you speak it ;-)
 
