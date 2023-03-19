@@ -21,7 +21,7 @@
     <string name="content_cover">Shows cover to choose</string>
     <string name="change_book_name">Name</string>
     <string name="download_book_cover">Cover from the Internet</string>
-    <string name="pick_book_cover">Cover from file system</string>
+    <string name="pick_book_cover">Cover from the file system</string>
     <string name="edit_book_title">Edit book</string>
     <string name="mark_as_completed">Mark as Completed</string>
     <string name="mark_as_current">Mark as Current</string>
