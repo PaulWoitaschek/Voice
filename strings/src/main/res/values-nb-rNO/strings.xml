@@ -33,7 +33,7 @@
     <string name="migration_delete_dialog_content">Når du sletter de gamle posisjonene vil du ikke kunne gjenopprette dine gamle avspillingsposisjoner.</string>
     <string name="search_hint">Hva leter du etter\?</string>
     <string name="delete_book_dialog_content">Sletter filene på enheten din.</string>
-    <string name="media_session_root">Rot</string>
+    <string name="media_session_root">Alle lydbøker</string>
     <string name="media_session_recent">Nylig</string>
     <string name="battery_optimization_action">Gjenoppfrisk</string>
     <string name="cover">Omslag</string>
