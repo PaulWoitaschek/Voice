@@ -61,9 +61,9 @@
     <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Agreguemos tu directorio de audio libros para que puedas empezar a escucharlos!</string>
     <string name="migration_hint_title">Accesando posición en libros viejos</string>
-    <string name="migration_hint_content">Debido a los cambios en las nuevas versiones de Android, es necesario seleccionar su carpeta de audiolibros utilizando el selector del sistema.
+    <string name="migration_hint_content">Debido a los cambios en las versiones más recientes de Android, debes seleccionar la carpeta de los audiolibros con el selector del sistema.
 \n
-\nHaga clic en el icono de arriba para ver sus antiguas posiciones de libros.</string>
+\nHaz clic en el icono de arriba para ver la ubicación de los libros antiguos.</string>
     <string name="migration_hint_confirm">Entendido</string>
     <string name="migration_detail_title">Posiciones antiguas</string>
     <string name="migration_detail_content_name">Nombre</string>
