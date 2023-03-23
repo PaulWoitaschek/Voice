@@ -7,16 +7,16 @@ sdk-min = "26"
 sdk-target = "33"
 
 coroutines = "1.6.4"
-room = "2.5.0"
+room = "2.5.1"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.45"
 kotlin = "1.8.10"
-compose-compiler = "1.4.3"
-media3 = "1.0.0-rc02"
+compose-compiler = "1.4.4"
+media3 = "1.0.0"
 agp = "7.4.2"
 ktlint = "0.48.2"
-accompanist = "0.28.0"
+accompanist = "0.30.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -70,7 +70,7 @@ androidTest-services-storage = "androidx.test.services:storage:1.4.2"
 androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.1"
 androidTest-rules = "androidx.test:rules:1.5.0"
 
-conductor = "com.bluelinelabs:conductor:3.2.0"
+conductor = "com.bluelinelabs:conductor:4.0.0-preview-1"
 
 prefs-core = { module = "com.github.PaulWoitaschek.FlowPref:core", version.ref = "prefs" }
 prefs-android = { module = "com.github.PaulWoitaschek.FlowPref:android", version.ref = "prefs" }
@@ -85,7 +85,7 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 
-compose-bom = "androidx.compose:compose-bom:2023.01.00"
+compose-bom = "androidx.compose:compose-bom:2023.03.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -101,7 +101,7 @@ compose-animation-graphics = { module = "androidx.compose.animation:animation-gr
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-windowsize = { module = "androidx.compose.material3:material3-window-size-class" }
-compose-activity = "androidx.activity:activity-compose:1.6.1"
+compose-activity = "androidx.activity:activity-compose:1.7.0"
 compose-navigation = "androidx.navigation:navigation-compose:2.5.3"
 compose-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 compose-flow = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }

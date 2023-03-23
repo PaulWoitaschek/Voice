@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.createCab
@@ -16,7 +17,6 @@ import kotlinx.coroutines.runBlocking
 import voice.app.R
 import voice.app.databinding.ImagePickerBinding
 import voice.app.injection.appComponent
-import voice.app.misc.conductor.popOrBack
 import voice.app.scanner.CoverSaver
 import voice.common.BookId
 import voice.common.conductor.ViewBindingController
@@ -62,9 +62,15 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   }
 
   private var onCreateViewScope: CoroutineScope? = null
+  private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+    override fun handleOnBackPressed() {
+      cab?.destroy()
+    }
+  }
 
   @SuppressLint("SetJavaScriptEnabled")
   override fun ImagePickerBinding.onBindingCreated() {
+    onBackPressedDispatcher?.addCallback(onBackPressedCallback)
     onCreateViewScope = MainScope()
     with(webView.settings) {
       setSupportZoom(true)
@@ -98,6 +104,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
   }
 
   private fun ImagePickerBinding.showCab() {
+    onBackPressedCallback.isEnabled = true
     cab = activity!!.createCab(R.id.cabStub) {
       menu(R.menu.crop_menu)
       closeDrawable(R.drawable.close)
@@ -115,6 +122,7 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         }
       }
       onDestroy {
+        onBackPressedCallback.isEnabled = false
         cropOverlay.selectionOn = false
         fab.show()
         true
@@ -155,7 +163,9 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
 
   @SuppressLint("InflateParams")
   private fun ImagePickerBinding.setupToolbar() {
-    toolbar.setNavigationOnClickListener { popOrBack() }
+    toolbar.setNavigationOnClickListener {
+      router.popController(this@CoverFromInternetController)
+    }
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.reset -> {
@@ -171,20 +181,17 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     }
   }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    onBackPressedCallback.remove()
+  }
+
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
     // load the last page loaded or the original one of there is none
     val url: String? = savedViewState.getString(SI_URL)
     if (url != null) {
       binding.webView.loadUrl(url)
     }
-  }
-
-  override fun handleBack(): Boolean {
-    if (cab.destroy()) {
-      return true
-    }
-
-    return false
   }
 
   override fun onSaveViewState(view: View, outState: Bundle) {

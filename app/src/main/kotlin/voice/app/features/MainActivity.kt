@@ -23,7 +23,7 @@ import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookmarks.BookmarkController
 import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
-import voice.app.misc.conductor.asTransaction
+import voice.app.misc.conductor.asVerticalChangeHandlerTransaction
 import voice.common.BookId
 import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
@@ -39,8 +39,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
   @field:[
-    Inject
-    CurrentBook
+  Inject
+  CurrentBook
   ]
   lateinit var currentBook: DataStore<BookId?>
 
@@ -65,6 +65,8 @@ class MainActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     router = Conductor.attachRouter(this, binding.root, savedInstanceState)
+      .setOnBackPressedDispatcherEnabled(true)
+      .setPopRootControllerMode(Router.PopRootControllerMode.NEVER)
     if (!router.hasRootController()) {
       setupRouter()
     }
@@ -109,15 +111,15 @@ class MainActivity : AppCompatActivity() {
                 // no-op
               }
               is Destination.Bookmarks -> {
-                router.pushController(BookmarkController(destination.bookId).asTransaction())
+                router.pushController(BookmarkController(destination.bookId).asVerticalChangeHandlerTransaction())
               }
               is Destination.CoverFromInternet -> {
-                router.pushController(CoverFromInternetController(destination.bookId).asTransaction())
+                router.pushController(CoverFromInternetController(destination.bookId).asVerticalChangeHandlerTransaction())
               }
               is Destination.Playback -> {
                 lifecycleScope.launch {
                   currentBook.updateData { destination.bookId }
-                  router.pushController(BookPlayController(destination.bookId).asTransaction())
+                  router.pushController(BookPlayController(destination.bookId).asVerticalChangeHandlerTransaction())
                 }
               }
               is Destination.Website -> {
@@ -160,7 +162,7 @@ class MainActivity : AppCompatActivity() {
       val bookId = runBlocking { currentBook.data.first() }
       if (bookId != null) {
         val bookShelf = RouterTransaction.with(AppController())
-        val bookPlay = BookPlayController(bookId).asTransaction()
+        val bookPlay = BookPlayController(bookId).asVerticalChangeHandlerTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         return
       }
@@ -170,7 +172,7 @@ class MainActivity : AppCompatActivity() {
     if (intent?.action == "playCurrent") {
       runBlocking { currentBook.data.first() }?.let { bookId ->
         val bookShelf = RouterTransaction.with(AppController())
-        val bookPlay = BookPlayController(bookId).asTransaction()
+        val bookPlay = BookPlayController(bookId).asVerticalChangeHandlerTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         playerController.play()
         return
@@ -179,15 +181,6 @@ class MainActivity : AppCompatActivity() {
 
     val rootTransaction = RouterTransaction.with(AppController())
     router.setRoot(rootTransaction)
-  }
-
-  @Deprecated("Deprecated in Java")
-  override fun onBackPressed() {
-    if (router.backstackSize == 1) {
-      super.onBackPressed()
-    } else {
-      router.handleBack()
-    }
   }
 
   companion object {
