@@ -107,7 +107,7 @@
     <string name="search_hint">Wonach suchst du?</string>
     <string name="battery_optimization_rationale">Aufgrund deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
     <string name="battery_optimization_action">Update</string>
-    <string name="media_session_root">Wurzelordner</string>
+    <string name="media_session_root">Alle Hörbücher</string>
     <string name="media_session_recent">Kürzlich</string>
     <string name="notification_sleep_timer_enable">Einschlaftimer einschalten</string>
     <string name="notification_sleep_timer_disable">Einschlaftimer ausschalten</string>
