@@ -1,130 +1,114 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
-  <!--BookShelf-->
-  <!-- in the book-overview the show-all button which displays all books of a category -->
-  <!--BookPlayFragment-->
-  <string name="cover">Cover</string>
-  <string name="play_pause">Play / Pause</string>
-  <string name="action_sleep">Sleep-Timer</string>
-  <string name="rewind">Rewind</string>
-  <string name="fast_forward">Fast forward</string>
-  <string name="previous_track">Previous track</string>
-  <string name="next_track">Next track</string>
-  <string name="skip_silence">Skip Silence</string>
-  <string name="volume_boost">Volume boost</string>
-  <string name="more">More</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Set</string>
-  <string name="dialog_cancel">Cancel</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Shows cover to choose</string>
-  <string name="change_book_name">Name</string>
-  <string name="download_book_cover">Cover from internet</string>
-  <string name="pick_book_cover">Cover from file system</string>
-  <string name="edit_book_title">Edit book</string>
-  <string name="mark_as_completed">Mark as Completed</string>
-  <string name="mark_as_current">Mark as Current</string>
-  <string name="mark_as_not_started">Mark as Not Started Yet</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Audiobook folders</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Playback speed</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Bookmark</string>
-  <string name="bookmark_edit_title">Edit bookmark</string>
-  <string name="bookmark_edit_hint">Bookmark name</string>
-  <string name="bookmark_added">Bookmark added</string>
-  <!--Settings-->
-  <string name="action_settings">Preferences</string>
-  <string name="min">%s min</string>
-  <string name="delete_last_number">Deletes the last entered number</string>
-  <plurals name="seconds">
-    <item quantity="one">%d second</item>
-    <item quantity="other">%d seconds</item>
-  </plurals>
-  <string name="pref_seek_time">Skip amount</string>
-  <string name="pref_theme_dark">Dark Theme</string>
-  <string name="pref_auto_rewind_title">Auto rewind</string>
-
-  <string name="pref_suggest_idea">Suggest an idea</string>
-  <string name="pref_use_grid">Use grid layout</string>
-  <string name="pref_report_issue">Report a problem</string>
-  <string name="pref_help_translating">Help translating Voice</string>
-  <string name="pref_get_support">Get support</string>
-  <string name="pref_app_version">App version</string>
-  <string name="popup_edit">Edit</string>
-  <string name="remove">Remove</string>
-  <string name="play_current">Play current</string>
-  <string name="refresh">Refresh</string>
-  <string name="reset">Reset</string>
-  <string name="cover_crop">Crop cover</string>
-
-  <!-- book category -->
-  <string name="book_header_current">Current</string>
-  <string name="book_header_not_started">Not started Yet</string>
-  <string name="book_header_completed">Completed</string>
-
-  <string name="close">Close</string>
-  <string name="delete">Delete</string>
-  <string name="add">Add</string>
-
-  <string name="folder_type_audiobooks">Audiobooks folder</string>
-  <string name="folder_type_single_folder">Single folder</string>
-  <string name="folder_type_single_file">Single file</string>
-  <string name="folder_type_dialog_title">What do you want to add?</string>
-
-  <string name="folder_mode_root">Root audiobook folder. One subfolder = one book.</string>
-  <string name="folder_mode_single">Single audiobook folder</string>
-  <plurals name="folder_type_file_count">
-    <item quantity="one">%d audio file</item>
-    <item quantity="other">%d audio files</item>
-  </plurals>
-  <string name="folder_type_book_example_header">This would lead to the following books being detected</string>
-  <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
-
-  <string name="folder_type_title">How are your files structured?</string>
-
-  <!-- will be shown as the time for a bookmark that was just created -->
-  <string name="bookmark_just_now">Just now</string>
-
-  <!-- will be shown as a hint when no books have been added -->
-  <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
-
-  <string name="migration_hint_title">Accessing old Book positions</string>
-  <string name="migration_hint_content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.\n\nClick on the icon above to view your old book positions.</string>
-  <string name="migration_hint_confirm">Understood</string>
-
-  <string name="migration_detail_title">Old book positions</string>
-  <string name="migration_detail_content_name">Name</string>
-  <string name="migration_detail_content_root">Root folder</string>
-  <string name="migration_detail_content_position">Position</string>
-  <string name="migration_detail_content_bookmarks">Bookmarks</string>
-  <string name="migration_detail_content_added_at">Added at</string>
-  <string name="migration_detail_content_position_current_file_title">Current file</string>
-  <string name="migration_detail_content_position_current_file_position">Position in file</string>
-  <string name="migration_detail_content_position_current_chapter_title">Current chapter</string>
-  <string name="migration_detail_content_position_current_chapter_position">Position in chapter</string>
-
-  <string name="migration_delete_dialog_title">Delete Positions</string>
-  <string name="migration_delete_dialog_content">Once you delete the old positions you won\'t be able to recover your old playback positions.</string>
-  <string name="migration_delete_dialog_action_delete">Delete</string>
-  <string name="migration_delete_dialog_action_keep">Keep</string>
-
-  <string name="delete_book_bottom_sheet_title">Delete Book</string>
-  <string name="delete_book_dialog_title">Delete Book</string>
-  <string name="delete_book_dialog_deletion_confirmation">Delete my files</string>
-  <string name="delete_book_dialog_content">This will delete the files on your device.</string>
-
-  <string name="search_hint">What are you looking for?</string>
-
-  <string name="battery_optimization_rationale">Due to your Power restrictions, playback interruptions might happen.</string>
-  <string name="battery_optimization_action">Update</string>
-
-  <string name="media_session_root">Root</string>
-  <string name="media_session_recent">Recent</string>
-
-  <string name="notification_sleep_timer_enable">Enable Sleep Timer</string>
-  <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
+    <!--BookShelf-->
+    <!-- in the book-overview the show-all button which displays all books of a category -->
+    <!--BookPlayFragment-->
+    <string name="cover">Cover</string>
+    <string name="play_pause">Play / Pause</string>
+    <string name="action_sleep">Sleep-Timer</string>
+    <string name="rewind">Rewind</string>
+    <string name="fast_forward">Fast forward</string>
+    <string name="previous_track">Previous track</string>
+    <string name="next_track">Next track</string>
+    <string name="skip_silence">Skip Silence</string>
+    <string name="volume_boost">Volume boost</string>
+    <string name="more">More</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Set</string>
+    <string name="dialog_cancel">Cancel</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Shows cover to choose</string>
+    <string name="change_book_name">Name</string>
+    <string name="download_book_cover">Cover from the Internet</string>
+    <string name="pick_book_cover">Cover from the file system</string>
+    <string name="edit_book_title">Edit book</string>
+    <string name="mark_as_completed">Mark as Completed</string>
+    <string name="mark_as_current">Mark as Current</string>
+    <string name="mark_as_not_started">Mark as Not Started Yet</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Audiobook folders</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Playback speed</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmark_edit_title">Edit bookmark</string>
+    <string name="bookmark_edit_hint">Bookmark name</string>
+    <string name="bookmark_added">Bookmark added</string>
+    <!--Settings-->
+    <string name="action_settings">Preferences</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Deletes the last entered number</string>
+    <plurals name="seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <string name="pref_seek_time">Skip amount</string>
+    <string name="pref_theme_dark">Dark Theme</string>
+    <string name="pref_auto_rewind_title">Auto rewind</string>
+    <string name="pref_suggest_idea">Suggest an idea</string>
+    <string name="pref_use_grid">Use grid layout</string>
+    <string name="pref_report_issue">Report a problem</string>
+    <string name="pref_help_translating">Help translating Voice</string>
+    <string name="pref_get_support">Get support</string>
+    <string name="pref_app_version">App version</string>
+    <string name="popup_edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="play_current">Play current</string>
+    <string name="refresh">Refresh</string>
+    <string name="reset">Reset</string>
+    <string name="cover_crop">Crop cover</string>
+    <!-- book category -->
+    <string name="book_header_current">Current</string>
+    <string name="book_header_not_started">Not started Yet</string>
+    <string name="book_header_completed">Completed</string>
+    <string name="close">Close</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="folder_type_audiobooks">Audiobooks folder</string>
+    <string name="folder_type_single_folder">Single folder</string>
+    <string name="folder_type_single_file">Single file</string>
+    <string name="folder_type_dialog_title">What do you want to add?</string>
+    <string name="folder_mode_root">Root audiobook folder. One subfolder = one book.</string>
+    <string name="folder_mode_single">Single audiobook folder</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d audio file</item>
+        <item quantity="other">%d audio files</item>
+    </plurals>
+    <string name="folder_type_book_example_header">This would lead to the following books being detected</string>
+    <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
+    <string name="folder_type_title">How are your files structured?</string>
+    <!-- will be shown as the time for a bookmark that was just created -->
+    <string name="bookmark_just_now">Just now</string>
+    <!-- will be shown as a hint when no books have been added -->
+    <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
+    <string name="migration_hint_title">Accessing old Book positions</string>
+    <string name="migration_hint_content">Due to changes in newer Android Versions, it is necessary to select your audiobook folder using the system picker.\n\nClick on the icon above to view your old book positions.</string>
+    <string name="migration_hint_confirm">Understood</string>
+    <string name="migration_detail_title">Old book positions</string>
+    <string name="migration_detail_content_name">Name</string>
+    <string name="migration_detail_content_root">Root folder</string>
+    <string name="migration_detail_content_position">Position</string>
+    <string name="migration_detail_content_bookmarks">Bookmarks</string>
+    <string name="migration_detail_content_added_at">Added at</string>
+    <string name="migration_detail_content_position_current_file_title">Current file</string>
+    <string name="migration_detail_content_position_current_file_position">Position in file</string>
+    <string name="migration_detail_content_position_current_chapter_title">Current chapter</string>
+    <string name="migration_detail_content_position_current_chapter_position">Position in chapter</string>
+    <string name="migration_delete_dialog_title">Delete Positions</string>
+    <string name="migration_delete_dialog_content">Once you delete the old positions you won\'t be able to recover your old playback positions.</string>
+    <string name="migration_delete_dialog_action_delete">Delete</string>
+    <string name="migration_delete_dialog_action_keep">Keep</string>
+    <string name="delete_book_bottom_sheet_title">Delete Book</string>
+    <string name="delete_book_dialog_title">Delete Book</string>
+    <string name="delete_book_dialog_deletion_confirmation">Delete my files</string>
+    <string name="delete_book_dialog_content">This will delete the files on your device.</string>
+    <string name="search_hint">What are you looking for?</string>
+    <string name="battery_optimization_rationale">Due to your Power restrictions, playback interruptions might happen.</string>
+    <string name="battery_optimization_action">Update</string>
+    <string name="media_session_root">All audiobooks</string>
+    <string name="media_session_recent">Recent</string>
+    <string name="notification_sleep_timer_enable">Enable Sleep Timer</string>
+    <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
 </resources>

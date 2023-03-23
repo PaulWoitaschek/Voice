@@ -1,4 +1,5 @@
-Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg)
+Voice ![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/main.yml/badge.svg) <a href="https://hosted.weblate.org/engage/voice/">
+<img src="https://hosted.weblate.org/widgets/voice/-/svg-badge.svg" alt="Translation status" />
 =======================
 
 <a href="https://play.google.com/store/apps/details?id=voice.audiobook"><img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/app/src/main/play/listings/en-US/graphics/feature-graphic/1.jpg" width="600" ></a>
@@ -35,7 +36,7 @@ Some rules for coding:
 * Use commits with a good description, so everyone can see what you did
 
 ## <a name="trans">Translations</a>
-The project page is on [transifex](https://www.transifex.com/PaulWoitaschek/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
+The project page is on [weblate](https://hosted.weblate.org/engage/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
 
 Or you can start translating a new language if you speak it ;-)
 

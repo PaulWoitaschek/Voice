@@ -1,79 +1,118 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Cubierta</string>
-  <string name="play_pause">Reproducir / Pausar</string>
-  <string name="action_sleep">Temporizador</string>
-  <string name="rewind">Retrasar</string>
-  <string name="fast_forward">Adelantar</string>
-  <string name="previous_track">Pista anterior</string>
-  <string name="next_track">Pista siguiente</string>
-  <string name="skip_silence">Saltar silencio</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Establecer</string>
-  <string name="dialog_cancel">Cancelar</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Muestra la cubierta seleccionada</string>
-  <string name="change_book_name">Cambiar nombre del libro</string>
-  <string name="download_book_cover">Cubierta de Internet</string>
-  <string name="pick_book_cover">Cubierta desde el sistema de archivos</string>
-  <string name="edit_book_title">Editar libro</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Directorios de audiolibros</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Velocidad de reproducción</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Marcador</string>
-  <string name="bookmark_edit_title">Editar marcador</string>
-  <string name="bookmark_edit_hint">Nombre del marcador</string>
-  <string name="bookmark_added">Marcador añadido</string>
-  <!--Settings-->
-  <string name="action_settings">Preferencias</string>
-  <string name="min">%s min</string>
-  <string name="delete_last_number">Borra el último número introducido</string>
-  <plurals name="seconds">
-    <item quantity="one">%d segundo</item>
-    <item quantity="many">%d segundos</item>
-    <item quantity="other">%d segundos</item>
-  </plurals>
-  <string name="pref_seek_time">Omitir cantidad</string>
-  <string name="pref_theme_dark">Tema oscuro</string>
-  <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
-  <string name="popup_edit">Editar</string>
-  <string name="remove">Eliminar</string>
-  <string name="play_current">Reproducir actual</string>
-  <string name="refresh">Actualizar</string>
-  <string name="reset">Reiniciar</string>
-  <string name="cover_crop">Recortar cubierta</string>
-  <!--book category-->
-  <string name="book_header_current">Actual</string>
-  <string name="book_header_not_started">Aún no comenzado</string>
-  <string name="book_header_completed">Completado</string>
-  <string name="close">Cerrar</string>
-  <string name="delete">Borrar</string>
-  <string name="add">Agregar</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">Justo ahora</string>
-  <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">Agreguemos tu directorio de audio libros para que puedas empezar a escucharlos!</string>
-  <string name="migration_hint_title">Accesando posición en libros viejos</string>
-  <string name="migration_hint_content">Debido a cambios en las versiones má nuevas de Androide, es necesario seleccionar tu directorio de audio libros utilizando el seleccionador del systema.\nHaz click en el icono arriba para ver las posiciones antiguas de tus libros.</string>
-  <string name="migration_hint_confirm">Entendido</string>
-  <string name="migration_detail_title">Posiciones antiguas</string>
-  <string name="migration_detail_content_name">Nombre</string>
-  <string name="migration_detail_content_root">Directorio raíz</string>
-  <string name="migration_detail_content_position">Posición</string>
-  <string name="migration_detail_content_bookmarks">Marcadores de libros</string>
-  <string name="migration_detail_content_added_at">Agregado a</string>
-  <string name="migration_delete_dialog_title">Borrar Posiciones</string>
-  <string name="migration_delete_dialog_action_delete">Borrar</string>
-  <string name="migration_delete_dialog_action_keep">Guardar</string>
-  <string name="delete_book_bottom_sheet_title">Borrar Libro</string>
-  <string name="delete_book_dialog_title">Borrar Libro</string>
-  <string name="delete_book_dialog_deletion_confirmation">Borrar mis archivos</string>
-  <string name="delete_book_dialog_content">Esto borrará los archivos en tu dispositivo</string>
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">Cubierta</string>
+    <string name="play_pause">Reproducir / Pausar</string>
+    <string name="action_sleep">Temporizador</string>
+    <string name="rewind">Retrasar</string>
+    <string name="fast_forward">Adelantar</string>
+    <string name="previous_track">Pista anterior</string>
+    <string name="next_track">Pista siguiente</string>
+    <string name="skip_silence">Saltar silencio</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Establecer</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Muestra la cubierta seleccionada</string>
+    <string name="change_book_name">Cambiar nombre del libro</string>
+    <string name="download_book_cover">Portada desde Internet</string>
+    <string name="pick_book_cover">Portada del sistema de archivos</string>
+    <string name="edit_book_title">Editar libro</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Directorios de audiolibros</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Velocidad de reproducción</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Marcador</string>
+    <string name="bookmark_edit_title">Editar marcador</string>
+    <string name="bookmark_edit_hint">Nombre del marcador</string>
+    <string name="bookmark_added">Marcador añadido</string>
+    <!--Settings-->
+    <string name="action_settings">Preferencias</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Borra el último número introducido</string>
+    <plurals name="seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="many">%d segundos</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <string name="pref_seek_time">Omitir cantidad</string>
+    <string name="pref_theme_dark">Tema oscuro</string>
+    <string name="pref_auto_rewind_title">Retrasar automáticamente</string>
+    <string name="popup_edit">Editar</string>
+    <string name="remove">Eliminar</string>
+    <string name="play_current">Reproducir actual</string>
+    <string name="refresh">Actualizar</string>
+    <string name="reset">Reiniciar</string>
+    <string name="cover_crop">Recortar cubierta</string>
+    <!--book category-->
+    <string name="book_header_current">Actual</string>
+    <string name="book_header_not_started">Aún no comenzado</string>
+    <string name="book_header_completed">Completado</string>
+    <string name="close">Cerrar</string>
+    <string name="delete">Borrar</string>
+    <string name="add">Agregar</string>
+    <!--will be shown as the time for a bookmark that was just created-->
+    <string name="bookmark_just_now">Justo ahora</string>
+    <!--will be shown as a hint when no books have been added-->
+    <string name="voice_intro_first_book">Agreguemos tu directorio de audio libros para que puedas empezar a escucharlos!</string>
+    <string name="migration_hint_title">Accesando posición en libros viejos</string>
+    <string name="migration_hint_content">Debido a los cambios en las versiones más recientes de Android, debes seleccionar la carpeta de los audiolibros con el selector del sistema.
+\n
+\nHaz clic en el icono de arriba para ver la ubicación de los libros antiguos.</string>
+    <string name="migration_hint_confirm">Entendido</string>
+    <string name="migration_detail_title">Posiciones antiguas</string>
+    <string name="migration_detail_content_name">Nombre</string>
+    <string name="migration_detail_content_root">Directorio raíz</string>
+    <string name="migration_detail_content_position">Posición</string>
+    <string name="migration_detail_content_bookmarks">Marcadores de libros</string>
+    <string name="migration_detail_content_added_at">Agregado a</string>
+    <string name="migration_delete_dialog_title">Borrar Posiciones</string>
+    <string name="migration_delete_dialog_action_delete">Borrar</string>
+    <string name="migration_delete_dialog_action_keep">Guardar</string>
+    <string name="delete_book_bottom_sheet_title">Borrar Libro</string>
+    <string name="delete_book_dialog_title">Borrar Libro</string>
+    <string name="delete_book_dialog_deletion_confirmation">Borrar mis archivos</string>
+    <string name="delete_book_dialog_content">Esto borrará los archivos de tu dispositivo.</string>
+    <string name="more">Más</string>
+    <string name="volume_boost">Incremento del volumen</string>
+    <string name="mark_as_completed">Marcar como finalizado</string>
+    <string name="mark_as_current">Marcar como actual</string>
+    <string name="pref_suggest_idea">Proponer una idea</string>
+    <string name="mark_as_not_started">Marcar como Aún No Iniciado</string>
+    <string name="pref_use_grid">Utilizar el diseño en cuadrícula</string>
+    <string name="pref_report_issue">Comunicar un problema</string>
+    <string name="pref_app_version">Versión de la aplicación</string>
+    <string name="folder_type_audiobooks">Carpeta de audiolibros</string>
+    <string name="folder_type_single_folder">Carpeta individual</string>
+    <string name="folder_mode_root">Carpeta raíz para audiolibros. Una subcarpeta = un libro.</string>
+    <string name="folder_mode_single">Una carpeta con un audiolibro</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d archivo de audio</item>
+        <item quantity="many">%d archivos de audios</item>
+        <item quantity="other">%d archivos de audios</item>
+    </plurals>
+    <string name="folder_type_title">¿Cómo están estructurados tus archivos\?</string>
+    <string name="migration_detail_content_position_current_file_position">Posición en el archivo</string>
+    <string name="migration_detail_content_position_current_chapter_position">Situación en el capítulo</string>
+    <string name="battery_optimization_action">Actualizar</string>
+    <string name="notification_sleep_timer_enable">Activar un temporizador de reposo</string>
+    <string name="pref_help_translating">Ayuda traduciendo Voice</string>
+    <string name="folder_type_dialog_title">¿Qué quiere añadir\?</string>
+    <string name="pref_get_support">Conseguir ayuda</string>
+    <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
+    <string name="folder_type_single_file">Archivo único</string>
+    <string name="folder_type_book_example_header">Así se detectarían los siguientes libros</string>
+    <string name="notification_sleep_timer_disable">Desactivar un temporizador de reposo</string>
+    <string name="folder_type_no_books">Voice no detecta ningún libro. ¿Hay archivos de audio\?</string>
+    <string name="migration_detail_content_position_current_file_title">Archivo actual</string>
+    <string name="media_session_root">Todos los audiolibros</string>
+    <string name="migration_delete_dialog_content">Una vez que elimines las posiciones anteriores, ya no podrás ver las posiciones anteriores.</string>
+    <string name="search_hint">¿Que estás buscando\?</string>
+    <string name="battery_optimization_rationale">Debido a sus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>
+    <string name="media_session_recent">Reciente</string>
 </resources>
