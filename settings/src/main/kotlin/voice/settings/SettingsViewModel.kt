@@ -117,6 +117,6 @@ class SettingsViewModel
 
   override fun openTranslations() {
     dismissDialog()
-    navigator.goTo(Destination.Website("https://explore.transifex.com/PaulWoitaschek/voice/"))
+    navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
   }
 }
