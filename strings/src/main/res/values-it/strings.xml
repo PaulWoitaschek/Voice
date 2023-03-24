@@ -19,7 +19,7 @@
     <string name="content_cover">Mostra la copertina da scegliere</string>
     <string name="change_book_name">Nome</string>
     <string name="download_book_cover">Copertina da Internet</string>
-    <string name="pick_book_cover">Copertina da file nel sistema</string>
+    <string name="pick_book_cover">Copertina dal file system</string>
     <string name="edit_book_title">Modifica libro</string>
     <!--JumpToPosition-->
     <!--BookAdding-->
@@ -58,4 +58,61 @@
     <string name="volume_boost">Ultime occasioni</string>
     <string name="more">Altro</string>
     <string name="mark_as_completed">Segna come completato</string>
+    <string name="mark_as_current">Contrassegna come attuale</string>
+    <string name="mark_as_not_started">Contrassegna come non ancora avviato</string>
+    <string name="pref_use_grid">Usa layout a griglia</string>
+    <string name="pref_report_issue">Segnala un problema</string>
+    <string name="pref_help_translating">Aiuta a tradurre Voice</string>
+    <string name="pref_get_support">Ottieni supporto</string>
+    <string name="pref_app_version">Versione dell\'app</string>
+    <string name="close">Chiudi</string>
+    <string name="delete">Elimina</string>
+    <string name="add">Aggiungi</string>
+    <string name="folder_type_audiobooks">Cartella audiolibri</string>
+    <string name="folder_type_single_folder">Cartella singola</string>
+    <string name="folder_type_single_file">File singolo</string>
+    <string name="folder_type_dialog_title">Cosa vuoi aggiungere\?</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d file audio</item>
+        <item quantity="many">%d file audio</item>
+        <item quantity="other">%d file audio</item>
+    </plurals>
+    <string name="folder_mode_root">Radice cartella audiolibro. Una sottocartella = un libro.</string>
+    <string name="folder_mode_single">Cartella audiolibro singolo</string>
+    <string name="folder_type_book_example_header">Questo porterebbe al rilevamento dei seguenti libri</string>
+    <string name="folder_type_no_books">Voice non ha rilevato alcun libro. Ci sono file audio\?</string>
+    <string name="folder_type_title">Come sono strutturati i tuoi file\?</string>
+    <string name="migration_hint_title">Accesso alle vecchie posizioni del Libro</string>
+    <string name="migration_hint_confirm">Ho capito</string>
+    <string name="migration_detail_content_name">Nome</string>
+    <string name="migration_detail_content_position">Posizione</string>
+    <string name="migration_detail_content_bookmarks">Segnalibri</string>
+    <string name="migration_detail_content_added_at">Aggiunto a</string>
+    <string name="migration_detail_content_position_current_file_title">File corrente</string>
+    <string name="migration_detail_content_position_current_file_position">Posizione nel file</string>
+    <string name="migration_detail_content_position_current_chapter_title">Capitolo attuale</string>
+    <string name="migration_detail_content_position_current_chapter_position">Posizione nel capitolo</string>
+    <string name="migration_delete_dialog_title">Elimina posizioni</string>
+    <string name="migration_delete_dialog_action_delete">Elimina</string>
+    <string name="migration_delete_dialog_action_keep">Mantieni</string>
+    <string name="delete_book_bottom_sheet_title">Elimina libro</string>
+    <string name="delete_book_dialog_deletion_confirmation">Elimina i miei file</string>
+    <string name="delete_book_dialog_content">Questo eliminerà i file sul tuo dispositivo.</string>
+    <string name="search_hint">Cosa stai cercando\?</string>
+    <string name="battery_optimization_action">Aggiornamento</string>
+    <string name="media_session_root">Tutti gli audiolibri</string>
+    <string name="media_session_recent">Recente</string>
+    <string name="notification_sleep_timer_enable">Abilita il timer di sospensione</string>
+    <string name="notification_sleep_timer_disable">Disabilita il timer di sospensione</string>
+    <string name="pref_suggest_idea">Suggerisci un\'idea</string>
+    <string name="bookmark_just_now">Proprio adesso</string>
+    <string name="voice_intro_first_book">Aggiungiamo la cartella dell\'audiolibro in modo che tu possa iniziare ad ascoltare!</string>
+    <string name="migration_hint_content">A causa dei cambiamenti nelle versioni Android più recenti, è necessario selezionare la cartella dell\'audiolibro utilizzando il selettore di sistema.
+\n
+\nFai clic sull\'icona in alto per visualizzare le tue vecchie posizioni del libro.</string>
+    <string name="migration_detail_title">Posizioni del vecchio libro</string>
+    <string name="migration_detail_content_root">Cartella root</string>
+    <string name="battery_optimization_rationale">A causa delle restrizioni di alimentazione, potrebbero verificarsi interruzioni della riproduzione.</string>
+    <string name="migration_delete_dialog_content">Una volta eliminate le vecchie posizioni, non sarai più in grado di recuperare le tue vecchie posizioni di riproduzione.</string>
+    <string name="delete_book_dialog_title">Elimina libro</string>
 </resources>
