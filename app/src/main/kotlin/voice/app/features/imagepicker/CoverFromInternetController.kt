@@ -1,6 +1,7 @@
 package voice.app.features.imagepicker
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -68,9 +69,13 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
     }
   }
 
+  override fun onContextAvailable(context: Context) {
+    super.onContextAvailable(context)
+    onBackPressedDispatcher?.addCallback(lifecycleOwner, onBackPressedCallback)
+  }
+
   @SuppressLint("SetJavaScriptEnabled")
   override fun ImagePickerBinding.onBindingCreated() {
-    onBackPressedDispatcher?.addCallback(onBackPressedCallback)
     onCreateViewScope = MainScope()
     with(webView.settings) {
       setSupportZoom(true)
@@ -179,11 +184,6 @@ class CoverFromInternetController(bundle: Bundle) : ViewBindingController<ImageP
         else -> false
       }
     }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    onBackPressedCallback.remove()
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
