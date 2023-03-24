@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import voice.settings.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () -> Unit) {
@@ -24,16 +24,16 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.FastRewind,
-        contentDescription = stringResource(R.string.pref_auto_rewind_title),
+        contentDescription = stringResource(StringsR.string.pref_auto_rewind_title),
       )
     },
     headlineText = {
-      Text(text = stringResource(R.string.pref_auto_rewind_title))
+      Text(text = stringResource(StringsR.string.pref_auto_rewind_title))
     },
     supportingText = {
       Text(
         text = LocalContext.current.resources.getQuantityString(
-          R.plurals.seconds,
+          StringsR.plurals.seconds,
           autoRewindInSeconds,
           autoRewindInSeconds,
         ),
@@ -49,11 +49,11 @@ internal fun AutoRewindAmountDialog(
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
-    title = stringResource(R.string.pref_auto_rewind_title),
+    title = stringResource(StringsR.string.pref_auto_rewind_title),
     currentSeconds = currentSeconds,
     minSeconds = 0,
     maxSeconds = 20,
-    textPluralRes = R.plurals.seconds,
+    textPluralRes = StringsR.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed,
     onDismiss = onDismiss,
   )

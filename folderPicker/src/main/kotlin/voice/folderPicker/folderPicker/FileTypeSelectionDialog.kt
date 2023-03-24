@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import voice.folderPicker.R
+import voice.strings.R as StringsR
 
 internal enum class FileTypeSelection {
   File,
@@ -47,7 +47,7 @@ internal fun FileTypeSelectionDialog(
     icon = {
       Icon(
         imageVector = Icons.Outlined.Book,
-        contentDescription = stringResource(id = R.string.folder_type_dialog_title),
+        contentDescription = stringResource(id = StringsR.string.folder_type_dialog_title),
       )
     },
     confirmButton = {
@@ -63,7 +63,7 @@ internal fun FileTypeSelectionDialog(
       DismissButton(onDismiss)
     },
     title = {
-      Text(text = stringResource(id = R.string.folder_type_dialog_title))
+      Text(text = stringResource(id = StringsR.string.folder_type_dialog_title))
     },
     text = {
       Column {
@@ -87,7 +87,7 @@ private fun ConfirmButton(enabled: Boolean, onConfirm: () -> Unit) {
     enabled = enabled,
     onClick = onConfirm,
   ) {
-    Text(text = stringResource(id = R.string.add))
+    Text(text = stringResource(id = StringsR.string.add))
   }
 }
 
@@ -98,7 +98,7 @@ private fun DismissButton(onDismiss: () -> Unit) {
       onDismiss()
     },
   ) {
-    Text(text = stringResource(id = R.string.dialog_cancel))
+    Text(text = stringResource(id = StringsR.string.dialog_cancel))
   }
 }
 

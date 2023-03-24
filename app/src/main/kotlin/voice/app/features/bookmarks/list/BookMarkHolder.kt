@@ -14,6 +14,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import voice.strings.R as StringsR
 
 class BookMarkHolder(
   parent: ViewGroup,
@@ -44,7 +45,7 @@ class BookMarkHolder(
       bookmark.setBySleepTimer -> {
         val justNowThreshold = 1.minutes
         if (ChronoUnit.MILLIS.between(bookmark.addedAt, Instant.now()).milliseconds < justNowThreshold) {
-          itemView.context.getString(R.string.bookmark_just_now)
+          itemView.context.getString(StringsR.string.bookmark_just_now)
         } else {
           DateUtils.getRelativeDateTimeString(
             itemView.context,

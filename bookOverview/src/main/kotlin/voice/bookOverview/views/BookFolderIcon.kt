@@ -8,7 +8,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.bookOverview.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun BookFolderIcon(
@@ -20,7 +20,7 @@ internal fun BookFolderIcon(
     IconButton(modifier = modifier, onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.Book,
-        contentDescription = stringResource(R.string.audiobook_folders_title),
+        contentDescription = stringResource(StringsR.string.audiobook_folders_title),
       )
     }
     if (withHint) {

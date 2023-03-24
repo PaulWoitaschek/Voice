@@ -7,7 +7,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import voice.bookOverview.R
+import voice.common.R as CommonR
+import voice.strings.R as StringsR
 
 @Composable
 internal fun PlayButton(playing: Boolean, onClick: () -> Unit) {
@@ -15,11 +16,11 @@ internal fun PlayButton(playing: Boolean, onClick: () -> Unit) {
     Icon(
       painter = rememberAnimatedVectorPainter(
         animatedImageVector = AnimatedImageVector.animatedVectorResource(
-          id = R.drawable.avd_pause_to_play,
+          id = CommonR.drawable.avd_pause_to_play,
         ),
         atEnd = !playing,
       ),
-      contentDescription = stringResource(R.string.play_pause),
+      contentDescription = stringResource(StringsR.string.play_pause),
     )
   }
 }

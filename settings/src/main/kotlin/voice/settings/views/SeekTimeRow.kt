@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import voice.settings.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit) {
@@ -24,16 +24,16 @@ internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit)
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.Timelapse,
-        contentDescription = stringResource(R.string.pref_seek_time),
+        contentDescription = stringResource(StringsR.string.pref_seek_time),
       )
     },
     headlineText = {
-      Text(text = stringResource(R.string.pref_seek_time))
+      Text(text = stringResource(StringsR.string.pref_seek_time))
     },
     supportingText = {
       Text(
         text = LocalContext.current.resources.getQuantityString(
-          R.plurals.seconds,
+          StringsR.plurals.seconds,
           seekTimeInSeconds,
           seekTimeInSeconds,
         ),
@@ -49,11 +49,11 @@ internal fun SeekAmountDialog(
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
-    title = stringResource(R.string.pref_seek_time),
+    title = stringResource(StringsR.string.pref_seek_time),
     currentSeconds = currentSeconds,
     minSeconds = 3,
     maxSeconds = 60,
-    textPluralRes = R.plurals.seconds,
+    textPluralRes = StringsR.plurals.seconds,
     onSecondsConfirmed = onSecondsConfirmed,
     onDismiss = onDismiss,
   )

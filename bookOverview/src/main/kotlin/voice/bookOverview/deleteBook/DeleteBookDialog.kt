@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import voice.bookOverview.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun DeleteBookDialog(
@@ -31,7 +31,7 @@ internal fun DeleteBookDialog(
   AlertDialog(
     onDismissRequest = onDismiss,
     title = {
-      Text(stringResource(R.string.delete_book_dialog_title))
+      Text(stringResource(StringsR.string.delete_book_dialog_title))
     },
     confirmButton = {
       Button(
@@ -42,19 +42,19 @@ internal fun DeleteBookDialog(
           contentColor = MaterialTheme.colorScheme.error,
         ),
       ) {
-        Text(stringResource(id = R.string.delete))
+        Text(stringResource(id = StringsR.string.delete))
       }
     },
     dismissButton = {
       TextButton(
         onClick = onDismiss,
       ) {
-        Text(stringResource(id = R.string.dialog_cancel))
+        Text(stringResource(id = StringsR.string.dialog_cancel))
       }
     },
     text = {
       Column {
-        Text(stringResource(id = R.string.delete_book_dialog_content))
+        Text(stringResource(id = StringsR.string.delete_book_dialog_content))
 
         Spacer(modifier = Modifier.heightIn(8.dp))
         Text(viewState.fileToDelete, style = MaterialTheme.typography.bodyLarge)
@@ -72,7 +72,7 @@ internal fun DeleteBookDialog(
             checked = viewState.deleteCheckBoxChecked,
             onCheckedChange = onDeleteCheckBoxChecked,
           )
-          Text(stringResource(id = R.string.delete_book_dialog_deletion_confirmation))
+          Text(stringResource(id = StringsR.string.delete_book_dialog_deletion_confirmation))
         }
       }
     },

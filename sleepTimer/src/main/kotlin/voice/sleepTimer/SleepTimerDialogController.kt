@@ -17,6 +17,7 @@ import voice.data.getBookId
 import voice.data.putBookId
 import voice.sleepTimer.databinding.DialogSleepBinding
 import javax.inject.Inject
+import voice.strings.R as StringsR
 
 private const val NI_BOOK_ID = "ni#bookId"
 
@@ -65,7 +66,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
 
     onCreateViewScope!!.launch {
       viewModel.viewState().collectLatest { viewState ->
-        binding.time.text = activity!!.getString(R.string.min, viewState.selectedMinutes.toString())
+        binding.time.text = activity!!.getString(StringsR.string.min, viewState.selectedMinutes.toString())
 
         if (viewState.showFab) {
           binding.fab.show()
@@ -85,7 +86,7 @@ class SleepTimerDialogController(bundle: Bundle) : DialogController(bundle) {
       setOnShowListener {
         val parentView = binding.root.parent as View
         parentView.background = null
-        val coordinator = findViewById<FrameLayout>(R.id.design_bottom_sheet)!!
+        val coordinator = findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)!!
         val behavior = BottomSheetBehavior.from(coordinator)
         behavior.peekHeight = binding.time.bottom
         behavior.state = BottomSheetBehavior.STATE_EXPANDED

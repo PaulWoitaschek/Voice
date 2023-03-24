@@ -5,6 +5,7 @@ import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
 import voice.playback.R
 import javax.inject.Inject
+import voice.strings.R as StringsR
 
 class SleepTimerCommandUpdater
 @Inject constructor(
@@ -30,9 +31,9 @@ class SleepTimerCommandUpdater
         .setDisplayName(
           context.getString(
             if (sleepTimerActive) {
-              R.string.notification_sleep_timer_disable
+              StringsR.string.notification_sleep_timer_disable
             } else {
-              R.string.notification_sleep_timer_enable
+              StringsR.string.notification_sleep_timer_enable
             },
           ),
         )

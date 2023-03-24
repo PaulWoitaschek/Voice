@@ -26,9 +26,9 @@ import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
 import voice.data.toUri
-import voice.playback.R
 import java.io.File
 import javax.inject.Inject
+import voice.strings.R as StringsR
 
 class MediaItemProvider
 @Inject constructor(
@@ -42,7 +42,7 @@ class MediaItemProvider
 ) {
 
   fun root(): MediaItem = MediaItem(
-    title = application.getString(R.string.media_session_root),
+    title = application.getString(StringsR.string.media_session_root),
     browsable = true,
     isPlayable = false,
     mediaId = MediaId.Root,
@@ -50,7 +50,7 @@ class MediaItemProvider
   )
 
   fun recent(): MediaItem? = MediaItem(
-    title = application.getString(R.string.media_session_recent),
+    title = application.getString(StringsR.string.media_session_recent),
     browsable = true,
     isPlayable = false,
     mediaId = MediaId.Recent,

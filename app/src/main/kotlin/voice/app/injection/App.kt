@@ -29,8 +29,8 @@ class App : Application() {
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
 
   @field:[
-    Inject
-    Named(PrefKeys.DARK_THEME)
+  Inject
+  Named(PrefKeys.DARK_THEME)
   ]
   lateinit var useDarkTheme: Pref<Boolean>
 

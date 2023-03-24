@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import voice.playback.misc.Decibel
+import voice.strings.R as StringsR
 
 @Composable
 internal fun VolumeGainDialog(
@@ -18,7 +19,7 @@ internal fun VolumeGainDialog(
     confirmButton = {},
     text = {
       Column {
-        Text(stringResource(id = R.string.volume_boost) + ": " + dialogState.valueFormatted)
+        Text(stringResource(id = StringsR.string.volume_boost) + ": " + dialogState.valueFormatted)
         Slider(
           valueRange = 0F..dialogState.maxGain.value,
           value = dialogState.gain.value,

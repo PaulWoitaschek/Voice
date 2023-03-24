@@ -8,11 +8,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
-import voice.app.R
 import voice.common.conductor.DialogController
 import voice.data.Bookmark
 import voice.data.getBookmarkId
 import voice.data.putBookmarkId
+import voice.strings.R as StringsR
 
 /**
  * Dialog for changing the bookmark title.
@@ -24,14 +24,14 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
     val bookmarkId = args.getBookmarkId(NI_BOOKMARK_ID)!!
 
     val dialog = MaterialDialog(activity!!).apply {
-      title(R.string.bookmark_edit_title)
+      title(StringsR.string.bookmark_edit_title)
       val inputType = InputType.TYPE_CLASS_TEXT or
         InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
         InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
         InputType.TYPE_TEXT_FLAG_MULTI_LINE
       @Suppress("CheckResult")
       input(
-        hintRes = R.string.bookmark_edit_hint,
+        hintRes = StringsR.string.bookmark_edit_hint,
         prefill = bookmarkTitle,
         allowEmpty = false,
         inputType = inputType,
@@ -40,7 +40,7 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
         val newTitle = charSequence.toString()
         callback.onEditBookmark(bookmarkId, newTitle)
       }
-      positiveButton(R.string.dialog_confirm)
+      positiveButton(StringsR.string.dialog_confirm)
     }
     val editText = dialog.getInputField()
     editText.setOnEditorActionListener { _, actionId, _ ->

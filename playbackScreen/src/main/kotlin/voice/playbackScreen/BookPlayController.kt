@@ -26,6 +26,7 @@ import voice.data.putBookId
 import voice.logging.core.Logger
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
+import voice.strings.R as StringsR
 
 private const val NI_BOOK_ID = "niBookId"
 
@@ -55,14 +56,14 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
       viewModel.viewEffects.collect { viewEffect ->
         when (viewEffect) {
           BookPlayViewEffect.BookmarkAdded -> {
-            snackbarHostState.showSnackbar(message = context.getString(R.string.bookmark_added))
+            snackbarHostState.showSnackbar(message = context.getString(StringsR.string.bookmark_added))
           }
 
           BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
             val result = snackbarHostState.showSnackbar(
-              message = context.getString(R.string.battery_optimization_rationale),
+              message = context.getString(StringsR.string.battery_optimization_rationale),
               duration = SnackbarDuration.Long,
-              actionLabel = context.getString(R.string.battery_optimization_action),
+              actionLabel = context.getString(StringsR.string.battery_optimization_action),
             )
             if (result == SnackbarResult.ActionPerformed) {
               toBatteryOptimizations()

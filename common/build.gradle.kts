@@ -10,6 +10,12 @@ anvil {
   generateDaggerFactories.set(true)
 }
 
+android {
+  buildFeatures {
+    androidResources = true
+  }
+}
+
 dependencies {
   implementation(projects.strings)
   implementation(libs.appCompat)

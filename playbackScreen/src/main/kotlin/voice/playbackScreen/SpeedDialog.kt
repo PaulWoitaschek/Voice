@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import java.text.DecimalFormat
+import voice.strings.R as StringsR
 
 @Composable
 internal fun SpeedDialog(
@@ -20,11 +21,11 @@ internal fun SpeedDialog(
     onDismissRequest = { viewModel.dismissDialog() },
     confirmButton = {},
     title = {
-      Text(stringResource(id = R.string.playback_speed))
+      Text(stringResource(id = StringsR.string.playback_speed))
     },
     text = {
       Column {
-        Text(stringResource(id = R.string.playback_speed) + ": " + speedFormatter.format(dialogState.speed))
+        Text(stringResource(id = StringsR.string.playback_speed) + ": " + speedFormatter.format(dialogState.speed))
         val valueRange = 0.5F..dialogState.maxSpeed
         val rangeSize = valueRange.endInclusive - valueRange.start
         val stepSize = 0.05

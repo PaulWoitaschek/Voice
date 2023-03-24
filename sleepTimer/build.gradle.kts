@@ -10,6 +10,7 @@ anvil {
 android {
   buildFeatures {
     viewBinding = true
+    androidResources = true
   }
 }
 
