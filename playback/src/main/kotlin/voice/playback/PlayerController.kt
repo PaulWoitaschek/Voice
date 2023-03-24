@@ -29,7 +29,7 @@ import kotlin.time.Duration
 
 class PlayerController
 @Inject constructor(
-  context: Context,
+  private val context: Context,
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
@@ -37,11 +37,24 @@ class PlayerController
   private val mediaItemProvider: MediaItemProvider,
 ) {
 
-  private val controller: Deferred<MediaController> = MediaController
+  private var _controller: Deferred<MediaController> = newController()
+
+  private fun newController() = MediaController
     .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
     .buildAsync()
     .asDeferred()
 
+  private val controller: Deferred<MediaController>
+    get() {
+      if (_controller.isCompleted) {
+        val completedController = _controller.getCompleted()
+        if (!completedController.isConnected) {
+          completedController.release()
+          _controller = newController()
+        }
+      }
+      return _controller
+    }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
   fun setPosition(time: Long, id: ChapterId) = executeAfterPrepare { controller ->
