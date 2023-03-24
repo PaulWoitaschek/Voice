@@ -3,7 +3,6 @@ package voice.bookOverview.search
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,18 +20,11 @@ import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -53,10 +45,6 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
     rootComponentAs<BookSearchComponent>().bookSearchViewModel
   }
   val viewState = viewModel.viewState()
-  val focusRequester = remember { FocusRequester() }
-  LaunchedEffect(Unit) {
-    focusRequester.requestFocus()
-  }
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -73,23 +61,9 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
           }
         },
         actions = {
-          TextField(
-            modifier = Modifier
-              .focusRequester(focusRequester)
-              .padding(start = 54.dp, end = 8.dp)
-              .fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-              containerColor = Color.Transparent,
-              focusedIndicatorColor = Color.Transparent,
-              unfocusedIndicatorColor = Color.Transparent,
-            ),
-            value = viewState.query,
-            singleLine = true,
-            maxLines = 1,
-            onValueChange = viewModel::onNewSearch,
-            label = {
-              Text(stringResource(id = R.string.search_hint))
-            },
+          SearchTextField(
+            query = viewState.query,
+            onQueryChange = viewModel::onQueryChange,
           )
         },
       )
@@ -110,7 +84,7 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
               CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
                 viewState.recentQueries.forEach { query ->
                   SuggestionChip(
-                    onClick = { viewModel.onNewSearch(query) },
+                    onClick = { viewModel.onQueryChange(query) },
                     label = {
                       Text(text = query)
                     },
@@ -124,7 +98,7 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
                 }
                 viewState.suggestedAuthors.forEach { author ->
                   SuggestionChip(
-                    onClick = { viewModel.onNewSearch(author) },
+                    onClick = { viewModel.onQueryChange(author) },
                     label = {
                       Text(text = author)
                     },

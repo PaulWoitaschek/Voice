@@ -100,7 +100,7 @@ class BookSearchViewModel
     navigator.goBack()
   }
 
-  fun onNewSearch(query: String) {
+  fun onQueryChange(query: String) {
     this.query.value = query
   }
 }
