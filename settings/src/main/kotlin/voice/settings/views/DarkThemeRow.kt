@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.settings.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun DarkThemeRow(useDarkTheme: Boolean, toggle: () -> Unit) {
@@ -19,7 +19,7 @@ internal fun DarkThemeRow(useDarkTheme: Boolean, toggle: () -> Unit) {
       }
       .fillMaxWidth(),
     headlineText = {
-      Text(text = stringResource(R.string.pref_theme_dark))
+      Text(text = stringResource(StringsR.string.pref_theme_dark))
     },
     trailingContent = {
       Switch(

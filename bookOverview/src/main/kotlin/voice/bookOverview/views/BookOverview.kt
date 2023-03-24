@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import voice.bookOverview.R
 import voice.bookOverview.bottomSheet.BottomSheetContent
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.deleteBook.DeleteBookDialog
@@ -50,6 +49,7 @@ import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
+import voice.common.R as CommonR
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
@@ -156,7 +156,7 @@ internal fun BookOverview(
     topBar = {
       TopAppBar(
         title = {
-          Text(text = stringResource(id = R.string.app_name))
+          Text(text = stringResource(id = CommonR.string.app_name))
         },
         scrollBehavior = scrollBehavior,
         actions = {

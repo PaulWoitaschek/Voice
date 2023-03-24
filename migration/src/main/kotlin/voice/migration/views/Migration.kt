@@ -40,9 +40,9 @@ import voice.common.compose.rememberScoped
 import voice.common.formatTime
 import voice.common.rootComponentAs
 import voice.migration.MigrationViewModel
-import voice.migration.R
 import java.time.Instant
 import kotlin.random.Random
+import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface MigrationComponent {
@@ -73,7 +73,7 @@ internal fun Migration(
       TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(stringResource(id = R.string.migration_detail_title))
+          Text(stringResource(id = StringsR.string.migration_detail_title))
         },
         navigationIcon = {
           IconButton(
@@ -81,7 +81,7 @@ internal fun Migration(
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(R.string.close),
+              contentDescription = stringResource(StringsR.string.close),
             )
           }
         },
@@ -91,7 +91,7 @@ internal fun Migration(
       FloatingActionButton(onClick = viewState.onDeleteClicked) {
         Icon(
           imageVector = Icons.Outlined.Delete,
-          contentDescription = stringResource(id = R.string.delete),
+          contentDescription = stringResource(id = StringsR.string.delete),
         )
       }
     },
@@ -121,19 +121,19 @@ private fun DeletionConfirmationDialog(
   AlertDialog(
     onDismissRequest = onCancel,
     title = {
-      Text(stringResource(R.string.migration_delete_dialog_title))
+      Text(stringResource(StringsR.string.migration_delete_dialog_title))
     },
     text = {
-      Text(stringResource(R.string.migration_delete_dialog_content))
+      Text(stringResource(StringsR.string.migration_delete_dialog_content))
     },
     confirmButton = {
       Button(onConfirm) {
-        Text(stringResource(R.string.migration_delete_dialog_action_delete))
+        Text(stringResource(StringsR.string.migration_delete_dialog_action_delete))
       }
     },
     dismissButton = {
       TextButton(onConfirm) {
-        Text(stringResource(R.string.migration_delete_dialog_action_keep))
+        Text(stringResource(StringsR.string.migration_delete_dialog_action_keep))
       }
     },
   )
@@ -149,16 +149,16 @@ private fun MigrationItem(item: MigrationViewState.Item) {
       verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       LabeledValue(
-        label = stringResource(id = R.string.migration_detail_content_name),
+        label = stringResource(id = StringsR.string.migration_detail_content_name),
         value = item.name,
       )
       LabeledValue(
-        label = stringResource(id = R.string.migration_detail_content_root),
+        label = stringResource(id = StringsR.string.migration_detail_content_root),
         value = item.root,
       )
       Column {
         Text(
-          text = stringResource(id = R.string.migration_detail_content_position),
+          text = stringResource(id = StringsR.string.migration_detail_content_position),
           style = MaterialTheme.typography.titleMedium,
         )
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
@@ -167,7 +167,7 @@ private fun MigrationItem(item: MigrationViewState.Item) {
       }
       if (item.bookmarks.isNotEmpty()) {
         Text(
-          text = stringResource(id = R.string.migration_detail_content_bookmarks),
+          text = stringResource(id = StringsR.string.migration_detail_content_bookmarks),
           style = MaterialTheme.typography.titleMedium,
         )
         Column(
@@ -177,13 +177,13 @@ private fun MigrationItem(item: MigrationViewState.Item) {
           item.bookmarks.forEach { bookmark ->
             if (bookmark.title != null) {
               LabeledValue(
-                label = stringResource(id = R.string.migration_detail_title),
+                label = stringResource(id = StringsR.string.migration_detail_title),
                 value = bookmark.title,
               )
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
               LabeledValue(
-                label = stringResource(id = R.string.migration_detail_content_added_at),
+                label = stringResource(id = StringsR.string.migration_detail_content_added_at),
                 value = bookmark.addedAt.toString(),
               )
               Spacer(modifier = Modifier.height(16.dp))
@@ -208,19 +208,19 @@ private fun LabeledValue(label: String, value: String) {
 private fun Position(viewState: MigrationViewState.Position) {
   Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
     LabeledValue(
-      label = stringResource(id = R.string.migration_detail_content_position_current_file_title),
+      label = stringResource(id = StringsR.string.migration_detail_content_position_current_file_title),
       value = viewState.currentFile,
     )
     LabeledValue(
-      label = stringResource(id = R.string.migration_detail_content_position_current_file_position),
+      label = stringResource(id = StringsR.string.migration_detail_content_position_current_file_position),
       value = viewState.positionInFile,
     )
     LabeledValue(
-      label = stringResource(id = R.string.migration_detail_content_position_current_chapter_title),
+      label = stringResource(id = StringsR.string.migration_detail_content_position_current_chapter_title),
       value = viewState.currentChapter,
     )
     LabeledValue(
-      label = stringResource(id = R.string.migration_detail_content_position_current_chapter_position),
+      label = stringResource(id = StringsR.string.migration_detail_content_position_current_chapter_position),
       value = viewState.positionInChapter,
     )
   }

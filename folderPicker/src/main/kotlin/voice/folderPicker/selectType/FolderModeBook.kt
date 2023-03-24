@@ -15,7 +15,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
-import voice.folderPicker.R
+import voice.common.R as CommonR
+import voice.strings.R as StringsR
 
 @Composable
 internal fun FolderModeBook(
@@ -30,7 +31,7 @@ internal fun FolderModeBook(
           .padding(start = 8.dp, end = 8.dp, top = 8.dp)
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
-        painter = painterResource(id = R.drawable.album_art),
+        painter = painterResource(id = CommonR.drawable.album_art),
         contentDescription = null,
       )
       Text(
@@ -42,7 +43,7 @@ internal fun FolderModeBook(
       Text(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
         text = pluralStringResource(
-          id = R.plurals.folder_type_file_count,
+          id = StringsR.plurals.folder_type_file_count,
           count = book.fileCount,
           book.fileCount,
         ),

@@ -36,7 +36,6 @@ kapt {
   }
 }
 
-
 android {
 
   namespace = "voice.app"
@@ -129,6 +128,7 @@ android {
 
   buildFeatures {
     viewBinding = true
+    buildConfig = true
   }
 }
 

@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.views.GridBook
 import voice.bookOverview.views.ListBookRow
@@ -38,6 +37,7 @@ import voice.bookOverview.views.gridColumnCount
 import voice.common.compose.plus
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
+import voice.strings.R as StringsR
 
 @Composable
 fun BookSearchScreen(modifier: Modifier = Modifier) {
@@ -56,7 +56,7 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
           IconButton(onClick = viewModel::onCloseClick) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = stringResource(id = R.string.close),
+              contentDescription = stringResource(id = StringsR.string.close),
             )
           }
         },

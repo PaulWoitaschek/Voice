@@ -27,6 +27,7 @@ import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import javax.inject.Inject
+import voice.common.R as CommonR
 
 @Reusable
 class WidgetUpdater
@@ -109,7 +110,7 @@ class WidgetUpdater
       wholeWidgetClickI,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
-    remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
+    remoteViews.setImageViewResource(R.id.imageView, CommonR.drawable.album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
   }
@@ -131,9 +132,9 @@ class WidgetUpdater
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
-      R.drawable.ic_pause_white_36dp
+      CommonR.drawable.ic_pause_white_36dp
     } else {
-      R.drawable.ic_play_white_36dp
+      CommonR.drawable.ic_play_white_36dp
     }
     remoteViews.setImageViewResource(R.id.playPause, playIcon)
 
@@ -159,15 +160,15 @@ class WidgetUpdater
           ImageRequest.Builder(context)
             .data(coverFile)
             .size(coverSize, coverSize)
-            .fallback(R.drawable.album_art)
-            .error(R.drawable.album_art)
+            .fallback(CommonR.drawable.album_art)
+            .error(CommonR.drawable.album_art)
             .allowHardware(false)
             .build(),
         )
         .drawable!!.toBitmap()
       remoteViews.setImageViewBitmap(R.id.imageView, bitmap)
     } else {
-      remoteViews.setImageViewResource(R.id.imageView, R.drawable.album_art)
+      remoteViews.setImageViewResource(R.id.imageView, CommonR.drawable.album_art)
     }
 
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

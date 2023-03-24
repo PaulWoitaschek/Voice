@@ -33,10 +33,10 @@ import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
-import voice.settings.R
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
+import voice.strings.R as StringsR
 
 @Composable
 @Preview
@@ -80,7 +80,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
       TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(stringResource(R.string.action_settings))
+          Text(stringResource(StringsR.string.action_settings))
         },
         navigationIcon = {
           IconButton(
@@ -90,7 +90,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(R.string.close),
+              contentDescription = stringResource(StringsR.string.close),
             )
           }
         },
@@ -115,9 +115,9 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             } else {
               Icons.Outlined.ViewList
             }
-            Icon(imageVector, stringResource(R.string.pref_use_grid))
+            Icon(imageVector, stringResource(StringsR.string.pref_use_grid))
           },
-          headlineText = { Text(stringResource(R.string.pref_use_grid)) },
+          headlineText = { Text(stringResource(StringsR.string.pref_use_grid)) },
           trailingContent = {
             Switch(
               checked = viewState.useGrid,
@@ -135,23 +135,23 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         }
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
-          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(R.string.pref_suggest_idea)) },
-          headlineText = { Text(stringResource(R.string.pref_suggest_idea)) },
+          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
+          headlineText = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
-          leadingContent = { Icon(Icons.Outlined.HelpOutline, stringResource(R.string.pref_get_support)) },
-          headlineText = { Text(stringResource(R.string.pref_get_support)) },
+          leadingContent = { Icon(Icons.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
+          headlineText = { Text(stringResource(StringsR.string.pref_get_support)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.openBugReport() },
-          leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(R.string.pref_report_issue)) },
-          headlineText = { Text(stringResource(R.string.pref_report_issue)) },
+          leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(StringsR.string.pref_report_issue)) },
+          headlineText = { Text(stringResource(StringsR.string.pref_report_issue)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.openTranslations() },
-          leadingContent = { Icon(Icons.Outlined.Language, stringResource(R.string.pref_help_translating)) },
-          headlineText = { Text(stringResource(R.string.pref_help_translating)) },
+          leadingContent = { Icon(Icons.Outlined.Language, stringResource(StringsR.string.pref_help_translating)) },
+          headlineText = { Text(stringResource(StringsR.string.pref_help_translating)) },
         )
         AppVersion(appVersion = viewState.appVersion)
         Dialog(viewState, listener)

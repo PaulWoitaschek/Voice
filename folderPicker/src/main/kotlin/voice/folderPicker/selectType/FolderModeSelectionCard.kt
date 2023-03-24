@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
-import voice.folderPicker.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun FolderModeSelectionCard(
@@ -80,8 +80,8 @@ private fun FolderModeColumn(
 @StringRes
 private fun FolderMode.title(): Int {
   return when (this) {
-    FolderMode.Audiobooks -> R.string.folder_mode_root
-    FolderMode.SingleBook -> R.string.folder_mode_single
+    FolderMode.Audiobooks -> StringsR.string.folder_mode_root
+    FolderMode.SingleBook -> StringsR.string.folder_mode_single
   }
 }
 

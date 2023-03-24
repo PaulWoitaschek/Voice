@@ -7,7 +7,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import voice.bookOverview.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun EditBookTitleDialog(
@@ -19,19 +19,19 @@ internal fun EditBookTitleDialog(
   AlertDialog(
     onDismissRequest = onDismissEditTitleClick,
     title = {
-      Text(text = stringResource(R.string.edit_book_title))
+      Text(text = stringResource(StringsR.string.edit_book_title))
     },
     confirmButton = {
       Button(
         onClick = onConfirmEditTitle,
         enabled = viewState.confirmButtonEnabled,
       ) {
-        Text(stringResource(id = R.string.dialog_confirm))
+        Text(stringResource(id = StringsR.string.dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = onDismissEditTitleClick) {
-        Text(stringResource(id = R.string.dialog_cancel))
+        Text(stringResource(id = StringsR.string.dialog_cancel))
       }
     },
     text = {
@@ -39,7 +39,7 @@ internal fun EditBookTitleDialog(
         value = viewState.title,
         onValueChange = onUpdateEditTitle,
         label = {
-          Text(stringResource(R.string.change_book_name))
+          Text(stringResource(StringsR.string.change_book_name))
         },
       )
     },

@@ -11,8 +11,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import voice.settings.R
 import kotlin.math.roundToInt
+import voice.strings.R as StringsR
 
 @Composable // ktlint-disable twitter-compose:modifier-missing-check
 fun TimeSettingDialog(
@@ -55,7 +55,7 @@ fun TimeSettingDialog(
           onDismiss()
         },
       ) {
-        Text(stringResource(R.string.dialog_confirm))
+        Text(stringResource(StringsR.string.dialog_confirm))
       }
     },
     dismissButton = {
@@ -64,7 +64,7 @@ fun TimeSettingDialog(
           onDismiss()
         },
       ) {
-        Text(stringResource(R.string.dialog_cancel))
+        Text(stringResource(StringsR.string.dialog_cancel))
       }
     },
   )

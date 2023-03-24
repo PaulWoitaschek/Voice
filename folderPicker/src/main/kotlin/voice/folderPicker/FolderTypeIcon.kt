@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import voice.data.folders.FolderType
+import voice.strings.R as StringsR
 
 @Composable
 internal fun FolderTypeIcon(folderType: FolderType) {
@@ -27,9 +28,9 @@ private fun FolderType.icon(): ImageVector = when (this) {
 @Composable
 private fun FolderType.contentDescription(): String {
   val res = when (this) {
-    FolderType.SingleFile -> R.string.folder_type_single_file
-    FolderType.SingleFolder -> R.string.folder_type_single_folder
-    FolderType.Root -> R.string.folder_type_audiobooks
+    FolderType.SingleFile -> StringsR.string.folder_type_single_file
+    FolderType.SingleFolder -> StringsR.string.folder_type_single_folder
+    FolderType.Root -> StringsR.string.folder_type_audiobooks
   }
   return stringResource(res)
 }

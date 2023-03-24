@@ -36,8 +36,8 @@ import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
-import voice.folderPicker.R
 import voice.logging.core.Logger
+import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface FolderPickerComponent {
@@ -122,20 +122,20 @@ private fun FolderPickerView(
       MediumTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(text = stringResource(R.string.audiobook_folders_title))
+          Text(text = stringResource(StringsR.string.audiobook_folders_title))
         },
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = stringResource(R.string.close),
+              contentDescription = stringResource(StringsR.string.close),
             )
           }
         },
       )
     },
     floatingActionButton = {
-      val text = stringResource(id = R.string.add)
+      val text = stringResource(id = StringsR.string.add)
       ExtendedFloatingActionButton(
         text = {
           Text(text)
@@ -167,7 +167,7 @@ private fun FolderPickerView(
               content = {
                 Icon(
                   imageVector = Icons.Outlined.Delete,
-                  contentDescription = stringResource(R.string.delete),
+                  contentDescription = stringResource(StringsR.string.delete),
                 )
               },
             )

@@ -14,7 +14,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import voice.bookOverview.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun SearchTextField(
@@ -37,7 +37,7 @@ internal fun SearchTextField(
     maxLines = 1,
     onValueChange = onQueryChange,
     label = {
-      Text(stringResource(id = R.string.search_hint))
+      Text(stringResource(id = StringsR.string.search_hint))
     },
   )
   SideEffect {

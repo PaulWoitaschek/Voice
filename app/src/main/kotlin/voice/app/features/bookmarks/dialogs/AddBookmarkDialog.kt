@@ -8,8 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bluelinelabs.conductor.Controller
-import voice.app.R
 import voice.common.conductor.DialogController
+import voice.strings.R as StringsR
 
 class AddBookmarkDialog : DialogController() {
 
@@ -19,14 +19,14 @@ class AddBookmarkDialog : DialogController() {
       InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
       InputType.TYPE_TEXT_FLAG_MULTI_LINE
     val dialog = MaterialDialog(activity!!).apply {
-      title(R.string.bookmark)
+      title(StringsR.string.bookmark)
       @Suppress("CheckResult")
-      input(hintRes = R.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->
+      input(hintRes = StringsR.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->
         val title = charSequence.toString()
         val callback = targetController as Callback
         callback.onBookmarkNameChosen(title)
       }
-      positiveButton(R.string.dialog_confirm)
+      positiveButton(StringsR.string.dialog_confirm)
     }
     val editText = dialog.getInputField()
     editText.setOnEditorActionListener { _, actionId, _ ->

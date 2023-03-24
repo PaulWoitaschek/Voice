@@ -12,21 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import voice.bookOverview.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun MigrateHint(onClick: () -> Unit) {
   ExplanationTooltip {
     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-      Text(stringResource(R.string.migration_hint_title), style = MaterialTheme.typography.headlineSmall)
+      Text(stringResource(StringsR.string.migration_hint_title), style = MaterialTheme.typography.headlineSmall)
       Spacer(modifier = Modifier.size(8.dp))
-      Text(stringResource(R.string.migration_hint_content))
+      Text(stringResource(StringsR.string.migration_hint_content))
       Spacer(modifier = Modifier.size(16.dp))
       Button(
         modifier = Modifier.align(Alignment.End),
         onClick = onClick,
       ) {
-        Text(stringResource(R.string.migration_hint_confirm))
+        Text(stringResource(StringsR.string.migration_hint_confirm))
       }
     }
   }

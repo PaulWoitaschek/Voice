@@ -24,12 +24,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
-import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.LongClickableCard
 import kotlin.math.roundToInt
+import voice.common.R as CommonR
 
 @Composable
 internal fun GridBooks(
@@ -94,8 +94,8 @@ internal fun GridBook(
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
         model = book.cover?.file,
-        placeholder = painterResource(id = R.drawable.album_art),
-        error = painterResource(id = R.drawable.album_art),
+        placeholder = painterResource(id = CommonR.drawable.album_art),
+        error = painterResource(id = CommonR.drawable.album_art),
         contentDescription = null,
       )
       Text(

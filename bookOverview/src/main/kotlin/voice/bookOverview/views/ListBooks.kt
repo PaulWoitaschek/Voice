@@ -24,13 +24,12 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
-import voice.bookOverview.R
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.compose.LongClickableCard
-import voice.common.recomposeHighlighter
+import voice.common.R as CommonR
 
 @Composable
 internal fun ListBooks(
@@ -86,7 +85,6 @@ internal fun ListBookRow(
       onBookLongClick(book.id)
     },
     modifier = modifier
-      .recomposeHighlighter()
       .fillMaxWidth(),
   ) {
     Column {
@@ -133,8 +131,8 @@ private fun CoverImage(cover: ImmutableFile?) {
       .size(76.dp)
       .clip(RoundedCornerShape(8.dp)),
     model = cover?.file,
-    placeholder = painterResource(id = R.drawable.album_art),
-    error = painterResource(id = R.drawable.album_art),
+    placeholder = painterResource(id = CommonR.drawable.album_art),
+    error = painterResource(id = CommonR.drawable.album_art),
     contentDescription = null,
   )
 }

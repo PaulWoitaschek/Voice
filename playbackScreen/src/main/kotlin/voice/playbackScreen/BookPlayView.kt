@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.BedtimeOff
@@ -68,11 +66,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.common.compose.ImmutableFile
 import voice.common.compose.VoiceTheme
+import voice.common.compose.rememberPlayIconPainter
 import voice.common.formatTime
-import voice.common.recomposeHighlighter
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.minutes
+import voice.common.R as CommonR
+import voice.strings.R as StringsR
 
 @Composable
 internal fun BookPlayView(
@@ -233,7 +233,7 @@ private fun BookPlayAppBar(
         } else {
           Icons.Outlined.BedtimeOff
         },
-        contentDescription = stringResource(id = R.string.action_sleep),
+        contentDescription = stringResource(id = StringsR.string.action_sleep),
       )
     }
     Box(
@@ -249,13 +249,13 @@ private fun BookPlayAppBar(
     ) {
       Icon(
         imageVector = Icons.Outlined.CollectionsBookmark,
-        contentDescription = stringResource(id = R.string.bookmark),
+        contentDescription = stringResource(id = StringsR.string.bookmark),
       )
     }
     IconButton(onClick = onSpeedChangeClick) {
       Icon(
         imageVector = Icons.Outlined.Speed,
-        contentDescription = stringResource(id = R.string.playback_speed),
+        contentDescription = stringResource(id = StringsR.string.playback_speed),
       )
     }
     OverflowMenu(
@@ -297,7 +297,7 @@ private fun CloseIcon(onCloseClick: () -> Unit) {
   IconButton(onClick = onCloseClick) {
     Icon(
       imageVector = Icons.Outlined.Close,
-      contentDescription = stringResource(id = R.string.close),
+      contentDescription = stringResource(id = StringsR.string.close),
     )
   }
 }
@@ -308,7 +308,7 @@ private fun OverflowMenu(
   onSkipSilenceClick: () -> Unit,
   onVolumeBoostClick: () -> Unit,
 ) {
-  Box(Modifier.recomposeHighlighter()) {
+  Box {
     var expanded by remember { mutableStateOf(false) }
     IconButton(
       onClick = {
@@ -317,7 +317,7 @@ private fun OverflowMenu(
     ) {
       Icon(
         imageVector = Icons.Outlined.MoreVert,
-        contentDescription = stringResource(id = R.string.more),
+        contentDescription = stringResource(id = StringsR.string.more),
       )
     }
     DropdownMenu(
@@ -332,7 +332,7 @@ private fun OverflowMenu(
           },
         ),
         headlineText = {
-          Text(text = stringResource(id = R.string.skip_silence))
+          Text(text = stringResource(id = StringsR.string.skip_silence))
         },
         trailingContent = {
           Checkbox(
@@ -352,7 +352,7 @@ private fun OverflowMenu(
           },
         ),
         headlineText = {
-          Text(text = stringResource(id = R.string.volume_boost))
+          Text(text = stringResource(id = StringsR.string.volume_boost))
         },
       )
     }
@@ -392,7 +392,6 @@ private fun CoverRow(
 private fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
   AsyncImage(
     modifier = Modifier
-      .recomposeHighlighter()
       .fillMaxSize()
       .pointerInput(Unit) {
         detectTapGestures(
@@ -404,9 +403,9 @@ private fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
       .clip(RoundedCornerShape(20.dp)),
     contentScale = ContentScale.Crop,
     model = cover?.file,
-    placeholder = painterResource(id = R.drawable.album_art),
-    error = painterResource(id = R.drawable.album_art),
-    contentDescription = stringResource(id = R.string.cover),
+    placeholder = painterResource(id = CommonR.drawable.album_art),
+    error = painterResource(id = CommonR.drawable.album_art),
+    contentDescription = stringResource(id = StringsR.string.cover),
   )
 }
 
@@ -420,7 +419,6 @@ private fun ChapterRow(
 ) {
   Row(
     modifier = Modifier
-      .recomposeHighlighter()
       .fillMaxWidth()
       .padding(horizontal = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
@@ -430,7 +428,7 @@ private fun ChapterRow(
         Icon(
           modifier = Modifier.size(36.dp),
           imageVector = Icons.Outlined.ChevronLeft,
-          contentDescription = stringResource(id = R.string.previous_track),
+          contentDescription = stringResource(id = StringsR.string.previous_track),
         )
       }
     }
@@ -448,7 +446,7 @@ private fun ChapterRow(
         Icon(
           modifier = Modifier.size(36.dp),
           imageVector = Icons.Outlined.ChevronRight,
-          contentDescription = stringResource(id = R.string.next_track),
+          contentDescription = stringResource(id = StringsR.string.next_track),
         )
       }
     }
@@ -464,8 +462,7 @@ private fun PlaybackRow(
 ) {
   Row(
     modifier = Modifier
-      .fillMaxWidth()
-      .recomposeHighlighter(),
+      .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center,
   ) {
@@ -477,12 +474,8 @@ private fun PlaybackRow(
     ) {
       Icon(
         modifier = Modifier.size(36.dp),
-        imageVector = if (playing) {
-          Icons.Filled.Pause
-        } else {
-          Icons.Filled.PlayArrow
-        },
-        contentDescription = stringResource(id = R.string.play_pause),
+        painter = rememberPlayIconPainter(playing = playing),
+        contentDescription = stringResource(id = StringsR.string.play_pause),
       )
     }
     Spacer(modifier = Modifier.size(16.dp))
@@ -507,9 +500,9 @@ private fun SkipButton(
     imageVector = Icons.Filled.Undo,
     contentDescription = stringResource(
       id = if (forward) {
-        R.string.fast_forward
+        StringsR.string.fast_forward
       } else {
-        R.string.rewind
+        StringsR.string.rewind
       },
     ),
   )
@@ -522,7 +515,6 @@ private fun SliderRow(
 ) {
   Row(
     modifier = Modifier
-      .recomposeHighlighter()
       .fillMaxWidth()
       .padding(horizontal = 16.dp),
     verticalAlignment = Alignment.CenterVertically,

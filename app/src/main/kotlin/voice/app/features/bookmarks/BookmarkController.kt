@@ -23,6 +23,7 @@ import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.getBookId
 import voice.data.putBookId
+import voice.strings.R as StringsR
 
 /**
  * Dialog for creating a bookmark
@@ -56,7 +57,7 @@ class BookmarkController(args: Bundle) :
   override fun showBookmarkAdded(bookmark: Bookmark) {
     val index = adapter.indexOf(bookmark)
     binding.recycler.smoothScrollToPosition(index)
-    Snackbar.make(view!!, R.string.bookmark_added, Snackbar.LENGTH_SHORT)
+    Snackbar.make(view!!, StringsR.string.bookmark_added, Snackbar.LENGTH_SHORT)
       .show()
   }
 

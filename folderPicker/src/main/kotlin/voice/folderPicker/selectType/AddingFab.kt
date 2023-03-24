@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import voice.folderPicker.R
+import voice.strings.R as StringsR
 
 @Composable
 internal fun AddingFab(
@@ -45,12 +45,12 @@ internal fun AddingFab(
     ExtendedFloatingActionButton(
       onClick = onAddClick,
       text = {
-        Text(text = stringResource(id = R.string.add))
+        Text(text = stringResource(id = StringsR.string.add))
       },
       icon = {
         Icon(
           imageVector = Icons.Outlined.Check,
-          contentDescription = stringResource(id = R.string.add),
+          contentDescription = stringResource(id = StringsR.string.add),
         )
       },
     )

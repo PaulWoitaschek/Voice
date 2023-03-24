@@ -2,7 +2,12 @@ plugins {
   id("voice.library")
   alias(libs.plugins.anvil)
   alias(libs.plugins.kotlin.serialization)
+}
 
+android {
+  buildFeatures {
+    androidResources = true
+  }
 }
 
 anvil {

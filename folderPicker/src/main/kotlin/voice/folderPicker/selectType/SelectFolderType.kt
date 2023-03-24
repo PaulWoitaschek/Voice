@@ -36,7 +36,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
-import voice.folderPicker.R
+import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface SelectFolderTypeComponent {
@@ -111,7 +111,7 @@ private fun Content(
       Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text(
           modifier = Modifier.padding(top = 24.dp),
-          text = stringResource(id = R.string.folder_type_book_example_header),
+          text = stringResource(id = StringsR.string.folder_type_book_example_header),
           style = MaterialTheme.typography.headlineSmall,
         )
       }
@@ -135,7 +135,7 @@ private fun Content(
           key = "noBooksDetected",
           span = { GridItemSpan(maxLineSpan) },
         ) {
-          Text(text = stringResource(id = R.string.folder_type_no_books))
+          Text(text = stringResource(id = StringsR.string.folder_type_no_books))
         }
       } else {
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -164,12 +164,12 @@ private fun AppBar(
       IconButton(onClick = onBackClick) {
         Icon(
           imageVector = Icons.Outlined.Close,
-          contentDescription = stringResource(id = R.string.close),
+          contentDescription = stringResource(id = StringsR.string.close),
         )
       }
     },
     title = {
-      Text(text = stringResource(id = R.string.folder_type_title))
+      Text(text = stringResource(id = StringsR.string.folder_type_title))
     },
   )
 }
