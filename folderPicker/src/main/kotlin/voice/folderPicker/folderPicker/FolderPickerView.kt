@@ -1,5 +1,6 @@
 package voice.folderPicker.folderPicker
 
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,6 +37,7 @@ import voice.common.rootComponentAs
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
 import voice.folderPicker.R
+import voice.logging.core.Logger
 
 @ContributesTo(AppScope::class)
 interface FolderPickerComponent {
@@ -76,10 +78,18 @@ fun FolderPicker(
       onSelected = { selection ->
         when (selection) {
           FileTypeSelection.File -> {
-            openDocumentLauncher.launch(arrayOf("*/*"))
+            try {
+              openDocumentLauncher.launch(arrayOf("*/*"))
+            } catch (e: ActivityNotFoundException) {
+              Logger.e(e, "Could not add $selection")
+            }
           }
           FileTypeSelection.Folder -> {
-            documentTreeLauncher.launch(null)
+            try {
+              documentTreeLauncher.launch(null)
+            } catch (e: ActivityNotFoundException) {
+              Logger.e(e, "Could not add $selection")
+            }
           }
         }
       },
