@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.BedtimeOff
@@ -68,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.common.compose.ImmutableFile
 import voice.common.compose.VoiceTheme
+import voice.common.compose.rememberPlayIconPainter
 import voice.common.formatTime
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
@@ -475,11 +474,7 @@ private fun PlaybackRow(
     ) {
       Icon(
         modifier = Modifier.size(36.dp),
-        imageVector = if (playing) {
-          Icons.Filled.Pause
-        } else {
-          Icons.Filled.PlayArrow
-        },
+        painter = rememberPlayIconPainter(playing = playing),
         contentDescription = stringResource(id = StringsR.string.play_pause),
       )
     }
