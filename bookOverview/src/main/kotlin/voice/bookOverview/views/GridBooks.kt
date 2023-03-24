@@ -29,13 +29,11 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.LongClickableCard
-import voice.common.compose.plus
 import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBooks(
   books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
-  contentPadding: PaddingValues,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
@@ -44,7 +42,7 @@ internal fun GridBooks(
     columns = GridCells.Fixed(cellCount),
     verticalArrangement = Arrangement.spacedBy(8.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = contentPadding + PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
+    contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
   ) {
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach

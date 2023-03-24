@@ -30,19 +30,17 @@ import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.compose.LongClickableCard
-import voice.common.compose.plus
 import voice.common.recomposeHighlighter
 
 @Composable
 internal fun ListBooks(
-  contentPadding: PaddingValues,
   books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    contentPadding = contentPadding + PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
+    contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
   ) {
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach

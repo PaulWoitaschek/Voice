@@ -3,16 +3,16 @@ package voice.bookOverview.views
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,8 +20,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -46,6 +49,7 @@ import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
@@ -183,34 +187,31 @@ internal fun BookOverview(
       }
     },
   ) { contentPadding ->
-    when (viewState) {
-      is BookOverviewViewState.Content -> {
-        when (viewState.layoutMode) {
-          BookOverviewLayoutMode.List -> {
-            ListBooks(
-              books = viewState.books,
-              onBookClick = onBookClick,
-              onBookLongClick = onBookLongClick,
-              contentPadding = contentPadding,
-            )
-          }
-          BookOverviewLayoutMode.Grid -> {
-            GridBooks(
-              books = viewState.books,
-              onBookClick = onBookClick,
-              onBookLongClick = onBookLongClick,
-              contentPadding = contentPadding,
-            )
-          }
+    Box(Modifier.padding(contentPadding)) {
+      var showLoading by remember { mutableStateOf(false) }
+      LaunchedEffect(viewState.isLoading) {
+        if (viewState.isLoading) {
+          delay(3.seconds)
         }
+        showLoading = viewState.isLoading
       }
-      BookOverviewViewState.Loading -> {
-        Box(
-          Modifier
-            .fillMaxSize()
-            .padding(contentPadding),
-        ) {
-          CircularProgressIndicator(Modifier.align(Alignment.Center))
+      if (showLoading) {
+        LinearProgressIndicator(Modifier.fillMaxWidth())
+      }
+      when (viewState.layoutMode) {
+        BookOverviewLayoutMode.List -> {
+          ListBooks(
+            books = viewState.books,
+            onBookClick = onBookClick,
+            onBookLongClick = onBookLongClick,
+          )
+        }
+        BookOverviewLayoutMode.Grid -> {
+          GridBooks(
+            books = viewState.books,
+            onBookClick = onBookClick,
+            onBookLongClick = onBookLongClick,
+          )
         }
       }
     }
@@ -252,8 +253,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
   }
 
   override val values = sequenceOf(
-    BookOverviewViewState.Loading,
-    BookOverviewViewState.Content(
+    BookOverviewViewState(
       books = persistentMapOf(
         BookOverviewCategory.CURRENT to buildList { repeat(10) { add(book()) } },
         BookOverviewCategory.FINISHED to listOf(book(), book()),
@@ -264,6 +264,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showMigrateHint = false,
       showMigrateIcon = true,
       showSearchIcon = true,
+      isLoading = true,
     ),
   )
 }

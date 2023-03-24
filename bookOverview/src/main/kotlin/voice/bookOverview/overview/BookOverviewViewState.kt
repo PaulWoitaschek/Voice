@@ -2,33 +2,32 @@ package voice.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
-sealed interface BookOverviewViewState {
+@Immutable
+data class BookOverviewViewState(
+  val books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
+  val layoutMode: BookOverviewLayoutMode,
+  val playButtonState: PlayButtonState?,
+  val showAddBookHint: Boolean,
+  val showMigrateHint: Boolean,
+  val showMigrateIcon: Boolean,
+  val showSearchIcon: Boolean,
+  val isLoading: Boolean,
+) {
 
-  val playButtonState: PlayButtonState?
-  val showAddBookHint: Boolean
-  val showMigrateHint: Boolean
-  val showMigrateIcon: Boolean
-  val showSearchIcon: Boolean
-
-  object Loading : BookOverviewViewState {
-    override val playButtonState: PlayButtonState? = null
-    override val showAddBookHint: Boolean = false
-    override val showMigrateHint: Boolean = false
-    override val showMigrateIcon: Boolean = false
-    override val showSearchIcon: Boolean = false
+  companion object {
+    val Loading = BookOverviewViewState(
+      books = persistentMapOf(),
+      layoutMode = BookOverviewLayoutMode.List,
+      playButtonState = null,
+      showAddBookHint = false,
+      showMigrateHint = false,
+      showMigrateIcon = false,
+      showSearchIcon = false,
+      isLoading = true,
+    )
   }
-
-  @Immutable
-  data class Content(
-    val books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
-    val layoutMode: BookOverviewLayoutMode,
-    override val playButtonState: PlayButtonState?,
-    override val showAddBookHint: Boolean,
-    override val showMigrateHint: Boolean,
-    override val showMigrateIcon: Boolean,
-    override val showSearchIcon: Boolean,
-  ) : BookOverviewViewState
 
   enum class PlayButtonState {
     Playing, Paused

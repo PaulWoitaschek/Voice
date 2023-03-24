@@ -66,7 +66,7 @@ constructor(
     val noBooks = !scannerActive && books.isEmpty()
     val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
 
-    return BookOverviewViewState.Content(
+    return BookOverviewViewState(
       layoutMode = when (gridMode) {
         GridMode.LIST -> BookOverviewLayoutMode.List
         GridMode.GRID -> BookOverviewLayoutMode.Grid
@@ -98,6 +98,7 @@ constructor(
       showMigrateIcon = hasLegacyBooks,
       showMigrateHint = showMigrateHint,
       showSearchIcon = books.isNotEmpty(),
+      isLoading = scannerActive,
     )
   }
 
