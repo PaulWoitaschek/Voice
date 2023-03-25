@@ -331,7 +331,7 @@ private fun OverflowMenu(
             onSkipSilenceClick()
           },
         ),
-        headlineText = {
+        headlineContent = {
           Text(text = stringResource(id = StringsR.string.skip_silence))
         },
         trailingContent = {
@@ -351,7 +351,7 @@ private fun OverflowMenu(
             onVolumeBoostClick()
           },
         ),
-        headlineText = {
+        headlineContent = {
           Text(text = stringResource(id = StringsR.string.volume_boost))
         },
       )

@@ -27,10 +27,10 @@ internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () ->
         contentDescription = stringResource(StringsR.string.pref_auto_rewind_title),
       )
     },
-    headlineText = {
+    headlineContent = {
       Text(text = stringResource(StringsR.string.pref_auto_rewind_title))
     },
-    supportingText = {
+    supportingContent = {
       Text(
         text = LocalContext.current.resources.getQuantityString(
           StringsR.plurals.seconds,

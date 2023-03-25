@@ -172,7 +172,7 @@ private fun FolderPickerView(
               },
             )
           },
-          headlineText = {
+          headlineContent = {
             Text(text = item.name)
           },
         )

@@ -27,10 +27,10 @@ internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit)
         contentDescription = stringResource(StringsR.string.pref_seek_time),
       )
     },
-    headlineText = {
+    headlineContent = {
       Text(text = stringResource(StringsR.string.pref_seek_time))
     },
-    supportingText = {
+    supportingContent = {
       Text(
         text = LocalContext.current.resources.getQuantityString(
           StringsR.plurals.seconds,

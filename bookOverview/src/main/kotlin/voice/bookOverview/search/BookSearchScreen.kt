@@ -16,7 +16,7 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -81,7 +81,7 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
             crossAxisSpacing = 8.dp,
             mainAxisAlignment = FlowMainAxisAlignment.Center,
             content = {
-              CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+              CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
                 viewState.recentQueries.forEach { query ->
                   SuggestionChip(
                     onClick = { viewModel.onQueryChange(query) },

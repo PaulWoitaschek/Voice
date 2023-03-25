@@ -32,7 +32,7 @@ internal fun SelectChapterDialog(
               modifier = Modifier.clickable {
                 viewModel.onChapterClicked(index)
               },
-              headlineText = {
+              headlineContent = {
                 Text(text = chapter.name ?: "")
               },
               leadingContent = {

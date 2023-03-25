@@ -117,7 +117,7 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
             }
             Icon(imageVector, stringResource(StringsR.string.pref_use_grid))
           },
-          headlineText = { Text(stringResource(StringsR.string.pref_use_grid)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_use_grid)) },
           trailingContent = {
             Switch(
               checked = viewState.useGrid,
@@ -136,22 +136,22 @@ private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
-          headlineText = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
           leadingContent = { Icon(Icons.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
-          headlineText = { Text(stringResource(StringsR.string.pref_get_support)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.openBugReport() },
           leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(StringsR.string.pref_report_issue)) },
-          headlineText = { Text(stringResource(StringsR.string.pref_report_issue)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_report_issue)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.openTranslations() },
           leadingContent = { Icon(Icons.Outlined.Language, stringResource(StringsR.string.pref_help_translating)) },
-          headlineText = { Text(stringResource(StringsR.string.pref_help_translating)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_help_translating)) },
         )
         AppVersion(appVersion = viewState.appVersion)
         Dialog(viewState, listener)

@@ -18,7 +18,7 @@ internal fun DarkThemeRow(useDarkTheme: Boolean, toggle: () -> Unit) {
         toggle()
       }
       .fillMaxWidth(),
-    headlineText = {
+    headlineContent = {
       Text(text = stringResource(StringsR.string.pref_theme_dark))
     },
     trailingContent = {

@@ -22,13 +22,13 @@ internal fun AppVersion(appVersion: String) {
         contentDescription = stringResource(StringsR.string.pref_app_version),
       )
     },
-    headlineText = {
+    headlineContent = {
       Text(
         text = stringResource(StringsR.string.pref_app_version),
         color = LocalContentColor.current.copy(alpha = 0.5F),
       )
     },
-    supportingText = {
+    supportingContent = {
       Text(
         text = appVersion,
         color = LocalContentColor.current.copy(alpha = 0.5F),

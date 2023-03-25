@@ -5,19 +5,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -78,62 +76,67 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     },
   )
 
-  val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-  ModalBottomSheetLayout(
-    modifier = modifier,
-    sheetState = bottomSheetState,
-    sheetContent = {
-      Surface {
-        BottomSheetContent(bottomSheetViewModel.state.value) { item ->
-          if (item == BottomSheetItem.FileCover) {
-            getContentLauncher.launch("image/*")
-          }
-          scope.launch {
-            delay(300)
-            bottomSheetState.hide()
-            bottomSheetViewModel.onItemClick(item)
-          }
-        }
-      }
+  var showBottomSheet by remember { mutableStateOf(false) }
+  BookOverview(
+    viewState = viewState,
+    onSettingsClick = bookOverviewViewModel::onSettingsClick,
+    onBookClick = bookOverviewViewModel::onBookClick,
+    onBookLongClick = { bookId ->
+      bottomSheetViewModel.bookSelected(bookId)
+      showBottomSheet = true
     },
-  ) {
-    BookOverview(
-      viewState = viewState,
-      onSettingsClick = bookOverviewViewModel::onSettingsClick,
-      onBookClick = bookOverviewViewModel::onBookClick,
-      onBookLongClick = { bookId ->
-        scope.launch {
-          bottomSheetViewModel.bookSelected(bookId)
-          bottomSheetState.show()
-        }
-      },
-      onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
-      onPlayButtonClick = bookOverviewViewModel::playPause,
-      onBookMigrationClick = {
-        bookOverviewViewModel.onBoomMigrationHelperConfirmClick()
-        bookOverviewViewModel.onBookMigrationClick()
-      },
-      onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
-      onSearchClick = bookOverviewViewModel::onSearchClick,
+    onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
+    onPlayButtonClick = bookOverviewViewModel::playPause,
+    onBookMigrationClick = {
+      bookOverviewViewModel.onBoomMigrationHelperConfirmClick()
+      bookOverviewViewModel.onBookMigrationClick()
+    },
+    onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
+    onSearchClick = bookOverviewViewModel::onSearchClick,
+  )
+  val deleteBookViewState = deleteBookViewModel.state.value
+  if (deleteBookViewState != null) {
+    DeleteBookDialog(
+      viewState = deleteBookViewState,
+      onDismiss = deleteBookViewModel::onDismiss,
+      onConfirmDeletion = deleteBookViewModel::onConfirmDeletion,
+      onDeleteCheckBoxChecked = deleteBookViewModel::onDeleteCheckBoxChecked,
     )
-    val deleteBookViewState = deleteBookViewModel.state.value
-    if (deleteBookViewState != null) {
-      DeleteBookDialog(
-        viewState = deleteBookViewState,
-        onDismiss = deleteBookViewModel::onDismiss,
-        onConfirmDeletion = deleteBookViewModel::onConfirmDeletion,
-        onDeleteCheckBoxChecked = deleteBookViewModel::onDeleteCheckBoxChecked,
-      )
-    }
-    val editBookTitleState = editBookTitleViewModel.state.value
-    if (editBookTitleState != null) {
-      EditBookTitleDialog(
-        onDismissEditTitleClick = editBookTitleViewModel::onDismissEditTitle,
-        onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
-        viewState = editBookTitleState,
-        onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle,
-      )
-    }
+  }
+  val editBookTitleState = editBookTitleViewModel.state.value
+  if (editBookTitleState != null) {
+    EditBookTitleDialog(
+      onDismissEditTitleClick = editBookTitleViewModel::onDismissEditTitle,
+      onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
+      viewState = editBookTitleState,
+      onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle,
+    )
+  }
+
+  if (showBottomSheet) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+      modifier = modifier,
+      sheetState = sheetState,
+      content = {
+        BottomSheetContent(
+          state = bottomSheetViewModel.state.value,
+          onItemClicked = { item ->
+            if (item == BottomSheetItem.FileCover) {
+              getContentLauncher.launch("image/*")
+            }
+            scope.launch {
+              sheetState.hide()
+              bottomSheetViewModel.onItemClick(item)
+              showBottomSheet = false
+            }
+          },
+        )
+      },
+      onDismissRequest = {
+        showBottomSheet = false
+      },
+    )
   }
 }
 
