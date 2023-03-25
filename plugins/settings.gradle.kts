@@ -7,6 +7,7 @@ rootProject.name = "plugins"
 dependencyResolutionManagement {
   repositories {
     mavenCentral()
+    google()
   }
   versionCatalogs {
     create("libs") {

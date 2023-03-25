@@ -1,11 +1,5 @@
 plugins {
-  alias(libs.plugins.kotlin.jvm)
-  `java-gradle-plugin`
-}
-
-repositories {
-  google()
-  mavenCentral()
+  `kotlin-dsl`
 }
 
 dependencies {

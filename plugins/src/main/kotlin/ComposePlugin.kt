@@ -6,6 +6,8 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // declared in the build.gradle.file
@@ -14,13 +16,13 @@ class ComposePlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
     target.pluginManager.withPlugin("com.android.application") {
-      target.extensions.configure(ApplicationExtension::class.java) { extension ->
-        configureCompose(extension, target)
+      target.extensions.configure<ApplicationExtension> {
+        configureCompose(this, target)
       }
     }
     target.pluginManager.withPlugin("com.android.library") {
-      target.extensions.configure(LibraryExtension::class.java) { extension ->
-        configureCompose(extension, target)
+      target.extensions.configure<LibraryExtension> {
+        configureCompose(this, target)
       }
     }
   }
@@ -33,11 +35,10 @@ class ComposePlugin : Plugin<Project> {
     extension.composeOptions {
       kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().requiredVersion
     }
-    target.tasks.withType(KotlinCompile::class.java) { kotlinCompile ->
-      kotlinCompile.kotlinOptions {
+    target.tasks.withType<KotlinCompile> {
+      kotlinOptions {
         allWarningsAsErrors = true
         freeCompilerArgs = freeCompilerArgs + listOf(
-          "androidx.compose.material.ExperimentalMaterialApi",
           "androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
           "androidx.compose.material3.ExperimentalMaterial3Api",
           "androidx.compose.foundation.ExperimentalFoundationApi",
