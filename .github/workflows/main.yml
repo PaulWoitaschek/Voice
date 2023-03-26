@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - run: ./gradlew testDebugUnitTest
       - run: ./gradlew lintKotlin
       - run: ./gradlew app:lintDebug
@@ -43,6 +46,9 @@ jobs:
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - run: mkdir -p signing/play
       - run: mkdir -p signing/github
