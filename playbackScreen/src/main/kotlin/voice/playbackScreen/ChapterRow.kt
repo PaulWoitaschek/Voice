@@ -1,13 +1,16 @@
 package voice.playbackScreen
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,15 +46,31 @@ internal fun ChapterRow(
         )
       }
     }
-    Text(
+    Row(
       modifier = Modifier
         .weight(1F)
         .clickable(onClick = onCurrentChapterClick)
         .padding(vertical = 16.dp),
-      text = chapterName,
-      style = MaterialTheme.typography.bodyLarge,
-      textAlign = TextAlign.Center,
-    )
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      if (nextPreviousVisible) {
+        Spacer(modifier = Modifier.size(28.dp))
+      }
+      Text(
+        modifier = Modifier.padding(horizontal = 4.dp),
+        text = chapterName,
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center,
+      )
+      if (nextPreviousVisible) {
+        Icon(
+          modifier = Modifier.size(28.dp),
+          imageVector = Icons.Outlined.ExpandMore,
+          contentDescription = stringResource(id = R.string.next_track),
+        )
+      }
+    }
     if (nextPreviousVisible) {
       IconButton(onClick = onSkipToNext) {
         Icon(
