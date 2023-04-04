@@ -5,15 +5,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -25,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -47,7 +40,6 @@ import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
-import voice.common.R as CommonR
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
@@ -157,28 +149,14 @@ internal fun BookOverview(
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
-      TopAppBar(
-        title = {
-          Text(text = stringResource(id = CommonR.string.app_name))
-        },
-        scrollBehavior = scrollBehavior,
-        actions = {
-          if (viewState.showSearchIcon) {
-            IconButton(onClick = onSearchClick) {
-              Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
-            }
-          }
-          if (viewState.showMigrateIcon) {
-            MigrateIcon(
-              onClick = onBookMigrationClick,
-              withHint = viewState.showMigrateHint,
-              onHintClick = onBoomMigrationHelperConfirmClick,
-            )
-          }
-          BookFolderIcon(withHint = viewState.showAddBookHint, onClick = onBookFolderClick)
-
-          SettingsIcon(onSettingsClick)
-        },
+      BookOverviewTopAppBar(
+        scrollBehavior,
+        viewState,
+        onSearchClick,
+        onBookMigrationClick,
+        onBoomMigrationHelperConfirmClick,
+        onBookFolderClick,
+        onSettingsClick,
       )
     },
     floatingActionButton = {
