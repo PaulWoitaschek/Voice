@@ -18,3 +18,4 @@ testResults
 Gemfile.lock
 releases
 .transifexrc
+/plugins/.idea/workspace.xml

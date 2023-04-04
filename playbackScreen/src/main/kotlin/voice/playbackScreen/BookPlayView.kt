@@ -23,8 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.BedtimeOff
-import androidx.compose.material.icons.outlined.ChevronLeft
-import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.MoreVert
@@ -37,7 +35,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
@@ -58,7 +55,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -407,50 +403,6 @@ private fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
     error = painterResource(id = CommonR.drawable.album_art),
     contentDescription = stringResource(id = StringsR.string.cover),
   )
-}
-
-@Composable
-private fun ChapterRow(
-  chapterName: String,
-  nextPreviousVisible: Boolean,
-  onSkipToNext: () -> Unit,
-  onSkipToPrevious: () -> Unit,
-  onCurrentChapterClick: () -> Unit,
-) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 8.dp),
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    if (nextPreviousVisible) {
-      IconButton(onClick = onSkipToPrevious) {
-        Icon(
-          modifier = Modifier.size(36.dp),
-          imageVector = Icons.Outlined.ChevronLeft,
-          contentDescription = stringResource(id = StringsR.string.previous_track),
-        )
-      }
-    }
-    Text(
-      modifier = Modifier
-        .weight(1F)
-        .clickable(onClick = onCurrentChapterClick)
-        .padding(vertical = 16.dp),
-      text = chapterName,
-      style = MaterialTheme.typography.bodyLarge,
-      textAlign = TextAlign.Center,
-    )
-    if (nextPreviousVisible) {
-      IconButton(onClick = onSkipToNext) {
-        Icon(
-          modifier = Modifier.size(36.dp),
-          imageVector = Icons.Outlined.ChevronRight,
-          contentDescription = stringResource(id = StringsR.string.next_track),
-        )
-      }
-    }
-  }
 }
 
 @Composable
