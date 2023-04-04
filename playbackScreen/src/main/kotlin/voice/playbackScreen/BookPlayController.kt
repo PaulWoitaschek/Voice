@@ -2,19 +2,18 @@ package voice.playbackScreen
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
@@ -46,7 +45,6 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
 
   @Composable
   override fun Content() {
-    val windowSizeClass: WindowSizeClass = calculateWindowSizeClass(activity = activity!!)
     val snackbarHostState = remember { SnackbarHostState() }
     val dialogState = viewModel.dialogState.value
     val viewState = remember(viewModel) { viewModel.viewState() }
@@ -92,7 +90,7 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
       onSkipToNext = viewModel::next,
       onSkipToPrevious = viewModel::previous,
       onCurrentChapterClick = viewModel::onCurrentChapterClicked,
-      useLandscapeLayout = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact,
+      useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
       snackbarHostState = snackbarHostState,
     )
     if (dialogState != null) {
