@@ -99,10 +99,10 @@
     <string name="folder_type_title">Як структуровані ваші файли\?</string>
     <string name="folder_mode_single">Єдина папка з аудіокнигами</string>
     <plurals name="folder_type_file_count">
-        <item quantity="one"></item>
-        <item quantity="few"></item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="one">%d аудіофайл</item>
+        <item quantity="few">%d аудіофайли</item>
+        <item quantity="many">%d аудіофайлів</item>
+        <item quantity="other">%d аудіофайлів</item>
     </plurals>
     <string name="folder_type_book_example_header">Пошук книг</string>
     <string name="folder_type_no_books">Voice не виявив жодної книги. Тут є аудіофайли\?</string>
