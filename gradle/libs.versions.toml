@@ -13,7 +13,7 @@ materialDialog = "3.3.0"
 dagger = "2.45"
 kotlin = "1.8.10"
 compose-compiler = "1.4.4"
-compose-material3 = "1.1.0-beta01"
+compose-material3 = "1.1.0-beta02"
 media3 = "1.0.0"
 agp = "7.4.2"
 ktlint = "0.48.2"
@@ -94,7 +94,6 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test" }
 compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
-compose-material-core = { module = "androidx.compose.material:material" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }

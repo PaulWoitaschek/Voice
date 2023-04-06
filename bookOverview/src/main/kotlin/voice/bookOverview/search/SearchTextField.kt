@@ -27,8 +27,10 @@ internal fun SearchTextField(
       .focusRequester(focusRequester)
       .padding(start = 54.dp, end = 8.dp)
       .fillMaxWidth(),
-    colors = TextFieldDefaults.textFieldColors(
-      containerColor = Color.Transparent,
+    colors = TextFieldDefaults.colors(
+      focusedContainerColor = Color.Transparent,
+      unfocusedContainerColor = Color.Transparent,
+      disabledContainerColor = Color.Transparent,
       focusedIndicatorColor = Color.Transparent,
       unfocusedIndicatorColor = Color.Transparent,
     ),
