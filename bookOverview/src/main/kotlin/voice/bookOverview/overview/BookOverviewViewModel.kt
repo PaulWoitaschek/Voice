@@ -68,13 +68,20 @@ constructor(
 
   @Composable
   internal fun state(): BookOverviewViewState {
-    val playState = playStateManager.flow.collectAsState(initial = PlayStateManager.PlayState.Paused).value
-    val books = repo.flow().collectAsState(initial = emptyList()).value
-    val currentBookId = currentBookDataStore.data.collectAsState(initial = null).value
-    val scannerActive = mediaScanner.scannerActive.collectAsState(initial = false).value
-    val gridMode = gridModePref.flow.collectAsState(initial = null).value ?: return BookOverviewViewState.Loading
-    val bookMigrationExplanationShown =
-      bookMigrationExplanationShown.data.collectAsState(initial = null).value ?: return BookOverviewViewState.Loading
+    val playState = remember { playStateManager.flow }
+      .collectAsState(initial = PlayStateManager.PlayState.Paused).value
+    val books = remember { repo.flow() }
+      .collectAsState(initial = emptyList()).value
+    val currentBookId = remember { currentBookDataStore.data }
+      .collectAsState(initial = null).value
+    val scannerActive = remember { mediaScanner.scannerActive }
+      .collectAsState(initial = false).value
+    val gridMode = remember { gridModePref.flow }
+      .collectAsState(initial = null).value
+      ?: return BookOverviewViewState.Loading
+    val bookMigrationExplanationShown = remember { bookMigrationExplanationShown.data }
+      .collectAsState(initial = null).value
+      ?: return BookOverviewViewState.Loading
 
     val hasLegacyBooks = produceState<Boolean?>(initialValue = null) {
       value = legacyBookDao.bookMetaDataCount() != 0
