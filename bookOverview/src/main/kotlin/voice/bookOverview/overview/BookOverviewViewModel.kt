@@ -1,8 +1,13 @@
 package voice.bookOverview.overview
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.collections.immutable.toImmutableMap
@@ -11,20 +16,27 @@ import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
+import voice.bookOverview.di.BookOverviewScope
+import voice.bookOverview.search.BookSearchViewState
 import voice.common.BookId
+import voice.common.comparator.sortedNaturally
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
+import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.internals.dao.LegacyBookDao
+import voice.data.repo.internals.dao.RecentBookSearchDao
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
+import voice.search.BookSearch
 import javax.inject.Inject
 import javax.inject.Named
 
+@BookOverviewScope
 class BookOverviewViewModel
 @Inject
 constructor(
@@ -41,9 +53,14 @@ constructor(
   private val bookMigrationExplanationShown: BookMigrationExplanationShown,
   private val legacyBookDao: LegacyBookDao,
   private val navigator: Navigator,
+  private val recentBookSearchDao: RecentBookSearchDao,
+  private val search: BookSearch,
+  private val contentRepo: BookContentRepo,
 ) {
 
   private val scope = MainScope()
+  private var searchActive by mutableStateOf(false)
+  private var query by mutableStateOf("")
 
   fun attach() {
     mediaScanner.scan()
@@ -66,16 +83,20 @@ constructor(
     val noBooks = !scannerActive && books.isEmpty()
     val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
 
+    val layoutMode = when (gridMode) {
+      GridMode.LIST -> BookOverviewLayoutMode.List
+      GridMode.GRID -> BookOverviewLayoutMode.Grid
+      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+        BookOverviewLayoutMode.Grid
+      } else {
+        BookOverviewLayoutMode.List
+      }
+    }
+
+    val bookSearchViewState = bookSearchViewState(layoutMode)
+
     return BookOverviewViewState(
-      layoutMode = when (gridMode) {
-        GridMode.LIST -> BookOverviewLayoutMode.List
-        GridMode.GRID -> BookOverviewLayoutMode.Grid
-        GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-          BookOverviewLayoutMode.Grid
-        } else {
-          BookOverviewLayoutMode.List
-        }
-      },
+      layoutMode = layoutMode,
       books = books
         .groupBy {
           it.category
@@ -99,7 +120,53 @@ constructor(
       showMigrateHint = showMigrateHint,
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
+      searchActive = searchActive,
+      searchViewState = bookSearchViewState,
     )
+  }
+
+  @Composable
+  private fun bookSearchViewState(layoutMode: BookOverviewLayoutMode): BookSearchViewState {
+    return if (searchActive) {
+      val recentBookSearch = remember {
+        recentBookSearchDao.recentBookSearch()
+      }.collectAsState(initial = emptyList()).value.reversed()
+      recentBookSearchDao.recentBookSearch()
+      var searchBooks by remember {
+        mutableStateOf(emptyList<BookOverviewItemViewState>())
+      }
+      LaunchedEffect(query) {
+        searchBooks = search.search(query).map { it.toItemViewState() }
+      }
+      val suggestedAuthors: List<String> by produceState(initialValue = emptyList()) {
+        value = contentRepo.all()
+          .filter { it.isActive }
+          .mapNotNull { it.author }
+          .toSet()
+          .sortedNaturally()
+      }
+
+      val bookSearchViewState = if (query.isNotBlank()) {
+        BookSearchViewState.SearchResults(
+          query = query,
+          books = searchBooks,
+          layoutMode = layoutMode,
+        )
+      } else {
+        BookSearchViewState.EmptySearch(
+          recentQueries = recentBookSearch,
+          suggestedAuthors = suggestedAuthors,
+          query = query,
+        )
+      }
+      bookSearchViewState
+    } else {
+      BookSearchViewState.EmptySearch(
+        recentQueries = emptyList(),
+        suggestedAuthors = emptyList(),
+        query = query,
+      )
+    }
   }
 
   fun onSettingsClick() {
@@ -118,8 +185,26 @@ constructor(
     navigator.goTo(Destination.Migration)
   }
 
-  fun onSearchClick() {
-    navigator.goTo(Destination.BookSearch)
+  fun onSearchActiveChange(active: Boolean) {
+    if (active && !searchActive) {
+      query = ""
+    }
+    this.searchActive = active
+  }
+
+  fun onSearchQueryChange(query: String) {
+    this.query = query
+  }
+
+  fun onSearchBookClick(id: BookId) {
+    val query = query.trim()
+    if (query.isNotBlank()) {
+      scope.launch {
+        recentBookSearchDao.add(query)
+      }
+    }
+    searchActive = false
+    navigator.goTo(Destination.Playback(id))
   }
 
   fun onBoomMigrationHelperConfirmClick() {

@@ -1,9 +1,11 @@
 package voice.bookOverview.search
 
+import androidx.compose.runtime.Immutable
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 
-internal sealed interface BookSearchViewState {
+@Immutable
+sealed interface BookSearchViewState {
   val query: String
 
   data class SearchResults(
@@ -12,7 +14,7 @@ internal sealed interface BookSearchViewState {
     override val query: String,
   ) : BookSearchViewState
 
-  data class InactiveSearch(
+  data class EmptySearch(
     val suggestedAuthors: List<String>,
     val recentQueries: List<String>,
     override val query: String,

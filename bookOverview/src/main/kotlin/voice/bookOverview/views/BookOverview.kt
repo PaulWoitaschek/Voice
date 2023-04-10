@@ -22,6 +22,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
+import voice.bookOverview.search.BookSearchViewState
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
@@ -52,6 +54,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   val bottomSheetViewModel = bookComponent.bottomSheetViewModel
   val deleteBookViewModel = bookComponent.deleteBookViewModel
   val fileCoverViewModel = bookComponent.fileCoverViewModel
+
   LaunchedEffect(Unit) {
     bookOverviewViewModel.attach()
   }
@@ -84,7 +87,9 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
       bookOverviewViewModel.onBookMigrationClick()
     },
     onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
-    onSearchClick = bookOverviewViewModel::onSearchClick,
+    onSearchActiveChange = bookOverviewViewModel::onSearchActiveChange,
+    onSearchQueryChange = bookOverviewViewModel::onSearchQueryChange,
+    onSearchBookClick = bookOverviewViewModel::onSearchBookClick,
   )
   val deleteBookViewState = deleteBookViewModel.state.value
   if (deleteBookViewState != null) {
@@ -142,21 +147,24 @@ internal fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
-  onSearchClick: () -> Unit,
+  onSearchActiveChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
+  onSearchQueryChange: (String) -> Unit,
+  onSearchBookClick: (BookId) -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       BookOverviewTopAppBar(
-        scrollBehavior,
-        viewState,
-        onSearchClick,
-        onBookMigrationClick,
-        onBoomMigrationHelperConfirmClick,
-        onBookFolderClick,
-        onSettingsClick,
+        viewState = viewState,
+        onBookMigrationClick = onBookMigrationClick,
+        onBoomMigrationHelperConfirmClick = onBoomMigrationHelperConfirmClick,
+        onBookFolderClick = onBookFolderClick,
+        onSettingsClick = onSettingsClick,
+        onActiveChange = onSearchActiveChange,
+        onQueryChange = onSearchQueryChange,
+        onSearchBookClick = onSearchBookClick,
       )
     },
     floatingActionButton = {
@@ -177,7 +185,11 @@ internal fun BookOverview(
         showLoading = viewState.isLoading
       }
       if (showLoading) {
-        LinearProgressIndicator(Modifier.fillMaxWidth())
+        LinearProgressIndicator(
+          Modifier
+            .padding(top = 12.dp)
+            .fillMaxWidth(),
+        )
       }
       when (viewState.layoutMode) {
         BookOverviewLayoutMode.List -> {
@@ -215,7 +227,9 @@ fun BookOverviewPreview(
       onPlayButtonClick = {},
       onBookMigrationClick = {},
       onBoomMigrationHelperConfirmClick = {},
-      onSearchClick = {},
+      onSearchActiveChange = {},
+      onSearchQueryChange = {},
+      onSearchBookClick = {},
     )
   }
 }
@@ -246,6 +260,13 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showMigrateIcon = true,
       showSearchIcon = true,
       isLoading = true,
+      searchActive = true,
+      searchViewState = BookSearchViewState.EmptySearch(
+        suggestedAuthors = emptyList(),
+        recentQueries = emptyList(),
+        query = "",
+
+        ),
     ),
   )
 }

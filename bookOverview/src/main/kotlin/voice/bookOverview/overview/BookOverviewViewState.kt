@@ -3,6 +3,7 @@ package voice.bookOverview.overview
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import voice.bookOverview.search.BookSearchViewState
 
 @Immutable
 data class BookOverviewViewState(
@@ -14,6 +15,8 @@ data class BookOverviewViewState(
   val showMigrateIcon: Boolean,
   val showSearchIcon: Boolean,
   val isLoading: Boolean,
+  val searchActive: Boolean,
+  val searchViewState: BookSearchViewState,
 ) {
 
   companion object {
@@ -26,6 +29,12 @@ data class BookOverviewViewState(
       showMigrateIcon = false,
       showSearchIcon = false,
       isLoading = true,
+      searchActive = false,
+      searchViewState = BookSearchViewState.EmptySearch(
+        suggestedAuthors = emptyList(),
+        recentQueries = emptyList(),
+        query = "",
+      ),
     )
   }
 

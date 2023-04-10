@@ -7,7 +7,6 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import voice.app.injection.appComponent
-import voice.bookOverview.search.BookSearchScreen
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.BookId
 import voice.common.compose.ComposeController
@@ -28,8 +27,8 @@ class AppController : ComposeController() {
   }
 
   @field:[
-    Inject
-    CurrentBook
+  Inject
+  CurrentBook
   ]
   lateinit var currentBookIdPref: DataStore<BookId?>
 
@@ -55,9 +54,6 @@ class AppController : ComposeController() {
             navController.popBackStack()
           },
         )
-      }
-      composable(Destination.BookSearch.route) {
-        BookSearchScreen()
       }
       composable(Destination.SelectFolderType.route) { backStackEntry ->
         val destination = Destination.SelectFolderType.parse(backStackEntry.arguments!!)
