@@ -3,8 +3,10 @@ package voice.data
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,22 +22,24 @@ class RecentBookSearchTest {
       .build()
     val dao = db.recentBookSearchDao()
 
-    dao.recentBookSearch().shouldBeEmpty()
+    dao.recentBookSearch().test {
+      awaitItem().shouldBeEmpty()
 
-    dao.add("cats")
-    dao.add("dogs")
-    dao.add("unicorns")
+      dao.add("cats")
+      awaitItem().shouldContainExactly("cats")
 
-    dao.recentBookSearch().shouldContainExactly("cats", "dogs", "unicorns")
+      dao.add("dogs")
+      awaitItem().shouldContainExactly("cats", "dogs")
 
-    dao.delete("dogs")
+      dao.add("unicorns")
+      awaitItem().shouldContainExactly("cats", "dogs", "unicorns")
 
-    dao.recentBookSearch().shouldContainExactly("cats", "unicorns")
+      dao.delete("dogs")
+      awaitItem().shouldContainExactly("cats", "unicorns")
 
-    dao.add("cats")
-
-    dao.recentBookSearch().shouldContainExactly("unicorns", "cats")
-
+      dao.add("cats")
+      awaitItem().shouldContainExactly("unicorns", "cats")
+    }
     db.close()
   }
 
@@ -50,7 +54,8 @@ class RecentBookSearchTest {
       dao.add(it)
     }
 
-    dao.recentBookSearch().shouldContainExactly(terms.takeLast(RecentBookSearchDao.LIMIT))
+    dao.recentBookSearch().first()
+      .shouldContainExactly(terms.takeLast(RecentBookSearchDao.LIMIT))
 
     db.close()
   }
