@@ -17,6 +17,7 @@ jobs:
       - run: ./gradlew testDebugUnitTest
       - run: ./gradlew lintKotlin
       - run: ./gradlew app:lintDebug
+      - run: ./gradlew app:assembleDebug
 
       - uses: actions/upload-artifact@v3
         if: always()
@@ -25,6 +26,7 @@ jobs:
           path: |
             artifacts/
             app/build/reports/*.html
+            app/build/outputs/apk/debug/app-debug.apk
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
