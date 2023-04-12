@@ -148,12 +148,7 @@ class MediaItemProvider
     imageUri = content.cover?.toUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
-    extras = Bundle().apply {
-      putString(
-        EXTRA_CHAPTER_MARKS,
-        Json.encodeToString(ListSerializer(ChapterMark.serializer()), chapter.chapterMarks),
-      )
-    },
+    extras = mediaItemChapterMarkExtras(chapter.chapterMarks),
   )
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
@@ -164,6 +159,15 @@ internal fun MediaItem.chapterMarks(): List<ChapterMark> {
     deserializer = ListSerializer(ChapterMark.serializer()),
     string = mediaMetadata.extras!!.getString(EXTRA_CHAPTER_MARKS)!!,
   )
+}
+
+internal fun mediaItemChapterMarkExtras(chapterMarks: List<ChapterMark>): Bundle {
+  return Bundle().apply {
+    putString(
+      EXTRA_CHAPTER_MARKS,
+      Json.encodeToString(ListSerializer(ChapterMark.serializer()), chapterMarks),
+    )
+  }
 }
 
 private const val EXTRA_CHAPTER_MARKS = "chapterMarks"

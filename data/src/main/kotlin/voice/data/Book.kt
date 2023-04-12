@@ -20,10 +20,6 @@ data class Book(
   }
 
   val currentChapter: Chapter = chapters[content.currentChapterIndex]
-  val previousChapter: Chapter? = chapters.getOrNull(content.currentChapterIndex - 1)
-  val nextChapter: Chapter? = chapters.getOrNull(content.currentChapterIndex + 1)
-
-  val nextMark: ChapterMark? = currentChapter.nextMark(content.positionInChapter)
   val currentMark: ChapterMark = currentChapter.markForPosition(content.positionInChapter)
 
   val position: Long = chapters.takeWhile { it.id != content.currentChapter }
@@ -32,17 +28,6 @@ data class Book(
 
   inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
-  }
-}
-
-private fun Chapter.nextMark(positionInChapterMs: Long): ChapterMark? {
-  val markForPosition = markForPosition(positionInChapterMs)
-  val marks = chapterMarks
-  val index = marks.indexOf(markForPosition)
-  return if (index != -1) {
-    marks.getOrNull(index + 1)
-  } else {
-    null
   }
 }
 

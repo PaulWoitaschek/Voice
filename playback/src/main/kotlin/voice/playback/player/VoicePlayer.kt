@@ -18,7 +18,7 @@ import voice.playback.session.chapterMarks
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -58,7 +58,7 @@ class VoicePlayer
       currentPosition in mark.startMs..mark.endMs
     } ?: marks.last()
 
-    if (currentPosition - currentMark.startMs > 2000) {
+    if (currentPosition - currentMark.startMs > THRESHOLD_FOR_BACK_SEEK_MS) {
       player.seekTo(currentMark.startMs)
     } else {
       val currentMarkIndex = marks.indexOf(currentMark)
@@ -103,6 +103,10 @@ class VoicePlayer
     seekBack()
   }
 
+  override fun seekToNextMediaItem() {
+    seekForward()
+  }
+
   override fun seekToPrevious() {
     seekBack()
   }
@@ -111,39 +115,48 @@ class VoicePlayer
     seekForward()
   }
 
-  override fun seekToNextMediaItem() {
-    seekForward()
+  override fun seekBack() {
+    val skipAmount = seekTimePref.value.seconds
+
+    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+      ?.milliseconds
+      ?.coerceAtLeast(ZERO)
+      ?: return
+
+    val newPosition = currentPosition - skipAmount
+    if (newPosition < ZERO) {
+      val previousMediaItemIndex = previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+      if (previousMediaItemIndex == null) {
+        player.seekTo(0)
+      } else {
+        val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
+        val previousMediaItemDuration = previousMediaItem.chapterMarks().maxOf { it.endMs }.milliseconds
+        player.seekTo(previousMediaItemIndex, (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds)
+      }
+    } else {
+      player.seekTo(newPosition.inWholeMilliseconds)
+    }
   }
 
   override fun seekForward() {
-    seek(forward = true)
-  }
+    val skipAmount = seekTimePref.value.seconds
 
-  override fun seekBack() {
-    seek(forward = false)
-  }
-
-  private fun seek(forward: Boolean) {
-    val rawAmount = seekTimePref.value.seconds
-    val skipAmount = if (forward) {
-      rawAmount
-    } else {
-      -rawAmount
-    }
-
-    val currentPos = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
       ?.milliseconds
-      ?.coerceAtLeast(Duration.ZERO)
+      ?.coerceAtLeast(ZERO)
       ?: return
+    val newPosition = currentPosition + skipAmount
+
     val duration = player.duration.takeUnless { it == C.TIME_UNSET }
       ?.milliseconds
       ?: return
 
-    val seekTo = currentPos + skipAmount
-    when {
-      seekTo < Duration.ZERO -> forceSeekToPrevious()
-      seekTo > duration -> forceSeekToNext()
-      else -> seekTo(seekTo.inWholeMilliseconds)
+    if (newPosition > duration) {
+      val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+        ?: return
+      player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
+    } else {
+      player.seekTo(newPosition.inWholeMilliseconds)
     }
   }
 
@@ -155,11 +168,11 @@ class VoicePlayer
     if (playWhenReady) {
       updateLastPlayedAt()
     } else {
-      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: Duration.ZERO
-      if (currentPosition > Duration.ZERO) {
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
+      if (currentPosition > ZERO) {
         seekTo(
           (currentPosition - autoRewindAmountPref.value.seconds)
-            .coerceAtLeast(Duration.ZERO)
+            .coerceAtLeast(ZERO)
             .inWholeMilliseconds,
         )
       }
@@ -198,3 +211,5 @@ class VoicePlayer
     }
   }
 }
+
+private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000

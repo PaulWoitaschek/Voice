@@ -2,7 +2,6 @@ package voice.data
 
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.longs.shouldBeExactly
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 
@@ -122,56 +121,6 @@ class BookTest {
     )
 
     book.content.currentChapterIndex shouldBeExactly 1
-  }
-
-  @Test
-  fun nextChapterOnNonLastChapter() {
-    val ch1 = chapter()
-    val ch2 = chapter()
-    val ch3 = chapter()
-    val book = book(
-      chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch2.id,
-    )
-
-    book.nextChapter shouldBe ch3
-  }
-
-  @Test
-  fun nextChapterOnLastChapter() {
-    val ch1 = chapter()
-    val ch2 = chapter()
-    val ch3 = chapter()
-    val book = book(
-      chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch3.id,
-    )
-
-    book.nextChapter.shouldBeNull()
-  }
-
-  @Test
-  fun previousChapterOnNonFirstChapter() {
-    val ch1 = chapter()
-    val ch2 = chapter()
-    val ch3 = chapter()
-    val book = book(
-      chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch2.id,
-    )
-    book.previousChapter shouldBe ch1
-  }
-
-  @Test
-  fun previousChapterOnFirstChapter() {
-    val ch1 = chapter()
-    val ch2 = chapter()
-    val ch3 = chapter()
-    val book = book(
-      chapters = listOf(ch1, ch2, ch3),
-      currentChapter = ch1.id,
-    )
-    book.previousChapter.shouldBeNull()
   }
 
   @Suppress("SameParameterValue")
