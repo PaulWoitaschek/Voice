@@ -52,7 +52,7 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.6"
-firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.1"
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.2"
 
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
 
