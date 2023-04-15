@@ -3,7 +3,6 @@ package voice.playback.session
 import android.app.Application
 import android.net.Uri
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -145,7 +144,7 @@ class MediaItemProvider
     browsable = false,
     isPlayable = true,
     sourceUri = chapter.id.toUri(),
-    imageUri = content.cover?.toUri(),
+    imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
     extras = mediaItemChapterMarkExtras(chapter.chapterMarks),
