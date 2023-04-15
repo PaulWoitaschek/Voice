@@ -3,13 +3,15 @@ package voice.data.repo.internals.dao
 import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 @Dao
 abstract class RecentBookSearchDao {
 
   @Query("SELECT searchTerm FROM recentBookSearch")
-  abstract fun recentBookSearch(): Flow<List<String>>
+  abstract suspend fun recentBookSearch(): List<String>
+
+  @Query("SELECT searchTerm FROM recentBookSearch")
+  abstract fun recentBookSearches(): Flow<List<String>>
 
   @Query("DELETE FROM recentBookSearch WHERE searchTerm = :query")
   abstract suspend fun delete(query: String)
@@ -19,7 +21,7 @@ abstract class RecentBookSearchDao {
 
   suspend fun add(query: String) {
     addRaw(query)
-    val recentSearch = recentBookSearch().first()
+    val recentSearch = recentBookSearch()
     if (recentSearch.size > LIMIT) {
       recentSearch.take(recentSearch.size - LIMIT)
         .forEach {

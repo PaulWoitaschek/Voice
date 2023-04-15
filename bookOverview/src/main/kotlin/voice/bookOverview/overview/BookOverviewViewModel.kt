@@ -136,9 +136,9 @@ constructor(
   private fun bookSearchViewState(layoutMode: BookOverviewLayoutMode): BookSearchViewState {
     return if (searchActive) {
       val recentBookSearch = remember {
-        recentBookSearchDao.recentBookSearch()
+        recentBookSearchDao.recentBookSearches()
       }.collectAsState(initial = emptyList()).value.reversed()
-      recentBookSearchDao.recentBookSearch()
+      recentBookSearchDao.recentBookSearches()
       var searchBooks by remember {
         mutableStateOf(emptyList<BookOverviewItemViewState>())
       }
