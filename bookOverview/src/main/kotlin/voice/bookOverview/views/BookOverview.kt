@@ -37,6 +37,7 @@ import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.search.BookSearchViewState
 import voice.common.BookId
+import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
@@ -171,7 +172,7 @@ internal fun BookOverview(
       if (viewState.playButtonState != null) {
         PlayButton(
           playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          onClick = onPlayButtonClick,
+          fabSize = 56.dp, iconSize = 24.dp, onPlayClick = onPlayButtonClick,
         )
       }
     },

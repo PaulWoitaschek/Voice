@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -61,8 +60,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.common.compose.ImmutableFile
+import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
-import voice.common.compose.rememberPlayIconPainter
 import voice.common.formatTime
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
@@ -420,16 +419,8 @@ private fun PlaybackRow(
   ) {
     SkipButton(forward = false, onClick = onRewindClick)
     Spacer(modifier = Modifier.size(16.dp))
-    FloatingActionButton(
-      modifier = Modifier.size(80.dp),
-      onClick = onPlayClick,
-    ) {
-      Icon(
-        modifier = Modifier.size(36.dp),
-        painter = rememberPlayIconPainter(playing = playing),
-        contentDescription = stringResource(id = StringsR.string.play_pause),
-      )
-    }
+
+    PlayButton(playing = playing, fabSize = 80.dp, iconSize = 36.dp, onPlayClick = onPlayClick)
     Spacer(modifier = Modifier.size(16.dp))
     SkipButton(forward = true, onClick = onFastForwardClick)
   }
