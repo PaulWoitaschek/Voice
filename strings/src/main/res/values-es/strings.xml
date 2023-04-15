@@ -115,4 +115,6 @@
     <string name="search_hint">¿Que estás buscando\?</string>
     <string name="battery_optimization_rationale">Debido a sus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>
     <string name="media_session_recent">Reciente</string>
+    <string name="pause">Pausar</string>
+    <string name="play">Reproducir</string>
 </resources>
