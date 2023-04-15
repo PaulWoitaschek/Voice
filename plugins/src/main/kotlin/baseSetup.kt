@@ -31,7 +31,7 @@ fun Project.baseSetup() {
   }
   extensions.configure<KotlinProjectExtension> {
     jvmToolchain {
-      languageVersion.set(JavaLanguageVersion.of(11))
+      languageVersion.set(JavaLanguageVersion.of(19))
     }
   }
   extensions.configure<BaseExtension> {
@@ -59,6 +59,7 @@ fun Project.baseSetup() {
       add("implementation", project(":logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
+    add("androidTestImplementation", platform(libs.findLibrary("compose-bom").get()))
 
     listOf(
       "coroutines.core",

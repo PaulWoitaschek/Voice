@@ -119,7 +119,7 @@ android {
     lintConfig = rootProject.file("lint.xml")
   }
 
-  packagingOptions {
+  packaging {
     with(resources.pickFirsts) {
       add("META-INF/atomicfu.kotlin_module")
       add("META-INF/core.kotlin_module")
