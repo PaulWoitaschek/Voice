@@ -7,7 +7,7 @@ import app.cash.turbine.test
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import voice.data.repo.internals.AppDb
@@ -17,7 +17,7 @@ import voice.data.repo.internals.dao.RecentBookSearchDao
 class RecentBookSearchTest {
 
   @Test
-  fun `add delete replace`() = runTest {
+  fun `add delete replace`() = runBlocking {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
     val dao = db.recentBookSearchDao()
@@ -44,7 +44,7 @@ class RecentBookSearchTest {
   }
 
   @Test
-  fun `add over limit replaces`() = runTest {
+  fun `add over limit replaces`() = runBlocking {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
     val dao = db.recentBookSearchDao()
