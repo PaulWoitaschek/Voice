@@ -31,7 +31,7 @@ fun Project.baseSetup() {
   }
   extensions.configure<KotlinProjectExtension> {
     jvmToolchain {
-      languageVersion.set(JavaLanguageVersion.of(19))
+      languageVersion.set(JavaLanguageVersion.of(17))
     }
   }
   extensions.configure<BaseExtension> {
