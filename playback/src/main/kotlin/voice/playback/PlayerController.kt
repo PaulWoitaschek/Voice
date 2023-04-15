@@ -3,6 +3,7 @@ package voice.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import kotlinx.coroutines.CoroutineScope
@@ -37,9 +38,9 @@ class PlayerController
   private val mediaItemProvider: MediaItemProvider,
 ) {
 
-  private var _controller: Deferred<MediaController> = newController()
+  private var _controller: Deferred<MediaController> = newControllerAsync()
 
-  private fun newController() = MediaController
+  private fun newControllerAsync() = MediaController
     .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
     .buildAsync()
     .asDeferred()
@@ -50,7 +51,7 @@ class PlayerController
         val completedController = _controller.getCompleted()
         if (!completedController.isConnected) {
           completedController.release()
-          _controller = newController()
+          _controller = newControllerAsync()
         }
       }
       return _controller
@@ -110,7 +111,9 @@ class PlayerController
 
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookId.data.first() ?: return false
-    if ((controller.currentMediaItem?.mediaId?.toMediaIdOrNull() as MediaId.Chapter?)?.bookId == bookId) {
+    if (controller.currentBookId() == bookId &&
+      controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
+    ) {
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
@@ -125,6 +128,17 @@ class PlayerController
     controller.prepare()
     volumeGain.gain = Decibel(book.content.gain)
     return true
+  }
+
+  private fun MediaController.currentBookId(): BookId? {
+    val currentMediaItem = currentMediaItem ?: return null
+    val mediaId = currentMediaItem.mediaId.toMediaIdOrNull() ?: return null
+    return when (mediaId) {
+      is MediaId.Book -> mediaId.id
+      is MediaId.Chapter -> mediaId.bookId
+      MediaId.Recent -> null
+      MediaId.Root -> null
+    }
   }
 
   fun pauseWithRewind(rewind: Duration) = executeAfterPrepare {
