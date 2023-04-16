@@ -109,4 +109,6 @@
     <string name="media_session_recent">最近</string>
     <string name="notification_sleep_timer_enable">启用睡眠定时器</string>
     <string name="notification_sleep_timer_disable">禁用睡眠定时器</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
 </resources>
