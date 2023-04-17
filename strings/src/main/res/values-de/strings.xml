@@ -111,4 +111,6 @@
     <string name="media_session_recent">Kürzlich</string>
     <string name="notification_sleep_timer_enable">Einschlaftimer einschalten</string>
     <string name="notification_sleep_timer_disable">Einschlaftimer ausschalten</string>
+    <string name="play">Abspielen</string>
+    <string name="pause">Pause</string>
 </resources>
