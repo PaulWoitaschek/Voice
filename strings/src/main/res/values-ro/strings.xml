@@ -49,8 +49,8 @@
     <string name="refresh">Împrospătare</string>
     <string name="reset">Restabilire</string>
     <string name="cover_crop">Decupare copertă</string>
-    <string name="book_header_current">Curent</string>
-    <string name="book_header_not_started">Ne portnit încă</string>
+    <string name="book_header_current">Cărți în legtură</string>
+    <string name="book_header_not_started">Cărți neascultate încă</string>
     <string name="close">Închide</string>
     <string name="delete">Șterge</string>
     <string name="add">Adaugă</string>
@@ -88,7 +88,7 @@
     <string name="notification_sleep_timer_enable">Activează Programarea opririi</string>
     <string name="notification_sleep_timer_disable">Dezactivează Programarea opririi</string>
     <string name="folder_type_single_folder">Dosar unic</string>
-    <string name="book_header_completed">Finalizat</string>
+    <string name="book_header_completed">Cărți citite</string>
     <string name="folder_type_book_example_header">S-ar putea ca următoarele căți să fie șterse</string>
     <string name="folder_type_no_books">Voice nu a găsit vreo carte. Există vreun fișier audio\?</string>
     <string name="migration_hint_content">Din cauza modificărilor din versiunile Android recente, este necesar să alegeți dosarul dumneavoastră cu cărți audio folosint selectorul de sistem.
@@ -101,4 +101,6 @@
     <string name="delete_book_dialog_deletion_confirmation">Șterge fișierele mele</string>
     <string name="battery_optimization_rationale">Din cauza restricțiilor de alimentare, s-ar putea să apară întreruperi în audiție.</string>
     <string name="media_session_recent">Recente</string>
+    <string name="pause">Pauză</string>
+    <string name="play">Redare</string>
 </resources>
