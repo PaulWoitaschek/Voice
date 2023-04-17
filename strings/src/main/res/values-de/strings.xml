@@ -51,7 +51,7 @@
     <string name="pref_use_grid">Grid Layout</string>
     <string name="pref_report_issue">Melde ein Problem</string>
     <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
-    <string name="pref_get_support">Hol Dir Hilfe</string>
+    <string name="pref_get_support">Bekomme Unterstützung</string>
     <string name="pref_app_version">App Version</string>
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
@@ -62,7 +62,7 @@
     <!--book category-->
     <string name="book_header_current">Aktuelles</string>
     <string name="book_header_not_started">Neu</string>
-    <string name="book_header_completed">Zu Ende</string>
+    <string name="book_header_completed">Abgeschlossen</string>
     <string name="close">Schließen</string>
     <string name="delete">Löschen</string>
     <string name="add">Hinzufügen</string>
@@ -71,7 +71,7 @@
     <string name="folder_type_single_file">Einzelne Datei</string>
     <string name="folder_type_dialog_title">Was möchtest du hinzufügen?</string>
     <string name="folder_mode_root">Wurzelverzeichnis für Hörbücher. Ein Unterordner = ein Buch.</string>
-    <string name="folder_mode_single">Einzelnes Hörbuch</string>
+    <string name="folder_mode_single">Einzelnes Hörbuch-Verzeichnis</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d Audiodatei</item>
         <item quantity="other">%d Audiodateien</item>
@@ -82,9 +82,11 @@
     <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Gerade eben</string>
     <!--will be shown as a hint when no books have been added-->
-    <string name="voice_intro_first_book">Fügen wir Ihren Hörbuchordner hinzu, damit Sie mit dem Hören beginnen können!</string>
+    <string name="voice_intro_first_book">Fügen deinen Hörbuchordner hinzu, damit du mit dem Hören beginnen kannst!</string>
     <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
-    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, Ihren Hörbuchordner mit dem Systempicker auszuwählen.\n\nKlicken Sie auf das Symbol oben, um Ihre alten Buchpositionen zu sehen.</string>
+    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem Systempicker auszuwählen.
+\n
+\nKlicke auf das Symbol oben, um deine alten Buchpositionen zu sehen.</string>
     <string name="migration_hint_confirm">Verstanden</string>
     <string name="migration_detail_title">Alte Buch Positionen</string>
     <string name="migration_detail_content_name">Name</string>
@@ -97,7 +99,7 @@
     <string name="migration_detail_content_position_current_chapter_title">Aktuelles Kapitel</string>
     <string name="migration_detail_content_position_current_chapter_position">Position im Kapitel</string>
     <string name="migration_delete_dialog_title">Positionen löschen</string>
-    <string name="migration_delete_dialog_content">Sobald Sie die alten Positionen gelöscht haben, können Sie die alten Abspielpositionen nicht mehr einsehen.</string>
+    <string name="migration_delete_dialog_content">Sobald du die alten Positionen gelöscht hast, kannst du die alten Abspielpositionen nicht mehr einsehen.</string>
     <string name="migration_delete_dialog_action_delete">Löschen</string>
     <string name="migration_delete_dialog_action_keep">Behalten</string>
     <string name="delete_book_bottom_sheet_title">Buch löschen</string>
