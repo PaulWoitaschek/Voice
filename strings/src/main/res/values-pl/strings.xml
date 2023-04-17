@@ -115,4 +115,6 @@
     <string name="media_session_recent">Ostatnie</string>
     <string name="notification_sleep_timer_disable">Wyłącz wyłącznik czasowy</string>
     <string name="notification_sleep_timer_enable">Włącz wyłącznik czasowy</string>
+    <string name="play">Odtwarzaj</string>
+    <string name="pause">Zatrzymaj</string>
 </resources>
