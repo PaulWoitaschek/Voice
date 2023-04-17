@@ -115,4 +115,6 @@
     <string name="battery_optimization_rationale">A causa delle restrizioni di alimentazione, potrebbero verificarsi interruzioni della riproduzione.</string>
     <string name="migration_delete_dialog_content">Una volta eliminate le vecchie posizioni, non sarai più in grado di recuperare le tue vecchie posizioni di riproduzione.</string>
     <string name="delete_book_dialog_title">Elimina libro</string>
+    <string name="play">Avvia</string>
+    <string name="pause">Pausa</string>
 </resources>
