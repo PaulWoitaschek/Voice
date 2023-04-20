@@ -3,9 +3,11 @@ package voice.app
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.datastore.core.DataStore
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import dev.olshevski.navigation.reimagined.AnimatedNavHost
+import dev.olshevski.navigation.reimagined.NavBackHandler
+import dev.olshevski.navigation.reimagined.navigate
+import dev.olshevski.navigation.reimagined.pop
+import dev.olshevski.navigation.reimagined.rememberNavController
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.BookId
@@ -37,27 +39,36 @@ class AppController : ComposeController() {
 
   @Composable
   override fun Content() {
-    val navController = rememberAnimatedNavController()
-    AnimatedNavHost(navController = navController, startDestination = Destination.BookOverview.route) {
-      composable(Destination.BookOverview.route) {
-        BookOverviewScreen()
-      }
-      composable(Destination.Settings.route) {
-        Settings()
-      }
-      composable(Destination.Migration.route) {
-        Migration()
-      }
-      composable(Destination.FolderPicker.route) {
-        FolderPicker(
-          onCloseClick = {
-            navController.popBackStack()
-          },
-        )
-      }
-      composable(Destination.SelectFolderType.route) { backStackEntry ->
-        val destination = Destination.SelectFolderType.parse(backStackEntry.arguments!!)
-        SelectFolderType(uri = destination.uri)
+    val navController = rememberNavController<Destination.Compose>(
+      startDestination = Destination.BookOverview,
+    )
+    NavBackHandler(navController)
+    AnimatedNavHost(
+      navController,
+      transitionSpec = { action, _, _ ->
+        navTransition(action)
+      },
+    ) { screen ->
+      when (screen) {
+        Destination.BookOverview -> {
+          BookOverviewScreen()
+        }
+        Destination.FolderPicker -> {
+          FolderPicker(
+            onCloseClick = {
+              navController.pop()
+            },
+          )
+        }
+        Destination.Migration -> {
+          Migration()
+        }
+        is Destination.SelectFolderType -> {
+          SelectFolderType(uri = screen.uri)
+        }
+        Destination.Settings -> {
+          Settings()
+        }
       }
     }
 
@@ -67,7 +78,7 @@ class AppController : ComposeController() {
           is NavigationCommand.GoTo -> {
             when (val destination = command.destination) {
               is Destination.Compose -> {
-                navController.navigate(destination.route)
+                navController.navigate(destination)
               }
               else -> {
                 // no-op
@@ -75,7 +86,7 @@ class AppController : ComposeController() {
             }
           }
           NavigationCommand.GoBack -> {
-            navController.popBackStack()
+            navController.pop()
           }
         }
       }
