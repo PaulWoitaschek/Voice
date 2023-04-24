@@ -55,9 +55,6 @@
   <string name="popup_edit">編集</string>
   <string name="remove">削除</string>
   <string name="play_current">現在を再生</string>
-  <string name="refresh">更新</string>
-  <string name="reset">リセット</string>
-  <string name="cover_crop">カバーをトリミング</string>
   <!--book category-->
   <string name="book_header_current">現在</string>
   <string name="book_header_not_started">未再生</string>

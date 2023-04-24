@@ -57,9 +57,6 @@
   <string name="popup_edit">Redaguoti</string>
   <string name="remove">Pašalinti</string>
   <string name="play_current">Atkurti dabartinę</string>
-  <string name="refresh">Atnaujinti</string>
-  <string name="reset">Nustatyti iš naujo</string>
-  <string name="cover_crop">Apkarpyti viršelį</string>
   <!--book category-->
   <string name="book_header_current">Dabartinės</string>
   <string name="book_header_not_started">Dar nepradėtos</string>

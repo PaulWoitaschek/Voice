@@ -9,7 +9,6 @@ import voice.app.AppController
 import voice.app.features.MainActivity
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookmarks.BookmarkPresenter
-import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.features.widget.BaseWidgetProvider
 import voice.common.AppScope
 import javax.inject.Singleton
@@ -26,7 +25,6 @@ interface AppComponent {
   fun inject(target: App)
   fun inject(target: BaseWidgetProvider)
   fun inject(target: AppController)
-  fun inject(target: CoverFromInternetController)
   fun inject(target: EditCoverDialogController)
   fun inject(target: MainActivity)
 

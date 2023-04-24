@@ -45,10 +45,7 @@
     <string name="popup_edit">Düzenle</string>
     <string name="remove">Kaldır</string>
     <string name="play_current">Geçerli oynatma</string>
-    <string name="refresh">Yenile</string>
-    <string name="reset">Sıfırla</string>
-    <string name="cover_crop">Kapağı kırp</string>
-    <!--book category-->
+  <!--book category-->
     <string name="book_header_current">Geçerli</string>
     <string name="book_header_not_started">Henüz başlamadı</string>
     <string name="book_header_completed">Tamamlandı</string>

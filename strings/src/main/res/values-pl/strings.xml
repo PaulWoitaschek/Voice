@@ -58,10 +58,7 @@
     <string name="popup_edit">Edytuj</string>
     <string name="remove">Usuń</string>
     <string name="play_current">Odtwórz aktualne</string>
-    <string name="refresh">Odśwież</string>
-    <string name="reset">Zresetuj</string>
-    <string name="cover_crop">Przytnij okładkę</string>
-    <!-- book category -->
+  <!-- book category -->
     <string name="book_header_current">Aktualne</string>
     <string name="book_header_not_started">Nierozpoczęte</string>
     <string name="book_header_completed">Ukończone</string>

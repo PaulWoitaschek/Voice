@@ -35,7 +35,6 @@
     </plurals>
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
-    <string name="refresh">Actualizar</string>
     <!--book category-->
     <string name="book_header_current">Actual</string>
     <!--will be shown as the time for a bookmark that was just created-->
@@ -61,8 +60,7 @@
     <string name="pref_help_translating">Ajuda traduzindo Voice</string>
     <string name="pref_app_version">Versão</string>
     <string name="play_current">Reproduzir atual</string>
-    <string name="reset">Reiniciar</string>
-    <string name="book_header_not_started">Não iniciado ainda</string>
+  <string name="book_header_not_started">Não iniciado ainda</string>
     <string name="book_header_completed">Concluído</string>
     <string name="close">Fechar</string>
     <string name="delete">Apagar</string>
@@ -72,5 +70,4 @@
     <string name="folder_type_single_file">Ficheiro único</string>
     <string name="folder_type_dialog_title">O que deseja adicionar\?</string>
     <string name="pref_get_support">Obter apoio</string>
-    <string name="cover_crop">Cortar Capa</string>
 </resources>

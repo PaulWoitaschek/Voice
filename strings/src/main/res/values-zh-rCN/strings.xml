@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--BookShelf-->
     <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
@@ -55,10 +55,7 @@
     <string name="popup_edit">编辑</string>
     <string name="remove">删除</string>
     <string name="play_current">播放当前有声书</string>
-    <string name="refresh">刷新</string>
-    <string name="reset">重置</string>
-    <string name="cover_crop">封面裁剪</string>
-    <!--book category-->
+  <!--book category-->
     <string name="book_header_current">正在播放中</string>
     <string name="book_header_not_started">尚未开始播放</string>
     <string name="book_header_completed">已结束播放</string>

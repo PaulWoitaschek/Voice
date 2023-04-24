@@ -16,6 +16,7 @@ import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
+import voice.cover.SelectCoverFromInternet
 import voice.folderPicker.folderPicker.FolderPicker
 import voice.folderPicker.selectType.SelectFolderType
 import voice.migration.views.Migration
@@ -68,6 +69,12 @@ class AppController : ComposeController() {
         }
         Destination.Settings -> {
           Settings()
+        }
+        is Destination.CoverFromInternet -> {
+          SelectCoverFromInternet(
+            bookId = screen.bookId,
+            onCloseClick = { navController.pop() },
+          )
         }
       }
     }

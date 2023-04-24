@@ -60,10 +60,7 @@
     <string name="popup_edit">حرر</string>
     <string name="remove">أزل</string>
     <string name="play_current">شغل الحالي</string>
-    <string name="refresh">حدّث</string>
-    <string name="reset">أعد الضبط</string>
-    <string name="cover_crop">اقتص الغطاء</string>
-    <!-- book category -->
+  <!-- book category -->
     <string name="book_header_current">الحالي</string>
     <string name="book_header_not_started">لم يبدأ بعد</string>
     <string name="book_header_completed">انتهى</string>

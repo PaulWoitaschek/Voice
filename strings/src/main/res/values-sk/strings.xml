@@ -47,9 +47,6 @@
   <string name="popup_edit">Upraviť</string>
   <string name="remove">Zmazať</string>
   <string name="play_current">Prehrať aktuálnu</string>
-  <string name="refresh">Obnoviť</string>
-  <string name="reset">Resetovať</string>
-  <string name="cover_crop">Orezať obal</string>
   <!--book category-->
   <string name="book_header_current">Aktuáne</string>
   <string name="book_header_not_started">Ešte nepočúvané</string>

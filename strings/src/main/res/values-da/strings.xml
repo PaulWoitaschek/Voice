@@ -56,9 +56,6 @@
   <string name="popup_edit">Rediger</string>
   <string name="remove">Fjern</string>
   <string name="play_current">Spil nuværende</string>
-  <string name="refresh">Opfrisk</string>
-  <string name="reset">Nulstil</string>
-  <string name="cover_crop">Skær cover til</string>
   <!--book category-->
   <string name="book_header_current">Nuværende</string>
   <string name="book_header_not_started">Endnu ikke startet</string>

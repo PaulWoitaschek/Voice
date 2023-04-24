@@ -21,7 +21,6 @@ import voice.app.AppController
 import voice.app.databinding.ActivityBookBinding
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookmarks.BookmarkController
-import voice.app.features.imagepicker.CoverFromInternetController
 import voice.app.injection.appComponent
 import voice.app.misc.conductor.asVerticalChangeHandlerTransaction
 import voice.common.BookId
@@ -112,9 +111,6 @@ class MainActivity : AppCompatActivity() {
               }
               is Destination.Bookmarks -> {
                 router.pushController(BookmarkController(destination.bookId).asVerticalChangeHandlerTransaction())
-              }
-              is Destination.CoverFromInternet -> {
-                router.pushController(CoverFromInternetController(destination.bookId).asVerticalChangeHandlerTransaction())
               }
               is Destination.Playback -> {
                 lifecycleScope.launch {

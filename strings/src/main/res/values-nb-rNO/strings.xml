@@ -13,8 +13,7 @@
     <string name="pref_use_grid">Bruk rutenettsoppsett</string>
     <string name="pref_help_translating">Bistå oversettelsen</string>
     <string name="pref_get_support">Få støtte</string>
-    <string name="cover_crop">Beskjær omslag</string>
-    <string name="book_header_current">Nåværende</string>
+  <string name="book_header_current">Nåværende</string>
     <string name="book_header_completed">Fullført</string>
     <string name="folder_type_audiobooks">Lydboksmappe</string>
     <string name="folder_type_single_folder">Enkeltmappe</string>
@@ -57,7 +56,6 @@
     <string name="bookmark_added">Bokmerket</string>
     <string name="action_settings">Innstillinger</string>
     <string name="pref_report_issue">Rapporter problem</string>
-    <string name="refresh">Gjenoppfrisk</string>
     <string name="bookmark_just_now">Akkurat nå</string>
     <plurals name="seconds">
         <item quantity="one">%d sekund</item>
@@ -72,8 +70,7 @@
     <string name="book_header_not_started">Ikke startet enda</string>
     <string name="delete">Slett</string>
     <string name="play_current">Spill nåværende</string>
-    <string name="reset">Tilbakestill</string>
-    <string name="close">Lukk</string>
+  <string name="close">Lukk</string>
     <string name="folder_type_dialog_title">Hva vil du legge til\?</string>
     <string name="add">Legg til</string>
     <string name="folder_type_single_file">Enkeltfil</string>
