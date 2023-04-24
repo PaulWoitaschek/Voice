@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--BookShelf-->
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
@@ -56,9 +56,6 @@
   <string name="popup_edit">Bewerken</string>
   <string name="remove">Verwijderen</string>
   <string name="play_current">Huidig boek afspelen</string>
-  <string name="refresh">Verversen</string>
-  <string name="reset">Herstellen</string>
-  <string name="cover_crop">Omslag bijsnijden</string>
   <!--book category-->
   <string name="book_header_current">Huidig</string>
   <string name="book_header_not_started">Nog niet begonnen</string>

@@ -38,8 +38,6 @@
   <string name="popup_edit">Badili</string>
   <string name="remove">Toa</string>
   <string name="play_current">Chaza Iliyomo</string>
-  <string name="refresh">Rudisha nyuma</string>
-  <string name="reset">Weka Upya</string>
   <!--book category-->
   <string name="book_header_current">iliyopo</string>
   <string name="book_header_not_started">Ambayo Haija Anzwa</string>

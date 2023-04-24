@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--BookShelf-->
   <!--in the book-overview the show-all button which displays all books of a category-->
   <!--BookPlayFragment-->
@@ -56,9 +56,6 @@
   <string name="popup_edit">संपादन</string>
   <string name="remove">हटाएं</string>
   <string name="play_current">वर्तामन चलायें</string>
-  <string name="refresh">रिफ्रेश करें</string>
-  <string name="reset">रिसेट करें</string>
-  <string name="cover_crop">कवर काटें</string>
   <!--book category-->
   <string name="book_header_current">वर्तमान </string>
   <string name="book_header_not_started">अभी प्रारंभ नही किया</string>

@@ -46,10 +46,7 @@
     <string name="popup_edit">Modificare</string>
     <string name="remove">Eliminare</string>
     <string name="play_current">Redare curentă</string>
-    <string name="refresh">Împrospătare</string>
-    <string name="reset">Restabilire</string>
-    <string name="cover_crop">Decupare copertă</string>
-    <string name="book_header_current">Cărți în legtură</string>
+  <string name="book_header_current">Cărți în legtură</string>
     <string name="book_header_not_started">Cărți neascultate încă</string>
     <string name="close">Închide</string>
     <string name="delete">Șterge</string>

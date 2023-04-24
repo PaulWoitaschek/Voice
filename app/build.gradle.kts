@@ -146,6 +146,7 @@ dependencies {
   implementation(projects.bookOverview)
   implementation(projects.migration)
   implementation(projects.search)
+  implementation(projects.cover)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
@@ -158,7 +159,6 @@ dependencies {
 
   implementation(libs.materialDialog.core)
   implementation(libs.materialDialog.input)
-  implementation(libs.materialCab)
   implementation(libs.coil)
 
   if (enableCrashlytics) {

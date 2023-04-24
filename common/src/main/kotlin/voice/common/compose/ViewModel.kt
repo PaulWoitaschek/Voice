@@ -9,9 +9,10 @@ internal class HoldingViewModel<T>(val value: T) : ViewModel()
 
 @Composable
 inline fun <reified T> rememberScoped(
+  key: String = "",
   crossinline create: () -> T,
 ): T {
-  return viewModel(key = T::class.qualifiedName) {
+  return viewModel(key = T::class.qualifiedName + key) {
     HoldingViewModel(create())
   }.value
 }

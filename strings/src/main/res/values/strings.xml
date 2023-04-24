@@ -58,9 +58,6 @@
   <string name="popup_edit">Edit</string>
   <string name="remove">Remove</string>
   <string name="play_current">Play current</string>
-  <string name="refresh">Refresh</string>
-  <string name="reset">Reset</string>
-  <string name="cover_crop">Crop cover</string>
   <!-- book category -->
   <string name="book_header_current">Current</string>
   <string name="book_header_not_started">Not started Yet</string>
@@ -113,4 +110,6 @@
   <string name="media_session_recent">Recent</string>
   <string name="notification_sleep_timer_enable">Enable Sleep Timer</string>
   <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
+  <string name="generic_error_message">Something went wrong 😢</string>
+  <string name="generic_error_retry">Retry</string>
 </resources>

@@ -56,10 +56,7 @@
     <string name="popup_edit">Redigera</string>
     <string name="remove">Ta bort</string>
     <string name="play_current">Spela aktuell</string>
-    <string name="refresh">Uppdatera</string>
-    <string name="reset">Återställ</string>
-    <string name="cover_crop">Beskär omslag</string>
-    <!--book category-->
+  <!--book category-->
     <string name="book_header_current">Aktuella</string>
     <string name="book_header_not_started">Inte påbörjad ännu</string>
     <string name="book_header_completed">Avslutad</string>

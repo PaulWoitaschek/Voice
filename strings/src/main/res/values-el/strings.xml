@@ -43,9 +43,6 @@
   <string name="popup_edit">Επεξεργασία </string>
   <string name="remove">Αφαίρεση</string>
   <string name="play_current">Αναπαραγωγή τρέχοντος</string>
-  <string name="refresh">Ανανέωση</string>
-  <string name="reset">Επαναφορά</string>
-  <string name="cover_crop">Περικοπή εξωφύλλου</string>
   <!--book category-->
   <string name="book_header_current">Τρέχον</string>
   <string name="book_header_not_started">Μη διαβασμένα</string>

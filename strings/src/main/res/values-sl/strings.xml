@@ -45,9 +45,6 @@
   <string name="popup_edit">Uredi</string>
   <string name="remove">Odstrani</string>
   <string name="play_current">Predvajaj trenutno</string>
-  <string name="refresh">Osveži</string>
-  <string name="reset">Ponastavi</string>
-  <string name="cover_crop">Prireži naslovnico</string>
   <!--book category-->
   <!--will be shown as the time for a bookmark that was just created-->
   <!--will be shown as a hint when no books have been added-->

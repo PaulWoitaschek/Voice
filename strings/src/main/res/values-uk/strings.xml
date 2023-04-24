@@ -50,10 +50,7 @@
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Вилучити</string>
     <string name="play_current">Відтворити поточну</string>
-    <string name="refresh">Оновити</string>
-    <string name="reset">Скинути</string>
-    <string name="cover_crop">Кадрувати обкладинку</string>
-    <!--book category-->
+  <!--book category-->
     <string name="book_header_current">Поточні</string>
     <string name="book_header_not_started">Ще не початі</string>
     <string name="book_header_completed">Завершені</string>
