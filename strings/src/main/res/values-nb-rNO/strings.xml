@@ -13,7 +13,7 @@
     <string name="pref_use_grid">Bruk rutenettsoppsett</string>
     <string name="pref_help_translating">Bistå oversettelsen</string>
     <string name="pref_get_support">Få støtte</string>
-  <string name="book_header_current">Nåværende</string>
+    <string name="book_header_current">Nåværende</string>
     <string name="book_header_completed">Fullført</string>
     <string name="folder_type_audiobooks">Lydboksmappe</string>
     <string name="folder_type_single_folder">Enkeltmappe</string>
@@ -70,7 +70,7 @@
     <string name="book_header_not_started">Ikke startet enda</string>
     <string name="delete">Slett</string>
     <string name="play_current">Spill nåværende</string>
-  <string name="close">Lukk</string>
+    <string name="close">Lukk</string>
     <string name="folder_type_dialog_title">Hva vil du legge til\?</string>
     <string name="add">Legg til</string>
     <string name="folder_type_single_file">Enkeltfil</string>
@@ -96,4 +96,8 @@
     <string name="migration_detail_content_position">Posisjon</string>
     <string name="migration_hint_title">Tilgang til gamle bokposisjoner</string>
     <string name="battery_optimization_rationale">Som følge av strømsparing kan avspillingen bli forstyrret.</string>
+    <string name="generic_error_retry">Prøv igjen</string>
+    <string name="generic_error_message">Noe gikk galt 😢</string>
+    <string name="play">Spill</string>
+    <string name="pause">Pause</string>
 </resources>
