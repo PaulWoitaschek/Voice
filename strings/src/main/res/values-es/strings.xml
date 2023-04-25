@@ -46,7 +46,7 @@
     <string name="popup_edit">Editar</string>
     <string name="remove">Eliminar</string>
     <string name="play_current">Reproducir actual</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Actual</string>
     <string name="book_header_not_started">Aún no comenzado</string>
     <string name="book_header_completed">Completado</string>
@@ -114,4 +114,6 @@
     <string name="media_session_recent">Reciente</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproducir</string>
+    <string name="generic_error_retry">Reintentar</string>
+    <string name="generic_error_message">Algo salió mal 😢</string>
 </resources>
