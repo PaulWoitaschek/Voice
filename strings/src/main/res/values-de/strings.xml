@@ -56,7 +56,7 @@
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
     <string name="play_current">Spiel aktuelles</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Aktuelles</string>
     <string name="book_header_not_started">Neu</string>
     <string name="book_header_completed">Abgeschlossen</string>
@@ -79,7 +79,7 @@
     <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Gerade eben</string>
     <!--will be shown as a hint when no books have been added-->
-    <string name="voice_intro_first_book">Fügen deinen Hörbuchordner hinzu, damit du mit dem Hören beginnen kannst!</string>
+    <string name="voice_intro_first_book">Füge deinen Hörbuchordner hinzu, damit du mit dem Hören beginnen kannst!</string>
     <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
     <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem Systempicker auszuwählen.
 \n
@@ -96,7 +96,7 @@
     <string name="migration_detail_content_position_current_chapter_title">Aktuelles Kapitel</string>
     <string name="migration_detail_content_position_current_chapter_position">Position im Kapitel</string>
     <string name="migration_delete_dialog_title">Positionen löschen</string>
-    <string name="migration_delete_dialog_content">Sobald du die alten Positionen gelöscht hast, kannst du die alten Abspielpositionen nicht mehr einsehen.</string>
+    <string name="migration_delete_dialog_content">Sobald du die alten Positionen gelöscht hast, kannst du die alten Abspielpositionen nicht mehr wiederherstellen.</string>
     <string name="migration_delete_dialog_action_delete">Löschen</string>
     <string name="migration_delete_dialog_action_keep">Behalten</string>
     <string name="delete_book_bottom_sheet_title">Buch löschen</string>
@@ -112,4 +112,6 @@
     <string name="notification_sleep_timer_disable">Einschlaftimer ausschalten</string>
     <string name="play">Abspielen</string>
     <string name="pause">Pause</string>
+    <string name="generic_error_message">Etwas ist schief gelaufen 😢</string>
+    <string name="generic_error_retry">Erneut versuchen</string>
 </resources>
