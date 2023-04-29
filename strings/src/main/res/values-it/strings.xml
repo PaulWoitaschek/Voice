@@ -46,7 +46,7 @@
     <string name="popup_edit">Modifica</string>
     <string name="remove">Rimuovi</string>
     <string name="play_current">Riproduci corrente</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Corrente</string>
     <string name="book_header_not_started">Non ancora iniziato</string>
     <string name="book_header_completed">Completato</string>
@@ -114,4 +114,6 @@
     <string name="delete_book_dialog_title">Elimina libro</string>
     <string name="play">Avvia</string>
     <string name="pause">Pausa</string>
+    <string name="generic_error_message">Qualcosa è andato storto 😢</string>
+    <string name="generic_error_retry">Riprova</string>
 </resources>
