@@ -22,7 +22,7 @@ retrofit = "2.9.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-material = "com.google.android.material:material:1.8.0"
+material = "com.google.android.material:material:1.9.0"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:5.1"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.13.5"
