@@ -14,6 +14,14 @@
         "https://plugins.gradle.org/m2/",
         "https://jitpack.io/"
       ]
+    },
+    {
+      "groupName": "Kotlin, Compose, KSP",
+      "matchPackagePrefixes": [
+        "org.jetbrains.compose.compiler",
+        "org.jetbrains.kotlin:kotlin",
+        "com.google.devtools.ksp"
+      ]
     }
   ],
   "prHourlyLimit": 0,
