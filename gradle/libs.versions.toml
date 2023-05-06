@@ -12,8 +12,8 @@ room = "2.5.1"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.45"
-kotlin = "1.8.20"
-compose-compiler = "1.4.6"
+kotlin = "1.8.21"
+compose-compiler = "1.4.7"
 compose-material3 = "1.1.0-rc01"
 media3 = "1.0.1"
 agp = "8.0.1"
@@ -154,7 +154,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.5" }
 ktlint = { id = "org.jmailen.kotlinter", version = "3.14.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.8.20-1.0.11" }
+ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.5" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
 playPublish = { id = "com.github.triplet.play", version = "3.8.2" }
