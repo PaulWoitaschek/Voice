@@ -18,8 +18,8 @@
     {
       "groupName": "Kotlin, Compose, KSP",
       "matchPackagePrefixes": [
-        "org.jetbrains.compose.compiler",
-        "org.jetbrains.kotlin:kotlin",
+        "org.jetbrains.compose:compiler",
+        "org.jetbrains.kotlin",
         "com.google.devtools.ksp"
       ]
     }
