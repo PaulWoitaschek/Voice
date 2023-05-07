@@ -23,6 +23,5 @@ val supportedAudioFormats = arrayOf(
   "rtx",
   "wav",
   "webm",
-  "wma",
   "xmf",
 )
