@@ -17,7 +17,6 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
-import voice.app.serialization.SerializableDataStoreFactory
 import voice.app.serialization.UriSerializer
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
@@ -29,6 +28,7 @@ import voice.common.pref.PrefKeys
 import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
+import voice.datastore.VoiceDataStoreFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -100,28 +100,28 @@ object PrefsModule {
   @Provides
   @Singleton
   @RootAudiobookFolders
-  fun audiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("audiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFolderAudiobookFolders
-  fun singleFolderAudiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("SingleFolderAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFileAudiobookFolders
-  fun singleFileAudiobookFolders(factory: SerializableDataStoreFactory): DataStore<List<Uri>> {
+  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("SingleFileAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @CurrentBook
-  fun currentBook(factory: SerializableDataStoreFactory): DataStore<BookId?> {
+  fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
     return factory.create(
       serializer = BookId.serializer().nullable,
       fileName = "currentBook",
@@ -132,12 +132,12 @@ object PrefsModule {
   @Provides
   @Singleton
   @BookMigrationExplanationQualifier
-  fun bookMigrationExplanationShown(factory: SerializableDataStoreFactory): BookMigrationExplanationShown {
+  fun bookMigrationExplanationShown(factory: VoiceDataStoreFactory): BookMigrationExplanationShown {
     return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")
   }
 }
 
-private fun SerializableDataStoreFactory.createUriList(
+private fun VoiceDataStoreFactory.createUriList(
   name: String,
 ): DataStore<List<Uri>> = create(
   serializer = ListSerializer(UriSerializer),

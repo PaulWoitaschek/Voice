@@ -134,6 +134,7 @@ android {
 
 dependencies {
   implementation(projects.strings)
+  implementation(projects.datastore)
   implementation(projects.common)
   implementation(projects.data)
   implementation(projects.playback)

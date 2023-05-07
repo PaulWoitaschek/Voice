@@ -22,6 +22,7 @@ import voice.playback.PlayerController
 import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
+import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -40,8 +41,6 @@ class BookPlayViewModel
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
 ) {
-
-  private var askedToIgnoreBatteryOptimization = false
 
   private val scope = MainScope()
 
@@ -102,11 +101,13 @@ class BookPlayViewModel
   }
 
   fun playPause() {
-    if (playStateManager.playState != PlayStateManager.PlayState.Playing && !askedToIgnoreBatteryOptimization) {
-      if (!batteryOptimization.isIgnoringBatteryOptimizations()) {
-        _viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+    if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
+      scope.launch {
+        if (batteryOptimization.shouldRequest()) {
+          _viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+          batteryOptimization.onBatteryOptimizationsRequested()
+        }
       }
-      askedToIgnoreBatteryOptimization = true
     }
     player.playPause()
   }
