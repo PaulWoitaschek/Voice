@@ -1,8 +1,5 @@
-package voice.playbackScreen
+package voice.playbackScreen.batteryOptimization
 
-import android.app.Application
-import android.os.PowerManager
-import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
@@ -15,7 +12,7 @@ import javax.inject.Singleton
 
 class BatteryOptimization
 @Inject constructor(
-  private val context: Application,
+  private val isIgnoringBatteryOptimizations: IsIgnoringBatteryOptimizations,
   private val amountOfBatteryOptimizationsRequested: DataStore<Int>,
 ) {
 
@@ -27,12 +24,6 @@ class BatteryOptimization
 
   suspend fun onBatteryOptimizationsRequested() {
     amountOfBatteryOptimizationsRequested.updateData { it + 1 }
-  }
-
-  private fun isIgnoringBatteryOptimizations(): Boolean {
-    val powerManager = context.getSystemService<PowerManager>()
-      ?: return true
-    return powerManager.isIgnoringBatteryOptimizations(context.packageName)
   }
 }
 

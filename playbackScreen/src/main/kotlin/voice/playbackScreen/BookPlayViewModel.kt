@@ -22,6 +22,7 @@ import voice.playback.PlayerController
 import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
+import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.sleepTimer.SleepTimer
 import javax.inject.Inject
 import kotlin.time.Duration
