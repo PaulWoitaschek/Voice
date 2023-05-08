@@ -60,7 +60,7 @@
     <string name="popup_edit">حرر</string>
     <string name="remove">أزل</string>
     <string name="play_current">شغل الحالي</string>
-  <!-- book category -->
+    <!-- book category -->
     <string name="book_header_current">الحالي</string>
     <string name="book_header_not_started">لم يبدأ بعد</string>
     <string name="book_header_completed">انتهى</string>
@@ -116,4 +116,8 @@
     <string name="media_session_recent">الحديثة</string>
     <string name="notification_sleep_timer_disable">عطّل مؤقت النوم</string>
     <string name="notification_sleep_timer_enable">مكّن مؤقت النوم</string>
+    <string name="generic_error_message">حدث خطأ ما 😢</string>
+    <string name="generic_error_retry">أعد المحاولة</string>
+    <string name="play">شغّل</string>
+    <string name="pause">ألبث</string>
 </resources>
