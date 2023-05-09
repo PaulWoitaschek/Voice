@@ -1,7 +1,7 @@
 [versions]
 pagingCompose = "1.0.0-alpha18"
-versionCode = "3603013"
-versionName = "7.0.8"
+versionCode = "3603014"
+versionName = "7.0.9"
 
 sdk-compile = "33"
 sdk-min = "26"
