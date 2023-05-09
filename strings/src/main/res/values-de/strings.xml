@@ -51,7 +51,7 @@
     <string name="pref_use_grid">Grid Layout</string>
     <string name="pref_report_issue">Melde ein Problem</string>
     <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
-    <string name="pref_get_support">Bekomme Unterstützung</string>
+    <string name="pref_get_support">Erhalte Unterstützung</string>
     <string name="pref_app_version">App Version</string>
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
@@ -81,7 +81,7 @@
     <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Füge deinen Hörbuchordner hinzu, damit du mit dem Hören beginnen kannst!</string>
     <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
-    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem Systempicker auszuwählen.
+    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem System Dateimanager auszuwählen.
 \n
 \nKlicke auf das Symbol oben, um deine alten Buchpositionen zu sehen.</string>
     <string name="migration_hint_confirm">Verstanden</string>
@@ -102,7 +102,7 @@
     <string name="delete_book_bottom_sheet_title">Buch löschen</string>
     <string name="delete_book_dialog_title">Buch löschen</string>
     <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
-    <string name="delete_book_dialog_content">Das wird die Dateien von deinem Gerät löschen.</string>
+    <string name="delete_book_dialog_content">Das wird die Dateien auf deinem Gerät löschen.</string>
     <string name="search_hint">Wonach suchst du?</string>
     <string name="battery_optimization_rationale">Aufgrund deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
     <string name="battery_optimization_action">Update</string>
