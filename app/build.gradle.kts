@@ -84,7 +84,14 @@ android {
     }
     all {
       signingConfig = signingConfigs.getByName("release")
-      setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard.pro"))
+      setProguardFiles(
+        listOf(
+          getDefaultProguardFile("proguard-android-optimize.txt"),
+          "proguard.pro",
+          // remove if retrofit > 2.9.0 is released https://github.com/square/retrofit/issues/3751
+          "retrofit2.pro",
+        ),
+      )
     }
   }
 
