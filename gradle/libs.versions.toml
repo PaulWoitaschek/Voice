@@ -75,7 +75,7 @@ androidTest-services-storage = "androidx.test.services:storage:1.4.2"
 androidTest-espresso = "androidx.test.espresso:espresso-core:3.5.1"
 androidTest-rules = "androidx.test:rules:1.5.0"
 
-conductor = "com.bluelinelabs:conductor:4.0.0-preview-2"
+conductor = "com.bluelinelabs:conductor:4.0.0-preview-3"
 
 prefs-core = { module = "com.github.PaulWoitaschek.FlowPref:core", version.ref = "prefs" }
 prefs-android = { module = "com.github.PaulWoitaschek.FlowPref:android", version.ref = "prefs" }
