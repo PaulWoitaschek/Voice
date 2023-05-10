@@ -1,5 +1,7 @@
 package voice.data
 
+import voice.documentfile.CachedDocumentFile
+
 val supportedAudioFormats = arrayOf(
   "3gp",
   "aac",
@@ -25,3 +27,10 @@ val supportedAudioFormats = arrayOf(
   "webm",
   "xmf",
 )
+
+fun CachedDocumentFile.isAudioFile(): Boolean {
+  if (!isFile) return false
+  val name = name ?: return false
+  val extension = name.substringAfterLast(".").lowercase()
+  return extension in supportedAudioFormats
+}
