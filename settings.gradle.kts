@@ -31,7 +31,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.enterprise") version "3.13.1"
+  id("com.gradle.enterprise") version "3.13.2"
   id("org.gradle.toolchains.foojay-resolver-convention") version ("0.5.0")
 }
 
