@@ -47,11 +47,11 @@ class MediaScanTrigger
           documentFilesWithUri.map { it.documentFile }
         }
       scanner.scan(folders)
+      _scannerActive.value = false
 
       val books = bookRepo.all()
       coverScanner.scan(books)
 
-      _scannerActive.value = false
     }
   }
 }
