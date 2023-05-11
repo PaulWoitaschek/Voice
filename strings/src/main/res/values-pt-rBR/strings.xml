@@ -28,7 +28,7 @@
     <string name="playback_speed">Velocidade de reprodução</string>
     <!--Bookmarks-->
     <string name="bookmark">Marcador de páginas</string>
-    <string name="bookmark_edit_title">Editar marcador</string>
+    <string name="bookmark_edit_title">Editar marcador de páginas</string>
     <string name="bookmark_edit_hint">Nome do marcador de páginas</string>
     <string name="bookmark_added">Marcador de páginas adicionado</string>
     <!--Settings-->
@@ -81,15 +81,15 @@
     <string name="bookmark_just_now">Nesse exato momento</string>
     <string name="voice_intro_first_book">Vamos adicionar uma pasta de Audiolivros para você começar a ouvir!</string>
     <string name="migration_hint_title">Acessar posições de livros antigos</string>
-    <string name="migration_hint_content">Devido a mudanças na versão do Android, é necessário selecionar a pasta de Audiolivros usando o sistema.
+    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu dispositivo.
 \n
-\nClique no ícone acima para ver a posição dos livros antigos.</string>
+\nClique no ícone acima para ver a localização antiga dos livros.</string>
     <string name="migration_hint_confirm">Entendido</string>
     <string name="migration_detail_title">Posições antigas de livro</string>
     <string name="migration_detail_content_name">Nome</string>
     <string name="migration_detail_content_root">Pasta raiz</string>
     <string name="migration_detail_content_position">Posição</string>
-    <string name="migration_detail_content_bookmarks">Marca-página</string>
+    <string name="migration_detail_content_bookmarks">Marcadores de página</string>
     <string name="migration_detail_content_added_at">Adicionado em</string>
     <string name="migration_detail_content_position_current_file_title">Arquivo atual</string>
     <string name="migration_detail_content_position_current_file_position">Posição no arquivo</string>
@@ -104,10 +104,16 @@
     <string name="migration_delete_dialog_action_keep">Manter</string>
     <string name="delete_book_dialog_content">Isso deletará os arquivos em seu aparelho.</string>
     <string name="search_hint">O que você está buscando\?</string>
-    <string name="battery_optimization_rationale">Devido à restrições de bateria, podem haver interrupções durante a reprodução do livro.</string>
+    <string name="battery_optimization_rationale">Devido à restrições de energia, podem haver interrupções durante a reprodução do livro.</string>
     <string name="battery_optimization_action">Atualizar</string>
     <string name="pause">Parar</string>
     <string name="volume_boost">Aumentar volume</string>
     <string name="more">Mais</string>
     <string name="play">Play</string>
+    <string name="media_session_root">Audiolivros</string>
+    <string name="media_session_recent">Recente</string>
+    <string name="notification_sleep_timer_enable">Ativar desligamento automático</string>
+    <string name="notification_sleep_timer_disable">Desativar desligamento automático</string>
+    <string name="generic_error_message">Algo deu errado 😢</string>
+    <string name="generic_error_retry">Tentar novamente</string>
 </resources>
