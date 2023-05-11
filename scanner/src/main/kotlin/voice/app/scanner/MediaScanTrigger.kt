@@ -15,6 +15,7 @@ import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.measureTime
 
 @Singleton
 class MediaScanTrigger
@@ -41,17 +42,20 @@ class MediaScanTrigger
       _scannerActive.value = true
       oldJob?.cancelAndJoin()
 
-      val folders: Map<FolderType, List<DocumentFile>> = audiobookFolders.all()
-        .first()
-        .mapValues { (_, documentFilesWithUri) ->
-          documentFilesWithUri.map { it.documentFile }
-        }
-      scanner.scan(folders)
+      measureTime {
+        val folders: Map<FolderType, List<DocumentFile>> = audiobookFolders.all()
+          .first()
+          .mapValues { (_, documentFilesWithUri) ->
+            documentFilesWithUri.map { it.documentFile }
+          }
+        scanner.scan(folders)
+      }.also {
+        Logger.i("scan took $it")
+      }
       _scannerActive.value = false
 
       val books = bookRepo.all()
       coverScanner.scan(books)
-
     }
   }
 }

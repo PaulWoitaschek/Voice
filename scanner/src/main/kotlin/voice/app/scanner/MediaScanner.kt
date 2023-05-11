@@ -4,7 +4,9 @@ import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
 import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
+import voice.logging.core.Logger
 import javax.inject.Inject
+import kotlin.time.measureTime
 
 class MediaScanner
 @Inject constructor(
@@ -29,7 +31,13 @@ class MediaScanner
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    files.forEach { scan(it) }
+    files.forEach { file ->
+      measureTime {
+        scan(file)
+      }.also {
+        Logger.i("scan took $it for ${file.uri}")
+      }
+    }
   }
 
   private suspend fun scan(file: DocumentFile) {
