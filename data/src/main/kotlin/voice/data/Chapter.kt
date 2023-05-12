@@ -27,14 +27,30 @@ data class Chapter(
   val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {
     listOf(ChapterMark(name, 0L, duration))
   } else {
-    val sorted = markData.sorted()
-    sorted.mapIndexed { index, (startMs, name) ->
-      val isFirst = index == 0
-      val isLast = index == sorted.size - 1
-      val start = if (isFirst) 0L else startMs
-      val end = if (isLast) duration else sorted[index + 1].startMs - 1
-      ChapterMark(name = name, startMs = start, endMs = end)
+    val sorted = markData.distinctBy { it.startMs }
+      .filter { it.startMs in 0..<duration }
+      .sorted()
+    val result = mutableListOf<ChapterMark>()
+    for ((index, markData) in sorted.withIndex()) {
+      val name = markData.name
+      val previous = result.lastOrNull()
+      val next = sorted.getOrNull(index + 1)
+      val startMs = if (previous == null) 0L else previous.endMs + 1
+      val endMs = if (next != null && next.startMs + 2 < duration && startMs < next.startMs - 1) {
+        next.startMs - 1
+      } else {
+        duration - 1
+      }
+      result += ChapterMark(
+        name = name,
+        startMs = startMs,
+        endMs = endMs,
+      )
+      if (endMs == duration - 1) {
+        break
+      }
     }
+    result.ifEmpty { listOf(ChapterMark(name, 0L, duration)) }
   }
 
   override fun compareTo(other: Chapter): Int {
