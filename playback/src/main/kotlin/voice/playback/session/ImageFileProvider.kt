@@ -20,11 +20,17 @@ class ImageFileProvider
         file,
       )
       .also { uri ->
-        application.grantUriPermission(
+        listOf(
+          "com.android.systemui",
           "com.google.android.projection.gearhead",
-          uri,
-          Intent.FLAG_GRANT_READ_URI_PERMISSION,
-        )
+        ).forEach { grantedPackage ->
+          application.grantUriPermission(
+            grantedPackage,
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION,
+          )
+        }
       }
   }
 }
+

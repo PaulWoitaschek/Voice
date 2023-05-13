@@ -1,55 +1,119 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Capa</string>
-  <string name="play_pause">Tocar / Pausar</string>
-  <string name="action_sleep">Desligamento automático</string>
-  <string name="rewind">Retroceder</string>
-  <string name="fast_forward">Avanço rápido</string>
-  <string name="previous_track">Capitulo anterior</string>
-  <string name="next_track">Próximo capitulo</string>
-  <string name="skip_silence">Pular Silêncio</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Definir</string>
-  <string name="dialog_cancel">Cancelar</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Mostrar capa para escolher</string>
-  <string name="change_book_name">Nome</string>
-  <string name="download_book_cover">Capa da internet</string>
-  <string name="pick_book_cover">Capa do arquivo de sistema</string>
-  <string name="edit_book_title">Editar livro</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Pastas de Audiolivros</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Velocidade de reprodução</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Marcador</string>
-  <string name="bookmark_edit_title">Editar marcador</string>
-  <string name="bookmark_edit_hint">Nome do marcador</string>
-  <string name="bookmark_added">Marcador adicionado</string>
-  <!--Settings-->
-  <string name="action_settings">Preferências</string>
-  <string name="min">%s min</string>
-  <string name="delete_last_number">Deleta o último número digitado</string>
-  <plurals name="seconds">
-    <item quantity="one">%d segundo</item>
-    <item quantity="many">%d segundos</item>
-    <item quantity="other">%d segundos</item>
-  </plurals>
-  <string name="pref_seek_time">Pular para</string>
-  <string name="pref_theme_dark">Tema escuro</string>
-  <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-  <string name="popup_edit">Editar</string>
-  <string name="remove">Remover</string>
-  <string name="play_current">Reproduzir o atual</string>
-  <!--book category-->
-  <string name="book_header_current">Atual</string>
-  <string name="book_header_not_started">Não iniciado ainda</string>
-  <string name="book_header_completed">Completo</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <!--will be shown as a hint when no books have been added-->
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">Capa</string>
+    <string name="play_pause">Tocar / Pausar</string>
+    <string name="action_sleep">Desligamento automático</string>
+    <string name="rewind">Retroceder</string>
+    <string name="fast_forward">Avançar</string>
+    <string name="previous_track">Capitulo anterior</string>
+    <string name="next_track">Próximo capitulo</string>
+    <string name="skip_silence">Pular Silêncio</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Definir</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Mostrar capa para escolher</string>
+    <string name="change_book_name">Nome</string>
+    <string name="download_book_cover">Capa da internet</string>
+    <string name="pick_book_cover">Capa do arquivo de sistema</string>
+    <string name="edit_book_title">Editar livro</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Pastas de Audiolivros</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Velocidade de reprodução</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Marcador de páginas</string>
+    <string name="bookmark_edit_title">Editar marcador de páginas</string>
+    <string name="bookmark_edit_hint">Nome do marcador de páginas</string>
+    <string name="bookmark_added">Marcador de páginas adicionado</string>
+    <!--Settings-->
+    <string name="action_settings">Preferências</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Deleta o último número digitado</string>
+    <plurals name="seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="many">%d segundos</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <string name="pref_seek_time">Pular para</string>
+    <string name="pref_theme_dark">Tema escuro</string>
+    <string name="pref_auto_rewind_title">Retornar automaticamente</string>
+    <string name="popup_edit">Editar</string>
+    <string name="remove">Remover</string>
+    <string name="play_current">Reproduzir o atual</string>
+    <!--book category-->
+    <string name="book_header_current">Atual</string>
+    <string name="book_header_not_started">Não iniciado ainda</string>
+    <string name="book_header_completed">Completo</string>
+    <!--will be shown as the time for a bookmark that was just created-->
+    <!--will be shown as a hint when no books have been added-->
+    <string name="mark_as_completed">Marcar como completo</string>
+    <string name="mark_as_current">Marcar como atual</string>
+    <string name="mark_as_not_started">Marcar como não-começado</string>
+    <string name="pref_suggest_idea">Sugerir uma ideia</string>
+    <string name="pref_use_grid">Usar modo em grade</string>
+    <string name="pref_report_issue">Reportar um problema</string>
+    <string name="pref_help_translating">Ajude a traduzir o Voice</string>
+    <string name="pref_get_support">Obtenha ajuda</string>
+    <string name="pref_app_version">Versão do Aplicativo</string>
+    <string name="close">Fechar</string>
+    <string name="folder_type_audiobooks">Pasta de Audiolivros</string>
+    <string name="delete">Deletar</string>
+    <string name="add">Adicionar</string>
+    <string name="folder_type_single_folder">Pasta única</string>
+    <string name="folder_type_single_file">Arquivo único</string>
+    <string name="folder_type_dialog_title">O que você gostaria de adicionar\?</string>
+    <string name="folder_mode_root">Pasta de Audiolivro padrão. Cada subpasta representa um livro/volume.</string>
+    <string name="folder_mode_single">Pasta única de Audiolivro</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d arquivo de áudio</item>
+        <item quantity="many">%d arquivos de áudio</item>
+        <item quantity="other">%d arquivos de áudio</item>
+    </plurals>
+    <string name="folder_type_book_example_header">Isso fará com que os respectivos livros sejam reconhecidos</string>
+    <string name="folder_type_no_books">Voice não conseguiu encontrar nenhum livro. O arquivo está no formato certo\?</string>
+    <string name="folder_type_title">Como estão organizados seus arquivos\?</string>
+    <string name="bookmark_just_now">Nesse exato momento</string>
+    <string name="voice_intro_first_book">Vamos adicionar uma pasta de Audiolivros para você começar a ouvir!</string>
+    <string name="migration_hint_title">Acessar posições de livros antigos</string>
+    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu dispositivo.
+\n
+\nClique no ícone acima para ver a localização antiga dos livros.</string>
+    <string name="migration_hint_confirm">Entendido</string>
+    <string name="migration_detail_title">Posições antigas de livro</string>
+    <string name="migration_detail_content_name">Nome</string>
+    <string name="migration_detail_content_root">Pasta raiz</string>
+    <string name="migration_detail_content_position">Posição</string>
+    <string name="migration_detail_content_bookmarks">Marcadores de página</string>
+    <string name="migration_detail_content_added_at">Adicionado em</string>
+    <string name="migration_detail_content_position_current_file_title">Arquivo atual</string>
+    <string name="migration_detail_content_position_current_file_position">Posição no arquivo</string>
+    <string name="migration_detail_content_position_current_chapter_title">Capítulo atual</string>
+    <string name="migration_detail_content_position_current_chapter_position">Posição no capítulo</string>
+    <string name="migration_delete_dialog_title">Deletar posições</string>
+    <string name="delete_book_bottom_sheet_title">Deletar livro</string>
+    <string name="delete_book_dialog_title">Deletar livro</string>
+    <string name="migration_delete_dialog_content">Assim que você deletar posições antigas, você não poderá recupera-las.</string>
+    <string name="migration_delete_dialog_action_delete">Deletar</string>
+    <string name="delete_book_dialog_deletion_confirmation">Deletar meus arquivos</string>
+    <string name="migration_delete_dialog_action_keep">Manter</string>
+    <string name="delete_book_dialog_content">Isso deletará os arquivos em seu aparelho.</string>
+    <string name="search_hint">O que você está buscando\?</string>
+    <string name="battery_optimization_rationale">Devido à restrições de energia, podem haver interrupções durante a reprodução do livro.</string>
+    <string name="battery_optimization_action">Atualizar</string>
+    <string name="pause">Parar</string>
+    <string name="volume_boost">Aumentar volume</string>
+    <string name="more">Mais</string>
+    <string name="play">Play</string>
+    <string name="media_session_root">Audiolivros</string>
+    <string name="media_session_recent">Recente</string>
+    <string name="notification_sleep_timer_enable">Ativar desligamento automático</string>
+    <string name="notification_sleep_timer_disable">Desativar desligamento automático</string>
+    <string name="generic_error_message">Algo deu errado 😢</string>
+    <string name="generic_error_retry">Tentar novamente</string>
 </resources>

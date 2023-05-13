@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="play">Mulai</string>
+    <string name="play_pause">Mulai / Berhenti</string>
+    <string name="pause">Berhenti</string>
+    <string name="cover">Cover</string>
+    <string name="mark_as_completed">Tandai Selesai</string>
+    <string name="mark_as_current">Tandai Sedang Dibaca</string>
+    <string name="pref_help_translating">Bantu terjemahkan Voice</string>
+    <string name="download_book_cover">Cover dari Internet</string>
+    <string name="dialog_cancel">Batalkan</string>
+    <string name="pick_book_cover">Cover dari file sistem</string>
+    <string name="change_book_name">Judul Buku</string>
+    <string name="mark_as_not_started">Tandai Belum Dibaca</string>
+</resources>

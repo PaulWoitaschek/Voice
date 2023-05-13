@@ -1,20 +1,20 @@
 [versions]
 pagingCompose = "1.0.0-alpha18"
-versionCode = "3603014"
-versionName = "7.0.9"
+versionCode = "3603015"
+versionName = "7.0.10"
 
 sdk-compile = "33"
 sdk-min = "26"
 sdk-target = "33"
 
-coroutines = "1.7.0"
+coroutines = "1.7.1"
 room = "2.5.1"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
-dagger = "2.45"
+dagger = "2.46.1"
 kotlin = "1.8.21"
 compose-compiler = "1.4.7"
-compose-material3 = "1.1.0-rc01"
+compose-material3 = "1.1.0"
 media3 = "1.0.1"
 agp = "8.0.1"
 ktlint = "0.48.2"
@@ -36,17 +36,17 @@ coil = "io.coil-kt:coil-compose:2.3.0"
 appCompat = "androidx.appcompat:appcompat:1.6.1"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
-androidxCore = "androidx.core:core-ktx:1.10.0"
+androidxCore = "androidx.core:core-ktx:1.10.1"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 documentFile = "androidx.documentfile:documentfile:1.0.1"
-koTest-assert = "io.kotest:kotest-assertions-core:5.6.1"
+koTest-assert = "io.kotest:kotest-assertions-core:5.6.2"
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
-turbine = "app.cash.turbine:turbine:0.12.3"
+turbine = "app.cash.turbine:turbine:0.13.0"
 molecule = "app.cash.molecule:molecule-runtime:0.9.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
@@ -59,7 +59,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.7"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.2"
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -92,7 +92,7 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-compose-bom = "androidx.compose:compose-bom:2023.05.00"
+compose-bom = "androidx.compose:compose-bom:2023.05.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
