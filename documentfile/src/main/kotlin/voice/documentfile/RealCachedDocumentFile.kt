@@ -20,7 +20,10 @@ internal data class RealCachedDocumentFile(
   private val content: FileContents? by lazy {
     preFilledContent ?: context.contentResolver.query(
       uri,
-      FileContents.columns, null, null, null,
+      FileContents.columns,
+      null,
+      null,
+      null,
     )?.use { cursor ->
       if (cursor.moveToFirst()) {
         FileContents.readFrom(cursor)

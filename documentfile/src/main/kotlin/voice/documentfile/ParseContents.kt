@@ -12,7 +12,10 @@ internal fun parseContents(uri: Uri, context: Context): List<CachedDocumentFile>
   )
   return context.contentResolver.query(
     childrenUri,
-    FileContents.columns, null, null, null,
+    FileContents.columns,
+    null,
+    null,
+    null,
   )?.use { cursor ->
     val files = mutableListOf<CachedDocumentFile>()
     while (cursor.moveToNext()) {
