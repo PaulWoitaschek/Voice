@@ -1,6 +1,7 @@
 package voice.app.scanner
 
 import voice.common.BookId
+import voice.data.audioFileCount
 import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
 import voice.documentfile.CachedDocumentFile
@@ -31,13 +32,16 @@ class MediaScanner
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    files.forEach { file ->
-      measureTime {
-        scan(file)
-      }.also {
-        Logger.i("scan took $it for ${file.uri}")
+    files
+      .sortedBy { it.audioFileCount() }
+      .forEach { file ->
+        Logger.d("scanning $file")
+        measureTime {
+          scan(file)
+        }.also {
+          Logger.i("scan took $it for ${file.uri}")
+        }
       }
-    }
   }
 
   private suspend fun scan(file: CachedDocumentFile) {

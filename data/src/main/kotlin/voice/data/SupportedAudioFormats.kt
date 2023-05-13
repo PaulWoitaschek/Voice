@@ -1,6 +1,7 @@
 package voice.data
 
 import voice.documentfile.CachedDocumentFile
+import voice.documentfile.walk
 
 val supportedAudioFormats = arrayOf(
   "3gp",
@@ -33,4 +34,8 @@ fun CachedDocumentFile.isAudioFile(): Boolean {
   val name = name ?: return false
   val extension = name.substringAfterLast(".").lowercase()
   return extension in supportedAudioFormats
+}
+
+fun CachedDocumentFile.audioFileCount(): Int {
+  return walk().count { it.isAudioFile() }
 }

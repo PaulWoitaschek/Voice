@@ -13,12 +13,12 @@ import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
 import voice.common.navigation.Navigator
+import voice.data.audioFileCount
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
-import voice.documentfile.walk
 import javax.inject.Inject
 
 class SelectFolderTypeViewModel
@@ -117,8 +117,4 @@ class SelectFolderTypeViewModel
     val uri: Uri,
     val documentFile: DocumentFile,
   )
-}
-
-private fun CachedDocumentFile.audioFileCount(): Int {
-  return walk().count { it.isAudioFile() }
 }
