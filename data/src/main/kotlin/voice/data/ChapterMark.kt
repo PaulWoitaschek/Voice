@@ -20,6 +20,12 @@ data class ChapterMark(
   val endMs: Long,
 ) {
 
+  init {
+    require(startMs < endMs) {
+      "Start must be less than end in $this"
+    }
+  }
+
   operator fun contains(position: Duration): Boolean = position.inWholeMilliseconds in startMs..endMs
   operator fun contains(positionMs: Long): Boolean = positionMs in startMs..endMs
 }
