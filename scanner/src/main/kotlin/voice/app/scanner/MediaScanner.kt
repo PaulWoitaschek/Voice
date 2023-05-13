@@ -6,7 +6,7 @@ import voice.data.repo.BookContentRepo
 import voice.documentfile.CachedDocumentFile
 import voice.logging.core.Logger
 import javax.inject.Inject
-import kotlin.time.measureTimedValue
+import kotlin.time.measureTime
 
 class MediaScanner
 @Inject constructor(
@@ -31,24 +31,12 @@ class MediaScanner
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    /*    withContext(Dispatchers.IO.limitedParallelism(2)) {
-          files.map { file ->
-            launch {
-              measureTimedValue {
-                scan(file)
-              }.also {
-                Logger.i("scan took ${it.duration} for ${file.uri}")
-              }.value
-            }
-          }
-        }.joinAll()*/
-
     files.forEach { file ->
-      measureTimedValue {
+      measureTime {
         scan(file)
       }.also {
-        Logger.i("scan took ${it.duration} for ${file.uri}")
-      }.value
+        Logger.i("scan took $it for ${file.uri}")
+      }
     }
   }
 
