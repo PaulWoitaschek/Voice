@@ -21,12 +21,16 @@ class PlaybackService : MediaLibraryService() {
   @Inject
   lateinit var player: VoicePlayer
 
+  @Inject
+  lateinit var voiceNotificationProvider: VoiceMediaNotificationProvider
+
   override fun onCreate() {
     super.onCreate()
     rootComponentAs<PlaybackComponent.Provider>()
       .playbackComponentFactory
       .create(this)
       .inject(this)
+    setMediaNotificationProvider(voiceNotificationProvider)
   }
 
   override fun onDestroy() {
