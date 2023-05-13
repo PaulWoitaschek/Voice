@@ -112,7 +112,8 @@ private fun SelectCoverFromInternet(
                       }
                       .fillMaxWidth()
                       .aspectRatio(item.width.toFloat() / item.height),
-                    painter = rememberAsyncImagePainter(model = item.thumbnail), contentDescription = null,
+                    painter = rememberAsyncImagePainter(model = item.thumbnail),
+                    contentDescription = null,
                   )
                 }
               }

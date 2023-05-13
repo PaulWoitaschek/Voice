@@ -24,10 +24,11 @@ fun PlayButton(
   fabSize: Dp,
   iconSize: Dp,
   onPlayClick: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   val cornerSize by animateDpAsState(if (playing) 16.dp else fabSize / 2)
   FloatingActionButton(
-    modifier = Modifier.size(fabSize),
+    modifier = modifier.size(fabSize),
     onClick = onPlayClick,
     shape = RoundedCornerShape(cornerSize),
   ) {
@@ -37,7 +38,9 @@ fun PlayButton(
       contentDescription = stringResource(
         id = if (playing) {
           StringsR.string.pause
-        } else StringsR.string.play,
+        } else {
+          StringsR.string.play
+        },
       ),
     )
   }
