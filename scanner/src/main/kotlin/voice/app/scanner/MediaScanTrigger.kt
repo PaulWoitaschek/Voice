@@ -1,6 +1,6 @@
 package voice.app.scanner
 
-import androidx.documentfile.provider.DocumentFile
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.data.repo.BookRepository
+import voice.documentfile.CachedDocumentFile
 import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,6 +25,7 @@ class MediaScanTrigger
   private val scanner: MediaScanner,
   private val coverScanner: CoverScanner,
   private val bookRepo: BookRepository,
+  private val context: Context,
 ) {
 
   private val _scannerActive = MutableStateFlow(false)
@@ -43,10 +45,12 @@ class MediaScanTrigger
       oldJob?.cancelAndJoin()
 
       measureTime {
-        val folders: Map<FolderType, List<DocumentFile>> = audiobookFolders.all()
+        val folders: Map<FolderType, List<CachedDocumentFile>> = audiobookFolders.all()
           .first()
           .mapValues { (_, documentFilesWithUri) ->
-            documentFilesWithUri.map { it.documentFile }
+            documentFilesWithUri.map {
+              CachedDocumentFile(context, it.documentFile.uri)
+            }
           }
         scanner.scan(folders)
       }.also {

@@ -48,7 +48,7 @@ fun SelectFolderType(uri: Uri) {
   val viewModel = rememberScoped {
     rootComponentAs<SelectFolderTypeComponent>().selectFolderTypeViewModel
   }
-  val documentFile = DocumentFile.fromTreeUri(LocalContext.current, uri) ?: return
+  val documentFile = DocumentFile.fromTreeUri(LocalContext.current, uri)!!
   viewModel.args = SelectFolderTypeViewModel.Args(uri, documentFile)
   val viewState = viewModel.viewState()
   SelectFolderType(

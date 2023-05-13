@@ -10,6 +10,7 @@ internal data class FileContents(
   val isFile: Boolean,
   val isDirectory: Boolean,
   val length: Long,
+  val lastModified: Long,
 ) {
 
   companion object {
@@ -18,6 +19,7 @@ internal data class FileContents(
       DocumentsContract.Document.COLUMN_MIME_TYPE,
       DocumentsContract.Document.COLUMN_DISPLAY_NAME,
       DocumentsContract.Document.COLUMN_SIZE,
+      DocumentsContract.Document.COLUMN_LAST_MODIFIED,
     )
 
     fun readFrom(cursor: Cursor): FileContents {
@@ -27,6 +29,7 @@ internal data class FileContents(
         isFile = mimeType != null && mimeType != DocumentsContract.Document.MIME_TYPE_DIR,
         isDirectory = mimeType == DocumentsContract.Document.MIME_TYPE_DIR,
         length = cursor.getLongOrNull(DocumentsContract.Document.COLUMN_SIZE) ?: 0L,
+        lastModified = cursor.getLongOrNull(DocumentsContract.Document.COLUMN_LAST_MODIFIED) ?: 0L,
       )
     }
   }

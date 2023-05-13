@@ -141,13 +141,12 @@ class MediaScannerTest {
       bookParser = BookParser(
         contentRepo = bookContentRepo,
         mediaAnalyzer = mediaAnalyzer,
-        application = ApplicationProvider.getApplicationContext(),
         legacyBookDao = db.legacyBookDao(),
+        application = ApplicationProvider.getApplicationContext(),
         bookmarkMigrator = BookmarkMigrator(
           legacyBookDao = db.legacyBookDao(),
           bookmarkDao = db.bookmarkDao(),
         ),
-        context = ApplicationProvider.getApplicationContext(),
       ),
     )
 

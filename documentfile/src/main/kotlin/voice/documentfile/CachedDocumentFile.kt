@@ -1,26 +1,34 @@
 package voice.documentfile
 
+import android.content.Context
 import android.net.Uri
-import android.provider.DocumentsContract
-import androidx.core.database.getStringOrNull
 
 class CachedDocumentFile
 internal constructor(
-  private val fileSystem: CachedDocumentFileSystem,
-  private val uri: Uri,
-  private val preFilledContent: FileContents? = null,
+  val context: Context,
+  val uri: Uri,
+  private val preFilledContent: FileContents?,
 ) {
+
+  constructor(
+    context: Context,
+    uri: Uri,
+  ) : this(context, uri, null)
+
+  override fun toString(): String {
+    return "CachedDocumentFile($uri)"
+  }
 
   val children: List<CachedDocumentFile> by lazy {
     if (isDirectory) {
-      parseContents(uri, fileSystem)
+      parseContents(uri, context)
     } else {
       emptyList()
     }
   }
 
   private val content: FileContents? by lazy {
-    preFilledContent ?: fileSystem.context.contentResolver.query(uri, FileContents.columns, null, null, null)?.use { cursor ->
+    preFilledContent ?: context.contentResolver.query(uri, FileContents.columns, null, null, null)?.use { cursor ->
       if (cursor.moveToFirst()) {
         FileContents.readFrom(cursor)
       } else {
@@ -33,31 +41,20 @@ internal constructor(
   val isDirectory: Boolean by lazy { content?.isDirectory ?: false }
   val isFile: Boolean by lazy { content?.isFile ?: false }
   val length: Long by lazy { content?.length ?: 0L }
+  val lastModified: Long by lazy { content?.lastModified ?: 0L }
 }
 
-fun CachedDocumentFile.walk(): Sequence<CachedDocumentFile> = sequence {
-  suspend fun SequenceScope<CachedDocumentFile>.walk(file: CachedDocumentFile) {
-    yield(file)
-    if (file.isDirectory) {
-      file.children.forEach { walk(it) }
-    }
+fun CachedDocumentFile.nameWithoutExtension(): String {
+  val name = name
+  return if (name == null) {
+    uri.pathSegments.lastOrNull()
+      ?.dropWhile { it != ':' }
+      ?.removePrefix(":")
+      ?.takeUnless { it.isBlank() }
+      ?: uri.toString()
+  } else {
+    name.substringBeforeLast(".")
+      .takeUnless { it.isEmpty() }
+      ?: name
   }
-  walk(this@walk)
-}
-
-private fun parseContents(uri: Uri, fileSystem: CachedDocumentFileSystem): List<CachedDocumentFile> {
-  val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-    uri,
-    DocumentsContract.getDocumentId(uri),
-  )
-  return fileSystem.context.contentResolver.query(childrenUri, FileContents.columns, null, null, null)?.use { cursor ->
-    val files = mutableListOf<CachedDocumentFile>()
-    while (cursor.moveToNext()) {
-      val documentId = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID))
-      val documentUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId)
-      val contents = FileContents.readFrom(cursor)
-      files += CachedDocumentFile(fileSystem, documentUri, contents)
-    }
-    files
-  } ?: emptyList()
 }
