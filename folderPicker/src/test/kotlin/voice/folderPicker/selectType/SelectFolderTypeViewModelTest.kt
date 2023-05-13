@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.common.DispatcherProvider
+import voice.documentfile.FileBasedDocumentFactory
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {
@@ -31,7 +32,8 @@ class SelectFolderTypeViewModelTest {
       newFile("audiobooks/SecondBook/1.mp3")
       newFile("audiobooks/SecondBook/2.mp3")
     }
-    val viewModel = SelectFolderTypeViewModel(DispatcherProvider(coroutineContext, coroutineContext), mockk(), mockk())
+    val viewModel =
+      SelectFolderTypeViewModel(DispatcherProvider(coroutineContext, coroutineContext), mockk(), mockk(), FileBasedDocumentFactory)
     viewModel.args = SelectFolderTypeViewModel.Args(audiobookFolder.toUri(), DocumentFile.fromFile(audiobookFolder))
     viewModel.setFolderMode(FolderMode.Audiobooks)
 

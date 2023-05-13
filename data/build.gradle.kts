@@ -31,6 +31,7 @@ android {
 
 dependencies {
   api(projects.common)
+  api(projects.documentfile)
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)

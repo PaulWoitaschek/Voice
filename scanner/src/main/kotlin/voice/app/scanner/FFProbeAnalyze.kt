@@ -1,9 +1,9 @@
 package voice.app.scanner
 
 import android.content.Context
-import androidx.documentfile.provider.DocumentFile
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import voice.documentfile.CachedDocumentFile
 import voice.ffmpeg.ffprobe
 import voice.logging.core.Logger
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class FFProbeAnalyze
     allowStructuredMapKeys = true
   }
 
-  suspend fun analyze(file: DocumentFile): MetaDataScanResult? {
+  suspend fun analyze(file: CachedDocumentFile): MetaDataScanResult? {
     val result = ffprobe(
       input = file.uri,
       context = context,

@@ -1,6 +1,5 @@
 package voice.app.scanner
 
-import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,9 +11,12 @@ import kotlinx.coroutines.launch
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.data.repo.BookRepository
+import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.measureTime
 
 @Singleton
 class MediaScanTrigger
@@ -23,6 +25,7 @@ class MediaScanTrigger
   private val scanner: MediaScanner,
   private val coverScanner: CoverScanner,
   private val bookRepo: BookRepository,
+  private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
   private val _scannerActive = MutableStateFlow(false)
@@ -41,17 +44,22 @@ class MediaScanTrigger
       _scannerActive.value = true
       oldJob?.cancelAndJoin()
 
-      val folders: Map<FolderType, List<DocumentFile>> = audiobookFolders.all()
-        .first()
-        .mapValues { (_, documentFilesWithUri) ->
-          documentFilesWithUri.map { it.documentFile }
-        }
-      scanner.scan(folders)
+      measureTime {
+        val folders: Map<FolderType, List<CachedDocumentFile>> = audiobookFolders.all()
+          .first()
+          .mapValues { (_, documentFilesWithUri) ->
+            documentFilesWithUri.map {
+              documentFileFactory.create(it.documentFile.uri)
+            }
+          }
+        scanner.scan(folders)
+      }.also {
+        Logger.i("scan took $it")
+      }
+      _scannerActive.value = false
 
       val books = bookRepo.all()
       coverScanner.scan(books)
-
-      _scannerActive.value = false
     }
   }
 }

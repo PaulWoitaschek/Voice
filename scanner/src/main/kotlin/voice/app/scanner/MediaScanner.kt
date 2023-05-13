@@ -1,10 +1,13 @@
 package voice.app.scanner
 
-import androidx.documentfile.provider.DocumentFile
 import voice.common.BookId
+import voice.data.audioFileCount
 import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepo
+import voice.documentfile.CachedDocumentFile
+import voice.logging.core.Logger
 import javax.inject.Inject
+import kotlin.time.measureTime
 
 class MediaScanner
 @Inject constructor(
@@ -13,7 +16,7 @@ class MediaScanner
   private val bookParser: BookParser,
 ) {
 
-  suspend fun scan(folders: Map<FolderType, List<DocumentFile>>) {
+  suspend fun scan(folders: Map<FolderType, List<CachedDocumentFile>>) {
     val files = folders.flatMap { (folderType, files) ->
       when (folderType) {
         FolderType.SingleFile, FolderType.SingleFolder -> {
@@ -21,7 +24,7 @@ class MediaScanner
         }
         FolderType.Root -> {
           files.flatMap { file ->
-            file.listFiles().toList()
+            file.children
           }
         }
       }
@@ -29,10 +32,19 @@ class MediaScanner
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    files.forEach { scan(it) }
+    files
+      .sortedBy { it.audioFileCount() }
+      .forEach { file ->
+        Logger.d("scanning $file")
+        measureTime {
+          scan(file)
+        }.also {
+          Logger.i("scan took $it for ${file.uri}")
+        }
+      }
   }
 
-  private suspend fun scan(file: DocumentFile) {
+  private suspend fun scan(file: CachedDocumentFile) {
     val chapters = chapterParser.parse(file)
     if (chapters.isEmpty()) return
 
