@@ -11,6 +11,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import voice.logging.core.Logger
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -25,32 +26,47 @@ data class Chapter(
 
   @Ignore
   val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {
-    listOf(ChapterMark(name, 0L, duration))
+    listOf(ChapterMark(name, 0L, duration - 1))
   } else {
-    val sorted = markData.distinctBy { it.startMs }
-      .filter { it.startMs in 0..<duration }
-      .sorted()
-    val result = mutableListOf<ChapterMark>()
-    for ((index, markData) in sorted.withIndex()) {
-      val name = markData.name
-      val previous = result.lastOrNull()
-      val next = sorted.getOrNull(index + 1)
-      val startMs = if (previous == null) 0L else previous.endMs + 1
-      val endMs = if (next != null && next.startMs + 2 < duration && startMs < next.startMs - 1) {
-        next.startMs - 1
-      } else {
-        duration - 1
+    try {
+      val result = mutableListOf<ChapterMark>()
+      val sorted = markData.distinctBy { it.startMs }
+        .filter { it.startMs in 0..<duration - 2 }
+        .sorted()
+
+      for ((index, markData) in sorted.withIndex()) {
+        val name = markData.name
+        val previous = result.lastOrNull()
+        val next = sorted.getOrNull(index + 1)
+
+        val endMs = if (next != null && next.startMs <= duration - 2) {
+          next.startMs - 1
+        } else {
+          duration - 1
+        }
+
+        if (previous == null) {
+          result += ChapterMark(
+            name = name,
+            startMs = 0L,
+            endMs = endMs,
+          )
+        } else {
+          val startMs = previous.endMs + 1
+          if (startMs < duration && startMs < endMs) {
+            result += ChapterMark(
+              name = name,
+              startMs = startMs,
+              endMs = endMs,
+            )
+          }
+        }
       }
-      result += ChapterMark(
-        name = name,
-        startMs = startMs,
-        endMs = endMs,
-      )
-      if (endMs == duration - 1) {
-        break
-      }
+      result
+    } catch (e: Exception) {
+      Logger.e(e, "Could not parse marks from $this")
+      listOf(ChapterMark(name, 0L, duration - 1))
     }
-    result.ifEmpty { listOf(ChapterMark(name, 0L, duration)) }
   }
 
   override fun compareTo(other: Chapter): Int {
