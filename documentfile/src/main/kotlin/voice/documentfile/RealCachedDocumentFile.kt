@@ -18,19 +18,7 @@ internal data class RealCachedDocumentFile(
   }
 
   private val content: FileContents? by lazy {
-    preFilledContent ?: context.contentResolver.query(
-      uri,
-      FileContents.columns,
-      null,
-      null,
-      null,
-    )?.use { cursor ->
-      if (cursor.moveToFirst()) {
-        FileContents.readFrom(cursor)
-      } else {
-        null
-      }
-    }
+    preFilledContent ?: FileContents.query(context, uri)
   }
 
   override val name: String? by lazy { content?.name }

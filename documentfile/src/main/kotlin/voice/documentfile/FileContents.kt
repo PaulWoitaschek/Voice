@@ -1,9 +1,12 @@
 package voice.documentfile
 
+import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
+import voice.logging.core.Logger
 
 internal data class FileContents(
   val name: String?,
@@ -32,6 +35,31 @@ internal data class FileContents(
         lastModified = cursor.getLongOrNull(DocumentsContract.Document.COLUMN_LAST_MODIFIED) ?: 0L,
       )
     }
+
+    fun query(context: Context, uri: Uri): FileContents? {
+      return context.query(uri)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+          readFrom(cursor)
+        } else {
+          null
+        }
+      }
+    }
+  }
+}
+
+private fun Context.query(uri: Uri): Cursor? {
+  return try {
+    contentResolver.query(
+      uri,
+      FileContents.columns,
+      null,
+      null,
+      null,
+    )
+  } catch (e: SecurityException) {
+    Logger.e(e, "Error while querying $uri")
+    null
   }
 }
 
