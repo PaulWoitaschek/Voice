@@ -9,6 +9,7 @@ anvil {
 }
 
 dependencies {
+  implementation(projects.common)
   implementation(libs.dagger.core)
   implementation(libs.androidxCore)
 }

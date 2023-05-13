@@ -1,6 +1,5 @@
 package voice.folderPicker.selectType
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +17,7 @@ import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
 import voice.documentfile.nameWithoutExtension
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class SelectFolderTypeViewModel
   private val dispatcherProvider: DispatcherProvider,
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
-  private val context: Context,
+  private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
   internal lateinit var args: Args
@@ -71,7 +71,7 @@ class SelectFolderTypeViewModel
   @Composable
   internal fun viewState(): SelectFolderTypeViewState {
     val documentFile: CachedDocumentFile = remember {
-      CachedDocumentFile(context, args.documentFile.uri)
+      documentFileFactory.create(args.documentFile.uri)
     }
     val selectedFolderMode = selectedFolderMode.value ?: documentFile.defaultFolderMode().also {
       selectedFolderMode.value = it

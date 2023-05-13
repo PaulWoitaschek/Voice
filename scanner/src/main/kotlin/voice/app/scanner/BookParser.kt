@@ -12,6 +12,7 @@ import voice.data.repo.BookContentRepo
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.toUri
 import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 import java.io.File
 import java.time.Instant
@@ -24,13 +25,14 @@ class BookParser
   private val legacyBookDao: LegacyBookDao,
   private val application: Application,
   private val bookmarkMigrator: BookmarkMigrator,
+  private val fileFactory: CachedDocumentFileFactory,
 ) {
 
   suspend fun parseAndStore(chapters: List<Chapter>, file: CachedDocumentFile): BookContent {
     val id = BookId(file.uri)
     return contentRepo.getOrPut(id) {
       val uri = chapters.first().id.toUri()
-      val analyzed = mediaAnalyzer.analyze(CachedDocumentFile(application, uri))
+      val analyzed = mediaAnalyzer.analyze(fileFactory.create(uri))
       val filePath = file.uri.filePath()
       val migrationMetaData = filePath?.let {
         legacyBookDao.bookMetaData()

@@ -14,6 +14,7 @@ import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
 import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 import javax.inject.Inject
 
@@ -26,6 +27,7 @@ class AudiobookFolders
   @SingleFileAudiobookFolders
   private val singleFileAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   private val context: Context,
+  private val cachedDocumentFileFactory: CachedDocumentFileFactory,
 ) {
 
   private val scope = MainScope()
@@ -57,7 +59,7 @@ class AudiobookFolders
         )
       }
     }
-    return CachedDocumentFile(context, uri)
+    return cachedDocumentFileFactory.create(uri)
   }
 
   fun add(uri: Uri, type: FolderType) {
