@@ -35,6 +35,7 @@ class SelectFolderTypeViewModel
 
   private fun CachedDocumentFile.defaultFolderMode(): FolderMode {
     return when {
+      name in listOf("Audiobooks", "Hörbücher") -> FolderMode.Audiobooks
       children.any { it.isAudioFile() } && children.any { it.isDirectory } -> {
         FolderMode.Audiobooks
       }
