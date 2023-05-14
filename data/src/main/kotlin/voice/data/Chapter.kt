@@ -37,13 +37,10 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
     listOf(ChapterMark(name, 0L, duration - 1))
   } else {
     try {
-      val cleanedMarks = markData.associate { it.startMs to it.name }
-        .toMutableMap()
-      val keys = cleanedMarks.keys
-      keys.filter { it - 1 in keys }
-        .forEach { cleanedMarks.remove(it) }
-
-      val sorted = cleanedMarks.toSortedMap().map { MarkData(it.key, it.value) }
+      val positions = markData.map { it.startMs }.toSet()
+      val sorted = markData.filterNot { it.startMs - 1 in positions }
+        .distinctBy { it.startMs }
+        .sortedBy { it.startMs }
 
       val result = mutableListOf<ChapterMark>()
       for ((index, mark) in sorted.withIndex()) {
@@ -63,15 +60,12 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
             startMs = 0L,
             endMs = endMs,
           )
-        } else {
-          val startMs = previous.endMs + 1
-          if (startMs < duration && startMs < endMs) {
-            result += ChapterMark(
-              name = name,
-              startMs = startMs,
-              endMs = endMs,
-            )
-          }
+        } else if (previous.endMs + 1 < duration && previous.endMs + 1 < endMs) {
+          result += ChapterMark(
+            name = name,
+            startMs = previous.endMs + 1,
+            endMs = endMs,
+          )
         }
       }
       result
