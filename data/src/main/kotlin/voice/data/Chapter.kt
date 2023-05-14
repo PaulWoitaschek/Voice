@@ -25,7 +25,15 @@ data class Chapter(
 ) : Comparable<Chapter> {
 
   @Ignore
-  val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {
+  val chapterMarks: List<ChapterMark> = parseMarkData()
+
+  override fun compareTo(other: Chapter): Int {
+    return id.compareTo(other.id)
+  }
+}
+
+private fun Chapter.parseMarkData(): List<ChapterMark> {
+  return if (markData.isEmpty()) {
     listOf(ChapterMark(name, 0L, duration - 1))
   } else {
     try {
@@ -71,10 +79,6 @@ data class Chapter(
       Logger.e(e, "Could not parse marks from $this")
       listOf(ChapterMark(name, 0L, duration - 1))
     }
-  }
-
-  override fun compareTo(other: Chapter): Int {
-    return id.compareTo(other.id)
   }
 }
 
