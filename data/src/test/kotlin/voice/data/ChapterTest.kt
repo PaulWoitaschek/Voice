@@ -49,8 +49,7 @@ class ChapterTest {
       chapterStarts = listOf(0, 5, 6, 7, 10),
       expected = listOf(
         MarkPosition(0, 4),
-        MarkPosition(5, 6),
-        MarkPosition(7, 9),
+        MarkPosition(5, 9),
         MarkPosition(10, 19),
       ),
     )
@@ -73,6 +72,18 @@ class ChapterTest {
       expected = listOf(
         MarkPosition(0, 19),
       ),
+    )
+  }
+
+  @Test
+  fun `no duration mark on first position`() {
+    test(
+      chapterStarts = listOf(0, 1, 5),
+      expected = listOf(
+        MarkPosition(0, 4),
+        MarkPosition(5, 19),
+      ),
+      duration = 20,
     )
   }
 

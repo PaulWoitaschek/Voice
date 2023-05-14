@@ -29,13 +29,17 @@ data class Chapter(
     listOf(ChapterMark(name, 0L, duration - 1))
   } else {
     try {
-      val result = mutableListOf<ChapterMark>()
-      val sorted = markData.distinctBy { it.startMs }
-        .filter { it.startMs in 0..<duration - 2 }
-        .sorted()
+      val cleanedMarks = markData.associate { it.startMs to it.name }
+        .toMutableMap()
+      val keys = cleanedMarks.keys
+      keys.filter { it - 1 in keys }
+        .forEach { cleanedMarks.remove(it) }
 
-      for ((index, markData) in sorted.withIndex()) {
-        val name = markData.name
+      val sorted = cleanedMarks.toSortedMap().map { MarkData(it.key, it.value) }
+
+      val result = mutableListOf<ChapterMark>()
+      for ((index, mark) in sorted.withIndex()) {
+        val name = mark.name
         val previous = result.lastOrNull()
         val next = sorted.getOrNull(index + 1)
 
