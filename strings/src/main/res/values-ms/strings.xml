@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="cover">Muka hadapan</string>
+    <string name="previous_track">Trek sebelumnya</string>
+    <string name="next_track">Trek seterusnya</string>
+    <string name="skip_silence">Langkau Senyap</string>
+    <string name="play_pause">Main / Jeda</string>
+    <string name="play">Main</string>
+    <string name="pause">Jeda</string>
+    <string name="action_sleep">Pemasa Tidur</string>
+    <string name="rewind">Putar semula</string>
+    <string name="fast_forward">Mara laju</string>
+    <string name="volume_boost">Peningkatan kelantangan</string>
+</resources>
