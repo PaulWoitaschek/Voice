@@ -25,17 +25,26 @@ data class Chapter(
 ) : Comparable<Chapter> {
 
   @Ignore
-  val chapterMarks: List<ChapterMark> = if (markData.isEmpty()) {
+  val chapterMarks: List<ChapterMark> = parseMarkData()
+
+  override fun compareTo(other: Chapter): Int {
+    return id.compareTo(other.id)
+  }
+}
+
+private fun Chapter.parseMarkData(): List<ChapterMark> {
+  return if (markData.isEmpty()) {
     listOf(ChapterMark(name, 0L, duration - 1))
   } else {
     try {
-      val result = mutableListOf<ChapterMark>()
-      val sorted = markData.distinctBy { it.startMs }
-        .filter { it.startMs in 0..<duration - 2 }
-        .sorted()
+      val positions = markData.map { it.startMs }.toSet()
+      val sorted = markData.filterNot { it.startMs - 1 in positions }
+        .distinctBy { it.startMs }
+        .sortedBy { it.startMs }
 
-      for ((index, markData) in sorted.withIndex()) {
-        val name = markData.name
+      val result = mutableListOf<ChapterMark>()
+      for ((index, mark) in sorted.withIndex()) {
+        val name = mark.name
         val previous = result.lastOrNull()
         val next = sorted.getOrNull(index + 1)
 
@@ -51,15 +60,12 @@ data class Chapter(
             startMs = 0L,
             endMs = endMs,
           )
-        } else {
-          val startMs = previous.endMs + 1
-          if (startMs < duration && startMs < endMs) {
-            result += ChapterMark(
-              name = name,
-              startMs = startMs,
-              endMs = endMs,
-            )
-          }
+        } else if (previous.endMs + 1 < duration && previous.endMs + 1 < endMs) {
+          result += ChapterMark(
+            name = name,
+            startMs = previous.endMs + 1,
+            endMs = endMs,
+          )
         }
       }
       result
@@ -67,10 +73,6 @@ data class Chapter(
       Logger.e(e, "Could not parse marks from $this")
       listOf(ChapterMark(name, 0L, duration - 1))
     }
-  }
-
-  override fun compareTo(other: Chapter): Int {
-    return id.compareTo(other.id)
   }
 }
 
