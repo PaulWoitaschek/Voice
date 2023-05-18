@@ -1,111 +1,115 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Omslag</string>
-  <string name="play_pause">Afspelen/Pauzeren</string>
-  <string name="action_sleep">Tijdklok</string>
-  <string name="rewind">Terugspoelen</string>
-  <string name="fast_forward">Vooruitspoelen</string>
-  <string name="previous_track">Vorig gedeelte</string>
-  <string name="next_track">Volgend gedeelte</string>
-  <string name="skip_silence">Stilte overslaan</string>
-  <string name="volume_boost">Volumeversterking</string>
-  <string name="more">Meer</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Instellen</string>
-  <string name="dialog_cancel">Annuleren</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Omslag kiezen</string>
-  <string name="change_book_name">Naam</string>
-  <string name="download_book_cover">Omslag ophalen van internet</string>
-  <string name="pick_book_cover">Omslag kiezen van bestandssysteem</string>
-  <string name="edit_book_title">Boek bewerken</string>
-  <string name="mark_as_completed">Markeren als afgerond</string>
-  <string name="mark_as_current">Markeren als huidig boek</string>
-  <string name="mark_as_not_started">Markeren als nog niet aan begonnen</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Luisterboekmappen</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Afspeelsnelheid</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Bladwijzer toevoegen</string>
-  <string name="bookmark_edit_title">Bladwijzer bewerken</string>
-  <string name="bookmark_edit_hint">Bladwijzernaam</string>
-  <string name="bookmark_added">De bladwijzer is toegevoegd</string>
-  <!--Settings-->
-  <string name="action_settings">Instellingen</string>
-  <string name="min">%s min.</string>
-  <string name="delete_last_number">Verwijdert het laatst ingevoerde nummer</string>
-  <plurals name="seconds">
-    <item quantity="one">%d seconde</item>
-    <item quantity="other">%d seconden</item>
-  </plurals>
-  <string name="pref_seek_time">Aantal overslaan</string>
-  <string name="pref_theme_dark">Donker thema</string>
-  <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
-  <string name="pref_suggest_idea">Idee delen</string>
-  <string name="pref_use_grid">Roosterindeling gebruiken</string>
-  <string name="pref_report_issue">Probleem melden</string>
-  <string name="pref_help_translating">Helpen met vertalen</string>
-  <string name="pref_get_support">Ondersteuning vragen</string>
-  <string name="pref_app_version">Appversie</string>
-  <string name="popup_edit">Bewerken</string>
-  <string name="remove">Verwijderen</string>
-  <string name="play_current">Huidig boek afspelen</string>
-  <!--book category-->
-  <string name="book_header_current">Huidig</string>
-  <string name="book_header_not_started">Nog niet begonnen</string>
-  <string name="book_header_completed">Voltooid</string>
-  <string name="close">Sluiten</string>
-  <string name="delete">Verwijderen</string>
-  <string name="add">Toevoegen</string>
-  <string name="folder_type_audiobooks">Luisterboekmap</string>
-  <string name="folder_type_single_folder">Losse map</string>
-  <string name="folder_type_single_file">Los bestand</string>
-  <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
-  <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
-  <string name="folder_mode_single">Losse luisterboekmap</string>
-  <plurals name="folder_type_file_count">
-    <item quantity="one">%d audiobestand</item>
-    <item quantity="other">%d audiobestanden</item>
-  </plurals>
-  <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
-  <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
-  <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">Zojuist</string>
-  <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">Voeg een luisterboekmap toe om te beginnen met luisteren.</string>
-  <string name="migration_hint_title">Oude leeslocaties</string>
-  <string name="migration_hint_content">Door wijzigingen in nieuwere Android-versies, is het noodzakelijk om je luisterboek opnieuw te kiezen via de bestandskiezer.\n\nDruk op bovenstaand pictogram je leeslocaties te bekijken.</string>
-  <string name="migration_hint_confirm">Ik begrijp het</string>
-  <string name="migration_detail_title">Oude leeslocaties</string>
-  <string name="migration_detail_content_name">Naam</string>
-  <string name="migration_detail_content_root">Hoofdmap</string>
-  <string name="migration_detail_content_position">Locatie</string>
-  <string name="migration_detail_content_bookmarks">Bladwijzers</string>
-  <string name="migration_detail_content_added_at">Toegevoegd op</string>
-  <string name="migration_detail_content_position_current_file_title">Huidig bestand</string>
-  <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
-  <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
-  <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
-  <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
-  <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
-  <string name="migration_delete_dialog_action_delete">Verwijderen</string>
-  <string name="migration_delete_dialog_action_keep">Behouden</string>
-  <string name="delete_book_bottom_sheet_title">Boek verwijderen</string>
-  <string name="delete_book_dialog_title">Boek verwijderen</string>
-  <string name="delete_book_dialog_deletion_confirmation">Mijn bestanden verwijderen</string>
-  <string name="delete_book_dialog_content">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
-  <string name="search_hint">Waar ben je naar op zoek?</string>
-  <string name="battery_optimization_rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
-  <string name="battery_optimization_action">Update</string>
-  <string name="media_session_root">Hoofdmap</string>
-  <string name="media_session_recent">Recent</string>
-  <string name="notification_sleep_timer_enable">Slaapklok inschakelen</string>
-  <string name="notification_sleep_timer_disable">Slaapklok uitschakelen</string>
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">Omslag</string>
+    <string name="play_pause">Afspelen/Pauzeren</string>
+    <string name="action_sleep">Slaaptimer</string>
+    <string name="rewind">Terugspoelen</string>
+    <string name="fast_forward">Vooruitspoelen</string>
+    <string name="previous_track">Vorig nummer</string>
+    <string name="next_track">Volgend gedeelte</string>
+    <string name="skip_silence">Stilte overslaan</string>
+    <string name="volume_boost">Volumeversterking</string>
+    <string name="more">Meer</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Instellen</string>
+    <string name="dialog_cancel">Annuleren</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Omslag kiezen</string>
+    <string name="change_book_name">Naam</string>
+    <string name="download_book_cover">Omslag ophalen van internet</string>
+    <string name="pick_book_cover">Omslag kiezen van bestandssysteem</string>
+    <string name="edit_book_title">Boek bewerken</string>
+    <string name="mark_as_completed">Markeren als afgerond</string>
+    <string name="mark_as_current">Markeren als huidig boek</string>
+    <string name="mark_as_not_started">Markeren als nog niet aan begonnen</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Luisterboekmappen</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Afspeelsnelheid</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Bladwijzer toevoegen</string>
+    <string name="bookmark_edit_title">Bladwijzer bewerken</string>
+    <string name="bookmark_edit_hint">Bladwijzernaam</string>
+    <string name="bookmark_added">De bladwijzer is toegevoegd</string>
+    <!--Settings-->
+    <string name="action_settings">Instellingen</string>
+    <string name="min">%s min.</string>
+    <string name="delete_last_number">Verwijdert het laatst ingevoerde nummer</string>
+    <plurals name="seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d seconden</item>
+    </plurals>
+    <string name="pref_seek_time">Aantal overslaan</string>
+    <string name="pref_theme_dark">Donker thema</string>
+    <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
+    <string name="pref_suggest_idea">Idee delen</string>
+    <string name="pref_use_grid">Roosterindeling gebruiken</string>
+    <string name="pref_report_issue">Probleem melden</string>
+    <string name="pref_help_translating">Helpen met vertalen</string>
+    <string name="pref_get_support">Ondersteuning vragen</string>
+    <string name="pref_app_version">Appversie</string>
+    <string name="popup_edit">Bewerken</string>
+    <string name="remove">Verwijderen</string>
+    <string name="play_current">Huidig boek afspelen</string>
+    <!--book category-->
+    <string name="book_header_current">Huidig</string>
+    <string name="book_header_not_started">Nog niet begonnen</string>
+    <string name="book_header_completed">Voltooid</string>
+    <string name="close">Sluiten</string>
+    <string name="delete">Verwijderen</string>
+    <string name="add">Toevoegen</string>
+    <string name="folder_type_audiobooks">Luisterboekmap</string>
+    <string name="folder_type_single_folder">Losse map</string>
+    <string name="folder_type_single_file">Los bestand</string>
+    <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
+    <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
+    <string name="folder_mode_single">Losse luisterboekmap</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d audiobestand</item>
+        <item quantity="other">%d audiobestanden</item>
+    </plurals>
+    <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
+    <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
+    <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
+    <!--will be shown as the time for a bookmark that was just created-->
+    <string name="bookmark_just_now">Zojuist</string>
+    <!--will be shown as a hint when no books have been added-->
+    <string name="voice_intro_first_book">Voeg een luisterboekmap toe om te beginnen met luisteren.</string>
+    <string name="migration_hint_title">Oude leeslocaties</string>
+    <string name="migration_hint_content">Door wijzigingen in nieuwere Android-versies, is het noodzakelijk om je luisterboek opnieuw te kiezen via de bestandskiezer.\n\nDruk op bovenstaand pictogram je leeslocaties te bekijken.</string>
+    <string name="migration_hint_confirm">Ik begrijp het</string>
+    <string name="migration_detail_title">Oude leeslocaties</string>
+    <string name="migration_detail_content_name">Naam</string>
+    <string name="migration_detail_content_root">Hoofdmap</string>
+    <string name="migration_detail_content_position">Locatie</string>
+    <string name="migration_detail_content_bookmarks">Bladwijzers</string>
+    <string name="migration_detail_content_added_at">Toegevoegd op</string>
+    <string name="migration_detail_content_position_current_file_title">Huidig bestand</string>
+    <string name="migration_detail_content_position_current_file_position">Locatie binnen bestand</string>
+    <string name="migration_detail_content_position_current_chapter_title">Huidig hoofdstuk</string>
+    <string name="migration_detail_content_position_current_chapter_position">Locatie binnen hoofdstuk</string>
+    <string name="migration_delete_dialog_title">Leeslocaties verwijderen</string>
+    <string name="migration_delete_dialog_content">Als je oude leeslocaties verwijdert, dan kun je ze later niet meer herstellen.</string>
+    <string name="migration_delete_dialog_action_delete">Verwijderen</string>
+    <string name="migration_delete_dialog_action_keep">Behouden</string>
+    <string name="delete_book_bottom_sheet_title">Boek verwijderen</string>
+    <string name="delete_book_dialog_title">Boek verwijderen</string>
+    <string name="delete_book_dialog_deletion_confirmation">Mijn bestanden verwijderen</string>
+    <string name="delete_book_dialog_content">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
+    <string name="search_hint">Waar ben je naar op zoek?</string>
+    <string name="battery_optimization_rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
+    <string name="battery_optimization_action">Update</string>
+    <string name="media_session_root">Alle luisterboeken</string>
+    <string name="media_session_recent">Recent</string>
+    <string name="notification_sleep_timer_enable">Slaapklok inschakelen</string>
+    <string name="notification_sleep_timer_disable">Slaapklok uitschakelen</string>
+    <string name="generic_error_message">Er is iets fout gegaan 😢</string>
+    <string name="generic_error_retry">Opnieuw proberen</string>
+    <string name="play">Afspelen</string>
+    <string name="pause">Pauzeren</string>
 </resources>
