@@ -58,7 +58,7 @@
     <string name="popup_edit">Edytuj</string>
     <string name="remove">Usuń</string>
     <string name="play_current">Odtwórz aktualne</string>
-  <!-- book category -->
+    <!-- book category -->
     <string name="book_header_current">Aktualne</string>
     <string name="book_header_not_started">Nierozpoczęte</string>
     <string name="book_header_completed">Ukończone</string>
@@ -77,7 +77,7 @@
         <item quantity="many">%d plików audio</item>
         <item quantity="other">%d plików audio</item>
     </plurals>
-    <string name="folder_type_book_example_header">Będzie to skutkowało usunięciem następujących książek</string>
+    <string name="folder_type_book_example_header">Będzie to skutkowało wykryciem następujących książek</string>
     <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
     <string name="folder_type_title">Jaka jest struktura twoich plików?</string>
     <!-- will be shown as the time for a bookmark that was just created -->
@@ -114,4 +114,6 @@
     <string name="notification_sleep_timer_enable">Włącz wyłącznik czasowy</string>
     <string name="play">Odtwarzaj</string>
     <string name="pause">Zatrzymaj</string>
+    <string name="generic_error_retry">Ponów</string>
+    <string name="generic_error_message">Coś nie wyszło 😢</string>
 </resources>

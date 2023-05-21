@@ -50,7 +50,7 @@
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Вилучити</string>
     <string name="play_current">Відтворити поточну</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Поточні</string>
     <string name="book_header_not_started">Ще не початі</string>
     <string name="book_header_completed">Завершені</string>
@@ -109,4 +109,13 @@
     <string name="notification_sleep_timer_disable">Вимкнути таймер сну</string>
     <string name="notification_sleep_timer_enable">Увімкнути таймер сну</string>
     <string name="media_session_root">Всі аудіокниги</string>
+    <string name="search_hint">Що ви шукаєте\?</string>
+    <string name="battery_optimization_rationale">Налаштування енергозбереження пристрою можуть призвести до переривань у відтворенні аудіокниг.</string>
+    <string name="media_session_recent">Нещодавні</string>
+    <string name="migration_detail_content_position_current_chapter_position">Місце у розділі</string>
+    <string name="battery_optimization_action">Оновити</string>
+    <string name="generic_error_message">Щось пішло не так 😢</string>
+    <string name="generic_error_retry">Повторити</string>
+    <string name="play">Відтворити</string>
+    <string name="pause">Призупинити</string>
 </resources>

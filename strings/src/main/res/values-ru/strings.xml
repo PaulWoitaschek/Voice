@@ -1,110 +1,111 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Обложка</string>
-  <string name="play_pause">Читать — пауза</string>
-  <string name="action_sleep">Таймер сна</string>
-  <string name="rewind">Перемотать назад</string>
-  <string name="fast_forward">Перемотать вперёд</string>
-  <string name="previous_track">Предыдущий файл</string>
-  <string name="next_track">Следующий файл</string>
-  <string name="skip_silence">Пропускать тишину</string>
-  <string name="volume_boost">Усиление звука</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Установить</string>
-  <string name="dialog_cancel">Отмена</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Показать выбранную обложку</string>
-  <string name="change_book_name">Название</string>
-  <string name="download_book_cover">Обложка из интернета</string>
-  <string name="pick_book_cover">Обложка на устройстве</string>
-  <string name="edit_book_title">Редактировать книгу</string>
-  <string name="mark_as_completed">Пометить как прослушанную</string>
-  <string name="mark_as_current">Пометить как открытую</string>
-  <string name="mark_as_not_started">Пометить как непрослушанную</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Скорость чтения</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Закладки</string>
-  <string name="bookmark_edit_title">Редактировать</string>
-  <string name="bookmark_edit_hint">Имя закладки</string>
-  <string name="bookmark_added">Закладка добавлена</string>
-  <!--Settings-->
-  <string name="action_settings">Настройки</string>
-  <string name="min">%s мин.</string>
-  <string name="delete_last_number">Удаляет последнее введенное число</string>
-  <plurals name="seconds">
-    <item quantity="one">%d секунда</item>
-    <item quantity="few">%d секунды</item>
-    <item quantity="many">%d секунд</item>
-    <item quantity="other">%d с</item>
-  </plurals>
-  <string name="pref_seek_time">Интервал перемотки</string>
-  <string name="pref_theme_dark">Тёмная тема</string>
-  <string name="pref_auto_rewind_title">Автоперемотка назад</string>
-  <string name="pref_suggest_idea">Предложить идею</string>
-  <string name="pref_use_grid">Использовать сетку</string>
-  <string name="pref_report_issue">Сообщить о проблеме</string>
-  <string name="pref_help_translating">Помочь с переводом</string>
-  <string name="pref_get_support">Поддержка</string>
-  <string name="pref_app_version">Версия приложения</string>
-  <string name="popup_edit">Редактировать</string>
-  <string name="remove">Удалить</string>
-  <string name="play_current">Читать открытую</string>
-  <!--book category-->
-  <string name="book_header_current">Слушаю</string>
-  <string name="book_header_not_started">Непрослушанные</string>
-  <string name="book_header_completed">Прослушанные</string>
-  <string name="close">Закрыть</string>
-  <string name="delete">Удалить</string>
-  <string name="add">Добавить</string>
-  <string name="folder_type_audiobooks">Папки с аудиокнигами</string>
-  <string name="folder_type_single_folder">Папка</string>
-  <string name="folder_type_single_file">Файл</string>
-  <string name="folder_type_dialog_title">Что добавить?</string>
-  <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
-  <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
-  <plurals name="folder_type_file_count">
-    <item quantity="one">%d аудиофайл</item>
-    <item quantity="few">%d аудиофайла</item>
-    <item quantity="many">%d аудиофайлов</item>
-    <item quantity="other">%d аудиофайла</item>
-  </plurals>
-  <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
-  <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
-  <string name="folder_type_title">Как упорядочены ваши файлы?</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">Только что</string>
-  <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">Давайте выберем папку с аудиокнигами!</string>
-  <string name="migration_hint_title">Поиск предыдущих расположений</string>
-  <string name="migration_hint_content">Из-за изменений в последних версиях Android, необходимо выбрать папку с аудиокнигами через системный диалог.\n\nНажмине на значке наверху, чтобы посмотреть предыдущее расположение книг.</string>
-  <string name="migration_hint_confirm">Понятно</string>
-  <string name="migration_detail_title">Предыдущее расположение</string>
-  <string name="migration_detail_content_name">Название</string>
-  <string name="migration_detail_content_root">Корневая папка</string>
-  <string name="migration_detail_content_position">Место</string>
-  <string name="migration_detail_content_bookmarks">Закладки</string>
-  <string name="migration_detail_content_added_at">Добавлено</string>
-  <string name="migration_detail_content_position_current_file_title">Текущий файл</string>
-  <string name="migration_detail_content_position_current_file_position">Позиция в файле</string>
-  <string name="migration_detail_content_position_current_chapter_title">Текущая глава</string>
-  <string name="migration_detail_content_position_current_chapter_position">Позиция в главе</string>
-  <string name="migration_delete_dialog_title">Удалить закладки</string>
-  <string name="migration_delete_dialog_content">Если вы удалите закладки, восстановить их не получится.</string>
-  <string name="migration_delete_dialog_action_delete">Удалить</string>
-  <string name="migration_delete_dialog_action_keep">Оставить</string>
-  <string name="delete_book_bottom_sheet_title">Удалить книгу</string>
-  <string name="delete_book_dialog_title">Удалить книгу</string>
-  <string name="delete_book_dialog_deletion_confirmation">Удалить файлы</string>
-  <string name="delete_book_dialog_content">Это действие удалит файлы книги с устройства.</string>
-  <string name="search_hint">Что вы ищете?</string>
-  <string name="battery_optimization_rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
-  <string name="battery_optimization_action">Обновить</string>
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">Обложка</string>
+    <string name="play_pause">Читать — пауза</string>
+    <string name="action_sleep">Таймер сна</string>
+    <string name="rewind">Перемотать назад</string>
+    <string name="fast_forward">Перемотать вперёд</string>
+    <string name="previous_track">Предыдущий файл</string>
+    <string name="next_track">Следующий файл</string>
+    <string name="skip_silence">Пропускать тишину</string>
+    <string name="volume_boost">Усиление звука</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Установить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Показать выбранную обложку</string>
+    <string name="change_book_name">Название</string>
+    <string name="download_book_cover">Обложка из интернета</string>
+    <string name="pick_book_cover">Обложка на устройстве</string>
+    <string name="edit_book_title">Редактировать книгу</string>
+    <string name="mark_as_completed">Пометить как прослушанную</string>
+    <string name="mark_as_current">Пометить как открытую</string>
+    <string name="mark_as_not_started">Пометить как непрослушанную</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Папки с аудиокнигами</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Скорость чтения</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Закладки</string>
+    <string name="bookmark_edit_title">Редактировать</string>
+    <string name="bookmark_edit_hint">Имя закладки</string>
+    <string name="bookmark_added">Закладка добавлена</string>
+    <!--Settings-->
+    <string name="action_settings">Настройки</string>
+    <string name="min">%s мин.</string>
+    <string name="delete_last_number">Удаляет последнее введенное число</string>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
+        <item quantity="other">%d с</item>
+    </plurals>
+    <string name="pref_seek_time">Интервал перемотки</string>
+    <string name="pref_theme_dark">Тёмная тема</string>
+    <string name="pref_auto_rewind_title">Автоперемотка назад</string>
+    <string name="pref_suggest_idea">Предложить идею</string>
+    <string name="pref_use_grid">Использовать сетку</string>
+    <string name="pref_report_issue">Сообщить о проблеме</string>
+    <string name="pref_help_translating">Помочь с переводом</string>
+    <string name="pref_get_support">Поддержка</string>
+    <string name="pref_app_version">Версия приложения</string>
+    <string name="popup_edit">Редактировать</string>
+    <string name="remove">Удалить</string>
+    <string name="play_current">Читать открытую</string>
+    <!--book category-->
+    <string name="book_header_current">Слушаю</string>
+    <string name="book_header_not_started">Непрослушанные</string>
+    <string name="book_header_completed">Прослушанные</string>
+    <string name="close">Закрыть</string>
+    <string name="delete">Удалить</string>
+    <string name="add">Добавить</string>
+    <string name="folder_type_audiobooks">Папки с аудиокнигами</string>
+    <string name="folder_type_single_folder">Папка</string>
+    <string name="folder_type_single_file">Файл</string>
+    <string name="folder_type_dialog_title">Что добавить?</string>
+    <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
+    <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d аудиофайл</item>
+        <item quantity="few">%d аудиофайла</item>
+        <item quantity="many">%d аудиофайлов</item>
+        <item quantity="other">%d аудиофайла</item>
+    </plurals>
+    <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
+    <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
+    <string name="folder_type_title">Как упорядочены ваши файлы?</string>
+    <!--will be shown as the time for a bookmark that was just created-->
+    <string name="bookmark_just_now">Только что</string>
+    <!--will be shown as a hint when no books have been added-->
+    <string name="voice_intro_first_book">Давайте выберем папку с аудиокнигами!</string>
+    <string name="migration_hint_title">Поиск предыдущих расположений</string>
+    <string name="migration_hint_content">Из-за изменений в последних версиях Android, необходимо выбрать папку с аудиокнигами через системный диалог.\n\nНажмине на значке наверху, чтобы посмотреть предыдущее расположение книг.</string>
+    <string name="migration_hint_confirm">Понятно</string>
+    <string name="migration_detail_title">Предыдущее расположение</string>
+    <string name="migration_detail_content_name">Название</string>
+    <string name="migration_detail_content_root">Корневая папка</string>
+    <string name="migration_detail_content_position">Место</string>
+    <string name="migration_detail_content_bookmarks">Закладки</string>
+    <string name="migration_detail_content_added_at">Добавлено</string>
+    <string name="migration_detail_content_position_current_file_title">Текущий файл</string>
+    <string name="migration_detail_content_position_current_file_position">Позиция в файле</string>
+    <string name="migration_detail_content_position_current_chapter_title">Текущая глава</string>
+    <string name="migration_detail_content_position_current_chapter_position">Позиция в главе</string>
+    <string name="migration_delete_dialog_title">Удалить закладки</string>
+    <string name="migration_delete_dialog_content">Если вы удалите закладки, восстановить их не получится.</string>
+    <string name="migration_delete_dialog_action_delete">Удалить</string>
+    <string name="migration_delete_dialog_action_keep">Оставить</string>
+    <string name="delete_book_bottom_sheet_title">Удалить книгу</string>
+    <string name="delete_book_dialog_title">Удалить книгу</string>
+    <string name="delete_book_dialog_deletion_confirmation">Удалить файлы</string>
+    <string name="delete_book_dialog_content">Это действие удалит файлы книги с устройства.</string>
+    <string name="search_hint">Что вы ищете?</string>
+    <string name="battery_optimization_rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
+    <string name="battery_optimization_action">Обновить</string>
+    <string name="play">Усиление звука</string>
 </resources>
