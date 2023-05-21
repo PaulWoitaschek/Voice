@@ -1,7 +1,7 @@
 {
   "extends": [
     "config:base",
-    ":dependencyDashboard"
+    ":disableDependencyDashboard"
   ],
   "packageRules": [
     {
@@ -19,7 +19,7 @@
       "groupName": "Kotlin, Compose, KSP",
       "matchPackagePrefixes": [
         "androidx.compose.compiler:compiler",
-        "org.jetbrains.kotlin",
+        "org.jetbrains.kotlin.android",
         "com.google.devtools.ksp"
       ]
     }

@@ -155,6 +155,7 @@ dependencies {
   implementation(projects.migration)
   implementation(projects.search)
   implementation(projects.cover)
+  implementation(projects.documentfile)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

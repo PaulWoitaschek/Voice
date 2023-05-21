@@ -1,10 +1,10 @@
 package voice.data.folders
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.datastore.core.DataStore
-import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
+import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 import javax.inject.Inject
 
@@ -24,7 +26,8 @@ class AudiobookFolders
   private val singleFolderAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   @SingleFileAudiobookFolders
   private val singleFileAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  private val application: Application,
+  private val context: Context,
+  private val cachedDocumentFileFactory: CachedDocumentFileFactory,
 ) {
 
   private val scope = MainScope()
@@ -33,11 +36,8 @@ class AudiobookFolders
     val flows = FolderType.values()
       .map { folderType ->
         dataStore(folderType).data.map { uris ->
-          val documentFiles = uris.mapNotNull { uri ->
-            val documentFile = uri.toDocumentFile(folderType)
-            documentFile?.let {
-              DocumentFileWithUri(it, uri)
-            }
+          val documentFiles = uris.map { uri ->
+            DocumentFileWithUri(uri.toDocumentFile(folderType), uri)
           }
           folderType to documentFiles
         }
@@ -47,19 +47,23 @@ class AudiobookFolders
 
   private fun Uri.toDocumentFile(
     folderType: FolderType,
-  ): DocumentFile? {
-    return when (folderType) {
-      FolderType.SingleFile -> {
-        DocumentFile.fromSingleUri(application, this)
-      }
+  ): CachedDocumentFile {
+    val uri = when (folderType) {
+      FolderType.SingleFile -> this
       FolderType.SingleFolder,
       FolderType.Root,
-      -> DocumentFile.fromTreeUri(application, this)
+      -> {
+        DocumentsContract.buildDocumentUriUsingTree(
+          this,
+          DocumentsContract.getTreeDocumentId(this),
+        )
+      }
     }
+    return cachedDocumentFileFactory.create(uri)
   }
 
   fun add(uri: Uri, type: FolderType) {
-    application.contentResolver.takePersistableUriPermission(
+    context.contentResolver.takePersistableUriPermission(
       uri,
       Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
     )
@@ -72,7 +76,7 @@ class AudiobookFolders
 
   fun remove(uri: Uri, folderType: FolderType) {
     try {
-      application.contentResolver.releasePersistableUriPermission(
+      context.contentResolver.releasePersistableUriPermission(
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
       )
@@ -94,6 +98,6 @@ class AudiobookFolders
 }
 
 data class DocumentFileWithUri(
-  val documentFile: DocumentFile,
+  val documentFile: CachedDocumentFile,
   val uri: Uri,
 )

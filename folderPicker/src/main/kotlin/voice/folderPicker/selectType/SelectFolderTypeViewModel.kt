@@ -12,8 +12,13 @@ import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
 import voice.common.navigation.Navigator
+import voice.data.audioFileCount
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
+import voice.data.isAudioFile
+import voice.documentfile.CachedDocumentFile
+import voice.documentfile.CachedDocumentFileFactory
+import voice.documentfile.nameWithoutExtension
 import javax.inject.Inject
 
 class SelectFolderTypeViewModel
@@ -21,14 +26,16 @@ class SelectFolderTypeViewModel
   private val dispatcherProvider: DispatcherProvider,
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
+  private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
   internal lateinit var args: Args
 
   private var selectedFolderMode: MutableState<FolderMode?> = mutableStateOf(null)
 
-  private fun DocumentFileCache.CachedDocumentFile.defaultFolderMode(): FolderMode {
+  private fun CachedDocumentFile.defaultFolderMode(): FolderMode {
     return when {
+      name in listOf("Audiobooks", "Hörbücher") -> FolderMode.Audiobooks
       children.any { it.isAudioFile() } && children.any { it.isDirectory } -> {
         FolderMode.Audiobooks
       }
@@ -64,10 +71,8 @@ class SelectFolderTypeViewModel
 
   @Composable
   internal fun viewState(): SelectFolderTypeViewState {
-    val documentFile: DocumentFileCache.CachedDocumentFile = remember {
-      with(DocumentFileCache()) {
-        args.documentFile.cached()
-      }
+    val documentFile: CachedDocumentFile = remember {
+      documentFileFactory.create(args.documentFile.uri)
     }
     val selectedFolderMode = selectedFolderMode.value ?: documentFile.defaultFolderMode().also {
       selectedFolderMode.value = it
@@ -113,11 +118,4 @@ class SelectFolderTypeViewModel
     val uri: Uri,
     val documentFile: DocumentFile,
   )
-}
-
-private fun DocumentFileCache.CachedDocumentFile.nameWithoutExtension(): String {
-  val name = name ?: return ""
-  return name.substringBeforeLast(".")
-    .takeUnless { it.isBlank() }
-    ?: name
 }

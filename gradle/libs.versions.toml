@@ -1,21 +1,21 @@
 [versions]
 pagingCompose = "1.0.0-alpha18"
-versionCode = "3603014"
-versionName = "7.0.9"
+versionCode = "3603017"
+versionName = "7.0.12"
 
 sdk-compile = "33"
 sdk-min = "26"
 sdk-target = "33"
 
-coroutines = "1.7.0"
+coroutines = "1.7.1"
 room = "2.5.1"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
-dagger = "2.45"
+dagger = "2.46.1"
 kotlin = "1.8.21"
 compose-compiler = "1.4.7"
 compose-material3 = "1.1.0"
-media3 = "1.0.1"
+media3 = "1.0.2"
 agp = "8.0.1"
 ktlint = "0.48.2"
 retrofit = "2.9.0"
@@ -31,7 +31,7 @@ paging-compose = "androidx.paging:paging-compose:1.0.0-alpha19"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-kotlinx = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
-robolectric = "org.robolectric:robolectric:4.10.2"
+robolectric = "org.robolectric:robolectric:4.10.3"
 coil = "io.coil-kt:coil-compose:2.3.0"
 appCompat = "androidx.appcompat:appcompat:1.6.1"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
@@ -46,7 +46,7 @@ datastore = "androidx.datastore:datastore-preferences:1.0.0"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
-turbine = "app.cash.turbine:turbine:0.12.3"
+turbine = "app.cash.turbine:turbine:0.13.0"
 molecule = "app.cash.molecule:molecule-runtime:0.9.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
@@ -59,7 +59,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.7"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.2"
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -112,7 +112,7 @@ compose-navigation = "dev.olshevski.navigation:reimagined:1.4.0"
 # For these dependencies we only use the version but declare full artifacts so renovate can update the version
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
-compose-ktlint = "com.twitter.compose.rules:ktlint:0.0.26"
+compose-ktlint = "io.nlopez.compose.rules:ktlint:0.1.5"
 
 [bundles]
 compose = [

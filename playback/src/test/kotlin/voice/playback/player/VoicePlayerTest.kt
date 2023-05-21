@@ -299,7 +299,9 @@ private fun havePosition(currentMediaItemIndex: Int, currentPosition: Long) = ob
     val actualCurrentPosition = value.currentPosition
     return MatcherResult(
       passed = actualCurrentMediaItemIndex == currentMediaItemIndex && actualCurrentPosition == currentPosition,
-      failureMessageFn = { "position was ($actualCurrentMediaItemIndex,$actualCurrentPosition) but we expected ($currentMediaItemIndex,$currentPosition)" },
+      failureMessageFn = {
+        "position was ($actualCurrentMediaItemIndex,$actualCurrentPosition) but we expected ($currentMediaItemIndex,$currentPosition)"
+      },
       negatedFailureMessageFn = { "position should not be ($actualCurrentMediaItemIndex,$actualCurrentPosition)" },
     )
   }

@@ -17,7 +17,14 @@ data class BookPlayViewState(
   val playing: Boolean,
   val cover: ImmutableFile?,
   val skipSilence: Boolean,
-)
+) {
+
+  init {
+    require(duration > Duration.ZERO) {
+      "Duration must be positive in $this"
+    }
+  }
+}
 
 internal sealed interface BookPlayDialogViewState {
   data class SpeedDialog(

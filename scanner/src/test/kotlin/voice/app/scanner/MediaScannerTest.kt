@@ -6,7 +6,6 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,6 +25,8 @@ import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
 import voice.data.repo.internals.AppDb
 import voice.data.toUri
+import voice.documentfile.FileBasedDocumentFactory
+import voice.documentfile.FileBasedDocumentFile
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files
@@ -141,13 +142,13 @@ class MediaScannerTest {
       bookParser = BookParser(
         contentRepo = bookContentRepo,
         mediaAnalyzer = mediaAnalyzer,
-        application = ApplicationProvider.getApplicationContext(),
         legacyBookDao = db.legacyBookDao(),
+        application = ApplicationProvider.getApplicationContext(),
         bookmarkMigrator = BookmarkMigrator(
           legacyBookDao = db.legacyBookDao(),
           bookmarkDao = db.bookmarkDao(),
         ),
-        context = ApplicationProvider.getApplicationContext(),
+        fileFactory = FileBasedDocumentFactory,
       ),
     )
 
@@ -156,7 +157,7 @@ class MediaScannerTest {
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
     suspend fun scan(vararg roots: File) {
-      scanner.scan(mapOf(FolderType.Root to roots.map(DocumentFile::fromFile)))
+      scanner.scan(mapOf(FolderType.Root to roots.map(::FileBasedDocumentFile)))
     }
 
     fun file(parent: File, name: String): Uri {

@@ -149,9 +149,9 @@ internal fun BookOverview(
   onBookMigrationClick: () -> Unit,
   onBoomMigrationHelperConfirmClick: () -> Unit,
   onSearchActiveChange: (Boolean) -> Unit,
-  modifier: Modifier = Modifier,
   onSearchQueryChange: (String) -> Unit,
   onSearchBookClick: (BookId) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
@@ -172,7 +172,9 @@ internal fun BookOverview(
       if (viewState.playButtonState != null) {
         PlayButton(
           playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          fabSize = 56.dp, iconSize = 24.dp, onPlayClick = onPlayButtonClick,
+          fabSize = 56.dp,
+          iconSize = 24.dp,
+          onPlayClick = onPlayButtonClick,
         )
       }
     },
@@ -214,7 +216,7 @@ internal fun BookOverview(
 
 @Preview // ktlint-disable twitter-compose:preview-public-check
 @Composable
-fun BookOverviewPreview(
+private fun BookOverviewPreview(
   @PreviewParameter(BookOverviewPreviewParameterProvider::class)
   viewState: BookOverviewViewState,
 ) {
@@ -267,7 +269,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         recentQueries = emptyList(),
         query = "",
 
-        ),
+      ),
     ),
   )
 }
