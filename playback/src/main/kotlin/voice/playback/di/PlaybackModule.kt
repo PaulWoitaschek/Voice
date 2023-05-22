@@ -62,6 +62,7 @@ object PlaybackModule {
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
       .setHandleAudioBecomingNoisy(true)
+      .setWakeMode(C.WAKE_MODE_LOCAL)
       .build()
       .also { player ->
         playStateDelegatingListener.attachTo(player)
