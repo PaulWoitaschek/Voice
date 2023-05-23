@@ -4,16 +4,16 @@
     <!--in the book-overview the show-all button which displays all books of a category-->
     <!--BookPlayFragment-->
     <string name="cover">Copertina</string>
-    <string name="play_pause">Play / Pausa</string>
-    <string name="action_sleep">Timer standby</string>
+    <string name="play_pause">Riproduci / Pausa</string>
+    <string name="action_sleep">Timer sospensione</string>
     <string name="rewind">Riavvolgi</string>
     <string name="fast_forward">Avanti veloce</string>
     <string name="previous_track">Traccia precedente</string>
     <string name="next_track">Traccia successiva</string>
-    <string name="skip_silence">Salta Silenzio</string>
+    <string name="skip_silence">Salta silenzio</string>
     <!--NoExternalStorage-->
     <!--Dialogs-->
-    <string name="dialog_confirm">Imposta</string>
+    <string name="dialog_confirm">Conferma</string>
     <string name="dialog_cancel">Annulla</string>
     <!--EditBookDialog-->
     <string name="content_cover">Mostra la copertina da scegliere</string>
@@ -23,7 +23,7 @@
     <string name="edit_book_title">Modifica libro</string>
     <!--JumpToPosition-->
     <!--BookAdding-->
-    <string name="audiobook_folders_title">Cartelle audiolibro</string>
+    <string name="audiobook_folders_title">Cartelle audiolibri</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Velocità di riproduzione</string>
     <!--Bookmarks-->
@@ -40,8 +40,8 @@
         <item quantity="many">%d secondi</item>
         <item quantity="other">%d secondi</item>
     </plurals>
-    <string name="pref_seek_time">Salta</string>
-    <string name="pref_theme_dark">Tema Scuro</string>
+    <string name="pref_seek_time">Salta tempo</string>
+    <string name="pref_theme_dark">Tema scuro</string>
     <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
     <string name="popup_edit">Modifica</string>
     <string name="remove">Rimuovi</string>
@@ -52,11 +52,11 @@
     <string name="book_header_completed">Completato</string>
     <!--will be shown as the time for a bookmark that was just created-->
     <!--will be shown as a hint when no books have been added-->
-    <string name="volume_boost">Ultime occasioni</string>
+    <string name="volume_boost">Aumento del volume</string>
     <string name="more">Altro</string>
     <string name="mark_as_completed">Segna come completato</string>
-    <string name="mark_as_current">Contrassegna come attuale</string>
-    <string name="mark_as_not_started">Contrassegna come non ancora avviato</string>
+    <string name="mark_as_current">Contrassegna come corrente</string>
+    <string name="mark_as_not_started">Contrassegna come non ancora iniziato</string>
     <string name="pref_use_grid">Usa layout a griglia</string>
     <string name="pref_report_issue">Segnala un problema</string>
     <string name="pref_help_translating">Aiuta a tradurre Voice</string>
@@ -78,8 +78,8 @@
     <string name="folder_mode_single">Cartella audiolibro singolo</string>
     <string name="folder_type_book_example_header">Questo porterebbe al rilevamento dei seguenti libri</string>
     <string name="folder_type_no_books">Voice non ha rilevato alcun libro. Ci sono file audio\?</string>
-    <string name="folder_type_title">Come sono strutturati i tuoi file\?</string>
-    <string name="migration_hint_title">Accesso alle vecchie posizioni del Libro</string>
+    <string name="folder_type_title">Come sono organizzati i tuoi file\?</string>
+    <string name="migration_hint_title">Accesso alle vecchie posizioni del libro</string>
     <string name="migration_hint_confirm">Ho capito</string>
     <string name="migration_detail_content_name">Nome</string>
     <string name="migration_detail_content_position">Posizione</string>
@@ -103,16 +103,16 @@
     <string name="notification_sleep_timer_disable">Disabilita il timer di sospensione</string>
     <string name="pref_suggest_idea">Suggerisci un\'idea</string>
     <string name="bookmark_just_now">Proprio adesso</string>
-    <string name="voice_intro_first_book">Aggiungiamo la cartella dell\'audiolibro in modo che tu possa iniziare ad ascoltare!</string>
-    <string name="migration_hint_content">A causa dei cambiamenti nelle versioni Android più recenti, è necessario selezionare la cartella dell\'audiolibro utilizzando il selettore di sistema.
+    <string name="voice_intro_first_book">Aggiungiamo la tua cartella degli audiolibri per iniziare ad ascoltare!</string>
+    <string name="migration_hint_content">A causa dei cambiamenti nelle versioni Android più recenti, è necessario selezionare la cartella degli audiolibri utilizzando il selettore di sistema.
 \n
 \nFai clic sull\'icona in alto per visualizzare le tue vecchie posizioni del libro.</string>
-    <string name="migration_detail_title">Posizioni del vecchio libro</string>
-    <string name="migration_detail_content_root">Cartella root</string>
-    <string name="battery_optimization_rationale">A causa delle restrizioni di alimentazione, potrebbero verificarsi interruzioni della riproduzione.</string>
+    <string name="migration_detail_title">Vecchie posizioni dei libri</string>
+    <string name="migration_detail_content_root">Cartella radice</string>
+    <string name="battery_optimization_rationale">A causa delle impostazioni di risparmio energetico, potrebbero verificarsi interruzioni nella riproduzione.</string>
     <string name="migration_delete_dialog_content">Una volta eliminate le vecchie posizioni, non sarai più in grado di recuperare le tue vecchie posizioni di riproduzione.</string>
     <string name="delete_book_dialog_title">Elimina libro</string>
-    <string name="play">Avvia</string>
+    <string name="play">Riproduci</string>
     <string name="pause">Pausa</string>
     <string name="generic_error_message">Qualcosa è andato storto 😢</string>
     <string name="generic_error_retry">Riprova</string>
