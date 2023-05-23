@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.playback.misc.VolumeGain
 import voice.playback.notification.MainActivityIntentProvider
+import voice.playback.player.DurationInconsistenciesUpdater
 import voice.playback.player.OnlyAudioRenderersFactory
 import voice.playback.player.VoicePlayer
 import voice.playback.player.onAudioSessionIdChanged
@@ -54,6 +55,7 @@ object PlaybackModule {
     playStateDelegatingListener: PlayStateDelegatingListener,
     positionUpdater: PositionUpdater,
     volumeGain: VolumeGain,
+    durationInconsistenciesUpdater: DurationInconsistenciesUpdater,
   ): Player {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
@@ -67,6 +69,7 @@ object PlaybackModule {
       .also { player ->
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
+        durationInconsistenciesUpdater.attachTo(player)
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
