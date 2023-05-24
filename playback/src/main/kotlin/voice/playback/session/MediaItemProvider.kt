@@ -88,6 +88,10 @@ class MediaItemProvider
 
   suspend fun chapters(bookId: BookId): List<MediaItem>? {
     val book = bookRepository.get(bookId) ?: return null
+    return chapters(book)
+  }
+
+  internal fun chapters(book: Book): List<MediaItem> {
     return book.chapters.map { chapter ->
       mediaItem(
         chapter = chapter,
@@ -138,7 +142,6 @@ class MediaItemProvider
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
-    extras = mediaItemChapterMarkExtras(chapter.chapterMarks),
   )
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
