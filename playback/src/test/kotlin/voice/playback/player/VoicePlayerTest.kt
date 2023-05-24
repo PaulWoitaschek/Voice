@@ -2,7 +2,6 @@ package voice.playback.player
 
 import androidx.media3.common.AdPlaybackState
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
 import androidx.media3.test.utils.FakeTimeline
@@ -17,9 +16,14 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 import org.junit.runner.RunWith
+import voice.data.Chapter
+import voice.data.ChapterId
 import voice.data.ChapterMark
+import voice.data.MarkData
+import voice.playback.session.MediaItemProvider
 import voice.playback.session.chapterMarks
-import voice.playback.session.mediaItemChapterMarkExtras
+import voice.playback.session.search.book
+import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(AndroidJUnit4::class)
@@ -75,13 +79,13 @@ class VoicePlayerTest {
 
   @Test
   fun `seekToNext does not clip`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 19_999, name = null),
           ChapterMark(startMs = 20_000, endMs = 30_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 19_999, name = null),
           ChapterMark(startMs = 20_000, endMs = 30_000, name = null),
         ),
@@ -115,13 +119,13 @@ class VoicePlayerTest {
 
   @Test
   fun `seekToPrevious does not clip`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
           ChapterMark(startMs = 5_000, endMs = 12_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
           ChapterMark(startMs = 5_000, endMs = 12_001, name = null),
         ),
@@ -154,13 +158,13 @@ class VoicePlayerTest {
 
   @Test
   fun `forceSeekToNext jumps to chapters`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
@@ -186,13 +190,13 @@ class VoicePlayerTest {
 
   @Test
   fun `forceSeekToPrevious jumps to chapters`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
@@ -219,13 +223,13 @@ class VoicePlayerTest {
 
   @Test
   fun `forceSeekToPrevious jumps to previous chapter when in the 2s window`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
@@ -245,15 +249,22 @@ class VoicePlayerTest {
     player.shouldHavePosition(0, 12_000)
   }
 
+  private fun setMediaItems(chapters: List<Chapter>) {
+    val book = book(chapters)
+    val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
+    mediaItemProvider.chapters(book)
+    player.setMediaItems(mediaItemProvider.chapters(book))
+  }
+
   @Test
   fun `forceSeekToPrevious jumps to chapter start when outside the 2s window`() {
-    player.setMediaItems(
+    setMediaItems(
       listOf(
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
-        mediaItem(
+        chapter(
           ChapterMark(startMs = 0, endMs = 11_999, name = null),
           ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
         ),
@@ -273,14 +284,16 @@ class VoicePlayerTest {
     player.shouldHavePosition(1, 0)
   }
 
-  private fun mediaItem(vararg marks: ChapterMark): MediaItem {
-    return MediaItem.Builder()
-      .setMediaMetadata(
-        MediaMetadata.Builder()
-          .setExtras(mediaItemChapterMarkExtras(marks.toList()))
-          .build(),
-      )
-      .build()
+  private fun chapter(vararg marks: ChapterMark): Chapter {
+    return Chapter(
+      id = ChapterId("chapter"),
+      name = "chapter",
+      duration = marks.maxOf { it.endMs } + 1,
+      fileLastModified = Instant.EPOCH,
+      markData = marks.map {
+        MarkData(it.startMs, it.name ?: "mark ")
+      },
+    )
   }
 
   private fun awaitReady() {
