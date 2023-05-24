@@ -183,6 +183,7 @@ class VoicePlayer
   }
 
   override fun setPlayWhenReady(playWhenReady: Boolean) {
+    Logger.d("setPlayWhenReady=$playWhenReady")
     if (playWhenReady) {
       updateLastPlayedAt()
     } else {

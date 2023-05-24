@@ -18,6 +18,7 @@ import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
+import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
@@ -43,9 +44,12 @@ class LibrarySessionCallback
     mediaSession: MediaSession,
     controller: MediaSession.ControllerInfo,
     mediaItems: MutableList<MediaItem>,
-  ): ListenableFuture<List<MediaItem>> = scope.future {
-    mediaItems.map { item ->
-      mediaItemProvider.item(item.mediaId) ?: item
+  ): ListenableFuture<List<MediaItem>> {
+    Logger.d("onAddMediaItems")
+    return scope.future {
+      mediaItems.map { item ->
+        mediaItemProvider.item(item.mediaId) ?: item
+      }
     }
   }
 
@@ -56,6 +60,7 @@ class LibrarySessionCallback
     startIndex: Int,
     startPositionMs: Long,
   ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+    Logger.d("onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)")
     val item = mediaItems.singleOrNull()
     return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
       scope.future {
@@ -95,6 +100,7 @@ class LibrarySessionCallback
     } else {
       mediaItemProvider.root()
     }
+    Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true}). Returning ${mediaItem.mediaId}")
     return Futures.immediateFuture(LibraryResult.ofItem(mediaItem, params))
   }
 
@@ -103,6 +109,7 @@ class LibrarySessionCallback
     browser: MediaSession.ControllerInfo,
     mediaId: String,
   ): ListenableFuture<LibraryResult<MediaItem>> = scope.future {
+    Logger.d("onGetItem(mediaId=$mediaId)")
     val item = mediaItemProvider.item(mediaId)
     if (item != null) {
       LibraryResult.ofItem(item, null)
@@ -119,6 +126,7 @@ class LibrarySessionCallback
     pageSize: Int,
     params: MediaLibraryService.LibraryParams?,
   ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
+    Logger.d("onGetChildren for $parentId")
     val children = mediaItemProvider.children(parentId)
     if (children != null) {
       LibraryResult.ofItemList(children, params)
