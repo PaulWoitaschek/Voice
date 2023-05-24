@@ -142,7 +142,6 @@ class MediaItemProvider
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
-    extras = mediaItemChapterMarkExtras(chapter.chapterMarks),
   )
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)

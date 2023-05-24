@@ -1,13 +1,10 @@
 package voice.playback.session
 
 import android.net.Uri
-import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import voice.data.ChapterMark
 
 internal enum class MediaType {
   AudioBook, AudioBookChapter, AudioBookRoot
@@ -23,7 +20,6 @@ internal fun MediaItem(
   genre: String? = null,
   sourceUri: Uri? = null,
   imageUri: Uri? = null,
-  extras: Bundle = Bundle.EMPTY,
   mediaType: MediaType,
 ): MediaItem {
   val metadata =
@@ -35,7 +31,6 @@ internal fun MediaItem(
       .setIsBrowsable(browsable)
       .setIsPlayable(isPlayable)
       .setArtworkUri(imageUri)
-      .setExtras(extras)
       .setMediaType(
         when (mediaType) {
           MediaType.AudioBook -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK
@@ -51,24 +46,6 @@ internal fun MediaItem(
     .setUri(sourceUri)
     .build()
 }
-
-internal fun MediaItem.chapterMarks(): List<ChapterMark> {
-  return Json.decodeFromString(
-    deserializer = ListSerializer(ChapterMark.serializer()),
-    string = mediaMetadata.extras!!.getString(EXTRA_CHAPTER_MARKS)!!,
-  )
-}
-
-internal fun mediaItemChapterMarkExtras(chapterMarks: List<ChapterMark>): Bundle {
-  return Bundle().apply {
-    putString(
-      EXTRA_CHAPTER_MARKS,
-      Json.encodeToString(ListSerializer(ChapterMark.serializer()), chapterMarks),
-    )
-  }
-}
-
-private const val EXTRA_CHAPTER_MARKS = "chapterMarks"
 
 fun String.toMediaIdOrNull(): MediaId? =
   try {

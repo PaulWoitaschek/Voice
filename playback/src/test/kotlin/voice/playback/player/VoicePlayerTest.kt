@@ -12,8 +12,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.should
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import voice.data.Chapter
@@ -75,16 +79,24 @@ class VoicePlayerTest {
       },
     )
     .build()
+
+  private val scope = TestScope()
   private val player = VoicePlayer(
     player = internalPlayer,
     repo = mockk(),
     currentBookId = mockk(),
     seekTimePref = seekTimePref,
     autoRewindAmountPref = mockk(),
+    scope = scope,
+    chapterRepo = mockk {
+      coEvery { this@mockk.get(any()) } answers {
+        currentChapters.single { it.id == firstArg() }
+      }
+    },
   )
 
   @Test
-  fun `seekToNext does not clip`() {
+  fun `seekToNext does not clip`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -124,12 +136,12 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `seekToPrevious does not clip`() {
+  fun `seekToPrevious does not clip`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
-          ChapterMark(startMs = 5_000, endMs = 12_001, name = null),
+          ChapterMark(startMs = 5_000, endMs = 12_000, name = null),
         ),
         chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
@@ -163,7 +175,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToNext jumps to chapters`() {
+  fun `forceSeekToNext jumps to chapters`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -195,7 +207,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to chapters`() {
+  fun `forceSeekToPrevious jumps to chapters`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -228,7 +240,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to previous chapter when in the 2s window`() {
+  fun `forceSeekToPrevious jumps to previous chapter when in the 2s window`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -265,7 +277,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to chapter start when outside the 2s window`() {
+  fun `forceSeekToPrevious jumps to chapter start when outside the 2s window`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -307,11 +319,12 @@ class VoicePlayerTest {
   private fun awaitReady() {
     TestPlayerRunHelper.runUntilPlaybackState(internalPlayer, Player.STATE_READY)
   }
-}
 
-private fun Player.shouldHavePosition(currentMediaItemIndex: Int, currentPosition: Long): Player {
-  this should havePosition(currentMediaItemIndex, currentPosition)
-  return this
+  private fun Player.shouldHavePosition(currentMediaItemIndex: Int, currentPosition: Long): Player {
+    scope.runCurrent()
+    this should havePosition(currentMediaItemIndex, currentPosition)
+    return this
+  }
 }
 
 private fun havePosition(currentMediaItemIndex: Int, currentPosition: Long) = object : io.kotest.matchers.Matcher<Player> {

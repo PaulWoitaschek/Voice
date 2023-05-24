@@ -3,18 +3,22 @@ package voice.playback.player
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import de.paulwoitaschek.flowpref.Pref
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
+import voice.data.Chapter
 import voice.data.repo.BookRepository
+import voice.data.repo.ChapterRepo
 import voice.logging.core.Logger
-import voice.playback.session.chapterMarks
+import voice.playback.session.MediaId
+import voice.playback.session.toMediaIdOrNull
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Named
@@ -32,47 +36,58 @@ class VoicePlayer
   private val seekTimePref: Pref<Int>,
   @Named(PrefKeys.AUTO_REWIND_AMOUNT)
   private val autoRewindAmountPref: Pref<Int>,
+  private val scope: CoroutineScope,
+  private val chapterRepo: ChapterRepo,
 ) : ForwardingPlayer(player) {
 
-  private val scope = MainScope()
-
   fun forceSeekToNext() {
-    val currentMediaItem = player.currentMediaItem ?: return
-    val marks = currentMediaItem.chapterMarks()
-    val currentMarkIndex = marks.indexOfFirst { mark ->
-      player.currentPosition in mark.startMs..mark.endMs
-    }
-    val nextMark = marks.getOrNull(currentMarkIndex + 1)
-    if (nextMark != null) {
-      player.seekTo(nextMark.startMs)
-    } else {
-      player.seekToNext()
+    scope.launch {
+      val currentMediaItem = player.currentMediaItem ?: return@launch
+      val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
+      val currentMarkIndex = marks.indexOfFirst { mark ->
+        player.currentPosition in mark.startMs..mark.endMs
+      }
+      val nextMark = marks.getOrNull(currentMarkIndex + 1)
+      if (nextMark != null) {
+        player.seekTo(nextMark.startMs)
+      } else {
+        player.seekToNext()
+      }
     }
   }
 
-  fun forceSeekToPrevious() {
-    val currentMediaItem = player.currentMediaItem ?: return
-    val marks = currentMediaItem.chapterMarks()
-    val currentPosition = player.currentPosition
-    val currentMark = marks.firstOrNull { mark ->
-      currentPosition in mark.startMs..mark.endMs
-    } ?: marks.last()
+  private suspend fun MediaItem.chapter(): Chapter? {
+    val mediaId = mediaId.toMediaIdOrNull() ?: return null
+    if (mediaId !is MediaId.Chapter) return null
+    return chapterRepo.get(mediaId.chapterId)
+  }
 
-    if (currentPosition - currentMark.startMs > THRESHOLD_FOR_BACK_SEEK_MS) {
-      player.seekTo(currentMark.startMs)
-    } else {
-      val currentMarkIndex = marks.indexOf(currentMark)
-      val previousMark = marks.getOrNull(currentMarkIndex - 1)
-      if (previousMark != null) {
-        player.seekTo(previousMark.startMs)
+  fun forceSeekToPrevious() {
+    scope.launch {
+      val currentMediaItem = player.currentMediaItem ?: return@launch
+      val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
+      val currentPosition = player.currentPosition
+      val currentMark = marks.firstOrNull { mark ->
+        currentPosition in mark.startMs..mark.endMs
+      } ?: marks.last()
+
+      if (currentPosition - currentMark.startMs > THRESHOLD_FOR_BACK_SEEK_MS) {
+        player.seekTo(currentMark.startMs)
       } else {
-        val currentMediaItemIndex = player.currentMediaItemIndex
-        if (currentMediaItemIndex > 0) {
-          val previousMediaItemIndex = currentMediaItemIndex - 1
-          val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-          player.seekTo(previousMediaItemIndex, previousMediaItem.chapterMarks().last().startMs)
+        val currentMarkIndex = marks.indexOf(currentMark)
+        val previousMark = marks.getOrNull(currentMarkIndex - 1)
+        if (previousMark != null) {
+          player.seekTo(previousMark.startMs)
         } else {
-          player.seekTo(0)
+          val currentMediaItemIndex = player.currentMediaItemIndex
+          if (currentMediaItemIndex > 0) {
+            val previousMediaItemIndex = currentMediaItemIndex - 1
+            val previousMediaItemMarks = player.getMediaItemAt(previousMediaItemIndex).chapter()?.chapterMarks
+              ?: return@launch
+            player.seekTo(previousMediaItemIndex, previousMediaItemMarks.last().startMs)
+          } else {
+            player.seekTo(0)
+          }
         }
       }
     }
@@ -116,25 +131,28 @@ class VoicePlayer
   }
 
   override fun seekBack() {
-    val skipAmount = seekTimePref.value.seconds
+    scope.launch {
+      val skipAmount = seekTimePref.value.seconds
 
-    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?.coerceAtLeast(ZERO)
-      ?: return
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+        ?.milliseconds
+        ?.coerceAtLeast(ZERO)
+        ?: return@launch
 
-    val newPosition = currentPosition - skipAmount
-    if (newPosition < ZERO) {
-      val previousMediaItemIndex = previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-      if (previousMediaItemIndex == null) {
-        player.seekTo(0)
+      val newPosition = currentPosition - skipAmount
+      if (newPosition < ZERO) {
+        val previousMediaItemIndex = previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+        if (previousMediaItemIndex == null) {
+          player.seekTo(0)
+        } else {
+          val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
+          val chapter = previousMediaItem.chapter() ?: return@launch
+          val previousMediaItemDuration = chapter.duration.milliseconds
+          player.seekTo(previousMediaItemIndex, (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds)
+        }
       } else {
-        val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-        val previousMediaItemDuration = previousMediaItem.chapterMarks().maxOf { it.endMs }.milliseconds
-        player.seekTo(previousMediaItemIndex, (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds)
+        player.seekTo(newPosition.inWholeMilliseconds)
       }
-    } else {
-      player.seekTo(newPosition.inWholeMilliseconds)
     }
   }
 
