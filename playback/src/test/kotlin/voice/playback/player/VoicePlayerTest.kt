@@ -20,11 +20,13 @@ import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.ChapterMark
 import voice.data.MarkData
+import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
-import voice.playback.session.chapterMarks
 import voice.playback.session.search.book
+import voice.playback.session.toMediaIdOrNull
 import java.time.Instant
-import kotlin.time.Duration.Companion.milliseconds
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
@@ -37,6 +39,10 @@ class VoicePlayerTest {
         every { createMediaSource(any()) } answers {
           val mediaItem = arg<MediaItem>(0)
           val mediaId = mediaItem.mediaId
+          val chapter = currentChapters.single {
+            it.id == (mediaId.toMediaIdOrNull()!! as MediaId.Chapter).chapterId
+          }
+          chapter.duration
           FakeMediaSource(
             FakeTimeline(
               FakeTimeline.TimelineWindowDefinition(
@@ -53,7 +59,7 @@ class VoicePlayerTest {
                 /* isPlaceholder = */
                 false,
                 /* durationUs = */
-                mediaItem.chapterMarks().maxOf { it.endMs }.milliseconds.inWholeMicroseconds,
+                TimeUnit.MILLISECONDS.toMicros(chapter.duration),
                 /* defaultPositionUs = */
                 0,
                 /* windowOffsetInFirstPeriodUs = */
@@ -123,7 +129,7 @@ class VoicePlayerTest {
       listOf(
         chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
-          ChapterMark(startMs = 5_000, endMs = 12_000, name = null),
+          ChapterMark(startMs = 5_000, endMs = 12_001, name = null),
         ),
         chapter(
           ChapterMark(startMs = 0, endMs = 4_999, name = null),
@@ -249,10 +255,12 @@ class VoicePlayerTest {
     player.shouldHavePosition(0, 12_000)
   }
 
+  private var currentChapters: List<Chapter> = emptyList()
+
   private fun setMediaItems(chapters: List<Chapter>) {
+    currentChapters = chapters
     val book = book(chapters)
     val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
-    mediaItemProvider.chapters(book)
     player.setMediaItems(mediaItemProvider.chapters(book))
   }
 
@@ -286,9 +294,9 @@ class VoicePlayerTest {
 
   private fun chapter(vararg marks: ChapterMark): Chapter {
     return Chapter(
-      id = ChapterId("chapter"),
+      id = ChapterId(UUID.randomUUID().toString()),
       name = "chapter",
-      duration = marks.maxOf { it.endMs } + 1,
+      duration = marks.maxOf { it.endMs },
       fileLastModified = Instant.EPOCH,
       markData = marks.map {
         MarkData(it.startMs, it.name ?: "mark ")
