@@ -64,6 +64,16 @@ class PlayerController
     }
   }
 
+  fun pauseIfCurrentBookDifferentFrom(id: BookId) {
+    scope.launch {
+      val controller = awaitConnect()
+      val currentBookId = controller.currentBookId()
+      if (currentBookId != null && currentBookId != id) {
+        controller.pause()
+      }
+    }
+  }
+
   fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
   }
