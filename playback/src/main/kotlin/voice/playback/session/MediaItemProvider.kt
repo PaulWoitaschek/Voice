@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
+import voice.data.BookComparator
 import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.repo.BookContentRepo
@@ -103,6 +104,7 @@ class MediaItemProvider
     return when (mediaId) {
       MediaId.Root -> {
         bookRepository.all()
+          .sortedWith(BookComparator.ByLastPlayed)
           .map { book ->
             mediaItem(book)
           }
