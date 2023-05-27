@@ -236,12 +236,12 @@ class VoicePlayer
     setBook(mediaItem)
   }
 
-  override fun setMediaItems(mediaItems: MutableList<MediaItem>) {
+  override fun setMediaItems(mediaItems: List<MediaItem>) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }
 
-  override fun setMediaItems(mediaItems: MutableList<MediaItem>, resetPosition: Boolean) {
+  override fun setMediaItems(mediaItems: List<MediaItem>, resetPosition: Boolean) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }
@@ -256,7 +256,7 @@ class VoicePlayer
   }
 
   private fun setBook(mediaItem: MediaItem) {
-    Logger.v("setBook($mediaItem)")
+    Logger.v("setBook(${mediaItem.mediaId})")
     val mediaId = mediaItem.mediaId.toMediaIdOrNull()
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
@@ -264,7 +264,7 @@ class VoicePlayer
           repo.get(mediaId.id)
         }
         if (book != null) {
-          setPlaybackSpeed(book.content.playbackSpeed)
+          player.setPlaybackSpeed(book.content.playbackSpeed)
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
           player.setMediaItems(
