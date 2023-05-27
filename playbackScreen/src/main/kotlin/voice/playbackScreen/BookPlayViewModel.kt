@@ -53,6 +53,7 @@ class BookPlayViewModel
   internal val dialogState: State<BookPlayDialogViewState?> get() = _dialogState
 
   fun viewState(): Flow<BookPlayViewState> {
+    player.pauseIfCurrentBookDifferentFrom(bookId)
     scope.launch {
       currentBookId.updateData { bookId }
     }
