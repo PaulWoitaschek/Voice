@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
@@ -17,8 +18,11 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.logging.core.Logger
@@ -133,6 +137,20 @@ class LibrarySessionCallback
   }
 
   override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
+    if (controller.packageName == "com.google.android.projection.gearhead" && player.playbackState == Player.STATE_IDLE) {
+      Logger.d("onConnect to Android Auto. Preparing current book so it shows up as recently played.")
+      scope.launch {
+        val bookId = currentBookId.data.first()
+        if (bookId != null) {
+          val item = mediaItemProvider.item(Json.encodeToString(MediaId.serializer(), MediaId.Book(bookId)))
+          if (item != null) {
+            player.setMediaItem(item)
+            player.prepare()
+          }
+        }
+      }
+    }
+
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
