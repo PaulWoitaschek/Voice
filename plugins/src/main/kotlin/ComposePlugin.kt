@@ -37,7 +37,6 @@ class ComposePlugin : Plugin<Project> {
     }
     target.tasks.withType<KotlinCompile> {
       kotlinOptions {
-        allWarningsAsErrors = true
         freeCompilerArgs = freeCompilerArgs + listOf(
           "androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
           "androidx.compose.material3.ExperimentalMaterial3Api",

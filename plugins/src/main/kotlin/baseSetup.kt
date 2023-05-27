@@ -16,7 +16,7 @@ fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-      allWarningsAsErrors = true
+      languageVersion = "1.9"
       jvmTarget = JavaVersion.VERSION_11.toString()
       val optIns = listOf(
         "kotlin.RequiresOptIn",
