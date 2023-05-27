@@ -5,8 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.LibraryResult
-import androidx.media3.session.MediaLibraryService
+import androidx.media3.session.MediaLibraryService.LibraryParams
+import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSession.ConnectionResult
+import androidx.media3.session.MediaSession.ControllerInfo
+import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import com.google.common.collect.ImmutableList
@@ -15,16 +19,13 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
-import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.logging.core.Logger
-import voice.playback.PlayerController
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import javax.inject.Inject
-import javax.inject.Provider
 
 class LibrarySessionCallback
 @Inject constructor(
@@ -35,14 +36,13 @@ class LibrarySessionCallback
   private val bookSearchHandler: BookSearchHandler,
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
-  private val playerController: Provider<PlayerController>,
   private val sleepTimerCommandUpdater: SleepTimerCommandUpdater,
   private val sleepTimer: SleepTimer,
-) : MediaLibraryService.MediaLibrarySession.Callback {
+) : MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
     mediaSession: MediaSession,
-    controller: MediaSession.ControllerInfo,
+    controller: ControllerInfo,
     mediaItems: MutableList<MediaItem>,
   ): ListenableFuture<List<MediaItem>> {
     Logger.d("onAddMediaItems")
@@ -55,11 +55,11 @@ class LibrarySessionCallback
 
   override fun onSetMediaItems(
     mediaSession: MediaSession,
-    controller: MediaSession.ControllerInfo,
+    controller: ControllerInfo,
     mediaItems: MutableList<MediaItem>,
     startIndex: Int,
     startPositionMs: Long,
-  ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+  ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)")
     val item = mediaItems.singleOrNull()
     return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
@@ -72,7 +72,7 @@ class LibrarySessionCallback
     }
   }
 
-  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaSession.MediaItemsWithStartPosition? {
+  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
@@ -88,14 +88,11 @@ class LibrarySessionCallback
   }
 
   override fun onGetLibraryRoot(
-    session: MediaLibraryService.MediaLibrarySession,
-    browser: MediaSession.ControllerInfo,
-    params: MediaLibraryService.LibraryParams?,
+    session: MediaLibrarySession,
+    browser: ControllerInfo,
+    params: LibraryParams?,
   ): ListenableFuture<LibraryResult<MediaItem>> {
     val mediaItem = if (params?.isRecent == true) {
-      scope.launch {
-        playerController.get().maybePrepare()
-      }
       mediaItemProvider.recent() ?: mediaItemProvider.root()
     } else {
       mediaItemProvider.root()
@@ -105,8 +102,8 @@ class LibrarySessionCallback
   }
 
   override fun onGetItem(
-    session: MediaLibraryService.MediaLibrarySession,
-    browser: MediaSession.ControllerInfo,
+    session: MediaLibrarySession,
+    browser: ControllerInfo,
     mediaId: String,
   ): ListenableFuture<LibraryResult<MediaItem>> = scope.future {
     Logger.d("onGetItem(mediaId=$mediaId)")
@@ -119,12 +116,12 @@ class LibrarySessionCallback
   }
 
   override fun onGetChildren(
-    session: MediaLibraryService.MediaLibrarySession,
-    browser: MediaSession.ControllerInfo,
+    session: MediaLibrarySession,
+    browser: ControllerInfo,
     parentId: String,
     page: Int,
     pageSize: Int,
-    params: MediaLibraryService.LibraryParams?,
+    params: LibraryParams?,
   ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
     Logger.d("onGetChildren for $parentId")
     val children = mediaItemProvider.children(parentId)
@@ -135,7 +132,7 @@ class LibrarySessionCallback
     }
   }
 
-  override fun onConnect(session: MediaSession, controller: MediaSession.ControllerInfo): MediaSession.ConnectionResult {
+  override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
@@ -144,7 +141,7 @@ class LibrarySessionCallback
         it.add(PublishedCustomCommand.Sleep.sessionCommand)
       }
       .build()
-    return MediaSession.ConnectionResult.accept(
+    return ConnectionResult.accept(
       sessionCommands,
       connectionResult.availablePlayerCommands,
     )
@@ -152,7 +149,7 @@ class LibrarySessionCallback
 
   override fun onCustomCommand(
     session: MediaSession,
-    controller: MediaSession.ControllerInfo,
+    controller: ControllerInfo,
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
@@ -175,6 +172,9 @@ class LibrarySessionCallback
           is CustomCommand.SetSkipSilence -> {
             player.setSkipSilenceEnabled(command.skipSilence)
           }
+          is CustomCommand.SetGain -> {
+            player.setGain(command.gain)
+          }
         }
       }
     }
@@ -182,7 +182,7 @@ class LibrarySessionCallback
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
   }
 
-  override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
+  override fun onPostConnect(session: MediaSession, controller: ControllerInfo) {
     super.onPostConnect(session, controller)
     sleepTimerCommandUpdater.update(session, controller, sleepTimer.sleepTimerActive())
   }

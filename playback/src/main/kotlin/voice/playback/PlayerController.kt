@@ -14,11 +14,9 @@ import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
-import voice.data.BookContent
 import voice.data.ChapterId
 import voice.data.repo.BookRepository
 import voice.playback.misc.Decibel
-import voice.playback.misc.VolumeGain
 import voice.playback.session.CustomCommand
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
@@ -34,7 +32,6 @@ class PlayerController
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
-  private val volumeGain: VolumeGain,
   private val mediaItemProvider: MediaItemProvider,
 ) {
 
@@ -69,12 +66,6 @@ class PlayerController
 
   fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
-    updateBook { it.copy(skipSilence = skip) }
-  }
-
-  private suspend fun updateBook(update: (BookContent) -> BookContent) {
-    val bookId = currentBookId.data.first() ?: return
-    bookRepository.updateBook(bookId, update)
   }
 
   fun fastForward() = executeAfterPrepare { controller ->
@@ -85,12 +76,12 @@ class PlayerController
     controller.seekBack()
   }
 
-  fun previous() = executeAfterPrepare {
-    it.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
+  fun previous() = executeAfterPrepare { controller ->
+    controller.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
   }
 
-  fun next() = executeAfterPrepare {
-    it.sendCustomCommand(CustomCommand.ForceSeekToNext)
+  fun next() = executeAfterPrepare { controller ->
+    controller.sendCustomCommand(CustomCommand.ForceSeekToNext)
   }
 
   fun play() = executeAfterPrepare { controller ->
@@ -105,10 +96,6 @@ class PlayerController
     }
   }
 
-  suspend fun maybePrepare() {
-    maybePrepare(awaitConnect())
-  }
-
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookId.data.first() ?: return false
     if (controller.currentBookId() == bookId &&
@@ -117,16 +104,8 @@ class PlayerController
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
-    val mediaItems = book.chapters.map { mediaItemProvider.mediaItem(it, book.content) }
-    controller.setMediaItems(
-      mediaItems,
-      book.content.currentChapterIndex,
-      book.content.positionInChapter,
-    )
-    controller.sendCustomCommand(CustomCommand.SetSkipSilence(book.content.skipSilence))
-    controller.setPlaybackSpeed(book.content.playbackSpeed)
+    controller.setMediaItem(mediaItemProvider.mediaItem(book))
     controller.prepare()
-    volumeGain.gain = Decibel(book.content.gain)
     return true
   }
 
@@ -141,21 +120,17 @@ class PlayerController
     }
   }
 
-  fun pauseWithRewind(rewind: Duration) = executeAfterPrepare {
-    it.pause()
-    it.seekTo((it.currentPosition - rewind.inWholeMilliseconds.coerceAtLeast(0)))
+  fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
+    controller.pause()
+    controller.seekTo((controller.currentPosition - rewind.inWholeMilliseconds.coerceAtLeast(0)))
   }
 
-  fun setSpeed(speed: Float) = executeAfterPrepare { player ->
-    player.setPlaybackSpeed(speed)
-    updateBook { it.copy(playbackSpeed = speed) }
+  fun setSpeed(speed: Float) = executeAfterPrepare { controller ->
+    controller.setPlaybackSpeed(speed)
   }
 
-  fun setGain(gain: Decibel) {
-    volumeGain.gain = gain
-    scope.launch {
-      updateBook { it.copy(gain = gain.value) }
-    }
+  fun setGain(gain: Decibel) = executeAfterPrepare { controller ->
+    controller.sendCustomCommand(CustomCommand.SetGain(gain))
   }
 
   fun setVolume(volume: Float) = executeAfterPrepare {

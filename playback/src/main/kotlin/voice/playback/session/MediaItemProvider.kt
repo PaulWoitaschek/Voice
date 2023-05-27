@@ -3,6 +3,7 @@ package voice.playback.session
 import android.app.Application
 import android.net.Uri
 import androidx.datastore.core.DataStore
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import kotlinx.coroutines.flow.first
@@ -52,7 +53,7 @@ class MediaItemProvider
     return when (mediaId) {
       MediaId.Root -> root()
       is MediaId.Book -> {
-        bookRepository.get(mediaId.id)?.toMediaItem()
+        bookRepository.get(mediaId.id)?.let(::mediaItem)
       }
 
       is MediaId.Chapter -> {
@@ -66,13 +67,10 @@ class MediaItemProvider
   }
 
   fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
-    val items = book.chapters.map { chapter ->
-      mediaItem(chapter = chapter, content = book.content)
-    }
     return MediaItemsWithStartPosition(
-      items,
-      book.content.currentChapterIndex,
-      book.content.positionInChapter,
+      listOf(mediaItem(book)),
+      C.INDEX_UNSET,
+      C.TIME_UNSET,
     )
   }
 
@@ -106,7 +104,7 @@ class MediaItemProvider
       MediaId.Root -> {
         bookRepository.all()
           .map { book ->
-            book.toMediaItem()
+            mediaItem(book)
           }
       }
       is MediaId.Book -> {
@@ -116,21 +114,21 @@ class MediaItemProvider
       MediaId.Recent -> {
         val bookId = currentBookId.data.first() ?: return null
         val book = bookRepository.get(bookId) ?: return null
-        listOf(book.toMediaItem())
+        listOf(mediaItem(book))
       }
     }
   }
 
-  private fun Book.toMediaItem() = MediaItem(
-    title = content.name,
-    mediaId = MediaId.Book(id),
+  fun mediaItem(book: Book): MediaItem = MediaItem(
+    title = book.content.name,
+    mediaId = MediaId.Book(book.id),
     browsable = false,
     isPlayable = true,
-    imageUri = content.cover?.toProvidedUri(),
+    imageUri = book.content.cover?.toProvidedUri(),
     mediaType = MediaType.AudioBook,
   )
 
-  fun mediaItem(
+  private fun mediaItem(
     chapter: Chapter,
     content: BookContent,
   ) = MediaItem(
