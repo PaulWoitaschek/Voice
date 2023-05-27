@@ -78,15 +78,6 @@
         android:resource="@xml/widget_info" />
     </receiver>
 
-    <receiver
-      android:name=".features.widget.MediaButtonReceiver"
-      android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MEDIA_BUTTON" />
-        <action android:name="voice.WidgetAction" />
-      </intent-filter>
-    </receiver>
-
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.coverprovider"
@@ -96,6 +87,7 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/cover_paths" />
     </provider>
+
   </application>
 
 </manifest>

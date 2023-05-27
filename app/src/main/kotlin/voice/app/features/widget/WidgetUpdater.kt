@@ -26,6 +26,7 @@ import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
+import voice.playback.receiver.MediaButtonReceiver
 import javax.inject.Inject
 import voice.common.R as CommonR
 

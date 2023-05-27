@@ -1,4 +1,4 @@
-package voice.app.features.widget
+package voice.playback.receiver
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -43,6 +43,7 @@ class MediaButtonReceiver : BroadcastReceiver() {
               player.fastForward()
               player.play()
             }
+
             Action.Rewind -> {
               player.rewind()
               player.play()
@@ -60,7 +61,7 @@ class MediaButtonReceiver : BroadcastReceiver() {
     fun inject(target: MediaButtonReceiver)
   }
 
-  internal companion object {
+  companion object {
 
     private const val ACTION_KEY = "action"
     private const val WIDGET_ACTION = "voice.WidgetAction"
@@ -72,11 +73,16 @@ class MediaButtonReceiver : BroadcastReceiver() {
       val intent = Intent(WIDGET_ACTION)
         .setComponent(ComponentName(context, MediaButtonReceiver::class.java))
         .putExtra(ACTION_KEY, action.name)
-      return PendingIntent.getBroadcast(context, action.ordinal, intent, PendingIntent.FLAG_IMMUTABLE)
+      return PendingIntent.getBroadcast(
+        context,
+        action.ordinal,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE,
+      )
     }
   }
 
-  internal enum class Action {
+  enum class Action {
     PlayPause, FastForward, Rewind;
 
     companion object {
