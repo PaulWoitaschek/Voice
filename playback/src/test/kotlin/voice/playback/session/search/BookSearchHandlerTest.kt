@@ -99,12 +99,16 @@ class BookSearchHandlerTest {
   }
 }
 
-fun book(chapters: List<Chapter>): Book {
+fun book(
+  chapters: List<Chapter>,
+  id: BookId = BookId(UUID.randomUUID().toString()),
+  positionInChapter: Long = 0,
+): Book {
   return Book(
     content = BookContent(
       author = UUID.randomUUID().toString(),
       name = UUID.randomUUID().toString(),
-      positionInChapter = 42,
+      positionInChapter = positionInChapter,
       playbackSpeed = 1F,
       addedAt = Instant.EPOCH,
       chapters = chapters.map { it.id },
@@ -113,7 +117,7 @@ fun book(chapters: List<Chapter>): Book {
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = BookId(UUID.randomUUID().toString()),
+      id = id,
       gain = 0F,
     ),
     chapters = chapters,

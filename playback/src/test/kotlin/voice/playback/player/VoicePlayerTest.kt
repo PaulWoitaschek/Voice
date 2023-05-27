@@ -12,18 +12,26 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.should
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import voice.common.BookId
+import voice.data.Book
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.ChapterMark
 import voice.data.MarkData
+import voice.logging.core.LogWriter
+import voice.logging.core.Logger
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.search.book
@@ -35,6 +43,17 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
 
+  init {
+    Logger.install(
+      object : LogWriter {
+        override fun log(severity: Logger.Severity, message: String, throwable: Throwable?) {
+          println("$severity: $message")
+          throwable?.printStackTrace()
+        }
+      },
+    )
+  }
+
   private val seekTimePref = InMemoryPref(2)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
@@ -43,7 +62,7 @@ class VoicePlayerTest {
         every { createMediaSource(any()) } answers {
           val mediaItem = arg<MediaItem>(0)
           val mediaId = mediaItem.mediaId
-          val chapter = currentChapters.single {
+          val chapter = currentBook.chapters.single {
             it.id == (mediaId.toMediaIdOrNull()!! as MediaId.Chapter).chapterId
           }
           chapter.duration
@@ -81,18 +100,28 @@ class VoicePlayerTest {
     .build()
 
   private val scope = TestScope()
+  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
+  private val bookId = BookId(UUID.randomUUID().toString())
+  private lateinit var currentBook: Book
   private val player = VoicePlayer(
     player = internalPlayer,
-    repo = mockk(),
-    currentBookId = mockk(),
+    repo = mockk {
+      coEvery { get(bookId) } answers { currentBook }
+      coEvery { updateBook(any(), any()) } just Runs
+    },
+    currentBookId = mockk {
+      every { data } returns flowOf(bookId)
+    },
     seekTimePref = seekTimePref,
     autoRewindAmountPref = mockk(),
     scope = scope,
     chapterRepo = mockk {
       coEvery { this@mockk.get(any()) } answers {
-        currentChapters.single { it.id == firstArg() }
+        currentBook.chapters.single { it.id == firstArg() }
       }
     },
+    mediaItemProvider = mediaItemProvider,
+    volumeGain = mockk(relaxed = true),
   )
 
   @Test
@@ -267,13 +296,10 @@ class VoicePlayerTest {
     player.shouldHavePosition(0, 12_000)
   }
 
-  private var currentChapters: List<Chapter> = emptyList()
-
-  private fun setMediaItems(chapters: List<Chapter>) {
-    currentChapters = chapters
-    val book = book(chapters)
-    val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
-    player.setMediaItems(mediaItemProvider.chapters(book))
+  private fun TestScope.setMediaItems(chapters: List<Chapter>) {
+    currentBook = book(chapters, bookId)
+    player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
+    runCurrent()
   }
 
   @Test
@@ -321,7 +347,7 @@ class VoicePlayerTest {
   }
 
   private fun Player.shouldHavePosition(currentMediaItemIndex: Int, currentPosition: Long): Player {
-    scope.runCurrent()
+    scope.advanceUntilIdle()
     this should havePosition(currentMediaItemIndex, currentPosition)
     return this
   }
