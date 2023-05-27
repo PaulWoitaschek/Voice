@@ -79,9 +79,10 @@
     </receiver>
 
     <receiver
-      android:name=".features.widget.WidgetActionBroadcastReceiver"
-      android:exported="false">
+      android:name=".features.widget.MediaButtonReceiver"
+      android:exported="true">
       <intent-filter>
+        <action android:name="android.intent.action.MEDIA_BUTTON" />
         <action android:name="voice.WidgetAction" />
       </intent-filter>
     </receiver>

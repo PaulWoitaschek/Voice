@@ -122,13 +122,13 @@ class WidgetUpdater
     }
 
   private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
-    val playPausePI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.PlayPause)
+    val playPausePI = MediaButtonReceiver.pendingIntent(context, MediaButtonReceiver.Action.PlayPause)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
-    val fastForwardPI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.FastForward)
+    val fastForwardPI = MediaButtonReceiver.pendingIntent(context, MediaButtonReceiver.Action.FastForward)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
-    val rewindPI = WidgetActionBroadcastReceiver.pendingIntent(context, WidgetActionBroadcastReceiver.Action.Rewind)
+    val rewindPI = MediaButtonReceiver.pendingIntent(context, MediaButtonReceiver.Action.Rewind)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
