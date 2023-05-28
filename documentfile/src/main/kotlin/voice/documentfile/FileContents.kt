@@ -57,11 +57,26 @@ private fun Context.query(uri: Uri): Cursor? {
       null,
       null,
     )
-  } catch (e: SecurityException) {
+  } catch (e: Exception) {
     Logger.e(e, "Error while querying $uri")
     null
   }
 }
 
-private fun Cursor.getStringOrNull(columnName: String): String? = getStringOrNull(getColumnIndexOrThrow(columnName))
-private fun Cursor.getLongOrNull(columnName: String): Long? = getLongOrNull(getColumnIndexOrThrow(columnName))
+private fun Cursor.getStringOrNull(columnName: String): String? {
+  val index = getColumnIndex(columnName)
+  return if (index == -1) {
+    null
+  } else {
+    getStringOrNull(index)
+  }
+}
+
+private fun Cursor.getLongOrNull(columnName: String): Long? {
+  val index = getColumnIndex(columnName)
+  return if (index == -1) {
+    null
+  } else {
+    getLongOrNull(index)
+  }
+}
