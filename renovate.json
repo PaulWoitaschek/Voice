@@ -22,6 +22,14 @@
         "org.jetbrains.kotlin.android",
         "com.google.devtools.ksp"
       ]
+    },
+    {
+      "groupName": "Ktlint",
+      "matchPackagePrefixes": [
+        "com.pinterest.ktlint",
+        "io.nlopez.compose.rules",
+        "org.jmailen.kotlinter"
+      ]
     }
   ],
   "prHourlyLimit": 0,
