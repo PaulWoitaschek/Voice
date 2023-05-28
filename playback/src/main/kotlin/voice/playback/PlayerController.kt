@@ -16,6 +16,7 @@ import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.ChapterId
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.misc.Decibel
 import voice.playback.session.CustomCommand
 import voice.playback.session.MediaId
@@ -66,7 +67,7 @@ class PlayerController
 
   fun pauseIfCurrentBookDifferentFrom(id: BookId) {
     scope.launch {
-      val controller = awaitConnect()
+      val controller = awaitConnect() ?: return@launch
       val currentBookId = controller.currentBookId()
       if (currentBookId != null && currentBookId != id) {
         controller.pause()
@@ -150,12 +151,19 @@ class PlayerController
 
   private inline fun executeAfterPrepare(crossinline action: suspend (MediaController) -> Unit) {
     scope.launch {
-      val controller = controller.await()
+      val controller = awaitConnect() ?: return@launch
       if (maybePrepare(controller)) {
         action(controller)
       }
     }
   }
 
-  suspend fun awaitConnect(): MediaController = controller.await()
+  suspend fun awaitConnect(): MediaController? {
+    return try {
+      controller.await()
+    } catch (e: Exception) {
+      Logger.e(e, "Error while connecting to media controller")
+      null
+    }
+  }
 }
