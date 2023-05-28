@@ -153,7 +153,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.6" }
-ktlint = { id = "org.jmailen.kotlinter", version = "3.14.0" }
+ktlint = { id = "org.jmailen.kotlinter", version = "3.15.0" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.5" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
