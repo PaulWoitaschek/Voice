@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.DocumentsContract
-import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import voice.logging.core.Logger
 
@@ -64,4 +63,12 @@ private fun Context.query(uri: Uri): Cursor? {
 }
 
 private fun Cursor.getStringOrNull(columnName: String): String? = getStringOrNull(getColumnIndexOrThrow(columnName))
-private fun Cursor.getLongOrNull(columnName: String): Long? = getLongOrNull(getColumnIndexOrThrow(columnName))
+
+private fun Cursor.getLongOrNull(columnName: String): Long? {
+  val index = getColumnIndex(columnName)
+  return if (index == -1) {
+    null
+  } else {
+    getLong(index)
+  }
+}
