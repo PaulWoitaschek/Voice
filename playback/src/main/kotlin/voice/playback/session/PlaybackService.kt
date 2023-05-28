@@ -6,6 +6,7 @@ import androidx.media3.session.MediaSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import voice.common.rootComponentAs
+import voice.logging.core.Logger
 import voice.playback.di.PlaybackComponent
 import voice.playback.player.VoicePlayer
 import javax.inject.Inject
@@ -31,6 +32,15 @@ class PlaybackService : MediaLibraryService() {
       .create(this)
       .inject(this)
     setMediaNotificationProvider(voiceNotificationProvider)
+  }
+
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    return try {
+      super.onStartCommand(intent, flags, startId)
+    } catch (e: SecurityException) {
+      Logger.e(e, "onStartCommand crashed")
+      START_STICKY
+    }
   }
 
   override fun onDestroy() {
