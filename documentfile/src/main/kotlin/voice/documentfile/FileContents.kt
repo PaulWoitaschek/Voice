@@ -56,7 +56,7 @@ private fun Context.query(uri: Uri): Cursor? {
       null,
       null,
     )
-  } catch (e: SecurityException) {
+  } catch (e: Exception) {
     Logger.e(e, "Error while querying $uri")
     null
   }
