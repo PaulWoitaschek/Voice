@@ -1,5 +1,6 @@
 package voice.cover
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,25 +26,42 @@ import voice.cover.api.CoverApi
 import voice.cover.api.ImageSearchPagingSource
 import voice.cover.api.SearchResponse
 import voice.data.repo.BookRepository
+import voice.strings.R as StringsR
 
 class SelectCoverFromInternetViewModel
 @AssistedInject constructor(
   private val api: CoverApi,
   private val bookRepository: BookRepository,
   private val navigator: Navigator,
+  private val context: Context,
   @Assisted private val bookId: BookId,
 ) {
 
   @Composable
   internal fun viewState(events: Flow<Events>): ViewState {
-    var bookName: String? by remember { mutableStateOf(null) }
+    var bookNameWithAuthor: BookNameWithAuthor? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
-      bookName = bookRepository.get(bookId)?.content?.name
+      val content = bookRepository.get(bookId)?.content
+      bookNameWithAuthor = BookNameWithAuthor(
+        bookName = content?.name ?: "",
+        author = content?.author ?: "",
+      )
     }
-    bookName ?: return ViewState.Loading("")
+    bookNameWithAuthor ?: return ViewState.Loading("")
 
-    var query by remember {
-      mutableStateOf("$bookName Audiobook Cover")
+    var query: String by remember(bookNameWithAuthor) {
+      val query = bookNameWithAuthor?.let { bookNameWithAuthor ->
+        if (bookNameWithAuthor.author == null) {
+          context.getString(StringsR.string.cover_search_template_no_author, bookNameWithAuthor.bookName)
+        } else {
+          context.getString(
+            StringsR.string.cover_search_template_with_author,
+            bookNameWithAuthor.bookName,
+            bookNameWithAuthor.author,
+          )
+        }
+      }
+      mutableStateOf(query ?: "")
     }
 
     val items = remember(query) {
@@ -105,4 +123,9 @@ class SelectCoverFromInternetViewModel
       val factory: Factory
     }
   }
+
+  private data class BookNameWithAuthor(
+    val bookName: String,
+    val author: String?,
+  )
 }
