@@ -71,11 +71,12 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
                 .transformations(CropTransformation(binding.cropOverlay, binding.coverImage))
                 .build(),
             )
-            .drawable!!.toBitmap()
+            .drawable?.toBitmap()
 
-          coverSaver.save(arguments.bookId, bitmap)
-
-          dismissDialog()
+          if (bitmap != null) {
+            coverSaver.save(arguments.bookId, bitmap)
+            dismissDialog()
+          }
         }
       } else {
         dismissDialog()
