@@ -15,6 +15,7 @@ dependencies {
   implementation(libs.dagger.core)
 
   implementation(libs.bundles.retrofit)
+  implementation(libs.okhttp)
   implementation(libs.paging.compose)
   implementation(libs.paging.runtime)
 

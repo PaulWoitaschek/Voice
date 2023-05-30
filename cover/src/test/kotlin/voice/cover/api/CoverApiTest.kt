@@ -10,7 +10,7 @@ internal class CoverApiTest {
   @Test
   fun test() = runTest {
     val api = CoverApi(
-      CoverModule.internalApi(),
+      CoverModule.internalApi(CoverModule.client()),
     )
     val query = "unicorns"
     val token = api.token(query).shouldNotBeEmpty()!!
