@@ -236,7 +236,7 @@ class CropOverlay @JvmOverloads constructor(
     val wf = w.toFloat()
     val hf = h.toFloat()
     bounds.set(0f, 0f, wf, hf)
-    val dragSize = min(wf, hf) / 2f
+    val dragSize = min(wf, hf)
 
     dragRect.set(0f, 0f, dragSize, dragSize)
     dragRect.offset(bounds.centerX() - dragSize / 2f, bounds.centerY() - dragSize / 2f)
