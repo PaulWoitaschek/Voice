@@ -19,6 +19,13 @@ internal class ImageSearchPagingSource(
   }
 
   override suspend fun load(params: LoadParams<ImageSearchParams>): LoadResult<ImageSearchParams, SearchResponse.ImageResult> {
+    if (query.isBlank()) {
+      return LoadResult.Page(
+        prevKey = null,
+        nextKey = null,
+        data = emptyList(),
+      )
+    }
     return try {
       val searchParams = params.key ?: freshSearchParams()
         ?: return LoadResult.Error(IOException("No params"))

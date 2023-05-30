@@ -40,23 +40,30 @@ class SelectCoverFromInternetViewModel
     LaunchedEffect(Unit) {
       bookName = bookRepository.get(bookId)?.content?.name
     }
-    bookName ?: return ViewState.Loading
+    bookName ?: return ViewState.Loading("")
 
-    val items = remember {
+    var query by remember {
+      mutableStateOf("$bookName Audiobook Cover")
+    }
+
+    val items = remember(query) {
       Pager(
         config = PagingConfig(10),
         pagingSourceFactory = {
-          ImageSearchPagingSource(api, "$bookName Audiobook Cover")
+          ImageSearchPagingSource(api, query)
         },
       ).flow
     }.collectAsLazyPagingItems()
 
     LaunchedEffect(events) {
-      events.collect {
-        when (it) {
+      events.collect { event ->
+        when (event) {
           is Events.Retry -> items.retry()
           is Events.CoverClick -> {
-            navigator.goTo(Destination.EditCover(bookId, it.cover.image.toUri()))
+            navigator.goTo(Destination.EditCover(bookId, event.cover.image.toUri()))
+          }
+          is Events.QueryChange -> {
+            query = event.query
           }
         }
       }
@@ -64,24 +71,29 @@ class SelectCoverFromInternetViewModel
 
     items.loadState.source.forEach { _, loadState ->
       if (loadState is LoadState.Error) {
-        return ViewState.Error
+        return ViewState.Error(query)
       }
     }
 
-    return ViewState.Content(items)
+    return ViewState.Content(items, query)
   }
 
   internal sealed interface ViewState {
-    object Loading : ViewState
-    object Error : ViewState
+
+    val query: String
+
+    data class Loading(override val query: String) : ViewState
+    data class Error(override val query: String) : ViewState
     data class Content(
       val items: LazyPagingItems<SearchResponse.ImageResult>,
+      override val query: String,
     ) : ViewState
   }
 
   internal sealed interface Events {
-    object Retry : Events
+    data object Retry : Events
     data class CoverClick(val cover: SearchResponse.ImageResult) : Events
+    data class QueryChange(val query: String) : Events
   }
 
   @AssistedFactory
