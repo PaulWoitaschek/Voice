@@ -30,12 +30,11 @@ import voice.strings.R
 internal fun CoverContents(
   viewState: SelectCoverFromInternetViewModel.ViewState,
   onCoverClick: (SearchResponse.ImageResult) -> Unit,
-  onCloseClick: () -> Unit,
   onRetry: () -> Unit,
 ) {
   when (viewState) {
     is SelectCoverFromInternetViewModel.ViewState.Content -> {
-      ItemsContent(viewState, onCoverClick, onCloseClick)
+      ItemsContent(viewState, onCoverClick)
     }
     is SelectCoverFromInternetViewModel.ViewState.Loading -> {
       LoadingContent()
@@ -79,7 +78,6 @@ private fun LoadingContent() {
 private fun ItemsContent(
   viewState: SelectCoverFromInternetViewModel.ViewState.Content,
   onCoverClick: (SearchResponse.ImageResult) -> Unit,
-  onCloseClick: () -> Unit,
 ) {
   val items = viewState.items
   LazyVerticalStaggeredGrid(
@@ -92,7 +90,7 @@ private fun ItemsContent(
       ) { index ->
         val item = items[index]
         if (item != null) {
-          CoverImage(onCoverClick = onCoverClick, item = item, onCloseClick = onCloseClick)
+          CoverImage(onCoverClick = onCoverClick, item = item)
         }
       }
     },
@@ -103,13 +101,11 @@ private fun ItemsContent(
 private fun CoverImage(
   item: SearchResponse.ImageResult,
   onCoverClick: (SearchResponse.ImageResult) -> Unit,
-  onCloseClick: () -> Unit,
 ) {
   AsyncImage(
     modifier = Modifier
       .clickable {
         onCoverClick(item)
-        onCloseClick()
       }
       .fillMaxWidth()
       .aspectRatio(item.width.toFloat() / item.height),

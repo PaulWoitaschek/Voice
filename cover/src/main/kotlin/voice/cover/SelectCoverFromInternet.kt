@@ -58,7 +58,6 @@ private fun SelectCoverFromInternet(
     CoverContents(
       viewState = viewState,
       onCoverClick = onCoverClick,
-      onCloseClick = onCloseClick,
       onRetry = onRetry,
     )
   }

@@ -34,6 +34,7 @@ class SelectCoverFromInternetViewModel
   private val bookRepository: BookRepository,
   private val navigator: Navigator,
   private val context: Context,
+  private val coverDownloader: CoverDownloader,
   @Assisted private val bookId: BookId,
 ) {
 
@@ -78,7 +79,12 @@ class SelectCoverFromInternetViewModel
         when (event) {
           is Events.Retry -> items.retry()
           is Events.CoverClick -> {
-            navigator.goTo(Destination.EditCover(bookId, event.cover.image.toUri()))
+            val downloaded = coverDownloader.download(event.cover.image)
+              ?: coverDownloader.download(event.cover.thumbnail)
+            if (downloaded != null) {
+              navigator.goBack()
+              navigator.goTo(Destination.EditCover(bookId, downloaded.toUri()))
+            }
           }
           is Events.QueryChange -> {
             query = event.query
