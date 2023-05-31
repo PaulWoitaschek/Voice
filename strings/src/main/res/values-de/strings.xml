@@ -114,4 +114,6 @@
     <string name="pause">Pause</string>
     <string name="generic_error_message">Etwas ist schief gelaufen 😢</string>
     <string name="generic_error_retry">Erneut versuchen</string>
+    <string name="cover_search_template_with_author">%1$s von %2$s Hörbuch cover</string>
+    <string name="cover_search_template_no_author">%s Hörbuch cover</string>
 </resources>
