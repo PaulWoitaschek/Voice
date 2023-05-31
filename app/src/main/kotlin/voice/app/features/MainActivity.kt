@@ -4,14 +4,11 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.lifecycleScope
 import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import kotlinx.coroutines.flow.first
@@ -69,31 +66,6 @@ class MainActivity : AppCompatActivity() {
     if (!router.hasRootController()) {
       setupRouter()
     }
-
-    router.addChangeListener(
-      object : ControllerChangeHandler.ControllerChangeListener {
-        override fun onChangeStarted(
-          to: Controller?,
-          from: Controller?,
-          isPush: Boolean,
-          container: ViewGroup,
-          handler: ControllerChangeHandler,
-        ) {
-          from?.setOptionsMenuHidden(true)
-        }
-
-        override fun onChangeCompleted(
-          to: Controller?,
-          from: Controller?,
-          isPush: Boolean,
-          container: ViewGroup,
-          handler: ControllerChangeHandler,
-        ) {
-          from?.setOptionsMenuHidden(false)
-        }
-      },
-    )
-
     lifecycleScope.launch {
       navigator.navigationCommands.collect { command ->
         when (command) {
