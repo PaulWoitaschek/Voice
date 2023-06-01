@@ -116,4 +116,6 @@
     <string name="pause">Zatrzymaj</string>
     <string name="generic_error_retry">Ponów</string>
     <string name="generic_error_message">Coś nie wyszło 😢</string>
+    <string name="cover_search_template_no_author">Okładka audiobooka %s</string>
+    <string name="cover_search_template_with_author">Okładka audiobooka %1$s autorstwa %2$s</string>
 </resources>
