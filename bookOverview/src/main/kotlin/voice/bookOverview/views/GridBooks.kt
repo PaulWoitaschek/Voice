@@ -36,6 +36,8 @@ internal fun GridBooks(
   books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  showPermissionBugCard: Boolean,
+  onPermissionBugCardClicked: () -> Unit,
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
@@ -44,6 +46,13 @@ internal fun GridBooks(
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 4.dp),
   ) {
+    if (showPermissionBugCard) {
+      item(
+        span = { GridItemSpan(maxLineSpan) },
+      ) {
+        PermissionBugCard(onPermissionBugCardClicked)
+      }
+    }
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       item(

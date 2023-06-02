@@ -26,4 +26,6 @@ internal data class RealCachedDocumentFile(
   override val isFile: Boolean by lazy { content?.isFile ?: false }
   override val length: Long by lazy { content?.length ?: 0L }
   override val lastModified: Long by lazy { content?.lastModified ?: 0L }
+
+  override fun toString(): String = "RealCachedDocumentFile($uri)"
 }

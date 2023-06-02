@@ -17,6 +17,7 @@ dependencies {
   implementation(projects.sleepTimer)
   implementation(projects.scanner)
 
+  implementation(libs.lifecycle)
   implementation(libs.documentFile)
   implementation(libs.dagger.core)
   implementation(libs.datastore)

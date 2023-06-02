@@ -101,6 +101,9 @@ class MainActivity : AppCompatActivity() {
                 val args = EditCoverDialogController.Arguments(destination.cover, destination.bookId)
                 EditCoverDialogController(args).showDialog(router)
               }
+              is Destination.Activity -> {
+                startActivity(destination.intent)
+              }
             }
           }
         }

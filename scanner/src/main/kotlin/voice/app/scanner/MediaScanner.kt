@@ -3,8 +3,10 @@ package voice.app.scanner
 import voice.common.BookId
 import voice.data.audioFileCount
 import voice.data.folders.FolderType
+import voice.data.isAudioFile
 import voice.data.repo.BookContentRepo
 import voice.documentfile.CachedDocumentFile
+import voice.documentfile.walk
 import voice.logging.core.Logger
 import javax.inject.Inject
 import kotlin.time.measureTime
@@ -14,6 +16,7 @@ class MediaScanner
   private val contentRepo: BookContentRepo,
   private val chapterParser: ChapterParser,
   private val bookParser: BookParser,
+  private val deviceHasPermissionBug: DeviceHasStoragePermissionBug,
 ) {
 
   suspend fun scan(folders: Map<FolderType, List<CachedDocumentFile>>) {
@@ -32,6 +35,14 @@ class MediaScanner
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
+    val probeFile = files.findProbeFile()
+    if (probeFile != null) {
+      if (deviceHasPermissionBug.checkForBugAndSet(probeFile)) {
+        Logger.e("Device has permission bug, aborting scan! Probed $probeFile")
+        return
+      }
+    }
+
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
@@ -41,6 +52,13 @@ class MediaScanner
         }.also {
           Logger.i("scan took $it for ${file.uri}")
         }
+      }
+  }
+
+  private fun List<CachedDocumentFile>.findProbeFile(): CachedDocumentFile? {
+    return asSequence().flatMap { it.walk() }
+      .firstOrNull { child ->
+        child.isAudioFile() && child.uri.authority == "com.android.externalstorage.documents"
       }
   }
 

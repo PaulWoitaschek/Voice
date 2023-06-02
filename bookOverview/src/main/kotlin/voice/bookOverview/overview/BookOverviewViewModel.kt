@@ -1,5 +1,8 @@
 package voice.bookOverview.overview
 
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -8,11 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import de.paulwoitaschek.flowpref.Pref
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import voice.app.scanner.DeviceHasStoragePermissionBug
 import voice.app.scanner.MediaScanTrigger
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
@@ -56,6 +61,7 @@ constructor(
   private val recentBookSearchDao: RecentBookSearchDao,
   private val search: BookSearch,
   private val contentRepo: BookContentRepo,
+  private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
 ) {
 
   private val scope = MainScope()
@@ -70,6 +76,8 @@ constructor(
   internal fun state(): BookOverviewViewState {
     val playState = remember { playStateManager.flow }
       .collectAsState(initial = PlayStateManager.PlayState.Paused).value
+    val hasStoragePermissionBug = remember { deviceHasStoragePermissionBug.hasBug }
+      .collectAsState().value
     val books = remember { repo.flow() }
       .collectAsState(initial = emptyList()).value
     val currentBookId = remember { currentBookDataStore.data }
@@ -122,13 +130,18 @@ constructor(
       } else {
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
-      showAddBookHint = if (showMigrateHint) false else noBooks,
+      showAddBookHint = if (showMigrateHint || hasStoragePermissionBug) {
+        false
+      } else {
+        noBooks
+      },
       showMigrateIcon = hasLegacyBooks,
       showMigrateHint = showMigrateHint,
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
       searchActive = searchActive,
       searchViewState = bookSearchViewState,
+      showStoragePermissionBugCard = hasStoragePermissionBug,
     )
   }
 
@@ -222,5 +235,16 @@ constructor(
 
   fun playPause() {
     playerController.playPause()
+  }
+
+  fun onPermissionBugCardClicked() {
+    if (Build.VERSION.SDK_INT >= 30) {
+      navigator.goTo(
+        Destination.Activity(
+          Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+            .setData("package:com.android.externalstorage".toUri()),
+        ),
+      )
+    }
   }
 }

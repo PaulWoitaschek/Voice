@@ -7,46 +7,27 @@ import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.LogRedirectionStrategy
-import com.arthenica.ffmpegkit.SessionState
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import voice.logging.core.Logger
-import kotlin.coroutines.resume
 
-suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String? {
+private val mutex = Mutex()
+
+suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String? = mutex.withLock {
   FFmpegKitConfig.setLogRedirectionStrategy(LogRedirectionStrategy.NEVER_PRINT_LOGS)
   val fullCommand = fullCommand(input, context, command) ?: return null
-  return suspendCancellableCoroutine { cont ->
-    val probeSession = FFprobeKit.executeWithArgumentsAsync(fullCommand.toTypedArray()) { session ->
-      when (session.state) {
-        SessionState.COMPLETED -> {
-          cont.resume(session.output)
-        }
-        SessionState.FAILED -> {
-          cont.resume(null)
-        }
-        else -> {}
-      }
-    }
-    cont.invokeOnCancellation { probeSession.cancel() }
+  return withContext(Dispatchers.IO) {
+    FFprobeKit.executeWithArguments(fullCommand.toTypedArray()).output
   }
 }
 
-suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String? {
+suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String? = mutex.withLock {
   FFmpegKitConfig.setLogRedirectionStrategy(LogRedirectionStrategy.NEVER_PRINT_LOGS)
   val fullCommand = fullCommand(input, context, command) ?: return null
-  return suspendCancellableCoroutine { cont ->
-    val probeSession = FFmpegKit.executeWithArgumentsAsync(fullCommand.toTypedArray()) { session ->
-      when (session.state) {
-        SessionState.COMPLETED -> {
-          cont.resume(session.output)
-        }
-        SessionState.FAILED -> {
-          cont.resume(null)
-        }
-        else -> {}
-      }
-    }
-    cont.invokeOnCancellation { probeSession.cancel() }
+  return withContext(Dispatchers.IO) {
+    FFmpegKit.executeWithArguments(fullCommand.toTypedArray()).output
   }
 }
 
