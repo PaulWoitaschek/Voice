@@ -186,6 +186,9 @@ dependencies {
   testImplementation(libs.junit)
   testImplementation(libs.mockk)
 
+  implementation(libs.leakcanary.plumber)
+  debugImplementation(libs.leakcanary.android)
+
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)
 

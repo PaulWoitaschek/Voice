@@ -1,4 +1,5 @@
 [versions]
+leakcanary = "2.11"
 pagingCompose = "1.0.0-alpha18"
 versionCode = "3603019"
 versionName = "7.0.14"
@@ -22,6 +23,8 @@ retrofit = "2.9.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
+leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 material = "com.google.android.material:material:1.9.0"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:5.1"
 junit = "junit:junit:4.13.2"
