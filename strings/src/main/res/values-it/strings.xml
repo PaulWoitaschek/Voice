@@ -116,4 +116,6 @@
     <string name="pause">Pausa</string>
     <string name="generic_error_message">Qualcosa è andato storto 😢</string>
     <string name="generic_error_retry">Riprova</string>
+    <string name="cover_search_template_no_author">%s copertina dell\'audiolibro</string>
+    <string name="cover_search_template_with_author">%1$s di %2$s copertina dell\'audiolibro</string>
 </resources>
