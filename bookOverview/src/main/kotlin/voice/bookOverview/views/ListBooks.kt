@@ -36,11 +36,18 @@ internal fun ListBooks(
   books: ImmutableMap<BookOverviewCategory, List<BookOverviewItemViewState>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  showPermissionBugCard: Boolean,
+  onPermissionBugCardClicked: () -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
     contentPadding = PaddingValues(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
   ) {
+    if (showPermissionBugCard) {
+      item {
+        PermissionBugCard(onPermissionBugCardClicked)
+      }
+    }
     books.forEach { (category, books) ->
       if (books.isEmpty()) return@forEach
       stickyHeader(

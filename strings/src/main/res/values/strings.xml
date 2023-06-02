@@ -114,4 +114,7 @@
   <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
   <string name="generic_error_message">Something went wrong 😢</string>
   <string name="generic_error_retry">Retry</string>
+  <string name="storage_bug_title">Permission required</string>
+  <string name="storage_bug_subtitle">For certain devices, particularly some Samsung models, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
+  <string name="storage_bug_button">Grant permission</string>
 </resources>

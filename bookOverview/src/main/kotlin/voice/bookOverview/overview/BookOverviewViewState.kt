@@ -17,6 +17,7 @@ data class BookOverviewViewState(
   val isLoading: Boolean,
   val searchActive: Boolean,
   val searchViewState: BookSearchViewState,
+  val showStoragePermissionBugCard: Boolean = false,
 ) {
 
   companion object {

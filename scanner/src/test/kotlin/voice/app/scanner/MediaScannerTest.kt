@@ -150,6 +150,7 @@ class MediaScannerTest {
         ),
         fileFactory = FileBasedDocumentFactory,
       ),
+      deviceHasPermissionBug = mockk(),
     )
 
     val bookRepo = BookRepository(chapterRepo, bookContentRepo)
