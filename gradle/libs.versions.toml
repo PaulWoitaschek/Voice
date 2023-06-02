@@ -1,8 +1,8 @@
 [versions]
 leakcanary = "2.11"
 pagingCompose = "1.0.0-alpha18"
-versionCode = "3603019"
-versionName = "7.0.14"
+versionCode = "3603020"
+versionName = "7.0.15"
 
 sdk-compile = "33"
 sdk-min = "26"
