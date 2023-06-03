@@ -118,4 +118,7 @@
     <string name="generic_error_retry">Riprova</string>
     <string name="cover_search_template_no_author">%s copertina dell\'audiolibro</string>
     <string name="cover_search_template_with_author">%1$s di %2$s copertina dell\'audiolibro</string>
+    <string name="storage_bug_title">Autorizzazione richiesta</string>
+    <string name="storage_bug_subtitle">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
+    <string name="storage_bug_button">Concedere l\'autorizzazione</string>
 </resources>
