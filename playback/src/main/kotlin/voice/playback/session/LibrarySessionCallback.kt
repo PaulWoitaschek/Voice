@@ -137,8 +137,9 @@ class LibrarySessionCallback
   }
 
   override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
-    if (controller.packageName == "com.google.android.projection.gearhead" && player.playbackState == Player.STATE_IDLE) {
-      Logger.d("onConnect to Android Auto. Preparing current book so it shows up as recently played.")
+    Logger.d("onConnect to ${controller.packageName}")
+    if (player.playbackState == Player.STATE_IDLE) {
+      Logger.d("onConnect and player is idle. Preparing current book so it shows up as recently played.")
       scope.launch {
         val bookId = currentBookId.data.first()
         if (bookId != null) {
