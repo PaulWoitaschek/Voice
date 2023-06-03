@@ -37,7 +37,7 @@ class PlaybackService : MediaLibraryService() {
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     return try {
       super.onStartCommand(intent, flags, startId)
-    } catch (e: SecurityException) {
+    } catch (e: Exception) {
       Logger.e(e, "onStartCommand crashed")
       START_STICKY
     }
@@ -60,5 +60,25 @@ class PlaybackService : MediaLibraryService() {
     session.release()
   }
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = session
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
+    return session.takeUnless { session ->
+      session.invokeIsReleased
+    }.also {
+      if (it == null) {
+        Logger.e("onGetSession returns null because the session is already released")
+      }
+    }
+  }
 }
+
+private val MediaSession.invokeIsReleased: Boolean
+  get() = try {
+    // temporarily checked to debug
+    // https://github.com/androidx/media/issues/422
+    MediaSession::class.java.getDeclaredMethod("isReleased")
+      .apply { isAccessible = true }
+      .invoke(this) as Boolean
+  } catch (e: Exception) {
+    Logger.e(e, "Couldn't check if it's released")
+    false
+  }
