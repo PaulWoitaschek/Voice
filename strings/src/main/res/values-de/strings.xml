@@ -116,4 +116,7 @@
     <string name="generic_error_retry">Erneut versuchen</string>
     <string name="cover_search_template_with_author">%1$s von %2$s Hörbuch cover</string>
     <string name="cover_search_template_no_author">%s Hörbuch cover</string>
+    <string name="storage_bug_title">Berechtigung benötigt</string>
+    <string name="storage_bug_subtitle">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Ihre Hörbücher lesen zu können.</string>
+    <string name="storage_bug_button">Berechtigung erteilen</string>
 </resources>
