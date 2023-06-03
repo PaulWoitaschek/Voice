@@ -11,7 +11,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import voice.logging.core.Logger
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -38,7 +37,7 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
   } else {
     try {
       val positions = markData.map { it.startMs }.toSet()
-      val sorted = markData.filterNot { it.startMs - 1 in positions }
+      val sorted = markData.filterNot { it.startMs - 1 in positions || it.startMs < 0 }
         .distinctBy { it.startMs }
         .sortedBy { it.startMs }
 
@@ -70,8 +69,7 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
       }
       result
     } catch (e: Exception) {
-      Logger.e(e, "Could not parse marks from $this")
-      listOf(ChapterMark(name, 0L, duration - 1))
+      throw IllegalStateException("Could not parse marks from $this", e)
     }
   }
 }

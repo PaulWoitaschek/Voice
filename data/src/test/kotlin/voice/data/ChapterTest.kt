@@ -76,6 +76,26 @@ class ChapterTest {
   }
 
   @Test
+  fun `negative start points are ignored`() {
+    test(
+      chapterStarts = listOf(-2, 5),
+      expected = listOf(
+        MarkPosition(0, 19),
+      ),
+    )
+  }
+
+  @Test
+  fun `negative start points without following below zero are ignored`() {
+    test(
+      chapterStarts = listOf(-2, 0),
+      expected = listOf(
+        MarkPosition(0, 19),
+      ),
+    )
+  }
+
+  @Test
   fun `no duration mark on first position`() {
     test(
       chapterStarts = listOf(0, 1, 5),
