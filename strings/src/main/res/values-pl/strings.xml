@@ -65,9 +65,6 @@
     <string name="close">Zamknij</string>
     <string name="delete">Usuń</string>
     <string name="add">Dodaj</string>
-    <string name="folder_type_audiobooks">Folder z audiobookami</string>
-    <string name="folder_type_single_folder">Jeden folder</string>
-    <string name="folder_type_single_file">Jeden plik</string>
     <string name="folder_type_dialog_title">Co chcesz dodać?</string>
     <string name="folder_mode_root">Folder z wieloma audiobookami. Jeden podfolder = jedna książka.</string>
     <string name="folder_mode_single">Folder z jednym audiobookiem</string>
@@ -79,7 +76,6 @@
     </plurals>
     <string name="folder_type_book_example_header">Będzie to skutkowało wykryciem następujących książek</string>
     <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
-    <string name="folder_type_title">Jaka jest struktura twoich plików?</string>
     <!-- will be shown as the time for a bookmark that was just created -->
     <string name="bookmark_just_now">Przed chwilą</string>
     <!-- will be shown as a hint when no books have been added -->

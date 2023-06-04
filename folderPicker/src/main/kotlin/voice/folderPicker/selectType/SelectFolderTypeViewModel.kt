@@ -63,6 +63,7 @@ class SelectFolderTypeViewModel
       type = when (selectedFolderMode.value) {
         FolderMode.Audiobooks -> FolderType.Root
         FolderMode.SingleBook -> FolderType.SingleFolder
+        FolderMode.Authors -> FolderType.Author
         null -> error("Add should not be clickable at this point")
       },
     )
@@ -100,6 +101,26 @@ class SelectFolderTypeViewModel
                 fileCount = documentFile.audioFileCount(),
               ),
             )
+          }
+          FolderMode.Authors -> {
+            documentFile.children.flatMap { author ->
+              val authorName = author.nameWithoutExtension()
+              if (author.isAudioFile()) {
+                listOf(
+                  SelectFolderTypeViewState.Book(
+                    name = author.nameWithoutExtension(),
+                    fileCount = author.audioFileCount(),
+                  ),
+                )
+              } else {
+                author.children.map { child ->
+                  SelectFolderTypeViewState.Book(
+                    name = "${child.nameWithoutExtension()} ($authorName)",
+                    fileCount = child.audioFileCount(),
+                  )
+                }
+              }
+            }
           }
         }
         loading = false

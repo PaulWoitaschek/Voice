@@ -55,16 +55,13 @@
     <string name="popup_edit">编辑</string>
     <string name="remove">删除</string>
     <string name="play_current">播放当前有声书</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">正在播放中</string>
     <string name="book_header_not_started">尚未开始播放</string>
     <string name="book_header_completed">已结束播放</string>
     <string name="close">关闭</string>
     <string name="delete">删除</string>
     <string name="add">添加</string>
-    <string name="folder_type_audiobooks">有声书文件夹</string>
-    <string name="folder_type_single_folder">一个文件夹</string>
-    <string name="folder_type_single_file">一个文件</string>
     <string name="folder_type_dialog_title">希望添加什么？</string>
     <string name="folder_mode_root">有声书根文件夹。一个文件夹 = 一本书。</string>
     <string name="folder_mode_single">单个有声书文件夹</string>

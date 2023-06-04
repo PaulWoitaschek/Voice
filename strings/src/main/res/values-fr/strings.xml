@@ -57,16 +57,13 @@
     <string name="popup_edit">Modifier</string>
     <string name="remove">Enlever</string>
     <string name="play_current">Lire l\'actuel</string>
-  <!-- book category -->
+    <!-- book category -->
     <string name="book_header_current">En cours</string>
     <string name="book_header_not_started">Pas encore commencé</string>
     <string name="book_header_completed">Complété</string>
     <string name="close">Fermer</string>
     <string name="delete">Supprimer</string>
     <string name="add">Ajouter</string>
-    <string name="folder_type_audiobooks">Dossier de livres audio</string>
-    <string name="folder_type_single_folder">Dossier unique </string>
-    <string name="folder_type_single_file">Fichier unique</string>
     <string name="folder_type_dialog_title">Que voulez-vous ajouter \?</string>
     <string name="folder_mode_root">Dossier racine des livres audio. Un sous-dossier = un livre.</string>
     <string name="folder_mode_single">Dossier de livre audio unique </string>

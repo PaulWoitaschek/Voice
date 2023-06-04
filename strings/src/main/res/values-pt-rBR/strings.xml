@@ -62,11 +62,8 @@
     <string name="pref_get_support">Obtenha ajuda</string>
     <string name="pref_app_version">Versão do Aplicativo</string>
     <string name="close">Fechar</string>
-    <string name="folder_type_audiobooks">Pasta de Audiolivros</string>
     <string name="delete">Deletar</string>
     <string name="add">Adicionar</string>
-    <string name="folder_type_single_folder">Pasta única</string>
-    <string name="folder_type_single_file">Arquivo único</string>
     <string name="folder_type_dialog_title">O que você gostaria de adicionar\?</string>
     <string name="folder_mode_root">Pasta de Audiolivro padrão. Cada subpasta representa um livro/volume.</string>
     <string name="folder_mode_single">Pasta única de Audiolivro</string>

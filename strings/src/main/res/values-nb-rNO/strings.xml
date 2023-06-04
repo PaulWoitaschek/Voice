@@ -15,8 +15,6 @@
     <string name="pref_get_support">Få støtte</string>
     <string name="book_header_current">Nåværende</string>
     <string name="book_header_completed">Fullført</string>
-    <string name="folder_type_audiobooks">Lydboksmappe</string>
-    <string name="folder_type_single_folder">Enkeltmappe</string>
     <string name="folder_mode_root">Rot-lydboksmappe. Én lydbok = én bok.</string>
     <string name="folder_mode_single">Enkelt lydboksmappe</string>
     <string name="folder_type_title">Hvilken struktur har filene dine\?</string>
@@ -73,7 +71,6 @@
     <string name="close">Lukk</string>
     <string name="folder_type_dialog_title">Hva vil du legge til\?</string>
     <string name="add">Legg til</string>
-    <string name="folder_type_single_file">Enkeltfil</string>
     <string name="folder_type_book_example_header">Følgende bøker vil bli lagt til</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d lydfil</item>

@@ -44,7 +44,7 @@
     <string name="popup_edit">Wysig</string>
     <string name="remove">Verwyder</string>
     <string name="play_current">Speel huidig</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog nie begin nie</string>
     <string name="book_header_completed">Voltooi</string>
@@ -60,9 +60,6 @@
     <string name="close">Sluit</string>
     <string name="delete">Skrap</string>
     <string name="add">Voeg toe</string>
-    <string name="folder_type_audiobooks">Audioboek lêer</string>
-    <string name="folder_type_single_folder">Enkel gids</string>
-    <string name="folder_type_single_file">Enkel lêer</string>
     <string name="folder_type_dialog_title">Wat wil jy toevoeg\?</string>
     <string name="folder_mode_single">Enkele audioboek gids</string>
     <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers\?</string>

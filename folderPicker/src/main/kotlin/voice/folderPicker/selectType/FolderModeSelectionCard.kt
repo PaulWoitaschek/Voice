@@ -72,6 +72,7 @@ private fun FolderModeColumn(
       folderType = when (folderMode) {
         FolderMode.Audiobooks -> FolderType.Root
         FolderMode.SingleBook -> FolderType.SingleFolder
+        FolderMode.Authors -> FolderType.Author
       },
     )
   }
@@ -82,6 +83,7 @@ private fun FolderMode.title(): Int {
   return when (this) {
     FolderMode.Audiobooks -> StringsR.string.folder_mode_root
     FolderMode.SingleBook -> StringsR.string.folder_mode_single
+    FolderMode.Authors -> StringsR.string.folder_mode_author
   }
 }
 

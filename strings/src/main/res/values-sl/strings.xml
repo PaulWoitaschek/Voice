@@ -1,51 +1,51 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Platnica</string>
-  <string name="play_pause">Predvajaj / Ustavi</string>
-  <string name="action_sleep">Odštevalnik za spanje</string>
-  <string name="rewind">Previj nazaj</string>
-  <string name="fast_forward">Previj naprej</string>
-  <string name="previous_track">Prejšnji posnetek</string>
-  <string name="next_track">Naslednji posnetek</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Nastavi</string>
-  <string name="dialog_cancel">Prekliči</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Prikaže naslednjo naslovnico</string>
-  <string name="change_book_name">Ime</string>
-  <string name="download_book_cover">Naslovnica s spleta</string>
-  <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
-  <string name="edit_book_title">Uredi knjigo</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Mape zvočnih knjig</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Hitrost predvajanja</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Zaznamek</string>
-  <string name="bookmark_edit_title">Uredi zaznamek</string>
-  <string name="bookmark_edit_hint">Ime zaznamka</string>
-  <string name="bookmark_added">Zaznamek dodan</string>
-  <!--Settings-->
-  <string name="action_settings">Nastavitve</string>
-  <string name="min">%s min</string>
-  <string name="delete_last_number">Zbriše zadnjo vpisano številko</string>
-  <plurals name="seconds">
-    <item quantity="one">%d sekundo</item>
-    <item quantity="two">%d sekundi</item>
-    <item quantity="few">%d sekund</item>
-    <item quantity="other">%d sekund</item>
-  </plurals>
-  <string name="pref_seek_time">Dolžina skoka</string>
-  <string name="pref_auto_rewind_title">Samodejni skok nazaj</string>
-  <string name="popup_edit">Uredi</string>
-  <string name="remove">Odstrani</string>
-  <string name="play_current">Predvajaj trenutno</string>
-  <!--book category-->
-  <!--will be shown as the time for a bookmark that was just created-->
-  <!--will be shown as a hint when no books have been added-->
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">Platnica</string>
+    <string name="play_pause">Predvajaj / Ustavi</string>
+    <string name="action_sleep">Odštevalnik za spanje</string>
+    <string name="rewind">Previj nazaj</string>
+    <string name="fast_forward">Previj naprej</string>
+    <string name="previous_track">Prejšnji posnetek</string>
+    <string name="next_track">Naslednji posnetek</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">Nastavi</string>
+    <string name="dialog_cancel">Prekliči</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">Prikaže naslednjo naslovnico</string>
+    <string name="change_book_name">Ime</string>
+    <string name="download_book_cover">Naslovnica s spleta</string>
+    <string name="pick_book_cover">Naslovnica iz datotečnega sistema</string>
+    <string name="edit_book_title">Uredi knjigo</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">Mape zvočnih knjig</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Hitrost predvajanja</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Zaznamek</string>
+    <string name="bookmark_edit_title">Uredi zaznamek</string>
+    <string name="bookmark_edit_hint">Ime zaznamka</string>
+    <string name="bookmark_added">Zaznamek dodan</string>
+    <!--Settings-->
+    <string name="action_settings">Nastavitve</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Zbriše zadnjo vpisano številko</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekundo</item>
+        <item quantity="two">%d sekundi</item>
+        <item quantity="few">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
+    <string name="pref_seek_time">Dolžina skoka</string>
+    <string name="pref_auto_rewind_title">Samodejni skok nazaj</string>
+    <string name="popup_edit">Uredi</string>
+    <string name="remove">Odstrani</string>
+    <string name="play_current">Predvajaj trenutno</string>
+    <!--book category-->
+    <!--will be shown as the time for a bookmark that was just created-->
+    <!--will be shown as a hint when no books have been added-->
 </resources>

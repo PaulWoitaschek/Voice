@@ -64,9 +64,6 @@
     <string name="close">Закрыть</string>
     <string name="delete">Удалить</string>
     <string name="add">Добавить</string>
-    <string name="folder_type_audiobooks">Папки с аудиокнигами</string>
-    <string name="folder_type_single_folder">Папка</string>
-    <string name="folder_type_single_file">Файл</string>
     <string name="folder_type_dialog_title">Что добавить?</string>
     <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
     <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
@@ -78,7 +75,6 @@
     </plurals>
     <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
     <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
-    <string name="folder_type_title">Как упорядочены ваши файлы?</string>
     <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Только что</string>
     <!--will be shown as a hint when no books have been added-->

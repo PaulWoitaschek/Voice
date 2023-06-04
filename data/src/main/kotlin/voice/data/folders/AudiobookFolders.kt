@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.common.pref.AuthorAudiobookFolders
 import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
@@ -26,6 +27,8 @@ class AudiobookFolders
   private val singleFolderAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   @SingleFileAudiobookFolders
   private val singleFileAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @AuthorAudiobookFolders
+  private val authorAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
 ) {
@@ -52,6 +55,7 @@ class AudiobookFolders
       FolderType.SingleFile -> this
       FolderType.SingleFolder,
       FolderType.Root,
+      FolderType.Author,
       -> {
         DocumentsContract.buildDocumentUriUsingTree(
           this,
@@ -90,10 +94,13 @@ class AudiobookFolders
     }
   }
 
-  private fun dataStore(type: FolderType) = when (type) {
-    FolderType.SingleFile -> singleFileAudiobookFolders
-    FolderType.SingleFolder -> singleFolderAudiobookFolders
-    FolderType.Root -> rootAudioBookFolders
+  private fun dataStore(type: FolderType): DataStore<List<Uri>> {
+    return when (type) {
+      FolderType.SingleFile -> singleFileAudiobookFolders
+      FolderType.SingleFolder -> singleFolderAudiobookFolders
+      FolderType.Root -> rootAudioBookFolders
+      FolderType.Author -> authorAudiobookFolders
+    }
   }
 }
 

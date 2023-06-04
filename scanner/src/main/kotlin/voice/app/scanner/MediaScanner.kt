@@ -30,12 +30,25 @@ class MediaScanner
             file.children
           }
         }
+        FolderType.Author -> {
+          files.flatMap { folder ->
+            folder.children.flatMap { author ->
+              if (author.isFile) {
+                listOf(author)
+              } else {
+                author.children.flatMap {
+                  author.children
+                }
+              }
+            }
+          }
+        }
       }
     }
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    val probeFile = files.findProbeFile()
+    val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {
       if (deviceHasPermissionBug.checkForBugAndSet(probeFile)) {
         Logger.e("Device has permission bug, aborting scan! Probed $probeFile")

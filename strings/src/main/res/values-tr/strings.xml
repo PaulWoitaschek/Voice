@@ -45,7 +45,7 @@
     <string name="popup_edit">Düzenle</string>
     <string name="remove">Kaldır</string>
     <string name="play_current">Geçerli oynatma</string>
-  <!--book category-->
+    <!--book category-->
     <string name="book_header_current">Geçerli</string>
     <string name="book_header_not_started">Henüz başlamadı</string>
     <string name="book_header_completed">Tamamlandı</string>
@@ -57,9 +57,6 @@
     <string name="pref_get_support">Destek al</string>
     <string name="pref_app_version">Uygulama sürümü</string>
     <string name="add">Ekle</string>
-    <string name="folder_type_audiobooks">Sesli kitap dizini</string>
-    <string name="folder_type_single_folder">Tek dizin</string>
-    <string name="folder_type_single_file">Tek dosya</string>
     <string name="folder_mode_root">Kök sesli kitap dizini. Bir alt dizin = bir kitap.</string>
     <string name="folder_mode_single">Tek sesli kitap dizini</string>
     <plurals name="folder_type_file_count">

@@ -1,105 +1,101 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">カバー</string>
-  <string name="play_pause">再生 / 一時停止</string>
-  <string name="action_sleep">スリープタイマー</string>
-  <string name="rewind">巻き戻し</string>
-  <string name="fast_forward">早送り</string>
-  <string name="previous_track">前のトラック</string>
-  <string name="next_track">次のトラック</string>
-  <string name="skip_silence">無音をスキップ</string>
-  <string name="volume_boost">音量ブースト</string>
-  <string name="more">さらに表示</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">設定</string>
-  <string name="dialog_cancel">キャンセル</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">選択するカバーを表示</string>
-  <string name="change_book_name">名前</string>
-  <string name="download_book_cover">インターネットからのカバー</string>
-  <string name="pick_book_cover">ファイルシステムからのカバー</string>
-  <string name="edit_book_title">ブックを編集</string>
-  <string name="mark_as_completed">完了としてマーク</string>
-  <string name="mark_as_current">現在としてマーク</string>
-  <string name="mark_as_not_started">未再生としてマーク</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">オーディオブック フォルダー</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">再生速度</string>
-  <!--Bookmarks-->
-  <string name="bookmark">ブックマーク</string>
-  <string name="bookmark_edit_title">ブックマークを編集</string>
-  <string name="bookmark_edit_hint">ブックマーク名</string>
-  <string name="bookmark_added">ブックマークを追加しました</string>
-  <!--Settings-->
-  <string name="action_settings">設定</string>
-  <string name="min">%s 分</string>
-  <string name="delete_last_number">最後に入力した番号を削除します</string>
-  <plurals name="seconds">
-    <item quantity="other">%d 秒</item>
-  </plurals>
-  <string name="pref_seek_time">スキップ量</string>
-  <string name="pref_theme_dark">ダークテーマ</string>
-  <string name="pref_auto_rewind_title">自動巻き戻し</string>
-  <string name="pref_suggest_idea">アイデアの提案</string>
-  <string name="pref_use_grid">グリッド表示の使用</string>
-  <string name="pref_report_issue">問題の報告</string>
-  <string name="pref_help_translating">翻訳の手助け</string>
-  <string name="pref_get_support">サポート</string>
-  <string name="pref_app_version">アプリのバージョン</string>
-  <string name="popup_edit">編集</string>
-  <string name="remove">削除</string>
-  <string name="play_current">現在を再生</string>
-  <!--book category-->
-  <string name="book_header_current">現在</string>
-  <string name="book_header_not_started">未再生</string>
-  <string name="book_header_completed">完了</string>
-  <string name="close">閉じる</string>
-  <string name="delete">削除</string>
-  <string name="add">追加</string>
-  <string name="folder_type_audiobooks">オーディオブック フォルダー</string>
-  <string name="folder_type_single_folder">単一フォルダー</string>
-  <string name="folder_type_single_file">単一ファイル</string>
-  <string name="folder_type_dialog_title">何を追加しますか？</string>
-  <string name="folder_mode_root">オーディオブックのルートフォルダー (1つのサブフォルダーが1冊のブック)</string>
-  <string name="folder_mode_single">単一のオーディオブックフォルダー</string>
-  <plurals name="folder_type_file_count">
-    <item quantity="other">%d 音声ファイル</item>
-  </plurals>
-  <string name="folder_type_book_example_header">この場合、以下のブックが検出されます。</string>
-  <string name="folder_type_no_books">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
-  <string name="folder_type_title">ファイルの構成はどうなっていますか？</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">たった今</string>
-  <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
-  <string name="migration_hint_title">過去のブック位置へのアクセス</string>
-  <string name="migration_hint_content">新しいAndroidバージョンの変更により、システムピッカーを使用してオーディオブックのフォルダーを選択する必要があります。\n\n上のアイコンをタップすると、過去のブック位置が表示されます。</string>
-  <string name="migration_hint_confirm">了解</string>
-  <string name="migration_detail_title">過去のブック位置</string>
-  <string name="migration_detail_content_name">名前</string>
-  <string name="migration_detail_content_root">ルートフォルダー</string>
-  <string name="migration_detail_content_position">位置</string>
-  <string name="migration_detail_content_bookmarks">ブックマーク</string>
-  <string name="migration_detail_content_added_at">追加日時</string>
-  <string name="migration_detail_content_position_current_file_title">現在のファイル</string>
-  <string name="migration_detail_content_position_current_file_position">ファイル内の位置</string>
-  <string name="migration_detail_content_position_current_chapter_title">現在のチャプター</string>
-  <string name="migration_detail_content_position_current_chapter_position">チャプター内の位置</string>
-  <string name="migration_delete_dialog_title">位置の削除</string>
-  <string name="migration_delete_dialog_content">一度、過去の位置を削除してしまうと、過去の再生位置を復元できなくなってしまいます。</string>
-  <string name="migration_delete_dialog_action_delete">削除</string>
-  <string name="migration_delete_dialog_action_keep">維持</string>
-  <string name="delete_book_bottom_sheet_title">ブックを削除</string>
-  <string name="delete_book_dialog_title">ブックの削除</string>
-  <string name="delete_book_dialog_deletion_confirmation">ファイルを削除</string>
-  <string name="delete_book_dialog_content">これにより、デバイス上のファイルが削除されます。</string>
-  <string name="search_hint">何をお探しですか？</string>
-  <string name="battery_optimization_rationale">端末側のバッテリー節約設定の制限により、再生が中断されるかもしれません。</string>
-  <string name="battery_optimization_action">更新</string>
+    <!--BookShelf-->
+    <!--in the book-overview the show-all button which displays all books of a category-->
+    <!--BookPlayFragment-->
+    <string name="cover">カバー</string>
+    <string name="play_pause">再生 / 一時停止</string>
+    <string name="action_sleep">スリープタイマー</string>
+    <string name="rewind">巻き戻し</string>
+    <string name="fast_forward">早送り</string>
+    <string name="previous_track">前のトラック</string>
+    <string name="next_track">次のトラック</string>
+    <string name="skip_silence">無音をスキップ</string>
+    <string name="volume_boost">音量ブースト</string>
+    <string name="more">さらに表示</string>
+    <!--NoExternalStorage-->
+    <!--Dialogs-->
+    <string name="dialog_confirm">設定</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <!--EditBookDialog-->
+    <string name="content_cover">選択するカバーを表示</string>
+    <string name="change_book_name">名前</string>
+    <string name="download_book_cover">インターネットからのカバー</string>
+    <string name="pick_book_cover">ファイルシステムからのカバー</string>
+    <string name="edit_book_title">ブックを編集</string>
+    <string name="mark_as_completed">完了としてマーク</string>
+    <string name="mark_as_current">現在としてマーク</string>
+    <string name="mark_as_not_started">未再生としてマーク</string>
+    <!--JumpToPosition-->
+    <!--BookAdding-->
+    <string name="audiobook_folders_title">オーディオブック フォルダー</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">再生速度</string>
+    <!--Bookmarks-->
+    <string name="bookmark">ブックマーク</string>
+    <string name="bookmark_edit_title">ブックマークを編集</string>
+    <string name="bookmark_edit_hint">ブックマーク名</string>
+    <string name="bookmark_added">ブックマークを追加しました</string>
+    <!--Settings-->
+    <string name="action_settings">設定</string>
+    <string name="min">%s 分</string>
+    <string name="delete_last_number">最後に入力した番号を削除します</string>
+    <plurals name="seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
+    <string name="pref_seek_time">スキップ量</string>
+    <string name="pref_theme_dark">ダークテーマ</string>
+    <string name="pref_auto_rewind_title">自動巻き戻し</string>
+    <string name="pref_suggest_idea">アイデアの提案</string>
+    <string name="pref_use_grid">グリッド表示の使用</string>
+    <string name="pref_report_issue">問題の報告</string>
+    <string name="pref_help_translating">翻訳の手助け</string>
+    <string name="pref_get_support">サポート</string>
+    <string name="pref_app_version">アプリのバージョン</string>
+    <string name="popup_edit">編集</string>
+    <string name="remove">削除</string>
+    <string name="play_current">現在を再生</string>
+    <!--book category-->
+    <string name="book_header_current">現在</string>
+    <string name="book_header_not_started">未再生</string>
+    <string name="book_header_completed">完了</string>
+    <string name="close">閉じる</string>
+    <string name="delete">削除</string>
+    <string name="add">追加</string>
+    <string name="folder_type_dialog_title">何を追加しますか？</string>
+    <string name="folder_mode_root">オーディオブックのルートフォルダー (1つのサブフォルダーが1冊のブック)</string>
+    <string name="folder_mode_single">単一のオーディオブックフォルダー</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="other">%d 音声ファイル</item>
+    </plurals>
+    <string name="folder_type_book_example_header">この場合、以下のブックが検出されます。</string>
+    <string name="folder_type_no_books">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
+    <!--will be shown as the time for a bookmark that was just created-->
+    <string name="bookmark_just_now">たった今</string>
+    <!--will be shown as a hint when no books have been added-->
+    <string name="voice_intro_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
+    <string name="migration_hint_title">過去のブック位置へのアクセス</string>
+    <string name="migration_hint_content">新しいAndroidバージョンの変更により、システムピッカーを使用してオーディオブックのフォルダーを選択する必要があります。\n\n上のアイコンをタップすると、過去のブック位置が表示されます。</string>
+    <string name="migration_hint_confirm">了解</string>
+    <string name="migration_detail_title">過去のブック位置</string>
+    <string name="migration_detail_content_name">名前</string>
+    <string name="migration_detail_content_root">ルートフォルダー</string>
+    <string name="migration_detail_content_position">位置</string>
+    <string name="migration_detail_content_bookmarks">ブックマーク</string>
+    <string name="migration_detail_content_added_at">追加日時</string>
+    <string name="migration_detail_content_position_current_file_title">現在のファイル</string>
+    <string name="migration_detail_content_position_current_file_position">ファイル内の位置</string>
+    <string name="migration_detail_content_position_current_chapter_title">現在のチャプター</string>
+    <string name="migration_detail_content_position_current_chapter_position">チャプター内の位置</string>
+    <string name="migration_delete_dialog_title">位置の削除</string>
+    <string name="migration_delete_dialog_content">一度、過去の位置を削除してしまうと、過去の再生位置を復元できなくなってしまいます。</string>
+    <string name="migration_delete_dialog_action_delete">削除</string>
+    <string name="migration_delete_dialog_action_keep">維持</string>
+    <string name="delete_book_bottom_sheet_title">ブックを削除</string>
+    <string name="delete_book_dialog_title">ブックの削除</string>
+    <string name="delete_book_dialog_deletion_confirmation">ファイルを削除</string>
+    <string name="delete_book_dialog_content">これにより、デバイス上のファイルが削除されます。</string>
+    <string name="search_hint">何をお探しですか？</string>
+    <string name="battery_optimization_rationale">端末側のバッテリー節約設定の制限により、再生が中断されるかもしれません。</string>
+    <string name="battery_optimization_action">更新</string>
 </resources>
