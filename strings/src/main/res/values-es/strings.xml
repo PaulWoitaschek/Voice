@@ -118,4 +118,7 @@
     <string name="generic_error_message">Algo salió mal 😢</string>
     <string name="cover_search_template_no_author">%s portada del audiolibro</string>
     <string name="cover_search_template_with_author">Portada del audiolibro %1$s de %2$s</string>
+    <string name="storage_bug_subtitle">En algunos dispositivos, una aplicación del sistema carece del permisos necesarios para acceder al almacenamiento externo. Este acceso es esencial para que Voice pueda leer tus audiolibros.</string>
+    <string name="storage_bug_title">Se requiere el permiso</string>
+    <string name="storage_bug_button">Conceder el permiso</string>
 </resources>
