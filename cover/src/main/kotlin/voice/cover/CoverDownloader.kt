@@ -13,6 +13,7 @@ import okio.sink
 import voice.logging.core.Logger
 import java.io.File
 import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -24,6 +25,11 @@ class CoverDownloader
 ) {
 
   internal suspend fun download(url: String): File? {
+    val tempFolder = File(context.cacheDir, "coverDownload")
+      .apply {
+        deleteRecursively()
+        mkdirs()
+      }
     val request = Request.Builder()
       .url(url)
       .build()
@@ -36,7 +42,8 @@ class CoverDownloader
     return withContext(Dispatchers.IO) {
       try {
         response.body?.source()?.use { source ->
-          val file = File(context.cacheDir, "cover")
+          // select a random name so on updating this, the old image is not cached
+          val file = File(tempFolder, UUID.randomUUID().toString())
           file.sink().use { sink ->
             source.readAll(sink)
           }

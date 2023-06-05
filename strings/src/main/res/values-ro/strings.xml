@@ -46,7 +46,7 @@
     <string name="popup_edit">Modificare</string>
     <string name="remove">Eliminare</string>
     <string name="play_current">Redare curentă</string>
-    <string name="book_header_current">Cărți în legtură</string>
+    <string name="book_header_current">Cărți în lectură</string>
     <string name="book_header_not_started">Cărți neascultate încă</string>
     <string name="close">Închide</string>
     <string name="delete">Șterge</string>
@@ -97,4 +97,11 @@
     <string name="media_session_recent">Recente</string>
     <string name="pause">Pauză</string>
     <string name="play">Redare</string>
+    <string name="storage_bug_subtitle">Pentru anumite dispozitive, o aplicație de sistem are nevoie de permisiunile necesary pentru a accesa stocarea externă. Această permisiune este essențială pentru Voice ca să poată citi Cărțile audio pe care le aveți.</string>
+    <string name="storage_bug_title">Permisiune necesară</string>
+    <string name="storage_bug_button">Acordă permisiune</string>
+    <string name="generic_error_message">Ceva nu a mers cum trebuie 😢</string>
+    <string name="cover_search_template_with_author">%1$s de %2$s copertă Cărți audio</string>
+    <string name="cover_search_template_no_author">%s copertă Cărți audio</string>
+    <string name="generic_error_retry">Reîncearcă</string>
 </resources>

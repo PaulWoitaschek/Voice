@@ -17,11 +17,7 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
   override suspend fun transform(input: Bitmap, size: Size): Bitmap {
     val scaleFactor: Float = input.width.toFloat() / cropSource.measuredWidth
     scaleRect(rect, scaleFactor)
-    return try {
-      Bitmap.createBitmap(input, rect.left, rect.top, rect.width(), rect.height())
-    } finally {
-      input.recycle()
-    }
+    return Bitmap.createBitmap(input, rect.left, rect.top, rect.width(), rect.height())
   }
 
   private fun scaleRect(rect: Rect, scaleFactor: Float) =
