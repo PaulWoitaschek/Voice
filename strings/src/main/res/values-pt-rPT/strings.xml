@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="rewind">Retroceder</string>
     <string name="previous_track">Capítulo anterior</string>
     <string name="next_track">Próximo capítulo</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_cancel">Cancelar</string>
-    <!--EditBookDialog-->
     <string name="change_book_name">Título</string>
     <string name="download_book_cover">Capa da internet</string>
     <string name="pick_book_cover">Capa do sistema de arquivo</string>
     <string name="edit_book_title">Editar livro</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Velocidade de reprodução</string>
-    <!--Bookmarks-->
     <string name="bookmark">Marcador</string>
     <string name="bookmark_edit_title">Editar marcador</string>
     <string name="bookmark_edit_hint">Título do marcador</string>
     <string name="bookmark_added">Marcador adicionado</string>
-    <!--Settings-->
     <string name="action_settings">Preferências</string>
     <string name="min">%s min</string>
     <plurals name="seconds">
@@ -35,10 +24,7 @@
     </plurals>
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
-    <!--book category-->
     <string name="book_header_current">Actual</string>
-    <!--will be shown as the time for a bookmark that was just created-->
-    <!--will be shown as a hint when no books have been added-->
     <string name="action_sleep">Temporizador de sono</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="skip_silence">Pular silêncio</string>
@@ -60,7 +46,7 @@
     <string name="pref_help_translating">Ajuda traduzindo Voice</string>
     <string name="pref_app_version">Versão</string>
     <string name="play_current">Reproduzir atual</string>
-  <string name="book_header_not_started">Não iniciado ainda</string>
+    <string name="book_header_not_started">Não iniciado ainda</string>
     <string name="book_header_completed">Concluído</string>
     <string name="close">Fechar</string>
     <string name="delete">Apagar</string>

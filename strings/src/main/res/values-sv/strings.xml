@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
     <string name="action_sleep">Insomningstimer</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">Hoppa över tystnad</string>
     <string name="volume_boost">Volymökning</string>
     <string name="more">Mer</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Ställ in</string>
     <string name="dialog_cancel">Avbryt</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Visar omslag att välja</string>
     <string name="change_book_name">Namn</string>
     <string name="download_book_cover">Omslag från internet</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">Markera som avslutad</string>
     <string name="mark_as_current">Markera som aktuell</string>
     <string name="mark_as_not_started">Markera som inte påbörjad ännu</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Ljudboksmappar</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Uppspelningshastighet</string>
-    <!--Bookmarks-->
     <string name="bookmark">Bokmärke</string>
     <string name="bookmark_edit_title">Redigera bokmärke</string>
     <string name="bookmark_edit_hint">Namn på bokmärke</string>
     <string name="bookmark_added">Bokmärke tillagt</string>
-    <!--Settings-->
     <string name="action_settings">Inställningar</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Tar bort det senast angivna numret</string>
@@ -56,7 +45,6 @@
     <string name="popup_edit">Redigera</string>
     <string name="remove">Ta bort</string>
     <string name="play_current">Spela aktuell</string>
-    <!--book category-->
     <string name="book_header_current">Aktuella</string>
     <string name="book_header_not_started">Inte påbörjad ännu</string>
     <string name="book_header_completed">Avslutad</string>
@@ -76,9 +64,7 @@
     <string name="folder_type_book_example_header">Detta skulle leda till att följande böcker upptäcks</string>
     <string name="folder_type_no_books">Voice kunde inte upptäcka några böcker. Finns det några ljudfiler?</string>
     <string name="folder_type_title">Hur är dina filer uppbyggda?</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Precis nu</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Lägg till din ljudboksmapp så att du kan börja lyssna!</string>
     <string name="migration_hint_title">Åtkomst till gamla bokpositioner</string>
     <string name="migration_hint_content">På grund av ändringar i nyare Android-versioner är det nödvändigt att välja din ljudboksmapp med hjälp av systemväljaren.\n\nKlicka på ikonen ovan för att se dina gamla bokpositioner.</string>

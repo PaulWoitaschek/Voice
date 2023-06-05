@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Відтворити/призупинити</string>
     <string name="action_sleep">Таймер сну</string>
@@ -11,11 +8,8 @@
     <string name="previous_track">Попередній запис</string>
     <string name="next_track">Наступний запис</string>
     <string name="skip_silence">Пропускати тишу</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Установити</string>
     <string name="dialog_cancel">Скасувати</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Показує вибір обкладинки</string>
     <string name="change_book_name">Назва</string>
     <string name="download_book_cover">Обкладинка з Інтернету</string>
@@ -24,17 +18,12 @@
     <string name="mark_as_completed">Позначити як завершене</string>
     <string name="mark_as_current">Позначити як поточне</string>
     <string name="mark_as_not_started">Позначити як ще не почате</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Папки з аудіокнигами</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Швидкість відтворення</string>
-    <!--Bookmarks-->
     <string name="bookmark">Закладка</string>
     <string name="bookmark_edit_title">Редагувати закладку</string>
     <string name="bookmark_edit_hint">Назва закладки</string>
     <string name="bookmark_added">Закладку додано</string>
-    <!--Settings-->
     <string name="action_settings">Налаштування</string>
     <string name="min">%s хв</string>
     <string name="delete_last_number">Видаляє останнє введене число</string>
@@ -50,16 +39,13 @@
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Вилучити</string>
     <string name="play_current">Відтворити поточну</string>
-    <!--book category-->
     <string name="book_header_current">Поточні</string>
     <string name="book_header_not_started">Ще не початі</string>
     <string name="book_header_completed">Завершені</string>
     <string name="close">Закрити</string>
     <string name="delete">Видалити</string>
     <string name="add">Додати</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Щойно</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Давайте додамо папку з аудіокнигами, щоб ви могли почати прослуховування!</string>
     <string name="migration_hint_title">Триває читання старих місць відтворення книг</string>
     <string name="migration_hint_content">Через зміни в нових версіях Android папку з аудіокнигами потрібно вибирати за допомогою системного диспетчера файлів.

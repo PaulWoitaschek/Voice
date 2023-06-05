@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="ar">
-    <!--BookShelf-->
-    <!-- in the book-overview the show-all button which displays all books of a category -->
-    <!--BookPlayFragment-->
     <string name="cover">الغطاء</string>
     <string name="play_pause">شغّل/ ألبث</string>
     <string name="action_sleep">مؤقت النوم</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">تخطَ الصمت</string>
     <string name="volume_boost">مكبر الصوت</string>
     <string name="more">المزيد</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">عيّن</string>
     <string name="dialog_cancel">ألغ</string>
-    <!--EditBookDialog-->
     <string name="content_cover">أظهر الغطاء للاختياره</string>
     <string name="change_book_name">الاسم</string>
     <string name="download_book_cover">الغلاف من الإنترنت</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">علّمه مكتمل</string>
     <string name="mark_as_current">علّمه الحالي</string>
     <string name="mark_as_not_started">علّمه أنه لم يبدأ</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">مجلدات الكتب الصوتية</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">سرعة التشغيل</string>
-    <!--Bookmarks-->
     <string name="bookmark">العلامات المرجعية</string>
     <string name="bookmark_edit_title">حرر العلامات</string>
     <string name="bookmark_edit_hint">اسم العلامة</string>
     <string name="bookmark_added">أضيفت علامة مرجعية</string>
-    <!--Settings-->
     <string name="action_settings">التفضيلات</string>
     <string name="min">%s د</string>
     <string name="delete_last_number">تحذف أخر رَقَم مدخل</string>
@@ -60,7 +49,6 @@
     <string name="popup_edit">حرر</string>
     <string name="remove">أزل</string>
     <string name="play_current">شغل الحالي</string>
-    <!-- book category -->
     <string name="book_header_current">الحالي</string>
     <string name="book_header_not_started">لم يبدأ بعد</string>
     <string name="book_header_completed">انتهى</string>
@@ -84,9 +72,7 @@
     <string name="folder_type_book_example_header">سيؤدي هذا إلى اكتشاف الكتاب التالي </string>
     <string name="folder_type_no_books">لم يتمكن فويس من اكتشاف أي كتب. هل هناك أي ملفات صوتية؟</string>
     <string name="folder_type_title">ما هي هيكلية ملفاتك؟</string>
-    <!-- will be shown as the time for a bookmark that was just created -->
     <string name="bookmark_just_now">الآن</string>
-    <!-- will be shown as a hint when no books have been added -->
     <string name="voice_intro_first_book">دعنا نضيف مجلد كتبك الصوتية لتبدأ الاستماع!</string>
     <string name="migration_hint_title">الوصول إلى مواضع الكتاب القديم</string>
     <string name="migration_hint_content">نظرًا للتغييرات في إصدارات أندوريد الأحدث، من الضروري تحديد مجلد الكتاب الصوتي باستخدام منتقي النظام.\n\nانقر فوق الرمز أعلاه لعرض مواضع كتابك القديم.</string>

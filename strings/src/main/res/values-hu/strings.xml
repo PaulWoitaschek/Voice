@@ -1,79 +1,65 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--BookShelf-->
-  <!--in the book-overview the show-all button which displays all books of a category-->
-  <!--BookPlayFragment-->
-  <string name="cover">Könyvborító</string>
-  <string name="play_pause">Lejátszás / szünet</string>
-  <string name="action_sleep">Alvásidőzítő</string>
-  <string name="rewind">visszatekerés</string>
-  <string name="fast_forward">előretekerés</string>
-  <string name="previous_track">Előző szám</string>
-  <string name="next_track">Következő szám</string>
-  <string name="skip_silence">Csend kihagyása</string>
-  <!--NoExternalStorage-->
-  <!--Dialogs-->
-  <string name="dialog_confirm">Beállítás</string>
-  <string name="dialog_cancel">Mégse</string>
-  <!--EditBookDialog-->
-  <string name="content_cover">Megjeleníti a választható borítót</string>
-  <string name="change_book_name">Név</string>
-  <string name="download_book_cover">Borító az internetről</string>
-  <string name="pick_book_cover">Fájlrendszerből származó borító</string>
-  <string name="edit_book_title">Könyv szerkesztése</string>
-  <string name="mark_as_completed">Jelölés meghallgatottnak</string>
-  <string name="mark_as_current">Megjelölés aktuálisként</string>
-  <string name="mark_as_not_started">Megjelölés még el nem kezdettként</string>
-  <!--JumpToPosition-->
-  <!--BookAdding-->
-  <string name="audiobook_folders_title">Hangoskönyv mappák</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Lejátszási sebesség</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Könyvjelző</string>
-  <string name="bookmark_edit_title">Könyvjelző szerkesztése</string>
-  <string name="bookmark_edit_hint">Könyvjelző neve</string>
-  <string name="bookmark_added">Könyvjelző hozzáadva</string>
-  <!--Settings-->
-  <string name="action_settings">Beállítások</string>
-  <string name="min">%s perc</string>
-  <string name="delete_last_number">Törli az utoljára beírt számot</string>
-  <plurals name="seconds">
-    <item quantity="one">%dmásodperc</item>
-    <item quantity="other">%d másodperc</item>
-  </plurals>
-  <string name="pref_seek_time">Kihagyás mértéke</string>
-  <string name="pref_theme_dark">Sötét téma</string>
-  <string name="pref_auto_rewind_title">Automatikus visszatekerés</string>
-  <string name="popup_edit">Szerkesztés</string>
-  <string name="remove">Eltávolítás</string>
-  <string name="play_current">Jelenlegi lejátszása</string>
-  <!--book category-->
-  <string name="book_header_current">Jelenlegi</string>
-  <string name="book_header_not_started">Még nem elkezdett</string>
-  <string name="book_header_completed">Befejezett</string>
-  <string name="close">Bezárás</string>
-  <string name="delete">Törlés</string>
-  <string name="add">Hozzáadás</string>
-  <!--will be shown as the time for a bookmark that was just created-->
-  <string name="bookmark_just_now">Éppen most</string>
-  <!--will be shown as a hint when no books have been added-->
-  <string name="voice_intro_first_book">Adjon hozzá a hangoskönyv mappát, hogy elkezdhesse a hallgatást!</string>
-  <string name="migration_hint_title">Hozzáférés a régi könyvek helyéhez</string>
-  <string name="migration_hint_content">Az újabb Android-verziók változásai miatt ki kell választani a hangoskönyv mappát a rendszerválasztóval.\n\nKattintson a fenti ikonra a régi könyvek helyének megtekintéséhez.</string>
-  <string name="migration_hint_confirm">Értem</string>
-  <string name="migration_detail_title">Régi könyvek helye</string>
-  <string name="migration_detail_content_name">Név</string>
-  <string name="migration_detail_content_root">Gyökérkönyvtár</string>
-  <string name="migration_detail_content_position">Hely</string>
-  <string name="migration_detail_content_bookmarks">Könyvjelzők</string>
-  <string name="migration_detail_content_added_at">Hozzáadva:</string>
-  <string name="migration_delete_dialog_title">Pozíciók törlése</string>
-  <string name="migration_delete_dialog_content">Ha törli a régi pozíciókat, nem fogja tudni visszaállítani a régi lejátszási pozíciókat.</string>
-  <string name="migration_delete_dialog_action_delete">Törlés</string>
-  <string name="migration_delete_dialog_action_keep">Megtartás</string>
-  <string name="delete_book_bottom_sheet_title">Könyv törlése</string>
-  <string name="delete_book_dialog_title">Könyv törlése</string>
-  <string name="delete_book_dialog_deletion_confirmation">Fájlok törlése</string>
-  <string name="delete_book_dialog_content">Ezzel törli a fájlokat az eszközön.</string>
+    <string name="cover">Könyvborító</string>
+    <string name="play_pause">Lejátszás / szünet</string>
+    <string name="action_sleep">Alvásidőzítő</string>
+    <string name="rewind">visszatekerés</string>
+    <string name="fast_forward">előretekerés</string>
+    <string name="previous_track">Előző szám</string>
+    <string name="next_track">Következő szám</string>
+    <string name="skip_silence">Csend kihagyása</string>
+    <string name="dialog_confirm">Beállítás</string>
+    <string name="dialog_cancel">Mégse</string>
+    <string name="content_cover">Megjeleníti a választható borítót</string>
+    <string name="change_book_name">Név</string>
+    <string name="download_book_cover">Borító az internetről</string>
+    <string name="pick_book_cover">Fájlrendszerből származó borító</string>
+    <string name="edit_book_title">Könyv szerkesztése</string>
+    <string name="mark_as_completed">Jelölés meghallgatottnak</string>
+    <string name="mark_as_current">Megjelölés aktuálisként</string>
+    <string name="mark_as_not_started">Megjelölés még el nem kezdettként</string>
+    <string name="audiobook_folders_title">Hangoskönyv mappák</string>
+    <string name="playback_speed">Lejátszási sebesség</string>
+    <string name="bookmark">Könyvjelző</string>
+    <string name="bookmark_edit_title">Könyvjelző szerkesztése</string>
+    <string name="bookmark_edit_hint">Könyvjelző neve</string>
+    <string name="bookmark_added">Könyvjelző hozzáadva</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="min">%s perc</string>
+    <string name="delete_last_number">Törli az utoljára beírt számot</string>
+    <plurals name="seconds">
+        <item quantity="one">%dmásodperc</item>
+        <item quantity="other">%d másodperc</item>
+    </plurals>
+    <string name="pref_seek_time">Kihagyás mértéke</string>
+    <string name="pref_theme_dark">Sötét téma</string>
+    <string name="pref_auto_rewind_title">Automatikus visszatekerés</string>
+    <string name="popup_edit">Szerkesztés</string>
+    <string name="remove">Eltávolítás</string>
+    <string name="play_current">Jelenlegi lejátszása</string>
+    <string name="book_header_current">Jelenlegi</string>
+    <string name="book_header_not_started">Még nem elkezdett</string>
+    <string name="book_header_completed">Befejezett</string>
+    <string name="close">Bezárás</string>
+    <string name="delete">Törlés</string>
+    <string name="add">Hozzáadás</string>
+    <string name="bookmark_just_now">Éppen most</string>
+    <string name="voice_intro_first_book">Adjon hozzá a hangoskönyv mappát, hogy elkezdhesse a hallgatást!</string>
+    <string name="migration_hint_title">Hozzáférés a régi könyvek helyéhez</string>
+    <string name="migration_hint_content">Az újabb Android-verziók változásai miatt ki kell választani a hangoskönyv mappát a rendszerválasztóval.\n\nKattintson a fenti ikonra a régi könyvek helyének megtekintéséhez.</string>
+    <string name="migration_hint_confirm">Értem</string>
+    <string name="migration_detail_title">Régi könyvek helye</string>
+    <string name="migration_detail_content_name">Név</string>
+    <string name="migration_detail_content_root">Gyökérkönyvtár</string>
+    <string name="migration_detail_content_position">Hely</string>
+    <string name="migration_detail_content_bookmarks">Könyvjelzők</string>
+    <string name="migration_detail_content_added_at">Hozzáadva:</string>
+    <string name="migration_delete_dialog_title">Pozíciók törlése</string>
+    <string name="migration_delete_dialog_content">Ha törli a régi pozíciókat, nem fogja tudni visszaállítani a régi lejátszási pozíciókat.</string>
+    <string name="migration_delete_dialog_action_delete">Törlés</string>
+    <string name="migration_delete_dialog_action_keep">Megtartás</string>
+    <string name="delete_book_bottom_sheet_title">Könyv törlése</string>
+    <string name="delete_book_dialog_title">Könyv törlése</string>
+    <string name="delete_book_dialog_deletion_confirmation">Fájlok törlése</string>
+    <string name="delete_book_dialog_content">Ezzel törli a fájlokat az eszközön.</string>
 </resources>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Copertina</string>
     <string name="play_pause">Riproduci / Pausa</string>
     <string name="action_sleep">Timer sospensione</string>
@@ -11,27 +8,19 @@
     <string name="previous_track">Traccia precedente</string>
     <string name="next_track">Traccia successiva</string>
     <string name="skip_silence">Salta silenzio</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Conferma</string>
     <string name="dialog_cancel">Annulla</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Mostra la copertina da scegliere</string>
     <string name="change_book_name">Nome</string>
     <string name="download_book_cover">Copertina da Internet</string>
     <string name="pick_book_cover">Copertina dal file system</string>
     <string name="edit_book_title">Modifica libro</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Cartelle audiolibri</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Velocità di riproduzione</string>
-    <!--Bookmarks-->
     <string name="bookmark">Segnalibro</string>
     <string name="bookmark_edit_title">Modifica segnalibro</string>
     <string name="bookmark_edit_hint">Nome segnalibro</string>
     <string name="bookmark_added">Segnalibro aggiunto</string>
-    <!--Settings-->
     <string name="action_settings">Preferenze</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Cancella l\'ultimo numero inserito</string>
@@ -46,12 +35,9 @@
     <string name="popup_edit">Modifica</string>
     <string name="remove">Rimuovi</string>
     <string name="play_current">Riproduci corrente</string>
-    <!--book category-->
     <string name="book_header_current">Corrente</string>
     <string name="book_header_not_started">Non ancora iniziato</string>
     <string name="book_header_completed">Completato</string>
-    <!--will be shown as the time for a bookmark that was just created-->
-    <!--will be shown as a hint when no books have been added-->
     <string name="volume_boost">Aumento del volume</string>
     <string name="more">Altro</string>
     <string name="mark_as_completed">Segna come completato</string>

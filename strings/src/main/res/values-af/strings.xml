@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Voorblad</string>
     <string name="play_pause">Speel / Breek</string>
     <string name="action_sleep">Slaap-Timer</string>
@@ -11,27 +8,19 @@
     <string name="previous_track">Vorige snit</string>
     <string name="next_track">Volgende snit</string>
     <string name="skip_silence">Skip Stilte</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Stel</string>
     <string name="dialog_cancel">Kanselleer</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Wys voorblad om te kies</string>
     <string name="change_book_name">Naam</string>
     <string name="download_book_cover">Dekblad van internet af</string>
     <string name="pick_book_cover">Dekblad vanaf leêr stelsel</string>
     <string name="edit_book_title">Wysig boek</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Klankboekgids</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Terugspeel spoed</string>
-    <!--Bookmarks-->
     <string name="bookmark">Boekmerk</string>
     <string name="bookmark_edit_title">Wysig boekmerk</string>
     <string name="bookmark_edit_hint">Boekmerk naam</string>
     <string name="bookmark_added">Boekmerk bygevoeg</string>
-    <!--Settings-->
     <string name="action_settings">Voorkeure</string>
     <string name="min">%smin</string>
     <string name="delete_last_number">Skrap die laaste ingevoerde nommer</string>
@@ -44,12 +33,9 @@
     <string name="popup_edit">Wysig</string>
     <string name="remove">Verwyder</string>
     <string name="play_current">Speel huidig</string>
-  <!--book category-->
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog nie begin nie</string>
     <string name="book_header_completed">Voltooi</string>
-    <!--will be shown as the time for a bookmark that was just created-->
-    <!--will be shown as a hint when no books have been added-->
     <string name="mark_as_completed">Merk as klaar</string>
     <string name="mark_as_not_started">Merk as nog nie begin nie</string>
     <string name="pref_suggest_idea">Deel \'n idee</string>
