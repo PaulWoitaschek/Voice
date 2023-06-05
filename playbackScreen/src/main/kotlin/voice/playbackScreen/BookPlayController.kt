@@ -23,6 +23,7 @@ import voice.common.rootComponentAs
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
+import voice.playbackScreen.view.BookPlayView
 import voice.sleepTimer.SleepTimerDialogController
 import javax.inject.Inject
 import voice.strings.R as StringsR

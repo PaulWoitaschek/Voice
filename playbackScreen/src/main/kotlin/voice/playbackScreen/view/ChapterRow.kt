@@ -1,4 +1,4 @@
-package voice.playbackScreen
+package voice.playbackScreen.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
