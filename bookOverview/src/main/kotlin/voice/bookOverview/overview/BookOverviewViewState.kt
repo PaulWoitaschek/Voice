@@ -17,7 +17,7 @@ data class BookOverviewViewState(
   val isLoading: Boolean,
   val searchActive: Boolean,
   val searchViewState: BookSearchViewState,
-  val showStoragePermissionBugCard: Boolean = false,
+  val showStoragePermissionBugCard: Boolean,
 ) {
 
   companion object {
@@ -36,6 +36,7 @@ data class BookOverviewViewState(
         recentQueries = emptyList(),
         query = "",
       ),
+      showStoragePermissionBugCard = false,
     )
   }
 
