@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.common.R
 import voice.common.compose.ImmutableFile
+import voice.strings.R as StringsR
 
 @Composable
 internal fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
@@ -32,6 +33,6 @@ internal fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
     model = cover?.file,
     placeholder = painterResource(id = R.drawable.album_art),
     error = painterResource(id = R.drawable.album_art),
-    contentDescription = stringResource(id = voice.strings.R.string.cover),
+    contentDescription = stringResource(id = StringsR.string.cover),
   )
 }
