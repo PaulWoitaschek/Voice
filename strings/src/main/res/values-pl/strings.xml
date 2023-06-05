@@ -64,6 +64,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Będzie to skutkowało wykryciem następujących książek</string>
     <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
+    <string name="folder_type_title">Jaka jest struktura twoich plików?</string>
     <string name="bookmark_just_now">Przed chwilą</string>
     <string name="voice_intro_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
     <string name="migration_hint_title">Sprawdzanie starych pozycji książek</string>

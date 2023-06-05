@@ -63,6 +63,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
     <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
+    <string name="folder_type_title">Как упорядочены ваши файлы?</string>
     <string name="bookmark_just_now">Только что</string>
     <string name="voice_intro_first_book">Давайте выберем папку с аудиокнигами!</string>
     <string name="migration_hint_title">Поиск предыдущих расположений</string>

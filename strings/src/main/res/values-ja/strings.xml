@@ -58,6 +58,7 @@
     </plurals>
     <string name="folder_type_book_example_header">この場合、以下のブックが検出されます。</string>
     <string name="folder_type_no_books">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
+    <string name="folder_type_title">ファイルの構成はどうなっていますか？</string>
     <string name="bookmark_just_now">たった今</string>
     <string name="voice_intro_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
     <string name="migration_hint_title">過去のブック位置へのアクセス</string>
