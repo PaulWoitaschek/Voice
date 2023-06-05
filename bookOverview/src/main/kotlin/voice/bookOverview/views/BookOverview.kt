@@ -36,6 +36,7 @@ import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.search.BookSearchViewState
+import voice.bookOverview.views.topbar.BookOverviewTopBar
 import voice.common.BookId
 import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
@@ -269,8 +270,8 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         suggestedAuthors = emptyList(),
         recentQueries = emptyList(),
         query = "",
-
       ),
+      showStoragePermissionBugCard = false,
     ),
   )
 }
