@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="action_sleep">Desligamento automático</string>
@@ -11,27 +8,19 @@
     <string name="previous_track">Capitulo anterior</string>
     <string name="next_track">Próximo capitulo</string>
     <string name="skip_silence">Pular Silêncio</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Definir</string>
     <string name="dialog_cancel">Cancelar</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Mostrar capa para escolher</string>
     <string name="change_book_name">Nome</string>
     <string name="download_book_cover">Capa da internet</string>
     <string name="pick_book_cover">Capa do arquivo de sistema</string>
     <string name="edit_book_title">Editar livro</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Pastas de Audiolivros</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Velocidade de reprodução</string>
-    <!--Bookmarks-->
     <string name="bookmark">Marcador de páginas</string>
     <string name="bookmark_edit_title">Editar marcador de páginas</string>
     <string name="bookmark_edit_hint">Nome do marcador de páginas</string>
     <string name="bookmark_added">Marcador de páginas adicionado</string>
-    <!--Settings-->
     <string name="action_settings">Preferências</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Deleta o último número digitado</string>
@@ -46,12 +35,9 @@
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
     <string name="play_current">Reproduzir o atual</string>
-    <!--book category-->
     <string name="book_header_current">Atual</string>
     <string name="book_header_not_started">Não iniciado ainda</string>
     <string name="book_header_completed">Completo</string>
-    <!--will be shown as the time for a bookmark that was just created-->
-    <!--will be shown as a hint when no books have been added-->
     <string name="mark_as_completed">Marcar como completo</string>
     <string name="mark_as_current">Marcar como atual</string>
     <string name="mark_as_not_started">Marcar como não-começado</string>

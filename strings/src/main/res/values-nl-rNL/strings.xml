@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Afspelen/Pauzeren</string>
     <string name="action_sleep">Slaaptimer</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">Stilte overslaan</string>
     <string name="volume_boost">Volumeversterking</string>
     <string name="more">Meer</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Instellen</string>
     <string name="dialog_cancel">Annuleren</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Omslag kiezen</string>
     <string name="change_book_name">Naam</string>
     <string name="download_book_cover">Omslag ophalen van internet</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">Markeren als afgerond</string>
     <string name="mark_as_current">Markeren als huidig boek</string>
     <string name="mark_as_not_started">Markeren als nog niet aan begonnen</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Luisterboekmappen</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Afspeelsnelheid</string>
-    <!--Bookmarks-->
     <string name="bookmark">Bladwijzer toevoegen</string>
     <string name="bookmark_edit_title">Bladwijzer bewerken</string>
     <string name="bookmark_edit_hint">Bladwijzernaam</string>
     <string name="bookmark_added">De bladwijzer is toegevoegd</string>
-    <!--Settings-->
     <string name="action_settings">Instellingen</string>
     <string name="min">%s min.</string>
     <string name="delete_last_number">Verwijdert het laatst ingevoerde nummer</string>
@@ -56,7 +45,6 @@
     <string name="popup_edit">Bewerken</string>
     <string name="remove">Verwijderen</string>
     <string name="play_current">Huidig boek afspelen</string>
-    <!--book category-->
     <string name="book_header_current">Huidig</string>
     <string name="book_header_not_started">Nog niet begonnen</string>
     <string name="book_header_completed">Voltooid</string>
@@ -73,9 +61,7 @@
     <string name="folder_type_book_example_header">Hierdoor worden de volgende boeken opgenomen</string>
     <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
     <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Zojuist</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Voeg een luisterboekmap toe om te beginnen met luisteren.</string>
     <string name="migration_hint_title">Oude leeslocaties</string>
     <string name="migration_hint_content">Door wijzigingen in nieuwere Android-versies, is het noodzakelijk om je luisterboek opnieuw te kiezen via de bestandskiezer.\n\nDruk op bovenstaand pictogram je leeslocaties te bekijken.</string>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">封面</string>
     <string name="play_pause">播放 / 暂停</string>
     <string name="action_sleep">睡眠定时器</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">跳过空白部分</string>
     <string name="volume_boost">音量提升</string>
     <string name="more">更多</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">设置</string>
     <string name="dialog_cancel">取消</string>
-    <!--EditBookDialog-->
     <string name="content_cover">显示可选封面</string>
     <string name="change_book_name">名称</string>
     <string name="download_book_cover">从互联网寻找封面图片</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">标记为已结束播放</string>
     <string name="mark_as_current">标记为正在播放</string>
     <string name="mark_as_not_started">标记为尚未开始播放</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">有声书文件夹</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">播放速度</string>
-    <!--Bookmarks-->
     <string name="bookmark">书签</string>
     <string name="bookmark_edit_title">编辑书签</string>
     <string name="bookmark_edit_hint">书签名</string>
     <string name="bookmark_added">已添加书签</string>
-    <!--Settings-->
     <string name="action_settings">偏好设置</string>
     <string name="min">%s 分</string>
     <string name="delete_last_number">删除最后输入的数字</string>
@@ -55,7 +44,6 @@
     <string name="popup_edit">编辑</string>
     <string name="remove">删除</string>
     <string name="play_current">播放当前有声书</string>
-    <!--book category-->
     <string name="book_header_current">正在播放中</string>
     <string name="book_header_not_started">尚未开始播放</string>
     <string name="book_header_completed">已结束播放</string>
@@ -71,9 +59,7 @@
     <string name="folder_type_book_example_header">这样操作将找到以下有声书</string>
     <string name="folder_type_no_books">Voice没有找到任何有声书。声音文件是否存在？</string>
     <string name="folder_type_title">您的文件是如何组织的？</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">刚才</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
     <string name="migration_hint_title">正在读取旧书位置</string>
     <string name="migration_hint_content">由于较新Android版本中的改变，需要使用系统选择器选择您的有声书文件夹。\n\n单击上面的图标以查看您的旧书位置。</string>

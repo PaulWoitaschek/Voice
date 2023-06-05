@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">कवर</string>
     <string name="play_pause">चलायें / रोकें</string>
     <string name="action_sleep">नींद-टाइमर</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">शांति हटाएं </string>
     <string name="volume_boost">आवाज बूस्ट करें</string>
     <string name="more">अधिक</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">सेट करें</string>
     <string name="dialog_cancel">रहने दें</string>
-    <!--EditBookDialog-->
     <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
     <string name="change_book_name">नाम</string>
     <string name="download_book_cover">इंटरनेट से कवर फोटो डालें</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">पूरा सुन चुके</string>
     <string name="mark_as_current">वर्तमान के रूप में चिह्नित करें</string>
     <string name="mark_as_not_started">अभी शुरू नहीं किया के रूप में चिह्नित करें</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">ऑडिओबुक के फोल्डर</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">प्लेबैक की गति</string>
-    <!--Bookmarks-->
     <string name="bookmark">बुकमार्क</string>
     <string name="bookmark_edit_title">बुकमार्क सम्पादित करें</string>
     <string name="bookmark_edit_hint">बुकमार्क का नाम</string>
     <string name="bookmark_added">बुकमार्क जोड़ा गया</string>
-    <!--Settings-->
     <string name="action_settings">पसंदें</string>
     <string name="min">%s मिनट</string>
     <string name="delete_last_number">पिछला डाला अंक डिलीट करेगा</string>
@@ -56,7 +45,6 @@
     <string name="popup_edit">संपादन</string>
     <string name="remove">हटाएं</string>
     <string name="play_current">वर्तामन चलायें</string>
-    <!--book category-->
     <string name="book_header_current">वर्तमान </string>
     <string name="book_header_not_started">अभी प्रारंभ नही किया</string>
     <string name="book_header_completed">पूरा हो गया </string>
@@ -73,9 +61,7 @@
     <string name="folder_type_book_example_header">इससे निम्नलिखित पुस्तकों का पता चलेगा</string>
     <string name="folder_type_no_books">वॉइस किसी भी किताब का पता नहीं लगा सकी। क्या कोई ऑडियो फाइल है?</string>
     <string name="folder_type_title">आपकी फाइलें कैसे संरचित हैं?</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">बस अभी </string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">चलिए आपका ऑडियोबुक फोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
     <string name="migration_hint_title">पुरानी पुस्तक स्थिति तक पहुँचना</string>
     <string name="migration_hint_content">नए एंड्राइड संस्करणों में परिवर्तनों के कारण, सिस्टम पिकर का उपयोग करके अपने ऑडियोबुक फ़ोल्डर का चयन करना आवश्यक है। अपनी पुरानी पुस्तकों की स्थिति देखने के लिए उपरोक्त आइकन पर क्लिक करें।</string>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Читать — пауза</string>
     <string name="action_sleep">Таймер сна</string>
@@ -12,11 +9,8 @@
     <string name="next_track">Следующий файл</string>
     <string name="skip_silence">Пропускать тишину</string>
     <string name="volume_boost">Усиление звука</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Установить</string>
     <string name="dialog_cancel">Отмена</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
     <string name="download_book_cover">Обложка из интернета</string>
@@ -25,17 +19,12 @@
     <string name="mark_as_completed">Пометить как прослушанную</string>
     <string name="mark_as_current">Пометить как открытую</string>
     <string name="mark_as_not_started">Пометить как непрослушанную</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Скорость чтения</string>
-    <!--Bookmarks-->
     <string name="bookmark">Закладки</string>
     <string name="bookmark_edit_title">Редактировать</string>
     <string name="bookmark_edit_hint">Имя закладки</string>
     <string name="bookmark_added">Закладка добавлена</string>
-    <!--Settings-->
     <string name="action_settings">Настройки</string>
     <string name="min">%s мин.</string>
     <string name="delete_last_number">Удаляет последнее введенное число</string>
@@ -57,7 +46,6 @@
     <string name="popup_edit">Редактировать</string>
     <string name="remove">Удалить</string>
     <string name="play_current">Читать открытую</string>
-    <!--book category-->
     <string name="book_header_current">Слушаю</string>
     <string name="book_header_not_started">Непрослушанные</string>
     <string name="book_header_completed">Прослушанные</string>
@@ -75,9 +63,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
     <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Только что</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Давайте выберем папку с аудиокнигами!</string>
     <string name="migration_hint_title">Поиск предыдущих расположений</string>
     <string name="migration_hint_content">Из-за изменений в последних версиях Android, необходимо выбрать папку с аудиокнигами через системный диалог.\n\nНажмине на значке наверху, чтобы посмотреть предыдущее расположение книг.</string>

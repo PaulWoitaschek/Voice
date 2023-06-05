@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="pl">
-    <!--BookShelf-->
-    <!-- in the book-overview the show-all button which displays all books of a category -->
-    <!--BookPlayFragment-->
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj / Pauza</string>
     <string name="action_sleep">Wyłącznik czasowy</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">Pomiń ciszę</string>
     <string name="volume_boost">Zwiększ głośność</string>
     <string name="more">Więcej</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Wybierz</string>
     <string name="dialog_cancel">Anuluj</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Pokazuje okładki do wyboru</string>
     <string name="change_book_name">Nazwa</string>
     <string name="download_book_cover">Okładka z internetu</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">Oznacz jako ukończona</string>
     <string name="mark_as_current">Oznacz jako aktualna</string>
     <string name="mark_as_not_started">Oznacz jako nierozpoczęta</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Foldery audiobooków</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Szybkość odtwarzania</string>
-    <!--Bookmarks-->
     <string name="bookmark">Zakładki</string>
     <string name="bookmark_edit_title">Edytuj zakładkę</string>
     <string name="bookmark_edit_hint">Nazwa zakładki</string>
     <string name="bookmark_added">Zakładka dodana</string>
-    <!--Settings-->
     <string name="action_settings">Preferencje</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Usuwa ostatni wprowadzony numer</string>
@@ -58,7 +47,6 @@
     <string name="popup_edit">Edytuj</string>
     <string name="remove">Usuń</string>
     <string name="play_current">Odtwórz aktualne</string>
-    <!-- book category -->
     <string name="book_header_current">Aktualne</string>
     <string name="book_header_not_started">Nierozpoczęte</string>
     <string name="book_header_completed">Ukończone</string>
@@ -76,9 +64,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Będzie to skutkowało wykryciem następujących książek</string>
     <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
-    <!-- will be shown as the time for a bookmark that was just created -->
     <string name="bookmark_just_now">Przed chwilą</string>
-    <!-- will be shown as a hint when no books have been added -->
     <string name="voice_intro_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
     <string name="migration_hint_title">Sprawdzanie starych pozycji książek</string>
     <string name="migration_hint_content">Z powodu zmian wprowadzonych w nowych wersjach systemu Android wymagane jest wybranie twojego folderu z audiobookami przy użyciu dialogu systemowego.\n\nKliknij na powyższą ikonę aby zobaczyć twoje poprzednie pozycje w książkach.</string>

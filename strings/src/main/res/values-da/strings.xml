@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!--BookShelf-->
-    <!--in the book-overview the show-all button which displays all books of a category-->
-    <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Afspil / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>
@@ -13,11 +10,8 @@
     <string name="skip_silence">Spring stilhed over</string>
     <string name="volume_boost">Lydstyrkeforøgelse</string>
     <string name="more">Mere</string>
-    <!--NoExternalStorage-->
-    <!--Dialogs-->
     <string name="dialog_confirm">Angiv</string>
     <string name="dialog_cancel">Annuller</string>
-    <!--EditBookDialog-->
     <string name="content_cover">Viser cover der kan vælges</string>
     <string name="change_book_name">Navn</string>
     <string name="download_book_cover">Cover fra internettet</string>
@@ -26,17 +20,12 @@
     <string name="mark_as_completed">Markér som afsluttet</string>
     <string name="mark_as_current">Markér som igangværende</string>
     <string name="mark_as_not_started">Markér som endnu ikke startet</string>
-    <!--JumpToPosition-->
-    <!--BookAdding-->
     <string name="audiobook_folders_title">Lydbogsmapper</string>
-    <!--PlaybackSpeed-->
     <string name="playback_speed">Afspilningshastighed</string>
-    <!--Bookmarks-->
     <string name="bookmark">Bogmærke</string>
     <string name="bookmark_edit_title">Rediger bogmærke</string>
     <string name="bookmark_edit_hint">Bogmærke navn</string>
     <string name="bookmark_added">Bogmærke tilføjet</string>
-    <!--Settings-->
     <string name="action_settings">Indstillinger</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Sletter det sidst indtastede nummer</string>
@@ -56,7 +45,6 @@
     <string name="popup_edit">Rediger</string>
     <string name="remove">Fjern</string>
     <string name="play_current">Spil nuværende</string>
-    <!--book category-->
     <string name="book_header_current">Nuværende</string>
     <string name="book_header_not_started">Endnu ikke startet</string>
     <string name="book_header_completed">Afsluttet</string>
@@ -73,9 +61,7 @@
     <string name="folder_type_book_example_header">Dette vil medføre at følgende bøger bliver opdaget</string>
     <string name="folder_type_no_books">Voice kunne ikke finde nogle bøger. Ligger der nogle lydfiler?</string>
     <string name="folder_type_title">Hvordan er dine filer struktureret?</string>
-    <!--will be shown as the time for a bookmark that was just created-->
     <string name="bookmark_just_now">Lige nu</string>
-    <!--will be shown as a hint when no books have been added-->
     <string name="voice_intro_first_book">Lad os tilføje din lydbogsmappe, så du kan begynde at lytte!</string>
     <string name="migration_hint_title">Adgang til gamle bog positioner</string>
     <string name="migration_hint_content">På grund af ændringer i nyere Android-versioner, er det nødvendigt at vælge din lydbogsmappe ved hjælp af systemvælgeren.\n\nKlik på ikonet ovenfor for at se dine gamle bogpositioner.</string>
