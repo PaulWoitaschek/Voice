@@ -55,7 +55,11 @@ internal fun BookPlayContent(
           )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        SliderRow(viewState, onSeek = onSeek)
+        SliderRow(
+          duration = viewState.duration,
+          playedTime = viewState.playedTime,
+          onSeek = onSeek,
+        )
         Spacer(modifier = Modifier.size(16.dp))
         PlaybackRow(
           playing = viewState.playing,
@@ -87,7 +91,11 @@ internal fun BookPlayContent(
         )
       }
       Spacer(modifier = Modifier.size(20.dp))
-      SliderRow(viewState, onSeek = onSeek)
+      SliderRow(
+        duration = viewState.duration,
+        playedTime = viewState.playedTime,
+        onSeek = onSeek,
+      )
       Spacer(modifier = Modifier.size(16.dp))
       PlaybackRow(
         playing = viewState.playing,

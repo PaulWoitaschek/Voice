@@ -16,12 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import voice.common.formatTime
-import voice.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 
 @Composable
 internal fun SliderRow(
-  viewState: BookPlayViewState,
+  duration: Duration,
+  playedTime: Duration,
   onSeek: (Duration) -> Unit,
 ) {
   Row(
@@ -36,11 +36,11 @@ internal fun SliderRow(
     Text(
       text = formatTime(
         timeMs = if (dragging) {
-          (viewState.duration * localValue.toDouble()).inWholeMilliseconds
+          (duration * localValue.toDouble()).inWholeMilliseconds
         } else {
-          viewState.playedTime.inWholeMilliseconds
+          playedTime.inWholeMilliseconds
         },
-        durationMs = viewState.duration.inWholeMilliseconds,
+        durationMs = duration.inWholeMilliseconds,
       ),
     )
     Slider(
@@ -51,20 +51,20 @@ internal fun SliderRow(
       value = if (dragging) {
         localValue
       } else {
-        (viewState.playedTime / viewState.duration).toFloat()
+        (playedTime / duration).toFloat()
           .coerceIn(0F, 1F)
       },
       onValueChange = {
         localValue = it
       },
       onValueChangeFinished = {
-        onSeek(viewState.duration * localValue.toDouble())
+        onSeek(duration * localValue.toDouble())
       },
     )
     Text(
       text = formatTime(
-        timeMs = viewState.duration.inWholeMilliseconds,
-        durationMs = viewState.duration.inWholeMilliseconds,
+        timeMs = duration.inWholeMilliseconds,
+        durationMs = duration.inWholeMilliseconds,
       ),
     )
   }
