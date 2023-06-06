@@ -46,11 +46,9 @@
     <string name="pref_report_issue">Αναφορά προβλήματος</string>
     <string name="pref_get_support">Λήψη υποστήριξης</string>
     <string name="close">Κλείσιμο</string>
-    <string name="folder_type_single_folder">Ενιαίος φάκελος</string>
-    <string name="folder_type_single_file">Ένα αρχείο</string>
     <string name="folder_mode_single">Φάκελος ενός βιβλίου</string>
-    <string name="folder_type_title">Πώς είναι δομημένα τα αρχεία σας;</string>
     <string name="migration_detail_content_added_at">Προστέθηκε στις</string>
+    <string name="folder_type_title">Πώς είναι δομημένα τα αρχεία σας;</string>
     <string name="migration_delete_dialog_title">Διαγραφή Θέσεων</string>
     <string name="migration_delete_dialog_action_keep">Διατήρηση</string>
     <string name="delete_book_bottom_sheet_title">Διαγραφή Βιβλίου</string>
@@ -92,7 +90,6 @@
     <string name="battery_optimization_action">Αλλαγή</string>
     <string name="pref_help_translating">Βοήθεια στη μετάφραση του Voice</string>
     <string name="pref_suggest_idea">Προτείνετε μια ιδέα</string>
-    <string name="folder_type_audiobooks">Φάκελος ακουστικών βιβλίων</string>
     <string name="folder_type_dialog_title">Τι θέλετε να προσθέσετε;</string>
     <string name="media_session_root">Όλα τα ηχητικά βιβλία</string>
     <string name="migration_hint_title">Πρόσβαση σε παλιές θέσεις βιβλίων</string>

@@ -37,5 +37,9 @@ fun CachedDocumentFile.isAudioFile(): Boolean {
 }
 
 fun CachedDocumentFile.audioFileCount(): Int {
-  return walk().count { it.isAudioFile() }
+  return if (isAudioFile()) {
+    1
+  } else {
+    walk().count { it.isAudioFile() }
+  }
 }

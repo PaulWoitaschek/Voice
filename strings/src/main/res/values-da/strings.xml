@@ -51,9 +51,6 @@
     <string name="close">Luk</string>
     <string name="delete">Slet</string>
     <string name="add">Tilføj</string>
-    <string name="folder_type_audiobooks">Lydbogsmappe</string>
-    <string name="folder_type_single_folder">Enkelt mappe</string>
-    <string name="folder_type_single_file">Enkelt fil</string>
     <string name="folder_type_dialog_title">Hvad vil du tilføje?</string>
     <string name="folder_mode_root">Rodmappe til lydbøger. En undermappe = en bog.</string>
     <string name="folder_mode_single">Enkelt mappe til lydbøger</string>

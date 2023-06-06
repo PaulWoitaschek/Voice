@@ -51,9 +51,6 @@
     <string name="close">Chiudi</string>
     <string name="delete">Elimina</string>
     <string name="add">Aggiungi</string>
-    <string name="folder_type_audiobooks">Cartella audiolibri</string>
-    <string name="folder_type_single_folder">Cartella singola</string>
-    <string name="folder_type_single_file">File singolo</string>
     <string name="folder_type_dialog_title">Cosa vuoi aggiungere\?</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d file audio</item>

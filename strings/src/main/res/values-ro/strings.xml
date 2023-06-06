@@ -51,8 +51,6 @@
     <string name="close">Închide</string>
     <string name="delete">Șterge</string>
     <string name="add">Adaugă</string>
-    <string name="folder_type_audiobooks">Dosar Cărți audio</string>
-    <string name="folder_type_single_file">Fișier unic</string>
     <string name="folder_type_dialog_title">Ce doriți să adăugați\?</string>
     <string name="folder_mode_root">Dosar rădăcină Cărți audio. Fiecare dosar conținut reprezintă o carte.</string>
     <string name="folder_mode_single">Dosar unic pentru Carte audio</string>
@@ -84,7 +82,6 @@
     <string name="media_session_root">Toate cărțile audio</string>
     <string name="notification_sleep_timer_enable">Activează Programarea opririi</string>
     <string name="notification_sleep_timer_disable">Dezactivează Programarea opririi</string>
-    <string name="folder_type_single_folder">Dosar unic</string>
     <string name="book_header_completed">Cărți citite</string>
     <string name="folder_type_book_example_header">S-ar putea ca următoarele căți să fie șterse</string>
     <string name="folder_type_no_books">Voice nu a găsit vreo carte. Există vreun fișier audio\?</string>

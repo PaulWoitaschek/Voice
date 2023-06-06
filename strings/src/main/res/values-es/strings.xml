@@ -70,8 +70,6 @@
     <string name="pref_use_grid">Utilizar el diseño en cuadrícula</string>
     <string name="pref_report_issue">Comunicar un problema</string>
     <string name="pref_app_version">Versión de la aplicación</string>
-    <string name="folder_type_audiobooks">Carpeta de audiolibros</string>
-    <string name="folder_type_single_folder">Carpeta individual</string>
     <string name="folder_mode_root">Carpeta raíz para audiolibros. Una subcarpeta = un libro.</string>
     <string name="folder_mode_single">Una carpeta con un audiolibro</string>
     <plurals name="folder_type_file_count">
@@ -88,7 +86,6 @@
     <string name="folder_type_dialog_title">¿Qué quiere añadir\?</string>
     <string name="pref_get_support">Conseguir ayuda</string>
     <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
-    <string name="folder_type_single_file">Archivo único</string>
     <string name="folder_type_book_example_header">Así se detectarían los siguientes libros</string>
     <string name="notification_sleep_timer_disable">Desactivar un temporizador de reposo</string>
     <string name="folder_type_no_books">Voice no detecta ningún libro. ¿Hay archivos de audio\?</string>

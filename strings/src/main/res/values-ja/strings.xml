@@ -50,9 +50,6 @@
     <string name="close">閉じる</string>
     <string name="delete">削除</string>
     <string name="add">追加</string>
-    <string name="folder_type_audiobooks">オーディオブック フォルダー</string>
-    <string name="folder_type_single_folder">単一フォルダー</string>
-    <string name="folder_type_single_file">単一ファイル</string>
     <string name="folder_type_dialog_title">何を追加しますか？</string>
     <string name="folder_mode_root">オーディオブックのルートフォルダー (1つのサブフォルダーが1冊のブック)</string>
     <string name="folder_mode_single">単一のオーディオブックフォルダー</string>

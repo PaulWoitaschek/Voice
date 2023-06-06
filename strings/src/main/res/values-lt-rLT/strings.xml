@@ -52,9 +52,6 @@
     <string name="close">Uždaryti</string>
     <string name="delete">Pašalinti</string>
     <string name="add">Pridėti</string>
-    <string name="folder_type_audiobooks">Garsinių knygų aplanką</string>
-    <string name="folder_type_single_folder">Vieną aplanką</string>
-    <string name="folder_type_single_file">Vieną failą</string>
     <string name="folder_type_dialog_title">Ką norite pridėti?</string>
     <string name="folder_mode_root">Šakninis garsinių knygų aplankas. Kiekvienas poaplankis = atskira knyga.</string>
     <string name="folder_mode_single">Vienos garsinės knygos aplankas</string>

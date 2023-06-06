@@ -2,7 +2,6 @@
 
 package voice.app.scanner
 
-import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -45,20 +44,20 @@ class MediaScannerTest {
 
     val book1 = File(audiobookFolder, "book1")
     val book1Chapters = listOf(
-      file(book1, "1.mp3"),
-      file(book1, "2.mp3"),
-      file(book1, "10.mp3"),
+      audioFile(book1, "1.mp3"),
+      audioFile(book1, "2.mp3"),
+      audioFile(book1, "10.mp3"),
     )
 
-    scan(audiobookFolder)
+    scan(FolderType.Root, audiobookFolder)
 
-    book1Chapters.first().toFile().delete()
+    book1Chapters.first().delete()
 
-    scan(audiobookFolder)
+    scan(FolderType.Root, audiobookFolder)
 
     assertBookContents(
       BookContentView(
-        id = BookId(book1.toUri()),
+        id = book1,
         chapters = book1Chapters.drop(1),
       ),
     )
@@ -71,23 +70,24 @@ class MediaScannerTest {
     val book1 = File(audiobookFolder, "book1")
     val book1Id = BookId(book1.toUri())
     val book1Chapters = listOf(
-      file(book1, "1.mp3"),
-      file(book1, "2.mp3"),
-      file(book1, "10.mp3"),
-    ).map(::ChapterId)
+      audioFile(book1, "1.mp3"),
+      audioFile(book1, "2.mp3"),
+      audioFile(book1, "10.mp3"),
+    )
 
-    scan(audiobookFolder)
+    scan(FolderType.Root, audiobookFolder)
 
-    val contentWithPositionAtLastChapter = bookContentRepo.get(BookId(book1.toUri()))!!.copy(currentChapter = book1Chapters.last())
+    val contentWithPositionAtLastChapter =
+      bookContentRepo.get(BookId(book1.toUri()))!!.copy(currentChapter = ChapterId(book1Chapters.last().toUri()))
     bookContentRepo.put(contentWithPositionAtLastChapter)
 
     book1Chapters.forEach { it.toUri().toFile().delete() }
 
-    scan(audiobookFolder)
+    scan(FolderType.Root, audiobookFolder)
 
-    file(book1, "1.mp3")
-    file(book1, "2.mp3")
-    file(book1, "10.mp3")
+    audioFile(book1, "1.mp3")
+    audioFile(book1, "2.mp3")
+    audioFile(book1, "10.mp3")
 
     bookContentRepo.get(book1Id) shouldBe contentWithPositionAtLastChapter
   }
@@ -96,26 +96,98 @@ class MediaScannerTest {
   fun multipleRoots() = test {
     val audiobookFolder1 = folder("audiobooks1")
 
-    val topFileBook = file(parent = audiobookFolder1, "test.mp3")
+    val topFileBook = audioFile(parent = audiobookFolder1, "test.mp3")
 
     val book1 = File(audiobookFolder1, "book1")
     val book1Chapters = listOf(
-      file(book1, "1.mp3"),
-      file(book1, "2.mp3"),
-      file(book1, "10.mp3"),
+      audioFile(book1, "1.mp3"),
+      audioFile(book1, "2.mp3"),
+      audioFile(book1, "10.mp3"),
     )
 
     val audiobookFolder2 = folder("audiobooks1")
 
     val book2 = File(audiobookFolder2, "book2")
-    val book2Chapters = listOf(file(book2, "1.mp3"))
+    val book2Chapters = listOf(audioFile(book2, "1.mp3"))
 
-    scan(audiobookFolder1, audiobookFolder2)
+    scan(FolderType.Root, audiobookFolder1, audiobookFolder2)
 
     assertBookContents(
-      BookContentView(topFileBook.let(::BookId), chapters = listOf(topFileBook)),
-      BookContentView(book1.toUri().let(::BookId), chapters = book1Chapters),
-      BookContentView(book2.toUri().let(::BookId), chapters = book2Chapters),
+      BookContentView(topFileBook, chapters = listOf(topFileBook)),
+      BookContentView(book1, chapters = book1Chapters),
+      BookContentView(book2, chapters = book2Chapters),
+    )
+  }
+
+  @Test
+  fun scanRoot() = test {
+    val audiobookFolder = folder("audiobooks1")
+
+    val topFileBook = audioFile(parent = audiobookFolder, "test.mp3")
+
+    val book1 = File(audiobookFolder, "book1")
+    val book1Chapters = listOf(
+      audioFile(book1, "1.mp3"),
+      audioFile(book1, "2.mp3"),
+      audioFile(book1, "10.mp3"),
+    )
+
+    val book2 = File(audiobookFolder, "book2")
+    val book2Chapters = listOf(
+      audioFile(book2, "1.mp3"),
+      audioFile(book2, "2.mp3"),
+      audioFile(book2, "10.mp3"),
+    )
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertBookContents(
+      BookContentView(topFileBook, chapters = listOf(topFileBook)),
+      BookContentView(book1, chapters = book1Chapters),
+      BookContentView(book2, chapters = book2Chapters),
+    )
+  }
+
+  @Test
+  fun scanSingleFile() = test {
+    val book = audioFile(parent = folder("audiobooks1"), "test.mp3")
+    scan(FolderType.SingleFile, book)
+    assertBookContents(
+      BookContentView(book, chapters = listOf(book)),
+    )
+  }
+
+  @Test
+  fun scanSingleFolder() = test {
+    val folder = folder("book")
+    val book = audioFile(parent = folder, "test.mp3")
+    scan(FolderType.SingleFolder, folder)
+    assertBookContents(
+      BookContentView(folder, chapters = listOf(book)),
+    )
+  }
+
+  @Test
+  fun scanAuthor() = test {
+    val audioBooks = folder("audiobooks")
+
+    val book1 = audioFile(parent = audioBooks, "test.mp3")
+
+    val book2 = audioFile(parent = audioBooks, "author1/test.mp3")
+
+    val book3 = File(audioBooks, "author1/book1")
+    val book3Chapter1 = audioFile(parent = book3, "c1.mp3")
+    val book3Chapter2 = audioFile(parent = book3, "c2.mp3")
+
+    val book4 = File(audioBooks, "author1/book2")
+    val book4Chapter1 = audioFile(book4, "a.mp3")
+
+    scan(FolderType.Author, audioBooks)
+    assertBookContents(
+      BookContentView(book1, chapters = listOf(book1)),
+      BookContentView(book2, chapters = listOf(book2)),
+      BookContentView(book3, chapters = listOf(book3Chapter1, book3Chapter2)),
+      BookContentView(book4, chapters = listOf(book4Chapter1)),
     )
   }
 
@@ -157,11 +229,12 @@ class MediaScannerTest {
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
-    suspend fun scan(vararg roots: File) {
-      scanner.scan(mapOf(FolderType.Root to roots.map(::FileBasedDocumentFile)))
+    suspend fun scan(type: FolderType = FolderType.Root, vararg roots: File) {
+      scanner.scan(mapOf(type to roots.map(::FileBasedDocumentFile)))
     }
 
-    fun file(parent: File, name: String): Uri {
+    fun audioFile(parent: File, name: String): File {
+      check(name.endsWith(".mp3"))
       return File(parent, name)
         .also {
           it.parentFile?.mkdirs()
@@ -178,7 +251,6 @@ class MediaScannerTest {
             )
           }
         }
-        .toUri()
     }
 
     fun folder(name: String): File {
@@ -190,9 +262,9 @@ class MediaScannerTest {
       bookRepo.all()
         .map {
           BookContentView(
-            id = it.id,
+            id = it.id.toUri().toFile(),
             chapters = it.content.chapters.map { chapter ->
-              chapter.toUri()
+              chapter.toUri().toFile()
             },
           )
         }
@@ -205,7 +277,7 @@ class MediaScannerTest {
   }
 
   data class BookContentView(
-    val id: BookId,
-    val chapters: List<Uri>,
+    val id: File,
+    val chapters: List<File>,
   )
 }

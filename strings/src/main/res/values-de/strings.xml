@@ -51,9 +51,6 @@
     <string name="close">Schließen</string>
     <string name="delete">Löschen</string>
     <string name="add">Hinzufügen</string>
-    <string name="folder_type_audiobooks">Hörbuch Ordner</string>
-    <string name="folder_type_single_folder">Einzelner Ordner</string>
-    <string name="folder_type_single_file">Einzelne Datei</string>
     <string name="folder_type_dialog_title">Was möchtest du hinzufügen?</string>
     <string name="folder_mode_root">Wurzelverzeichnis für Hörbücher. Ein Unterordner = ein Buch.</string>
     <string name="folder_mode_single">Einzelnes Hörbuch-Verzeichnis</string>

@@ -55,12 +55,10 @@
     <string name="close">Close</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
-    <string name="folder_type_audiobooks">Audiobooks folder</string>
-    <string name="folder_type_single_folder">Single folder</string>
-    <string name="folder_type_single_file">Single file</string>
     <string name="folder_type_dialog_title">What do you want to add?</string>
-    <string name="folder_mode_root">Root audiobook folder. One subfolder = one book.</string>
-    <string name="folder_mode_single">Single audiobook folder</string>
+    <string name="folder_mode_root">Top-Level Book Mode: Subfolders are books</string>
+    <string name="folder_mode_single">Single Book Mode: One folder equals one book.</string>
+    <string name="folder_mode_author">Author-Book Mode: Subfolders are authors, sub-subfolders are books.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>

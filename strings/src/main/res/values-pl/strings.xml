@@ -53,9 +53,6 @@
     <string name="close">Zamknij</string>
     <string name="delete">Usuń</string>
     <string name="add">Dodaj</string>
-    <string name="folder_type_audiobooks">Folder z audiobookami</string>
-    <string name="folder_type_single_folder">Jeden folder</string>
-    <string name="folder_type_single_file">Jeden plik</string>
     <string name="folder_type_dialog_title">Co chcesz dodać?</string>
     <string name="folder_mode_root">Folder z wieloma audiobookami. Jeden podfolder = jedna książka.</string>
     <string name="folder_mode_single">Folder z jednym audiobookiem</string>

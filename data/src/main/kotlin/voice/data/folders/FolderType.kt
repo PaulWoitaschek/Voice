@@ -4,4 +4,5 @@ enum class FolderType {
   SingleFile,
   SingleFolder,
   Root,
+  Author,
 }

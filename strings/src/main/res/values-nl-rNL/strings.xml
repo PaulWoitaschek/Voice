@@ -51,9 +51,6 @@
     <string name="close">Sluiten</string>
     <string name="delete">Verwijderen</string>
     <string name="add">Toevoegen</string>
-    <string name="folder_type_audiobooks">Luisterboekmap</string>
-    <string name="folder_type_single_folder">Losse map</string>
-    <string name="folder_type_single_file">Los bestand</string>
     <string name="folder_type_dialog_title">Wat wil je toevoegen?</string>
     <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
     <string name="folder_mode_single">Losse luisterboekmap</string>

@@ -23,6 +23,7 @@ import voice.bookOverview.BookMigrationExplanationShown
 import voice.common.AppScope
 import voice.common.BookId
 import voice.common.grid.GridMode
+import voice.common.pref.AuthorAudiobookFolders
 import voice.common.pref.CurrentBook
 import voice.common.pref.PrefKeys
 import voice.common.pref.RootAudiobookFolders
@@ -116,6 +117,13 @@ object PrefsModule {
   @SingleFileAudiobookFolders
   fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("SingleFileAudiobookFolders")
+  }
+
+  @Provides
+  @Singleton
+  @AuthorAudiobookFolders
+  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
+    return factory.createUriList("AuthorAudiobookFolders")
   }
 
   @Provides

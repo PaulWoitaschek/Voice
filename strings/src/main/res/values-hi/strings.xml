@@ -51,9 +51,6 @@
     <string name="close">बंद </string>
     <string name="delete">हटाएँ </string>
     <string name="add">जोड़ें</string>
-    <string name="folder_type_audiobooks">ऑडियोबुक फोल्डर </string>
-    <string name="folder_type_single_folder">एक फोल्डर </string>
-    <string name="folder_type_single_file">एक फाइल </string>
     <string name="folder_type_dialog_title">आप क्या जोड़ना चाहते हैं </string>
     <string name="folder_mode_root">रूट ऑडियोबुक फ़ोल्डर। एक सबफ़ोल्डर = एक किताब।</string>
     <string name="folder_mode_single">एकल ऑडियोबुक फ़ोल्डर</string>

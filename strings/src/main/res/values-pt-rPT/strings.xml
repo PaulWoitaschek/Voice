@@ -51,9 +51,6 @@
     <string name="close">Fechar</string>
     <string name="delete">Apagar</string>
     <string name="add">Adicionar</string>
-    <string name="folder_type_audiobooks">Pasta de audiolivros</string>
-    <string name="folder_type_single_folder">Pasta única</string>
-    <string name="folder_type_single_file">Ficheiro único</string>
     <string name="folder_type_dialog_title">O que deseja adicionar\?</string>
     <string name="pref_get_support">Obter apoio</string>
 </resources>

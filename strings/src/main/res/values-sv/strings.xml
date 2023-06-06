@@ -51,9 +51,6 @@
     <string name="close">Stäng</string>
     <string name="delete">Ta bort</string>
     <string name="add">Lägg till</string>
-    <string name="folder_type_audiobooks">Mapp för ljudböcker</string>
-    <string name="folder_type_single_folder">Enskild mapp</string>
-    <string name="folder_type_single_file">Enskild fil</string>
     <string name="folder_type_dialog_title">Vad vill du lägga till?</string>
     <string name="folder_mode_root">Rotljudboksmapp. En undermapp = en bok.</string>
     <string name="folder_mode_single">Enskild ljudboksmapp</string>

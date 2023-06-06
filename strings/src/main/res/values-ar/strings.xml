@@ -55,9 +55,6 @@
     <string name="close">أغلق</string>
     <string name="delete">احذف</string>
     <string name="add">أضف</string>
-    <string name="folder_type_audiobooks">مجلد الكتاب الصوتي</string>
-    <string name="folder_type_single_folder">مجلد فردي</string>
-    <string name="folder_type_single_file">ملف فردي</string>
     <string name="folder_type_dialog_title">ماذا تريد أن تضيف؟</string>
     <string name="folder_mode_root">المجلد الأساسي للكتاب الصوتي. كل مجلد فرعي = كتاب واحد مستقل.</string>
     <string name="folder_mode_single">مجلد كتاب صوتي فردي</string>
