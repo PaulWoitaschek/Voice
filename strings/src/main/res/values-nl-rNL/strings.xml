@@ -95,4 +95,6 @@
     <string name="generic_error_retry">Opnieuw proberen</string>
     <string name="play">Afspelen</string>
     <string name="pause">Pauzeren</string>
+    <string name="cover_search_template_no_author">%s audioboek omslag</string>
+    <string name="cover_search_template_with_author">%1$s door %2$s audioboekomslag</string>
 </resources>
