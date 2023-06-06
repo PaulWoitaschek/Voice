@@ -28,12 +28,11 @@ data class BookContent(
 ) {
 
   @Ignore
-  val currentChapterIndex = chapters.indexOf(currentChapter).also { require(it != -1) }
+  val currentChapterIndex = chapters.indexOf(currentChapter)
 
   init {
-    require(currentChapter in chapters)
-    require(positionInChapter >= 0) {
-      "invalid position$positionInChapter"
+    require(currentChapter in chapters && positionInChapter >= 0) {
+      "invalid data in $this"
     }
   }
 }

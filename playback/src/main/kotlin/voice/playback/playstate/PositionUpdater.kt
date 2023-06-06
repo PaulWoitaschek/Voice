@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import voice.playback.session.MediaId
 import voice.playback.session.toMediaIdOrNull
 import javax.inject.Inject
@@ -53,11 +54,17 @@ class PositionUpdater
       .takeIf { it >= 0 } ?: return
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
     mediaId as MediaId.Chapter
+    val chapterId = mediaId.chapterId
     bookRepo.updateBook(mediaId.bookId) { content ->
-      content.copy(
-        currentChapter = mediaId.chapterId,
-        positionInChapter = currentPosition,
-      )
+      if (chapterId in content.chapters) {
+        content.copy(
+          currentChapter = chapterId,
+          positionInChapter = currentPosition,
+        )
+      } else {
+        Logger.e("$mediaId not in $content")
+        content
+      }
     }
   }
 }
