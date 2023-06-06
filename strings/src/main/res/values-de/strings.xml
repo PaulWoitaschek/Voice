@@ -52,8 +52,8 @@
     <string name="delete">Löschen</string>
     <string name="add">Hinzufügen</string>
     <string name="folder_type_dialog_title">Was möchtest du hinzufügen?</string>
-    <string name="folder_mode_root">Wurzelverzeichnis für Hörbücher. Ein Unterordner = ein Buch.</string>
-    <string name="folder_mode_single">Einzelnes Hörbuch-Verzeichnis</string>
+    <string name="folder_mode_root">Buch-Modus auf oberster Ebene: Unterordner sind Bücher</string>
+    <string name="folder_mode_single">Einzelbuchmodus: Ein Ordner entspricht einem Buch.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d Audiodatei</item>
         <item quantity="other">%d Audiodateien</item>
@@ -102,4 +102,5 @@
     <string name="storage_bug_title">Berechtigung benötigt</string>
     <string name="storage_bug_subtitle">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Ihre Hörbücher lesen zu können.</string>
     <string name="storage_bug_button">Berechtigung erteilen</string>
+    <string name="folder_mode_author">Autor-Buch-Modus: Unterordner sind Autoren, Unter-Unterordner sind Bücher.</string>
 </resources>
