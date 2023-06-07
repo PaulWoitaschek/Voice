@@ -57,8 +57,8 @@
         <item quantity="many">%d file audio</item>
         <item quantity="other">%d file audio</item>
     </plurals>
-    <string name="folder_mode_root">Radice cartella audiolibro. Una sottocartella = un libro.</string>
-    <string name="folder_mode_single">Cartella audiolibro singolo</string>
+    <string name="folder_mode_root">Modalità libro di primo livello: le sottocartelle sono libri</string>
+    <string name="folder_mode_single">Modalità libro singolo: una cartella equivale a un libro.</string>
     <string name="folder_type_book_example_header">Questo porterebbe al rilevamento dei seguenti libri</string>
     <string name="folder_type_no_books">Voice non ha rilevato alcun libro. Ci sono file audio\?</string>
     <string name="folder_type_title">Come sono organizzati i tuoi file\?</string>
@@ -104,4 +104,5 @@
     <string name="storage_bug_title">Autorizzazione richiesta</string>
     <string name="storage_bug_subtitle">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
     <string name="storage_bug_button">Concedere l\'autorizzazione</string>
+    <string name="folder_mode_author">Modalità autore-libro: le sottocartelle sono gli autori, le sottocartelle sono i libri.</string>
 </resources>
