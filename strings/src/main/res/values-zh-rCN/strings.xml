@@ -51,8 +51,8 @@
     <string name="delete">删除</string>
     <string name="add">添加</string>
     <string name="folder_type_dialog_title">希望添加什么？</string>
-    <string name="folder_mode_root">有声书根文件夹。一个文件夹 = 一本书。</string>
-    <string name="folder_mode_single">单个有声书文件夹</string>
+    <string name="folder_mode_root">顶层书籍模式：子文件夹是书籍</string>
+    <string name="folder_mode_single">单本书模式：一个文件夹等于一本书。</string>
     <plurals name="folder_type_file_count">
         <item quantity="other">%d个声音文件</item>
     </plurals>
