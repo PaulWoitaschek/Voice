@@ -70,8 +70,8 @@
     <string name="pref_use_grid">Utilizar el diseño en cuadrícula</string>
     <string name="pref_report_issue">Comunicar un problema</string>
     <string name="pref_app_version">Versión de la aplicación</string>
-    <string name="folder_mode_root">Carpeta raíz para audiolibros. Una subcarpeta = un libro.</string>
-    <string name="folder_mode_single">Una carpeta con un audiolibro</string>
+    <string name="folder_mode_root">Modo libro de nivel superior: Las subcarpetas son libros</string>
+    <string name="folder_mode_single">Modo de libro único: Una carpeta equivale a un libro.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d archivo de audio</item>
         <item quantity="many">%d archivos de audios</item>
@@ -104,4 +104,5 @@
     <string name="storage_bug_subtitle">En algunos dispositivos, una aplicación del sistema carece del permisos necesarios para acceder al almacenamiento externo. Este acceso es esencial para que Voice pueda leer tus audiolibros.</string>
     <string name="storage_bug_title">Se requiere el permiso</string>
     <string name="storage_bug_button">Conceder el permiso</string>
+    <string name="folder_mode_author">Modo Autor-Libro: Las subcarpetas son autores, las subcarpetas son libros.</string>
 </resources>
