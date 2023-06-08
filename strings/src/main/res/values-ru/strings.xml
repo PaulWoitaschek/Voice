@@ -4,7 +4,7 @@
     <string name="play_pause">Читать — пауза</string>
     <string name="action_sleep">Таймер сна</string>
     <string name="rewind">Перемотать назад</string>
-    <string name="fast_forward">Перемотать вперёд</string>
+    <string name="fast_forward">Перемотать вперед</string>
     <string name="previous_track">Предыдущий файл</string>
     <string name="next_track">Следующий файл</string>
     <string name="skip_silence">Пропускать тишину</string>
@@ -14,7 +14,7 @@
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
     <string name="download_book_cover">Обложка из интернета</string>
-    <string name="pick_book_cover">Обложка на устройстве</string>
+    <string name="pick_book_cover">Обложка с устройства</string>
     <string name="edit_book_title">Редактировать книгу</string>
     <string name="mark_as_completed">Пометить как прослушанную</string>
     <string name="mark_as_current">Пометить как открытую</string>
@@ -26,7 +26,7 @@
     <string name="bookmark_edit_hint">Имя закладки</string>
     <string name="bookmark_added">Закладка добавлена</string>
     <string name="action_settings">Настройки</string>
-    <string name="min">%s мин.</string>
+    <string name="min">%s мин</string>
     <string name="delete_last_number">Удаляет последнее введенное число</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
@@ -35,7 +35,7 @@
         <item quantity="other">%d с</item>
     </plurals>
     <string name="pref_seek_time">Интервал перемотки</string>
-    <string name="pref_theme_dark">Тёмная тема</string>
+    <string name="pref_theme_dark">Темная тема</string>
     <string name="pref_auto_rewind_title">Автоперемотка назад</string>
     <string name="pref_suggest_idea">Предложить идею</string>
     <string name="pref_use_grid">Использовать сетку</string>
@@ -53,8 +53,8 @@
     <string name="delete">Удалить</string>
     <string name="add">Добавить</string>
     <string name="folder_type_dialog_title">Что добавить?</string>
-    <string name="folder_mode_root">Общая папка с аудиокнигами. Одна подпапка = одна книга.</string>
-    <string name="folder_mode_single">Отдельная папка с аудиокнигой</string>
+    <string name="folder_mode_root">Книжный режим верхнего уровня: подпапки — это книги</string>
+    <string name="folder_mode_single">Режим одной книги: одна папка соответствует одной книге.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d аудиофайл</item>
         <item quantity="few">%d аудиофайла</item>
@@ -91,4 +91,18 @@
     <string name="battery_optimization_rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
     <string name="battery_optimization_action">Обновить</string>
     <string name="play">Усиление звука</string>
+    <string name="more">Больше</string>
+    <string name="generic_error_retry">Повторить</string>
+    <string name="storage_bug_button">Предоставить разрешение</string>
+    <string name="storage_bug_title">Требуется разрешение</string>
+    <string name="media_session_recent">Недавние</string>
+    <string name="notification_sleep_timer_enable">Включить таймер сна</string>
+    <string name="storage_bug_subtitle">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>
+    <string name="notification_sleep_timer_disable">Отключить таймер сна</string>
+    <string name="generic_error_message">Что-то пошло не так 😢</string>
+    <string name="media_session_root">Все аудиокниги</string>
+    <string name="folder_mode_author">Режим автор-книга: подпапки - авторы, подподпапки - книги.</string>
+    <string name="cover_search_template_no_author">%s обложек аудиокниг</string>
+    <string name="cover_search_template_with_author">%1$s из %2$s обложек аудиокниг</string>
+    <string name="pause">Пауза</string>
 </resources>
