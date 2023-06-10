@@ -52,7 +52,7 @@ class FolderPickerViewModel
         audiobookFolders.add(uri, FolderType.SingleFile)
       }
       FileTypeSelection.Folder -> {
-        navigator.goTo(Destination.SelectFolderType(uri))
+        navigator.goTo(Destination.SelectFolderType(uri, Destination.SelectFolderType.Mode.Default))
       }
     }
   }

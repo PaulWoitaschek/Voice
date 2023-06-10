@@ -25,7 +25,7 @@ import voice.bookOverview.views.BookOverviewPreview
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.common.formatTime
-import voice.folderPicker.folderPicker.FolderPickerPreview
+import voice.folderPicker.folderPicker.FolderOverviewPreview
 import voice.logging.core.Logger
 import voice.settings.views.Settings
 import java.io.File
@@ -144,7 +144,7 @@ class ScreenshotCapture {
         )
       },
       Screenshot("settings") { Settings() },
-      Screenshot("folder_picker") { FolderPickerPreview() },
+      Screenshot("folder_picker") { FolderOverviewPreview() },
     )
   }
 

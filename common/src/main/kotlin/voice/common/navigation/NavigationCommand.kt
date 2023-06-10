@@ -8,7 +8,10 @@ import voice.common.BookId
 
 sealed interface NavigationCommand {
   data object GoBack : NavigationCommand
-  data class GoTo(val destination: Destination) : NavigationCommand
+  data class GoTo(
+    val destination: Destination,
+    val replace: Boolean,
+  ) : NavigationCommand
 }
 
 sealed interface Destination {
@@ -37,5 +40,23 @@ sealed interface Destination {
   object FolderPicker : Compose
 
   @Parcelize
-  data class SelectFolderType(val uri: Uri) : Compose
+  data class SelectFolderType(val uri: Uri, val mode: Mode) : Compose {
+
+    enum class Mode {
+      Default,
+      Onboarding,
+    }
+  }
+
+  @Parcelize
+  object OnboardingWelcome : Compose
+
+  @Parcelize
+  object OnboardingCompletion : Compose
+
+  @Parcelize
+  object OnboardingExplanation : Compose
+
+  @Parcelize
+  object OnboardingAddContent : Compose
 }

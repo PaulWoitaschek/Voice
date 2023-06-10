@@ -8,6 +8,8 @@ import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
+import dev.olshevski.navigation.reimagined.replaceAll
+import dev.olshevski.navigation.reimagined.replaceLast
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.BookId
@@ -17,9 +19,13 @@ import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
 import voice.cover.SelectCoverFromInternet
-import voice.folderPicker.folderPicker.FolderPicker
+import voice.folderPicker.folderPicker.FolderOverview
 import voice.folderPicker.selectType.SelectFolderType
 import voice.migration.views.Migration
+import voice.onboarding.OnboardingCompletion
+import voice.onboarding.OnboardingExplanation
+import voice.onboarding.OnboardingWelcome
+import voice.onboarding.addcontent.OnboardingAddContent
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -41,13 +47,13 @@ class AppController : ComposeController() {
   @Composable
   override fun Content() {
     val navController = rememberNavController<Destination.Compose>(
-      startDestination = Destination.BookOverview,
+      startDestination = Destination.OnboardingWelcome,
     )
     NavBackHandler(navController)
     AnimatedNavHost(
       navController,
-      transitionSpec = { action, _, _ ->
-        navTransition(action)
+      transitionSpec = { action, destination, _ ->
+        navTransition(action, destination)
       },
     ) { screen ->
       when (screen) {
@@ -55,7 +61,7 @@ class AppController : ComposeController() {
           BookOverviewScreen()
         }
         Destination.FolderPicker -> {
-          FolderPicker(
+          FolderOverview(
             onCloseClick = {
               navController.pop()
             },
@@ -65,7 +71,10 @@ class AppController : ComposeController() {
           Migration()
         }
         is Destination.SelectFolderType -> {
-          SelectFolderType(uri = screen.uri)
+          SelectFolderType(
+            uri = screen.uri,
+            mode = screen.mode,
+          )
         }
         Destination.Settings -> {
           Settings()
@@ -76,6 +85,27 @@ class AppController : ComposeController() {
             onCloseClick = { navController.pop() },
           )
         }
+        Destination.OnboardingAddContent -> OnboardingAddContent()
+
+        Destination.OnboardingCompletion -> OnboardingCompletion(
+          onBack = {
+            navController.pop()
+          },
+          onNext = {
+            navController.replaceAll(Destination.BookOverview)
+          },
+        )
+        Destination.OnboardingExplanation -> OnboardingExplanation(
+          onNext = {
+            navController.navigate(Destination.OnboardingAddContent)
+          },
+          onBack = {
+            navController.pop()
+          },
+        )
+        Destination.OnboardingWelcome -> OnboardingWelcome(
+          onNext = { navController.navigate(Destination.OnboardingExplanation) },
+        )
       }
     }
 
@@ -85,7 +115,11 @@ class AppController : ComposeController() {
           is NavigationCommand.GoTo -> {
             when (val destination = command.destination) {
               is Destination.Compose -> {
-                navController.navigate(destination)
+                if (command.replace) {
+                  navController.replaceLast(destination)
+                } else {
+                  navController.navigate(destination)
+                }
               }
               else -> {
                 // no-op

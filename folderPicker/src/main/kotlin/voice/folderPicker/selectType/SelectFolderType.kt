@@ -35,27 +35,31 @@ import androidx.documentfile.provider.DocumentFile
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
 import voice.common.rootComponentAs
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface SelectFolderTypeComponent {
-  val selectFolderTypeViewModel: SelectFolderTypeViewModel
+  val selectFolderTypeViewModelFactory: SelectFolderTypeViewModel.Factory
 }
 
 @Composable
-fun SelectFolderType(uri: Uri) {
+fun SelectFolderType(uri: Uri, mode: Destination.SelectFolderType.Mode) {
+  val context = LocalContext.current
   val viewModel = rememberScoped {
-    rootComponentAs<SelectFolderTypeComponent>().selectFolderTypeViewModel
+    rootComponentAs<SelectFolderTypeComponent>().selectFolderTypeViewModelFactory
+      .create(
+        uri = uri,
+        mode = mode,
+        documentFile = DocumentFile.fromTreeUri(context, uri)!!,
+      )
   }
-  val documentFile = DocumentFile.fromTreeUri(LocalContext.current, uri)!!
-  viewModel.args = SelectFolderTypeViewModel.Args(uri, documentFile)
-  val viewState = viewModel.viewState()
   SelectFolderType(
-    viewState = viewState,
-    onFolderModeSelected = { viewModel.setFolderMode(it) },
-    onAddClick = { viewModel.add() },
-    onBackClick = { viewModel.onCloseClick() },
+    viewState = viewModel.viewState(),
+    onFolderModeSelected = viewModel::setFolderMode,
+    onAddClick = viewModel::add,
+    onBackClick = viewModel::onCloseClick,
   )
 }
 

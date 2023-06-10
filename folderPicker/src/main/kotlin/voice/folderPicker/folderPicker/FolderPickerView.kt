@@ -45,7 +45,7 @@ interface FolderPickerComponent {
 }
 
 @Composable
-fun FolderPicker(
+fun FolderOverview(
   onCloseClick: () -> Unit,
 ) {
   val viewModel: FolderPickerViewModel = rememberScoped {
@@ -96,7 +96,7 @@ fun FolderPicker(
     )
   }
 
-  FolderPickerView(
+  FolderOverviewView(
     viewState = viewState,
     onAddClick = {
       showSelectFileDialog = true
@@ -109,7 +109,7 @@ fun FolderPicker(
 }
 
 @Composable
-private fun FolderPickerView(
+private fun FolderOverviewView(
   viewState: FolderPickerViewState,
   onAddClick: () -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
@@ -184,8 +184,8 @@ private fun FolderPickerView(
 // ktlint-disable compose:preview-public-check
 @Composable
 @Preview
-fun FolderPickerPreview() {
-  FolderPickerView(
+fun FolderOverviewPreview() {
+  FolderOverviewView(
     viewState = FolderPickerViewState(
       items = listOf(
         FolderPickerViewState.Item(

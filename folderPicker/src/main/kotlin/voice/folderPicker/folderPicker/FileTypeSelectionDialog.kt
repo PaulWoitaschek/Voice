@@ -27,7 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import voice.strings.R as StringsR
 
-internal enum class FileTypeSelection {
+enum class FileTypeSelection {
   File,
   Folder,
 }

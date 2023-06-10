@@ -9,8 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.documentfile.provider.DocumentFile
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
+import voice.common.navigation.Destination
+import voice.common.navigation.Destination.SelectFolderType.Mode
 import voice.common.navigation.Navigator
 import voice.data.audioFileCount
 import voice.data.folders.AudiobookFolders
@@ -19,17 +24,20 @@ import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.documentfile.nameWithoutExtension
-import javax.inject.Inject
 
 class SelectFolderTypeViewModel
-@Inject constructor(
+@AssistedInject constructor(
   private val dispatcherProvider: DispatcherProvider,
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
   private val documentFileFactory: CachedDocumentFileFactory,
+  @Assisted
+  private val uri: Uri,
+  @Assisted
+  private val documentFile: DocumentFile,
+  @Assisted
+  private val mode: Mode,
 ) {
-
-  internal lateinit var args: Args
 
   private var selectedFolderMode: MutableState<FolderMode?> = mutableStateOf(null)
 
@@ -59,7 +67,7 @@ class SelectFolderTypeViewModel
 
   internal fun add() {
     audiobookFolders.add(
-      uri = args.uri,
+      uri = uri,
       type = when (selectedFolderMode.value) {
         FolderMode.Audiobooks -> FolderType.Root
         FolderMode.SingleBook -> FolderType.SingleFolder
@@ -67,13 +75,19 @@ class SelectFolderTypeViewModel
         null -> error("Add should not be clickable at this point")
       },
     )
-    navigator.goBack()
+    when (mode) {
+      Mode.Default -> navigator.goBack()
+      Mode.Onboarding -> navigator.goTo(
+        destination = Destination.OnboardingCompletion,
+        replace = true,
+      )
+    }
   }
 
   @Composable
   internal fun viewState(): SelectFolderTypeViewState {
     val documentFile: CachedDocumentFile = remember {
-      documentFileFactory.create(args.documentFile.uri)
+      documentFileFactory.create(documentFile.uri)
     }
     val selectedFolderMode = selectedFolderMode.value ?: documentFile.defaultFolderMode().also {
       selectedFolderMode.value = it
@@ -135,8 +149,12 @@ class SelectFolderTypeViewModel
     )
   }
 
-  data class Args(
-    val uri: Uri,
-    val documentFile: DocumentFile,
-  )
+  @AssistedFactory
+  interface Factory {
+    fun create(
+      uri: Uri,
+      documentFile: DocumentFile,
+      mode: Mode,
+    ): SelectFolderTypeViewModel
+  }
 }
