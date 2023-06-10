@@ -23,6 +23,7 @@ fun AddContent(mode: Destination.AddContent.Mode) {
     onBack = {
       viewModel.back()
     },
+    mode = mode,
     onAdd = { folderType, uri ->
       viewModel.add(uri, folderType)
     },

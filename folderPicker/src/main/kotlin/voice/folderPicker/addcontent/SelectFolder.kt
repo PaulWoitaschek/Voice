@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import voice.common.navigation.Destination
 import voice.folderPicker.R
 import voice.folderPicker.folderPicker.FileTypeSelection
 import voice.logging.core.Logger
@@ -40,6 +41,7 @@ import voice.strings.R as StringsR
 internal fun SelectFolder(
   onBack: () -> Unit,
   onAdd: (FileTypeSelection, Uri) -> Unit,
+  mode: Destination.AddContent.Mode,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
@@ -72,7 +74,12 @@ internal fun SelectFolder(
 
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = stringResource(StringsR.string.select_folder_title_onboarding),
+          text = stringResource(
+            when (mode) {
+              Destination.AddContent.Mode.Default -> StringsR.string.select_folder_title_default
+              Destination.AddContent.Mode.Onboarding -> StringsR.string.select_folder_title_onboarding
+            },
+          ),
           style = MaterialTheme.typography.displayMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
