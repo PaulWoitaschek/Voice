@@ -181,6 +181,7 @@ private fun FolderPickerView(
   }
 }
 
+// ktlint-disable compose:preview-public-check
 @Composable
 @Preview
 fun FolderPickerPreview() {

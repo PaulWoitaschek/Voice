@@ -40,7 +40,7 @@ import voice.strings.R as StringsR
 
 @Composable
 @Preview
-fun SettingsPreview() {
+private fun SettingsPreview() {
   val viewState = SettingsViewState(
     useDarkTheme = false,
     showDarkThemePref = true,

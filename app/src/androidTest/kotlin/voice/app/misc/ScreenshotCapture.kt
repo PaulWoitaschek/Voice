@@ -20,6 +20,7 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
+import voice.bookOverview.search.BookSearchViewState
 import voice.bookOverview.views.BookOverviewPreview
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
@@ -147,7 +148,7 @@ class ScreenshotCapture {
     )
   }
 
-  private fun bookOverviewViewState(): BookOverviewViewState.Content {
+  private fun bookOverviewViewState(): BookOverviewViewState {
     val foreNames = mutableListOf(
       "Aysha", "Bonnie", "Tianna", "Fleur", "Imogen", "Sienna", "Kimberley", "Elizabeth", "Priya", "Claudia",
     ).also { it.shuffle() }
@@ -175,7 +176,7 @@ class ScreenshotCapture {
         remainingTime = formatTime(5.hours.inWholeMilliseconds + Random.nextLong(10.hours.inWholeMilliseconds)),
       )
     }
-    return BookOverviewViewState.Content(
+    return BookOverviewViewState(
       books = persistentMapOf(
         BookOverviewCategory.CURRENT to books.take(3),
         BookOverviewCategory.NOT_STARTED to books.drop(3).map { it.copy(progress = 0F) },
@@ -186,6 +187,10 @@ class ScreenshotCapture {
       showMigrateHint = false,
       showMigrateIcon = false,
       showSearchIcon = true,
+      isLoading = false,
+      searchActive = false,
+      showStoragePermissionBugCard = false,
+      searchViewState = BookSearchViewState.EmptySearch(emptyList(), emptyList(), ""),
     )
   }
 }

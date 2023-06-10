@@ -215,9 +215,10 @@ internal fun BookOverview(
   }
 }
 
-@Preview // ktlint-disable twitter-compose:preview-public-check
+// ktlint-disable compose:preview-public-check
+@Preview
 @Composable
-private fun BookOverviewPreview(
+fun BookOverviewPreview(
   @PreviewParameter(BookOverviewPreviewParameterProvider::class)
   viewState: BookOverviewViewState,
 ) {
