@@ -1,6 +1,5 @@
 package voice.folderPicker.folderPicker
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,7 +11,6 @@ import kotlinx.coroutines.withContext
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
-import voice.data.folders.FolderType
 import voice.documentfile.nameWithoutExtension
 import javax.inject.Inject
 
@@ -46,15 +44,12 @@ class FolderPickerViewModel
     }
   }
 
-  internal fun add(uri: Uri, type: FileTypeSelection) {
-    when (type) {
-      FileTypeSelection.File -> {
-        audiobookFolders.add(uri, FolderType.SingleFile)
-      }
-      FileTypeSelection.Folder -> {
-        navigator.goTo(Destination.SelectFolderType(uri, Destination.SelectFolderType.Mode.Default))
-      }
-    }
+  internal fun add() {
+    navigator.goTo(
+      Destination.AddContent(
+        Destination.AddContent.Mode.Default,
+      ),
+    )
   }
 
   fun removeFolder(item: FolderPickerViewState.Item) {

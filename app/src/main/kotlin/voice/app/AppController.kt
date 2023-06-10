@@ -19,13 +19,13 @@ import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
 import voice.cover.SelectCoverFromInternet
+import voice.folderPicker.addcontent.AddContent
 import voice.folderPicker.folderPicker.FolderOverview
 import voice.folderPicker.selectType.SelectFolderType
 import voice.migration.views.Migration
 import voice.onboarding.OnboardingCompletion
 import voice.onboarding.OnboardingExplanation
 import voice.onboarding.OnboardingWelcome
-import voice.onboarding.addcontent.OnboardingAddContent
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ class AppController : ComposeController() {
   @Composable
   override fun Content() {
     val navController = rememberNavController<Destination.Compose>(
-      startDestination = Destination.OnboardingWelcome,
+      startDestination = Destination.BookOverview,
     )
     NavBackHandler(navController)
     AnimatedNavHost(
@@ -55,8 +55,8 @@ class AppController : ComposeController() {
       transitionSpec = { action, destination, _ ->
         navTransition(action, destination)
       },
-    ) { screen ->
-      when (screen) {
+    ) { destination ->
+      when (destination) {
         Destination.BookOverview -> {
           BookOverviewScreen()
         }
@@ -72,8 +72,8 @@ class AppController : ComposeController() {
         }
         is Destination.SelectFolderType -> {
           SelectFolderType(
-            uri = screen.uri,
-            mode = screen.mode,
+            uri = destination.uri,
+            mode = destination.mode,
           )
         }
         Destination.Settings -> {
@@ -81,11 +81,11 @@ class AppController : ComposeController() {
         }
         is Destination.CoverFromInternet -> {
           SelectCoverFromInternet(
-            bookId = screen.bookId,
+            bookId = destination.bookId,
             onCloseClick = { navController.pop() },
           )
         }
-        Destination.OnboardingAddContent -> OnboardingAddContent()
+        is Destination.AddContent -> AddContent(destination.mode)
 
         Destination.OnboardingCompletion -> OnboardingCompletion(
           onBack = {
@@ -97,7 +97,11 @@ class AppController : ComposeController() {
         )
         Destination.OnboardingExplanation -> OnboardingExplanation(
           onNext = {
-            navController.navigate(Destination.OnboardingAddContent)
+            navController.navigate(
+              Destination.AddContent(
+                mode = Destination.AddContent.Mode.Onboarding,
+              ),
+            )
           },
           onBack = {
             navController.pop()
@@ -128,6 +132,9 @@ class AppController : ComposeController() {
           }
           NavigationCommand.GoBack -> {
             navController.pop()
+          }
+          is NavigationCommand.Execute -> {
+            command.action(navController)
           }
         }
       }

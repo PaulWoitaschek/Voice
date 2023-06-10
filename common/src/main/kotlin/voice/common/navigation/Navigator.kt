@@ -1,5 +1,6 @@
 package voice.common.navigation
 
+import dev.olshevski.navigation.reimagined.NavController
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,6 +26,12 @@ class Navigator
   fun goBack() {
     scope.launch {
       _navigationCommands.emit(NavigationCommand.GoBack)
+    }
+  }
+
+  fun execute(action: NavController<Destination.Compose>.() -> Unit) {
+    scope.launch {
+      _navigationCommands.emit(NavigationCommand.Execute(action))
     }
   }
 }

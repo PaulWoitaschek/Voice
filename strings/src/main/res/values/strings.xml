@@ -101,4 +101,7 @@
     <string name="storage_bug_title">Permission required</string>
     <string name="storage_bug_subtitle">For certain devices, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
     <string name="storage_bug_button">Grant permission</string>
+    <string name="select_folder_title_onboarding">Add Your First Audiobook</string>
+    <string name="select_folder_title_default">Add your Audiobook(s)</string>
+    <string name="select_folder_subtitle">Would you like to add a single file as a book or a folder?</string>
 </resources>

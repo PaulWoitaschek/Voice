@@ -12,6 +12,7 @@ import androidx.documentfile.provider.DocumentFile
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dev.olshevski.navigation.reimagined.popUpTo
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
 import voice.common.navigation.Destination
@@ -76,11 +77,17 @@ class SelectFolderTypeViewModel
       },
     )
     when (mode) {
-      Mode.Default -> navigator.goBack()
-      Mode.Onboarding -> navigator.goTo(
-        destination = Destination.OnboardingCompletion,
-        replace = true,
-      )
+      Mode.Default -> {
+        navigator.execute {
+          popUpTo { it is Destination.FolderPicker }
+        }
+      }
+      Mode.Onboarding -> {
+        navigator.goTo(
+          destination = Destination.OnboardingCompletion,
+          replace = true,
+        )
+      }
     }
   }
 

@@ -3,6 +3,7 @@ package voice.common.navigation
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import dev.olshevski.navigation.reimagined.NavController
 import kotlinx.parcelize.Parcelize
 import voice.common.BookId
 
@@ -11,6 +12,10 @@ sealed interface NavigationCommand {
   data class GoTo(
     val destination: Destination,
     val replace: Boolean,
+  ) : NavigationCommand
+
+  data class Execute(
+    val action: (NavController<Destination.Compose>) -> Unit,
   ) : NavigationCommand
 }
 
@@ -58,5 +63,10 @@ sealed interface Destination {
   object OnboardingExplanation : Compose
 
   @Parcelize
-  object OnboardingAddContent : Compose
+  data class AddContent(val mode: Mode) : Compose {
+
+    enum class Mode {
+      Default, Onboarding
+    }
+  }
 }

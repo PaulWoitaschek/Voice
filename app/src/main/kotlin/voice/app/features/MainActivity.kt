@@ -106,6 +106,9 @@ class MainActivity : AppCompatActivity() {
               }
             }
           }
+          is NavigationCommand.Execute -> {
+            // handled in AppController
+          }
         }
       }
     }

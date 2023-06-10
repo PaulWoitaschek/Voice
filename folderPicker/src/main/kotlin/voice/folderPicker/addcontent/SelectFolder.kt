@@ -1,4 +1,4 @@
-package voice.folderPicker.selectFolder
+package voice.folderPicker.addcontent
 
 import android.content.ActivityNotFoundException
 import android.net.Uri
@@ -29,13 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.folderPicker.R
 import voice.folderPicker.folderPicker.FileTypeSelection
 import voice.logging.core.Logger
+import voice.strings.R as StringsR
 
 @Composable
-fun SelectFolder(
+internal fun SelectFolder(
   onBack: () -> Unit,
   onAdd: (FileTypeSelection, Uri) -> Unit,
   modifier: Modifier = Modifier,
@@ -70,13 +72,13 @@ fun SelectFolder(
 
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Add Your First Audiobook",
+          text = stringResource(StringsR.string.select_folder_title_onboarding),
           style = MaterialTheme.typography.displayMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Would you like to add a single file as a book or a folder?",
+          text = stringResource(StringsR.string.select_folder_subtitle),
           style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(modifier = Modifier.size(24.dp))

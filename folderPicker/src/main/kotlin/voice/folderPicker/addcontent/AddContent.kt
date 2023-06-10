@@ -1,4 +1,4 @@
-package voice.onboarding.addcontent
+package voice.folderPicker.addcontent
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -6,18 +6,18 @@ import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
 import voice.common.rootComponentAs
-import voice.folderPicker.selectFolder.SelectFolder
 
 @ContributesTo(AppScope::class)
-interface OnboardingAddContentComponent {
-  val viewModel: OnboardingAddContentViewModel
+interface AddContentComponent {
+  val viewModelFactory: AddContentViewModel.Factory
 }
 
 @Composable
-fun OnboardingAddContent() {
-  val viewModel = rememberScoped {
-    rootComponentAs<OnboardingAddContentComponent>().viewModel
+fun AddContent(mode: Destination.AddContent.Mode) {
+  val viewModel = rememberScoped(mode.name) {
+    rootComponentAs<AddContentComponent>().viewModelFactory.create(mode)
   }
   SelectFolder(
     onBack = {
@@ -31,8 +31,8 @@ fun OnboardingAddContent() {
 
 @Composable
 @Preview
-private fun OnboardingAddContentPreview() {
+private fun AddContentPreview() {
   VoiceTheme {
-    OnboardingAddContent()
+    AddContent(Destination.AddContent.Mode.Default)
   }
 }
