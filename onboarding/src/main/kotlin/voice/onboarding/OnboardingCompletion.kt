@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
+import voice.strings.R as StringsR
 
 @Composable
 fun OnboardingCompletion(
@@ -38,7 +40,7 @@ fun OnboardingCompletion(
           IconButton(onClick = onBack) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = null,
+              contentDescription = stringResource(id = StringsR.string.close),
             )
           }
         },
@@ -46,7 +48,7 @@ fun OnboardingCompletion(
     },
     floatingActionButton = {
       ExtendedFloatingActionButton(onClick = onNext) {
-        Text(text = "Start Listening")
+        Text(text = stringResource(StringsR.string.onboarding_completion_next_button))
       }
     },
     content = { contentPadding ->
@@ -64,13 +66,13 @@ fun OnboardingCompletion(
         Spacer(modifier = Modifier.size(16.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "You're All Set!",
+          text = stringResource(StringsR.string.onboarding_completion_title),
           style = MaterialTheme.typography.displayMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Your first audiobook is ready to play. Enjoy your journey with Voice!",
+          text = stringResource(StringsR.string.onboarding_completion_subtitle),
           style = MaterialTheme.typography.bodyLarge,
         )
       }

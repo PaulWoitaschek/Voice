@@ -53,7 +53,7 @@ internal fun SelectFolder(
           IconButton(onClick = onBack) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = null,
+              contentDescription = stringResource(id = StringsR.string.close),
             )
           }
         },
@@ -119,10 +119,10 @@ internal fun SelectFolder(
             Icon(
               modifier = Modifier.size(ButtonDefaults.IconSize),
               imageVector = Icons.Outlined.Folder,
-              contentDescription = null,
+              contentDescription = stringResource(id = StringsR.string.select_folder_type_folder),
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text = "Folder")
+            Text(text = stringResource(id = StringsR.string.select_folder_type_folder))
           }
           Spacer(modifier = Modifier.size(8.dp))
           FilledTonalButton(
@@ -137,10 +137,10 @@ internal fun SelectFolder(
             Icon(
               modifier = Modifier.size(ButtonDefaults.IconSize),
               imageVector = Icons.Outlined.AudioFile,
-              contentDescription = null,
+              contentDescription = stringResource(id = StringsR.string.select_folder_type_file),
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text = "File")
+            Text(text = stringResource(id = StringsR.string.select_folder_type_file))
           }
         }
       }

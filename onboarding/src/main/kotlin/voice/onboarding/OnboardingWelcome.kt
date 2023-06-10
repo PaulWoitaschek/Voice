@@ -15,9 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
+import voice.strings.R as StringsR
 
 @Composable
 fun OnboardingWelcome(
@@ -28,7 +30,7 @@ fun OnboardingWelcome(
     modifier = modifier,
     floatingActionButton = {
       ExtendedFloatingActionButton(onClick = onNext) {
-        Text(text = "Next")
+        Text(text = stringResource(StringsR.string.onboarding_button_next))
       }
     },
     content = { contentPadding ->
@@ -38,13 +40,13 @@ fun OnboardingWelcome(
         Spacer(modifier = Modifier.size(32.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Welcome to Voice!",
+          text = stringResource(StringsR.string.onboarding_welcome_title),
           style = MaterialTheme.typography.displayMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Your personal pocket audiobook player. Let's get you set up.",
+          text = stringResource(id = StringsR.string.onboarding_welcome_subtitle),
           style = MaterialTheme.typography.bodyLarge,
         )
       }

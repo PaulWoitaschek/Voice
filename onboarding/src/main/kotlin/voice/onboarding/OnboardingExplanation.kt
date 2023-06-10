@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.common.compose.VoiceTheme
+import voice.strings.R as StringsR
 
 @Composable
 fun OnboardingExplanation(
@@ -38,7 +40,7 @@ fun OnboardingExplanation(
           IconButton(onClick = onBack) {
             Icon(
               imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = null,
+              contentDescription = stringResource(id = StringsR.string.close),
             )
           }
         },
@@ -46,7 +48,7 @@ fun OnboardingExplanation(
     },
     floatingActionButton = {
       ExtendedFloatingActionButton(onClick = onNext) {
-        Text(text = "Next")
+        Text(text = stringResource(StringsR.string.onboarding_button_next))
       }
     },
     content = { contentPadding ->
@@ -63,13 +65,13 @@ fun OnboardingExplanation(
         Spacer(modifier = Modifier.size(16.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "Your Library, Your Way",
+          text = stringResource(StringsR.string.onboarding_explanation_title),
           style = MaterialTheme.typography.displayMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
-          text = "With Voice, you can add books as individual files or organize them in folders. You choose!",
+          text = stringResource(StringsR.string.onboarding_explanation_subtitle),
           style = MaterialTheme.typography.bodyLarge,
         )
       }
