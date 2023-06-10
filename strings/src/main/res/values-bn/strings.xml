@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="play">চালু</string>
+    <string name="play_pause">চালু/থামা</string>
+    <string name="pause">থামা</string>
+    <string name="cover">কভার</string>
+</resources>
