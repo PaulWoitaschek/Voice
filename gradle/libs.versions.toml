@@ -15,7 +15,6 @@ materialDialog = "3.3.0"
 dagger = "2.46.1"
 kotlin = "1.8.21"
 compose-compiler = "1.4.7"
-compose-material3 = "1.1.0"
 media3 = "1.0.2"
 agp = "8.0.2"
 ktlint = "0.49.1"
@@ -111,7 +110,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.7.2"
 compose-navigation = "dev.olshevski.navigation:reimagined:1.4.0"
 
