@@ -8,6 +8,7 @@ import androidx.datastore.core.DataStore
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.common.pref.AuthorAudiobookFolders
@@ -100,6 +101,12 @@ class AudiobookFolders
       FolderType.SingleFolder -> singleFolderAudiobookFolders
       FolderType.Root -> rootAudioBookFolders
       FolderType.Author -> authorAudiobookFolders
+    }
+  }
+
+  suspend fun hasAnyFolders(): Boolean {
+    return FolderType.values().any {
+      dataStore(it).data.first().isNotEmpty()
     }
   }
 }
