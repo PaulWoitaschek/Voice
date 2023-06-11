@@ -1,4 +1,4 @@
-package voice.onboarding
+package voice.onboarding.completion
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -22,11 +22,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.squareup.anvil.annotations.ContributesTo
+import voice.common.AppScope
 import voice.common.compose.VoiceTheme
+import voice.common.compose.rememberScoped
+import voice.common.rootComponentAs
+import voice.onboarding.R
 import voice.strings.R as StringsR
 
+@ContributesTo(AppScope::class)
+interface OnboardingCompletionComponent {
+  val viewModel: OnboardingCompletionViewModel
+}
+
 @Composable
-fun OnboardingCompletion(
+fun OnboardingCompletion(modifier: Modifier = Modifier) {
+  val viewModel = rememberScoped {
+    rootComponentAs<OnboardingCompletionComponent>().viewModel
+  }
+  OnboardingCompletion(
+    modifier = modifier,
+    onNext = viewModel::next,
+    onBack = viewModel::back,
+  )
+}
+
+@Composable
+private fun OnboardingCompletion(
   onNext: () -> Unit,
   onBack: () -> Unit,
   modifier: Modifier = Modifier,

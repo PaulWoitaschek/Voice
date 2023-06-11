@@ -41,4 +41,15 @@ class VoiceDataStoreFactory
       fileName = fileName,
     )
   }
+
+  fun boolean(
+    fileName: String,
+    defaultValue: Boolean,
+  ): DataStore<Boolean> {
+    return create(
+      serializer = Boolean.serializer(),
+      defaultValue = defaultValue,
+      fileName = fileName,
+    )
+  }
 }

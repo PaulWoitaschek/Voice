@@ -25,6 +25,7 @@ import voice.common.BookId
 import voice.common.grid.GridMode
 import voice.common.pref.AuthorAudiobookFolders
 import voice.common.pref.CurrentBook
+import voice.common.pref.OnboardingCompleted
 import voice.common.pref.PrefKeys
 import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
@@ -96,6 +97,13 @@ object PrefsModule {
   @Named(PrefKeys.GRID_MODE)
   fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
     return prefs.enum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE)
+  }
+
+  @Provides
+  @Singleton
+  @OnboardingCompleted
+  fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("onboardingCompleted", defaultValue = false)
   }
 
   @Provides
