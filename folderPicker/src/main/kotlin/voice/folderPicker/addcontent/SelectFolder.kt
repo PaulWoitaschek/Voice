@@ -28,8 +28,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.common.navigation.Destination
 import voice.folderPicker.R
@@ -61,15 +63,17 @@ internal fun SelectFolder(
     },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
-        Spacer(modifier = Modifier.size(16.dp))
-        Image(
-          modifier = Modifier
-            .widthIn(max = 400.dp)
-            .padding(horizontal = 32.dp)
-            .align(Alignment.CenterHorizontally),
-          painter = painterResource(id = R.drawable.folder_type_artwork),
-          contentDescription = null,
-        )
+        if (LocalConfiguration.current.screenHeightDp > 500) {
+          Spacer(modifier = Modifier.size(16.dp))
+          Image(
+            modifier = Modifier
+              .widthIn(max = 400.dp)
+              .padding(horizontal = 32.dp)
+              .align(Alignment.CenterHorizontally),
+            painter = painterResource(id = R.drawable.folder_type_artwork),
+            contentDescription = null,
+          )
+        }
         Spacer(modifier = Modifier.size(16.dp))
 
         Text(
@@ -145,5 +149,15 @@ internal fun SelectFolder(
         }
       }
     },
+  )
+}
+
+@Composable
+@Preview
+private fun SelectFolderPreview() {
+  SelectFolder(
+    onBack = {},
+    onAdd = { _, _ -> },
+    mode = Destination.AddContent.Mode.Default,
   )
 }

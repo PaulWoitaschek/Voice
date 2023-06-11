@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,15 +54,17 @@ fun OnboardingExplanation(
     },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
-        Spacer(modifier = Modifier.size(32.dp))
-        Image(
-          modifier = Modifier
-            .widthIn(max = 400.dp)
-            .padding(horizontal = 32.dp)
-            .align(CenterHorizontally),
-          painter = painterResource(id = R.drawable.bookshelf_artwork),
-          contentDescription = null,
-        )
+        if (LocalConfiguration.current.screenHeightDp > 500) {
+          Spacer(modifier = Modifier.size(32.dp))
+          Image(
+            modifier = Modifier
+              .widthIn(max = 400.dp)
+              .padding(horizontal = 32.dp)
+              .align(CenterHorizontally),
+            painter = painterResource(id = R.drawable.bookshelf_artwork),
+            contentDescription = null,
+          )
+        }
         Spacer(modifier = Modifier.size(16.dp))
         Text(
           modifier = Modifier.padding(horizontal = 24.dp),
