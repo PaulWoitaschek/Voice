@@ -103,4 +103,19 @@
     <string name="storage_bug_subtitle">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Ihre Hörbücher lesen zu können.</string>
     <string name="storage_bug_button">Berechtigung erteilen</string>
     <string name="folder_mode_author">Autor-Buch-Modus: Unterordner sind Autoren, Unter-Unterordner sind Bücher.</string>
+    <string name="cover_search.author">Autor</string>
+    <string name="select_folder_title_onboarding">Füge dein erstes Hörbuch hinzu</string>
+    <string name="select_folder_title_default">Füge deine Hörbücher hinzu</string>
+    <string name="select_folder_type_file">Datei</string>
+    <string name="select_folder_type_folder">Ordner</string>
+    <string name="select_folder_subtitle">Möchtest du eine einzelne Datei als Buch hinzufügen oder einen Ordner\?</string>
+    <string name="onboarding_welcome_title">Willkommen bei Voice!</string>
+    <string name="onboarding.explanation.title">Deine Bibliothek, Deine Wahl</string>
+    <string name="onboarding.completion.title">Du bist fertig!</string>
+    <string name="onboarding.completion.subtitle">Dein erstes Hörbuch ist bereit zum Abspielen. Viel Spaß auf deiner Reise mit Voice!</string>
+    <string name="onboarding.completion.next_button">Start</string>
+    <string name="cover_search.icon_recent">Zuletzt gesucht</string>
+    <string name="onboarding_welcome_subtitle">Dein persönlicher Hörbuch-Player. Lass uns mit dem Einrichten loslegen.</string>
+    <string name="onboarding.button_next">Weiter</string>
+    <string name="onboarding.explanation.subtitle">Mit Voice kannst du Bücher als einzelne Dateien hinzufügen oder in Ordnern organisieren. Du entscheidest!</string>
 </resources>
