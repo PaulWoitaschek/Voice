@@ -1,30 +1,15 @@
 package voice.folderPicker.addcontent
 
-import android.content.ActivityNotFoundException
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.AudioFile
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import voice.common.navigation.Destination
 import voice.folderPicker.R
 import voice.folderPicker.folderPicker.FileTypeSelection
-import voice.logging.core.Logger
 import voice.strings.R as StringsR
 
 @Composable
@@ -49,17 +33,7 @@ internal fun SelectFolder(
   Scaffold(
     modifier = modifier,
     topBar = {
-      TopAppBar(
-        title = { },
-        navigationIcon = {
-          IconButton(onClick = onBack) {
-            Icon(
-              imageVector = Icons.Outlined.ArrowBack,
-              contentDescription = stringResource(id = StringsR.string.close),
-            )
-          }
-        },
-      )
+      SelectFolderAppBar(onBack)
     },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
@@ -93,60 +67,7 @@ internal fun SelectFolder(
           style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(modifier = Modifier.size(24.dp))
-        Row(
-          Modifier
-            .fillMaxWidth(),
-          horizontalArrangement = Arrangement.Center,
-        ) {
-          val openDocumentLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.OpenDocument(),
-          ) { uri ->
-            if (uri != null) {
-              onAdd(FileTypeSelection.File, uri)
-            }
-          }
-          val documentTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-            if (uri != null) {
-              onAdd(FileTypeSelection.Folder, uri)
-            }
-          }
-
-          FilledTonalButton(
-            onClick = {
-              try {
-                documentTreeLauncher.launch(null)
-              } catch (e: ActivityNotFoundException) {
-                Logger.e(e, "Could not add folder")
-              }
-            },
-          ) {
-            Icon(
-              modifier = Modifier.size(ButtonDefaults.IconSize),
-              imageVector = Icons.Outlined.Folder,
-              contentDescription = stringResource(id = StringsR.string.select_folder_type_folder),
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text = stringResource(id = StringsR.string.select_folder_type_folder))
-          }
-          Spacer(modifier = Modifier.size(8.dp))
-          FilledTonalButton(
-            onClick = {
-              try {
-                openDocumentLauncher.launch(arrayOf("*/*"))
-              } catch (e: ActivityNotFoundException) {
-                Logger.e(e, "Could not add file")
-              }
-            },
-          ) {
-            Icon(
-              modifier = Modifier.size(ButtonDefaults.IconSize),
-              imageVector = Icons.Outlined.AudioFile,
-              contentDescription = stringResource(id = StringsR.string.select_folder_type_file),
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text = stringResource(id = StringsR.string.select_folder_type_file))
-          }
-        }
+        SelectFolderButtonRow(onAdd)
       }
     },
   )
