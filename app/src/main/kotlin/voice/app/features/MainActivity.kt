@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.lifecycleScope
+import com.bluelinelabs.conductor.ChangeHandlerFrameLayout
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
-import voice.app.databinding.ActivityBookBinding
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookmarks.BookmarkController
 import voice.app.injection.appComponent
@@ -57,10 +57,10 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     appComponent.inject(this)
     super.onCreate(savedInstanceState)
-    val binding = ActivityBookBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+    val root = ChangeHandlerFrameLayout(this)
+    setContentView(root)
 
-    router = Conductor.attachRouter(this, binding.root, savedInstanceState)
+    router = Conductor.attachRouter(this, root, savedInstanceState)
       .setOnBackPressedDispatcherEnabled(true)
       .setPopRootControllerMode(Router.PopRootControllerMode.NEVER)
     if (!router.hasRootController()) {
@@ -105,6 +105,9 @@ class MainActivity : AppCompatActivity() {
                 startActivity(destination.intent)
               }
             }
+          }
+          is NavigationCommand.Execute -> {
+            // handled in AppController
           }
         }
       }

@@ -19,6 +19,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.views.GridBook
@@ -26,6 +27,7 @@ import voice.bookOverview.views.ListBookRow
 import voice.bookOverview.views.gridColumnCount
 import voice.common.BookId
 import voice.common.compose.plus
+import voice.strings.R as StringsR
 
 @Composable
 internal fun BookSearchContent(
@@ -47,7 +49,7 @@ internal fun BookSearchContent(
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.History,
-                contentDescription = null,
+                contentDescription = stringResource(id = StringsR.string.cover_search_icon_recent),
               )
             },
           )
@@ -59,7 +61,7 @@ internal fun BookSearchContent(
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.SentimentSatisfied,
-                contentDescription = null,
+                contentDescription = stringResource(id = StringsR.string.cover_search_author),
               )
             },
           )

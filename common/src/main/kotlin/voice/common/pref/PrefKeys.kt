@@ -14,6 +14,9 @@ object PrefKeys {
 }
 
 @Qualifier
+annotation class OnboardingCompleted
+
+@Qualifier
 annotation class RootAudiobookFolders
 
 @Qualifier

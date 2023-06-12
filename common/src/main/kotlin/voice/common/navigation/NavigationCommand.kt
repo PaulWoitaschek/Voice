@@ -3,12 +3,20 @@ package voice.common.navigation
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import dev.olshevski.navigation.reimagined.NavController
 import kotlinx.parcelize.Parcelize
 import voice.common.BookId
 
 sealed interface NavigationCommand {
   data object GoBack : NavigationCommand
-  data class GoTo(val destination: Destination) : NavigationCommand
+  data class GoTo(
+    val destination: Destination,
+    val replace: Boolean,
+  ) : NavigationCommand
+
+  data class Execute(
+    val action: (NavController<Destination.Compose>) -> Unit,
+  ) : NavigationCommand
 }
 
 sealed interface Destination {
@@ -37,5 +45,28 @@ sealed interface Destination {
   object FolderPicker : Compose
 
   @Parcelize
-  data class SelectFolderType(val uri: Uri) : Compose
+  data class SelectFolderType(val uri: Uri, val mode: Mode) : Compose {
+
+    enum class Mode {
+      Default,
+      Onboarding,
+    }
+  }
+
+  @Parcelize
+  object OnboardingWelcome : Compose
+
+  @Parcelize
+  object OnboardingCompletion : Compose
+
+  @Parcelize
+  object OnboardingExplanation : Compose
+
+  @Parcelize
+  data class AddContent(val mode: Mode) : Compose {
+
+    enum class Mode {
+      Default, Onboarding
+    }
+  }
 }

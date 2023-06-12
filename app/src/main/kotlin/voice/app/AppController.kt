@@ -2,24 +2,27 @@ package voice.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.datastore.core.DataStore
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.NavBackHandler
+import dev.olshevski.navigation.reimagined.NavController
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
+import dev.olshevski.navigation.reimagined.replaceLast
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
-import voice.common.BookId
 import voice.common.compose.ComposeController
 import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.common.pref.CurrentBook
 import voice.cover.SelectCoverFromInternet
-import voice.folderPicker.folderPicker.FolderPicker
+import voice.folderPicker.addcontent.AddContent
+import voice.folderPicker.folderPicker.FolderOverview
 import voice.folderPicker.selectType.SelectFolderType
 import voice.migration.views.Migration
+import voice.onboarding.OnboardingExplanation
+import voice.onboarding.OnboardingWelcome
+import voice.onboarding.completion.OnboardingCompletion
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -29,33 +32,30 @@ class AppController : ComposeController() {
     appComponent.inject(this)
   }
 
-  @field:[
-  Inject
-  CurrentBook
-  ]
-  lateinit var currentBookIdPref: DataStore<BookId?>
+  @Inject
+  lateinit var startDestinationProvider: StartDestinationProvider
 
   @Inject
   lateinit var navigator: Navigator
 
   @Composable
   override fun Content() {
-    val navController = rememberNavController<Destination.Compose>(
-      startDestination = Destination.BookOverview,
+    val navController: NavController<Destination.Compose> = rememberNavController(
+      startDestination = startDestinationProvider(),
     )
     NavBackHandler(navController)
     AnimatedNavHost(
       navController,
-      transitionSpec = { action, _, _ ->
-        navTransition(action)
+      transitionSpec = { action, destination, _ ->
+        navTransition(action, destination)
       },
-    ) { screen ->
-      when (screen) {
+    ) { destination ->
+      when (destination) {
         Destination.BookOverview -> {
           BookOverviewScreen()
         }
         Destination.FolderPicker -> {
-          FolderPicker(
+          FolderOverview(
             onCloseClick = {
               navController.pop()
             },
@@ -65,17 +65,38 @@ class AppController : ComposeController() {
           Migration()
         }
         is Destination.SelectFolderType -> {
-          SelectFolderType(uri = screen.uri)
+          SelectFolderType(
+            uri = destination.uri,
+            mode = destination.mode,
+          )
         }
         Destination.Settings -> {
           Settings()
         }
         is Destination.CoverFromInternet -> {
           SelectCoverFromInternet(
-            bookId = screen.bookId,
+            bookId = destination.bookId,
             onCloseClick = { navController.pop() },
           )
         }
+        is Destination.AddContent -> AddContent(destination.mode)
+
+        Destination.OnboardingCompletion -> OnboardingCompletion()
+        Destination.OnboardingExplanation -> OnboardingExplanation(
+          onNext = {
+            navController.navigate(
+              Destination.AddContent(
+                mode = Destination.AddContent.Mode.Onboarding,
+              ),
+            )
+          },
+          onBack = {
+            navController.pop()
+          },
+        )
+        Destination.OnboardingWelcome -> OnboardingWelcome(
+          onNext = { navController.navigate(Destination.OnboardingExplanation) },
+        )
       }
     }
 
@@ -85,7 +106,11 @@ class AppController : ComposeController() {
           is NavigationCommand.GoTo -> {
             when (val destination = command.destination) {
               is Destination.Compose -> {
-                navController.navigate(destination)
+                if (command.replace) {
+                  navController.replaceLast(destination)
+                } else {
+                  navController.navigate(destination)
+                }
               }
               else -> {
                 // no-op
@@ -94,6 +119,9 @@ class AppController : ComposeController() {
           }
           NavigationCommand.GoBack -> {
             navController.pop()
+          }
+          is NavigationCommand.Execute -> {
+            command.action(navController)
           }
         }
       }

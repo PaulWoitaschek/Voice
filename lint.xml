@@ -8,6 +8,8 @@
   </issue>
   <issue id="Overdraw" severity="informational" />
   <issue id="RestrictedApi" severity="informational" />
+  <issue id="VectorRaster" severity="informational" />
+  <issue id="VectorPath" severity="informational" />
   <issue id="UnusedResources" severity="informational" />
   <issue id="UnusedQuantity" severity="informational" />
   <issue id="ObsoleteLintCustomCheck" severity="informational" />

@@ -1,9 +1,6 @@
 package voice.folderPicker.folderPicker
 
-import android.content.ActivityNotFoundException
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,10 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -36,7 +29,6 @@ import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
-import voice.logging.core.Logger
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -45,7 +37,7 @@ interface FolderPickerComponent {
 }
 
 @Composable
-fun FolderPicker(
+fun FolderOverview(
   onCloseClick: () -> Unit,
 ) {
   val viewModel: FolderPickerViewModel = rememberScoped {
@@ -53,53 +45,10 @@ fun FolderPicker(
       .folderPickerViewModel
   }
   val viewState = viewModel.viewState()
-
-  var showSelectFileDialog by remember {
-    mutableStateOf(false)
-  }
-  val openDocumentLauncher = rememberLauncherForActivityResult(
-    ActivityResultContracts.OpenDocument(),
-  ) { uri ->
-    if (uri != null) {
-      viewModel.add(uri, FileTypeSelection.File)
-    }
-  }
-  val documentTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-    if (uri != null) {
-      viewModel.add(uri, FileTypeSelection.Folder)
-    }
-  }
-
-  if (showSelectFileDialog) {
-    FileTypeSelectionDialog(
-      onDismiss = {
-        showSelectFileDialog = false
-      },
-      onSelected = { selection ->
-        when (selection) {
-          FileTypeSelection.File -> {
-            try {
-              openDocumentLauncher.launch(arrayOf("*/*"))
-            } catch (e: ActivityNotFoundException) {
-              Logger.e(e, "Could not add $selection")
-            }
-          }
-          FileTypeSelection.Folder -> {
-            try {
-              documentTreeLauncher.launch(null)
-            } catch (e: ActivityNotFoundException) {
-              Logger.e(e, "Could not add $selection")
-            }
-          }
-        }
-      },
-    )
-  }
-
-  FolderPickerView(
+  FolderOverviewView(
     viewState = viewState,
     onAddClick = {
-      showSelectFileDialog = true
+      viewModel.add()
     },
     onDeleteClick = {
       viewModel.removeFolder(it)
@@ -109,7 +58,7 @@ fun FolderPicker(
 }
 
 @Composable
-private fun FolderPickerView(
+private fun FolderOverviewView(
   viewState: FolderPickerViewState,
   onAddClick: () -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
@@ -184,8 +133,8 @@ private fun FolderPickerView(
 // ktlint-disable compose:preview-public-check
 @Composable
 @Preview
-fun FolderPickerPreview() {
-  FolderPickerView(
+fun FolderOverviewPreview() {
+  FolderOverviewView(
     viewState = FolderPickerViewState(
       items = listOf(
         FolderPickerViewState.Item(
