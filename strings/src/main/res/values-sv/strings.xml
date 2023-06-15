@@ -95,4 +95,22 @@
     <string name="generic_error_retry">Försök igen</string>
     <string name="play">Spela</string>
     <string name="pause">Pausa</string>
+    <string name="cover_search.author">Författare</string>
+    <string name="storage_bug_button">Tillåta behörigheter</string>
+    <string name="select_folder_subtitle">Vill du lägga till en fil som en bok eller en mapp\?</string>
+    <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dom i mappar. Du väljer!</string>
+    <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
+    <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas. Njut av din resa med Voice!</string>
+    <string name="onboarding.completion.next_button">Börja Lyssna</string>
+    <string name="storage_bug_subtitle">För vissa enheter saknar appen vissa nödvändiga behörigheter för att komma åt den externa lagringen. Den åtkomst är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
+    <string name="storage_bug_title">Tillstånd krävs</string>
+    <string name="cover_search_template_no_author">%s ljudboksomslag</string>
+    <string name="select_folder_title_onboarding">Lägg Till Din Första Ljudbok</string>
+    <string name="select_folder_title_default">Lägg till dina Ljudböker</string>
+    <string name="select_folder_type_file">Fil</string>
+    <string name="select_folder_type_folder">Mapp</string>
+    <string name="onboarding_welcome_title">Välkommen till Voice!</string>
+    <string name="onboarding_welcome_subtitle">Din personliga ljudboksspelare.</string>
+    <string name="onboarding.button_next">Nästa</string>
+    <string name="onboarding.completion.title">Du är redo!</string>
 </resources>
