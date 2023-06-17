@@ -26,9 +26,9 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import voice.strings.R as StringsR
 
 @Composable
-fun AskReviewDialog(
+fun AskForReviewDialog(
   onRate: (Int) -> Unit,
-  onNotRate: () -> Unit,
+  onRatingDenied: () -> Unit,
   onDismiss: () -> Unit,
 ) {
   var selectedStars by remember { mutableStateOf(5) }
@@ -69,7 +69,7 @@ fun AskReviewDialog(
       }
     },
     dismissButton = {
-      TextButton(onClick = onNotRate) {
+      TextButton(onClick = onRatingDenied) {
         Text(stringResource(StringsR.string.review_button_no))
       }
     },
@@ -88,9 +88,9 @@ fun AskReviewDialog(
 @Composable
 @Preview
 private fun ReviewDialogPreview() {
-  AskReviewDialog(
+  AskForReviewDialog(
     onRate = {},
-    onNotRate = {},
+    onRatingDenied = {},
     onDismiss = {},
   )
 }

@@ -20,6 +20,7 @@ import voice.common.AppInfoProvider
 import voice.common.AppScope
 import voice.common.DispatcherProvider
 import voice.playback.notification.MainActivityIntentProvider
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -93,4 +94,7 @@ object AndroidModule {
       io = Dispatchers.IO,
     )
   }
+
+  @Provides
+  fun clock(): Clock = Clock.systemDefaultZone()
 }

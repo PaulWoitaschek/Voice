@@ -1,6 +1,11 @@
 plugins {
   id("voice.library")
   id("voice.compose")
+  alias(libs.plugins.anvil)
+}
+
+anvil {
+  generateDaggerFactories.set(true)
 }
 
 android {
@@ -11,6 +16,11 @@ android {
 
 dependencies {
   implementation(projects.strings)
+  implementation(projects.playback)
+  implementation(projects.data)
+  implementation(projects.common)
+  implementation(projects.datastore)
   implementation(libs.review)
   implementation(libs.lottie)
+  implementation(libs.dagger.core)
 }

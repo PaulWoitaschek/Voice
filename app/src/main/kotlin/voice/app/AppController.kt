@@ -2,6 +2,11 @@ package voice.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.NavController
@@ -9,6 +14,7 @@ import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
 import dev.olshevski.navigation.reimagined.replaceLast
+import kotlinx.coroutines.launch
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
@@ -23,6 +29,8 @@ import voice.migration.views.Migration
 import voice.onboarding.OnboardingExplanation
 import voice.onboarding.OnboardingWelcome
 import voice.onboarding.completion.OnboardingCompletion
+import voice.review.AskForReviewDialog
+import voice.review.ShouldShowRatingDialog
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -37,6 +45,9 @@ class AppController : ComposeController() {
 
   @Inject
   lateinit var navigator: Navigator
+
+  @Inject
+  lateinit var shouldShowRatingDialog: ShouldShowRatingDialog
 
   @Composable
   override fun Content() {
@@ -96,6 +107,31 @@ class AppController : ComposeController() {
         )
         Destination.OnboardingWelcome -> OnboardingWelcome(
           onNext = { navController.navigate(Destination.OnboardingExplanation) },
+        )
+      }
+
+      var showRatingDialog by remember { mutableStateOf(false) }
+      LaunchedEffect(Unit) {
+        showRatingDialog = shouldShowRatingDialog.shouldShow()
+      }
+      val scope = rememberCoroutineScope()
+      if (showRatingDialog) {
+        AskForReviewDialog(
+          onRate = {
+            showRatingDialog = false
+            scope.launch {
+              shouldShowRatingDialog.setShown()
+            }
+          },
+          onRatingDenied = {
+            showRatingDialog = false
+            scope.launch {
+              shouldShowRatingDialog.setShown()
+            }
+          },
+          onDismiss = {
+            showRatingDialog = false
+          },
         )
       }
     }
