@@ -27,7 +27,7 @@ import voice.strings.R as StringsR
 
 @Composable
 internal fun AskForReviewDialog(
-  onRate: (Int) -> Unit,
+  onReviewed: (Int) -> Unit,
   onReviewDenied: () -> Unit,
   onDismiss: () -> Unit,
 ) {
@@ -76,7 +76,7 @@ internal fun AskForReviewDialog(
     confirmButton = {
       TextButton(
         onClick = {
-          onRate(selectedStars)
+          onReviewed(selectedStars)
         },
       ) {
         Text(stringResource(StringsR.string.review_button_yes))
@@ -89,7 +89,7 @@ internal fun AskForReviewDialog(
 @Preview
 private fun ReviewDialogPreview() {
   AskForReviewDialog(
-    onRate = {},
+    onReviewed = {},
     onReviewDenied = {},
     onDismiss = {},
   )

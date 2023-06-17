@@ -24,7 +24,7 @@ fun ReviewFeature() {
   val scope = rememberCoroutineScope()
   if (showReviewDialog) {
     AskForReviewDialog(
-      onRate = {
+      onReviewed = {
         showReviewDialog = false
         scope.launch {
           shouldShowReviewDialog.setShown()
