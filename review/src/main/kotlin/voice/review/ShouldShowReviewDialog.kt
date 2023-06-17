@@ -10,12 +10,12 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 
-class ShouldShowRatingDialog
+class ShouldShowReviewDialog
 @Inject constructor(
   private val installationTimeProvider: InstallationTimeProvider,
   private val clock: Clock,
-  @RatingDialogShown
-  private val ratingDialogShown: DataStore<Boolean>,
+  @ReviewDialogShown
+  private val reviewDialogShown: DataStore<Boolean>,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
 ) {
@@ -23,7 +23,7 @@ class ShouldShowRatingDialog
   suspend fun shouldShow(): Boolean {
     return isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
-      ratingNotShownYet() &&
+      reviewDialogNotShown() &&
       listenedForEnoughTime()
   }
 
@@ -35,13 +35,13 @@ class ShouldShowRatingDialog
     return timeSinceInstallation >= 2.days
   }
 
-  private suspend fun ratingNotShownYet() = !ratingDialogShown.data.first()
+  private suspend fun reviewDialogNotShown() = !reviewDialogShown.data.first()
 
   private fun isNotPlaying() = playStateManager.playState != PlayStateManager.PlayState.Playing
 
   private suspend fun listenedForEnoughTime() = bookRepository.all().sumOf { it.position }.milliseconds >= 1.days
 
   suspend fun setShown() {
-    ratingDialogShown.updateData { true }
+    reviewDialogShown.updateData { true }
   }
 }

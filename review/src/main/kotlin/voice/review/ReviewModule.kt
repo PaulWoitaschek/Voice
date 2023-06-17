@@ -16,11 +16,11 @@ object ReviewModule {
 
   @Provides
   @Singleton
-  @RatingDialogShown
-  fun ratingDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
-    return factory.create(Boolean.serializer(), false, "ratingDialogShown")
+  @ReviewDialogShown
+  fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.create(Boolean.serializer(), false, "reviewDialogShown")
   }
 }
 
 @Qualifier
-annotation class RatingDialogShown
+annotation class ReviewDialogShown

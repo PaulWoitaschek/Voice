@@ -15,14 +15,14 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 
-class ShouldShowRatingDialogTest {
+class ShouldShowReviewDialogTest {
 
   @Test
   fun `shouldShow returns false when playstate is playing`() {
     test(
       timeElapsedSinceInstallation = 100.days,
       playState = PlayStateManager.PlayState.Playing,
-      ratingDialogShown = false,
+      reviewDialogShown = false,
       playedBookTime = 100.days,
       expected = false,
     )
@@ -33,18 +33,18 @@ class ShouldShowRatingDialogTest {
     test(
       timeElapsedSinceInstallation = 1.days,
       playState = PlayStateManager.PlayState.Paused,
-      ratingDialogShown = false,
+      reviewDialogShown = false,
       playedBookTime = 1.days,
       expected = false,
     )
   }
 
   @Test
-  fun `shouldShow returns false when rating dialog was shown before`() {
+  fun `shouldShow returns false when review dialog was shown before`() {
     test(
       timeElapsedSinceInstallation = 3.days,
       playState = PlayStateManager.PlayState.Paused,
-      ratingDialogShown = true,
+      reviewDialogShown = true,
       playedBookTime = 1.days,
       expected = false,
     )
@@ -55,7 +55,7 @@ class ShouldShowRatingDialogTest {
     test(
       timeElapsedSinceInstallation = 3.days,
       playState = PlayStateManager.PlayState.Paused,
-      ratingDialogShown = false,
+      reviewDialogShown = false,
       playedBookTime = 20.hours,
       expected = false,
     )
@@ -66,7 +66,7 @@ class ShouldShowRatingDialogTest {
     test(
       timeElapsedSinceInstallation = 3.days,
       playState = PlayStateManager.PlayState.Paused,
-      ratingDialogShown = false,
+      reviewDialogShown = false,
       playedBookTime = 2.days,
       expected = true,
     )
@@ -75,12 +75,12 @@ class ShouldShowRatingDialogTest {
   private fun test(
     timeElapsedSinceInstallation: Duration,
     playState: PlayStateManager.PlayState,
-    ratingDialogShown: Boolean,
+    reviewDialogShown: Boolean,
     playedBookTime: Duration,
     expected: Boolean,
   ) {
     val now = Instant.ofEpochMilli(1687034006)
-    val shouldShowRatingDialog = ShouldShowRatingDialog(
+    val shouldShowReviewDialog = ShouldShowReviewDialog(
       installationTimeProvider = mockk {
         every { installationTime() } returns now
           .minusMillis(timeElapsedSinceInstallation.inWholeMilliseconds)
@@ -96,13 +96,13 @@ class ShouldShowRatingDialogTest {
       playStateManager = mockk {
         every { this@mockk.playState } returns playState
       },
-      ratingDialogShown = mockk {
-        every { data } returns flowOf(ratingDialogShown)
+      reviewDialogShown = mockk {
+        every { data } returns flowOf(reviewDialogShown)
       },
     )
-    val showsRatingDialog = runBlocking {
-      shouldShowRatingDialog.shouldShow()
+    val showsreviewDialog = runBlocking {
+      shouldShowReviewDialog.shouldShow()
     }
-    showsRatingDialog shouldBe expected
+    showsreviewDialog shouldBe expected
   }
 }

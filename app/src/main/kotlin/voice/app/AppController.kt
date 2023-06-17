@@ -30,7 +30,7 @@ import voice.onboarding.OnboardingExplanation
 import voice.onboarding.OnboardingWelcome
 import voice.onboarding.completion.OnboardingCompletion
 import voice.review.AskForReviewDialog
-import voice.review.ShouldShowRatingDialog
+import voice.review.ShouldShowReviewDialog
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ class AppController : ComposeController() {
   lateinit var navigator: Navigator
 
   @Inject
-  lateinit var shouldShowRatingDialog: ShouldShowRatingDialog
+  lateinit var shouldShowReviewDialog: ShouldShowReviewDialog
 
   @Composable
   override fun Content() {
@@ -110,27 +110,27 @@ class AppController : ComposeController() {
         )
       }
 
-      var showRatingDialog by remember { mutableStateOf(false) }
+      var showReviewDialog by remember { mutableStateOf(false) }
       LaunchedEffect(Unit) {
-        showRatingDialog = shouldShowRatingDialog.shouldShow()
+        showReviewDialog = shouldShowReviewDialog.shouldShow()
       }
       val scope = rememberCoroutineScope()
-      if (showRatingDialog) {
+      if (showReviewDialog) {
         AskForReviewDialog(
           onRate = {
-            showRatingDialog = false
+            showReviewDialog = false
             scope.launch {
-              shouldShowRatingDialog.setShown()
+              shouldShowReviewDialog.setShown()
             }
           },
-          onRatingDenied = {
-            showRatingDialog = false
+          onReviewDenied = {
+            showReviewDialog = false
             scope.launch {
-              shouldShowRatingDialog.setShown()
+              shouldShowReviewDialog.setShown()
             }
           },
           onDismiss = {
-            showRatingDialog = false
+            showReviewDialog = false
           },
         )
       }
