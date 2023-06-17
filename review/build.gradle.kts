@@ -20,7 +20,8 @@ dependencies {
   implementation(projects.data)
   implementation(projects.common)
   implementation(projects.datastore)
-  implementation(libs.review)
+  api(libs.review)
   implementation(libs.lottie)
+  implementation(libs.coroutines.play)
   implementation(libs.dagger.core)
 }

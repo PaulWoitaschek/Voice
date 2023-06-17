@@ -51,12 +51,12 @@ class ShouldShowReviewDialogTest {
   }
 
   @Test
-  fun `shouldShow returns false when listened time is less than 1 day`() {
+  fun `shouldShow returns false when listened time is less than 5 hours`() {
     test(
       timeElapsedSinceInstallation = 3.days,
       playState = PlayStateManager.PlayState.Paused,
       reviewDialogShown = false,
-      playedBookTime = 20.hours,
+      playedBookTime = 2.hours,
       expected = false,
     )
   }

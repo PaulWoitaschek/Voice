@@ -8,7 +8,9 @@ import java.time.Clock
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 class ShouldShowReviewDialog
 @Inject constructor(
@@ -32,10 +34,10 @@ class ShouldShowReviewDialog
   }
 
   private fun enoughTimeElapsedSinceInstallation(): Boolean {
-    val timeSinceInstallation = ChronoUnit.MILLIS.between(
+    val timeSinceInstallation = ChronoUnit.MINUTES.between(
       installationTimeProvider.installationTime(),
       clock.instant(),
-    ).milliseconds
+    ).minutes
     return timeSinceInstallation >= 2.days
   }
 
@@ -43,5 +45,10 @@ class ShouldShowReviewDialog
 
   private fun isNotPlaying() = playStateManager.playState != PlayStateManager.PlayState.Playing
 
-  private suspend fun listenedForEnoughTime() = bookRepository.all().sumOf { it.position }.milliseconds >= 1.days
+  private suspend fun listenedForEnoughTime(): Boolean {
+    val totalListeningTime = bookRepository.all().sumOf {
+      it.position.milliseconds.inWholeMinutes
+    }.minutes
+    return totalListeningTime >= 5.hours
+  }
 }
