@@ -1,8 +1,10 @@
 package voice.review
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.view.ContextThemeWrapper
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +42,7 @@ fun ReviewFeature() {
     reviewComponent.shouldShowReviewDialog
   }
   var showReviewDialog by remember { mutableStateOf(false) }
+  var showFeedbackDialog by remember { mutableStateOf(false) }
   LaunchedEffect(Unit) {
     showReviewDialog = shouldShowReviewDialog.shouldShow()
   }
@@ -52,7 +55,11 @@ fun ReviewFeature() {
         Logger.d("User rated $stars")
         scope.launch {
           shouldShowReviewDialog.setShown()
-          reviewManager.launchReview(activity, reviewInfo)
+          if (stars < 5) {
+            showFeedbackDialog = true
+          } else {
+            reviewManager.launchReview(activity, reviewInfo)
+          }
           showReviewDialog = false
         }
       },
@@ -64,6 +71,22 @@ fun ReviewFeature() {
       },
       onDismiss = {
         showReviewDialog = false
+      },
+    )
+  }
+  val mailToLauncher = rememberLauncherForActivityResult(contract = MailToContract, onResult = {})
+  if (showFeedbackDialog) {
+    AskForFeedbackDialog(
+      onFeedback = {
+        showFeedbackDialog = false
+        try {
+          mailToLauncher.launch("audiobook@posteo.de")
+        } catch (e: ActivityNotFoundException) {
+          Logger.e(e, "Could not find an email app")
+        }
+      },
+      onDismiss = {
+        showFeedbackDialog = false
       },
     )
   }

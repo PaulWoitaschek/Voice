@@ -116,8 +116,12 @@
     <string name="onboarding.completion.title">You\'re All Set!</string>
     <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
     <string name="onboarding.completion.next_button">Start Listening</string>
-    <string name="review.title">Enjoying Voice?</string>
-    <string name="review.content">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
-    <string name="review.button.yes">Rate Now</string>
-    <string name="review.button.no">No, Thanks</string>
+    <string name="review.request.title">Enjoying Voice?</string>
+    <string name="review.request.content">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
+    <string name="review.request.button.yes">Rate Now</string>
+    <string name="review.request.button.no">No, Thanks</string>
+    <string name="review.feedback.title">We\'re sorry to hear that!</string>
+    <string name="review.feedback.content">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
+    <string name="review.feedback.button.yes">Send Feedback</string>
+    <string name="review.feedback.button.no">Cancel</string>
 </resources>
