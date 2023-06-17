@@ -116,4 +116,8 @@
     <string name="onboarding.completion.title">You\'re All Set!</string>
     <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
     <string name="onboarding.completion.next_button">Start Listening</string>
+    <string name="review.title">Enjoying Voice?</string>
+    <string name="review.content">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
+    <string name="review.button.yes">Rate Now</string>
+    <string name="review.button.no">No, Thanks</string>
 </resources>
