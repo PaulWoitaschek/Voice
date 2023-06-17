@@ -11,7 +11,7 @@ class InstallationTimeProvider
   private val context: Context,
 ) {
 
-  fun installationTime(): Instant {
+  internal fun installationTime(): Instant {
     val packageManager = context.packageManager
 
     val packageInfo = if (Build.VERSION.SDK_INT >= 33) {

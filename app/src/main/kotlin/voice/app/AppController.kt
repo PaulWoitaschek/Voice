@@ -2,11 +2,6 @@ package voice.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import dev.olshevski.navigation.reimagined.AnimatedNavHost
 import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.NavController
@@ -14,7 +9,6 @@ import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
 import dev.olshevski.navigation.reimagined.replaceLast
-import kotlinx.coroutines.launch
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
@@ -29,8 +23,7 @@ import voice.migration.views.Migration
 import voice.onboarding.OnboardingExplanation
 import voice.onboarding.OnboardingWelcome
 import voice.onboarding.completion.OnboardingCompletion
-import voice.review.AskForReviewDialog
-import voice.review.ShouldShowReviewDialog
+import voice.review.ReviewFeature
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -45,9 +38,6 @@ class AppController : ComposeController() {
 
   @Inject
   lateinit var navigator: Navigator
-
-  @Inject
-  lateinit var shouldShowReviewDialog: ShouldShowReviewDialog
 
   @Composable
   override fun Content() {
@@ -109,32 +99,9 @@ class AppController : ComposeController() {
           onNext = { navController.navigate(Destination.OnboardingExplanation) },
         )
       }
-
-      var showReviewDialog by remember { mutableStateOf(false) }
-      LaunchedEffect(Unit) {
-        showReviewDialog = shouldShowReviewDialog.shouldShow()
-      }
-      val scope = rememberCoroutineScope()
-      if (showReviewDialog) {
-        AskForReviewDialog(
-          onRate = {
-            showReviewDialog = false
-            scope.launch {
-              shouldShowReviewDialog.setShown()
-            }
-          },
-          onReviewDenied = {
-            showReviewDialog = false
-            scope.launch {
-              shouldShowReviewDialog.setShown()
-            }
-          },
-          onDismiss = {
-            showReviewDialog = false
-          },
-        )
-      }
     }
+
+    ReviewFeature()
 
     LaunchedEffect(navigator) {
       navigator.navigationCommands.collect { command ->

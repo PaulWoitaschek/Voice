@@ -20,11 +20,15 @@ class ShouldShowReviewDialog
   private val playStateManager: PlayStateManager,
 ) {
 
-  suspend fun shouldShow(): Boolean {
+  internal suspend fun shouldShow(): Boolean {
     return isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
       reviewDialogNotShown() &&
       listenedForEnoughTime()
+  }
+
+  internal suspend fun setShown() {
+    reviewDialogShown.updateData { true }
   }
 
   private fun enoughTimeElapsedSinceInstallation(): Boolean {
@@ -40,8 +44,4 @@ class ShouldShowReviewDialog
   private fun isNotPlaying() = playStateManager.playState != PlayStateManager.PlayState.Playing
 
   private suspend fun listenedForEnoughTime() = bookRepository.all().sumOf { it.position }.milliseconds >= 1.days
-
-  suspend fun setShown() {
-    reviewDialogShown.updateData { true }
-  }
 }

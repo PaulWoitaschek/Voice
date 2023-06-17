@@ -26,7 +26,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import voice.strings.R as StringsR
 
 @Composable
-fun AskForReviewDialog(
+internal fun AskForReviewDialog(
   onRate: (Int) -> Unit,
   onReviewDenied: () -> Unit,
   onDismiss: () -> Unit,
