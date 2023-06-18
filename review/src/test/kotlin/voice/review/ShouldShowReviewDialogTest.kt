@@ -99,10 +99,13 @@ class ShouldShowReviewDialogTest {
       reviewDialogShown = mockk {
         every { data } returns flowOf(reviewDialogShown)
       },
+      reviewTranslated = mockk {
+        every { translated() } returns true
+      },
     )
-    val showsreviewDialog = runBlocking {
+    val showsReviewDialog = runBlocking {
       shouldShowReviewDialog.shouldShow()
     }
-    showsreviewDialog shouldBe expected
+    showsReviewDialog shouldBe expected
   }
 }

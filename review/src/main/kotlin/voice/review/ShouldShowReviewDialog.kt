@@ -20,10 +20,12 @@ class ShouldShowReviewDialog
   private val reviewDialogShown: DataStore<Boolean>,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
+  private val reviewTranslated: ReviewTranslated,
 ) {
 
   internal suspend fun shouldShow(): Boolean {
-    return isNotPlaying() &&
+    return reviewTranslated.translated() &&
+      isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
       reviewDialogNotShown() &&
       listenedForEnoughTime()
