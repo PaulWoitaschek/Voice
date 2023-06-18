@@ -23,6 +23,7 @@ import voice.migration.views.Migration
 import voice.onboarding.OnboardingExplanation
 import voice.onboarding.OnboardingWelcome
 import voice.onboarding.completion.OnboardingCompletion
+import voice.review.ReviewFeature
 import voice.settings.views.Settings
 import javax.inject.Inject
 
@@ -99,6 +100,8 @@ class AppController : ComposeController() {
         )
       }
     }
+
+    ReviewFeature()
 
     LaunchedEffect(navigator) {
       navigator.navigationCommands.collect { command ->

@@ -53,11 +53,14 @@ molecule = "app.cash.molecule:molecule-runtime:0.9.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp:4.11.0"
+review = "com.google.android.play:review-ktx:2.0.1"
+lottie = "com.airbnb.android:lottie-compose:6.0.1"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+coroutines-play = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.7"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.3.0"

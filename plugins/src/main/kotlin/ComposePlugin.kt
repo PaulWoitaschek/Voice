@@ -43,6 +43,7 @@ class ComposePlugin : Plugin<Project> {
           "androidx.compose.foundation.ExperimentalFoundationApi",
           "androidx.compose.ui.ExperimentalComposeUiApi",
           "androidx.compose.animation.ExperimentalAnimationApi",
+          "androidx.compose.foundation.layout.ExperimentalLayoutApi",
         ).map { "-opt-in=$it" }
       }
     }

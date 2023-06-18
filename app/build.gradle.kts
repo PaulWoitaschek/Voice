@@ -78,7 +78,6 @@ android {
       isShrinkResources = true
     }
     getByName("debug") {
-      applicationIdSuffix = ".debug"
       isMinifyEnabled = false
       isShrinkResources = false
     }
@@ -157,6 +156,7 @@ dependencies {
   implementation(projects.cover)
   implementation(projects.documentfile)
   implementation(projects.onboarding)
+  implementation(projects.review)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
