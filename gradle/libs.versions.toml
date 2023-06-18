@@ -1,6 +1,5 @@
 [versions]
 leakcanary = "2.11"
-pagingCompose = "1.0.0-alpha18"
 versionCode = "3603026"
 versionName = "8.0.0"
 
