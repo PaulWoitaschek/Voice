@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Cover</string>
     <string name="play_pause">Afspil / Pause</string>
@@ -52,8 +52,8 @@
     <string name="delete">Slet</string>
     <string name="add">Tilføj</string>
     <string name="folder_type_dialog_title">Hvad vil du tilføje?</string>
-    <string name="folder_mode_root">Rodmappe til lydbøger. En undermappe = en bog.</string>
-    <string name="folder_mode_single">Enkelt mappe til lydbøger</string>
+    <string name="folder_mode_root">Rodmappe til lydbøger. Én undermappe er én bog</string>
+    <string name="folder_mode_single">Enkelt bog-mode: Én mappe er èn bog.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>
@@ -86,4 +86,42 @@
     <string name="delete_book_dialog_content">Dette vil slette filerne på din enhed.</string>
     <string name="search_hint">Hvad leder du efter?</string>
     <string name="battery_optimization_action">Opdatér</string>
+    <string name="media_session_recent">Seneste</string>
+    <string name="notification_sleep_timer_disable">Deaktiver søvntimer</string>
+    <string name="media_session_root">Alle lydbøger</string>
+    <string name="storage_bug_subtitle">På visse enheder mangler en system-app den nødvendige tilladelse til at få adgang til det eksterne lager. Denne adgang er afgørende for, at Voice kan læse dine lydbøger.</string>
+    <string name="onboarding.completion.next_button">Begynd at lytte</string>
+    <string name="review.request.title">Kan du lide Voice\?</string>
+    <string name="review.request.button.yes">Bedøm nu</string>
+    <string name="review.request.button.no">Nej tak</string>
+    <string name="review.feedback.content">Kan du fortælle os, hvad der gik galt\? Vi sætter pris på din feedback, og det hjælper os med at forbedre din oplevelse.</string>
+    <string name="review.feedback.button.yes">Send feedback</string>
+    <string name="review.feedback.button.no">Annulér</string>
+    <string name="review.request.content">Din feedback betyder noget for os! Hvis du har et øjeblik, så bedøm os og del din oplevelse. Det hjælper os med at lave forbedringer og tilbyde en bedre lytteoplevelse.</string>
+    <string name="review.feedback.title">Det er vi kede af at høre!</string>
+    <string name="onboarding.explanation.subtitle">Med Voice kan du tilføje bøger som individuelle filer eller organisere dem i mapper. Du vælger selv!</string>
+    <string name="storage_bug_title">Tilladelse påkrævet</string>
+    <string name="storage_bug_button">Giv tilladelse</string>
+    <string name="generic_error_retry">Prøv igen</string>
+    <string name="generic_error_message">Noget gik galt😢</string>
+    <string name="cover_search_template_no_author">%s lydbogscover</string>
+    <string name="cover_search_template_with_author">%1$s af %2$s lydbogscover</string>
+    <string name="notification_sleep_timer_enable">Aktivér søvntimer</string>
+    <string name="play">Afspil</string>
+    <string name="pause">Pause</string>
+    <string name="cover_search.icon_recent">Seneste søgninger</string>
+    <string name="cover_search.author">Forfatter</string>
+    <string name="battery_optimization_rationale">På grund af dine strømbegrænsninger kan der forekommer afbrydelser i afspilningen.</string>
+    <string name="select_folder_title_onboarding">Tilføj din første lydbog</string>
+    <string name="select_folder_title_default">Tilføj din/dine lydbøger</string>
+    <string name="select_folder_type_file">Fil</string>
+    <string name="select_folder_type_folder">Mappe</string>
+    <string name="select_folder_subtitle">Vil du tilføje en enkelt fil som en bog eller som en mappe\?</string>
+    <string name="onboarding_welcome_title">Velkommen til Voice!</string>
+    <string name="onboarding.button_next">Næste</string>
+    <string name="folder_mode_author">Forfatter-Bog-tilstand: Undermapper er forfattere, under-undermapper er bøger.</string>
+    <string name="onboarding_welcome_subtitle">Din personlige lydbogsafspiller. Lad os få dig i gang.</string>
+    <string name="onboarding.explanation.title">Dit bibliotek - På din måde</string>
+    <string name="onboarding.completion.title">Så er du klar!</string>
+    <string name="onboarding.completion.subtitle">Din første lydbog er klar til afspilning. Nyd din rejse med Voice!</string>
 </resources>
