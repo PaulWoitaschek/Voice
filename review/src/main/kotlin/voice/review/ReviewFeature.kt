@@ -58,7 +58,11 @@ fun ReviewFeature() {
           if (stars < 5) {
             showFeedbackDialog = true
           } else {
-            reviewManager.launchReview(activity, reviewInfo)
+            try {
+              reviewManager.launchReview(activity, reviewInfo)
+            } catch (e: Exception) {
+              Logger.e(e, "Error while launching the review flow")
+            }
           }
           showReviewDialog = false
         }
