@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.net.toUri
 
-object MailToContract : ActivityResultContract<String, Unit>() {
+internal object MailToContract : ActivityResultContract<String, Unit>() {
 
   override fun createIntent(context: Context, input: String): Intent {
     return Intent(Intent.ACTION_SENDTO)
