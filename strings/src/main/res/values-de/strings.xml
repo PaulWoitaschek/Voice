@@ -118,4 +118,12 @@
     <string name="onboarding_welcome_subtitle">Dein persönlicher Hörbuch-Player. Lass uns mit dem Einrichten loslegen.</string>
     <string name="onboarding.button_next">Weiter</string>
     <string name="onboarding.explanation.subtitle">Mit Voice kannst du Bücher als einzelne Dateien hinzufügen oder in Ordnern organisieren. Du entscheidest!</string>
+    <string name="review.request.button.yes">Jetzt bewerten</string>
+    <string name="review.request.button.no">Nein, danke</string>
+    <string name="review.feedback.button.yes">Feedback senden</string>
+    <string name="review.feedback.button.no">Abbrechen</string>
+    <string name="review.request.title">Gefällt Ihnen Voice\?</string>
+    <string name="review.request.content">Ihr Feedback ist uns wichtig! Wenn Sie einen Moment Zeit haben, bewerten Sie uns und teilen Sie Ihre Erfahrungen. Es hilft uns, Verbesserungen vorzunehmen und ein besseres Hörerlebnis zu bieten.</string>
+    <string name="review.feedback.title">Es tut uns leid, das zu hören!</string>
+    <string name="review.feedback.content">Könnten Sie uns sagen, was schief gelaufen ist\? Wir schätzen Ihr Feedback und es hilft uns, Ihre Erfahrung zu verbessern.</string>
 </resources>
