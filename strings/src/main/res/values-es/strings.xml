@@ -120,4 +120,12 @@
     <string name="onboarding.completion.subtitle">Tu primer audiolibro está listo para reproducirse. ¡Disfruta de tu viaje con Voice!</string>
     <string name="onboarding.completion.next_button">Empezar a escuchar</string>
     <string name="onboarding.explanation.subtitle">Con Voice, puedes añadir libros como archivos individuales u organizarlos en carpetas. ¡Tú eliges!</string>
+    <string name="review.request.button.yes">Valorar ahora</string>
+    <string name="review.request.button.no">No, gracias</string>
+    <string name="review.feedback.title">¡Lamentamos escuchar eso!</string>
+    <string name="review.feedback.content">¿Podrías decirnos qué salió mal\? Agradecemos tus comentarios ya que nos ayudan a mejorar tu experiencia.</string>
+    <string name="review.feedback.button.yes">Envía tus comentarios</string>
+    <string name="review.request.content">Tu opinión nos importa. Si tienes un momento, valóranos y comparte tu experiencia. Nos ayuda a mejorar y a ofrecer una mejor experiencia auditiva.</string>
+    <string name="review.request.title">¿Disfrutando de la voz\?</string>
+    <string name="review.feedback.button.no">Cancelar</string>
 </resources>

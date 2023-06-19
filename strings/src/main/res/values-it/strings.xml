@@ -105,4 +105,27 @@
     <string name="storage_bug_subtitle">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
     <string name="storage_bug_button">Concedere l\'autorizzazione</string>
     <string name="folder_mode_author">Modalità autore-libro: le sottocartelle sono gli autori, le sottocartelle sono i libri.</string>
+    <string name="review.request.button.yes">Vota adesso</string>
+    <string name="review.feedback.title">Siamo spiacenti di sentirlo!</string>
+    <string name="review.feedback.button.yes">Invia feedback</string>
+    <string name="review.feedback.button.no">Cancella</string>
+    <string name="cover_search.author">Autore</string>
+    <string name="review.request.content">Il tuo feedback è importante per noi! Se hai un momento, votaci e condividi la tua esperienza. Ci aiuta a migliorare e offrire una migliore esperienza di ascolto.</string>
+    <string name="review.request.title">Ti stai divertendo con Voice\?</string>
+    <string name="review.request.button.no">No, grazie</string>
+    <string name="review.feedback.content">Ci può dire cosa è andato storto\? Apprezziamo il tuo feedback e ci aiuta a migliorare la tua esperienza.</string>
+    <string name="cover_search.icon_recent">Interrogazione recente</string>
+    <string name="select_folder_title_onboarding">Aggiungi il tuo primo audiolibro</string>
+    <string name="select_folder_title_default">Aggiungi il tuo audiolibro(i)</string>
+    <string name="select_folder_type_file">File</string>
+    <string name="select_folder_type_folder">Cartella</string>
+    <string name="select_folder_subtitle">Vuoi aggiungere un singolo file come un libro o una cartella\?</string>
+    <string name="onboarding_welcome_title">Benvenuto in Voice!</string>
+    <string name="onboarding_welcome_subtitle">Il tuo lettore di audiolibri tascabile personale. Ti prepariamo.</string>
+    <string name="onboarding.button_next">Avanti</string>
+    <string name="onboarding.explanation.title">La tua libreria, a modo tuo</string>
+    <string name="onboarding.explanation.subtitle">Con Voice, puoi aggiungere libri come singoli file o organizzarli in cartelle. Scegli tu!</string>
+    <string name="onboarding.completion.title">È tutto pronto!</string>
+    <string name="onboarding.completion.subtitle">Il tuo primo audiolibro è pronto per essere riprodotto. Buon viaggio con Voice!</string>
+    <string name="onboarding.completion.next_button">Inizia ad ascoltare</string>
 </resources>
