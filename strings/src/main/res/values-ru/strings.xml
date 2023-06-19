@@ -105,4 +105,27 @@
     <string name="cover_search_template_no_author">%s обложек аудиокниг</string>
     <string name="cover_search_template_with_author">%1$s из %2$s обложек аудиокниг</string>
     <string name="pause">Пауза</string>
+    <string name="review.request.button.yes">Оценить сейчас</string>
+    <string name="review.request.button.no">Нет, спасибо</string>
+    <string name="review.feedback.title">Нам жаль это слышать!</string>
+    <string name="review.feedback.button.yes">Отправить отзыв</string>
+    <string name="review.feedback.button.no">Отмена</string>
+    <string name="review.request.title">Нравится Voice\?</string>
+    <string name="select_folder_title_onboarding">Добавьте свою первую аудиокнигу</string>
+    <string name="select_folder_subtitle">Хотите добавить один файл в виде книги или папки\?</string>
+    <string name="onboarding_welcome_title">Добро пожаловать в Voice!</string>
+    <string name="onboarding_welcome_subtitle">Ваш личный карманный проигрыватель аудиокниг. Давайте настроим.</string>
+    <string name="onboarding.explanation.subtitle">С помощью Voice вы можете добавлять книги в виде отдельных файлов или формировать их в папкам. Выбирайте!</string>
+    <string name="review.request.content">Ваш отзыв важен для нас! Если у вас есть время, оцените нас и поделитесь своим опытом. Это помогает нам вносить улучшения и обеспечивает качество прослушивания.</string>
+    <string name="review.feedback.content">Не могли бы вы рассказать нам, что пошло не так\? Мы ценим ваши отзывы, и они помогают нам улучшить ваш опыт.</string>
+    <string name="cover_search.author">Автор</string>
+    <string name="cover_search.icon_recent">Недавний запрос</string>
+    <string name="select_folder_title_default">Добавьте свои аудиокниги</string>
+    <string name="select_folder_type_file">Файл</string>
+    <string name="select_folder_type_folder">Папка</string>
+    <string name="onboarding.button_next">Далее</string>
+    <string name="onboarding.explanation.title">Ваша библиотека, Ваш выбор</string>
+    <string name="onboarding.completion.title">Все готово!</string>
+    <string name="onboarding.completion.subtitle">Ваша первая аудиокнига готова к воспроизведению. Наслаждайтесь своим путешествием с Voice!</string>
+    <string name="onboarding.completion.next_button">Начать прослушивание</string>
 </resources>
