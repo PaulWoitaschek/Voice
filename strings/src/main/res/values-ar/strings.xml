@@ -56,8 +56,8 @@
     <string name="delete">احذف</string>
     <string name="add">أضف</string>
     <string name="folder_type_dialog_title">ماذا تريد أن تضيف؟</string>
-    <string name="folder_mode_root">المجلد الأساسي للكتاب الصوتي. كل مجلد فرعي = كتاب واحد مستقل.</string>
-    <string name="folder_mode_single">مجلد كتاب صوتي فردي</string>
+    <string name="folder_mode_root">وضع المجلد الحاوي للكتب: كل مجلد فرعي كتاب مستقل</string>
+    <string name="folder_mode_single">وضع الكتاب المفرد: كل مجلد يعني كتاب واحد.</string>
     <plurals name="folder_type_file_count">
         <item quantity="zero">%dملف صوتي</item>
         <item quantity="one">%d ملف صوتي واحد</item>
@@ -103,4 +103,33 @@
     <string name="generic_error_retry">أعد المحاولة</string>
     <string name="play">شغّل</string>
     <string name="pause">ألبث</string>
+    <string name="storage_bug_subtitle">بالنسبة لأجهزة معينة، يفقد تطبيق النظام الإذن اللازم للوصول إلى وحدة التخزين الخارجية. يعد هذا الوصول ضروريًا لـفويس لقراءة كتبك الصوتية.</string>
+    <string name="review.request.title">هل يعجبك فويس؟</string>
+    <string name="review.request.content">ملاحظاتك تهمنا! إذا كان لديك لحظة، قيمنا وشاركنا تجربتك. يساعدنا على إجراء تحسينات وتقديم تجربة استماع أفضل.</string>
+    <string name="review.request.button.yes">قيمنا الآن</string>
+    <string name="review.request.button.no">لا، شكراً</string>
+    <string name="review.feedback.title">نأسف لسماع ذلك!</string>
+    <string name="review.feedback.content">هل يمكن أن تخبرنا ما الخطأ الذي حدث؟ نحن نقدر ملاحظاتك وتساعدنا على تحسين تجربتك.</string>
+    <string name="review.feedback.button.yes">أرسل تعليقك</string>
+    <string name="review.feedback.button.no">ألغ</string>
+    <string name="storage_bug_title">تحتاج إلى أذن</string>
+    <string name="storage_bug_button">امنح الإذن</string>
+    <string name="cover_search_template_no_author">غلاف الكتاب الصوتي %s</string>
+    <string name="cover_search_template_with_author">%1$s بواسطة غلاف الكتاب الصوتي %2$s</string>
+    <string name="select_folder_title_default">أضف كتبك الصوتية</string>
+    <string name="select_folder_type_folder">مجلد</string>
+    <string name="select_folder_subtitle">هل تريد إضافة ملف مفرد ككتاب أو مجلد؟</string>
+    <string name="onboarding_welcome_title">مرحبا بك في فويس!</string>
+    <string name="onboarding.completion.next_button">ابدأ بالاستماع</string>
+    <string name="cover_search.icon_recent">أخر استعلام</string>
+    <string name="cover_search.author">المؤلف</string>
+    <string name="folder_mode_author">وضع المؤلفين: كل مجلد فرعي مؤلف وكل مجلد فرعي في ذاك المجلد كتاب لذاك المؤلف.</string>
+    <string name="select_folder_title_onboarding">أضف أول كتاب صوتي</string>
+    <string name="select_folder_type_file">ملف</string>
+    <string name="onboarding_welcome_subtitle">مشغلك للكتب الصوتية. دعنا نجهز كتبك.</string>
+    <string name="onboarding.button_next">التالي</string>
+    <string name="onboarding.explanation.title">مكتبتك، طريقك</string>
+    <string name="onboarding.explanation.subtitle">مع فويس يمكنك إضافة كتب من ملفات فردية أو تنظيمها في مجلدات. أنت تختار!</string>
+    <string name="onboarding.completion.title">أنت جاهز!</string>
+    <string name="onboarding.completion.subtitle">كتابك الصوتي الأول يعمل. استمتع برحلتك مع فويس!</string>
 </resources>
