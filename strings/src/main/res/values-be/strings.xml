@@ -1,2 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="bookmark_edit_title">Рэдагаваць закладку</string>
+    <string name="bookmark">Закладка</string>
+    <string name="mark_as_completed">Пазначыць як прачытанае</string>
+    <string name="playback_speed">Хуткасць прайгравання</string>
+    <string name="bookmark_added">Закладка дададзеная</string>
+    <string name="bookmark_edit_hint">Назва закладкі</string>
+    <string name="min">%s хв</string>
+    <string name="pref_suggest_idea">Прапанаваць ідэю</string>
+    <string name="play_pause">Прайграванне / Паўза</string>
+    <string name="play">Прайграванне</string>
+    <string name="rewind">Пракрутка назад</string>
+    <string name="previous_track">Папярэдняе</string>
+    <string name="next_track">Наступнае</string>
+    <string name="skip_silence">Пропуск цішыні</string>
+    <string name="more">Больш</string>
+    <string name="dialog_confirm">Пацвердзіць</string>
+    <string name="change_book_name">Назва</string>
+    <string name="pick_book_cover">Вокладка з памяці прылады</string>
+    <string name="cover_search_template_with_author">%1$s з %2$s вокладак аўдыякніг</string>
+    <string name="mark_as_not_started">Пазначыць як нечытанае</string>
+    <string name="audiobook_folders_title">Тэчкі з аўдыякнігамі</string>
+    <string name="pref_seek_time">Інтэрвал пракруткі</string>
+    <string name="pref_get_support">Падтрымка</string>
+    <string name="pref_app_version">Версія</string>
+    <string name="popup_edit">Рэдагаваць</string>
+    <string name="remove">Выдаліць</string>
+    <string name="close">Загарнуць</string>
+    <string name="add">Дадаць</string>
+    <string name="folder_mode_root">Рэжым паліцы: кожная падтэчка – гэта кніга</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d аўдыяфайл</item>
+        <item quantity="few">%d аўдыяфайлы</item>
+        <item quantity="many">%d аўдыяфайлаў</item>
+        <item quantity="other">%d аўдыяфайлаў</item>
+    </plurals>
+    <string name="bookmark_just_now">Толькі што</string>
+    <string name="migration_hint_title">Ідзе пошук папярэдніх сховішчаў кніг</string>
+    <string name="cover">Вокладка</string>
+    <string name="pause">Паўза</string>
+    <string name="action_sleep">Таймер сну</string>
+    <string name="fast_forward">Пракрутка наперад</string>
+    <string name="dialog_cancel">Скасаваць</string>
+    <string name="download_book_cover">Вокладка з Інтэрнета</string>
+    <string name="content_cover">Паказаць вокладкі для выбару</string>
+    <string name="cover_search_template_no_author">%s вокладак аўдыякніг</string>
+    <string name="cover_search.author">Аўтар</string>
+    <string name="delete_last_number">Выдаляе апошнюю набраную лічбу</string>
+    <string name="cover_search.icon_recent">Нядаўні запыт</string>
+    <string name="edit_book_title">Рэдагаваць кнігу</string>
+    <string name="mark_as_current">Пазначыць як чытанае зараз</string>
+    <string name="action_settings">Налады</string>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секундаў</item>
+        <item quantity="other">%d секундаў</item>
+    </plurals>
+    <string name="pref_report_issue">Павведаміць пра праблему</string>
+    <string name="pref_theme_dark">Цёмная тэма</string>
+    <string name="pref_auto_rewind_title">Аўтаматычная пракрутка назад</string>
+    <string name="pref_use_grid">Выкарыстоўваць сетку</string>
+    <string name="pref_help_translating">Дапамагчы з перакладам Voice</string>
+    <string name="play_current">Прайграць чытанае зараз</string>
+    <string name="book_header_current">Чытанае зараз</string>
+    <string name="book_header_not_started">Яшчэ не чытанае</string>
+    <string name="book_header_completed">Прачытанае</string>
+    <string name="delete">Выдаліць</string>
+    <string name="folder_type_dialog_title">Што Вы хочаце дадаць\?</string>
+    <string name="volume_boost">Узмацненне гучнасці</string>
+    <string name="folder_mode_single">Рэжым адной кнігі: адна тэчка – гэта адна кніга.</string>
+    <string name="folder_mode_author">Рэжым Аўтар-Кніга: падтэчкі – гэта аўтары, пад-падтэчкі – кнігі.</string>
+    <string name="folder_type_book_example_header">Будуць знойдзеныя наступныя кнігі</string>
+    <string name="folder_type_no_books">Voice не знайшоў ніводнай кнігі. Ці ёсць аўдыяфайлы ў гэтай тэчцы\?</string>
+    <string name="folder_type_title">Як спарадкаваныя Вашыя файлы\?</string>
+    <string name="voice_intro_first_book">Давайце вызначым тэчку з аўдыякнігамі!</string>
+    <string name="migration_hint_confirm">Зразумела</string>
+    <string name="migration_detail_title">Папярэднія сховішчы кніг</string>
+    <string name="migration_hint_content">З-за зменаў у новых версіях Android неабходна выбраць тэчку з Вашымі аўдыякнігамі праз сістэмны дыялог.
+\n
+\nНацісніце на значок уверсе, каб праглядзець Вашыя папярэднія сховішчы кніг.</string>
+</resources>
