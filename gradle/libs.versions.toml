@@ -28,7 +28,7 @@ ffmpeg = "com.arthenica:ffmpeg-kit-audio:5.1"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.13.5"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.1.1"
-paging-compose = "androidx.paging:paging-compose:3.2.0-beta01"
+paging-compose = "androidx.paging:paging-compose:3.2.0-rc01"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-kotlinx = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
