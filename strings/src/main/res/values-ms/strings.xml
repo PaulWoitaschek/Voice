@@ -11,4 +11,25 @@
     <string name="rewind">Putar semula</string>
     <string name="fast_forward">Mara laju</string>
     <string name="volume_boost">Peningkatan kelantangan</string>
+    <string name="content_cover">Tunjuk muka hadapan untuk dipilih</string>
+    <string name="edit_book_title">Sunting buku</string>
+    <string name="mark_as_completed">Tanda sebagai Selesai</string>
+    <string name="mark_as_current">Tanda sebagai Sedang</string>
+    <string name="mark_as_not_started">Tanda sebagai Belum Dimulakan Lagi</string>
+    <string name="audiobook_folders_title">Folder audiobook</string>
+    <string name="dialog_confirm">Tetapkan</string>
+    <string name="bookmark">Penanda</string>
+    <string name="bookmark_edit_title">Sunting penanda</string>
+    <string name="bookmark_edit_hint">Nama penanda</string>
+    <string name="pick_book_cover">Muka hadapan daripada sistem fail</string>
+    <string name="change_book_name">Nama</string>
+    <string name="dialog_cancel">Batal</string>
+    <string name="download_book_cover">Muka hadapan daripada Internet</string>
+    <string name="cover_search_template_no_author">Muka hadapan audiobook %s</string>
+    <string name="cover_search_template_with_author">Muka hadapan audiobook %1$s oleh %2$s</string>
+    <string name="playback_speed">Kelajuan main semula</string>
+    <string name="cover_search.icon_recent">Pertanyaan terkini</string>
+    <string name="cover_search.author">Penulis</string>
+    <string name="bookmark_added">Penanda ditambah</string>
+    <string name="action_settings">Pilihan</string>
 </resources>
