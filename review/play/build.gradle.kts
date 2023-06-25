@@ -22,6 +22,5 @@ dependencies {
   implementation(projects.datastore)
   api(libs.review)
   implementation(libs.lottie)
-  implementation(libs.coroutines.play)
   implementation(libs.dagger.core)
 }

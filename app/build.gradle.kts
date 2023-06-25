@@ -156,7 +156,12 @@ dependencies {
   implementation(projects.cover)
   implementation(projects.documentfile)
   implementation(projects.onboarding)
-  implementation(projects.review)
+
+  if (hasProperty("foss")) {
+    implementation(projects.review.noop)
+  } else {
+    implementation(project(":review:play"))
+  }
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

@@ -63,4 +63,7 @@ include(":logging:debug")
 include(":logging:crashlytics")
 include(":documentfile")
 include(":onboarding")
-include(":review")
+if (!providers.gradleProperty("foss").isPresent) {
+  include(":review:play")
+}
+include(":review:noop")
