@@ -8,7 +8,7 @@ sdk-min = "26"
 sdk-target = "33"
 
 coroutines = "1.7.1"
-room = "2.5.1"
+room = "2.5.2"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.46.1"
