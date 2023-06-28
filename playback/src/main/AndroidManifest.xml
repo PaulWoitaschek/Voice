@@ -4,14 +4,11 @@
   <application>
 
     <receiver
-      android:name="voice.playback.receiver.MediaButtonReceiver"
+      android:name="androidx.media3.session.MediaButtonReceiver"
       android:exported="true">
-
       <intent-filter>
         <action android:name="android.intent.action.MEDIA_BUTTON" />
-        <action android:name="voice.WidgetAction" />
       </intent-filter>
-
     </receiver>
 
   </application>

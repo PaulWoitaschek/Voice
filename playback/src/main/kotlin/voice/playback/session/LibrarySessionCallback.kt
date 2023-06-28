@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
@@ -21,10 +20,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import voice.common.BookId
 import voice.common.pref.CurrentBook
+import voice.data.Book
+import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
@@ -42,6 +41,7 @@ class LibrarySessionCallback
   private val currentBookId: DataStore<BookId?>,
   private val sleepTimerCommandUpdater: SleepTimerCommandUpdater,
   private val sleepTimer: SleepTimer,
+  private val bookRepository: BookRepository,
 ) : MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
@@ -136,22 +136,25 @@ class LibrarySessionCallback
     }
   }
 
-  override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
-    Logger.d("onConnect to ${controller.packageName}")
-    if (player.playbackState == Player.STATE_IDLE) {
-      Logger.d("onConnect and player is idle. Preparing current book so it shows up as recently played.")
-      scope.launch {
-        val bookId = currentBookId.data.first()
-        if (bookId != null) {
-          val item = mediaItemProvider.item(Json.encodeToString(MediaId.serializer(), MediaId.Book(bookId)))
-          if (item != null) {
-            player.setMediaItem(item)
-            player.prepare()
-          }
-        }
+  override fun onPlaybackResumption(mediaSession: MediaSession, controller: ControllerInfo): ListenableFuture<MediaItemsWithStartPosition> {
+    Logger.d("onPlaybackResumption")
+    return scope.future {
+      val currentBook = currentBook()
+      if (currentBook != null) {
+        mediaItemProvider.mediaItemsWithStartPosition(currentBook)
+      } else {
+        throw UnsupportedClassVersionError()
       }
     }
+  }
 
+  private suspend fun currentBook(): Book? {
+    val bookId = currentBookId.data.first() ?: return null
+    return bookRepository.get(bookId)
+  }
+
+  override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
+    Logger.d("onConnect to ${controller.packageName}")
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
