@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,7 +41,7 @@ internal fun SelectFolder(
           Spacer(modifier = Modifier.size(16.dp))
           Image(
             modifier = Modifier
-              .widthIn(max = 400.dp)
+              .heightIn(max = 300.dp)
               .padding(horizontal = 32.dp)
               .align(Alignment.CenterHorizontally),
             painter = painterResource(id = R.drawable.folder_type_artwork),
