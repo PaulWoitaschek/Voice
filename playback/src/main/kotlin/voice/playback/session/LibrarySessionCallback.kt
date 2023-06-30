@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
@@ -20,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
+import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
@@ -155,6 +157,17 @@ class LibrarySessionCallback
 
   override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
     Logger.d("onConnect to ${controller.packageName}")
+
+    if (player.playbackState == Player.STATE_IDLE &&
+      controller.packageName == "com.google.android.projection.gearhead"
+    ) {
+      Logger.d("onConnect to ${controller.packageName} and player is idle.")
+      Logger.d("Preparing current book so it shows up as recently played")
+      scope.launch {
+        prepareCurrentBook()
+      }
+    }
+
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
@@ -167,6 +180,14 @@ class LibrarySessionCallback
       sessionCommands,
       connectionResult.availablePlayerCommands,
     )
+  }
+
+  private suspend fun prepareCurrentBook() {
+    val bookId = currentBookId.data.first() ?: return
+    val book = bookRepository.get(bookId) ?: return
+    val item = mediaItemProvider.mediaItem(book)
+    player.setMediaItem(item)
+    player.prepare()
   }
 
   override fun onCustomCommand(
