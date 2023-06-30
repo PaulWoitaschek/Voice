@@ -11,6 +11,16 @@
       </intent-filter>
     </receiver>
 
+    <receiver
+      android:name="voice.playback.receiver.WidgetButtonReceiver"
+      android:exported="false">
+
+      <intent-filter>
+        <action android:name="voice.WidgetAction" />
+      </intent-filter>
+
+    </receiver>
+
   </application>
 
 </manifest>
