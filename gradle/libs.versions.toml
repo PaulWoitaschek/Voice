@@ -1,5 +1,5 @@
 [versions]
-leakcanary = "2.11"
+leakcanary = "2.12"
 versionCode = "3603027"
 versionName = "8.1.0"
 
