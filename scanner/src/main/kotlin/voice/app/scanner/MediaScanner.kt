@@ -9,7 +9,6 @@ import voice.documentfile.CachedDocumentFile
 import voice.documentfile.walk
 import voice.logging.core.Logger
 import javax.inject.Inject
-import kotlin.time.measureTime
 
 class MediaScanner
 @Inject constructor(
@@ -59,12 +58,7 @@ class MediaScanner
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
-        Logger.d("scanning $file")
-        measureTime {
-          scan(file)
-        }.also {
-          Logger.i("scan took $it for ${file.uri}")
-        }
+        scan(file)
       }
   }
 
