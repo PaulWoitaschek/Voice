@@ -38,7 +38,7 @@ jobs:
           java-version: 17
 
       - name: Setup Signing
-        run: ./signing-setup.sh
+        run: ./ci_signing_setup.sh
 
       - name: Test
         run: ./gradlew testDebugUnitTest lintKotlin app:lintDebug app:assembleDebug
@@ -75,7 +75,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Setup Signing
-        run: ./signing-setup.sh
+        run: ./ci_signing_setup.sh
 
       - name: Publish to Google Play
         run: ./gradlew app:publishReleaseBundle -Pvoice.signing.play=true
