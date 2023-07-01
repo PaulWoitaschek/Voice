@@ -10,6 +10,6 @@ class ReviewTranslated
 
   fun translated(): Boolean {
     val language = context.resources.configuration.locales[0].language.lowercase()
-    return language in listOf("en", "de", "es", "ru", "it")
+    return language in listOf("en", "de", "es", "ru", "it", "ar")
   }
 }
