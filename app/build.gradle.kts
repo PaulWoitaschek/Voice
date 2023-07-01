@@ -15,8 +15,8 @@ plugins {
   alias(libs.plugins.playPublish)
 }
 
-val enableCrashlytics = project.hasProperty("enableCrashlytics")
-if (enableCrashlytics) {
+val useProprietaryLibraries = providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true"
+if (useProprietaryLibraries) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
@@ -80,7 +80,6 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
-      applicationIdSuffix = ".debug"
     }
     all {
       signingConfig = signingConfigs.getByName("release")
@@ -158,12 +157,6 @@ dependencies {
   implementation(projects.documentfile)
   implementation(projects.onboarding)
 
-  if (hasProperty("foss")) {
-    implementation(projects.review.noop)
-  } else {
-    implementation(project(":review:play"))
-  }
-
   implementation(libs.appCompat)
   implementation(libs.recyclerView)
   implementation(libs.material)
@@ -177,10 +170,14 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
-  if (enableCrashlytics) {
+  if (useProprietaryLibraries) {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.remoteconfig)
     implementation(projects.logging.crashlytics)
+    implementation(project(":review:play"))
+  } else {
+    implementation(projects.review.noop)
   }
 
   debugImplementation(projects.logging.debug)
