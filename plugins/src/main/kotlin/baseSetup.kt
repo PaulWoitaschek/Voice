@@ -59,7 +59,9 @@ fun Project.baseSetup() {
       add("implementation", project(":logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
-    add("implementation", platform(libs.findLibrary("firebase-bom").get()))
+    if (providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true") {
+      add("implementation", platform(libs.findLibrary("firebase-bom").get()))
+    }
     add("androidTestImplementation", platform(libs.findLibrary("compose-bom").get()))
 
     listOf(
