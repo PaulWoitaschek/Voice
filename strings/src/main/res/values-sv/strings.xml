@@ -113,4 +113,9 @@
     <string name="onboarding_welcome_subtitle">Din personliga ljudboksspelare.</string>
     <string name="onboarding.button_next">Nästa</string>
     <string name="onboarding.completion.title">Du är redo!</string>
+    <string name="review.request.button.yes">Betygsätt Nu</string>
+    <string name="review.request.button.no">Nej, tack</string>
+    <string name="review.feedback.button.no">Avbryt</string>
+    <string name="review.feedback.title">Vi är ledsna att höra det!</string>
+    <string name="cover_search_template_with_author">%1$s av %2$s ljudboksomslag</string>
 </resources>
