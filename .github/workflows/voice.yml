@@ -1,0 +1,89 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -XX:MaxMetaspaceSize=1g -Xms512m -XX:+HeapDumpOnOutOfMemoryError"
+  ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
+  SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
+  SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
+  SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
+  SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
+  GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+
+jobs:
+  test:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Signing
+        run: ./signing-setup.sh
+
+      - name: Test
+        run: ./gradlew testDebugUnitTest lintKotlin app:lintDebug app:assembleDebug
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: "Artifacts"
+          path: |
+            artifacts/
+            app/build/reports/*.html
+            app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/test-results/**/TEST-*.xml'
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Setup Signing
+        run: ./signing-setup.sh
+
+      - name: Publish to Google Play
+        run: ./gradlew app:publishReleaseBundle -Pvoice.signing.play=true
+
+      - name: Build Github APK
+        run: ./gradlew app:assembleRelease -Pvoice.signing.play=false
+
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: app/build/outputs/apk/release/app-release.apk
