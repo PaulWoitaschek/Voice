@@ -15,8 +15,8 @@ plugins {
   alias(libs.plugins.playPublish)
 }
 
-val foss = hasProperty("foss")
-if (!foss) {
+val useProprietaryLibraries = providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true"
+if (useProprietaryLibraries) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
@@ -170,14 +170,14 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
-  if (foss) {
-    implementation(projects.review.noop)
-  } else {
+  if (useProprietaryLibraries) {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.remoteconfig)
     implementation(projects.logging.crashlytics)
     implementation(project(":review:play"))
+  } else {
+    implementation(projects.review.noop)
   }
 
   debugImplementation(projects.logging.debug)
