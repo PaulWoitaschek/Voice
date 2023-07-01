@@ -10,9 +10,7 @@ import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import voice.app.BuildConfig
 import voice.app.features.widget.TriggerWidgetOnChange
-import voice.app.misc.StrictModeInit
 import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.PrefKeys
@@ -36,8 +34,6 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-
-    if (BuildConfig.DEBUG) StrictModeInit.init()
 
     Coil.setImageLoader(
       ImageLoader.Builder(this)

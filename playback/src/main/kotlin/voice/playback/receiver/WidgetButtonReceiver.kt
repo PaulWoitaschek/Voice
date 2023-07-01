@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.view.KeyEvent
 import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -18,7 +16,7 @@ import voice.playback.PlayerController
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class MediaButtonReceiver : BroadcastReceiver() {
+class WidgetButtonReceiver : BroadcastReceiver() {
 
   private val scope = MainScope()
 
@@ -58,7 +56,7 @@ class MediaButtonReceiver : BroadcastReceiver() {
 
   @ContributesTo(AppScope::class)
   interface Component {
-    fun inject(target: MediaButtonReceiver)
+    fun inject(target: WidgetButtonReceiver)
   }
 
   companion object {
@@ -71,7 +69,7 @@ class MediaButtonReceiver : BroadcastReceiver() {
       action: Action,
     ): PendingIntent? {
       val intent = Intent(WIDGET_ACTION)
-        .setComponent(ComponentName(context, MediaButtonReceiver::class.java))
+        .setComponent(ComponentName(context, WidgetButtonReceiver::class.java))
         .putExtra(ACTION_KEY, action.name)
       return PendingIntent.getBroadcast(
         context,
@@ -88,25 +86,6 @@ class MediaButtonReceiver : BroadcastReceiver() {
     companion object {
       fun parse(intent: Intent?): Action? {
         return when (intent?.action) {
-          Intent.ACTION_MEDIA_BUTTON -> {
-            val key: KeyEvent? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-              intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
-            } else {
-              @Suppress("DEPRECATION")
-              intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
-            }
-            Logger.d("key=$key")
-            if (key?.action == KeyEvent.ACTION_UP) {
-              when (key.keyCode) {
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY -> PlayPause
-                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_MEDIA_SKIP_FORWARD -> FastForward
-                KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_SKIP_BACKWARD -> Rewind
-                else -> null
-              }
-            } else {
-              null
-            }
-          }
           WIDGET_ACTION -> {
             entries.find { it.name == intent.getStringExtra(ACTION_KEY) }
           }
