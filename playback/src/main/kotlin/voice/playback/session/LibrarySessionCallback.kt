@@ -145,7 +145,7 @@ class LibrarySessionCallback
       if (currentBook != null) {
         mediaItemProvider.mediaItemsWithStartPosition(currentBook)
       } else {
-        throw UnsupportedClassVersionError()
+        throw UnsupportedOperationException()
       }
     }
   }
