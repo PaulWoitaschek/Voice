@@ -18,7 +18,9 @@ plugins {
 val useProprietaryLibraries = providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true"
 if (useProprietaryLibraries) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
-  pluginManager.apply(libs.plugins.googleServices.get().pluginId)
+  if (file("google-services.json").exists()) {
+    pluginManager.apply(libs.plugins.googleServices.get().pluginId)
+  }
 }
 
 play {
