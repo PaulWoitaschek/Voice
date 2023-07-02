@@ -1,17 +1,27 @@
 #!/bin/bash
 
-if [ ! -d "signing/play" ]; then
-  mkdir -p signing/play
-  echo "$SIGNING_KEYSTORE_PLAY" | base64 --decode >signing/play/signing.keystore
-  echo "$SIGNING_PROPERTIES_PLAY" | base64 --decode >signing/play/signing.properties
-fi
+decode_env_to_file() {
+  local env_var="${1}"
+  local dest_file="${2}"
+  if [[ -n "${!env_var}" ]]; then
+    if [[ ! -f "${dest_file}" ]]; then
+      echo "${!env_var}" | base64 --decode >"${dest_file}"
+      echo "Success: Written to ${dest_file}"
+    else
+      echo "Warning: File ${dest_file} already exists, not overwritten."
+    fi
+  else
+    echo "Warning: Environment variable ${env_var} is empty or not set, no action taken."
+  fi
+}
 
-if [ ! -d "signing/github" ]; then
-  mkdir -p signing/github
-  echo "$SIGNING_KEYSTORE_GITHUB" | base64 --decode >signing/github/signing.keystore
-  echo "$SIGNING_PROPERTIES_GITHUB" | base64 --decode >signing/github/signing.properties
-fi
+mkdir -p signing/play
+mkdir -p signing/github
 
-if [ ! -f "app/google-services.json" ]; then
-  echo "$GOOGLE_SERVICES" | base64 --decode >app/google-services.json
-fi
+decode_env_to_file "SIGNING_KEYSTORE_PLAY" "signing/play/signing.keystore"
+decode_env_to_file "SIGNING_PROPERTIES_PLAY" "signing/play/signing.properties"
+
+decode_env_to_file "SIGNING_KEYSTORE_GITHUB" "signing/github/signing.keystore"
+decode_env_to_file "SIGNING_PROPERTIES_GITHUB" "signing/github/signing.properties"
+
+decode_env_to_file "GOOGLE_SERVICES" "app/google-services.json"
