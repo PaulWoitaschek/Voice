@@ -3,6 +3,9 @@ package voice.onboarding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -10,6 +13,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,43 +38,41 @@ fun OnboardingWelcome(
         Text(text = stringResource(StringsR.string.onboarding_button_next))
       }
     },
+    topBar = {
+      TopAppBar(title = { })
+    },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
         if (LocalConfiguration.current.screenHeightDp > 440) {
-          Spacer(modifier = Modifier.size(64.dp))
-          VoiceIcon(
+          Image(
             modifier = Modifier
-              .padding(horizontal = 32.dp)
-              .align(Alignment.CenterHorizontally),
+              .weight(1F)
+              .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+              .heightIn(max = 400.dp)
+              .aspectRatio(1F)
+              .fillMaxSize()
+              .align(Alignment.CenterHorizontally)
+              .clip(CircleShape),
+            painter = painterResource(id = R.drawable.welcome),
+            contentDescription = null,
           )
         }
-        Spacer(modifier = Modifier.size(32.dp))
-        Text(
-          modifier = Modifier.padding(horizontal = 24.dp),
-          text = stringResource(StringsR.string.onboarding_welcome_title),
-          style = MaterialTheme.typography.displayMedium,
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-          modifier = Modifier.padding(horizontal = 24.dp),
-          text = stringResource(id = StringsR.string.onboarding_welcome_subtitle),
-          style = MaterialTheme.typography.bodyLarge,
-        )
+        Column(Modifier.weight(2F)) {
+          Spacer(modifier = Modifier.size(16.dp))
+          Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(StringsR.string.onboarding_welcome_title),
+            style = MaterialTheme.typography.displayMedium,
+          )
+          Spacer(modifier = Modifier.size(4.dp))
+          Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(id = StringsR.string.onboarding_welcome_subtitle),
+            style = MaterialTheme.typography.bodyLarge,
+          )
+        }
       }
     },
-  )
-}
-
-@Composable
-private fun VoiceIcon(
-  modifier: Modifier = Modifier,
-) {
-  Image(
-    modifier = modifier
-      .size(256.dp)
-      .clip(CircleShape),
-    painter = painterResource(id = R.drawable.welcome),
-    contentDescription = null,
   )
 }
 

@@ -3,9 +3,9 @@ package voice.onboarding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -55,28 +55,31 @@ fun OnboardingExplanation(
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
         if (LocalConfiguration.current.screenHeightDp > 500) {
-          Spacer(modifier = Modifier.size(32.dp))
           Image(
             modifier = Modifier
-              .widthIn(max = 400.dp)
+              .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+              .weight(1F)
+              .heightIn(max = 400.dp)
               .padding(horizontal = 32.dp)
               .align(CenterHorizontally),
             painter = painterResource(id = R.drawable.bookshelf_artwork),
             contentDescription = null,
           )
         }
-        Spacer(modifier = Modifier.size(16.dp))
-        Text(
-          modifier = Modifier.padding(horizontal = 24.dp),
-          text = stringResource(StringsR.string.onboarding_explanation_title),
-          style = MaterialTheme.typography.displayMedium,
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-          modifier = Modifier.padding(horizontal = 24.dp),
-          text = stringResource(StringsR.string.onboarding_explanation_subtitle),
-          style = MaterialTheme.typography.bodyLarge,
-        )
+        Column(Modifier.weight(2F)) {
+          Spacer(modifier = Modifier.size(16.dp))
+          Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(StringsR.string.onboarding_explanation_title),
+            style = MaterialTheme.typography.displayMedium,
+          )
+          Spacer(modifier = Modifier.size(4.dp))
+          Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(StringsR.string.onboarding_explanation_subtitle),
+            style = MaterialTheme.typography.bodyLarge,
+          )
+        }
       }
     },
   )
