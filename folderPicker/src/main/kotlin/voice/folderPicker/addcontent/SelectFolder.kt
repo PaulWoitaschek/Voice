@@ -38,16 +38,15 @@ internal fun SelectFolder(
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
         if (LocalConfiguration.current.screenHeightDp > 600) {
-          Column(Modifier.weight(1F)) {
-            Image(
-              modifier = Modifier
-                .heightIn(max = 400.dp)
-                .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
-                .align(Alignment.CenterHorizontally),
-              painter = painterResource(id = R.drawable.folder_type_artwork),
-              contentDescription = null,
-            )
-          }
+          Image(
+            modifier = Modifier
+              .weight(1F)
+              .heightIn(max = 400.dp)
+              .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+              .align(Alignment.CenterHorizontally),
+            painter = painterResource(id = R.drawable.folder_type_artwork),
+            contentDescription = null,
+          )
         }
 
         Column(Modifier.weight(2F)) {
