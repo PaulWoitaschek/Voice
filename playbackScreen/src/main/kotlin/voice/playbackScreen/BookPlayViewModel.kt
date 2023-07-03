@@ -3,6 +3,9 @@ package voice.playbackScreen
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,12 +27,11 @@ import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.sleepTimer.SleepTimer
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class BookPlayViewModel
-@Inject constructor(
+@AssistedInject constructor(
   private val repo: BookRepository,
   private val player: PlayerController,
   private val sleepTimer: SleepTimer,
@@ -40,14 +42,14 @@ class BookPlayViewModel
   private val bookmarkRepo: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
+  @Assisted
+  private val bookId: BookId,
 ) {
 
   private val scope = MainScope()
 
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   internal val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
-
-  lateinit var bookId: BookId
 
   private val _dialogState = mutableStateOf<BookPlayDialogViewState?>(null)
   internal val dialogState: State<BookPlayDialogViewState?> get() = _dialogState
@@ -217,5 +219,10 @@ class BookPlayViewModel
       val skipSilence = book.content.skipSilence
       player.skipSilence(!skipSilence)
     }
+  }
+
+  @AssistedFactory
+  interface Factory {
+    fun create(bookId: BookId): BookPlayViewModel
   }
 }

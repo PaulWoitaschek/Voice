@@ -25,7 +25,6 @@ import voice.data.putBookId
 import voice.logging.core.Logger
 import voice.playbackScreen.view.BookPlayView
 import voice.sleepTimer.SleepTimerDialogController
-import javax.inject.Inject
 import voice.strings.R as StringsR
 
 private const val NI_BOOK_ID = "niBookId"
@@ -34,15 +33,10 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
 
   constructor(bookId: BookId) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
-  @Inject
-  lateinit var viewModel: BookPlayViewModel
-
-  private val bookId: BookId = bundle.getBookId(NI_BOOK_ID)!!
-
-  init {
-    rootComponentAs<Component>().inject(this)
-    this.viewModel.bookId = bookId
-  }
+  private val bookId = bundle.getBookId(NI_BOOK_ID)!!
+  private val viewModel: BookPlayViewModel = rootComponentAs<Component>()
+    .bookPlayViewModelFactory
+    .create(bookId)
 
   @Composable
   override fun Content() {
@@ -132,6 +126,6 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
 
   @ContributesTo(AppScope::class)
   interface Component {
-    fun inject(target: BookPlayController)
+    val bookPlayViewModelFactory: BookPlayViewModel.Factory
   }
 }
