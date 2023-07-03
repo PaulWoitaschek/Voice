@@ -1,6 +1,7 @@
 package voice.app.scanner
 
 import android.content.Context
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +38,7 @@ class DeviceHasStoragePermissionBug
         Logger.e(e, "Probing for permission failed!")
         "com.android.externalstorage has no access" in (e.message ?: "")
       } catch (e: Exception) {
+        if (e is CancellationException) throw e
         Logger.e(e, "Probing for permission failed!")
         false
       }

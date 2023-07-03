@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -162,6 +163,7 @@ class PlayerController
     return try {
       controller.await()
     } catch (e: Exception) {
+      if (e is CancellationException) throw e
       Logger.e(e, "Error while connecting to media controller")
       null
     }
