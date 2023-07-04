@@ -1,5 +1,5 @@
 #!/usr/bin/env kotlin
-@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:3.5.4")
+@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:4.0.0")
 @file:CompilerOptions("-Xopt-in=kotlin.RequiresOptIn")
 
 import com.github.ajalt.clikt.core.CliktCommand
