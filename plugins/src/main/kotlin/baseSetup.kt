@@ -55,7 +55,7 @@ fun Project.baseSetup() {
     // only necessary because of ktlint-gradle
     // can be removed once https://github.com/JLLeitschuh/ktlint-gradle/issues/524 is fixed
     sourceSets.all {
-      java.srcDir(project.file("src/$name/kotlin"))
+      // java.srcDir(project.file("src/$name/kotlin"))
     }
   }
   dependencies.run {
