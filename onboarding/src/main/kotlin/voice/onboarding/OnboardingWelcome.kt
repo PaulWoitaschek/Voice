@@ -28,10 +28,9 @@ import voice.strings.R as StringsR
 
 @Composable
 fun OnboardingWelcome(
-  modifier: Modifier = Modifier,
   onNext: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-  Text("")
   Scaffold(
     modifier = modifier,
     floatingActionButton = {

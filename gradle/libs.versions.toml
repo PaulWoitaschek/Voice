@@ -17,7 +17,7 @@ compose-compiler = "1.4.8"
 media3 = "1.1.0"
 agp = "8.0.2"
 ktlint-core = "0.50.0"
-ktlint-gradlePlugin = "11.5.0"
+ktlint-gradlePlugin = "0.4.0"
 retrofit = "2.9.0"
 
 [libraries]
@@ -120,7 +120,7 @@ compose-navigation = "dev.olshevski.navigation:reimagined:1.4.0"
 
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint-core" }
-ktlint-gradlePlugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint-gradlePlugin" }
+ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ktlint-compose = "io.nlopez.compose.rules:ktlint:0.1.12"
 
 [bundles]
@@ -162,7 +162,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.6" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradlePlugin" }
+ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.22-1.0.11" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.6" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }

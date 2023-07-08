@@ -130,6 +130,7 @@ private fun FolderOverviewView(
   }
 }
 
+@Suppress("ktlint:compose:preview-public-check")
 @Composable
 @Preview
 fun FolderOverviewPreview() {

@@ -10,7 +10,6 @@ operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {
   val self = this
   return object : PaddingValues {
 
-
     override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp {
       return self.calculateLeftPadding(layoutDirection) + other.calculateLeftPadding(layoutDirection)
     }
