@@ -12,7 +12,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
-  pluginManager.apply("org.jmailen.kotlinter")
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
@@ -51,6 +50,12 @@ fun Project.baseSetup() {
       unitTests.isReturnDefaultValues = true
       animationsDisabled = true
       unitTests.isIncludeAndroidResources = true
+    }
+
+    // only necessary because of ktlint-gradle
+    // can be removed once https://github.com/JLLeitschuh/ktlint-gradle/issues/524 is fixed
+    sourceSets.all {
+      java.srcDir(project.file("src/$name/kotlin"))
     }
   }
   dependencies.run {

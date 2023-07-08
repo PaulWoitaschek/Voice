@@ -4,6 +4,7 @@
       <w>composables</w>
       <w>constraintlayout</w>
       <w>coroutine</w>
+      <w>ktlint</w>
       <w>lerp</w>
       <w>seekable</w>
       <w>snackbar</w>

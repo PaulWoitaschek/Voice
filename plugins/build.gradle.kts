@@ -6,6 +6,7 @@ dependencies {
   implementation(libs.androidPluginForGradle)
   implementation(libs.kotlin.pluginForGradle)
   implementation(libs.kotlin.compilerEmbeddable)
+  implementation(libs.ktlint.gradlePlugin)
 }
 
 gradlePlugin {
@@ -21,6 +22,10 @@ gradlePlugin {
     create("compose") {
       id = "voice.compose"
       implementationClass = "ComposePlugin"
+    }
+    create("ktlint") {
+      id = "voice.ktlint"
+      implementationClass = "KtlintPlugin"
     }
   }
 }
