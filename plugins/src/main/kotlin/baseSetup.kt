@@ -51,12 +51,6 @@ fun Project.baseSetup() {
       animationsDisabled = true
       unitTests.isIncludeAndroidResources = true
     }
-
-    // only necessary because of ktlint-gradle
-    // can be removed once https://github.com/JLLeitschuh/ktlint-gradle/issues/524 is fixed
-    sourceSets.all {
-      // java.srcDir(project.file("src/$name/kotlin"))
-    }
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
