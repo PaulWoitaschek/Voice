@@ -215,7 +215,7 @@ internal fun BookOverview(
   }
 }
 
-// ktlint-disable compose:preview-public-check
+@Suppress("ktlint:compose:preview-public-check")
 @Preview
 @Composable
 fun BookOverviewPreview(

@@ -1,25 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-  alias(libs.plugins.ktlint)
   alias(libs.plugins.kotlin.android) apply false
   alias(libs.plugins.android.app) apply false
   alias(libs.plugins.android.library) apply false
-}
-
-buildscript {
-  dependencies {
-    classpath(libs.compose.ktlint)
-  }
-  configurations.classpath {
-    resolutionStrategy {
-      eachDependency {
-        if (requested.group == "com.pinterest.ktlint") {
-          useVersion(libs.versions.ktlint.get())
-        }
-      }
-    }
-  }
+  id("voice.ktlint")
 }
 
 tasks.wrapper {

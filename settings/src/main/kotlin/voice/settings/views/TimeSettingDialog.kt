@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import kotlin.math.roundToInt
 import voice.strings.R as StringsR
 
-@Composable // ktlint-disable twitter-compose:modifier-missing-check
+@Composable
 fun TimeSettingDialog(
   title: String,
   currentSeconds: Int,
