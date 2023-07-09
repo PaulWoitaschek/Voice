@@ -29,7 +29,7 @@
       "matchPackagePrefixes": [
         "com.pinterest.ktlint",
         "io.nlopez.compose.rules",
-        "org.jmailen.kotlinter"
+        "io.github.usefulness"
       ]
     }
   ],
