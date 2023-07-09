@@ -33,5 +33,6 @@
     }
   ],
   "prHourlyLimit": 0,
-  "prConcurrentLimit": 0
+  "prConcurrentLimit": 0,
+  "configMigration": true
 }
