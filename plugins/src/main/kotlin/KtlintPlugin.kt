@@ -8,16 +8,10 @@ class KtlintPlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
     target.pluginManager.apply("io.github.usefulness.ktlint-gradle-plugin")
-    target.pluginManager.withPlugin("io.github.usefulness.ktlint-gradle-plugin") {
-      val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-      target.extensions.configure<KtlintGradleExtension> {
-        ktlintVersion.set(libs.findVersion("ktlint-core").get().requiredVersion)
-      }
-      target.configurations
-        .matching { it.name == "ktlintRuleSet" }
-        .configureEach {
-          target.dependencies.add(name, libs.findLibrary("ktlint-compose").get())
-        }
+    val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+    target.extensions.configure<KtlintGradleExtension> {
+      ktlintVersion.set(libs.findVersion("ktlint-core").get().requiredVersion)
     }
+    target.dependencies.add("ktlintRuleSet", libs.findLibrary("ktlint-compose").get())
   }
 }
