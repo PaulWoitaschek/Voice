@@ -52,8 +52,8 @@
     <string name="delete">Ta bort</string>
     <string name="add">Lägg till</string>
     <string name="folder_type_dialog_title">Vad vill du lägga till?</string>
-    <string name="folder_mode_root">Rotljudboksmapp. En undermapp = en bok.</string>
-    <string name="folder_mode_single">Enskild ljudboksmapp</string>
+    <string name="folder_mode_root">Bokläge på högsta nivå: Undermappar är böcker</string>
+    <string name="folder_mode_single">Enkelbokläge: En mapp motsvarar en bok.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d ljudfil</item>
         <item quantity="other">%d ljudfiler</item>
@@ -110,7 +110,7 @@
     <string name="select_folder_type_file">Fil</string>
     <string name="select_folder_type_folder">Mapp</string>
     <string name="onboarding_welcome_title">Välkommen till Voice!</string>
-    <string name="onboarding_welcome_subtitle">Din personliga ljudboksspelare.</string>
+    <string name="onboarding_welcome_subtitle">Din personliga ljudboksspelare i fickan. Låt oss komma igång.</string>
     <string name="onboarding.button_next">Nästa</string>
     <string name="onboarding.completion.title">Du är redo!</string>
     <string name="review.request.button.yes">Betygsätt Nu</string>
@@ -118,4 +118,10 @@
     <string name="review.feedback.button.no">Avbryt</string>
     <string name="review.feedback.title">Vi är ledsna att höra det!</string>
     <string name="cover_search_template_with_author">%1$s av %2$s ljudboksomslag</string>
+    <string name="folder_mode_author">Författarbokläge: Undermappar är författare, under-undermappar är böcker.</string>
+    <string name="review.request.title">Tycker du om Voice\?</string>
+    <string name="review.request.content">Din feedback är viktig för oss! Om du har en stund, betygsätt oss och dela din upplevelse. Det hjälper oss att göra förbättringar och erbjuda en bättre lyssningsupplevelse.</string>
+    <string name="review.feedback.content">Kan du berätta vad som gick fel\? Vi uppskattar din feedback och den hjälper oss att förbättra din upplevelse.</string>
+    <string name="review.feedback.button.yes">Skicka feedback</string>
+    <string name="cover_search.icon_recent">Senaste sökning</string>
 </resources>
