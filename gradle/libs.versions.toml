@@ -164,7 +164,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 anvil = { id = "com.squareup.anvil", version = "2.4.6" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.22-1.0.11" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.6" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.7" }
 googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
 playPublish = { id = "com.github.triplet.play", version = "3.8.4" }
 android-app = { id = "com.android.application", version.ref = "agp" }
