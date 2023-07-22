@@ -3,7 +3,7 @@ package voice.folderPicker.selectType
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -44,7 +44,7 @@ class SelectFolderTypeViewModelTest {
     )
     viewModel.setFolderMode(FolderMode.Audiobooks)
 
-    backgroundScope.launchMolecule(clock = RecompositionClock.Immediate) {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
       suspend fun expectItem(folderMode: FolderMode, vararg books: SelectFolderTypeViewState.Book) {
