@@ -57,7 +57,7 @@
         <item quantity="many">%d секундаў</item>
         <item quantity="other">%d секундаў</item>
     </plurals>
-    <string name="pref_report_issue">Павведаміць пра праблему</string>
+    <string name="pref_report_issue">Паведаміць пра праблему</string>
     <string name="pref_theme_dark">Цёмная тэма</string>
     <string name="pref_auto_rewind_title">Аўтаматычная пракрутка назад</string>
     <string name="pref_use_grid">Выкарыстоўваць сетку</string>
