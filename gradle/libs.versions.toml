@@ -161,7 +161,7 @@ retrofit = [
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.4.6" }
+anvil = { id = "com.squareup.anvil", version = "2.4.7-1-8" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.12" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.7" }
