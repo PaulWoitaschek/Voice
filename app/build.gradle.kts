@@ -42,6 +42,10 @@ android {
 
   namespace = "voice.app"
 
+  androidResources {
+    generateLocaleConfig = true
+  }
+
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionCode = libs.versions.versionCode.get().toInt()
