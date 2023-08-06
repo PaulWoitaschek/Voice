@@ -55,6 +55,7 @@ uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp:4.11.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.1.0"
+clikt = "com.github.ajalt.clikt:clikt:4.2.0"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }

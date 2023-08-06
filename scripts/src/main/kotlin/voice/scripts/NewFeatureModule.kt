@@ -1,13 +1,11 @@
-#!/usr/bin/env kotlin
-@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:4.2.0")
-@file:CompilerOptions("-Xopt-in=kotlin.RequiresOptIn")
+package voice.scripts
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.validate
 import java.io.File
 
-class NewFeatureModule : CliktCommand(name = "Creates a new feature module") {
+class NewFeatureModule : CliktCommand(help = "Creates a new feature module") {
 
   private val name: String by argument("The new module name, i.e. :unicorn:wings")
     .validate { name ->
@@ -46,12 +44,6 @@ class NewFeatureModule : CliktCommand(name = "Creates a new feature module") {
     settingsGradle.writeText(lines.joinToString(separator = "\n"))
   }
 
-  private fun String.toSnakeCase(): String {
-    return "([a-z])([A-Z]+)".toRegex()
-      .replace(this, "$1_$2")
-      .lowercase()
-  }
-
   private fun gradleContent(): String {
     val plugins = buildList {
       add("voice.library")
@@ -75,5 +67,3 @@ class NewFeatureModule : CliktCommand(name = "Creates a new feature module") {
     }
   }
 }
-
-NewFeatureModule().main(args)
