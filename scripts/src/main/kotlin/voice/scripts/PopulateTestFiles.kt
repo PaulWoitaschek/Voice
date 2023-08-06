@@ -1,11 +1,9 @@
-#!/usr/bin/env kotlin
-@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:4.2.0")
-@file:CompilerOptions("-Xopt-in=kotlin.RequiresOptIn")
+package voice.scripts
 
 import com.github.ajalt.clikt.core.CliktCommand
 import java.io.File
 
-class PopulateTestFiles : CliktCommand(name = "Populates test files using adb") {
+class PopulateTestFiles : CliktCommand(help = "Populates test files using adb") {
 
   private val testFilesRoot = File("build/testfiles/")
 
@@ -80,18 +78,4 @@ class PopulateTestFiles : CliktCommand(name = "Populates test files using adb") 
       output.absolutePath,
     )
   }
-
-  private fun runCommand(vararg command: String) {
-    println("runCommand=${command.toList()}")
-    val process = ProcessBuilder(command.toList())
-      .redirectOutput(ProcessBuilder.Redirect.INHERIT)
-      .start()
-    process.waitFor().also {
-      check(it == 0) {
-        "output=${process.errorStream.bufferedReader().readText()}"
-      }
-    }
-  }
 }
-
-PopulateTestFiles().main(args)

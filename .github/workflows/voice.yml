@@ -41,7 +41,7 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Test
-        run: ./gradlew testDebugUnitTest lintKotlin app:lintDebug app:assembleDebug
+        run: ./gradlew testDebugUnitTest lintKotlin :app:lintDebug :app:assembleDebug :scripts:build
 
       - uses: actions/upload-artifact@v3
         if: always()
