@@ -25,7 +25,7 @@
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
     <string name="book_header_current">Actual</string>
-    <string name="action_sleep">Temporizador de sono</string>
+    <string name="action_sleep">Desligamento automático</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="skip_silence">Pular silêncio</string>
     <string name="volume_boost">Aumento de volume</string>
@@ -42,7 +42,7 @@
     <string name="pref_auto_rewind_title">Rebobin automaticamente</string>
     <string name="pref_suggest_idea">Sugerir uma ideia</string>
     <string name="pref_use_grid">Utilizar a disposição da grelha</string>
-    <string name="pref_report_issue">Comunicar um problema</string>
+    <string name="pref_report_issue">Reportar um problema</string>
     <string name="pref_help_translating">Ajuda traduzindo Voice</string>
     <string name="pref_app_version">Versão</string>
     <string name="play_current">Reproduzir atual</string>
@@ -53,4 +53,57 @@
     <string name="add">Adicionar</string>
     <string name="folder_type_dialog_title">O que deseja adicionar\?</string>
     <string name="pref_get_support">Obter apoio</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d ficheiro de áudio</item>
+        <item quantity="many">%d ficheiros de áudio</item>
+        <item quantity="other">%d ficheiros de áudio</item>
+    </plurals>
+    <string name="folder_type_book_example_header">Isso fará com que os respectivos livros sejam reconhecidos</string>
+    <string name="voice_intro_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
+    <string name="migration_detail_content_name">Nome</string>
+    <string name="migration_detail_content_root">Pasta raiz</string>
+    <string name="migration_detail_content_position">Posição</string>
+    <string name="migration_detail_content_added_at">Adicionado em</string>
+    <string name="search_hint">O que procura\?</string>
+    <string name="notification_sleep_timer_disable">Desativar desligamento automático</string>
+    <string name="folder_type_no_books">Voice não conseguiu encontrar nenhum livro. O ficheiro está no formato certo\?</string>
+    <string name="folder_type_title">Como os seus ficheiros estão organizados\?</string>
+    <string name="migration_hint_title">Aceder posições de livros antigos</string>
+    <string name="delete_book_dialog_content">Isso deletará os ficheiros no seu aparelho.</string>
+    <string name="delete_book_dialog_title">Deletar livro</string>
+    <string name="delete_book_dialog_deletion_confirmation">Deletar os meus ficheiros</string>
+    <string name="battery_optimization_rationale">Devido à restrições de energia, podem haver interrupções durante a reprodução do livro.</string>
+    <string name="review.request.button.yes">Avalie agora</string>
+    <string name="review.request.button.no">Não, obrigado</string>
+    <string name="review.feedback.button.no">Cancelar</string>
+    <string name="storage_bug_button">Conceder permissão</string>
+    <string name="generic_error_retry">Tentar novamente</string>
+    <string name="generic_error_message">Algo deu errado 😢</string>
+    <string name="migration_detail_content_position_current_chapter_position">Posição no capítulo</string>
+    <string name="migration_delete_dialog_title">Deletar posições</string>
+    <string name="play">Play</string>
+    <string name="pause">Parar</string>
+    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu aparelho.
+\n
+\nClique no ícone acima para ver a localização antiga dos livros.</string>
+    <string name="migration_hint_confirm">Entendido</string>
+    <string name="migration_detail_content_position_current_chapter_title">Capítulo atual</string>
+    <string name="migration_delete_dialog_content">Assim que deletar posições antigas, não poderá recupera-las.</string>
+    <string name="migration_delete_dialog_action_delete">Deletar</string>
+    <string name="migration_detail_title">Posições antigas de livro</string>
+    <string name="migration_detail_content_bookmarks">Marcadores de página</string>
+    <string name="migration_detail_content_position_current_file_title">Ficheiro atual</string>
+    <string name="migration_delete_dialog_action_keep">Manter</string>
+    <string name="migration_detail_content_position_current_file_position">Posição no ficheiro</string>
+    <string name="cover_search.author">Autor</string>
+    <string name="bookmark_just_now">Nesse exato momento</string>
+    <string name="delete_book_bottom_sheet_title">Deletar livro</string>
+    <string name="battery_optimization_action">Atualizar</string>
+    <string name="media_session_root">Audiolivros</string>
+    <string name="media_session_recent">Recente</string>
+    <string name="notification_sleep_timer_enable">Ativar desligamento automático</string>
+    <string name="select_folder_type_file">Ficheiro</string>
+    <string name="select_folder_type_folder">Pasta</string>
+    <string name="onboarding.button_next">Próximo</string>
+    <string name="onboarding.completion.next_button">Começar a ouvir</string>
 </resources>

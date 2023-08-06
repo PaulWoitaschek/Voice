@@ -27,7 +27,7 @@
         <item quantity="one">%d δευτερόλεπτο</item>
         <item quantity="other">%d δευτερόλεπτα</item>
     </plurals>
-    <string name="pref_seek_time">Μεταφορά ποσότητας</string>
+    <string name="pref_seek_time">Χρονική μετακίνηση</string>
     <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>
