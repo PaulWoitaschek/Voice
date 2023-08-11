@@ -97,7 +97,7 @@
     <string name="pause">Pausa</string>
     <string name="cover_search.author">Författare</string>
     <string name="storage_bug_button">Tillåta behörigheter</string>
-    <string name="select_folder_subtitle">Vill du lägga till en enda fil som en bok eller en mapp\?</string>
+    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som en bok eller en mapp\?</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dem i mappar. Du väljer!</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas. Njut av din resa med Voice!</string>
