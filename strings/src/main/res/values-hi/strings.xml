@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">कवर</string>
-    <string name="play_pause">चलायें / रोकें</string>
+    <string name="play_pause">प्ले / रोकें</string>
     <string name="action_sleep">नींद-टाइमर</string>
     <string name="rewind">पीछे जाएँ</string>
     <string name="fast_forward">आगे बढ़ें</string>
@@ -14,8 +14,8 @@
     <string name="dialog_cancel">रहने दें</string>
     <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
     <string name="change_book_name">नाम</string>
-    <string name="download_book_cover">इंटरनेट से कवर फोटो डालें</string>
-    <string name="pick_book_cover">फोन से कवर फोटो डालें</string>
+    <string name="download_book_cover">इंटरनेट से कवर फोटो</string>
+    <string name="pick_book_cover">फोन से कवर फोटो</string>
     <string name="edit_book_title">किताब में बदलाव करें</string>
     <string name="mark_as_completed">पूरा सुन चुके</string>
     <string name="mark_as_current">वर्तमान के रूप में चिह्नित करें</string>
@@ -52,8 +52,8 @@
     <string name="delete">हटाएँ </string>
     <string name="add">जोड़ें</string>
     <string name="folder_type_dialog_title">आप क्या जोड़ना चाहते हैं </string>
-    <string name="folder_mode_root">रूट ऑडियोबुक फ़ोल्डर। एक सबफ़ोल्डर = एक किताब।</string>
-    <string name="folder_mode_single">एकल ऑडियोबुक फ़ोल्डर</string>
+    <string name="folder_mode_root">शीर्ष-स्तरीय पुस्तक मोड: सबफ़ोल्डर पुस्तकें हैं</string>
+    <string name="folder_mode_single">एकल पुस्तक मोड: एक फ़ोल्डर एक पुस्तक के बराबर होता है।</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%dऑडियो फाइल </item>
         <item quantity="other">%d ऑडियो फाइल</item>
@@ -87,8 +87,18 @@
     <string name="search_hint">आप क्या ढूंढ रहे हैं?</string>
     <string name="battery_optimization_rationale">आपके पावर प्रतिबंधों के कारण, प्लेबैक रुकावट हो सकती है।</string>
     <string name="battery_optimization_action">अपडेट </string>
-    <string name="media_session_root">रूट </string>
+    <string name="media_session_root">सभी ऑडियोबुक</string>
     <string name="media_session_recent">हाल ही का</string>
     <string name="notification_sleep_timer_enable">स्लीप टाइमर चालू करें</string>
     <string name="notification_sleep_timer_disable">स्लीप टाइमर बंद करें</string>
+    <string name="folder_mode_author">लेखक-पुस्तक मोड: सबफ़ोल्डर लेखक हैं, उप-सबफ़ोल्डर पुस्तकें हैं।</string>
+    <string name="generic_error_message">कुछ गलत हो गया 😢</string>
+    <string name="storage_bug_title">अनुमति आवश्यक है</string>
+    <string name="cover_search_template_no_author">%s ऑडियोबुक कवर</string>
+    <string name="generic_error_retry">पुन: प्रयास करें</string>
+    <string name="play">प्ले</string>
+    <string name="pause">रोकें</string>
+    <string name="cover_search_template_with_author">%1$s / %2$s ऑडियोबुक कवर</string>
+    <string name="cover_search.icon_recent">हाल की खोज</string>
+    <string name="cover_search.author">लेखक</string>
 </resources>
