@@ -21,9 +21,9 @@
     <string name="migration_delete_dialog_action_delete">मेटाउनुहोस्</string>
     <string name="migration_delete_dialog_action_keep">राख्नुहोस्</string>
     <string name="delete_book_bottom_sheet_title">पुस्तक मेटाउनुहोस्</string>
-    <string name="delete_book_dialog_title">पुस्तक मेटाउनुहोस</string>
+    <string name="delete_book_dialog_title">पुस्तक मेटाउनुहोस्</string>
     <string name="delete_book_dialog_deletion_confirmation">मेरो फाइलहरू मेटाउनुहोस्</string>
-    <string name="delete_book_dialog_content">यसले तपाईंको मोबएलको फाइलहरू जानेछ।</string>
+    <string name="delete_book_dialog_content">यसले तपाईंको यन्त्रमा फाइलहरू मेटाउनेछ।</string>
     <string name="play_pause">प्ले / पज</string>
     <string name="action_sleep">सुत्ने-टाइमर</string>
     <string name="fast_forward">अगाडि बढ्नु</string>
@@ -73,7 +73,7 @@
     <string name="play">प्ले</string>
     <string name="pause">पज</string>
     <string name="next_track">अर्को ट्र्याक</string>
-    <string name="pref_seek_time">अगाडि कति स्किप गर्ने</string>
+    <string name="pref_seek_time">स्किप गर्ने मात्रा</string>
     <string name="skip_silence">शान्तिले स्किप गर्नुहोस्</string>
     <string name="volume_boost">आवाज बूस्ट</string>
     <string name="more">थप</string>
@@ -109,7 +109,7 @@
     <string name="onboarding_welcome_subtitle">तपाईंको व्यक्तिगत पकेट अडियोबूक प्लेयर। तपाईलाई सेट अप गरौं।</string>
     <string name="onboarding.explanation.title">तपाईंको पुस्तकालय, तपाईंको इच्छा अनुसार</string>
     <string name="onboarding.explanation.subtitle">Voice को साथ, तपाईंले पुस्तकहरूलाई व्यक्तिगत फाइलहरूको रूपमा थप्न वा फोल्डरहरूमा व्यवस्थित गर्न सक्नुहुन्छ। तपाईं छान्नुहोस्!</string>
-    <string name="onboarding.completion.title">तपाईं तयार हुनुहुन्छ!</string>
+    <string name="onboarding.completion.title">तपाईं पुरै सेट हुनुहुन्छ!</string>
     <string name="onboarding.completion.subtitle">तपाईंको पहिलो अडियोबूक प्ले गर्न तयार छ। Voice सँग आफ्नो यात्राको आनन्द लिनुहोस्!</string>
     <string name="review.request.content">तपाईंको प्रतिक्रिया हाम्रो लागि महत्त्वपूर्ण छ! यदि तपाइँसँग एक क्षण छ भने, हामीलाई मूल्याङ्कन गर्नुहोस् र तपाइँको अनुभव साझा गर्नुहोस्। यसले हामीलाई सुधार गर्न र राम्रो सुन्ने अनुभव प्रदान गर्न मद्दत गर्छ।</string>
     <string name="review.request.button.no">होइन, धन्यवाद</string>
