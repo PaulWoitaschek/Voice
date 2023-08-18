@@ -1,7 +1,7 @@
 package voice.playback.playstate
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +12,7 @@ constructor() {
 
   private val _playState = MutableStateFlow(PlayState.Paused)
 
-  val flow: Flow<PlayState>
+  val flow: StateFlow<PlayState>
     get() = _playState
 
   var playState: PlayState

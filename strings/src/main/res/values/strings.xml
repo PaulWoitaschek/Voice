@@ -124,4 +124,11 @@
     <string name="review.feedback.content">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
     <string name="review.feedback.button.yes">Send Feedback</string>
     <string name="review.feedback.button.no">Cancel</string>
+    <string name="sleep_timer.title">Sweet dreams! 🌙</string>
+    <string name="sleep_timer.button.increment">Longer</string>
+    <string name="sleep_timer.button.decrement">Shorter</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
 </resources>

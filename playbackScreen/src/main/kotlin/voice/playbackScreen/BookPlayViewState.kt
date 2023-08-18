@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import voice.common.compose.ImmutableFile
 import voice.data.ChapterMark
 import voice.playback.misc.Decibel
+import voice.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
 
 @Immutable
@@ -43,5 +44,10 @@ internal sealed interface BookPlayDialogViewState {
   data class SelectChapterDialog(
     val chapters: List<ChapterMark>,
     val selectedIndex: Int?,
+  ) : BookPlayDialogViewState
+
+  @JvmInline
+  value class SleepTimer(
+    val viewState: SleepTimerViewState,
   ) : BookPlayDialogViewState
 }
