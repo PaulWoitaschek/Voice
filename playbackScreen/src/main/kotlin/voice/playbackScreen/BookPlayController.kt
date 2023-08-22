@@ -11,7 +11,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +23,7 @@ import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
 import voice.playbackScreen.view.BookPlayView
-import voice.sleepTimer.SleepTimerDialogController
+import voice.sleepTimer.SleepTimerDialog
 import voice.strings.R as StringsR
 
 private const val NI_BOOK_ID = "niBookId"
@@ -42,8 +41,8 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
   override fun Content() {
     val snackbarHostState = remember { SnackbarHostState() }
     val dialogState = viewModel.dialogState.value
-    val viewState = remember(viewModel) { viewModel.viewState() }
-      .collectAsState(initial = null).value ?: return
+    val viewState = viewModel.viewState()
+      ?: return
     val context = LocalContext.current
     LaunchedEffect(viewModel) {
       viewModel.viewEffects.collect { viewEffect ->
@@ -61,10 +60,6 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
             if (result == SnackbarResult.ActionPerformed) {
               toBatteryOptimizations()
             }
-          }
-
-          BookPlayViewEffect.ShowSleepTimeDialog -> {
-            openSleepTimeDialog()
           }
         }
       }
@@ -101,6 +96,15 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
         is BookPlayDialogViewState.SelectChapterDialog -> {
           SelectChapterDialog(dialogState, viewModel)
         }
+        is BookPlayDialogViewState.SleepTimer -> {
+          SleepTimerDialog(
+            viewState = dialogState.viewState,
+            onDismiss = viewModel::dismissDialog,
+            onIncrementSleepTime = viewModel::incrementSleepTime,
+            onDecrementSleepTime = viewModel::decrementSleepTime,
+            onAcceptSleepTime = viewModel::onAcceptSleepTime,
+          )
+        }
       }
     }
   }
@@ -117,11 +121,6 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
     } catch (e: ActivityNotFoundException) {
       Logger.e(e, "Can't request ignoring battery optimizations")
     }
-  }
-
-  private fun openSleepTimeDialog() {
-    SleepTimerDialogController(bookId)
-      .showDialog(router)
   }
 
   @ContributesTo(AppScope::class)

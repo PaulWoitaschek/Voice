@@ -6,8 +6,8 @@ import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -39,7 +39,6 @@ class SleepTimer
 ) : PlaybackSleepTimer {
 
   private val scope = MainScope()
-  private val sleepTime: Duration get() = sleepTimePref.value.minutes
   private val fadeOutDuration = 10.seconds
 
   private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
@@ -48,7 +47,7 @@ class SleepTimer
     set(value) {
       _leftSleepTime.value = value
     }
-  override val leftSleepTimeFlow: Flow<Duration> get() = _leftSleepTime
+  override val leftSleepTimeFlow: StateFlow<Duration> get() = _leftSleepTime
 
   override fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
 
@@ -57,13 +56,13 @@ class SleepTimer
   override fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")
     if (enable) {
-      start()
+      setActive()
     } else {
       cancel()
     }
   }
 
-  private fun start() {
+  fun setActive(sleepTime: Duration = sleepTimePref.value.minutes) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)
@@ -76,7 +75,7 @@ class SleepTimer
         shakeDetector.detect()
         Logger.i("Shake detected. Reset sleep time")
         playerController.play()
-        start()
+        setActive()
       }
       Logger.i("exiting")
     }

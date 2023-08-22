@@ -31,4 +31,7 @@ dependencies {
   implementation(libs.material)
 
   implementation(libs.dagger.core)
+
+  testImplementation(libs.prefs.inMemory)
+  testImplementation(libs.turbine)
 }
