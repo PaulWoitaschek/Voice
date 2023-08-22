@@ -25,7 +25,7 @@ androidPluginForGradle = { module = "com.android.tools.build:gradle", version.re
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 material = "com.google.android.material:material:1.9.0"
-ffmpeg = "com.arthenica:ffmpeg-kit-audio:5.1"
+ffmpeg = "com.arthenica:ffmpeg-kit-audio:6.0"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.13.7"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.2.0"
