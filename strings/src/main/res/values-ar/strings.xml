@@ -132,4 +132,5 @@
     <string name="onboarding.explanation.subtitle">مع فويس يمكنك إضافة كتب من ملفات فردية أو تنظيمها في مجلدات. أنت تختار!</string>
     <string name="onboarding.completion.title">أنت جاهز!</string>
     <string name="onboarding.completion.subtitle">كتابك الصوتي الأول يعمل. استمتع برحلتك مع فويس!</string>
+    <string name="sleep_timer.title">أحلام سعيدة! 🌙</string>
 </resources>
