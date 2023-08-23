@@ -146,6 +146,18 @@ class PlayerController
     controller.setPlaybackSpeed(speed)
   }
 
+  fun pauseAtStart() = executeAfterPrepare {
+    it.pause()
+    val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
+    val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
+    it.seekTo(book.currentMark.startMs)
+  }
+
+  fun pauseAtTime(ms: Long) = executeAfterPrepare {
+    it.pause()
+    it.seekTo(ms)
+  }
+
   fun setGain(gain: Decibel) = executeAfterPrepare { controller ->
     controller.sendCustomCommand(CustomCommand.SetGain(gain))
   }
