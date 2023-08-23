@@ -7,4 +7,5 @@ interface SleepTimer {
   val leftSleepTimeFlow: Flow<Duration>
   fun sleepTimerActive(): Boolean
   fun setActive(enable: Boolean)
+  fun setEocActive(enable: Boolean)
 }
