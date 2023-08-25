@@ -128,4 +128,12 @@
     <string name="onboarding.completion.title">È tutto pronto!</string>
     <string name="onboarding.completion.subtitle">Il tuo primo audiolibro è pronto per essere riprodotto. Buon viaggio con Voice!</string>
     <string name="onboarding.completion.next_button">Inizia ad ascoltare</string>
+    <string name="sleep_timer.title">Sogni d\'oro! 🌙</string>
+    <string name="sleep_timer.button.increment">Più a lungo</string>
+    <string name="sleep_timer.button.decrement">Più breve</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d minuti</item>
+        <item quantity="other">%d minuti</item>
+    </plurals>
 </resources>
