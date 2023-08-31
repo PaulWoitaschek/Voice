@@ -124,4 +124,11 @@
     <string name="review.feedback.content">Kan du berätta vad som gick fel\? Vi uppskattar din feedback och den hjälper oss att förbättra din upplevelse.</string>
     <string name="review.feedback.button.yes">Skicka feedback</string>
     <string name="cover_search.icon_recent">Senaste sökning</string>
+    <string name="sleep_timer.title">Söta drömmar! 🌙</string>
+    <string name="sleep_timer.button.increment">Längre</string>
+    <string name="sleep_timer.button.decrement">Kortare</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minuter</item>
+    </plurals>
 </resources>
