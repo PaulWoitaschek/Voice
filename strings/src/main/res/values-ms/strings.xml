@@ -63,8 +63,8 @@
     <string name="play_current">Mainkan sekarang</string>
     <string name="folder_type_dialog_title">Apa yang anda ingin tambah\?</string>
     <string name="folder_mode_root">Mod Buku Peringkat Tertinggi: Subfolder adalah buku</string>
-    <string name="folder_mode_single">Mod Buku Tunggal: Satu folder bersamaan satu buku</string>
-    <string name="folder_mode_author">Mod Buku Penulis: Subfolder adalah penulis, sub-subfolder adalah buku</string>
+    <string name="folder_mode_single">Mod Buku Tunggal: Satu folder bersamaan satu buku.</string>
+    <string name="folder_mode_author">Mod Buku Penulis: Subfolder adalah penulis, sub-subfolder adalah buku.</string>
     <string name="folder_type_book_example_header">Ini akan membawa kepada buku berikut dapat dikesan</string>
     <plurals name="folder_type_file_count">
         <item quantity="other">%d fail audio</item>
