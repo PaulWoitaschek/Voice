@@ -45,7 +45,9 @@
     <string name="close">Tutup</string>
     <string name="migration_hint_title">Mengakses posisi buku lama</string>
     <string name="folder_type_title">Bagaimanakah struktur fail anda\?</string>
-    <string name="migration_hint_content">Disebabkan berubahan dalam Versi Android baharu,</string>
+    <string name="migration_hint_content">Disebabkan perubahan dalam Versi Android baharu, adalah perlu untuk pilih folder audiobook anda menggunakan system picker.
+\n
+\nKlik pada ikon di atas untuk melihat kedudukan buku lama anda.</string>
     <string name="delete_last_number">Padam nombor terakhir dimasukkan</string>
     <plurals name="seconds">
         <item quantity="other">%d saat</item>
