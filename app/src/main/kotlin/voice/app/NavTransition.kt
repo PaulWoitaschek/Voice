@@ -6,7 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import dev.olshevski.navigation.reimagined.NavAction
 import voice.common.navigation.Destination
 
@@ -20,16 +20,16 @@ internal fun navTransition(action: NavAction, destination: Destination.Compose) 
         .plus(slideInHorizontally { it / 2 })
     }
     val exit = fadeOut()
-    enter with exit
+    enter togetherWith exit
   }
   NavAction.Pop -> {
     fadeIn(tween(700))
-      .with(
+      .togetherWith(
         fadeOut(tween(300))
           .plus(
             slideOutHorizontally(tween(700)) { it / 2 },
           ),
       )
   }
-  else -> fadeIn(tween(700)) with fadeOut(tween(700))
+  else -> fadeIn(tween(700)) togetherWith fadeOut(tween(700))
 }
