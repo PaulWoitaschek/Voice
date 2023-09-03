@@ -20,8 +20,8 @@ internal fun MigrateIcon(
   onHintClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Box {
-    IconButton(modifier = modifier, onClick = onClick) {
+  Box(modifier) {
+    IconButton(onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.Restore,
         contentDescription = stringResource(StringsR.string.migration_hint_title),

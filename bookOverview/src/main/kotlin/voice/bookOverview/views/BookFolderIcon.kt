@@ -16,8 +16,8 @@ internal fun BookFolderIcon(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Box {
-    IconButton(modifier = modifier, onClick = onClick) {
+  Box(modifier) {
+    IconButton(onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.Book,
         contentDescription = stringResource(StringsR.string.audiobook_folders_title),
