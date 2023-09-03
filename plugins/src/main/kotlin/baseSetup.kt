@@ -26,6 +26,7 @@ fun Project.baseSetup() {
         "kotlinx.coroutines.FlowPreview",
       )
       freeCompilerArgs = (freeCompilerArgs + listOf("-progressive") + optIns.map { "-opt-in=$it" })
+      allWarningsAsErrors = true
     }
   }
   extensions.configure<KotlinProjectExtension> {
