@@ -23,7 +23,7 @@ import voice.data.repo.internals.mapRows
  * Test the migration from 40 to 41
  */
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [28])
+@Config(sdk = [33])
 class Migration40to41Test {
 
   private lateinit var db: SupportSQLiteDatabase

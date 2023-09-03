@@ -19,7 +19,7 @@ import voice.data.repo.internals.getInt
 import voice.data.repo.internals.mapRows
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [28])
+@Config(sdk = [33])
 class Migration39to40Test {
 
   private lateinit var db: SupportSQLiteDatabase

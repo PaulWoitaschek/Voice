@@ -10,9 +10,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [33])
 class NaturalOrderComparatorTest {
 
   private val testFolder = TemporaryFolder()

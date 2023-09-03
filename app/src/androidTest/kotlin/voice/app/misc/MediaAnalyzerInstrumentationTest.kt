@@ -1,5 +1,6 @@
+package voice.app.misc
+
 import androidx.annotation.RawRes
-import androidx.documentfile.provider.DocumentFile
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -14,6 +15,7 @@ import voice.app.scanner.FFProbeAnalyze
 import voice.app.scanner.MediaAnalyzer
 import voice.app.test.R
 import voice.data.MarkData
+import voice.documentfile.FileBasedDocumentFile
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -53,7 +55,7 @@ class MediaAnalyzerInstrumentationTest {
   private fun analyze(@RawRes resource: Int): MediaAnalyzer.Metadata? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
-      mediaAnalyzer.analyze(DocumentFile.fromFile(file))
+      mediaAnalyzer.analyze(FileBasedDocumentFile(file))
     }
   }
 

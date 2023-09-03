@@ -8,10 +8,12 @@ import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import voice.data.repo.internals.AppDb
 import voice.data.repo.internals.dao.RecentBookSearchDao
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [33])
 class RecentBookSearchTest {
 
   @Test
