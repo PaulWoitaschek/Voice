@@ -15,7 +15,7 @@ plugins {
   alias(libs.plugins.playPublish)
 }
 
-val useProprietaryLibraries = providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true"
+val useProprietaryLibraries = System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true"
 if (useProprietaryLibraries) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
   if (file("google-services.json").exists()) {
@@ -180,7 +180,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.remoteconfig)
-    implementation(projects.logging.crashlytics)
+    implementation(project(":logging:crashlytics"))
     implementation(project(":review:play"))
   } else {
     implementation(projects.review.noop)
