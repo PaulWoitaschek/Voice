@@ -61,10 +61,10 @@ include(":migration")
 include(":scripts")
 include(":logging:core")
 include(":logging:debug")
-include(":logging:crashlytics")
 include(":documentfile")
 include(":onboarding")
-if (!providers.gradleProperty("foss").isPresent) {
+if (System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true") {
+  include(":logging:crashlytics")
   include(":review:play")
 }
 include(":review:noop")
