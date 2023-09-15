@@ -27,7 +27,11 @@ class BookmarkRepo
     dao.addBookmark(bookmark)
   }
 
-  suspend fun addBookmarkAtBookPosition(book: Book, title: String?, setBySleepTimer: Boolean): Bookmark {
+  suspend fun addBookmarkAtBookPosition(
+    book: Book,
+    title: String?,
+    setBySleepTimer: Boolean,
+  ): Bookmark {
     return withContext(Dispatchers.IO) {
       val bookMark = Bookmark(
         title = title,

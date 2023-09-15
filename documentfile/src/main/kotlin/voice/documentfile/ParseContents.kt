@@ -7,7 +7,10 @@ import android.provider.DocumentsContract
 import androidx.core.database.getStringOrNull
 import voice.logging.core.Logger
 
-internal fun parseContents(uri: Uri, context: Context): List<CachedDocumentFile> {
+internal fun parseContents(
+  uri: Uri,
+  context: Context,
+): List<CachedDocumentFile> {
   return context.query(uri)?.use { cursor ->
     cursor.parseRows(uri, context)
   } ?: emptyList()

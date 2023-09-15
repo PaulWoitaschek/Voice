@@ -64,7 +64,10 @@ private class ExplanationTooltipPopupPositionProvider(
   }
 }
 
-private fun explanationTooltipShape(triangleCenterX: Float?, density: Density): GenericShape {
+private fun explanationTooltipShape(
+  triangleCenterX: Float?,
+  density: Density,
+): GenericShape {
   val triangleSize = with(density) {
     28.dp.toPx()
   }

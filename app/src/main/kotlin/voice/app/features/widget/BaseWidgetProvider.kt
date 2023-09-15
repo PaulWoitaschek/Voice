@@ -13,7 +13,10 @@ class BaseWidgetProvider : AppWidgetProvider() {
   @Inject
   lateinit var widgetUpdater: WidgetUpdater
 
-  override fun onReceive(context: Context, intent: Intent?) {
+  override fun onReceive(
+    context: Context,
+    intent: Intent?,
+  ) {
     appComponent.inject(this)
     super.onReceive(context, intent)
   }

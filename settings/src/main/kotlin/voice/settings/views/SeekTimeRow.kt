@@ -14,7 +14,10 @@ import androidx.compose.ui.res.stringResource
 import voice.strings.R as StringsR
 
 @Composable
-internal fun SeekTimeRow(seekTimeInSeconds: Int, openSeekTimeDialog: () -> Unit) {
+internal fun SeekTimeRow(
+  seekTimeInSeconds: Int,
+  openSeekTimeDialog: () -> Unit,
+) {
   ListItem(
     modifier = Modifier
       .clickable {

@@ -23,7 +23,10 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   @Inject
   lateinit var player: PlayerController
 
-  override fun onReceive(context: Context, intent: Intent?) {
+  override fun onReceive(
+    context: Context,
+    intent: Intent?,
+  ) {
     val action = Action.parse(intent)
     Logger.d("onReceive ${intent?.action}. Parsed to $action")
     action ?: return
@@ -81,7 +84,10 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   }
 
   enum class Action {
-    PlayPause, FastForward, Rewind;
+    PlayPause,
+    FastForward,
+    Rewind,
+    ;
 
     companion object {
       fun parse(intent: Intent?): Action? {

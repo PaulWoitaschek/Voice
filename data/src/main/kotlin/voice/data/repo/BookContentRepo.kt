@@ -79,7 +79,10 @@ class BookContentRepo
     }
   }
 
-  suspend inline fun getOrPut(id: BookId, defaultValue: () -> BookContent): BookContent {
+  suspend inline fun getOrPut(
+    id: BookId,
+    defaultValue: () -> BookContent,
+  ): BookContent {
     return get(id) ?: defaultValue().also { put(it) }
   }
 }

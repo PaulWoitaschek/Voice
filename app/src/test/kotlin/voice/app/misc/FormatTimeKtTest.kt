@@ -42,7 +42,11 @@ class FormatTimeKtTest {
     formatted shouldBe "0:00"
   }
 
-  private fun ms(hours: Long, minutes: Long, seconds: Long): Long {
+  private fun ms(
+    hours: Long,
+    minutes: Long,
+    seconds: Long,
+  ): Long {
     return TimeUnit.HOURS.toMillis(hours) +
       TimeUnit.MINUTES.toMillis(minutes) +
       TimeUnit.SECONDS.toMillis(seconds)

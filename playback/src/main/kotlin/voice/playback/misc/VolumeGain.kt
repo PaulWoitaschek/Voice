@@ -11,7 +11,10 @@ class VolumeGainSetter
 
   private var currentConfiguration: CurrentConfiguration? = null
 
-  fun set(gain: Decibel, audioSession: Int) {
+  fun set(
+    gain: Decibel,
+    audioSession: Int,
+  ) {
     Logger.v("set gain=$gain, session=$audioSession")
     if (gain == Decibel.Zero) {
       reset()
@@ -30,7 +33,10 @@ class VolumeGainSetter
     currentConfiguration = null
   }
 
-  private fun createNewConfiguration(audioSession: Int, gain: Decibel) {
+  private fun createNewConfiguration(
+    audioSession: Int,
+    gain: Decibel,
+  ) {
     reset()
 
     val enhancer = createEnhancer(audioSession)

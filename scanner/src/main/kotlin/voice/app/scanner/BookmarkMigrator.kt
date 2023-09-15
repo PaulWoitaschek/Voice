@@ -16,7 +16,11 @@ class BookmarkMigrator
   private val bookmarkDao: BookmarkDao,
 ) {
 
-  suspend fun migrate(migrationMetaData: LegacyBookMetaData, chapters: List<Chapter>, id: BookId) {
+  suspend fun migrate(
+    migrationMetaData: LegacyBookMetaData,
+    chapters: List<Chapter>,
+    id: BookId,
+  ) {
     legacyBookDao.chapters()
       .filter {
         it.bookId == migrationMetaData.id

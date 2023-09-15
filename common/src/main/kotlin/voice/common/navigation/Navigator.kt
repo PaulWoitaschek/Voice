@@ -17,7 +17,10 @@ class Navigator
 
   private val scope = MainScope()
 
-  fun goTo(destination: Destination, replace: Boolean = false) {
+  fun goTo(
+    destination: Destination,
+    replace: Boolean = false,
+  ) {
     scope.launch {
       _navigationCommands.emit(NavigationCommand.GoTo(destination, replace))
     }

@@ -57,7 +57,10 @@ class PlayerController
     }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
-  fun setPosition(time: Long, id: ChapterId) = executeAfterPrepare { controller ->
+  fun setPosition(
+    time: Long,
+    id: ChapterId,
+  ) = executeAfterPrepare { controller ->
     val bookId = currentBookId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
     val index = book.chapters.indexOfFirst { it.id == id }

@@ -145,9 +145,7 @@ class BookPlayViewModel
     }
   }
 
-  private fun updateSleepTimeViewState(
-    update: (SleepTimerViewState) -> SleepTimerViewState?,
-  ) {
+  private fun updateSleepTimeViewState(update: (SleepTimerViewState) -> SleepTimerViewState?) {
     val current = dialogState.value
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)

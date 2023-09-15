@@ -49,9 +49,7 @@ class AudiobookFolders
     return combine(flows) { it.toMap() }
   }
 
-  private fun Uri.toDocumentFile(
-    folderType: FolderType,
-  ): CachedDocumentFile {
+  private fun Uri.toDocumentFile(folderType: FolderType): CachedDocumentFile {
     val uri = when (folderType) {
       FolderType.SingleFile -> this
       FolderType.SingleFolder,
@@ -67,7 +65,10 @@ class AudiobookFolders
     return cachedDocumentFileFactory.create(uri)
   }
 
-  fun add(uri: Uri, type: FolderType) {
+  fun add(
+    uri: Uri,
+    type: FolderType,
+  ) {
     context.contentResolver.takePersistableUriPermission(
       uri,
       Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
@@ -79,7 +80,10 @@ class AudiobookFolders
     }
   }
 
-  fun remove(uri: Uri, folderType: FolderType) {
+  fun remove(
+    uri: Uri,
+    folderType: FolderType,
+  ) {
     try {
       context.contentResolver.releasePersistableUriPermission(
         uri,

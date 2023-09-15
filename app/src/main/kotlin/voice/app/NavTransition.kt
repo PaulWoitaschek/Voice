@@ -10,7 +10,10 @@ import androidx.compose.animation.togetherWith
 import dev.olshevski.navigation.reimagined.NavAction
 import voice.common.navigation.Destination
 
-internal fun navTransition(action: NavAction, destination: Destination.Compose) = when (action) {
+internal fun navTransition(
+  action: NavAction,
+  destination: Destination.Compose,
+) = when (action) {
   NavAction.Navigate -> {
     val enter = if (destination is Destination.AddContent) {
       // we come from the system activity, don't show a transition here

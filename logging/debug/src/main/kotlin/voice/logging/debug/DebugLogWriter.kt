@@ -10,7 +10,11 @@ internal class DebugLogWriter : LogWriter {
   /**
    * This logic was borrowed from Timber: https://github.com/JakeWharton/timber
    */
-  override fun log(severity: Logger.Severity, message: String, throwable: Throwable?) {
+  override fun log(
+    severity: Logger.Severity,
+    message: String,
+    throwable: Throwable?,
+  ) {
     val tag = Throwable().stackTrace
       .first { it.className !in fqcnIgnore }
       .let(::createStackElementTag)

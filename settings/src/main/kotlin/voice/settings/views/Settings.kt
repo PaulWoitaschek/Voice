@@ -72,7 +72,10 @@ private fun SettingsPreview() {
 }
 
 @Composable
-private fun Settings(viewState: SettingsViewState, listener: SettingsListener) {
+private fun Settings(
+  viewState: SettingsViewState,
+  listener: SettingsListener,
+) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

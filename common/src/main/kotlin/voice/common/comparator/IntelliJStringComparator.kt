@@ -8,9 +8,16 @@ internal object IntelliJStringComparator : Comparator<String> {
 
   private fun isDecimalDigit(c: Char) = c in '0'..'9'
 
-  override fun compare(lhs: String?, rhs: String?) = naturalCompare(lhs, rhs, false)
+  override fun compare(
+    lhs: String?,
+    rhs: String?,
+  ) = naturalCompare(lhs, rhs, false)
 
-  private fun naturalCompare(lhs: String?, rhs: String?, caseSensitive: Boolean): Int {
+  private fun naturalCompare(
+    lhs: String?,
+    rhs: String?,
+    caseSensitive: Boolean,
+  ): Int {
     if (lhs === rhs) {
       return 0
     }

@@ -231,11 +231,17 @@ class MediaScannerTest {
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
-    suspend fun scan(type: FolderType = FolderType.Root, vararg roots: File) {
+    suspend fun scan(
+      type: FolderType = FolderType.Root,
+      vararg roots: File,
+    ) {
       scanner.scan(mapOf(type to roots.map(::FileBasedDocumentFile)))
     }
 
-    fun audioFile(parent: File, name: String): File {
+    fun audioFile(
+      parent: File,
+      name: String,
+    ): File {
       check(name.endsWith(".mp3"))
       return File(parent, name)
         .also {

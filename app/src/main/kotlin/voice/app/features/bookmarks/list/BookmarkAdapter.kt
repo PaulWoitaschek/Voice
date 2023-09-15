@@ -16,7 +16,10 @@ class BookmarkAdapter(
   private val bookmarks = ArrayList<Bookmark>()
   private val chapters = ArrayList<Chapter>()
 
-  fun newData(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
+  fun newData(
+    bookmarks: List<Bookmark>,
+    chapters: List<Chapter>,
+  ) {
     this.chapters.clear()
     this.chapters.addAll(chapters)
 
@@ -30,10 +33,15 @@ class BookmarkAdapter(
 
   fun indexOf(bookmark: Bookmark) = bookmarks.indexOf(bookmark)
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-    BookMarkHolder(parent, listener)
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ) = BookMarkHolder(parent, listener)
 
-  override fun onBindViewHolder(holder: BookMarkHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: BookMarkHolder,
+    position: Int,
+  ) {
     val bookMark = bookmarks[position]
     holder.bind(bookMark, chapters)
   }

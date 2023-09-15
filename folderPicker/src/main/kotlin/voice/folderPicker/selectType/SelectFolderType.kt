@@ -45,7 +45,10 @@ interface SelectFolderTypeComponent {
 }
 
 @Composable
-fun SelectFolderType(uri: Uri, mode: Destination.SelectFolderType.Mode) {
+fun SelectFolderType(
+  uri: Uri,
+  mode: Destination.SelectFolderType.Mode,
+) {
   val context = LocalContext.current
   val viewModel = rememberScoped {
     rootComponentAs<SelectFolderTypeComponent>().selectFolderTypeViewModelFactory

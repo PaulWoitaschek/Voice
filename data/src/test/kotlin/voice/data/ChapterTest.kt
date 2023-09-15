@@ -107,7 +107,11 @@ class ChapterTest {
     )
   }
 
-  private fun test(chapterStarts: List<Int>, expected: List<MarkPosition>, duration: Long = 20L) {
+  private fun test(
+    chapterStarts: List<Int>,
+    expected: List<MarkPosition>,
+    duration: Long = 20L,
+  ) {
     val positions = Chapter(
       duration = duration,
       fileLastModified = Instant.now(),

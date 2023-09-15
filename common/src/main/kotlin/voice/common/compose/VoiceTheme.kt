@@ -16,9 +16,7 @@ import voice.common.rootComponentAs
 import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
-fun VoiceTheme(
-  content: @Composable () -> Unit,
-) {
+fun VoiceTheme(content: @Composable () -> Unit) {
   Material3Theme(
     colorScheme = if (isDarkTheme()) {
       if (Build.VERSION.SDK_INT >= 31) {

@@ -14,17 +14,22 @@ class CropTransformation(cropOverlay: CropOverlay, private val cropSource: Image
 
   override val cacheKey: String = "cropTransformation"
 
-  override suspend fun transform(input: Bitmap, size: Size): Bitmap {
+  override suspend fun transform(
+    input: Bitmap,
+    size: Size,
+  ): Bitmap {
     val scaleFactor: Float = input.width.toFloat() / cropSource.measuredWidth
     scaleRect(rect, scaleFactor)
     return Bitmap.createBitmap(input, rect.left, rect.top, rect.width(), rect.height())
   }
 
-  private fun scaleRect(rect: Rect, scaleFactor: Float) =
-    rect.set(
-      (rect.left * scaleFactor).toInt(),
-      (rect.top * scaleFactor).toInt(),
-      (rect.right * scaleFactor).toInt(),
-      (rect.bottom * scaleFactor).toInt(),
-    )
+  private fun scaleRect(
+    rect: Rect,
+    scaleFactor: Float,
+  ) = rect.set(
+    (rect.left * scaleFactor).toInt(),
+    (rect.top * scaleFactor).toInt(),
+    (rect.right * scaleFactor).toInt(),
+    (rect.bottom * scaleFactor).toInt(),
+  )
 }

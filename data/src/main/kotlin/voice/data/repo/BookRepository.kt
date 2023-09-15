@@ -58,7 +58,10 @@ class BookRepository
     return contentRepo.get(id)?.book()
   }
 
-  suspend fun updateBook(id: BookId, update: (BookContent) -> BookContent) {
+  suspend fun updateBook(
+    id: BookId,
+    update: (BookContent) -> BookContent,
+  ) {
     mutex.withLock {
       val content = contentRepo.get(id) ?: return
       val updated = update(content)

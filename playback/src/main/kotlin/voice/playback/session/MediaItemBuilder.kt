@@ -7,7 +7,9 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 internal enum class MediaType {
-  AudioBook, AudioBookChapter, AudioBookRoot
+  AudioBook,
+  AudioBookChapter,
+  AudioBookRoot,
 }
 
 internal fun MediaItem(
@@ -47,9 +49,8 @@ internal fun MediaItem(
     .build()
 }
 
-fun String.toMediaIdOrNull(): MediaId? =
-  try {
-    Json.decodeFromString(MediaId.serializer(), this)
-  } catch (e: SerializationException) {
-    null
-  }
+fun String.toMediaIdOrNull(): MediaId? = try {
+  Json.decodeFromString(MediaId.serializer(), this)
+} catch (e: SerializationException) {
+  null
+}

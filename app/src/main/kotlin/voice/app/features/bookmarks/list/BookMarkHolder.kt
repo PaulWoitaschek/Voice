@@ -37,7 +37,10 @@ class BookMarkHolder(
     }
   }
 
-  fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
+  fun bind(
+    bookmark: Bookmark,
+    chapters: List<Chapter>,
+  ) {
     boundBookmark = bookmark
     val currentChapter = chapters.single { it.id == bookmark.chapterId }
     val bookmarkTitle = bookmark.title

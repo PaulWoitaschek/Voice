@@ -93,7 +93,10 @@ private data class MigrationData(
   val bookmarks: List<LegacyBookmark>,
 )
 
-private fun migrationItem(metaData: LegacyBookMetaData, migrationData: MigrationData): MigrationViewState.Item? {
+private fun migrationItem(
+  metaData: LegacyBookMetaData,
+  migrationData: MigrationData,
+): MigrationViewState.Item? {
   val settings = migrationData.settings.find { it.id == metaData.id }
     ?: return null
 
@@ -164,13 +167,19 @@ private fun bookmark(
 }
 
 private object LegacyChapterComparator : Comparator<LegacyChapter> {
-  override fun compare(o1: LegacyChapter, o2: LegacyChapter): Int {
+  override fun compare(
+    o1: LegacyChapter,
+    o2: LegacyChapter,
+  ): Int {
     return fileComparator.compare(o1.file, o2.file)
   }
 }
 
 private object LegacyBookmarkComparator : Comparator<LegacyBookmark> {
-  override fun compare(o1: LegacyBookmark, o2: LegacyBookmark): Int {
+  override fun compare(
+    o1: LegacyBookmark,
+    o2: LegacyBookmark,
+  ): Int {
     val fileCompare = fileComparator.compare(o1.mediaFile, o2.mediaFile)
     if (fileCompare != 0) {
       return fileCompare

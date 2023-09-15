@@ -31,19 +31,31 @@ abstract class MvpController<V : Any, out P, B : ViewBinding>(
     addLifecycleListener(
       object : LifecycleListener() {
 
-        override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+        override fun onRestoreInstanceState(
+          controller: Controller,
+          savedInstanceState: Bundle,
+        ) {
           presenter.onRestore(savedInstanceState)
         }
 
-        override fun postAttach(controller: Controller, view: View) {
+        override fun postAttach(
+          controller: Controller,
+          view: View,
+        ) {
           presenter.attach(provideView())
         }
 
-        override fun preDetach(controller: Controller, view: View) {
+        override fun preDetach(
+          controller: Controller,
+          view: View,
+        ) {
           presenter.detach()
         }
 
-        override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
+        override fun onSaveInstanceState(
+          controller: Controller,
+          outState: Bundle,
+        ) {
           presenter.onSave(outState)
         }
 

@@ -29,7 +29,8 @@ class FFProbeAnalyze
         "-show_entries", "format=duration",
         "-show_entries", "format_tags=artist,title,album",
         "-show_entries", "stream_tags=artist,title,album",
-        "-select_streams", "a", // only select the audio stream
+        // only select the audio stream
+        "-select_streams", "a",
       ),
     )
     if (result == null) {

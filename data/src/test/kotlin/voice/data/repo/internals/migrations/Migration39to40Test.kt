@@ -35,7 +35,11 @@ class Migration39to40Test {
             db.execSQL(BookTable.CREATE_TABLE)
           }
 
-          override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+          override fun onUpgrade(
+            db: SupportSQLiteDatabase,
+            oldVersion: Int,
+            newVersion: Int,
+          ) {
           }
         },
       )

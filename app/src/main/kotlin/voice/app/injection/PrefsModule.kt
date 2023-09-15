@@ -153,9 +153,7 @@ object PrefsModule {
   }
 }
 
-private fun VoiceDataStoreFactory.createUriList(
-  name: String,
-): DataStore<List<Uri>> = create(
+private fun VoiceDataStoreFactory.createUriList(name: String): DataStore<List<Uri>> = create(
   serializer = ListSerializer(UriSerializer),
   fileName = name,
   defaultValue = emptyList(),

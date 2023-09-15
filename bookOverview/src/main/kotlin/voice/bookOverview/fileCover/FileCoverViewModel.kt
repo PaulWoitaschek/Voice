@@ -24,7 +24,10 @@ constructor(
     return listOf(BottomSheetItem.FileCover)
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     if (item == BottomSheetItem.FileCover) {
       this.bookId = bookId
     }

@@ -228,11 +228,17 @@ class VoicePlayer
     else -> state
   }
 
-  override fun setMediaItem(mediaItem: MediaItem, startPositionMs: Long) {
+  override fun setMediaItem(
+    mediaItem: MediaItem,
+    startPositionMs: Long,
+  ) {
     setBook(mediaItem)
   }
 
-  override fun setMediaItem(mediaItem: MediaItem, resetPosition: Boolean) {
+  override fun setMediaItem(
+    mediaItem: MediaItem,
+    resetPosition: Boolean,
+  ) {
     setBook(mediaItem)
   }
 
@@ -241,7 +247,10 @@ class VoicePlayer
     setBook(first)
   }
 
-  override fun setMediaItems(mediaItems: List<MediaItem>, resetPosition: Boolean) {
+  override fun setMediaItems(
+    mediaItems: List<MediaItem>,
+    resetPosition: Boolean,
+  ) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }
@@ -250,7 +259,11 @@ class VoicePlayer
     setBook(mediaItem)
   }
 
-  override fun setMediaItems(mediaItems: List<MediaItem>, startIndex: Int, startPositionMs: Long) {
+  override fun setMediaItems(
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }

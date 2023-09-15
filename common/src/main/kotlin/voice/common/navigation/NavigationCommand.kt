@@ -66,7 +66,8 @@ sealed interface Destination {
   data class AddContent(val mode: Mode) : Compose {
 
     enum class Mode {
-      Default, Onboarding
+      Default,
+      Onboarding,
     }
   }
 }

@@ -81,7 +81,10 @@ object ChapterIdSerializer : KSerializer<ChapterId> {
 
   override fun deserialize(decoder: Decoder): ChapterId = ChapterId(decoder.decodeString())
 
-  override fun serialize(encoder: Encoder, value: ChapterId) {
+  override fun serialize(
+    encoder: Encoder,
+    value: ChapterId,
+  ) {
     encoder.encodeString(value.value)
   }
 }
