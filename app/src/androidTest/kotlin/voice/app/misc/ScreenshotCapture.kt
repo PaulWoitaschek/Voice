@@ -13,6 +13,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.services.storage.TestStorage
 import androidx.test.uiautomator.UiDevice
+import java.io.File
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.hours
 import kotlinx.collections.immutable.persistentMapOf
 import org.junit.Rule
 import org.junit.Test
@@ -28,9 +31,6 @@ import voice.common.formatTime
 import voice.folderPicker.folderPicker.FolderOverviewPreview
 import voice.logging.core.Logger
 import voice.settings.views.Settings
-import java.io.File
-import kotlin.random.Random
-import kotlin.time.Duration.Companion.hours
 
 class ScreenshotCapture {
 

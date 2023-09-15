@@ -2,6 +2,9 @@ package voice.app.scanner
 
 import android.app.Application
 import android.net.Uri
+import java.io.File
+import java.time.Instant
+import javax.inject.Inject
 import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
@@ -14,9 +17,6 @@ import voice.data.toUri
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
-import java.io.File
-import java.time.Instant
-import javax.inject.Inject
 
 class BookParser
 @Inject constructor(
@@ -28,7 +28,10 @@ class BookParser
   private val fileFactory: CachedDocumentFileFactory,
 ) {
 
-  suspend fun parseAndStore(chapters: List<Chapter>, file: CachedDocumentFile): BookContent {
+  suspend fun parseAndStore(
+    chapters: List<Chapter>,
+    file: CachedDocumentFile,
+  ): BookContent {
     val id = BookId(file.uri)
     return contentRepo.getOrPut(id) {
       val uri = chapters.first().id.toUri()
@@ -115,7 +118,10 @@ class BookParser
   }
 }
 
-internal fun validateIntegrity(content: BookContent, chapters: List<Chapter>) {
+internal fun validateIntegrity(
+  content: BookContent,
+  chapters: List<Chapter>,
+) {
   // the init block performs integrity validation
   Book(content, chapters)
 }

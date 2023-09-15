@@ -1,5 +1,7 @@
 package voice.data.repo
 
+import java.time.Instant
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
@@ -10,8 +12,6 @@ import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.transaction
 import voice.data.runForMaxSqlVariableNumber
 import voice.logging.core.Logger
-import java.time.Instant
-import javax.inject.Inject
 
 class BookmarkRepo
 @Inject constructor(
@@ -27,7 +27,11 @@ class BookmarkRepo
     dao.addBookmark(bookmark)
   }
 
-  suspend fun addBookmarkAtBookPosition(book: Book, title: String?, setBySleepTimer: Boolean): Bookmark {
+  suspend fun addBookmarkAtBookPosition(
+    book: Book,
+    title: String?,
+    setBySleepTimer: Boolean,
+  ): Bookmark {
     return withContext(Dispatchers.IO) {
       val bookMark = Bookmark(
         title = title,

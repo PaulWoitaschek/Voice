@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
 import com.squareup.anvil.annotations.ContributesMultibinding
+import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
@@ -13,7 +14,6 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesMultibinding(
@@ -36,7 +36,10 @@ constructor(
     return listOf(BottomSheetItem.DeleteBook)
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     if (item != BottomSheetItem.DeleteBook) return
 
     _state.value = DeleteBookViewState(

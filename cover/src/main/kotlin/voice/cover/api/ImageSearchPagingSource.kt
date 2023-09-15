@@ -2,9 +2,9 @@ package voice.cover.api
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import java.io.IOException
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
-import java.io.IOException
 
 internal class ImageSearchPagingSource(
   private val api: CoverApi,

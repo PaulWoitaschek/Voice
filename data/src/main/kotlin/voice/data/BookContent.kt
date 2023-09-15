@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import voice.common.BookId
 import java.io.File
 import java.time.Instant
+import voice.common.BookId
 
 @Entity(tableName = "content2")
 data class BookContent(

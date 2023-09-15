@@ -1,12 +1,12 @@
 package voice.app.scanner
 
 import android.content.Context
+import javax.inject.Inject
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import voice.documentfile.CachedDocumentFile
 import voice.ffmpeg.ffprobe
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 class FFProbeAnalyze
 @Inject constructor(
@@ -29,7 +29,8 @@ class FFProbeAnalyze
         "-show_entries", "format=duration",
         "-show_entries", "format_tags=artist,title,album",
         "-show_entries", "stream_tags=artist,title,album",
-        "-select_streams", "a", // only select the audio stream
+        // only select the audio stream
+        "-select_streams", "a",
       ),
     )
     if (result == null) {

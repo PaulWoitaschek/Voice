@@ -1,11 +1,11 @@
 package voice.playbackScreen
 
 import androidx.compose.runtime.Immutable
+import kotlin.time.Duration
 import voice.common.compose.ImmutableFile
 import voice.data.ChapterMark
 import voice.playback.misc.Decibel
 import voice.sleepTimer.SleepTimerViewState
-import kotlin.time.Duration
 
 @Immutable
 data class BookPlayViewState(

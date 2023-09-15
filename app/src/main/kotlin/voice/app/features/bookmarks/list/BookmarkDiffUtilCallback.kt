@@ -11,7 +11,10 @@ class BookmarkDiffUtilCallback(
   private val newItems: List<Bookmark>,
 ) : DiffUtil.Callback() {
 
-  override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+  override fun areItemsTheSame(
+    oldItemPosition: Int,
+    newItemPosition: Int,
+  ): Boolean {
     return oldItems[oldItemPosition] == newItems[newItemPosition]
   }
 
@@ -19,6 +22,8 @@ class BookmarkDiffUtilCallback(
 
   override fun getNewListSize() = newItems.size
 
-  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-    areItemsTheSame(oldItemPosition, newItemPosition)
+  override fun areContentsTheSame(
+    oldItemPosition: Int,
+    newItemPosition: Int,
+  ) = areItemsTheSame(oldItemPosition, newItemPosition)
 }

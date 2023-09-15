@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
+import javax.inject.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.getFloat
 import voice.data.repo.internals.getInt
@@ -13,7 +14,6 @@ import voice.data.repo.internals.getString
 import voice.data.repo.internals.getStringOrNull
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
-import javax.inject.Inject
 
 private const val ID = "bookId"
 private const val NAME = "bookName"

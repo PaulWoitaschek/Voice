@@ -6,6 +6,8 @@ import androidx.datastore.core.DataStore
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import javax.inject.Inject
+import kotlin.time.Duration
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -25,8 +27,6 @@ import voice.playback.session.MediaItemProvider
 import voice.playback.session.PlaybackService
 import voice.playback.session.sendCustomCommand
 import voice.playback.session.toMediaIdOrNull
-import javax.inject.Inject
-import kotlin.time.Duration
 
 class PlayerController
 @Inject constructor(
@@ -57,7 +57,10 @@ class PlayerController
     }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
-  fun setPosition(time: Long, id: ChapterId) = executeAfterPrepare { controller ->
+  fun setPosition(
+    time: Long,
+    id: ChapterId,
+  ) = executeAfterPrepare { controller ->
     val bookId = currentBookId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
     val index = book.chapters.indexOfFirst { it.id == id }

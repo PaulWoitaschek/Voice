@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import java.io.File
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,8 +22,6 @@ import voice.data.legacy.LegacyChapter
 import voice.data.legacy.LegacyChapterMark
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.migration.views.MigrationViewState
-import java.io.File
-import javax.inject.Inject
 
 private const val COMMON_STORAGE_PREFIX = "/storage/emulated/0/"
 
@@ -93,7 +93,10 @@ private data class MigrationData(
   val bookmarks: List<LegacyBookmark>,
 )
 
-private fun migrationItem(metaData: LegacyBookMetaData, migrationData: MigrationData): MigrationViewState.Item? {
+private fun migrationItem(
+  metaData: LegacyBookMetaData,
+  migrationData: MigrationData,
+): MigrationViewState.Item? {
   val settings = migrationData.settings.find { it.id == metaData.id }
     ?: return null
 
@@ -164,13 +167,19 @@ private fun bookmark(
 }
 
 private object LegacyChapterComparator : Comparator<LegacyChapter> {
-  override fun compare(o1: LegacyChapter, o2: LegacyChapter): Int {
+  override fun compare(
+    o1: LegacyChapter,
+    o2: LegacyChapter,
+  ): Int {
     return fileComparator.compare(o1.file, o2.file)
   }
 }
 
 private object LegacyBookmarkComparator : Comparator<LegacyBookmark> {
-  override fun compare(o1: LegacyBookmark, o2: LegacyBookmark): Int {
+  override fun compare(
+    o1: LegacyBookmark,
+    o2: LegacyBookmark,
+  ): Int {
     val fileCompare = fileComparator.compare(o1.mediaFile, o2.mediaFile)
     if (fileCompare != 0) {
       return fileCompare

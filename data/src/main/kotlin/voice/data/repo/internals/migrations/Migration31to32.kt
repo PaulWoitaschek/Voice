@@ -7,9 +7,15 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.squareup.anvil.annotations.ContributesMultibinding
+import javax.inject.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
+
+private const val BOOK_ID = "bookId"
+private const val TABLE_BOOK = "tableBooks"
+private const val TABLE_CHAPTERS = "tableChapters"
+private const val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
+private const val CHAPTER_PATH = "chapterPath"
 
 @ContributesMultibinding(
   scope = AppScope::class,
@@ -18,12 +24,6 @@ import javax.inject.Inject
 @SuppressLint("Recycle")
 class Migration31to32
 @Inject constructor() : IncrementalMigration(31) {
-
-  private val BOOK_ID = "bookId"
-  private val TABLE_BOOK = "tableBooks"
-  private val TABLE_CHAPTERS = "tableChapters"
-  private val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
-  private val CHAPTER_PATH = "chapterPath"
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query(

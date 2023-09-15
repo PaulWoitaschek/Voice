@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import voice.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
+import voice.playbackScreen.BookPlayViewState
 
 @Composable
 internal fun BookPlayContent(

@@ -1,7 +1,7 @@
 package voice.cover.api
 
-import voice.logging.core.Logger
 import javax.inject.Inject
+import voice.logging.core.Logger
 
 class CoverApi
 @Inject constructor(
@@ -14,7 +14,11 @@ class CoverApi
     return "vqd=([\\d-]+)&".toRegex().find(response)?.groupValues?.get(1)
   }
 
-  internal suspend fun search(query: String, auth: String, url: String = "/i.js"): SearchResponse {
+  internal suspend fun search(
+    query: String,
+    auth: String,
+    url: String = "/i.js",
+  ): SearchResponse {
     Logger.d("search $query, url=$url")
     return api.search(
       query = query,

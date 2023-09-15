@@ -5,15 +5,18 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import voice.app.injection.appComponent
 import javax.inject.Inject
+import voice.app.injection.appComponent
 
 class BaseWidgetProvider : AppWidgetProvider() {
 
   @Inject
   lateinit var widgetUpdater: WidgetUpdater
 
-  override fun onReceive(context: Context, intent: Intent?) {
+  override fun onReceive(
+    context: Context,
+    intent: Intent?,
+  ) {
     appComponent.inject(this)
     super.onReceive(context, intent)
   }

@@ -3,6 +3,9 @@ package voice.data.repo.internals
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.TypeConverter
+import java.io.File
+import java.time.Instant
+import java.util.UUID
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import voice.common.BookId
@@ -11,9 +14,6 @@ import voice.data.ChapterId
 import voice.data.MarkData
 import voice.data.legacy.LegacyBookType
 import voice.data.legacy.LegacyMarkData
-import java.io.File
-import java.time.Instant
-import java.util.UUID
 
 class Converters {
 

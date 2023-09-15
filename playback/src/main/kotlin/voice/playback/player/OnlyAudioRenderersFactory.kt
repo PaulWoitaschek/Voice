@@ -46,9 +46,18 @@ class OnlyAudioRenderersFactory
   ) {
   }
 
-  override fun buildCameraMotionRenderers(context: Context, extensionRendererMode: Int, out: ArrayList<Renderer>) {
+  override fun buildCameraMotionRenderers(
+    context: Context,
+    extensionRendererMode: Int,
+    out: ArrayList<Renderer>,
+  ) {
   }
 
-  override fun buildMiscellaneousRenderers(context: Context, eventHandler: Handler, extensionRendererMode: Int, out: ArrayList<Renderer>) {
+  override fun buildMiscellaneousRenderers(
+    context: Context,
+    eventHandler: Handler,
+    extensionRendererMode: Int,
+    out: ArrayList<Renderer>,
+  ) {
   }
 }

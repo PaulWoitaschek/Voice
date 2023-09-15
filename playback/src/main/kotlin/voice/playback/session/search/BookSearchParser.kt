@@ -10,7 +10,10 @@ import javax.inject.Inject
 @Reusable
 class BookSearchParser @Inject constructor() {
 
-  fun parse(query: String?, extras: Bundle?): VoiceSearch {
+  fun parse(
+    query: String?,
+    extras: Bundle?,
+  ): VoiceSearch {
     return VoiceSearch(
       query = query,
       mediaFocus = extras?.getString(MediaStore.EXTRA_MEDIA_FOCUS),

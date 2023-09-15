@@ -2,13 +2,13 @@ package voice.playback.session.search
 
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
+import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import voice.common.BookId
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 class BookSearchHandler
 @Inject constructor(

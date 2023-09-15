@@ -7,16 +7,16 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.squareup.anvil.annotations.ContributesMultibinding
+import java.io.File
+import java.io.IOException
+import java.util.InvalidPropertiesFormatException
+import javax.inject.Inject
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
 import voice.logging.core.Logger
-import java.io.File
-import java.io.IOException
-import java.util.InvalidPropertiesFormatException
-import javax.inject.Inject
 
 @ContributesMultibinding(
   scope = AppScope::class,

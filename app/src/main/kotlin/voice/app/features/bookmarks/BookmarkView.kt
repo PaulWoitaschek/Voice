@@ -8,7 +8,10 @@ import voice.data.Chapter
  */
 interface BookmarkView {
 
-  fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>)
+  fun render(
+    bookmarks: List<Bookmark>,
+    chapters: List<Chapter>,
+  )
   fun showBookmarkAdded(bookmark: Bookmark)
   fun finish()
 }

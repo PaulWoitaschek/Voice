@@ -8,11 +8,11 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import javax.inject.Qualifier
+import javax.inject.Singleton
 import kotlinx.serialization.builtins.serializer
 import voice.common.AppScope
 import voice.datastore.VoiceDataStoreFactory
-import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
 @Module

@@ -3,11 +3,11 @@ package voice.bookOverview.bottomSheet
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
-import javax.inject.Inject
 
 @BookOverviewScope
 class BottomSheetViewModel

@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import java.io.File
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +17,6 @@ import voice.app.scanner.MediaAnalyzer
 import voice.app.test.R
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
-import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class MediaAnalyzerInstrumentationTest {

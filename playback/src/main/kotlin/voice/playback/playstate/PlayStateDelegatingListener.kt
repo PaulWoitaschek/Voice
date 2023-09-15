@@ -20,7 +20,10 @@ class PlayStateDelegatingListener
     updatePlayState()
   }
 
-  override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+  override fun onPlayWhenReadyChanged(
+    playWhenReady: Boolean,
+    reason: Int,
+  ) {
     updatePlayState()
   }
 

@@ -2,12 +2,12 @@ package voice.onboarding.completion
 
 import androidx.datastore.core.DataStore
 import dev.olshevski.navigation.reimagined.replaceAll
+import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.OnboardingCompleted
-import javax.inject.Inject
 
 class OnboardingCompletionViewModel
 @Inject constructor(

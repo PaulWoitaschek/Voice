@@ -33,6 +33,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
+import java.time.Instant
+import kotlin.random.Random
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
@@ -40,8 +42,6 @@ import voice.common.compose.rememberScoped
 import voice.common.formatTime
 import voice.common.rootComponentAs
 import voice.migration.MigrationViewModel
-import java.time.Instant
-import kotlin.random.Random
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -197,7 +197,10 @@ private fun MigrationItem(item: MigrationViewState.Item) {
 }
 
 @Composable
-private fun LabeledValue(label: String, value: String) {
+private fun LabeledValue(
+  label: String,
+  value: String,
+) {
   Column {
     Text(text = label, style = MaterialTheme.typography.titleMedium)
     Text(value)

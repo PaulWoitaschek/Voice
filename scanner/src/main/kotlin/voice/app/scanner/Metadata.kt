@@ -1,9 +1,9 @@
 package voice.app.scanner
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class MetaDataScanResult(
@@ -13,7 +13,9 @@ data class MetaDataScanResult(
 )
 
 enum class TagType {
-  Title, Artist, Album
+  Title,
+  Artist,
+  Album,
 }
 
 fun MetaDataScanResult.findTag(tagType: TagType): String? {

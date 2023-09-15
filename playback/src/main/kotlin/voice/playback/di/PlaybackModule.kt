@@ -13,6 +13,7 @@ import androidx.media3.session.MediaLibraryService
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,7 +32,6 @@ import voice.playback.session.LibrarySessionCallback
 import voice.playback.session.PlaybackService
 import voice.playback.session.SleepTimer
 import voice.playback.session.SleepTimerCommandUpdater
-import kotlin.time.Duration
 
 @Module
 @ContributesTo(PlaybackScope::class)

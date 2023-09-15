@@ -7,6 +7,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import java.time.Instant
+import java.util.UUID
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -19,10 +23,6 @@ import voice.data.Chapter
 import voice.data.ChapterId
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
-import java.time.Instant
-import java.util.UUID
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 class BookPlayViewModelTest {
 

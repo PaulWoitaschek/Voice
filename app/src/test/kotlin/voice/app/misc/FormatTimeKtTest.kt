@@ -1,9 +1,9 @@
 package voice.app.misc
 
 import io.kotest.matchers.shouldBe
+import java.util.concurrent.TimeUnit
 import org.junit.Test
 import voice.common.formatTime
-import java.util.concurrent.TimeUnit
 
 class FormatTimeKtTest {
 
@@ -42,7 +42,11 @@ class FormatTimeKtTest {
     formatted shouldBe "0:00"
   }
 
-  private fun ms(hours: Long, minutes: Long, seconds: Long): Long {
+  private fun ms(
+    hours: Long,
+    minutes: Long,
+    seconds: Long,
+  ): Long {
     return TimeUnit.HOURS.toMillis(hours) +
       TimeUnit.MINUTES.toMillis(minutes) +
       TimeUnit.SECONDS.toMillis(seconds)

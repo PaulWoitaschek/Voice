@@ -4,8 +4,8 @@ import android.app.Application
 import android.os.PowerManager
 import androidx.core.content.getSystemService
 import com.squareup.anvil.annotations.ContributesBinding
-import voice.common.AppScope
 import javax.inject.Inject
+import voice.common.AppScope
 
 fun interface IsIgnoringBatteryOptimizations {
   operator fun invoke(): Boolean

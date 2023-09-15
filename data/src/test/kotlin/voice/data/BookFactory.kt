@@ -1,8 +1,8 @@
 package voice.data
 
-import voice.common.BookId
 import java.time.Instant
 import java.util.UUID
+import voice.common.BookId
 
 fun book(
   name: String = UUID.randomUUID().toString(),

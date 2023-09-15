@@ -31,7 +31,10 @@ data class Book(
   }
 }
 
-fun Bundle.putBookId(key: String, id: BookId) {
+fun Bundle.putBookId(
+  key: String,
+  id: BookId,
+) {
   putString(key, id.value)
 }
 

@@ -2,12 +2,12 @@ package voice.data.repo.internals.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import java.io.File
+import java.util.UUID
 import voice.data.legacy.LegacyBookMetaData
 import voice.data.legacy.LegacyBookSettings
 import voice.data.legacy.LegacyBookmark
 import voice.data.legacy.LegacyChapter
-import java.io.File
-import java.util.UUID
 
 @Dao
 interface LegacyBookDao {

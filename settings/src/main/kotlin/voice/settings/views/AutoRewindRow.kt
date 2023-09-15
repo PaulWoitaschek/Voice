@@ -14,7 +14,10 @@ import androidx.compose.ui.res.stringResource
 import voice.strings.R as StringsR
 
 @Composable
-internal fun AutoRewindRow(autoRewindInSeconds: Int, openAutoRewindDialog: () -> Unit) {
+internal fun AutoRewindRow(
+  autoRewindInSeconds: Int,
+  openAutoRewindDialog: () -> Unit,
+) {
   ListItem(
     modifier = Modifier
       .clickable {

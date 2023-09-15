@@ -1,8 +1,8 @@
 package voice.app.misc
 
+import javax.inject.Inject
 import voice.app.BuildConfig
 import voice.common.AppInfoProvider
-import javax.inject.Inject
 
 class AppInfoProviderImpl
 @Inject constructor() : AppInfoProvider {

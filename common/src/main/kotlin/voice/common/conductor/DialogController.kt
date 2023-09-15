@@ -47,7 +47,10 @@ abstract class DialogController(args: Bundle = Bundle()) : Controller(args) {
   }
 
   @CallSuper
-  override fun onSaveViewState(view: View, outState: Bundle) {
+  override fun onSaveViewState(
+    view: View,
+    outState: Bundle,
+  ) {
     super.onSaveViewState(view, outState)
     val dialogState = dialog!!.onSaveInstanceState()
     outState.putBundle(SI_DIALOG, dialogState)

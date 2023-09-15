@@ -11,7 +11,10 @@ import androidx.compose.ui.res.stringResource
 import voice.strings.R as StringsR
 
 @Composable
-internal fun DarkThemeRow(useDarkTheme: Boolean, toggle: () -> Unit) {
+internal fun DarkThemeRow(
+  useDarkTheme: Boolean,
+  toggle: () -> Unit,
+) {
   ListItem(
     modifier = Modifier
       .clickable {

@@ -7,6 +7,12 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import de.paulwoitaschek.flowpref.Pref
+import java.time.Instant
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.time.Duration.Companion.ZERO
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,12 +30,6 @@ import voice.playback.misc.VolumeGain
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.toMediaIdOrNull
-import java.time.Instant
-import javax.inject.Inject
-import javax.inject.Named
-import kotlin.time.Duration.Companion.ZERO
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 class VoicePlayer
 @Inject constructor(
@@ -228,11 +228,17 @@ class VoicePlayer
     else -> state
   }
 
-  override fun setMediaItem(mediaItem: MediaItem, startPositionMs: Long) {
+  override fun setMediaItem(
+    mediaItem: MediaItem,
+    startPositionMs: Long,
+  ) {
     setBook(mediaItem)
   }
 
-  override fun setMediaItem(mediaItem: MediaItem, resetPosition: Boolean) {
+  override fun setMediaItem(
+    mediaItem: MediaItem,
+    resetPosition: Boolean,
+  ) {
     setBook(mediaItem)
   }
 
@@ -241,7 +247,10 @@ class VoicePlayer
     setBook(first)
   }
 
-  override fun setMediaItems(mediaItems: List<MediaItem>, resetPosition: Boolean) {
+  override fun setMediaItems(
+    mediaItems: List<MediaItem>,
+    resetPosition: Boolean,
+  ) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }
@@ -250,7 +259,11 @@ class VoicePlayer
     setBook(mediaItem)
   }
 
-  override fun setMediaItems(mediaItems: List<MediaItem>, startIndex: Int, startPositionMs: Long) {
+  override fun setMediaItems(
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ) {
     val first = mediaItems.firstOrNull() ?: return
     setBook(first)
   }

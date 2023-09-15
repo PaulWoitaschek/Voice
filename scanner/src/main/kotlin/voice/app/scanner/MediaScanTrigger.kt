@@ -1,5 +1,8 @@
 package voice.app.scanner
 
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.time.measureTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,9 +17,6 @@ import voice.data.repo.BookRepository
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.time.measureTime
 
 @Singleton
 class MediaScanTrigger

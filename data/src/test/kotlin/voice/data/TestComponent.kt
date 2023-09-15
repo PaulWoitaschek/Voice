@@ -5,10 +5,10 @@ import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import de.paulwoitaschek.flowpref.Pref
 import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
-import voice.common.AppScope
-import voice.common.pref.PrefKeys
 import javax.inject.Named
 import javax.inject.Singleton
+import voice.common.AppScope
+import voice.common.pref.PrefKeys
 
 @Singleton
 @MergeComponent(

@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
+import javax.inject.Inject
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
 
 // tables
 private const val TABLE_BOOK = "tableBooks"

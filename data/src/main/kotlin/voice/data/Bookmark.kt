@@ -3,9 +3,9 @@ package voice.data
 import android.os.Bundle
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import voice.common.BookId
 import java.time.Instant
 import java.util.UUID
+import voice.common.BookId
 
 @Entity(tableName = "bookmark2")
 data class Bookmark(
@@ -26,7 +26,10 @@ data class Bookmark(
   }
 }
 
-fun Bundle.putBookmarkId(key: String, value: Bookmark.Id) {
+fun Bundle.putBookmarkId(
+  key: String,
+  value: Bookmark.Id,
+) {
   putString(key, value.value.toString())
 }
 

@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import java.util.UUID
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetContent
@@ -42,7 +43,6 @@ import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
-import java.util.UUID
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {

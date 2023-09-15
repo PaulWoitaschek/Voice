@@ -1,7 +1,7 @@
 package voice.data
 
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class MarkData(

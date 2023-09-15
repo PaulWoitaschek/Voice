@@ -2,9 +2,9 @@ package voice.app.misc
 
 import android.app.PendingIntent
 import android.content.Context
+import javax.inject.Inject
 import voice.app.features.MainActivity
 import voice.playback.notification.MainActivityIntentProvider
-import javax.inject.Inject
 
 class MainActivityIntentProviderImpl
 @Inject constructor(

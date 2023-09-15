@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
 import java.time.Instant
 import javax.inject.Inject
+import voice.common.AppScope
 
 // clear the fileLastModified to trigger a rescan of the chapters
 @ContributesMultibinding(

@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.squareup.anvil.annotations.ContributesTo
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -13,8 +15,6 @@ import voice.common.AppScope
 import voice.common.rootComponentAs
 import voice.logging.core.Logger
 import voice.playback.PlayerController
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {
 
@@ -23,7 +23,10 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   @Inject
   lateinit var player: PlayerController
 
-  override fun onReceive(context: Context, intent: Intent?) {
+  override fun onReceive(
+    context: Context,
+    intent: Intent?,
+  ) {
     val action = Action.parse(intent)
     Logger.d("onReceive ${intent?.action}. Parsed to $action")
     action ?: return
@@ -81,7 +84,10 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   }
 
   enum class Action {
-    PlayPause, FastForward, Rewind;
+    PlayPause,
+    FastForward,
+    Rewind,
+    ;
 
     companion object {
       fun parse(intent: Intent?): Action? {

@@ -12,6 +12,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import de.paulwoitaschek.flowpref.Pref
+import javax.inject.Named
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
@@ -37,10 +41,6 @@ import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
-import javax.inject.Named
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 
 class BookPlayViewModel
 @AssistedInject constructor(
@@ -145,9 +145,7 @@ class BookPlayViewModel
     }
   }
 
-  private fun updateSleepTimeViewState(
-    update: (SleepTimerViewState) -> SleepTimerViewState?,
-  ) {
+  private fun updateSleepTimeViewState(update: (SleepTimerViewState) -> SleepTimerViewState?) {
     val current = dialogState.value
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)

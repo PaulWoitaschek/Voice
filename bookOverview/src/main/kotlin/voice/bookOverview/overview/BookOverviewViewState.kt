@@ -41,6 +41,7 @@ data class BookOverviewViewState(
   }
 
   enum class PlayButtonState {
-    Playing, Paused
+    Playing,
+    Paused,
   }
 }

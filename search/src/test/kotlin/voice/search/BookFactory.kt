@@ -1,12 +1,12 @@
 package voice.search
 
+import java.time.Instant
+import java.util.UUID
 import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.ChapterId
-import java.time.Instant
-import java.util.UUID
 
 fun book(
   chapters: List<Chapter> = listOf(chapter(), chapter()),

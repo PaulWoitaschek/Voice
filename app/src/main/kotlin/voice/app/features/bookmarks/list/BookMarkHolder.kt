@@ -2,6 +2,11 @@ package voice.app.features.bookmarks.list
 
 import android.text.format.DateUtils
 import android.view.ViewGroup
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import voice.app.R
 import voice.app.databinding.BookmarkRowLayoutBinding
 import voice.app.uitools.ViewBindingHolder
@@ -9,11 +14,6 @@ import voice.common.formatTime
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.markForPosition
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import voice.strings.R as StringsR
 
 class BookMarkHolder(
@@ -37,7 +37,10 @@ class BookMarkHolder(
     }
   }
 
-  fun bind(bookmark: Bookmark, chapters: List<Chapter>) {
+  fun bind(
+    bookmark: Bookmark,
+    chapters: List<Chapter>,
+  ) {
     boundBookmark = bookmark
     val currentChapter = chapters.single { it.id == bookmark.chapterId }
     val bookmarkTitle = bookmark.title

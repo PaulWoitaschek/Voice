@@ -15,7 +15,11 @@ import voice.logging.core.Logger
 
 private val mutex = Mutex()
 
-suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String? = mutex.withLock {
+suspend fun ffprobe(
+  input: Uri,
+  context: Context,
+  command: List<String>,
+): String? = mutex.withLock {
   FFmpegKitConfig.setLogRedirectionStrategy(LogRedirectionStrategy.NEVER_PRINT_LOGS)
   val fullCommand = fullCommand(input, context, command) ?: return null
   return withContext(Dispatchers.IO) {
@@ -23,7 +27,11 @@ suspend fun ffprobe(input: Uri, context: Context, command: List<String>): String
   }
 }
 
-suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String? = mutex.withLock {
+suspend fun ffmpeg(
+  input: Uri,
+  context: Context,
+  command: List<String>,
+): String? = mutex.withLock {
   FFmpegKitConfig.setLogRedirectionStrategy(LogRedirectionStrategy.NEVER_PRINT_LOGS)
   val fullCommand = fullCommand(input, context, command) ?: return null
   return withContext(Dispatchers.IO) {
@@ -31,7 +39,11 @@ suspend fun ffmpeg(input: Uri, context: Context, command: List<String>): String?
   }
 }
 
-private fun fullCommand(input: Uri, context: Context, command: List<String>): List<String>? {
+private fun fullCommand(
+  input: Uri,
+  context: Context,
+  command: List<String>,
+): List<String>? {
   val mappedInput = if (input.scheme == "content") {
     try {
       FFmpegKitConfig.getSafParameterForRead(context, input)

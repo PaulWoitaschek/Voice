@@ -30,7 +30,10 @@ object BookIdSerializer : KSerializer<BookId> {
 
   override fun deserialize(decoder: Decoder): BookId = BookId(decoder.decodeString())
 
-  override fun serialize(encoder: Encoder, value: BookId) {
+  override fun serialize(
+    encoder: Encoder,
+    value: BookId,
+  ) {
     encoder.encodeString(value.value)
   }
 }

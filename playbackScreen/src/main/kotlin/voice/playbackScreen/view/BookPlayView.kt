@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import voice.common.compose.VoiceTheme
-import voice.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import voice.common.compose.VoiceTheme
+import voice.playbackScreen.BookPlayViewState
 
 @Composable
 internal fun BookPlayView(

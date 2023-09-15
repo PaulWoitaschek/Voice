@@ -1,12 +1,12 @@
 package voice.common.navigation
 
 import dev.olshevski.navigation.reimagined.NavController
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class Navigator
@@ -17,7 +17,10 @@ class Navigator
 
   private val scope = MainScope()
 
-  fun goTo(destination: Destination, replace: Boolean = false) {
+  fun goTo(
+    destination: Destination,
+    replace: Boolean = false,
+  ) {
     scope.launch {
       _navigationCommands.emit(NavigationCommand.GoTo(destination, replace))
     }

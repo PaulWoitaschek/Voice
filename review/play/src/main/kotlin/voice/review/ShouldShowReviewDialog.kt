@@ -2,9 +2,6 @@ package voice.review
 
 import androidx.datastore.core.DataStore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import kotlinx.coroutines.flow.first
-import voice.data.repo.BookRepository
-import voice.playback.playstate.PlayStateManager
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -12,6 +9,9 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlinx.coroutines.flow.first
+import voice.data.repo.BookRepository
+import voice.playback.playstate.PlayStateManager
 
 class ShouldShowReviewDialog
 @Inject constructor(

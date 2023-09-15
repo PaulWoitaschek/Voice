@@ -4,16 +4,16 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import org.junit.Test
-import voice.playback.playstate.PlayStateManager
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
+import voice.playback.playstate.PlayStateManager
 
 class ShouldShowReviewDialogTest {
 

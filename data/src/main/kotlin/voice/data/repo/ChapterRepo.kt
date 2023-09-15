@@ -1,12 +1,12 @@
 package voice.data.repo
 
+import java.time.Instant
+import javax.inject.Inject
+import javax.inject.Singleton
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.runForMaxSqlVariableNumber
-import java.time.Instant
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class ChapterRepo

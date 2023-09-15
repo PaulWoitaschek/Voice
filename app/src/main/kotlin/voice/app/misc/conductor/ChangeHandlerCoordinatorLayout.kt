@@ -24,8 +24,7 @@ class ChangeHandlerCoordinatorLayout :
     defStyleAttr,
   )
 
-  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean =
-    inProgressTransactionCount > 0 || super.onInterceptTouchEvent(ev)
+  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean = inProgressTransactionCount > 0 || super.onInterceptTouchEvent(ev)
 
   override fun onChangeStarted(
     to: Controller?,

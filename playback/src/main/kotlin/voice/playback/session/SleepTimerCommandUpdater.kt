@@ -3,8 +3,8 @@ package voice.playback.session
 import android.content.Context
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
-import voice.playback.R
 import javax.inject.Inject
+import voice.playback.R
 import voice.strings.R as StringsR
 
 class SleepTimerCommandUpdater
@@ -20,7 +20,10 @@ class SleepTimerCommandUpdater
     session.setCustomLayout(controller, layout(sleepTimerActive))
   }
 
-  fun update(session: MediaSession, sleepTimerActive: Boolean) {
+  fun update(
+    session: MediaSession,
+    sleepTimerActive: Boolean,
+  ) {
     session.setCustomLayout(layout(sleepTimerActive))
   }
 

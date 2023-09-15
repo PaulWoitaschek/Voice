@@ -1,5 +1,7 @@
 package voice.data.repo
 
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
@@ -8,8 +10,6 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class BookRepository
@@ -58,7 +58,10 @@ class BookRepository
     return contentRepo.get(id)?.book()
   }
 
-  suspend fun updateBook(id: BookId, update: (BookContent) -> BookContent) {
+  suspend fun updateBook(
+    id: BookId,
+    update: (BookContent) -> BookContent,
+  ) {
     mutex.withLock {
       val content = contentRepo.get(id) ?: return
       val updated = update(content)

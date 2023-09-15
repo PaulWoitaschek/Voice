@@ -23,13 +23,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import kotlin.math.roundToInt
 import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
-import voice.common.compose.LongClickableCard
-import kotlin.math.roundToInt
 import voice.common.R as CommonR
+import voice.common.compose.LongClickableCard
 
 @Composable
 internal fun GridBooks(

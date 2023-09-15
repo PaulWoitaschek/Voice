@@ -1,5 +1,6 @@
 package voice.app.scanner
 
+import javax.inject.Inject
 import voice.common.BookId
 import voice.data.Bookmark
 import voice.data.Chapter
@@ -8,7 +9,6 @@ import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.runForMaxSqlVariableNumber
 import voice.data.toUri
-import javax.inject.Inject
 
 class BookmarkMigrator
 @Inject constructor(
@@ -16,7 +16,11 @@ class BookmarkMigrator
   private val bookmarkDao: BookmarkDao,
 ) {
 
-  suspend fun migrate(migrationMetaData: LegacyBookMetaData, chapters: List<Chapter>, id: BookId) {
+  suspend fun migrate(
+    migrationMetaData: LegacyBookMetaData,
+    chapters: List<Chapter>,
+    id: BookId,
+  ) {
     legacyBookDao.chapters()
       .filter {
         it.bookId == migrationMetaData.id

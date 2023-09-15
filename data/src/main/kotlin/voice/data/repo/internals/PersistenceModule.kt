@@ -6,13 +6,13 @@ import androidx.room.migration.Migration
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 import voice.common.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.dao.RecentBookSearchDao
-import javax.inject.Singleton
 
 @Module
 @ContributesTo(AppScope::class)

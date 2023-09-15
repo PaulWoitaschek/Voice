@@ -12,6 +12,9 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.io.Closeable
+import java.io.File
+import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,9 +30,6 @@ import voice.data.repo.internals.AppDb
 import voice.data.toUri
 import voice.documentfile.FileBasedDocumentFactory
 import voice.documentfile.FileBasedDocumentFile
-import java.io.Closeable
-import java.io.File
-import java.nio.file.Files
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])
@@ -231,11 +231,17 @@ class MediaScannerTest {
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
-    suspend fun scan(type: FolderType = FolderType.Root, vararg roots: File) {
+    suspend fun scan(
+      type: FolderType = FolderType.Root,
+      vararg roots: File,
+    ) {
       scanner.scan(mapOf(type to roots.map(::FileBasedDocumentFile)))
     }
 
-    fun audioFile(parent: File, name: String): File {
+    fun audioFile(
+      parent: File,
+      name: String,
+    ): File {
       check(name.endsWith(".mp3"))
       return File(parent, name)
         .also {

@@ -13,6 +13,8 @@ import de.paulwoitaschek.flowpref.android.boolean
 import de.paulwoitaschek.flowpref.android.enum
 import de.paulwoitaschek.flowpref.android.int
 import de.paulwoitaschek.flowpref.android.stringSet
+import javax.inject.Named
+import javax.inject.Singleton
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
@@ -31,8 +33,6 @@ import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
 import voice.datastore.VoiceDataStoreFactory
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @ContributesTo(AppScope::class)
@@ -153,9 +153,7 @@ object PrefsModule {
   }
 }
 
-private fun VoiceDataStoreFactory.createUriList(
-  name: String,
-): DataStore<List<Uri>> = create(
+private fun VoiceDataStoreFactory.createUriList(name: String): DataStore<List<Uri>> = create(
   serializer = ListSerializer(UriSerializer),
   fileName = name,
   defaultValue = emptyList(),

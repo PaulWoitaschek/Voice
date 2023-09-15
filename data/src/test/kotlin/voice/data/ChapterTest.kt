@@ -1,8 +1,8 @@
 package voice.data
 
 import io.kotest.matchers.collections.shouldContainInOrder
-import org.junit.Test
 import java.time.Instant
+import org.junit.Test
 
 class ChapterTest {
 
@@ -107,7 +107,11 @@ class ChapterTest {
     )
   }
 
-  private fun test(chapterStarts: List<Int>, expected: List<MarkPosition>, duration: Long = 20L) {
+  private fun test(
+    chapterStarts: List<Int>,
+    expected: List<MarkPosition>,
+    duration: Long = 20L,
+  ) {
     val positions = Chapter(
       duration = duration,
       fileLastModified = Instant.now(),

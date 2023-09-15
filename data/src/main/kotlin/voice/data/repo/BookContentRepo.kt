@@ -1,5 +1,7 @@
 package voice.data.repo
 
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -13,8 +15,6 @@ import kotlinx.coroutines.sync.withLock
 import voice.common.BookId
 import voice.data.BookContent
 import voice.data.repo.internals.dao.BookContentDao
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class BookContentRepo
@@ -79,7 +79,10 @@ class BookContentRepo
     }
   }
 
-  suspend inline fun getOrPut(id: BookId, defaultValue: () -> BookContent): BookContent {
+  suspend inline fun getOrPut(
+    id: BookId,
+    defaultValue: () -> BookContent,
+  ): BookContent {
     return get(id) ?: defaultValue().also { put(it) }
   }
 }
