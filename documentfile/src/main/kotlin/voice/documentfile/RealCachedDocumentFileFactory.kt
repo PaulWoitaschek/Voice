@@ -3,8 +3,8 @@ package voice.documentfile
 import android.content.Context
 import android.net.Uri
 import com.squareup.anvil.annotations.ContributesBinding
-import javax.inject.Inject
 import voice.common.AppScope
+import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class RealCachedDocumentFileFactory

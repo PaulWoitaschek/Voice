@@ -4,7 +4,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.matchers.collections.shouldContainExactly
-import java.util.UUID
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,6 +14,7 @@ import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
 import voice.data.repo.internals.AppDb
+import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])

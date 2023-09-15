@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.getString
+import javax.inject.Inject
 
 @ContributesMultibinding(
   scope = AppScope::class,

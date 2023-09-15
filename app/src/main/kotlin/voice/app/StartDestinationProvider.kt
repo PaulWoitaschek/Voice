@@ -1,12 +1,12 @@
 package voice.app
 
 import androidx.datastore.core.DataStore
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.common.navigation.Destination
 import voice.common.pref.OnboardingCompleted
 import voice.data.folders.AudiobookFolders
+import javax.inject.Inject
 
 class StartDestinationProvider
 @Inject constructor(

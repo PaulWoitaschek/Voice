@@ -1,11 +1,11 @@
 package voice.app.scanner
 
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
 import voice.logging.core.Logger
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class MediaAnalyzer
 @Inject constructor(

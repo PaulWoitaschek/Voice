@@ -1,12 +1,6 @@
 package voice.cover
 
 import android.content.Context
-import java.io.File
-import java.io.IOException
-import java.util.UUID
-import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -17,6 +11,12 @@ import okhttp3.Request
 import okhttp3.Response
 import okio.sink
 import voice.logging.core.Logger
+import java.io.File
+import java.io.IOException
+import java.util.UUID
+import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class CoverDownloader
 @Inject constructor(

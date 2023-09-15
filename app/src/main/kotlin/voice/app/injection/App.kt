@@ -7,8 +7,6 @@ import coil.Coil
 import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
 import de.paulwoitaschek.flowpref.Pref
-import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -17,6 +15,8 @@ import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.PrefKeys
 import voice.common.rootComponent
+import javax.inject.Inject
+import javax.inject.Named
 
 class App : Application() {
 

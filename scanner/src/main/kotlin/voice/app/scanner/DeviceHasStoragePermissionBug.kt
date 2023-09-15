@@ -1,8 +1,6 @@
 package voice.app.scanner
 
 import android.content.Context
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import voice.documentfile.CachedDocumentFile
 import voice.logging.core.Logger
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class DeviceHasStoragePermissionBug

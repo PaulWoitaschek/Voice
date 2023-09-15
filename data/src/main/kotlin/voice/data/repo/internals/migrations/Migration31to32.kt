@@ -7,9 +7,9 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
+import javax.inject.Inject
 
 private const val BOOK_ID = "bookId"
 private const val TABLE_BOOK = "tableBooks"

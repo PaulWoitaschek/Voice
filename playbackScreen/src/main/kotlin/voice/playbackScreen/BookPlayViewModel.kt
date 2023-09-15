@@ -12,10 +12,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import de.paulwoitaschek.flowpref.Pref
-import javax.inject.Named
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +37,10 @@ import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
+import javax.inject.Named
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 class BookPlayViewModel
 @AssistedInject constructor(

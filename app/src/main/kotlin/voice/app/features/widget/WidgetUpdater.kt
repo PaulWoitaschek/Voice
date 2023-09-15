@@ -14,7 +14,6 @@ import androidx.datastore.core.DataStore
 import coil.imageLoader
 import coil.request.ImageRequest
 import dagger.Reusable
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -22,13 +21,14 @@ import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
 import voice.common.BookId
-import voice.common.R as CommonR
 import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBook
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.playback.receiver.WidgetButtonReceiver
+import javax.inject.Inject
+import voice.common.R as CommonR
 
 @Reusable
 class WidgetUpdater

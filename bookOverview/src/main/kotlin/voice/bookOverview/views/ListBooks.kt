@@ -27,9 +27,9 @@ import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
-import voice.common.R as CommonR
 import voice.common.compose.ImmutableFile
 import voice.common.compose.LongClickableCard
+import voice.common.R as CommonR
 
 @Composable
 internal fun ListBooks(

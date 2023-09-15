@@ -1,9 +1,9 @@
 package voice.bookOverview.overview
 
 import androidx.annotation.StringRes
-import java.util.concurrent.TimeUnit.SECONDS
 import voice.data.Book
 import voice.data.BookComparator
+import java.util.concurrent.TimeUnit.SECONDS
 import voice.strings.R as StringsR
 
 enum class BookOverviewCategory(

@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
 import voice.bookOverview.overview.BookOverviewLayoutMode
@@ -22,6 +21,7 @@ import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.search.BookSearchViewState
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun BookOverviewTopBar(

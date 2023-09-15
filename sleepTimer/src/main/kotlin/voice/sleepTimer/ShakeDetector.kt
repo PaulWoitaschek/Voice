@@ -2,10 +2,10 @@ package voice.sleepTimer
 
 import android.content.Context
 import android.hardware.SensorManager
-import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 class ShakeDetector
 @Inject constructor(private val context: Context) {

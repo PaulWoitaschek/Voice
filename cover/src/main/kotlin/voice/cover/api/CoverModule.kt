@@ -4,7 +4,6 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -12,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 import voice.common.AppScope
+import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
 @Module

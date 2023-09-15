@@ -3,17 +3,17 @@ package voice.app.scanner
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import voice.common.BookId
+import voice.data.repo.BookRepository
+import voice.logging.core.Logger
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.max
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import voice.common.BookId
-import voice.data.repo.BookRepository
-import voice.logging.core.Logger
 
 class CoverSaver
 @Inject constructor(

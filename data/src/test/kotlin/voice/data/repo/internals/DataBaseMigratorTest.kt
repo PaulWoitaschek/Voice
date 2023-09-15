@@ -7,13 +7,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import java.util.UUID
-import kotlin.random.Random
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import voice.data.allMigrations
+import java.util.UUID
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])

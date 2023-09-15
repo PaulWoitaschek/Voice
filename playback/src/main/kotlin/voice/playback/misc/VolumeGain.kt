@@ -1,10 +1,10 @@
 package voice.playback.misc
 
 import android.media.audiofx.LoudnessEnhancer
+import voice.logging.core.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.properties.Delegates
-import voice.logging.core.Logger
 
 class VolumeGainSetter
 @Inject constructor() {

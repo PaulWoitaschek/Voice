@@ -2,14 +2,14 @@ package voice.app.scanner
 
 import android.content.Context
 import androidx.documentfile.provider.DocumentFile
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
 import voice.data.toUri
 import voice.ffmpeg.ffmpeg
 import voice.logging.core.Logger
+import java.io.IOException
+import javax.inject.Inject
 
 class CoverScanner
 @Inject constructor(

@@ -1,6 +1,5 @@
 package voice.app.scanner
 
-import javax.inject.Inject
 import voice.common.BookId
 import voice.data.audioFileCount
 import voice.data.folders.FolderType
@@ -9,6 +8,7 @@ import voice.data.repo.BookContentRepo
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.walk
 import voice.logging.core.Logger
+import javax.inject.Inject
 
 class MediaScanner
 @Inject constructor(

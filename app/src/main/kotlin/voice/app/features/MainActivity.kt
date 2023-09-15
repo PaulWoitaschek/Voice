@@ -12,7 +12,6 @@ import com.bluelinelabs.conductor.ChangeHandlerFrameLayout
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -31,6 +30,7 @@ import voice.playback.PlayerController
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import voice.playbackScreen.BookPlayController
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 

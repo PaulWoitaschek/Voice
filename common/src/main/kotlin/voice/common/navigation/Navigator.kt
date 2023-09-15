@@ -1,12 +1,12 @@
 package voice.common.navigation
 
 import dev.olshevski.navigation.reimagined.NavController
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class Navigator

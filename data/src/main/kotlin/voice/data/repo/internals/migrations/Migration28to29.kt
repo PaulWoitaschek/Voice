@@ -5,11 +5,11 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import java.io.File
-import javax.inject.Inject
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.logging.core.Logger
+import java.io.File
+import javax.inject.Inject
 
 @ContributesMultibinding(
   scope = AppScope::class,

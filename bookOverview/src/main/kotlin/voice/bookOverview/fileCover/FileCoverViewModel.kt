@@ -2,13 +2,13 @@ package voice.bookOverview.fileCover
 
 import android.net.Uri
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
+import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesMultibinding(BookOverviewScope::class, boundType = BottomSheetItemViewModel::class)

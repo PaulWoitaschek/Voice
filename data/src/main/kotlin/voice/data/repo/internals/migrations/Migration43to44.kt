@@ -6,8 +6,6 @@ import androidx.core.content.contentValuesOf
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import java.util.UUID
-import javax.inject.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.consumeEach
 import voice.data.repo.internals.getFloat
@@ -17,6 +15,8 @@ import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.getStringOrNull
 import voice.data.repo.internals.moveToNextLoop
+import java.util.UUID
+import javax.inject.Inject
 
 @ContributesMultibinding(
   scope = AppScope::class,

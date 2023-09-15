@@ -17,7 +17,6 @@ import androidx.media3.session.SessionResult
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
@@ -31,6 +30,7 @@ import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
+import javax.inject.Inject
 
 class LibrarySessionCallback
 @Inject constructor(

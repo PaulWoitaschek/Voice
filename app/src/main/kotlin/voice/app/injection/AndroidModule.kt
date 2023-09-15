@@ -12,8 +12,6 @@ import android.view.WindowManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import java.time.Clock
-import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
@@ -22,6 +20,8 @@ import voice.common.AppInfoProvider
 import voice.common.AppScope
 import voice.common.DispatcherProvider
 import voice.playback.notification.MainActivityIntentProvider
+import java.time.Clock
+import javax.inject.Singleton
 
 /**
  * Module providing Android SDK Related instances.

@@ -6,9 +6,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.withContext
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlinx.coroutines.withContext
 
 inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)

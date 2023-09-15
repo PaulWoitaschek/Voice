@@ -3,10 +3,10 @@ package voice.app.scanner
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.io.File
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import voice.documentfile.FileBasedDocumentFile
+import java.io.File
 
 internal class MediaAnalyzerTest {
 

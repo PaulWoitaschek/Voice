@@ -1,13 +1,13 @@
 package voice.playback.player
 
 import androidx.media3.common.Player
-import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.data.repo.ChapterRepo
 import voice.logging.core.Logger
 import voice.playback.session.MediaId
 import voice.playback.session.toMediaIdOrNull
+import javax.inject.Inject
 
 class DurationInconsistenciesUpdater
 @Inject constructor(

@@ -3,9 +3,9 @@ package voice.data.repo.internals.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import org.json.JSONObject
 import voice.common.AppScope
+import javax.inject.Inject
 
 @ContributesMultibinding(
   scope = AppScope::class,

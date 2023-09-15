@@ -13,13 +13,13 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import voice.app.R
+import voice.common.dpToPxRounded
+import voice.common.layoutInflater
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
-import voice.app.R
-import voice.common.dpToPxRounded
-import voice.common.layoutInflater
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.

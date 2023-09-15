@@ -1,8 +1,8 @@
 package voice.data
 
 import io.kotest.matchers.collections.shouldContainInOrder
-import java.time.Instant
 import org.junit.Test
+import java.time.Instant
 
 class ChapterTest {
 

@@ -1,9 +1,9 @@
 package voice.app.scanner
 
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class MetaDataScanResult(

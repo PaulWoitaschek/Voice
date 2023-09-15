@@ -8,8 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
-import javax.inject.Inject
-import javax.inject.Named
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.grid.GridCount
@@ -17,6 +15,8 @@ import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
+import javax.inject.Inject
+import javax.inject.Named
 
 class SettingsViewModel
 @Inject constructor(

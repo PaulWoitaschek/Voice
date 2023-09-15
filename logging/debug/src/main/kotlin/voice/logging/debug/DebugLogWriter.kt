@@ -1,9 +1,9 @@
 package voice.logging.debug
 
 import android.util.Log
-import java.util.regex.Pattern
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
+import java.util.regex.Pattern
 
 internal class DebugLogWriter : LogWriter {
 

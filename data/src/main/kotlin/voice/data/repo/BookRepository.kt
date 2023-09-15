@@ -1,7 +1,5 @@
 package voice.data.repo
 
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
@@ -10,6 +8,8 @@ import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.logging.core.Logger
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class BookRepository

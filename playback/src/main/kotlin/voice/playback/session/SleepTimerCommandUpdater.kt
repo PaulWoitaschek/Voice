@@ -3,8 +3,8 @@ package voice.playback.session
 import android.content.Context
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
-import javax.inject.Inject
 import voice.playback.R
+import javax.inject.Inject
 import voice.strings.R as StringsR
 
 class SleepTimerCommandUpdater

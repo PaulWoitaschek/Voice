@@ -2,7 +2,6 @@ package voice.common.compose
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme as Material3Theme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -14,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.Dispatchers
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.rootComponentAs
+import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
 fun VoiceTheme(content: @Composable () -> Unit) {

@@ -15,8 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlin.time.Duration
 import voice.common.formatTime
+import kotlin.time.Duration
 
 @Composable
 internal fun SliderRow(

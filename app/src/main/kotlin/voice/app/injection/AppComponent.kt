@@ -5,13 +5,13 @@ import android.content.Context
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Singleton
 import voice.app.AppController
 import voice.app.features.MainActivity
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.bookmarks.BookmarkPresenter
 import voice.app.features.widget.BaseWidgetProvider
 import voice.common.AppScope
+import javax.inject.Singleton
 
 @Singleton
 @MergeComponent(

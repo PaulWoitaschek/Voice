@@ -7,11 +7,11 @@ import dagger.assisted.AssistedInject
 import voice.common.navigation.Destination.AddContent.Mode
 import voice.common.navigation.Destination.OnboardingCompletion
 import voice.common.navigation.Destination.SelectFolderType
-import voice.common.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
 import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.folderPicker.folderPicker.FileTypeSelection
+import voice.common.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
 
 class AddContentViewModel
 @AssistedInject constructor(

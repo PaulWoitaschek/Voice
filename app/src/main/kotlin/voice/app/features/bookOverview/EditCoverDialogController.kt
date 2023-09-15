@@ -13,7 +13,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import voice.app.databinding.DialogCoverEditBinding
@@ -25,6 +24,7 @@ import voice.common.BookId
 import voice.common.conductor.DialogController
 import voice.common.parcelable
 import voice.data.repo.BookRepository
+import javax.inject.Inject
 import voice.strings.R as StringsR
 
 private const val NI_ARGS = "ni#bundle"

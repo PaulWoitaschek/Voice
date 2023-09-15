@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import voice.common.AppScope
+import javax.inject.Inject
 
 private const val BOOK_TABLE_NAME = "tableBooks"
 private const val BOOK_TIME = "bookTime"

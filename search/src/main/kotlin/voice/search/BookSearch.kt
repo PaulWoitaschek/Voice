@@ -1,9 +1,9 @@
 package voice.search
 
-import javax.inject.Inject
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.data.repo.internals.dao.BookContentDao
+import javax.inject.Inject
 
 class BookSearch
 @Inject constructor(

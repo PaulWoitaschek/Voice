@@ -1,7 +1,7 @@
 package voice.cover.api
 
-import javax.inject.Inject
 import voice.logging.core.Logger
+import javax.inject.Inject
 
 class CoverApi
 @Inject constructor(

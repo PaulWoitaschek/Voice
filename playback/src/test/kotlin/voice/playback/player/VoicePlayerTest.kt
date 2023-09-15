@@ -17,9 +17,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import java.time.Instant
-import java.util.UUID
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -40,6 +37,9 @@ import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.search.book
 import voice.playback.session.toMediaIdOrNull
+import java.time.Instant
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])

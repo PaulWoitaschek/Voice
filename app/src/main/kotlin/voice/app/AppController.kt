@@ -9,7 +9,6 @@ import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
 import dev.olshevski.navigation.reimagined.replaceLast
-import javax.inject.Inject
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
@@ -26,6 +25,7 @@ import voice.onboarding.OnboardingWelcome
 import voice.onboarding.completion.OnboardingCompletion
 import voice.review.ReviewFeature
 import voice.settings.views.Settings
+import javax.inject.Inject
 
 class AppController : ComposeController() {
 

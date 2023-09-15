@@ -1,8 +1,6 @@
 package voice.bookOverview.editBookCategory
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import java.time.Instant
-import javax.inject.Inject
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
@@ -10,6 +8,8 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.category
 import voice.common.BookId
 import voice.data.repo.BookRepository
+import java.time.Instant
+import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesMultibinding(

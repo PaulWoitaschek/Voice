@@ -21,9 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlin.time.Duration
 import voice.playbackScreen.BookPlayViewState
 import voice.strings.R
+import kotlin.time.Duration
 
 @Composable
 internal fun BookPlayAppBar(

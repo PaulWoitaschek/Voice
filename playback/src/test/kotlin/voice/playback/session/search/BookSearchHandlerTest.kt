@@ -6,8 +6,6 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.Instant
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
@@ -19,6 +17,8 @@ import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.repo.BookRepository
+import java.time.Instant
+import java.util.UUID
 
 class BookSearchHandlerTest {
 

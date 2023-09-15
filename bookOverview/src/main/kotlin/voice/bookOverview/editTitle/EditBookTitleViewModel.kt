@@ -3,7 +3,6 @@ package voice.bookOverview.editTitle
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetItem
@@ -11,6 +10,7 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
 import voice.data.repo.BookRepository
+import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesMultibinding(

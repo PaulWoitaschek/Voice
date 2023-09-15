@@ -1,7 +1,7 @@
 package voice.playback.session
 
-import kotlin.time.Duration
 import kotlinx.coroutines.flow.Flow
+import kotlin.time.Duration
 
 interface SleepTimer {
   val leftSleepTimeFlow: Flow<Duration>

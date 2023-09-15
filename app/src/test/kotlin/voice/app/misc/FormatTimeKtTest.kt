@@ -1,9 +1,9 @@
 package voice.app.misc
 
 import io.kotest.matchers.shouldBe
-import java.util.concurrent.TimeUnit
 import org.junit.Test
 import voice.common.formatTime
+import java.util.concurrent.TimeUnit
 
 class FormatTimeKtTest {
 

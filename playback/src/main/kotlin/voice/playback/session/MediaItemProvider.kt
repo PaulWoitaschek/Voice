@@ -6,8 +6,6 @@ import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
-import java.io.File
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.common.BookId
@@ -20,6 +18,8 @@ import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo
 import voice.data.toUri
+import java.io.File
+import javax.inject.Inject
 import voice.strings.R as StringsR
 
 class MediaItemProvider

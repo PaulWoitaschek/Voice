@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import java.io.File
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -12,6 +11,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])

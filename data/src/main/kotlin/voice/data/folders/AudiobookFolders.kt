@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.datastore.core.DataStore
-import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -19,6 +18,7 @@ import voice.common.pref.SingleFolderAudiobookFolders
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
+import javax.inject.Inject
 
 class AudiobookFolders
 @Inject constructor(

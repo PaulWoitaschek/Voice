@@ -2,8 +2,8 @@ package voice.playbackScreen.batteryOptimization
 
 import android.os.Build
 import androidx.datastore.core.DataStore
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
 class BatteryOptimization
 @Inject constructor(

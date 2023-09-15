@@ -1,9 +1,9 @@
 package voice.playback.playstate
 
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class PlayStateManager

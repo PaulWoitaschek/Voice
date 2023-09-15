@@ -1,7 +1,6 @@
 package voice.app.features.bookmarks
 
 import androidx.datastore.core.DataStore
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import voice.app.mvp.Presenter
 import voice.common.BookId
@@ -12,6 +11,7 @@ import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
+import javax.inject.Inject
 
 class BookmarkPresenter
 @Inject constructor(
