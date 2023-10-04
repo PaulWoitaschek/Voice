@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="mark_as_not_started">צייכן אלס נאכנישט אנגעהויבן</string>
+    <string name="play_pause">שפיל / האלט</string>
+    <string name="mark_as_completed">צייכן אלס גענדיגט</string>
+    <string name="next_track">קומענדיגע טרעק</string>
+    <string name="pause">האלט</string>
+    <string name="fast_forward">שנעל פאראויס</string>
+    <string name="cover">דעקל</string>
+    <string name="change_book_name">נאמען</string>
+    <string name="previous_track">פאריגע טרעק</string>
+    <string name="rewind">דריי צוריק</string>
+    <string name="more">מער</string>
+    <string name="play">שפּיל</string>
+</resources>
