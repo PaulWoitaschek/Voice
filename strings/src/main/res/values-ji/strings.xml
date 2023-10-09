@@ -12,4 +12,15 @@
     <string name="rewind">דריי צוריק</string>
     <string name="more">מער</string>
     <string name="play">שפּיל</string>
+    <string name="edit_book_title">רעדאגירט די ביכל</string>
+    <string name="pick_book_cover">דעקל פון די פייל סיסטעם</string>
+    <string name="cover_search.icon_recent">לעצטיגע אָנפראַגעס</string>
+    <string name="cover_search.author">מחבר</string>
+    <string name="mark_as_current">צייכן אלס אנגייענדע</string>
+    <string name="download_book_cover">דעקל פון די וועב</string>
+    <string name="dialog_confirm">באשטעטיג</string>
+    <string name="dialog_cancel">קענסעל</string>
+    <string name="audiobook_folders_title">אודיאו-ביכל טעקע</string>
+    <string name="action_sleep">שלאָף-טיימער</string>
+    <string name="content_cover">צייגט די דעקל צו וועלן</string>
 </resources>
