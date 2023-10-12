@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Obal</string>
     <string name="play_pause">Prehrať / Pozastaviť</string>
@@ -22,7 +22,7 @@
     <string name="bookmark_edit_hint">Názov záložky</string>
     <string name="bookmark_added">Záložka pridaná</string>
     <string name="action_settings">Predvoľby</string>
-    <string name="min">%smin.</string>
+    <string name="min">%s min</string>
     <string name="delete_last_number">Vymazať naposledy zadané číslo</string>
     <plurals name="seconds">
         <item quantity="one">%d sek.</item>
