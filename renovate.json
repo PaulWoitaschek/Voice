@@ -1,7 +1,6 @@
 {
   "extends": [
-    "config:recommended",
-    ":disableDependencyDashboard"
+    "config:recommended"
   ],
   "packageRules": [
     {
