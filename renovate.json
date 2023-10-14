@@ -29,6 +29,17 @@
         "io.nlopez.compose.rules",
         "io.github.usefulness"
       ]
+    },
+    {
+      "matchDatasources": [
+        "maven"
+      ],
+      "registryUrls": [
+        "https://jitpack.io/"
+      ],
+      "matchPackagePrefixes": [
+        "com.github.PaulWoitaschek"
+      ]
     }
   ],
   "prHourlyLimit": 0,
