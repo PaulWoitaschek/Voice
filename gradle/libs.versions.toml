@@ -24,7 +24,7 @@ retrofit = "2.9.0"
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
-material = "com.google.android.material:material:1.9.0"
+material = "com.google.android.material:material:1.10.0"
 ffmpeg = "com.arthenica:ffmpeg-kit-audio:6.0-2"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.13.8"
