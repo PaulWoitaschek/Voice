@@ -140,7 +140,10 @@ class LibrarySessionCallback
     }
   }
 
-  override fun onPlaybackResumption(mediaSession: MediaSession, controller: ControllerInfo): ListenableFuture<MediaItemsWithStartPosition> {
+  override fun onPlaybackResumption(
+    mediaSession: MediaSession,
+    controller: ControllerInfo,
+  ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
     return scope.future {
       val currentBook = currentBook()
@@ -157,7 +160,10 @@ class LibrarySessionCallback
     return bookRepository.get(bookId)
   }
 
-  override fun onConnect(session: MediaSession, controller: ControllerInfo): ConnectionResult {
+  override fun onConnect(
+    session: MediaSession,
+    controller: ControllerInfo,
+  ): ConnectionResult {
     Logger.d("onConnect to ${controller.packageName}")
 
     if (player.playbackState == Player.STATE_IDLE &&
@@ -173,7 +179,7 @@ class LibrarySessionCallback
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
-      .add(SessionCommand(CustomCommand.CustomCommandAction, Bundle.EMPTY))
+      .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
       .also {
         it.add(PublishedCustomCommand.Sleep.sessionCommand)
       }
@@ -227,7 +233,10 @@ class LibrarySessionCallback
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
   }
 
-  override fun onPostConnect(session: MediaSession, controller: ControllerInfo) {
+  override fun onPostConnect(
+    session: MediaSession,
+    controller: ControllerInfo,
+  ) {
     super.onPostConnect(session, controller)
     sleepTimerCommandUpdater.update(session, controller, sleepTimer.sleepTimerActive())
   }

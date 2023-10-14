@@ -12,6 +12,7 @@
   <issue id="VectorPath" severity="informational" />
   <issue id="UnusedResources" severity="informational" />
   <issue id="GradleDependency" severity="informational" />
+  <issue id="AndroidGradlePluginVersion" severity="informational" />
   <issue id="UnusedQuantity" severity="informational" />
   <issue id="ObsoleteLintCustomCheck" severity="informational" />
   <issue id="UnknownIssueId" severity="informational" />

@@ -11,23 +11,23 @@ coroutines = "1.7.3"
 room = "2.5.2"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
-dagger = "2.48"
+dagger = "2.48.1"
 kotlin = "1.9.10"
 compose-compiler = "1.5.3"
 media3 = "1.1.1"
-agp = "8.1.1"
-ktlint-core = "0.50.0"
-ktlint-gradlePlugin = "0.4.1"
+agp = "8.1.2"
+ktlint-core = "1.0.1"
+ktlint-gradlePlugin = "0.6.0"
 retrofit = "2.9.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
-material = "com.google.android.material:material:1.9.0"
-ffmpeg = "com.arthenica:ffmpeg-kit-audio:6.0-1"
+material = "com.google.android.material:material:1.10.0"
+ffmpeg = "com.arthenica:ffmpeg-kit-audio:6.0-2"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.13.7"
+mockk = "io.mockk:mockk:1.13.8"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.2.1"
 paging-compose = "androidx.paging:paging-compose:3.2.1"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
@@ -49,20 +49,20 @@ seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.1.1"
 turbine = "app.cash.turbine:turbine:1.0.0"
-molecule = "app.cash.molecule:molecule-runtime:1.2.0"
-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
+molecule = "app.cash.molecule:molecule-runtime:1.2.1"
+immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp:4.11.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.1.0"
-clikt = "com.github.ajalt.clikt:clikt:4.2.0"
+clikt = "com.github.ajalt.clikt:clikt:4.2.1"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:32.2.3"
+firebase-bom = "com.google.firebase:firebase-bom:32.3.1"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
@@ -102,7 +102,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
-compose-bom = "androidx.compose:compose-bom:2023.09.00"
+compose-bom = "androidx.compose:compose-bom:2023.10.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -116,13 +116,13 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-activity = "androidx.activity:activity-compose:1.7.2"
+compose-activity = "androidx.activity:activity-compose:1.8.0"
 compose-navigation = "dev.olshevski.navigation:reimagined:1.5.0"
 
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
-ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint-core" }
+ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.2.1"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.3.0"
 
 [bundles]
 compose = [
@@ -166,7 +166,7 @@ anvil = { id = "com.squareup.anvil", version = "2.4.8-1-8" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.9" }
-googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.0" }
 playPublish = { id = "com.github.triplet.play", version = "3.8.4" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }

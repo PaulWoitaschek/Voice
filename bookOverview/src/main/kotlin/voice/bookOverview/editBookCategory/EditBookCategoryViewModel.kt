@@ -40,7 +40,10 @@ constructor(
     }
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     val book = repo.get(bookId) ?: return
 
     val (currentChapter, positionInChapter) = when (item) {

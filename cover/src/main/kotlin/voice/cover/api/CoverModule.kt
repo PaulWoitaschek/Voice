@@ -23,9 +23,7 @@ object CoverModule {
 
   @Provides
   @Singleton
-  fun internalApi(
-    client: OkHttpClient,
-  ): InternalCoverApi {
+  fun internalApi(client: OkHttpClient): InternalCoverApi {
     val json = Json {
       ignoreUnknownKeys = true
     }

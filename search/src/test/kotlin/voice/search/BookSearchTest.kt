@@ -128,7 +128,10 @@ private fun Book.withNewIdAndInactive(): Book {
 
 private class TestBase(private val search: BookSearch) {
 
-  suspend fun expectSearchResult(query: String, vararg expected: Book) {
+  suspend fun expectSearchResult(
+    query: String,
+    vararg expected: Book,
+  ) {
     val result = search.search(query)
     result shouldContainExactly expected.toList()
   }

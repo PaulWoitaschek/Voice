@@ -1,7 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.dsl.ApplicationAndroidResources
 import com.android.build.api.dsl.ManagedVirtualDevice
-import java.util.*
+import java.util.Properties
 
 plugins {
   id("voice.app")
@@ -15,7 +16,7 @@ plugins {
   alias(libs.plugins.playPublish)
 }
 
-val useProprietaryLibraries = providers.environmentVariable("VOICE_USE_PROPRIETARY_LIBRARIES").orNull == "true"
+val useProprietaryLibraries = System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true"
 if (useProprietaryLibraries) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
   if (file("google-services.json").exists()) {
@@ -43,7 +44,9 @@ android {
   namespace = "voice.app"
 
   androidResources {
-    generateLocaleConfig = true
+    // since https://github.com/PaulWoitaschek/Voice/pull/2131 this cast is required.
+    // this is very strange and should not be necessary
+    (this as ApplicationAndroidResources).generateLocaleConfig = true
   }
 
   defaultConfig {
@@ -180,7 +183,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.remoteconfig)
-    implementation(projects.logging.crashlytics)
+    implementation(project(":logging:crashlytics"))
     implementation(project(":review:play"))
   } else {
     implementation(projects.review.noop)

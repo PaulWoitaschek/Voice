@@ -97,4 +97,11 @@
     <string name="generic_error_message">Noe gikk galt 😢</string>
     <string name="play">Spill</string>
     <string name="pause">Pause</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minutt</item>
+        <item quantity="other">%d minutter</item>
+    </plurals>
+    <string name="select_folder_title_onboarding">Legg til din første lydbok</string>
+    <string name="select_folder_type_folder">Mappe</string>
+    <string name="onboarding.button_next">Neste</string>
 </resources>

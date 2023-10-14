@@ -48,7 +48,11 @@ class VoicePlayerTest {
   init {
     Logger.install(
       object : LogWriter {
-        override fun log(severity: Logger.Severity, message: String, throwable: Throwable?) {
+        override fun log(
+          severity: Logger.Severity,
+          message: String,
+          throwable: Throwable?,
+        ) {
           println("$severity: $message")
           throwable?.printStackTrace()
         }
@@ -348,14 +352,20 @@ class VoicePlayerTest {
     TestPlayerRunHelper.runUntilPlaybackState(internalPlayer, Player.STATE_READY)
   }
 
-  private fun Player.shouldHavePosition(currentMediaItemIndex: Int, currentPosition: Long): Player {
+  private fun Player.shouldHavePosition(
+    currentMediaItemIndex: Int,
+    currentPosition: Long,
+  ): Player {
     scope.advanceUntilIdle()
     this should havePosition(currentMediaItemIndex, currentPosition)
     return this
   }
 }
 
-private fun havePosition(currentMediaItemIndex: Int, currentPosition: Long) = object : io.kotest.matchers.Matcher<Player> {
+private fun havePosition(
+  currentMediaItemIndex: Int,
+  currentPosition: Long,
+) = object : io.kotest.matchers.Matcher<Player> {
   override fun test(value: Player): MatcherResult {
     val actualCurrentMediaItemIndex = value.currentMediaItemIndex
     val actualCurrentPosition = value.currentPosition

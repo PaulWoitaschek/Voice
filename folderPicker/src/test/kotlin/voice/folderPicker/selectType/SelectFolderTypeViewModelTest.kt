@@ -49,7 +49,10 @@ class SelectFolderTypeViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      suspend fun expectItem(folderMode: FolderMode, vararg books: SelectFolderTypeViewState.Book) {
+      suspend fun expectItem(
+        folderMode: FolderMode,
+        vararg books: SelectFolderTypeViewState.Book,
+      ) {
         with(awaitItem()) {
           this.books.shouldContainExactlyInAnyOrder(books.toList())
           this.selectedFolderMode shouldBe folderMode

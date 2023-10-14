@@ -42,7 +42,11 @@ class PositionUpdater
     }
   }
 
-  override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+  override fun onPositionDiscontinuity(
+    oldPosition: Player.PositionInfo,
+    newPosition: Player.PositionInfo,
+    reason: Int,
+  ) {
     scope.launch {
       updatePosition()
     }

@@ -21,7 +21,10 @@ constructor(
     return listOf(BottomSheetItem.InternetCover)
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     if (item == BottomSheetItem.InternetCover) {
       navigator.goTo(Destination.CoverFromInternet(bookId))
     }

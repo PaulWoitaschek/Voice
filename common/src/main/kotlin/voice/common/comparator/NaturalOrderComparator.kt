@@ -7,7 +7,10 @@ object NaturalOrderComparator {
   val stringComparator: Comparator<String> = IntelliJStringComparator
 
   val uriComparator = object : Comparator<Uri> {
-    override fun compare(lhs: Uri, rhs: Uri): Int {
+    override fun compare(
+      lhs: Uri,
+      rhs: Uri,
+    ): Int {
       val lhsSegments = lhs.pathSegments.flatMap { it.split("/") }
       val rhsSegments = rhs.pathSegments.flatMap { it.split("/") }
 

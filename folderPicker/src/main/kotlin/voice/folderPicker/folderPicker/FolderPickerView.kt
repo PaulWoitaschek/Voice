@@ -37,9 +37,7 @@ interface FolderPickerComponent {
 }
 
 @Composable
-fun FolderOverview(
-  onCloseClick: () -> Unit,
-) {
+fun FolderOverview(onCloseClick: () -> Unit) {
   val viewModel: FolderPickerViewModel = rememberScoped {
     rootComponentAs<FolderPickerComponent>()
       .folderPickerViewModel
@@ -133,7 +131,7 @@ private fun FolderOverviewView(
 @Suppress("ktlint:compose:preview-public-check")
 @Composable
 @Preview
-fun FolderOverviewPreview() {
+private fun FolderOverviewPreview() {
   FolderOverviewView(
     viewState = FolderPickerViewState(
       items = listOf(

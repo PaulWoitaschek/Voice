@@ -10,7 +10,11 @@ import com.bluelinelabs.conductor.Controller
 
 abstract class ComposeController(args: Bundle = Bundle()) : Controller(args) {
 
-  final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
+  final override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup,
+    savedViewState: Bundle?,
+  ): View {
     onCreateView()
     return ComposeView(container.context).also {
       it.setContent {

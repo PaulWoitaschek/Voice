@@ -58,7 +58,10 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
   }
 
   interface Callback {
-    fun onEditBookmark(id: Bookmark.Id, title: String)
+    fun onEditBookmark(
+      id: Bookmark.Id,
+      title: String,
+    )
   }
 
   companion object {

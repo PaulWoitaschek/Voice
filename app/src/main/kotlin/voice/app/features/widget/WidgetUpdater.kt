@@ -58,7 +58,10 @@ class WidgetUpdater
     }
   }
 
-  private suspend fun updateWidgetForId(book: Book?, widgetId: Int) {
+  private suspend fun updateWidgetForId(
+    book: Book?,
+    widgetId: Int,
+  ) {
     if (book != null) {
       initWidgetForPresentBook(widgetId, book)
     } else {
@@ -66,7 +69,10 @@ class WidgetUpdater
     }
   }
 
-  private suspend fun initWidgetForPresentBook(widgetId: Int, book: Book) {
+  private suspend fun initWidgetForPresentBook(
+    widgetId: Int,
+    book: Book,
+  ) {
     val opts = appWidgetManager.getAppWidgetOptions(widgetId)
     val useWidth = widgetWidth(opts)
     val useHeight = widgetHeight(opts)
@@ -122,7 +128,11 @@ class WidgetUpdater
       return orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
-  private suspend fun initElements(remoteViews: RemoteViews, book: Book, coverSize: Int) {
+  private suspend fun initElements(
+    remoteViews: RemoteViews,
+    book: Book,
+    coverSize: Int,
+  ) {
     val playPausePI = WidgetButtonReceiver.pendingIntent(context, WidgetButtonReceiver.Action.PlayPause)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
@@ -185,7 +195,11 @@ class WidgetUpdater
     setVerticalVisibility(remoteViews, height, singleChapter)
   }
 
-  private fun setHorizontalVisibility(remoteViews: RemoteViews, widgetWidth: Int, coverSize: Int) {
+  private fun setHorizontalVisibility(
+    remoteViews: RemoteViews,
+    widgetWidth: Int,
+    coverSize: Int,
+  ) {
     val singleButtonSize = context.dpToPxRounded(8F + 36F + 8F)
     // widget height because cover is square
     var summarizedItemWidth = 3 * singleButtonSize + coverSize

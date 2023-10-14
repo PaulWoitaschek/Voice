@@ -44,7 +44,7 @@
     <string name="pref_app_version">Uygulama sürümü</string>
     <string name="add">Ekle</string>
     <string name="folder_mode_root">Kök sesli kitap dizini. Bir alt dizin = bir kitap.</string>
-    <string name="folder_mode_single">Tek sesli kitap dizini</string>
+    <string name="folder_mode_single">Tek kitap modu: Bir dosyada bir kitap bulunur.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d ses dosyası</item>
         <item quantity="other">%d ses dosyası</item>
@@ -92,5 +92,41 @@
     <string name="delete_book_dialog_content">Bu, aygıtınızdaki dosyaları silecektir.</string>
     <string name="delete_book_bottom_sheet_title">Kitabı Sil</string>
     <string name="search_hint">Ne arıyorsunuz\?</string>
-    <string name="media_session_root">Kök</string>
+    <string name="media_session_root">Tüm sesli kitaplar</string>
+    <string name="review.feedback.button.no">İptal et</string>
+    <string name="select_folder_subtitle">Tek bir dosyayı kitap olarak mı yoksa klasör olarak mı eklemek istiyorsunuz\?</string>
+    <string name="sleep_timer.title">Tatlı rüyalar! 🌙</string>
+    <string name="onboarding.button_next">Sonraki</string>
+    <string name="select_folder_type_folder">Dosya</string>
+    <string name="onboarding.completion.subtitle">İlk sesli kitabın dinlemen için hazır. Voice ile yolculuğunda iyi eğlenceler!</string>
+    <string name="review.request.title">Voice\'den memnun musun\?</string>
+    <string name="pause">Beklet</string>
+    <string name="generic_error_retry">Tekrar dene</string>
+    <string name="select_folder_title_default">Sesli kitabını (kitaplarını) ekle</string>
+    <string name="storage_bug_title">İzin gerekli</string>
+    <string name="cover_search.icon_recent">Son aramalar</string>
+    <string name="review.feedback.title">Bunu duyduğumuz için üzgünüz.</string>
+    <string name="sleep_timer.button.increment">Daha uzun</string>
+    <string name="onboarding.explanation.title">Senin kütüphanen,senin tarzın</string>
+    <string name="review.request.button.yes">Şimdi puanla</string>
+    <string name="cover_search.author">Yazar</string>
+    <string name="storage_bug_button">İzin ver</string>
+    <string name="select_folder_type_file">Dosya</string>
+    <string name="onboarding_welcome_title">Voice\'e hoşgeldiniz!</string>
+    <plurals name="minutes">
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
+    </plurals>
+    <string name="review.feedback.button.yes">Geribildirim gönder.</string>
+    <string name="onboarding_welcome_subtitle">Cebinizdeki kişisel sesli kitap oynatıcınız! Hadi başlayalım.</string>
+    <string name="onboarding.completion.title">Hazırsın!</string>
+    <string name="review.request.button.no">Hayır, teşekkürler.</string>
+    <string name="select_folder_title_onboarding">İlk sesli kitabını ekle</string>
+    <string name="review.feedback.content">Bize neyin yanlış gittiğini söyleyebilir misiniz\? Geri bildiriminizi takdir ediyoruz ve bu, deneyiminizi geliştirmemize yardımcı oluyor.</string>
+    <string name="sleep_timer.button.decrement">Daha kısa</string>
+    <string name="generic_error_message">Bir şeyler ters gitti😢</string>
+    <string name="play">Yürüt</string>
+    <string name="onboarding.explanation.subtitle">Voice\'u kullanarak kitapları tek tek dosyalar halinde ekleyebilir veya klasörler halinde düzenleyebilirsiniz. Sen seç!</string>
+    <string name="onboarding.completion.next_button">Dinlemeye başla</string>
+    <string name="review.request.content">Geri bildiriminiz bizim için önemli! Vaktiniz varsa bizi değerlendirin ve deneyiminizi paylaşın. Bu bizim iyileştirmeler yapmamıza ve daha iyi bir dinleme deneyimi sunmamıza yardımcı olur.</string>
 </resources>

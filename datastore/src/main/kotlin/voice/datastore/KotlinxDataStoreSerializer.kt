@@ -18,7 +18,10 @@ class KotlinxDataStoreSerializer<T>(
 
   override suspend fun readFrom(input: InputStream): T = json.decodeFromStream(serializer, input)
 
-  override suspend fun writeTo(t: T, output: OutputStream) {
+  override suspend fun writeTo(
+    t: T,
+    output: OutputStream,
+  ) {
     json.encodeToStream(serializer, t, output)
   }
 }

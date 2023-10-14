@@ -197,7 +197,10 @@ private fun MigrationItem(item: MigrationViewState.Item) {
 }
 
 @Composable
-private fun LabeledValue(label: String, value: String) {
+private fun LabeledValue(
+  label: String,
+  value: String,
+) {
   Column {
     Text(text = label, style = MaterialTheme.typography.titleMedium)
     Text(value)

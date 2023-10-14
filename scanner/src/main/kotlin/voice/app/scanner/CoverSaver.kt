@@ -21,7 +21,10 @@ class CoverSaver
   private val context: Context,
 ) {
 
-  suspend fun save(bookId: BookId, cover: Bitmap) {
+  suspend fun save(
+    bookId: BookId,
+    cover: Bitmap,
+  ) {
     val newCover = newBookCoverFile()
 
     withContext(Dispatchers.IO) {
@@ -65,7 +68,10 @@ class CoverSaver
     return File(coversFolder, "${UUID.randomUUID()}.png")
   }
 
-  suspend fun setBookCover(cover: File, bookId: BookId) {
+  suspend fun setBookCover(
+    cover: File,
+    bookId: BookId,
+  ) {
     val oldCover = repo.get(bookId)?.content?.cover
     if (oldCover != null) {
       withContext(Dispatchers.IO) {

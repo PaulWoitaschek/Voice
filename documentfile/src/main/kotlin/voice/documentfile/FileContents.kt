@@ -36,7 +36,10 @@ internal data class FileContents(
       )
     }
 
-    fun query(context: Context, uri: Uri): FileContents? {
+    fun query(
+      context: Context,
+      uri: Uri,
+    ): FileContents? {
       return context.query(uri)?.use { cursor ->
         if (cursor.moveToFirst()) {
           readFrom(cursor)

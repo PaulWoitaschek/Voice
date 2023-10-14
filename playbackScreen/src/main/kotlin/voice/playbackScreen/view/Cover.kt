@@ -17,7 +17,10 @@ import voice.common.compose.ImmutableFile
 import voice.strings.R as StringsR
 
 @Composable
-internal fun Cover(onDoubleClick: () -> Unit, cover: ImmutableFile?) {
+internal fun Cover(
+  onDoubleClick: () -> Unit,
+  cover: ImmutableFile?,
+) {
   AsyncImage(
     modifier = Modifier
       .fillMaxSize()

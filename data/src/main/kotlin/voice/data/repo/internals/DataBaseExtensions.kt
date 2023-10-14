@@ -107,7 +107,11 @@ fun SQLiteDatabase.update(
   return update(table, values, whereClause, whereArgsMapped)
 }
 
-fun SQLiteDatabase.delete(table: String, whereClause: String, vararg whereArgs: Any): Int {
+fun SQLiteDatabase.delete(
+  table: String,
+  whereClause: String,
+  vararg whereArgs: Any,
+): Int {
   val whereArgsMapped = whereArgs.map(Any::toString).toTypedArray()
   return delete(table, whereClause, whereArgsMapped)
 }

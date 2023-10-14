@@ -25,7 +25,10 @@ object Logger {
     log(severity = Severity.Warn, message = message, throwable = null)
   }
 
-  fun w(throwable: Throwable, message: String? = null) {
+  fun w(
+    throwable: Throwable,
+    message: String? = null,
+  ) {
     log(severity = Severity.Warn, message = message, throwable = throwable)
   }
 
@@ -33,7 +36,10 @@ object Logger {
     log(severity = Severity.Error, message = message, throwable = null)
   }
 
-  fun e(throwable: Throwable, message: String) {
+  fun e(
+    throwable: Throwable,
+    message: String,
+  ) {
     log(severity = Severity.Error, message = message, throwable = throwable)
   }
 
@@ -46,7 +52,11 @@ object Logger {
   /**
    * This logic is borrowed from Timber: https://github.com/JakeWharton/timber
    */
-  private fun log(severity: Severity, message: String?, throwable: Throwable?) {
+  private fun log(
+    severity: Severity,
+    message: String?,
+    throwable: Throwable?,
+  ) {
     var messageResult = message
     if (messageResult.isNullOrEmpty()) {
       if (throwable == null) {
@@ -85,5 +95,9 @@ object Logger {
 
 interface LogWriter {
 
-  fun log(severity: Logger.Severity, message: String, throwable: Throwable?)
+  fun log(
+    severity: Logger.Severity,
+    message: String,
+    throwable: Throwable?,
+  )
 }

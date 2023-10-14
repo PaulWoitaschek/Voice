@@ -23,11 +23,17 @@ class PlayStateDelegatingListener
     updatePlayState()
   }
 
-  override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+  override fun onPlayWhenReadyChanged(
+    playWhenReady: Boolean,
+    reason: Int,
+  ) {
     updatePlayState()
   }
 
-  override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+  override fun onMediaItemTransition(
+    mediaItem: MediaItem?,
+    reason: Int,
+  ) {
     if (playStateManager.sleepAtEoc) {
       playStateManager.sleepAtEoc = false
       playerController.pauseAtStart()

@@ -13,7 +13,9 @@ data class MetaDataScanResult(
 )
 
 enum class TagType {
-  Title, Artist, Album
+  Title,
+  Artist,
+  Album,
 }
 
 fun MetaDataScanResult.findTag(tagType: TagType): String? {

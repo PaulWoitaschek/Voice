@@ -129,4 +129,12 @@
     <string name="review.request.content">Tu opinión nos importa. Si tienes un momento, valóranos y comparte tu experiencia. Nos ayuda a mejorar y a ofrecer una mejor experiencia auditiva.</string>
     <string name="review.request.title">¿Disfrutando de la voz\?</string>
     <string name="review.feedback.button.no">Cancelar</string>
+    <string name="sleep_timer.title">Dulces sueños! 🌙</string>
+    <string name="sleep_timer.button.increment">Mas largo</string>
+    <string name="sleep_timer.button.decrement">Mas corto</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d minutos</item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>

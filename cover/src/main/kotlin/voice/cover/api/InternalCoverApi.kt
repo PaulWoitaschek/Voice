@@ -7,9 +7,7 @@ import retrofit2.http.Url
 interface InternalCoverApi {
 
   @GET("/")
-  suspend fun auth(
-    @Query("q") search: String,
-  ): String
+  suspend fun auth(@Query("q") search: String): String
 
   @GET
   suspend fun search(

@@ -20,7 +20,10 @@ class SleepTimerCommandUpdater
     session.setCustomLayout(controller, layout(sleepTimerActive))
   }
 
-  fun update(session: MediaSession, sleepTimerActive: Boolean) {
+  fun update(
+    session: MediaSession,
+    sleepTimerActive: Boolean,
+  ) {
     session.setCustomLayout(layout(sleepTimerActive))
   }
 

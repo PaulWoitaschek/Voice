@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mark_as_not_started">צייכן אלס נאכנישט אנגעהויבן</string>
+    <string name="play_pause">שפיל / האלט</string>
+    <string name="mark_as_completed">צייכן אלס גענדיגט</string>
+    <string name="next_track">קומענדיגע טרעק</string>
+    <string name="pause">האלט</string>
+    <string name="fast_forward">שנעל פאראויס</string>
+    <string name="cover">דעקל</string>
+    <string name="change_book_name">נאמען</string>
+    <string name="previous_track">פאריגע טרעק</string>
+    <string name="rewind">דריי צוריק</string>
+    <string name="more">מער</string>
+    <string name="play">שפּיל</string>
+    <string name="edit_book_title">רעדאגירט די ביכל</string>
+    <string name="pick_book_cover">דעקל פון די פייל סיסטעם</string>
+    <string name="cover_search.icon_recent">לעצטיגע אָנפראַגעס</string>
+    <string name="cover_search.author">מחבר</string>
+    <string name="mark_as_current">צייכן אלס אנגייענדע</string>
+    <string name="download_book_cover">דעקל פון די וועב</string>
+    <string name="dialog_confirm">באשטעטיג</string>
+    <string name="dialog_cancel">קענסעל</string>
+    <string name="audiobook_folders_title">אודיאו-ביכל טעקע</string>
+    <string name="action_sleep">שלאָף-טיימער</string>
+    <string name="content_cover">צייגט די דעקל צו וועלן</string>
+    <string name="bookmark_edit_hint">בוקמארק נאמען</string>
+    <string name="pref_theme_dark">טונקעלע טעמע</string>
+    <string name="bookmark_edit_title">רעדאגיר די בוקמארק</string>
+    <string name="bookmark">בוקמארק</string>
+    <string name="bookmark_added">בוקמארק צוגעלייגט</string>
+    <string name="action_settings">פרעפרענצן</string>
+    <string name="delete_last_number">מעקט אויס די לעצט אריינגעלייגטע נומער</string>
+</resources>

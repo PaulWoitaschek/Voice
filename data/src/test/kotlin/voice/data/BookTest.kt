@@ -124,7 +124,11 @@ class BookTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun bookPosition(chapters: List<Chapter>, currentChapter: ChapterId, positionInChapter: Long): Long {
+  private fun bookPosition(
+    chapters: List<Chapter>,
+    currentChapter: ChapterId,
+    positionInChapter: Long,
+  ): Long {
     return book(
       chapters = chapters,
       time = positionInChapter,

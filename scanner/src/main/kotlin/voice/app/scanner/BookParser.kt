@@ -28,7 +28,10 @@ class BookParser
   private val fileFactory: CachedDocumentFileFactory,
 ) {
 
-  suspend fun parseAndStore(chapters: List<Chapter>, file: CachedDocumentFile): BookContent {
+  suspend fun parseAndStore(
+    chapters: List<Chapter>,
+    file: CachedDocumentFile,
+  ): BookContent {
     val id = BookId(file.uri)
     return contentRepo.getOrPut(id) {
       val uri = chapters.first().id.toUri()
@@ -115,7 +118,10 @@ class BookParser
   }
 }
 
-internal fun validateIntegrity(content: BookContent, chapters: List<Chapter>) {
+internal fun validateIntegrity(
+  content: BookContent,
+  chapters: List<Chapter>,
+) {
   // the init block performs integrity validation
   Book(content, chapters)
 }

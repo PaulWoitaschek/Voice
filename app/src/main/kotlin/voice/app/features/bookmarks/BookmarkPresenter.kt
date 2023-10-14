@@ -69,7 +69,10 @@ class BookmarkPresenter
     view.finish()
   }
 
-  fun editBookmark(id: Bookmark.Id, newTitle: String) {
+  fun editBookmark(
+    id: Bookmark.Id,
+    newTitle: String,
+  ) {
     scope.launch {
       bookmarks.find { it.id == id }?.let {
         val withNewTitle = it.copy(

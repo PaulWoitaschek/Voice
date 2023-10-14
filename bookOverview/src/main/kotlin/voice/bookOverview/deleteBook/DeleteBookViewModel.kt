@@ -36,7 +36,10 @@ constructor(
     return listOf(BottomSheetItem.DeleteBook)
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     if (item != BottomSheetItem.DeleteBook) return
 
     _state.value = DeleteBookViewState(

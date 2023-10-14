@@ -21,7 +21,10 @@ class AddContentViewModel
   private val mode: Mode,
 ) {
 
-  internal fun add(uri: Uri, type: FileTypeSelection) {
+  internal fun add(
+    uri: Uri,
+    type: FileTypeSelection,
+  ) {
     when (type) {
       FileTypeSelection.File -> {
         audiobookFolders.add(uri, FolderType.SingleFile)

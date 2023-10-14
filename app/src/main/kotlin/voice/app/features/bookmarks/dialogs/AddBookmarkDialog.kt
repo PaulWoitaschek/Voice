@@ -48,9 +48,8 @@ class AddBookmarkDialog : DialogController() {
   }
 
   companion object {
-    operator fun <T> invoke(target: T) where T : Controller, T : Callback =
-      AddBookmarkDialog().apply {
-        targetController = target
-      }
+    operator fun <T> invoke(target: T) where T : Controller, T : Callback = AddBookmarkDialog().apply {
+      targetController = target
+    }
   }
 }

@@ -24,13 +24,16 @@ internal sealed interface CustomCommand {
 
   companion object {
 
-    const val CustomCommandAction = "voiceCommandAction"
-    internal const val CustomCommandExtra = "voiceCommandExtra"
-    internal fun parse(command: SessionCommand, args: Bundle): CustomCommand? {
-      if (command.customAction != CustomCommandAction) {
+    const val CUSTOM_COMMAND_ACTION = "voiceCommandAction"
+    internal const val CUSTOM_COMMAND_EXTRA = "voiceCommandExtra"
+    internal fun parse(
+      command: SessionCommand,
+      args: Bundle,
+    ): CustomCommand? {
+      if (command.customAction != CUSTOM_COMMAND_ACTION) {
         return null
       }
-      val json = args.getString(CustomCommandExtra) ?: return null
+      val json = args.getString(CUSTOM_COMMAND_EXTRA) ?: return null
       return Json.decodeFromString(serializer(), json)
     }
   }
@@ -48,9 +51,9 @@ internal sealed class PublishedCustomCommand {
 internal fun MediaController.sendCustomCommand(command: CustomCommand) {
   val json = Json.encodeToString(CustomCommand.serializer(), command)
   sendCustomCommand(
-    SessionCommand(CustomCommand.CustomCommandAction, Bundle.EMPTY),
+    SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY),
     Bundle().apply {
-      putString(CustomCommand.CustomCommandExtra, json)
+      putString(CustomCommand.CUSTOM_COMMAND_EXTRA, json)
     },
   )
 }

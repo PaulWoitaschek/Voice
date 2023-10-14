@@ -32,7 +32,10 @@ constructor(
     return listOf(BottomSheetItem.Title)
   }
 
-  override suspend fun onItemClicked(bookId: BookId, item: BottomSheetItem) {
+  override suspend fun onItemClicked(
+    bookId: BookId,
+    item: BottomSheetItem,
+  ) {
     if (item != BottomSheetItem.Title) return
     val book = repo.get(bookId) ?: return
     _state.value = EditBookTitleState(

@@ -50,7 +50,10 @@ class BookmarkController(args: Bundle) :
     bookId = this@BookmarkController.bookId
   }
 
-  override fun render(bookmarks: List<Bookmark>, chapters: List<Chapter>) {
+  override fun render(
+    bookmarks: List<Bookmark>,
+    chapters: List<Chapter>,
+  ) {
     adapter.newData(bookmarks, chapters)
   }
 
@@ -66,7 +69,10 @@ class BookmarkController(args: Bundle) :
     router.popController(this)
   }
 
-  override fun onEditBookmark(id: Bookmark.Id, title: String) {
+  override fun onEditBookmark(
+    id: Bookmark.Id,
+    title: String,
+  ) {
     presenter.editBookmark(id, title)
   }
 
@@ -114,7 +120,10 @@ class BookmarkController(args: Bundle) :
         return false
       }
 
-      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+      override fun onSwiped(
+        viewHolder: RecyclerView.ViewHolder,
+        direction: Int,
+      ) {
         val boundBookmark = (viewHolder as BookMarkHolder).boundBookmark
         boundBookmark?.let { presenter.deleteBookmark(it.id) }
       }
@@ -122,7 +131,10 @@ class BookmarkController(args: Bundle) :
     ItemTouchHelper(swipeCallback).attachToRecyclerView(recycler)
   }
 
-  override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
+  override fun onOptionsMenuClicked(
+    bookmark: Bookmark,
+    v: View,
+  ) {
     val popup = PopupMenu(context, v)
     popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
     popup.setOnMenuItemClickListener {

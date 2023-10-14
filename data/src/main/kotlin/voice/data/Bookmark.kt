@@ -26,7 +26,10 @@ data class Bookmark(
   }
 }
 
-fun Bundle.putBookmarkId(key: String, value: Bookmark.Id) {
+fun Bundle.putBookmarkId(
+  key: String,
+  value: Bookmark.Id,
+) {
   putString(key, value.value.toString())
 }
 
