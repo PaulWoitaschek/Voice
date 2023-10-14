@@ -134,6 +134,6 @@
     <plurals name="minutes">
         <item quantity="one">%d minuto</item>
         <item quantity="many">%d minutos</item>
-        <item quantity="other"></item>
+        <item quantity="other">%d minutos</item>
     </plurals>
 </resources>
