@@ -40,4 +40,21 @@
     <string name="pref_suggest_idea">Sarankan ide</string>
     <string name="pref_seek_time">Lewati jumlah</string>
     <string name="cover_search.author">Penulis</string>
+    <string name="close">Tutup</string>
+    <string name="pref_theme_dark">Tema Gelap</string>
+    <string name="pref_use_grid">Gunakan tata letak kisi</string>
+    <string name="remove">Buang</string>
+    <string name="book_header_completed">Selesai</string>
+    <string name="min">%s min</string>
+    <string name="skip_silence">Lewati Keheningan</string>
+    <string name="cover_search.icon_recent">Permintaan terbaru</string>
+    <string name="play_current">Putar saat ini</string>
+    <string name="delete">Hapus</string>
+    <string name="folder_type_dialog_title">Apa yang ingin Anda tambahkan\?</string>
+    <string name="pref_report_issue">Laporkan masalah</string>
+    <string name="rewind">Memundurkan</string>
+    <string name="more">Lainnya</string>
+    <string name="pref_auto_rewind_title">Mundur otomatis</string>
+    <string name="add">Tambah</string>
+    <string name="action_sleep">Pengatur Waktu Tidur</string>
 </resources>

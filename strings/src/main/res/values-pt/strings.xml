@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="play_pause">Reproduzir / Pausar</string>
+    <string name="next_track">Faixa seguinte</string>
+    <string name="pause">Pausa</string>
+    <string name="fast_forward">Avançar</string>
+    <string name="cover">Capa</string>
+    <string name="skip_silence">Saltar silencio</string>
+    <string name="previous_track">Faixa anterior</string>
+    <string name="more">Mais</string>
+    <string name="dialog_confirm">Definir</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="play">Reproduzir</string>
+    <string name="action_sleep">Temporizador</string>
+    <string name="volume_boost">Aumentar volume</string>
+</resources>

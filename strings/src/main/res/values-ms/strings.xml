@@ -45,7 +45,9 @@
     <string name="close">Tutup</string>
     <string name="migration_hint_title">Mengakses posisi buku lama</string>
     <string name="folder_type_title">Bagaimanakah struktur fail anda\?</string>
-    <string name="migration_hint_content">Disebabkan berubahan dalam Versi Android baharu,</string>
+    <string name="migration_hint_content">Disebabkan perubahan dalam Versi Android baharu, adalah perlu untuk pilih folder audiobook anda menggunakan system picker.
+\n
+\nKlik pada ikon di atas untuk melihat kedudukan buku lama anda.</string>
     <string name="delete_last_number">Padam nombor terakhir dimasukkan</string>
     <plurals name="seconds">
         <item quantity="other">%d saat</item>
@@ -63,8 +65,8 @@
     <string name="play_current">Mainkan sekarang</string>
     <string name="folder_type_dialog_title">Apa yang anda ingin tambah\?</string>
     <string name="folder_mode_root">Mod Buku Peringkat Tertinggi: Subfolder adalah buku</string>
-    <string name="folder_mode_single">Mod Buku Tunggal: Satu folder bersamaan satu buku</string>
-    <string name="folder_mode_author">Mod Buku Penulis: Subfolder adalah penulis, sub-subfolder adalah buku</string>
+    <string name="folder_mode_single">Mod Buku Tunggal: Satu folder bersamaan satu buku.</string>
+    <string name="folder_mode_author">Mod Buku Penulis: Subfolder adalah penulis, sub-subfolder adalah buku.</string>
     <string name="folder_type_book_example_header">Ini akan membawa kepada buku berikut dapat dikesan</string>
     <plurals name="folder_type_file_count">
         <item quantity="other">%d fail audio</item>

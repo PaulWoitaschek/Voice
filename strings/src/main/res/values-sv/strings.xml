@@ -97,7 +97,7 @@
     <string name="pause">Pausa</string>
     <string name="cover_search.author">Författare</string>
     <string name="storage_bug_button">Tillåta behörigheter</string>
-    <string name="select_folder_subtitle">Vill du lägga till en enda fil som en bok eller en mapp\?</string>
+    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som en bok eller en mapp\?</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dem i mappar. Du väljer!</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas. Njut av din resa med Voice!</string>
@@ -124,4 +124,11 @@
     <string name="review.feedback.content">Kan du berätta vad som gick fel\? Vi uppskattar din feedback och den hjälper oss att förbättra din upplevelse.</string>
     <string name="review.feedback.button.yes">Skicka feedback</string>
     <string name="cover_search.icon_recent">Senaste sökning</string>
+    <string name="sleep_timer.title">Söta drömmar! 🌙</string>
+    <string name="sleep_timer.button.increment">Längre</string>
+    <string name="sleep_timer.button.decrement">Kortare</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minuter</item>
+    </plurals>
 </resources>
