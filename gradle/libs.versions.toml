@@ -166,7 +166,7 @@ anvil = { id = "com.squareup.anvil", version = "2.4.8-1-8" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.9" }
-googleServices = { id = "com.google.gms.google-services", version = "4.3.15" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.0" }
 playPublish = { id = "com.github.triplet.play", version = "3.8.4" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
