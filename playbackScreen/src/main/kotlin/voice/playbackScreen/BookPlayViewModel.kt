@@ -89,8 +89,11 @@ class BookPlayViewModel
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
     return BookPlayViewState(
-      sleepTime = sleepTime,
-      sleepEoc = sleepAtEoc,
+      sleepTimer = when {
+        sleepAtEoc -> BookPlayViewState.SleepTimerViewState.SleepAtEndOfChapter
+        sleepTime > Duration.ZERO -> BookPlayViewState.SleepTimerViewState.SleepAfterDuration(sleepTime)
+        else -> null
+      },
       playing = playState == PlayStateManager.PlayState.Playing,
       title = book.content.name,
       showPreviousNextButtons = hasMoreThanOneChapter,

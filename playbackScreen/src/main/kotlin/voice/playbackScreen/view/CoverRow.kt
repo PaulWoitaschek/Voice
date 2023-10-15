@@ -13,20 +13,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.common.compose.ImmutableFile
 import voice.common.formatTime
+import voice.playbackScreen.BookPlayViewState
 import voice.strings.R
-import kotlin.time.Duration
 
 @Composable
 internal fun CoverRow(
   cover: ImmutableFile?,
-  sleepTime: Duration,
-  sleepEoc: Boolean,
+  sleepTimer: BookPlayViewState.SleepTimerViewState?,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Box(modifier) {
     Cover(onDoubleClick = onPlayClick, cover = cover)
-    if (sleepTime != Duration.ZERO || sleepEoc) {
+    if (sleepTimer != null) {
       Text(
         modifier = Modifier
           .align(Alignment.TopEnd)
@@ -36,11 +35,11 @@ internal fun CoverRow(
             shape = RoundedCornerShape(20.dp),
           )
           .padding(horizontal = 20.dp, vertical = 16.dp),
-        text = when (sleepEoc) {
-          true -> stringResource(R.string.end_of_chapter)
-          false -> formatTime(
-            timeMs = sleepTime.inWholeMilliseconds,
-            durationMs = sleepTime.inWholeMilliseconds,
+        text = when (sleepTimer) {
+          BookPlayViewState.SleepTimerViewState.SleepAtEndOfChapter -> stringResource(R.string.end_of_chapter)
+          is BookPlayViewState.SleepTimerViewState.SleepAfterDuration -> formatTime(
+            timeMs = sleepTimer.remaining.inWholeMilliseconds,
+            durationMs = sleepTimer.remaining.inWholeMilliseconds,
           )
         },
         color = Color.White,
