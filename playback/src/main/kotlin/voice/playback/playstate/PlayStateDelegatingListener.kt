@@ -1,11 +1,14 @@
 package voice.playback.playstate
 
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import voice.playback.PlayerController
 import javax.inject.Inject
 
 class PlayStateDelegatingListener
 @Inject constructor(
   private val playStateManager: PlayStateManager,
+  private val playerController: PlayerController,
 ) : Player.Listener {
 
   private lateinit var player: Player
@@ -25,6 +28,16 @@ class PlayStateDelegatingListener
     reason: Int,
   ) {
     updatePlayState()
+  }
+
+  override fun onMediaItemTransition(
+    mediaItem: MediaItem?,
+    reason: Int,
+  ) {
+    if (playStateManager.sleepAtEoc) {
+      playStateManager.sleepAtEoc = false
+      playerController.pauseAtStart()
+    }
   }
 
   private fun updatePlayState() {

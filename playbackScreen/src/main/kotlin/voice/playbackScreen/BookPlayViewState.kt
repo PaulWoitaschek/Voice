@@ -13,6 +13,7 @@ data class BookPlayViewState(
   val showPreviousNextButtons: Boolean,
   val title: String,
   val sleepTime: Duration,
+  val sleepEoc: Boolean,
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
