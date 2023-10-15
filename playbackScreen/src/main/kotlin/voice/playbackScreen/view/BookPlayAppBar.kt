@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.playbackScreen.BookPlayViewState
 import voice.strings.R
-import kotlin.time.Duration
 
 @Composable
 internal fun BookPlayAppBar(
@@ -40,7 +39,7 @@ internal fun BookPlayAppBar(
   val appBarActions: @Composable RowScope.() -> Unit = {
     IconButton(onClick = onSleepTimerClick) {
       Icon(
-        imageVector = if (!viewState.sleepEoc && viewState.sleepTime == Duration.ZERO) {
+        imageVector = if (viewState.sleepTimer == null) {
           Icons.Outlined.Bedtime
         } else {
           Icons.Outlined.BedtimeOff
