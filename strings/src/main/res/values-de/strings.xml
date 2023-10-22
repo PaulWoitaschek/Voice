@@ -123,8 +123,11 @@
     <string name="review.request.button.no">Nein, danke</string>
     <string name="review.feedback.button.yes">Feedback senden</string>
     <string name="review.feedback.button.no">Abbrechen</string>
-    <string name="review.request.title">Gefällt Ihnen Voice\?</string>
-    <string name="review.request.content">Ihr Feedback ist uns wichtig! Wenn Sie einen Moment Zeit haben, bewerten Sie uns und teilen Sie Ihre Erfahrungen. Es hilft uns, Verbesserungen vorzunehmen und ein besseres Hörerlebnis zu bieten.</string>
+    <string name="review.request.title">Gefällt dir Voice\?</string>
+    <string name="review.request.content">Deine Meinung ist uns wichtig! Wenn du einen Moment Zeit hast, bewerte uns und teile deine Erfahrungen. Das hilft uns dabei, Verbesserungen vorzunehmen und ein besseres Hörerlebnis zu bieten.</string>
     <string name="review.feedback.title">Es tut uns leid, das zu hören!</string>
-    <string name="review.feedback.content">Könnten Sie uns sagen, was schief gelaufen ist\? Wir schätzen Ihr Feedback und es hilft uns, Ihre Erfahrung zu verbessern.</string>
+    <string name="review.feedback.content">Kannst du uns mitteilen, was falsch gelaufen ist\? Wir schätzen dein Feedback sehr, es hilft uns dabei, dein Erlebnis zu verbessern.</string>
+    <string name="sleep_timer.title">Schlaf gut! 🌙</string>
+    <string name="sleep_timer.button.increment">Länger</string>
+    <string name="sleep_timer.button.decrement">Kürzer</string>
 </resources>
