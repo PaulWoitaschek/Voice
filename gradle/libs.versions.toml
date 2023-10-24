@@ -17,7 +17,7 @@ compose-compiler = "1.5.3"
 media3 = "1.1.1"
 agp = "8.1.2"
 ktlint-core = "1.0.1"
-ktlint-gradlePlugin = "0.6.0"
+ktlint-gradlePlugin = "0.6.1"
 retrofit = "2.9.0"
 
 [libraries]
