@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Cover</string>
-    <string name="play_pause">Abspielen / Pause</string>
+    <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Einschlaf-Timer</string>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
@@ -93,7 +93,7 @@
     <string name="media_session_recent">Kürzlich</string>
     <string name="notification_sleep_timer_enable">Einschlaftimer einschalten</string>
     <string name="notification_sleep_timer_disable">Einschlaftimer ausschalten</string>
-    <string name="play">Abspielen</string>
+    <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="end_of_chapter">Kapitelende</string>
     <string name="generic_error_message">Etwas ist schief gelaufen 😢</string>
@@ -130,4 +130,8 @@
     <string name="sleep_timer.title">Schlaf gut! 🌙</string>
     <string name="sleep_timer.button.increment">Länger</string>
     <string name="sleep_timer.button.decrement">Kürzer</string>
+    <plurals name="minutes">
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minuten</item>
+    </plurals>
 </resources>
