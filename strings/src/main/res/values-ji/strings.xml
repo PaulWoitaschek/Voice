@@ -38,4 +38,10 @@
     <string name="pref_suggest_idea">פארשלאגט א געדאנק</string>
     <string name="pref_report_issue">באריכט א פראבלעם</string>
     <string name="popup_edit">רעדאגיר</string>
+    <string name="close">פארמאך</string>
+    <string name="book_header_completed">גענדיגט</string>
+    <string name="delete">פארמעק</string>
+    <string name="folder_type_dialog_title">וואס ווילסטו צולייגן\?</string>
+    <string name="book_header_not_started">נאך נישט אנגעהויבן</string>
+    <string name="add">לייג צו</string>
 </resources>
