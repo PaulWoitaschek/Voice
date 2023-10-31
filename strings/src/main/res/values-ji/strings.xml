@@ -44,4 +44,10 @@
     <string name="folder_type_dialog_title">וואס ווילסטו צולייגן\?</string>
     <string name="book_header_not_started">נאך נישט אנגעהויבן</string>
     <string name="add">לייג צו</string>
+    <string name="play_current">שפיל די אנגייענדע</string>
+    <string name="folder_type_book_example_header">דאס וואלט געטראפן די פאלגענדע ביכער</string>
+    <string name="battery_optimization_action">אפדעיט</string>
+    <string name="media_session_root">אלע אודיו ביכער</string>
+    <string name="book_header_current">אנגייענדע</string>
+    <string name="bookmark_just_now">ממש יעצט</string>
 </resources>
