@@ -136,4 +136,5 @@
         <item quantity="many">%d minuti</item>
         <item quantity="other">%d minuti</item>
     </plurals>
+    <string name="end_of_chapter">Fine del capitolo</string>
 </resources>
