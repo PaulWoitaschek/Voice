@@ -131,4 +131,5 @@
         <item quantity="one">%d minut</item>
         <item quantity="other">%d minuter</item>
     </plurals>
+    <string name="end_of_chapter">Slutet av kapitel</string>
 </resources>
