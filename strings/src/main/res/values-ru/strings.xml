@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Обложка</string>
-    <string name="play_pause">Читать — пауза</string>
+    <string name="play_pause">Воспроизведение — пауза</string>
     <string name="action_sleep">Таймер сна</string>
     <string name="rewind">Перемотать назад</string>
     <string name="fast_forward">Перемотать вперед</string>
@@ -21,8 +21,8 @@
     <string name="mark_as_not_started">Пометить как непрослушанную</string>
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
     <string name="playback_speed">Скорость чтения</string>
-    <string name="bookmark">Закладки</string>
-    <string name="bookmark_edit_title">Редактировать</string>
+    <string name="bookmark">Закладка</string>
+    <string name="bookmark_edit_title">Редактировать закладку</string>
     <string name="bookmark_edit_hint">Имя закладки</string>
     <string name="bookmark_added">Закладка добавлена</string>
     <string name="action_settings">Настройки</string>
@@ -44,7 +44,7 @@
     <string name="pref_get_support">Поддержка</string>
     <string name="pref_app_version">Версия приложения</string>
     <string name="popup_edit">Редактировать</string>
-    <string name="remove">Удалить</string>
+    <string name="remove">Убрать</string>
     <string name="play_current">Читать открытую</string>
     <string name="book_header_current">Слушаю</string>
     <string name="book_header_not_started">Непрослушанные</string>
@@ -90,7 +90,7 @@
     <string name="search_hint">Что вы ищете?</string>
     <string name="battery_optimization_rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
     <string name="battery_optimization_action">Обновить</string>
-    <string name="play">Усиление звука</string>
+    <string name="play">Воспроизведение</string>
     <string name="more">Больше</string>
     <string name="generic_error_retry">Повторить</string>
     <string name="storage_bug_button">Предоставить разрешение</string>
@@ -135,4 +135,7 @@
         <item quantity="many">%d минут</item>
         <item quantity="other">%d минут</item>
     </plurals>
+    <string name="sleep_timer.button.increment">Дольше</string>
+    <string name="end_of_chapter">Конец главы</string>
+    <string name="sleep_timer.button.decrement">Короче</string>
 </resources>
