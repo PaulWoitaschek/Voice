@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Обложка</string>
-    <string name="play_pause">Воспроизведение — пауза</string>
+    <string name="play_pause">Воспроизведение / Пауза</string>
     <string name="action_sleep">Таймер сна</string>
     <string name="rewind">Перемотать назад</string>
     <string name="fast_forward">Перемотать вперед</string>
@@ -20,7 +20,7 @@
     <string name="mark_as_current">Пометить как открытую</string>
     <string name="mark_as_not_started">Пометить как непрослушанную</string>
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
-    <string name="playback_speed">Скорость чтения</string>
+    <string name="playback_speed">Скорость воспроизведения</string>
     <string name="bookmark">Закладка</string>
     <string name="bookmark_edit_title">Редактировать закладку</string>
     <string name="bookmark_edit_hint">Имя закладки</string>
@@ -44,8 +44,8 @@
     <string name="pref_get_support">Поддержка</string>
     <string name="pref_app_version">Версия приложения</string>
     <string name="popup_edit">Редактировать</string>
-    <string name="remove">Убрать</string>
-    <string name="play_current">Читать открытую</string>
+    <string name="remove">Удалить</string>
+    <string name="play_current">Воспроизвести текущую</string>
     <string name="book_header_current">Слушаю</string>
     <string name="book_header_not_started">Непрослушанные</string>
     <string name="book_header_completed">Прослушанные</string>
