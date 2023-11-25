@@ -124,4 +124,12 @@
     <string name="onboarding.explanation.title">Dit bibliotek - På din måde</string>
     <string name="onboarding.completion.title">Så er du klar!</string>
     <string name="onboarding.completion.subtitle">Din første lydbog er klar til afspilning. Nyd din rejse med Voice!</string>
+    <string name="sleep_timer.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.button.increment">Længre</string>
+    <string name="end_of_chapter">Slutning af kapitel</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minutter</item>
+    </plurals>
+    <string name="sleep_timer.button.decrement">Kortere</string>
 </resources>
