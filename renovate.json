@@ -40,6 +40,16 @@
       "matchPackagePrefixes": [
         "com.github.PaulWoitaschek"
       ]
+    },
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
     }
   ],
   "prHourlyLimit": 0,
