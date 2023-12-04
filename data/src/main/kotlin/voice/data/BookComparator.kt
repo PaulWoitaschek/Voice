@@ -16,4 +16,9 @@ enum class BookComparator(
       NaturalOrderComparator.stringComparator.compare(left.content.name, right.content.name)
     },
   ),
+  ByLastAdded(
+    compareByDescending<Book> {
+      it.content.addedAt
+    },
+  ),
 }

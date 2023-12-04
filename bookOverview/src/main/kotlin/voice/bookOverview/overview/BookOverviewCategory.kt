@@ -16,7 +16,7 @@ enum class BookOverviewCategory(
   ),
   NOT_STARTED(
     nameRes = StringsR.string.book_header_not_started,
-    comparator = BookComparator.ByName,
+    comparator = BookComparator.ByLastAdded,
   ),
   FINISHED(
     nameRes = StringsR.string.book_header_completed,
