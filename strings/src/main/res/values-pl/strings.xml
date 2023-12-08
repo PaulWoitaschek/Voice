@@ -112,7 +112,6 @@
     <string name="storage_bug_title">Wymagany dostęp</string>
     <string name="storage_bug_subtitle">W przypadku niektórych urządzeń aplikacja systemowa nie ma uprawnień niezbędnych do uzyskania dostępu do pamięci zewnętrznej. Dostęp ten jest niezbędny, aby aplikacja Voice mogła odczytywać książki audio.</string>
     <string name="review.feedback.title">Przykro nam to słyszeć!</string>
-    <string name="sleep_timer.button.increment"></string>
     <string name="onboarding.explanation.title">Twoja biblioteka, Twoja Wybór</string>
     <string name="review.request.button.yes">Oceń Teraz</string>
     <string name="select_folder_type_file">Plik</string>
@@ -128,7 +127,6 @@
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
     <string name="review.request.button.no">Nie, Dziękuję</string>
     <string name="review.feedback.content">Czy możesz nam powiedzieć, co poszło nie tak? Doceniamy Twoją opinię, która pomoże nam poprawić Twoje doświadczenia.</string>
-    <string name="sleep_timer.button.decrement"></string>
     <string name="onboarding.explanation.subtitle">Aplikacja Voice umożliwia dodawanie książek jako pojedynczych plików lub organizowanie ich w folderach. To ty wybierasz!</string>
     <string name="onboarding.completion.next_button">Zacznij Słuchać</string>
     <string name="review.request.content">Twoja opinia ma dla nas znaczenie! Jeśli masz chwilę, oceń nas i podziel się swoimi doświadczeniami. Pomaga nam to wprowadzać ulepszenia i oferować lepsze wrażenia słuchowe.</string>
