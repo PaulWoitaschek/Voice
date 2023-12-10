@@ -130,4 +130,8 @@
     <string name="onboarding.explanation.subtitle">Aplikacja Voice umożliwia dodawanie książek jako pojedynczych plików lub organizowanie ich w folderach. To ty wybierasz!</string>
     <string name="onboarding.completion.next_button">Zacznij Słuchać</string>
     <string name="review.request.content">Twoja opinia ma dla nas znaczenie! Jeśli masz chwilę, oceń nas i podziel się swoimi doświadczeniami. Pomaga nam to wprowadzać ulepszenia i oferować lepsze wrażenia słuchowe.</string>
+    <string name="select_folder_title_default">Dodaj swój Audiobook(i)</string>
+    <string name="storage_bug_button">Przyznaj uprawnienie</string>
+    <string name="end_of_chapter">Koniec Rozdziału</string>
+    <string name="select_folder_title_onboarding">Dodaj Swój Pierwszy Audiobook</string>
 </resources>
