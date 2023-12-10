@@ -33,6 +33,10 @@ import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import javax.inject.Inject
 
+
+private const val APP_PACKAGE_ID = "de.ph1b.audiobook"
+
+
 class LibrarySessionCallback
 @Inject constructor(
   private val mediaItemProvider: MediaItemProvider,
@@ -166,9 +170,7 @@ class LibrarySessionCallback
   ): ConnectionResult {
     Logger.d("onConnect to ${controller.packageName}")
 
-    if (player.playbackState == Player.STATE_IDLE &&
-      controller.packageName == "com.google.android.projection.gearhead"
-    ) {
+    if (player.playbackState == Player.STATE_IDLE && controller.packageName != APP_PACKAGE_ID) {
       Logger.d("onConnect to ${controller.packageName} and player is idle.")
       Logger.d("Preparing current book so it shows up as recently played")
       scope.launch {
