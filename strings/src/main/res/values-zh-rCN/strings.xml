@@ -91,4 +91,11 @@
     <string name="notification_sleep_timer_disable">禁用睡眠定时器</string>
     <string name="play">播放</string>
     <string name="pause">暂停</string>
+    <string name="generic_error_retry">重试</string>
+    <string name="storage_bug_title">需要权限</string>
+    <string name="cover_search.icon_recent">近期查询</string>
+    <string name="storage_bug_subtitle">对于某些设备，系统应用程序缺少访问外部存储的必要权限。此访问对于Voice阅读您的有声读物至关重要。</string>
+    <string name="cover_search.author">作者</string>
+    <string name="end_of_chapter">章末</string>
+    <string name="generic_error_message">发生了错误😢</string>
 </resources>
