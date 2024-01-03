@@ -37,7 +37,7 @@ class MediaScannerTest {
 
   init {
     Shadows.shadowOf(MimeTypeMap.getSingleton())
-      .addExtensionMimeTypMapping("mp3", "audio/mp3")
+      .addExtensionMimeTypeMapping("mp3", "audio/mp3")
   }
 
   @Test
