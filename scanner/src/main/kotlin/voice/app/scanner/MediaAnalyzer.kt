@@ -20,7 +20,7 @@ class MediaAnalyzer
         duration = duration.seconds.inWholeMilliseconds,
         chapterName = result.findTag(TagType.Title) ?: file.nameWithoutExtension(),
         author = result.findTag(TagType.Artist),
-        bookName = result.findTag(TagType.Album),
+        bookName = result.findTag(TagType.Title),
         chapters = result.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
             startMs = metaDataChapter.start.inWholeMilliseconds,

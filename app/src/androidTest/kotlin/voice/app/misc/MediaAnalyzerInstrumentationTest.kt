@@ -36,7 +36,7 @@ class MediaAnalyzerInstrumentationTest {
     analyze(R.raw.intact) shouldBe MediaAnalyzer.Metadata(
       duration = 119040,
       author = "Auphonic",
-      bookName = "Auphonic Examples",
+      bookName = "Auphonic Chapter Marks Demo",
       chapterName = "Auphonic Chapter Marks Demo",
       chapters = listOf(
         MarkData(0, "Intro"),
