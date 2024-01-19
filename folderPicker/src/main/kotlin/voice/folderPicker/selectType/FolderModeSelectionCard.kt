@@ -37,7 +37,7 @@ internal fun FolderModeSelectionCard(
       modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-      FolderMode.values().forEach { folderMode ->
+      FolderMode.entries.forEach { folderMode ->
         val selectFolder = { onFolderModeSelected(folderMode) }
         FolderModeColumn(selectFolder = selectFolder, selectedFolderMode = selectedFolderMode, folderMode = folderMode)
       }
