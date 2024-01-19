@@ -51,10 +51,6 @@ class BookParser
 
       val migratedPlaybackPosition = migrationSettings?.let { findMigratedPlaybackPosition(it, chapters) }
 
-      buildList {
-        add(null)
-        add("")
-      }.filterNotNull().firstOrNull()
       BookContent(
         id = id,
         isActive = true,
