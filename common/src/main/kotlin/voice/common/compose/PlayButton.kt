@@ -26,7 +26,10 @@ fun PlayButton(
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val cornerSize by animateDpAsState(if (playing) 16.dp else fabSize / 2)
+  val cornerSize by animateDpAsState(
+    targetValue = if (playing) 16.dp else fabSize / 2,
+    label = "cornerSize",
+  )
   FloatingActionButton(
     modifier = modifier.size(fabSize),
     onClick = onPlayClick,
