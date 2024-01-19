@@ -1,5 +1,3 @@
-@file:Suppress("BlockingMethodInNonBlockingContext")
-
 package voice.app.scanner
 
 import android.webkit.MimeTypeMap
