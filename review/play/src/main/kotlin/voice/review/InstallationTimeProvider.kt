@@ -17,7 +17,6 @@ class InstallationTimeProvider
     val packageInfo = if (Build.VERSION.SDK_INT >= 33) {
       packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(0L))
     } else {
-      @Suppress("DEPRECATION")
       packageManager.getPackageInfo(context.packageName, 0)
     }
     return Instant.ofEpochMilli(packageInfo.firstInstallTime)
