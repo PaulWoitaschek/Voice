@@ -9,7 +9,7 @@ import voice.data.ChapterId
 sealed interface MediaId {
   @Serializable
   @SerialName("root")
-  object Root : MediaId
+  data object Root : MediaId
 
   @Serializable
   @SerialName("book")
@@ -24,5 +24,5 @@ sealed interface MediaId {
 
   @Serializable
   @SerialName("recent")
-  object Recent : MediaId
+  data object Recent : MediaId
 }
