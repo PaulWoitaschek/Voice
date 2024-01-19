@@ -22,8 +22,6 @@
     <string name="bookmark_edit_hint">Boekmerk naam</string>
     <string name="bookmark_added">Boekmerk bygevoeg</string>
     <string name="action_settings">Voorkeure</string>
-    <string name="min">%smin</string>
-    <string name="delete_last_number">Skrap die laaste ingevoerde nommer</string>
     <plurals name="seconds">
         <item quantity="one">%d sekonde</item>
         <item quantity="other">%d sekondes</item>
@@ -46,7 +44,6 @@
     <string name="close">Sluit</string>
     <string name="delete">Skrap</string>
     <string name="add">Voeg toe</string>
-    <string name="folder_type_dialog_title">Wat wil jy toevoeg\?</string>
     <string name="folder_mode_single">Enkele audioboek gids</string>
     <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers\?</string>
     <string name="folder_type_title">Hoe is jou lêers onderverdeel\?</string>

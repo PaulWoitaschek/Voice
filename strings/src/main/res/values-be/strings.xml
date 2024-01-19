@@ -6,7 +6,6 @@
     <string name="playback_speed">Хуткасць прайгравання</string>
     <string name="bookmark_added">Закладка дададзеная</string>
     <string name="bookmark_edit_hint">Назва закладкі</string>
-    <string name="min">%s хв</string>
     <string name="pref_suggest_idea">Прапанаваць ідэю</string>
     <string name="play_pause">Прайграванне / Паўза</string>
     <string name="play">Прайграванне</string>
@@ -46,7 +45,6 @@
     <string name="content_cover">Паказаць вокладкі для выбару</string>
     <string name="cover_search_template_no_author">%s вокладак аўдыякніг</string>
     <string name="cover_search.author">Аўтар</string>
-    <string name="delete_last_number">Выдаляе апошнюю набраную лічбу</string>
     <string name="cover_search.icon_recent">Нядаўні запыт</string>
     <string name="edit_book_title">Рэдагаваць кнігу</string>
     <string name="mark_as_current">Пазначыць як чытанае зараз</string>
@@ -67,7 +65,6 @@
     <string name="book_header_not_started">Яшчэ не чытанае</string>
     <string name="book_header_completed">Прачытанае</string>
     <string name="delete">Выдаліць</string>
-    <string name="folder_type_dialog_title">Што Вы хочаце дадаць\?</string>
     <string name="volume_boost">Узмацненне гучнасці</string>
     <string name="folder_mode_single">Рэжым адной кнігі: адна тэчка – гэта адна кніга.</string>
     <string name="folder_mode_author">Рэжым Аўтар-Кніга: падтэчкі – гэта аўтары, пад-падтэчкі – кнігі.</string>

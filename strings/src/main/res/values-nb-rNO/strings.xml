@@ -8,7 +8,6 @@
     <string name="playback_speed">Avspillingshastighet</string>
     <string name="bookmark">Bokmerke</string>
     <string name="bookmark_edit_hint">Bokmerkenavn</string>
-    <string name="delete_last_number">Sletter sist inntastede tall</string>
     <string name="pref_seek_time">Hopp over mengde</string>
     <string name="pref_use_grid">Bruk rutenettsoppsett</string>
     <string name="pref_help_translating">Bistå oversettelsen</string>
@@ -49,7 +48,6 @@
     <string name="edit_book_title">Rediger bok</string>
     <string name="mark_as_current">Marker som pågående</string>
     <string name="mark_as_not_started">Marker som ikke startet enda</string>
-    <string name="min">%s min</string>
     <string name="bookmark_edit_title">Rediger bokmerke</string>
     <string name="bookmark_added">Bokmerket</string>
     <string name="action_settings">Innstillinger</string>
@@ -69,7 +67,6 @@
     <string name="delete">Slett</string>
     <string name="play_current">Spill nåværende</string>
     <string name="close">Lukk</string>
-    <string name="folder_type_dialog_title">Hva vil du legge til\?</string>
     <string name="add">Legg til</string>
     <string name="folder_type_book_example_header">Følgende bøker vil bli lagt til</string>
     <plurals name="folder_type_file_count">

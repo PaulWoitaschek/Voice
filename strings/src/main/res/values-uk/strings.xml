@@ -25,8 +25,6 @@
     <string name="bookmark_edit_hint">Назва закладки</string>
     <string name="bookmark_added">Закладку додано</string>
     <string name="action_settings">Налаштування</string>
-    <string name="min">%s хв</string>
-    <string name="delete_last_number">Видаляє останнє введене число</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
         <item quantity="few">%d секунд</item>
@@ -74,7 +72,6 @@
     <string name="pref_help_translating">Допомога в перекладі Voice</string>
     <string name="pref_get_support">Підтримка</string>
     <string name="pref_app_version">Версія</string>
-    <string name="folder_type_dialog_title">Що ви хочете додати\?</string>
     <string name="folder_mode_root">Коренева папка аудіокниг. Одна папка = одна книга.</string>
     <string name="folder_type_title">Як структуровані ваші файли\?</string>
     <string name="folder_mode_single">Єдина папка з аудіокнигами</string>

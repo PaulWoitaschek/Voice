@@ -26,8 +26,6 @@
     <string name="bookmark_edit_hint">Žymelės pavadinimas</string>
     <string name="bookmark_added">Žymelė išsaugota</string>
     <string name="action_settings">Nustatymai</string>
-    <string name="min">%s min.</string>
-    <string name="delete_last_number">Pašalina paskutinį įvestą skaičių</string>
     <plurals name="seconds">
         <item quantity="one">%d sekundė</item>
         <item quantity="few">%d sekundės</item>
@@ -52,7 +50,6 @@
     <string name="close">Uždaryti</string>
     <string name="delete">Pašalinti</string>
     <string name="add">Pridėti</string>
-    <string name="folder_type_dialog_title">Ką norite pridėti?</string>
     <string name="folder_mode_root">Šakninis garsinių knygų aplankas. Kiekvienas poaplankis = atskira knyga.</string>
     <string name="folder_mode_single">Vienos garsinės knygos aplankas</string>
     <plurals name="folder_type_file_count">

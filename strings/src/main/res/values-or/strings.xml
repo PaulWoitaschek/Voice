@@ -2,7 +2,6 @@
 <resources>
     <string name="edit_book_title">ପୁସ୍ତକ ସମ୍ପାଦନା</string>
     <string name="mark_as_completed">ସାରିଥିବା ପରି ଚିହ୍ନିତ କର</string>
-    <string name="min">%s ମିନିଟ୍</string>
     <plurals name="seconds">
         <item quantity="one">%d ସେକେଣ୍ଡ</item>
         <item quantity="other">%d ସେକେଣ୍ଡ</item>

@@ -26,8 +26,6 @@
     <string name="mark_as_completed">Marchează ca terminată</string>
     <string name="bookmark_edit_title">Modificare semn de carte</string>
     <string name="action_settings">Preferințe</string>
-    <string name="min">%s minute</string>
-    <string name="delete_last_number">Șterge ultimul număr introdus</string>
     <string name="bookmark_edit_hint">Nume semn de carte</string>
     <plurals name="seconds">
         <item quantity="one">%d secundă</item>
@@ -51,7 +49,6 @@
     <string name="close">Închide</string>
     <string name="delete">Șterge</string>
     <string name="add">Adaugă</string>
-    <string name="folder_type_dialog_title">Ce doriți să adăugați\?</string>
     <string name="folder_mode_root">Dosar rădăcină Cărți audio. Fiecare dosar conținut reprezintă o carte.</string>
     <string name="folder_mode_single">Dosar unic pentru Carte audio</string>
     <plurals name="folder_type_file_count">
