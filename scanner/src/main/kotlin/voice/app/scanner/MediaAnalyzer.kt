@@ -18,9 +18,10 @@ class MediaAnalyzer
     return if (duration != null && duration > 0 && result.streams.isNotEmpty()) {
       Metadata(
         duration = duration.seconds.inWholeMilliseconds,
-        chapterName = result.findTag(TagType.Title) ?: file.nameWithoutExtension(),
-        author = result.findTag(TagType.Artist),
-        bookName = result.findTag(TagType.Album),
+        fileName = file.nameWithoutExtension(),
+        artist = result.findTag(TagType.Artist),
+        album = result.findTag(TagType.Album),
+        title = result.findTag(TagType.Title),
         chapters = result.chapters.mapIndexed { index, metaDataChapter ->
           MarkData(
             startMs = metaDataChapter.start.inWholeMilliseconds,
@@ -36,9 +37,10 @@ class MediaAnalyzer
 
   data class Metadata(
     val duration: Long,
-    val chapterName: String?,
-    val author: String?,
-    val bookName: String?,
+    val artist: String?,
+    val album: String?,
+    val title: String?,
+    val fileName: String,
     val chapters: List<MarkData>,
   )
 }

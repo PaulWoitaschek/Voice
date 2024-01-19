@@ -33,11 +33,12 @@ class MediaAnalyzerInstrumentationTest {
 
   @Test
   fun intactFile() {
-    analyze(R.raw.intact) shouldBe MediaAnalyzer.Metadata(
+    analyze(R.raw.intact)!!.copy(fileName = "") shouldBe MediaAnalyzer.Metadata(
       duration = 119040,
-      author = "Auphonic",
-      bookName = "Auphonic Examples",
-      chapterName = "Auphonic Chapter Marks Demo",
+      artist = "Auphonic",
+      album = "Auphonic Examples",
+      fileName = "",
+      title = "Auphonic Chapter Marks Demo",
       chapters = listOf(
         MarkData(0, "Intro"),
         MarkData(15_000, "Creating a new production"),

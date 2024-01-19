@@ -59,10 +59,11 @@ class ChapterParserTest {
           val file = firstArg<CachedDocumentFile>()
           MediaAnalyzer.Metadata(
             duration = 1000,
-            chapterName = file.nameWithoutExtension(),
-            author = null,
-            bookName = null,
+            fileName = file.nameWithoutExtension(),
+            artist = null,
+            album = null,
             chapters = emptyList(),
+            title = null,
           )
         }
       },
