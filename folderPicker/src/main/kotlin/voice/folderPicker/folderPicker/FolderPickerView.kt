@@ -131,7 +131,7 @@ private fun FolderOverviewView(
 @Suppress("ktlint:compose:preview-public-check")
 @Composable
 @Preview
-private fun FolderOverviewPreview() {
+fun FolderOverviewPreview() {
   FolderOverviewView(
     viewState = FolderPickerViewState(
       items = listOf(

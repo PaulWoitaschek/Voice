@@ -6,19 +6,19 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @Serializable
-data class MetaDataScanResult(
+internal data class MetaDataScanResult(
   val streams: List<MetaDataStream> = emptyList(),
   val chapters: List<MetaDataChapter> = emptyList(),
   val format: MetaDataFormat? = null,
 )
 
-enum class TagType {
-  Title,
-  Artist,
-  Album,
+internal enum class TagType(val keys: List<String>) {
+  Title(listOf("title")),
+  Artist(listOf("author", "artist", "album_artist")),
+  Album(listOf("album")),
 }
 
-fun MetaDataScanResult.findTag(tagType: TagType): String? {
+internal fun MetaDataScanResult.findTag(tagType: TagType): String? {
   format?.tags?.find(tagType)?.let { return it }
   streams.forEach { stream ->
     stream.tags?.find(tagType)?.let { return it }
@@ -29,27 +29,24 @@ fun MetaDataScanResult.findTag(tagType: TagType): String? {
   return null
 }
 
-fun Map<String, String>.find(tagType: TagType): String? {
-  val targetKey = when (tagType) {
-    TagType.Title -> "title"
-    TagType.Artist -> "artist"
-    TagType.Album -> "album"
-  }
+internal fun Map<String, String>.find(tagType: TagType): String? {
   forEach { (key, value) ->
-    if (key.equals(targetKey, ignoreCase = true) && value.isNotEmpty()) {
-      return value
+    tagType.keys.forEach { targetKey ->
+      if (key.equals(targetKey, ignoreCase = true) && value.isNotEmpty()) {
+        return value
+      }
     }
   }
   return null
 }
 
 @Serializable
-data class MetaDataStream(
+internal data class MetaDataStream(
   val tags: Map<String, String>? = null,
 )
 
 @Serializable
-data class MetaDataChapter(
+internal data class MetaDataChapter(
   @SerialName("start_time")
   private val startInSeconds: Double,
   val tags: Map<String, String>? = null,
@@ -59,7 +56,7 @@ data class MetaDataChapter(
 }
 
 @Serializable
-data class MetaDataFormat(
+internal data class MetaDataFormat(
   val duration: Double? = null,
   val tags: Map<String, String>? = null,
 )

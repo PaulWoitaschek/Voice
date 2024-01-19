@@ -25,7 +25,7 @@ internal class MediaAnalyzerTest {
         duration = 123.45,
       ),
     )
-    analyzer.analyze(file)!!.chapterName shouldBe "MyTitle"
+    analyzer.analyze(file)!!.title shouldBe "MyTitle"
   }
 
   @Test
@@ -39,6 +39,6 @@ internal class MediaAnalyzerTest {
         duration = 123.45,
       ),
     )
-    analyzer.analyze(file)!!.chapterName shouldBe "mybook"
+    analyzer.analyze(file)!!.fileName shouldBe "mybook"
   }
 }
