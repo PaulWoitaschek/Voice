@@ -39,11 +39,4 @@ abstract class ViewBindingController<B : ViewBinding>(
   open fun onDestroyView() {}
 
   open fun B.onBindingCreated() {}
-
-  final override fun onAttach(view: View) {
-    super.onAttach(view)
-    binding.onAttach()
-  }
-
-  open fun B.onAttach() {}
 }
