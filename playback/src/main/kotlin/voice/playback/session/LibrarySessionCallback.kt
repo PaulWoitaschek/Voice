@@ -204,7 +204,7 @@ class LibrarySessionCallback
   ): ListenableFuture<SessionResult> {
     when (customCommand) {
       PublishedCustomCommand.Sleep.sessionCommand -> {
-        sleepTimer.setEocActive(!sleepTimer.sleepTimerActive())
+        sleepTimer.setActive(!sleepTimer.sleepTimerActive())
       }
       else -> {
         val command = CustomCommand.parse(customCommand, args)

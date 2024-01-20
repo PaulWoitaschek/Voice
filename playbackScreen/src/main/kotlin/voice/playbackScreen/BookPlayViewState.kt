@@ -12,24 +12,18 @@ data class BookPlayViewState(
   val chapterName: String?,
   val showPreviousNextButtons: Boolean,
   val title: String,
+  val sleepTime: Duration,
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
   val cover: ImmutableFile?,
   val skipSilence: Boolean,
-  val sleepTimer: SleepTimerViewState?,
 ) {
 
   init {
     require(duration > Duration.ZERO) {
       "Duration must be positive in $this"
     }
-  }
-
-  @Immutable
-  sealed interface SleepTimerViewState {
-    data object SleepAtEndOfChapter : SleepTimerViewState
-    data class SleepAfterDuration(val remaining: Duration) : SleepTimerViewState
   }
 }
 
