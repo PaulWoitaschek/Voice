@@ -27,8 +27,6 @@
     <string name="bookmark_edit_hint">बुकमार्क का नाम</string>
     <string name="bookmark_added">बुकमार्क जोड़ा गया</string>
     <string name="action_settings">पसंदें</string>
-    <string name="min">%s मिनट</string>
-    <string name="delete_last_number">पिछला डाला अंक डिलीट करेगा</string>
     <plurals name="seconds">
         <item quantity="one">%d सेकंड</item>
         <item quantity="other">%d सेकंड</item>
@@ -51,7 +49,6 @@
     <string name="close">बंद </string>
     <string name="delete">हटाएँ </string>
     <string name="add">जोड़ें</string>
-    <string name="folder_type_dialog_title">आप क्या जोड़ना चाहते हैं </string>
     <string name="folder_mode_root">शीर्ष-स्तरीय पुस्तक मोड: सबफ़ोल्डर पुस्तकें हैं</string>
     <string name="folder_mode_single">एकल पुस्तक मोड: एक फ़ोल्डर एक पुस्तक के बराबर होता है।</string>
     <plurals name="folder_type_file_count">

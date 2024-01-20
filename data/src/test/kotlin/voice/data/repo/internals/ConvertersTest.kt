@@ -27,7 +27,7 @@ class ConvertersTest {
 
   @Test
   fun bookType() {
-    LegacyBookType.values().forEach { bookType ->
+    LegacyBookType.entries.forEach { bookType ->
       test(bookType, Converters::fromBookType, Converters::toBookType)
     }
   }

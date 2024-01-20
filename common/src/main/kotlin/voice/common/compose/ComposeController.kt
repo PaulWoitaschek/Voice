@@ -15,7 +15,6 @@ abstract class ComposeController(args: Bundle = Bundle()) : Controller(args) {
     container: ViewGroup,
     savedViewState: Bundle?,
   ): View {
-    onCreateView()
     return ComposeView(container.context).also {
       it.setContent {
         VoiceTheme {
@@ -24,8 +23,6 @@ abstract class ComposeController(args: Bundle = Bundle()) : Controller(args) {
       }
     }
   }
-
-  open fun onCreateView() {}
 
   @Composable
   abstract fun Content()

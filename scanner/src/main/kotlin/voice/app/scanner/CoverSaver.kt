@@ -37,7 +37,6 @@ class CoverSaver
       }
 
       try {
-        @Suppress("BlockingMethodInNonBlockingContext")
         FileOutputStream(newCover).use {
           val compressFormat = when (newCover.extension) {
             "png" -> Bitmap.CompressFormat.PNG

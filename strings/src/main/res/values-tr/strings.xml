@@ -22,8 +22,6 @@
     <string name="bookmark_edit_hint">Yer imi adı</string>
     <string name="bookmark_added">Yer imi eklendi</string>
     <string name="action_settings">Tercihler</string>
-    <string name="min">%s dak</string>
-    <string name="delete_last_number">Son girilen numarayı siler</string>
     <plurals name="seconds">
         <item quantity="one">%d saniye</item>
         <item quantity="other">%d saniye</item>
@@ -76,7 +74,6 @@
     <string name="pref_help_translating">Voice\'i çevirmeye yardım et</string>
     <string name="close">Kapat</string>
     <string name="delete">Sil</string>
-    <string name="folder_type_dialog_title">Ne eklemek istiyorsunuz\?</string>
     <string name="folder_type_no_books">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı\?</string>
     <string name="migration_detail_title">Eski kitap konumları</string>
     <string name="migration_detail_content_position_current_file_title">Geçerli dosya</string>

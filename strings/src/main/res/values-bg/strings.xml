@@ -21,8 +21,6 @@
     <string name="bookmark_edit_hint">Име на отметката</string>
     <string name="bookmark_added">Отметката бе добавена</string>
     <string name="action_settings">Настройки</string>
-    <string name="min">%s мин</string>
-    <string name="delete_last_number">Изтрива последно въведения номер</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
         <item quantity="other">%d секунди</item>
