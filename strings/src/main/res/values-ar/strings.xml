@@ -130,4 +130,6 @@
     <string name="onboarding.completion.title">أنت جاهز!</string>
     <string name="onboarding.completion.subtitle">كتابك الصوتي الأول يعمل. استمتع برحلتك مع فويس!</string>
     <string name="sleep_timer.title">أحلام سعيدة! 🌙</string>
+    <string name="sleep_timer.button.increment">أطول</string>
+    <string name="sleep_timer.button.decrement">أقصر</string>
 </resources>

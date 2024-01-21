@@ -12,7 +12,7 @@
     <string name="dialog_cancel">İptal</string>
     <string name="content_cover">Seçmek için kapak gösterir</string>
     <string name="change_book_name">Ad</string>
-    <string name="download_book_cover">İnternetten kapak</string>
+    <string name="download_book_cover">İnternetten kitap kapağı</string>
     <string name="pick_book_cover">Dosyalardan kapak</string>
     <string name="edit_book_title">Kitabı düzenle</string>
     <string name="audiobook_folders_title">Sesli kitap dizinleri</string>
@@ -126,4 +126,6 @@
     <string name="onboarding.explanation.subtitle">Voice\'u kullanarak kitapları tek tek dosyalar halinde ekleyebilir veya klasörler halinde düzenleyebilirsiniz. Sen seç!</string>
     <string name="onboarding.completion.next_button">Dinlemeye başla</string>
     <string name="review.request.content">Geri bildiriminiz bizim için önemli! Vaktiniz varsa bizi değerlendirin ve deneyiminizi paylaşın. Bu bizim iyileştirmeler yapmamıza ve daha iyi bir dinleme deneyimi sunmamıza yardımcı olur.</string>
+    <string name="storage_bug_subtitle">Belirli cihazlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir</string>
+    <string name="cover_search_template_no_author">Sesli kitabın %s\'si tamamlandı</string>
 </resources>

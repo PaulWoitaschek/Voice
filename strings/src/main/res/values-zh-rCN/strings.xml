@@ -88,4 +88,19 @@
     <string name="notification_sleep_timer_disable">禁用睡眠定时器</string>
     <string name="play">播放</string>
     <string name="pause">暂停</string>
+    <string name="generic_error_retry">重试</string>
+    <string name="storage_bug_title">需要权限</string>
+    <string name="cover_search.icon_recent">近期查询</string>
+    <string name="storage_bug_subtitle">对于某些设备，系统应用程序缺少访问外部存储的必要权限。此访问对于Voice阅读您的有声读物至关重要。</string>
+    <string name="cover_search.author">作者</string>
+    <string name="generic_error_message">发生了错误😢</string>
+    <string name="select_folder_subtitle">你想将单个文件添加为书本还是文件夹？</string>
+    <string name="select_folder_type_folder">文件夹</string>
+    <string name="folder_mode_author">作者-书籍模式：子文件夹为作者，子文件夹下的文件夹为书籍。</string>
+    <string name="select_folder_title_default">添加你的有声书</string>
+    <string name="storage_bug_button">给予权限</string>
+    <string name="select_folder_type_file">文件</string>
+    <string name="onboarding_welcome_title">欢迎使用Voice！</string>
+    <string name="onboarding_welcome_subtitle">你的个人口袋有声读物播放器。现在来进行配置吧。</string>
+    <string name="select_folder_title_onboarding">添加你的第一本有声书</string>
 </resources>
