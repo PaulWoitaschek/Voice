@@ -120,7 +120,7 @@
         <item quantity="other">%d minut</item>
     </plurals>
     <string name="review.feedback.button.yes">Wyślij Opinię</string>
-    <string name="onboarding_welcome_subtitle">Twój osobisty kieszonkowy odtwarzacz audiobooków. Zajmijmy się konfiguracją.</string>
+    <string name="onboarding_welcome_subtitle">Twój osobisty kieszonkowy odtwarzacz audiobooków. Zacznijmy od konfiguracji.</string>
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
     <string name="review.request.button.no">Nie, Dziękuję</string>
     <string name="review.feedback.content">Czy możesz nam powiedzieć, co poszło nie tak? Doceniamy Twoją opinię, która pomoże nam poprawić Twoje doświadczenia.</string>
