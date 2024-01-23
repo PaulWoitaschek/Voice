@@ -23,6 +23,7 @@ import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
 import voice.playbackScreen.view.BookPlayView
+import voice.playbackScreen.view.jumpToPosition.JumpToPosition
 import voice.sleepTimer.SleepTimerDialog
 import voice.strings.R as StringsR
 
@@ -82,17 +83,16 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
       onCurrentChapterClick = viewModel::onCurrentChapterClicked,
       useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
       snackbarHostState = snackbarHostState,
+      onCurrentTimeClick = viewModel::onCurrentTimeClicked,
     )
     if (dialogState != null) {
       when (dialogState) {
         is BookPlayDialogViewState.SpeedDialog -> {
           SpeedDialog(dialogState, viewModel)
         }
-
         is BookPlayDialogViewState.VolumeGainDialog -> {
           VolumeGainDialog(dialogState, viewModel)
         }
-
         is BookPlayDialogViewState.SelectChapterDialog -> {
           SelectChapterDialog(dialogState, viewModel)
         }
@@ -103,6 +103,12 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
             onIncrementSleepTime = viewModel::incrementSleepTime,
             onDecrementSleepTime = viewModel::decrementSleepTime,
             onAcceptSleepTime = viewModel::onAcceptSleepTime,
+          )
+        }
+        is BookPlayDialogViewState.JumpToPosition -> {
+          JumpToPosition(
+            onDismiss = viewModel::dismissDialog,
+            onPositionSelected = viewModel::onJumpToPositionTimeSelected,
           )
         }
       }
