@@ -54,4 +54,22 @@
     <string name="pref_auto_rewind_title">Mundur otomatis</string>
     <string name="add">Tambah</string>
     <string name="action_sleep">Pengatur Waktu Tidur</string>
+    <string name="folder_type_title">Bagaimana file Anda terstruktur?</string>
+    <string name="folder_mode_root">Mode Buku Tingkat Atas: Subfolder adalah buku</string>
+    <string name="folder_type_no_books">Suara tidak dapat mendeteksi buku apa pun. Apakah ada file audio?</string>
+    <string name="bookmark_just_now">Baru saja</string>
+    <string name="migration_hint_title">Mengakses posisi Buku lama</string>
+    <string name="migration_hint_confirm">Oke</string>
+    <string name="migration_detail_title">Posisi buku lama</string>
+    <string name="folder_mode_single">Mode Buku Tunggal: Satu folder sama dengan satu buku.</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="other">%d file audio</item>
+    </plurals>
+    <string name="folder_type_book_example_header">Hal ini akan menyebabkan buku-buku berikut ini terdeteksi</string>
+    <string name="folder_mode_author">Mode Penulis-Buku: Subfolder adalah penulis, sub-subfolder adalah buku.</string>
+    <string name="migration_detail_content_name">Nama</string>
+    <string name="voice_intro_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
+    <string name="migration_hint_content">Karena adanya perubahan pada Versi Android yang lebih baru, Anda perlu memilih folder buku audio Anda menggunakan pemilih sistem.
+\n
+\nKlik ikon di atas untuk melihat posisi buku lama Anda.</string>
 </resources>
