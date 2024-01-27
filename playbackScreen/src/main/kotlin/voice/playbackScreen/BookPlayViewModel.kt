@@ -84,16 +84,11 @@ class BookPlayViewModel
     }.collectAsState()
 
     val sleepTime by remember { sleepTimer.leftSleepTimeFlow }.collectAsState()
-    val sleepAtEoc by remember { playStateManager.sleepAtEocFlow }.collectAsState()
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
     return BookPlayViewState(
-      sleepTimer = when {
-        sleepAtEoc -> BookPlayViewState.SleepTimerViewState.SleepAtEndOfChapter
-        sleepTime > Duration.ZERO -> BookPlayViewState.SleepTimerViewState.SleepAfterDuration(sleepTime)
-        else -> null
-      },
+      sleepTime = sleepTime,
       playing = playState == PlayStateManager.PlayState.Playing,
       title = book.content.name,
       showPreviousNextButtons = hasMoreThanOneChapter,
@@ -146,13 +141,6 @@ class BookPlayViewModel
         )
       }
       sleepTimer.setActive(time.minutes)
-      null
-    }
-  }
-
-  fun onAcceptSleepAtEoc() {
-    updateSleepTimeViewState {
-      sleepTimer.setEocActive(true)
       null
     }
   }

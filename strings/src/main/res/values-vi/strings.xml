@@ -22,8 +22,6 @@
     <string name="bookmark_edit_hint">Tên</string>
     <string name="bookmark_added">Đánh dấu đã được thêm vào</string>
     <string name="action_settings">Tùy chọn</string>
-    <string name="min">%sphút</string>
-    <string name="delete_last_number">Xóa số vừa nhập</string>
     <plurals name="seconds">
         <item quantity="other">%dgiây</item>
     </plurals>

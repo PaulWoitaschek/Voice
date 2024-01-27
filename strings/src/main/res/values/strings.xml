@@ -33,8 +33,6 @@
     <string name="bookmark_edit_hint">Bookmark name</string>
     <string name="bookmark_added">Bookmark added</string>
     <string name="action_settings">Preferences</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Deletes the last entered number</string>
     <plurals name="seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
@@ -57,7 +55,6 @@
     <string name="close">Close</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
-    <string name="folder_type_dialog_title">What do you want to add?</string>
     <string name="folder_mode_root">Top-Level Book Mode: Subfolders are books</string>
     <string name="folder_mode_single">Single Book Mode: One folder equals one book.</string>
     <string name="folder_mode_author">Author-Book Mode: Subfolders are authors, sub-subfolders are books.</string>
@@ -98,7 +95,6 @@
     <string name="media_session_recent">Recent</string>
     <string name="notification_sleep_timer_enable">Enable Sleep Timer</string>
     <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
-    <string name="end_of_chapter">End of Chapter</string>
     <string name="generic_error_message">Something went wrong 😢</string>
     <string name="generic_error_retry">Retry</string>
     <string name="storage_bug_title">Permission required</string>

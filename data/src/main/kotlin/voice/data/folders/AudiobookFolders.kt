@@ -37,7 +37,7 @@ class AudiobookFolders
   private val scope = MainScope()
 
   fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
-    val flows = FolderType.values()
+    val flows = FolderType.entries
       .map { folderType ->
         dataStore(folderType).data.map { uris ->
           val documentFiles = uris.map { uri ->
@@ -109,7 +109,7 @@ class AudiobookFolders
   }
 
   suspend fun hasAnyFolders(): Boolean {
-    return FolderType.values().any {
+    return FolderType.entries.any {
       dataStore(it).data.first().isNotEmpty()
     }
   }

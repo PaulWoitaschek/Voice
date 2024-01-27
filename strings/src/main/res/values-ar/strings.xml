@@ -27,8 +27,6 @@
     <string name="bookmark_edit_hint">اسم العلامة</string>
     <string name="bookmark_added">أضيفت علامة مرجعية</string>
     <string name="action_settings">التفضيلات</string>
-    <string name="min">%s د</string>
-    <string name="delete_last_number">تحذف أخر رَقَم مدخل</string>
     <plurals name="seconds">
         <item quantity="zero">%d ثانية</item>
         <item quantity="one">%d ثانية واحدة</item>
@@ -55,7 +53,6 @@
     <string name="close">أغلق</string>
     <string name="delete">احذف</string>
     <string name="add">أضف</string>
-    <string name="folder_type_dialog_title">ماذا تريد أن تضيف؟</string>
     <string name="folder_mode_root">وضع المجلد الحاوي للكتب: كل مجلد فرعي كتاب مستقل</string>
     <string name="folder_mode_single">وضع الكتاب المفرد: كل مجلد يعني كتاب واحد.</string>
     <plurals name="folder_type_file_count">
@@ -133,4 +130,6 @@
     <string name="onboarding.completion.title">أنت جاهز!</string>
     <string name="onboarding.completion.subtitle">كتابك الصوتي الأول يعمل. استمتع برحلتك مع فويس!</string>
     <string name="sleep_timer.title">أحلام سعيدة! 🌙</string>
+    <string name="sleep_timer.button.increment">أطول</string>
+    <string name="sleep_timer.button.decrement">أقصر</string>
 </resources>

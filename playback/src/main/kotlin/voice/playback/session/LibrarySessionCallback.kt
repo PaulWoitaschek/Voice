@@ -28,7 +28,6 @@ import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer
-import voice.playback.playstate.PlayStateManager
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import javax.inject.Inject
@@ -49,7 +48,6 @@ class LibrarySessionCallback
   private val sleepTimerCommandUpdater: SleepTimerCommandUpdater,
   private val sleepTimer: SleepTimer,
   private val bookRepository: BookRepository,
-  private val playStateManager: PlayStateManager,
 ) : MediaLibrarySession.Callback {
 
   override fun onAddMediaItems(
@@ -208,7 +206,7 @@ class LibrarySessionCallback
   ): ListenableFuture<SessionResult> {
     when (customCommand) {
       PublishedCustomCommand.Sleep.sessionCommand -> {
-        sleepTimer.setEocActive(!sleepTimer.sleepTimerActive())
+        sleepTimer.setActive(!sleepTimer.sleepTimerActive())
       }
       else -> {
         val command = CustomCommand.parse(customCommand, args)

@@ -17,7 +17,6 @@
     <string name="bookmark_edit_hint">Jina la Alamisho</string>
     <string name="bookmark_added">Alamisho Imeogezwa</string>
     <string name="action_settings">Mapendeleo</string>
-    <string name="min">Dakika %s</string>
     <plurals name="seconds">
         <item quantity="one">Sekunde %d</item>
         <item quantity="other">Sekunde %d</item>

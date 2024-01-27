@@ -27,8 +27,6 @@
     <string name="bookmark_edit_hint">书签名</string>
     <string name="bookmark_added">已添加书签</string>
     <string name="action_settings">偏好设置</string>
-    <string name="min">%s 分</string>
-    <string name="delete_last_number">删除最后输入的数字</string>
     <plurals name="seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
@@ -50,7 +48,6 @@
     <string name="close">关闭</string>
     <string name="delete">删除</string>
     <string name="add">添加</string>
-    <string name="folder_type_dialog_title">希望添加什么？</string>
     <string name="folder_mode_root">顶层书籍模式：子文件夹是书籍</string>
     <string name="folder_mode_single">单本书模式：一个文件夹等于一本书。</string>
     <plurals name="folder_type_file_count">
@@ -91,4 +88,19 @@
     <string name="notification_sleep_timer_disable">禁用睡眠定时器</string>
     <string name="play">播放</string>
     <string name="pause">暂停</string>
+    <string name="generic_error_retry">重试</string>
+    <string name="storage_bug_title">需要权限</string>
+    <string name="cover_search.icon_recent">近期查询</string>
+    <string name="storage_bug_subtitle">对于某些设备，系统应用程序缺少访问外部存储的必要权限。此访问对于Voice阅读您的有声读物至关重要。</string>
+    <string name="cover_search.author">作者</string>
+    <string name="generic_error_message">发生了错误😢</string>
+    <string name="select_folder_subtitle">你想将单个文件添加为书本还是文件夹？</string>
+    <string name="select_folder_type_folder">文件夹</string>
+    <string name="folder_mode_author">作者-书籍模式：子文件夹为作者，子文件夹下的文件夹为书籍。</string>
+    <string name="select_folder_title_default">添加你的有声书</string>
+    <string name="storage_bug_button">给予权限</string>
+    <string name="select_folder_type_file">文件</string>
+    <string name="onboarding_welcome_title">欢迎使用Voice！</string>
+    <string name="onboarding_welcome_subtitle">你的个人口袋有声读物播放器。现在来进行配置吧。</string>
+    <string name="select_folder_title_onboarding">添加你的第一本有声书</string>
 </resources>

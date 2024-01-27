@@ -56,10 +56,22 @@ class BookParser
         isActive = true,
         addedAt = migrationMetaData?.addedAtMillis?.let(Instant::ofEpochMilli)
           ?: Instant.now(),
-        author = analyzed?.author,
+        author = analyzed?.artist,
         lastPlayedAt = migrationSettings?.lastPlayedAtMillis?.let(Instant::ofEpochMilli)
           ?: Instant.EPOCH,
-        name = migrationMetaData?.name ?: analyzed?.bookName ?: analyzed?.chapterName ?: file.bookName(),
+        name = buildList {
+          add(migrationMetaData?.name)
+          if (chapters.size == 1) {
+            // for single file audiobooks, the title should have higher precedence.
+            // see https://github.com/PaulWoitaschek/Voice/issues/2171
+            add(analyzed?.title)
+            add(analyzed?.album)
+          } else {
+            add(analyzed?.album)
+            add(analyzed?.title)
+          }
+        }
+          .filterNotNull().firstOrNull() ?: file.bookName(),
         playbackSpeed = migrationSettings?.playbackSpeed
           ?: 1F,
         skipSilence = migrationSettings?.skipSilence

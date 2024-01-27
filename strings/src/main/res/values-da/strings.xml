@@ -27,8 +27,6 @@
     <string name="bookmark_edit_hint">Bogmærke navn</string>
     <string name="bookmark_added">Bogmærke tilføjet</string>
     <string name="action_settings">Indstillinger</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Sletter det sidst indtastede nummer</string>
     <plurals name="seconds">
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
@@ -51,7 +49,6 @@
     <string name="close">Luk</string>
     <string name="delete">Slet</string>
     <string name="add">Tilføj</string>
-    <string name="folder_type_dialog_title">Hvad vil du tilføje?</string>
     <string name="folder_mode_root">Rodmappe til lydbøger. Én undermappe er én bog</string>
     <string name="folder_mode_single">Enkelt bog-mode: Én mappe er èn bog.</string>
     <plurals name="folder_type_file_count">
@@ -124,4 +121,11 @@
     <string name="onboarding.explanation.title">Dit bibliotek - På din måde</string>
     <string name="onboarding.completion.title">Så er du klar!</string>
     <string name="onboarding.completion.subtitle">Din første lydbog er klar til afspilning. Nyd din rejse med Voice!</string>
+    <string name="sleep_timer.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.button.increment">Længre</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minutter</item>
+    </plurals>
+    <string name="sleep_timer.button.decrement">Kortere</string>
 </resources>

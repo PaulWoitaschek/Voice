@@ -48,14 +48,12 @@
     <string name="migration_hint_content">Disebabkan perubahan dalam Versi Android baharu, adalah perlu untuk pilih folder audiobook anda menggunakan system picker.
 \n
 \nKlik pada ikon di atas untuk melihat kedudukan buku lama anda.</string>
-    <string name="delete_last_number">Padam nombor terakhir dimasukkan</string>
     <plurals name="seconds">
         <item quantity="other">%d saat</item>
     </plurals>
     <string name="pref_report_issue">Laporkan masalah</string>
     <string name="pref_app_version">Versi aplikasi</string>
     <string name="voice_intro_first_book">Mari tambah folder audiobook anda jadi anda boleh mula mendengar!</string>
-    <string name="min">%s min</string>
     <string name="pref_seek_time">Jumlah langkau</string>
     <string name="pref_theme_dark">Tema Gelap</string>
     <string name="pref_auto_rewind_title">Mandir automatik</string>
@@ -63,7 +61,6 @@
     <string name="pref_use_grid">Guna paparan grid</string>
     <string name="remove">Keluarkan</string>
     <string name="play_current">Mainkan sekarang</string>
-    <string name="folder_type_dialog_title">Apa yang anda ingin tambah\?</string>
     <string name="folder_mode_root">Mod Buku Peringkat Tertinggi: Subfolder adalah buku</string>
     <string name="folder_mode_single">Mod Buku Tunggal: Satu folder bersamaan satu buku.</string>
     <string name="folder_mode_author">Mod Buku Penulis: Subfolder adalah penulis, sub-subfolder adalah buku.</string>

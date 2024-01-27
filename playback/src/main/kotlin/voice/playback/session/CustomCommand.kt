@@ -43,7 +43,7 @@ internal sealed class PublishedCustomCommand {
 
   abstract val sessionCommand: SessionCommand
 
-  object Sleep : PublishedCustomCommand() {
+  data object Sleep : PublishedCustomCommand() {
     override val sessionCommand: SessionCommand = SessionCommand("voice.sleep", Bundle.EMPTY)
   }
 }

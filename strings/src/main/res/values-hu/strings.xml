@@ -25,8 +25,6 @@
     <string name="bookmark_edit_hint">Könyvjelző neve</string>
     <string name="bookmark_added">Könyvjelző hozzáadva</string>
     <string name="action_settings">Beállítások</string>
-    <string name="min">%s perc</string>
-    <string name="delete_last_number">Törli az utoljára beírt számot</string>
     <plurals name="seconds">
         <item quantity="one">%dmásodperc</item>
         <item quantity="other">%d másodperc</item>
