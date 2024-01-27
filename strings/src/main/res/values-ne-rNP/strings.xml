@@ -4,7 +4,6 @@
     <string name="mark_as_completed">सम्पन्न भयो भनि टिक लगाउनुहोस्</string>
     <string name="mark_as_current">हालको भनि टिक लगाउनुहोस्</string>
     <string name="mark_as_not_started">सुरु भएको छैन भनि टिक लगाउनुहोस्</string>
-    <string name="delete_last_number">पछिल्लो हालिएको नम्बर मेटाउँछ</string>
     <string name="remove">हटाउनुहोस्</string>
     <string name="book_header_current">हालको</string>
     <string name="book_header_not_started">सुरु भएको छैन</string>
@@ -55,7 +54,6 @@
     <string name="action_settings">प्राथमिकताहरू</string>
     <string name="download_book_cover">इन्टरनेटबाट कभर लिनुहोस्</string>
     <string name="media_session_root">सबै अडियोबूक</string>
-    <string name="folder_type_dialog_title">तपाईं के थप्न चाहनु हुन्छ\?</string>
     <string name="migration_detail_content_bookmarks">पुस्तकचिनोहरू</string>
     <string name="battery_optimization_action">अपडेट</string>
     <string name="storage_bug_subtitle">केहि यन्त्रहरूको लागि, प्रणाली एपले बाह्य भण्डारण पहुँच गर्न आवश्यक अनुमति गुमाएको छ। तपाईंको अडियोबूकहरू पढ्नको लागि Voice को लागि यो पहुँच आवश्यक छ।</string>
@@ -95,7 +93,6 @@
     <string name="voice_intro_first_book">तपाईंको अडियोबूक फोल्डर थप्नुहोस् ताकि तपाईं सुन्न सुरु गर्न सक्नुहुन्छ!</string>
     <string name="migration_hint_title">पुरानो पुस्तक ठाउँहरू पहुँच गर्दै</string>
     <string name="bookmark_added">पुस्तकचिनो राखियो</string>
-    <string name="min">%s मिनेट</string>
     <string name="migration_detail_content_position_current_chapter_title">हालको अध्याय</string>
     <string name="migration_detail_content_position_current_chapter_position">अध्यायमा ठाउँ</string>
     <string name="generic_error_message">केही गडबड भयो 😢</string>

@@ -10,8 +10,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-// declared in the build.gradle.file
-@Suppress("unused")
 class ComposePlugin : Plugin<Project> {
 
   override fun apply(target: Project) {

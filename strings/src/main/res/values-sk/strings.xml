@@ -15,15 +15,13 @@
     <string name="download_book_cover">Obal z internetu</string>
     <string name="pick_book_cover">Obal zo súboru</string>
     <string name="edit_book_title">Upraviť knihu</string>
-    <string name="audiobook_folders_title">Adresáre s audioknihami</string>
+    <string name="audiobook_folders_title">Zložka s audioknihami</string>
     <string name="playback_speed">Rýchlosť prehrávania</string>
-    <string name="bookmark">Záložky</string>
+    <string name="bookmark">Záložka</string>
     <string name="bookmark_edit_title">Upraviť záložku</string>
     <string name="bookmark_edit_hint">Názov záložky</string>
     <string name="bookmark_added">Záložka pridaná</string>
     <string name="action_settings">Predvoľby</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Vymazať naposledy zadané číslo</string>
     <plurals name="seconds">
         <item quantity="one">%d sek.</item>
         <item quantity="few">%d sek.</item>
@@ -42,4 +40,24 @@
     <string name="close">Zavriet</string>
     <string name="delete">Vymazať</string>
     <string name="add">Pridať</string>
+    <string name="mark_as_not_started">Označiť za nezačaté</string>
+    <string name="pref_get_support">Podpora</string>
+    <string name="mark_as_completed">Označiť za ukončené</string>
+    <string name="pause">Pozastaviť</string>
+    <string name="pref_help_translating">Pomôcť s prekladom</string>
+    <string name="folder_type_no_books">Aplikácia nenašla žiadne knihy. Sú tam nejaké audio súbory\?</string>
+    <string name="pref_app_version">Verzia aplikácie</string>
+    <string name="cover_search.author">Autor</string>
+    <string name="pref_report_issue">Nahlásiť problém</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d audio súbor</item>
+        <item quantity="few">%d audio súbory</item>
+        <item quantity="other">%d audio súborov</item>
+    </plurals>
+    <string name="more">Viac</string>
+    <string name="bookmark_just_now">Práve teraz</string>
+    <string name="folder_type_title">Ako sú organizované vaše súbory\?</string>
+    <string name="mark_as_current">Označiť za aktuálne</string>
+    <string name="play">Prehrať</string>
+    <string name="volume_boost">Zvýrazniť hlasitosť</string>
 </resources>

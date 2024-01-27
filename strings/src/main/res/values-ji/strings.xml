@@ -29,5 +29,23 @@
     <string name="bookmark">בוקמארק</string>
     <string name="bookmark_added">בוקמארק צוגעלייגט</string>
     <string name="action_settings">פרעפרענצן</string>
-    <string name="delete_last_number">מעקט אויס די לעצט אריינגעלייגטע נומער</string>
+    <string name="pref_use_grid">ניצט א געקעסטעלטע אויסשטעל</string>
+    <string name="remove">נעם אראפ</string>
+    <string name="pref_get_support">הילף אנפראגע</string>
+    <string name="pref_help_translating">העלפט איבערזעצן Voice</string>
+    <string name="pref_app_version">אפליקאציע ווערסיע</string>
+    <string name="pref_suggest_idea">פארשלאגט א געדאנק</string>
+    <string name="pref_report_issue">באריכט א פראבלעם</string>
+    <string name="popup_edit">רעדאגיר</string>
+    <string name="close">פארמאך</string>
+    <string name="book_header_completed">גענדיגט</string>
+    <string name="delete">פארמעק</string>
+    <string name="book_header_not_started">נאך נישט אנגעהויבן</string>
+    <string name="add">לייג צו</string>
+    <string name="play_current">שפיל די אנגייענדע</string>
+    <string name="folder_type_book_example_header">דאס וואלט געטראפן די פאלגענדע ביכער</string>
+    <string name="battery_optimization_action">אפדעיט</string>
+    <string name="media_session_root">אלע אודיו ביכער</string>
+    <string name="book_header_current">אנגייענדע</string>
+    <string name="bookmark_just_now">ממש יעצט</string>
 </resources>

@@ -1,5 +1,3 @@
-@file:Suppress("BlockingMethodInNonBlockingContext")
-
 package voice.app.scanner
 
 import android.webkit.MimeTypeMap
@@ -37,7 +35,7 @@ class MediaScannerTest {
 
   init {
     Shadows.shadowOf(MimeTypeMap.getSingleton())
-      .addExtensionMimeTypMapping("mp3", "audio/mp3")
+      .addExtensionMimeTypeMapping("mp3", "audio/mp3")
   }
 
   @Test
@@ -252,10 +250,11 @@ class MediaScannerTest {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
             MediaAnalyzer.Metadata(
               duration = 1000L,
-              author = "Author",
-              bookName = "Book Name",
-              chapterName = "Chapter",
+              artist = "Author",
+              album = "Book Name",
+              fileName = "Chapter",
               chapters = emptyList(),
+              title = "Title",
             )
           }
         }

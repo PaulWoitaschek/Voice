@@ -22,8 +22,6 @@
     <string name="bookmark_edit_hint">Nome segnalibro</string>
     <string name="bookmark_added">Segnalibro aggiunto</string>
     <string name="action_settings">Preferenze</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Cancella l\'ultimo numero inserito</string>
     <plurals name="seconds">
         <item quantity="one">%d secondo</item>
         <item quantity="many">%d secondi</item>
@@ -51,7 +49,6 @@
     <string name="close">Chiudi</string>
     <string name="delete">Elimina</string>
     <string name="add">Aggiungi</string>
-    <string name="folder_type_dialog_title">Cosa vuoi aggiungere\?</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d file audio</item>
         <item quantity="many">%d file audio</item>

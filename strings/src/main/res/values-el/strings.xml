@@ -22,7 +22,6 @@
     <string name="bookmark_edit_hint">Όνομα σελιδοδείκτη</string>
     <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
     <string name="action_settings">Προτιμήσεις</string>
-    <string name="min">%s λεπτά</string>
     <plurals name="seconds">
         <item quantity="one">%d δευτερόλεπτο</item>
         <item quantity="other">%d δευτερόλεπτα</item>
@@ -41,7 +40,6 @@
     <string name="mark_as_not_started">Επισήμανση ως μη διαβασμένου</string>
     <string name="mark_as_current">Επισήμανση ως τρέχον</string>
     <string name="pref_theme_dark">Σκούρο θέμα</string>
-    <string name="delete_last_number">Διαγράφει τον τελευταίο εισαχθέντα αριθμό</string>
     <string name="pref_use_grid">Χρήση πλέγματος</string>
     <string name="pref_report_issue">Αναφορά προβλήματος</string>
     <string name="pref_get_support">Λήψη υποστήριξης</string>
@@ -90,7 +88,6 @@
     <string name="battery_optimization_action">Αλλαγή</string>
     <string name="pref_help_translating">Βοήθεια στη μετάφραση του Voice</string>
     <string name="pref_suggest_idea">Προτείνετε μια ιδέα</string>
-    <string name="folder_type_dialog_title">Τι θέλετε να προσθέσετε;</string>
     <string name="media_session_root">Όλα τα ηχητικά βιβλία</string>
     <string name="migration_hint_title">Πρόσβαση σε παλιές θέσεις βιβλίων</string>
     <string name="generic_error_retry">Ξαναδοκιμάστε</string>

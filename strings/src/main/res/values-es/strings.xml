@@ -22,8 +22,6 @@
     <string name="bookmark_edit_hint">Nombre del marcador</string>
     <string name="bookmark_added">Marcador añadido</string>
     <string name="action_settings">Preferencias</string>
-    <string name="min">%s min</string>
-    <string name="delete_last_number">Borra el último número introducido</string>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>
@@ -83,7 +81,6 @@
     <string name="battery_optimization_action">Actualizar</string>
     <string name="notification_sleep_timer_enable">Activar un temporizador de reposo</string>
     <string name="pref_help_translating">Ayuda traduciendo Voice</string>
-    <string name="folder_type_dialog_title">¿Qué quiere añadir\?</string>
     <string name="pref_get_support">Conseguir ayuda</string>
     <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
     <string name="folder_type_book_example_header">Así se detectarían los siguientes libros</string>
@@ -97,7 +94,6 @@
     <string name="media_session_recent">Reciente</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproducir</string>
-    <string name="end_of_chapter">Fin del capítulo</string>
     <string name="generic_error_retry">Reintentar</string>
     <string name="generic_error_message">Algo salió mal 😢</string>
     <string name="cover_search_template_no_author">%s portada del audiolibro</string>

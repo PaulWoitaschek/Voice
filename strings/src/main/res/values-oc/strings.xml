@@ -12,7 +12,6 @@
     <string name="bookmark_edit_hint">Nom del marcapagina</string>
     <string name="bookmark_added">Marcapagina apondut</string>
     <string name="action_settings">Preferéncias</string>
-    <string name="min">%s min</string>
     <plurals name="seconds">
         <item quantity="one">%d segonda</item>
         <item quantity="other">%d segondas</item>

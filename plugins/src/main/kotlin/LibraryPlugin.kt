@@ -1,8 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-// declared in the build.gradle.file
-@Suppress("unused")
 class LibraryPlugin : Plugin<Project> {
 
   override fun apply(target: Project) {

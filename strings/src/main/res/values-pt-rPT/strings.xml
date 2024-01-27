@@ -16,7 +16,6 @@
     <string name="bookmark_edit_hint">Título do marcador</string>
     <string name="bookmark_added">Marcador adicionado</string>
     <string name="action_settings">Preferências</string>
-    <string name="min">%s min</string>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>
@@ -36,7 +35,6 @@
     <string name="mark_as_current">Marca com Actual</string>
     <string name="mark_as_not_started">Marca como não iniciado</string>
     <string name="audiobook_folders_title">Pastas de audiolivros</string>
-    <string name="delete_last_number">Apaga o último número inserido</string>
     <string name="pref_seek_time">Quantidade de Salto</string>
     <string name="pref_theme_dark">Tema Escuro</string>
     <string name="pref_auto_rewind_title">Rebobin automaticamente</string>
@@ -51,7 +49,6 @@
     <string name="close">Fechar</string>
     <string name="delete">Apagar</string>
     <string name="add">Adicionar</string>
-    <string name="folder_type_dialog_title">O que deseja adicionar\?</string>
     <string name="pref_get_support">Obter apoio</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d ficheiro de áudio</item>

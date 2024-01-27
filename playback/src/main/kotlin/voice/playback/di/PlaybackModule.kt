@@ -16,7 +16,6 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -27,7 +26,6 @@ import voice.playback.player.OnlyAudioRenderersFactory
 import voice.playback.player.VoicePlayer
 import voice.playback.player.onAudioSessionIdChanged
 import voice.playback.playstate.PlayStateDelegatingListener
-import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PositionUpdater
 import voice.playback.session.LibrarySessionCallback
 import voice.playback.session.PlaybackService
@@ -92,20 +90,17 @@ object PlaybackModule {
     scope: CoroutineScope,
     sleepTimer: SleepTimer,
     sleepTimerCommandUpdater: SleepTimerCommandUpdater,
-    playStateManager: PlayStateManager,
   ): MediaLibraryService.MediaLibrarySession {
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
       .build()
       .also { session ->
         scope.launch {
-          sleepTimer.leftSleepTimeFlow.map { it != Duration.ZERO }
-            .combine(playStateManager.sleepAtEocFlow) { sleepTimerActive, sleepEocActive ->
-              sleepTimerActive || sleepEocActive
-            }
+          sleepTimer.leftSleepTimeFlow
+            .map { it != Duration.ZERO }
             .distinctUntilChanged()
-            .collect { sleepActive ->
-              sleepTimerCommandUpdater.update(session, sleepActive)
+            .collect { sleepTimerActive ->
+              sleepTimerCommandUpdater.update(session, sleepTimerActive)
             }
         }
       }

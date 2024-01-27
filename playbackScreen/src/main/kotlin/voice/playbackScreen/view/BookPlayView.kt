@@ -105,7 +105,7 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       playedTime = 3.minutes,
       playing = true,
       skipSilence = true,
-      sleepTimer = BookPlayViewState.SleepTimerViewState.SleepAfterDuration(4.minutes),
+      sleepTime = 4.minutes,
       title = "Das Ende der Welt",
     )
     yield(initial)

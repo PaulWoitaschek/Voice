@@ -59,7 +59,7 @@ class BookMarkHolder(
           )
         }
       }
-      bookmarkTitle != null && bookmarkTitle.isNotEmpty() -> bookmarkTitle
+      !bookmarkTitle.isNullOrEmpty() -> bookmarkTitle
       else -> currentChapter.markForPosition(bookmark.time).name
     }
     binding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, if (bookmark.setBySleepTimer) R.drawable.ic_sleep else 0, 0)
