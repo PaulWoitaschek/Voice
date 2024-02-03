@@ -101,4 +101,6 @@
     <string name="cover_search_template_with_author">%1$s de %2$s copertă Cărți audio</string>
     <string name="cover_search_template_no_author">%s copertă Cărți audio</string>
     <string name="generic_error_retry">Reîncearcă</string>
+    <string name="cover_search.icon_recent">Voce</string>
+    <string name="cover_search.author">Autor</string>
 </resources>
