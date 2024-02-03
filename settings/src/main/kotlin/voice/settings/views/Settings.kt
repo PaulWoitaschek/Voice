@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -116,7 +116,7 @@ private fun Settings(
             val imageVector = if (viewState.useGrid) {
               Icons.Outlined.GridView
             } else {
-              Icons.Outlined.ViewList
+              Icons.AutoMirrored.Outlined.ViewList
             }
             Icon(imageVector, stringResource(StringsR.string.pref_use_grid))
           },
@@ -143,7 +143,7 @@ private fun Settings(
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
-          leadingContent = { Icon(Icons.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
+          leadingContent = { Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
         )
         ListItem(

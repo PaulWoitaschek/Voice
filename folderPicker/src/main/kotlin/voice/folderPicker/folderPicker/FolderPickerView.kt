@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -74,7 +74,7 @@ private fun FolderOverviewView(
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              imageVector = Icons.Outlined.ArrowBack,
+              imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
               contentDescription = stringResource(StringsR.string.close),
             )
           }

@@ -3,7 +3,7 @@ package voice.cover
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,7 +27,7 @@ internal fun CoverSearchBar(
     leadingIcon = {
       IconButton(onClick = onCloseClick) {
         Icon(
-          imageVector = Icons.Outlined.ArrowBack,
+          imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
           contentDescription = stringResource(id = R.string.close),
         )
       }
