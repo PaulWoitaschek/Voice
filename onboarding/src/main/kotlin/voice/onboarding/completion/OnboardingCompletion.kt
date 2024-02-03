@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -62,7 +62,7 @@ private fun OnboardingCompletion(
         navigationIcon = {
           IconButton(onClick = onBack) {
             Icon(
-              imageVector = Icons.Outlined.ArrowBack,
+              imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
               contentDescription = stringResource(id = StringsR.string.close),
             )
           }

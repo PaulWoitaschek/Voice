@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Undo
+import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -29,7 +29,7 @@ internal fun SkipButton(
       )
       .size(50.dp)
       .scale(scaleX = if (forward) -1f else 1F, scaleY = 1f),
-    imageVector = Icons.Filled.Undo,
+    imageVector = Icons.AutoMirrored.Filled.Undo,
     contentDescription = stringResource(
       id = if (forward) {
         R.string.fast_forward
