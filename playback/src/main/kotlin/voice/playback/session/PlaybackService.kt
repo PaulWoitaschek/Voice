@@ -5,6 +5,7 @@ import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import voice.common.rootComponentAs
 import voice.logging.core.Logger
 import voice.playback.di.PlaybackComponent
@@ -32,6 +33,9 @@ class PlaybackService : MediaLibraryService() {
       .create(this)
       .inject(this)
     setMediaNotificationProvider(voiceNotificationProvider)
+    scope.launch {
+      player.prepareCurrentBook()
+    }
   }
 
   override fun onTaskRemoved(rootIntent: Intent?) {
