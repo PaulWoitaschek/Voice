@@ -15,3 +15,4 @@ kotlinScripting.xml
 /.name
 /kotlinc.xml
 /modules.xml
+/deploymentTargetSelector.xml

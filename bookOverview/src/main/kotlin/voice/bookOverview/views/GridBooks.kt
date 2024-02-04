@@ -122,7 +122,7 @@ internal fun GridBook(
       if (book.progress > 0F) {
         LinearProgressIndicator(
           modifier = Modifier.fillMaxWidth(),
-          progress = book.progress,
+          progress = { book.progress },
         )
       }
     }
