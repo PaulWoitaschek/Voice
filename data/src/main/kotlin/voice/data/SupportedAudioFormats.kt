@@ -17,6 +17,7 @@ val supportedAudioFormats = arrayOf(
   "mp3",
   "mp3package",
   "mp4",
+  "mpga",
   "opus",
   "mxmf",
   "oga",
