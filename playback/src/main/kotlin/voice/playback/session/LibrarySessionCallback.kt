@@ -170,7 +170,7 @@ class LibrarySessionCallback
       Logger.d("onConnect to ${controller.packageName} and player is idle.")
       Logger.d("Preparing current book so it shows up as recently played")
       scope.launch {
-        player.prepareCurrentBook()
+        prepareCurrentBook()
       }
     }
 
@@ -186,6 +186,14 @@ class LibrarySessionCallback
       sessionCommands,
       connectionResult.availablePlayerCommands,
     )
+  }
+
+  private suspend fun prepareCurrentBook() {
+    val bookId = currentBookId.data.first() ?: return
+    val book = bookRepository.get(bookId) ?: return
+    val item = mediaItemProvider.mediaItem(book)
+    player.setMediaItem(item)
+    player.prepare()
   }
 
   override fun onCustomCommand(

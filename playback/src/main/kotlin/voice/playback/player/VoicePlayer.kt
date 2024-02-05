@@ -322,14 +322,6 @@ class VoicePlayer
     val bookId = currentBookId.data.first() ?: return
     repo.updateBook(bookId, update)
   }
-
-  suspend fun prepareCurrentBook() {
-    val bookId = currentBookId.data.first() ?: return
-    val book = repo.get(bookId) ?: return
-    val item = mediaItemProvider.mediaItem(book)
-    setMediaItem(item)
-    prepare()
-  }
 }
 
 private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
