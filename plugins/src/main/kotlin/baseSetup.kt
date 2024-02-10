@@ -57,10 +57,6 @@ fun Project.baseSetup() {
       add("implementation", project(":logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
-
-    // todo: remove when compose bom > 2024.01.00 released.
-    // see https://issuetracker.google.com/issues/322214617
-    add("implementation", "androidx.compose.material3:material3:1.2.0-rc01")
     if (System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true") {
       add("implementation", platform(libs.findLibrary("firebase-bom").get()))
     }
