@@ -13,7 +13,7 @@ prefs = "1.0.1"
 materialDialog = "3.3.0"
 dagger = "2.50"
 kotlin = "1.9.22"
-compose-compiler = "1.5.8"
+compose-compiler = "1.5.9"
 media3 = "1.2.1"
 agp = "8.2.2"
 ktlint-core = "1.1.1"
@@ -62,7 +62,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:32.7.1"
+firebase-bom = "com.google.firebase:firebase-bom:32.7.2"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
@@ -102,7 +102,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
 
-compose-bom = "androidx.compose:compose-bom:2024.01.00"
+compose-bom = "androidx.compose:compose-bom:2024.02.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -167,6 +167,6 @@ ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktli
 ksp = { id = "com.google.devtools.ksp", version = "1.9.22-1.0.17" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.9" }
 googleServices = { id = "com.google.gms.google-services", version = "4.4.0" }
-playPublish = { id = "com.github.triplet.play", version = "3.8.6" }
+playPublish = { id = "com.github.triplet.play", version = "3.9.0" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
