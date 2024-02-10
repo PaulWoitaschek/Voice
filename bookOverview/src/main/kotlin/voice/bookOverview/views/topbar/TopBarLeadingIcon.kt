@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +30,7 @@ internal fun ColumnScope.TopBarLeadingIcon(
   ) {
     IconButton(onClick = { onActiveChange(false) }) {
       Icon(
-        imageVector = Icons.Outlined.ArrowBack,
+        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
         contentDescription = stringResource(id = R.string.close),
       )
     }
