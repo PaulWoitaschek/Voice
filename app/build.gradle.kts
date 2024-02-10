@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.android.build.api.dsl.ApplicationAndroidResources
 import com.android.build.api.dsl.ManagedVirtualDevice
 import java.util.Properties
 
@@ -44,9 +43,7 @@ android {
   namespace = "voice.app"
 
   androidResources {
-    // since https://github.com/PaulWoitaschek/Voice/pull/2131 this cast is required.
-    // this is very strange and should not be necessary
-    (this as ApplicationAndroidResources).generateLocaleConfig = true
+    generateLocaleConfig = true
   }
 
   defaultConfig {
