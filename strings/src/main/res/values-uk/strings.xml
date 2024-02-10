@@ -27,9 +27,9 @@
     <string name="action_settings">Налаштування</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
-        <item quantity="few">%d секунд</item>
+        <item quantity="few">%d секунди</item>
         <item quantity="many">%d секунд</item>
-        <item quantity="other">%d с</item>
+        <item quantity="other">%d секунд</item>
     </plurals>
     <string name="pref_seek_time">Інтервал перемотування</string>
     <string name="pref_theme_dark">Темна тема</string>
@@ -72,9 +72,9 @@
     <string name="pref_help_translating">Допомога в перекладі Voice</string>
     <string name="pref_get_support">Підтримка</string>
     <string name="pref_app_version">Версія</string>
-    <string name="folder_mode_root">Коренева папка аудіокниг. Одна папка = одна книга.</string>
+    <string name="folder_mode_root">Книжковий режим верхнього рівня: підкаталоги – це книги</string>
     <string name="folder_type_title">Як структуровані ваші файли\?</string>
-    <string name="folder_mode_single">Єдина папка з аудіокнигами</string>
+    <string name="folder_mode_single">Режим однієї книги: один каталог відповідає одній книзі</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d аудіофайл</item>
         <item quantity="few">%d аудіофайли</item>
@@ -98,4 +98,42 @@
     <string name="generic_error_retry">Повторити</string>
     <string name="play">Відтворити</string>
     <string name="pause">Призупинити</string>
+    <string name="onboarding.button_next">Далі</string>
+    <string name="review.feedback.title">Нам шкода це чути!</string>
+    <string name="review.feedback.content">Не могли б ви розповісти нам, що саме не сподобалось? Ми цінуємо ваші відгуки, і вони допомагають нам покращувати ваш досвід.</string>
+    <string name="review.request.title">Подобається Voice?</string>
+    <string name="storage_bug_title">Потрібен дозвіл</string>
+    <string name="storage_bug_button">Надати дозвіл</string>
+    <string name="select_folder_title_onboarding">Додайте свою першу аудіокнигу</string>
+    <string name="select_folder_title_default">Додайте свої аудіокниги</string>
+    <string name="onboarding.completion.title">Ви все зробили!</string>
+    <string name="onboarding.explanation.title">Ваша бібліотека, ваш спосіб</string>
+    <string name="onboarding.completion.subtitle">Ваша перша аудіокнига готова до прослуховування. Насолоджуйтеся вашою подорожжю з Voice!</string>
+    <string name="review.request.button.yes">Оцінити зараз</string>
+    <string name="review.request.button.no">Ні, дякую</string>
+    <string name="review.feedback.button.yes">Надіслати відгук</string>
+    <string name="review.feedback.button.no">Скасування</string>
+    <plurals name="minutes">
+        <item quantity="one">%d хвилина</item>
+        <item quantity="few">%d хвилини</item>
+        <item quantity="many">%d хвилин</item>
+        <item quantity="other">%d хвилин</item>
+    </plurals>
+    <string name="cover_search_template_no_author">Обкладинка аудіокниги %s</string>
+    <string name="cover_search_template_with_author">Обкладинка аудіокниги %1$ автора %2$</string>
+    <string name="cover_search.icon_recent">Недавній запит</string>
+    <string name="cover_search.author">Автор</string>
+    <string name="select_folder_type_file">Файл</string>
+    <string name="onboarding_welcome_title">Ласкаво просимо до Voice!</string>
+    <string name="onboarding_welcome_subtitle">Ваш особистий кишеньковий програвач аудіокниг. Налаштуймо його.</string>
+    <string name="select_folder_subtitle">Ви хочете додати книгу як окремий файл або каталог?</string>
+    <string name="onboarding.completion.next_button">Розпочати слухати</string>
+    <string name="folder_mode_author">Режим «Автор–Книга»: підкаталоги це автори, під-підкаталоги – книги</string>
+    <string name="select_folder_type_folder">Каталог</string>
+    <string name="onboarding.explanation.subtitle">За допомогою Voice ви можете додавати книги як окремі файли, або зібрані у каталогах. Вибір за вами!</string>
+    <string name="review.request.content">Ваш відгук важливий для нас! Якщо ви маєте час, оцініть нас і поділіться враженнями. Це допомагає нам робити виправлення та пропонувати кращу якість прослуховування.</string>
+    <string name="sleep_timer.title">На добраніч! 🌙</string>
+    <string name="sleep_timer.button.increment">Довше</string>
+    <string name="sleep_timer.button.decrement">Коротше</string>
+    <string name="storage_bug_subtitle">На деяких пристроях системні програми не мають необхідного дозволу на доступ до зовнішнього накопичувача. Цей дозвіл необхідний для того, аби Voice мав змогу читати ваші аудіокниги.</string>
 </resources>
