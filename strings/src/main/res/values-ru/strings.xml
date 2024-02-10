@@ -99,8 +99,8 @@
     <string name="generic_error_message">Что-то пошло не так 😢</string>
     <string name="media_session_root">Все аудиокниги</string>
     <string name="folder_mode_author">Режим автор-книга: подпапки - авторы, подподпапки - книги.</string>
-    <string name="cover_search_template_no_author">%s обложек аудиокниг</string>
-    <string name="cover_search_template_with_author">%1$s из %2$s обложек аудиокниг</string>
+    <string name="cover_search_template_no_author">Обложка аудиокниги %s</string>
+    <string name="cover_search_template_with_author">Обложка аудиокниги %1$s автора %2$s</string>
     <string name="pause">Пауза</string>
     <string name="review.request.button.yes">Оценить сейчас</string>
     <string name="review.request.button.no">Нет, спасибо</string>
