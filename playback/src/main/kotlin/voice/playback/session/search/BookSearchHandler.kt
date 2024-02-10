@@ -44,7 +44,7 @@ class BookSearchHandler
 
   // Look for anything that might match the query
   private suspend fun searchUnstructured(query: String?): Book? {
-    if (query != null) {
+    if (!query.isNullOrBlank()) {
       val foundMatch = findBook {
         val bookNameMatches = it.content.name.contains(query, ignoreCase = true)
         val authorMatches = it.content.author?.contains(query, ignoreCase = true) == true
