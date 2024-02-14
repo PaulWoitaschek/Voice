@@ -11,6 +11,7 @@ interface SettingsListener {
   fun dismissDialog()
   fun getSupport()
   fun suggestIdea()
+  fun export()
   fun openBugReport()
   fun openTranslations()
 }

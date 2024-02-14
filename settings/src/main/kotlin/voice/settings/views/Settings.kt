@@ -64,6 +64,7 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
+        override fun export() {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
@@ -140,6 +141,11 @@ private fun Settings(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
+        )
+        ListItem(
+          modifier = Modifier.clickable { listener.export() },
+          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },

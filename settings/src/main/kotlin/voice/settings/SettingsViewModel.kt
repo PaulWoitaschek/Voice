@@ -104,6 +104,10 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
+  override fun export() {
+    // navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
+  }
+
   override fun openBugReport() {
     val url = "https://github.com/PaulWoitaschek/Voice/issues/new".toUri()
       .buildUpon()
