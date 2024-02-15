@@ -157,13 +157,13 @@ private fun Settings(
         )
         ListItem(
           modifier = Modifier.clickable { listener.export(saveFile) },
-          leadingContent = { Icon(Icons.Outlined.Download, stringResource(StringsR.string.pref_export_database)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
+          leadingContent = { Icon(Icons.Outlined.Download, stringResource(StringsR.string.pref_backup_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_backup_database)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.import(openFile) },
-          leadingContent = { Icon(Icons.Outlined.Upload, stringResource(StringsR.string.pref_import_database)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_import_database)) },
+          leadingContent = { Icon(Icons.Outlined.Upload, stringResource(StringsR.string.pref_restore_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_restore_database)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
