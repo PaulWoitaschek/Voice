@@ -6,6 +6,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.sqlite.db.SupportSQLiteDatabase
+import android.content.Context
+import android.content.Intent
+import java.io.File
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
 import voice.common.AppInfoProvider
@@ -15,8 +20,25 @@ import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
+import voice.data.repo.internals.AppDb
 import javax.inject.Inject
 import javax.inject.Named
+import androidx.activity.ComponentActivity
+import android.content.ContextWrapper
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+
+
+const val CSV_NEWLINE = "\n"
+const val CSV_INDICATOR_START = "{START}"
+const val CSV_INDICATOR_END = "{END}"
+const val CSV_INDICATOR_TABLE = "{TABLE}"
+const val CSV_COMMA_REPLACE = "{COMMA}"
+
+fun Context.getActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> this.baseContext.getActivity()
+    else -> null
+}
 
 class SettingsViewModel
 @Inject constructor(
@@ -31,9 +53,15 @@ class SettingsViewModel
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
+  private val appDb: AppDb,
+  private val context: Context,
 ) : SettingsListener {
 
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
+
+  // val getContent = registerForActivityResult(GetContent()) { uri: Uri? ->
+  //     // Handle the returned Uri
+  // }
 
   @Composable
   fun viewState(): SettingsViewState {
@@ -106,6 +134,98 @@ class SettingsViewModel
 
   override fun export() {
     // navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
+    // I need the  `appDb().getOpenHelper().getReadableDatabase()`
+    val suppDb = appDb.openHelper.readableDatabase
+    val replaceCommaInData = CSV_COMMA_REPLACE /* commas in the data will be replaced by this */
+    val rv = StringBuilder().append(CSV_INDICATOR_START)
+    val sql = StringBuilder()
+    var afterFirstTable = false
+    var afterFirstColumn: Boolean
+    var afterFirstRow: Boolean
+    var currentTableName: String
+    val csr = appDb.query(
+      "SELECT name FROM sqlite_master " +
+              "WHERE type='table' " +
+              "AND name NOT LIKE('sqlite_%') " +
+              "AND name NOT LIKE('room_%') " +
+              "AND name NOT LIKE('android_%')",
+      arrayOf<Any>()
+    )
+
+    while (csr.moveToNext()) {
+        sql.clear()
+        sql.append("SELECT ")
+        currentTableName = csr.getString(0)
+        if (afterFirstTable) rv.append("$CSV_NEWLINE")
+        afterFirstTable = true
+        afterFirstColumn = false
+        rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_TABLE,$currentTableName")
+        for (columnName in getTableColumnNames(currentTableName,suppDb)) {
+          if (afterFirstColumn) sql.append("||','||")
+          afterFirstColumn = true
+          sql.append("replace(`$columnName`,',','$replaceCommaInData')")
+        }
+        sql.append(" FROM `${currentTableName}`")
+        val csr2 = appDb.query(sql.toString(),null)
+        afterFirstRow = false
+        while (csr2.moveToNext()) {
+          if (!afterFirstRow) rv.append("$CSV_NEWLINE")
+          afterFirstRow = true
+          rv.append(CSV_NEWLINE).append(csr2.getString(0))
+        }
+    }
+
+    rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_END")
+    val csv = rv.toString()
+    val path = context.getFilesDir()
+    val file = File(path, "export.txt")
+    file.writeText(csv)
+
+
+    // val getContent = context.activity.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
+    //     // Handle the returned Uri
+    // }
+
+      val uri = FileProvider.getUriForFile(
+          context,
+          // BuildConfig.APPLICATION_ID +
+          "de.ph1b.audiobook.coverprovider",
+          file
+      )
+      val intent = Intent(Intent.ACTION_SEND)
+      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      intent.setType("text/plain")
+      intent.putExtra(Intent.EXTRA_STREAM, uri)
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      context.startActivity(intent)
+
+    //   val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+    //     addCategory(Intent.CATEGORY_OPENABLE)
+    //     type = "text/plain"
+    //     putExtra(Intent.EXTRA_TITLE, "export.txt")
+
+    //     // Optionally, specify a URI for the directory that should be opened in
+    //     // the system file picker before your app creates the document.
+    //     // putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+    // }
+    // startActivityForResult(intent, CREATE_FILE)
+
+    // fun backupAsCSV() {
+    //     val csvFile = File(instance!!.getOpenHelper().writableDatabase.path + THEDATBASE_DATABASE_BACKUP_CSV_SUFFIX)
+    //     csvFile.delete()
+    //     csvFile.writeText(createAutoCSV())
+    // }
+  }
+
+
+  private fun getTableColumnNames(tableName: String, suppDB: SupportSQLiteDatabase): List<String> {
+    val rv = arrayListOf<String>()
+    val csr = suppDB.query("SELECT name FROM pragma_table_info('${tableName}')",arrayOf<Any>())
+    while (csr.moveToNext()) {
+        rv.add(csr.getString(0))
+    }
+    csr.close()
+    return rv.toList()
   }
 
   override fun openBugReport() {
