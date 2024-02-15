@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -38,6 +41,15 @@ import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
 import voice.strings.R as StringsR
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import androidx.core.content.FileProvider
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import android.net.Uri
 
 @Composable
 @Preview
@@ -65,10 +77,11 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
-        override fun export(activity: ComponentActivity) {}
+        override fun export(saveFile: () -> MutableState<Uri?>) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
+      { mutableStateOf<Uri?>(null) }
     )
   }
 }
@@ -77,6 +90,7 @@ private fun SettingsPreview() {
 private fun Settings(
   viewState: SettingsViewState,
   listener: SettingsListener,
+  saveFile: () -> MutableState<Uri?>,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
@@ -144,7 +158,7 @@ private fun Settings(
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
-          modifier = Modifier.clickable { listener.export(this.getActivity()) },
+          modifier = Modifier.clickable { listener.export(saveFile) },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
         )
@@ -179,7 +193,16 @@ interface SettingsComponent {
 fun Settings() {
   val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
   val viewState = viewModel.viewState()
-  Settings(viewState, viewModel)
+
+  val result = remember { mutableStateOf<Uri?>(null) }
+  val getContent = rememberLauncherForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
+    result.value = uri
+  }
+
+  Settings(viewState, viewModel, {
+    getContent.launch("aname.txt")
+    result
+  })
 }
 
 @Composable

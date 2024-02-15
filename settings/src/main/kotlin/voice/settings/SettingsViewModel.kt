@@ -30,6 +30,8 @@ import androidx.activity.ComponentActivity
 import android.content.ContextWrapper
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import android.net.Uri
+import androidx.compose.runtime.MutableState
+import voice.logging.core.Logger
 
 
 const val CSV_NEWLINE = "\n"
@@ -136,7 +138,7 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
-  override fun export(activity: ComponentActivity) {
+  override fun export(saveFile: () -> MutableState<Uri?>) {
     // navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
     // I need the  `appDb().getOpenHelper().getReadableDatabase()`
     val suppDb = appDb.openHelper.readableDatabase
@@ -181,29 +183,49 @@ class SettingsViewModel
 
     rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_END")
     val csv = rv.toString()
-    val path = context.getFilesDir()
-    val file = File(path, "export.txt")
-    file.writeText(csv)
+
+    // val path = context.getFilesDir()
+    // val file = File(path, "export.txt")
+    // file.writeText(csv)
 
     // AHGG how do I get the activity my folks
 
-    val getContent = context.getActivity()!!.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
-        // Handle the returned Uri
-        // File(uri).writeText(csv)
-        try {
-            context.contentResolver.openFileDescriptor(uri!!, "w")?.use {
-                FileOutputStream(it.fileDescriptor).use {
-                    it.write(csv.toByteArray())
-                }
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+    Logger.w("Calling save file")
+    saveFile().value?.let { uri ->
+    Logger.w("Saving file $uri")
+    val stream = context.contentResolver.openOutputStream(uri)!!
+    stream.write(csv.toByteArray())
+    stream.close()
+      // try {
+      //     context.contentResolver.openFileDescriptor(uri, "w")?.use {
+      //         FileOutputStream(it.fileDescriptor).use {
+      //             it.write(csv.toByteArray())
+      //         }
+      //     }
+      // } catch (e: FileNotFoundException) {
+      //     e.printStackTrace()
+      // } catch (e: IOException) {
+      //     e.printStackTrace()
+      // }
     }
 
-    getContent.launch("")
+    // val getContent = activity.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
+    //     // Handle the returned Uri
+    //     // File(uri).writeText(csv)
+    //     try {
+    //         context.contentResolver.openFileDescriptor(uri!!, "w")?.use {
+    //             FileOutputStream(it.fileDescriptor).use {
+    //                 it.write(csv.toByteArray())
+    //             }
+    //         }
+    //     } catch (e: FileNotFoundException) {
+    //         e.printStackTrace()
+    //     } catch (e: IOException) {
+    //         e.printStackTrace()
+    //     }
+    // }
+
+    // getContent.launch("")
 
       // val uri = FileProvider.getUriForFile(
       //     context,

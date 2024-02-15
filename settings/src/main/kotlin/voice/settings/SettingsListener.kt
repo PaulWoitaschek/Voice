@@ -1,5 +1,7 @@
 package voice.settings
 import androidx.activity.ComponentActivity
+import android.net.Uri
+import androidx.compose.runtime.MutableState
 
 interface SettingsListener {
   fun close()
@@ -12,7 +14,7 @@ interface SettingsListener {
   fun dismissDialog()
   fun getSupport()
   fun suggestIdea()
-  fun export(activity: ComponentActivity)
+  fun export(saveFile: () -> MutableState<Uri?>)
   fun openBugReport()
   fun openTranslations()
 }
