@@ -1,5 +1,6 @@
 package voice.settings
 
+import android.database.Cursor.FIELD_TYPE_BLOB
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,7 @@ import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import android.net.Uri
 import androidx.compose.runtime.MutableState
 import voice.logging.core.Logger
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 
 
 const val CSV_NEWLINE = "\n"
@@ -140,57 +142,58 @@ class SettingsViewModel
 
   override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
     val suppDb = appDb.openHelper.readableDatabase
-    val replaceCommaInData = CSV_COMMA_REPLACE /* commas in the data will be replaced by this */
-    val rv = StringBuilder().append(CSV_INDICATOR_START)
     val sql = StringBuilder()
-    var afterFirstTable = false
-    var afterFirstColumn: Boolean
-    var afterFirstRow: Boolean
-    var currentTableName: String
     val csr = appDb.query(
       "SELECT name FROM sqlite_master " +
               "WHERE type='table' " +
               "AND name NOT LIKE('sqlite_%') " +
               "AND name NOT LIKE('room_%') " +
+              "AND name NOT LIKE('bookSearchFts_%') " +
               "AND name NOT LIKE('android_%')",
       arrayOf<Any>()
     )
 
+    var rows = mutableListOf(listOf("Voice Export"))
+
     while (csr.moveToNext()) {
         sql.clear()
         sql.append("SELECT ")
-        currentTableName = csr.getString(0)
-        if (afterFirstTable) rv.append("$CSV_NEWLINE")
-        afterFirstTable = true
-        afterFirstColumn = false
-        rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_TABLE,$currentTableName")
-        for (columnName in getTableColumnNames(currentTableName,suppDb)) {
-          if (afterFirstColumn) sql.append("||','||")
-          afterFirstColumn = true
-          sql.append("replace(`$columnName`,',','$replaceCommaInData')")
-        }
+        val currentTableName = csr.getString(0)
+        rows.add(listOf("========"))
+        rows.add(listOf("Table", currentTableName))
+        val colNames = getTableColumnNames(currentTableName,suppDb)
+        sql.append(colNames.joinToString(","))
+        rows.add(colNames)
+        rows.add(listOf("========"))
         sql.append(" FROM `${currentTableName}`")
         val csr2 = appDb.query(sql.toString(),null)
-        afterFirstRow = false
         while (csr2.moveToNext()) {
-          if (!afterFirstRow) rv.append("$CSV_NEWLINE")
-          afterFirstRow = true
-          rv.append(CSV_NEWLINE).append(csr2.getString(0))
+          val row = mutableListOf<String>()
+          for (i in 0..csr2.getColumnCount() - 1) {
+            val type = csr2.getType(i)
+            if (type == FIELD_TYPE_BLOB) {
+              row.add("{blob}")
+              continue
+            }
+
+            val got = csr2.getString(i)
+            if (got != null) {
+              row.add(got)
+            } else {
+              row.add("")
+            }
+          }
+          rows.add(row)
         }
     }
-
-    rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_END")
-    val csv = rv.toString()
 
     Logger.w("Calling save file")
     saveFile({ uri ->
       Logger.w("Saving file $uri")
       val stream = context.contentResolver.openOutputStream(uri)!!
-      stream.write(csv.toByteArray())
-      stream.close()
+      csvWriter().writeAll(rows, stream)
     })
   }
-
 
   private fun getTableColumnNames(tableName: String, suppDB: SupportSQLiteDatabase): List<String> {
     val rv = arrayListOf<String>()
