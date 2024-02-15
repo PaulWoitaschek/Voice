@@ -14,7 +14,7 @@ interface SettingsListener {
   fun dismissDialog()
   fun getSupport()
   fun suggestIdea()
-  fun export(saveFile: () -> MutableState<Uri?>)
+  fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit)
   fun openBugReport()
   fun openTranslations()
 }

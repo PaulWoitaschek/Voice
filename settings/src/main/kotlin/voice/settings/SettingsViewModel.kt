@@ -138,9 +138,7 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
-  override fun export(saveFile: () -> MutableState<Uri?>) {
-    // navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
-    // I need the  `appDb().getOpenHelper().getReadableDatabase()`
+  override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
     val suppDb = appDb.openHelper.readableDatabase
     val replaceCommaInData = CSV_COMMA_REPLACE /* commas in the data will be replaced by this */
     val rv = StringBuilder().append(CSV_INDICATOR_START)
@@ -184,78 +182,13 @@ class SettingsViewModel
     rv.append(CSV_NEWLINE).append("$CSV_INDICATOR_END")
     val csv = rv.toString()
 
-    // val path = context.getFilesDir()
-    // val file = File(path, "export.txt")
-    // file.writeText(csv)
-
-    // AHGG how do I get the activity my folks
-
     Logger.w("Calling save file")
-    saveFile().value?.let { uri ->
-    Logger.w("Saving file $uri")
-    val stream = context.contentResolver.openOutputStream(uri)!!
-    stream.write(csv.toByteArray())
-    stream.close()
-      // try {
-      //     context.contentResolver.openFileDescriptor(uri, "w")?.use {
-      //         FileOutputStream(it.fileDescriptor).use {
-      //             it.write(csv.toByteArray())
-      //         }
-      //     }
-      // } catch (e: FileNotFoundException) {
-      //     e.printStackTrace()
-      // } catch (e: IOException) {
-      //     e.printStackTrace()
-      // }
-    }
-
-    // val getContent = activity.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
-    //     // Handle the returned Uri
-    //     // File(uri).writeText(csv)
-    //     try {
-    //         context.contentResolver.openFileDescriptor(uri!!, "w")?.use {
-    //             FileOutputStream(it.fileDescriptor).use {
-    //                 it.write(csv.toByteArray())
-    //             }
-    //         }
-    //     } catch (e: FileNotFoundException) {
-    //         e.printStackTrace()
-    //     } catch (e: IOException) {
-    //         e.printStackTrace()
-    //     }
-    // }
-
-    // getContent.launch("")
-
-      // val uri = FileProvider.getUriForFile(
-      //     context,
-      //     // BuildConfig.APPLICATION_ID +
-      //     "de.ph1b.audiobook.coverprovider",
-      //     file
-      // )
-      // val intent = Intent(Intent.ACTION_SEND)
-      // intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      // intent.setType("text/plain")
-      // intent.putExtra(Intent.EXTRA_STREAM, uri)
-      // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      // context.startActivity(intent)
-
-    //   val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-    //     addCategory(Intent.CATEGORY_OPENABLE)
-    //     type = "text/plain"
-    //     putExtra(Intent.EXTRA_TITLE, "export.txt")
-
-    //     // Optionally, specify a URI for the directory that should be opened in
-    //     // the system file picker before your app creates the document.
-    //     // putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
-    // }
-    // startActivityForResult(intent, CREATE_FILE)
-
-    // fun backupAsCSV() {
-    //     val csvFile = File(instance!!.getOpenHelper().writableDatabase.path + THEDATBASE_DATABASE_BACKUP_CSV_SUFFIX)
-    //     csvFile.delete()
-    //     csvFile.writeText(createAutoCSV())
-    // }
+    saveFile({ uri ->
+      Logger.w("Saving file $uri")
+      val stream = context.contentResolver.openOutputStream(uri)!!
+      stream.write(csv.toByteArray())
+      stream.close()
+    })
   }
 
 

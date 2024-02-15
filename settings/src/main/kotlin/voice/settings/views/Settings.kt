@@ -77,7 +77,7 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
-        override fun export(saveFile: () -> MutableState<Uri?>) {}
+        override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
@@ -90,7 +90,7 @@ private fun SettingsPreview() {
 private fun Settings(
   viewState: SettingsViewState,
   listener: SettingsListener,
-  saveFile: () -> MutableState<Uri?>,
+  saveFile: (handle: (uri: Uri) -> Unit) -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
@@ -194,14 +194,16 @@ fun Settings() {
   val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
   val viewState = viewModel.viewState()
 
-  val result = remember { mutableStateOf<Uri?>(null) }
+  val result = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
   val getContent = rememberLauncherForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
-    result.value = uri
+    uri?.let { inner ->
+      result.value(inner)
+    }
   }
 
-  Settings(viewState, viewModel, {
+  Settings(viewState, viewModel, { cb ->
+    result.value = cb
     getContent.launch("aname.txt")
-    result
   })
 }
 
