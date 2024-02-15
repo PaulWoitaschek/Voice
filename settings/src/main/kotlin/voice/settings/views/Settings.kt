@@ -1,6 +1,5 @@
 package voice.settings.views
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -44,15 +42,8 @@ import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
 import voice.strings.R as StringsR
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import androidx.core.content.FileProvider
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
-import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import android.net.Uri
 
 @Composable

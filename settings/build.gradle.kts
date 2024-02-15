@@ -20,7 +20,6 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.constraintLayout)
   implementation(libs.material)
-  implementation(libs.csv)
 
   implementation(libs.dagger.core)
 }

@@ -175,7 +175,6 @@ dependencies {
   implementation(libs.materialDialog.core)
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
-  implementation(libs.csv)
 
   if (useProprietaryLibraries) {
     implementation(libs.firebase.crashlytics)
