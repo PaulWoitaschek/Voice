@@ -40,6 +40,7 @@ import java.io.OutputStream
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import java.util.zip.ZipInputStream
 
 
 const val CSV_NEWLINE = "\n"
@@ -224,27 +225,33 @@ class SettingsViewModel
       }
 
       zip.close()
-
-      // val inp = Path(db.path!!)
-      // if (File(db.path!! + "-shm").exists()) {
-      //   Files.copy(Path(db.path!! + "-shm"), outp)
-      // } else {
-      //   Files.copy(inp, outp)
-      // }
     })
   }
 
   override fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {
-    val db = appDb.openHelper.readableDatabase
     openFile({ uri ->
+      val db = appDb.openHelper.readableDatabase
       val inp = context.contentResolver.openInputStream(uri)!!
-      val outp = Path(db.path!!)
-      Files.copy(inp, outp, REPLACE_EXISTING)
+      val zip = ZipInputStream(inp)
 
-      // val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
-      // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-      // context.startActivity(intent)
-      // System.exit(0)
+      val dbFile = File(db.path!!)
+
+      var entry = zip.getNextEntry()
+      while (entry != null) {
+        if (!entry.name.startsWith(dbFile.name) || entry.name.contains("/")) {
+          // invalid
+          continue
+        }
+        val outp = Path(dbFile.parent!!, entry.name)
+        Files.copy(zip, outp, REPLACE_EXISTING)
+
+        entry = zip.getNextEntry()
+      }
+
+      val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+      context.startActivity(intent)
+      System.exit(0)
     })
   }
 

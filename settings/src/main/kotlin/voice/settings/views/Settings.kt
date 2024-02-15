@@ -15,6 +15,8 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -164,13 +166,13 @@ private fun Settings(
         )
         ListItem(
           modifier = Modifier.clickable { listener.export(saveFile) },
-          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
+          leadingContent = { Icon(Icons.Outlined.Download, stringResource(StringsR.string.pref_export_database)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.import(openFile) },
-          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
+          leadingContent = { Icon(Icons.Outlined.Upload, stringResource(StringsR.string.pref_import_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_import_database)) },
         )
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
