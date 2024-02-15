@@ -1,5 +1,6 @@
 package voice.settings.views
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,7 +65,7 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
-        override fun export() {}
+        override fun export(activity: ComponentActivity) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
@@ -143,7 +144,7 @@ private fun Settings(
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
-          modifier = Modifier.clickable { listener.export() },
+          modifier = Modifier.clickable { listener.export(this.getActivity()) },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
         )

@@ -1,4 +1,5 @@
 package voice.settings
+import androidx.activity.ComponentActivity
 
 interface SettingsListener {
   fun close()
@@ -11,7 +12,7 @@ interface SettingsListener {
   fun dismissDialog()
   fun getSupport()
   fun suggestIdea()
-  fun export()
+  fun export(activity: ComponentActivity)
   fun openBugReport()
   fun openTranslations()
 }

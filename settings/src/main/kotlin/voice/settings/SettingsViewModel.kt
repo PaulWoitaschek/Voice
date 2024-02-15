@@ -10,6 +10,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import android.content.Context
 import android.content.Intent
 import java.io.File
+import java.io.FileOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import de.paulwoitaschek.flowpref.Pref
@@ -26,6 +29,7 @@ import javax.inject.Named
 import androidx.activity.ComponentActivity
 import android.content.ContextWrapper
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import android.net.Uri
 
 
 const val CSV_NEWLINE = "\n"
@@ -132,7 +136,7 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
-  override fun export() {
+  override fun export(activity: ComponentActivity) {
     // navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
     // I need the  `appDb().getOpenHelper().getReadableDatabase()`
     val suppDb = appDb.openHelper.readableDatabase
@@ -181,23 +185,38 @@ class SettingsViewModel
     val file = File(path, "export.txt")
     file.writeText(csv)
 
+    // AHGG how do I get the activity my folks
 
-    // val getContent = context.activity.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
-    //     // Handle the returned Uri
-    // }
+    val getContent = context.getActivity()!!.registerForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
+        // Handle the returned Uri
+        // File(uri).writeText(csv)
+        try {
+            context.contentResolver.openFileDescriptor(uri!!, "w")?.use {
+                FileOutputStream(it.fileDescriptor).use {
+                    it.write(csv.toByteArray())
+                }
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 
-      val uri = FileProvider.getUriForFile(
-          context,
-          // BuildConfig.APPLICATION_ID +
-          "de.ph1b.audiobook.coverprovider",
-          file
-      )
-      val intent = Intent(Intent.ACTION_SEND)
-      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      intent.setType("text/plain")
-      intent.putExtra(Intent.EXTRA_STREAM, uri)
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      context.startActivity(intent)
+    getContent.launch("")
+
+      // val uri = FileProvider.getUriForFile(
+      //     context,
+      //     // BuildConfig.APPLICATION_ID +
+      //     "de.ph1b.audiobook.coverprovider",
+      //     file
+      // )
+      // val intent = Intent(Intent.ACTION_SEND)
+      // intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      // intent.setType("text/plain")
+      // intent.putExtra(Intent.EXTRA_STREAM, uri)
+      // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      // context.startActivity(intent)
 
     //   val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
     //     addCategory(Intent.CATEGORY_OPENABLE)
