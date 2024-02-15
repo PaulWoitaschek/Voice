@@ -119,7 +119,7 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
-  override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
+  override fun backup(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
     val db = appDb.openHelper.readableDatabase
     saveFile({ uri ->
       val outp: OutputStream = context.contentResolver.openOutputStream(uri)!!
@@ -148,7 +148,7 @@ class SettingsViewModel
     })
   }
 
-  override fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {
+  override fun restore(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {
     openFile({ uri ->
       val db = appDb.openHelper.readableDatabase
       val inp = context.contentResolver.openInputStream(uri)!!

@@ -72,8 +72,8 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
-        override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
-        override fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
+        override fun backup(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
+        override fun restore(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
@@ -156,12 +156,12 @@ private fun Settings(
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
-          modifier = Modifier.clickable { listener.export(saveFile) },
+          modifier = Modifier.clickable { listener.backup(saveFile) },
           leadingContent = { Icon(Icons.Outlined.Download, stringResource(StringsR.string.pref_backup_database)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_backup_database)) },
         )
         ListItem(
-          modifier = Modifier.clickable { listener.import(openFile) },
+          modifier = Modifier.clickable { listener.restore(openFile) },
           leadingContent = { Icon(Icons.Outlined.Upload, stringResource(StringsR.string.pref_restore_database)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_restore_database)) },
         )
