@@ -49,6 +49,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import androidx.core.content.FileProvider
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
+import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import android.net.Uri
 
 @Composable
@@ -78,10 +80,12 @@ private fun SettingsPreview() {
         override fun getSupport() {}
         override fun suggestIdea() {}
         override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
+        override fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
-      { mutableStateOf<Uri?>(null) }
+      { _ -> },
+      { _ -> },
     )
   }
 }
@@ -91,6 +95,7 @@ private fun Settings(
   viewState: SettingsViewState,
   listener: SettingsListener,
   saveFile: (handle: (uri: Uri) -> Unit) -> Unit,
+  openFile: (handle: (uri: Uri) -> Unit) -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
@@ -163,6 +168,11 @@ private fun Settings(
           headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
         )
         ListItem(
+          modifier = Modifier.clickable { listener.import(openFile) },
+          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_export_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_export_database)) },
+        )
+        ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
           leadingContent = { Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
@@ -194,16 +204,26 @@ fun Settings() {
   val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
   val viewState = viewModel.viewState()
 
-  val result = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
-  val getContent = rememberLauncherForActivityResult(CreateDocument("text/plain")) { uri: Uri? ->
+  val saveResult = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
+  val saveLauncher = rememberLauncherForActivityResult(CreateDocument("application/binary")) { uri: Uri? ->
     uri?.let { inner ->
-      result.value(inner)
+      saveResult.value(inner)
+    }
+  }
+
+  val openResult = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
+  val openLauncher = rememberLauncherForActivityResult(OpenDocument()) { uri: Uri? ->
+    uri?.let { inner ->
+      openResult.value(inner)
     }
   }
 
   Settings(viewState, viewModel, { cb ->
-    result.value = cb
-    getContent.launch("aname.txt")
+    saveResult.value = cb
+    saveLauncher.launch("voice.zip")
+  }, { cb ->
+    openResult.value = cb
+    openLauncher.launch(arrayOf("*/*"))
   })
 }
 

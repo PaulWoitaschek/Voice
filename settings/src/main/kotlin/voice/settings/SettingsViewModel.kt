@@ -34,6 +34,12 @@ import android.net.Uri
 import androidx.compose.runtime.MutableState
 import voice.logging.core.Logger
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+import java.nio.file.Files
+import kotlin.io.path.Path
+import java.io.OutputStream
+import java.nio.file.StandardCopyOption.REPLACE_EXISTING
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 
 const val CSV_NEWLINE = "\n"
@@ -140,7 +146,7 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
   }
 
-  override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
+  fun saveCsv(uri: Uri) {
     val suppDb = appDb.openHelper.readableDatabase
     val sql = StringBuilder()
     val csr = appDb.query(
@@ -187,11 +193,58 @@ class SettingsViewModel
         }
     }
 
-    Logger.w("Calling save file")
+    Logger.w("Saving a file")
+    val stream = context.contentResolver.openOutputStream(uri)!!
+    csvWriter().writeAll(rows, stream)
+  }
+
+  override fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {
+    val db = appDb.openHelper.readableDatabase
     saveFile({ uri ->
-      Logger.w("Saving file $uri")
-      val stream = context.contentResolver.openOutputStream(uri)!!
-      csvWriter().writeAll(rows, stream)
+      val outp: OutputStream = context.contentResolver.openOutputStream(uri)!!
+      val zip = ZipOutputStream(outp)
+
+      val files = listOf(File(db.path!!), File(db.path!! + "-shm"), File(db.path!! + "-wal"))
+      for (file in files) {
+        if (!file.exists()) {
+          continue
+        }
+        zip.putNextEntry(ZipEntry(file.name))
+
+        val fileInputStream = file.inputStream()
+        val buffer = ByteArray(1024)
+        var length: Int
+
+        while (fileInputStream.read(buffer).also { length = it } > 0) {
+            zip.write(buffer, 0, length)
+        }
+
+        fileInputStream.close()
+        zip.closeEntry()
+      }
+
+      zip.close()
+
+      // val inp = Path(db.path!!)
+      // if (File(db.path!! + "-shm").exists()) {
+      //   Files.copy(Path(db.path!! + "-shm"), outp)
+      // } else {
+      //   Files.copy(inp, outp)
+      // }
+    })
+  }
+
+  override fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {
+    val db = appDb.openHelper.readableDatabase
+    openFile({ uri ->
+      val inp = context.contentResolver.openInputStream(uri)!!
+      val outp = Path(db.path!!)
+      Files.copy(inp, outp, REPLACE_EXISTING)
+
+      // val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
+      // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+      // context.startActivity(intent)
+      // System.exit(0)
     })
   }
 

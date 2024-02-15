@@ -15,6 +15,7 @@ interface SettingsListener {
   fun getSupport()
   fun suggestIdea()
   fun export(saveFile: (handle: (uri: Uri) -> Unit) -> Unit)
+  fun import(openFile: (handle: (uri: Uri) -> Unit) -> Unit)
   fun openBugReport()
   fun openTranslations()
 }
