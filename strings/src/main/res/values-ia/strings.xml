@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="bookmark">Marcapagina</string>
+    <string name="play">Reproducer</string>
+    <string name="play_pause">Reproducer / Pausar</string>
+    <string name="pause">Pausar</string>
+    <string name="action_sleep">Temporisator de somno</string>
+    <string name="rewind">Rebobinar</string>
+    <string name="previous_track">Tracia precedente</string>
+    <string name="next_track">Tracia sequente</string>
+    <string name="skip_silence">Saltar le silentio</string>
+    <string name="more">Plus</string>
+    <string name="dialog_confirm">Definir</string>
+    <string name="dialog_cancel">Cancellar</string>
+    <string name="content_cover">Monstra le copertura seligite</string>
+    <string name="change_book_name">Nomine</string>
+    <string name="cover_search.author">Autor</string>
+    <string name="playback_speed">Velocitate de reproduction</string>
+    <string name="bookmark_edit_title">Modificar le marcapagina</string>
+    <string name="bookmark_edit_hint">Nomine del marcapagina</string>
+</resources>
