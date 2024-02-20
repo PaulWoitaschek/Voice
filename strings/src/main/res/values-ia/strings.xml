@@ -46,4 +46,22 @@
     <string name="review.request.button.no">Non, gratias</string>
     <string name="review.feedback.button.yes">Invia tu commentos</string>
     <string name="review.feedback.button.no">Cancellar</string>
+    <string name="action_settings">Preferentias</string>
+    <string name="pref_theme_dark">Thema obscur</string>
+    <string name="pref_report_issue">Signalar un defecto</string>
+    <string name="pref_help_translating">Adjuta in traducer Voice</string>
+    <string name="pref_get_support">Obtener assistentia</string>
+    <string name="pref_app_version">Version del application</string>
+    <string name="popup_edit">Modificar</string>
+    <string name="remove">Remover</string>
+    <string name="book_header_current">Actual</string>
+    <string name="book_header_not_started">Ancora non ha comenciate</string>
+    <string name="book_header_completed">Completate</string>
+    <string name="migration_detail_content_name">Nomine</string>
+    <string name="migration_detail_content_root">Dossier radice</string>
+    <string name="migration_detail_content_position">Position</string>
+    <string name="migration_detail_title">Positiones ancian del libro</string>
+    <string name="delete_book_dialog_content">Isto delera le files in tu apparato.</string>
+    <string name="delete_book_dialog_title">Deler le libro</string>
+    <string name="migration_delete_dialog_action_keep">Mantener</string>
 </resources>
