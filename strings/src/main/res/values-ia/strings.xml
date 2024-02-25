@@ -64,4 +64,17 @@
     <string name="delete_book_dialog_content">Isto delera le files in tu apparato.</string>
     <string name="delete_book_dialog_title">Deler le libro</string>
     <string name="migration_delete_dialog_action_keep">Mantener</string>
+    <string name="cover">Copertura</string>
+    <string name="download_book_cover">Copertura ab le Internet</string>
+    <string name="pick_book_cover">Copertura ab le systema de files</string>
+    <string name="edit_book_title">Modificar le libro</string>
+    <string name="audiobook_folders_title">Dossieres de audiolibros</string>
+    <string name="pref_seek_time">Saltar quantitate</string>
+    <string name="pref_auto_rewind_title">Auto rebobinar</string>
+    <string name="pref_suggest_idea">Suggerer un idea</string>
+    <string name="play_current">Reproducer le actual</string>
+    <string name="folder_type_no_books">Voice non poteva deteger necun libro? Il ha alcun files de audio?</string>
+    <string name="media_session_root">Tote le audiolibros</string>
+    <string name="select_folder_title_onboarding">Adde tu prime audiolibro</string>
+    <string name="select_folder_title_default">Adde tu audiolibro(s)</string>
 </resources>
