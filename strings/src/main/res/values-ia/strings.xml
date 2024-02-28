@@ -77,4 +77,5 @@
     <string name="media_session_root">Tote le audiolibros</string>
     <string name="select_folder_title_onboarding">Adde tu prime audiolibro</string>
     <string name="select_folder_title_default">Adde tu audiolibro(s)</string>
+    <string name="bookmark_added">Marcapagina addite</string>
 </resources>
