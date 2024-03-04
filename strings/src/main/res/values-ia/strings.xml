@@ -78,4 +78,19 @@
     <string name="select_folder_title_onboarding">Adde tu prime audiolibro</string>
     <string name="select_folder_title_default">Adde tu audiolibro(s)</string>
     <string name="bookmark_added">Marcapagina addite</string>
+    <string name="cover_search_template_no_author">Copertura del audiolibro %s</string>
+    <string name="cover_search_template_with_author">Copertura del audiolibro %1$s per %2$s</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuta</item>
+        <item quantity="other">%d minutas</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d secunda</item>
+        <item quantity="other">%d secundas</item>
+    </plurals>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d file de audio</item>
+        <item quantity="other">%d files de audio</item>
+    </plurals>
+    <string name="delete_book_bottom_sheet_title">Deler le libro</string>
 </resources>
