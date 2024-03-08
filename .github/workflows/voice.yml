@@ -84,7 +84,7 @@ jobs:
         run: ./gradlew app:assembleRelease -Pvoice.signing.play=false
 
       - name: Github Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: app/build/outputs/apk/release/app-release.apk
