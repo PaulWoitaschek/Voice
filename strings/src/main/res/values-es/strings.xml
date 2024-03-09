@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cover">Cubierta</string>
+    <string name="cover">Portada</string>
     <string name="play_pause">Reproducir / Pausar</string>
     <string name="action_sleep">Temporizador</string>
     <string name="rewind">Retrasar</string>
@@ -66,7 +66,7 @@
     <string name="pref_suggest_idea">Proponer una idea</string>
     <string name="mark_as_not_started">Marcar como Aún No Iniciado</string>
     <string name="pref_use_grid">Utilizar el diseño en cuadrícula</string>
-    <string name="pref_report_issue">Comunicar un problema</string>
+    <string name="pref_report_issue">Reportar un problema</string>
     <string name="pref_app_version">Versión de la aplicación</string>
     <string name="folder_mode_root">Modo libro de nivel superior: Las subcarpetas son libros</string>
     <string name="folder_mode_single">Modo de libro único: Una carpeta equivale a un libro.</string>
@@ -123,7 +123,7 @@
     <string name="review.feedback.content">¿Podrías decirnos qué salió mal\? Agradecemos tus comentarios ya que nos ayudan a mejorar tu experiencia.</string>
     <string name="review.feedback.button.yes">Envía tus comentarios</string>
     <string name="review.request.content">Tu opinión nos importa. Si tienes un momento, valóranos y comparte tu experiencia. Nos ayuda a mejorar y a ofrecer una mejor experiencia auditiva.</string>
-    <string name="review.request.title">¿Disfrutando de la voz\?</string>
+    <string name="review.request.title">¿Disfrutando de Voice?</string>
     <string name="review.feedback.button.no">Cancelar</string>
     <string name="sleep_timer.title">Dulces sueños! 🌙</string>
     <string name="sleep_timer.button.increment">Mas largo</string>
