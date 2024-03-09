@@ -120,7 +120,7 @@
         <item quantity="other">%d хвилин</item>
     </plurals>
     <string name="cover_search_template_no_author">Обкладинка аудіокниги %s</string>
-    <string name="cover_search_template_with_author">Обкладинка аудіокниги %1$ автора %2$</string>
+    <string name="cover_search_template_with_author">Обкладинка аудіокниги %1$s автора %2$s</string>
     <string name="cover_search.icon_recent">Недавній запит</string>
     <string name="cover_search.author">Автор</string>
     <string name="select_folder_type_file">Файл</string>
