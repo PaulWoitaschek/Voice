@@ -25,7 +25,7 @@ class ComposePlugin : Plugin<Project> {
     }
   }
 
-  private fun configureCompose(extension: CommonExtension<*, *, *, *, *>, target: Project) {
+  private fun configureCompose(extension: CommonExtension<*, *, *, *, *, *>, target: Project) {
     val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
     target.dependencies.add("implementation", libs.findBundle("compose").get())
     target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
