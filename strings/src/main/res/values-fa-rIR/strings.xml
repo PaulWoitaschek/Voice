@@ -1,32 +1,134 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cover">جلد</string>
+    <string name="cover">کاور</string>
     <string name="play_pause">پخش / توقف</string>
     <string name="action_sleep">تایمر خواب</string>
-    <string name="rewind">بازپخش</string>
-    <string name="fast_forward">پخش سریع</string>
-    <string name="previous_track">قطعه قبلی</string>
-    <string name="next_track">قطعه بعدی</string>
+    <string name="rewind">به عقب برگرداندن</string>
+    <string name="fast_forward">رو به جلو بردن سریع</string>
+    <string name="previous_track">تراک قبلی</string>
+    <string name="next_track">تراک بعدی</string>
     <string name="dialog_confirm">انتخاب</string>
-    <string name="dialog_cancel">انصراف</string>
-    <string name="content_cover">جلدی را برای انتخاب نمایش می‌دهد</string>
+    <string name="dialog_cancel">لغو</string>
+    <string name="content_cover">نمایش کاور برای انتخاب</string>
     <string name="change_book_name">نام</string>
-    <string name="download_book_cover">دریافت جلد از اینترنت</string>
-    <string name="pick_book_cover">دریافت جلد از حافظه</string>
+    <string name="download_book_cover">دریافت کاور از طریق اینترنت</string>
+    <string name="pick_book_cover">دریافت کاور از داخل سیستم</string>
     <string name="edit_book_title">ویرایش کتاب</string>
     <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
-    <string name="playback_speed">سرعت پخش</string>
+    <string name="playback_speed">سرعت بازپخش</string>
     <string name="bookmark">نشان‌گذاری</string>
     <string name="bookmark_edit_title">ویرایش نشانه </string>
-    <string name="bookmark_edit_hint">نام نشانه</string>
+    <string name="bookmark_edit_hint">نام گذاری نشانه</string>
     <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
     <string name="action_settings">تنظیمات</string>
     <plurals name="seconds">
         <item quantity="one">%d ثانیه</item>
-        <item quantity="other">%d ثانیه</item>
+        <item quantity="other">%d ثانیه ها</item>
     </plurals>
     <string name="pref_seek_time">میزان پرش</string>
-    <string name="pref_auto_rewind_title">بازپخش خودکار</string>
+    <string name="pref_auto_rewind_title">عقب بردن خودکار</string>
     <string name="popup_edit">ویرایش</string>
     <string name="remove">حذف</string>
+    <string name="skip_silence">رد کردن بخش های حاوی سکوت</string>
+    <string name="volume_boost">افزایش ولوم صدا</string>
+    <string name="more">گزینه های بیشتر</string>
+    <string name="mark_as_completed">علامت زدن به عنوان تکمیل شده</string>
+    <string name="mark_as_not_started">علامت زدن به عنوان شروع نشده</string>
+    <string name="pref_theme_dark">تم مشکی</string>
+    <string name="pref_suggest_idea">یک ایده پیشنهاد کنید</string>
+    <string name="pref_use_grid">چینش بصورت شبکه ای</string>
+    <string name="pref_report_issue">گزارش مشکل</string>
+    <string name="pref_get_support">دریافت پشتیبانی</string>
+    <string name="pref_app_version">ورژن اپلیکیشن</string>
+    <string name="play_current">پخش فایل جاری</string>
+    <string name="book_header_not_started">هنوز شروع نشده</string>
+    <string name="book_header_current">جاری</string>
+    <string name="close">بستن</string>
+    <string name="bookmark_just_now">همین الان</string>
+    <string name="migration_detail_content_position_current_chapter_position">موقعیت در فصل</string>
+    <string name="migration_delete_dialog_title">پاک کردن موقعیت ها</string>
+    <string name="delete_book_dialog_content">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
+    <string name="battery_optimization_action">بروزرسانی</string>
+    <string name="media_session_recent">به تازگی</string>
+    <string name="notification_sleep_timer_enable">فعال کردن تایمر خواب</string>
+    <string name="onboarding.explanation.subtitle">با Voice می‌توانید کتاب‌ها را به‌عنوان فایل‌های جداگانه اضافه کنید یا آنها را در پوشه‌ها سازماندهی کنید.به انتخاب خودتان!</string>
+    <string name="onboarding.completion.next_button">شروع به گوش دادن</string>
+    <string name="sleep_timer.title">رویاهای شیرین! 🌙</string>
+    <string name="sleep_timer.button.decrement">کوتاه تر</string>
+    <string name="sleep_timer.button.increment">طولانی تر</string>
+    <plurals name="minutes">
+        <item quantity="one">%d دقیقه</item>
+        <item quantity="other">%d دقیقه ها</item>
+    </plurals>
+    <string name="folder_mode_single">حالت تک کتاب: یک پوشه برابر با یک کتاب است.</string>
+    <string name="folder_mode_root">حالت کتاب سطح بالا: زیرپوشه ها کتاب هستند</string>
+    <string name="migration_detail_title">موقعیت های کتاب قدیمی</string>
+    <string name="migration_hint_confirm">فهمیده شد</string>
+    <string name="migration_detail_content_position">موقعیت</string>
+    <string name="migration_detail_content_position_current_file_title">فایل جاری</string>
+    <string name="migration_detail_content_bookmarks">نشانه ها</string>
+    <string name="migration_detail_content_root">پوشه ریشه</string>
+    <string name="migration_detail_content_added_at">اضافه شده در</string>
+    <string name="search_hint">دنبال چه چیزی میگردید؟</string>
+    <string name="migration_delete_dialog_content">پس از حذف موقعیت های قدیمی، نمی توانید موقعیت های پخش قدیمی خود را بازیابی کنید.</string>
+    <string name="battery_optimization_rationale">به دلیل تنظیمات شما مربوط به محدودیت های استفاده از برق، ممکن است وقفه در پخش اتفاق بیفتد.</string>
+    <string name="delete_book_dialog_deletion_confirmation">فایلهای من را پاک کن</string>
+    <string name="delete_book_dialog_title">پاک کردن کتاب</string>
+    <string name="media_session_root">همه کتاب های صوتی</string>
+    <string name="notification_sleep_timer_disable">غیرفعال کردن تایمر خواب</string>
+    <string name="review.feedback.button.no">لغو</string>
+    <plurals name="folder_type_file_count">
+        <item quantity="one">%d فایل صوتی</item>
+        <item quantity="other">%d فایل های صوتی</item>
+    </plurals>
+    <string name="folder_type_book_example_header">این کار منجر به شناسایی کتاب های زیر می شود</string>
+    <string name="migration_hint_title">دسترسی به موقعیت های کتاب قدیمی</string>
+    <string name="migration_detail_content_name">نام</string>
+    <string name="migration_detail_content_position_current_file_position">موقعیت در فایل</string>
+    <string name="migration_detail_content_position_current_chapter_title">فصل کنونی</string>
+    <string name="storage_bug_title">مجوز لازم است</string>
+    <string name="select_folder_title_default">کتاب[های] صوتی خود را اضافه کنید</string>
+    <string name="storage_bug_button">اعطا مجوز</string>
+    <string name="review.request.button.no">نه، متشکرم</string>
+    <string name="review.feedback.button.yes">فرستادن بازخورد</string>
+    <string name="cover_search_template_with_author">%1$s به وسیله %2$s کاور کتاب صوتی</string>
+    <string name="cover_search_template_no_author">%s کاور کتاب صوتی</string>
+    <string name="pref_help_translating">کمک برای ترجمه Voice</string>
+    <string name="generic_error_message">مشکلی پیش آمد 😢</string>
+    <string name="voice_intro_first_book">پوشه کتاب صوتی خود را اضافه کنید تا بتوانید شروع به گوش دادن کنید!</string>
+    <string name="pause">توقف</string>
+    <string name="play">پخش</string>
+    <string name="add">اضافه کردن</string>
+    <string name="cover_search.icon_recent">لیست اخیر</string>
+    <string name="delete">پاک کردن</string>
+    <string name="select_folder_title_onboarding">اولین کتاب صوتی خود را اضافه کنید</string>
+    <string name="cover_search.author">نویسنده</string>
+    <string name="mark_as_current">علامت زدن به عنوان جاری</string>
+    <string name="migration_delete_dialog_action_delete">پاک کردن</string>
+    <string name="onboarding.completion.title">همه چیز آماده است!</string>
+    <string name="onboarding.explanation.title">کتابخانه شما، به روش شما</string>
+    <string name="book_header_completed">تمام شده</string>
+    <string name="folder_mode_author">حالت نویسنده-کتاب: زیرپوشه ها نویسنده هستند، زیر-زیرپوشه ها کتابها هستند.</string>
+    <string name="folder_type_no_books">Voice نتوانست هیچ کتابی را شناسایی کند. آیا فایل های صوتی وجود دارد؟</string>
+    <string name="folder_type_title">ساختار فایل های شما چگونه است؟</string>
+    <string name="migration_delete_dialog_action_keep">نگه داری</string>
+    <string name="delete_book_bottom_sheet_title">پاک کردن کتاب</string>
+    <string name="generic_error_retry">تلاش مجدد</string>
+    <string name="select_folder_type_file">فایل</string>
+    <string name="select_folder_type_folder">پوشه</string>
+    <string name="storage_bug_subtitle">در برخی از دستگاه‌ها، یک برنامه سیستم مجوز لازم برای دسترسی به کارت حافظه خارجی را ندارد. این دسترسی برای Voice برای خواندن کتاب‌های صوتی شما ضروری است.</string>
+    <string name="select_folder_subtitle">آیا می خواهید یک فایل را به عنوان یک کتاب یا یک پوشه اضافه کنید؟</string>
+    <string name="onboarding.completion.subtitle">اولین کتاب صوتی شما آماده پخش است. از گشت و گذار خود با Voice لذت ببرید!</string>
+    <string name="review.feedback.title">از شنیدن آن متاسفیم!</string>
+    <string name="review.feedback.content">ممکن است به ما بگویید چه اشتباهی رخ داده است؟ ما از بازخورد شما قدردانی می کنیم و به ما کمک می کند تا تجربه شما را بهبود ببخشیم.</string>
+    <string name="onboarding_welcome_title">به برنامه Voice خوش آمدید!</string>
+    <string name="review.request.title">از Voice خوشتان آمد؟</string>
+    <string name="review.request.content">بازخورد شما برای ما مهم است! اگر فرصت دارید، به ما امتیاز دهید و تجربه خود را به اشتراک بگذارید. این به ما کمک می کند تا بهبودها را ایجاد کنیم و تجربه شنیداری بهتری را ارائه دهیم.</string>
+    <string name="review.request.button.yes">الان امتیاز بدهید</string>
+    <string name="onboarding_welcome_subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
+    <string name="onboarding.button_next">بعدی</string>
+    <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید.
+\n
+\n
+\nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
 </resources>
