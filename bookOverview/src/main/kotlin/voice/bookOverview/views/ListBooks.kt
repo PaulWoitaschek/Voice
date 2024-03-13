@@ -114,7 +114,7 @@ internal fun ListBookRow(
             style = MaterialTheme.typography.bodyMedium,
           )
           Text(
-            text = book.remainingTime,
+            text = "${book.remainingTime} / ${(book.progress * 100).toInt()}%",
             style = MaterialTheme.typography.bodySmall,
           )
         }

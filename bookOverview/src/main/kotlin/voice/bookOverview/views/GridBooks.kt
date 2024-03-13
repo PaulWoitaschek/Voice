@@ -115,7 +115,7 @@ internal fun GridBook(
       )
       Text(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-        text = book.remainingTime,
+        text = "${book.remainingTime} / ${(book.progress * 100).toInt()}%",
         style = MaterialTheme.typography.bodySmall,
       )
 
