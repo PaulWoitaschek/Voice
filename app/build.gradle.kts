@@ -11,13 +11,10 @@ plugins {
   id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
-  alias(libs.plugins.crashlytics) apply false
-  alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.crashlytics)
+  alias(libs.plugins.googleServices)
   alias(libs.plugins.playPublish)
 }
-
-pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
-pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 
 play {
   defaultToAppBundles.value(true)
