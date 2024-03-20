@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.dsl.ManagedVirtualDevice
+import com.android.build.gradle.internal.dsl.SigningConfig
 import java.util.Properties
 
 plugins {
@@ -10,17 +11,9 @@ plugins {
   id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
-  alias(libs.plugins.crashlytics) apply false
-  alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.crashlytics)
+  alias(libs.plugins.googleServices)
   alias(libs.plugins.playPublish)
-}
-
-val useProprietaryLibraries = System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true"
-if (useProprietaryLibraries) {
-  pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
-  if (file("google-services.json").exists()) {
-    pluginManager.apply(libs.plugins.googleServices.get().pluginId)
-  }
 }
 
 play {
@@ -59,15 +52,10 @@ android {
     }
   }
 
-  signingConfigs {
-    create("release") {
+  fun createSigningConfig(name: String): SigningConfig {
+    return signingConfigs.create(name) {
       val properties = Properties()
-      val keyStoreName = if (providers.gradleProperty("voice.signing.play").get().toBoolean()) {
-        "play"
-      } else {
-        "github"
-      }
-      val propertiesFile = rootProject.file("signing/$keyStoreName/signing.properties")
+      val propertiesFile = rootProject.file("signing/$name/signing.properties")
         .takeIf { it.canRead() }
         ?: rootProject.file("signing/ci/signing.properties")
       properties.load(propertiesFile.inputStream())
@@ -75,6 +63,30 @@ android {
       storePassword = properties["STORE_PASSWORD"] as String
       keyAlias = properties["KEY_ALIAS"] as String
       keyPassword = properties["KEY_PASSWORD"] as String
+    }
+  }
+
+  val playSigningConfig = createSigningConfig("play")
+  val githubSigningConfig = createSigningConfig("github")
+
+  val signingFlavor = "signing"
+  val freeFlavor = "free"
+  flavorDimensions += signingFlavor
+  flavorDimensions += freeFlavor
+  productFlavors {
+    register("github") {
+      dimension = signingFlavor
+      signingConfig = githubSigningConfig
+    }
+    register("play") {
+      dimension = signingFlavor
+      signingConfig = playSigningConfig
+    }
+    register("libre") {
+      dimension = freeFlavor
+    }
+    register("proprietary") {
+      dimension = freeFlavor
     }
   }
 
@@ -88,13 +100,10 @@ android {
       isShrinkResources = false
     }
     all {
-      signingConfig = signingConfigs.getByName("release")
       setProguardFiles(
         listOf(
           getDefaultProguardFile("proguard-android-optimize.txt"),
           "proguard.pro",
-          // remove if retrofit > 2.9.0 is released https://github.com/square/retrofit/issues/3751
-          "retrofit2.pro",
         ),
       )
     }
@@ -176,15 +185,12 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
-  if (useProprietaryLibraries) {
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.remoteconfig)
-    implementation(project(":logging:crashlytics"))
-    implementation(project(":review:play"))
-  } else {
-    implementation(projects.review.noop)
-  }
+  "proprietaryImplementation"(libs.firebase.crashlytics)
+  "proprietaryImplementation"(libs.firebase.analytics)
+  "proprietaryImplementation"(libs.firebase.remoteconfig)
+  "proprietaryImplementation"(projects.logging.crashlytics)
+  "proprietaryImplementation"(projects.review.play)
+  "libreImplementation"(projects.review.noop)
 
   debugImplementation(projects.logging.debug)
 
