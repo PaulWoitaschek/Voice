@@ -130,4 +130,8 @@
     <string name="select_folder_title_default">Dodaj swój Audiobook(i)</string>
     <string name="storage_bug_button">Przyznaj uprawnienie</string>
     <string name="select_folder_title_onboarding">Dodaj Swój Pierwszy Audiobook</string>
+    <string name="sleep_timer.button.increment">Dłużej</string>
+    <string name="cover_search.icon_recent">Ostatnie wyszukiwanie</string>
+    <string name="review.request.title">Podoba ci się Voice?</string>
+    <string name="sleep_timer.button.decrement">Krócej</string>
 </resources>

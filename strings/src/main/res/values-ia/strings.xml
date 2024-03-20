@@ -93,4 +93,41 @@
         <item quantity="other">%d files de audio</item>
     </plurals>
     <string name="delete_book_bottom_sheet_title">Deler le libro</string>
+    <string name="fast_forward">Avantiar rapidemente</string>
+    <string name="volume_boost">Augmentar le volumine</string>
+    <string name="cover_search.icon_recent">Consulta recente</string>
+    <string name="mark_as_completed">Marcar como completate</string>
+    <string name="mark_as_current">Marcar como actual</string>
+    <string name="mark_as_not_started">Marcar como non comenciate</string>
+    <string name="pref_use_grid">Usar le disposition in grillia</string>
+    <string name="folder_mode_root">Modo libro de nivello superior: Le subdossieres es libros</string>
+    <string name="folder_mode_single">Modo de libro single: Un dossier es equal a un libro.</string>
+    <string name="folder_mode_author">Modo Libro-Autor: Subdossieres es autores, lor subdossieres es libros.</string>
+    <string name="folder_type_book_example_header">Isto poterea facer que le sequente libros sia detegite</string>
+    <string name="folder_type_title">Como es structurate tu files?</string>
+    <string name="voice_intro_first_book">Nos adde tu dossier de audiolibro dunque tu pote comenciar a ascoltar lo!</string>
+    <string name="migration_detail_content_position_current_chapter_title">Capitulo actual</string>
+    <string name="migration_detail_content_position_current_chapter_position">Position in le capitulo</string>
+    <string name="battery_optimization_rationale">A causa del restrictiones de energia, poterea haber interruptiones in le reproduction.</string>
+    <string name="select_folder_subtitle">Desira tu adder un sol file como libro o dossier?</string>
+    <string name="onboarding_welcome_subtitle">Tu reproductor personal de audiolibros de tasca. Que nos comencia.</string>
+    <string name="onboarding.explanation.title">Tu bibliotheca, tu maniera</string>
+    <string name="onboarding.completion.subtitle">Tu prime audiolibro es preste pro reproducer. Gaude tu viage con Voice!</string>
+    <string name="onboarding.completion.next_button">Comenciar a ascoltar</string>
+    <string name="review.request.title">Gaude tu de Voice?</string>
+    <string name="review.feedback.title">Nos regretta ascoltar illo!</string>
+    <string name="sleep_timer.title">Suave sonios! 🌙</string>
+    <string name="sleep_timer.button.increment">Plus longe</string>
+    <string name="sleep_timer.button.decrement">Plus curte</string>
+    <string name="migration_hint_title">Accesante al positiones ancian del libro</string>
+    <string name="onboarding.explanation.subtitle">Con Voice, tu pote adder libros como files individual o arrangiar los in dossieres. Tu selige!</string>
+    <string name="migration_hint_content">Debite al cambiamentos in versiones plus nove de Android, es necessari seliger tu dossier de audiolibros usante le selector de systema.
+\n
+\nClicca in le icone in alto pro vider le positiones ancian del libro.</string>
+    <string name="search_hint">Que cerca tu?</string>
+    <string name="storage_bug_subtitle">In certe apparatos, un application de systema manca le permissiones necessari pro acceder al immagazinage externe. Iste accesso es essential pro que Voice pote leger tu audiolibros.</string>
+    <string name="review.request.content">Tu commentos nos importa! Si tu habe un momento, evaluta nos e comparti tu experientia. Illo nos adjuta a facer melioramentos e offerer un melior experientia de ascoltamento.</string>
+    <string name="review.request.button.yes">Evalutar ora</string>
+    <string name="review.feedback.content">Pote tu dicer nos que vadeva errate? Nos apprecia tu commentos e illo nos adjuta a meliorar tu experientia.</string>
+    <string name="migration_delete_dialog_content">Un vice tu dele le positiones ancian tu non potera recuperar los.</string>
 </resources>
