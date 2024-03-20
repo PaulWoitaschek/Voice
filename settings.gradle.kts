@@ -63,8 +63,6 @@ include(":logging:core")
 include(":logging:debug")
 include(":documentfile")
 include(":onboarding")
-if (System.getenv("VOICE_USE_PROPRIETARY_LIBRARIES") == "true") {
-  include(":logging:crashlytics")
-  include(":review:play")
-}
+include(":logging:crashlytics")
+include(":review:play")
 include(":review:noop")
