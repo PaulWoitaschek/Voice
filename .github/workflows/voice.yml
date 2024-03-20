@@ -41,7 +41,7 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Test
-        run: ./gradlew testDebugUnitTest lintKotlin :app:lintDebug :app:assembleDebug :scripts:build
+        run: ./gradlew voiceUnitTest lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -50,7 +50,6 @@ jobs:
           path: |
             artifacts/
             app/build/reports/*.html
-            app/build/outputs/apk/debug/app-debug.apk
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4

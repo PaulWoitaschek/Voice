@@ -10,6 +10,9 @@ class AppPlugin : Plugin<Project> {
       apply("kotlin-android")
       withPlugin("com.android.application") {
         target.baseSetup()
+        target.tasks.register("voiceUnitTest") {
+          dependsOn("testPlayProprietaryDebugUnitTest")
+        }
       }
     }
   }
