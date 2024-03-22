@@ -26,6 +26,7 @@ internal fun BookPlayContent(
   onSkipToNext: () -> Unit,
   onSkipToPrevious: () -> Unit,
   onCurrentChapterClick: () -> Unit,
+  onCurrentTimeClick: () -> Unit,
   useLandscapeLayout: Boolean,
 ) {
   if (useLandscapeLayout) {
@@ -59,6 +60,7 @@ internal fun BookPlayContent(
           duration = viewState.duration,
           playedTime = viewState.playedTime,
           onSeek = onSeek,
+          onCurrentTimeClick = onCurrentTimeClick,
         )
         Spacer(modifier = Modifier.size(16.dp))
         PlaybackRow(
@@ -95,6 +97,7 @@ internal fun BookPlayContent(
         duration = viewState.duration,
         playedTime = viewState.playedTime,
         onSeek = onSeek,
+        onCurrentTimeClick = onCurrentTimeClick,
       )
       Spacer(modifier = Modifier.size(16.dp))
       PlaybackRow(

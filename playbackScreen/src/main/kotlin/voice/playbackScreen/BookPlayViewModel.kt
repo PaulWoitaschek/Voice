@@ -39,6 +39,7 @@ import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import javax.inject.Named
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -173,6 +174,10 @@ class BookPlayViewModel
     player.previous()
   }
 
+  fun onCurrentTimeClicked() {
+    _dialogState.value = BookPlayDialogViewState.JumpToPosition(1.hours)
+  }
+
   fun playPause() {
     if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
       scope.launch {
@@ -271,8 +276,17 @@ class BookPlayViewModel
       val book = bookRepository.get(bookId) ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
+      if (position <= currentMark.durationMs.milliseconds) {
+        player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
+      } else {
+        Logger.d("Invalid seek with mark=$currentMark, position=$position")
+      }
     }
+  }
+
+  fun onJumpToPositionTimeSelected(position: Duration) {
+    _dialogState.value = null
+    seekTo(position)
   }
 
   fun toggleSleepTimer() {

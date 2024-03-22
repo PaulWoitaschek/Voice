@@ -1,5 +1,6 @@
 package voice.playbackScreen.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Row
@@ -22,12 +23,13 @@ import kotlin.time.Duration
 internal fun SliderRow(
   duration: Duration,
   playedTime: Duration,
+  onCurrentTimeClick: () -> Unit,
   onSeek: (Duration) -> Unit,
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = 16.dp),
+      .padding(horizontal = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     var localValue by remember { mutableFloatStateOf(0F) }
@@ -42,11 +44,13 @@ internal fun SliderRow(
         },
         durationMs = duration.inWholeMilliseconds,
       ),
+      modifier = Modifier
+        .clickable(onClick = onCurrentTimeClick)
+        .padding(horizontal = 8.dp, vertical = 4.dp),
     )
     Slider(
       modifier = Modifier
-        .weight(1F)
-        .padding(horizontal = 8.dp),
+        .weight(1F),
       interactionSource = interactionSource,
       value = if (dragging) {
         localValue
@@ -62,6 +66,7 @@ internal fun SliderRow(
       },
     )
     Text(
+      modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
       text = formatTime(
         timeMs = duration.inWholeMilliseconds,
         durationMs = duration.inWholeMilliseconds,
