@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Jalada</string>
     <string name="play_pause">Cheza / Sitisha</string>
@@ -29,4 +29,6 @@
     <string name="book_header_current">iliyopo</string>
     <string name="book_header_not_started">Ambayo Haija Anzwa</string>
     <string name="book_header_completed">Iliyo malizwa</string>
+    <string name="play">Cheza</string>
+    <string name="pause">Sitisha</string>
 </resources>
