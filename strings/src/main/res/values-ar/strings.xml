@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="ar">
-    <string name="cover">الغطاء</string>
+    <string name="cover">الغلاف</string>
     <string name="play_pause">شغّل/ ألبث</string>
     <string name="action_sleep">مؤقت النوم</string>
     <string name="rewind">أرجع</string>
