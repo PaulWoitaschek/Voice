@@ -33,7 +33,7 @@ paging-compose = "androidx.paging:paging-compose:3.2.1"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
-robolectric = "org.robolectric:robolectric:4.11.1"
+robolectric = "org.robolectric:robolectric:4.12"
 coil = "io.coil-kt:coil-compose:2.6.0"
 appCompat = "androidx.appcompat:appcompat:1.6.1"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
