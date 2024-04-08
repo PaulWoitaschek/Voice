@@ -13,4 +13,9 @@
     <string name="play">Reproduzir</string>
     <string name="action_sleep">Temporizador</string>
     <string name="volume_boost">Aumentar volume</string>
+    <string name="download_book_cover">Obter capa na Internet</string>
+    <string name="onboarding.completion.subtitle">Seu primeiro audiolivro está pronto para ser reproduzido. Aproveite sua jornada com o Voice!</string>
+    <string name="rewind">Retroceder</string>
+    <string name="change_book_name">Nome</string>
+    <string name="pick_book_cover">Obter capa nos arquivos</string>
 </resources>
