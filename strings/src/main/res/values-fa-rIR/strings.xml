@@ -91,7 +91,7 @@
     <string name="storage_bug_button">اعطا مجوز</string>
     <string name="review.request.button.no">نه، متشکرم</string>
     <string name="review.feedback.button.yes">فرستادن بازخورد</string>
-    <string name="cover_search_template_with_author">%1$s به وسیله %2$s کاور کتاب صوتی</string>
+    <string name="cover_search_template_with_author">%1$s توسط %2$s کاور کتاب صوتی</string>
     <string name="cover_search_template_no_author">%s کاور کتاب صوتی</string>
     <string name="pref_help_translating">کمک برای ترجمه Voice</string>
     <string name="generic_error_message">مشکلی پیش آمد 😢</string>
@@ -128,7 +128,6 @@
     <string name="onboarding_welcome_subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.button_next">بعدی</string>
     <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید.
-\n
 \n
 \nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
 </resources>
