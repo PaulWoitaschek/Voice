@@ -62,7 +62,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@cd7d8d697e10461458bc61a30d094dc601a8b017
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
 
       - name: Set up JDK
         uses: actions/setup-java@v4.2.1
