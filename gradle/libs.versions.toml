@@ -116,7 +116,7 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-activity = "androidx.activity:activity-compose:1.8.2"
+compose-activity = "androidx.activity:activity-compose:1.9.0"
 compose-navigation = "dev.olshevski.navigation:reimagined:1.5.0"
 
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
