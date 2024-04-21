@@ -12,8 +12,12 @@ plugins {
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
   alias(libs.plugins.crashlytics)
-  alias(libs.plugins.googleServices)
+  alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
+}
+
+if (file("google-services.json").exists()) {
+  pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
 
 play {
