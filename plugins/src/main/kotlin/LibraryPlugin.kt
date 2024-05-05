@@ -10,6 +10,9 @@ class LibraryPlugin : Plugin<Project> {
       apply("kotlin-android")
       withPlugin("com.android.library") {
         target.baseSetup()
+        target.tasks.register("voiceUnitTest") {
+          dependsOn("testDebugUnitTest")
+        }
       }
     }
   }

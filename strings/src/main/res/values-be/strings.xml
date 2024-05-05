@@ -127,4 +127,13 @@
     <string name="review.feedback.title">Нам вельмі шкада!</string>
     <string name="review.feedback.button.yes">Даслаць водгук</string>
     <string name="review.feedback.button.no">Скасаваць</string>
+    <plurals name="minutes">
+        <item quantity="one">%d хвіліна</item>
+        <item quantity="few">%d хвіліны</item>
+        <item quantity="many">%d хвілін</item>
+        <item quantity="other">%d хвілін</item>
+    </plurals>
+    <string name="sleep_timer.button.increment">Даўжэй</string>
+    <string name="sleep_timer.title">Дабранач! 🌙</string>
+    <string name="sleep_timer.button.decrement">Карацей</string>
 </resources>
