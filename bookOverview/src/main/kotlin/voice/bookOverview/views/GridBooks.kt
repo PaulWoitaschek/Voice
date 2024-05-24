@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
@@ -114,12 +115,17 @@ internal fun GridBook(
         style = MaterialTheme.typography.bodyMedium,
       )
       Text(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
         text = book.remainingTime,
         style = MaterialTheme.typography.bodySmall,
       )
 
       if (book.progress > 0F) {
+        Text(
+          modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+          text = "${book.progress * 100}%",
+          style = MaterialTheme.typography.bodySmall,
+        )
         LinearProgressIndicator(
           modifier = Modifier.fillMaxWidth(),
           progress = { book.progress },
@@ -138,4 +144,21 @@ internal fun gridColumnCount(): Int {
   }
   val columns = (widthPx / desiredPx).roundToInt()
   return columns.coerceAtLeast(2)
+}
+
+@Preview
+@Composable
+private fun PreviewGridBook() {
+  GridBook(
+    book = BookOverviewItemViewState(
+      name = "Some Cool Book",
+      author = "Jeremy Bobson",
+      cover = null,
+      progress = 0.5F,
+      id = BookId("123456-abcde123-whatever"),
+      remainingTime = "3:01:56"
+    ),
+    onBookClick = {},
+    onBookLongClick = {},
+  )
 }
