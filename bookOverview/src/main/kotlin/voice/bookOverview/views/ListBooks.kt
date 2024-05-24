@@ -120,7 +120,7 @@ internal fun ListBookRow(
           )
           if (book.progress > 0.05) {
             Text(
-              text = "${book.progress * 100}%",
+              text = "${(book.progress * 100).toInt()}%",
               style = MaterialTheme.typography.bodySmall,
             )
           }

@@ -124,7 +124,7 @@ internal fun GridBook(
       if (book.progress > 0F) {
         Text(
           modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-          text = "${book.progress * 100}%",
+          text = "${(book.progress * 100).toInt()}%",
           style = MaterialTheme.typography.bodySmall,
         )
         LinearProgressIndicator(
