@@ -114,8 +114,9 @@ internal fun GridBook(
         maxLines = 3,
         style = MaterialTheme.typography.bodyMedium,
       )
+      val bottomPadding = if (book.progress > 0F) 0.dp else 8.dp
       Text(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = bottomPadding),
         text = book.remainingTime,
         style = MaterialTheme.typography.bodySmall,
       )
