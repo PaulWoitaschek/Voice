@@ -6,25 +6,28 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-      languageVersion = "1.9"
-      jvmTarget = JavaVersion.VERSION_11.toString()
-      val optIns = listOf(
-        "kotlin.RequiresOptIn",
-        "kotlin.ExperimentalStdlibApi",
-        "kotlin.contracts.ExperimentalContracts",
-        "kotlin.time.ExperimentalTime",
-        "kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "kotlinx.coroutines.FlowPreview",
+    compilerOptions {
+      languageVersion.set(KotlinVersion.KOTLIN_1_9)
+      jvmTarget.set(JvmTarget.JVM_11)
+      optIn.addAll(
+        listOf(
+          "kotlin.RequiresOptIn",
+          "kotlin.ExperimentalStdlibApi",
+          "kotlin.contracts.ExperimentalContracts",
+          "kotlin.time.ExperimentalTime",
+          "kotlinx.coroutines.ExperimentalCoroutinesApi",
+          "kotlinx.coroutines.FlowPreview",
+        ),
       )
-      freeCompilerArgs = (freeCompilerArgs + listOf("-progressive") + optIns.map { "-opt-in=$it" })
-      allWarningsAsErrors = true
+      allWarningsAsErrors.set(true)
     }
   }
   extensions.configure<KotlinProjectExtension> {
