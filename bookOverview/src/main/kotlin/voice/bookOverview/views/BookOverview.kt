@@ -3,6 +3,8 @@ package voice.bookOverview.views
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -189,8 +191,13 @@ internal fun BookOverview(
         )
       }
     },
+    contentWindowInsets = WindowInsets(0, 0, 0, 0),
   ) { contentPadding ->
-    Box(Modifier.padding(contentPadding)) {
+    Box(
+      Modifier
+        .padding(contentPadding)
+        .consumeWindowInsets(contentPadding),
+    ) {
       when (viewState.layoutMode) {
         BookOverviewLayoutMode.List -> {
           ListBooks(
