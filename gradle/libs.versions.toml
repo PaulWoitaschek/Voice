@@ -61,11 +61,6 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:33.1.0"
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
-
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -164,8 +159,6 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 anvil = { id = "com.squareup.anvil", version = "2.5.0-beta09" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.22" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
-googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
 playPublish = { id = "com.github.triplet.play", version = "3.9.1" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }

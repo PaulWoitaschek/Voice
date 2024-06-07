@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -28,11 +27,6 @@ object ReviewModule {
   @Provides
   fun reviewManager(context: Context): ReviewManager {
     return ReviewManagerFactory.create(context)
-  }
-
-  @Provides
-  fun remoteConfig(): FirebaseRemoteConfig {
-    return FirebaseRemoteConfig.getInstance()
   }
 }
 
