@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
@@ -57,6 +58,9 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     appComponent.inject(this)
     super.onCreate(savedInstanceState)
+
+    enableEdgeToEdge()
+
     val root = ChangeHandlerFrameLayout(this)
     setContentView(root)
 

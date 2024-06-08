@@ -3,9 +3,13 @@ package voice.bookOverview.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -75,6 +79,11 @@ internal fun GridBooks(
           onBookClick = onBookClick,
           onBookLongClick = onBookLongClick,
         )
+      }
+      item(
+        span = { GridItemSpan(maxLineSpan) },
+      ) {
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
       }
     }
   }
