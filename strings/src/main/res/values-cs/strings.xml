@@ -86,7 +86,7 @@
     <plurals name="folder_type_file_count">
         <item quantity="one">%d zvukový soubor</item>
         <item quantity="few">%d zvukové soubory</item>
-        <item quantity="other">"%d  zvukových souborů"</item>
+        <item quantity="other">%d zvukových souborů</item>
     </plurals>
     <string name="voice_intro_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
     <string name="migration_detail_content_position">Pozice</string>
