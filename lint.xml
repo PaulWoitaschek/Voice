@@ -3,9 +3,11 @@
   <issue id="Typos" severity="informational" />
   <issue id="TypographyEllipsis" severity="informational" />
   <issue id="MissingTranslation" severity="informational" />
+  <!-- https://github.com/WeblateOrg/weblate/issues/7520 -->
   <issue id="MissingQuantity">
     <ignore regexp=".*?French.*?many" />
     <ignore regexp=".*?Slovak.*?many" />
+    <ignore regexp=".*?Czech.*?many" />
   </issue>
   <issue id="Overdraw" severity="informational" />
   <issue id="RestrictedApi" severity="informational" />
