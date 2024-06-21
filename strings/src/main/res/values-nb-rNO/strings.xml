@@ -111,4 +111,23 @@
     <string name="cover_search.author">Forfatter</string>
     <string name="select_folder_type_file">Fil</string>
     <string name="cover_search_template_with_author">%1$s av %2$s lydbokomslag</string>
+    <string name="review.feedback.content">Kan du fortelle oss hva som gikk galt? Vi setter pris på tilbakemeldingen din, og det hjelper oss med å forbedre opplevelsen din.</string>
+    <string name="sleep_timer.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.button.decrement">Kortere</string>
+    <string name="sleep_timer.button.increment">Lengre</string>
+    <string name="onboarding.completion.next_button">Start lytting</string>
+    <string name="review.request.title">Liker du Voice?</string>
+    <string name="review.request.button.yes">Vurder nå</string>
+    <string name="review.request.button.no">Nei takk</string>
+    <string name="review.feedback.title">Det var leit å høre!</string>
+    <string name="review.feedback.button.yes">Send tilbakemelding</string>
+    <string name="review.feedback.button.no">Avbryt</string>
+    <string name="select_folder_subtitle">Vil du legge til en enkelt fil som en bok eller en mappe?</string>
+    <string name="onboarding.explanation.subtitle">Med Voice kan du legge til bøker som individuelle filer eller organisere dem i mapper. Ditt valg!</string>
+    <string name="onboarding.completion.title">Du er ferdig!</string>
+    <string name="onboarding_welcome_title">Velkommen til Voice!</string>
+    <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
+    <string name="onboarding_welcome_subtitle">Din personlige lydbokspiller. La oss gjøre deg klar.</string>
+    <string name="onboarding.explanation.title">Ditt bibliotek, din måte</string>
+    <string name="review.request.content">Din tilbakemelding er viktig for oss! Hvis du har tid, kan du rangere oss og dele din opplevelse. Det hjelper oss med å gjøre forbedringer og tilby en bedre lytteopplevelse.</string>
 </resources>
