@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pause">Tauko</string>
+    <string name="play_pause">Toisto / Tauko</string>
+    <string name="play">Toisto</string>
+    <string name="action_sleep">Uni-ajastin</string>
+    <string name="rewind">Takaisinkelaus</string>
+    <string name="cover_search.author">Tekijä</string>
+    <string name="edit_book_title">Muokkaa kirjaa</string>
+    <string name="mark_as_completed">Merkitse valmiiksi</string>
+    <string name="mark_as_current">Merkitse nykyseksi</string>
+    <string name="mark_as_not_started">Merkitse ei vielä aloitetuksi</string>
+    <string name="audiobook_folders_title">Äänikirjakansiot</string>
+    <string name="fast_forward">Pikakelaus</string>
+    <string name="previous_track">Edellinen ääniraita</string>
+    <string name="next_track">Seuraava ääniraita</string>
+    <string name="skip_silence">Ohita Hiljaisuus</string>
+    <string name="volume_boost">Äänenvoimakkuuden tehostus</string>
+    <string name="dialog_confirm">Aseta</string>
+    <string name="playback_speed">Toiston nopeus</string>
+    <string name="bookmark">Kirjanmerkki</string>
+    <string name="bookmark_edit_title">Muokkaa kirjanmerkkiä</string>
+    <string name="action_settings">Asetukset</string>
+    <plurals name="seconds">
+        <item quantity="one">%d sekuntti</item>
+        <item quantity="other">%d sekunttia</item>
+    </plurals>
+    <string name="pref_theme_dark">Tumma teema</string>
+    <string name="add">Lisää</string>
+    <string name="cover_search.icon_recent">Viimeisin haku</string>
+    <string name="generic_error_message">Jotakin meni pieleen 😢</string>
+    <string name="generic_error_retry">Yritä uudelleen</string>
+    <string name="storage_bug_title">Käyttöoikeus tarvitaan</string>
+    <string name="storage_bug_subtitle">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>
+    <string name="select_folder_subtitle">Haluaisitko lisätä yksittäisen tietoston kirjana vai kansiona?</string>
+    <string name="cover">Kansi</string>
+    <string name="more">Enemmän</string>
+    <string name="change_book_name">Nimi</string>
+    <string name="download_book_cover">Kansi internetistä</string>
+    <string name="bookmark_edit_hint">Kirjanmerkin nimi</string>
+    <string name="pick_book_cover">Kansi tiedostojärjestelmästä</string>
+    <string name="dialog_cancel">Peruuta</string>
+    <string name="bookmark_added">Kirjanmerkki lisätty</string>
+    <string name="battery_optimization_action">Päivitä</string>
+    <string name="media_session_recent">Viimeisin</string>
+    <string name="media_session_root">Kaikki äänikirjat</string>
+    <string name="select_folder_type_folder">Kansio</string>
+    <string name="storage_bug_button">Anna käyttöoikeus</string>
+    <string name="select_folder_title_onboarding">Lisää ensimmäinen äänikirjasi</string>
+    <string name="select_folder_title_default">Lisää äänikirjasi</string>
+    <string name="select_folder_type_file">Tiedosto</string>
+</resources>
