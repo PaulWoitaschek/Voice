@@ -69,7 +69,7 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 androidX-test-runner = "androidx.test:runner:1.5.2"
 androidX-test-junit = "androidx.test.ext:junit:1.2.0"
-androidX-test-core = "androidx.test:core-ktx:1.5.0"
+androidX-test-core = "androidx.test:core-ktx:1.6.0"
 
 androidTest-orchestrator = "androidx.test:orchestrator:1.4.2"
 androidTest-services-testServices = "androidx.test.services:test-services:1.5.0"
