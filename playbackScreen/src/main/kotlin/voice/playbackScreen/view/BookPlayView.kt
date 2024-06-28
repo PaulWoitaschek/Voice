@@ -108,6 +108,17 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       sleepTime = 4.minutes,
       title = "Das Ende der Welt",
     )
+    val longTitle = BookPlayViewState(
+      chapterName = "My Chapter",
+      showPreviousNextButtons = false,
+      cover = null,
+      duration = 10.minutes,
+      playedTime = 3.minutes,
+      playing = true,
+      skipSilence = true,
+      sleepTime = 4.minutes,
+      title = "American Eclipse - A Nation's Epic Race to Catch the Shadow of the Moon and Win the Glory of the World",
+    )
     yield(initial)
     yield(
       initial.copy(
@@ -117,5 +128,6 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       ),
     )
     yield(initial.copy(chapterName = null))
+    yield(longTitle)
   }
 }
