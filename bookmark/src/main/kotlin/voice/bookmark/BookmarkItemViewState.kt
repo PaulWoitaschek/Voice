@@ -1,4 +1,4 @@
-package voice.app.features.bookmarks
+package voice.bookmark
 
 import voice.data.Bookmark
 

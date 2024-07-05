@@ -1,12 +1,14 @@
-package voice.app.features.bookmarks
+package voice.bookmark
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import voice.app.features.bookmarks.dialogs.AddBookmarkDialog
-import voice.app.features.bookmarks.dialogs.EditBookmarkDialog
-import voice.app.injection.appComponent
+import com.squareup.anvil.annotations.ContributesTo
+import voice.bookmark.dialogs.AddBookmarkDialog
+import voice.bookmark.dialogs.EditBookmarkDialog
+import voice.common.AppScope
 import voice.common.BookId
 import voice.common.compose.ComposeController
+import voice.common.rootComponentAs
 import voice.data.Bookmark
 import voice.data.getBookId
 import voice.data.putBookId
@@ -27,7 +29,9 @@ class BookmarkController(args: Bundle) :
 
   private val bookId = args.getBookId(NI_BOOK_ID)!!
 
-  private val presenter = appComponent.bookmarkPresenterFactory.create(bookId)
+  private val presenter = rootComponentAs<Component>()
+    .bookmarkPresenterFactory
+    .create(bookId)
 
   @Composable
   override fun Content() {
@@ -67,5 +71,10 @@ class BookmarkController(args: Bundle) :
 
   private fun showAddBookmarkDialog() {
     AddBookmarkDialog(this).showDialog(router)
+  }
+
+  @ContributesTo(AppScope::class)
+  interface Component {
+    val bookmarkPresenterFactory: BookmarkPresenter.Factory
   }
 }

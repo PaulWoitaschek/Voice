@@ -1,4 +1,4 @@
-package voice.app.features.bookmarks
+package voice.bookmark
 
 import android.content.Context
 import android.text.format.DateUtils

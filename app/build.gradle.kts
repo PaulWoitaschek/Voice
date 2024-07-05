@@ -170,6 +170,7 @@ dependencies {
   implementation(projects.cover)
   implementation(projects.documentfile)
   implementation(projects.onboarding)
+  implementation(projects.bookmark)
 
   implementation(libs.appCompat)
   implementation(libs.recyclerView)

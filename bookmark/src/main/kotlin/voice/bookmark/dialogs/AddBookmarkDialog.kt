@@ -1,4 +1,4 @@
-package voice.app.features.bookmarks.dialogs
+package voice.bookmark.dialogs
 
 import android.app.Dialog
 import android.os.Bundle

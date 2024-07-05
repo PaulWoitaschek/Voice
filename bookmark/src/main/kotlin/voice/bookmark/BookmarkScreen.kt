@@ -1,4 +1,4 @@
-package voice.app.features.bookmarks
+package voice.bookmark
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
