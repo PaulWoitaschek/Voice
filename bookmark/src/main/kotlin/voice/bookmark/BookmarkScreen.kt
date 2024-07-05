@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import voice.bookmark.dialogs.AddBookmarkDialog
+import voice.bookmark.dialogs.EditBookmarkDialog
 import voice.data.Bookmark
 import java.util.UUID
 import kotlin.math.roundToInt
@@ -58,11 +59,12 @@ internal fun BookmarkScreen(
   onClose: () -> Unit,
   onAdd: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
-  onEdit: (Bookmark.Id, String) -> Unit,
+  onEdit: (Bookmark.Id) -> Unit,
   onScrollConfirmed: () -> Unit,
   onClick: (Bookmark.Id) -> Unit,
   onCloseDialog: () -> Unit,
   onNewBookmarkNameChosen: (String) -> Unit,
+  onEditBookmark: (Bookmark.Id, String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val snackbarHostState = remember { SnackbarHostState() }
@@ -134,6 +136,14 @@ internal fun BookmarkScreen(
     }
     BookmarkDialogViewState.None -> {
     }
+    is BookmarkDialogViewState.EditBookmark -> {
+      EditBookmarkDialog(
+        onDismissRequest = onCloseDialog,
+        onEditBookmark = onEditBookmark,
+        bookmarkId = viewState.dialogViewState.id,
+        initialTitle = viewState.dialogViewState.title ?: "",
+      )
+    }
   }
 }
 
@@ -146,7 +156,7 @@ internal enum class DragAnchors {
 internal fun BookmarkItem(
   bookmark: BookmarkItemViewState,
   onDelete: (Bookmark.Id) -> Unit,
-  onEdit: (Bookmark.Id, String) -> Unit,
+  onEdit: (Bookmark.Id) -> Unit,
   onClick: (Bookmark.Id) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -228,7 +238,7 @@ internal fun BookmarkItem(
               text = { Text(stringResource(id = StringsR.string.popup_edit)) },
               onClick = {
                 expanded = false
-                onEdit(bookmark.id, bookmark.title)
+                onEdit(bookmark.id)
               },
             )
             DropdownMenuItem(
@@ -259,7 +269,7 @@ private fun BookmarkItemPreview() {
       id = Bookmark.Id(UUID.randomUUID()),
     ),
     onDelete = {},
-    onEdit = { _, _ -> },
+    onEdit = { },
     onClick = {},
   )
 }

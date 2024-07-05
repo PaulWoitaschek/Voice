@@ -17,4 +17,8 @@ data class BookmarkViewState(
 sealed interface BookmarkDialogViewState {
   data object None : BookmarkDialogViewState
   data object AddBookmark : BookmarkDialogViewState
+  data class EditBookmark(
+    val id: Bookmark.Id,
+    val title: String?,
+  ) : BookmarkDialogViewState
 }

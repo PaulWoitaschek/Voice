@@ -166,6 +166,11 @@ class BookmarkPresenter
     dialogViewState = BookmarkDialogViewState.AddBookmark
   }
 
+  fun onEditClicked(id: Bookmark.Id) {
+    val bookmark = bookmarks.find { it.id == id } ?: return
+    dialogViewState = BookmarkDialogViewState.EditBookmark(id, bookmark.title)
+  }
+
   @AssistedFactory
   interface Factory {
     fun create(id: BookId): BookmarkPresenter
