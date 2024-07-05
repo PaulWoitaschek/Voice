@@ -1,55 +1,84 @@
 package voice.bookmark.dialogs
 
-import android.app.Dialog
-import android.os.Bundle
-import android.text.InputType
-import android.view.inputmethod.EditorInfo
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.getInputField
-import com.afollestad.materialdialogs.input.input
-import com.bluelinelabs.conductor.Controller
-import voice.common.conductor.DialogController
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import voice.strings.R as StringsR
 
-class AddBookmarkDialog : DialogController() {
-
-  override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    val inputType = InputType.TYPE_CLASS_TEXT or
-      InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
-      InputType.TYPE_TEXT_FLAG_AUTO_CORRECT or
-      InputType.TYPE_TEXT_FLAG_MULTI_LINE
-    val dialog = MaterialDialog(activity!!).apply {
-      title(StringsR.string.bookmark)
-      @Suppress("CheckResult")
-      input(hintRes = StringsR.string.bookmark_edit_hint, allowEmpty = true, inputType = inputType) { _, charSequence ->
-        val title = charSequence.toString()
-        val callback = targetController as Callback
-        callback.onBookmarkNameChosen(title)
+@Composable
+internal fun AddBookmarkDialog(
+  onDismissRequest: () -> Unit,
+  onBookmarkNameChosen: (String) -> Unit,
+) {
+  var bookmarkName by remember { mutableStateOf("") }
+  val focusRequester = remember { FocusRequester() }
+  AlertDialog(
+    onDismissRequest = onDismissRequest,
+    title = { Text(text = stringResource(StringsR.string.bookmark)) },
+    text = {
+      Column {
+        OutlinedTextField(
+          value = bookmarkName,
+          onValueChange = { bookmarkName = it },
+          label = { Text(stringResource(StringsR.string.bookmark_edit_hint)) },
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .focusRequester(focusRequester),
+          keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences,
+            autoCorrect = true,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+          ),
+          keyboardActions = KeyboardActions(
+            onDone = {
+              onBookmarkNameChosen(bookmarkName)
+            },
+          ),
+          singleLine = true,
+        )
       }
-      positiveButton(StringsR.string.dialog_confirm)
-    }
-    val editText = dialog.getInputField()
-    editText.setOnEditorActionListener { _, actionId, _ ->
-      if (actionId == EditorInfo.IME_ACTION_DONE) {
-        val title = editText.text.toString()
-        val callback = targetController as Callback
-        callback.onBookmarkNameChosen(title)
-        dismissDialog()
-        true
-      } else {
-        false
+    },
+    confirmButton = {
+      Button(
+        onClick = {
+          onBookmarkNameChosen(bookmarkName)
+          onDismissRequest()
+        },
+      ) {
+        Text(stringResource(StringsR.string.dialog_confirm))
       }
-    }
-    return dialog
-  }
+    },
+    dismissButton = {
+      TextButton(onClick = onDismissRequest) {
+        Text(stringResource(StringsR.string.dialog_cancel))
+      }
+    },
+  )
 
-  interface Callback {
-    fun onBookmarkNameChosen(name: String)
-  }
-
-  companion object {
-    operator fun <T> invoke(target: T) where T : Controller, T : Callback = AddBookmarkDialog().apply {
-      targetController = target
-    }
+  LaunchedEffect(Unit) {
+    focusRequester.requestFocus()
   }
 }

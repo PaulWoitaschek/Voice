@@ -46,13 +46,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import voice.bookmark.dialogs.AddBookmarkDialog
 import voice.data.Bookmark
 import java.util.UUID
 import kotlin.math.roundToInt
 import voice.strings.R as StringsR
 
 @Composable
-fun BookmarkScreen(
+internal fun BookmarkScreen(
   viewState: BookmarkViewState,
   onClose: () -> Unit,
   onAdd: () -> Unit,
@@ -60,6 +61,8 @@ fun BookmarkScreen(
   onEdit: (Bookmark.Id, String) -> Unit,
   onScrollConfirmed: () -> Unit,
   onClick: (Bookmark.Id) -> Unit,
+  onCloseDialog: () -> Unit,
+  onNewBookmarkNameChosen: (String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val snackbarHostState = remember { SnackbarHostState() }
@@ -121,15 +124,26 @@ fun BookmarkScreen(
       }
     }
   }
+
+  when (viewState.dialogViewState) {
+    BookmarkDialogViewState.AddBookmark -> {
+      AddBookmarkDialog(
+        onDismissRequest = onCloseDialog,
+        onBookmarkNameChosen = onNewBookmarkNameChosen,
+      )
+    }
+    BookmarkDialogViewState.None -> {
+    }
+  }
 }
 
-enum class DragAnchors {
+internal enum class DragAnchors {
   Start,
   End,
 }
 
 @Composable
-fun BookmarkItem(
+internal fun BookmarkItem(
   bookmark: BookmarkItemViewState,
   onDelete: (Bookmark.Id) -> Unit,
   onEdit: (Bookmark.Id, String) -> Unit,

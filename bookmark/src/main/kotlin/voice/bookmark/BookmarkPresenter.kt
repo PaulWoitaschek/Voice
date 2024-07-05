@@ -50,6 +50,7 @@ class BookmarkPresenter
   private var chapters by mutableStateOf<List<Chapter>>(emptyList())
 
   private var shouldScrollTo by mutableStateOf<Bookmark.Id?>(null)
+  private var dialogViewState: BookmarkDialogViewState by mutableStateOf(BookmarkDialogViewState.None)
 
   @Composable
   fun viewState(): BookmarkViewState {
@@ -91,6 +92,7 @@ class BookmarkPresenter
         )
       },
       shouldScrollTo = shouldScrollTo,
+      dialogViewState = dialogViewState,
     )
   }
 
@@ -154,6 +156,14 @@ class BookmarkPresenter
 
   fun onScrollConfirmed() {
     shouldScrollTo = null
+  }
+
+  fun closeDialog() {
+    dialogViewState = BookmarkDialogViewState.None
+  }
+
+  fun onAddClicked() {
+    dialogViewState = BookmarkDialogViewState.AddBookmark
   }
 
   @AssistedFactory
