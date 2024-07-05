@@ -71,11 +71,12 @@ class EditBookmarkDialog(args: Bundle) : DialogController(args) {
 
     operator fun <T> invoke(
       target: T,
-      bookmark: Bookmark,
+      bookmark: Bookmark.Id,
+      title: String?,
     ): EditBookmarkDialog where T : Controller, T : Callback {
       val args = Bundle().apply {
-        putBookmarkId(NI_BOOKMARK_ID, bookmark.id)
-        putString(NI_BOOKMARK_TITLE, bookmark.title)
+        putBookmarkId(NI_BOOKMARK_ID, bookmark)
+        putString(NI_BOOKMARK_TITLE, title)
       }
       return EditBookmarkDialog(args).apply {
         targetController = target

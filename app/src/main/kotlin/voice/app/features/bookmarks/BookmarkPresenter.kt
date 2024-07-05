@@ -1,53 +1,103 @@
 package voice.app.features.bookmarks
 
+import android.content.Context
+import android.text.format.DateUtils
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import voice.app.mvp.Presenter
 import voice.common.BookId
+import voice.common.formatTime
+import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBook
 import voice.data.Bookmark
 import voice.data.Chapter
+import voice.data.markForPosition
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
-import javax.inject.Inject
+import voice.strings.R
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 class BookmarkPresenter
-@Inject constructor(
+@AssistedInject constructor(
   @CurrentBook
   private val currentBook: DataStore<BookId?>,
   private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
-) : Presenter<BookmarkView>() {
+  private val navigator: Navigator,
+  private val context: Context,
+  @Assisted
+  private val bookId: BookId,
+) {
 
-  lateinit var bookId: BookId
-  private val bookmarks = ArrayList<Bookmark>()
-  private val chapters = ArrayList<Chapter>()
+  private val scope = MainScope()
+  private var bookmarks by mutableStateOf<List<Bookmark>>(emptyList())
+  private var chapters by mutableStateOf<List<Chapter>>(emptyList())
 
-  override fun onAttach(view: BookmarkView) {
-    onAttachScope.launch {
-      val book = repo.get(bookId) ?: return@launch
-      bookmarks.clear()
-      bookmarks.addAll(
-        bookmarkRepo.bookmarks(book.content)
-          .sortedByDescending { it.addedAt },
-      )
-      chapters.clear()
-      chapters.addAll(book.chapters)
+  private var shouldScrollTo by mutableStateOf<Bookmark.Id?>(null)
 
-      renderView()
+  @Composable
+  fun viewState(): BookmarkViewState {
+    LaunchedEffect(bookId) {
+      val book = repo.get(bookId)
+      if (book != null) {
+        bookmarks = bookmarkRepo.bookmarks(book.content)
+          .sortedByDescending { it.addedAt }
+        chapters = book.chapters
+      }
     }
+    return BookmarkViewState(
+      bookmarks = bookmarks.map { bookmark ->
+        val currentChapter = chapters.single { it.id == bookmark.chapterId }
+        val bookmarkTitle = bookmark.title
+        val title: String = when {
+          bookmark.setBySleepTimer -> {
+            val justNowThreshold = 1.minutes
+            if (ChronoUnit.MILLIS.between(bookmark.addedAt, Instant.now()).milliseconds < justNowThreshold) {
+              context.getString(R.string.bookmark_just_now)
+            } else {
+              DateUtils.getRelativeDateTimeString(
+                context,
+                bookmark.addedAt.toEpochMilli(),
+                justNowThreshold.inWholeMilliseconds,
+                2.days.inWholeMilliseconds,
+                0,
+              ).toString()
+            }
+          }
+          !bookmarkTitle.isNullOrEmpty() -> bookmarkTitle
+          else -> currentChapter.markForPosition(bookmark.time).name ?: ""
+        }
+
+        BookmarkItemViewState(
+          title = title,
+          subtitle = formatTime(bookmark.time),
+          id = bookmark.id,
+        )
+      },
+      shouldScrollTo = shouldScrollTo,
+    )
   }
 
   fun deleteBookmark(id: Bookmark.Id) {
     scope.launch {
       bookmarkRepo.deleteBookmark(id)
-      bookmarks.removeAll { it.id == id }
-
-      renderView()
+      bookmarks = bookmarks.filter { it.id != id }
     }
   }
 
@@ -66,7 +116,7 @@ class BookmarkPresenter
       playerController.play()
     }
 
-    view.finish()
+    navigator.goBack()
   }
 
   fun editBookmark(
@@ -81,8 +131,9 @@ class BookmarkPresenter
         )
         bookmarkRepo.addBookmark(withNewTitle)
         val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
-        bookmarks[index] = withNewTitle
-        if (attached) renderView()
+        bookmarks = bookmarks.toMutableList().apply {
+          this[index] = withNewTitle
+        }
       }
     }
   }
@@ -90,19 +141,23 @@ class BookmarkPresenter
   fun addBookmark(name: String) {
     scope.launch {
       val book = repo.get(bookId) ?: return@launch
-      val addedBookmark = bookmarkRepo.addBookmarkAtBookPosition(
+      val newBookmark = bookmarkRepo.addBookmarkAtBookPosition(
         book = book,
         title = name,
         setBySleepTimer = false,
       )
-      bookmarks.add(addedBookmark)
-      if (attached) renderView()
+      bookmarks = (bookmarks + newBookmark)
+        .sortedByDescending { it.addedAt }
+      shouldScrollTo = newBookmark.id
     }
   }
 
-  private fun renderView() {
-    if (attached) {
-      view.render(bookmarks, chapters)
-    }
+  fun onScrollConfirmed() {
+    shouldScrollTo = null
+  }
+
+  @AssistedFactory
+  interface Factory {
+    fun create(id: BookId): BookmarkPresenter
   }
 }

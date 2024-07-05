@@ -19,7 +19,7 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
-  val bookmarkPresenter: BookmarkPresenter
+  val bookmarkPresenterFactory: BookmarkPresenter.Factory
   val context: Context
 
   fun inject(target: App)
