@@ -173,9 +173,7 @@ dependencies {
   implementation(projects.bookmark)
 
   implementation(libs.appCompat)
-  implementation(libs.recyclerView)
   implementation(libs.material)
-  implementation(libs.constraintLayout)
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
