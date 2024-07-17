@@ -33,7 +33,7 @@ retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "ret
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 robolectric = "org.robolectric:robolectric:4.13"
-coil = "io.coil-kt:coil-compose:2.6.0"
+coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.7.0"
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 recyclerView = "androidx.recyclerview:recyclerview:1.3.2"
