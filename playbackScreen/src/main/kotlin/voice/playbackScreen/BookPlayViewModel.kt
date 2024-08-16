@@ -182,6 +182,7 @@ class BookPlayViewModel
         }
       }
     }
+    sleepTimer.setActive()
     player.playPause()
   }
 
