@@ -37,3 +37,6 @@ annotation class DarkThemeStore
 
 @Qualifier
 annotation class FadeOutStore
+
+@Qualifier
+annotation class AutoSleepTimerStore
