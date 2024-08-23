@@ -57,6 +57,8 @@ class BookPlayViewModel
   dispatcherProvider: DispatcherProvider,
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  private val autoSleepTimerPref: Pref<Boolean>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -113,7 +115,7 @@ class BookPlayViewModel
         else -> customTime + 5
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime)
+      SleepTimerViewState(newTime, it.autoSleepTimer)
     }
   }
 
@@ -126,7 +128,7 @@ class BookPlayViewModel
         else -> (customTime - 5).coerceAtLeast(5)
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime)
+      SleepTimerViewState(newTime, it.autoSleepTimer)
     }
   }
 
@@ -145,12 +147,19 @@ class BookPlayViewModel
     }
   }
 
+  fun onCheckAutoSleepTimer(checked: Boolean) {
+    updateSleepTimeViewState {
+      autoSleepTimerPref.value = checked
+      SleepTimerViewState(it.customSleepTime, checked)
+    }
+  }
+
   private fun updateSleepTimeViewState(update: (SleepTimerViewState) -> SleepTimerViewState?) {
     val current = dialogState.value
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)
     } else {
-      update(SleepTimerViewState(sleepTimePref.value))
+      update(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value))
     }
     _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
   }
@@ -182,9 +191,29 @@ class BookPlayViewModel
         }
       }
     }
-    sleepTimer.setActive()
+    if (autoSleepTimerPref.value && !sleepTimer.sleepTimerActive()) {
+//      val now: Calendar = GregorianCalendar()
+//      now.timeInMillis = System.currentTimeMillis()
+//      val currentHour: Int = now.get(Calendar.HOUR_OF_DAY)
+//      val autoEnableByTime = isInTimeRange(22, 6, currentHour)
+      sleepTimer.setActive()
+    }
     player.playPause()
   }
+
+  /*private fun isInTimeRange(from: Int, to: Int, current: Int): Boolean {
+    // Range covers one day
+    if (from < to) {
+      return current in from..<to
+    }
+
+    // Range covers two days
+    if (from <= current) {
+      return true
+    }
+
+    return current < to
+  }*/
 
   fun rewind() {
     player.rewind()
@@ -282,7 +311,7 @@ class BookPlayViewModel
       sleepTimer.setActive(false)
       _dialogState.value = null
     } else {
-      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimePref.value))
+      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value))
     }
   }
 

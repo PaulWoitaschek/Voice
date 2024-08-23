@@ -80,6 +80,13 @@ object PrefsModule {
 
   @Provides
   @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  fun provideAutoSleepTimerPreference(prefs: AndroidPreferences): Pref<Boolean> {
+    return prefs.boolean(PrefKeys.AUTO_SLEEP_TIMER, false)
+  }
+
+  @Provides
+  @Singleton
   @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
   fun provideSingleBookFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
     return prefs.stringSet(PrefKeys.SINGLE_BOOK_FOLDERS, emptySet())
