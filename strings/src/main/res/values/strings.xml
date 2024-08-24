@@ -124,6 +124,7 @@
     <string name="sleep_timer.title">Sweet dreams! 🌙</string>
     <string name="sleep_timer.button.increment">Longer</string>
     <string name="sleep_timer.button.decrement">Shorter</string>
+    <string name="sleep_timer_auto_start">Start timer on playpack</string>
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
