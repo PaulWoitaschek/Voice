@@ -159,6 +159,6 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 anvil = { id = "com.squareup.anvil", version = "2.5.0-beta11" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.24" }
-playPublish = { id = "com.github.triplet.play", version = "3.10.1" }
+playPublish = { id = "com.github.triplet.play", version = "3.11.0" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
