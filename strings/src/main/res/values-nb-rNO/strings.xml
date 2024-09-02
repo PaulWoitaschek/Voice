@@ -14,8 +14,8 @@
     <string name="pref_get_support">Få støtte</string>
     <string name="book_header_current">Nåværende</string>
     <string name="book_header_completed">Fullført</string>
-    <string name="folder_mode_root">Bokmodus på øverste nivå: Undermapper er bøker</string>
-    <string name="folder_mode_single">Enkeltbokmodus: Én mappe tilsvarer én bok.</string>
+    <string name="folder_mode_root">Samlet lydboksmappe: hver undermappe er én bok</string>
+    <string name="folder_mode_single">Enkelvis lydboksmappe: denne mappen er én bok.</string>
     <string name="folder_type_title">Hvilken struktur har filene dine\?</string>
     <string name="migration_detail_content_bookmarks">Bokmerker</string>
     <string name="voice_intro_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
@@ -106,7 +106,7 @@
     <string name="storage_bug_button">Innvilg tillatelse</string>
     <string name="select_folder_title_default">Legg til dine lydbøker</string>
     <string name="cover_search_template_no_author">%s lydbokomslag</string>
-    <string name="folder_mode_author">Forfatterbokmodus: Undermapper er forfattere, under-undermapper er bøker.</string>
+    <string name="folder_mode_author">Samlet forfatter/kategori-modus: undermapper er forfattere, hver mappe under er én bok.</string>
     <string name="cover_search.icon_recent">Siste søk</string>
     <string name="cover_search.author">Forfatter</string>
     <string name="select_folder_type_file">Fil</string>
