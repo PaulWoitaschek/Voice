@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-class BookmarkPresenter
+class BookmarkViewModel
 @AssistedInject constructor(
   @CurrentBook
   private val currentBook: DataStore<BookId?>,
@@ -171,8 +171,12 @@ class BookmarkPresenter
     dialogViewState = BookmarkDialogViewState.EditBookmark(id, bookmark.title)
   }
 
+  fun closeScreen() {
+    navigator.goBack()
+  }
+
   @AssistedFactory
   interface Factory {
-    fun create(id: BookId): BookmarkPresenter
+    fun create(id: BookId): BookmarkViewModel
   }
 }

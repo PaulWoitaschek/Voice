@@ -46,12 +46,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.squareup.anvil.annotations.ContributesTo
 import voice.bookmark.dialogs.AddBookmarkDialog
 import voice.bookmark.dialogs.EditBookmarkDialog
+import voice.common.AppScope
+import voice.common.BookId
+import voice.common.compose.rememberScoped
+import voice.common.rootComponentAs
 import voice.data.Bookmark
 import java.util.UUID
 import kotlin.math.roundToInt
 import voice.strings.R as StringsR
+
+@ContributesTo(AppScope::class)
+interface Component {
+  val bookmarkViewModelFactory: BookmarkViewModel.Factory
+}
+
+@Composable
+fun BookmarkScreen(bookId: BookId) {
+  val viewModel = rememberScoped(bookId.value) {
+    rootComponentAs<Component>().bookmarkViewModelFactory.create(bookId)
+  }
+  val viewState = viewModel.viewState()
+  BookmarkScreen(
+    viewState = viewState,
+    onClose = viewModel::closeScreen,
+    onAdd = viewModel::onAddClicked,
+    onDelete = viewModel::deleteBookmark,
+    onEdit = viewModel::onEditClicked,
+    onScrollConfirmed = viewModel::onScrollConfirmed,
+    onClick = viewModel::selectBookmark,
+    onNewBookmarkNameChosen = viewModel::addBookmark,
+    onCloseDialog = viewModel::closeDialog,
+    onEditBookmark = viewModel::editBookmark,
+  )
+}
 
 @Composable
 internal fun BookmarkScreen(
