@@ -45,6 +45,7 @@ develocity {
 include(":app")
 include(":strings")
 include(":common")
+include(":bookmark")
 include(":data")
 include(":playback")
 include(":ffmpeg")

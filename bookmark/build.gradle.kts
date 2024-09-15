@@ -13,15 +13,8 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data)
-
-  implementation(libs.androidxCore)
-  implementation(libs.prefs.core)
-  implementation(libs.materialDialog.core)
-  implementation(libs.androidxCore)
-  implementation(libs.material)
-  implementation(libs.seismic)
-
+  implementation(projects.datastore)
   implementation(libs.dagger.core)
-
-  testImplementation(libs.prefs.inMemory)
+  implementation(libs.materialDialog.core)
+  implementation(libs.materialDialog.input)
 }
