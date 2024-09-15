@@ -6,6 +6,7 @@ data class BookmarkItemViewState(
   val title: String,
   val subtitle: String,
   val id: Bookmark.Id,
+  val showSleepIcon: Boolean,
 )
 
 data class BookmarkViewState(

@@ -89,6 +89,7 @@ class BookmarkViewModel
           title = title,
           subtitle = formatTime(bookmark.time),
           id = bookmark.id,
+          showSleepIcon = bookmark.setBySleepTimer,
         )
       },
       shouldScrollTo = shouldScrollTo,

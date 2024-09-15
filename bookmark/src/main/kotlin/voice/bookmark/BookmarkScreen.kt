@@ -8,8 +8,10 @@ import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
@@ -242,7 +245,18 @@ internal fun BookmarkItem(
           onClick(bookmark.id)
         },
       headlineContent = {
-        Text(text = bookmark.title)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Text(text = bookmark.title)
+          if (bookmark.showSleepIcon) {
+            Icon(
+              modifier = Modifier
+                .padding(start = 4.dp)
+                .size(16.dp),
+              imageVector = Icons.Outlined.Timer,
+              contentDescription = stringResource(StringsR.string.action_sleep),
+            )
+          }
+        }
       },
       trailingContent = {
         Box {
@@ -294,6 +308,7 @@ private fun BookmarkItemPreview() {
       title = "Bookmark 1",
       subtitle = "10:10:10 / 12:12:12",
       id = Bookmark.Id(UUID.randomUUID()),
+      showSleepIcon = true,
     ),
     onDelete = {},
     onEdit = { },
