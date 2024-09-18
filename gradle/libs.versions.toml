@@ -92,7 +92,7 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.8.5"
+lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.8.6"
 
 compose-bom = "androidx.compose:compose-bom:2024.08.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
