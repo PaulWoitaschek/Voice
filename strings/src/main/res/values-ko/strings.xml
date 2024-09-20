@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
@@ -33,4 +33,7 @@
     <string name="book_header_current">현재</string>
     <string name="book_header_not_started">아직 재생 안 됨</string>
     <string name="book_header_completed">완료됨</string>
+    <string name="cover_search_template_no_author">%s 오디오북 커버</string>
+    <string name="pause">일시정지</string>
+    <string name="play">재생</string>
 </resources>
