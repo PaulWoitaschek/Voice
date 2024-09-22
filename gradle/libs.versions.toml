@@ -15,8 +15,8 @@ dagger = "2.52"
 kotlin = "2.0.20"
 media3 = "1.3.1"
 agp = "8.6.1"
-ktlint-core = "1.2.1"
-ktlint-gradlePlugin = "0.9.0"
+ktlint-core = "1.3.1"
+ktlint-gradlePlugin = "0.10.0"
 retrofit = "2.11.0"
 
 [libraries]
@@ -113,7 +113,7 @@ compose-navigation = "dev.olshevski.navigation:reimagined:1.5.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.1"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.12"
 
 [bundles]
 compose = [
