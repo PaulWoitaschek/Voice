@@ -1,6 +1,7 @@
 package voice.bookOverview.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +34,6 @@ import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
 import voice.common.compose.ImmutableFile
-import voice.common.compose.LongClickableCard
 import voice.common.R as CommonR
 
 @Composable
@@ -91,50 +92,53 @@ internal fun ListBookRow(
   onBookLongClick: (BookId) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  LongClickableCard(
-    onClick = {
-      onBookClick(book.id)
-    },
-    onLongClick = {
-      onBookLongClick(book.id)
-    },
+  Card(
     modifier = modifier
-      .fillMaxWidth(),
-  ) {
-    Column {
-      Row {
-        CoverImage(book.cover)
-        Column(
-          Modifier
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-            .align(Alignment.CenterVertically),
-        ) {
-          if (book.author != null) {
+      .fillMaxWidth()
+      .combinedClickable(
+        onClick = {
+          onBookClick(book.id)
+        },
+        onLongClick = {
+          onBookLongClick(book.id)
+        },
+      ),
+    content = {
+      Column {
+        Row {
+          CoverImage(book.cover)
+          Column(
+            Modifier
+              .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+              .align(Alignment.CenterVertically),
+          ) {
+            if (book.author != null) {
+              Text(
+                text = book.author.toUpperCase(LocaleList.current),
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+              )
+            }
             Text(
-              text = book.author.toUpperCase(LocaleList.current),
-              style = MaterialTheme.typography.labelSmall,
-              maxLines = 1,
+              text = book.name,
+              style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+              text = book.remainingTime,
+              style = MaterialTheme.typography.bodySmall,
             )
           }
-          Text(
-            text = book.name,
-            style = MaterialTheme.typography.bodyMedium,
-          )
-          Text(
-            text = book.remainingTime,
-            style = MaterialTheme.typography.bodySmall,
+        }
+
+        if (book.progress > 0.05) {
+          LinearProgressIndicator(
+            modifier = Modifier.fillMaxWidth(),
+            progress = { book.progress },
           )
         }
       }
-
-      if (book.progress > 0.05) {
-        LinearProgressIndicator(
-          modifier = Modifier.fillMaxWidth(),
-          progress = { book.progress },
-        )
-      }
-    }
-  }
+    },
+  )
 }
 
 @Composable

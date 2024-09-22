@@ -1,5 +1,6 @@
 package voice.bookOverview.views
 
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +33,6 @@ import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
 import voice.common.BookId
-import voice.common.compose.LongClickableCard
 import kotlin.math.roundToInt
 import voice.common.R as CommonR
 
@@ -95,14 +96,17 @@ internal fun GridBook(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
-  LongClickableCard(
-    onClick = {
-      onBookClick(book.id)
-    },
-    onLongClick = {
-      onBookLongClick(book.id)
-    },
-    modifier = Modifier.fillMaxWidth(),
+  Card(
+    modifier = Modifier
+      .fillMaxWidth()
+      .combinedClickable(
+        onClick = {
+          onBookClick(book.id)
+        },
+        onLongClick = {
+          onBookLongClick(book.id)
+        },
+      ),
   ) {
     Column {
       AsyncImage(

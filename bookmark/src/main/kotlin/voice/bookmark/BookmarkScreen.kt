@@ -1,16 +1,11 @@
 package voice.bookmark
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.AnchoredDraggableState
-import androidx.compose.foundation.gestures.DraggableAnchors
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,8 +26,11 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,10 +40,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
 import voice.bookmark.dialogs.AddBookmarkDialog
@@ -56,7 +52,6 @@ import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.data.Bookmark
 import java.util.UUID
-import kotlin.math.roundToInt
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -144,7 +139,7 @@ internal fun BookmarkScreen(
         key = { it.id.value.toString() },
       ) { bookmark ->
         BookmarkItem(
-          modifier = Modifier.animateItemPlacement(),
+          modifier = Modifier.animateItem(),
           bookmark = bookmark,
           onDelete = onDelete,
           onEdit = onEdit,
@@ -177,11 +172,6 @@ internal fun BookmarkScreen(
   }
 }
 
-internal enum class DragAnchors {
-  Start,
-  End,
-}
-
 @Composable
 internal fun BookmarkItem(
   bookmark: BookmarkItemViewState,
@@ -190,114 +180,99 @@ internal fun BookmarkItem(
   onClick: (Bookmark.Id) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val density = LocalDensity.current
-
-  val deleteIconSize = 72.dp
-
   var expanded by remember { mutableStateOf(false) }
 
-  val state = remember {
-    AnchoredDraggableState(
-      initialValue = DragAnchors.Start,
-      positionalThreshold = { distance: Float -> distance },
-      velocityThreshold = { with(density) { 100.dp.toPx() } },
-      animationSpec = tween(),
+  SwipeToDismissBox(
+    modifier = modifier,
+    state = rememberSwipeToDismissBoxState(
       confirmValueChange = {
-        if (it == DragAnchors.End) {
-          onDelete(bookmark.id)
-        }
-        true
-      },
-    ).apply {
-      updateAnchors(
-        DraggableAnchors {
-          DragAnchors.Start at 0f
-          DragAnchors.End at with(density) { deleteIconSize.toPx() }
-        },
-      )
-    }
-  }
-  Box(modifier) {
-    Box(
-      Modifier
-        .size(deleteIconSize)
-        .background(Color.Red),
-    ) {
-      Icon(
-        modifier = Modifier.align(Alignment.Center),
-        imageVector = Icons.Outlined.Delete,
-        contentDescription = stringResource(id = StringsR.string.delete),
-        tint = Color.White,
-      )
-    }
-    ListItem(
-      modifier = Modifier
-        .offset {
-          IntOffset(
-            x = state
-              .requireOffset()
-              .roundToInt(),
-            y = 0,
-          )
-        }
-        .anchoredDraggable(state, Orientation.Horizontal)
-        .clickable {
-          onClick(bookmark.id)
-        },
-      headlineContent = {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-          Text(text = bookmark.title)
-          if (bookmark.showSleepIcon) {
-            Icon(
-              modifier = Modifier
-                .padding(start = 4.dp)
-                .size(16.dp),
-              imageVector = Icons.Outlined.Timer,
-              contentDescription = stringResource(StringsR.string.action_sleep),
-            )
+        when (it) {
+          SwipeToDismissBoxValue.StartToEnd -> {
+            onDelete(bookmark.id)
+            true
           }
+          SwipeToDismissBoxValue.EndToStart,
+          SwipeToDismissBoxValue.Settled,
+          -> false
         }
       },
-      trailingContent = {
-        Box {
-          IconButton(
-            onClick = {
-              expanded = !expanded
-            },
-            content = {
+    ),
+    backgroundContent = {
+      Box(
+        Modifier
+          .fillMaxSize()
+          .background(Color.Red),
+      ) {
+        Icon(
+          modifier = Modifier
+            .padding(start = 16.dp)
+            .align(Alignment.CenterStart),
+          imageVector = Icons.Outlined.Delete,
+          contentDescription = stringResource(id = StringsR.string.delete),
+          tint = Color.White,
+        )
+      }
+    },
+    content = {
+      ListItem(
+        modifier = Modifier
+          .clickable {
+            onClick(bookmark.id)
+          },
+        headlineContent = {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = bookmark.title)
+            if (bookmark.showSleepIcon) {
               Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = stringResource(id = StringsR.string.popup_edit),
+                modifier = Modifier
+                  .padding(start = 4.dp)
+                  .size(16.dp),
+                imageVector = Icons.Outlined.Timer,
+                contentDescription = stringResource(StringsR.string.action_sleep),
               )
-            },
-          )
-          DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-          ) {
-            DropdownMenuItem(
-              text = { Text(stringResource(id = StringsR.string.popup_edit)) },
-              onClick = {
-                expanded = false
-                onEdit(bookmark.id)
-              },
-            )
-            DropdownMenuItem(
-              text = { Text(stringResource(id = StringsR.string.remove)) },
-              onClick = {
-                expanded = false
-                onDelete(bookmark.id)
-              },
-            )
+            }
           }
-        }
-      },
-
-      supportingContent = {
-        Text(text = bookmark.subtitle)
-      },
-    )
-  }
+        },
+        trailingContent = {
+          Box {
+            IconButton(
+              onClick = {
+                expanded = !expanded
+              },
+              content = {
+                Icon(
+                  imageVector = Icons.Default.MoreVert,
+                  contentDescription = stringResource(id = StringsR.string.popup_edit),
+                )
+              },
+            )
+            DropdownMenu(
+              expanded = expanded,
+              onDismissRequest = { expanded = false },
+            ) {
+              DropdownMenuItem(
+                text = { Text(stringResource(id = StringsR.string.popup_edit)) },
+                onClick = {
+                  expanded = false
+                  onEdit(bookmark.id)
+                },
+              )
+              DropdownMenuItem(
+                text = { Text(stringResource(id = StringsR.string.remove)) },
+                onClick = {
+                  expanded = false
+                  onDelete(bookmark.id)
+                },
+              )
+            }
+          }
+        },
+        supportingContent = {
+          Text(text = bookmark.subtitle)
+        },
+      )
+    },
+  )
 }
 
 @Composable
