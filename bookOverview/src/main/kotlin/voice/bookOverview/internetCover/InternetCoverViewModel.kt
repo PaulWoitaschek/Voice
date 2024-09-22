@@ -19,7 +19,7 @@ constructor(private val navigator: Navigator) : BottomSheetItemViewModel {
     return listOf(BottomSheetItem.InternetCover)
   }
 
-  override suspend fun onItemClicked(
+  override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   ) {

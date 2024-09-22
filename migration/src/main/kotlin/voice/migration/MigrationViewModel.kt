@@ -36,17 +36,17 @@ class MigrationViewModel
     var showDeletionConfirmationDialog by remember {
       mutableStateOf(false)
     }
-    val onDeleteClicked = {
+    val onDeleteClick = {
       showDeletionConfirmationDialog = true
     }
-    val onDeletionAborted = {
+    val onDeletionAbort = {
       showDeletionConfirmationDialog = false
     }
     var items by remember {
       mutableStateOf(listOf<MigrationViewState.Item>())
     }
     val scope = rememberCoroutineScope()
-    val onDeletionConfirmed: () -> Unit = {
+    val onDeletionConfirm: () -> Unit = {
       showDeletionConfirmationDialog = false
       scope.launch {
         dao.deleteAll()
@@ -59,10 +59,10 @@ class MigrationViewModel
 
     return MigrationViewState(
       items = items,
-      onDeleteClicked = onDeleteClicked,
+      onDeleteClick = onDeleteClick,
       showDeletionConfirmationDialog = showDeletionConfirmationDialog,
-      onDeletionConfirmed = onDeletionConfirmed,
-      onDeletionAborted = onDeletionAborted,
+      onDeletionConfirm = onDeletionConfirm,
+      onDeletionAbort = onDeletionAbort,
     )
   }
 

@@ -155,7 +155,7 @@ class BookmarkViewModel
     }
   }
 
-  fun onScrollConfirmed() {
+  fun onScrollConfirm() {
     shouldScrollTo = null
   }
 
@@ -163,11 +163,11 @@ class BookmarkViewModel
     dialogViewState = BookmarkDialogViewState.None
   }
 
-  fun onAddClicked() {
+  fun onAddClick() {
     dialogViewState = BookmarkDialogViewState.AddBookmark
   }
 
-  fun onEditClicked(id: Bookmark.Id) {
+  fun onEditClick(id: Bookmark.Id) {
     val bookmark = bookmarks.find { it.id == id } ?: return
     dialogViewState = BookmarkDialogViewState.EditBookmark(id, bookmark.title)
   }

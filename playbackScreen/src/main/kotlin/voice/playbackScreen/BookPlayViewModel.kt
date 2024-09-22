@@ -193,7 +193,7 @@ class BookPlayViewModel
     player.fastForward()
   }
 
-  fun onCurrentChapterClicked() {
+  fun onCurrentChapterClick() {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
       val chapterMarks = book.chapters.flatMap {
@@ -207,7 +207,7 @@ class BookPlayViewModel
     }
   }
 
-  fun onChapterClicked(index: Int) {
+  fun onChapterClick(index: Int) {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
       var currentIndex = -1
@@ -224,7 +224,7 @@ class BookPlayViewModel
     }
   }
 
-  fun onPlaybackSpeedIconClicked() {
+  fun onPlaybackSpeedIconClick() {
     scope.launch {
       val playbackSpeed = bookRepository.get(bookId)?.content?.playbackSpeed
       if (playbackSpeed != null) {
@@ -233,7 +233,7 @@ class BookPlayViewModel
     }
   }
 
-  fun onVolumeGainIconClicked() {
+  fun onVolumeGainIconClick() {
     scope.launch {
       val content = bookRepository.get(bookId)?.content
       if (content != null) {
@@ -250,11 +250,11 @@ class BookPlayViewModel
     )
   }
 
-  fun onBookmarkClicked() {
+  fun onBookmarkClick() {
     navigator.goTo(Destination.Bookmarks(bookId))
   }
 
-  fun onBookmarkLongClicked() {
+  fun onBookmarkLongClick() {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
       bookmarkRepository.addBookmarkAtBookPosition(

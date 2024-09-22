@@ -51,7 +51,7 @@ fun ReviewFeature() {
     val reviewManager = reviewComponent.reviewManager
     val activity = LocalContext.current.findActivity() ?: return
     AskForReviewDialog(
-      onReviewed = { stars ->
+      onReview = { stars ->
         Logger.d("User rated $stars")
         scope.launch {
           shouldShowReviewDialog.setShown()
@@ -67,7 +67,7 @@ fun ReviewFeature() {
           showReviewDialog = false
         }
       },
-      onReviewDenied = {
+      onReviewDeny = {
         showReviewDialog = false
         scope.launch {
           shouldShowReviewDialog.setShown()

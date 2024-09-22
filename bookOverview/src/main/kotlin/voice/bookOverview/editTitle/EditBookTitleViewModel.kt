@@ -30,7 +30,7 @@ constructor(private val repo: BookRepository) : BottomSheetItemViewModel {
     return listOf(BottomSheetItem.Title)
   }
 
-  override suspend fun onItemClicked(
+  override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   ) {

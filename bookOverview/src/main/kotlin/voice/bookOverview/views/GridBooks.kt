@@ -42,7 +42,7 @@ internal fun GridBooks(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   showPermissionBugCard: Boolean,
-  onPermissionBugCardClicked: () -> Unit,
+  onPermissionBugCardClick: () -> Unit,
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
@@ -55,7 +55,7 @@ internal fun GridBooks(
       item(
         span = { GridItemSpan(maxLineSpan) },
       ) {
-        PermissionBugCard(onPermissionBugCardClicked)
+        PermissionBugCard(onPermissionBugCardClick)
       }
     }
     books.forEach { (category, books) ->

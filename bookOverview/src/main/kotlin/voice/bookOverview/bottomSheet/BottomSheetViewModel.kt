@@ -34,7 +34,7 @@ class BottomSheetViewModel
     val bookId = bookId ?: return
     scope.launch {
       viewModels.forEach {
-        it.onItemClicked(bookId, item)
+        it.onItemClick(bookId, item)
       }
     }
   }

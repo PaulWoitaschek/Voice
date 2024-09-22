@@ -237,7 +237,7 @@ constructor(
     playerController.playPause()
   }
 
-  fun onPermissionBugCardClicked() {
+  fun onPermissionBugCardClick() {
     if (Build.VERSION.SDK_INT >= 30) {
       navigator.goTo(
         Destination.Activity(

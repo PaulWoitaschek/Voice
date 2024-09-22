@@ -68,12 +68,12 @@ fun BookmarkScreen(bookId: BookId) {
   BookmarkScreen(
     viewState = viewState,
     onClose = viewModel::closeScreen,
-    onAdd = viewModel::onAddClicked,
+    onAdd = viewModel::onAddClick,
     onDelete = viewModel::deleteBookmark,
-    onEdit = viewModel::onEditClicked,
-    onScrollConfirmed = viewModel::onScrollConfirmed,
+    onEdit = viewModel::onEditClick,
+    onScrollConfirm = viewModel::onScrollConfirm,
     onClick = viewModel::selectBookmark,
-    onNewBookmarkNameChosen = viewModel::addBookmark,
+    onNewBookmarkNameChoose = viewModel::addBookmark,
     onCloseDialog = viewModel::closeDialog,
     onEditBookmark = viewModel::editBookmark,
   )
@@ -86,10 +86,10 @@ internal fun BookmarkScreen(
   onAdd: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
   onEdit: (Bookmark.Id) -> Unit,
-  onScrollConfirmed: () -> Unit,
+  onScrollConfirm: () -> Unit,
   onClick: (Bookmark.Id) -> Unit,
   onCloseDialog: () -> Unit,
-  onNewBookmarkNameChosen: (String) -> Unit,
+  onNewBookmarkNameChoose: (String) -> Unit,
   onEditBookmark: (Bookmark.Id, String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -123,11 +123,11 @@ internal fun BookmarkScreen(
     },
   ) { paddingValues ->
     val lazyListState = rememberLazyListState()
-    LaunchedEffect(viewState.shouldScrollTo, onScrollConfirmed) {
+    LaunchedEffect(viewState.shouldScrollTo, onScrollConfirm) {
       val index = viewState.bookmarks.indexOfFirst { it.id == viewState.shouldScrollTo }
       if (index != -1) {
         lazyListState.animateScrollToItem(index)
-        onScrollConfirmed()
+        onScrollConfirm()
       }
     }
     LazyColumn(
@@ -156,7 +156,7 @@ internal fun BookmarkScreen(
     BookmarkDialogViewState.AddBookmark -> {
       AddBookmarkDialog(
         onDismissRequest = onCloseDialog,
-        onBookmarkNameChosen = onNewBookmarkNameChosen,
+        onBookmarkNameChoose = onNewBookmarkNameChoose,
       )
     }
     BookmarkDialogViewState.None -> {
