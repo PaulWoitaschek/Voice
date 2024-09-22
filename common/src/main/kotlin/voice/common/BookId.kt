@@ -14,7 +14,9 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = BookIdSerializer::class)
 @Parcelize
-data class BookId(val value: String) : Parcelable {
+data class BookId(
+  val value: String,
+) : Parcelable {
 
   constructor(uri: Uri) : this(uri.toString())
 

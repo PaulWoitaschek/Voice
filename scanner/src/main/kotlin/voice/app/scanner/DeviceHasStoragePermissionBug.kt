@@ -13,7 +13,9 @@ import javax.inject.Singleton
 
 @Singleton
 class DeviceHasStoragePermissionBug
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+) {
 
   private val _hasBug = MutableStateFlow(false)
   val hasBug: StateFlow<Boolean> get() = _hasBug

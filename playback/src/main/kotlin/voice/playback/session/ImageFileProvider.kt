@@ -8,7 +8,9 @@ import java.io.File
 import javax.inject.Inject
 
 class ImageFileProvider
-@Inject constructor(private val application: Application) {
+@Inject constructor(
+  private val application: Application,
+) {
 
   internal fun uri(file: File): Uri {
     return FileProvider

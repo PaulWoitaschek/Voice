@@ -29,7 +29,9 @@ import voice.strings.R as StringsR
 
 private const val NI_ARGS = "ni#bundle"
 
-class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
+class EditCoverDialogController(
+  bundle: Bundle,
+) : DialogController(bundle) {
 
   constructor(args: Arguments) : this(
     Bundle().apply {

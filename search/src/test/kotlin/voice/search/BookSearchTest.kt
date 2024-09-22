@@ -126,7 +126,9 @@ private fun Book.withNewIdAndInactive(): Book {
   }
 }
 
-private class TestBase(private val search: BookSearch) {
+private class TestBase(
+  private val search: BookSearch,
+) {
 
   suspend fun expectSearchResult(
     query: String,

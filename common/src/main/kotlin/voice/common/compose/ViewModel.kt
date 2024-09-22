@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @PublishedApi
-internal class HoldingViewModel<T>(val value: T) : ViewModel()
+internal class HoldingViewModel<T>(
+  val value: T,
+) : ViewModel()
 
 @Composable
 inline fun <reified T> rememberScoped(

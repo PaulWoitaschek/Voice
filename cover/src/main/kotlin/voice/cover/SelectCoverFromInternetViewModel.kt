@@ -106,8 +106,12 @@ class SelectCoverFromInternetViewModel
 
     val query: String
 
-    data class Loading(override val query: String) : ViewState
-    data class Error(override val query: String) : ViewState
+    data class Loading(
+      override val query: String,
+    ) : ViewState
+    data class Error(
+      override val query: String,
+    ) : ViewState
     data class Content(
       val items: LazyPagingItems<SearchResponse.ImageResult>,
       override val query: String,
@@ -116,8 +120,12 @@ class SelectCoverFromInternetViewModel
 
   internal sealed interface Events {
     data object Retry : Events
-    data class CoverClick(val cover: SearchResponse.ImageResult) : Events
-    data class QueryChange(val query: String) : Events
+    data class CoverClick(
+      val cover: SearchResponse.ImageResult,
+    ) : Events
+    data class QueryChange(
+      val query: String,
+    ) : Events
   }
 
   @AssistedFactory

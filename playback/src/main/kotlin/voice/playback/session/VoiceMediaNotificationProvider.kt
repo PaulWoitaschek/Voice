@@ -9,7 +9,9 @@ import com.google.common.collect.ImmutableList
 import javax.inject.Inject
 
 class VoiceMediaNotificationProvider
-@Inject constructor(context: Context) : DefaultMediaNotificationProvider(context) {
+@Inject constructor(
+  context: Context,
+) : DefaultMediaNotificationProvider(context) {
 
   override fun getMediaButtons(
     session: MediaSession,

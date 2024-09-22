@@ -8,7 +8,9 @@ import kotlin.coroutines.resume
 import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 class ShakeDetector
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+) {
 
   /**
    * This function returns once a shake was detected

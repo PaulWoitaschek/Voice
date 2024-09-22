@@ -9,7 +9,9 @@ import voice.logging.core.Logger
 import javax.inject.Inject
 
 class FFProbeAnalyze
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+) {
 
   private val json = Json {
     ignoreUnknownKeys = true

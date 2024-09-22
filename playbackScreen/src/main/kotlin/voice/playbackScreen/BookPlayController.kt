@@ -28,7 +28,9 @@ import voice.strings.R as StringsR
 
 private const val NI_BOOK_ID = "niBookId"
 
-class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
+class BookPlayController(
+  bundle: Bundle,
+) : ComposeController(bundle) {
 
   constructor(bookId: BookId) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 

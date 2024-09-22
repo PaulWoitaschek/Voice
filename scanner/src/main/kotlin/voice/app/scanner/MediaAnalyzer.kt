@@ -8,7 +8,9 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class MediaAnalyzer
-@Inject constructor(private val ffProbeAnalyze: FFProbeAnalyze) {
+@Inject constructor(
+  private val ffProbeAnalyze: FFProbeAnalyze,
+) {
 
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
     val result = ffProbeAnalyze.analyze(file) ?: return null

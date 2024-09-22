@@ -13,7 +13,9 @@ fun interface IsIgnoringBatteryOptimizations {
 
 @ContributesBinding(AppScope::class)
 class IsIgnoringBatteryOptimizationsImpl
-@Inject constructor(private val context: Application) : IsIgnoringBatteryOptimizations {
+@Inject constructor(
+  private val context: Application,
+) : IsIgnoringBatteryOptimizations {
   override fun invoke(): Boolean {
     val powerManager = context.getSystemService<PowerManager>()
       ?: return true

@@ -7,7 +7,9 @@ import java.time.Instant
 import javax.inject.Inject
 
 class InstallationTimeProvider
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+) {
 
   internal fun installationTime(): Instant {
     val packageManager = context.packageManager

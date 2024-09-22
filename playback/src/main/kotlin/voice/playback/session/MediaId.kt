@@ -13,7 +13,9 @@ sealed interface MediaId {
 
   @Serializable
   @SerialName("book")
-  data class Book(val id: BookId) : MediaId
+  data class Book(
+    val id: BookId,
+  ) : MediaId
 
   @Serializable
   @SerialName("chapter")
