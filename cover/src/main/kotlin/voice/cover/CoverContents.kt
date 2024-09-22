@@ -82,7 +82,7 @@ private fun ItemsContent(
   val items = viewState.items
   LazyVerticalStaggeredGrid(
     columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
-    contentPadding = PaddingValues(top = 80.dp),
+    contentPadding = PaddingValues(top = 96.dp),
     content = {
       items(
         count = items.itemCount,

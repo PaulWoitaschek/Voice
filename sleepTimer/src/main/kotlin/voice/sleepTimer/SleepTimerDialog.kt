@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -55,6 +57,7 @@ fun SleepTimerDialog(
           modifier = Modifier.clickable {
             onAcceptSleepTime(time)
           },
+          colors = ListItemDefaults.colors(containerColor = Color.Transparent),
           headlineContent = {
             Text(text = minutes(minutes = time))
           },
@@ -64,6 +67,7 @@ fun SleepTimerDialog(
         modifier = Modifier.clickable {
           onAcceptSleepTime(viewState.customSleepTime)
         },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         headlineContent = {
           Text(text = minutes(minutes = viewState.customSleepTime))
         },
