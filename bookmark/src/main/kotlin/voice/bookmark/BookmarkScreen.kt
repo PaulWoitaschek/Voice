@@ -193,7 +193,7 @@ internal fun BookmarkItem(
           }
           SwipeToDismissBoxValue.EndToStart,
           SwipeToDismissBoxValue.Settled,
-            -> false
+          -> false
         }
       },
     ),
