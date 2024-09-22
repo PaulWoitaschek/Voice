@@ -11,9 +11,7 @@ import javax.inject.Inject
 
 @BookOverviewScope
 class BottomSheetViewModel
-@Inject constructor(
-  private val viewModels: Set<@JvmSuppressWildcards BottomSheetItemViewModel>,
-) {
+@Inject constructor(private val viewModels: Set<@JvmSuppressWildcards BottomSheetItemViewModel>) {
 
   private val scope = MainScope()
 

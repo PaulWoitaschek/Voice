@@ -5,9 +5,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import java.io.File
 
-data class FileBasedDocumentFile(
-  private val file: File,
-) : CachedDocumentFile {
+data class FileBasedDocumentFile(private val file: File) : CachedDocumentFile {
 
   override val children: List<CachedDocumentFile> get() = file.listFiles()?.map { FileBasedDocumentFile(it) } ?: emptyList()
   override val name: String? get() = file.name

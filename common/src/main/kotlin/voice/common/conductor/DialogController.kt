@@ -18,9 +18,7 @@ private const val SI_DIALOG = "android:savedDialogState"
 /**
  * A wrapper that wraps a dialog in a controller
  */
-abstract class DialogController(
-  args: Bundle = Bundle(),
-) : Controller(args) {
+abstract class DialogController(args: Bundle = Bundle()) : Controller(args) {
 
   private var dialog: Dialog? = null
   private var dismissed = false

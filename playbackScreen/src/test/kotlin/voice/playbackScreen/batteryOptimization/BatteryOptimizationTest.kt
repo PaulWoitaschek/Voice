@@ -44,9 +44,7 @@ class BatteryOptimizationTest {
   }
 }
 
-private class MemoryDataStore<T>(
-  initial: T,
-) : DataStore<T> {
+private class MemoryDataStore<T>(initial: T) : DataStore<T> {
 
   private val value = MutableStateFlow(initial)
 

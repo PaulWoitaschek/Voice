@@ -4,9 +4,7 @@ import kotlinx.serialization.Serializable
 
 @JvmInline
 @Serializable
-value class Decibel(
-  val value: Float,
-) {
+value class Decibel(val value: Float) {
 
   val milliBel: Int get() = (value * 100).toInt()
 

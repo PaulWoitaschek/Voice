@@ -19,9 +19,7 @@ data class Bookmark(
   val id: Id,
 ) {
 
-  data class Id(
-    val value: UUID,
-  ) {
+  data class Id(val value: UUID) {
     companion object {
       fun random(): Id = Id(UUID.randomUUID())
     }

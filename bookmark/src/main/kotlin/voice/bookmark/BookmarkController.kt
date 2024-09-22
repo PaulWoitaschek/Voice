@@ -10,9 +10,7 @@ import voice.data.putBookId
 private const val NI_BOOK_ID = "ni#bookId"
 
 @Suppress("unused")
-class BookmarkController(
-  args: Bundle,
-) : ComposeController(args) {
+class BookmarkController(args: Bundle) : ComposeController(args) {
 
   constructor(bookId: BookId) : this(
     Bundle().apply {

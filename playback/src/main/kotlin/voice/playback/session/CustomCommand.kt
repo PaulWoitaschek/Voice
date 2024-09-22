@@ -17,14 +17,10 @@ internal sealed interface CustomCommand {
   data object ForceSeekToPrevious : CustomCommand
 
   @Serializable
-  data class SetSkipSilence(
-    val skipSilence: Boolean,
-  ) : CustomCommand
+  data class SetSkipSilence(val skipSilence: Boolean) : CustomCommand
 
   @Serializable
-  data class SetGain(
-    val gain: Decibel,
-  ) : CustomCommand
+  data class SetGain(val gain: Decibel) : CustomCommand
 
   companion object {
 

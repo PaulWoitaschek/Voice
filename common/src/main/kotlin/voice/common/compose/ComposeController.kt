@@ -8,9 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.bluelinelabs.conductor.Controller
 
-abstract class ComposeController(
-  args: Bundle = Bundle(),
-) : Controller(args) {
+abstract class ComposeController(args: Bundle = Bundle()) : Controller(args) {
 
   final override fun onCreateView(
     inflater: LayoutInflater,

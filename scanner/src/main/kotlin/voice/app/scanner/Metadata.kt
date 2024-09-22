@@ -12,9 +12,7 @@ internal data class MetaDataScanResult(
   val format: MetaDataFormat? = null,
 )
 
-internal enum class TagType(
-  val keys: List<String>,
-) {
+internal enum class TagType(val keys: List<String>) {
   Title(listOf("title")),
   Artist(listOf("author", "artist", "album_artist")),
   Album(listOf("album")),
@@ -43,9 +41,7 @@ internal fun Map<String, String>.find(tagType: TagType): String? {
 }
 
 @Serializable
-internal data class MetaDataStream(
-  val tags: Map<String, String>? = null,
-)
+internal data class MetaDataStream(val tags: Map<String, String>? = null)
 
 @Serializable
 internal data class MetaDataChapter(
