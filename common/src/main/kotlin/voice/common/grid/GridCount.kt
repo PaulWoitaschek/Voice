@@ -4,9 +4,7 @@ import android.content.Context
 import javax.inject.Inject
 
 class GridCount
-@Inject constructor(
-  private val context: Context,
-) {
+@Inject constructor(private val context: Context) {
 
   fun useGridAsDefault(): Boolean {
     val displayMetrics = context.resources.displayMetrics

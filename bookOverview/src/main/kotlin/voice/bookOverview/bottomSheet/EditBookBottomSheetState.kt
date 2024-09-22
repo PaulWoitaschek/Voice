@@ -12,9 +12,7 @@ import androidx.compose.material.icons.outlined.Title
 import androidx.compose.ui.graphics.vector.ImageVector
 import voice.strings.R as StringsR
 
-internal data class EditBookBottomSheetState(
-  val items: List<BottomSheetItem>,
-)
+internal data class EditBookBottomSheetState(val items: List<BottomSheetItem>)
 
 enum class BottomSheetItem(
   @StringRes val titleRes: Int,

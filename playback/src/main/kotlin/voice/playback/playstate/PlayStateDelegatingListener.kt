@@ -4,9 +4,7 @@ import androidx.media3.common.Player
 import javax.inject.Inject
 
 class PlayStateDelegatingListener
-@Inject constructor(
-  private val playStateManager: PlayStateManager,
-) : Player.Listener {
+@Inject constructor(private val playStateManager: PlayStateManager) : Player.Listener {
 
   private lateinit var player: Player
 

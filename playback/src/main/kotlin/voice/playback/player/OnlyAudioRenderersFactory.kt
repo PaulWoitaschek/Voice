@@ -12,9 +12,7 @@ import androidx.media3.exoplayer.video.VideoRendererEventListener
 import javax.inject.Inject
 
 class OnlyAudioRenderersFactory
-@Inject constructor(
-  context: Context,
-) : DefaultRenderersFactory(context) {
+@Inject constructor(context: Context) : DefaultRenderersFactory(context) {
 
   override fun buildVideoRenderers(
     context: Context,

@@ -8,9 +8,7 @@ import javax.inject.Inject
 import voice.strings.R as StringsR
 
 class SleepTimerCommandUpdater
-@Inject constructor(
-  private val context: Context,
-) {
+@Inject constructor(private val context: Context) {
 
   fun update(
     session: MediaSession,

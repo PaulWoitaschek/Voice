@@ -7,8 +7,10 @@ import coil.size.Size
 import coil.transform.Transformation
 import voice.app.features.imagepicker.CropOverlay
 
-class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) :
-  Transformation {
+class CropTransformation(
+  cropOverlay: CropOverlay,
+  private val cropSource: ImageView,
+) : Transformation {
 
   private val rect = cropOverlay.selectedRect
 
