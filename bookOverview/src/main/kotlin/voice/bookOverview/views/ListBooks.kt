@@ -42,7 +42,7 @@ internal fun ListBooks(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   showPermissionBugCard: Boolean,
-  onPermissionBugCardClicked: () -> Unit,
+  onPermissionBugCardClick: () -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -50,7 +50,7 @@ internal fun ListBooks(
   ) {
     if (showPermissionBugCard) {
       item {
-        PermissionBugCard(onPermissionBugCardClicked)
+        PermissionBugCard(onPermissionBugCardClick)
       }
     }
     books.forEach { (category, books) ->

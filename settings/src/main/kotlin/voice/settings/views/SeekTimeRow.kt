@@ -48,7 +48,7 @@ internal fun SeekTimeRow(
 @Composable
 internal fun SeekAmountDialog(
   currentSeconds: Int,
-  onSecondsConfirmed: (Int) -> Unit,
+  onSecondsConfirm: (Int) -> Unit,
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
@@ -57,7 +57,7 @@ internal fun SeekAmountDialog(
     minSeconds = 3,
     maxSeconds = 60,
     textPluralRes = StringsR.plurals.seconds,
-    onSecondsConfirmed = onSecondsConfirmed,
+    onSecondsConfirm = onSecondsConfirm,
     onDismiss = onDismiss,
   )
 }

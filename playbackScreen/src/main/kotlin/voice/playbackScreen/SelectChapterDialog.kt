@@ -33,7 +33,7 @@ internal fun SelectChapterDialog(
             ListItem(
               colors = ListItemDefaults.colors(containerColor = Color.Transparent),
               modifier = Modifier.clickable {
-                viewModel.onChapterClicked(index)
+                viewModel.onChapterClick(index)
               },
               headlineContent = {
                 Text(text = chapter.name ?: "")

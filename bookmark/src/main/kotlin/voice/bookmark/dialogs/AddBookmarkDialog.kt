@@ -29,7 +29,7 @@ import voice.strings.R as StringsR
 @Composable
 internal fun AddBookmarkDialog(
   onDismissRequest: () -> Unit,
-  onBookmarkNameChosen: (String) -> Unit,
+  onBookmarkNameChoose: (String) -> Unit,
 ) {
   var bookmarkName by remember { mutableStateOf("") }
   val focusRequester = remember { FocusRequester() }
@@ -54,7 +54,7 @@ internal fun AddBookmarkDialog(
           ),
           keyboardActions = KeyboardActions(
             onDone = {
-              onBookmarkNameChosen(bookmarkName)
+              onBookmarkNameChoose(bookmarkName)
             },
           ),
           singleLine = true,
@@ -64,7 +64,7 @@ internal fun AddBookmarkDialog(
     confirmButton = {
       Button(
         onClick = {
-          onBookmarkNameChosen(bookmarkName)
+          onBookmarkNameChoose(bookmarkName)
           onDismissRequest()
         },
       ) {

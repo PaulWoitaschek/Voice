@@ -80,15 +80,15 @@ class SettingsViewModel
     seekTimePref.value = seconds
   }
 
-  override fun onSeekAmountRowClicked() {
+  override fun onSeekAmountRowClick() {
     dialog.value = SettingsViewState.Dialog.SeekTime
   }
 
-  override fun autoRewindAmountChanged(seconds: Int) {
+  override fun autoRewindAmountChang(seconds: Int) {
     autoRewindAmountPref.value = seconds
   }
 
-  override fun onAutoRewindRowClicked() {
+  override fun onAutoRewindRowClick() {
     dialog.value = SettingsViewState.Dialog.AutoRewindAmount
   }
 
