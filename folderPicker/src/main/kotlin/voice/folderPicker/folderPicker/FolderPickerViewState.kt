@@ -3,9 +3,7 @@ package voice.folderPicker.folderPicker
 import android.net.Uri
 import voice.data.folders.FolderType
 
-data class FolderPickerViewState(
-  val items: List<Item>,
-) {
+data class FolderPickerViewState(val items: List<Item>) {
 
   data class Item(
     val name: String,

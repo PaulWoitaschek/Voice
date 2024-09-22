@@ -10,9 +10,7 @@ import voice.playback.session.toMediaIdOrNull
 import javax.inject.Inject
 
 class DurationInconsistenciesUpdater
-@Inject constructor(
-  private val chapterRepo: ChapterRepo,
-) : Player.Listener {
+@Inject constructor(private val chapterRepo: ChapterRepo) : Player.Listener {
 
   private lateinit var player: Player
 

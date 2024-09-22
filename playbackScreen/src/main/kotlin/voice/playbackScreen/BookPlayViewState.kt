@@ -28,9 +28,7 @@ data class BookPlayViewState(
 }
 
 internal sealed interface BookPlayDialogViewState {
-  data class SpeedDialog(
-    val speed: Float,
-  ) : BookPlayDialogViewState {
+  data class SpeedDialog(val speed: Float) : BookPlayDialogViewState {
 
     val maxSpeed: Float get() = if (speed < 2F) 2F else 3.5F
   }
@@ -47,7 +45,5 @@ internal sealed interface BookPlayDialogViewState {
   ) : BookPlayDialogViewState
 
   @JvmInline
-  value class SleepTimer(
-    val viewState: SleepTimerViewState,
-  ) : BookPlayDialogViewState
+  value class SleepTimer(val viewState: SleepTimerViewState) : BookPlayDialogViewState
 }
