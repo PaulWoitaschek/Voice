@@ -113,7 +113,7 @@ compose-navigation = "dev.olshevski.navigation:reimagined:1.5.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.14"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.15"
 
 [bundles]
 compose = [
