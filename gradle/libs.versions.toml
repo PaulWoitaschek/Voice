@@ -50,7 +50,7 @@ molecule = "app.cash.molecule:molecule-runtime:2.0.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0"
 okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
-review = "com.google.android.play:review-ktx:2.0.1"
+review = "com.google.android.play:review-ktx:2.0.2"
 lottie = "com.airbnb.android:lottie-compose:6.5.2"
 clikt = "com.github.ajalt.clikt:clikt:4.4.0"
 
