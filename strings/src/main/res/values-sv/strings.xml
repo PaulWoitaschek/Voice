@@ -44,7 +44,7 @@
     <string name="remove">Ta bort</string>
     <string name="play_current">Spela aktuell</string>
     <string name="book_header_current">Aktuella</string>
-    <string name="book_header_not_started">Inte påbörjad ännu</string>
+    <string name="book_header_not_started">Inte påbörjade ännu</string>
     <string name="book_header_completed">Avslutad</string>
     <string name="close">Stäng</string>
     <string name="delete">Ta bort</string>
