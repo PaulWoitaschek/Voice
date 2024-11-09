@@ -2,13 +2,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="fr">
     <string name="cover">Couverture</string>
     <string name="play_pause">Lecture / Pause</string>
-    <string name="action_sleep">Minuteur</string>
-    <string name="rewind">Rembobiner</string>
+    <string name="action_sleep">Minuterie de mise en veille</string>
+    <string name="rewind">Revenir en arrière</string>
     <string name="fast_forward">Avance rapide</string>
     <string name="previous_track">Piste précédente</string>
     <string name="next_track">Piste suivante</string>
     <string name="skip_silence">Sauter les silences</string>
-    <string name="volume_boost">Hausser le volume </string>
+    <string name="volume_boost">Augmentation du volume</string>
     <string name="more">Plus</string>
     <string name="dialog_confirm">Définir</string>
     <string name="dialog_cancel">Annuler</string>
@@ -46,7 +46,7 @@
     <string name="play_current">Lire l\'actuel</string>
     <string name="book_header_current">En cours</string>
     <string name="book_header_not_started">Pas encore commencé</string>
-    <string name="book_header_completed">Complété</string>
+    <string name="book_header_completed">Terminé</string>
     <string name="close">Fermer</string>
     <string name="delete">Supprimer</string>
     <string name="add">Ajouter</string>
@@ -88,8 +88,8 @@
     <string name="battery_optimization_action">Mise à jour</string>
     <string name="media_session_root">Tous les livres audio</string>
     <string name="media_session_recent">Récent</string>
-    <string name="notification_sleep_timer_enable">Activer la minuterie de sommeil</string>
-    <string name="notification_sleep_timer_disable">Désactiver la minuterie de sommeil</string>
+    <string name="notification_sleep_timer_enable">Activer la minuterie de mise en veille</string>
+    <string name="notification_sleep_timer_disable">Désactiver la minuterie de mise en veille</string>
     <string name="onboarding_welcome_title">Bienvenue dans Voice !</string>
     <string name="sleep_timer.title">Bonne nuit ! 🌙</string>
     <string name="sleep_timer.button.increment">Plus long</string>
