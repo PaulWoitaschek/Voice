@@ -94,7 +94,7 @@
     <string name="sleep_timer.title">Bonne nuit ! 🌙</string>
     <string name="sleep_timer.button.increment">Plus long</string>
     <string name="folder_mode_author">Mode auteurs : chaque sous-dossier est un auteur, dont chaque sous-dossier est un livre.</string>
-    <string name="generic_error_message">Quelque chose a planté 😢</string>
+    <string name="generic_error_message">Quelque chose s\'est mal passé 😢</string>
     <string name="generic_error_retry">Réessayer</string>
     <string name="storage_bug_subtitle">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>
     <string name="storage_bug_button">Accorder la permission</string>
