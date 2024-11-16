@@ -8,6 +8,8 @@ object PrefKeys {
   const val SEEK_TIME = "SEEK_TIME"
   const val SLEEP_TIME = "SLEEP_TIME"
   const val AUTO_SLEEP_TIMER = "AUTO_SLEEP_TIMER"
+  const val AUTO_SLEEP_TIMER_START = "AUTO_SLEEP_TIMER_START"
+  const val AUTO_SLEEP_TIMER_END = "AUTO_SLEEP_TIMER_END"
   const val SINGLE_BOOK_FOLDERS = "singleBookFolders"
   const val COLLECTION_BOOK_FOLDERS = "folders"
   const val DARK_THEME = "darkTheme"

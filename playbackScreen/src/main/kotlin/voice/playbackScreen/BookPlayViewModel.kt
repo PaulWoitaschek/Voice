@@ -37,6 +37,7 @@ import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
+import java.time.LocalTime
 import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -59,6 +60,10 @@ class BookPlayViewModel
   private val sleepTimePref: Pref<Int>,
   @Named(PrefKeys.AUTO_SLEEP_TIMER)
   private val autoSleepTimerPref: Pref<Boolean>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
+  private val autoSleepTimerStart: Pref<String>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
+  private val autoSleepTimerEnd: Pref<String>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -115,7 +120,7 @@ class BookPlayViewModel
         else -> customTime + 5
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime, it.autoSleepTimer)
+      SleepTimerViewState(newTime, it.autoSleepTimer, it.autoSleepTimeStart, it.autoSleepTimeEnd)
     }
   }
 
@@ -128,7 +133,7 @@ class BookPlayViewModel
         else -> (customTime - 5).coerceAtLeast(5)
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime, it.autoSleepTimer)
+      SleepTimerViewState(newTime, it.autoSleepTimer, it.autoSleepTimeStart, it.autoSleepTimeEnd)
     }
   }
 
@@ -150,7 +155,23 @@ class BookPlayViewModel
   fun onCheckAutoSleepTimer(checked: Boolean) {
     updateSleepTimeViewState {
       autoSleepTimerPref.value = checked
-      SleepTimerViewState(it.customSleepTime, checked)
+      SleepTimerViewState(it.customSleepTime, checked, it.autoSleepTimeStart, it.autoSleepTimeEnd)
+    }
+  }
+
+  fun setAutoSleepTimerStart(hour: Int, minute: Int) {
+    val time = LocalTime.of(hour, minute).toString()
+    updateSleepTimeViewState {
+      autoSleepTimerStart.value = time
+      SleepTimerViewState(it.customSleepTime, it.autoSleepTimer, time, it.autoSleepTimeEnd)
+    }
+  }
+
+  fun setAutoSleepTimerEnd(hour: Int, minute: Int) {
+    val time = LocalTime.of(hour, minute).toString()
+    updateSleepTimeViewState {
+      autoSleepTimerEnd.value = time
+      SleepTimerViewState(it.customSleepTime, it.autoSleepTimer, it.autoSleepTimeStart, time)
     }
   }
 
@@ -159,7 +180,7 @@ class BookPlayViewModel
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)
     } else {
-      update(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value))
+      update(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value, autoSleepTimerStart.value, autoSleepTimerEnd.value))
     }
     _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
   }
@@ -192,28 +213,25 @@ class BookPlayViewModel
       }
     }
     if (autoSleepTimerPref.value && !sleepTimer.sleepTimerActive()) {
-//      val now: Calendar = GregorianCalendar()
-//      now.timeInMillis = System.currentTimeMillis()
-//      val currentHour: Int = now.get(Calendar.HOUR_OF_DAY)
-//      val autoEnableByTime = isInTimeRange(22, 6, currentHour)
-      sleepTimer.setActive()
+      val startTime = LocalTime.parse(autoSleepTimerStart.value)
+      val endTime = LocalTime.parse(autoSleepTimerEnd.value)
+      if (isCurrentTimeInRange(startTime, endTime)) {
+        sleepTimer.setActive()
+      }
     }
     player.playPause()
   }
 
-  /*private fun isInTimeRange(from: Int, to: Int, current: Int): Boolean {
-    // Range covers one day
-    if (from < to) {
-      return current in from..<to
+  private fun isCurrentTimeInRange(startTime: LocalTime, endTime: LocalTime): Boolean {
+    val currentTime = LocalTime.now()
+    return if (startTime <= endTime) {
+      // Standard case, start and end on the same day
+      currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+    } else {
+      // Range wraps around midnight
+      currentTime.isAfter(startTime) || currentTime.isBefore(endTime)
     }
-
-    // Range covers two days
-    if (from <= current) {
-      return true
-    }
-
-    return current < to
-  }*/
+  }
 
   fun rewind() {
     player.rewind()
@@ -311,7 +329,14 @@ class BookPlayViewModel
       sleepTimer.setActive(false)
       _dialogState.value = null
     } else {
-      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value))
+      _dialogState.value = BookPlayDialogViewState.SleepTimer(
+        SleepTimerViewState(
+          sleepTimePref.value,
+          autoSleepTimerPref.value,
+          autoSleepTimerStart.value,
+          autoSleepTimerEnd.value,
+        ),
+      )
     }
   }
 
