@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -21,10 +19,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.mutableStateOf
@@ -104,7 +100,7 @@ fun SleepTimerDialog(
       ListItem(
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         headlineContent = {
-          Text(text = stringResource(id = StringsR.string.sleep_timer_auto_start))
+          Text(text = stringResource(id = StringsR.string.auto_sleep_timer))
         },
         trailingContent = {
           Switch(
@@ -116,14 +112,17 @@ fun SleepTimerDialog(
       if (viewState.autoSleepTimer) {
         val shouldShowStartTimePicker = remember { mutableStateOf(false) }
         ListItem(
+          modifier = Modifier.padding(horizontal = 15.dp),
           colors = ListItemDefaults.colors(containerColor = Color.Transparent),
           headlineContent = {
-            Text(text = "Start Timer after ${viewState.autoSleepTimeStart}")
+            Text(stringResource(id = StringsR.string.auto_sleep_timer_start))
           },
           trailingContent = {
             if (shouldShowStartTimePicker.value) {
+              val initialTime = LocalTime.parse(viewState.autoSleepTimeStart)
               TimePickerDialog(
-                viewState.autoSleepTimeStart,
+                initialTime.hour,
+                initialTime.minute,
                 { timePickerState: TimePickerState ->
                   onSetAutoSleepTimerStart(timePickerState.hour, timePickerState.minute)
                   shouldShowStartTimePicker.value = false
@@ -131,28 +130,28 @@ fun SleepTimerDialog(
                 { shouldShowStartTimePicker.value = false },
               )
             }
-            IconButton(
+            TextButton(
               onClick = {
                 shouldShowStartTimePicker.value = true
               },
             ) {
-              Icon(
-                imageVector = Icons.Outlined.AccessTime,
-                "Set Auto Sleep Timer Start Time",
-              )
+              Text(viewState.autoSleepTimeStart)
             }
           },
         )
         val shouldShowEndTimePicker = remember { mutableStateOf(false) }
         ListItem(
+          modifier = Modifier.padding(horizontal = 15.dp),
           colors = ListItemDefaults.colors(containerColor = Color.Transparent),
           headlineContent = {
-            Text(text = "Start timer before ${viewState.autoSleepTimeEnd}")
+            Text(stringResource(id = StringsR.string.auto_sleep_timer_end))
           },
           trailingContent = {
             if (shouldShowEndTimePicker.value) {
+              val initialTime = LocalTime.parse(viewState.autoSleepTimeEnd)
               TimePickerDialog(
-                viewState.autoSleepTimeEnd,
+                initialTime.hour,
+                initialTime.minute,
                 { timePickerState: TimePickerState ->
                   onSetAutoSleepTimerEnd(timePickerState.hour, timePickerState.minute)
                   shouldShowEndTimePicker.value = false
@@ -160,15 +159,12 @@ fun SleepTimerDialog(
                 { shouldShowEndTimePicker.value = false },
               )
             }
-            IconButton(
+            TextButton(
               onClick = {
                 shouldShowEndTimePicker.value = true
               },
             ) {
-              Icon(
-                imageVector = Icons.Outlined.AccessTime,
-                "Set Auto Sleep Timer End Time",
-              )
+              Text(viewState.autoSleepTimeEnd)
             }
           },
         )
@@ -182,41 +178,4 @@ fun SleepTimerDialog(
 @ReadOnlyComposable
 private fun minutes(minutes: Int): String {
   return pluralStringResource(StringsR.plurals.minutes, minutes, minutes)
-}
-
-@Composable
-fun TimePickerDialog(
-  initialTime: String,
-  onConfirm: (TimePickerState) -> Unit,
-  onDismiss: () -> Unit,
-) {
-  val initialLocalTime = LocalTime.parse(initialTime)
-  val timePickerState = rememberTimePickerState(
-    initialLocalTime.hour,
-    initialLocalTime.minute,
-    is24Hour = true,
-  )
-
-  AlertDialog(
-    onDismissRequest = onDismiss,
-    dismissButton = {
-      TextButton(onClick = { onDismiss() }) {
-        Text(stringResource(id = StringsR.string.dialog_cancel))
-      }
-    },
-    confirmButton = {
-      TextButton(
-        onClick = {
-          onConfirm(timePickerState)
-        },
-      ) {
-        Text(stringResource(id = StringsR.string.dialog_confirm))
-      }
-    },
-    text = {
-      TimePicker(
-        state = timePickerState,
-      )
-    },
-  )
 }
