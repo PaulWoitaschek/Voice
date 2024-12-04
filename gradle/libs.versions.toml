@@ -154,7 +154,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.5.0-beta11" }
+anvil = { id = "com.squareup.anvil", version = "2.5.0" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
 playPublish = { id = "com.github.triplet.play", version = "3.12.1" }
