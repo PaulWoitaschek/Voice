@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters.AudioOffloadPreferences
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
@@ -61,6 +62,13 @@ object PlaybackModule {
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
+    val audioOffloadPreferences =
+      AudioOffloadPreferences.Builder()
+        .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
+        .setIsGaplessSupportRequired(true)
+        .setIsSpeedChangeSupportRequired(true)
+        .build()
+
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
       .setHandleAudioBecomingNoisy(true)
@@ -73,6 +81,8 @@ object PlaybackModule {
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
+        player.trackSelectionParameters =
+          player.trackSelectionParameters.buildUpon().setAudioOffloadPreferences(audioOffloadPreferences).build()
       }
   }
 
