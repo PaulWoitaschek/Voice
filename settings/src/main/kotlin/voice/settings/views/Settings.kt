@@ -14,6 +14,8 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -23,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -37,6 +41,10 @@ import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
 import voice.strings.R as StringsR
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
+import android.net.Uri
 
 @Composable
 @Preview
@@ -64,9 +72,13 @@ private fun SettingsPreview() {
         override fun openTranslations() {}
         override fun getSupport() {}
         override fun suggestIdea() {}
+        override fun backup(saveFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
+        override fun restore(openFile: (handle: (uri: Uri) -> Unit) -> Unit) {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
       },
+      { _ -> },
+      { _ -> },
     )
   }
 }
@@ -75,6 +87,8 @@ private fun SettingsPreview() {
 private fun Settings(
   viewState: SettingsViewState,
   listener: SettingsListener,
+  saveFile: (handle: (uri: Uri) -> Unit) -> Unit,
+  openFile: (handle: (uri: Uri) -> Unit) -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
   Scaffold(
@@ -142,6 +156,16 @@ private fun Settings(
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
         ListItem(
+          modifier = Modifier.clickable { listener.backup(saveFile) },
+          leadingContent = { Icon(Icons.Outlined.Download, stringResource(StringsR.string.pref_backup_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_backup_database)) },
+        )
+        ListItem(
+          modifier = Modifier.clickable { listener.restore(openFile) },
+          leadingContent = { Icon(Icons.Outlined.Upload, stringResource(StringsR.string.pref_restore_database)) },
+          headlineContent = { Text(stringResource(StringsR.string.pref_restore_database)) },
+        )
+        ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
           leadingContent = { Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
@@ -172,7 +196,28 @@ interface SettingsComponent {
 fun Settings() {
   val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
   val viewState = viewModel.viewState()
-  Settings(viewState, viewModel)
+
+  val saveResult = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
+  val saveLauncher = rememberLauncherForActivityResult(CreateDocument("application/binary")) { uri: Uri? ->
+    uri?.let { inner ->
+      saveResult.value(inner)
+    }
+  }
+
+  val openResult = remember { mutableStateOf<(uri: Uri) -> Unit>({ _ ->  }) }
+  val openLauncher = rememberLauncherForActivityResult(OpenDocument()) { uri: Uri? ->
+    uri?.let { inner ->
+      openResult.value(inner)
+    }
+  }
+
+  Settings(viewState, viewModel, { cb ->
+    saveResult.value = cb
+    saveLauncher.launch("voice.zip")
+  }, { cb ->
+    openResult.value = cb
+    openLauncher.launch(arrayOf("*/*"))
+  })
 }
 
 @Composable
