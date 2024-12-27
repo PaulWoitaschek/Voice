@@ -3,7 +3,7 @@ leakcanary = "2.14"
 versionCode = "3603035"
 versionName = "8.2.4"
 
-sdk-compile = "34"
+sdk-compile = "35"
 sdk-min = "26"
 sdk-target = "34"
 
