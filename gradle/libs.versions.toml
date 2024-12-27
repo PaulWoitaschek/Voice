@@ -7,7 +7,7 @@ sdk-compile = "35"
 sdk-min = "26"
 sdk-target = "34"
 
-coroutines = "1.8.1"
+coroutines = "1.10.1"
 room = "2.6.1"
 prefs = "1.0.1"
 materialDialog = "3.3.0"
