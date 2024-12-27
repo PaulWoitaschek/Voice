@@ -5,7 +5,7 @@ plugins {
 dependencies {
   implementation(libs.androidPluginForGradle)
   implementation(libs.kotlin.pluginForGradle)
-  implementation(libs.kotlin.compilerEmbeddable)
+  compileOnly(libs.kotlin.compilerEmbeddable)
   implementation(libs.ktlint.gradlePlugin)
 }
 
