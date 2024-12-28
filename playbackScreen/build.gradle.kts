@@ -21,17 +21,16 @@ dependencies {
   implementation(projects.data)
   implementation(projects.datastore)
   implementation(projects.sleepTimer)
+  implementation(projects.pref)
 
   implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
-  implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.material)
 
   implementation(libs.dagger.core)
 
-  testImplementation(libs.prefs.inMemory)
   testImplementation(libs.turbine)
 }

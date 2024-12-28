@@ -15,10 +15,10 @@ dependencies {
   implementation(projects.data)
   implementation(projects.sleepTimer)
   implementation(projects.scanner)
+  implementation(projects.pref)
 
   implementation(libs.dagger.core)
   implementation(libs.datastore)
-  implementation(libs.prefs.core)
 
   testImplementation(libs.bundles.testing.jvm)
 }

@@ -18,9 +18,9 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.data)
+  implementation(projects.pref)
 
   implementation(libs.androidxCore)
-  implementation(libs.prefs.core)
   implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.coroutines.guava)
@@ -31,7 +31,6 @@ dependencies {
   implementation(libs.media3.session)
 
   testImplementation(libs.bundles.testing.jvm)
-  testImplementation(libs.prefs.inMemory)
   testImplementation(libs.media3.testUtils.core)
   testImplementation(libs.media3.testUtils.robolectric)
 }
