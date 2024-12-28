@@ -1,11 +1,12 @@
 package voice.scripts
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.validate
 import java.io.File
 
-class NewFeatureModule : CliktCommand(help = "Creates a new feature module") {
+class NewFeatureModule : CliktCommand() {
 
   private val name: String by argument("The new module name, i.e. :unicorn:wings")
     .validate { name ->
@@ -18,6 +19,7 @@ class NewFeatureModule : CliktCommand(help = "Creates a new feature module") {
     name.removePrefix(":").split(":")
   }
 
+  override fun help(context: Context): String = "Creates a new feature module"
   override fun run() {
     val moduleRoot = File(components.joinToString(separator = "/"))
 
