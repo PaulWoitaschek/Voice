@@ -57,14 +57,13 @@ class PlaybackService : MediaLibraryService() {
     release()
   }
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
-    return session.takeUnless { session ->
-      session.invokeIsReleased
-    }.also {
-      if (it == null) {
-        Logger.e("onGetSession returns null because the session is already released")
-      }
-    }
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {
+    if (session.invokeIsReleased)
+      rootComponentAs<PlaybackComponent.Provider>()
+        .playbackComponentFactory
+        .create(this)
+        .inject(this)
+    return session
   }
 }
 
