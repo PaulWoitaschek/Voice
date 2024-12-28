@@ -204,8 +204,7 @@ dependencies {
 
   implementation(libs.conductor)
 
-  implementation(libs.prefs.android)
-  testImplementation(libs.prefs.inMemory)
+  implementation(projects.pref)
 
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)

@@ -77,10 +77,6 @@ androidTest-rules = "androidx.test:rules:1.6.1"
 
 conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
 
-prefs-core = { module = "com.github.PaulWoitaschek.FlowPref:core", version.ref = "prefs" }
-prefs-android = { module = "com.github.PaulWoitaschek.FlowPref:android", version.ref = "prefs" }
-prefs-inMemory = { module = "com.github.PaulWoitaschek.FlowPref:in-memory", version.ref = "prefs" }
-
 materialDialog-core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialog" }
 materialDialog-input = { module = "com.afollestad.material-dialogs:input", version.ref = "materialDialog" }
 

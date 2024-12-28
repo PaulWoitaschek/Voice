@@ -6,7 +6,6 @@ import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,6 +23,7 @@ import voice.playback.misc.VolumeGain
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.toMediaIdOrNull
+import voice.pref.Pref
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Named
