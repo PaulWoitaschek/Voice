@@ -11,7 +11,6 @@ import androidx.datastore.core.DataStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +34,7 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
+import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import javax.inject.Named
