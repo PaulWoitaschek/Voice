@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.kotlin.jvm)
+  id("voice.ktlint")
   application
 }
 
@@ -9,4 +10,10 @@ application {
 
 dependencies {
   implementation(libs.clikt)
+}
+
+kotlin {
+  jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
 }
