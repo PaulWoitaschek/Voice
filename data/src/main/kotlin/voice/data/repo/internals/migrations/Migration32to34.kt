@@ -71,5 +71,9 @@ class Migration32to34
     }
   }
 
-  private data class Holder(val path: String, val title: String, val time: Long)
+  private data class Holder(
+    val path: String,
+    val title: String,
+    val time: Long,
+  )
 }

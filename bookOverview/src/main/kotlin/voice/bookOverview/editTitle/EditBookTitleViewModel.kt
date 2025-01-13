@@ -19,9 +19,7 @@ import javax.inject.Inject
 )
 class EditBookTitleViewModel
 @Inject
-constructor(
-  private val repo: BookRepository,
-) : BottomSheetItemViewModel {
+constructor(private val repo: BookRepository) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 
@@ -32,7 +30,7 @@ constructor(
     return listOf(BottomSheetItem.Title)
   }
 
-  override suspend fun onItemClicked(
+  override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   ) {

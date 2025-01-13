@@ -10,11 +10,11 @@ import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.BedtimeOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Speed
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,7 +54,7 @@ internal fun BookPlayAppBar(
         .combinedClickable(
           onClick = onBookmarkClick,
           onLongClick = onBookmarkLongClick,
-          indication = rememberRipple(bounded = false, radius = 20.dp),
+          indication = ripple(bounded = false, radius = 20.dp),
           interactionSource = remember { MutableInteractionSource() },
         ),
       contentAlignment = Alignment.Center,

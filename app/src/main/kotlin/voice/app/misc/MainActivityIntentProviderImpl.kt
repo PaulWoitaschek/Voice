@@ -7,9 +7,7 @@ import voice.playback.notification.MainActivityIntentProvider
 import javax.inject.Inject
 
 class MainActivityIntentProviderImpl
-@Inject constructor(
-  private val context: Context,
-) : MainActivityIntentProvider {
+@Inject constructor(private val context: Context) : MainActivityIntentProvider {
 
   override fun toCurrentBook(): PendingIntent {
     val intent = MainActivity.goToBookIntent(context)

@@ -19,3 +19,5 @@ Gemfile.lock
 releases
 .transifexrc
 /plugins/.idea/workspace.xml
+/.kotlin
+/.idea/deviceManager.xml

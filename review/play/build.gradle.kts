@@ -23,5 +23,4 @@ dependencies {
   api(libs.review)
   implementation(libs.lottie)
   implementation(libs.dagger.core)
-  implementation(libs.firebase.remoteconfig)
 }

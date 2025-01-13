@@ -1,6 +1,5 @@
 package voice.playbackScreen
 
-import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
@@ -17,6 +16,7 @@ import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId
+import voice.pref.inmemory.InMemoryPref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import java.time.Instant

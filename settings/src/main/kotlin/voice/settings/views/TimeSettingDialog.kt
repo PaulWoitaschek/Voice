@@ -23,7 +23,7 @@ fun TimeSettingDialog(
   @PluralsRes textPluralRes: Int,
   minSeconds: Int,
   maxSeconds: Int,
-  onSecondsConfirmed: (Int) -> Unit,
+  onSecondsConfirm: (Int) -> Unit,
   onDismiss: () -> Unit,
 ) {
   var sliderValue by remember { mutableFloatStateOf(currentSeconds.toFloat()) }
@@ -53,7 +53,7 @@ fun TimeSettingDialog(
     confirmButton = {
       TextButton(
         onClick = {
-          onSecondsConfirmed(sliderValue.roundToInt())
+          onSecondsConfirm(sliderValue.roundToInt())
           onDismiss()
         },
       ) {

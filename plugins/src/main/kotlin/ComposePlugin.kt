@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
@@ -29,20 +27,18 @@ class ComposePlugin : Plugin<Project> {
     val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
     target.dependencies.add("implementation", libs.findBundle("compose").get())
     target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
+    target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     extension.buildFeatures.compose = true
-    extension.composeOptions {
-      kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().requiredVersion
-    }
     target.tasks.withType<KotlinCompile> {
-      kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf(
+      compilerOptions {
+        optIn.addAll(
           "androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
           "androidx.compose.material3.ExperimentalMaterial3Api",
           "androidx.compose.foundation.ExperimentalFoundationApi",
           "androidx.compose.ui.ExperimentalComposeUiApi",
           "androidx.compose.animation.ExperimentalAnimationApi",
           "androidx.compose.foundation.layout.ExperimentalLayoutApi",
-        ).map { "-opt-in=$it" }
+        )
       }
     }
   }

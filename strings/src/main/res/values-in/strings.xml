@@ -72,4 +72,15 @@
     <string name="migration_hint_content">Karena adanya perubahan pada Versi Android yang lebih baru, Anda perlu memilih folder buku audio Anda menggunakan pemilih sistem.
 \n
 \nKlik ikon di atas untuk melihat posisi buku lama Anda.</string>
+    <string name="migration_detail_content_position">Posisi</string>
+    <string name="migration_detail_content_added_at">Ditambahkan di</string>
+    <string name="migration_detail_content_bookmarks">Markah</string>
+    <string name="migration_detail_content_position_current_file_title">File saat ini</string>
+    <string name="migration_detail_content_position_current_chapter_title">Bab saat ini</string>
+    <string name="migration_delete_dialog_action_delete">Hapus</string>
+    <string name="migration_detail_content_root">Folder root</string>
+    <string name="migration_detail_content_position_current_file_position">Posisi dalam file</string>
+    <string name="migration_delete_dialog_content">Setelah Anda menghapus posisi lama, Anda tidak akan dapat memulihkan posisi pemutaran lama Anda.</string>
+    <string name="migration_detail_content_position_current_chapter_position">Posisi dalam bab</string>
+    <string name="migration_delete_dialog_title">Hapus Posisi</string>
 </resources>

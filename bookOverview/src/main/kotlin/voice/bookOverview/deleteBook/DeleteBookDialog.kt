@@ -26,7 +26,7 @@ internal fun DeleteBookDialog(
   viewState: DeleteBookViewState,
   onDismiss: () -> Unit,
   onConfirmDeletion: () -> Unit,
-  onDeleteCheckBoxChecked: (Boolean) -> Unit,
+  onDeleteCheckBoxCheck: (Boolean) -> Unit,
 ) {
   AlertDialog(
     onDismissRequest = onDismiss,
@@ -65,12 +65,12 @@ internal fun DeleteBookDialog(
             .padding(top = 8.dp)
             .fillMaxWidth()
             .clickable {
-              onDeleteCheckBoxChecked(!viewState.deleteCheckBoxChecked)
+              onDeleteCheckBoxCheck(!viewState.deleteCheckBoxChecked)
             },
         ) {
           Checkbox(
             checked = viewState.deleteCheckBoxChecked,
-            onCheckedChange = onDeleteCheckBoxChecked,
+            onCheckedChange = onDeleteCheckBoxCheck,
           )
           Text(stringResource(id = StringsR.string.delete_book_dialog_deletion_confirmation))
         }

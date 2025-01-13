@@ -109,7 +109,7 @@
     <string name="storage_bug_title">Wymagany dostęp</string>
     <string name="storage_bug_subtitle">W przypadku niektórych urządzeń aplikacja systemowa nie ma uprawnień niezbędnych do uzyskania dostępu do pamięci zewnętrznej. Dostęp ten jest niezbędny, aby aplikacja Voice mogła odczytywać książki audio.</string>
     <string name="review.feedback.title">Przykro nam to słyszeć!</string>
-    <string name="onboarding.explanation.title">Twoja biblioteka, Twoja Wybór</string>
+    <string name="onboarding.explanation.title">Twoja Biblioteka, Twój Wybór</string>
     <string name="review.request.button.yes">Oceń Teraz</string>
     <string name="select_folder_type_file">Plik</string>
     <string name="onboarding_welcome_title">Witamy w Voice!</string>

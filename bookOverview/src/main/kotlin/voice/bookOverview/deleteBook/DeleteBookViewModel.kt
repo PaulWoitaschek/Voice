@@ -36,7 +36,7 @@ constructor(
     return listOf(BottomSheetItem.DeleteBook)
   }
 
-  override suspend fun onItemClicked(
+  override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   ) {
@@ -62,7 +62,7 @@ constructor(
     _state.value = null
   }
 
-  internal fun onDeleteCheckBoxChecked(checked: Boolean) {
+  internal fun onDeleteCheckBoxCheck(checked: Boolean) {
     _state.value = _state.value?.copy(deleteCheckBoxChecked = checked)
   }
 

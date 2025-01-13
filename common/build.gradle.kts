@@ -18,11 +18,12 @@ android {
 
 dependencies {
   implementation(projects.strings)
+  implementation(projects.pref)
+
   implementation(libs.appCompat)
   implementation(libs.dagger.core)
   implementation(libs.material)
   api(libs.immutable)
-  implementation(libs.prefs.core)
   api(libs.conductor)
   implementation(libs.androidxCore)
   implementation(libs.viewBinding)

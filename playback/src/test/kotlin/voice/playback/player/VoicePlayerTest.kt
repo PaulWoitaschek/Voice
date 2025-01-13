@@ -9,7 +9,6 @@ import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.media3.test.utils.robolectric.TestPlayerRunHelper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.should
 import io.mockk.Runs
@@ -37,6 +36,7 @@ import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.search.book
 import voice.playback.session.toMediaIdOrNull
+import voice.pref.inmemory.InMemoryPref
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.TimeUnit

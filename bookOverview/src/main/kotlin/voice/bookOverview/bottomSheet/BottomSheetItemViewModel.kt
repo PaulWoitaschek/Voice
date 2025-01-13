@@ -5,7 +5,7 @@ import voice.common.BookId
 interface BottomSheetItemViewModel {
 
   suspend fun items(bookId: BookId): List<BottomSheetItem>
-  suspend fun onItemClicked(
+  suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   )

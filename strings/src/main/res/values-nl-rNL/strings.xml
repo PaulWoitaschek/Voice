@@ -49,8 +49,8 @@
     <string name="close">Sluiten</string>
     <string name="delete">Verwijderen</string>
     <string name="add">Toevoegen</string>
-    <string name="folder_mode_root">De hoofdmap met luisterboeken. Eén onderliggende map = één boek.</string>
-    <string name="folder_mode_single">Losse luisterboekmap</string>
+    <string name="folder_mode_root">De hoofdmap met luisterboeken. Subfolders bevatten boeken.</string>
+    <string name="folder_mode_single">Losse luisterboekmap: één folder bevat één boek.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d audiobestand</item>
         <item quantity="other">%d audiobestanden</item>
@@ -94,4 +94,35 @@
     <string name="pause">Pauzeren</string>
     <string name="cover_search_template_no_author">%s audioboek omslag</string>
     <string name="cover_search_template_with_author">%1$s door %2$s audioboekomslag</string>
+    <string name="select_folder_type_file">Bestand</string>
+    <string name="select_folder_title_default">Voeg Audioboek(en) toe</string>
+    <string name="folder_mode_author">Auteur-boek mode: Subfolders zijn auteurs, sub-subfolders bevatten boeken.</string>
+    <string name="storage_bug_subtitle">Voor sommige toestellen mist een systeem applicatie toegang tot de externe opslag. Deze toegang is essentieel voor Voice om de je audioboeken te kunnen lezen.</string>
+    <string name="storage_bug_title">Toegang vereist</string>
+    <string name="storage_bug_button">Toegang geven</string>
+    <string name="select_folder_title_onboarding">Voeg je eerste audiobook toe</string>
+    <string name="review.request.title">Tevreden met Voice?</string>
+    <string name="review.request.button.yes">Beoordeeld Nu</string>
+    <string name="review.request.button.no">Nee, bedankt</string>
+    <string name="review.feedback.title">Het spijt ons dit te horen!</string>
+    <string name="review.feedback.content">Kan je ons vertellen wat misliep? We appreciëren jou mening en dit help ons je ervaring te verbeteren.</string>
+    <string name="review.feedback.button.no">Annuleer</string>
+    <string name="sleep_timer.title">Slaapwel! 🌙</string>
+    <string name="sleep_timer.button.increment">Langer</string>
+    <string name="sleep_timer.button.decrement">Korter</string>
+    <plurals name="minutes">
+        <item quantity="one">minuut</item>
+        <item quantity="other">minuten</item>
+    </plurals>
+    <string name="cover_search.author">Auteur</string>
+    <string name="onboarding_welcome_title">Welkom bij Voice!</string>
+    <string name="onboarding.button_next">Volgende</string>
+    <string name="select_folder_type_folder">Map</string>
+    <string name="onboarding.explanation.subtitle">Met Voice kan je individuele boeken toevoegen of ze organiseren in folders. Jij kiest!</string>
+    <string name="onboarding.explanation.title">Jouw bibliotheek, jouw manier</string>
+    <string name="onboarding.completion.next_button">Begin te luisteren</string>
+    <string name="cover_search.icon_recent">Recente zoekopdracht</string>
+    <string name="select_folder_subtitle">Wil je een enkel bestand toevoegen als een boek of een folder?</string>
+    <string name="onboarding.completion.subtitle">Je eerste audioboek is klaar om af te spelen. Geniet van je ervaring met Voice!</string>
+    <string name="review.request.content">Je menig is van belang voor ons. Neem even de tijd, beoordeeld ons en deel je ervaring. Dit helpt ons verbeteringen aan te brengen en een betere ervaring aan te bieden.</string>
 </resources>

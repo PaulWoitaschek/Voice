@@ -1,6 +1,5 @@
 package voice.data
 
-import android.os.Bundle
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import voice.common.BookId
@@ -24,16 +23,4 @@ data class Bookmark(
       fun random(): Id = Id(UUID.randomUUID())
     }
   }
-}
-
-fun Bundle.putBookmarkId(
-  key: String,
-  value: Bookmark.Id,
-) {
-  putString(key, value.value.toString())
-}
-
-fun Bundle.getBookmarkId(key: String): Bookmark.Id? {
-  val value = getString(key) ?: return null
-  return Bookmark.Id(UUID.fromString(value))
 }

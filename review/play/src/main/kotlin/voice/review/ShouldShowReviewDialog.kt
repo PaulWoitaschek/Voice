@@ -1,7 +1,6 @@
 package voice.review
 
 import androidx.datastore.core.DataStore
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.flow.first
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
@@ -22,12 +21,10 @@ class ShouldShowReviewDialog
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
   private val reviewTranslated: ReviewTranslated,
-  private val remoteConfig: FirebaseRemoteConfig,
 ) {
 
   internal suspend fun shouldShow(): Boolean {
-    return enabledInRemoteConfig() &&
-      reviewTranslated.translated() &&
+    return reviewTranslated.translated() &&
       isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
       reviewDialogNotShown() &&
@@ -36,10 +33,6 @@ class ShouldShowReviewDialog
 
   internal suspend fun setShown() {
     reviewDialogShown.updateData { true }
-  }
-
-  private fun enabledInRemoteConfig(): Boolean {
-    return remoteConfig.getBoolean("review_enabled")
   }
 
   private fun enoughTimeElapsedSinceInstallation(): Boolean {

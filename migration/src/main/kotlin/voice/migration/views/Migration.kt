@@ -55,7 +55,7 @@ fun Migration() {
   val viewState = viewModel.viewState()
   Migration(
     viewState = viewState,
-    onCloseClicked = {
+    onCloseClick = {
       viewModel.onCloseClick()
     },
   )
@@ -64,7 +64,7 @@ fun Migration() {
 @Composable
 internal fun Migration(
   viewState: MigrationViewState,
-  onCloseClicked: () -> Unit,
+  onCloseClick: () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
   Scaffold(
@@ -77,7 +77,7 @@ internal fun Migration(
         },
         navigationIcon = {
           IconButton(
-            onClick = onCloseClicked,
+            onClick = onCloseClick,
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
@@ -88,7 +88,7 @@ internal fun Migration(
       )
     },
     floatingActionButton = {
-      FloatingActionButton(onClick = viewState.onDeleteClicked) {
+      FloatingActionButton(onClick = viewState.onDeleteClick) {
         Icon(
           imageVector = Icons.Outlined.Delete,
           contentDescription = stringResource(id = StringsR.string.delete),
@@ -106,8 +106,8 @@ internal fun Migration(
     }
     if (viewState.showDeletionConfirmationDialog) {
       DeletionConfirmationDialog(
-        onCancel = viewState.onDeletionAborted,
-        onConfirm = viewState.onDeletionConfirmed,
+        onCancel = viewState.onDeletionAbort,
+        onConfirm = viewState.onDeletionConfirm,
       )
     }
   }
@@ -236,7 +236,7 @@ private fun MigrationPreview(
   viewState: MigrationViewState,
 ) {
   VoiceTheme {
-    Migration(viewState, onCloseClicked = {})
+    Migration(viewState, onCloseClick = {})
   }
 }
 
@@ -272,10 +272,10 @@ internal class MigrationViewStatePreviewProvider : PreviewParameterProvider<Migr
       yield(
         MigrationViewState(
           items = listOf(item(), item()),
-          onDeleteClicked = {},
+          onDeleteClick = {},
           showDeletionConfirmationDialog = false,
-          onDeletionConfirmed = {},
-          onDeletionAborted = {},
+          onDeletionConfirm = {},
+          onDeletionAbort = {},
         ),
       )
     }

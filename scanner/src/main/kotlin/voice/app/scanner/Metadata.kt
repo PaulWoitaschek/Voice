@@ -41,9 +41,7 @@ internal fun Map<String, String>.find(tagType: TagType): String? {
 }
 
 @Serializable
-internal data class MetaDataStream(
-  val tags: Map<String, String>? = null,
-)
+internal data class MetaDataStream(val tags: Map<String, String>? = null)
 
 @Serializable
 internal data class MetaDataChapter(

@@ -5,8 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Undo
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,10 +24,10 @@ internal fun SkipButton(
     modifier = Modifier
       .clickable(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false),
+        indication = ripple(bounded = false),
         onClick = onClick,
       )
-      .size(50.dp)
+      .size(48.dp)
       .scale(scaleX = if (forward) -1f else 1F, scaleY = 1f),
     imageVector = Icons.AutoMirrored.Filled.Undo,
     contentDescription = stringResource(

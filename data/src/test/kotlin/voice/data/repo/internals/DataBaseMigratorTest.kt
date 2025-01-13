@@ -47,8 +47,15 @@ class DataBaseMigratorTest {
     val dbName = "testDb"
     val db = helper.createDatabase(dbName, 44)
 
-    data class BookSetting(val id: String, val currentFile: String, val positionInChapter: Int)
-    data class Chapter(val file: String, val bookId: String)
+    data class BookSetting(
+      val id: String,
+      val currentFile: String,
+      val positionInChapter: Int,
+    )
+    data class Chapter(
+      val file: String,
+      val bookId: String,
+    )
 
     fun insertBookSettings(settings: BookSetting) {
       db.execSQL(

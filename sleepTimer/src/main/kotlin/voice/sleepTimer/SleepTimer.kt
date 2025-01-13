@@ -2,7 +2,6 @@ package voice.sleepTimer
 
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.squareup.anvil.annotations.ContributesBinding
-import de.paulwoitaschek.flowpref.Pref
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -18,6 +17,7 @@ import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
+import voice.pref.Pref
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
