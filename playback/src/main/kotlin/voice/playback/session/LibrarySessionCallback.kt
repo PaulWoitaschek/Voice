@@ -13,6 +13,7 @@ import androidx.media3.session.MediaSession.ConnectionResult
 import androidx.media3.session.MediaSession.ControllerInfo
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
@@ -117,7 +118,7 @@ class LibrarySessionCallback
     if (item != null) {
       LibraryResult.ofItem(item, null)
     } else {
-      LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
+      LibraryResult.ofError(SessionError.ERROR_BAD_VALUE)
     }
   }
 
@@ -134,7 +135,7 @@ class LibrarySessionCallback
     if (children != null) {
       LibraryResult.ofItemList(children, params)
     } else {
-      LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
+      LibraryResult.ofError(SessionError.ERROR_BAD_VALUE)
     }
   }
 

@@ -3,10 +3,10 @@ package voice.data
 import androidx.room.migration.Migration
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
-import de.paulwoitaschek.flowpref.Pref
-import de.paulwoitaschek.flowpref.inmemory.InMemoryPref
 import voice.common.AppScope
 import voice.common.pref.PrefKeys
+import voice.pref.Pref
+import voice.pref.inmemory.InMemoryPref
 import javax.inject.Named
 import javax.inject.Singleton
 

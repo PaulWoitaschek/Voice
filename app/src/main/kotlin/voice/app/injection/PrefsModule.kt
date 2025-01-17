@@ -7,12 +7,6 @@ import androidx.datastore.core.DataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import de.paulwoitaschek.flowpref.Pref
-import de.paulwoitaschek.flowpref.android.AndroidPreferences
-import de.paulwoitaschek.flowpref.android.boolean
-import de.paulwoitaschek.flowpref.android.enum
-import de.paulwoitaschek.flowpref.android.int
-import de.paulwoitaschek.flowpref.android.stringSet
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
@@ -31,6 +25,12 @@ import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
 import voice.datastore.VoiceDataStoreFactory
+import voice.pref.AndroidPreferences
+import voice.pref.Pref
+import voice.pref.boolean
+import voice.pref.enum
+import voice.pref.int
+import voice.pref.stringSet
 import javax.inject.Named
 import javax.inject.Singleton
 

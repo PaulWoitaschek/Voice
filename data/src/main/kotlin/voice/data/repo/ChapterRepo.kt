@@ -10,9 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ChapterRepo
-@Inject constructor(
-  private val dao: ChapterDao,
-) {
+@Inject constructor(private val dao: ChapterDao) {
 
   private val cache = mutableMapOf<ChapterId, Chapter?>()
 

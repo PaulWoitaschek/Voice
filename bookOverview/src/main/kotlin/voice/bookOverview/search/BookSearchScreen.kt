@@ -16,9 +16,11 @@ import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.SentimentSatisfied
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.bookOverview.overview.BookOverviewLayoutMode
@@ -46,6 +48,7 @@ internal fun BookSearchContent(
           ListItem(
             modifier = Modifier.clickable { onQueryChange(query) },
             headlineContent = { Text(query) },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.History,
@@ -58,6 +61,7 @@ internal fun BookSearchContent(
           ListItem(
             modifier = Modifier.clickable { onQueryChange(author) },
             headlineContent = { Text(author) },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.SentimentSatisfied,

@@ -13,12 +13,11 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data)
+  implementation(projects.pref)
 
   implementation(libs.androidxCore)
-  implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
-  implementation(libs.constraintLayout)
   implementation(libs.material)
 
   implementation(libs.dagger.core)

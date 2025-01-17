@@ -18,7 +18,6 @@ env:
   SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
   SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-  VOICE_USE_PROPRIETARY_LIBRARIES: "true"
 
 jobs:
   test:
@@ -26,13 +25,13 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.2.1
+        uses: actions/setup-java@v4.6.0
         with:
           distribution: 'zulu'
           java-version: 17
@@ -52,7 +51,7 @@ jobs:
             app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -62,10 +61,10 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.2.1
+        uses: actions/setup-java@v4.6.0
         with:
           distribution: 'zulu'
           java-version: 17

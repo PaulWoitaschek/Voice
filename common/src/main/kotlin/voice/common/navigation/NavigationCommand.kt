@@ -14,9 +14,7 @@ sealed interface NavigationCommand {
     val replace: Boolean,
   ) : NavigationCommand
 
-  data class Execute(
-    val action: (NavController<Destination.Compose>) -> Unit,
-  ) : NavigationCommand
+  data class Execute(val action: (NavController<Destination.Compose>) -> Unit) : NavigationCommand
 }
 
 sealed interface Destination {
@@ -26,11 +24,16 @@ sealed interface Destination {
   @Parcelize
   data class CoverFromInternet(val bookId: BookId) : Compose
   data class Website(val url: String) : Destination
-  data class EditCover(val bookId: BookId, val cover: Uri) : Destination
+  data class EditCover(
+    val bookId: BookId,
+    val cover: Uri,
+  ) : Destination
 
   data class Activity(val intent: Intent) : Destination
 
-  sealed interface Compose : Destination, Parcelable
+  sealed interface Compose :
+    Destination,
+    Parcelable
 
   @Parcelize
   object Migration : Compose
@@ -45,7 +48,10 @@ sealed interface Destination {
   object FolderPicker : Compose
 
   @Parcelize
-  data class SelectFolderType(val uri: Uri, val mode: Mode) : Compose {
+  data class SelectFolderType(
+    val uri: Uri,
+    val mode: Mode,
+  ) : Compose {
 
     enum class Mode {
       Default,

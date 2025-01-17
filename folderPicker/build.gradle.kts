@@ -17,10 +17,10 @@ dependencies {
   implementation(projects.data)
   implementation(projects.sleepTimer)
   implementation(projects.documentfile)
+  implementation(projects.pref)
 
   implementation(libs.datastore)
   implementation(libs.coil)
-  implementation(libs.prefs.core)
   implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)

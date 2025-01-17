@@ -11,13 +11,7 @@ plugins {
   id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
-  alias(libs.plugins.crashlytics)
-  alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
-}
-
-if (file("google-services.json").exists()) {
-  pluginManager.apply(libs.plugins.googleServices.get().pluginId)
 }
 
 play {
@@ -102,6 +96,7 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
+      applicationIdSuffix = ".debug"
     }
     all {
       setProguardFiles(
@@ -175,11 +170,10 @@ dependencies {
   implementation(projects.cover)
   implementation(projects.documentfile)
   implementation(projects.onboarding)
+  implementation(projects.bookmark)
 
   implementation(libs.appCompat)
-  implementation(libs.recyclerView)
   implementation(libs.material)
-  implementation(libs.constraintLayout)
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
@@ -189,10 +183,6 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
-  "proprietaryImplementation"(libs.firebase.crashlytics)
-  "proprietaryImplementation"(libs.firebase.analytics)
-  "proprietaryImplementation"(libs.firebase.remoteconfig)
-  "proprietaryImplementation"(projects.logging.crashlytics)
   "proprietaryImplementation"(projects.review.play)
   "libreImplementation"(projects.review.noop)
 
@@ -214,8 +204,7 @@ dependencies {
 
   implementation(libs.conductor)
 
-  implementation(libs.prefs.android)
-  testImplementation(libs.prefs.inMemory)
+  implementation(projects.pref)
 
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)

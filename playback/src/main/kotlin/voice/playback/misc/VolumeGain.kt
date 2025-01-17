@@ -97,9 +97,7 @@ class VolumeGainSetter
 
 @Singleton
 class VolumeGain
-@Inject constructor(
-  private val volumeGainSetter: VolumeGainSetter,
-) {
+@Inject constructor(private val volumeGainSetter: VolumeGainSetter) {
 
   var gain: Decibel by Delegates.observable(Decibel(0F)) { _, _, _ -> updateLoudnessEnhancer() }
   var audioSessionId: Int? by Delegates.observable(null) { _, _, _ -> updateLoudnessEnhancer() }
