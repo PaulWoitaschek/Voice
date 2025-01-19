@@ -34,7 +34,7 @@
     <string name="popup_edit">Upraviť</string>
     <string name="remove">Zmazať</string>
     <string name="play_current">Prehrať aktuálnu</string>
-    <string name="book_header_current">Aktuáne</string>
+    <string name="book_header_current">Aktuálne</string>
     <string name="book_header_not_started">Ešte nepočúvané</string>
     <string name="book_header_completed">Dokončené</string>
     <string name="close">Zavriet</string>
