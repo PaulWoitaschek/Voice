@@ -31,7 +31,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.6.0
+        uses: actions/setup-java@v4.7.0
         with:
           distribution: 'zulu'
           java-version: 17
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.6.0
+        uses: actions/setup-java@v4.7.0
         with:
           distribution: 'zulu'
           java-version: 17
