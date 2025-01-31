@@ -132,4 +132,5 @@
     <string name="cover_search.icon_recent">Pesquisa recente</string>
     <string name="content_cover">Mostra capas para escolher</string>
     <string name="cover_search.author">Autor</string>
+    <string name="folder_mode_root">Modo de Livro de Nível Superior: As sub-pastas são livros</string>
 </resources>
