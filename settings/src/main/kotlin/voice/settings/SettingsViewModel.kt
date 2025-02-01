@@ -15,6 +15,7 @@ import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
 import voice.pref.Pref
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -31,6 +32,12 @@ class SettingsViewModel
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  private val autoSleepTimerPref: Pref<Boolean>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
+  private val autoSleepTimeStartPref: Pref<String>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
+  private val autoSleepTimeEndPref: Pref<String>,
 ) : SettingsListener {
 
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
@@ -41,6 +48,9 @@ class SettingsViewModel
     val autoRewindAmount by remember { autoRewindAmountPref.flow }.collectAsState(initial = 0)
     val seekTime by remember { seekTimePref.flow }.collectAsState(initial = 0)
     val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
+    val autoSleepTimer by remember { autoSleepTimerPref.flow }.collectAsState(initial = false)
+    val autoSleepTimeStart by remember { autoSleepTimeStartPref.flow }.collectAsState(initial = "")
+    val autoSleepTimeEnd by remember { autoSleepTimeEndPref.flow }.collectAsState(initial = "")
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -53,6 +63,9 @@ class SettingsViewModel
         GridMode.GRID -> true
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
+      autoSleepTimer = autoSleepTimer,
+      autoSleepTimeStart = autoSleepTimeStart,
+      autoSleepTimeEnd = autoSleepTimeEnd,
     )
   }
 
@@ -118,5 +131,19 @@ class SettingsViewModel
   override fun openTranslations() {
     dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
+  }
+
+  override fun toggleAutoSleepTimer(checked: Boolean) {
+    autoSleepTimerPref.value = checked
+  }
+
+  override fun setAutoSleepTimerStart(hour: Int, minute: Int) {
+    val time = LocalTime.of(hour, minute).toString()
+    autoSleepTimeStartPref.value = time
+  }
+
+  override fun setAutoSleepTimerEnd(hour: Int, minute: Int) {
+    val time = LocalTime.of(hour, minute).toString()
+    autoSleepTimeEndPref.value = time
   }
 }
