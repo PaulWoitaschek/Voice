@@ -17,13 +17,12 @@ Voice
        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
+## About
+Voice is a simple, user-focused audiobook player where I explore new technologies, design ideas, and coding practices. It’s built to be intuitive, reliable, and an all-around joy to use.
 
-At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
+## Current Status
+**Note:**  
+I’m currently unable to review or accept pull requests (PRs) due to life and work commitments. The project remains in "soft maintenance" mode. Bug reports and suggestions are welcome, but PRs may not receive a response for the foreseeable future. Thank you for your understanding!
 
-If you like to [contribute](CONTRIBUTING.md#development) or [translate](CONTRIBUTING.md#translations), that is very much appreciated.
-
-# License
-Copyright (C) 2014 [Paul Woitaschek](https://www.woitaschek.de/)
-
-The license is [GNU GPLv3](LICENSE.md). With contributing you agree to license your code under the same conditions.
+## License
+This project is licensed under [GNU GPLv3](LICENSE.md). By contributing, you agree to license your code under the same terms.
