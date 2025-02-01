@@ -30,6 +30,7 @@ import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
+import voice.pref.string
 import voice.pref.stringSet
 import java.time.LocalTime
 import javax.inject.Named

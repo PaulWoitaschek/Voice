@@ -120,7 +120,7 @@ class BookPlayViewModel
         else -> customTime + 5
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime, it.autoSleepTimer, it.autoSleepTimeStart, it.autoSleepTimeEnd)
+      SleepTimerViewState(newTime)
     }
   }
 
@@ -133,7 +133,7 @@ class BookPlayViewModel
         else -> (customTime - 5).coerceAtLeast(5)
       }
       sleepTimePref.value = newTime
-      SleepTimerViewState(newTime, it.autoSleepTimer, it.autoSleepTimeStart, it.autoSleepTimeEnd)
+      SleepTimerViewState(newTime)
     }
   }
 
@@ -152,35 +152,12 @@ class BookPlayViewModel
     }
   }
 
-  fun onCheckAutoSleepTimer(checked: Boolean) {
-    updateSleepTimeViewState {
-      autoSleepTimerPref.value = checked
-      SleepTimerViewState(it.customSleepTime, checked, it.autoSleepTimeStart, it.autoSleepTimeEnd)
-    }
-  }
-
-  fun setAutoSleepTimerStart(hour: Int, minute: Int) {
-    val time = LocalTime.of(hour, minute).toString()
-    updateSleepTimeViewState {
-      autoSleepTimerStart.value = time
-      SleepTimerViewState(it.customSleepTime, it.autoSleepTimer, time, it.autoSleepTimeEnd)
-    }
-  }
-
-  fun setAutoSleepTimerEnd(hour: Int, minute: Int) {
-    val time = LocalTime.of(hour, minute).toString()
-    updateSleepTimeViewState {
-      autoSleepTimerEnd.value = time
-      SleepTimerViewState(it.customSleepTime, it.autoSleepTimer, it.autoSleepTimeStart, time)
-    }
-  }
-
   private fun updateSleepTimeViewState(update: (SleepTimerViewState) -> SleepTimerViewState?) {
     val current = dialogState.value
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)
     } else {
-      update(SleepTimerViewState(sleepTimePref.value, autoSleepTimerPref.value, autoSleepTimerStart.value, autoSleepTimerEnd.value))
+      update(SleepTimerViewState(sleepTimePref.value))
     }
     _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
   }
@@ -332,9 +309,6 @@ class BookPlayViewModel
       _dialogState.value = BookPlayDialogViewState.SleepTimer(
         SleepTimerViewState(
           sleepTimePref.value,
-          autoSleepTimerPref.value,
-          autoSleepTimerStart.value,
-          autoSleepTimerEnd.value,
         ),
       )
     }
