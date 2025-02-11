@@ -306,11 +306,7 @@ class BookPlayViewModel
       sleepTimer.setActive(false)
       _dialogState.value = null
     } else {
-      _dialogState.value = BookPlayDialogViewState.SleepTimer(
-        SleepTimerViewState(
-          sleepTimePref.value,
-        ),
-      )
+      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimePref.value))
     }
   }
 

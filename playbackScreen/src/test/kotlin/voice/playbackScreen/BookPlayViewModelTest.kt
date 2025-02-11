@@ -75,11 +75,7 @@ class BookPlayViewModelTest {
   @Test
   fun sleepTimerValueChanging() = scope.runTest {
     fun assertDialogSleepTime(expected: Int) {
-      viewModel.dialogState.value shouldBe BookPlayDialogViewState.SleepTimer(
-        SleepTimerViewState(
-          expected,
-        ),
-      )
+      viewModel.dialogState.value shouldBe BookPlayDialogViewState.SleepTimer(SleepTimerViewState(expected))
     }
 
     viewModel.toggleSleepTimer()
