@@ -78,9 +78,6 @@ class BookPlayViewModelTest {
       viewModel.dialogState.value shouldBe BookPlayDialogViewState.SleepTimer(
         SleepTimerViewState(
           expected,
-          autoSleepTimerPref.value,
-          autoSleepTimeStartPref.value,
-          autoSleepTimeEndPref.value,
         ),
       )
     }
