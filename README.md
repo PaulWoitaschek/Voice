@@ -20,9 +20,29 @@ Voice
 ## About
 Voice is a simple, user-focused audiobook player where I explore new technologies, design ideas, and coding practices. It’s built to be intuitive, reliable, and an all-around joy to use.
 
-## Current Status
+## Development
+
+### Current Status
 **Note:**  
 I’m currently unable to review or accept pull requests (PRs) due to life and work commitments. The project remains in "soft maintenance" mode. Bug reports and suggestions are welcome, but PRs may not receive a response for the foreseeable future. Thank you for your understanding!
+
+### Ktlint
+
+Voice uses **Ktlint** to enforce consistent code formatting.  
+
+- Check for formatting issues:  
+  ```sh
+  ./gradlew lintKotlin
+  ```
+- Auto-fix formatting:  
+  ```sh
+  ./gradlew formatKotlin
+  ```
+- To make commits fail on formatting errors, set up a pre-commit hook:  
+  ```sh
+  echo "./gradlew lintKotlin" > .git/hooks/pre-commit
+  chmod +x .git/hooks/pre-commit
+  ```
 
 ## License
 This project is licensed under [GNU GPLv3](LICENSE.md). By contributing, you agree to license your code under the same terms.
