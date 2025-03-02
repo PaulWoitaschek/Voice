@@ -2,7 +2,6 @@ package voice.settings.views
 
 import AutoSleepTimerSetting
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -164,10 +162,7 @@ private fun Settings(
         ListItem(
           leadingContent = { Spacer(Modifier.size(24.dp)) },
           headlineContent = {
-            Row(
-              horizontalArrangement = Arrangement.spacedBy(10.dp),
-              verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row {
               AutoSleepTimerSetting(
                 viewState.autoSleepTimer,
                 viewState.autoSleepTimeStart,
