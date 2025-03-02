@@ -14,6 +14,12 @@ interface SettingsListener {
   fun openBugReport()
   fun openTranslations()
   fun toggleAutoSleepTimer(checked: Boolean)
-  fun setAutoSleepTimerStart(hour: Int, minute: Int)
-  fun setAutoSleepTimerEnd(hour: Int, minute: Int)
+  fun setAutoSleepTimerStart(
+    hour: Int,
+    minute: Int,
+  )
+  fun setAutoSleepTimerEnd(
+    hour: Int,
+    minute: Int,
+  )
 }

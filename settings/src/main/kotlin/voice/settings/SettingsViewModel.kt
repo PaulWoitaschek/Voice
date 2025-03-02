@@ -137,12 +137,18 @@ class SettingsViewModel
     autoSleepTimerPref.value = checked
   }
 
-  override fun setAutoSleepTimerStart(hour: Int, minute: Int) {
+  override fun setAutoSleepTimerStart(
+    hour: Int,
+    minute: Int,
+  ) {
     val time = LocalTime.of(hour, minute).toString()
     autoSleepTimeStartPref.value = time
   }
 
-  override fun setAutoSleepTimerEnd(hour: Int, minute: Int) {
+  override fun setAutoSleepTimerEnd(
+    hour: Int,
+    minute: Int,
+  ) {
     val time = LocalTime.of(hour, minute).toString()
     autoSleepTimeEndPref.value = time
   }

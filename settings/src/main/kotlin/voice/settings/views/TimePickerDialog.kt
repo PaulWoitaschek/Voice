@@ -17,8 +17,8 @@ fun TimePickerDialog(
   onDismiss: () -> Unit,
 ) {
   val timePickerState = TimePickerState(
-    initialHour,
-    initialMinute,
+    initialHour = initialHour,
+    initialMinute = initialMinute,
     is24Hour = true,
   )
 

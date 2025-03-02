@@ -199,7 +199,10 @@ class BookPlayViewModel
     player.playPause()
   }
 
-  private fun isCurrentTimeInRange(startTime: LocalTime, endTime: LocalTime): Boolean {
+  private fun isCurrentTimeInRange(
+    startTime: LocalTime,
+    endTime: LocalTime,
+  ): Boolean {
     val currentTime = LocalTime.now()
     return if (startTime <= endTime) {
       // Standard case, start and end on the same day

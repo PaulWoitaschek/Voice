@@ -76,8 +76,17 @@ private fun SettingsPreview() {
         override fun openBugReport() {}
         override fun toggleGrid() {}
         override fun toggleAutoSleepTimer(checked: Boolean) {}
-        override fun setAutoSleepTimerStart(hour: Int, minute: Int) {}
-        override fun setAutoSleepTimerEnd(hour: Int, minute: Int) {}
+        override fun setAutoSleepTimerStart(
+          hour: Int,
+          minute: Int,
+        ) {
+        }
+
+        override fun setAutoSleepTimerEnd(
+          hour: Int,
+          minute: Int,
+        ) {
+        }
       },
     )
   }
