@@ -37,6 +37,7 @@ import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
+import java.time.LocalTime
 import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -57,6 +58,12 @@ class BookPlayViewModel
   dispatcherProvider: DispatcherProvider,
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  private val autoSleepTimerPref: Pref<Boolean>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
+  private val autoSleepTimerStart: Pref<String>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
+  private val autoSleepTimerEnd: Pref<String>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -182,7 +189,28 @@ class BookPlayViewModel
         }
       }
     }
+    if (autoSleepTimerPref.value && !sleepTimer.sleepTimerActive()) {
+      val startTime = LocalTime.parse(autoSleepTimerStart.value)
+      val endTime = LocalTime.parse(autoSleepTimerEnd.value)
+      if (isCurrentTimeInRange(startTime, endTime)) {
+        sleepTimer.setActive()
+      }
+    }
     player.playPause()
+  }
+
+  private fun isCurrentTimeInRange(
+    startTime: LocalTime,
+    endTime: LocalTime,
+  ): Boolean {
+    val currentTime = LocalTime.now()
+    return if (startTime <= endTime) {
+      // Standard case, start and end on the same day
+      currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+    } else {
+      // Range wraps around midnight
+      currentTime.isAfter(startTime) || currentTime.isBefore(endTime)
+    }
   }
 
   fun rewind() {

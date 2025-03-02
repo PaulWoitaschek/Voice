@@ -30,7 +30,9 @@ import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
+import voice.pref.string
 import voice.pref.stringSet
+import java.time.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -76,6 +78,27 @@ object PrefsModule {
   @Named(PrefKeys.SLEEP_TIME)
   fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.SLEEP_TIME, 20)
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  fun provideAutoSleepTimerPreference(prefs: AndroidPreferences): Pref<Boolean> {
+    return prefs.boolean(PrefKeys.AUTO_SLEEP_TIMER, false)
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
+  fun provideAutoSleepTimerStartPreference(prefs: AndroidPreferences): Pref<String> {
+    return prefs.string(PrefKeys.AUTO_SLEEP_TIMER_START, LocalTime.of(22, 0).toString())
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
+  fun provideAutoSleepTimerEndPreference(prefs: AndroidPreferences): Pref<String> {
+    return prefs.string(PrefKeys.AUTO_SLEEP_TIMER_END, LocalTime.of(6, 0).toString())
   }
 
   @Provides
