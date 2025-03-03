@@ -94,6 +94,7 @@
     <string name="media_session_recent">Reciente</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproducir</string>
+    <string name="end_of_chapter">Fin del capítulo</string>
     <string name="generic_error_retry">Reintentar</string>
     <string name="generic_error_message">Algo salió mal 😢</string>
     <string name="cover_search_template_no_author">%s portada del audiolibro</string>
