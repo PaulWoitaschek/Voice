@@ -3,6 +3,7 @@ package voice.app.scanner
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.core.graphics.scale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.common.BookId
@@ -31,7 +32,7 @@ class CoverSaver
       // scale down if bitmap is too large
       val preferredSize = 1920
       val bitmapToSave = if (max(cover.width, cover.height) > preferredSize) {
-        Bitmap.createScaledBitmap(cover, preferredSize, preferredSize, true)
+        cover.scale(preferredSize, preferredSize)
       } else {
         cover
       }
