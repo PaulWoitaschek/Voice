@@ -109,25 +109,27 @@ android {
   }
 
   testOptions {
-    unitTests.isReturnDefaultValues = true
+    unitTests {
+      isReturnDefaultValues = true
+      isIncludeAndroidResources = true
+    }
     animationsDisabled = true
-    unitTests.isIncludeAndroidResources = true
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
     managedDevices {
-      devices.create<ManagedVirtualDevice>("pixel5") {
+      allDevices.create<ManagedVirtualDevice>("pixel5") {
         device = "Pixel 5"
         apiLevel = 31
       }
-      devices.create<ManagedVirtualDevice>("nexus7") {
+      allDevices.create<ManagedVirtualDevice>("nexus7") {
         device = "Nexus 7"
         apiLevel = 31
       }
-      devices.create<ManagedVirtualDevice>("nexus10") {
+      allDevices.create<ManagedVirtualDevice>("nexus10") {
         device = "Nexus 10"
         apiLevel = 31
       }
       groups.create("screenshotDevices") {
-        targetDevices.addAll(devices.toList())
+        targetDevices.addAll(allDevices)
       }
     }
   }

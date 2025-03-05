@@ -3,7 +3,6 @@ package voice.playbackScreen
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.compose.material3.SnackbarDuration
@@ -14,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.BookId
@@ -114,7 +114,7 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
       .apply {
         @Suppress("BatteryLife")
         action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-        data = Uri.parse("package:${activity!!.packageName}")
+        data = "package:${activity!!.packageName}".toUri()
       }
     try {
       startActivity(intent)
