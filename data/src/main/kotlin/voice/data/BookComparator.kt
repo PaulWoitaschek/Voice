@@ -14,4 +14,9 @@ enum class BookComparator(private val comparatorFunction: Comparator<Book>) : Co
       NaturalOrderComparator.stringComparator.compare(left.content.name, right.content.name)
     },
   ),
+  ByLastAdded(
+    compareByDescending<Book> {
+      it.content.addedAt
+    },
+  ),
 }
