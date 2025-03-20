@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
@@ -135,6 +136,12 @@ internal fun ListBookRow(
             modifier = Modifier.fillMaxWidth(),
             progress = { book.progress },
           )
+          if (book.progress > 0.05) {
+            Text(
+              text = "${(book.progress * 100).toInt()}%",
+              style = MaterialTheme.typography.bodySmall,
+            )
+          }
         }
       }
     },
@@ -152,5 +159,23 @@ private fun CoverImage(cover: ImmutableFile?) {
     placeholder = painterResource(id = CommonR.drawable.album_art),
     error = painterResource(id = CommonR.drawable.album_art),
     contentDescription = null,
+  )
+}
+
+@Preview
+@Composable
+private fun PreviewListBookRow() {
+  ListBookRow(
+    BookOverviewItemViewState(
+      name = "Some Cool Book",
+      author = "Jeremy Bobson",
+      cover = null,
+      progress = 0.5F,
+      id = BookId("123456-abcde123-whatever"),
+      remainingTime = "3:01:56"
+    ),
+    onBookLongClick = {},
+    onBookClick = {},
+    modifier = Modifier,
   )
 }
