@@ -79,12 +79,12 @@
     <string name="migration_detail_content_position_current_file_position">Posición en el archivo</string>
     <string name="migration_detail_content_position_current_chapter_position">Situación en el capítulo</string>
     <string name="battery_optimization_action">Actualizar</string>
-    <string name="notification_sleep_timer_enable">Activar un temporizador de reposo</string>
+    <string name="notification_sleep_timer_enable">Activar temporizador</string>
     <string name="pref_help_translating">Ayudar a traducir Voice</string>
     <string name="pref_get_support">Conseguir ayuda</string>
     <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
     <string name="folder_type_book_example_header">Así se detectarían los siguientes libros</string>
-    <string name="notification_sleep_timer_disable">Desactivar un temporizador de reposo</string>
+    <string name="notification_sleep_timer_disable">Desactivar temporizador</string>
     <string name="folder_type_no_books">Voice no detecta ningún libro. ¿Hay archivos de audio\?</string>
     <string name="migration_detail_content_position_current_file_title">Archivo actual</string>
     <string name="media_session_root">Todos los audiolibros</string>
