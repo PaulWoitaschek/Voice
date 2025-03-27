@@ -49,7 +49,7 @@
     <string name="close">Sluiten</string>
     <string name="delete">Verwijderen</string>
     <string name="add">Toevoegen</string>
-    <string name="folder_mode_root">De hoofdmap met luisterboeken. Subfolders bevatten boeken.</string>
+    <string name="folder_mode_root">Hoofdmap met luisterboeken: Subfolders bevatten boeken.</string>
     <string name="folder_mode_single">Losse luisterboekmap: één folder bevat één boek.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d audiobestand</item>
@@ -59,7 +59,7 @@
     <string name="folder_type_no_books">Er zijn geen boeken aangetroffen. Zijn er audiobestanden aanwezig?</string>
     <string name="folder_type_title">Hoe zijn de bestanden onderverdeeld?</string>
     <string name="bookmark_just_now">Zojuist</string>
-    <string name="voice_intro_first_book">Voeg een luisterboekmap toe om te beginnen met luisteren.</string>
+    <string name="voice_intro_first_book">Laten we je luisterboekmap toevoegen om te beginnen met luisteren!</string>
     <string name="migration_hint_title">Oude leeslocaties</string>
     <string name="migration_hint_content">Door wijzigingen in nieuwere Android-versies, is het noodzakelijk om je luisterboek opnieuw te kiezen via de bestandskiezer.\n\nDruk op bovenstaand pictogram je leeslocaties te bekijken.</string>
     <string name="migration_hint_confirm">Ik begrijp het</string>
@@ -92,15 +92,15 @@
     <string name="generic_error_retry">Opnieuw proberen</string>
     <string name="play">Afspelen</string>
     <string name="pause">Pauzeren</string>
-    <string name="cover_search_template_no_author">%s audioboek omslag</string>
-    <string name="cover_search_template_with_author">%1$s door %2$s audioboekomslag</string>
+    <string name="cover_search_template_no_author">%s luisterboekomslag</string>
+    <string name="cover_search_template_with_author">%1$s door %2$s luisterboekomslag</string>
     <string name="select_folder_type_file">Bestand</string>
-    <string name="select_folder_title_default">Voeg Audioboek(en) toe</string>
+    <string name="select_folder_title_default">Voeg Luisterboek(en) toe</string>
     <string name="folder_mode_author">Auteur-boek mode: Subfolders zijn auteurs, sub-subfolders bevatten boeken.</string>
-    <string name="storage_bug_subtitle">Voor sommige toestellen mist een systeem applicatie toegang tot de externe opslag. Deze toegang is essentieel voor Voice om de je audioboeken te kunnen lezen.</string>
+    <string name="storage_bug_subtitle">Voor sommige toestellen mist een systeem applicatie toegang tot de externe opslag. Deze toegang is essentieel voor Voice om de je luisterboeken te kunnen lezen.</string>
     <string name="storage_bug_title">Toegang vereist</string>
     <string name="storage_bug_button">Toegang geven</string>
-    <string name="select_folder_title_onboarding">Voeg je eerste audiobook toe</string>
+    <string name="select_folder_title_onboarding">Voeg je eerste luisterboek toe</string>
     <string name="review.request.title">Tevreden met Voice?</string>
     <string name="review.request.button.yes">Beoordeeld Nu</string>
     <string name="review.request.button.no">Nee, bedankt</string>
@@ -111,8 +111,8 @@
     <string name="sleep_timer.button.increment">Langer</string>
     <string name="sleep_timer.button.decrement">Korter</string>
     <plurals name="minutes">
-        <item quantity="one">minuut</item>
-        <item quantity="other">minuten</item>
+        <item quantity="one">%d minuut</item>
+        <item quantity="other">%d minuten</item>
     </plurals>
     <string name="cover_search.author">Auteur</string>
     <string name="onboarding_welcome_title">Welkom bij Voice!</string>
@@ -123,6 +123,9 @@
     <string name="onboarding.completion.next_button">Begin te luisteren</string>
     <string name="cover_search.icon_recent">Recente zoekopdracht</string>
     <string name="select_folder_subtitle">Wil je een enkel bestand toevoegen als een boek of een folder?</string>
-    <string name="onboarding.completion.subtitle">Je eerste audioboek is klaar om af te spelen. Geniet van je ervaring met Voice!</string>
+    <string name="onboarding.completion.subtitle">Je eerste luisterboek is klaar om af te spelen. Geniet van je ervaring met Voice!</string>
     <string name="review.request.content">Je menig is van belang voor ons. Neem even de tijd, beoordeeld ons en deel je ervaring. Dit helpt ons verbeteringen aan te brengen en een betere ervaring aan te bieden.</string>
+    <string name="onboarding.completion.title">Je bent helemaal klaar!</string>
+    <string name="review.feedback.button.yes">Feedback verzenden</string>
+    <string name="onboarding_welcome_subtitle">Jouw persoonlijke luisterboekspeler. Laten we je installatie afmaken.</string>
 </resources>
