@@ -27,7 +27,14 @@ class SleepTimerCommandUpdater
 
   private fun layout(sleepTimerActive: Boolean): List<CommandButton> {
     return listOf(
-      CommandButton.Builder()
+      CommandButton
+        .Builder(
+          if (sleepTimerActive) {
+            R.drawable.ic_bedtime_off
+          } else {
+            R.drawable.ic_bedtime
+          },
+        )
         .setSessionCommand(PublishedCustomCommand.Sleep.sessionCommand)
         .setDisplayName(
           context.getString(
@@ -37,13 +44,6 @@ class SleepTimerCommandUpdater
               StringsR.string.notification_sleep_timer_enable
             },
           ),
-        )
-        .setIconResId(
-          if (sleepTimerActive) {
-            R.drawable.ic_bedtime_off
-          } else {
-            R.drawable.ic_bedtime
-          },
         )
         .build(),
     )
