@@ -35,7 +35,7 @@
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_auto_rewind_title">Automaticky přetočit</string>
     <string name="popup_edit">Upravit</string>
-    <string name="remove">Odstranit</string>
+    <string name="remove">Smazat</string>
     <string name="play_current">Přehrát aktuální</string>
     <string name="book_header_current">Aktuální</string>
     <string name="book_header_not_started">Doposud nespuštěno</string>
@@ -95,7 +95,7 @@
     <string name="storage_bug_subtitle">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>
     <string name="storage_bug_button">Udělit oprávnění</string>
     <string name="pref_report_issue">Nahlásit problém</string>
-    <string name="pref_help_translating">Pomozte přeložit Voice</string>
+    <string name="pref_help_translating">Pomoc s překladem Voice</string>
     <string name="close">Zavřít</string>
     <string name="folder_type_book_example_header">Povede k nalezení následujících knih</string>
     <string name="migration_detail_content_root">Kořenová složka</string>
@@ -113,7 +113,7 @@
     <string name="review.feedback.button.yes">Odeslat zpětnou vazbu</string>
     <string name="review.feedback.button.no">Zrušit</string>
     <string name="cover_search_template_no_author">%s obal audioknihy</string>
-    <string name="pref_suggest_idea">Navrhnout nápad</string>
+    <string name="pref_suggest_idea">Navrhnout zlepšení</string>
     <string name="generic_error_message">Něco se pokazilo 😢</string>
     <string name="generic_error_retry">Znovu</string>
     <string name="play">Přehrát</string>
