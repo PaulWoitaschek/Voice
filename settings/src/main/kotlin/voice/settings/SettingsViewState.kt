@@ -8,6 +8,9 @@ data class SettingsViewState(
   val appVersion: String,
   val dialog: Dialog?,
   val useGrid: Boolean,
+  val autoSleepTimer: Boolean,
+  val autoSleepTimeStart: String,
+  val autoSleepTimeEnd: String,
 ) {
 
   enum class Dialog {
