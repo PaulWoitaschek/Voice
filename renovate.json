@@ -49,6 +49,12 @@
         "digest"
       ],
       "automerge": true
+    },
+    {
+      "matchPackageNames": [
+        "com.google.android.play"
+      ],
+      "allowedVersions": "/^(?!2\\.0\\.2$).+/"
     }
   ],
   "prHourlyLimit": 0,
