@@ -25,6 +25,10 @@ private fun Cursor.parseRows(
     val documentId = getStringOrNull(getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID))
     val documentUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId)
     val contents = FileContents.readFrom(this)
+    if (contents.name?.startsWith(".") == true) {
+      Logger.v("Ignoring hidden file $contents")
+      continue
+    }
     files += RealCachedDocumentFile(context, documentUri, contents)
   }
   return files
