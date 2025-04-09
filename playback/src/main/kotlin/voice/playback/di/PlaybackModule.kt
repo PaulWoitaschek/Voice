@@ -16,9 +16,6 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import voice.playback.misc.VolumeGain
 import voice.playback.notification.MainActivityIntentProvider
 import voice.playback.player.DurationInconsistenciesUpdater
@@ -29,9 +26,6 @@ import voice.playback.playstate.PlayStateDelegatingListener
 import voice.playback.playstate.PositionUpdater
 import voice.playback.session.LibrarySessionCallback
 import voice.playback.session.PlaybackService
-import voice.playback.session.SleepTimer
-import voice.playback.session.SleepTimerCommandUpdater
-import kotlin.time.Duration
 
 @Module
 @ContributesTo(PlaybackScope::class)
@@ -87,22 +81,9 @@ object PlaybackModule {
     player: VoicePlayer,
     callback: LibrarySessionCallback,
     mainActivityIntentProvider: MainActivityIntentProvider,
-    scope: CoroutineScope,
-    sleepTimer: SleepTimer,
-    sleepTimerCommandUpdater: SleepTimerCommandUpdater,
   ): MediaLibraryService.MediaLibrarySession {
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
       .build()
-      .also { session ->
-        scope.launch {
-          sleepTimer.leftSleepTimeFlow
-            .map { it != Duration.ZERO }
-            .distinctUntilChanged()
-            .collect { sleepTimerActive ->
-              sleepTimerCommandUpdater.update(session, sleepTimerActive)
-            }
-        }
-      }
   }
 }
