@@ -52,7 +52,7 @@
     },
     {
       "matchPackageNames": [
-        "com.google.android.play"
+        "com.google.android.play:review-ktx"
       ],
       "allowedVersions": "!/^(2\\.0\\.2)$/"
     },
