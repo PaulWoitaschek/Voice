@@ -49,6 +49,19 @@
         "digest"
       ],
       "automerge": true
+    },
+    {
+      "matchPackageNames": [
+        "com.google.android.play"
+      ],
+      "allowedVersions": "!/^(2\\.0\\.2)$/"
+    },
+    {
+      "matchPackageNames": [
+        "com.google.dagger:dagger",
+        "com.google.dagger:dagger-compiler"
+      ],
+      "allowedVersions": "!/^(2\\.56|2\\.56\\.1)$/"
     }
   ],
   "prHourlyLimit": 0,
