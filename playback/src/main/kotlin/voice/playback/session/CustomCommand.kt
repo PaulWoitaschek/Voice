@@ -39,15 +39,6 @@ internal sealed interface CustomCommand {
   }
 }
 
-internal sealed class PublishedCustomCommand {
-
-  abstract val sessionCommand: SessionCommand
-
-  data object Sleep : PublishedCustomCommand() {
-    override val sessionCommand: SessionCommand = SessionCommand("voice.sleep", Bundle.EMPTY)
-  }
-}
-
 internal fun MediaController.sendCustomCommand(command: CustomCommand) {
   val json = Json.encodeToString(CustomCommand.serializer(), command)
   sendCustomCommand(

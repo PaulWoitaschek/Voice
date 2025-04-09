@@ -42,8 +42,6 @@ class LibrarySessionCallback
   private val bookSearchHandler: BookSearchHandler,
   @CurrentBook
   private val currentBookId: DataStore<BookId?>,
-  private val sleepTimerCommandUpdater: SleepTimerCommandUpdater,
-  private val sleepTimer: SleepTimer,
   private val bookRepository: BookRepository,
 ) : MediaLibrarySession.Callback {
 
@@ -179,9 +177,6 @@ class LibrarySessionCallback
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
-      .also {
-        it.add(PublishedCustomCommand.Sleep.sessionCommand)
-      }
       .build()
     return ConnectionResult.accept(
       sessionCommands,
@@ -203,40 +198,25 @@ class LibrarySessionCallback
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
-    when (customCommand) {
-      PublishedCustomCommand.Sleep.sessionCommand -> {
-        sleepTimer.setActive(!sleepTimer.sleepTimerActive())
+    val command = CustomCommand.parse(customCommand, args)
+      ?: return super.onCustomCommand(session, controller, customCommand, args)
+    when (command) {
+      CustomCommand.ForceSeekToNext -> {
+        player.forceSeekToNext()
       }
-      else -> {
-        val command = CustomCommand.parse(customCommand, args)
-          ?: return super.onCustomCommand(session, controller, customCommand, args)
-        when (command) {
-          CustomCommand.ForceSeekToNext -> {
-            player.forceSeekToNext()
-          }
 
-          CustomCommand.ForceSeekToPrevious -> {
-            player.forceSeekToPrevious()
-          }
+      CustomCommand.ForceSeekToPrevious -> {
+        player.forceSeekToPrevious()
+      }
 
-          is CustomCommand.SetSkipSilence -> {
-            player.setSkipSilenceEnabled(command.skipSilence)
-          }
-          is CustomCommand.SetGain -> {
-            player.setGain(command.gain)
-          }
-        }
+      is CustomCommand.SetSkipSilence -> {
+        player.setSkipSilenceEnabled(command.skipSilence)
+      }
+      is CustomCommand.SetGain -> {
+        player.setGain(command.gain)
       }
     }
 
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
-  }
-
-  override fun onPostConnect(
-    session: MediaSession,
-    controller: ControllerInfo,
-  ) {
-    super.onPostConnect(session, controller)
-    sleepTimerCommandUpdater.update(session, controller, sleepTimer.sleepTimerActive())
   }
 }
