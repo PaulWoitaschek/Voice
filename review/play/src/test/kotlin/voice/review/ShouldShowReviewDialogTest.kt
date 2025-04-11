@@ -102,6 +102,9 @@ class ShouldShowReviewDialogTest {
       reviewTranslated = mockk {
         every { translated() } returns true
       },
+      remoteConfig = mockk {
+        every { getBoolean("review_enabled") } returns true
+      },
     )
     val showsReviewDialog = runBlocking {
       shouldShowReviewDialog.shouldShow()

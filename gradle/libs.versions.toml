@@ -58,6 +58,11 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
+firebase-bom = "com.google.firebase:firebase-bom:33.1.0"
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
+
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -145,13 +150,15 @@ retrofit = [
 ]
 
 [plugins]
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-anvil = { id = "com.squareup.anvil", version = "2.5.1" }
-ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.1.20-2.0.0" }
-playPublish = { id = "com.github.triplet.play", version = "3.12.1" }
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+anvil = { id = "com.squareup.anvil", version = "2.5.1" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.20-2.0.0" }
+ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
+playPublish = { id = "com.github.triplet.play", version = "3.12.1" }

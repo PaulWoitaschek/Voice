@@ -60,6 +60,7 @@ fun Project.baseSetup() {
       add("implementation", project(":logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
+    add("implementation", platform(libs.findLibrary("firebase-bom").get()))
     add("androidTestImplementation", platform(libs.findLibrary("compose-bom").get()))
 
     listOf(

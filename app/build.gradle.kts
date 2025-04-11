@@ -11,7 +11,14 @@ plugins {
   id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.anvil)
+  alias(libs.plugins.crashlytics) apply false
+  alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
+}
+
+if (file("google-services.json").exists()) {
+  pluginManager.apply(libs.plugins.googleServices.get().pluginId)
+  pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
 play {
@@ -96,7 +103,6 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
-      applicationIdSuffix = ".debug"
     }
     all {
       setProguardFiles(
@@ -185,6 +191,10 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
+  "proprietaryImplementation"(libs.firebase.crashlytics)
+  "proprietaryImplementation"(libs.firebase.analytics)
+  "proprietaryImplementation"(libs.firebase.remoteconfig)
+  "proprietaryImplementation"(projects.logging.crashlytics)
   "proprietaryImplementation"(projects.review.play)
   "libreImplementation"(projects.review.noop)
 
