@@ -11,7 +11,6 @@ class Script : CliktCommand() {
 fun main(args: Array<String>) {
   Script()
     .subcommands(
-      UpdateScreenshots(),
       NewFeatureModule(),
       PopulateTestFiles(),
     )
