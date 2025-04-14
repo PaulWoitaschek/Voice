@@ -1,0 +1,38 @@
+site_name: Voice
+site_description: "Voice is an open source audiobook player built for simplicity and accessibility. Listen to, organize, and enjoy your audiobooks effortlessly."
+site_author: Paul Woitaschek
+site_url: https://voice.woitaschek.de
+
+repo_url: https://github.com/PaulWoitaschek/Voice
+repo_name: "Voice on GitHub"
+
+
+nav:
+  - Home: index.md
+  - Privacy Policy: privacy.md
+  - License: license.md
+  - Contributing: contributing.md
+  - About: about.md
+  - Development: development.md
+  - FAQ: faq.md
+
+theme:
+  name: material
+  logo: logo.png
+  features:
+    - navigation.instant
+  palette:
+    - scheme: default
+      primary: white
+      accent: indigo
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
