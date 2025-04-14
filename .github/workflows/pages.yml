@@ -7,6 +7,9 @@ on:
     paths:
       - 'docs/**'
       - mkdocs.yml
+      - CONTRIBUTING.md
+      - PRIVACY.md
+      - LICENSE.md
 
 permissions:
   contents: write
