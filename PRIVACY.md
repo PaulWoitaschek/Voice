@@ -1,1 +1,1 @@
-../PRIVACY.md
+docs/privacy.md
