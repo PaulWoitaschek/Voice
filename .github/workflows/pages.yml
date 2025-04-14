@@ -1,0 +1,30 @@
+name: Deploy Project Site
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'docs/**'
+      - mkdocs.yml
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs
+        run: pip install mkdocs-material
+
+      - run: mkdocs gh-deploy --force --strict
