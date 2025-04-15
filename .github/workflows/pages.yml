@@ -10,6 +10,7 @@ on:
       - CONTRIBUTING.md
       - PRIVACY.md
       - LICENSE.md
+      - Pipfile
 
 permissions:
   contents: write
