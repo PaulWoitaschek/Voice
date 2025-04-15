@@ -28,6 +28,9 @@ class BookPlayViewModelTest {
 
   private val scope = TestScope()
   private val sleepTimerPref = InMemoryPref(15)
+  private val autoSleepTimerPref = InMemoryPref(false)
+  private val autoSleepTimeStartPref = InMemoryPref("22:00")
+  private val autoSleepTimeEndPref = InMemoryPref("06:00")
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     var sleepTimerActive = false
@@ -62,6 +65,9 @@ class BookPlayViewModelTest {
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
     sleepTimePref = sleepTimerPref,
+    autoSleepTimerPref = autoSleepTimerPref,
+    autoSleepTimerStart = autoSleepTimeStartPref,
+    autoSleepTimerEnd = autoSleepTimeEndPref,
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
   )
