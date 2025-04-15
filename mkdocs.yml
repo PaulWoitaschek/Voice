@@ -9,7 +9,7 @@ repo_name: "Voice on GitHub"
 
 nav:
   - Home: index.md
-  - Privacy Policy: privacy.md
+  - Privacy Policy: privacy_policy.md
   - License: license.md
   - Contributing: contributing.md
   - About: about.md
