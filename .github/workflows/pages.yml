@@ -11,6 +11,7 @@ on:
       - PRIVACY.md
       - LICENSE.md
       - Pipfile
+      - .github/workflows/pages.yml
 
 permissions:
   contents: write
