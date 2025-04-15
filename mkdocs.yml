@@ -6,10 +6,9 @@ site_url: https://voice.woitaschek.de
 repo_url: https://github.com/PaulWoitaschek/Voice
 repo_name: "Voice on GitHub"
 
-
 nav:
   - Home: index.md
-  - Privacy Policy: privacy_policy.md
+  - Privacy Policy: privacy-policy.md
   - License: license.md
   - Contributing: contributing.md
   - About: about.md
@@ -36,3 +35,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+
+plugins:
+  - redirects:
+      redirect_maps:
+        'privacy_policy.md': 'privacy-policy.md'
+        'privacy.md': 'privacy-policy.md'
