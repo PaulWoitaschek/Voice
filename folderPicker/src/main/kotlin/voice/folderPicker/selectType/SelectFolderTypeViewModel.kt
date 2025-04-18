@@ -12,7 +12,6 @@ import androidx.documentfile.provider.DocumentFile
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dev.olshevski.navigation.reimagined.popUpTo
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
 import voice.common.navigation.Destination
@@ -25,6 +24,7 @@ import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.documentfile.nameWithoutExtension
+import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 class SelectFolderTypeViewModel
 @AssistedInject constructor(
@@ -78,15 +78,14 @@ class SelectFolderTypeViewModel
     )
     when (mode) {
       Mode.Default -> {
-        navigator.execute {
-          popUpTo { it is Destination.FolderPicker }
+        navigator.execute { navController ->
+          navController.typedNavigate(Destination.BookOverview) {
+            popUpTo(0)
+          }
         }
       }
       Mode.Onboarding -> {
-        navigator.goTo(
-          destination = Destination.OnboardingCompletion,
-          replace = true,
-        )
+        navigator.goTo(Destination.OnboardingCompletion)
       }
     }
   }

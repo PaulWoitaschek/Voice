@@ -1,13 +1,13 @@
 package voice.onboarding.completion
 
 import androidx.datastore.core.DataStore
-import dev.olshevski.navigation.reimagined.replaceAll
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.OnboardingCompleted
 import javax.inject.Inject
+import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 class OnboardingCompletionViewModel
 @Inject constructor(
@@ -22,8 +22,10 @@ class OnboardingCompletionViewModel
     scope.launch {
       onboardingCompleted.updateData { true }
     }
-    navigator.execute {
-      replaceAll(Destination.BookOverview)
+    navigator.execute { navController ->
+      navController.typedNavigate(Destination.BookOverview) {
+        popUpTo(0)
+      }
     }
   }
 

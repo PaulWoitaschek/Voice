@@ -1,6 +1,6 @@
 package voice.common.navigation
 
-import dev.olshevski.navigation.reimagined.NavController
+import androidx.navigation.NavController
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,12 +17,9 @@ class Navigator
 
   private val scope = MainScope()
 
-  fun goTo(
-    destination: Destination,
-    replace: Boolean = false,
-  ) {
+  fun goTo(destination: Destination) {
     scope.launch {
-      _navigationCommands.emit(NavigationCommand.GoTo(destination, replace))
+      _navigationCommands.emit(NavigationCommand.GoTo(destination))
     }
   }
 
@@ -32,7 +29,7 @@ class Navigator
     }
   }
 
-  fun execute(action: NavController<Destination.Compose>.() -> Unit) {
+  fun execute(action: (NavController) -> Unit) {
     scope.launch {
       _navigationCommands.emit(NavigationCommand.Execute(action))
     }

@@ -1,4 +1,4 @@
-package voice.app.serialization
+package voice.common.serialization
 
 import android.net.Uri
 import androidx.core.net.toUri

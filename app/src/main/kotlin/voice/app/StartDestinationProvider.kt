@@ -3,7 +3,6 @@ package voice.app
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import voice.common.navigation.Destination
 import voice.common.pref.OnboardingCompleted
 import voice.data.folders.AudiobookFolders
 import javax.inject.Inject
@@ -15,12 +14,12 @@ class StartDestinationProvider
   private val audiobookFolders: AudiobookFolders,
 ) {
 
-  operator fun invoke(): Destination.Compose {
+  operator fun invoke(): StartDestination {
     return runBlocking {
       if (showOnboarding()) {
-        Destination.OnboardingWelcome
+        StartDestination.OnboardingWelcome
       } else {
-        Destination.BookOverview
+        StartDestination.BookOverview
       }
     }
   }
@@ -31,5 +30,10 @@ class StartDestinationProvider
       audiobookFolders.hasAnyFolders() -> false
       else -> true
     }
+  }
+
+  enum class StartDestination {
+    OnboardingWelcome,
+    BookOverview,
   }
 }

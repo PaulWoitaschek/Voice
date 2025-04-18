@@ -2,13 +2,11 @@ package voice.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import dev.olshevski.navigation.reimagined.AnimatedNavHost
-import dev.olshevski.navigation.reimagined.NavBackHandler
-import dev.olshevski.navigation.reimagined.NavController
-import dev.olshevski.navigation.reimagined.navigate
-import dev.olshevski.navigation.reimagined.pop
-import dev.olshevski.navigation.reimagined.rememberNavController
-import dev.olshevski.navigation.reimagined.replaceLast
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.kiwi.navigationcompose.typed.composable
+import com.kiwi.navigationcompose.typed.createRoutePattern
 import voice.app.injection.appComponent
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
@@ -26,6 +24,7 @@ import voice.onboarding.completion.OnboardingCompletion
 import voice.review.ReviewFeature
 import voice.settings.views.Settings
 import javax.inject.Inject
+import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 class AppController : ComposeController() {
 
@@ -41,67 +40,74 @@ class AppController : ComposeController() {
 
   @Composable
   override fun Content() {
-    val navController: NavController<Destination.Compose> = rememberNavController(
-      startDestination = startDestinationProvider(),
-    )
-    NavBackHandler(navController)
-    AnimatedNavHost(
-      navController,
-      transitionSpec = { action, destination, _ ->
-        navTransition(action, destination)
+    val navController = rememberNavController()
+    NavHost(
+      navController = navController,
+      startDestination = when (startDestinationProvider()) {
+        StartDestinationProvider.StartDestination.OnboardingWelcome -> {
+          createRoutePattern<Destination.OnboardingWelcome>()
+        }
+        StartDestinationProvider.StartDestination.BookOverview -> {
+          createRoutePattern<Destination.BookOverview>()
+        }
       },
-    ) { destination ->
-      when (destination) {
-        Destination.BookOverview -> {
-          BookOverviewScreen()
-        }
-        Destination.FolderPicker -> {
-          FolderOverview(
-            onCloseClick = {
-              navController.pop()
-            },
-          )
-        }
-        Destination.Migration -> {
-          Migration()
-        }
-        is Destination.SelectFolderType -> {
-          SelectFolderType(
-            uri = destination.uri,
-            mode = destination.mode,
-          )
-        }
-        Destination.Settings -> {
-          Settings()
-        }
-        is Destination.CoverFromInternet -> {
-          SelectCoverFromInternet(
-            bookId = destination.bookId,
-            onCloseClick = { navController.pop() },
-          )
-        }
-        is Destination.AddContent -> AddContent(destination.mode)
-
-        Destination.OnboardingCompletion -> OnboardingCompletion()
-        Destination.OnboardingExplanation -> OnboardingExplanation(
+    ) {
+      composable<Destination.Migration> {
+        Migration()
+      }
+      composable<Destination.SelectFolderType> {
+        SelectFolderType(
+          uri = uri,
+          mode = mode,
+        )
+      }
+      composable<Destination.CoverFromInternet> {
+        SelectCoverFromInternet(
+          bookId = bookId,
+          onCloseClick = { navController.popBackStack() },
+        )
+      }
+      composable<Destination.AddContent> {
+        AddContent(mode)
+      }
+      composable<Destination.OnboardingCompletion> {
+        OnboardingCompletion()
+      }
+      composable<Destination.OnboardingExplanation> {
+        OnboardingExplanation(
           onNext = {
-            navController.navigate(
+            navController.typedNavigate(
               Destination.AddContent(
                 mode = Destination.AddContent.Mode.Onboarding,
               ),
             )
           },
           onBack = {
-            navController.pop()
+            if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+              navController.popBackStack()
+            }
           },
         )
-        Destination.OnboardingWelcome -> OnboardingWelcome(
-          onNext = { navController.navigate(Destination.OnboardingExplanation) },
+      }
+      composable<Destination.OnboardingWelcome> {
+        OnboardingWelcome(
+          onNext = { navController.typedNavigate(Destination.OnboardingExplanation) },
+        )
+      }
+      composable<Destination.BookOverview> {
+        BookOverviewScreen()
+      }
+      composable<Destination.Settings> {
+        Settings()
+      }
+      composable<Destination.FolderPicker> {
+        FolderOverview(
+          onCloseClick = {
+            navController.popBackStack()
+          },
         )
       }
     }
-
-    ReviewFeature()
 
     LaunchedEffect(navigator) {
       navigator.navigationCommands.collect { command ->
@@ -109,11 +115,7 @@ class AppController : ComposeController() {
           is NavigationCommand.GoTo -> {
             when (val destination = command.destination) {
               is Destination.Compose -> {
-                if (command.replace) {
-                  navController.replaceLast(destination)
-                } else {
-                  navController.navigate(destination)
-                }
+                navController.typedNavigate(destination)
               }
               else -> {
                 // no-op
@@ -121,7 +123,9 @@ class AppController : ComposeController() {
             }
           }
           NavigationCommand.GoBack -> {
-            navController.pop()
+            if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+              navController.popBackStack()
+            }
           }
           is NavigationCommand.Execute -> {
             command.action(navController)
@@ -129,5 +133,7 @@ class AppController : ComposeController() {
         }
       }
     }
+
+    ReviewFeature()
   }
 }

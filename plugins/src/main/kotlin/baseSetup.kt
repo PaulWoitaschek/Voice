@@ -25,6 +25,7 @@ fun Project.baseSetup() {
           "kotlin.time.ExperimentalTime",
           "kotlinx.coroutines.ExperimentalCoroutinesApi",
           "kotlinx.coroutines.FlowPreview",
+          "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
       allWarningsAsErrors.set(true)
@@ -70,6 +71,7 @@ fun Project.baseSetup() {
       add("implementation", libs.findLibrary(it).get())
     }
 
+    add("implementation", libs.findLibrary("serialization-json").get())
     add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }
