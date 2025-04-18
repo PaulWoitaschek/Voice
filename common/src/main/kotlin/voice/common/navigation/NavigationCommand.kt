@@ -2,26 +2,22 @@ package voice.common.navigation
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
-import dev.olshevski.navigation.reimagined.NavController
-import kotlinx.parcelize.Parcelize
+import androidx.navigation.NavController
+import kotlinx.serialization.Serializable
 import voice.common.BookId
+import voice.common.serialization.UriSerializer
 
 sealed interface NavigationCommand {
   data object GoBack : NavigationCommand
-  data class GoTo(
-    val destination: Destination,
-    val replace: Boolean,
-  ) : NavigationCommand
-
-  data class Execute(val action: (NavController<Destination.Compose>) -> Unit) : NavigationCommand
+  data class GoTo(val destination: Destination) : NavigationCommand
+  data class Execute(val action: (NavController) -> Unit) : NavigationCommand
 }
 
 sealed interface Destination {
   data class Playback(val bookId: BookId) : Destination
   data class Bookmarks(val bookId: BookId) : Destination
 
-  @Parcelize
+  @Serializable
   data class CoverFromInternet(val bookId: BookId) : Compose
   data class Website(val url: String) : Destination
   data class EditCover(
@@ -31,25 +27,28 @@ sealed interface Destination {
 
   data class Activity(val intent: Intent) : Destination
 
+  @Serializable
   sealed interface Compose :
     Destination,
-    Parcelable
+    com.kiwi.navigationcompose.typed.Destination
 
-  @Parcelize
-  object Migration : Compose
+  @Serializable
+  data object Migration : Compose
 
-  @Parcelize
-  object Settings : Compose
+  @Serializable
+  data object Settings : Compose
 
-  @Parcelize
-  object BookOverview : Compose
+  @Serializable
+  data object BookOverview : Compose
 
-  @Parcelize
-  object FolderPicker : Compose
+  @Serializable
+  data object FolderPicker : Compose
 
-  @Parcelize
+  @Serializable
   data class SelectFolderType(
-    val uri: Uri,
+    val uri:
+    @Serializable(with = UriSerializer::class)
+    Uri,
     val mode: Mode,
   ) : Compose {
 
@@ -59,16 +58,16 @@ sealed interface Destination {
     }
   }
 
-  @Parcelize
-  object OnboardingWelcome : Compose
+  @Serializable
+  data object OnboardingWelcome : Compose
 
-  @Parcelize
-  object OnboardingCompletion : Compose
+  @Serializable
+  data object OnboardingCompletion : Compose
 
-  @Parcelize
-  object OnboardingExplanation : Compose
+  @Serializable
+  data object OnboardingExplanation : Compose
 
-  @Parcelize
+  @Serializable
   data class AddContent(val mode: Mode) : Compose {
 
     enum class Mode {

@@ -11,7 +11,6 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
-import voice.app.serialization.UriSerializer
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.common.AppScope
@@ -24,6 +23,7 @@ import voice.common.pref.PrefKeys
 import voice.common.pref.RootAudiobookFolders
 import voice.common.pref.SingleFileAudiobookFolders
 import voice.common.pref.SingleFolderAudiobookFolders
+import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
 import voice.pref.Pref

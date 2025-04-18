@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -184,6 +185,7 @@ internal fun BookOverview(
     floatingActionButton = {
       if (viewState.playButtonState != null) {
         PlayButton(
+          modifier = Modifier.navigationBarsPadding(),
           playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
           fabSize = 56.dp,
           iconSize = 24.dp,
