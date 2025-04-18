@@ -73,7 +73,6 @@ internal fun EditBookmarkDialog(
               }
             },
           ),
-          singleLine = true,
         )
       }
     },
