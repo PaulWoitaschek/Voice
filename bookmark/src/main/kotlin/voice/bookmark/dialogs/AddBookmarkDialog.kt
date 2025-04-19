@@ -57,7 +57,6 @@ internal fun AddBookmarkDialog(
               onBookmarkNameChoose(bookmarkName)
             },
           ),
-          singleLine = true,
         )
       }
     },
