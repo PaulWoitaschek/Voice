@@ -4,7 +4,7 @@ versionCode = "3603037"
 versionName = "8.3.0"
 
 sdk-compile = "35"
-sdk-min = "26"
+sdk-min = "28"
 sdk-target = "35"
 
 coroutines = "1.10.2"
