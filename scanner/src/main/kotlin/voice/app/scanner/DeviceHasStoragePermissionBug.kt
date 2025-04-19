@@ -3,6 +3,7 @@ package voice.app.scanner
 import android.content.Context
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -36,7 +37,7 @@ class DeviceHasStoragePermissionBug
         Logger.w(e, "Probing for permission failed!")
         "com.android.externalstorage has no access" in (e.message ?: "")
       } catch (e: Exception) {
-        if (e is CancellationException) throw e
+        if (e is CancellationException) ensureActive()
         Logger.w(e, "Probing for permission failed!")
         false
       }
