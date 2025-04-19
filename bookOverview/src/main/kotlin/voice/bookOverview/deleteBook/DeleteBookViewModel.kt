@@ -49,7 +49,7 @@ constructor(
         .let { segments ->
           val result = segments.lastOrNull()?.removePrefix("primary:")
           if (result.isNullOrEmpty()) {
-            Logger.e("Could not determine path for $segments")
+            Logger.w("Could not determine path for $segments")
             segments.joinToString(separator = "\"")
           } else {
             result

@@ -66,7 +66,7 @@ class PositionUpdater
           positionInChapter = currentPosition,
         )
       } else {
-        Logger.e("$mediaId not in $content")
+        Logger.w("$mediaId not in $content")
         content
       }
     }
