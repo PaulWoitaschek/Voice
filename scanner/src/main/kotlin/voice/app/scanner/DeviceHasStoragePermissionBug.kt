@@ -34,11 +34,11 @@ class DeviceHasStoragePermissionBug
         false
       } catch (e: SecurityException) {
         // https://issuetracker.google.com/issues/258270138
-        Logger.e(e, "Probing for permission failed!")
+        Logger.w(e, "Probing for permission failed!")
         "com.android.externalstorage has no access" in (e.message ?: "")
       } catch (e: Exception) {
         if (e is CancellationException) ensureActive()
-        Logger.e(e, "Probing for permission failed!")
+        Logger.w(e, "Probing for permission failed!")
         false
       }
     }

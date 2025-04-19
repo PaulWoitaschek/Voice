@@ -169,7 +169,7 @@ class PlayerController
       controller.await()
     } catch (e: Exception) {
       if (e is CancellationException) coroutineContext.ensureActive()
-      Logger.e(e, "Error while connecting to media controller")
+      Logger.w(e, "Error while connecting to media controller")
       null
     }
   }

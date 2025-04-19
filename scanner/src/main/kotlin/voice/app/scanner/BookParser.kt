@@ -109,7 +109,7 @@ class BookParser
         .removePrefix("/storage/emulated/")
         .removePrefix("/storage/")
         .also {
-          Logger.e("Could not parse fileName from $this. Fallback to $it")
+          Logger.w("Could not parse fileName from $this. Fallback to $it")
         }
     } else {
       if (isFile) {

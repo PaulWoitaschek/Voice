@@ -35,7 +35,7 @@ fun ReviewFeature() {
       reviewManager.requestReview()
     } catch (e: Exception) {
       if (e is CancellationException) ensureActive()
-      Logger.e(e, "Error while creating the review flow")
+      Logger.w(e, "Error while creating the review flow")
       null
     }
   }
@@ -65,7 +65,7 @@ fun ReviewFeature() {
               reviewManager.launchReview(activity, reviewInfo)
             } catch (e: Exception) {
               if (e is CancellationException) ensureActive()
-              Logger.e(e, "Error while launching the review flow")
+              Logger.w(e, "Error while launching the review flow")
             }
           }
           showReviewDialog = false
@@ -90,7 +90,7 @@ fun ReviewFeature() {
         try {
           mailToLauncher.launch("audiobook@posteo.de")
         } catch (e: ActivityNotFoundException) {
-          Logger.e(e, "Could not find an email app")
+          Logger.w(e, "Could not find an email app")
         }
       },
       onDismiss = {

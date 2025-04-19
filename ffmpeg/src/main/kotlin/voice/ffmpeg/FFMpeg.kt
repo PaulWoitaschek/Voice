@@ -48,7 +48,7 @@ private fun fullCommand(
     try {
       FFmpegKitConfig.getSafParameterForRead(context, input)
     } catch (e: Exception) {
-      Logger.e(e, "Could not get saf parameter for $input")
+      Logger.w(e, "Could not get saf parameter for $input")
       return null
     }
   } else {
