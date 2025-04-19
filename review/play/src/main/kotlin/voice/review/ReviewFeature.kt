@@ -18,6 +18,8 @@ import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.squareup.anvil.annotations.ContributesTo
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import voice.common.AppScope
 import voice.common.rootComponentAs
@@ -32,6 +34,7 @@ fun ReviewFeature() {
     reviewInfoState.value = try {
       reviewManager.requestReview()
     } catch (e: Exception) {
+      if (e is CancellationException) ensureActive()
       Logger.w(e, "Error while creating the review flow")
       null
     }
@@ -61,6 +64,7 @@ fun ReviewFeature() {
             try {
               reviewManager.launchReview(activity, reviewInfo)
             } catch (e: Exception) {
+              if (e is CancellationException) ensureActive()
               Logger.w(e, "Error while launching the review flow")
             }
           }
