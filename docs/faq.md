@@ -17,6 +17,19 @@ To participate in the public beta, you can either:
 - [Join via the Web](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
 - [Join through Google Play](https://play.google.com/apps/testing/de.ph1b.audiobook)
 
-### What is the last version that supports Android 7?
+### Which Voice version should I use on older Android?
 
-It is [Version 6.0.10](https://github.com/PaulWoitaschek/Voice/releases/tag/6.0.10).
+!!! tip
+
+    To check your API level, go to **Settings » About » Android version** on your device.
+
+If you’re running an Android release that’s not supported by the latest Voice build, pick the version below that matches your OS/API level:
+
+| Android Version | API Level (SDK) | Voice Version                                                           |
+|-----------------|-----------------|-------------------------------------------------------------------------|
+| Android 9+      | 28+             | Supported in the latest version 🎉                                      |
+| Android 8.1     | 27              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 8       | 26              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 7.1     | 25              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 7.0     | 24              | [6.0.10](https://github.com/PaulWoitaschek/Voice/releases/tag/6.0.10)   |
+
