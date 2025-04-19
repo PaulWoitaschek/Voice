@@ -32,7 +32,7 @@ fun ReviewFeature() {
     reviewInfoState.value = try {
       reviewManager.requestReview()
     } catch (e: Exception) {
-      Logger.e(e, "Error while creating the review flow")
+      Logger.w(e, "Error while creating the review flow")
       null
     }
   }
@@ -61,7 +61,7 @@ fun ReviewFeature() {
             try {
               reviewManager.launchReview(activity, reviewInfo)
             } catch (e: Exception) {
-              Logger.e(e, "Error while launching the review flow")
+              Logger.w(e, "Error while launching the review flow")
             }
           }
           showReviewDialog = false
@@ -86,7 +86,7 @@ fun ReviewFeature() {
         try {
           mailToLauncher.launch("audiobook@posteo.de")
         } catch (e: ActivityNotFoundException) {
-          Logger.e(e, "Could not find an email app")
+          Logger.w(e, "Could not find an email app")
         }
       },
       onDismiss = {

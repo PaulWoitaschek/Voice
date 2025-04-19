@@ -50,7 +50,7 @@ class MediaScanner
     val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {
       if (deviceHasPermissionBug.checkForBugAndSet(probeFile)) {
-        Logger.e("Device has permission bug, aborting scan! Probed $probeFile")
+        Logger.w("Device has permission bug, aborting scan! Probed $probeFile")
         return
       }
     }

@@ -47,7 +47,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
         try {
           documentTreeLauncher.launch(null)
         } catch (e: ActivityNotFoundException) {
-          Logger.e(e, "Could not add folder")
+          Logger.w(e, "Could not add folder")
         }
       },
     )
@@ -59,7 +59,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
         try {
           openDocumentLauncher.launch(arrayOf("*/*"))
         } catch (e: ActivityNotFoundException) {
-          Logger.e(e, "Could not add file")
+          Logger.w(e, "Could not add file")
         }
       },
     )
