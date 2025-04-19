@@ -76,7 +76,7 @@ class BookRepository
       chapters = chapters.map { chapterId ->
         val chapter = chapterRepo.get(chapterId)
         if (chapter == null) {
-          Logger.e("Missing chapter with id=$chapterId for $this")
+          Logger.w("Missing chapter with id=$chapterId for $this")
           return null
         }
         chapter

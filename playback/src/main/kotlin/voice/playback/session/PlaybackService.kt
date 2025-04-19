@@ -49,7 +49,7 @@ class PlaybackService : MediaLibraryService() {
       session.invokeIsReleased
     }.also {
       if (it == null) {
-        Logger.e("onGetSession returns null because the session is already released")
+        Logger.w("onGetSession returns null because the session is already released")
       }
     }
   }
@@ -63,6 +63,6 @@ private val MediaSession.invokeIsReleased: Boolean
       .apply { isAccessible = true }
       .invoke(this) as Boolean
   } catch (e: Exception) {
-    Logger.e(e, "Couldn't check if it's released")
+    Logger.w(e, "Couldn't check if it's released")
     false
   }

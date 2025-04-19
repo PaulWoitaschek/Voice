@@ -119,7 +119,7 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
     try {
       startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-      Logger.e(e, "Can't request ignoring battery optimizations")
+      Logger.w(e, "Can't request ignoring battery optimizations")
     }
   }
 
