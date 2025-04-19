@@ -47,10 +47,7 @@ private fun Context.query(uri: Uri): Cursor? {
       null,
       null,
     )
-  } catch (e: SecurityException) {
-    Logger.w(e, "Can't parse contents for $uri")
-    null
-  } catch (e: IllegalArgumentException) {
+  } catch (e: Exception) {
     Logger.w(e, "Can't parse contents for $uri")
     null
   }
