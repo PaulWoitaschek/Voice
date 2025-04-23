@@ -1,3 +1,5 @@
+package voice.settings.views
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -7,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import voice.settings.views.TimePickerDialog
 import java.time.LocalTime
 
 @Composable

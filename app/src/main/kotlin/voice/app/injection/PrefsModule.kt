@@ -26,11 +26,11 @@ import voice.common.pref.SingleFolderAudiobookFolders
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
+import voice.pref.AutoSleepTimerPrefs
 import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
-import voice.pref.string
 import voice.pref.stringSet
 import java.time.LocalTime
 import javax.inject.Named
@@ -83,22 +83,16 @@ object PrefsModule {
   @Provides
   @Singleton
   @Named(PrefKeys.AUTO_SLEEP_TIMER)
-  fun provideAutoSleepTimerPreference(prefs: AndroidPreferences): Pref<Boolean> {
-    return prefs.boolean(PrefKeys.AUTO_SLEEP_TIMER, false)
-  }
-
-  @Provides
-  @Singleton
-  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
-  fun provideAutoSleepTimerStartPreference(prefs: AndroidPreferences): Pref<String> {
-    return prefs.string(PrefKeys.AUTO_SLEEP_TIMER_START, LocalTime.of(22, 0).toString())
-  }
-
-  @Provides
-  @Singleton
-  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
-  fun provideAutoSleepTimerEndPreference(prefs: AndroidPreferences): Pref<String> {
-    return prefs.string(PrefKeys.AUTO_SLEEP_TIMER_END, LocalTime.of(6, 0).toString())
+  fun provideAutoSleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<AutoSleepTimerPrefs> {
+    return factory.create(
+      serializer = AutoSleepTimerPrefs.serializer(),
+      fileName = "autoSleepTimerPrefs",
+      defaultValue = AutoSleepTimerPrefs(
+        enabled = false,
+        startTime = LocalTime.of(22, 0).toString(),
+        endTime = LocalTime.of(6, 0).toString(),
+      ),
+    )
   }
 
   @Provides

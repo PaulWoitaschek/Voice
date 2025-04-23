@@ -16,6 +16,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.DispatcherProvider
@@ -34,6 +35,7 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
+import voice.pref.AutoSleepTimerPrefs
 import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
@@ -59,11 +61,7 @@ class BookPlayViewModel
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
   @Named(PrefKeys.AUTO_SLEEP_TIMER)
-  private val autoSleepTimerPref: Pref<Boolean>,
-  @Named(PrefKeys.AUTO_SLEEP_TIMER_START)
-  private val autoSleepTimerStart: Pref<String>,
-  @Named(PrefKeys.AUTO_SLEEP_TIMER_END)
-  private val autoSleepTimerEnd: Pref<String>,
+  private val autoSleepTimerPref: DataStore<AutoSleepTimerPrefs>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -189,11 +187,13 @@ class BookPlayViewModel
         }
       }
     }
-    if (autoSleepTimerPref.value && !sleepTimer.sleepTimerActive()) {
-      val startTime = LocalTime.parse(autoSleepTimerStart.value)
-      val endTime = LocalTime.parse(autoSleepTimerEnd.value)
-      if (isCurrentTimeInRange(startTime, endTime)) {
-        sleepTimer.setActive()
+    autoSleepTimerPref.data.map { prefs ->
+      if (prefs.enabled && !sleepTimer.sleepTimerActive()) {
+        val startTime = LocalTime.parse(prefs.startTime)
+        val endTime = LocalTime.parse(prefs.endTime)
+        if (isCurrentTimeInRange(startTime, endTime)) {
+          sleepTimer.setActive()
+        }
       }
     }
     player.playPause()

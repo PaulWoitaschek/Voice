@@ -1,6 +1,5 @@
 package voice.settings.views
 
-import AutoSleepTimerSetting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,9 +36,11 @@ import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
+import voice.pref.AutoSleepTimerPrefs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
+import java.time.LocalTime
 import voice.strings.R as StringsR
 
 @Composable
@@ -53,9 +54,11 @@ private fun SettingsPreview() {
     dialog = null,
     appVersion = "1.2.3",
     useGrid = true,
-    autoSleepTimer = false,
-    autoSleepTimeEnd = "",
-    autoSleepTimeStart = "",
+    autoSleepTimer = AutoSleepTimerPrefs(
+      enabled = false,
+      startTime = LocalTime.of(22, 0).toString(),
+      endTime = LocalTime.of(6, 0).toString(),
+    ),
   )
   VoiceTheme {
     Settings(
@@ -73,7 +76,7 @@ private fun SettingsPreview() {
         override fun suggestIdea() {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
-        override fun toggleAutoSleepTimer(checked: Boolean) {}
+        override fun setAutoSleepTimer(checked: Boolean) {}
         override fun setAutoSleepTimerStart(
           hour: Int,
           minute: Int,
@@ -156,23 +159,23 @@ private fun Settings(
           listener.onAutoRewindRowClick()
         }
         AutoSleepTimerRow(
-          viewState.autoSleepTimer,
-          listener::toggleAutoSleepTimer,
+          viewState.autoSleepTimer.enabled,
+          listener::setAutoSleepTimer,
         )
         ListItem(
           leadingContent = { Spacer(Modifier.size(24.dp)) },
           headlineContent = {
             Row {
               AutoSleepTimerSetting(
-                viewState.autoSleepTimer,
-                viewState.autoSleepTimeStart,
+                viewState.autoSleepTimer.enabled,
+                viewState.autoSleepTimer.startTime,
                 stringResource(id = StringsR.string.auto_sleep_timer_start),
                 listener::setAutoSleepTimerStart,
               )
               Spacer(Modifier.weight(weight = 1f, fill = true))
               AutoSleepTimerSetting(
-                viewState.autoSleepTimer,
-                viewState.autoSleepTimeEnd,
+                viewState.autoSleepTimer.enabled,
+                viewState.autoSleepTimer.endTime,
                 stringResource(id = StringsR.string.auto_sleep_timer_end),
                 listener::setAutoSleepTimerEnd,
               )

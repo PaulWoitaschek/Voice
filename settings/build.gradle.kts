@@ -21,4 +21,5 @@ dependencies {
   implementation(libs.material)
 
   implementation(libs.dagger.core)
+  implementation(libs.datastore.core.android)
 }

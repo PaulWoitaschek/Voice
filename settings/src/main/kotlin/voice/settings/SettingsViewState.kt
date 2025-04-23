@@ -1,5 +1,7 @@
 package voice.settings
 
+import voice.pref.AutoSleepTimerPrefs
+
 data class SettingsViewState(
   val useDarkTheme: Boolean,
   val showDarkThemePref: Boolean,
@@ -8,9 +10,7 @@ data class SettingsViewState(
   val appVersion: String,
   val dialog: Dialog?,
   val useGrid: Boolean,
-  val autoSleepTimer: Boolean,
-  val autoSleepTimeStart: String,
-  val autoSleepTimeEnd: String,
+  val autoSleepTimer: AutoSleepTimerPrefs,
 ) {
 
   enum class Dialog {
