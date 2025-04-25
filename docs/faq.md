@@ -33,3 +33,13 @@ If you’re running an Android release that’s not supported by the latest Voic
 | Android 7.1     | 25              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
 | Android 7.0     | 24              | [6.0.10](https://github.com/PaulWoitaschek/Voice/releases/tag/6.0.10)   |
 
+### How do I resume playback after the sleep timer stops?
+
+Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To keep listening, you have two options:
+
+- **Shake to resume**: Shake your device within 30 seconds of pause to restart playback.
+- **Open to resume**: Open the App and simply press on play again
+
+!!! tip
+
+    On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably—tapping the timer display always works.
