@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="playback_speed">Taasesituse kiirus</string>
+    <string name="cover">Kaanepilt</string>
+    <string name="play_pause">Esita / Peata esitus</string>
+    <string name="play">Esita</string>
+    <string name="pause">Peata esitus</string>
+    <string name="action_sleep">Unetaimer</string>
+    <string name="rewind">Keri tagasi</string>
+    <string name="fast_forward">Keri edasi</string>
+    <string name="previous_track">Eelmine lugu</string>
+    <string name="next_track">Järgmine lugu</string>
+    <string name="skip_silence">Jäta vaikus vahele</string>
+    <string name="volume_boost">Lubatust valjem heli</string>
+    <string name="more">Veel</string>
+    <string name="change_book_name">Nimi</string>
+    <string name="download_book_cover">Kaanepilt internetist</string>
+    <string name="pick_book_cover">Kaanepilt nutiseadme failisüsteemist</string>
+    <string name="cover_search.icon_recent">Hiljutine päring</string>
+    <string name="cover_search.author">Autor</string>
+    <string name="edit_book_title">Muuda raamatut</string>
+    <string name="mark_as_completed">Märgi loetuks</string>
+    <string name="mark_as_current">Märgi kuulamisel olevaks</string>
+    <string name="mark_as_not_started">Märgi ootel olevaks</string>
+    <string name="audiobook_folders_title">Heliraamatute kaustad</string>
+</resources>
