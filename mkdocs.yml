@@ -8,6 +8,7 @@ repo_name: "Voice on GitHub"
 
 nav:
   - Home: index.md
+  - Organizing Audiobooks: organizing.md
   - Privacy Policy: privacy-policy.md
   - License: license.md
   - Contributing: contributing.md
