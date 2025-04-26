@@ -18,7 +18,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +55,7 @@ fun OnboardingExplanation(
     },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
-        if (LocalConfiguration.current.screenHeightDp > 500) {
+        if (shouldShowImage()) {
           Image(
             modifier = Modifier
               .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
@@ -83,6 +84,13 @@ fun OnboardingExplanation(
       }
     },
   )
+}
+
+@Composable
+private fun shouldShowImage(): Boolean {
+  val localWindowInfo = LocalWindowInfo.current
+  val thresholdPx = with(LocalDensity.current) { 500.dp.toPx() }
+  return localWindowInfo.containerSize.height > thresholdPx
 }
 
 @Composable
