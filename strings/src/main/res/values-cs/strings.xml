@@ -41,10 +41,10 @@
     <string name="book_header_not_started">Doposud nespuštěno</string>
     <string name="book_header_completed">Dokončeno</string>
     <string name="pref_get_support">Získat podporu</string>
-    <string name="delete">Smazat</string>
+    <string name="delete">Odstranit</string>
     <string name="add">Přidat</string>
-    <string name="folder_mode_root">Režim řazení knih: Podsložky jsou knihy</string>
-    <string name="folder_type_title">Jak jsou vaše audioknihy logicky rozmístěné?</string>
+    <string name="folder_mode_root">Režim knihy nejvyšší úrovně: Podsložky jsou knihy</string>
+    <string name="folder_type_title">Jak jsou organizované vaše soubory?</string>
     <string name="bookmark_just_now">Právě teď</string>
     <string name="migration_hint_title">Zpřístupnění starých pozic knih</string>
     <string name="select_folder_type_folder">Složka</string>
@@ -64,9 +64,7 @@
     <string name="migration_hint_confirm">Rozumím</string>
     <string name="migration_detail_content_added_at">Přidáno v</string>
     <string name="migration_delete_dialog_title">Odstranit pozice</string>
-    <string name="migration_hint_content">Vzhledem ke změnám v novějších verzích Androidu, je potřeba vybrat hlavní složku audioknih pomocí systémového výběru.
-\n
-\nkliknutím na ikonu výše zobrazíte pozice svých starých knih.</string>
+    <string name="migration_hint_content">Vzhledem ke změnám v novějších verzích Androidu, je potřeba vybrat hlavní složku audioknih pomocí systémového výběru.\n\nKliknutím na ikonu výše zobrazíte pozice svých starých knih.</string>
     <string name="migration_delete_dialog_content">Jakmile odstraníte staré pozice, nebudete moci obnovit své staré pozice přehrávání.</string>
     <string name="delete_book_bottom_sheet_title">Odstranit knihu</string>
     <string name="delete_book_dialog_title">Odstranit knihu</string>
@@ -81,8 +79,8 @@
         <item quantity="other">%d minut</item>
     </plurals>
     <string name="search_hint">Co hledáte?</string>
-    <string name="folder_mode_single">Režim řazení knih: Jedna složka = Jedna kniha</string>
-    <string name="folder_mode_author">Režim řazení knih: Podsložky jsou autoři, podsložky podložek jsou knihy</string>
+    <string name="folder_mode_single">Režim jedné knihy: Jedna složka se rovná jedné knize.</string>
+    <string name="folder_mode_author">Režim autor-kniha: Podsložky jsou autoři, pod-podsložky jsou knihy.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d zvukový soubor</item>
         <item quantity="few">%d zvukové soubory</item>
@@ -127,8 +125,8 @@
     <string name="migration_detail_content_position_current_file_position">Pozice v souboru</string>
     <string name="migration_detail_content_position_current_file_title">Aktuální soubor</string>
     <string name="migration_detail_content_position_current_chapter_position">Pozice v kapitole</string>
-    <string name="migration_detail_content_position_current_chapter_title">Současná kapitola</string>
-    <string name="media_session_root">Všechny audoknihy</string>
+    <string name="migration_detail_content_position_current_chapter_title">Aktuální kapitola</string>
+    <string name="media_session_root">Všechny audioknihy</string>
     <string name="media_session_recent">Nedávné</string>
     <string name="battery_optimization_rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>
     <string name="battery_optimization_action">Aktualizovat</string>
