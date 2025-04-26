@@ -18,7 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +44,7 @@ fun OnboardingWelcome(
     },
     content = { contentPadding ->
       Column(Modifier.padding(contentPadding)) {
-        if (LocalConfiguration.current.screenHeightDp > 440) {
+        if (shouldShowImage()) {
           Image(
             modifier = Modifier
               .weight(1F)
@@ -74,6 +75,13 @@ fun OnboardingWelcome(
       }
     },
   )
+}
+
+@Composable
+private fun shouldShowImage(): Boolean {
+  val localWindowInfo = LocalWindowInfo.current
+  val thresholdPx = with(LocalDensity.current) { 440.dp.toPx() }
+  return localWindowInfo.containerSize.height > thresholdPx
 }
 
 @Composable
