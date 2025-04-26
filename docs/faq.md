@@ -42,4 +42,4 @@ Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To
 
 !!! tip
 
-    On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably—tapping the timer display always works.
+    On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably.
