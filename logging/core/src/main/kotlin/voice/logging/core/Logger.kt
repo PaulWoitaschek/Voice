@@ -32,6 +32,13 @@ object Logger {
     log(severity = Severity.Warn, message = message, throwable = throwable)
   }
 
+  fun d(
+    throwable: Throwable,
+    message: String? = null,
+  ) {
+    log(severity = Severity.Debug, message = message, throwable = throwable)
+  }
+
   fun e(message: String) {
     log(severity = Severity.Error, message = message, throwable = null)
   }
