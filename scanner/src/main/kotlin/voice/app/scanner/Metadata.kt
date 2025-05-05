@@ -12,7 +12,7 @@ data class Metadata(
   val chapters: List<MarkData>,
 ) {
 
-  class Builder(val fileName: String) {
+  internal class Builder(val fileName: String) {
     var artist: String? = null
     var album: String? = null
     var title: String? = null
