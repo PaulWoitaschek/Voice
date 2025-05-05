@@ -13,6 +13,7 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.app.scanner.FFProbeAnalyze
 import voice.app.scanner.MediaAnalyzer
+import voice.app.scanner.Metadata
 import voice.app.test.R
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
@@ -33,7 +34,7 @@ class MediaAnalyzerInstrumentationTest {
 
   @Test
   fun intactFile() {
-    analyze(R.raw.intact)!!.copy(fileName = "") shouldBe MediaAnalyzer.Metadata(
+    analyze(R.raw.intact)!!.copy(fileName = "") shouldBe Metadata(
       duration = 119040,
       artist = "Auphonic",
       album = "Auphonic Examples",
@@ -53,7 +54,7 @@ class MediaAnalyzerInstrumentationTest {
     )
   }
 
-  private fun analyze(@RawRes resource: Int): MediaAnalyzer.Metadata? {
+  private fun analyze(@RawRes resource: Int): Metadata? {
     val file = resourceToTemporaryFile(resource)
     return runBlocking {
       mediaAnalyzer.analyze(FileBasedDocumentFile(file))

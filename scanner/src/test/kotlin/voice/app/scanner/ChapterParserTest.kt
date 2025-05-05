@@ -57,7 +57,7 @@ class ChapterParserTest {
           analyze(any())
         } answers {
           val file = firstArg<CachedDocumentFile>()
-          MediaAnalyzer.Metadata(
+          Metadata(
             duration = 1000,
             fileName = file.nameWithoutExtension(),
             artist = null,

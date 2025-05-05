@@ -248,7 +248,7 @@ class MediaScannerTest {
         }
         .also {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
-            MediaAnalyzer.Metadata(
+            Metadata(
               duration = 1000L,
               artist = "Author",
               album = "Book Name",
