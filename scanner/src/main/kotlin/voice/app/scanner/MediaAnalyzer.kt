@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.ParserException
-import androidx.media3.common.TrackGroup
 import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.exoplayer.MediaExtractorCompat
 import androidx.media3.exoplayer.MetadataRetriever
@@ -44,14 +43,14 @@ class MediaAnalyzer
     val trackGroups = retrieveMetadata(file.uri)
       ?: return null
 
-    for (i in 0 until trackGroups.length) {
-      val trackGroup: TrackGroup = trackGroups[i]
+    repeat(trackGroups.length) { trackGroupsIndex ->
+      val trackGroup = trackGroups[trackGroupsIndex]
       if (trackGroup.type == C.TRACK_TYPE_AUDIO) {
-        for (j in 0 until trackGroup.length) {
-          val format = trackGroup.getFormat(j)
+        repeat(trackGroup.length) { formatIndex ->
+          val format = trackGroup.getFormat(formatIndex)
           format.metadata?.let { metadata ->
-            for (k in 0 until metadata.length()) {
-              val entry = metadata.get(k)
+            repeat(metadata.length()) { metadataIndex ->
+              val entry = metadata.get(metadataIndex)
               when (entry) {
                 is TextInformationFrame -> visitText(entry, builder)
                 is ChapterFrame -> visitChapter(entry, builder)
@@ -76,9 +75,11 @@ class MediaAnalyzer
       "com.apple.quicktime.title" -> {
         builder.title = entry.value.toString(Charsets.UTF_8)
       }
+
       "com.apple.quicktime.artist" -> {
         builder.artist = entry.value.toString(Charsets.UTF_8)
       }
+
       "com.apple.quicktime.album" -> {
         builder.album = entry.value.toString(Charsets.UTF_8)
       }
@@ -125,6 +126,7 @@ class MediaAnalyzer
           }
         }
       }
+
       else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
     }
   }
@@ -152,6 +154,7 @@ class MediaAnalyzer
       "TALB" -> builder.album = value
       "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {
       }
+
       else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
     }
   }

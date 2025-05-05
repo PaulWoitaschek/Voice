@@ -23,11 +23,14 @@ class CoverExtractor @Inject constructor(private val context: Context) {
         MediaItem.fromUri(input),
       )
       .await()
-    for (trackGroup in trackGroups) {
-      for (format in trackGroup) {
+    repeat(trackGroups.length) { trackGroupIndex ->
+      val trackGroup = trackGroups[trackGroupIndex]
+      repeat(trackGroup.length) { formatIndex ->
+        val format = trackGroup.getFormat(formatIndex)
         val metadata = format.metadata
         if (metadata != null) {
-          for (entry in metadata) {
+          repeat(metadata.length()) { metadataIndex ->
+            val entry = metadata.get(metadataIndex)
             when (entry) {
               is ApicFrame -> {
                 Logger.w("Found image frame in ${trackGroup.type}")
