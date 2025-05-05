@@ -2,6 +2,7 @@ package voice.app.scanner
 
 import android.content.Context
 import android.media.MediaFormat
+import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.ParserException
@@ -10,6 +11,7 @@ import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.exoplayer.MediaExtractorCompat
 import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
@@ -44,21 +46,8 @@ class MediaAnalyzer
     var album: String? = null
     var title: String? = null
 
-    val trackGroups = try {
-      MetadataRetriever
-        .retrieveMetadata(
-          DefaultMediaSourceFactory(
-            context,
-            DefaultExtractorsFactory(),
-          ),
-          MediaItem.fromUri(file.uri),
-        )
-        .await()
-    } catch (e: Exception) {
-      if (e is CancellationException) coroutineContext.ensureActive()
-      Logger.w(e, "Error retrieving metadata")
-      return null
-    }
+    val trackGroups = retrieveMetadata(file.uri)
+      ?: return null
 
     val vorbisChapterNames = mutableMapOf<Int, String>()
     val vorbisChapterStarts = mutableMapOf<Int, Long>()
@@ -173,6 +162,24 @@ class MediaAnalyzer
       fileName = file.nameWithoutExtension(),
       chapters = chapters,
     )
+  }
+
+  private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
+    return try {
+      MetadataRetriever
+        .retrieveMetadata(
+          DefaultMediaSourceFactory(
+            context,
+            DefaultExtractorsFactory(),
+          ),
+          MediaItem.fromUri(uri),
+        )
+        .await()
+    } catch (e: Exception) {
+      if (e is CancellationException) coroutineContext.ensureActive()
+      Logger.w(e, "Error retrieving metadata")
+      null
+    }
   }
 
   private suspend fun parseDuration(file: CachedDocumentFile): Duration? {
