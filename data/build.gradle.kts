@@ -13,7 +13,8 @@ anvil {
 
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
-  allWarningsAsErrors = true
+  allWarningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
+
 }
 
 android {

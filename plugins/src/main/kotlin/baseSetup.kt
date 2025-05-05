@@ -28,7 +28,7 @@ fun Project.baseSetup() {
           "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
-      allWarningsAsErrors.set(true)
+      allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
     }
   }
   extensions.configure<KotlinProjectExtension> {

@@ -144,7 +144,7 @@ android {
   lint {
     checkDependencies = true
     ignoreTestSources = true
-    warningsAsErrors = true
+    warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
     lintConfig = rootProject.file("lint.xml")
   }
 
