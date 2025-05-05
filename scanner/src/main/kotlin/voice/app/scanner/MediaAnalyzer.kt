@@ -37,14 +37,11 @@ class MediaAnalyzer
 @Inject constructor(private val context: Context) {
 
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
+    val builder = Metadata.Builder(file.nameWithoutExtension())
     val duration = parseDuration(file)
       ?: return null
 
     val chapters = mutableListOf<MarkData>()
-
-    var artist: String? = null
-    var album: String? = null
-    var title: String? = null
 
     val trackGroups = retrieveMetadata(file.uri)
       ?: return null
@@ -63,9 +60,9 @@ class MediaAnalyzer
                 is TextInformationFrame -> {
                   val value = entry.values.first()
                   when (entry.id) {
-                    "TIT2" -> title = value
-                    "TPE1" -> artist = value
-                    "TALB" -> album = value
+                    "TIT2" -> builder.title = value
+                    "TPE1" -> builder.artist = value
+                    "TALB" -> builder.album = value
                     "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {
                     }
                     else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
@@ -83,9 +80,9 @@ class MediaAnalyzer
                   val key = entry.key
                   val value = entry.value
                   when {
-                    key == "ARTIST" -> artist = value
-                    key == "ALBUM" -> album = value
-                    key == "TITLE" -> title = value
+                    key == "ARTIST" -> builder.artist = value
+                    key == "ALBUM" -> builder.album = value
+                    key == "TITLE" -> builder.title = value
                     key.startsWith("CHAPTER") -> {
                       val withoutPrefix = key.removePrefix("CHAPTER")
                       val isName = withoutPrefix.endsWith("NAME")
@@ -122,13 +119,13 @@ class MediaAnalyzer
                 is MdtaMetadataEntry -> {
                   when (entry.key) {
                     "com.apple.quicktime.title" -> {
-                      title = entry.value.toString(Charsets.UTF_8)
+                      builder.title = entry.value.toString(Charsets.UTF_8)
                     }
                     "com.apple.quicktime.artist" -> {
-                      artist = entry.value.toString(Charsets.UTF_8)
+                      builder.artist = entry.value.toString(Charsets.UTF_8)
                     }
                     "com.apple.quicktime.album" -> {
-                      album = entry.value.toString(Charsets.UTF_8)
+                      builder.album = entry.value.toString(Charsets.UTF_8)
                     }
                   }
                 }
@@ -154,14 +151,7 @@ class MediaAnalyzer
         }
       }
 
-    return Metadata(
-      duration = duration.inWholeMilliseconds,
-      artist = artist,
-      album = album,
-      title = title ?: file.nameWithoutExtension(),
-      fileName = file.nameWithoutExtension(),
-      chapters = chapters,
-    )
+    return builder.build(duration.inWholeMilliseconds)
   }
 
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
@@ -221,5 +211,22 @@ class MediaAnalyzer
     val title: String?,
     val fileName: String,
     val chapters: List<MarkData>,
-  )
+  ) {
+
+    class Builder(val fileName: String) {
+      var artist: String? = null
+      var album: String? = null
+      var title: String? = null
+      val chapters = mutableListOf<MarkData>()
+
+      fun build(duration: Duration) = Metadata(
+        duration = duration.inWholeMilliseconds,
+        artist = artist,
+        album = album,
+        title = title ?: fileName,
+        fileName = fileName,
+        chapters = chapters,
+      )
+    }
+  }
 }
