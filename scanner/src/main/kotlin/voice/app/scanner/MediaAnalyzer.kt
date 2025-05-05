@@ -33,6 +33,13 @@ import kotlin.time.Duration.Companion.microseconds
 class MediaAnalyzer
 @Inject constructor(private val context: Context) {
 
+  // we use a custom MediaSourceFactory because the default one for the
+  // retriever also extracts the covers
+  private val mediaSourceFactory = DefaultMediaSourceFactory(
+    context,
+    DefaultExtractorsFactory(),
+  )
+
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
     val builder = Metadata.Builder(file.nameWithoutExtension())
     val duration = parseDuration(file)
@@ -149,10 +156,7 @@ class MediaAnalyzer
     return try {
       MetadataRetriever
         .retrieveMetadata(
-          DefaultMediaSourceFactory(
-            context,
-            DefaultExtractorsFactory(),
-          ),
+          mediaSourceFactory,
           MediaItem.fromUri(uri),
         )
         .await()
