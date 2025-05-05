@@ -14,7 +14,9 @@ import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
 import voice.data.MarkData
@@ -24,6 +26,7 @@ import voice.logging.core.Logger
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
@@ -31,9 +34,9 @@ import kotlin.time.Duration.Companion.microseconds
 class MediaAnalyzer
 @Inject constructor(private val context: Context) {
 
-  suspend fun analyze(file: CachedDocumentFile): Metadata? = withContext(Dispatchers.IO) {
+  suspend fun analyze(file: CachedDocumentFile): Metadata? {
     val duration = parseDuration(file)
-      ?: return@withContext null
+      ?: return null
 
     val chapters = mutableListOf<MarkData>()
 
@@ -41,15 +44,21 @@ class MediaAnalyzer
     var album: String? = null
     var title: String? = null
 
-    val trackGroups = MetadataRetriever
-      .retrieveMetadata(
-        DefaultMediaSourceFactory(
-          context,
-          DefaultExtractorsFactory(),
-        ),
-        MediaItem.fromUri(file.uri),
-      )
-      .await()
+    val trackGroups = try {
+      MetadataRetriever
+        .retrieveMetadata(
+          DefaultMediaSourceFactory(
+            context,
+            DefaultExtractorsFactory(),
+          ),
+          MediaItem.fromUri(file.uri),
+        )
+        .await()
+    } catch (e: Exception) {
+      if (e is CancellationException) coroutineContext.ensureActive()
+      Logger.w(e, "Error retrieving metadata")
+      return null
+    }
 
     val vorbisChapterNames = mutableMapOf<Int, String>()
     val vorbisChapterStarts = mutableMapOf<Int, Long>()
@@ -157,7 +166,7 @@ class MediaAnalyzer
         }
       }
 
-    Metadata(
+    return Metadata(
       duration = duration.inWholeMilliseconds,
       artist = artist,
       album = album,
@@ -167,31 +176,36 @@ class MediaAnalyzer
     )
   }
 
-  private fun parseDuration(file: CachedDocumentFile): Duration? {
-    return try {
-      val extractor = MediaExtractorCompat(context)
-      extractor.setDataSource(file.uri, 0)
+  private suspend fun parseDuration(file: CachedDocumentFile): Duration? {
+    val extractor = MediaExtractorCompat(context)
 
-      for (i in 0 until extractor.trackCount) {
-        val format = extractor.getTrackFormat(i)
-        if (format.getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true) {
-          extractor.selectTrack(i)
-          if (format.containsKey(MediaFormat.KEY_DURATION)) {
-            val durationUs = format.getLong(MediaFormat.KEY_DURATION)
-            if (durationUs != C.TIME_UNSET) {
-              return durationUs.microseconds
-            }
+    val prepared = withContext(Dispatchers.IO) {
+      try {
+        extractor.setDataSource(file.uri, 0)
+        true
+      } catch (e: IOException) {
+        Logger.w(e, "Error extracting duration")
+        false
+      } catch (e: ParserException) {
+        Logger.w(e, "Error extracting duration")
+        false
+      }
+    }
+    if (!prepared) return null
+
+    for (i in 0 until extractor.trackCount) {
+      val format = extractor.getTrackFormat(i)
+      if (format.getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true) {
+        extractor.selectTrack(i)
+        if (format.containsKey(MediaFormat.KEY_DURATION)) {
+          val durationUs = format.getLong(MediaFormat.KEY_DURATION)
+          if (durationUs != C.TIME_UNSET) {
+            return durationUs.microseconds
           }
         }
       }
-      null
-    } catch (e: IOException) {
-      Logger.w(e, "Error extracting duration")
-      null
-    } catch (e: ParserException) {
-      Logger.w(e, "Error extracting duration")
-      null
     }
+    return null
   }
 
   data class Metadata(
