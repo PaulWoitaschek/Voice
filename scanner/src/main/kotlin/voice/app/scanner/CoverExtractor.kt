@@ -4,25 +4,27 @@ import android.content.Context
 import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.MetadataRetriever
+import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.metadata.flac.PictureFrame
 import androidx.media3.extractor.metadata.id3.ApicFrame
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import voice.logging.core.Logger
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
-class CoverExtractor @Inject constructor(private val context: Context) {
+class CoverExtractor
+@Inject constructor(private val context: Context) {
 
   suspend fun extractCover(
     input: Uri,
     outputFile: File,
   ): Boolean {
-    val trackGroups = MetadataRetriever
-      .retrieveMetadata(
-        context,
-        MediaItem.fromUri(input),
-      )
-      .await()
+    val trackGroups = retrieveMetadata(input)
+      ?: return false
+
     repeat(trackGroups.length) { trackGroupIndex ->
       val trackGroup = trackGroups[trackGroupIndex]
       repeat(trackGroup.length) { formatIndex ->
@@ -55,5 +57,20 @@ class CoverExtractor @Inject constructor(private val context: Context) {
       }
     }
     return false
+  }
+
+  private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
+    return try {
+      MetadataRetriever
+        .retrieveMetadata(
+          context,
+          MediaItem.fromUri(uri),
+        )
+        .await()
+    } catch (e: Exception) {
+      if (e is CancellationException) coroutineContext.ensureActive()
+      Logger.w(e, "Error retrieving metadata")
+      null
+    }
   }
 }
