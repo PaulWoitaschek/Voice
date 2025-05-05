@@ -41,13 +41,9 @@ class MediaAnalyzer
     val duration = parseDuration(file)
       ?: return null
 
-    val chapters = mutableListOf<MarkData>()
-
     val trackGroups = retrieveMetadata(file.uri)
       ?: return null
 
-    val vorbisChapterNames = mutableMapOf<Int, String>()
-    val vorbisChapterStarts = mutableMapOf<Int, Long>()
     for (i in 0 until trackGroups.length) {
       val trackGroup: TrackGroup = trackGroups[i]
       if (trackGroup.type == C.TRACK_TYPE_AUDIO) {
@@ -57,81 +53,11 @@ class MediaAnalyzer
             for (k in 0 until metadata.length()) {
               val entry = metadata.get(k)
               when (entry) {
-                is TextInformationFrame -> {
-                  val value = entry.values.first()
-                  when (entry.id) {
-                    "TIT2" -> builder.title = value
-                    "TPE1" -> builder.artist = value
-                    "TALB" -> builder.album = value
-                    "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {
-                    }
-                    else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
-                  }
-                }
-                is ChapterFrame -> {
-                  for (subFrameIndex in 0 until entry.subFrameCount) {
-                    val subFrame = entry.getSubFrame(subFrameIndex)
-                    if (subFrame is TextInformationFrame) {
-                      chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
-                    }
-                  }
-                }
-                is VorbisComment -> {
-                  val key = entry.key
-                  val value = entry.value
-                  when {
-                    key == "ARTIST" -> builder.artist = value
-                    key == "ALBUM" -> builder.album = value
-                    key == "TITLE" -> builder.title = value
-                    key.startsWith("CHAPTER") -> {
-                      val withoutPrefix = key.removePrefix("CHAPTER")
-                      val isName = withoutPrefix.endsWith("NAME")
-                      if (isName) {
-                        val index = withoutPrefix.removeSuffix("NAME").toIntOrNull()
-                        if (index != null) {
-                          vorbisChapterNames[index] = value
-                        }
-                      } else {
-                        val index = withoutPrefix.toIntOrNull()
-                        if (index != null) {
-                          val split = value.split(":")
-                          if (split.size == 3) {
-                            val hour = split[0].toLongOrNull()
-                            val minute = split[1].toLongOrNull()
-                            val seconds = split[2].toDoubleOrNull()
-                            if (hour != null && minute != null && seconds != null) {
-                              val start = TimeUnit.HOURS.toMillis(hour) +
-                                TimeUnit.MINUTES.toMillis(minute) +
-                                (seconds * 60).roundToLong()
-                              vorbisChapterStarts[index] = start
-                            } else {
-                              Logger.w("Invalid vorbis chapter format: $value")
-                            }
-                          } else {
-                            Logger.w("Invalid vorbis chapter format: $value")
-                          }
-                        }
-                      }
-                    }
-                    else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
-                  }
-                }
-                is MdtaMetadataEntry -> {
-                  when (entry.key) {
-                    "com.apple.quicktime.title" -> {
-                      builder.title = entry.value.toString(Charsets.UTF_8)
-                    }
-                    "com.apple.quicktime.artist" -> {
-                      builder.artist = entry.value.toString(Charsets.UTF_8)
-                    }
-                    "com.apple.quicktime.album" -> {
-                      builder.album = entry.value.toString(Charsets.UTF_8)
-                    }
-                  }
-                }
-                else -> {
-                  Logger.d("Unknown metadata entry: $entry")
-                }
+                is TextInformationFrame -> visitText(entry, builder)
+                is ChapterFrame -> visitChapter(entry, builder)
+                is VorbisComment -> visitVorbis(entry, builder)
+                is MdtaMetadataEntry -> visitMdta(entry, builder)
+                else -> Logger.d("Unknown metadata entry: $entry")
               }
             }
           }
@@ -139,19 +65,95 @@ class MediaAnalyzer
       }
     }
 
-    vorbisChapterNames.keys.toList()
-      .sorted()
-      .mapNotNullTo(chapters) { index ->
-        val name = vorbisChapterNames[index]
-        val start = vorbisChapterStarts[index]
-        if (name != null && start != null) {
-          MarkData(startMs = start, name = name)
+    return builder.build(duration)
+  }
+
+  private fun visitMdta(
+    entry: MdtaMetadataEntry,
+    builder: Metadata.Builder,
+  ) {
+    when (entry.key) {
+      "com.apple.quicktime.title" -> {
+        builder.title = entry.value.toString(Charsets.UTF_8)
+      }
+      "com.apple.quicktime.artist" -> {
+        builder.artist = entry.value.toString(Charsets.UTF_8)
+      }
+      "com.apple.quicktime.album" -> {
+        builder.album = entry.value.toString(Charsets.UTF_8)
+      }
+    }
+  }
+
+  private fun visitVorbis(
+    entry: VorbisComment,
+    builder: Metadata.Builder,
+  ) {
+    val key = entry.key
+    val value = entry.value
+    when {
+      key == "ARTIST" -> builder.artist = value
+      key == "ALBUM" -> builder.album = value
+      key == "TITLE" -> builder.title = value
+      key.startsWith("CHAPTER") -> {
+        val withoutPrefix = key.removePrefix("CHAPTER")
+        val isName = withoutPrefix.endsWith("NAME")
+        if (isName) {
+          val index = withoutPrefix.removeSuffix("NAME").toIntOrNull()
+          if (index != null) {
+            builder.vorbisChapterNames[index] = value
+          }
         } else {
-          null
+          val index = withoutPrefix.toIntOrNull()
+          if (index != null) {
+            val split = value.split(":")
+            if (split.size == 3) {
+              val hour = split[0].toLongOrNull()
+              val minute = split[1].toLongOrNull()
+              val seconds = split[2].toDoubleOrNull()
+              if (hour != null && minute != null && seconds != null) {
+                val start = TimeUnit.HOURS.toMillis(hour) +
+                  TimeUnit.MINUTES.toMillis(minute) +
+                  (seconds * 60).roundToLong()
+                builder.vorbisChapterStarts[index] = start
+              } else {
+                Logger.w("Invalid vorbis chapter format: $value")
+              }
+            } else {
+              Logger.w("Invalid vorbis chapter format: $value")
+            }
+          }
         }
       }
+      else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
+    }
+  }
 
-    return builder.build(duration.inWholeMilliseconds)
+  private fun visitChapter(
+    entry: ChapterFrame,
+    builder: Metadata.Builder,
+  ) {
+    for (subFrameIndex in 0 until entry.subFrameCount) {
+      val subFrame = entry.getSubFrame(subFrameIndex)
+      if (subFrame is TextInformationFrame) {
+        builder.chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
+      }
+    }
+  }
+
+  private fun visitText(
+    entry: TextInformationFrame,
+    builder: Metadata.Builder,
+  ) {
+    val value = entry.values.first()
+    when (entry.id) {
+      "TIT2" -> builder.title = value
+      "TPE1" -> builder.artist = value
+      "TALB" -> builder.album = value
+      "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {
+      }
+      else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
+    }
   }
 
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
@@ -218,15 +220,31 @@ class MediaAnalyzer
       var album: String? = null
       var title: String? = null
       val chapters = mutableListOf<MarkData>()
+      val vorbisChapterNames = mutableMapOf<Int, String>()
+      val vorbisChapterStarts = mutableMapOf<Int, Long>()
 
-      fun build(duration: Duration) = Metadata(
-        duration = duration.inWholeMilliseconds,
-        artist = artist,
-        album = album,
-        title = title ?: fileName,
-        fileName = fileName,
-        chapters = chapters,
-      )
+      fun build(duration: Duration): Metadata {
+        vorbisChapterNames.keys.toList()
+          .sorted()
+          .mapNotNullTo(chapters) { index ->
+            val name = vorbisChapterNames[index]
+            val start = vorbisChapterStarts[index]
+            if (name != null && start != null) {
+              MarkData(startMs = start, name = name)
+            } else {
+              null
+            }
+          }
+
+        return Metadata(
+          duration = duration.inWholeMilliseconds,
+          artist = artist,
+          album = album,
+          title = title ?: fileName,
+          fileName = fileName,
+          chapters = chapters,
+        )
+      }
     }
   }
 }
