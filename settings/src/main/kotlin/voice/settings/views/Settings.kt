@@ -158,6 +158,16 @@ private fun Settings(
         )
         AppVersion(appVersion = viewState.appVersion)
         Dialog(viewState, listener)
+        AutoSleepTimerSettings(
+          isEnabled = viewState.autoSleepTimerEnabled,
+          startTime = viewState.autoSleepTimerStartTime,
+          endTime = viewState.autoSleepTimerEndTime,
+          duration = viewState.autoSleepTimerDuration,
+          onToggle = listener::toggleAutoSleepTimer,
+          onStartTimeChange = listener::changeAutoSleepTimerStartTime,
+          onEndTimeChange = listener::changeAutoSleepTimerEndTime,
+          onDurationChange = listener::changeAutoSleepTimerDuration
+        )
       }
     }
   }
@@ -194,6 +204,43 @@ private fun Dialog(
         currentSeconds = viewState.seekTimeInSeconds,
         onSecondsConfirm = listener::seekAmountChanged,
         onDismiss = listener::dismissDialog,
+      )
+    }
+  }
+}
+
+@Composable
+private fun AutoSleepTimerSettings(
+  isEnabled: Boolean,
+  startTime: Int,
+  endTime: Int,
+  duration: Int,
+  onToggle: (Boolean) -> Unit,
+  onStartTimeChange: (Int) -> Unit,
+  onEndTimeChange: (Int) -> Unit,
+  onDurationChange: (Int) -> Unit,
+) {
+  Column {
+    SwitchRow(
+      title = stringResource(StringsR.string.pref_auto_sleep_timer),
+      isChecked = isEnabled,
+      onCheckedChange = onToggle
+    )
+    if (isEnabled) {
+      TimePickerRow(
+        title = stringResource(StringsR.string.pref_auto_sleep_timer_start_time),
+        time = startTime,
+        onTimeChange = onStartTimeChange
+      )
+      TimePickerRow(
+        title = stringResource(StringsR.string.pref_auto_sleep_timer_end_time),
+        time = endTime,
+        onTimeChange = onEndTimeChange
+      )
+      DurationPickerRow(
+        title = stringResource(StringsR.string.pref_auto_sleep_timer_duration),
+        duration = duration,
+        onDurationChange = onDurationChange
       )
     }
   }

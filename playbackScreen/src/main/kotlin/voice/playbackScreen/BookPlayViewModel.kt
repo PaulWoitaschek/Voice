@@ -41,6 +41,7 @@ import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import java.time.LocalTime
 
 class BookPlayViewModel
 @AssistedInject constructor(
@@ -57,6 +58,14 @@ class BookPlayViewModel
   dispatcherProvider: DispatcherProvider,
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_ENABLED)
+  private val autoSleepTimerEnabledPref: Pref<Boolean>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START_TIME)
+  private val autoSleepTimerStartTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END_TIME)
+  private val autoSleepTimerEndTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_DURATION)
+  private val autoSleepTimerDurationPref: Pref<Int>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -291,6 +300,26 @@ class BookPlayViewModel
       val skipSilence = book.content.skipSilence
       player.skipSilence(!skipSilence)
     }
+  }
+
+  fun checkAndActivateAutoSleepTimer() {
+    val isEnabled = autoSleepTimerEnabledPref.value
+    val startTime = autoSleepTimerStartTimePref.value
+    val endTime = autoSleepTimerEndTimePref.value
+    val duration = autoSleepTimerDurationPref.value
+
+    if (isEnabled) {
+      val currentHour = LocalTime.now().hour
+      if ((startTime <= endTime && currentHour in startTime until endTime) ||
+          (startTime > endTime && (currentHour >= startTime || currentHour < endTime))) {
+        sleepTimer.setActive(duration.minutes)
+      }
+    }
+  }
+
+  override fun onPlaybackStarted() {
+    super.onPlaybackStarted()
+    checkAndActivateAutoSleepTimer()
   }
 
   @AssistedFactory

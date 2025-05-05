@@ -4,7 +4,10 @@
     <string name="play_pause">Play / Pause</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="action_sleep">Sleep-Timer</string>
+    <string name="action_sleep">Sleep Timer</string>
+    <string name="action_auto_sleep">Auto Sleep Timer</string>
+    <string name="enable_auto_sleep_timer">Enable Auto Sleep Timer</string>
+    <string name="disable_auto_sleep_timer">Disable Auto Sleep Timer</string>
     <string name="rewind">Rewind</string>
     <string name="fast_forward">Fast forward</string>
     <string name="previous_track">Previous track</string>
@@ -40,6 +43,8 @@
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_theme_dark">Dark Theme</string>
     <string name="pref_auto_rewind_title">Auto rewind</string>
+    <string name="pref_auto_sleep_timer">Auto Sleep Timer</string>
+    <string name="pref_auto_sleep_timer_settings">Auto Sleep Timer Settings</string>
     <string name="pref_suggest_idea">Suggest an idea</string>
     <string name="pref_use_grid">Use grid layout</string>
     <string name="pref_report_issue">Report a problem</string>

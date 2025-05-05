@@ -43,3 +43,7 @@ Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To
 !!! tip
 
     On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably.
+
+### How does the Auto-Sleep Timer work?
+
+The Auto-Sleep Timer automatically activates when playback starts during a configured time period. You can enable this feature in the settings and configure the time range as well as the auto sleep timer duration.

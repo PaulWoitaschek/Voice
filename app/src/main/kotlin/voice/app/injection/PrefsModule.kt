@@ -101,6 +101,34 @@ object PrefsModule {
 
   @Provides
   @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_ENABLED)
+  fun provideAutoSleepTimerEnabledPreference(prefs: AndroidPreferences): Pref<Boolean> {
+    return prefs.boolean(PrefKeys.AUTO_SLEEP_TIMER_ENABLED, false)
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_START_TIME)
+  fun provideAutoSleepTimerStartTimePreference(prefs: AndroidPreferences): Pref<Int> {
+    return prefs.int(PrefKeys.AUTO_SLEEP_TIMER_START_TIME, 22) // Default: 22:00
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_END_TIME)
+  fun provideAutoSleepTimerEndTimePreference(prefs: AndroidPreferences): Pref<Int> {
+    return prefs.int(PrefKeys.AUTO_SLEEP_TIMER_END_TIME, 6) // Default: 06:00
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER_DURATION)
+  fun provideAutoSleepTimerDurationPreference(prefs: AndroidPreferences): Pref<Int> {
+    return prefs.int(PrefKeys.AUTO_SLEEP_TIMER_DURATION, 30) // Default: 30 minutes
+  }
+
+  @Provides
+  @Singleton
   @OnboardingCompleted
   fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("onboardingCompleted", defaultValue = false)
