@@ -10,7 +10,6 @@ anvil {
 }
 
 dependencies {
-  implementation(projects.ffmpeg)
   implementation(projects.data)
   implementation(projects.common)
   implementation(projects.pref)
@@ -21,6 +20,8 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
   implementation(libs.datastore)
+  implementation(libs.media3.exoplayer)
+  implementation(libs.coroutines.guava)
 
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.runner)

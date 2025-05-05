@@ -166,7 +166,6 @@ dependencies {
   implementation(projects.common)
   implementation(projects.data)
   implementation(projects.playback)
-  implementation(projects.ffmpeg)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)
   implementation(projects.sleepTimer)

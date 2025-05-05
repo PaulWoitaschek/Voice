@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
 import voice.data.toUri
-import voice.ffmpeg.ffmpeg
 import voice.logging.core.Logger
 import java.io.IOException
 import javax.inject.Inject
@@ -15,6 +14,7 @@ class CoverScanner
 @Inject constructor(
   private val context: Context,
   private val coverSaver: CoverSaver,
+  private val coverExtractor: CoverExtractor,
 ) {
 
   suspend fun scan(books: List<Book>) {
@@ -38,7 +38,7 @@ class CoverScanner
   private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean = withContext(Dispatchers.IO) {
     val documentFile = try {
       DocumentFile.fromTreeUri(context, book.id.toUri())
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
       null
     } ?: return@withContext false
 
@@ -60,7 +60,7 @@ class CoverScanner
           Logger.w(e, "Error while copying the cover from ${child.uri}")
           false
         } catch (e: IllegalStateException) {
-          // On some Samsung Devices, openInputStream throws this though it should not.
+          // On some Samsung Devices, openInputStream throws this exception, though it should not.
           Logger.w(e, "Error while copying the cover from ${child.uri}")
           false
         }
@@ -78,12 +78,11 @@ class CoverScanner
     val coverFile = coverSaver.newBookCoverFile()
     book.chapters
       .take(5).forEach { chapter ->
-        ffmpeg(
+        val success = coverExtractor.extractCover(
           input = chapter.id.toUri(),
-          context = context,
-          command = listOf("-an", coverFile.absolutePath),
+          outputFile = coverFile,
         )
-        if (coverFile.exists() && coverFile.length() > 0) {
+        if (success && coverFile.exists() && coverFile.length() > 0) {
           coverSaver.setBookCover(coverFile, bookId = book.id)
           return
         }
