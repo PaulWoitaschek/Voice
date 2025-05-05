@@ -224,19 +224,5 @@ dependencies {
   testImplementation(libs.robolectric)
   testImplementation(libs.coroutines.test)
 
-  androidTestUtil(libs.androidTest.orchestrator)
-  androidTestUtil(libs.androidTest.services.testServices)
-  androidTestImplementation(libs.androidTest.services.storage)
-
-  androidTestImplementation(libs.androidTest.espresso)
-  androidTestImplementation(libs.androidTest.rules)
-  androidTestImplementation(libs.koTest.assert)
-  androidTestImplementation(libs.junit)
-  androidTestImplementation(libs.compose.ui.test)
   debugImplementation(libs.compose.ui.testManifest)
-  androidTestImplementation(libs.compose.ui.testJunit)
-  androidTestImplementation(libs.androidX.test.runner)
-  androidTestImplementation(libs.androidX.test.core)
-  androidTestImplementation(libs.androidX.test.junit)
-  androidTestImplementation(libs.uiautomator)
 }
