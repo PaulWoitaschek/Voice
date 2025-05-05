@@ -193,10 +193,10 @@ class MediaAnalyzer
     }
     if (!prepared) return null
 
-    for (i in 0 until extractor.trackCount) {
-      val format = extractor.getTrackFormat(i)
+    for (trackIndex in 0 until extractor.trackCount) {
+      val format = extractor.getTrackFormat(trackIndex)
       if (format.getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true) {
-        extractor.selectTrack(i)
+        extractor.selectTrack(trackIndex)
         if (format.containsKey(MediaFormat.KEY_DURATION)) {
           val durationUs = format.getLong(MediaFormat.KEY_DURATION)
           if (durationUs != C.TIME_UNSET) {
