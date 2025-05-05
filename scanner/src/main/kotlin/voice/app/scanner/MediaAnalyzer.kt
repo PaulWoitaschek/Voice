@@ -25,10 +25,8 @@ import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
 import voice.logging.core.Logger
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
-import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
@@ -107,21 +105,9 @@ class MediaAnalyzer
         } else {
           val index = withoutPrefix.toIntOrNull()
           if (index != null) {
-            val split = value.split(":")
-            if (split.size == 3) {
-              val hour = split[0].toLongOrNull()
-              val minute = split[1].toLongOrNull()
-              val seconds = split[2].toDoubleOrNull()
-              if (hour != null && minute != null && seconds != null) {
-                val start = TimeUnit.HOURS.toMillis(hour) +
-                  TimeUnit.MINUTES.toMillis(minute) +
-                  (seconds * 60).roundToLong()
-                builder.vorbisChapterStarts[index] = start
-              } else {
-                Logger.w("Invalid vorbis chapter format: $value")
-              }
-            } else {
-              Logger.w("Invalid vorbis chapter format: $value")
+            val duration = parseVorbisDuration(value)
+            if (duration != null) {
+              builder.vorbisChapterStarts[index] = duration.inWholeMilliseconds
             }
           }
         }
