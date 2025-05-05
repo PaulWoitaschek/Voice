@@ -50,11 +50,6 @@ android {
     versionName = libs.versions.versionName.get()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-    ndk {
-      abiFilters.clear()
-      abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-    }
   }
 
   fun createSigningConfig(name: String): SigningConfig {
