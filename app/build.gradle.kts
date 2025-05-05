@@ -48,6 +48,7 @@ android {
     applicationId = "de.ph1b.audiobook"
     versionCode = libs.versions.versionCode.get().toInt()
     versionName = libs.versions.versionName.get()
+    applicationIdSuffix = ".debug"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
