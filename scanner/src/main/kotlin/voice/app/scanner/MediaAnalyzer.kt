@@ -121,7 +121,7 @@ class MediaAnalyzer
     entry: ChapterFrame,
     builder: Metadata.Builder,
   ) {
-    for (subFrameIndex in 0 until entry.subFrameCount) {
+    repeat(entry.subFrameCount) { subFrameIndex ->
       val subFrame = entry.getSubFrame(subFrameIndex)
       if (subFrame is TextInformationFrame) {
         builder.chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
@@ -180,7 +180,7 @@ class MediaAnalyzer
     }
     if (!prepared) return null
 
-    for (trackIndex in 0 until extractor.trackCount) {
+    repeat(extractor.trackCount) { trackIndex ->
       val format = extractor.getTrackFormat(trackIndex)
       if (format.getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true) {
         extractor.selectTrack(trackIndex)
