@@ -153,12 +153,11 @@ class MediaAnalyzer
       }
     }
 
-    (vorbisChapterNames.keys + vorbisChapterStarts.keys)
-      .distinct()
+    vorbisChapterNames.keys.toList()
       .sorted()
-      .mapNotNullTo(chapters) {
-        val name = vorbisChapterNames[it]
-        val start = vorbisChapterStarts[it]
+      .mapNotNullTo(chapters) { index ->
+        val name = vorbisChapterNames[index]
+        val start = vorbisChapterStarts[index]
         if (name != null && start != null) {
           MarkData(startMs = start, name = name)
         } else {
