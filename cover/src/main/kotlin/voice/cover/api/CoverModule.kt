@@ -11,6 +11,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 import voice.common.AppScope
+import voice.remoteconfig.core.RemoteConfig
 import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
@@ -19,7 +20,19 @@ object CoverModule {
 
   @Provides
   @Singleton
-  fun client(): OkHttpClient = OkHttpClient()
+  fun client(remoteConfig: RemoteConfig): OkHttpClient = OkHttpClient.Builder()
+    .addInterceptor { chain ->
+      chain.proceed(
+        chain.request()
+          .newBuilder()
+          .addHeader(
+            name = "User-Agent",
+            value = remoteConfig.string(key = "user_agent", defaultValue = "Mozilla/5.0"),
+          )
+          .build(),
+      )
+    }
+    .build()
 
   @Provides
   @Singleton

@@ -1,10 +1,10 @@
 package voice.review
 
 import androidx.datastore.core.DataStore
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.flow.first
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
+import voice.remoteconfig.core.RemoteConfig
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class ShouldShowReviewDialog
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
   private val reviewTranslated: ReviewTranslated,
-  private val remoteConfig: FirebaseRemoteConfig,
+  private val remoteConfig: RemoteConfig,
 ) {
 
   internal suspend fun shouldShow(): Boolean {
@@ -39,7 +39,7 @@ class ShouldShowReviewDialog
   }
 
   private fun enabledInRemoteConfig(): Boolean {
-    return remoteConfig.getBoolean("review_enabled")
+    return remoteConfig.boolean("review_enabled")
   }
 
   private fun enoughTimeElapsedSinceInstallation(): Boolean {

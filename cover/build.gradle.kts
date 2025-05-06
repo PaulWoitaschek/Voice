@@ -12,6 +12,7 @@ anvil {
 dependencies {
   implementation(projects.data)
   implementation(projects.strings)
+  implementation(projects.remoteconfig.core)
   implementation(libs.dagger.core)
 
   implementation(libs.bundles.retrofit)
@@ -21,4 +22,5 @@ dependencies {
 
   implementation(libs.serialization.json)
   testImplementation(libs.bundles.testing.jvm)
+  testImplementation(projects.remoteconfig.noop)
 }
