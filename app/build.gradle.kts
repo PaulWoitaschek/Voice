@@ -193,10 +193,12 @@ dependencies {
 
   "proprietaryImplementation"(libs.firebase.crashlytics)
   "proprietaryImplementation"(libs.firebase.analytics)
-  "proprietaryImplementation"(libs.firebase.remoteconfig)
   "proprietaryImplementation"(projects.logging.crashlytics)
   "proprietaryImplementation"(projects.review.play)
+  "proprietaryImplementation"(projects.remoteconfig.firebase)
   "libreImplementation"(projects.review.noop)
+  "libreImplementation"(projects.remoteconfig.noop)
+  implementation(projects.remoteconfig.core)
 
   debugImplementation(projects.logging.debug)
 
