@@ -37,6 +37,20 @@ internal class MediaAnalyzerTest {
     },
   )
 
+  @Test
+  fun ogg() = test(fileName = "test.ogg")
+
+  @Test
+  fun opus() = test(
+    fileName = "test.opus",
+    durationAssert = {
+      it.shouldBeWithinPercentageOf(30.seconds.inWholeMilliseconds, 0.2)
+    },
+  )
+
+  @Test
+  fun mka() = test(fileName = "test.mka")
+
   private fun test(
     fileName: String,
     durationAssert: (Long) -> Unit = {

@@ -1,4 +1,8 @@
-RESOURCES_FOLDER=../scanner/src/test/resources
+#!/bin/bash
+
+set -euo pipefail
+
+RESOURCES_FOLDER="../resources"
 
 ffmpeg \
   -y \
@@ -9,3 +13,5 @@ ffmpeg \
   -codec:a libmp3lame \
   -t 30 \
   $RESOURCES_FOLDER/test.mp3
+
+ffprobe "$RESOURCES_FOLDER/test.mp3"
