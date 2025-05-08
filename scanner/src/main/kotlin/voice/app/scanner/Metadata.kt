@@ -1,60 +1,46 @@
 package voice.app.scanner
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import voice.data.MarkData
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
-@Serializable
-internal data class MetaDataScanResult(
-  val streams: List<MetaDataStream> = emptyList(),
-  val chapters: List<MetaDataChapter> = emptyList(),
-  val format: MetaDataFormat? = null,
-)
-
-internal enum class TagType(val keys: List<String>) {
-  Title(listOf("title")),
-  Artist(listOf("author", "artist", "album_artist")),
-  Album(listOf("album")),
-}
-
-internal fun MetaDataScanResult.findTag(tagType: TagType): String? {
-  format?.tags?.find(tagType)?.let { return it }
-  streams.forEach { stream ->
-    stream.tags?.find(tagType)?.let { return it }
-  }
-  chapters.forEach { chapter ->
-    chapter.tags?.find(tagType)?.let { return it }
-  }
-  return null
-}
-
-internal fun Map<String, String>.find(tagType: TagType): String? {
-  forEach { (key, value) ->
-    tagType.keys.forEach { targetKey ->
-      if (key.equals(targetKey, ignoreCase = true) && value.isNotEmpty()) {
-        return value
-      }
-    }
-  }
-  return null
-}
-
-@Serializable
-internal data class MetaDataStream(val tags: Map<String, String>? = null)
-
-@Serializable
-internal data class MetaDataChapter(
-  @SerialName("start_time")
-  private val startInSeconds: Double,
-  val tags: Map<String, String>? = null,
+data class Metadata(
+  val duration: Long,
+  val artist: String?,
+  val album: String?,
+  val title: String?,
+  val fileName: String,
+  val chapters: List<MarkData>,
 ) {
 
-  val start: Duration get() = startInSeconds.seconds
-}
+  internal class Builder(val fileName: String) {
+    var artist: String? = null
+    var album: String? = null
+    var title: String? = null
+    val chapters = mutableListOf<MarkData>()
+    val vorbisChapterNames = mutableMapOf<Int, String>()
+    val vorbisChapterStarts = mutableMapOf<Int, Long>()
 
-@Serializable
-internal data class MetaDataFormat(
-  val duration: Double? = null,
-  val tags: Map<String, String>? = null,
-)
+    fun build(duration: Duration): Metadata {
+      vorbisChapterNames.keys.toList()
+        .sorted()
+        .mapNotNullTo(chapters) { index ->
+          val name = vorbisChapterNames[index]
+          val start = vorbisChapterStarts[index]
+          if (name != null && start != null) {
+            MarkData(startMs = start, name = name)
+          } else {
+            null
+          }
+        }
+
+      return Metadata(
+        duration = duration.inWholeMilliseconds,
+        artist = artist,
+        album = album,
+        title = title ?: fileName,
+        fileName = fileName,
+        chapters = chapters,
+      )
+    }
+  }
+}

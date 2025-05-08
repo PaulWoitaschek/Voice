@@ -23,7 +23,6 @@ androidPluginForGradle = { module = "com.android.tools.build:gradle", version.re
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 material = "com.google.android.material:material:1.12.0"
-ffmpeg = "com.arthenica:ffmpeg-kit-audio:6.0-2"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.14.0"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.3.6"
@@ -47,7 +46,6 @@ appStartup = "androidx.startup:startup-runtime:1.2.0"
 turbine = "app.cash.turbine:turbine:1.2.0"
 molecule = "app.cash.molecule:molecule-runtime:2.1.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0"
 okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.6.6"
@@ -72,12 +70,6 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidX-test-runner = "androidx.test:runner:1.6.2"
 androidX-test-junit = "androidx.test.ext:junit:1.2.1"
 androidX-test-core = "androidx.test:core-ktx:1.6.1"
-
-androidTest-orchestrator = "androidx.test:orchestrator:1.5.1"
-androidTest-services-testServices = "androidx.test.services:test-services:1.5.0"
-androidTest-services-storage = "androidx.test.services:storage:1.5.0"
-androidTest-espresso = "androidx.test.espresso:espresso-core:3.6.1"
-androidTest-rules = "androidx.test:rules:1.6.1"
 
 conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
 

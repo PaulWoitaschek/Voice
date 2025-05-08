@@ -40,7 +40,7 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Test
-        run: ./gradlew voiceUnitTest lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
+        run: ./gradlew voiceUnitTest -Pvoice.warningsAsErrors=true lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -76,13 +76,13 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Publish to Google Play
-        run: ./gradlew :app:publishPlayProprietaryReleaseBundle
+        run: ./gradlew :app:publishPlayProprietaryReleaseBundle -Pvoice.warningsAsErrors=true
 
       - name: Build Github Proprietary APK
-        run: ./gradlew :app:assembleGithubProprietaryRelease
+        run: ./gradlew :app:assembleGithubProprietaryRelease -Pvoice.warningsAsErrors=true
 
       - name: Build Github Proprietary APK
-        run: ./gradlew :app:assembleGithubLibreRelease
+        run: ./gradlew :app:assembleGithubLibreRelease -Pvoice.warningsAsErrors=true
 
       - name: Github Release
         uses: softprops/action-gh-release@v2

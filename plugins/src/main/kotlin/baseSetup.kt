@@ -28,7 +28,7 @@ fun Project.baseSetup() {
           "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
-      allWarningsAsErrors.set(true)
+      allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
     }
   }
   extensions.configure<KotlinProjectExtension> {
@@ -62,7 +62,6 @@ fun Project.baseSetup() {
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
-    add("androidTestImplementation", platform(libs.findLibrary("compose-bom").get()))
 
     listOf(
       "coroutines.core",
