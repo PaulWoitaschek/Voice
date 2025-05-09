@@ -115,4 +115,18 @@ internal class MediaAnalyzerTest {
       metadata.album shouldBe "Auphonic Examples"
     }
   }
+
+  @Test
+  fun `m4a with chpl chapters`() {
+    val metadata = parse("chpl.m4a")
+
+    assertSoftly {
+      metadata.shouldNotBeNull()
+      metadata.chapters.shouldContainExactly(
+        MarkData(startMs = 0L, name = "Introduction"),
+        MarkData(startMs = 10000L, name = "Chapter 1"),
+        MarkData(startMs = 20000L, name = "Chapter 2"),
+      )
+    }
+  }
 }
