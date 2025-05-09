@@ -13,7 +13,7 @@ class Mp4ChapterExtractor {
 
   fun parse(input: ExtractorInput): List<MarkData> {
     return try {
-      parseBoxes(input, 0, input.length)
+      parseBoxes(input, 0, Long.MAX_VALUE)
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse mp4 chapters")
       emptyList()
