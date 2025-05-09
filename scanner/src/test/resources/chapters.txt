@@ -1,0 +1,25 @@
+;FFMETADATA1
+title=Test Audiobook
+artist=Jane Doe
+album=Sample Audio
+genre=Audiobook
+date=2025-05-01
+comment=Generated for Voice player test
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=0
+END=10000
+title=Introduction
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=10000
+END=20000
+title=Chapter 1
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=20000
+END=30000
+title=Chapter 2
