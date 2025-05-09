@@ -76,18 +76,29 @@ class MediaAnalyzer
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
     if (fileType == FileTypes.MP4) {
-      val dataSourceFactory = DefaultDataSource.Factory(context)
-      val dataSource = dataSourceFactory.createDataSource()
-      dataSource.open(DataSpec(file.uri))
-
-      val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      val chapterExtractor = Mp4ChapterExtractor()
-
-      builder.chapters.addAll(chapterExtractor.parseBoxes(input, 0, Long.MAX_VALUE))
-      dataSource.close()
+      parseMp4Chapters(file, builder)
     }
 
     return builder.build(duration)
+  }
+
+  private fun parseMp4Chapters(
+    file: CachedDocumentFile,
+    builder: Metadata.Builder,
+  ) {
+    val dataSourceFactory = DefaultDataSource.Factory(context)
+    val dataSource = dataSourceFactory.createDataSource()
+    try {
+      dataSource.open(DataSpec(file.uri))
+    } catch (e: IOException) {
+      Logger.d(e)
+      return
+    }
+    val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
+    val chapterExtractor = Mp4ChapterExtractor()
+
+    val chapters = chapterExtractor.parse(input)
+    builder.chapters += chapters
   }
 
   private fun visitMdta(

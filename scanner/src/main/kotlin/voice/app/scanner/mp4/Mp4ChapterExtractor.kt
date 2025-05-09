@@ -4,12 +4,26 @@ import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
 import voice.data.MarkData
+import voice.logging.core.Logger
+import java.io.IOException
 
 class Mp4ChapterExtractor {
 
   private val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
 
-  fun parseBoxes(
+  fun parse(input: ExtractorInput): List<MarkData> {
+    return try {
+      parseBoxes(input, 0, input.length)
+    } catch (e: IOException) {
+      Logger.w(e, "Failed to parse mp4 chapters")
+      emptyList()
+    } catch (e: IllegalStateException) {
+      Logger.w(e, "Failed to parse mp4 chapters")
+      emptyList()
+    }
+  }
+
+  private fun parseBoxes(
     input: ExtractorInput,
     depth: Int,
     parentEnd: Long,
