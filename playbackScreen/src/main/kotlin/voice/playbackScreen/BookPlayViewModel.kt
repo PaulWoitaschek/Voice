@@ -16,6 +16,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.DispatcherProvider
@@ -34,9 +35,11 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
+import voice.pref.AutoSleepTimerPrefs
 import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
+import java.time.LocalTime
 import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -57,6 +60,8 @@ class BookPlayViewModel
   dispatcherProvider: DispatcherProvider,
   @Named(PrefKeys.SLEEP_TIME)
   private val sleepTimePref: Pref<Int>,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  private val autoSleepTimerPref: DataStore<AutoSleepTimerPrefs>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -182,7 +187,30 @@ class BookPlayViewModel
         }
       }
     }
+    autoSleepTimerPref.data.map { prefs ->
+      if (prefs.enabled && !sleepTimer.sleepTimerActive()) {
+        val startTime = LocalTime.parse(prefs.startTime)
+        val endTime = LocalTime.parse(prefs.endTime)
+        if (isCurrentTimeInRange(startTime, endTime)) {
+          sleepTimer.setActive()
+        }
+      }
+    }
     player.playPause()
+  }
+
+  private fun isCurrentTimeInRange(
+    startTime: LocalTime,
+    endTime: LocalTime,
+  ): Boolean {
+    val currentTime = LocalTime.now()
+    return if (startTime <= endTime) {
+      // Standard case, start and end on the same day
+      currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+    } else {
+      // Range wraps around midnight
+      currentTime.isAfter(startTime) || currentTime.isBefore(endTime)
+    }
   }
 
   fun rewind() {
