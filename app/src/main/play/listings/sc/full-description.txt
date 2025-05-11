@@ -1,0 +1,19 @@
+Ses chirchende unu letore de audiolibros simpre e minimale chi funtzionet e bastat?
+Unu chi ti permitit de ti cuntzentrare subra de su chi boles fàghere: Ascurtare audiolibros?
+Podes annànghere a manera fàtzile sa cartella de sos audiolibros printzipale tua, e cada cartella benit reconnota comente unu libru sìngulu. Custu mantenet sa biblioteca tua simpre e ordinada.
+
+Ite podet fàghere:
+- Ammentat s'ùrtima positzione
+- Impostat sa lestresa de sa riprodutzione
+- Gràfica materiale bella meda
+- Temas pro sa die e sa note. Bellos de bìdere
+- Sinnalibros
+- Android Auto
+- Temporizadore pro su sonnu. Non b'at bisòngiu de istudare su letore a tardu a de note.
+
+Voice est de badas e a còdighe abertu. Custu bolet nàrrere chi totus podent bìdere ite faghet. Impreat permissos mìnimos.
+
+Si tenes cussìgios o atzapas faddinas in su còdighe, sinnala·los inoghe:
+https://github.com/PaulWoitaschek/Voice/issues
+
+Sa lissèntzia a còdighe abertu est sa Gnu GPLv3
