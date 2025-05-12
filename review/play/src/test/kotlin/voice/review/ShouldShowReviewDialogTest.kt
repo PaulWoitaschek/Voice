@@ -99,9 +99,6 @@ class ShouldShowReviewDialogTest {
       reviewDialogShown = mockk {
         every { data } returns flowOf(reviewDialogShown)
       },
-      reviewTranslated = mockk {
-        every { translated() } returns true
-      },
       remoteConfig = mockk {
         every { boolean("review_enabled") } returns true
       },
