@@ -13,6 +13,8 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.app.scanner.mp4.ChapterTrackExtractor
+import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
 import voice.logging.core.LogWriter
@@ -27,7 +29,13 @@ internal class MediaAnalyzerTest {
   @JvmField
   val tempFolder = TemporaryFolder()
 
-  private val analyzer = MediaAnalyzer(ApplicationProvider.getApplicationContext())
+  private val analyzer = MediaAnalyzer(
+    context = ApplicationProvider.getApplicationContext(),
+    mp4ChapterExtractor = Mp4ChapterExtractor(
+      context = ApplicationProvider.getApplicationContext(),
+      chapterTrackExtractor = ChapterTrackExtractor(context = ApplicationProvider.getApplicationContext()),
+    ),
+  )
   private val auphonicChapters = listOf(
     MarkData(startMs = 0L, name = "Intro"),
     MarkData(startMs = 15000L, name = "Creating a new production"),
@@ -105,7 +113,6 @@ internal class MediaAnalyzerTest {
   @Test
   fun m4a() {
     val metadata = parse("auphonic_chapters_demo.m4a")
-
     assertSoftly {
       metadata.shouldNotBeNull()
       metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
@@ -113,6 +120,10 @@ internal class MediaAnalyzerTest {
       metadata.title shouldBe "Auphonic Chapter Marks Demo"
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
+      metadata.chapters shouldContainExactly auphonicChapters.filter {
+        // for some reason only this one is missing in the test files
+        it.name != "Sound analysis"
+      }
     }
   }
 

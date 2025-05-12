@@ -8,13 +8,10 @@ import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.ParserException
 import androidx.media3.container.MdtaMetadataEntry
-import androidx.media3.datasource.DataSpec
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.MediaExtractorCompat
 import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
-import androidx.media3.extractor.DefaultExtractorInput
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
@@ -36,7 +33,10 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
 class MediaAnalyzer
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+  private val mp4ChapterExtractor: Mp4ChapterExtractor,
+) {
 
   // we use a custom MediaSourceFactory because the default one for the
   // retriever also extracts the covers
@@ -82,22 +82,11 @@ class MediaAnalyzer
     return builder.build(duration)
   }
 
-  private fun parseMp4Chapters(
+  private suspend fun parseMp4Chapters(
     file: CachedDocumentFile,
     builder: Metadata.Builder,
   ) {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
-    val dataSource = dataSourceFactory.createDataSource()
-    try {
-      dataSource.open(DataSpec(file.uri))
-    } catch (e: IOException) {
-      Logger.d(e)
-      return
-    }
-    val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-    val chapterExtractor = Mp4ChapterExtractor()
-
-    val chapters = chapterExtractor.parse(input)
+    val chapters = mp4ChapterExtractor.extractChapters(file.uri)
     builder.chapters += chapters
   }
 
