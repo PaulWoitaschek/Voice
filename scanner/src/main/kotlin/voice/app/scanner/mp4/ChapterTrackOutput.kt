@@ -7,28 +7,28 @@ import androidx.media3.extractor.SeekMap
 import androidx.media3.extractor.TrackOutput
 import voice.data.MarkData
 
-internal class ChapterExtractorOutput(
-  private val targetMp4TrackId: Int,
-  private val outputCuesList: MutableList<MarkData>,
+internal class ChapterTrackOutput(
+  private val targetTrackId: Int,
+  private val outputChapters: MutableList<MarkData>,
 ) : ExtractorOutput {
 
-  private var targetTrackOutput: ChapterCueTrackOutput? = null
+  private var chapterCueOutput: ChapterCueProcessor? = null
 
   override fun track(
     id: Int,
     type: Int,
   ): TrackOutput {
-    if (type == C.TRACK_TYPE_TEXT && id == targetMp4TrackId) {
-      val trackOutput = ChapterCueTrackOutput(outputCuesList)
-      if (targetTrackOutput == null) {
-        targetTrackOutput = trackOutput
+    if (type == C.TRACK_TYPE_TEXT && id == targetTrackId) {
+      val processor = ChapterCueProcessor(outputChapters)
+      if (chapterCueOutput == null) {
+        chapterCueOutput = processor
       }
-      return trackOutput
+      return processor
     }
+
     return DiscardingTrackOutput()
   }
 
   override fun endTracks() {}
-
   override fun seekMap(seekMap: SeekMap) {}
 }

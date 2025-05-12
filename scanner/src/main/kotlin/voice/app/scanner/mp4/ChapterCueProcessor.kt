@@ -7,12 +7,15 @@ import androidx.media3.extractor.TrackOutput
 import androidx.media3.extractor.text.CueDecoder
 import voice.data.MarkData
 import java.io.ByteArrayOutputStream
+import java.util.concurrent.TimeUnit
 
-internal class ChapterCueTrackOutput(private val outputCuesList: MutableList<MarkData>) : TrackOutput {
+internal class ChapterCueProcessor(private val outputChapters: MutableList<MarkData>) : TrackOutput {
 
   private val sampleDataBuffer = ByteArrayOutputStream()
 
-  override fun format(format: Format) {}
+  override fun format(format: Format) {
+    // Not needed for chapter extraction
+  }
 
   override fun sampleData(
     input: DataReader,
@@ -21,11 +24,14 @@ internal class ChapterCueTrackOutput(private val outputCuesList: MutableList<Mar
     sampleDataPart: Int,
   ): Int {
     if (length == 0) return 0
+
     val buffer = ByteArray(length)
     val bytesRead = input.read(buffer, 0, length)
+
     if (bytesRead > 0) {
       sampleDataBuffer.write(buffer, 0, bytesRead)
     }
+
     return bytesRead
   }
 
@@ -35,6 +41,7 @@ internal class ChapterCueTrackOutput(private val outputCuesList: MutableList<Mar
     sampleDataPart: Int,
   ) {
     if (length == 0) return
+
     val currentPosition = data.position
     sampleDataBuffer.write(data.data, currentPosition, length)
     data.skipBytes(length)
@@ -47,16 +54,20 @@ internal class ChapterCueTrackOutput(private val outputCuesList: MutableList<Mar
     offset: Int,
     cryptoData: TrackOutput.CryptoData?,
   ) {
-    val allSampleBytes = sampleDataBuffer.toByteArray()
-    val sampleEffectiveOffset = allSampleBytes.size - offset - size
+    val sampleBytes = sampleDataBuffer.toByteArray()
+    val effectiveOffset = sampleBytes.size - offset - size
 
-    CueDecoder().decode(timeUs, allSampleBytes, sampleEffectiveOffset, size)
-      .also { cuesWithTiming ->
-        val cue = cuesWithTiming.cues.firstOrNull()
-        if (cue != null) {
-          outputCuesList += MarkData(timeUs / 1000, name = cue.text?.toString() ?: "")
-        }
-      }
+    val cuesWithTiming = CueDecoder().decode(timeUs, sampleBytes, effectiveOffset, size)
+
+    val cue = cuesWithTiming.cues.firstOrNull()
+    if (cue != null) {
+      val chapterMark = MarkData(
+        startMs = TimeUnit.MICROSECONDS.toMillis(timeUs),
+        name = cue.text?.toString() ?: "",
+      )
+      outputChapters.add(chapterMark)
+    }
+
     sampleDataBuffer.reset()
   }
 }

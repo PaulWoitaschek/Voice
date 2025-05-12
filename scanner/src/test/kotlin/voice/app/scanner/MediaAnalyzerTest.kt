@@ -13,6 +13,8 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.app.scanner.mp4.ChapterTrackExtractor
+import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
 import voice.logging.core.LogWriter
@@ -27,7 +29,13 @@ internal class MediaAnalyzerTest {
   @JvmField
   val tempFolder = TemporaryFolder()
 
-  private val analyzer = MediaAnalyzer(ApplicationProvider.getApplicationContext())
+  private val analyzer = MediaAnalyzer(
+    context = ApplicationProvider.getApplicationContext(),
+    mp4ChapterExtractor = Mp4ChapterExtractor(
+      context = ApplicationProvider.getApplicationContext(),
+      chapterTrackExtractor = ChapterTrackExtractor(context = ApplicationProvider.getApplicationContext()),
+    ),
+  )
   private val auphonicChapters = listOf(
     MarkData(startMs = 0L, name = "Intro"),
     MarkData(startMs = 15000L, name = "Creating a new production"),
