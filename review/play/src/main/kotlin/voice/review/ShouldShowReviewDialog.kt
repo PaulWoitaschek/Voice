@@ -21,13 +21,11 @@ class ShouldShowReviewDialog
   private val reviewDialogShown: DataStore<Boolean>,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
-  private val reviewTranslated: ReviewTranslated,
   private val remoteConfig: RemoteConfig,
 ) {
 
   internal suspend fun shouldShow(): Boolean {
     return enabledInRemoteConfig() &&
-      reviewTranslated.translated() &&
       isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
       reviewDialogNotShown() &&
