@@ -1,6 +1,7 @@
 package voice.playback.di
 
 import android.content.Context
+import android.os.Build
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
@@ -56,12 +57,6 @@ object PlaybackModule {
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)
       .build()
-    val audioOffloadPreferences =
-      AudioOffloadPreferences.Builder()
-        .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
-        .setIsGaplessSupportRequired(true)
-        .setIsSpeedChangeSupportRequired(true)
-        .build()
 
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
@@ -75,8 +70,24 @@ object PlaybackModule {
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
-        player.trackSelectionParameters =
-          player.trackSelectionParameters.buildUpon().setAudioOffloadPreferences(audioOffloadPreferences).build()
+        val disableAudioOffload =
+          Build.MANUFACTURER.equals("samsung", ignoreCase = true) &&
+            Build.VERSION.SDK_INT < 35
+        if (!disableAudioOffload) {
+          // samsung being samsung 🤪
+          // https://github.com/PaulWoitaschek/Voice/issues/2807
+          player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setAudioOffloadPreferences(
+              AudioOffloadPreferences
+                .Builder()
+                .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
+                .setIsGaplessSupportRequired(true)
+                .setIsSpeedChangeSupportRequired(true)
+                .build(),
+            )
+            .build()
+        }
       }
   }
 
