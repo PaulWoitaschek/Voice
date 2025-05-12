@@ -8,13 +8,10 @@ import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.ParserException
 import androidx.media3.container.MdtaMetadataEntry
-import androidx.media3.datasource.DataSpec
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.MediaExtractorCompat
 import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
-import androidx.media3.extractor.DefaultExtractorInput
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
@@ -24,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
-import voice.app.scanner.mp4.Mp4ChapterExtractor
+import voice.app.scanner.mp4.parse
 import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
@@ -82,22 +79,11 @@ class MediaAnalyzer
     return builder.build(duration)
   }
 
-  private fun parseMp4Chapters(
+  private suspend fun parseMp4Chapters(
     file: CachedDocumentFile,
     builder: Metadata.Builder,
   ) {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
-    val dataSource = dataSourceFactory.createDataSource()
-    try {
-      dataSource.open(DataSpec(file.uri))
-    } catch (e: IOException) {
-      Logger.d(e)
-      return
-    }
-    val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-    val chapterExtractor = Mp4ChapterExtractor()
-
-    val chapters = chapterExtractor.parse(input)
+    val chapters = parse(context, file.uri)
     builder.chapters += chapters
   }
 
