@@ -1,5 +1,6 @@
 plugins {
   id("voice.library")
+  alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {

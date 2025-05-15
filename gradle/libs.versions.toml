@@ -17,6 +17,7 @@ agp = "8.10.0"
 ktlint-core = "1.5.0"
 ktlint-gradlePlugin = "0.10.0"
 retrofit = "2.11.0"
+datastoreCoreAndroid = "1.1.4"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -107,6 +108,7 @@ compose-typedNavigation = "com.kiwi.navigation-compose.typed:core:0.10.0"
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.22"
+datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 
 [bundles]
 compose = [

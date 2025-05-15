@@ -26,11 +26,13 @@ import voice.common.pref.SingleFolderAudiobookFolders
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
+import voice.pref.AutoSleepTimerPrefs
 import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
 import voice.pref.stringSet
+import java.time.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -76,6 +78,21 @@ object PrefsModule {
   @Named(PrefKeys.SLEEP_TIME)
   fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
     return prefs.int(PrefKeys.SLEEP_TIME, 20)
+  }
+
+  @Provides
+  @Singleton
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  fun provideAutoSleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<AutoSleepTimerPrefs> {
+    return factory.create(
+      serializer = AutoSleepTimerPrefs.serializer(),
+      fileName = "autoSleepTimerPrefs",
+      defaultValue = AutoSleepTimerPrefs(
+        enabled = false,
+        startTime = LocalTime.of(22, 0).toString(),
+        endTime = LocalTime.of(6, 0).toString(),
+      ),
+    )
   }
 
   @Provides

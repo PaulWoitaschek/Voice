@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
+import kotlinx.coroutines.runBlocking
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.grid.GridCount
@@ -14,7 +16,9 @@ import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.PrefKeys
+import voice.pref.AutoSleepTimerPrefs
 import voice.pref.Pref
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -31,6 +35,8 @@ class SettingsViewModel
   @Named(PrefKeys.GRID_MODE)
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
+  @Named(PrefKeys.AUTO_SLEEP_TIMER)
+  private val autoSleepTimerPref: DataStore<AutoSleepTimerPrefs>,
 ) : SettingsListener {
 
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
@@ -41,6 +47,13 @@ class SettingsViewModel
     val autoRewindAmount by remember { autoRewindAmountPref.flow }.collectAsState(initial = 0)
     val seekTime by remember { seekTimePref.flow }.collectAsState(initial = 0)
     val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
+    val autoSleepTimer by remember { autoSleepTimerPref.data }.collectAsState(
+      initial = AutoSleepTimerPrefs(
+        enabled = false,
+        startTime = LocalTime.of(22, 0).toString(),
+        endTime = LocalTime.of(6, 0).toString(),
+      ),
+    )
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -53,6 +66,7 @@ class SettingsViewModel
         GridMode.GRID -> true
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
+      autoSleepTimer = autoSleepTimer,
     )
   }
 
@@ -118,5 +132,49 @@ class SettingsViewModel
   override fun openTranslations() {
     dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
+  }
+
+  override fun setAutoSleepTimer(checked: Boolean) {
+    runBlocking {
+      autoSleepTimerPref.updateData { currentPrefs ->
+        AutoSleepTimerPrefs(
+          enabled = checked,
+          startTime = currentPrefs.startTime,
+          endTime = currentPrefs.endTime,
+        )
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerStart(
+    hour: Int,
+    minute: Int,
+  ) {
+    val time = LocalTime.of(hour, minute).toString()
+    runBlocking {
+      autoSleepTimerPref.updateData { currentPrefs ->
+        AutoSleepTimerPrefs(
+          enabled = currentPrefs.enabled,
+          startTime = time,
+          endTime = currentPrefs.endTime,
+        )
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerEnd(
+    hour: Int,
+    minute: Int,
+  ) {
+    val time = LocalTime.of(hour, minute).toString()
+    runBlocking {
+      autoSleepTimerPref.updateData { currentPrefs ->
+        AutoSleepTimerPrefs(
+          enabled = currentPrefs.enabled,
+          startTime = currentPrefs.startTime,
+          endTime = time,
+        )
+      }
+    }
   }
 }
