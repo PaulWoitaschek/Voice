@@ -3,14 +3,14 @@ package voice.app
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import voice.common.pref.OnboardingCompleted
+import voice.common.pref.OnboardingCompletedStore
 import voice.data.folders.AudiobookFolders
 import javax.inject.Inject
 
 class StartDestinationProvider
 @Inject constructor(
-  @OnboardingCompleted
-  private val onboardingCompleted: DataStore<Boolean>,
+  @OnboardingCompletedStore
+  private val onboardingCompletedStore: DataStore<Boolean>,
   private val audiobookFolders: AudiobookFolders,
 ) {
 
@@ -26,7 +26,7 @@ class StartDestinationProvider
 
   private suspend fun showOnboarding(): Boolean {
     return when {
-      onboardingCompleted.data.first() -> false
+      onboardingCompletedStore.data.first() -> false
       audiobookFolders.hasAnyFolders() -> false
       else -> true
     }

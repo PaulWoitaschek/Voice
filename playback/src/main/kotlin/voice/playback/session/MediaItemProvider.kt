@@ -9,7 +9,7 @@ import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.common.BookId
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.Book
 import voice.data.BookComparator
 import voice.data.BookContent
@@ -29,8 +29,8 @@ class MediaItemProvider
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
   private val imageFileProvider: ImageFileProvider,
-  @CurrentBook
-  private val currentBookId: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStoreId: DataStore<BookId?>,
 ) {
 
   fun root(): MediaItem = MediaItem(
@@ -47,7 +47,7 @@ class MediaItemProvider
     isPlayable = false,
     mediaId = MediaId.Recent,
     mediaType = MediaType.AudioBook,
-  ).takeIf { runBlocking { currentBookId.data.first() != null } }
+  ).takeIf { runBlocking { currentBookStoreId.data.first() != null } }
 
   suspend fun item(id: String): MediaItem? {
     val mediaId = id.toMediaIdOrNull() ?: return null
@@ -114,7 +114,7 @@ class MediaItemProvider
       }
       is MediaId.Chapter -> null
       MediaId.Recent -> {
-        val bookId = currentBookId.data.first() ?: return null
+        val bookId = currentBookStoreId.data.first() ?: return null
         val book = bookRepository.get(bookId) ?: return null
         listOf(mediaItem(book))
       }

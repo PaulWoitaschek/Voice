@@ -22,7 +22,7 @@ import voice.app.R
 import voice.app.features.MainActivity
 import voice.common.BookId
 import voice.common.dpToPxRounded
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
@@ -35,8 +35,8 @@ class WidgetUpdater
 @Inject constructor(
   private val context: Context,
   private val repo: BookRepository,
-  @CurrentBook
-  private val currentBook: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
   private val playStateManager: PlayStateManager,
 ) {
 
@@ -46,7 +46,7 @@ class WidgetUpdater
 
   fun update() {
     scope.launch {
-      val book = currentBook.data.first()?.let {
+      val book = currentBookStore.data.first()?.let {
         repo.get(it)
       }
       val componentName = ComponentName(this@WidgetUpdater.context, BaseWidgetProvider::class.java)

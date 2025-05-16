@@ -22,8 +22,8 @@ import voice.common.DispatcherProvider
 import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.pref.CurrentBook
-import voice.common.pref.PrefKeys
+import voice.common.pref.CurrentBookStore
+import voice.common.pref.SleepTimeStore
 import voice.data.durationMs
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
@@ -37,7 +37,6 @@ import voice.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
-import javax.inject.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -48,15 +47,15 @@ class BookPlayViewModel
   private val player: PlayerController,
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
-  @CurrentBook
-  private val currentBookId: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStoreId: DataStore<BookId?>,
   private val navigator: Navigator,
   private val bookmarkRepository: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
   dispatcherProvider: DispatcherProvider,
-  @Named(PrefKeys.SLEEP_TIME)
-  private val sleepTimePref: Pref<Int>,
+  @SleepTimeStore
+  private val sleepTimeStore: Pref<Int>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -73,7 +72,7 @@ class BookPlayViewModel
   fun viewState(): BookPlayViewState? {
     player.pauseIfCurrentBookDifferentFrom(bookId)
     LaunchedEffect(Unit) {
-      currentBookId.updateData { bookId }
+      currentBookStoreId.updateData { bookId }
     }
 
     val book = remember { bookRepository.flow(bookId).filterNotNull() }.collectAsState(initial = null).value
@@ -112,7 +111,7 @@ class BookPlayViewModel
         customTime < 5 -> customTime + 1
         else -> customTime + 5
       }
-      sleepTimePref.value = newTime
+      sleepTimeStore.value = newTime
       SleepTimerViewState(newTime)
     }
   }
@@ -125,7 +124,7 @@ class BookPlayViewModel
         customTime <= 5 -> customTime - 1
         else -> (customTime - 5).coerceAtLeast(5)
       }
-      sleepTimePref.value = newTime
+      sleepTimeStore.value = newTime
       SleepTimerViewState(newTime)
     }
   }
@@ -150,7 +149,7 @@ class BookPlayViewModel
     val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
       update(current.viewState)
     } else {
-      update(SleepTimerViewState(sleepTimePref.value))
+      update(SleepTimerViewState(sleepTimeStore.value))
     }
     _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
   }
@@ -281,7 +280,7 @@ class BookPlayViewModel
       sleepTimer.setActive(false)
       _dialogState.value = null
     } else {
-      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimePref.value))
+      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimeStore.value))
     }
   }
 

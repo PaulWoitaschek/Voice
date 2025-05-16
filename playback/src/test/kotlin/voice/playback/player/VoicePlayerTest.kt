@@ -115,11 +115,11 @@ class VoicePlayerTest {
       coEvery { get(bookId) } answers { currentBook }
       coEvery { updateBook(any(), any()) } just Runs
     },
-    currentBookId = mockk {
+    currentBookStoreId = mockk {
       every { data } returns flowOf(bookId)
     },
-    seekTimePref = seekTimePref,
-    autoRewindAmountPref = mockk(),
+    seekTimeStore = seekTimePref,
+    autoRewindAmountStore = mockk(),
     scope = scope,
     chapterRepo = mockk {
       coEvery { this@mockk.get(any()) } answers {

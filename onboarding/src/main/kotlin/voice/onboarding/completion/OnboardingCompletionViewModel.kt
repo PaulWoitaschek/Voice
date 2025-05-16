@@ -5,14 +5,14 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.pref.OnboardingCompleted
+import voice.common.pref.OnboardingCompletedStore
 import javax.inject.Inject
 import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 class OnboardingCompletionViewModel
 @Inject constructor(
-  @OnboardingCompleted
-  private val onboardingCompleted: DataStore<Boolean>,
+  @OnboardingCompletedStore
+  private val onboardingCompletedStore: DataStore<Boolean>,
   private val navigator: Navigator,
 ) {
 
@@ -20,7 +20,7 @@ class OnboardingCompletionViewModel
 
   fun next() {
     scope.launch {
-      onboardingCompleted.updateData { true }
+      onboardingCompletedStore.updateData { true }
     }
     navigator.execute { navController ->
       navController.typedNavigate(Destination.BookOverview) {

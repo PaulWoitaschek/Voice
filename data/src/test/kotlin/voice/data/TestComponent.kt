@@ -4,10 +4,9 @@ import androidx.room.migration.Migration
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import voice.common.AppScope
-import voice.common.pref.PrefKeys
+import voice.common.pref.DarkThemeStore
 import voice.pref.Pref
 import voice.pref.inmemory.InMemoryPref
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -23,8 +22,8 @@ interface TestComponent {
 
     fun create(
       @BindsInstance
-      @Named(PrefKeys.DARK_THEME)
-      darkThemePref: Pref<Boolean>,
+      @DarkThemeStore
+      darkThemeStore: Pref<Boolean>,
     ): TestComponent
   }
 }

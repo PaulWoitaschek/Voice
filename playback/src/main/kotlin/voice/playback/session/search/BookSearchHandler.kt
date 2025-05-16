@@ -4,7 +4,7 @@ import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import voice.common.BookId
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
@@ -13,8 +13,8 @@ import javax.inject.Inject
 class BookSearchHandler
 @Inject constructor(
   private val repo: BookRepository,
-  @CurrentBook
-  private val currentBook: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
 ) {
 
   suspend fun handle(search: VoiceSearch): Book? {
@@ -58,7 +58,7 @@ class BookSearchHandler
     }
 
     Logger.i("continuing from search without query")
-    val currentId = currentBook.data.first()
+    val currentId = currentBookStore.data.first()
     return findBook { it.content.id == currentId }
   }
 

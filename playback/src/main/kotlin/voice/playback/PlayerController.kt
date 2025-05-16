@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
 import voice.common.BookId
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.ChapterId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
@@ -33,8 +33,8 @@ import kotlin.time.Duration
 class PlayerController
 @Inject constructor(
   private val context: Context,
-  @CurrentBook
-  private val currentBookId: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
 ) {
@@ -63,7 +63,7 @@ class PlayerController
     time: Long,
     id: ChapterId,
   ) = executeAfterPrepare { controller ->
-    val bookId = currentBookId.data.first() ?: return@executeAfterPrepare
+    val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
     val index = book.chapters.indexOfFirst { it.id == id }
     if (index != -1) {
@@ -114,7 +114,7 @@ class PlayerController
   }
 
   private suspend fun maybePrepare(controller: MediaController): Boolean {
-    val bookId = currentBookId.data.first() ?: return false
+    val bookId = currentBookStoreId.data.first() ?: return false
     if (controller.currentBookId() == bookId &&
       controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
     ) {

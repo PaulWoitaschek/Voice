@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.formatTime
 import voice.common.navigation.Navigator
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.markForPosition
@@ -33,8 +33,8 @@ import kotlin.time.Duration.Companion.minutes
 
 class BookmarkViewModel
 @AssistedInject constructor(
-  @CurrentBook
-  private val currentBook: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
   private val repo: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val playStateManager: PlayStateManager,
@@ -111,7 +111,7 @@ class BookmarkViewModel
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
 
     scope.launch {
-      currentBook.updateData { bookId }
+      currentBookStore.updateData { bookId }
     }
     playerController.setPosition(bookmark.time, bookmark.chapterId)
 

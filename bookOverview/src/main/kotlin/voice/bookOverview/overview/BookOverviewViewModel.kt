@@ -28,8 +28,8 @@ import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.pref.CurrentBook
-import voice.common.pref.PrefKeys
+import voice.common.pref.CurrentBookStore
+import voice.common.pref.GridModeStore
 import voice.data.repo.BookContentRepo
 import voice.data.repo.BookRepository
 import voice.data.repo.internals.dao.LegacyBookDao
@@ -39,7 +39,6 @@ import voice.playback.playstate.PlayStateManager
 import voice.pref.Pref
 import voice.search.BookSearch
 import javax.inject.Inject
-import javax.inject.Named
 
 @BookOverviewScope
 class BookOverviewViewModel
@@ -49,9 +48,9 @@ constructor(
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
-  @CurrentBook
-  private val currentBookDataStore: DataStore<BookId?>,
-  @Named(PrefKeys.GRID_MODE)
+  @CurrentBookStore
+  private val currentBookStoreDataStore: DataStore<BookId?>,
+  @GridModeStore
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
   @BookMigrationExplanationQualifier
@@ -80,7 +79,7 @@ constructor(
       .collectAsState().value
     val books = remember { repo.flow() }
       .collectAsState(initial = emptyList()).value
-    val currentBookId = remember { currentBookDataStore.data }
+    val currentBookId = remember { currentBookStoreDataStore.data }
       .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
