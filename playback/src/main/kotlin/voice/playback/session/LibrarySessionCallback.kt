@@ -24,7 +24,7 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.launch
 import voice.common.BookId
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
@@ -40,8 +40,8 @@ class LibrarySessionCallback
   private val player: VoicePlayer,
   private val bookSearchParser: BookSearchParser,
   private val bookSearchHandler: BookSearchHandler,
-  @CurrentBook
-  private val currentBookId: DataStore<BookId?>,
+  @CurrentBookStore
+  private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
 ) : MediaLibrarySession.Callback {
 
@@ -82,11 +82,11 @@ class LibrarySessionCallback
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
       val searchResult = bookSearchHandler.handle(search) ?: return null
-      currentBookId.updateData { searchResult.id }
+      currentBookStoreId.updateData { searchResult.id }
       mediaItemProvider.mediaItemsWithStartPosition(searchResult)
     } else {
       (item.mediaId.toMediaIdOrNull() as? MediaId.Book)?.let { bookId ->
-        currentBookId.updateData { bookId.id }
+        currentBookStoreId.updateData { bookId.id }
       }
       mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
     }
@@ -153,7 +153,7 @@ class LibrarySessionCallback
   }
 
   private suspend fun currentBook(): Book? {
-    val bookId = currentBookId.data.first() ?: return null
+    val bookId = currentBookStoreId.data.first() ?: return null
     return bookRepository.get(bookId)
   }
 
@@ -185,7 +185,7 @@ class LibrarySessionCallback
   }
 
   private suspend fun prepareCurrentBook() {
-    val bookId = currentBookId.data.first() ?: return
+    val bookId = currentBookStoreId.data.first() ?: return
     val book = bookRepository.get(bookId) ?: return
     val item = mediaItemProvider.mediaItem(book)
     player.setMediaItem(item)

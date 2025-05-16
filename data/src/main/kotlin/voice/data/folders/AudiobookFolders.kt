@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import voice.common.pref.AuthorAudiobookFolders
-import voice.common.pref.RootAudiobookFolders
-import voice.common.pref.SingleFileAudiobookFolders
-import voice.common.pref.SingleFolderAudiobookFolders
+import voice.common.pref.AuthorAudiobookFoldersStore
+import voice.common.pref.RootAudiobookFoldersStore
+import voice.common.pref.SingleFileAudiobookFoldersStore
+import voice.common.pref.SingleFolderAudiobookFoldersStore
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
@@ -22,14 +22,14 @@ import javax.inject.Inject
 
 class AudiobookFolders
 @Inject constructor(
-  @RootAudiobookFolders
-  private val rootAudioBookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  @SingleFolderAudiobookFolders
-  private val singleFolderAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  @SingleFileAudiobookFolders
-  private val singleFileAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
-  @AuthorAudiobookFolders
-  private val authorAudiobookFolders: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @RootAudiobookFoldersStore
+  private val rootAudioBookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @SingleFolderAudiobookFoldersStore
+  private val singleFolderAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @SingleFileAudiobookFoldersStore
+  private val singleFileAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  @AuthorAudiobookFoldersStore
+  private val authorAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
 ) {
@@ -101,10 +101,10 @@ class AudiobookFolders
 
   private fun dataStore(type: FolderType): DataStore<List<Uri>> {
     return when (type) {
-      FolderType.SingleFile -> singleFileAudiobookFolders
-      FolderType.SingleFolder -> singleFolderAudiobookFolders
-      FolderType.Root -> rootAudioBookFolders
-      FolderType.Author -> authorAudiobookFolders
+      FolderType.SingleFile -> singleFileAudiobookFoldersStore
+      FolderType.SingleFolder -> singleFolderAudiobookFoldersStore
+      FolderType.Root -> rootAudioBookFoldersStore
+      FolderType.Author -> authorAudiobookFoldersStore
     }
   }
 

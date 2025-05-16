@@ -25,7 +25,7 @@ import voice.common.BookId
 import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.common.pref.CurrentBook
+import voice.common.pref.CurrentBookStore
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.session.search.BookSearchHandler
@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity() {
 
   @field:[
   Inject
-  CurrentBook
+  CurrentBookStore
   ]
-  lateinit var currentBook: DataStore<BookId?>
+  lateinit var currentBookStore: DataStore<BookId?>
 
   @Inject
   lateinit var bookSearchParser: BookSearchParser
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
               }
               is Destination.Playback -> {
                 lifecycleScope.launch {
-                  currentBook.updateData { destination.bookId }
+                  currentBookStore.updateData { destination.bookId }
                   router.pushController(BookPlayController(destination.bookId).asVerticalChangeHandlerTransaction())
                 }
               }
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
     // if we should enter a book set the backstack and return early
     val goToBook = intent.getBooleanExtra(NI_GO_TO_BOOK, false)
     if (goToBook) {
-      val bookId = runBlocking { currentBook.data.first() }
+      val bookId = runBlocking { currentBookStore.data.first() }
       if (bookId != null) {
         val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asVerticalChangeHandlerTransaction()
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
     // if we should play the current book, set the backstack and return early
     if (intent?.action == "playCurrent") {
-      runBlocking { currentBook.data.first() }?.let { bookId ->
+      runBlocking { currentBookStore.data.first() }?.let { bookId ->
         val bookShelf = RouterTransaction.with(AppController())
         val bookPlay = BookPlayController(bookId).asVerticalChangeHandlerTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)

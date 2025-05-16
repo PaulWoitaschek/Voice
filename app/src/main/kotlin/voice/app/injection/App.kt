@@ -12,11 +12,10 @@ import kotlinx.coroutines.launch
 import voice.app.features.widget.TriggerWidgetOnChange
 import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
-import voice.common.pref.PrefKeys
+import voice.common.pref.DarkThemeStore
 import voice.common.rootComponent
 import voice.pref.Pref
 import javax.inject.Inject
-import javax.inject.Named
 
 class App : Application() {
 
@@ -28,9 +27,9 @@ class App : Application() {
 
   @field:[
   Inject
-  Named(PrefKeys.DARK_THEME)
+  DarkThemeStore
   ]
-  lateinit var useDarkTheme: Pref<Boolean>
+  lateinit var useDarkThemeStore: Pref<Boolean>
 
   override fun onCreate() {
     super.onCreate()
@@ -50,7 +49,7 @@ class App : Application() {
 
     if (DARK_THEME_SETTABLE) {
       MainScope().launch {
-        useDarkTheme.flow
+        useDarkThemeStore.flow
           .distinctUntilChanged()
           .collect { useDarkTheme ->
             val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO

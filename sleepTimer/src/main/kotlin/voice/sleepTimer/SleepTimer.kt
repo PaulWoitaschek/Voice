@@ -12,14 +12,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.common.AppScope
-import voice.common.pref.PrefKeys
+import voice.common.pref.SleepTimeStore
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
 import voice.pref.Pref
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -33,8 +32,8 @@ class SleepTimer
 @Inject constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
-  @Named(PrefKeys.SLEEP_TIME)
-  private val sleepTimePref: Pref<Int>,
+  @SleepTimeStore
+  private val sleepTimeStore: Pref<Int>,
   private val playerController: PlayerController,
 ) : PlaybackSleepTimer {
 
@@ -62,7 +61,7 @@ class SleepTimer
     }
   }
 
-  fun setActive(sleepTime: Duration = sleepTimePref.value.minutes) {
+  fun setActive(sleepTime: Duration = sleepTimeStore.value.minutes) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)

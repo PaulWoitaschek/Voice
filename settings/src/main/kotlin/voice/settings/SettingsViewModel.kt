@@ -13,22 +13,24 @@ import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
-import voice.common.pref.PrefKeys
+import voice.common.pref.AutoRewindAmountStore
+import voice.common.pref.DarkThemeStore
+import voice.common.pref.GridModeStore
+import voice.common.pref.SeekTimeStore
 import voice.pref.Pref
 import javax.inject.Inject
-import javax.inject.Named
 
 class SettingsViewModel
 @Inject constructor(
-  @Named(PrefKeys.DARK_THEME)
-  private val useDarkTheme: Pref<Boolean>,
-  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
-  private val autoRewindAmountPref: Pref<Int>,
-  @Named(PrefKeys.SEEK_TIME)
-  private val seekTimePref: Pref<Int>,
+  @DarkThemeStore
+  private val useDarkThemeStore: Pref<Boolean>,
+  @AutoRewindAmountStore
+  private val autoRewindAmountStore: Pref<Int>,
+  @SeekTimeStore
+  private val seekTimeStore: Pref<Int>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
-  @Named(PrefKeys.GRID_MODE)
+  @GridModeStore
   private val gridModePref: Pref<GridMode>,
   private val gridCount: GridCount,
 ) : SettingsListener {
@@ -37,9 +39,9 @@ class SettingsViewModel
 
   @Composable
   fun viewState(): SettingsViewState {
-    val useDarkTheme by remember { useDarkTheme.flow }.collectAsState(initial = false)
-    val autoRewindAmount by remember { autoRewindAmountPref.flow }.collectAsState(initial = 0)
-    val seekTime by remember { seekTimePref.flow }.collectAsState(initial = 0)
+    val useDarkTheme by remember { useDarkThemeStore.flow }.collectAsState(initial = false)
+    val autoRewindAmount by remember { autoRewindAmountStore.flow }.collectAsState(initial = 0)
+    val seekTime by remember { seekTimeStore.flow }.collectAsState(initial = 0)
     val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
@@ -61,7 +63,7 @@ class SettingsViewModel
   }
 
   override fun toggleDarkTheme() {
-    useDarkTheme.value = !useDarkTheme.value
+    useDarkThemeStore.value = !useDarkThemeStore.value
   }
 
   override fun toggleGrid() {
@@ -77,7 +79,7 @@ class SettingsViewModel
   }
 
   override fun seekAmountChanged(seconds: Int) {
-    seekTimePref.value = seconds
+    seekTimeStore.value = seconds
   }
 
   override fun onSeekAmountRowClick() {
@@ -85,7 +87,7 @@ class SettingsViewModel
   }
 
   override fun autoRewindAmountChang(seconds: Int) {
-    autoRewindAmountPref.value = seconds
+    autoRewindAmountStore.value = seconds
   }
 
   override fun onAutoRewindRowClick() {

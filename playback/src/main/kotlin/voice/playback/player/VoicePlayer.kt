@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.common.BookId
-import voice.common.pref.CurrentBook
-import voice.common.pref.PrefKeys
+import voice.common.pref.AutoRewindAmountStore
+import voice.common.pref.CurrentBookStore
+import voice.common.pref.SeekTimeStore
 import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.repo.BookRepository
@@ -26,7 +27,6 @@ import voice.playback.session.toMediaIdOrNull
 import voice.pref.Pref
 import java.time.Instant
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -35,12 +35,12 @@ class VoicePlayer
 @Inject constructor(
   private val player: Player,
   private val repo: BookRepository,
-  @CurrentBook
-  private val currentBookId: DataStore<BookId?>,
-  @Named(PrefKeys.SEEK_TIME)
-  private val seekTimePref: Pref<Int>,
-  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
-  private val autoRewindAmountPref: Pref<Int>,
+  @CurrentBookStore
+  private val currentBookStoreId: DataStore<BookId?>,
+  @SeekTimeStore
+  private val seekTimeStore: Pref<Int>,
+  @AutoRewindAmountStore
+  private val autoRewindAmountStore: Pref<Int>,
   private val mediaItemProvider: MediaItemProvider,
   private val scope: CoroutineScope,
   private val chapterRepo: ChapterRepo,
@@ -139,7 +139,7 @@ class VoicePlayer
 
   override fun seekBack() {
     scope.launch {
-      val skipAmount = seekTimePref.value.seconds
+      val skipAmount = seekTimeStore.value.seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
         ?.milliseconds
@@ -164,7 +164,7 @@ class VoicePlayer
   }
 
   override fun seekForward() {
-    val skipAmount = seekTimePref.value.seconds
+    val skipAmount = seekTimeStore.value.seconds
 
     val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
       ?.milliseconds
@@ -197,7 +197,7 @@ class VoicePlayer
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
       if (currentPosition > ZERO) {
         seekTo(
-          (currentPosition - autoRewindAmountPref.value.seconds)
+          (currentPosition - autoRewindAmountStore.value.seconds)
             .coerceAtLeast(ZERO)
             .inWholeMilliseconds,
         )
@@ -212,7 +212,7 @@ class VoicePlayer
 
   private fun updateLastPlayedAt() {
     scope.launch {
-      currentBookId.data.first()?.let { bookId ->
+      currentBookStoreId.data.first()?.let { bookId ->
         repo.updateBook(bookId) {
           val lastPlayedAt = Instant.now()
           Logger.v("Update ${it.name}: lastPlayedAt to $lastPlayedAt")
@@ -319,7 +319,7 @@ class VoicePlayer
   }
 
   private suspend fun updateBook(update: (BookContent) -> BookContent) {
-    val bookId = currentBookId.data.first() ?: return
+    val bookId = currentBookStoreId.data.first() ?: return
     repo.updateBook(bookId, update)
   }
 }

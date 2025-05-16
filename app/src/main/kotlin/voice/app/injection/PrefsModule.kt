@@ -16,13 +16,17 @@ import voice.bookOverview.BookMigrationExplanationShown
 import voice.common.AppScope
 import voice.common.BookId
 import voice.common.grid.GridMode
-import voice.common.pref.AuthorAudiobookFolders
-import voice.common.pref.CurrentBook
-import voice.common.pref.OnboardingCompleted
-import voice.common.pref.PrefKeys
-import voice.common.pref.RootAudiobookFolders
-import voice.common.pref.SingleFileAudiobookFolders
-import voice.common.pref.SingleFolderAudiobookFolders
+import voice.common.pref.AuthorAudiobookFoldersStore
+import voice.common.pref.AutoRewindAmountStore
+import voice.common.pref.CurrentBookStore
+import voice.common.pref.DarkThemeStore
+import voice.common.pref.GridModeStore
+import voice.common.pref.OnboardingCompletedStore
+import voice.common.pref.RootAudiobookFoldersStore
+import voice.common.pref.SeekTimeStore
+import voice.common.pref.SingleFileAudiobookFoldersStore
+import voice.common.pref.SingleFolderAudiobookFoldersStore
+import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
@@ -30,8 +34,6 @@ import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
-import voice.pref.stringSet
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -52,91 +54,77 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  @Named(PrefKeys.DARK_THEME)
+  @DarkThemeStore
   fun darkThemePref(prefs: AndroidPreferences): Pref<Boolean> {
-    return prefs.boolean(PrefKeys.DARK_THEME, false)
+    return prefs.boolean("darkTheme", false)
   }
 
   @Provides
   @Singleton
-  @Named(PrefKeys.AUTO_REWIND_AMOUNT)
+  @AutoRewindAmountStore
   fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int(PrefKeys.AUTO_REWIND_AMOUNT, 2)
+    return prefs.int("AUTO_REWIND", 2)
   }
 
   @Provides
   @Singleton
-  @Named(PrefKeys.SEEK_TIME)
+  @SeekTimeStore
   fun provideSeekTimePreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int(PrefKeys.SEEK_TIME, 20)
+    return prefs.int("SEEK_TIME", 20)
   }
 
   @Provides
   @Singleton
-  @Named(PrefKeys.SLEEP_TIME)
+  @SleepTimeStore
   fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int(PrefKeys.SLEEP_TIME, 20)
+    return prefs.int("SLEEP_TIME", 20)
   }
 
   @Provides
   @Singleton
-  @Named(PrefKeys.SINGLE_BOOK_FOLDERS)
-  fun provideSingleBookFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
-    return prefs.stringSet(PrefKeys.SINGLE_BOOK_FOLDERS, emptySet())
-  }
-
-  @Provides
-  @Singleton
-  @Named(PrefKeys.COLLECTION_BOOK_FOLDERS)
-  fun provideCollectionFoldersPreference(prefs: AndroidPreferences): Pref<Set<String>> {
-    return prefs.stringSet(PrefKeys.COLLECTION_BOOK_FOLDERS, emptySet())
-  }
-
-  @Provides
-  @Singleton
-  @Named(PrefKeys.GRID_MODE)
+  @GridModeStore
   fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
-    return prefs.enum(PrefKeys.GRID_MODE, GridMode.FOLLOW_DEVICE)
+    return prefs.enum("gridView", GridMode.FOLLOW_DEVICE)
   }
 
   @Provides
   @Singleton
-  @OnboardingCompleted
+  @OnboardingCompletedStore
   fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("onboardingCompleted", defaultValue = false)
   }
 
   @Provides
   @Singleton
-  @RootAudiobookFolders
+  @RootAudiobookFoldersStore
   fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("audiobookFolders")
   }
 
   @Provides
   @Singleton
-  @SingleFolderAudiobookFolders
+  @SingleFolderAudiobookFoldersStore
   fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("SingleFolderAudiobookFolders")
   }
 
   @Provides
   @Singleton
-  @SingleFileAudiobookFolders
+  @SingleFileAudiobookFoldersStore
   fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("SingleFileAudiobookFolders")
   }
 
   @Provides
   @Singleton
-  @AuthorAudiobookFolders
+  @AuthorAudiobookFoldersStore
   fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
     return factory.createUriList("AuthorAudiobookFolders")
   }
 
   @Provides
   @Singleton
-  @CurrentBook
+  @CurrentBookStore
   fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
     return factory.create(
       serializer = BookId.serializer().nullable,

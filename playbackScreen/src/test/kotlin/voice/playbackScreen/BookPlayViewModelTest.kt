@@ -46,7 +46,7 @@ class BookPlayViewModelTest {
     player = mockk(),
     sleepTimer = sleepTimer,
     playStateManager = mockk(),
-    currentBookId = mockk(),
+    currentBookStoreId = mockk(),
     navigator = mockk(),
     bookmarkRepository = mockk {
       coEvery { addBookmarkAtBookPosition(book, any(), any()) } returns Bookmark(
@@ -61,7 +61,7 @@ class BookPlayViewModelTest {
     },
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
-    sleepTimePref = sleepTimerPref,
+    sleepTimeStore = sleepTimerPref,
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
   )
