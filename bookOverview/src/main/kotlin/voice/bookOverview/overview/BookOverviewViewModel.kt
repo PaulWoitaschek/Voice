@@ -83,7 +83,7 @@ constructor(
       .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
-    val gridMode = remember { gridModePref.flow }
+    val gridMode = remember { gridModePref.data }
       .collectAsState(initial = null).value
       ?: return BookOverviewViewState.Loading
     val bookMigrationExplanationShown = remember { bookMigrationExplanationShown.data }

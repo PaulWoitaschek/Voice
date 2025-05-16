@@ -49,7 +49,7 @@ class App : Application() {
 
     if (DARK_THEME_SETTABLE) {
       MainScope().launch {
-        useDarkThemeStore.flow
+        useDarkThemeStore.data
           .distinctUntilChanged()
           .collect { useDarkTheme ->
             val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO

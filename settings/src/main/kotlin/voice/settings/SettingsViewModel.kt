@@ -39,10 +39,10 @@ class SettingsViewModel
 
   @Composable
   fun viewState(): SettingsViewState {
-    val useDarkTheme by remember { useDarkThemeStore.flow }.collectAsState(initial = false)
-    val autoRewindAmount by remember { autoRewindAmountStore.flow }.collectAsState(initial = 0)
-    val seekTime by remember { seekTimeStore.flow }.collectAsState(initial = 0)
-    val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
+    val useDarkTheme by remember { useDarkThemeStore.data }.collectAsState(initial = false)
+    val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
+    val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
+    val gridMode by remember { gridModePref.data }.collectAsState(initial = GridMode.GRID)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,

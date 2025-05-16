@@ -13,7 +13,8 @@ class InMemoryPref<T>(private val default: T) : Pref<T>() {
     channel.tryEmit(value)
   }
 
-  override val flow: Flow<T> = channel
+  override val data: Flow<T>
+    get() = channel
 
   override fun delete(commit: Boolean) {
     channel.tryEmit(default)

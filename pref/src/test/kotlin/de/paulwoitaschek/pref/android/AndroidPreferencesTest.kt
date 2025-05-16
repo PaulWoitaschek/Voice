@@ -50,7 +50,7 @@ class AndroidPreferencesTest {
   @Test
   fun flow() = runTest {
     val pref = prefs.string(DEFAULT_KEY, "Bob")
-    pref.flow.test {
+    pref.data.test {
       awaitItem() shouldBe "Bob"
 
       pref.value = "1"
@@ -142,8 +142,8 @@ class AndroidPreferencesTest {
       val prefA = prefs.int("preA", 42)
       val prefB = prefs.int("prefB", 42)
 
-      val aTurbine = prefA.flow.testIn(this)
-      val bTurbine = prefB.flow.testIn(this)
+      val aTurbine = prefA.data.testIn(this)
+      val bTurbine = prefB.data.testIn(this)
 
       aTurbine.awaitItem() shouldBe 42
       bTurbine.awaitItem() shouldBe 42
