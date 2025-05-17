@@ -3,6 +3,7 @@ package voice.app.injection
 import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
 import coil.Coil
 import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
@@ -14,7 +15,6 @@ import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.DarkThemeStore
 import voice.common.rootComponent
-import voice.pref.Pref
 import javax.inject.Inject
 
 class App : Application() {
@@ -29,7 +29,7 @@ class App : Application() {
   Inject
   DarkThemeStore
   ]
-  lateinit var useDarkThemeStore: Pref<Boolean>
+  lateinit var useDarkThemeStore: DataStore<Boolean>
 
   override fun onCreate() {
     super.onCreate()

@@ -34,7 +34,6 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
-import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
@@ -55,7 +54,7 @@ class BookPlayViewModel
   private val batteryOptimization: BatteryOptimization,
   dispatcherProvider: DispatcherProvider,
   @SleepTimeStore
-  private val sleepTimeStore: Pref<Int>,
+  private val sleepTimeStore: DataStore<Int>,
   @Assisted
   private val bookId: BookId,
 ) {

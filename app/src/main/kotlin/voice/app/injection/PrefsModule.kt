@@ -30,7 +30,6 @@ import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
-import voice.pref.Pref
 import voice.pref.boolean
 import voice.pref.enum
 import voice.pref.int
@@ -55,35 +54,35 @@ object PrefsModule {
   @Provides
   @Singleton
   @DarkThemeStore
-  fun darkThemePref(prefs: AndroidPreferences): Pref<Boolean> {
+  fun darkThemePref(prefs: AndroidPreferences): DataStore<Boolean> {
     return prefs.boolean("darkTheme", false)
   }
 
   @Provides
   @Singleton
   @AutoRewindAmountStore
-  fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
+  fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): DataStore<Int> {
     return prefs.int("AUTO_REWIND", 2)
   }
 
   @Provides
   @Singleton
   @SeekTimeStore
-  fun provideSeekTimePreference(prefs: AndroidPreferences): Pref<Int> {
+  fun provideSeekTimePreference(prefs: AndroidPreferences): DataStore<Int> {
     return prefs.int("SEEK_TIME", 20)
   }
 
   @Provides
   @Singleton
   @SleepTimeStore
-  fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
+  fun provideSleepTimePreference(prefs: AndroidPreferences): DataStore<Int> {
     return prefs.int("SLEEP_TIME", 20)
   }
 
   @Provides
   @Singleton
   @GridModeStore
-  fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
+  fun gridViewPref(prefs: AndroidPreferences): DataStore<GridMode> {
     return prefs.enum("gridView", GridMode.FOLLOW_DEVICE)
   }
 

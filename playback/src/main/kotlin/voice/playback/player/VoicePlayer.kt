@@ -24,7 +24,6 @@ import voice.playback.misc.VolumeGain
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.toMediaIdOrNull
-import voice.pref.Pref
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.ZERO
@@ -38,9 +37,9 @@ class VoicePlayer
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
   @SeekTimeStore
-  private val seekTimeStore: Pref<Int>,
+  private val seekTimeStore: DataStore<Int>,
   @AutoRewindAmountStore
-  private val autoRewindAmountStore: Pref<Int>,
+  private val autoRewindAmountStore: DataStore<Int>,
   private val mediaItemProvider: MediaItemProvider,
   private val scope: CoroutineScope,
   private val chapterRepo: ChapterRepo,

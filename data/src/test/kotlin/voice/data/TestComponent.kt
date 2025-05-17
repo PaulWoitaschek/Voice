@@ -5,7 +5,6 @@ import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
-import voice.pref.Pref
 import voice.pref.inmemory.InMemoryPref
 import javax.inject.Singleton
 
@@ -23,7 +22,7 @@ interface TestComponent {
     fun create(
       @BindsInstance
       @DarkThemeStore
-      darkThemeStore: Pref<Boolean>,
+      darkThemeStore: DataStore<Boolean>,
     ): TestComponent
   }
 }

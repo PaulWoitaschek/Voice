@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
 import kotlinx.coroutines.launch
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
@@ -20,21 +21,20 @@ import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
-import voice.pref.Pref
 import javax.inject.Inject
 
 class SettingsViewModel
 @Inject constructor(
   @DarkThemeStore
-  private val useDarkThemeStore: Pref<Boolean>,
+  private val useDarkThemeStore: DataStore<Boolean>,
   @AutoRewindAmountStore
-  private val autoRewindAmountStore: Pref<Int>,
+  private val autoRewindAmountStore: DataStore<Int>,
   @SeekTimeStore
-  private val seekTimeStore: Pref<Int>,
+  private val seekTimeStore: DataStore<Int>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
-  private val gridModeStore: Pref<GridMode>,
+  private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
