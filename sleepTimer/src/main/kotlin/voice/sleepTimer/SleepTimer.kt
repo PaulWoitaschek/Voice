@@ -1,5 +1,6 @@
 package voice.sleepTimer
 
+import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.squareup.anvil.annotations.ContributesBinding
 import kotlinx.coroutines.Job
@@ -17,7 +18,6 @@ import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
-import voice.pref.Pref
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration
@@ -33,7 +33,7 @@ class SleepTimer
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @SleepTimeStore
-  private val sleepTimeStore: Pref<Int>,
+  private val sleepTimeStore: DataStore<Int>,
   private val playerController: PlayerController,
 ) : PlaybackSleepTimer {
 
@@ -61,7 +61,13 @@ class SleepTimer
     }
   }
 
-  fun setActive(sleepTime: Duration = sleepTimeStore.value.minutes) {
+  private fun setActive() {
+    scope.launch {
+      setActive(sleepTimeStore.data.first().minutes)
+    }
+  }
+
+  fun setActive(sleepTime: Duration) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)
@@ -74,7 +80,7 @@ class SleepTimer
         shakeDetector.detect()
         Logger.i("Shake detected. Reset sleep time")
         playerController.play()
-        setActive()
+        setActive(sleepTime)
       }
       Logger.i("exiting")
     }

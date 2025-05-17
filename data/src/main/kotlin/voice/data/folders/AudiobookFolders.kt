@@ -23,13 +23,13 @@ import javax.inject.Inject
 class AudiobookFolders
 @Inject constructor(
   @RootAudiobookFoldersStore
-  private val rootAudioBookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val rootAudioBookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   @SingleFolderAudiobookFoldersStore
-  private val singleFolderAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val singleFolderAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   @SingleFileAudiobookFoldersStore
-  private val singleFileAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val singleFileAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   @AuthorAudiobookFoldersStore
-  private val authorAudiobookFoldersStore: DataStore<List<@JvmSuppressWildcards Uri>>,
+  private val authorAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
 ) {
@@ -75,7 +75,7 @@ class AudiobookFolders
     )
     scope.launch {
       dataStore(type).updateData {
-        (it + uri).distinct()
+        it + uri
       }
     }
   }
@@ -99,7 +99,7 @@ class AudiobookFolders
     }
   }
 
-  private fun dataStore(type: FolderType): DataStore<List<Uri>> {
+  private fun dataStore(type: FolderType): DataStore<Set<Uri>> {
     return when (type) {
       FolderType.SingleFile -> singleFileAudiobookFoldersStore
       FolderType.SingleFolder -> singleFolderAudiobookFoldersStore

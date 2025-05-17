@@ -212,8 +212,6 @@ dependencies {
 
   implementation(libs.conductor)
 
-  implementation(projects.pref)
-
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.core)

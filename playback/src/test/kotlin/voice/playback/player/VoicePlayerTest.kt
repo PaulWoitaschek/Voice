@@ -32,11 +32,11 @@ import voice.data.ChapterMark
 import voice.data.MarkData
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
+import voice.playback.MemoryDataStore
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.search.book
 import voice.playback.session.toMediaIdOrNull
-import voice.pref.inmemory.InMemoryPref
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -60,7 +60,7 @@ class VoicePlayerTest {
     )
   }
 
-  private val seekTimePref = InMemoryPref(2)
+  private val seekTimeStore = MemoryDataStore(2)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMediaSourceFactory(
@@ -118,7 +118,7 @@ class VoicePlayerTest {
     currentBookStoreId = mockk {
       every { data } returns flowOf(bookId)
     },
-    seekTimeStore = seekTimePref,
+    seekTimeStore = seekTimeStore,
     autoRewindAmountStore = mockk(),
     scope = scope,
     chapterRepo = mockk {
@@ -145,7 +145,7 @@ class VoicePlayerTest {
       ),
     )
 
-    seekTimePref.value = 7
+    seekTimeStore.updateData { 7 }
 
     player.prepare()
     awaitReady()
@@ -185,7 +185,7 @@ class VoicePlayerTest {
       ),
     )
 
-    seekTimePref.value = 5
+    seekTimeStore.updateData { 5 }
 
     player.seekTo(1, 12_000)
     player.prepare()

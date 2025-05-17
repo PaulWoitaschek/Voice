@@ -24,7 +24,6 @@ import voice.playback.misc.VolumeGain
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.toMediaIdOrNull
-import voice.pref.Pref
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.ZERO
@@ -38,9 +37,9 @@ class VoicePlayer
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
   @SeekTimeStore
-  private val seekTimeStore: Pref<Int>,
+  private val seekTimeStore: DataStore<Int>,
   @AutoRewindAmountStore
-  private val autoRewindAmountStore: Pref<Int>,
+  private val autoRewindAmountStore: DataStore<Int>,
   private val mediaItemProvider: MediaItemProvider,
   private val scope: CoroutineScope,
   private val chapterRepo: ChapterRepo,
@@ -139,7 +138,7 @@ class VoicePlayer
 
   override fun seekBack() {
     scope.launch {
-      val skipAmount = seekTimeStore.value.seconds
+      val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
         ?.milliseconds
@@ -164,24 +163,26 @@ class VoicePlayer
   }
 
   override fun seekForward() {
-    val skipAmount = seekTimeStore.value.seconds
+    scope.launch {
+      val skipAmount = seekTimeStore.data.first().seconds
 
-    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?.coerceAtLeast(ZERO)
-      ?: return
-    val newPosition = currentPosition + skipAmount
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+        ?.milliseconds
+        ?.coerceAtLeast(ZERO)
+        ?: return@launch
+      val newPosition = currentPosition + skipAmount
 
-    val duration = player.duration.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?: return
+      val duration = player.duration.takeUnless { it == C.TIME_UNSET }
+        ?.milliseconds
+        ?: return@launch
 
-    if (newPosition > duration) {
-      val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-        ?: return
-      player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
-    } else {
-      player.seekTo(newPosition.inWholeMilliseconds)
+      if (newPosition > duration) {
+        val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+          ?: return@launch
+        player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
+      } else {
+        player.seekTo(newPosition.inWholeMilliseconds)
+      }
     }
   }
 
@@ -196,8 +197,9 @@ class VoicePlayer
     } else {
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
       if (currentPosition > ZERO) {
+        val autoRewindAmount = runBlocking { autoRewindAmountStore.data.first().seconds }
         seekTo(
-          (currentPosition - autoRewindAmountStore.value.seconds)
+          (currentPosition - autoRewindAmount)
             .coerceAtLeast(ZERO)
             .inWholeMilliseconds,
         )

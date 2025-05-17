@@ -12,7 +12,6 @@ anvil {
 dependencies {
   implementation(projects.data)
   implementation(projects.common)
-  implementation(projects.pref)
 
   implementation(libs.appCompat)
   implementation(libs.dagger.core)

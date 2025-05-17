@@ -7,8 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
+import kotlinx.coroutines.launch
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
+import voice.common.DispatcherProvider
+import voice.common.MainScope
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
@@ -17,32 +21,33 @@ import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
-import voice.pref.Pref
 import javax.inject.Inject
 
 class SettingsViewModel
 @Inject constructor(
   @DarkThemeStore
-  private val useDarkThemeStore: Pref<Boolean>,
+  private val useDarkThemeStore: DataStore<Boolean>,
   @AutoRewindAmountStore
-  private val autoRewindAmountStore: Pref<Int>,
+  private val autoRewindAmountStore: DataStore<Int>,
   @SeekTimeStore
-  private val seekTimeStore: Pref<Int>,
+  private val seekTimeStore: DataStore<Int>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
-  private val gridModePref: Pref<GridMode>,
+  private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
+  dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
+  private val mainScope = MainScope(dispatcherProvider)
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
 
   @Composable
   fun viewState(): SettingsViewState {
-    val useDarkTheme by remember { useDarkThemeStore.flow }.collectAsState(initial = false)
-    val autoRewindAmount by remember { autoRewindAmountStore.flow }.collectAsState(initial = 0)
-    val seekTime by remember { seekTimeStore.flow }.collectAsState(initial = 0)
-    val gridMode by remember { gridModePref.flow }.collectAsState(initial = GridMode.GRID)
+    val useDarkTheme by remember { useDarkThemeStore.data }.collectAsState(initial = false)
+    val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
+    val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
+    val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -63,23 +68,31 @@ class SettingsViewModel
   }
 
   override fun toggleDarkTheme() {
-    useDarkThemeStore.value = !useDarkThemeStore.value
+    mainScope.launch {
+      useDarkThemeStore.updateData { !it }
+    }
   }
 
   override fun toggleGrid() {
-    gridModePref.value = when (gridModePref.value) {
-      GridMode.LIST -> GridMode.GRID
-      GridMode.GRID -> GridMode.LIST
-      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-        GridMode.LIST
-      } else {
-        GridMode.GRID
+    mainScope.launch {
+      gridModeStore.updateData { currentMode ->
+        when (currentMode) {
+          GridMode.LIST -> GridMode.GRID
+          GridMode.GRID -> GridMode.LIST
+          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+            GridMode.LIST
+          } else {
+            GridMode.GRID
+          }
+        }
       }
     }
   }
 
   override fun seekAmountChanged(seconds: Int) {
-    seekTimeStore.value = seconds
+    mainScope.launch {
+      seekTimeStore.updateData { seconds }
+    }
   }
 
   override fun onSeekAmountRowClick() {
@@ -87,7 +100,9 @@ class SettingsViewModel
   }
 
   override fun autoRewindAmountChang(seconds: Int) {
-    autoRewindAmountStore.value = seconds
+    mainScope.launch {
+      autoRewindAmountStore.updateData { seconds }
+    }
   }
 
   override fun onAutoRewindRowClick() {

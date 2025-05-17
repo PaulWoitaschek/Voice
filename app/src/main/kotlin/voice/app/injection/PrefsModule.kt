@@ -7,7 +7,7 @@ import androidx.datastore.core.DataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
@@ -29,11 +29,6 @@ import voice.common.pref.SingleFolderAudiobookFoldersStore
 import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
-import voice.pref.AndroidPreferences
-import voice.pref.Pref
-import voice.pref.boolean
-import voice.pref.enum
-import voice.pref.int
 import javax.inject.Singleton
 
 @Module
@@ -48,43 +43,89 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  fun prefs(sharedPreferences: SharedPreferences): AndroidPreferences {
-    return AndroidPreferences(sharedPreferences)
-  }
-
-  @Provides
-  @Singleton
   @DarkThemeStore
-  fun darkThemePref(prefs: AndroidPreferences): Pref<Boolean> {
-    return prefs.boolean("darkTheme", false)
+  fun darkThemePref(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Boolean> {
+    return factory.boolean(
+      fileName = "darkTheme",
+      defaultValue = false,
+      migrations = listOf(
+        booleanPrefsDataMigration(sharedPreferences, "darkTheme"),
+      ),
+    )
   }
 
   @Provides
   @Singleton
   @AutoRewindAmountStore
-  fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int("AUTO_REWIND", 2)
+  fun provideAutoRewindAmountPreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "autoRewind",
+      defaultValue = 2,
+      migrations = listOf(intPrefsDataMigration(sharedPreferences, "AUTO_REWIND")),
+    )
   }
 
   @Provides
   @Singleton
   @SeekTimeStore
-  fun provideSeekTimePreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int("SEEK_TIME", 20)
+  fun provideSeekTimePreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "seekTime",
+      defaultValue = 20,
+      migrations = listOf(intPrefsDataMigration(sharedPreferences, "SEEK_TIME")),
+    )
   }
 
   @Provides
   @Singleton
   @SleepTimeStore
-  fun provideSleepTimePreference(prefs: AndroidPreferences): Pref<Int> {
-    return prefs.int("SLEEP_TIME", 20)
+  fun provideSleepTimePreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "sleepTime",
+      defaultValue = 20,
+      migrations = listOf(
+        intPrefsDataMigration(sharedPreferences, "SLEEP_TIME"),
+      ),
+    )
   }
 
   @Provides
   @Singleton
   @GridModeStore
-  fun gridViewPref(prefs: AndroidPreferences): Pref<GridMode> {
-    return prefs.enum("gridView", GridMode.FOLLOW_DEVICE)
+  fun gridModeStore(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<GridMode> {
+    return factory.create(
+      GridMode.serializer(),
+      GridMode.FOLLOW_DEVICE,
+      "gridMode",
+      migrations = listOf(
+        PrefsDataMigration(
+          sharedPreferences,
+          key = "gridView",
+          getFromSharedPreferences = {
+            when (sharedPreferences.getString("gridView", null)) {
+              "LIST" -> GridMode.LIST
+              "GRID" -> GridMode.GRID
+              else -> GridMode.FOLLOW_DEVICE
+            }
+          },
+        ),
+      ),
+    )
   }
 
   @Provides
@@ -97,29 +138,29 @@ object PrefsModule {
   @Provides
   @Singleton
   @RootAudiobookFoldersStore
-  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("audiobookFolders")
+  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("audiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFolderAudiobookFoldersStore
-  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("SingleFolderAudiobookFolders")
+  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("SingleFolderAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFileAudiobookFoldersStore
-  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("SingleFileAudiobookFolders")
+  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("SingleFileAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @AuthorAudiobookFoldersStore
-  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("AuthorAudiobookFolders")
+  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("AuthorAudiobookFolders")
   }
 
   @Provides
@@ -141,8 +182,8 @@ object PrefsModule {
   }
 }
 
-private fun VoiceDataStoreFactory.createUriList(name: String): DataStore<List<Uri>> = create(
-  serializer = ListSerializer(UriSerializer),
+private fun VoiceDataStoreFactory.createUriSet(name: String): DataStore<Set<Uri>> = create(
+  serializer = SetSerializer(UriSerializer),
   fileName = name,
-  defaultValue = emptyList(),
+  defaultValue = emptySet(),
 )

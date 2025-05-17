@@ -40,7 +40,7 @@ fun VoiceTheme(content: @Composable () -> Unit) {
 fun isDarkTheme(): Boolean {
   return if (DARK_THEME_SETTABLE) {
     val darkThemeFlow = remember {
-      rootComponentAs<SharedComponent>().useDarkThemeStore.flow
+      rootComponentAs<SharedComponent>().useDarkThemeStore.data
     }
     darkThemeFlow.collectAsState(initial = false, context = Dispatchers.Unconfined).value
   } else {

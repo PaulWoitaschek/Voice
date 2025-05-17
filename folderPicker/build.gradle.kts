@@ -17,7 +17,6 @@ dependencies {
   implementation(projects.data)
   implementation(projects.sleepTimer)
   implementation(projects.documentfile)
-  implementation(projects.pref)
 
   implementation(libs.datastore)
   implementation(libs.coil)

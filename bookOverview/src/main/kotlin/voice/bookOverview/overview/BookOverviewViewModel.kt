@@ -36,7 +36,6 @@ import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.dao.RecentBookSearchDao
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
-import voice.pref.Pref
 import voice.search.BookSearch
 import javax.inject.Inject
 
@@ -51,7 +50,7 @@ constructor(
   @CurrentBookStore
   private val currentBookStoreDataStore: DataStore<BookId?>,
   @GridModeStore
-  private val gridModePref: Pref<GridMode>,
+  private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
   @BookMigrationExplanationQualifier
   private val bookMigrationExplanationShown: BookMigrationExplanationShown,
@@ -83,7 +82,7 @@ constructor(
       .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
-    val gridMode = remember { gridModePref.flow }
+    val gridMode = remember { gridModeStore.data }
       .collectAsState(initial = null).value
       ?: return BookOverviewViewState.Loading
     val bookMigrationExplanationShown = remember { bookMigrationExplanationShown.data }

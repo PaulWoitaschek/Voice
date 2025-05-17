@@ -11,14 +11,14 @@ import androidx.datastore.core.DataStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.DispatcherProvider
+import voice.common.MainScope
 import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
@@ -34,7 +34,6 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.playstate.PlayStateManager
 import voice.playbackScreen.batteryOptimization.BatteryOptimization
-import voice.pref.Pref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
@@ -55,12 +54,12 @@ class BookPlayViewModel
   private val batteryOptimization: BatteryOptimization,
   dispatcherProvider: DispatcherProvider,
   @SleepTimeStore
-  private val sleepTimeStore: Pref<Int>,
+  private val sleepTimeStore: DataStore<Int>,
   @Assisted
   private val bookId: BookId,
 ) {
 
-  private val scope = CoroutineScope(SupervisorJob() + dispatcherProvider.main)
+  private val scope = MainScope(dispatcherProvider)
 
   private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
   internal val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
@@ -111,7 +110,7 @@ class BookPlayViewModel
         customTime < 5 -> customTime + 1
         else -> customTime + 5
       }
-      sleepTimeStore.value = newTime
+      sleepTimeStore.updateData { newTime }
       SleepTimerViewState(newTime)
     }
   }
@@ -124,7 +123,7 @@ class BookPlayViewModel
         customTime <= 5 -> customTime - 1
         else -> (customTime - 5).coerceAtLeast(5)
       }
-      sleepTimeStore.value = newTime
+      sleepTimeStore.updateData { newTime }
       SleepTimerViewState(newTime)
     }
   }
@@ -144,14 +143,16 @@ class BookPlayViewModel
     }
   }
 
-  private fun updateSleepTimeViewState(update: (SleepTimerViewState) -> SleepTimerViewState?) {
-    val current = dialogState.value
-    val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
-      update(current.viewState)
-    } else {
-      update(SleepTimerViewState(sleepTimeStore.value))
+  private fun updateSleepTimeViewState(update: suspend (SleepTimerViewState) -> SleepTimerViewState?) {
+    scope.launch {
+      val current = dialogState.value
+      val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
+        update(current.viewState)
+      } else {
+        update(SleepTimerViewState(sleepTimeStore.data.first()))
+      }
+      _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
     }
-    _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
   }
 
   fun onPlaybackSpeedChanged(speed: Float) {
@@ -275,12 +276,14 @@ class BookPlayViewModel
   }
 
   fun toggleSleepTimer() {
-    Logger.d("toggleSleepTimer while active=${sleepTimer.sleepTimerActive()}")
-    if (sleepTimer.sleepTimerActive()) {
-      sleepTimer.setActive(false)
-      _dialogState.value = null
-    } else {
-      _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimeStore.value))
+    scope.launch {
+      Logger.d("toggleSleepTimer while active=${sleepTimer.sleepTimerActive()}")
+      if (sleepTimer.sleepTimerActive()) {
+        sleepTimer.setActive(false)
+        _dialogState.value = null
+      } else {
+        _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimeStore.data.first()))
+      }
     }
   }
 
