@@ -32,11 +32,11 @@ import voice.data.ChapterMark
 import voice.data.MarkData
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
+import voice.playback.MemoryDataStore
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.search.book
 import voice.playback.session.toMediaIdOrNull
-import voice.pref.inmemory.InMemoryPref
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -60,7 +60,7 @@ class VoicePlayerTest {
     )
   }
 
-  private val seekTimeStore = InMemoryPref(2)
+  private val seekTimeStore = MemoryDataStore(2)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMediaSourceFactory(

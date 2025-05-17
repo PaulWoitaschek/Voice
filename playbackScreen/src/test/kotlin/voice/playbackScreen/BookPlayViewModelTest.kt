@@ -9,6 +9,7 @@ import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.yield
 import org.junit.Test
 import voice.common.BookId
 import voice.common.DispatcherProvider
@@ -17,7 +18,6 @@ import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId
-import voice.pref.inmemory.InMemoryPref
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import java.time.Instant
@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.minutes
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
-  private val sleepTimerPref = InMemoryPref(15)
+  private val sleepTimerDataStore = MemoryDataStore(15)
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     var sleepTimerActive = false
@@ -62,7 +62,7 @@ class BookPlayViewModelTest {
     },
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
-    sleepTimeStore = sleepTimerPref,
+    sleepTimeStore = sleepTimerDataStore,
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
   )
@@ -74,15 +74,18 @@ class BookPlayViewModelTest {
     }
 
     viewModel.toggleSleepTimer()
+    yield()
     assertDialogSleepTime(15)
 
-    fun incrementAndAssert(time: Int) {
+    suspend fun incrementAndAssert(time: Int) {
       viewModel.incrementSleepTime()
+      yield()
       assertDialogSleepTime(time)
     }
 
-    fun decrementAndAssert(time: Int) {
+    suspend fun decrementAndAssert(time: Int) {
       viewModel.decrementSleepTime()
+      yield()
       assertDialogSleepTime(time)
     }
 
@@ -107,17 +110,19 @@ class BookPlayViewModelTest {
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerPref.data.first() shouldBe 15
+    sleepTimerDataStore.data.first() shouldBe 15
+    yield()
     verify(exactly = 1) {
       sleepTimer.setActive(10.minutes)
     }
   }
 
   @Test
-  fun deactivateSleepTimer() {
+  fun deactivateSleepTimer() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
     viewModel.toggleSleepTimer()
+    yield()
     verifyOrder {
       sleepTimer.setActive(10.minutes)
       sleepTimer.setActive(false)

@@ -1,11 +1,11 @@
 package voice.data
 
+import androidx.datastore.core.DataStore
 import androidx.room.migration.Migration
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
-import voice.pref.inmemory.InMemoryPref
 import javax.inject.Singleton
 
 @Singleton
@@ -29,6 +29,6 @@ interface TestComponent {
 
 internal fun allMigrations(): Array<Migration> {
   return DaggerTestComponent.factory()
-    .create(InMemoryPref(false))
+    .create(MemoryDataStore(false))
     .migrations.toTypedArray()
 }
