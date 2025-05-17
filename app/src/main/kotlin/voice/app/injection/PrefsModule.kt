@@ -7,7 +7,7 @@ import androidx.datastore.core.DataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
@@ -96,29 +96,29 @@ object PrefsModule {
   @Provides
   @Singleton
   @RootAudiobookFoldersStore
-  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("audiobookFolders")
+  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("audiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFolderAudiobookFoldersStore
-  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("SingleFolderAudiobookFolders")
+  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("SingleFolderAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @SingleFileAudiobookFoldersStore
-  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("SingleFileAudiobookFolders")
+  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("SingleFileAudiobookFolders")
   }
 
   @Provides
   @Singleton
   @AuthorAudiobookFoldersStore
-  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<List<Uri>> {
-    return factory.createUriList("AuthorAudiobookFolders")
+  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+    return factory.createUriSet("AuthorAudiobookFolders")
   }
 
   @Provides
@@ -140,8 +140,8 @@ object PrefsModule {
   }
 }
 
-private fun VoiceDataStoreFactory.createUriList(name: String): DataStore<List<Uri>> = create(
-  serializer = ListSerializer(UriSerializer),
+private fun VoiceDataStoreFactory.createUriSet(name: String): DataStore<Set<Uri>> = create(
+  serializer = SetSerializer(UriSerializer),
   fileName = name,
-  defaultValue = emptyList(),
+  defaultValue = emptySet(),
 )
