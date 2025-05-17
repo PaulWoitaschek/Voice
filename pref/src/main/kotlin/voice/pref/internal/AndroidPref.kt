@@ -1,7 +1,6 @@
 package voice.pref.internal
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import voice.pref.Pref
@@ -40,8 +39,12 @@ internal class AndroidPref<T>(
     set(value, commit = false)
   }
 
-  override fun setAndCommit(value: T) {
-    set(value, commit = true)
+  override suspend fun updateData(transform: suspend (t: T) -> T): T {
+    val value = adapter.get(key, prefs)
+    val transformed = transform(value)
+    adapter.set(key, prefs, transformed, commit = true)
+    channel.value = transformed
+    return transformed
   }
 
   private fun set(
@@ -50,10 +53,5 @@ internal class AndroidPref<T>(
   ) {
     adapter.set(key, prefs, value, commit = commit)
     channel.value = value
-  }
-
-  override fun delete(commit: Boolean) {
-    prefs.edit(commit = commit) { remove(key) }
-    channel.value = default
   }
 }

@@ -7,8 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
+import kotlinx.coroutines.launch
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
+import voice.common.DispatcherProvider
+import voice.common.MainScope
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
@@ -31,10 +34,12 @@ class SettingsViewModel
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
-  private val gridModePref: Pref<GridMode>,
+  private val gridModeStore: Pref<GridMode>,
   private val gridCount: GridCount,
+  dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
+  private val mainScope = MainScope(dispatcherProvider)
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
 
   @Composable
@@ -42,7 +47,7 @@ class SettingsViewModel
     val useDarkTheme by remember { useDarkThemeStore.data }.collectAsState(initial = false)
     val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
-    val gridMode by remember { gridModePref.data }.collectAsState(initial = GridMode.GRID)
+    val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -63,23 +68,31 @@ class SettingsViewModel
   }
 
   override fun toggleDarkTheme() {
-    useDarkThemeStore.value = !useDarkThemeStore.value
+    mainScope.launch {
+      useDarkThemeStore.updateData { !it }
+    }
   }
 
   override fun toggleGrid() {
-    gridModePref.value = when (gridModePref.value) {
-      GridMode.LIST -> GridMode.GRID
-      GridMode.GRID -> GridMode.LIST
-      GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-        GridMode.LIST
-      } else {
-        GridMode.GRID
+    mainScope.launch {
+      gridModeStore.updateData { currentMode ->
+        when (currentMode) {
+          GridMode.LIST -> GridMode.GRID
+          GridMode.GRID -> GridMode.LIST
+          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
+            GridMode.LIST
+          } else {
+            GridMode.GRID
+          }
+        }
       }
     }
   }
 
   override fun seekAmountChanged(seconds: Int) {
-    seekTimeStore.value = seconds
+    mainScope.launch {
+      seekTimeStore.updateData { seconds }
+    }
   }
 
   override fun onSeekAmountRowClick() {
@@ -87,7 +100,9 @@ class SettingsViewModel
   }
 
   override fun autoRewindAmountChang(seconds: Int) {
-    autoRewindAmountStore.value = seconds
+    mainScope.launch {
+      autoRewindAmountStore.updateData { seconds }
+    }
   }
 
   override fun onAutoRewindRowClick() {

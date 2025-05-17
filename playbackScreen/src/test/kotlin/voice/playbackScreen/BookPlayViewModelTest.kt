@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -106,7 +107,7 @@ class BookPlayViewModelTest {
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerPref.value shouldBe 15
+    sleepTimerPref.data.first() shouldBe 15
     verify(exactly = 1) {
       sleepTimer.setActive(10.minutes)
     }

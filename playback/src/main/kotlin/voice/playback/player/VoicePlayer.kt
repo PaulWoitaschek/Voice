@@ -139,7 +139,7 @@ class VoicePlayer
 
   override fun seekBack() {
     scope.launch {
-      val skipAmount = seekTimeStore.value.seconds
+      val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
         ?.milliseconds
@@ -164,24 +164,26 @@ class VoicePlayer
   }
 
   override fun seekForward() {
-    val skipAmount = seekTimeStore.value.seconds
+    scope.launch {
+      val skipAmount = seekTimeStore.data.first().seconds
 
-    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?.coerceAtLeast(ZERO)
-      ?: return
-    val newPosition = currentPosition + skipAmount
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+        ?.milliseconds
+        ?.coerceAtLeast(ZERO)
+        ?: return@launch
+      val newPosition = currentPosition + skipAmount
 
-    val duration = player.duration.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?: return
+      val duration = player.duration.takeUnless { it == C.TIME_UNSET }
+        ?.milliseconds
+        ?: return@launch
 
-    if (newPosition > duration) {
-      val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-        ?: return
-      player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
-    } else {
-      player.seekTo(newPosition.inWholeMilliseconds)
+      if (newPosition > duration) {
+        val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+          ?: return@launch
+        player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
+      } else {
+        player.seekTo(newPosition.inWholeMilliseconds)
+      }
     }
   }
 
@@ -196,8 +198,9 @@ class VoicePlayer
     } else {
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
       if (currentPosition > ZERO) {
+        val autoRewindAmount = runBlocking { autoRewindAmountStore.data.first().seconds }
         seekTo(
-          (currentPosition - autoRewindAmountStore.value.seconds)
+          (currentPosition - autoRewindAmount)
             .coerceAtLeast(ZERO)
             .inWholeMilliseconds,
         )

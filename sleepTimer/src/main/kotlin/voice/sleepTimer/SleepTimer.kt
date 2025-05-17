@@ -61,7 +61,13 @@ class SleepTimer
     }
   }
 
-  fun setActive(sleepTime: Duration = sleepTimeStore.value.minutes) {
+  private fun setActive() {
+    scope.launch {
+      setActive(sleepTimeStore.data.first().minutes)
+    }
+  }
+
+  fun setActive(sleepTime: Duration) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)
@@ -74,7 +80,7 @@ class SleepTimer
         shakeDetector.detect()
         Logger.i("Shake detected. Reset sleep time")
         playerController.play()
-        setActive()
+        setActive(sleepTime)
       }
       Logger.i("exiting")
     }
