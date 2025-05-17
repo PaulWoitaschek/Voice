@@ -29,8 +29,6 @@ import voice.common.pref.SingleFolderAudiobookFoldersStore
 import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
-import voice.pref.AndroidPreferences
-import voice.pref.enum
 import javax.inject.Singleton
 
 @Module
@@ -41,12 +39,6 @@ object PrefsModule {
   @Singleton
   fun provideSharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
-  }
-
-  @Provides
-  @Singleton
-  fun prefs(sharedPreferences: SharedPreferences): AndroidPreferences {
-    return AndroidPreferences(sharedPreferences)
   }
 
   @Provides
@@ -112,8 +104,28 @@ object PrefsModule {
   @Provides
   @Singleton
   @GridModeStore
-  fun gridViewPref(prefs: AndroidPreferences): DataStore<GridMode> {
-    return prefs.enum("gridView", GridMode.FOLLOW_DEVICE)
+  fun gridModeStore(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<GridMode> {
+    return factory.create(
+      GridMode.serializer(),
+      GridMode.FOLLOW_DEVICE,
+      "gridMode",
+      migrations = listOf(
+        PrefsDataMigration(
+          sharedPreferences,
+          key = "gridView",
+          getFromSharedPreferences = {
+            when (sharedPreferences.getString("gridView", null)) {
+              "LIST" -> GridMode.LIST
+              "GRID" -> GridMode.GRID
+              else -> GridMode.FOLLOW_DEVICE
+            }
+          },
+        ),
+      ),
+    )
   }
 
   @Provides

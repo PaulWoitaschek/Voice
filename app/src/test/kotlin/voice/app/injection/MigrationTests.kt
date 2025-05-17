@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.common.grid.GridMode
 import voice.datastore.VoiceDataStoreFactory
 
 @RunWith(AndroidJUnit4::class)
@@ -174,5 +175,50 @@ class MigrationTests {
     )
     ds.data.first() shouldBe 123
     sharedPreferences.contains("TEST_INT_KEY") shouldBe false
+  }
+
+  @Test
+  fun `migrates LIST from SharedPreferences and cleans up`() = runTest {
+    sharedPreferences.edit {
+      clear()
+      putString("gridView", "LIST")
+    }
+
+    val store: DataStore<GridMode> = PrefsModule.gridModeStore(factory, sharedPreferences)
+    store.data.first() shouldBe GridMode.LIST
+    sharedPreferences.contains("gridView") shouldBe false
+  }
+
+  @Test
+  fun `migrates GRID from SharedPreferences and cleans up`() = runTest {
+    sharedPreferences.edit {
+      clear()
+      putString("gridView", "GRID")
+    }
+
+    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    store.data.first() shouldBe GridMode.GRID
+    sharedPreferences.contains("gridView") shouldBe false
+  }
+
+  @Test
+  fun `falls back to FOLLOW_DEVICE when key missing`() = runTest {
+    sharedPreferences.edit { clear() }
+
+    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    store.data.first() shouldBe GridMode.FOLLOW_DEVICE
+    sharedPreferences.contains("gridView") shouldBe false
+  }
+
+  @Test
+  fun `falls back to FOLLOW_DEVICE on unknown legacy value and cleans up`() = runTest {
+    sharedPreferences.edit {
+      clear()
+      putString("gridView", "UNKNOWN")
+    }
+
+    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    store.data.first() shouldBe GridMode.FOLLOW_DEVICE
+    sharedPreferences.contains("gridView") shouldBe false
   }
 }
