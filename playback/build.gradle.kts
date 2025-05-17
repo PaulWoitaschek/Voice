@@ -18,7 +18,6 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.data)
-  implementation(projects.pref)
 
   implementation(libs.androidxCore)
   implementation(libs.datastore)

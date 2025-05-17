@@ -36,7 +36,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
-  implementation(projects.pref)
 
   api(libs.room.runtime)
   ksp(libs.room.compiler)
