@@ -30,9 +30,7 @@ import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import voice.pref.AndroidPreferences
-import voice.pref.boolean
 import voice.pref.enum
-import voice.pref.int
 import javax.inject.Singleton
 
 @Module
@@ -54,29 +52,61 @@ object PrefsModule {
   @Provides
   @Singleton
   @DarkThemeStore
-  fun darkThemePref(prefs: AndroidPreferences): DataStore<Boolean> {
-    return prefs.boolean("darkTheme", false)
+  fun darkThemePref(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Boolean> {
+    return factory.boolean(
+      fileName = "darkTheme",
+      defaultValue = false,
+      migrations = listOf(
+        booleanPrefsDataMigration(sharedPreferences, "darkTheme"),
+      ),
+    )
   }
 
   @Provides
   @Singleton
   @AutoRewindAmountStore
-  fun provideAutoRewindAmountPreference(prefs: AndroidPreferences): DataStore<Int> {
-    return prefs.int("AUTO_REWIND", 2)
+  fun provideAutoRewindAmountPreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "autoRewind",
+      defaultValue = 2,
+      migrations = listOf(intPrefsDataMigration(sharedPreferences, "AUTO_REWIND")),
+    )
   }
 
   @Provides
   @Singleton
   @SeekTimeStore
-  fun provideSeekTimePreference(prefs: AndroidPreferences): DataStore<Int> {
-    return prefs.int("SEEK_TIME", 20)
+  fun provideSeekTimePreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "seekTime",
+      defaultValue = 20,
+      migrations = listOf(intPrefsDataMigration(sharedPreferences, "SEEK_TIME")),
+    )
   }
 
   @Provides
   @Singleton
   @SleepTimeStore
-  fun provideSleepTimePreference(prefs: AndroidPreferences): DataStore<Int> {
-    return prefs.int("SLEEP_TIME", 20)
+  fun provideSleepTimePreference(
+    factory: VoiceDataStoreFactory,
+    sharedPreferences: SharedPreferences,
+  ): DataStore<Int> {
+    return factory.int(
+      fileName = "sleepTime",
+      defaultValue = 20,
+      migrations = listOf(
+        intPrefsDataMigration(sharedPreferences, "SLEEP_TIME"),
+      ),
+    )
   }
 
   @Provides
