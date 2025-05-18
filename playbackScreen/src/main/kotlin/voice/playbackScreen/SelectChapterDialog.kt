@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Equalizer
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -25,6 +21,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import voice.strings.R as StringsR
+import voice.common.formatTime
 
 @Composable
 internal fun SelectChapterDialog(
@@ -58,12 +55,7 @@ internal fun SelectChapterDialog(
                 Text(text = chapter.name ?: "")
               },
               trailingContent = {
-                if (dialogState.selectedIndex == index) {
-                  Icon(
-                    imageVector = Icons.Outlined.Equalizer,
-                    contentDescription = stringResource(id = StringsR.string.migration_detail_content_position_current_chapter_title),
-                  )
-                }
+                Text(text = formatTime(chapter.startMs))
               },
             )
           }
