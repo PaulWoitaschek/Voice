@@ -10,6 +10,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,10 +23,9 @@ internal fun SelectChapterDialog(
   dialogState: BookPlayDialogViewState.SelectChapterDialog,
   viewModel: BookPlayViewModel,
 ) {
-  AlertDialog(
+  ModalBottomSheet(
     onDismissRequest = { viewModel.dismissDialog() },
-    confirmButton = {},
-    text = {
+    content = {
       LazyColumn(
         state = rememberLazyListState(initialFirstVisibleItemIndex = dialogState.selectedIndex ?: 0),
         content = {
