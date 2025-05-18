@@ -27,7 +27,7 @@ internal fun SelectChapterDialog(
     onDismissRequest = { viewModel.dismissDialog() },
     content = {
       LazyColumn(
-        state = rememberLazyListState(initialFirstVisibleItemIndex = dialogState.selectedIndex ?: 0),
+        state = rememberLazyListState(initialFirstVisibleItemIndex = dialogState.selectedIndex?.minus(1)?.coerceAtLeast(0) ?: 0),
         content = {
           itemsIndexed(dialogState.chapters) { index, chapter ->
             ListItem(
