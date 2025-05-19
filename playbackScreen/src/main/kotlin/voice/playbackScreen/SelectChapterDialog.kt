@@ -37,10 +37,14 @@ internal fun SelectChapterDialog(
           itemsIndexed(dialogState.chapters) { index, chapter ->
             val isCurrentChapter = dialogState.selectedIndex == index
             val description = stringResource(StringsR.string.migration_detail_content_position_current_chapter_title)
+            val backgroundColor = if (isCurrentChapter) {
+              MaterialTheme.colorScheme.primaryContainer
+            } else {
+              Color.Transparent
+            }
 
             ListItem(
-              colors = if (isCurrentChapter) { ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.primaryContainer) }
-              else { ListItemDefaults.colors(containerColor = Color.Transparent) },
+              colors = ListItemDefaults.colors(containerColor = backgroundColor),
               modifier = Modifier
                 .padding(3.dp)
                 .clip(shape = RoundedCornerShape(12.dp))
