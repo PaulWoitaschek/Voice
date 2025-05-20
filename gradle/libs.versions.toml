@@ -86,7 +86,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.0"
 
-compose-bom = "androidx.compose:compose-bom:2025.05.00"
+compose-bom = "androidx.compose:compose-bom:2025.05.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
