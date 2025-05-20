@@ -29,6 +29,7 @@ import voice.playback.session.toMediaIdOrNull
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
+import kotlinx.coroutines.delay
 
 class PlayerController
 @Inject constructor(
@@ -148,6 +149,7 @@ class PlayerController
 
   fun pauseAtStart() = executeAfterPrepare {
     it.pause()
+    delay(100)
     it.seekTo(0)
   }
 
