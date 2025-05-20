@@ -10,6 +10,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
@@ -148,6 +149,7 @@ class PlayerController
 
   fun pauseAtStart() = executeAfterPrepare {
     it.pause()
+    delay(100)
     it.seekTo(0)
   }
 
