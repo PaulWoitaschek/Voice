@@ -39,7 +39,7 @@ kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-emb
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
 koTest-assert = "io.kotest:kotest-assertions-core:5.9.1"
-datastore = "androidx.datastore:datastore-preferences:1.1.6"
+datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.2.0"
