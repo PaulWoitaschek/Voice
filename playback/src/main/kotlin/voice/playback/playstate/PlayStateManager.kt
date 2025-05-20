@@ -25,16 +25,4 @@ constructor() {
     Playing,
     Paused,
   }
-
-  // Sleep at eoc state
-  private val _sleepAtEoc = MutableStateFlow(false)
-
-  val sleepAtEocFlow: StateFlow<Boolean>
-    get() = _sleepAtEoc
-
-  var sleepAtEoc: Boolean
-    set(value) {
-      _sleepAtEoc.value = value
-    }
-    get() = _sleepAtEoc.value
 }

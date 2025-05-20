@@ -148,9 +148,7 @@ class PlayerController
 
   fun pauseAtStart() = executeAfterPrepare {
     it.pause()
-    val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
-    val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
-    it.seekTo(book.currentMark.startMs)
+    it.seekTo(0)
   }
 
   fun pauseAtTime(ms: Long) = executeAfterPrepare {

@@ -82,7 +82,7 @@ class BookPlayViewModel
     }.collectAsState()
 
     val sleepTime by remember { sleepTimer.leftSleepTimeFlow }.collectAsState()
-    val sleepAtEoc by remember { playStateManager.sleepAtEocFlow }.collectAsState()
+    val sleepAtEoc by remember { sleepTimer.sleepAtEocFlow }.collectAsState()
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
