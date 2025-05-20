@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import voice.data.repo.ChapterRepo
 import voice.playback.PlayerController
 import voice.playback.session.MediaId
+import voice.playback.session.SleepTimer
 import voice.playback.session.toMediaIdOrNull
 import javax.inject.Inject
 
@@ -18,6 +19,7 @@ class PlayStateDelegatingListener
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   private val chapterRepo: ChapterRepo,
+  private val sleepTimer: SleepTimer,
 ) : Player.Listener {
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
@@ -44,8 +46,8 @@ class PlayStateDelegatingListener
     mediaItem: MediaItem?,
     reason: Int,
   ) {
-    if (playStateManager.sleepAtEoc) {
-      playStateManager.sleepAtEoc = false
+    if (sleepTimer.sleepAtEoc) {
+      sleepTimer.sleepAtEoc = false
       playerController.pauseAtStart()
     }
     if (player is ExoPlayer) {
@@ -69,9 +71,9 @@ class PlayStateDelegatingListener
       if (mediaId !is MediaId.Chapter) return@launch
       val marks = chapterRepo.get(mediaId.chapterId)?.chapterMarks?.filter { mark -> mark.startMs != 0L } ?: return@launch
       val boundaryHandler = PlayerMessage.Target { _, payload ->
-        if (playStateManager.sleepAtEoc) {
+        if (sleepTimer.sleepAtEoc) {
           playerController.pauseAtTime(payload as Long)
-          playStateManager.sleepAtEoc = false
+          sleepTimer.sleepAtEoc = false
         }
       }
       marks.forEach { mark ->
