@@ -49,7 +49,7 @@ android {
     versionCode = libs.versions.versionCode.get().toInt()
     versionName = libs.versions.versionName.get()
 
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
 
   fun createSigningConfig(name: String): SigningConfig {
@@ -219,4 +219,13 @@ dependencies {
   testImplementation(libs.coroutines.test)
 
   debugImplementation(libs.compose.ui.testManifest)
+
+  androidTestImplementation(libs.androidX.test.espresso.core)
+  androidTestImplementation(libs.androidX.test.runner)
+  androidTestImplementation(libs.androidX.test.rules)
+  androidTestImplementation(libs.androidX.test.junit)
+  androidTestImplementation(libs.media3.testUtils.core)
+  androidTestImplementation(libs.androidX.test.services)
+  androidTestUtil(libs.androidX.test.orchestrator)
+  kaptAndroidTest(libs.dagger.compiler)
 }
