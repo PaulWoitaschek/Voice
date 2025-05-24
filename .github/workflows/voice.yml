@@ -77,8 +77,16 @@ jobs:
       - name: Accept Android licenses
         run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
+      - name: Setup GMD
+        run: ./gradlew voiceDeviceSetup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
       - name: Test
-        run: ./gradlew voiceGithubLibreDebugAndroidTest
+        run: ./gradlew voiceDeviceGithubLibreDebugAndroidTest
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
 
       - uses: actions/upload-artifact@v4
         if: always()

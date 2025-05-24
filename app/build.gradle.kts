@@ -117,7 +117,7 @@ android {
     animationsDisabled = true
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
     managedDevices {
-      allDevices.create<ManagedVirtualDevice>("voice") {
+      allDevices.create<ManagedVirtualDevice>("voiceDevice") {
         device = "Pixel 9"
         apiLevel = 33
       }
