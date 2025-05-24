@@ -13,14 +13,17 @@ import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.DispatcherProvider
 import voice.common.MainScope
+import voice.common.autoSleepTimer.AutoSleepTimer
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.AutoRewindAmountStore
+import voice.common.pref.AutoSleepTimerStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
+import java.time.LocalTime
 import javax.inject.Inject
 
 class SettingsViewModel
@@ -35,6 +38,8 @@ class SettingsViewModel
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
   private val gridModeStore: DataStore<GridMode>,
+  @AutoSleepTimerStore
+  private val autoSleepTimer: DataStore<AutoSleepTimer>,
   private val gridCount: GridCount,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
@@ -48,6 +53,13 @@ class SettingsViewModel
     val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
     val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
+    val autoSleepTimer by remember { autoSleepTimer.data }.collectAsState(
+      initial = AutoSleepTimer(
+        enabled = false,
+        startTime = LocalTime.of(22, 0),
+        endTime = LocalTime.of(6, 0),
+      ),
+    )
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -60,6 +72,7 @@ class SettingsViewModel
         GridMode.GRID -> true
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
+      autoSleepTimer = autoSleepTimer,
     )
   }
 
@@ -135,5 +148,37 @@ class SettingsViewModel
   override fun openTranslations() {
     dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
+  }
+
+  override fun setAutoSleepTimer(checked: Boolean) {
+    mainScope.launch {
+      autoSleepTimer.updateData { currentPrefs ->
+        currentPrefs.copy(enabled = checked)
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerStart(
+    hour: Int,
+    minute: Int,
+  ) {
+    val time = LocalTime.of(hour, minute)
+    mainScope.launch {
+      autoSleepTimer.updateData { currentPrefs ->
+        currentPrefs.copy(startTime = time)
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerEnd(
+    hour: Int,
+    minute: Int,
+  ) {
+    val time = LocalTime.of(hour, minute)
+    mainScope.launch {
+      autoSleepTimer.updateData { currentPrefs ->
+        currentPrefs.copy(endTime = time)
+      }
+    }
   }
 }

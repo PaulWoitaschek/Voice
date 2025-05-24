@@ -3,7 +3,10 @@ package voice.settings.views
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,12 +33,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
+import voice.common.autoSleepTimer.AutoSleepTimer
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.rootComponentAs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
+import java.time.LocalTime
 import voice.strings.R as StringsR
 
 @Composable
@@ -49,6 +54,11 @@ private fun SettingsPreview() {
     dialog = null,
     appVersion = "1.2.3",
     useGrid = true,
+    autoSleepTimer = AutoSleepTimer(
+      enabled = false,
+      startTime = LocalTime.of(22, 0),
+      endTime = LocalTime.of(6, 0),
+    ),
   )
   VoiceTheme {
     Settings(
@@ -66,6 +76,18 @@ private fun SettingsPreview() {
         override fun suggestIdea() {}
         override fun openBugReport() {}
         override fun toggleGrid() {}
+        override fun setAutoSleepTimer(checked: Boolean) {}
+        override fun setAutoSleepTimerStart(
+          hour: Int,
+          minute: Int,
+        ) {
+        }
+
+        override fun setAutoSleepTimerEnd(
+          hour: Int,
+          minute: Int,
+        ) {
+        }
       },
     )
   }
@@ -136,6 +158,30 @@ private fun Settings(
         AutoRewindRow(viewState.autoRewindInSeconds) {
           listener.onAutoRewindRowClick()
         }
+        AutoSleepTimerRow(
+          viewState.autoSleepTimer.enabled,
+          listener::setAutoSleepTimer,
+        )
+        ListItem(
+          leadingContent = { Spacer(Modifier.size(24.dp)) },
+          headlineContent = {
+            Row {
+              AutoSleepTimerSetting(
+                viewState.autoSleepTimer.enabled,
+                viewState.autoSleepTimer.startTime,
+                stringResource(id = StringsR.string.auto_sleep_timer_start),
+                listener::setAutoSleepTimerStart,
+              )
+              Spacer(Modifier.weight(weight = 1f, fill = true))
+              AutoSleepTimerSetting(
+                viewState.autoSleepTimer.enabled,
+                viewState.autoSleepTimer.endTime,
+                stringResource(id = StringsR.string.auto_sleep_timer_end),
+                listener::setAutoSleepTimerEnd,
+              )
+            }
+          },
+        )
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
