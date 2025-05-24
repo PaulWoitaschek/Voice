@@ -17,7 +17,7 @@ import voice.common.pref.DarkThemeStore
 import voice.common.rootComponent
 import javax.inject.Inject
 
-class App : Application() {
+open class App : Application() {
 
   @Inject
   lateinit var mediaScanner: MediaScanTrigger
@@ -42,8 +42,7 @@ class App : Application() {
 
     DynamicColors.applyToActivitiesIfAvailable(this)
 
-    appComponent = AppComponent.factory()
-      .create(this)
+    appComponent = createAppComponent()
     rootComponent = appComponent
     appComponent.inject(this)
 
@@ -61,6 +60,10 @@ class App : Application() {
     mediaScanner.scan()
 
     triggerWidgetOnChange.init()
+  }
+
+  open fun createAppComponent(): AppComponent {
+    return ProductionAppComponent.factory().create(this)
   }
 }
 

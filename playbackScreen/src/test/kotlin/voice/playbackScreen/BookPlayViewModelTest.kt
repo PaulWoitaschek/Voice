@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.minutes
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
-  private val sleepTimerDataStore = MemoryDataStore(15)
+  private val sleepTimerDataStore = MemoryDataStore(15.minutes)
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     var sleepTimerActive = false
@@ -110,7 +110,7 @@ class BookPlayViewModelTest {
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerDataStore.data.first() shouldBe 15
+    sleepTimerDataStore.data.first() shouldBe 15.minutes
     yield()
     verify(exactly = 1) {
       sleepTimer.setActive(10.minutes)
