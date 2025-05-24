@@ -20,6 +20,7 @@ import voice.common.pref.AuthorAudiobookFoldersStore
 import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.DarkThemeStore
+import voice.common.pref.FadeOutStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.OnboardingCompletedStore
 import voice.common.pref.RootAudiobookFoldersStore
@@ -30,6 +31,9 @@ import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
 import javax.inject.Singleton
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Module
 @ContributesTo(AppScope::class)
@@ -73,6 +77,17 @@ object PrefsModule {
 
   @Provides
   @Singleton
+  @FadeOutStore
+  fun fadeOutStore(factory: VoiceDataStoreFactory): DataStore<Duration> {
+    return factory.create(
+      fileName = "fadeOut",
+      defaultValue = 10.seconds,
+      serializer = Duration.serializer(),
+    )
+  }
+
+  @Provides
+  @Singleton
   @SeekTimeStore
   fun provideSeekTimePreference(
     factory: VoiceDataStoreFactory,
@@ -88,16 +103,11 @@ object PrefsModule {
   @Provides
   @Singleton
   @SleepTimeStore
-  fun provideSleepTimePreference(
-    factory: VoiceDataStoreFactory,
-    sharedPreferences: SharedPreferences,
-  ): DataStore<Int> {
-    return factory.int(
-      fileName = "sleepTime",
-      defaultValue = 20,
-      migrations = listOf(
-        intPrefsDataMigration(sharedPreferences, "SLEEP_TIME"),
-      ),
+  fun provideSleepTimePreference(factory: VoiceDataStoreFactory): DataStore<Duration> {
+    return factory.create(
+      serializer = Duration.serializer(),
+      fileName = "sleepTime2",
+      defaultValue = 20.minutes,
     )
   }
 

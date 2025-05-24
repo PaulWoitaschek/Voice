@@ -34,3 +34,6 @@ annotation class GridModeStore
 
 @Qualifier
 annotation class DarkThemeStore
+
+@Qualifier
+annotation class FadeOutStore

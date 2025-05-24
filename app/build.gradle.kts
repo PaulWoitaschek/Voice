@@ -225,7 +225,9 @@ dependencies {
   androidTestImplementation(libs.androidX.test.rules)
   androidTestImplementation(libs.androidX.test.junit)
   androidTestImplementation(libs.media3.testUtils.core)
+  androidTestImplementation(libs.koTest.assert)
   androidTestImplementation(libs.androidX.test.services)
+  androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
   kaptAndroidTest(libs.dagger.compiler)
 }
