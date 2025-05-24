@@ -198,6 +198,9 @@ class MediaAnalyzer
       } catch (e: ParserException) {
         Logger.w(e, "Error extracting duration")
         false
+      } catch (e: IllegalArgumentException) {
+        Logger.w(e, "Error extracting duration")
+        false
       }
     }
     if (!prepared) return null
