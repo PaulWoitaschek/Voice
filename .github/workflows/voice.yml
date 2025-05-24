@@ -74,6 +74,9 @@ jobs:
       - name: Setup Signing
         run: ./ci_signing_setup.sh
 
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Test
         run: ./gradlew voiceGithubLibreDebugAndroidTest
 
