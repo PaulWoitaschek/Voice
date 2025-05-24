@@ -117,20 +117,9 @@ android {
     animationsDisabled = true
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
     managedDevices {
-      allDevices.create<ManagedVirtualDevice>("pixel5") {
-        device = "Pixel 5"
-        apiLevel = 31
-      }
-      allDevices.create<ManagedVirtualDevice>("nexus7") {
-        device = "Nexus 7"
-        apiLevel = 31
-      }
-      allDevices.create<ManagedVirtualDevice>("nexus10") {
-        device = "Nexus 10"
-        apiLevel = 31
-      }
-      groups.create("screenshotDevices") {
-        targetDevices.addAll(allDevices)
+      allDevices.create<ManagedVirtualDevice>("voice") {
+        device = "Pixel 9"
+        apiLevel = 33
       }
     }
   }
