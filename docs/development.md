@@ -8,7 +8,7 @@ To run the unit tests, run the following command:
 
 ```sh
 ./gradlew voiceUnitTests
-````
+```
 
 ### Instrumentation tests
 
