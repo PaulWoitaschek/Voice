@@ -46,10 +46,6 @@ class PlayStateDelegatingListener
     mediaItem: MediaItem?,
     reason: Int,
   ) {
-    if (sleepTimer.sleepAtEoc) {
-      sleepTimer.sleepAtEoc = false
-      playerController.pauseAtStart()
-    }
     if (player is ExoPlayer) {
       registerChapterMarkCallbacks(player as ExoPlayer)
     }
@@ -69,17 +65,17 @@ class PlayStateDelegatingListener
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val mediaId = currentMediaItem.mediaId.toMediaIdOrNull() ?: return@launch
       if (mediaId !is MediaId.Chapter) return@launch
-      val marks = chapterRepo.get(mediaId.chapterId)?.chapterMarks?.filter { mark -> mark.startMs != 0L } ?: return@launch
+      val marks = (chapterRepo.get(mediaId.chapterId)?.chapterMarks?.map { mark -> mark.startMs } ?: listOf(0L))
       val boundaryHandler = PlayerMessage.Target { _, payload ->
         if (sleepTimer.sleepAtEoc) {
           playerController.pauseAtTime(payload as Long)
           sleepTimer.sleepAtEoc = false
         }
       }
-      marks.forEach { mark ->
+      marks.forEach { startMs ->
         player.createMessage(boundaryHandler)
-          .setPosition(mark.startMs)
-          .setPayload(mark.startMs)
+          .setPosition(startMs)
+          .setPayload(startMs)
           .setDeleteAfterDelivery(false)
           .send()
       }
