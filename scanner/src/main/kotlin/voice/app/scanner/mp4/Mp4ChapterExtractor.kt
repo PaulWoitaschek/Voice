@@ -72,6 +72,10 @@ class Mp4ChapterExtractor @Inject constructor(
     } catch (e: IllegalStateException) {
       Logger.w(e, "Invalid MP4 structure")
       null
+    } catch (e: ArrayIndexOutOfBoundsException) {
+      Logger.w(e, "Undeclared")
+      // https://github.com/androidx/media/issues/2467
+      null
     }
   }
 
