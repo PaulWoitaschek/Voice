@@ -1,11 +1,13 @@
 package voice.playback.player
 
+import android.os.Looper
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.PlayerMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -23,6 +25,7 @@ import voice.playback.misc.Decibel
 import voice.playback.misc.VolumeGain
 import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
+import voice.playback.session.SleepTimer
 import voice.playback.session.toMediaIdOrNull
 import java.time.Instant
 import javax.inject.Inject
@@ -44,6 +47,7 @@ class VoicePlayer
   private val scope: CoroutineScope,
   private val chapterRepo: ChapterRepo,
   private val volumeGain: VolumeGain,
+  private val sleepTimer: SleepTimer,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
@@ -282,14 +286,42 @@ class VoicePlayer
           player.setPlaybackSpeed(book.content.playbackSpeed)
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
+          val chapters = mediaItemProvider.chapters(book)
           player.setMediaItems(
-            mediaItemProvider.chapters(book),
+            chapters,
             book.content.currentChapterIndex,
             book.content.positionInChapter,
           )
+          registerChapterMarkCallbacks(chapters)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
+      }
+    }
+  }
+
+  private fun registerChapterMarkCallbacks(chapters: List<MediaItem>) {
+    if (player is ExoPlayer) {
+      assert(chapters.size == player.mediaItemCount)
+      val boundaryHandler = PlayerMessage.Target { _, payload ->
+        if (payload is Pair<*, *> && sleepTimer.sleepAtEoc) {
+          player.pause()
+          player.seekTo(payload.first as Int, payload.second as Long)
+          sleepTimer.sleepAtEoc = false
+        }
+      }
+      chapters.forEachIndexed { index, mediaItem ->
+        val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
+        if (mediaId !is MediaId.Chapter) return
+        val marks = runBlocking { (chapterRepo.get(mediaId.chapterId)?.chapterMarks?.map { mark -> mark.startMs } ?: listOf(0L)) }
+        marks.forEach { startMs ->
+          player.createMessage(boundaryHandler)
+            .setPosition(index, startMs)
+            .setPayload(Pair(index, startMs))
+            .setDeleteAfterDelivery(false)
+            .setLooper(Looper.getMainLooper())
+            .send()
+        }
       }
     }
   }
