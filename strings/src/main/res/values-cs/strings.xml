@@ -131,4 +131,7 @@
     <string name="battery_optimization_rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>
     <string name="battery_optimization_action">Aktualizovat</string>
     <string name="select_folder_title_onboarding">Přidejte svou první audioknihu</string>
+    <string name="auto_sleep_timer_end">Čas konce</string>
+    <string name="auto_sleep_timer_start">Čas začátku</string>
+    <string name="auto_sleep_timer">Spustit odložení časovače podle plánu</string>
 </resources>
