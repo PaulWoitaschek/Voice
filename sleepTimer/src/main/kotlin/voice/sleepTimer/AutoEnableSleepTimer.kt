@@ -1,7 +1,7 @@
 package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.common.BookId
@@ -15,7 +15,7 @@ import voice.data.repo.BookmarkRepo
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
 import voice.playback.session.SleepTimer
-import java.time.LocalTime
+import java.time.Clock
 import javax.inject.Inject
 
 class AutoEnableSleepTimer
@@ -29,23 +29,26 @@ class AutoEnableSleepTimer
   private val bookRepository: BookRepository,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
+  private val clock: Clock,
 ) {
 
   private val mainScope = MainScope(dispatcherProvider)
 
   fun startMonitoring() {
     mainScope.launch {
-      combine(
-        playStateManager.flow,
-        sleepTimerPreferenceStore.data,
-      ) { playState, autoSleepTimer ->
-        playState to autoSleepTimer
-      }.collect { (playState, autoSleepTimer) ->
-        if (shouldEnableSleepTimer(playState, autoSleepTimer)) {
-          sleepTimer.setActive(true)
-          createBookmark()
+      playStateManager.flow
+        .filter { it == Playing }
+        .collect {
+          val autoSleepTimerPreference = sleepTimerPreferenceStore.data.first()
+          if (shouldEnableSleepTimer(
+              autoSleepTimer = autoSleepTimerPreference,
+              sleepTimerActive = sleepTimer.sleepTimerActive(),
+            )
+          ) {
+            sleepTimer.setActive(true)
+            createBookmark()
+          }
         }
-      }
     }
   }
 
@@ -60,13 +63,13 @@ class AutoEnableSleepTimer
   }
 
   private fun shouldEnableSleepTimer(
-    playState: PlayStateManager.PlayState,
     autoSleepTimer: SleepTimerPreference,
+    sleepTimerActive: Boolean,
   ): Boolean {
-    return playState == Playing &&
-      autoSleepTimer.autoSleepTimerEnabled &&
+    return autoSleepTimer.autoSleepTimerEnabled &&
+      !sleepTimerActive &&
       isTimeInRange(
-        currentTime = LocalTime.now(),
+        currentTime = clock.instant().atZone(clock.zone).toLocalTime(),
         startTime = autoSleepTimer.autoSleepStartTime,
         endTime = autoSleepTimer.autoSleepEndTime,
       )
