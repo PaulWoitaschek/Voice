@@ -11,4 +11,13 @@ data class AutoSleepTimer(
   val startTime: LocalTime,
   @Serializable(with = LocalTimeSerializer::class)
   val endTime: LocalTime,
-)
+) {
+
+  companion object {
+    val Default = AutoSleepTimer(
+      enabled = false,
+      startTime = LocalTime.of(22, 0),
+      endTime = LocalTime.of(6, 0),
+    )
+  }
+}

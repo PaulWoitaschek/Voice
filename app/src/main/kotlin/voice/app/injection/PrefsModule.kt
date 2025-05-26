@@ -32,7 +32,6 @@ import voice.common.pref.SingleFolderAudiobookFoldersStore
 import voice.common.pref.SleepTimeStore
 import voice.common.serialization.UriSerializer
 import voice.datastore.VoiceDataStoreFactory
-import java.time.LocalTime
 import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -120,11 +119,7 @@ object PrefsModule {
   fun provideAutoSleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<AutoSleepTimer> {
     return factory.create(
       AutoSleepTimer.serializer(),
-      AutoSleepTimer(
-        enabled = false,
-        startTime = LocalTime.of(22, 0),
-        endTime = LocalTime.of(6, 0),
-      ),
+      AutoSleepTimer.Default,
       "autoSleepTimer",
     )
   }

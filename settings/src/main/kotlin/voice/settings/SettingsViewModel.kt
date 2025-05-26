@@ -54,11 +54,7 @@ class SettingsViewModel
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
     val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
     val autoSleepTimer by remember { autoSleepTimer.data }.collectAsState(
-      initial = AutoSleepTimer(
-        enabled = false,
-        startTime = LocalTime.of(22, 0),
-        endTime = LocalTime.of(6, 0),
-      ),
+      initial = AutoSleepTimer.Default,
     )
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
@@ -72,7 +68,11 @@ class SettingsViewModel
         GridMode.GRID -> true
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
-      autoSleepTimer = autoSleepTimer,
+      autoSleepTimer = SettingsViewState.AutoSleepTimerViewState(
+        enabled = autoSleepTimer.enabled,
+        startTime = autoSleepTimer.startTime,
+        endTime = autoSleepTimer.endTime,
+      ),
     )
   }
 
@@ -158,11 +158,7 @@ class SettingsViewModel
     }
   }
 
-  override fun setAutoSleepTimerStart(
-    hour: Int,
-    minute: Int,
-  ) {
-    val time = LocalTime.of(hour, minute)
+  override fun setAutoSleepTimerStart(time: LocalTime) {
     mainScope.launch {
       autoSleepTimer.updateData { currentPrefs ->
         currentPrefs.copy(startTime = time)
@@ -170,11 +166,7 @@ class SettingsViewModel
     }
   }
 
-  override fun setAutoSleepTimerEnd(
-    hour: Int,
-    minute: Int,
-  ) {
-    val time = LocalTime.of(hour, minute)
+  override fun setAutoSleepTimerEnd(time: LocalTime) {
     mainScope.launch {
       autoSleepTimer.updateData { currentPrefs ->
         currentPrefs.copy(endTime = time)

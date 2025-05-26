@@ -1,5 +1,7 @@
 package voice.settings
 
+import java.time.LocalTime
+
 interface SettingsListener {
   fun close()
   fun toggleDarkTheme()
@@ -14,13 +16,26 @@ interface SettingsListener {
   fun openBugReport()
   fun openTranslations()
   fun setAutoSleepTimer(checked: Boolean)
-  fun setAutoSleepTimerStart(
-    hour: Int,
-    minute: Int,
-  )
+  fun setAutoSleepTimerStart(time: LocalTime)
+  fun setAutoSleepTimerEnd(time: LocalTime)
 
-  fun setAutoSleepTimerEnd(
-    hour: Int,
-    minute: Int,
-  )
+  companion object {
+    fun noop() = object : SettingsListener {
+      override fun close() {}
+      override fun toggleDarkTheme() {}
+      override fun toggleGrid() {}
+      override fun seekAmountChanged(seconds: Int) {}
+      override fun onSeekAmountRowClick() {}
+      override fun autoRewindAmountChang(seconds: Int) {}
+      override fun onAutoRewindRowClick() {}
+      override fun dismissDialog() {}
+      override fun getSupport() {}
+      override fun suggestIdea() {}
+      override fun openBugReport() {}
+      override fun openTranslations() {}
+      override fun setAutoSleepTimer(checked: Boolean) {}
+      override fun setAutoSleepTimerStart(time: LocalTime) {}
+      override fun setAutoSleepTimerEnd(time: LocalTime) {}
+    }
+  }
 }
