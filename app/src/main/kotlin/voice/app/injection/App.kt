@@ -15,6 +15,7 @@ import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.DarkThemeStore
 import voice.common.rootComponent
+import voice.sleepTimer.AutoEnableSleepTimer
 import javax.inject.Inject
 
 open class App : Application() {
@@ -24,6 +25,9 @@ open class App : Application() {
 
   @Inject
   lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
+
+  @Inject
+  lateinit var autoEnableSleepTimer: AutoEnableSleepTimer
 
   @field:[
   Inject
@@ -58,8 +62,8 @@ open class App : Application() {
     }
 
     mediaScanner.scan()
-
     triggerWidgetOnChange.init()
+    autoEnableSleepTimer.startMonitoring()
   }
 
   open fun createAppComponent(): AppComponent {
