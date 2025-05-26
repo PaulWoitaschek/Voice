@@ -2,11 +2,16 @@ package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.MainScope
 import voice.common.autoSleepTimer.AutoSleepTimer
 import voice.common.pref.AutoSleepTimerStore
+import voice.common.pref.CurrentBookStore
+import voice.data.repo.BookRepository
+import voice.data.repo.BookmarkRepo
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
 import voice.playback.session.SleepTimer
@@ -20,6 +25,10 @@ class AutoEnableSleepTimer
   dispatcherProvider: DispatcherProvider,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
+  private val bookmarkRepo: BookmarkRepo,
+  private val bookRepository: BookRepository,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
 ) {
 
   private val mainScope = MainScope(dispatcherProvider)
@@ -34,9 +43,20 @@ class AutoEnableSleepTimer
       }.collect { (playState, autoSleepTimer) ->
         if (shouldEnableSleepTimer(playState, autoSleepTimer)) {
           sleepTimer.setActive(true)
+          createBookmark()
         }
       }
     }
+  }
+
+  private suspend fun createBookmark() {
+    val currentBookId = currentBookStore.data.first() ?: return
+    val currentBook = bookRepository.get(currentBookId) ?: return
+    bookmarkRepo.addBookmarkAtBookPosition(
+      book = currentBook,
+      title = null,
+      setBySleepTimer = true,
+    )
   }
 
   private fun shouldEnableSleepTimer(
