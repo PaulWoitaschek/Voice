@@ -7,9 +7,9 @@ import kotlinx.coroutines.launch
 import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.MainScope
-import voice.common.autoSleepTimer.AutoSleepTimer
-import voice.common.pref.AutoSleepTimerStore
 import voice.common.pref.CurrentBookStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import voice.playback.playstate.PlayStateManager
@@ -20,8 +20,8 @@ import javax.inject.Inject
 
 class AutoEnableSleepTimer
 @Inject constructor(
-  @AutoSleepTimerStore
-  private val autoSleepTimerStore: DataStore<AutoSleepTimer>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   dispatcherProvider: DispatcherProvider,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
@@ -37,7 +37,7 @@ class AutoEnableSleepTimer
     mainScope.launch {
       combine(
         playStateManager.flow,
-        autoSleepTimerStore.data,
+        sleepTimerPreferenceStore.data,
       ) { playState, autoSleepTimer ->
         playState to autoSleepTimer
       }.collect { (playState, autoSleepTimer) ->
@@ -61,14 +61,14 @@ class AutoEnableSleepTimer
 
   private fun shouldEnableSleepTimer(
     playState: PlayStateManager.PlayState,
-    autoSleepTimer: AutoSleepTimer,
+    autoSleepTimer: SleepTimerPreference,
   ): Boolean {
     return playState == Playing &&
-      autoSleepTimer.enabled &&
+      autoSleepTimer.autoSleepTimerEnabled &&
       isTimeInRange(
         currentTime = LocalTime.now(),
-        startTime = autoSleepTimer.startTime,
-        endTime = autoSleepTimer.endTime,
+        startTime = autoSleepTimer.autoSleepStartTime,
+        endTime = autoSleepTimer.autoSleepEndTime,
       )
   }
 }

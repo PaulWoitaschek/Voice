@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.common.AppScope
 import voice.common.pref.FadeOutStore
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
@@ -31,8 +32,8 @@ class SleepTimer
 @Inject constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
-  @SleepTimeStore
-  private val sleepTimeStore: DataStore<Duration>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val playerController: PlayerController,
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
@@ -63,7 +64,7 @@ class SleepTimer
 
   private fun setActive() {
     scope.launch {
-      setActive(sleepTimeStore.data.first())
+      setActive(sleepTimerPreferenceStore.data.first().duration)
     }
   }
 

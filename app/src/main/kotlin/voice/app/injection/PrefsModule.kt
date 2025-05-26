@@ -15,11 +15,9 @@ import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.common.AppScope
 import voice.common.BookId
-import voice.common.autoSleepTimer.AutoSleepTimer
 import voice.common.grid.GridMode
 import voice.common.pref.AuthorAudiobookFoldersStore
 import voice.common.pref.AutoRewindAmountStore
-import voice.common.pref.AutoSleepTimerStore
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.FadeOutStore
@@ -29,12 +27,12 @@ import voice.common.pref.RootAudiobookFoldersStore
 import voice.common.pref.SeekTimeStore
 import voice.common.pref.SingleFileAudiobookFoldersStore
 import voice.common.pref.SingleFolderAudiobookFoldersStore
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.serialization.UriSerializer
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.datastore.VoiceDataStoreFactory
 import javax.inject.Singleton
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Module
@@ -104,23 +102,12 @@ object PrefsModule {
 
   @Provides
   @Singleton
-  @SleepTimeStore
-  fun provideSleepTimePreference(factory: VoiceDataStoreFactory): DataStore<Duration> {
+  @SleepTimerPreferenceStore
+  fun provideSleepTimePreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
     return factory.create(
-      serializer = Duration.serializer(),
-      fileName = "sleepTime2",
-      defaultValue = 20.minutes,
-    )
-  }
-
-  @Provides
-  @Singleton
-  @AutoSleepTimerStore
-  fun provideAutoSleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<AutoSleepTimer> {
-    return factory.create(
-      AutoSleepTimer.serializer(),
-      AutoSleepTimer.Default,
-      "autoSleepTimer",
+      serializer = SleepTimerPreference.serializer(),
+      fileName = "sleepTime3",
+      defaultValue = SleepTimerPreference.Default,
     )
   }
 

@@ -13,16 +13,16 @@ import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.DispatcherProvider
 import voice.common.MainScope
-import voice.common.autoSleepTimer.AutoSleepTimer
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.AutoRewindAmountStore
-import voice.common.pref.AutoSleepTimerStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -38,8 +38,8 @@ class SettingsViewModel
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
   private val gridModeStore: DataStore<GridMode>,
-  @AutoSleepTimerStore
-  private val autoSleepTimer: DataStore<AutoSleepTimer>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val gridCount: GridCount,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
@@ -53,8 +53,8 @@ class SettingsViewModel
     val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
     val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
-    val autoSleepTimer by remember { autoSleepTimer.data }.collectAsState(
-      initial = AutoSleepTimer.Default,
+    val autoSleepTimer by remember { sleepTimerPreferenceStore.data }.collectAsState(
+      initial = SleepTimerPreference.Default,
     )
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
@@ -69,9 +69,9 @@ class SettingsViewModel
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
       autoSleepTimer = SettingsViewState.AutoSleepTimerViewState(
-        enabled = autoSleepTimer.enabled,
-        startTime = autoSleepTimer.startTime,
-        endTime = autoSleepTimer.endTime,
+        enabled = autoSleepTimer.autoSleepTimerEnabled,
+        startTime = autoSleepTimer.autoSleepStartTime,
+        endTime = autoSleepTimer.autoSleepEndTime,
       ),
     )
   }
@@ -152,24 +152,24 @@ class SettingsViewModel
 
   override fun setAutoSleepTimer(checked: Boolean) {
     mainScope.launch {
-      autoSleepTimer.updateData { currentPrefs ->
-        currentPrefs.copy(enabled = checked)
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepTimerEnabled = checked)
       }
     }
   }
 
   override fun setAutoSleepTimerStart(time: LocalTime) {
     mainScope.launch {
-      autoSleepTimer.updateData { currentPrefs ->
-        currentPrefs.copy(startTime = time)
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepStartTime = time)
       }
     }
   }
 
   override fun setAutoSleepTimerEnd(time: LocalTime) {
     mainScope.launch {
-      autoSleepTimer.updateData { currentPrefs ->
-        currentPrefs.copy(endTime = time)
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepEndTime = time)
       }
     }
   }
