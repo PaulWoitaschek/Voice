@@ -128,7 +128,4 @@
         <item quantity="one">%d minut</item>
         <item quantity="other">%d minutit</item>
     </plurals>
-    <string name="auto_sleep_timer">Käivita uinumise taimer ajastamise alusel</string>
-    <string name="auto_sleep_timer_start">Algusaeg</string>
-    <string name="auto_sleep_timer_end">Lõpuaeg</string>
 </resources>
