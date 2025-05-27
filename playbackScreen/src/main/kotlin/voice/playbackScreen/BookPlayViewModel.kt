@@ -23,7 +23,8 @@ import voice.common.compose.ImmutableFile
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBookStore
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.durationMs
 import voice.data.markForPosition
 import voice.data.repo.BookRepository
@@ -53,8 +54,8 @@ class BookPlayViewModel
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
   dispatcherProvider: DispatcherProvider,
-  @SleepTimeStore
-  private val sleepTimeStore: DataStore<Int>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -112,7 +113,7 @@ class BookPlayViewModel
         customTime < 5 -> customTime + 1
         else -> customTime + 5
       }
-      sleepTimeStore.updateData { newTime }
+      sleepTimerPreferenceStore.updateData { preference -> preference.copy(duration = newTime.minutes) }
       SleepTimerViewState(newTime)
     }
   }
@@ -125,7 +126,9 @@ class BookPlayViewModel
         customTime <= 5 -> customTime - 1
         else -> (customTime - 5).coerceAtLeast(5)
       }
-      sleepTimeStore.updateData { newTime }
+      sleepTimerPreferenceStore.updateData { preference ->
+        preference.copy(duration = newTime.minutes)
+      }
       SleepTimerViewState(newTime)
     }
   }
@@ -158,7 +161,7 @@ class BookPlayViewModel
       val updated: SleepTimerViewState? = if (current is BookPlayDialogViewState.SleepTimer) {
         update(current.viewState)
       } else {
-        update(SleepTimerViewState(sleepTimeStore.data.first()))
+        update(SleepTimerViewState(sleepTimerPreferenceStore.data.first().duration.inWholeMinutes.toInt()))
       }
       _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
     }
@@ -291,7 +294,11 @@ class BookPlayViewModel
         sleepTimer.setActive(false)
         _dialogState.value = null
       } else {
-        _dialogState.value = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(sleepTimeStore.data.first()))
+        _dialogState.value = BookPlayDialogViewState.SleepTimer(
+          viewState = SleepTimerViewState(
+            customSleepTime = sleepTimerPreferenceStore.data.first().duration.inWholeMinutes.toInt(),
+          ),
+        )
       }
     }
   }

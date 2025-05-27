@@ -1,11 +1,7 @@
 package voice.settings.views
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.ViewList
@@ -27,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.squareup.anvil.annotations.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
@@ -36,37 +31,16 @@ import voice.common.rootComponentAs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
+import voice.settings.views.sleeptimer.AutoSleepTimerCard
 import voice.strings.R as StringsR
 
 @Composable
 @Preview
 private fun SettingsPreview() {
-  val viewState = SettingsViewState(
-    useDarkTheme = false,
-    showDarkThemePref = true,
-    seekTimeInSeconds = 42,
-    autoRewindInSeconds = 12,
-    dialog = null,
-    appVersion = "1.2.3",
-    useGrid = true,
-  )
   VoiceTheme {
     Settings(
-      viewState,
-      object : SettingsListener {
-        override fun close() {}
-        override fun toggleDarkTheme() {}
-        override fun seekAmountChanged(seconds: Int) {}
-        override fun onSeekAmountRowClick() {}
-        override fun autoRewindAmountChang(seconds: Int) {}
-        override fun onAutoRewindRowClick() {}
-        override fun dismissDialog() {}
-        override fun openTranslations() {}
-        override fun getSupport() {}
-        override fun suggestIdea() {}
-        override fun openBugReport() {}
-        override fun toggleGrid() {}
-      },
+      SettingsViewState.preview(),
+      SettingsListener.noop(),
     )
   }
 }
@@ -100,16 +74,13 @@ private fun Settings(
       )
     },
   ) { contentPadding ->
-    Box(Modifier.padding(contentPadding)) {
-      Column(
-        Modifier
-          .verticalScroll(rememberScrollState())
-          .nestedScroll(scrollBehavior.nestedScrollConnection)
-          .padding(vertical = 8.dp),
-      ) {
-        if (viewState.showDarkThemePref) {
+    LazyColumn(contentPadding = contentPadding) {
+      if (viewState.showDarkThemePref) {
+        item {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
+      }
+      item {
         ListItem(
           modifier = Modifier.clickable { listener.toggleGrid() },
           leadingContent = {
@@ -130,36 +101,59 @@ private fun Settings(
             )
           },
         )
+      }
+
+      item {
         SeekTimeRow(viewState.seekTimeInSeconds) {
           listener.onSeekAmountRowClick()
         }
+      }
+
+      item {
         AutoRewindRow(viewState.autoRewindInSeconds) {
           listener.onAutoRewindRowClick()
         }
+      }
+
+      item {
+        AutoSleepTimerCard(viewState.autoSleepTimer, listener)
+      }
+
+      item {
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
         )
+      }
+
+      item {
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
           leadingContent = { Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
         )
+      }
+
+      item {
         ListItem(
           modifier = Modifier.clickable { listener.openBugReport() },
           leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(StringsR.string.pref_report_issue)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_report_issue)) },
         )
+      }
+      item {
         ListItem(
           modifier = Modifier.clickable { listener.openTranslations() },
           leadingContent = { Icon(Icons.Outlined.Language, stringResource(StringsR.string.pref_help_translating)) },
           headlineContent = { Text(stringResource(StringsR.string.pref_help_translating)) },
         )
+      }
+      item {
         AppVersion(appVersion = viewState.appVersion)
-        Dialog(viewState, listener)
       }
     }
+    Dialog(viewState, listener)
   }
 }
 

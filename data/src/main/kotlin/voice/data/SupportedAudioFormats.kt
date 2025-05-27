@@ -3,7 +3,7 @@ package voice.data
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.walk
 
-val supportedAudioFormats = arrayOf(
+private val supportedAudioFormats = setOf(
   "3gp",
   "aac",
   "awb",
@@ -18,10 +18,11 @@ val supportedAudioFormats = arrayOf(
   "mp3package",
   "mp4",
   "mpga",
-  "opus",
   "mxmf",
   "oga",
   "ogg",
+  "ogx",
+  "opus",
   "ota",
   "rtttl",
   "rtx",

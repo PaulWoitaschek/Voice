@@ -60,8 +60,7 @@ class MediaAnalyzer
           val format = trackGroup.getFormat(formatIndex)
           format.metadata?.let { metadata ->
             repeat(metadata.length()) { metadataIndex ->
-              val entry = metadata.get(metadataIndex)
-              when (entry) {
+              when (val entry = metadata.get(metadataIndex)) {
                 is TextInformationFrame -> visitText(entry, builder)
                 is ChapterFrame -> visitChapter(entry, builder)
                 is VorbisComment -> visitVorbis(entry, builder)
@@ -197,6 +196,12 @@ class MediaAnalyzer
         false
       } catch (e: ParserException) {
         Logger.w(e, "Error extracting duration")
+        false
+      } catch (e: IllegalArgumentException) {
+        Logger.w(e, "Error extracting duration")
+        false
+      } catch (e: SecurityException) {
+        Logger.w(e, "Error extracting duration due to security exception")
         false
       }
     }

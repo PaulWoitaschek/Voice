@@ -77,8 +77,8 @@
     <string name="migration_delete_dialog_title">מחק מיקומים</string>
     <string name="migration_delete_dialog_content">לאחר שתמחק את המיקומים הישנים, לא תוכל לשחזר את מיקומי ההפעלה הישנים שלך.</string>
     <string name="migration_delete_dialog_action_keep">שמור</string>
-    <string name="delete_book_bottom_sheet_title">מחר ספר</string>
-    <string name="delete_book_dialog_title">מחר ספר</string>
+    <string name="delete_book_bottom_sheet_title">מחק ספר</string>
+    <string name="delete_book_dialog_title">מחק ספר</string>
     <string name="delete_book_dialog_deletion_confirmation">מחק את הקבצים שלי</string>
     <string name="delete_book_dialog_content">פעולה זו תמחק את הקבצים במכשיר שלך.</string>
     <string name="search_hint">מה את.ה מחפש.ת?</string>
