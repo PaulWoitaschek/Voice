@@ -126,8 +126,8 @@
     <string name="sleep_timer.button.decrement">Shorter</string>
     <string name="auto_sleep_timer.title">Automatic Sleep Timer</string>
     <string name="auto_sleep_timer.subtitle">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
-    <string name="auto_sleep_timer.start">Set start time</string>
-    <string name="auto_sleep_timer.end">Set end time</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Set start time</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Set end time</string>
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
