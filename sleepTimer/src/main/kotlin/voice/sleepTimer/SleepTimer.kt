@@ -8,20 +8,17 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.common.AppScope
-import voice.common.autoSleepTimer.AutoSleepTimer
-import voice.common.pref.AutoSleepTimerStore
 import voice.common.pref.FadeOutStore
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
-import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration
@@ -35,13 +32,11 @@ class SleepTimer
 @Inject constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
-  @SleepTimeStore
-  private val sleepTimeStore: DataStore<Duration>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val playerController: PlayerController,
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
-  @AutoSleepTimerStore
-  private val autoSleepTimerStore: DataStore<AutoSleepTimer>,
 ) : PlaybackSleepTimer {
 
   private val scope = MainScope()
@@ -58,25 +53,6 @@ class SleepTimer
 
   private var sleepJob: Job? = null
 
-  init {
-    scope.launch {
-      combine(
-        playStateManager.flow,
-        autoSleepTimerStore.data,
-      ) { playState, autoSleepTimer ->
-        playState to autoSleepTimer
-      }.collect { (playState, autoSleepTimer) ->
-        if (
-          playState == Playing &&
-          autoSleepTimer.enabled &&
-          isTimeInRange(LocalTime.now(), autoSleepTimer.startTime, autoSleepTimer.endTime)
-        ) {
-          setActive()
-        }
-      }
-    }
-  }
-
   override fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")
     if (enable) {
@@ -88,7 +64,7 @@ class SleepTimer
 
   private fun setActive() {
     scope.launch {
-      setActive(sleepTimeStore.data.first())
+      setActive(sleepTimerPreferenceStore.data.first().duration)
     }
   }
 

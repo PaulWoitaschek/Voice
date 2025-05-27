@@ -12,8 +12,9 @@ import org.junit.Test
 import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.FadeOutStore
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.rootComponentAs
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.BookContent
 import voice.data.Chapter
 import voice.data.ChapterId
@@ -37,8 +38,8 @@ class SleepTimerIntegrationTest {
   @field:[Inject CurrentBookStore]
   lateinit var currentBookStore: DataStore<BookId?>
 
-  @field:[Inject SleepTimeStore]
-  lateinit var sleepTimeStore: DataStore<Duration>
+  @field:[Inject SleepTimerPreferenceStore]
+  lateinit var sleepTimerPreferenceStore: DataStore<SleepTimerPreference>
 
   @Inject
   lateinit var bookContentRepo: BookContentRepo
@@ -63,7 +64,7 @@ class SleepTimerIntegrationTest {
 
     // speed up the tests by using shorter fade out and sleep times
     fadeOutStore.updateData { 1.seconds }
-    sleepTimeStore.updateData { 3.seconds }
+    sleepTimerPreferenceStore.updateData { it.copy(duration = 3.seconds) }
 
     // play the book and wait for it to start
     playerController.play()

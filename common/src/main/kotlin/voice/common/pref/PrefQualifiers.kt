@@ -27,7 +27,7 @@ annotation class AutoRewindAmountStore
 annotation class SeekTimeStore
 
 @Qualifier
-annotation class SleepTimeStore
+annotation class SleepTimerPreferenceStore
 
 @Qualifier
 annotation class GridModeStore
@@ -37,6 +37,3 @@ annotation class DarkThemeStore
 
 @Qualifier
 annotation class FadeOutStore
-
-@Qualifier
-annotation class AutoSleepTimerStore

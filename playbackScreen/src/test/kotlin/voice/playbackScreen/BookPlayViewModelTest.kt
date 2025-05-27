@@ -13,6 +13,7 @@ import kotlinx.coroutines.yield
 import org.junit.Test
 import voice.common.BookId
 import voice.common.DispatcherProvider
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Bookmark
@@ -28,7 +29,7 @@ import kotlin.time.Duration.Companion.minutes
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
-  private val sleepTimerDataStore = MemoryDataStore(15.minutes)
+  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 15.minutes))
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     var sleepTimerActive = false
@@ -62,7 +63,7 @@ class BookPlayViewModelTest {
     },
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
-    sleepTimeStore = sleepTimerDataStore,
+    sleepTimerPreferenceStore = sleepTimerDataStore,
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
   )
@@ -110,7 +111,7 @@ class BookPlayViewModelTest {
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerDataStore.data.first() shouldBe 15.minutes
+    sleepTimerDataStore.data.first().duration shouldBe 15.minutes
     yield()
     verify(exactly = 1) {
       sleepTimer.setActive(10.minutes)

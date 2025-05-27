@@ -124,9 +124,10 @@
     <string name="sleep_timer.title">Sweet dreams! 🌙</string>
     <string name="sleep_timer.button.increment">Longer</string>
     <string name="sleep_timer.button.decrement">Shorter</string>
-    <string name="auto_sleep_timer">Start snooze timer on schedule</string>
-    <string name="auto_sleep_timer_start">Start time</string>
-    <string name="auto_sleep_timer_end">End time</string>
+    <string name="auto_sleep_timer.title">Automatic Sleep Timer</string>
+    <string name="auto_sleep_timer.subtitle">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
+    <string name="auto_sleep_timer.start">Set start time</string>
+    <string name="auto_sleep_timer.end">Set end time</string>
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
