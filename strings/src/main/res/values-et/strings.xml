@@ -128,4 +128,8 @@
         <item quantity="one">%d minut</item>
         <item quantity="other">%d minutit</item>
     </plurals>
+    <string name="auto_sleep_timer.subtitle">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>
+    <string name="auto_sleep_timer.start">Seadista algusaeg</string>
+    <string name="auto_sleep_timer.title">Automaatne unetaimer</string>
+    <string name="auto_sleep_timer.end">Seadista lõpuaeg</string>
 </resources>
