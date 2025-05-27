@@ -139,4 +139,8 @@
     <string name="review.feedback.button.no">Cealaigh</string>
     <string name="review.feedback.content">An bhféadfá a insint dúinn cad a chuaigh mícheart? Is mór againn d’aiseolas agus cabhraíonn sé linn d’eispéireas a fheabhsú.</string>
     <string name="sleep_timer.button.decrement">Níos giorra</string>
+    <string name="auto_sleep_timer.start">Socraigh am tosaithe</string>
+    <string name="auto_sleep_timer.end">Socraigh am deiridh</string>
+    <string name="auto_sleep_timer.subtitle">Tosaigh lasc ama codlata go huathoibríoch nuair a thosaíonn an athsheinm idir %1$s agus %2$s</string>
+    <string name="auto_sleep_timer.title">Uaineadóir Codlata Uathoibríoch</string>
 </resources>
