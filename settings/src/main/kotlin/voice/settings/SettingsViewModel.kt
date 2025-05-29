@@ -21,6 +21,9 @@ import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
+import java.time.LocalTime
 import javax.inject.Inject
 
 class SettingsViewModel
@@ -35,6 +38,8 @@ class SettingsViewModel
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
   private val gridModeStore: DataStore<GridMode>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val gridCount: GridCount,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
@@ -48,6 +53,9 @@ class SettingsViewModel
     val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
     val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
+    val autoSleepTimer by remember { sleepTimerPreferenceStore.data }.collectAsState(
+      initial = SleepTimerPreference.Default,
+    )
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -60,6 +68,11 @@ class SettingsViewModel
         GridMode.GRID -> true
         GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
       },
+      autoSleepTimer = SettingsViewState.AutoSleepTimerViewState(
+        enabled = autoSleepTimer.autoSleepTimerEnabled,
+        startTime = autoSleepTimer.autoSleepStartTime,
+        endTime = autoSleepTimer.autoSleepEndTime,
+      ),
     )
   }
 
@@ -135,5 +148,29 @@ class SettingsViewModel
   override fun openTranslations() {
     dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
+  }
+
+  override fun setAutoSleepTimer(checked: Boolean) {
+    mainScope.launch {
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepTimerEnabled = checked)
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerStart(time: LocalTime) {
+    mainScope.launch {
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepStartTime = time)
+      }
+    }
+  }
+
+  override fun setAutoSleepTimerEnd(time: LocalTime) {
+    mainScope.launch {
+      sleepTimerPreferenceStore.updateData { currentPrefs ->
+        currentPrefs.copy(autoSleepEndTime = time)
+      }
+    }
   }
 }

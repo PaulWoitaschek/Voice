@@ -1,7 +1,7 @@
 [versions]
 leakcanary = "2.14"
-versionCode = "3603042"
-versionName = "8.4.2"
+versionCode = "3603043"
+versionName = "8.4.3"
 
 sdk-compile = "35"
 sdk-min = "28"
@@ -14,7 +14,7 @@ dagger = "2.56.2"
 kotlin = "2.1.21"
 media3 = "1.7.1"
 agp = "8.10.0"
-ktlint-core = "1.5.0"
+ktlint-core = "1.6.0"
 ktlint-gradlePlugin = "0.10.0"
 retrofit = "3.0.0"
 
@@ -39,7 +39,7 @@ kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-emb
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
 koTest-assert = "io.kotest:kotest-assertions-core:5.9.1"
-datastore = "androidx.datastore:datastore-preferences:1.1.6"
+datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
 viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.2.0"
@@ -56,7 +56,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:33.13.0"
+firebase-bom = "com.google.firebase:firebase-bom:33.14.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
@@ -70,6 +70,10 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidX-test-runner = "androidx.test:runner:1.6.2"
 androidX-test-junit = "androidx.test.ext:junit:1.2.1"
 androidX-test-core = "androidx.test:core-ktx:1.6.1"
+androidX-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
+androidX-test-rules = "androidx.test:rules:1.6.1"
+androidX-test-services = "androidx.test.services:test-services:1.5.0"
+androidX-test-orchestrator = "androidx.test:orchestrator:1.5.1"
 
 conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
 
@@ -86,7 +90,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.0"
 
-compose-bom = "androidx.compose:compose-bom:2025.05.00"
+compose-bom = "androidx.compose:compose-bom:2025.05.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }

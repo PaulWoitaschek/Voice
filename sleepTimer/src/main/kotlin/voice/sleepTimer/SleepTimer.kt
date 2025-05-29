@@ -8,12 +8,13 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.common.AppScope
-import voice.common.pref.SleepTimeStore
+import voice.common.pref.FadeOutStore
+import voice.common.pref.SleepTimerPreferenceStore
+import voice.common.sleepTimer.SleepTimerPreference
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
@@ -22,7 +23,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import voice.playback.session.SleepTimer as PlaybackSleepTimer
 
@@ -32,13 +32,14 @@ class SleepTimer
 @Inject constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
-  @SleepTimeStore
-  private val sleepTimeStore: DataStore<Int>,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val playerController: PlayerController,
+  @FadeOutStore
+  private val fadeOutStore: DataStore<Duration>,
 ) : PlaybackSleepTimer {
 
   private val scope = MainScope()
-  private val fadeOutDuration = 10.seconds
 
   private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
   private var leftSleepTime: Duration
@@ -63,7 +64,7 @@ class SleepTimer
 
   private fun setActive() {
     scope.launch {
-      setActive(sleepTimeStore.data.first().minutes)
+      setActive(sleepTimerPreferenceStore.data.first().duration)
     }
   }
 
@@ -88,11 +89,12 @@ class SleepTimer
 
   private suspend fun startSleepTimerCountdown() {
     var interval = 500.milliseconds
+    val fadeOutDuration = fadeOutStore.data.first()
     while (leftSleepTime > Duration.ZERO) {
       suspendUntilPlaying()
       if (leftSleepTime < fadeOutDuration) {
         interval = 200.milliseconds
-        updateVolumeForSleepTime()
+        updateVolumeForSleepTime(fadeOutDuration)
       }
       delay(interval)
       leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
@@ -101,7 +103,7 @@ class SleepTimer
     playerController.setVolume(1F)
   }
 
-  private fun updateVolumeForSleepTime() {
+  private fun updateVolumeForSleepTime(fadeOutDuration: Duration) {
     val percentageOfTimeLeft = if (leftSleepTime == Duration.ZERO) {
       0F
     } else {
@@ -116,8 +118,7 @@ class SleepTimer
     if (playStateManager.playState != Playing) {
       Logger.i("Not playing. Wait for Playback to continue.")
       playStateManager.flow
-        .filter { it == Playing }
-        .first()
+        .first { it == Playing }
       Logger.i("Playback continued.")
     }
   }

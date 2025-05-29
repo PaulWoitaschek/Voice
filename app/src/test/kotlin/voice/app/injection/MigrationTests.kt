@@ -33,19 +33,6 @@ class MigrationTests {
   }
 
   @Test
-  fun `sleepTime migrates from SharedPreferences and cleans up`() = runTest {
-    val expected = 30
-    sharedPreferences.edit {
-      clear()
-      putInt("SLEEP_TIME", expected)
-    }
-
-    val store: DataStore<Int> = PrefsModule.provideSleepTimePreference(factory, sharedPreferences)
-    store.data.first() shouldBe expected
-    sharedPreferences.contains("SLEEP_TIME") shouldBe false
-  }
-
-  @Test
   fun `seekTime migrates from SharedPreferences and cleans up`() = runTest {
     val expected = 15
     sharedPreferences.edit {
@@ -88,7 +75,6 @@ class MigrationTests {
   fun `defaults are used when SharedPreferences empty`() = runTest {
     sharedPreferences.edit { clear() }
 
-    PrefsModule.provideSleepTimePreference(factory, sharedPreferences).data.first() shouldBe 20
     PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 20
     PrefsModule.provideAutoRewindAmountPreference(factory, sharedPreferences).data.first() shouldBe 2
     PrefsModule.darkThemePref(factory, sharedPreferences).data.first() shouldBe false
@@ -101,7 +87,7 @@ class MigrationTests {
       putInt("OTHER_KEY", 50)
     }
 
-    PrefsModule.provideSleepTimePreference(factory, sharedPreferences).data.first() shouldBe 20
+    PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 20
     sharedPreferences.contains("OTHER_KEY") shouldBe true
   }
 
@@ -109,13 +95,11 @@ class MigrationTests {
   fun `multiple migrations applied sequentially`() = runTest {
     sharedPreferences.edit {
       clear()
-      putInt("SLEEP_TIME", 30)
       putInt("SEEK_TIME", 15)
       putInt("AUTO_REWIND", 5)
       putBoolean("darkTheme", true)
     }
 
-    PrefsModule.provideSleepTimePreference(factory, sharedPreferences).data.first() shouldBe 30
     PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 15
     PrefsModule.provideAutoRewindAmountPreference(factory, sharedPreferences).data.first() shouldBe 5
     PrefsModule.darkThemePref(factory, sharedPreferences).data.first() shouldBe true
@@ -124,42 +108,6 @@ class MigrationTests {
       .forEach {
         sharedPreferences.contains(it).shouldBeFalse()
       }
-  }
-
-  @Test
-  fun `migration runs only once for sleepTime`() = runTest {
-    val initial = 55
-    sharedPreferences.edit {
-      clear()
-      putInt("SLEEP_TIME", initial)
-    }
-
-    val sleepStore = PrefsModule.provideSleepTimePreference(factory, sharedPreferences)
-    sleepStore.data.first() shouldBe initial
-    sharedPreferences.contains("SLEEP_TIME") shouldBe false
-
-    // Second read from the same store
-    sleepStore.data.first() shouldBe initial
-  }
-
-  @Test
-  fun `handle max edge case for sleepTime migration`() = runTest {
-    sharedPreferences.edit {
-      clear()
-      putInt("SLEEP_TIME", Int.MAX_VALUE)
-    }
-    PrefsModule.provideSleepTimePreference(factory, sharedPreferences)
-      .data.first() shouldBe Int.MAX_VALUE
-  }
-
-  @Test
-  fun `handle negative edge case for sleepTime migration`() = runTest {
-    sharedPreferences.edit {
-      clear()
-      putInt("SLEEP_TIME", -10)
-    }
-    PrefsModule.provideSleepTimePreference(factory, sharedPreferences)
-      .data.first() shouldBe -10
   }
 
   @Test

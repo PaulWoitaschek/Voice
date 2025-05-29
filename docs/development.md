@@ -1,11 +1,22 @@
 # Development
 
-## Current Status
+## Tests
 
-**Note:**
-I’m currently unable to review or accept pull requests (PRs) due to life and work commitments. The project remains in "soft maintenance"
-mode. Bug reports and suggestions are welcome, but PRs may not receive a response for the foreseeable future. Thank you for your
-understanding!
+### Unit tests
+
+To run the unit tests, run the following command:
+
+```sh
+./gradlew voiceUnitTests
+```
+
+### Instrumentation tests
+
+To run the instrumentation tests, run the following command:
+
+```sh
+./gradlew voiceDeviceGithubLibreDebugAndroidTest
+```
 
 ## Ktlint
 
