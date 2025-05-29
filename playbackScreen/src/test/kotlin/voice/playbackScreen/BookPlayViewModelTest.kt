@@ -1,6 +1,8 @@
 package voice.playbackScreen
 
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -19,6 +21,7 @@ import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId
+import voice.data.MarkData
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import java.time.Instant
@@ -130,6 +133,48 @@ class BookPlayViewModelTest {
     }
     sleepTimer.sleepTimerActive() shouldBe false
   }
+
+  @Test
+  fun onCurrentChapterClickShowsDialogWithCorrectState() = scope.runTest {
+    viewModel.onCurrentChapterClick()
+    yield()
+
+    val dialogState = viewModel.dialogState.value
+      .shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+
+    dialogState.items.shouldContainExactly(
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 1,
+        name = "Chapter Start",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 2,
+        name = "Middle Section",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 3,
+        name = "Final Section",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 4,
+        name = "Chapter Start",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 5,
+        name = "Middle Section",
+        active = true,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 6,
+        name = "Final Section",
+        active = false,
+      ),
+    )
+  }
 }
 
 private fun book(
@@ -145,12 +190,12 @@ private fun book(
     content = BookContent(
       author = UUID.randomUUID().toString(),
       name = name,
-      positionInChapter = 42,
+      positionInChapter = 2.5.minutes.inWholeMilliseconds,
       playbackSpeed = 1F,
       addedAt = Instant.ofEpochMilli(addedAtMillis),
       chapters = chapters.map { it.id },
       cover = null,
-      currentChapter = chapters.first().id,
+      currentChapter = chapters[1].id,
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
@@ -166,7 +211,11 @@ private fun chapter(): Chapter {
     id = ChapterId("http://${UUID.randomUUID()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
-    markData = emptyList(),
+    markData = listOf(
+      MarkData(startMs = 0L, name = "Chapter Start"),
+      MarkData(startMs = 2.minutes.inWholeMilliseconds, name = "Middle Section"),
+      MarkData(startMs = 4.minutes.inWholeMilliseconds, name = "Final Section"),
+    ),
     name = "name",
   )
 }
