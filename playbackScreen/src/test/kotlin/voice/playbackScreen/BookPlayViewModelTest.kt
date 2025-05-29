@@ -3,8 +3,10 @@ package voice.playbackScreen
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -22,6 +24,7 @@ import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.MarkData
+import voice.playback.PlayerController
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import java.time.Instant
@@ -44,11 +47,12 @@ class BookPlayViewModelTest {
       sleepTimerActive = firstArg()
     }
   }
+ private val player = mockk<PlayerController>()
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
     },
-    player = mockk(),
+    player = player,
     sleepTimer = sleepTimer,
     playStateManager = mockk(),
     currentBookStoreId = mockk(),
@@ -174,6 +178,27 @@ class BookPlayViewModelTest {
         active = false,
       ),
     )
+  }
+
+  @Test
+  fun onChapterClickSetsPositionAndDismissesDialog() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+
+    viewModel.onCurrentChapterClick()
+    yield()
+
+    viewModel.dialogState.value.shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+
+    viewModel.onChapterClick(number = 2)
+    yield()
+
+    // Verify player.setPosition was called with correct parameters
+    // The second mark starts at 2 minutes position in the first chapter
+    verify(exactly = 1) {
+      player.setPosition(time = 2.minutes.inWholeMilliseconds, id = book.chapters.first().id)
+    }
+
+    viewModel.dialogState.value shouldBe null
   }
 }
 
