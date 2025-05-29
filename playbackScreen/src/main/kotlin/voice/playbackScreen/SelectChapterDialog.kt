@@ -2,7 +2,7 @@ package voice.playbackScreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Equalizer
@@ -26,26 +26,29 @@ internal fun SelectChapterDialog(
     onDismissRequest = { viewModel.dismissDialog() },
     confirmButton = {},
     text = {
+      val selectedIndex = dialogState.items.indexOfFirst { it.active }
+      // -1 because we want to show the previous chapter as well
+      val initialFirstVisibleItemIndex = (selectedIndex - 1).coerceAtLeast(0)
       LazyColumn(
-        state = rememberLazyListState(initialFirstVisibleItemIndex = dialogState.selectedIndex ?: 0),
+        state = rememberLazyListState(initialFirstVisibleItemIndex = initialFirstVisibleItemIndex),
         content = {
-          itemsIndexed(dialogState.chapters) { index, chapter ->
+          items(dialogState.items) { chapter ->
             ListItem(
               colors = ListItemDefaults.colors(containerColor = Color.Transparent),
               modifier = Modifier.clickable {
-                viewModel.onChapterClick(index)
+                viewModel.onChapterClick(chapter.number)
               },
               headlineContent = {
-                Text(text = chapter.name ?: "")
+                Text(text = chapter.name)
               },
               leadingContent = {
-                Text(text = (index + 1).toString())
+                Text(text = chapter.number.toString())
               },
               trailingContent = {
-                if (dialogState.selectedIndex == index) {
+                if (chapter.active) {
                   Icon(
                     imageVector = Icons.Outlined.Equalizer,
-                    contentDescription = stringResource(id = StringsR.string.migration_detail_content_position_current_chapter_title),
+                    contentDescription = stringResource(id = StringsR.string.playback_current_chapter),
                   )
                 }
               },
