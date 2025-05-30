@@ -132,4 +132,5 @@
     <string name="auto_sleep_timer.start">Cunfigura s\'ora de incumintzu</string>
     <string name="auto_sleep_timer.end">Cunfigura s\'ora de fine</string>
     <string name="auto_sleep_timer.subtitle">Allughe unu temporizadore de suspensione cando sa riprodutzione incumintzat intre %1$s e %2$s</string>
+    <string name="playback.current_chapter">Capìtulu atuale</string>
 </resources>
