@@ -129,8 +129,8 @@
     <string name="generic_error_retry">Torra a proare</string>
     <string name="review.feedback.title">Nos dispraghet a l\'intèndere!</string>
     <string name="auto_sleep_timer.title">Temporizadore de suspensione automàticu</string>
-    <string name="auto_sleep_timer.start">Cunfigura s\'ora de incumintzu</string>
-    <string name="auto_sleep_timer.end">Cunfigura s\'ora de fine</string>
+    <string name="auto_sleep_timer.start">Ora de cumintzu</string>
+    <string name="auto_sleep_timer.end">Ora de fine</string>
     <string name="auto_sleep_timer.subtitle">Allughe unu temporizadore de suspensione cando sa riprodutzione incumintzat intre %1$s e %2$s</string>
     <string name="playback.current_chapter">Capìtulu atuale</string>
 </resources>
