@@ -47,7 +47,7 @@ class BookPlayViewModelTest {
       sleepTimerActive = firstArg()
     }
   }
- private val player = mockk<PlayerController>()
+  private val player = mockk<PlayerController>()
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
