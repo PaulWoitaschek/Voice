@@ -134,4 +134,9 @@
     <string name="cover_search.icon_recent">Ostatnie wyszukiwanie</string>
     <string name="review.request.title">Podoba ci się Voice?</string>
     <string name="sleep_timer.button.decrement">Krócej</string>
+    <string name="auto_sleep_timer.title">Automatyczny Wyłącznik Czasowy</string>
+    <string name="auto_sleep_timer.subtitle">Automatycznie uruchamia wyłącznik czasowy po rozpoczęciu odtwarzania pomiędzy %1$s a %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Rozpocznij</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Zakończ</string>
+    <string name="playback.current_chapter">Aktualny rozdział</string>
 </resources>
