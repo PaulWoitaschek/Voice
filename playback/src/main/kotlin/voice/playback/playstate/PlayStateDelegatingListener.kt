@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 class PlayStateDelegatingListener
 @Inject constructor(private val playStateManager: PlayStateManager) : Player.Listener {
-
   private lateinit var player: Player
 
   fun attachTo(player: Player) {
