@@ -134,4 +134,5 @@
     <string name="auto_sleep_timer.title">Automatischer Einschlaf-Timer</string>
     <string name="auto_sleep_timer.subtitle">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s beginnt</string>
     <string name="auto_sleep_timer.end">Endzeit</string>
+    <string name="playback.current_chapter">Aktuelles Kapitel</string>
 </resources>
