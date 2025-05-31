@@ -20,6 +20,7 @@ import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.MainScope
 import voice.common.compose.ImmutableFile
+import voice.common.formatTime
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBookStore
@@ -199,25 +200,30 @@ class BookPlayViewModel
   fun onCurrentChapterClick() {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
-      val chapterMarks = book.chapters.flatMap {
-        it.chapterMarks
-      }
-      val selectedIndex = chapterMarks.indexOf(book.currentMark)
       _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
-        chapters = chapterMarks,
-        selectedIndex = selectedIndex.takeUnless { it == -1 },
+        items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
+          chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
+            val previousChapters = book.chapters.take(chapterIndex)
+            BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+              number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
+              name = chapterMark.name ?: "",
+              active = chapterMark == book.currentMark && chapter == book.currentChapter,
+              time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
+            )
+          }
+        },
       )
     }
   }
 
-  fun onChapterClick(index: Int) {
+  fun onChapterClick(number: Int) {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
-          if (currentIndex == index) {
+          if (currentIndex == number - 1) {
             player.setPosition(mark.startMs, chapter.id)
             _dialogState.value = null
             return@launch

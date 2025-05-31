@@ -132,4 +132,5 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="playback.current_chapter">Current chapter</string>
 </resources>

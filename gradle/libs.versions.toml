@@ -1,7 +1,7 @@
 [versions]
 leakcanary = "2.14"
-versionCode = "3603043"
-versionName = "8.4.3"
+versionCode = "3603044"
+versionName = "8.5.0"
 
 sdk-compile = "35"
 sdk-min = "28"
@@ -13,7 +13,7 @@ materialDialog = "3.3.0"
 dagger = "2.56.2"
 kotlin = "2.1.21"
 media3 = "1.7.1"
-agp = "8.10.0"
+agp = "8.10.1"
 ktlint-core = "1.6.0"
 ktlint-gradlePlugin = "0.10.0"
 retrofit = "3.0.0"
