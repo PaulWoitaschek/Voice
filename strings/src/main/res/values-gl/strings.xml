@@ -111,4 +111,26 @@
     <string name="battery_optimization_rationale">Debido aos axustes da batería podería haber interrupcións da reprodución.</string>
     <string name="storage_bug_subtitle">En certos dispositivos, a unha app do sistema fáltanlle o permiso necesario para acceder á almacenaxe externa. Este acceso é esencial para que Voice poida ler os teus audiolibros.</string>
     <string name="onboarding.explanation.subtitle">Con Voice, podes engadir libros como ficheiros individuais ou organizalos en cartafoles. Ti elixes!</string>
+    <string name="review.request.button.no">Non, grazas</string>
+    <string name="onboarding.completion.subtitle">O teu primeiro audiolibro está listo para a escoita. Desfruta usando Voice!</string>
+    <string name="onboarding.completion.next_button">Comezar a escoita</string>
+    <string name="review.request.title">Desfrutas de Voice?</string>
+    <string name="review.request.content">A túa opinión é importante! Se tes un momento, valora a aplicación e comparte a túa experiencia. Axudarasnos a mellorar e a ofrecer una experiencia de escoita mellorada.</string>
+    <string name="review.feedback.title">Lamentamos escoitar iso!</string>
+    <string name="review.feedback.content">Poderías dicirnos que foi o que fallou? Apreciamos a túa opinión e axudaranos a mellorar a túa experiencia.</string>
+    <string name="review.feedback.button.yes">Enivar opinión</string>
+    <string name="review.feedback.button.no">Desbotar</string>
+    <string name="sleep_timer.title">Felices soños! 🌙</string>
+    <string name="sleep_timer.button.increment">Máis longo</string>
+    <string name="sleep_timer.button.decrement">Máis curto</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <string name="playback.current_chapter">Capítulo actual</string>
+    <string name="auto_sleep_timer.title">Temporizador automático</string>
+    <string name="auto_sleep_timer.subtitle">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Hora de inicio</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Hora de fin</string>
+    <string name="review.request.button.yes">Valorar agora</string>
 </resources>
