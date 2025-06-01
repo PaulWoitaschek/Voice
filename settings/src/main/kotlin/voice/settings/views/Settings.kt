@@ -122,31 +122,73 @@ private fun Settings(
       item {
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
-          leadingContent = { Icon(Icons.Outlined.Lightbulb, stringResource(StringsR.string.pref_suggest_idea)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_suggest_idea)) },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.Lightbulb,
+              contentDescription = stringResource(StringsR.string.pref_suggest_idea),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_suggest_idea))
+          },
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable { listener.getSupport() },
-          leadingContent = { Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(StringsR.string.pref_get_support)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_get_support)) },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+              contentDescription = stringResource(StringsR.string.pref_get_support),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_get_support))
+          },
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable { listener.openBugReport() },
-          leadingContent = { Icon(Icons.Outlined.BugReport, stringResource(StringsR.string.pref_report_issue)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_report_issue)) },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.BugReport,
+              contentDescription = stringResource(StringsR.string.pref_report_issue),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_report_issue))
+          },
         )
       }
       item {
         ListItem(
           modifier = Modifier.clickable { listener.openTranslations() },
-          leadingContent = { Icon(Icons.Outlined.Language, stringResource(StringsR.string.pref_help_translating)) },
-          headlineContent = { Text(stringResource(StringsR.string.pref_help_translating)) },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.Language,
+              contentDescription = stringResource(StringsR.string.pref_help_translating),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_help_translating))
+          },
+        )
+      }
+      item {
+        ListItem(
+          modifier = Modifier.clickable { listener.openFaq() },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+              contentDescription = stringResource(StringsR.string.pref_faq),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_faq))
+          },
         )
       }
       item {
