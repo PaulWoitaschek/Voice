@@ -111,7 +111,7 @@
     <string name="review.feedback.button.yes">Odeslat zpětnou vazbu</string>
     <string name="review.feedback.button.no">Zrušit</string>
     <string name="cover_search_template_no_author">%s obal audioknihy</string>
-    <string name="pref_suggest_idea">Navrhnout zlepšení</string>
+    <string name="pref_suggest_idea">Navrhnout nápad</string>
     <string name="generic_error_message">Něco se pokazilo 😢</string>
     <string name="generic_error_retry">Znovu</string>
     <string name="play">Přehrát</string>
