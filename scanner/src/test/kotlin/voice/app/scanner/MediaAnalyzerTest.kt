@@ -8,6 +8,7 @@ import io.kotest.matchers.longs.shouldBeWithinPercentageOf
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -49,17 +50,6 @@ internal class MediaAnalyzerTest {
   )
 
   private fun parse(filename: String): Metadata? {
-    Logger.install(
-      object : LogWriter {
-        override fun log(
-          severity: Logger.Severity,
-          message: String,
-          throwable: Throwable?,
-        ) {
-          println("$severity: $message, $throwable")
-        }
-      },
-    )
     val testFile = File(javaClass.classLoader!!.getResource(filename)!!.file)
     val documentFile = FileBasedDocumentFile(testFile)
     return runBlocking { analyzer.analyze(documentFile) }
@@ -137,6 +127,25 @@ internal class MediaAnalyzerTest {
         MarkData(startMs = 0L, name = "Introduction"),
         MarkData(startMs = 10000L, name = "Chapter 1"),
         MarkData(startMs = 20000L, name = "Chapter 2"),
+      )
+    }
+  }
+
+  companion object {
+
+    @BeforeClass
+    @JvmStatic
+    fun setup() {
+      Logger.install(
+        object : LogWriter {
+          override fun log(
+            severity: Logger.Severity,
+            message: String,
+            throwable: Throwable?,
+          ) {
+            println("$severity: $message, $throwable")
+          }
+        },
       )
     }
   }

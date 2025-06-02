@@ -74,7 +74,8 @@ class MediaAnalyzer
     }
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
-    if (fileType == FileTypes.MP4) {
+    val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
+    if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
       parseMp4Chapters(file, builder)
     }
 
