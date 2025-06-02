@@ -133,4 +133,9 @@
         <item quantity="many">%d minuti</item>
         <item quantity="other">%d minuti</item>
     </plurals>
+    <string name="auto_sleep_timer.title">Timer di spegnimento automatico</string>
+    <string name="auto_sleep_timer.subtitle">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Imposta l\'ora di inizio</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Imposta l\'ora di fine</string>
+    <string name="playback.current_chapter">Capitolo corrente</string>
 </resources>

@@ -133,4 +133,5 @@
     <string name="auto_sleep_timer.title">Automaatne unetaimer</string>
     <string name="auto_sleep_timer.end">Seadista lõpuaeg</string>
     <string name="playback.current_chapter">Praegune peatükk</string>
+    <string name="pref_faq">KKK</string>
 </resources>
