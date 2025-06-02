@@ -144,4 +144,5 @@
     <string name="auto_sleep_timer.subtitle">Tosaigh lasc ama codlata go huathoibríoch nuair a thosaíonn an athsheinm idir %1$s agus %2$s</string>
     <string name="auto_sleep_timer.title">Uaineadóir Codlata Uathoibríoch</string>
     <string name="playback.current_chapter">Caibidil reatha</string>
+    <string name="pref_faq">Ceisteanna Coitianta</string>
 </resources>
