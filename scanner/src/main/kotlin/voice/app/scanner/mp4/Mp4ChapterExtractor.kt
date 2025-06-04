@@ -40,9 +40,7 @@ class Mp4ChapterExtractor @Inject constructor(
       dataSource.open(DataSpec(uri))
 
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      val result = parseTopLevelBoxes(input)
-
-      when (result) {
+      when (val result = parseTopLevelBoxes(input)) {
         is ChapterParseResult.ChplChapters -> result.chapters
         is ChapterParseResult.ChapterTrackId -> {
           chapterTrackExtractor.extractFromTrackId(uri, result.trackId)
@@ -65,7 +63,7 @@ class Mp4ChapterExtractor @Inject constructor(
   private fun parseTopLevelBoxes(input: ExtractorInput): ChapterParseResult? {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
     return try {
-      parseBoxes(input = input, depth = 0, parentEnd = Long.MAX_VALUE, scratch = scratch)
+      parseBoxes(input = input, path = emptyList(), parentEnd = Long.MAX_VALUE, scratch = scratch)
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse MP4 boxes")
       null
@@ -81,7 +79,7 @@ class Mp4ChapterExtractor @Inject constructor(
 
   private fun parseBoxes(
     input: ExtractorInput,
-    depth: Int,
+    path: List<String>,
     parentEnd: Long,
     scratch: ParsableByteArray,
   ): ChapterParseResult? {
@@ -111,28 +109,9 @@ class Mp4ChapterExtractor @Inject constructor(
 
       val payloadSize = (atomSize - headerSize).toInt()
       val payloadEnd = input.position + payloadSize
-
+      val currentPath = path + atomType
       when {
-        (depth == 0 && atomType == "moov") ||
-          (depth == 1 && atomType in listOf("udta", "trak")) ||
-          (depth == 2 && atomType == "tref") -> {
-          val result = parseBoxes(
-            input = input,
-            depth = depth + 1,
-            parentEnd = payloadEnd,
-            scratch = scratch,
-          )
-
-          if (result is ChapterParseResult.ChplChapters) {
-            return result
-          }
-
-          if (result is ChapterParseResult.ChapterTrackId) {
-            chapterTrackId = result
-          }
-        }
-
-        depth == 2 && atomType == "chpl" -> {
+        currentPath == chplPath -> {
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return chapterTrackId
@@ -144,7 +123,7 @@ class Mp4ChapterExtractor @Inject constructor(
           }
         }
 
-        atomType == "chap" -> {
+        currentPath == chapPath -> {
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return chapterTrackId
@@ -152,6 +131,23 @@ class Mp4ChapterExtractor @Inject constructor(
 
           val trackId = buffer.readUnsignedIntToInt()
           chapterTrackId = ChapterParseResult.ChapterTrackId(trackId)
+        }
+
+        (chplPath.startsWith(currentPath) || chapPath.startsWith(currentPath)) -> {
+          val result = parseBoxes(
+            input = input,
+            path = currentPath,
+            parentEnd = payloadEnd,
+            scratch = scratch,
+          )
+
+          if (result is ChapterParseResult.ChplChapters) {
+            return result
+          }
+
+          if (result is ChapterParseResult.ChapterTrackId) {
+            chapterTrackId = result
+          }
         }
 
         else -> {
@@ -201,4 +197,11 @@ class Mp4ChapterExtractor @Inject constructor(
     data class ChplChapters(val chapters: List<MarkData>) : ChapterParseResult()
     data class ChapterTrackId(val trackId: Int) : ChapterParseResult()
   }
+}
+
+private val chplPath = listOf("moov", "udta", "chpl")
+private val chapPath = listOf("moov", "trak", "tref", "chap")
+
+private fun List<String>.startsWith(other: List<String>): Boolean {
+  return take(other.size) == other
 }
