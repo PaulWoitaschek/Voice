@@ -133,4 +133,6 @@
     <string name="auto_sleep_timer.title">Temporisator de somno automatic</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir tempore de fin</string>
     <string name="pref_faq">FAQ</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Definir tempore initial</string>
+    <string name="playback.current_chapter">Capitulo actual</string>
 </resources>
