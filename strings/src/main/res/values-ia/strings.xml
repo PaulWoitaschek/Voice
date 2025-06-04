@@ -130,4 +130,7 @@
     <string name="review.request.button.yes">Evalutar ora</string>
     <string name="review.feedback.content">Pote tu dicer nos que vadeva errate? Nos apprecia tu commentos e illo nos adjuta a meliorar tu experientia.</string>
     <string name="migration_delete_dialog_content">Un vice tu dele le positiones ancian tu non potera recuperar los.</string>
+    <string name="auto_sleep_timer.title">Temporisator de somno automatic</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir tempore de fin</string>
+    <string name="pref_faq">FAQ</string>
 </resources>
