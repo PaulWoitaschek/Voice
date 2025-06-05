@@ -12,6 +12,12 @@ import androidx.media3.extractor.DefaultExtractorInput
 import androidx.media3.extractor.ExtractorInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import voice.app.scanner.mp4.visitor.ChapVisitor
+import voice.app.scanner.mp4.visitor.ChplVisitor
+import voice.app.scanner.mp4.visitor.MdhdVisitor
+import voice.app.scanner.mp4.visitor.StcoVisitor
+import voice.app.scanner.mp4.visitor.StscVisitor
+import voice.app.scanner.mp4.visitor.SttsVisitor
 import voice.data.MarkData
 import voice.logging.core.Logger
 import java.io.IOException
@@ -30,7 +36,25 @@ import javax.inject.Inject
  * - Returns chapters as MarkData objects with timestamps and names
  */
 class Mp4ChapterExtractor
-@Inject constructor(private val context: Context) {
+@Inject constructor(
+  private val context: Context,
+  stscVisitor: StscVisitor,
+  mdhdVisitor: MdhdVisitor,
+  sttsVisitor: SttsVisitor,
+  stcoVisitor: StcoVisitor,
+  chplVisitor: ChplVisitor,
+  chapVisitor: ChapVisitor,
+) {
+
+  private val visitors = listOf(
+    stscVisitor,
+    mdhdVisitor,
+    sttsVisitor,
+    stcoVisitor,
+    chplVisitor,
+    chapVisitor,
+  )
+  private val visitorByPath = visitors.associateBy { it.path }
 
   suspend fun extractChapters(uri: Uri): List<MarkData> = withContext(Dispatchers.IO) {
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
@@ -68,9 +92,9 @@ class Mp4ChapterExtractor
     }
   }
 
-  private fun parseTopLevelBoxes(input: ExtractorInput): BoxParseOutput {
+  private fun parseTopLevelBoxes(input: ExtractorInput): Mp4ChpaterExtractorOutput {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
-    val parseOutput = BoxParseOutput()
+    val parseOutput = Mp4ChpaterExtractorOutput()
     parseBoxes(
       input = input,
       path = emptyList(),
@@ -85,7 +109,7 @@ class Mp4ChapterExtractor
     uri: Uri,
     dataSource: DataSource,
     trackId: Int,
-    output: BoxParseOutput,
+    output: Mp4ChpaterExtractorOutput,
   ): List<MarkData> {
     val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
     if (chunkOffsets == null) {
@@ -187,7 +211,7 @@ class Mp4ChapterExtractor
     path: List<String>,
     parentEnd: Long,
     scratch: ParsableByteArray,
-    parseOutput: BoxParseOutput,
+    parseOutput: Mp4ChpaterExtractorOutput,
   ) {
     while (input.position < parentEnd) {
       scratch.reset(Mp4Box.HEADER_SIZE)
@@ -215,63 +239,24 @@ class Mp4ChapterExtractor
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
       Logger.d("Current path: $currentPath, atomType: $atomType")
+
+      val visitor = visitorByPath[currentPath]
+
       when {
-        currentPath == mdhdPath -> {
-          Logger.v("Found mdhd!")
+        visitor != null -> {
+          Logger.v("Found ${visitor.path.last()}!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return
           }
-          parseMdhdAtom(buffer, parseOutput)
-        }
-        currentPath == sttsPath -> {
-          Logger.v("Found stts!")
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
-          parseSttsAtom(buffer, parseOutput)
-        }
-        currentPath == stcoPath -> {
-          Logger.v("Found stco!")
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
-          parseStcoAtom(buffer, parseOutput)
-        }
-        currentPath == stscPath -> {
-          Logger.v("Found stsc!")
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
-          parseStscAtom(buffer, parseOutput)
-        }
-        currentPath == chplPath -> {
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
+          visitor.visit(buffer, parseOutput)
 
-          val chapters = parseChplAtom(buffer)
-          parseOutput.chplChapters = chapters
-          if (chapters.isNotEmpty()) {
+          if (parseOutput.chplChapters.isNotEmpty()) {
             return
           }
         }
 
-        currentPath == chapPath -> {
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
-
-          val trackId = buffer.readUnsignedIntToInt()
-          parseOutput.chapterTrackId = trackId
-        }
-
-        pathsToVisit.any { it.startsWith(currentPath) } -> {
+        visitors.any { it.path.startsWith(currentPath) } -> {
           parseBoxes(
             input = input,
             path = currentPath,
@@ -299,154 +284,8 @@ class Mp4ChapterExtractor
       }
     }
   }
-
-  // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
-  private fun parseStcoAtom(
-    buffer: ParsableByteArray,
-    parseOutput: BoxParseOutput,
-  ) {
-    val version = buffer.readUnsignedByte()
-    if (version != 0) {
-      Logger.w("Unexpected version $version in stco atom, expected 0")
-    } else {
-      buffer.skipBytes(3) // flags
-      val numberOfEntries = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stco: $numberOfEntries")
-      val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
-      parseOutput.chunkOffsets.add(chunkOffsets)
-    }
-  }
-
-  // https://developer.apple.com/documentation/quicktime-file-format/time-to-sample_atom
-  private fun parseSttsAtom(
-    buffer: ParsableByteArray,
-    parseOutput: BoxParseOutput,
-  ) {
-    val version = buffer.readUnsignedByte()
-    if (version != 0) {
-      Logger.w("Unexpected version $version in stts atom, expected 0")
-    } else {
-      buffer.skipBytes(3) // flags
-      val numberOfEntriesInSttsTable = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stts: $numberOfEntriesInSttsTable")
-      val individualSampleDurations = mutableListOf<Long>()
-      repeat(numberOfEntriesInSttsTable) {
-        val count = buffer.readUnsignedInt().toInt()
-        val delta = buffer.readUnsignedInt()
-        repeat(count) {
-          individualSampleDurations.add(delta)
-        }
-      }
-      parseOutput.durations.add(individualSampleDurations)
-    }
-  }
-
-  // https://developer.apple.com/documentation/quicktime-file-format/sample-to-chunk_atom/
-  private fun parseStscAtom(
-    buffer: ParsableByteArray,
-    parseOutput: BoxParseOutput,
-  ) {
-    val version = buffer.readUnsignedByte()
-    if (version != 0) {
-      Logger.w("Unexpected version $version in stsc atom, expected 0")
-    } else {
-      buffer.skipBytes(3) // flags
-      val numberOfEntries = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stsc: $numberOfEntries")
-      val stscEntriesForTrack = (0 until numberOfEntries).map {
-        val firstChunk = buffer.readUnsignedInt()
-        val samplesPerChunk = buffer.readUnsignedIntToInt()
-        buffer.skipBytes(4) // skip sample description index
-        StscEntry(
-          firstChunk = firstChunk,
-          samplesPerChunk = samplesPerChunk,
-        )
-      }
-      parseOutput.stscEntries.add(stscEntriesForTrack)
-    }
-  }
-
-  // https://developer.apple.com/documentation/quicktime-file-format/media_header_atom
-  private fun parseMdhdAtom(
-    buffer: ParsableByteArray,
-    parseOutput: BoxParseOutput,
-  ) {
-    val version = buffer.readUnsignedByte()
-    if (version != 0 && version != 1) {
-      Logger.w("Unexpected version $version in mdhd atom, expected 0 or 1")
-    } else {
-      val flagsSize = 3
-      val creationTimeSize = if (version == 0) 4 else 8
-      val modificationTimeSize = if (version == 0) 4 else 8
-      buffer.skipBytes(flagsSize + creationTimeSize + modificationTimeSize)
-      val timescale = buffer.readUnsignedInt()
-      Logger.v("Timescale: $timescale")
-      parseOutput.timeScales += timescale
-    }
-  }
-
-  private fun parseChplAtom(data: ParsableByteArray): List<MarkData> {
-    data.setPosition(0)
-    val version = data.readUnsignedByte()
-    data.skipBytes(3) // flags
-
-    if (version != 0 && version != 1) {
-      Logger.w("Unexpected version $version in chpl atom, expected 0 or 1")
-      return emptyList()
-    }
-
-    if (version == 1) {
-      data.skipBytes(4)
-    }
-
-    val chapterCount = data.readUnsignedByte()
-
-    return (0 until chapterCount).map {
-      val timestamp = if (version == 0) {
-        data.readUnsignedInt()
-      } else {
-        data.readUnsignedLongToLong()
-      }
-
-      val titleLength = data.readUnsignedByte()
-      val title = data.readString(titleLength)
-
-      // Convert from 100ns units to milliseconds (10,000 units per ms)
-      val startTimeMs = timestamp / 10_000
-      MarkData(startMs = startTimeMs, name = title)
-    }
-  }
 }
-
-private val chplPath = listOf("moov", "udta", "chpl")
-private val chapPath = listOf("moov", "trak", "tref", "chap")
-private val mdhdPath = listOf("moov", "trak", "mdia", "mdhd")
-private val stcoPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stco")
-private val sttsPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stts")
-private val stscPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc")
-private val pathsToVisit = listOf(
-  chplPath,
-  chapPath,
-  mdhdPath,
-  stcoPath,
-  sttsPath,
-  stscPath,
-)
 
 private fun List<String>.startsWith(other: List<String>): Boolean {
   return take(other.size) == other
 }
-
-private data class StscEntry(
-  val firstChunk: Long,
-  val samplesPerChunk: Int,
-)
-
-private data class BoxParseOutput(
-  val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
-  val durations: MutableList<List<Long>> = mutableListOf(),
-  val stscEntries: MutableList<List<StscEntry>> = mutableListOf(),
-  val timeScales: MutableList<Long> = mutableListOf(),
-  var chplChapters: List<MarkData> = emptyList(),
-  var chapterTrackId: Int? = null,
-)
