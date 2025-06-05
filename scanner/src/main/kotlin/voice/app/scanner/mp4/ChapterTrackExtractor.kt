@@ -2,16 +2,9 @@ package voice.app.scanner.mp4
 
 import android.content.Context
 import android.net.Uri
-import androidx.media3.common.C
 import androidx.media3.common.util.ParsableByteArray
-import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
-import androidx.media3.extractor.DefaultExtractorInput
-import androidx.media3.extractor.Extractor
-import androidx.media3.extractor.PositionHolder
-import androidx.media3.extractor.mp4.Mp4Extractor
-import androidx.media3.extractor.text.DefaultSubtitleParserFactory
 import voice.data.MarkData
 import voice.logging.core.Logger
 import java.io.IOException
@@ -32,8 +25,25 @@ class ChapterTrackExtractor @Inject constructor(private val context: Context) {
       Logger.w("No chunk offsets found for track ID $trackId")
       return chapters
     }
-    chunkOffsets.map { offset ->
+    val timeScale = output.timeScales.getOrNull(trackId - 1)
+    if (timeScale == null) {
+      Logger.w("No time scale found for track ID $trackId")
+      return chapters
+    }
+    val durations = output.durations.getOrNull(trackId - 1)
+    if (durations == null) {
+      Logger.w("No durations found for track ID $trackId")
+      return chapters
+    }
+
+    if (chunkOffsets.size != durations.size) {
+      Logger.w("Chunk offsets and durations size mismatch for track ID $trackId")
+      return chapters
+    }
+
+    val names = chunkOffsets.map { offset ->
       try {
+        dataSource.close()
         dataSource.open(
           DataSpec.Builder()
             .setUri(uri)
@@ -48,8 +58,10 @@ class ChapterTrackExtractor @Inject constructor(private val context: Context) {
         dataSource.read(buffer.data, 0, textLength)
         val text = buffer.readString(textLength)
         Logger.w("Extracted chapter text: $text")
+        text
       } catch (e: IOException) {
         Logger.e(e, "IO error during chapter track extraction")
+        return emptyList()
       } finally {
         try {
           dataSource.close()
@@ -57,62 +69,22 @@ class ChapterTrackExtractor @Inject constructor(private val context: Context) {
           Logger.w(e, "Error closing data source")
         }
       }
-
     }
 
-    try {
-      dataSource.open(DataSpec(uri))
-      processTrack(dataSource, uri, trackId, chapters)
-    } catch (e: IOException) {
-      Logger.e(e, "IO error during chapter track extraction")
-    } finally {
-      try {
-        dataSource.close()
-      } catch (e: IOException) {
-        Logger.w(e, "Error closing data source")
-      }
+    if (names.size != chunkOffsets.size) {
+      Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
+      return chapters
     }
-
-    return chapters.sorted()
-  }
-
-  private fun processTrack(
-    dataSource: DataSource,
-    uri: Uri,
-    trackId: Int,
-    outputChapters: MutableList<MarkData>,
-  ) {
-    var extractorInput = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-    val positionHolder = PositionHolder()
-
-    val extractor = Mp4Extractor(DefaultSubtitleParserFactory())
-    val extractorOutput = ChapterTrackOutput(trackId, outputChapters)
-    extractor.init(extractorOutput)
-
-    while (true) {
-      val result = extractor.read(extractorInput, positionHolder)
-      when (result) {
-        Extractor.RESULT_CONTINUE -> {
-          // Continue reading
+    var position = 0L
+    return names
+      .mapIndexed { index, chapterName ->
+        MarkData(
+          startMs = position / timeScale,
+          name = chapterName,
+        ).also {
+          val dai = durations[index]
+          position += dai
         }
-        Extractor.RESULT_SEEK -> {
-          dataSource.close()
-          var length = dataSource.open(
-            DataSpec.Builder()
-              .setUri(uri)
-              .setPosition(positionHolder.position)
-              .build(),
-          )
-
-          if (length != C.LENGTH_UNSET.toLong()) {
-            length += positionHolder.position
-          }
-
-          Logger.d("Seeking to position ${positionHolder.position}")
-          extractorInput = DefaultExtractorInput(dataSource, positionHolder.position, length)
-        }
-        Extractor.RESULT_END_OF_INPUT -> break
-      }
-    }
+      }.sorted()
   }
 }
