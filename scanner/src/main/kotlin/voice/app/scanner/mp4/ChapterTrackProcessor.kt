@@ -96,19 +96,14 @@ class ChapterTrackProcessor
     chunkIndex: Int,
     stscEntries: List<StscEntry>,
   ): Int {
-    val chunkNumber = chunkIndex + 1
-
-    for (i in stscEntries.indices) {
-      val entry = stscEntries[i]
-      val nextEntry = stscEntries.getOrNull(i + 1)
-
-      if (chunkNumber >= entry.firstChunk) {
-        if (nextEntry == null || chunkNumber < nextEntry.firstChunk) {
+    stscEntries.forEachIndexed { index, entry ->
+      val nextEntry = stscEntries.getOrNull(index + 1)
+      if (chunkIndex + 1 >= entry.firstChunk) {
+        if (nextEntry == null || chunkIndex + 1 < nextEntry.firstChunk) {
           return entry.samplesPerChunk
         }
       }
     }
-
     return 1
   }
 }
