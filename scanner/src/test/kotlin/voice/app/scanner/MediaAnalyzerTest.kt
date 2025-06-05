@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.app.scanner.mp4.ChapterTrackProcessor
 import voice.app.scanner.mp4.Mp4BoxParser
 import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.app.scanner.mp4.visitor.ChapVisitor
@@ -49,6 +50,7 @@ internal class MediaAnalyzerTest {
         chplVisitor = ChplVisitor(),
         chapVisitor = ChapVisitor(),
       ),
+      chapterTrackProcessor = ChapterTrackProcessor(),
     ),
   )
   private val auphonicChapters = listOf(

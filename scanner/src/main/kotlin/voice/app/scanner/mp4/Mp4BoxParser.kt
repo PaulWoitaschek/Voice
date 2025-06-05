@@ -32,7 +32,7 @@ class Mp4BoxParser
   )
   private val visitorByPath = visitors.associateBy { it.path }
 
-  fun parse(input: ExtractorInput): Mp4ChpaterExtractorOutput {
+  operator fun invoke(input: ExtractorInput): Mp4ChpaterExtractorOutput {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
     val parseOutput = Mp4ChpaterExtractorOutput()
     parseBoxes(
