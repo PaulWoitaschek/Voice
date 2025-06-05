@@ -39,14 +39,16 @@ class Mp4ChapterExtractor
       dataSource.open(DataSpec(uri))
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
       val topLevelResult = parseTopLevelBoxes(input)
-      if (topLevelResult.chplChapters.isNotEmpty()) {
-        return@withContext topLevelResult.chplChapters
-      }
       val trackId = topLevelResult.chapterTrackId
-      if (trackId != null) {
-        return@withContext extractFromTrackId(uri, dataSource, trackId, topLevelResult)
+      when {
+        topLevelResult.chplChapters.isNotEmpty() -> {
+          topLevelResult.chplChapters
+        }
+        trackId != null -> {
+          extractFromTrackId(uri, dataSource, trackId, topLevelResult)
+        }
+        else -> emptyList()
       }
-      return@withContext emptyList()
     } catch (e: IOException) {
       Logger.w(e, "Failed to open MP4 file for chapter extraction")
       emptyList()
@@ -160,7 +162,10 @@ class Mp4ChapterExtractor
       .sorted()
   }
 
-  private fun getSamplesPerChunk(chunkIndex: Int, stscEntries: List<StscEntry>): Int {
+  private fun getSamplesPerChunk(
+    chunkIndex: Int,
+    stscEntries: List<StscEntry>,
+  ): Int {
     val chunkNumber = chunkIndex + 1
 
     for (i in stscEntries.indices) {
@@ -383,7 +388,7 @@ class Mp4ChapterExtractor
   private fun parseChplAtom(data: ParsableByteArray): List<MarkData> {
     data.setPosition(0)
     val version = data.readUnsignedByte()
-    data.skipBytes(3)  // flags
+    data.skipBytes(3) // flags
 
     if (version != 0 && version != 1) {
       Logger.w("Unexpected version $version in chpl atom, expected 0 or 1")
