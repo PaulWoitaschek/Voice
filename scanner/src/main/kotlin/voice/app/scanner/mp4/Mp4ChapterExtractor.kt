@@ -38,15 +38,17 @@ class Mp4ChapterExtractor
       dataSource.open(DataSpec(uri))
 
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      when (val result = parseTopLevelBoxes(input)) {
-        is ChapterParseResult.ChplChapters -> result.chapters
-        is ChapterParseResult.ChapterTrackId -> {
-          Logger.w("Found 'chap' atom, extracting chapters from track ID: ${result.trackId}")
-          extractFromTrackId(uri, result.trackId, result.output)
-        }
-
-        null -> emptyList()
+      val topLevelResult = parseTopLevelBoxes(input) ?: return@withContext emptyList()
+      if (topLevelResult.chplChapters.isNotEmpty()) {
+        return@withContext topLevelResult.chplChapters
       }
+      println("tlr")
+      println(topLevelResult)
+      val trackId = topLevelResult.chapterTrackId
+      if (trackId != null) {
+        return@withContext extractFromTrackId(uri, trackId, topLevelResult)
+      }
+      return@withContext emptyList()
     } catch (e: IOException) {
       Logger.w(e, "Failed to open MP4 file for chapter extraction")
       emptyList()
@@ -59,7 +61,7 @@ class Mp4ChapterExtractor
     }
   }
 
-  private fun parseTopLevelBoxes(input: ExtractorInput): ChapterParseResult? {
+  private fun parseTopLevelBoxes(input: ExtractorInput): BoxParseOutput? {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
     return try {
       val parseOutput = BoxParseOutput()
@@ -72,6 +74,7 @@ class Mp4ChapterExtractor
       ).also {
         Logger.w("output=$parseOutput")
       }
+      parseOutput
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse MP4 boxes")
       null
@@ -152,20 +155,27 @@ class Mp4ChapterExtractor
     return names
       .mapIndexed { index, chapterName ->
         MarkData(
-          startMs = position / timeScale,
+          startMs = position * 1000 / timeScale,
           name = chapterName,
         ).also {
-          val dai = durations[index]
-          position += dai
+          val duration = durations[index]
+          position += duration
         }
       }.sorted()
   }
 
-  data class BoxParseOutput(
+  private data class BoxParseOutput(
     val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
     val durations: MutableList<List<Long>> = mutableListOf(),
-    val timeScales: MutableList<Long> = mutableListOf<Long>(),
-  )
+    val timeScales: MutableList<Long> = mutableListOf(),
+    var chplChapters: List<MarkData> = emptyList(),
+    var chapterTrackId: Int? = null,
+  ) {
+
+    override fun toString(): String {
+      return "BoxParseOutput(chunkOffsets=${chunkOffsets.size}, durations=${durations.size}, timeScales=${timeScales.size}, chplChapters=$chplChapters, chapterTrackId=$chapterTrackId)"
+    }
+  }
 
   private fun parseBoxes(
     input: ExtractorInput,
@@ -173,13 +183,11 @@ class Mp4ChapterExtractor
     parentEnd: Long,
     scratch: ParsableByteArray,
     parseOutput: BoxParseOutput,
-  ): ChapterParseResult? {
-    var chapterTrackId: ChapterParseResult.ChapterTrackId? = null
-
+  ) {
     while (input.position < parentEnd) {
       scratch.reset(Mp4Box.HEADER_SIZE)
       if (!input.readFully(scratch.data, 0, Mp4Box.HEADER_SIZE, true)) {
-        return chapterTrackId
+        return
       }
 
       scratch.setPosition(0)
@@ -214,7 +222,7 @@ class Mp4ChapterExtractor
           Logger.v("Found mdhd!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return chapterTrackId
+            return
           }
           parseMdhdAtom(buffer, parseOutput)
         }
@@ -222,7 +230,7 @@ class Mp4ChapterExtractor
           Logger.v("Found stts!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return chapterTrackId
+            return
           }
           parseSttsAtom(buffer, parseOutput)
         }
@@ -231,34 +239,35 @@ class Mp4ChapterExtractor
           Logger.v("Found stco!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return chapterTrackId
+            return
           }
           parseStcoAtom(buffer, parseOutput)
         }
         currentPath == chplPath -> {
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return chapterTrackId
+            return
           }
 
           val chapters = parseChplAtom(buffer)
+          parseOutput.chplChapters = chapters
           if (chapters.isNotEmpty()) {
-            return ChapterParseResult.ChplChapters(chapters)
+            return
           }
         }
 
         currentPath == chapPath -> {
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return chapterTrackId
+            return
           }
 
           val trackId = buffer.readUnsignedIntToInt()
-          chapterTrackId = ChapterParseResult.ChapterTrackId(trackId, parseOutput)
+          parseOutput.chapterTrackId = trackId
         }
 
         pathsToVisit.any { it.startsWith(currentPath) } -> {
-          val result = parseBoxes(
+          parseBoxes(
             input = input,
             path = currentPath,
             parentEnd = payloadEnd,
@@ -266,30 +275,24 @@ class Mp4ChapterExtractor
             parseOutput = parseOutput,
           )
 
-          if (result is ChapterParseResult.ChplChapters) {
-            return result
-          }
-
-          if (result is ChapterParseResult.ChapterTrackId) {
-            chapterTrackId = result
+          if (parseOutput.chplChapters.isNotEmpty()) {
+            // return
           }
         }
 
         else -> {
           if (!input.skipFully(payloadSize, true)) {
-            return chapterTrackId
+            return
           }
         }
       }
 
       if (input.position < payloadEnd) {
         if (!input.skipFully((payloadEnd - input.position).toInt(), true)) {
-          return chapterTrackId
+          return
         }
       }
     }
-
-    return chapterTrackId
   }
 
   private fun parseStcoAtom(
@@ -303,6 +306,7 @@ class Mp4ChapterExtractor
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntries = buffer.readUnsignedIntToInt()
+      Logger.v("Number of entries in stco: $numberOfEntries")
       val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
       parseOutput.chunkOffsets.add(chunkOffsets)
     }
@@ -318,10 +322,11 @@ class Mp4ChapterExtractor
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntries = buffer.readUnsignedIntToInt()
+      Logger.v("Number of entries in stts: $numberOfEntries")
       val durations = (0 until numberOfEntries).map {
         val count = buffer.readUnsignedInt()
         val delta = buffer.readUnsignedInt()
-        1000L * count * delta
+        count * delta
       }
       parseOutput.durations += durations
     }
@@ -350,6 +355,7 @@ class Mp4ChapterExtractor
     data.setPosition(0)
     val version = data.readUnsignedByte()
     data.skipBytes(3) // flags
+    Logger.e("version=$version")
     data.skipBytes(1) // reserved
     val chapterCount = data.readUnsignedIntToInt()
 
@@ -367,14 +373,6 @@ class Mp4ChapterExtractor
       val startTimeMs = timestamp / 10_000
       MarkData(startMs = startTimeMs, name = title)
     }
-  }
-
-  private sealed class ChapterParseResult {
-    data class ChplChapters(val chapters: List<MarkData>) : ChapterParseResult()
-    data class ChapterTrackId(
-      val trackId: Int,
-      val output: BoxParseOutput,
-    ) : ChapterParseResult()
   }
 }
 
