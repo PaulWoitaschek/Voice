@@ -42,8 +42,6 @@ class Mp4ChapterExtractor
       if (topLevelResult.chplChapters.isNotEmpty()) {
         return@withContext topLevelResult.chplChapters
       }
-      println("tlr")
-      println(topLevelResult)
       val trackId = topLevelResult.chapterTrackId
       if (trackId != null) {
         return@withContext extractFromTrackId(uri, trackId, topLevelResult)
@@ -145,20 +143,19 @@ class Mp4ChapterExtractor
       var sampleIndex = 0
 
       return (0 until numberOfChaptersToProcess)
-        .map { index ->
-          val chapterName = names[index]
+        .map { chunkIndex ->
+          val chapterName = names[chunkIndex]
+
+          val samplesInThisChunk = getSamplesPerChunk(chunkIndex, stscEntries)
+
           var chunkDuration = 0L
 
-          val relevantStscEntry = stscEntries.lastOrNull { it.firstChunk <= index + 1 }
-          val samplesPerChunk = relevantStscEntry?.samplesPerChunk ?: 1
-
-          for (i in 0 until samplesPerChunk) {
+          repeat(samplesInThisChunk) {
             if (sampleIndex < durations.size) {
               chunkDuration += durations[sampleIndex]
               sampleIndex++
             } else {
-              Logger.w("Not enough sample durations for chunk ${index + 1}. Using partial duration.")
-              break
+              Logger.w("Not enough sample durations for chunk ${chunkIndex + 1}")
             }
           }
 
@@ -182,6 +179,23 @@ class Mp4ChapterExtractor
     }
   }
 
+  private fun getSamplesPerChunk(chunkIndex: Int, stscEntries: List<StscEntry>): Int {
+    val chunkNumber = chunkIndex + 1
+
+    for (i in stscEntries.indices) {
+      val entry = stscEntries[i]
+      val nextEntry = stscEntries.getOrNull(i + 1)
+
+      if (chunkNumber >= entry.firstChunk) {
+        if (nextEntry == null || chunkNumber < nextEntry.firstChunk) {
+          return entry.samplesPerChunk
+        }
+      }
+    }
+
+    return 1
+  }
+
   private fun parseBoxes(
     input: ExtractorInput,
     path: List<String>,
@@ -203,7 +217,7 @@ class Mp4ChapterExtractor
       if (atomSize == 1L) {
         input.readFully(
           scratch.data,
-          Mp4Box.HEADER_SIZE, // Corrected from Mp4Box.HEADER_SIZE for better readability
+          Mp4Box.HEADER_SIZE,
           Mp4Box.LONG_HEADER_SIZE - Mp4Box.HEADER_SIZE,
         )
         scratch.setPosition(Mp4Box.HEADER_SIZE)
@@ -215,14 +229,6 @@ class Mp4ChapterExtractor
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
       Logger.d("Current path: $currentPath, atomType: $atomType")
-      val pathsToVisit = listOf(
-        chplPath,
-        chapPath,
-        mdhdPath,
-        stcoPath,
-        sttsPath,
-        stscPath, // Added stscPath
-      )
       when {
         currentPath == mdhdPath -> {
           Logger.v("Found mdhd!")
@@ -248,7 +254,7 @@ class Mp4ChapterExtractor
           }
           parseStcoAtom(buffer, parseOutput)
         }
-        currentPath == stscPath -> { // Added stsc parsing case
+        currentPath == stscPath -> {
           Logger.v("Found stsc!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
@@ -308,11 +314,11 @@ class Mp4ChapterExtractor
     }
   }
 
+  // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
   private fun parseStcoAtom(
     buffer: ParsableByteArray,
     parseOutput: BoxParseOutput,
   ) {
-    // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
     val version = buffer.readUnsignedByte()
     if (version != 0) {
       Logger.w("Unexpected version $version in stco atom, expected 0")
@@ -363,12 +369,11 @@ class Mp4ChapterExtractor
       Logger.v("Number of entries in stsc: $numberOfEntries")
       val stscEntriesForTrack = (0 until numberOfEntries).map {
         val firstChunk = buffer.readUnsignedInt()
-        val samplesPerChunk = buffer.readUnsignedInt()
-        val sampleDescriptionIndex = buffer.readUnsignedInt()
+        val samplesPerChunk = buffer.readUnsignedIntToInt()
+        buffer.skipBytes(4) // skip sample description index
         StscEntry(
           firstChunk = firstChunk,
           samplesPerChunk = samplesPerChunk,
-          sampleDescriptionIndex = sampleDescriptionIndex,
         )
       }
       parseOutput.stscEntries.add(stscEntriesForTrack)
@@ -432,7 +437,15 @@ private val chapPath = listOf("moov", "trak", "tref", "chap")
 private val mdhdPath = listOf("moov", "trak", "mdia", "mdhd")
 private val stcoPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stco")
 private val sttsPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stts")
-private val stscPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc") // Added stscPath
+private val stscPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc")
+private val pathsToVisit = listOf(
+  chplPath,
+  chapPath,
+  mdhdPath,
+  stcoPath,
+  sttsPath,
+  stscPath,
+)
 
 private fun List<String>.startsWith(other: List<String>): Boolean {
   return take(other.size) == other
@@ -440,8 +453,7 @@ private fun List<String>.startsWith(other: List<String>): Boolean {
 
 private data class StscEntry(
   val firstChunk: Long,
-  val samplesPerChunk: Long,
-  val sampleDescriptionIndex: Long,
+  val samplesPerChunk: Int,
 )
 
 private data class BoxParseOutput(

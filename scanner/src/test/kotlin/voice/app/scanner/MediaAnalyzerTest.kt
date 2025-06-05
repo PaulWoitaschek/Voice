@@ -118,6 +118,7 @@ internal class MediaAnalyzerTest {
       metadata.title shouldBe "Auphonic Chapter Marks Demo"
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
+      println(metadata.chapters.joinToString(separator = "\n"))
       metadata.chapters shouldContainExactly auphonicChapters.filter {
         // for some reason only this one is missing in the test files
         it.name != "Creating a new production"
