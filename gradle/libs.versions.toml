@@ -32,7 +32,7 @@ retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", versio
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 robolectric = "org.robolectric:robolectric:4.14.1"
 coil = "io.coil-kt:coil-compose:2.7.0"
-appCompat = "androidx.appcompat:appcompat:1.7.0"
+appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidxCore = "androidx.core:core-ktx:1.16.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -88,9 +88,9 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.0"
+lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.1"
 
-compose-bom = "androidx.compose:compose-bom:2025.05.01"
+compose-bom = "androidx.compose:compose-bom:2025.06.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
