@@ -43,7 +43,8 @@ class Mp4ChapterExtractor @Inject constructor(
       when (val result = parseTopLevelBoxes(input)) {
         is ChapterParseResult.ChplChapters -> result.chapters
         is ChapterParseResult.ChapterTrackId -> {
-          chapterTrackExtractor.extractFromTrackId(uri, result.trackId)
+          Logger.w("Found 'chap' atom, extracting chapters from track ID: ${result.trackId}")
+          chapterTrackExtractor.extractFromTrackId(uri, result.trackId, result.output)
         }
 
         null -> emptyList()
@@ -63,13 +64,16 @@ class Mp4ChapterExtractor @Inject constructor(
   private fun parseTopLevelBoxes(input: ExtractorInput): ChapterParseResult? {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
     return try {
+      val parseOutput = BoxParseOutput()
       parseBoxes(
         input = input,
         path = emptyList(),
         parentEnd = Long.MAX_VALUE,
         scratch = scratch,
-        parseOutput = BoxParseOutput(),
-      )
+        parseOutput = parseOutput,
+      ).also {
+        Logger.w("output=$parseOutput")
+      }
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse MP4 boxes")
       null
@@ -83,7 +87,7 @@ class Mp4ChapterExtractor @Inject constructor(
     }
   }
 
-  private data class BoxParseOutput(
+  data class BoxParseOutput(
     val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
     val durations: MutableList<List<Long>> = mutableListOf(),
     val timeScales: MutableList<Long> = mutableListOf<Long>(),
@@ -211,7 +215,7 @@ class Mp4ChapterExtractor @Inject constructor(
           }
 
           val trackId = buffer.readUnsignedIntToInt()
-          chapterTrackId = ChapterParseResult.ChapterTrackId(trackId)
+          chapterTrackId = ChapterParseResult.ChapterTrackId(trackId, parseOutput)
         }
 
         (pathsToVisit.any { it.startsWith(currentPath) }) -> {
@@ -277,7 +281,10 @@ class Mp4ChapterExtractor @Inject constructor(
 
   private sealed class ChapterParseResult {
     data class ChplChapters(val chapters: List<MarkData>) : ChapterParseResult()
-    data class ChapterTrackId(val trackId: Int) : ChapterParseResult()
+    data class ChapterTrackId(
+      val trackId: Int,
+      val output: BoxParseOutput,
+    ) : ChapterParseResult()
   }
 }
 

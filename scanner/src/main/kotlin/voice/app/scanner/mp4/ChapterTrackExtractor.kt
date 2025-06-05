@@ -3,6 +3,7 @@ package voice.app.scanner.mp4
 import android.content.Context
 import android.net.Uri
 import androidx.media3.common.C
+import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
@@ -21,9 +22,43 @@ class ChapterTrackExtractor @Inject constructor(private val context: Context) {
   fun extractFromTrackId(
     uri: Uri,
     trackId: Int,
+    output: Mp4ChapterExtractor.BoxParseOutput,
   ): List<MarkData> {
     val chapters = mutableListOf<MarkData>()
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
+
+    val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
+    if (chunkOffsets == null) {
+      Logger.w("No chunk offsets found for track ID $trackId")
+      return chapters
+    }
+    chunkOffsets.map { offset ->
+      try {
+        dataSource.open(
+          DataSpec.Builder()
+            .setUri(uri)
+            .setPosition(offset)
+            .build(),
+        )
+        val buffer = ParsableByteArray()
+        buffer.reset(2)
+        dataSource.read(buffer.data, 0, 2)
+        val textLength = buffer.readShort().toInt()
+        buffer.reset(textLength)
+        dataSource.read(buffer.data, 0, textLength)
+        val text = buffer.readString(textLength)
+        Logger.w("Extracted chapter text: $text")
+      } catch (e: IOException) {
+        Logger.e(e, "IO error during chapter track extraction")
+      } finally {
+        try {
+          dataSource.close()
+        } catch (e: IOException) {
+          Logger.w(e, "Error closing data source")
+        }
+      }
+
+    }
 
     try {
       dataSource.open(DataSpec(uri))
