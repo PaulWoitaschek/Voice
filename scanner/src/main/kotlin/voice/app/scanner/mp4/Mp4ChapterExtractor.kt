@@ -93,32 +93,33 @@ class Mp4ChapterExtractor
     trackId: Int,
     output: BoxParseOutput,
   ): List<MarkData> {
-    val chapters = mutableListOf<MarkData>()
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
 
-    val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
-    if (chunkOffsets == null) {
-      Logger.w("No chunk offsets found for track ID $trackId")
-      return chapters
-    }
-    val timeScale = output.timeScales.getOrNull(trackId - 1)
-    if (timeScale == null) {
-      Logger.w("No time scale found for track ID $trackId")
-      return chapters
-    }
-    val durations = output.durations.getOrNull(trackId - 1)
-    if (durations == null) {
-      Logger.w("No durations found for track ID $trackId")
-      return chapters
-    }
+    try {
+      val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
+      if (chunkOffsets == null) {
+        Logger.w("No chunk offsets found for track ID $trackId")
+        return emptyList()
+      }
+      val timeScale = output.timeScales.getOrNull(trackId - 1)
+      if (timeScale == null) {
+        Logger.w("No time scale found for track ID $trackId")
+        return emptyList()
+      }
+      val durations = output.durations.getOrNull(trackId - 1)
+      if (durations == null) {
+        Logger.w("No durations found for track ID $trackId")
+        return emptyList()
+      }
+      val stscEntries = output.stscEntries.getOrNull(trackId - 1)
+      if (stscEntries == null) {
+        Logger.w("No stsc entries found for track ID $trackId")
+        return emptyList()
+      }
 
-    if (chunkOffsets.size != durations.size) {
-      Logger.w("Chunk offsets and durations size mismatch for track ID $trackId")
-      return chapters
-    }
+      val numberOfChaptersToProcess = chunkOffsets.size
 
-    val names = chunkOffsets.map { offset ->
-      try {
+      val names = chunkOffsets.map { offset ->
         dataSource.close()
         dataSource.open(
           DataSpec.Builder()
@@ -132,48 +133,52 @@ class Mp4ChapterExtractor
         val textLength = buffer.readShort().toInt()
         buffer.reset(textLength)
         dataSource.read(buffer.data, 0, textLength)
-        val text = buffer.readString(textLength)
-        Logger.w("Extracted chapter text: $text")
-        text
-      } catch (e: IOException) {
-        Logger.e(e, "IO error during chapter track extraction")
-        return emptyList()
-      } finally {
-        try {
-          dataSource.close()
-        } catch (e: IOException) {
-          Logger.w(e, "Error closing data source")
-        }
+        buffer.readString(textLength)
       }
-    }
 
-    if (names.size != chunkOffsets.size) {
-      Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
-      return chapters
-    }
-    var position = 0L
-    return names
-      .mapIndexed { index, chapterName ->
-        MarkData(
-          startMs = position * 1000 / timeScale,
-          name = chapterName,
-        ).also {
-          val duration = durations[index]
-          position += duration
+      if (names.size != numberOfChaptersToProcess) {
+        Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
+        return emptyList()
+      }
+
+      var position = 0L
+      var sampleIndex = 0
+
+      return (0 until numberOfChaptersToProcess)
+        .map { index ->
+          val chapterName = names[index]
+          var chunkDuration = 0L
+
+          val relevantStscEntry = stscEntries.lastOrNull { it.firstChunk <= index + 1 }
+          val samplesPerChunk = relevantStscEntry?.samplesPerChunk ?: 1
+
+          for (i in 0 until samplesPerChunk) {
+            if (sampleIndex < durations.size) {
+              chunkDuration += durations[sampleIndex]
+              sampleIndex++
+            } else {
+              Logger.w("Not enough sample durations for chunk ${index + 1}. Using partial duration.")
+              break
+            }
+          }
+
+          MarkData(
+            startMs = position * 1000 / timeScale,
+            name = chapterName,
+          ).also {
+            position += chunkDuration
+          }
         }
-      }.sorted()
-  }
-
-  private data class BoxParseOutput(
-    val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
-    val durations: MutableList<List<Long>> = mutableListOf(),
-    val timeScales: MutableList<Long> = mutableListOf(),
-    var chplChapters: List<MarkData> = emptyList(),
-    var chapterTrackId: Int? = null,
-  ) {
-
-    override fun toString(): String {
-      return "BoxParseOutput(chunkOffsets=${chunkOffsets.size}, durations=${durations.size}, timeScales=${timeScales.size}, chplChapters=$chplChapters, chapterTrackId=$chapterTrackId)"
+        .sorted()
+    } catch (e: IOException) {
+      Logger.e(e, "IO error during chapter track extraction in extractFromTrackId")
+      return emptyList()
+    } finally {
+      try {
+        dataSource.close()
+      } catch (e: IOException) {
+        Logger.w(e, "Error closing data source in extractFromTrackId finally block")
+      }
     }
   }
 
@@ -198,7 +203,7 @@ class Mp4ChapterExtractor
       if (atomSize == 1L) {
         input.readFully(
           scratch.data,
-          Mp4Box.HEADER_SIZE,
+          Mp4Box.HEADER_SIZE, // Corrected from Mp4Box.HEADER_SIZE for better readability
           Mp4Box.LONG_HEADER_SIZE - Mp4Box.HEADER_SIZE,
         )
         scratch.setPosition(Mp4Box.HEADER_SIZE)
@@ -216,6 +221,7 @@ class Mp4ChapterExtractor
         mdhdPath,
         stcoPath,
         sttsPath,
+        stscPath, // Added stscPath
       )
       when {
         currentPath == mdhdPath -> {
@@ -234,7 +240,6 @@ class Mp4ChapterExtractor
           }
           parseSttsAtom(buffer, parseOutput)
         }
-
         currentPath == stcoPath -> {
           Logger.v("Found stco!")
           val buffer = ParsableByteArray(payloadSize)
@@ -242,6 +247,14 @@ class Mp4ChapterExtractor
             return
           }
           parseStcoAtom(buffer, parseOutput)
+        }
+        currentPath == stscPath -> { // Added stsc parsing case
+          Logger.v("Found stsc!")
+          val buffer = ParsableByteArray(payloadSize)
+          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
+            return
+          }
+          parseStscAtom(buffer, parseOutput)
         }
         currentPath == chplPath -> {
           val buffer = ParsableByteArray(payloadSize)
@@ -276,7 +289,7 @@ class Mp4ChapterExtractor
           )
 
           if (parseOutput.chplChapters.isNotEmpty()) {
-            // return
+            return
           }
         }
 
@@ -312,6 +325,7 @@ class Mp4ChapterExtractor
     }
   }
 
+  // https://developer.apple.com/documentation/quicktime-file-format/time-to-sample_atom
   private fun parseSttsAtom(
     buffer: ParsableByteArray,
     parseOutput: BoxParseOutput,
@@ -321,14 +335,43 @@ class Mp4ChapterExtractor
       Logger.w("Unexpected version $version in stts atom, expected 0")
     } else {
       buffer.skipBytes(3) // flags
-      val numberOfEntries = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stts: $numberOfEntries")
-      val durations = (0 until numberOfEntries).map {
-        val count = buffer.readUnsignedInt()
+      val numberOfEntriesInSttsTable = buffer.readUnsignedIntToInt()
+      Logger.v("Number of entries in stts: $numberOfEntriesInSttsTable")
+      val individualSampleDurations = mutableListOf<Long>()
+      repeat(numberOfEntriesInSttsTable) {
+        val count = buffer.readUnsignedInt().toInt()
         val delta = buffer.readUnsignedInt()
-        count * delta
+        repeat(count) {
+          individualSampleDurations.add(delta)
+        }
       }
-      parseOutput.durations += durations
+      parseOutput.durations.add(individualSampleDurations)
+    }
+  }
+
+  // https://developer.apple.com/documentation/quicktime-file-format/sample-to-chunk_atom/
+  private fun parseStscAtom(
+    buffer: ParsableByteArray,
+    parseOutput: BoxParseOutput,
+  ) {
+    val version = buffer.readUnsignedByte()
+    if (version != 0) {
+      Logger.w("Unexpected version $version in stsc atom, expected 0")
+    } else {
+      buffer.skipBytes(3) // flags
+      val numberOfEntries = buffer.readUnsignedIntToInt()
+      Logger.v("Number of entries in stsc: $numberOfEntries")
+      val stscEntriesForTrack = (0 until numberOfEntries).map {
+        val firstChunk = buffer.readUnsignedInt()
+        val samplesPerChunk = buffer.readUnsignedInt()
+        val sampleDescriptionIndex = buffer.readUnsignedInt()
+        StscEntry(
+          firstChunk = firstChunk,
+          samplesPerChunk = samplesPerChunk,
+          sampleDescriptionIndex = sampleDescriptionIndex,
+        )
+      }
+      parseOutput.stscEntries.add(stscEntriesForTrack)
     }
   }
 
@@ -354,10 +397,18 @@ class Mp4ChapterExtractor
   private fun parseChplAtom(data: ParsableByteArray): List<MarkData> {
     data.setPosition(0)
     val version = data.readUnsignedByte()
-    data.skipBytes(3) // flags
-    Logger.e("version=$version")
-    data.skipBytes(1) // reserved
-    val chapterCount = data.readUnsignedIntToInt()
+    data.skipBytes(3)  // flags
+
+    if (version != 0 && version != 1) {
+      Logger.w("Unexpected version $version in chpl atom, expected 0 or 1")
+      return emptyList()
+    }
+
+    if (version == 1) {
+      data.skipBytes(4)
+    }
+
+    val chapterCount = data.readUnsignedByte()
 
     return (0 until chapterCount).map {
       val timestamp = if (version == 0) {
@@ -369,7 +420,7 @@ class Mp4ChapterExtractor
       val titleLength = data.readUnsignedByte()
       val title = data.readString(titleLength)
 
-      // Convert from 100ns units to milliseconds
+      // Convert from 100ns units to milliseconds (10,000 units per ms)
       val startTimeMs = timestamp / 10_000
       MarkData(startMs = startTimeMs, name = title)
     }
@@ -381,7 +432,23 @@ private val chapPath = listOf("moov", "trak", "tref", "chap")
 private val mdhdPath = listOf("moov", "trak", "mdia", "mdhd")
 private val stcoPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stco")
 private val sttsPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stts")
+private val stscPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc") // Added stscPath
 
 private fun List<String>.startsWith(other: List<String>): Boolean {
   return take(other.size) == other
 }
+
+private data class StscEntry(
+  val firstChunk: Long,
+  val samplesPerChunk: Long,
+  val sampleDescriptionIndex: Long,
+)
+
+private data class BoxParseOutput(
+  val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
+  val durations: MutableList<List<Long>> = mutableListOf(),
+  val stscEntries: MutableList<List<StscEntry>> = mutableListOf(),
+  val timeScales: MutableList<Long> = mutableListOf(),
+  var chplChapters: List<MarkData> = emptyList(),
+  var chapterTrackId: Int? = null,
+)

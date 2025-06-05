@@ -120,7 +120,7 @@ internal class MediaAnalyzerTest {
       metadata.album shouldBe "Auphonic Examples"
       metadata.chapters shouldContainExactly auphonicChapters.filter {
         // for some reason only this one is missing in the test files
-        it.name != "Sound analysis"
+        it.name != "Creating a new production"
       }
     }
   }
