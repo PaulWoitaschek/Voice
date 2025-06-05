@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveElementAt
 import io.kotest.matchers.longs.shouldBeWithinPercentageOf
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -83,6 +84,15 @@ internal class MediaAnalyzerTest {
       metadata.album shouldBe "Auphonic Examples"
       metadata.chapters shouldContainExactly auphonicChapters
     }
+  }
+
+  @Test
+  fun chapterTrackId() {
+    val chapters = parse("chapter_track_id.m4b")
+      .shouldNotBeNull()
+      .chapters
+    chapters.shouldHaveElementAt(0, MarkData(0, "Opening Credits"))
+    chapters.shouldHaveElementAt(107, MarkData(103121056, "Closing Credits"))
   }
 
   @Test
