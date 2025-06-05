@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.extractor.DefaultExtractorInput
@@ -44,7 +45,7 @@ class Mp4ChapterExtractor
       }
       val trackId = topLevelResult.chapterTrackId
       if (trackId != null) {
-        return@withContext extractFromTrackId(uri, trackId, topLevelResult)
+        return@withContext extractFromTrackId(uri, dataSource, trackId, topLevelResult)
       }
       return@withContext emptyList()
     } catch (e: IOException) {
@@ -69,9 +70,7 @@ class Mp4ChapterExtractor
         parentEnd = Long.MAX_VALUE,
         scratch = scratch,
         parseOutput = parseOutput,
-      ).also {
-        Logger.w("output=$parseOutput")
-      }
+      )
       parseOutput
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse MP4 boxes")
@@ -88,11 +87,10 @@ class Mp4ChapterExtractor
 
   private fun extractFromTrackId(
     uri: Uri,
+    dataSource: DataSource,
     trackId: Int,
     output: BoxParseOutput,
   ): List<MarkData> {
-    val dataSource = DefaultDataSource.Factory(context).createDataSource()
-
     try {
       val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
       if (chunkOffsets == null) {
