@@ -4,57 +4,22 @@ import android.content.Context
 import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.util.ParsableByteArray
-import androidx.media3.container.Mp4Box
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.extractor.DefaultExtractorInput
-import androidx.media3.extractor.ExtractorInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import voice.app.scanner.mp4.visitor.ChapVisitor
-import voice.app.scanner.mp4.visitor.ChplVisitor
-import voice.app.scanner.mp4.visitor.MdhdVisitor
-import voice.app.scanner.mp4.visitor.StcoVisitor
-import voice.app.scanner.mp4.visitor.StscVisitor
-import voice.app.scanner.mp4.visitor.SttsVisitor
 import voice.data.MarkData
 import voice.logging.core.Logger
 import java.io.IOException
 import javax.inject.Inject
 
-/**
- * Extracts chapter information from MP4 files using two methods:
- *
- * 1. Primary method: Search for 'chpl' atom in MP4 structure, which directly contains chapter data
- * 2. Fallback method: If 'chap' atom is found, extract chapter info from the referenced text track
- *
- * The extraction process:
- * - Opens MP4 file and traverses its box structure (moov → udta/trak → chpl/tref/chap)
- * - If 'chpl' atom is found, parses timestamps and titles directly
- * - If 'chap' atom is found, uses ChapterTrackExtractor to process the referenced text track
- * - Returns chapters as MarkData objects with timestamps and names
- */
 class Mp4ChapterExtractor
 @Inject constructor(
   private val context: Context,
-  stscVisitor: StscVisitor,
-  mdhdVisitor: MdhdVisitor,
-  sttsVisitor: SttsVisitor,
-  stcoVisitor: StcoVisitor,
-  chplVisitor: ChplVisitor,
-  chapVisitor: ChapVisitor,
+  private val boxParser: Mp4BoxParser,
 ) {
-
-  private val visitors = listOf(
-    stscVisitor,
-    mdhdVisitor,
-    sttsVisitor,
-    stcoVisitor,
-    chplVisitor,
-    chapVisitor,
-  )
-  private val visitorByPath = visitors.associateBy { it.path }
 
   suspend fun extractChapters(uri: Uri): List<MarkData> = withContext(Dispatchers.IO) {
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
@@ -62,7 +27,7 @@ class Mp4ChapterExtractor
     try {
       dataSource.open(DataSpec(uri))
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      val topLevelResult = parseTopLevelBoxes(input)
+      val topLevelResult = boxParser.parse(input)
       val trackId = topLevelResult.chapterTrackId
       when {
         topLevelResult.chplChapters.isNotEmpty() -> {
@@ -90,19 +55,6 @@ class Mp4ChapterExtractor
         Logger.w(e, "Error closing data source")
       }
     }
-  }
-
-  private fun parseTopLevelBoxes(input: ExtractorInput): Mp4ChpaterExtractorOutput {
-    val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
-    val parseOutput = Mp4ChpaterExtractorOutput()
-    parseBoxes(
-      input = input,
-      path = emptyList(),
-      parentEnd = Long.MAX_VALUE,
-      scratch = scratch,
-      parseOutput = parseOutput,
-    )
-    return parseOutput
   }
 
   private fun extractFromTrackId(
@@ -205,87 +157,4 @@ class Mp4ChapterExtractor
 
     return 1
   }
-
-  private fun parseBoxes(
-    input: ExtractorInput,
-    path: List<String>,
-    parentEnd: Long,
-    scratch: ParsableByteArray,
-    parseOutput: Mp4ChpaterExtractorOutput,
-  ) {
-    while (input.position < parentEnd) {
-      scratch.reset(Mp4Box.HEADER_SIZE)
-      if (!input.readFully(scratch.data, 0, Mp4Box.HEADER_SIZE, true)) {
-        return
-      }
-
-      scratch.setPosition(0)
-      var atomSize = scratch.readUnsignedInt()
-      val atomType = scratch.readString(4)
-      var headerSize = Mp4Box.HEADER_SIZE
-
-      if (atomSize == 1L) {
-        input.readFully(
-          scratch.data,
-          Mp4Box.HEADER_SIZE,
-          Mp4Box.LONG_HEADER_SIZE - Mp4Box.HEADER_SIZE,
-        )
-        scratch.setPosition(Mp4Box.HEADER_SIZE)
-        atomSize = scratch.readUnsignedLongToLong()
-        headerSize = Mp4Box.LONG_HEADER_SIZE
-      }
-
-      val payloadSize = (atomSize - headerSize).toInt()
-      val payloadEnd = input.position + payloadSize
-      val currentPath = path + atomType
-      Logger.d("Current path: $currentPath, atomType: $atomType")
-
-      val visitor = visitorByPath[currentPath]
-
-      when {
-        visitor != null -> {
-          Logger.v("Found ${visitor.path.last()}!")
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
-            return
-          }
-          visitor.visit(buffer, parseOutput)
-
-          if (parseOutput.chplChapters.isNotEmpty()) {
-            return
-          }
-        }
-
-        visitors.any { it.path.startsWith(currentPath) } -> {
-          parseBoxes(
-            input = input,
-            path = currentPath,
-            parentEnd = payloadEnd,
-            scratch = scratch,
-            parseOutput = parseOutput,
-          )
-
-          if (parseOutput.chplChapters.isNotEmpty()) {
-            return
-          }
-        }
-
-        else -> {
-          if (!input.skipFully(payloadSize, true)) {
-            return
-          }
-        }
-      }
-
-      if (input.position < payloadEnd) {
-        if (!input.skipFully((payloadEnd - input.position).toInt(), true)) {
-          return
-        }
-      }
-    }
-  }
-}
-
-private fun List<String>.startsWith(other: List<String>): Boolean {
-  return take(other.size) == other
 }

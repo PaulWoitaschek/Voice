@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.app.scanner.mp4.Mp4BoxParser
 import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.app.scanner.mp4.visitor.ChapVisitor
 import voice.app.scanner.mp4.visitor.ChplVisitor
@@ -40,12 +41,14 @@ internal class MediaAnalyzerTest {
     context = ApplicationProvider.getApplicationContext(),
     mp4ChapterExtractor = Mp4ChapterExtractor(
       context = ApplicationProvider.getApplicationContext(),
-      stscVisitor = StscVisitor(),
-      mdhdVisitor = MdhdVisitor(),
-      sttsVisitor = SttsVisitor(),
-      stcoVisitor = StcoVisitor(),
-      chplVisitor = ChplVisitor(),
-      chapVisitor = ChapVisitor(),
+      boxParser = Mp4BoxParser(
+        stscVisitor = StscVisitor(),
+        mdhdVisitor = MdhdVisitor(),
+        sttsVisitor = SttsVisitor(),
+        stcoVisitor = StcoVisitor(),
+        chplVisitor = ChplVisitor(),
+        chapVisitor = ChapVisitor(),
+      ),
     ),
   )
   private val auphonicChapters = listOf(
