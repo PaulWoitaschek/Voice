@@ -37,9 +37,8 @@ class Mp4ChapterExtractor
 
     try {
       dataSource.open(DataSpec(uri))
-
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      val topLevelResult = parseTopLevelBoxes(input) ?: return@withContext emptyList()
+      val topLevelResult = parseTopLevelBoxes(input)
       if (topLevelResult.chplChapters.isNotEmpty()) {
         return@withContext topLevelResult.chplChapters
       }
@@ -51,6 +50,13 @@ class Mp4ChapterExtractor
     } catch (e: IOException) {
       Logger.w(e, "Failed to open MP4 file for chapter extraction")
       emptyList()
+    } catch (e: IllegalStateException) {
+      Logger.w(e, "Invalid MP4 structure")
+      emptyList()
+    } catch (e: ArrayIndexOutOfBoundsException) {
+      Logger.w(e, "Undeclared")
+      // https://github.com/androidx/media/issues/2467
+      emptyList()
     } finally {
       try {
         dataSource.close()
@@ -60,29 +66,17 @@ class Mp4ChapterExtractor
     }
   }
 
-  private fun parseTopLevelBoxes(input: ExtractorInput): BoxParseOutput? {
+  private fun parseTopLevelBoxes(input: ExtractorInput): BoxParseOutput {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
-    return try {
-      val parseOutput = BoxParseOutput()
-      parseBoxes(
-        input = input,
-        path = emptyList(),
-        parentEnd = Long.MAX_VALUE,
-        scratch = scratch,
-        parseOutput = parseOutput,
-      )
-      parseOutput
-    } catch (e: IOException) {
-      Logger.w(e, "Failed to parse MP4 boxes")
-      null
-    } catch (e: IllegalStateException) {
-      Logger.w(e, "Invalid MP4 structure")
-      null
-    } catch (e: ArrayIndexOutOfBoundsException) {
-      Logger.w(e, "Undeclared")
-      // https://github.com/androidx/media/issues/2467
-      null
-    }
+    val parseOutput = BoxParseOutput()
+    parseBoxes(
+      input = input,
+      path = emptyList(),
+      parentEnd = Long.MAX_VALUE,
+      scratch = scratch,
+      parseOutput = parseOutput,
+    )
+    return parseOutput
   }
 
   private fun extractFromTrackId(
@@ -91,90 +85,79 @@ class Mp4ChapterExtractor
     trackId: Int,
     output: BoxParseOutput,
   ): List<MarkData> {
-    try {
-      val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
-      if (chunkOffsets == null) {
-        Logger.w("No chunk offsets found for track ID $trackId")
-        return emptyList()
-      }
-      val timeScale = output.timeScales.getOrNull(trackId - 1)
-      if (timeScale == null) {
-        Logger.w("No time scale found for track ID $trackId")
-        return emptyList()
-      }
-      val durations = output.durations.getOrNull(trackId - 1)
-      if (durations == null) {
-        Logger.w("No durations found for track ID $trackId")
-        return emptyList()
-      }
-      val stscEntries = output.stscEntries.getOrNull(trackId - 1)
-      if (stscEntries == null) {
-        Logger.w("No stsc entries found for track ID $trackId")
-        return emptyList()
-      }
+    val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
+    if (chunkOffsets == null) {
+      Logger.w("No chunk offsets found for track ID $trackId")
+      return emptyList()
+    }
+    val timeScale = output.timeScales.getOrNull(trackId - 1)
+    if (timeScale == null) {
+      Logger.w("No time scale found for track ID $trackId")
+      return emptyList()
+    }
+    val durations = output.durations.getOrNull(trackId - 1)
+    if (durations == null) {
+      Logger.w("No durations found for track ID $trackId")
+      return emptyList()
+    }
+    val stscEntries = output.stscEntries.getOrNull(trackId - 1)
+    if (stscEntries == null) {
+      Logger.w("No stsc entries found for track ID $trackId")
+      return emptyList()
+    }
 
-      val numberOfChaptersToProcess = chunkOffsets.size
+    val numberOfChaptersToProcess = chunkOffsets.size
 
-      val names = chunkOffsets.map { offset ->
-        dataSource.close()
-        dataSource.open(
-          DataSpec.Builder()
-            .setUri(uri)
-            .setPosition(offset)
-            .build(),
-        )
-        val buffer = ParsableByteArray()
-        buffer.reset(2)
-        dataSource.read(buffer.data, 0, 2)
-        val textLength = buffer.readShort().toInt()
-        buffer.reset(textLength)
-        dataSource.read(buffer.data, 0, textLength)
-        buffer.readString(textLength)
-      }
+    val names = chunkOffsets.map { offset ->
+      dataSource.close()
+      dataSource.open(
+        DataSpec.Builder()
+          .setUri(uri)
+          .setPosition(offset)
+          .build(),
+      )
+      val buffer = ParsableByteArray()
+      buffer.reset(2)
+      dataSource.read(buffer.data, 0, 2)
+      val textLength = buffer.readShort().toInt()
+      buffer.reset(textLength)
+      dataSource.read(buffer.data, 0, textLength)
+      buffer.readString(textLength)
+    }
 
-      if (names.size != numberOfChaptersToProcess) {
-        Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
-        return emptyList()
-      }
+    if (names.size != numberOfChaptersToProcess) {
+      Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
+      return emptyList()
+    }
 
-      var position = 0L
-      var sampleIndex = 0
+    var position = 0L
+    var sampleIndex = 0
 
-      return (0 until numberOfChaptersToProcess)
-        .map { chunkIndex ->
-          val chapterName = names[chunkIndex]
+    return (0 until numberOfChaptersToProcess)
+      .map { chunkIndex ->
+        val chapterName = names[chunkIndex]
 
-          val samplesInThisChunk = getSamplesPerChunk(chunkIndex, stscEntries)
+        val samplesInThisChunk = getSamplesPerChunk(chunkIndex, stscEntries)
 
-          var chunkDuration = 0L
+        var chunkDuration = 0L
 
-          repeat(samplesInThisChunk) {
-            if (sampleIndex < durations.size) {
-              chunkDuration += durations[sampleIndex]
-              sampleIndex++
-            } else {
-              Logger.w("Not enough sample durations for chunk ${chunkIndex + 1}")
-            }
-          }
-
-          MarkData(
-            startMs = position * 1000 / timeScale,
-            name = chapterName,
-          ).also {
-            position += chunkDuration
+        repeat(samplesInThisChunk) {
+          if (sampleIndex < durations.size) {
+            chunkDuration += durations[sampleIndex]
+            sampleIndex++
+          } else {
+            Logger.w("Not enough sample durations for chunk ${chunkIndex + 1}")
           }
         }
-        .sorted()
-    } catch (e: IOException) {
-      Logger.e(e, "IO error during chapter track extraction in extractFromTrackId")
-      return emptyList()
-    } finally {
-      try {
-        dataSource.close()
-      } catch (e: IOException) {
-        Logger.w(e, "Error closing data source in extractFromTrackId finally block")
+
+        MarkData(
+          startMs = position * 1000 / timeScale,
+          name = chapterName,
+        ).also {
+          position += chunkDuration
+        }
       }
-    }
+      .sorted()
   }
 
   private fun getSamplesPerChunk(chunkIndex: Int, stscEntries: List<StscEntry>): Int {
