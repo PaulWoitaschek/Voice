@@ -28,10 +28,8 @@ import javax.inject.Inject
  * - If 'chap' atom is found, uses ChapterTrackExtractor to process the referenced text track
  * - Returns chapters as MarkData objects with timestamps and names
  */
-class Mp4ChapterExtractor @Inject constructor(
-  private val context: Context,
-  private val chapterTrackExtractor: ChapterTrackExtractor,
-) {
+class Mp4ChapterExtractor
+@Inject constructor(private val context: Context) {
 
   suspend fun extractChapters(uri: Uri): List<MarkData> = withContext(Dispatchers.IO) {
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
@@ -44,7 +42,7 @@ class Mp4ChapterExtractor @Inject constructor(
         is ChapterParseResult.ChplChapters -> result.chapters
         is ChapterParseResult.ChapterTrackId -> {
           Logger.w("Found 'chap' atom, extracting chapters from track ID: ${result.trackId}")
-          chapterTrackExtractor.extractFromTrackId(uri, result.trackId, result.output)
+          extractFromTrackId(uri, result.trackId, result.output)
         }
 
         null -> emptyList()
@@ -85,6 +83,82 @@ class Mp4ChapterExtractor @Inject constructor(
       // https://github.com/androidx/media/issues/2467
       null
     }
+  }
+
+  private fun extractFromTrackId(
+    uri: Uri,
+    trackId: Int,
+    output: BoxParseOutput,
+  ): List<MarkData> {
+    val chapters = mutableListOf<MarkData>()
+    val dataSource = DefaultDataSource.Factory(context).createDataSource()
+
+    val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
+    if (chunkOffsets == null) {
+      Logger.w("No chunk offsets found for track ID $trackId")
+      return chapters
+    }
+    val timeScale = output.timeScales.getOrNull(trackId - 1)
+    if (timeScale == null) {
+      Logger.w("No time scale found for track ID $trackId")
+      return chapters
+    }
+    val durations = output.durations.getOrNull(trackId - 1)
+    if (durations == null) {
+      Logger.w("No durations found for track ID $trackId")
+      return chapters
+    }
+
+    if (chunkOffsets.size != durations.size) {
+      Logger.w("Chunk offsets and durations size mismatch for track ID $trackId")
+      return chapters
+    }
+
+    val names = chunkOffsets.map { offset ->
+      try {
+        dataSource.close()
+        dataSource.open(
+          DataSpec.Builder()
+            .setUri(uri)
+            .setPosition(offset)
+            .build(),
+        )
+        val buffer = ParsableByteArray()
+        buffer.reset(2)
+        dataSource.read(buffer.data, 0, 2)
+        val textLength = buffer.readShort().toInt()
+        buffer.reset(textLength)
+        dataSource.read(buffer.data, 0, textLength)
+        val text = buffer.readString(textLength)
+        Logger.w("Extracted chapter text: $text")
+        text
+      } catch (e: IOException) {
+        Logger.e(e, "IO error during chapter track extraction")
+        return emptyList()
+      } finally {
+        try {
+          dataSource.close()
+        } catch (e: IOException) {
+          Logger.w(e, "Error closing data source")
+        }
+      }
+    }
+
+    if (names.size != chunkOffsets.size) {
+      Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
+      return chapters
+    }
+    var position = 0L
+    return names
+      .mapIndexed { index, chapterName ->
+        MarkData(
+          startMs = position / timeScale,
+          name = chapterName,
+        ).also {
+          val dai = durations[index]
+          position += dai
+        }
+      }.sorted()
   }
 
   data class BoxParseOutput(
@@ -137,64 +211,29 @@ class Mp4ChapterExtractor @Inject constructor(
       )
       when {
         currentPath == mdhdPath -> {
-          // https://developer.apple.com/documentation/quicktime-file-format/media_header_atom
-          Logger.d("Found mdhd!")
+          Logger.v("Found mdhd!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return chapterTrackId
           }
-          val version = buffer.readUnsignedByte()
-          if (version != 0 && version != 1) {
-            Logger.w("Unexpected version $version in mdhd atom, expected 0 or 1")
-            return chapterTrackId
-          }
-          val flagsSize = 3
-          val creationTimeSize = if (version == 0) 4 else 8
-          val modificationTimeSize = if (version == 0) 4 else 8
-          buffer.skipBytes(flagsSize + creationTimeSize + modificationTimeSize)
-          val timescale = buffer.readUnsignedInt()
-          Logger.d("Timescale: $timescale")
-          parseOutput.timeScales += timescale
+          parseMdhdAtom(buffer, parseOutput)
         }
         currentPath == sttsPath -> {
-          Logger.d("Found stts!")
+          Logger.v("Found stts!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return chapterTrackId
           }
-          val version = buffer.readUnsignedByte()
-          if (version != 0) {
-            Logger.w("Unexpected version $version in stts atom, expected 0")
-            return chapterTrackId
-          }
-          buffer.skipBytes(3) // flags
-          val numberOfEntries = buffer.readUnsignedIntToInt()
-          val durations = (0 until numberOfEntries).map {
-            val count = buffer.readUnsignedInt()
-            val delta = buffer.readUnsignedInt()
-            1000L * count * delta
-          }
-          //     Logger.d("Durations: $durations")
-          parseOutput.durations += durations
+          parseSttsAtom(buffer, parseOutput)
         }
 
         currentPath == stcoPath -> {
-          Logger.d("Found stco!")
+          Logger.v("Found stco!")
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
             return chapterTrackId
           }
-          // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
-          val version = buffer.readUnsignedByte()
-          if (version != 0) {
-            Logger.w("Unexpected version $version in stco atom, expected 0")
-            return chapterTrackId
-          }
-          buffer.skipBytes(3) // flags
-          val numberOfEntries = buffer.readUnsignedIntToInt()
-          val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
-          //  Logger.d("ChunkOffsets: $chunkOffsets")
-          parseOutput.chunkOffsets.add(chunkOffsets)
+          parseStcoAtom(buffer, parseOutput)
         }
         currentPath == chplPath -> {
           val buffer = ParsableByteArray(payloadSize)
@@ -218,7 +257,7 @@ class Mp4ChapterExtractor @Inject constructor(
           chapterTrackId = ChapterParseResult.ChapterTrackId(trackId, parseOutput)
         }
 
-        (pathsToVisit.any { it.startsWith(currentPath) }) -> {
+        pathsToVisit.any { it.startsWith(currentPath) } -> {
           val result = parseBoxes(
             input = input,
             path = currentPath,
@@ -253,6 +292,60 @@ class Mp4ChapterExtractor @Inject constructor(
     return chapterTrackId
   }
 
+  private fun parseStcoAtom(
+    buffer: ParsableByteArray,
+    parseOutput: BoxParseOutput,
+  ) {
+    // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
+    val version = buffer.readUnsignedByte()
+    if (version != 0) {
+      Logger.w("Unexpected version $version in stco atom, expected 0")
+    } else {
+      buffer.skipBytes(3) // flags
+      val numberOfEntries = buffer.readUnsignedIntToInt()
+      val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
+      parseOutput.chunkOffsets.add(chunkOffsets)
+    }
+  }
+
+  private fun parseSttsAtom(
+    buffer: ParsableByteArray,
+    parseOutput: BoxParseOutput,
+  ) {
+    val version = buffer.readUnsignedByte()
+    if (version != 0) {
+      Logger.w("Unexpected version $version in stts atom, expected 0")
+    } else {
+      buffer.skipBytes(3) // flags
+      val numberOfEntries = buffer.readUnsignedIntToInt()
+      val durations = (0 until numberOfEntries).map {
+        val count = buffer.readUnsignedInt()
+        val delta = buffer.readUnsignedInt()
+        1000L * count * delta
+      }
+      parseOutput.durations += durations
+    }
+  }
+
+  // https://developer.apple.com/documentation/quicktime-file-format/media_header_atom
+  private fun parseMdhdAtom(
+    buffer: ParsableByteArray,
+    parseOutput: BoxParseOutput,
+  ) {
+    val version = buffer.readUnsignedByte()
+    if (version != 0 && version != 1) {
+      Logger.w("Unexpected version $version in mdhd atom, expected 0 or 1")
+    } else {
+      val flagsSize = 3
+      val creationTimeSize = if (version == 0) 4 else 8
+      val modificationTimeSize = if (version == 0) 4 else 8
+      buffer.skipBytes(flagsSize + creationTimeSize + modificationTimeSize)
+      val timescale = buffer.readUnsignedInt()
+      Logger.v("Timescale: $timescale")
+      parseOutput.timeScales += timescale
+    }
+  }
+
   private fun parseChplAtom(data: ParsableByteArray): List<MarkData> {
     data.setPosition(0)
     val version = data.readUnsignedByte()
@@ -260,8 +353,7 @@ class Mp4ChapterExtractor @Inject constructor(
     data.skipBytes(1) // reserved
     val chapterCount = data.readUnsignedIntToInt()
 
-    val chapters = mutableListOf<MarkData>()
-    repeat(chapterCount) {
+    return (0 until chapterCount).map {
       val timestamp = if (version == 0) {
         data.readUnsignedInt()
       } else {
@@ -273,10 +365,8 @@ class Mp4ChapterExtractor @Inject constructor(
 
       // Convert from 100ns units to milliseconds
       val startTimeMs = timestamp / 10_000
-      chapters.add(MarkData(startMs = startTimeMs, name = title))
+      MarkData(startMs = startTimeMs, name = title)
     }
-
-    return chapters
   }
 
   private sealed class ChapterParseResult {

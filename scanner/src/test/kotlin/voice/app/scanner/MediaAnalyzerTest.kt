@@ -15,7 +15,6 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import voice.app.scanner.mp4.ChapterTrackExtractor
 import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
@@ -35,7 +34,6 @@ internal class MediaAnalyzerTest {
     context = ApplicationProvider.getApplicationContext(),
     mp4ChapterExtractor = Mp4ChapterExtractor(
       context = ApplicationProvider.getApplicationContext(),
-      chapterTrackExtractor = ChapterTrackExtractor(context = ApplicationProvider.getApplicationContext()),
     ),
   )
   private val auphonicChapters = listOf(
@@ -153,7 +151,15 @@ internal class MediaAnalyzerTest {
             message: String,
             throwable: Throwable?,
           ) {
-            println("$severity: $message, $throwable")
+            println(
+              buildString {
+                append("${severity.name}: ")
+                append(message)
+                if (throwable != null) {
+                  append(", $throwable")
+                }
+              },
+            )
           }
         },
       )
