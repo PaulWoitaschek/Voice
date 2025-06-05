@@ -49,14 +49,33 @@ class SleepTimer
     }
   override val leftSleepTimeFlow: StateFlow<Duration> get() = _leftSleepTime
 
-  override fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
+  override fun sleepTimerActive(): Boolean = (sleepJob?.isActive == true && leftSleepTime > Duration.ZERO) || sleepAtEoc
 
   private var sleepJob: Job? = null
+
+  private val _sleepAtEoc = MutableStateFlow(false)
+
+  val sleepAtEocFlow: StateFlow<Boolean>
+    get() = _sleepAtEoc
+
+  override var sleepAtEoc: Boolean
+    set(value) {
+      _sleepAtEoc.value = value
+    }
+    get() = _sleepAtEoc.value
 
   override fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")
     if (enable) {
       setActive()
+    } else {
+      cancel()
+    }
+  }
+
+  override fun setEocActive(enable: Boolean) {
+    if (enable) {
+      sleepAtEoc = true
     } else {
       cancel()
     }
@@ -127,5 +146,6 @@ class SleepTimer
     sleepJob?.cancel()
     leftSleepTime = Duration.ZERO
     playerController.setVolume(1F)
+    sleepAtEoc = false
   }
 }
