@@ -58,7 +58,6 @@ class Mp4BoxParser
         return
       }
 
-      scratch.setPosition(0)
       var atomSize = scratch.readUnsignedInt()
       val atomType = scratch.readString(4)
       var headerSize = Mp4Box.HEADER_SIZE
@@ -84,11 +83,11 @@ class Mp4BoxParser
       when {
         visitor != null -> {
           Logger.v("Found ${visitor.path.last()}!")
-          val buffer = ParsableByteArray(payloadSize)
-          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
+          scratch.reset(payloadSize)
+          if (!input.readFully(scratch.data, 0, payloadSize, true)) {
             return
           }
-          visitor.visit(buffer, parseOutput)
+          visitor.visit(scratch, parseOutput)
 
           if (parseOutput.chplChapters.isNotEmpty()) {
             return
