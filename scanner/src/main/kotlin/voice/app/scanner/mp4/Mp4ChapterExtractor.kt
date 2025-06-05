@@ -63,7 +63,13 @@ class Mp4ChapterExtractor @Inject constructor(
   private fun parseTopLevelBoxes(input: ExtractorInput): ChapterParseResult? {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
     return try {
-      parseBoxes(input = input, path = emptyList(), parentEnd = Long.MAX_VALUE, scratch = scratch)
+      parseBoxes(
+        input = input,
+        path = emptyList(),
+        parentEnd = Long.MAX_VALUE,
+        scratch = scratch,
+        parseOutput = BoxParseOutput(),
+      )
     } catch (e: IOException) {
       Logger.w(e, "Failed to parse MP4 boxes")
       null
@@ -77,11 +83,18 @@ class Mp4ChapterExtractor @Inject constructor(
     }
   }
 
+  private data class BoxParseOutput(
+    val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
+    val durations: MutableList<List<Long>> = mutableListOf(),
+    val timeScales: MutableList<Long> = mutableListOf<Long>(),
+  )
+
   private fun parseBoxes(
     input: ExtractorInput,
     path: List<String>,
     parentEnd: Long,
     scratch: ParsableByteArray,
+    parseOutput: BoxParseOutput,
   ): ChapterParseResult? {
     var chapterTrackId: ChapterParseResult.ChapterTrackId? = null
 
@@ -110,7 +123,75 @@ class Mp4ChapterExtractor @Inject constructor(
       val payloadSize = (atomSize - headerSize).toInt()
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
+      Logger.d("Current path: $currentPath, atomType: $atomType")
+      val pathsToVisit = listOf(
+        chplPath,
+        chapPath,
+        mdhdPath,
+        stcoPath,
+        sttsPath,
+      )
       when {
+        currentPath == mdhdPath -> {
+          // https://developer.apple.com/documentation/quicktime-file-format/media_header_atom
+          Logger.d("Found mdhd!")
+          val buffer = ParsableByteArray(payloadSize)
+          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
+            return chapterTrackId
+          }
+          val version = buffer.readUnsignedByte()
+          if (version != 0 && version != 1) {
+            Logger.w("Unexpected version $version in mdhd atom, expected 0 or 1")
+            return chapterTrackId
+          }
+          val flagsSize = 3
+          val creationTimeSize = if (version == 0) 4 else 8
+          val modificationTimeSize = if (version == 0) 4 else 8
+          buffer.skipBytes(flagsSize + creationTimeSize + modificationTimeSize)
+          val timescale = buffer.readUnsignedInt()
+          Logger.d("Timescale: $timescale")
+          parseOutput.timeScales += timescale
+        }
+        currentPath == sttsPath -> {
+          Logger.d("Found stts!")
+          val buffer = ParsableByteArray(payloadSize)
+          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
+            return chapterTrackId
+          }
+          val version = buffer.readUnsignedByte()
+          if (version != 0) {
+            Logger.w("Unexpected version $version in stts atom, expected 0")
+            return chapterTrackId
+          }
+          buffer.skipBytes(3) // flags
+          val numberOfEntries = buffer.readUnsignedIntToInt()
+          val durations = (0 until numberOfEntries).map {
+            val count = buffer.readUnsignedInt()
+            val delta = buffer.readUnsignedInt()
+            1000L * count * delta
+          }
+          //     Logger.d("Durations: $durations")
+          parseOutput.durations += durations
+        }
+
+        currentPath == stcoPath -> {
+          Logger.d("Found stco!")
+          val buffer = ParsableByteArray(payloadSize)
+          if (!input.readFully(buffer.data, 0, payloadSize, true)) {
+            return chapterTrackId
+          }
+          // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
+          val version = buffer.readUnsignedByte()
+          if (version != 0) {
+            Logger.w("Unexpected version $version in stco atom, expected 0")
+            return chapterTrackId
+          }
+          buffer.skipBytes(3) // flags
+          val numberOfEntries = buffer.readUnsignedIntToInt()
+          val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
+          //  Logger.d("ChunkOffsets: $chunkOffsets")
+          parseOutput.chunkOffsets.add(chunkOffsets)
+        }
         currentPath == chplPath -> {
           val buffer = ParsableByteArray(payloadSize)
           if (!input.readFully(buffer.data, 0, payloadSize, true)) {
@@ -133,12 +214,13 @@ class Mp4ChapterExtractor @Inject constructor(
           chapterTrackId = ChapterParseResult.ChapterTrackId(trackId)
         }
 
-        (chplPath.startsWith(currentPath) || chapPath.startsWith(currentPath)) -> {
+        (pathsToVisit.any { it.startsWith(currentPath) }) -> {
           val result = parseBoxes(
             input = input,
             path = currentPath,
             parentEnd = payloadEnd,
             scratch = scratch,
+            parseOutput = parseOutput,
           )
 
           if (result is ChapterParseResult.ChplChapters) {
@@ -201,6 +283,9 @@ class Mp4ChapterExtractor @Inject constructor(
 
 private val chplPath = listOf("moov", "udta", "chpl")
 private val chapPath = listOf("moov", "trak", "tref", "chap")
+private val mdhdPath = listOf("moov", "trak", "mdia", "mdhd")
+private val stcoPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stco")
+private val sttsPath = listOf("moov", "trak", "mdia", "minf", "stbl", "stts")
 
 private fun List<String>.startsWith(other: List<String>): Boolean {
   return take(other.size) == other
