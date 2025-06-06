@@ -238,8 +238,7 @@ class MatroskaMetaDataExtractor(
 
   override fun close() = dataSource.close()
 
-  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) =
-    this != null && isType(t.type)
+  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 }
 
 private data class TagInfo(

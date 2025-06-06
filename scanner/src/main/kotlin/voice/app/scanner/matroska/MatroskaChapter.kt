@@ -1,8 +1,8 @@
 package voice.app.scanner.matroska
 
 data class MatroskaChapter(
-    val startTime: Long,
-    private val names: List<MatroskaChapterName>,
+  val startTime: Long,
+  private val names: List<MatroskaChapterName>,
 ) {
 
   fun bestName(preferredLanguages: List<String>): String? {

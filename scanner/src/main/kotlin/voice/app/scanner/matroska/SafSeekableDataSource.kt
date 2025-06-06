@@ -10,7 +10,11 @@ import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import kotlin.math.max
 
- class SafSeekableDataSource(contentResolver: ContentResolver, uri: Uri) : DataSource, AutoCloseable {
+class SafSeekableDataSource(
+  contentResolver: ContentResolver,
+  uri: Uri,
+) : DataSource,
+  AutoCloseable {
 
   private var fileInputStream: FileInputStream
   private val fileChannel: FileChannel
