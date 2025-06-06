@@ -9,6 +9,7 @@ import org.ebml.ProtoType
 import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
 import org.ebml.matroska.MatroskaDocTypes
+import voice.data.MarkData
 import voice.logging.core.Logger
 import java.util.Locale
 import javax.inject.Inject
@@ -288,16 +289,15 @@ internal data class MatroskaChapter(
   }
 }
 
-data class Chapter(val start: Long, val name: String)
 internal class MatroskaParseException(message: String) : RuntimeException(message)
 
 internal data class MatroskaChapterName(val name: String, val languages: Set<String>)
 
 internal object MatroskaChapterFlattener {
 
-  fun toChapters(list: List<MatroskaChapter>, preferredLanguages: List<String>): List<Chapter> {
+  fun toChapters(list: List<MatroskaChapter>, preferredLanguages: List<String>): List<MarkData> {
     return list.mapIndexed { index, chapter ->
-      Chapter(chapter.startTime / 1000000, chapter.name(preferredLanguages) ?: "Chapter ${index + 1}")
+      MarkData(chapter.startTime / 1000000, chapter.name(preferredLanguages) ?: "Chapter ${index + 1}")
     }
   }
 }

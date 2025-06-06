@@ -94,9 +94,7 @@ class MediaAnalyzer
   ) {
     try {
       val mediaInfo = matroskaExtractorFactory.create(file.uri).readMediaInfo()
-      mediaInfo.chapters.forEach { chapter ->
-        builder.chapters.add(MarkData(startMs = chapter.start, name = chapter.name))
-      }
+      builder.chapters.addAll(mediaInfo.chapters)
       builder.artist = builder.artist ?: mediaInfo.artist
       builder.album = builder.album ?: mediaInfo.album
       builder.title = builder.title ?: mediaInfo.title
