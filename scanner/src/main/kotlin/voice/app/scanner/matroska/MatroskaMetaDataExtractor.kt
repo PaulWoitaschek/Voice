@@ -16,7 +16,7 @@ import javax.inject.Inject
 class MatroskaMetaDataExtractor(
   private val dataSource: SafSeekableDataSource,
   private val reader: EBMLReader,
-) {
+) : AutoCloseable {
 
   class Factory @Inject constructor(private val context: Context) {
     fun create(uri: Uri): MatroskaMetaDataExtractor {
@@ -60,8 +60,6 @@ class MatroskaMetaDataExtractor(
         }
       }
     }
-
-    close()
 
     val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
     val flatChapters = chapters.mapIndexed { index, chapter ->
@@ -238,7 +236,7 @@ class MatroskaMetaDataExtractor(
     return value
   }
 
-  private fun close() = dataSource.close()
+  override fun close() = dataSource.close()
 
   private infix fun <T : Element> Element?.isType(t: ProtoType<T>) =
     this != null && isType(t.type)

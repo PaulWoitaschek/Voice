@@ -93,11 +93,13 @@ class MediaAnalyzer
     builder: Metadata.Builder,
   ) {
     try {
-      val mediaInfo = matroskaExtractorFactory.create(file.uri).readMediaInfo()
-      builder.chapters.addAll(mediaInfo.chapters)
-      builder.artist = builder.artist ?: mediaInfo.artist
-      builder.album = builder.album ?: mediaInfo.album
-      builder.title = builder.title ?: mediaInfo.title
+      matroskaExtractorFactory.create(file.uri).use { extractor ->
+        val mediaInfo = extractor.readMediaInfo()
+        builder.chapters.addAll(mediaInfo.chapters)
+        builder.artist = builder.artist ?: mediaInfo.artist
+        builder.album = builder.album ?: mediaInfo.album
+        builder.title = builder.title ?: mediaInfo.title
+      }
     } catch (e: MatroskaParseException) {
       Logger.w(e, "Error parsing Matroska metadata")
     }
