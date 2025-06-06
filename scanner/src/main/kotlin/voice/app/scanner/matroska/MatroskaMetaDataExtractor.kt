@@ -10,7 +10,6 @@ import org.ebml.StringElement
 import org.ebml.UnsignedIntegerElement
 import org.ebml.matroska.MatroskaDocTypes
 import voice.data.MarkData
-import voice.logging.core.Logger
 import java.util.Locale
 import javax.inject.Inject
 
@@ -19,10 +18,7 @@ class MatroskaMetaDataExtractor(
   private val reader: EBMLReader,
 ) {
 
-  class Factory @Inject constructor(
-    private val context: Context,
-  ) {
-
+  class Factory @Inject constructor(private val context: Context) {
     fun create(uri: Uri): MatroskaMetaDataExtractor {
       val dataSource = SafSeekableDataSource(context.contentResolver, uri)
       val reader = EBMLReader(dataSource)
@@ -31,141 +27,200 @@ class MatroskaMetaDataExtractor(
   }
 
   init {
-    // Reference MatroskaDocTypes to force static init of its members which
-    // register in static map used when identifying EBML Element types.
+    // Force static initialization
     MatroskaDocTypes.Void.level
   }
 
   fun readMediaInfo(): MatroskaMediaInfo {
-    val firstElement = reader.readNextElement()
-    if (!isValidEbmlHeader(firstElement)) {
-      throw MatroskaParseException("Invalid ebml header")
+    validateHeader()
+
+    val segment = reader.readNextElement()
+    if (!(segment isType MatroskaDocTypes.Segment)) {
+      throw MatroskaParseException("Expected Segment element")
     }
 
-    var chapters = listOf<MatroskaChapter>()
+    var chapters = emptyList<MatroskaChapter>()
     var album: String? = null
     var artist: String? = null
     var title: String? = null
 
-    val segment = reader.readNextElement()
-    if (segment isType MatroskaDocTypes.Segment) {
-      segment.forEachChild { element ->
-        when {
-          element isType MatroskaDocTypes.Chapters -> {
-            element.forEachChild {
-              if (it isType MatroskaDocTypes.EditionEntry) {
-                val (default, chaptersCandidate) = it.readEditionEntry()
-                if (chaptersCandidate != null && (chapters.isEmpty() || default)) {
-                  chapters = chaptersCandidate
-                }
-              }
-            }
-          }
-          element isType MatroskaDocTypes.Info -> {
-            // Read title from Info section
-            element.forEachChild { infoChild ->
-              if (infoChild isType MatroskaDocTypes.Title) {
-                title = infoChild.readString()
-              }
-            }
-          }
-          element isType MatroskaDocTypes.Tags -> {
-            val tagInfo = element.readTags()
-            album = tagInfo.album ?: album
-            artist = tagInfo.artist ?: artist
-            title = tagInfo.title ?: title
-          }
+    segment.forEachChild { element ->
+      when {
+        element isType MatroskaDocTypes.Chapters -> {
+          chapters = readChapters(element)
+        }
+        element isType MatroskaDocTypes.Info -> {
+          title = readTitle(element) ?: title
+        }
+        element isType MatroskaDocTypes.Tags -> {
+          val tags = readTags(element)
+          album = tags.album ?: album
+          artist = tags.artist ?: artist
+          title = tags.title ?: title
         }
       }
-    } else {
-      throw MatroskaParseException("Segment not the second element in the file: was ${segment.elementType.name} instead")
     }
 
     close()
 
     val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
-    val flatChapters = MatroskaChapterFlattener.toChapters(chapters, preferredLanguages)
+    val flatChapters = chapters.mapIndexed { index, chapter ->
+      MarkData(
+        chapter.startTime / 1000000,
+        chapter.bestName(preferredLanguages) ?: "Chapter ${index + 1}",
+      )
+    }
 
     return MatroskaMediaInfo(album, artist, title, flatChapters)
   }
 
-  private fun Element.readTags(): TagInfo {
-    var album: String? = null
-    var artist: String? = null
-    var title: String? = null
-
-    forEachChild { tag ->
-      if (tag isType MatroskaDocTypes.Tag) {
-        val tagInfo = tag.readTag()
-        album = tagInfo.album ?: album
-        artist = tagInfo.artist ?: artist
-        title = tagInfo.title ?: title
-      }
+  private fun validateHeader() {
+    val header = reader.readNextElement()
+    if (!(header isType MatroskaDocTypes.EBML)) {
+      throw MatroskaParseException("Invalid EBML header")
     }
 
-    return TagInfo(album, artist, title)
+    header.forEachChild { element ->
+      if (element isType MatroskaDocTypes.DocType) {
+        val docType = element.readString()
+        if (docType !in listOf("matroska", "webm")) {
+          throw MatroskaParseException("Unsupported doc type: $docType")
+        }
+      }
+    }
   }
 
-  private fun Element.readTag(): TagInfo {
-    var album: String? = null
-    var artist: String? = null
-    var title: String? = null
+  private fun readChapters(element: Element): List<MatroskaChapter> {
+    val chapters = mutableListOf<MatroskaChapter>()
 
-    forEachChild { simpleTag ->
-      if (simpleTag isType MatroskaDocTypes.SimpleTag) {
-        val (tagName, tagValue) = simpleTag.readSimpleTag()
-        when (tagName?.uppercase()) {
-          "ALBUM" -> album = tagValue
-          "ARTIST", "PERFORMER" -> artist = tagValue
-          "TITLE" -> title = tagValue
+    element.forEachChild { child ->
+      if (child isType MatroskaDocTypes.EditionEntry) {
+        val editionChapters = readEdition(child)
+        if (editionChapters.isNotEmpty()) {
+          chapters.addAll(editionChapters)
         }
       }
     }
 
-    return TagInfo(album, artist, title)
+    return chapters
   }
 
-  private fun Element.readSimpleTag(): Pair<String?, String?> {
-    var tagName: String? = null
-    var tagString: String? = null
+  private fun readEdition(element: Element): List<MatroskaChapter> {
+    val chapters = mutableListOf<MatroskaChapter>()
+    var hidden = false
 
-    forEachChild { child ->
+    element.forEachChild { child ->
       when {
-        child isType MatroskaDocTypes.TagName -> {
-          tagName = child.readString()
+        child isType MatroskaDocTypes.ChapterAtom -> {
+          readChapter(child)?.let { chapters.add(it) }
         }
-        child isType MatroskaDocTypes.TagString -> {
-          tagString = child.readString()
+        child isType MatroskaDocTypes.EditionFlagHidden -> {
+          hidden = child.readUnsignedInteger() == 1L
         }
-      }
-    }
-
-    return Pair(tagName, tagString)
-  }
-
-  private fun isValidEbmlHeader(element: Element): Boolean =
-    if (element isType MatroskaDocTypes.EBML) {
-      element.forEachChild {
-        if (it isType MatroskaDocTypes.DocType) {
-          val docType = it.readString()
-          if (docType != "matroska" && docType != "webm") {
-            Logger.e("DocType $docType is not matroska")
-            return false
+        child isType MatroskaDocTypes.EditionFlagOrdered -> {
+          if (child.readUnsignedInteger() == 1L) {
+            hidden = true // Skip ordered chapters
           }
         }
       }
-      true
-    } else {
-      Logger.e("EBML Header not the first element in the file")
-      false
     }
+
+    return if (hidden) emptyList() else chapters
+  }
+
+  private fun readChapter(element: Element): MatroskaChapter? {
+    var startTime: Long? = null
+    val names = mutableListOf<MatroskaChapterName>()
+    var hidden = false
+
+    element.forEachChild { child ->
+      when {
+        child isType MatroskaDocTypes.ChapterTimeStart -> {
+          startTime = child.readUnsignedInteger()
+        }
+        child isType MatroskaDocTypes.ChapterDisplay -> {
+          names.add(readChapterName(child))
+        }
+        child isType MatroskaDocTypes.ChapterFlagHidden -> {
+          hidden = child.readUnsignedInteger() == 1L
+        }
+      }
+    }
+
+    if (hidden || startTime == null) return null
+
+    return MatroskaChapter(startTime!!, names)
+  }
+
+  private fun readChapterName(element: Element): MatroskaChapterName {
+    var name: String? = null
+    val languages = mutableSetOf<String>()
+
+    element.forEachChild { child ->
+      when {
+        child isType MatroskaDocTypes.ChapString -> {
+          name = child.readString()
+        }
+        child isType MatroskaDocTypes.ChapLanguage -> {
+          languages.add(child.readString())
+        }
+      }
+    }
+
+    return MatroskaChapterName(name ?: "", languages)
+  }
+
+  private fun readTitle(element: Element): String? {
+    element.forEachChild { child ->
+      if (child isType MatroskaDocTypes.Title) {
+        return child.readString()
+      }
+    }
+    return null
+  }
+
+  private fun readTags(element: Element): TagInfo {
+    var album: String? = null
+    var artist: String? = null
+    var title: String? = null
+
+    element.forEachChild { tag ->
+      if (tag isType MatroskaDocTypes.Tag) {
+        tag.forEachChild { simpleTag ->
+          if (simpleTag isType MatroskaDocTypes.SimpleTag) {
+            val (name, value) = readSimpleTag(simpleTag)
+            when (name?.uppercase()) {
+              "ALBUM" -> album = value
+              "ARTIST", "PERFORMER" -> artist = value
+              "TITLE" -> title = value
+            }
+          }
+        }
+      }
+    }
+
+    return TagInfo(album, artist, title)
+  }
+
+  private fun readSimpleTag(element: Element): Pair<String?, String?> {
+    var tagName: String? = null
+    var tagValue: String? = null
+
+    element.forEachChild { child ->
+      when {
+        child isType MatroskaDocTypes.TagName -> tagName = child.readString()
+        child isType MatroskaDocTypes.TagString -> tagValue = child.readString()
+      }
+    }
+
+    return tagName to tagValue
+  }
 
   private inline fun Element.forEachChild(action: (Element) -> Unit) {
     this as MasterElement
     var child = readNextChild(reader)
     while (child != null) {
       action(child)
-      // Calling skipData is a nop after calling readData/skipData.
       child.skipData(dataSource)
       child = readNextChild(reader)
     }
@@ -183,89 +238,10 @@ class MatroskaMetaDataExtractor(
     return value
   }
 
-  private fun Element.readChapterDisplay(): MatroskaChapterName {
-    // https://www.matroska.org/technical/chapters.html
-    var name: String? = null
-    val languages = mutableSetOf<String>()
-    forEachChild { child ->
-      when {
-        child isType MatroskaDocTypes.ChapString -> {
-          name = child.readString()
-        }
-        child isType MatroskaDocTypes.ChapLanguage -> {
-          languages.add(child.readString())
-        }
-      }
-    }
-    if (name == null) {
-      throw MatroskaParseException("Missing mandatory ChapterString in ChapterDisplay")
-    }
-    return MatroskaChapterName(name!!, languages)
-  }
+  private fun close() = dataSource.close()
 
-  private fun Element.readChapterAtom(): MatroskaChapter? {
-    var startTime: Long? = null
-    val names = mutableListOf<MatroskaChapterName>()
-    val children = mutableListOf<MatroskaChapter>()
-    var hidden = false
-    forEachChild { child ->
-      when {
-        child isType MatroskaDocTypes.ChapterTimeStart -> {
-          startTime = child.readUnsignedInteger()
-        }
-        child isType MatroskaDocTypes.ChapterAtom -> {
-          // ignoring nested chapters
-        }
-        child isType MatroskaDocTypes.ChapterDisplay -> {
-          names.add(child.readChapterDisplay())
-        }
-        child isType MatroskaDocTypes.ChapterFlagHidden -> {
-          hidden = child.readUnsignedInteger() == 1L
-        }
-      }
-    }
-    if (hidden) return null
-    if (startTime == null) {
-      throw MatroskaParseException("Missing mandatory ChapterTimeStart element in ChapterAtom")
-    }
-    return MatroskaChapter(startTime!!, names, children)
-  }
-
-  private fun Element.readEditionEntry(): Pair<Boolean, List<MatroskaChapter>?> {
-    val chapters = mutableListOf<MatroskaChapter>()
-    var hidden = false
-    var default = false
-    forEachChild {
-      when {
-        it isType MatroskaDocTypes.ChapterAtom -> {
-          val chapter = it.readChapterAtom()
-          if (chapter != null) chapters.add(chapter)
-        }
-        it isType MatroskaDocTypes.EditionFlagHidden -> {
-          hidden = it.readUnsignedInteger() == 1L
-        }
-        it isType MatroskaDocTypes.EditionFlagOrdered -> {
-          if (it.readUnsignedInteger() == 1L) {
-            // Ordered chapters support is problematic,
-            // it varies across players so lets ignore them.
-            hidden = true
-            Logger.i("Ordered chapters. Ignoring affected edition")
-          }
-        }
-        it isType MatroskaDocTypes.EditionFlagDefault -> {
-          default = it.readUnsignedInteger() == 1L
-        }
-      }
-    }
-    if (hidden) return false to null
-    return default to chapters
-  }
-
-  private fun close() {
-    dataSource.close()
-  }
-
-  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
+  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) =
+    this != null && isType(t.type)
 }
 
 private data class TagInfo(
@@ -274,30 +250,4 @@ private data class TagInfo(
   val title: String? = null,
 )
 
-internal data class MatroskaChapter(
-  val startTime: Long,
-  private val names: List<MatroskaChapterName>,
-  val children: List<MatroskaChapter>,
-) {
-
-  fun name(preferredLanguages: List<String> = emptyList()): String? {
-    return preferredLanguages.firstNotNullOfOrNull { language ->
-      names.find { language in it.languages }
-        ?.name
-    }
-      ?: names.firstOrNull()?.name
-  }
-}
-
-internal class MatroskaParseException(message: String) : RuntimeException(message)
-
-internal data class MatroskaChapterName(val name: String, val languages: Set<String>)
-
-internal object MatroskaChapterFlattener {
-
-  fun toChapters(list: List<MatroskaChapter>, preferredLanguages: List<String>): List<MarkData> {
-    return list.mapIndexed { index, chapter ->
-      MarkData(chapter.startTime / 1000000, chapter.name(preferredLanguages) ?: "Chapter ${index + 1}")
-    }
-  }
-}
+class MatroskaParseException(message: String) : RuntimeException(message)

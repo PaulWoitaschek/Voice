@@ -184,9 +184,7 @@ class MediaAnalyzer
       "TIT2" -> builder.title = value
       "TPE1" -> builder.artist = value
       "TALB" -> builder.album = value
-      "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {
-      }
-
+      "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {}
       else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
     }
   }
