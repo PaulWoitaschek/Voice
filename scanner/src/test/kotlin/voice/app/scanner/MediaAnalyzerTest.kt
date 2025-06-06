@@ -54,7 +54,9 @@ internal class MediaAnalyzerTest {
       ),
       chapterTrackProcessor = ChapterTrackProcessor(),
     ),
-    matroskaExtractor = MatroskaMetaDataExtractor(context = ApplicationProvider.getApplicationContext()),
+    matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
+      context = ApplicationProvider.getApplicationContext(),
+    ),
   )
   private val auphonicChapters = listOf(
     MarkData(startMs = 0L, name = "Intro"),

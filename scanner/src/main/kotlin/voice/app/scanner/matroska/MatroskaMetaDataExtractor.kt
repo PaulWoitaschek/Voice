@@ -13,13 +13,21 @@ import voice.logging.core.Logger
 import java.util.Locale
 import javax.inject.Inject
 
-class MatroskaMetaDataExtractor
-@Inject constructor(
-  private val context: Context,
+class MatroskaMetaDataExtractor(
+  private val dataSource: SafSeekableDataSource,
+  private val reader: EBMLReader,
 ) {
 
-  private lateinit var dataSource: SafSeekableDataSource
-  private lateinit var reader: EBMLReader
+  class Factory @Inject constructor(
+    private val context: Context,
+  ) {
+
+    fun create(uri: Uri): MatroskaMetaDataExtractor {
+      val dataSource = SafSeekableDataSource(context.contentResolver, uri)
+      val reader = EBMLReader(dataSource)
+      return MatroskaMetaDataExtractor(dataSource, reader)
+    }
+  }
 
   init {
     // Reference MatroskaDocTypes to force static init of its members which
@@ -27,10 +35,7 @@ class MatroskaMetaDataExtractor
     MatroskaDocTypes.Void.level
   }
 
-  fun readMediaInfo(uri: Uri): MatroskaMediaInfo {
-    Logger.i("read media info $uri")
-    init(uri)
-
+  fun readMediaInfo(): MatroskaMediaInfo {
     val firstElement = reader.readNextElement()
     if (!isValidEbmlHeader(firstElement)) {
       throw MatroskaParseException("Invalid ebml header")
@@ -153,11 +158,6 @@ class MatroskaMetaDataExtractor
       Logger.e("EBML Header not the first element in the file")
       false
     }
-
-  private fun init(uri: Uri) {
-    dataSource = SafSeekableDataSource(context.contentResolver, uri)
-    reader = EBMLReader(dataSource)
-  }
 
   private inline fun Element.forEachChild(action: (Element) -> Unit) {
     this as MasterElement

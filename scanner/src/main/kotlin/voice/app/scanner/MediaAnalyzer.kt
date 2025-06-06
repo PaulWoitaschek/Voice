@@ -22,6 +22,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
 import voice.app.scanner.matroska.MatroskaMetaDataExtractor
+import voice.app.scanner.matroska.MatroskaParseException
 import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
@@ -37,7 +38,7 @@ class MediaAnalyzer
 @Inject constructor(
   private val context: Context,
   private val mp4ChapterExtractor: Mp4ChapterExtractor,
-  private val matroskaExtractor: MatroskaMetaDataExtractor,
+  private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
 ) {
 
   // we use a custom MediaSourceFactory because the default one for the
@@ -91,13 +92,17 @@ class MediaAnalyzer
     file: CachedDocumentFile,
     builder: Metadata.Builder,
   ) {
-    val mediaInfo = matroskaExtractor.readMediaInfo(file.uri)
-    mediaInfo.chapters.forEach { chapter ->
-      builder.chapters.add(MarkData(startMs = chapter.start, name = chapter.name))
+    try {
+      val mediaInfo = matroskaExtractorFactory.create(file.uri).readMediaInfo()
+      mediaInfo.chapters.forEach { chapter ->
+        builder.chapters.add(MarkData(startMs = chapter.start, name = chapter.name))
+      }
+      builder.artist = builder.artist ?: mediaInfo.artist
+      builder.album = builder.album ?: mediaInfo.album
+      builder.title = builder.title ?: mediaInfo.title
+    } catch (e: MatroskaParseException) {
+      Logger.w(e, "Error parsing Matroska metadata")
     }
-    builder.artist = builder.artist ?: mediaInfo.artist
-    builder.album = builder.album ?: mediaInfo.album
-    builder.title = builder.title ?: mediaInfo.title
   }
 
   private suspend fun parseMp4Chapters(
