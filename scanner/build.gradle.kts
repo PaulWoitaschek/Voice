@@ -14,6 +14,8 @@ dependencies {
   implementation(projects.common)
 
   implementation(libs.appCompat)
+  implementation(libs.slf4j.noop)
+  implementation(libs.jebml)
   implementation(libs.dagger.core)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
