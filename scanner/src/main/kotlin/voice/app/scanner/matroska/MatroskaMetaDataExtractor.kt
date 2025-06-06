@@ -96,10 +96,7 @@ class MatroskaMetaDataExtractor(
 
     element.forEachChild { child ->
       if (child isType MatroskaDocTypes.EditionEntry) {
-        val editionChapters = readEdition(child)
-        if (editionChapters.isNotEmpty()) {
-          chapters.addAll(editionChapters)
-        }
+        chapters += readEdition(child)
       }
     }
 
