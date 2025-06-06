@@ -31,7 +31,7 @@ class MatroskaMetaDataExtractor(
     MatroskaDocTypes.Void.level
   }
 
-  fun readMediaInfo(): MatroskaMediaInfo {
+  fun readMediaInfo(): MatroskaMediaInfo = try {
     validateHeader()
 
     val segment = reader.readNextElement()
@@ -62,7 +62,7 @@ class MatroskaMetaDataExtractor(
     }
 
     val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
-    return MatroskaMediaInfo(
+    MatroskaMediaInfo(
       album = album,
       artist = artist,
       title = title,
@@ -73,6 +73,9 @@ class MatroskaMetaDataExtractor(
         )
       },
     )
+  } catch (e: RuntimeException) {
+    // jebml throws undeclared exceptions, so we need wrap them :/
+    throw MatroskaParseException("Failed to read Matroska metadata: ${e.message}", e)
   }
 
   private fun validateHeader() {
@@ -127,7 +130,7 @@ class MatroskaMetaDataExtractor(
   }
 
   private fun readChapter(element: Element): MatroskaChapter? {
-    var startTime: Long? = null
+    var startTime: Long = -1
     val names = mutableListOf<MatroskaChapterName>()
     var hidden = false
 
@@ -145,9 +148,9 @@ class MatroskaMetaDataExtractor(
       }
     }
 
-    if (hidden || startTime == null) return null
+    if (hidden || startTime == -1L) return null
 
-    return MatroskaChapter(startTime!!, names)
+    return MatroskaChapter(startTime, names)
   }
 
   private fun readChapterName(element: Element): MatroskaChapterName {
@@ -215,7 +218,9 @@ class MatroskaMetaDataExtractor(
   }
 
   private inline fun Element.forEachChild(action: (Element) -> Unit) {
-    this as MasterElement
+    if (this !is MasterElement) {
+      throw MatroskaParseException("Expected a MasterElement")
+    }
     var child = readNextChild(reader)
     while (child != null) {
       action(child)
@@ -225,13 +230,17 @@ class MatroskaMetaDataExtractor(
   }
 
   private fun Element.readString(): String {
-    this as StringElement
+    if (this !is StringElement) {
+      throw MatroskaParseException("Expected a StringElement")
+    }
     readData(dataSource)
     return value
   }
 
   private fun Element.readUnsignedInteger(): Long {
-    this as UnsignedIntegerElement
+    if (this !is UnsignedIntegerElement) {
+      throw MatroskaParseException("Expected an UnsignedIntegerElement")
+    }
     readData(dataSource)
     return value
   }
@@ -247,4 +256,7 @@ private data class TagInfo(
   val title: String? = null,
 )
 
-class MatroskaParseException(message: String) : RuntimeException(message)
+class MatroskaParseException : RuntimeException {
+  constructor(message: String) : super(message)
+  constructor(message: String, cause: Throwable) : super(message, cause)
+}
