@@ -44,7 +44,6 @@ class MatroskaMetaDataExtractor
     val segment = reader.readNextElement()
     if (segment isType MatroskaDocTypes.Segment) {
       segment.forEachChild { element ->
-        println(element.elementType.name)
         when {
           element isType MatroskaDocTypes.Chapters -> {
             element.forEachChild {
@@ -65,13 +64,9 @@ class MatroskaMetaDataExtractor
             }
           }
           element isType MatroskaDocTypes.Tags -> {
-            // Read metadata from Tags section
             val tagInfo = element.readTags()
-            println("taginfo!")
-            println(tagInfo)
             album = tagInfo.album ?: album
             artist = tagInfo.artist ?: artist
-            // Tags title takes precedence over Info title
             title = tagInfo.title ?: title
           }
         }
@@ -113,8 +108,6 @@ class MatroskaMetaDataExtractor
     forEachChild { simpleTag ->
       if (simpleTag isType MatroskaDocTypes.SimpleTag) {
         val (tagName, tagValue) = simpleTag.readSimpleTag()
-        println("tagname")
-        println(tagName)
         when (tagName?.uppercase()) {
           "ALBUM" -> album = tagValue
           "ARTIST", "PERFORMER" -> artist = tagValue
