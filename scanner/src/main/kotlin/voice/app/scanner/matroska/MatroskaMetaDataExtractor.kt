@@ -62,14 +62,17 @@ class MatroskaMetaDataExtractor(
     }
 
     val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
-    val flatChapters = chapters.mapIndexed { index, chapter ->
-      MarkData(
-        chapter.startTime / 1000000,
-        chapter.bestName(preferredLanguages) ?: "Chapter ${index + 1}",
-      )
-    }
-
-    return MatroskaMediaInfo(album, artist, title, flatChapters)
+    return MatroskaMediaInfo(
+      album = album,
+      artist = artist,
+      title = title,
+      chapters = chapters.mapIndexed { index, chapter ->
+        MarkData(
+          chapter.startTime / 1000000,
+          chapter.bestName(preferredLanguages) ?: "Chapter ${index + 1}",
+        )
+      },
+    )
   }
 
   private fun validateHeader() {
@@ -165,7 +168,7 @@ class MatroskaMetaDataExtractor(
       }
     }
 
-    return MatroskaChapterName(name ?: "", languages)
+    return MatroskaChapterName(name = name ?: "", languages = languages)
   }
 
   private fun readTitle(element: Element): String? {
@@ -197,7 +200,7 @@ class MatroskaMetaDataExtractor(
       }
     }
 
-    return TagInfo(album, artist, title)
+    return TagInfo(album = album, artist = artist, title = title)
   }
 
   private fun readSimpleTag(element: Element): Pair<String?, String?> {
