@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
+import voice.app.scanner.matroska.MatroskaMetaDataExtractor
 import voice.app.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
@@ -36,6 +37,7 @@ class MediaAnalyzer
 @Inject constructor(
   private val context: Context,
   private val mp4ChapterExtractor: Mp4ChapterExtractor,
+  private val matroskaExtractor: MatroskaMetaDataExtractor,
 ) {
 
   // we use a custom MediaSourceFactory because the default one for the
@@ -78,8 +80,24 @@ class MediaAnalyzer
     if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
       parseMp4Chapters(file, builder)
     }
+    if (fileType == FileTypes.MATROSKA || extension == "mka") {
+      parseMatroskaMetaData(file, builder)
+    }
 
     return builder.build(duration)
+  }
+
+  private fun parseMatroskaMetaData(
+    file: CachedDocumentFile,
+    builder: Metadata.Builder,
+  ) {
+    val mediaInfo = matroskaExtractor.readMediaInfo(file.uri)
+    mediaInfo.chapters.forEach { chapter ->
+      builder.chapters.add(MarkData(startMs = chapter.start, name = chapter.name))
+    }
+    builder.artist = builder.artist ?: mediaInfo.artist
+    builder.album = builder.album ?: mediaInfo.album
+    builder.title = builder.title ?: mediaInfo.title
   }
 
   private suspend fun parseMp4Chapters(
