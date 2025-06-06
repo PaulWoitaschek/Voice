@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveElementAt
 import io.kotest.matchers.longs.shouldBeWithinPercentageOf
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -14,8 +15,15 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import voice.app.scanner.mp4.ChapterTrackExtractor
+import voice.app.scanner.mp4.ChapterTrackProcessor
+import voice.app.scanner.mp4.Mp4BoxParser
 import voice.app.scanner.mp4.Mp4ChapterExtractor
+import voice.app.scanner.mp4.visitor.ChapVisitor
+import voice.app.scanner.mp4.visitor.ChplVisitor
+import voice.app.scanner.mp4.visitor.MdhdVisitor
+import voice.app.scanner.mp4.visitor.StcoVisitor
+import voice.app.scanner.mp4.visitor.StscVisitor
+import voice.app.scanner.mp4.visitor.SttsVisitor
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
 import voice.logging.core.LogWriter
@@ -34,7 +42,15 @@ internal class MediaAnalyzerTest {
     context = ApplicationProvider.getApplicationContext(),
     mp4ChapterExtractor = Mp4ChapterExtractor(
       context = ApplicationProvider.getApplicationContext(),
-      chapterTrackExtractor = ChapterTrackExtractor(context = ApplicationProvider.getApplicationContext()),
+      boxParser = Mp4BoxParser(
+        stscVisitor = StscVisitor(),
+        mdhdVisitor = MdhdVisitor(),
+        sttsVisitor = SttsVisitor(),
+        stcoVisitor = StcoVisitor(),
+        chplVisitor = ChplVisitor(),
+        chapVisitor = ChapVisitor(),
+      ),
+      chapterTrackProcessor = ChapterTrackProcessor(),
     ),
   )
   private val auphonicChapters = listOf(
@@ -86,6 +102,15 @@ internal class MediaAnalyzerTest {
   }
 
   @Test
+  fun chapterTrackId() {
+    val chapters = parse("chapter_track_id.m4b")
+      .shouldNotBeNull()
+      .chapters
+    chapters.shouldHaveElementAt(0, MarkData(0, "Opening Credits"))
+    chapters.shouldHaveElementAt(107, MarkData(103121056, "Closing Credits"))
+  }
+
+  @Test
   fun opus() {
     val metadata = parse("auphonic_chapters_demo.opus")
 
@@ -112,7 +137,7 @@ internal class MediaAnalyzerTest {
       metadata.album shouldBe "Auphonic Examples"
       metadata.chapters shouldContainExactly auphonicChapters.filter {
         // for some reason only this one is missing in the test files
-        it.name != "Sound analysis"
+        it.name != "Creating a new production"
       }
     }
   }
@@ -143,7 +168,15 @@ internal class MediaAnalyzerTest {
             message: String,
             throwable: Throwable?,
           ) {
-            println("$severity: $message, $throwable")
+            println(
+              buildString {
+                append("${severity.name}: ")
+                append(message)
+                if (throwable != null) {
+                  append(", $throwable")
+                }
+              },
+            )
           }
         },
       )
