@@ -220,8 +220,7 @@ class MatroskaMetaDataExtractor
           startTime = child.readUnsignedInteger()
         }
         child isType MatroskaDocTypes.ChapterAtom -> {
-          val chapter = child.readChapterAtom()
-          if (chapter != null) children.add(chapter)
+          // ignoring nested chapters
         }
         child isType MatroskaDocTypes.ChapterDisplay -> {
           names.add(child.readChapterDisplay())
@@ -275,7 +274,6 @@ class MatroskaMetaDataExtractor
   private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 }
 
-// Helper data class for tag information
 private data class TagInfo(
   val album: String? = null,
   val artist: String? = null,
