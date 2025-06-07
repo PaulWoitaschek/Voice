@@ -7,3 +7,8 @@
 -keepclassmembers class * extends androidx.datastore.preferences.protobuf.GeneratedMessageLite {
     <fields>;
 }
+
+# JEBML uses reflection
+-keepclassmembers class * extends org.ebml.Element {
+    <init>(...);
+}
