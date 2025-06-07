@@ -101,7 +101,7 @@ class MediaAnalyzer
         builder.title = builder.title ?: mediaInfo.title
       }
     } catch (e: MatroskaParseException) {
-      Logger.w(e, "Error parsing Matroska metadata")
+      Logger.e(e, "Error parsing Matroska metadata")
     }
   }
 
