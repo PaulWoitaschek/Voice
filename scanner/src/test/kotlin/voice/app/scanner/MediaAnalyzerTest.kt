@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import voice.app.scanner.matroska.MatroskaMetaDataExtractor
 import voice.app.scanner.mp4.ChapterTrackProcessor
 import voice.app.scanner.mp4.Mp4BoxParser
 import voice.app.scanner.mp4.Mp4ChapterExtractor
@@ -29,6 +30,7 @@ import voice.documentfile.FileBasedDocumentFile
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
 import java.io.File
+import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [33])
@@ -51,6 +53,9 @@ internal class MediaAnalyzerTest {
         chapVisitor = ChapVisitor(),
       ),
       chapterTrackProcessor = ChapterTrackProcessor(),
+    ),
+    matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
+      context = ApplicationProvider.getApplicationContext(),
     ),
   )
   private val auphonicChapters = listOf(
@@ -98,6 +103,39 @@ internal class MediaAnalyzerTest {
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
       metadata.chapters shouldContainExactly auphonicChapters
+    }
+  }
+
+  @Test
+  fun mka_simple_chapters() {
+    val metadata = parse("mka_simple_chapters.mka")
+    assertSoftly {
+      metadata.shouldNotBeNull()
+      metadata.title shouldBe "Your Album Title"
+      metadata.artist shouldBe "Your Artist Name"
+      metadata.album shouldBe "Your Album Name"
+      metadata.chapters.shouldContainExactly(
+        MarkData(startMs = 0L, name = "Intro"),
+        MarkData(startMs = 150000L, name = "Baby prepares to rock"),
+        MarkData(startMs = 162300L, name = "Baby rocks the house"),
+      )
+    }
+  }
+
+  @Test
+  fun mka_nested_chapters() {
+    val metadata = parse("mka_nested_chapters.mka")
+    assertSoftly {
+      metadata.shouldNotBeNull()
+      metadata.title shouldBe "Your Album Title"
+      metadata.artist shouldBe "Your Artist Name"
+      metadata.album shouldBe "Your Album Name"
+      println(metadata.chapters)
+      metadata.chapters.shouldContainExactly(
+        MarkData(startMs = 0L, name = "Introduction"),
+        MarkData(startMs = 10.minutes.inWholeMilliseconds, name = "Main Content"),
+        MarkData(startMs = 20.minutes.inWholeMilliseconds, name = "Conclusion"),
+      )
     }
   }
 

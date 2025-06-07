@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Chapters SYSTEM "matroskachapters.dtd">
+<Chapters>
+  <EditionEntry>
+    <ChapterAtom>
+      <ChapterTimeStart>00:00:00.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:10:00.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>Introduction</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterAtom>
+        <ChapterTimeStart>00:02:00.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:05:00.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>Getting Started</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+      <ChapterAtom>
+        <ChapterTimeStart>00:05:30.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:08:30.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>Basic Concepts</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+    </ChapterAtom>
+    <ChapterAtom>
+      <ChapterTimeStart>00:10:00.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:20:00.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>Main Content</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterAtom>
+        <ChapterTimeStart>00:12:00.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:15:00.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>Advanced Techniques</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+      <ChapterAtom>
+        <ChapterTimeStart>00:16:00.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:19:00.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>Practical Examples</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+    </ChapterAtom>
+    <ChapterAtom>
+      <ChapterTimeStart>00:20:00.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:25:00.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>Conclusion</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+    </ChapterAtom>
+  </EditionEntry>
+</Chapters>

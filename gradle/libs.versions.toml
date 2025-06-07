@@ -50,6 +50,8 @@ okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.6.6"
 clikt = "com.github.ajalt.clikt:clikt:5.0.3"
+jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
+slf4j-noop = "org.slf4j:slf4j-nop:2.0.17"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
