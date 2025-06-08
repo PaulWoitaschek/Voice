@@ -154,6 +154,7 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs: build_release
     runs-on: ubuntu-latest
+    environment: "google-play"
     steps:
       - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
 
