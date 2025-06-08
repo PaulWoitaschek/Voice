@@ -11,7 +11,11 @@ import org.ebml.matroska.MatroskaDocTypes
 
 infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 
-inline fun Element.forEachChild(dataSource: DataSource, reader: EBMLReader, action: (Element) -> Unit) {
+inline fun Element.forEachChild(
+  dataSource: DataSource,
+  reader: EBMLReader,
+  action: (Element) -> Unit,
+) {
   if (this !is MasterElement) {
     throw MatroskaParseException("Expected a MasterElement")
   }
@@ -23,7 +27,10 @@ inline fun Element.forEachChild(dataSource: DataSource, reader: EBMLReader, acti
   }
 }
 
-fun validateHeader(dataSource: DataSource, reader: EBMLReader) {
+fun validateHeader(
+  dataSource: DataSource,
+  reader: EBMLReader,
+) {
   val header = reader.readNextElement()
   if (!(header isType MatroskaDocTypes.EBML)) {
     throw MatroskaParseException("Invalid EBML header")
