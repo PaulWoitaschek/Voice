@@ -81,7 +81,7 @@ class MediaAnalyzer
     if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
       parseMp4Chapters(file, builder)
     }
-    if (fileType == FileTypes.MATROSKA || extension == "mka") {
+    if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       parseMatroskaMetaData(file, builder)
     }
 
