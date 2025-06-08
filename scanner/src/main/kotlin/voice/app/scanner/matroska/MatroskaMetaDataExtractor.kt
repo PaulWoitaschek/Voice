@@ -4,10 +4,6 @@ import android.content.Context
 import android.net.Uri
 import org.ebml.EBMLReader
 import org.ebml.Element
-import org.ebml.MasterElement
-import org.ebml.ProtoType
-import org.ebml.StringElement
-import org.ebml.UnsignedIntegerElement
 import org.ebml.matroska.MatroskaDocTypes
 import voice.data.MarkData
 import java.util.Locale
@@ -32,7 +28,7 @@ class MatroskaMetaDataExtractor(
   }
 
   fun readMediaInfo(): MatroskaMediaInfo = try {
-    validateHeader()
+    validateHeader(dataSource, reader)
 
     val segment = reader.readNextElement()
     if (!(segment isType MatroskaDocTypes.Segment)) {
@@ -78,22 +74,6 @@ class MatroskaMetaDataExtractor(
     throw MatroskaParseException("Failed to read Matroska metadata: ${e.message}", e)
   }
 
-  private fun validateHeader() {
-    val header = reader.readNextElement()
-    if (!(header isType MatroskaDocTypes.EBML)) {
-      throw MatroskaParseException("Invalid EBML header")
-    }
-
-    header.forEachChild { element ->
-      if (element isType MatroskaDocTypes.DocType) {
-        val docType = element.readString()
-        if (docType !in listOf("matroska", "webm")) {
-          throw MatroskaParseException("Unsupported doc type: $docType")
-        }
-      }
-    }
-  }
-
   private fun readChapters(element: Element): List<MatroskaChapter> {
     val chapters = mutableListOf<MatroskaChapter>()
 
@@ -116,10 +96,10 @@ class MatroskaMetaDataExtractor(
           readChapter(child)?.let { chapters.add(it) }
         }
         child isType MatroskaDocTypes.EditionFlagHidden -> {
-          hidden = child.readUnsignedInteger() == 1L
+          hidden = child.readUnsignedInteger(dataSource) == 1L
         }
         child isType MatroskaDocTypes.EditionFlagOrdered -> {
-          if (child.readUnsignedInteger() == 1L) {
+          if (child.readUnsignedInteger(dataSource) == 1L) {
             hidden = true // Skip ordered chapters
           }
         }
@@ -137,13 +117,13 @@ class MatroskaMetaDataExtractor(
     element.forEachChild { child ->
       when {
         child isType MatroskaDocTypes.ChapterTimeStart -> {
-          startTime = child.readUnsignedInteger()
+          startTime = child.readUnsignedInteger(dataSource)
         }
         child isType MatroskaDocTypes.ChapterDisplay -> {
           names.add(readChapterName(child))
         }
         child isType MatroskaDocTypes.ChapterFlagHidden -> {
-          hidden = child.readUnsignedInteger() == 1L
+          hidden = child.readUnsignedInteger(dataSource) == 1L
         }
       }
     }
@@ -217,37 +197,10 @@ class MatroskaMetaDataExtractor(
     return tagName to tagValue
   }
 
-  private inline fun Element.forEachChild(action: (Element) -> Unit) {
-    if (this !is MasterElement) {
-      throw MatroskaParseException("Expected a MasterElement")
-    }
-    var child = readNextChild(reader)
-    while (child != null) {
-      action(child)
-      child.skipData(dataSource)
-      child = readNextChild(reader)
-    }
-  }
-
-  private fun Element.readString(): String {
-    if (this !is StringElement) {
-      throw MatroskaParseException("Expected a StringElement")
-    }
-    readData(dataSource)
-    return value
-  }
-
-  private fun Element.readUnsignedInteger(): Long {
-    if (this !is UnsignedIntegerElement) {
-      throw MatroskaParseException("Expected an UnsignedIntegerElement")
-    }
-    readData(dataSource)
-    return value
-  }
+  private inline fun Element.forEachChild(action: (Element) -> Unit) = forEachChild(dataSource, reader, action)
+  private fun Element.readString(): String = readString(dataSource)
 
   override fun close() = dataSource.close()
-
-  private infix fun <T : Element> Element?.isType(t: ProtoType<T>) = this != null && isType(t.type)
 }
 
 private data class TagInfo(
