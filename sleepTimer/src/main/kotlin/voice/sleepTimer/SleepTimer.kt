@@ -115,6 +115,9 @@ class SleepTimer
         interval = 200.milliseconds
         updateVolumeForSleepTime(fadeOutDuration)
       }
+      if (leftSleepTime < interval) {
+        interval = leftSleepTime
+      }
       delay(interval)
       leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
     }
