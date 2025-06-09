@@ -208,25 +208,28 @@ class BookPlayViewModel
   fun onCurrentChapterClick() {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
-      val chapterMarks = book.chapters.flatMap {
-        it.chapterMarks
-      }
-      val selectedIndex = chapterMarks.indexOf(book.currentMark)
       _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
-        chapters = chapterMarks,
-        selectedIndex = selectedIndex.takeUnless { it == -1 },
+        items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
+          chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
+            BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+              number = book.chapters.take(chapterIndex).sumOf { it.chapterMarks.count() } + markIndex + 1,
+              name = chapterMark.name ?: "",
+              active = chapterMark == book.currentMark && chapter == book.currentChapter,
+            )
+          }
+        },
       )
     }
   }
 
-  fun onChapterClick(index: Int) {
+  fun onChapterClick(number: Int) {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
-          if (currentIndex == index) {
+          if (currentIndex == number - 1) {
             player.setPosition(mark.startMs, chapter.id)
             _dialogState.value = null
             return@launch

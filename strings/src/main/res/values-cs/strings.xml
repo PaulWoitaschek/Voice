@@ -2,7 +2,7 @@
 <resources>
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
-    <string name="action_sleep">Časovač vypnutí</string>
+    <string name="action_sleep">Časovač spánku</string>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
     <string name="previous_track">Předchozí skladba</string>
@@ -88,7 +88,7 @@
     </plurals>
     <string name="voice_intro_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
     <string name="migration_detail_content_position">Pozice</string>
-    <string name="notification_sleep_timer_enable">Zapnout časovač vypnutí</string>
+    <string name="notification_sleep_timer_enable">Zapnout časovač spánku</string>
     <string name="storage_bug_title">Vyžadováno povolení</string>
     <string name="storage_bug_subtitle">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>
     <string name="storage_bug_button">Udělit oprávnění</string>
@@ -111,7 +111,7 @@
     <string name="review.feedback.button.yes">Odeslat zpětnou vazbu</string>
     <string name="review.feedback.button.no">Zrušit</string>
     <string name="cover_search_template_no_author">%s obal audioknihy</string>
-    <string name="pref_suggest_idea">Navrhnout zlepšení</string>
+    <string name="pref_suggest_idea">Navrhnout nápad</string>
     <string name="generic_error_message">Něco se pokazilo 😢</string>
     <string name="generic_error_retry">Znovu</string>
     <string name="play">Přehrát</string>
@@ -131,4 +131,10 @@
     <string name="battery_optimization_rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>
     <string name="battery_optimization_action">Aktualizovat</string>
     <string name="select_folder_title_onboarding">Přidejte svou první audioknihu</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Nastavit čas startu</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Nastavit čas konce</string>
+    <string name="pref_faq">Často kladené dotazy (FAQ)</string>
+    <string name="auto_sleep_timer.title">Automatický časovač spánku</string>
+    <string name="playback.current_chapter">Aktuální kapitola</string>
+    <string name="auto_sleep_timer.subtitle">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
 </resources>

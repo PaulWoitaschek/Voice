@@ -1,3 +1,13 @@
+### Does Voice support Android Auto?
+
+Yes, Voice fully supports Android Auto!
+
+!!! warning
+
+    For Android Auto functionality to work, you must install Voice directly from the
+    [Google Play Store](https://play.google.com/store/apps/details?id=de.ph1b.audiobook).
+    This is because Android Auto integration requires versions that have been reviewed and approved by the Google Play team.
+
 ### Why doesn't Voice support the xyz Media Format?
 
 Voice relies on the media formats that are natively supported by the Android platform.
@@ -40,6 +50,6 @@ Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To
 - **Shake to resume**: Shake your device within 30 seconds of pause to restart playback.
 - **Open to resume**: Open the App and simply press on play again
 
-!!! tip
+!!! warning
 
     On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably.

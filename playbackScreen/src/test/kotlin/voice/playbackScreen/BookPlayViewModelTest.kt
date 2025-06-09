@@ -1,8 +1,12 @@
 package voice.playbackScreen
 
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -19,6 +23,8 @@ import voice.data.BookContent
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId
+import voice.data.MarkData
+import voice.playback.PlayerController
 import voice.sleepTimer.SleepTimer
 import voice.sleepTimer.SleepTimerViewState
 import java.time.Instant
@@ -41,11 +47,12 @@ class BookPlayViewModelTest {
       sleepTimerActive = firstArg()
     }
   }
+  private val player = mockk<PlayerController>()
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
     },
-    player = mockk(),
+    player = player,
     sleepTimer = sleepTimer,
     playStateManager = mockk(),
     currentBookStoreId = mockk(),
@@ -130,6 +137,69 @@ class BookPlayViewModelTest {
     }
     sleepTimer.sleepTimerActive() shouldBe false
   }
+
+  @Test
+  fun onCurrentChapterClickShowsDialogWithCorrectState() = scope.runTest {
+    viewModel.onCurrentChapterClick()
+    yield()
+
+    val dialogState = viewModel.dialogState.value
+      .shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+
+    dialogState.items.shouldContainExactly(
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 1,
+        name = "Chapter Start",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 2,
+        name = "Middle Section",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 3,
+        name = "Final Section",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 4,
+        name = "Chapter Start",
+        active = false,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 5,
+        name = "Middle Section",
+        active = true,
+      ),
+      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+        number = 6,
+        name = "Final Section",
+        active = false,
+      ),
+    )
+  }
+
+  @Test
+  fun onChapterClickSetsPositionAndDismissesDialog() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+
+    viewModel.onCurrentChapterClick()
+    yield()
+
+    viewModel.dialogState.value.shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+
+    viewModel.onChapterClick(number = 2)
+    yield()
+
+    // Verify player.setPosition was called with correct parameters
+    // The second mark starts at 2 minutes position in the first chapter
+    verify(exactly = 1) {
+      player.setPosition(time = 2.minutes.inWholeMilliseconds, id = book.chapters.first().id)
+    }
+
+    viewModel.dialogState.value shouldBe null
+  }
 }
 
 private fun book(
@@ -145,12 +215,12 @@ private fun book(
     content = BookContent(
       author = UUID.randomUUID().toString(),
       name = name,
-      positionInChapter = 42,
+      positionInChapter = 2.5.minutes.inWholeMilliseconds,
       playbackSpeed = 1F,
       addedAt = Instant.ofEpochMilli(addedAtMillis),
       chapters = chapters.map { it.id },
       cover = null,
-      currentChapter = chapters.first().id,
+      currentChapter = chapters[1].id,
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
@@ -166,7 +236,11 @@ private fun chapter(): Chapter {
     id = ChapterId("http://${UUID.randomUUID()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
-    markData = emptyList(),
+    markData = listOf(
+      MarkData(startMs = 0L, name = "Chapter Start"),
+      MarkData(startMs = 2.minutes.inWholeMilliseconds, name = "Middle Section"),
+      MarkData(startMs = 4.minutes.inWholeMilliseconds, name = "Final Section"),
+    ),
     name = "name",
   )
 }

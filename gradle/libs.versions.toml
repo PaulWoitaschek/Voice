@@ -1,7 +1,7 @@
 [versions]
 leakcanary = "2.14"
-versionCode = "3603043"
-versionName = "8.4.3"
+versionCode = "3603047"
+versionName = "8.6.0"
 
 sdk-compile = "35"
 sdk-min = "28"
@@ -13,7 +13,7 @@ materialDialog = "3.3.0"
 dagger = "2.56.2"
 kotlin = "2.1.21"
 media3 = "1.7.1"
-agp = "8.10.0"
+agp = "8.10.1"
 ktlint-core = "1.6.0"
 ktlint-gradlePlugin = "0.10.0"
 retrofit = "3.0.0"
@@ -32,7 +32,7 @@ retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", versio
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 robolectric = "org.robolectric:robolectric:4.14.1"
 coil = "io.coil-kt:coil-compose:2.7.0"
-appCompat = "androidx.appcompat:appcompat:1.7.0"
+appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidxCore = "androidx.core:core-ktx:1.16.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -50,13 +50,15 @@ okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.6.6"
 clikt = "com.github.ajalt.clikt:clikt:5.0.3"
+jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
+slf4j-noop = "org.slf4j:slf4j-nop:2.0.17"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:33.14.0"
+firebase-bom = "com.google.firebase:firebase-bom:33.15.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
@@ -88,9 +90,9 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.0"
+lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.1"
 
-compose-bom = "androidx.compose:compose-bom:2025.05.01"
+compose-bom = "androidx.compose:compose-bom:2025.06.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -152,7 +154,7 @@ android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 anvil = { id = "com.squareup.anvil", version = "2.5.1" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.4" }
 googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

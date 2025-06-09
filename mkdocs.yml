@@ -45,3 +45,5 @@ plugins:
       redirect_maps:
         'privacy_policy.md': 'privacy-policy.md'
         'privacy.md': 'privacy-policy.md'
+
+copyright: <a href="https://woitaschek.de/impressum/">Impressum</a>

@@ -150,6 +150,10 @@ class SettingsViewModel
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
   }
 
+  override fun openFaq() {
+    navigator.goTo(Destination.Website("https://voice.woitaschek.de/faq/"))
+  }
+
   override fun setAutoSleepTimer(checked: Boolean) {
     mainScope.launch {
       sleepTimerPreferenceStore.updateData { currentPrefs ->

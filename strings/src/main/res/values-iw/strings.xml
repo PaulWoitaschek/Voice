@@ -131,4 +131,10 @@
     <string name="migration_delete_dialog_action_delete">הסר</string>
     <string name="migration_detail_content_bookmarks">סימניות</string>
     <string name="migration_detail_content_position_current_chapter_position">מיקום בפרק</string>
+    <string name="auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
+    <string name="pref_faq">שאלות נפוצות</string>
+    <string name="auto_sleep_timer.subtitle">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">בחר זמן התחלה</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">בחר זמן סיום</string>
+    <string name="playback.current_chapter">פרק נוכחי</string>
 </resources>
