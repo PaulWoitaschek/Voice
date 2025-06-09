@@ -28,10 +28,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
           java-version: 17
@@ -42,7 +42,7 @@ jobs:
       - name: Test
         run: ./gradlew voiceUnitTest -Pvoice.warningsAsErrors=true lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: "Artifacts"
@@ -51,7 +51,7 @@ jobs:
             app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@65fe03598d8d251738592a497a9e8547a5c48eaa # v5
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -69,10 +69,10 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
           java-version: 17
@@ -91,7 +91,7 @@ jobs:
         run: ./gradlew voiceDeviceGithubLibreDebugAndroidTest
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: "Artifacts"
@@ -100,7 +100,7 @@ jobs:
             app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@65fe03598d8d251738592a497a9e8547a5c48eaa # v5
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -115,13 +115,13 @@ jobs:
       - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
 
       - name: Setup Signing
         run: ./ci_signing_setup.sh
@@ -136,14 +136,14 @@ jobs:
         run: ./gradlew :app:assembleGithubLibreRelease -Pvoice.warningsAsErrors=true
 
       - name: Upload AAB artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: google-play-aab
           path: app/build/outputs/bundle/playProprietaryRelease/app-play-proprietary-release.aab
           retention-days: 30
 
       - name: Github Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2
         with:
           draft: true
           files: |
@@ -159,19 +159,19 @@ jobs:
       - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
 
       - name: Setup Signing
         run: ./ci_signing_setup.sh
 
       - name: Download AAB artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: google-play-aab
           path: app/build/outputs/bundle/playProprietaryRelease/
