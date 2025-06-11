@@ -131,4 +131,7 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Zet eindtijd</string>
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Zet starttijd</string>
     <string name="playback.current_chapter">Huidig hoofdstuk</string>
+    <string name="pref_faq">Veelgestelde vragen</string>
+    <string name="auto_sleep_timer.title">Automatische Slaaptimer</string>
+    <string name="auto_sleep_timer.subtitle">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
 </resources>
