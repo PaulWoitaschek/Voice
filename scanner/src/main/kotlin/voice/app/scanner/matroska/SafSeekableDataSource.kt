@@ -31,7 +31,7 @@ class SafSeekableDataSource(
       fileChannel = fileInputStream.channel
       length = fileChannel.size()
     } catch (e: Exception) {
-      throw IOException("Cannot open URI as seekable source: $uri", e)
+      throw MatroskaParseException("Cannot open URI as seekable source: $uri", e)
     }
   }
 
@@ -41,7 +41,7 @@ class SafSeekableDataSource(
     if (closed) return -1
     return try {
       fileChannel.position()
-    } catch (e: IOException) {
+    } catch (_: IOException) {
       -1
     }
   }
@@ -53,7 +53,7 @@ class SafSeekableDataSource(
     try {
       fileChannel.position(pos)
       return fileChannel.position()
-    } catch (e: IOException) {
+    } catch (_: IOException) {
       return -1
     }
   }
@@ -77,7 +77,7 @@ class SafSeekableDataSource(
     if (closed) return -1
     return try {
       fileChannel.read(buff)
-    } catch (e: IOException) {
+    } catch (_: IOException) {
       -1
     }
   }
@@ -89,7 +89,7 @@ class SafSeekableDataSource(
       val newPos = max(0.0, (currentPos + offset).toDouble()).toLong()
       fileChannel.position(newPos)
       return newPos - currentPos
-    } catch (e: IOException) {
+    } catch (_: IOException) {
       return 0
     }
   }
