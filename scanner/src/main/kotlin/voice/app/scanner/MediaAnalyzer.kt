@@ -52,6 +52,10 @@ class MediaAnalyzer
     val builder = Metadata.Builder(file.nameWithoutExtension())
     val duration = parseDuration(file)
       ?: return null
+    if(duration<= Duration.ZERO) {
+      Logger.w("Duration is zero or negative for file: ${file.uri}")
+      return null
+    }
 
     val trackGroups = retrieveMetadata(file.uri)
       ?: return null
