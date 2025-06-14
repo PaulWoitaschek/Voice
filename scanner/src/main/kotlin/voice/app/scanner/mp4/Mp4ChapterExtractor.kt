@@ -40,6 +40,9 @@ class Mp4ChapterExtractor
     } catch (e: IOException) {
       Logger.w(e, "Failed to open MP4 file for chapter extraction")
       emptyList()
+    } catch (e: SecurityException) {
+      Logger.w(e, "Security exception while accessing MP4 file")
+      emptyList()
     } catch (e: IllegalStateException) {
       Logger.w(e, "Invalid MP4 structure")
       emptyList()
