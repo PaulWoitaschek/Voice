@@ -90,8 +90,8 @@
     <string name="notification_sleep_timer_disable">Slaapklok uitschakelen</string>
     <string name="generic_error_message">Er is iets fout gegaan 😢</string>
     <string name="generic_error_retry">Opnieuw proberen</string>
-    <string name="play">Afspelen</string>
-    <string name="pause">Pauzeren</string>
+    <string name="play">Speel af</string>
+    <string name="pause">Pauzeer</string>
     <string name="cover_search_template_no_author">%s luisterboekomslag</string>
     <string name="cover_search_template_with_author">%1$s door %2$s luisterboekomslag</string>
     <string name="select_folder_type_file">Bestand</string>
