@@ -1,7 +1,7 @@
 [versions]
 leakcanary = "2.14"
-versionCode = "3603047"
-versionName = "8.6.0"
+versionCode = "3603048"
+versionName = "8.6.1"
 
 sdk-compile = "35"
 sdk-min = "28"
