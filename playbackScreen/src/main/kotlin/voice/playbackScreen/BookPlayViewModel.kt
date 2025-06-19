@@ -20,6 +20,7 @@ import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.MainScope
 import voice.common.compose.ImmutableFile
+import voice.common.formatTime
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.CurrentBookStore
@@ -202,10 +203,12 @@ class BookPlayViewModel
       _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
         items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
           chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
+            val previousChapters = book.chapters.take(chapterIndex)
             BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-              number = book.chapters.take(chapterIndex).sumOf { it.chapterMarks.count() } + markIndex + 1,
+              number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
               name = chapterMark.name ?: "",
               active = chapterMark == book.currentMark && chapter == book.currentChapter,
+              time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
             )
           }
         },
