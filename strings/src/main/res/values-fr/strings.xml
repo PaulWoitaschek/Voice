@@ -37,7 +37,7 @@
     <string name="pref_auto_rewind_title">Rembobinage automatique</string>
     <string name="pref_suggest_idea">Suggérer une idée</string>
     <string name="pref_use_grid">Utiliser la mise en page en grille</string>
-    <string name="pref_report_issue">Rapporter un problème </string>
+    <string name="pref_report_issue">Signaler un problème</string>
     <string name="pref_help_translating">Aidez à traduire Voice</string>
     <string name="pref_get_support">Demander de l\'aide</string>
     <string name="pref_app_version">Version de l\'application </string>
@@ -118,7 +118,7 @@
     <string name="review.feedback.button.yes">Donnez votre avis</string>
     <string name="onboarding.completion.subtitle">Votre premier livre audio est prêt à être lu. Profitez de votre voyage avec Voice !</string>
     <string name="onboarding.completion.next_button">Commencer à écouter</string>
-    <string name="review.request.content">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Ça nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
+    <string name="review.request.content">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Cela nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
     <string name="review.feedback.button.no">Annuler</string>
     <string name="onboarding_welcome_subtitle">Votre lecteur de livres audio personnel. Configurons votre application.</string>
     <string name="play">Lecture</string>
@@ -133,8 +133,8 @@
     <string name="select_folder_subtitle">Les livres sont-ils des fichiers ou des dossiers ?</string>
     <string name="auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="auto_sleep_timer.subtitle">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
-    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Définir l’heure de début</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Heure de début</string>
     <string name="pref_faq">FAQ</string>
-    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Définir l’heure de fin</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Heure de fin</string>
     <string name="playback.current_chapter">Chapitre en cours</string>
 </resources>
