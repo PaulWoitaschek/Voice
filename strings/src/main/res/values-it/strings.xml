@@ -41,7 +41,7 @@
     <string name="mark_as_completed">Segna come completato</string>
     <string name="mark_as_current">Contrassegna come corrente</string>
     <string name="mark_as_not_started">Contrassegna come non ancora iniziato</string>
-    <string name="pref_use_grid">Usa layout a griglia</string>
+    <string name="pref_use_grid">Usa la disposizione a griglia</string>
     <string name="pref_report_issue">Segnala un problema</string>
     <string name="pref_help_translating">Aiuta a tradurre Voice</string>
     <string name="pref_get_support">Ottieni supporto</string>
@@ -107,7 +107,7 @@
     <string name="review.feedback.button.yes">Invia feedback</string>
     <string name="review.feedback.button.no">Cancella</string>
     <string name="cover_search.author">Autore</string>
-    <string name="review.request.content">Il tuo feedback è importante per noi! Se hai un momento, votaci e condividi la tua esperienza. Ci aiuta a migliorare e offrire una migliore esperienza di ascolto.</string>
+    <string name="review.request.content">I tuoi commenti sono importanti per noi! Se hai un momento, votaci e condividi la tua esperienza. Ci aiuta a migliorare e offrire una migliore esperienza di ascolto.</string>
     <string name="review.request.title">Ti stai divertendo con Voice\?</string>
     <string name="review.request.button.no">No, grazie</string>
     <string name="review.feedback.content">Ci può dire cosa è andato storto\? Apprezziamo il tuo feedback e ci aiuta a migliorare la tua esperienza.</string>
@@ -120,7 +120,7 @@
     <string name="onboarding_welcome_title">Benvenuto in Voice!</string>
     <string name="onboarding_welcome_subtitle">Il tuo lettore di audiolibri tascabile personale. Ti prepariamo.</string>
     <string name="onboarding.button_next">Avanti</string>
-    <string name="onboarding.explanation.title">La tua libreria, a modo tuo</string>
+    <string name="onboarding.explanation.title">La tua biblioteca, a modo tuo</string>
     <string name="onboarding.explanation.subtitle">Con Voice, puoi aggiungere libri come singoli file o organizzarli in cartelle. Scegli tu!</string>
     <string name="onboarding.completion.title">È tutto pronto!</string>
     <string name="onboarding.completion.subtitle">Il tuo primo audiolibro è pronto per essere riprodotto. Buon viaggio con Voice!</string>
@@ -135,8 +135,8 @@
     </plurals>
     <string name="auto_sleep_timer.title">Timer di spegnimento automatico</string>
     <string name="auto_sleep_timer.subtitle">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
-    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Imposta l\'ora di inizio</string>
-    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Imposta l\'ora di fine</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Ora di inizio</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Ora di fine</string>
     <string name="playback.current_chapter">Capitolo corrente</string>
-    <string name="pref_faq">FAQ</string>
+    <string name="pref_faq">Domande frequenti</string>
 </resources>
