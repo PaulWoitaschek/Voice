@@ -1,0 +1,47 @@
+{
+  "name": "Voice Android Dev",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "image": "mcr.microsoft.com/devcontainers/java:0-17",
+
+  "features": {
+    "ghcr.io/devcontainers/features/android-sdk:0": {
+      "installGradle": true,
+      "installNdks": false,
+      "version": "latest"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "fwcd.kotlin",
+        "sdeleuze.vscode-spring-boot", // Good Kotlin support
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint" // For any potential web/JS parts or markdown linting
+      ]
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "./gradlew --version && ./gradlew tasks --all",
+
+  // Configure tool-specific properties.
+  // "customizations": {},
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.gradle,target=/home/vscode/.gradle,type=bind,consistency=cached"
+  ],
+  "runArgs": ["--name=voice-devcontainer"],
+
+  "remoteEnv": {
+    "ANDROID_HOME": "/opt/sdk",
+    "ANDROID_SDK_ROOT": "/opt/sdk"
+  },
+  "postCreateCommand": "echo 'sdk.dir=/opt/sdk' > local.properties && ./gradlew --version && ./gradlew tasks --all"
+}
