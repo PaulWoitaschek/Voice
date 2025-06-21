@@ -107,6 +107,9 @@ class AppController : ComposeController() {
           },
         )
       }
+      composable<Destination.GoogleDrive> {
+        voice.gdrive.integration.ui.GoogleDriveScreen()
+      }
     }
 
     LaunchedEffect(navigator) {

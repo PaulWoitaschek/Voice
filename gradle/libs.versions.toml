@@ -114,6 +114,12 @@ ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlin
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.22"
 
+# Google Drive API
+google-api-client-android = "com.google.api-client:google-api-client-android:2.0.0"
+google-api-services-drive = "com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0"
+google-oauth-client-jetty = "com.google.oauth-client:google-oauth-client-jetty:1.34.1"
+
+
 [bundles]
 compose = [
   "compose-ui-ui",

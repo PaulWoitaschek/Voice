@@ -21,6 +21,9 @@ data class Chapter(
   val duration: Long,
   val fileLastModified: Instant,
   val markData: List<MarkData>,
+  // Not persisted in DB, used for GDrive streaming
+  @Ignore
+  val sourceUri: Uri? = null,
 ) : Comparable<Chapter> {
 
   @Ignore
