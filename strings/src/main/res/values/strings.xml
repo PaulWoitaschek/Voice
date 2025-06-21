@@ -47,6 +47,7 @@
     <string name="pref_get_support">Get support</string>
     <string name="pref_app_version">App version</string>
     <string name="pref_faq">FAQ</string>
+    <string name="pref_google_drive_title">Google Drive</string>
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>
     <string name="play_current">Play current</string>

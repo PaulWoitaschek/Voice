@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gdrive_sign_in_failed">Google Sign-In failed: %s</string>
+    <string name="gdrive_sign_in_cancelled">Google Sign-In cancelled or failed.</string>
+    <string name="gdrive_signed_in">Signed in to Google Drive!</string>
+    <string name="gdrive_not_signed_in">Not signed in. Please sign in to access Google Drive.</string>
+    <string name="gdrive_sign_in_button">Sign In with Google</string>
+    <string name="gdrive_error_loading_files">Error loading files: %s</string>
+    <string name="gdrive_no_files_found">No audio files or folders found.</string>
+</resources>
