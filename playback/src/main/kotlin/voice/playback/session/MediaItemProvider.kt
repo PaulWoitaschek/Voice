@@ -138,7 +138,7 @@ class MediaItemProvider
     mediaId = MediaId.Chapter(bookId = content.id, chapterId = chapter.id),
     browsable = false,
     isPlayable = true,
-    sourceUri = chapter.id.toUri(),
+    sourceUri = chapter.sourceUri ?: chapter.id.toUri(),
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,

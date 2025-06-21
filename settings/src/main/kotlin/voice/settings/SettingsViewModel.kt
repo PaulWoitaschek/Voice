@@ -177,4 +177,8 @@ class SettingsViewModel
       }
     }
   }
+
+  override fun openGoogleDrive() {
+    navigator.goTo(Destination.GoogleDrive)
+  }
 }

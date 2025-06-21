@@ -75,4 +75,7 @@ sealed interface Destination {
       Onboarding,
     }
   }
+
+  @Serializable
+  data object GoogleDrive : Compose
 }

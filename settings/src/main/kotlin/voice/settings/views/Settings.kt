@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -107,6 +108,21 @@ private fun Settings(
         SeekTimeRow(viewState.seekTimeInSeconds) {
           listener.onSeekAmountRowClick()
         }
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable { listener.openGoogleDrive() },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.Cloud, // Or a more specific Google Drive icon if available
+              contentDescription = stringResource(StringsR.string.pref_google_drive_title),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.pref_google_drive_title))
+          },
+        )
       }
 
       item {

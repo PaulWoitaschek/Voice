@@ -162,6 +162,7 @@ dependencies {
   implementation(projects.documentfile)
   implementation(projects.onboarding)
   implementation(projects.bookmark)
+  implementation(projects.gdrive.integration)
 
   implementation(libs.appCompat)
   implementation(libs.material)
@@ -219,4 +220,8 @@ dependencies {
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
   kaptAndroidTest(libs.dagger.compiler)
+
+  implementation(libs.google.api.client.android)
+  implementation(libs.google.api.services.drive)
+  implementation(libs.google.oauth.client.jetty)
 }
