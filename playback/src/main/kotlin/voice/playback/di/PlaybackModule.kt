@@ -70,9 +70,7 @@ object PlaybackModule {
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
-        val disableAudioOffload =
-          Build.MANUFACTURER.equals("samsung", ignoreCase = true) &&
-            Build.VERSION.SDK_INT < 35
+        val disableAudioOffload = Build.MANUFACTURER.equals("samsung", ignoreCase = true)
         if (!disableAudioOffload) {
           // samsung being samsung 🤪
           // https://github.com/PaulWoitaschek/Voice/issues/2807
