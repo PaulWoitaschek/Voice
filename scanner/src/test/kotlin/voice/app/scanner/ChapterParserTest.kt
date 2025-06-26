@@ -12,14 +12,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.data.repo.ChapterRepo
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.FileBasedDocumentFile
 import voice.documentfile.nameWithoutExtension
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class ChapterParserTest {
 
   private val testFolder = TemporaryFolder()

@@ -12,7 +12,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.common.BookId
 import voice.data.ChapterId
 import voice.data.folders.FolderType
@@ -28,7 +27,6 @@ import java.io.File
 import java.nio.file.Files
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class MediaScannerTest {
 
   @Test

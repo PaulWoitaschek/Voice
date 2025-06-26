@@ -14,12 +14,10 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.common.grid.GridMode
 import voice.datastore.VoiceDataStoreFactory
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class MigrationTests {
 
   private lateinit var sharedPreferences: SharedPreferences

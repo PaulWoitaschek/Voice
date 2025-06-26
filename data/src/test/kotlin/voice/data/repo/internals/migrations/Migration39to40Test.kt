@@ -14,12 +14,10 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.data.repo.internals.getInt
 import voice.data.repo.internals.mapRows
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class Migration39to40Test {
 
   private lateinit var db: SupportSQLiteDatabase

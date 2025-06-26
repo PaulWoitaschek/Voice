@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.common.BookId
 import voice.data.Book
 import voice.data.Chapter
@@ -42,7 +41,6 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class VoicePlayerTest {
 
   init {

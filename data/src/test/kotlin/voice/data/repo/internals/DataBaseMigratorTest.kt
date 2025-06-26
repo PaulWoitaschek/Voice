@@ -10,13 +10,11 @@ import io.kotest.matchers.shouldBe
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.data.allMigrations
 import java.util.UUID
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class DataBaseMigratorTest {
 
   @Rule
