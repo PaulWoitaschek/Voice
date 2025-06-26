@@ -14,7 +14,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.app.scanner.matroska.MatroskaMetaDataExtractor
 import voice.app.scanner.mp4.ChapterTrackProcessor
 import voice.app.scanner.mp4.Mp4BoxParser
@@ -33,7 +32,6 @@ import java.io.File
 import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 internal class MediaAnalyzerTest {
 
   @Rule
