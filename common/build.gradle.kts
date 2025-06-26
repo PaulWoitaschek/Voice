@@ -11,8 +11,8 @@ anvil {
 }
 
 android {
-  buildFeatures {
-    androidResources = true
+  androidResources {
+    enable = true
   }
 }
 
