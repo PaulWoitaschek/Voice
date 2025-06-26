@@ -155,7 +155,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 anvil = { id = "com.squareup.anvil", version = "2.5.1" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.4" }
-googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.3" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
