@@ -8,7 +8,11 @@ anvil {
   generateDaggerFactories.set(true)
 }
 
-android.buildFeatures.androidResources = true
+android {
+  androidResources {
+    enable = true
+  }
+}
 
 dependencies {
   implementation(projects.common)
