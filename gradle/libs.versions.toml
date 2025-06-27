@@ -63,7 +63,7 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx"
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
 
-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0"
 
 room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
