@@ -16,7 +16,7 @@ plugins {
   alias(libs.plugins.playPublish)
 }
 
-if (file("google-services.json").exists()) {
+if (providers.gradleProperty("voice.enableCrashlytics").get().toBooleanStrict()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }

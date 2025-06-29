@@ -127,10 +127,10 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Build Google Play AAB
-        run: ./gradlew :app:bundlePlayProprietaryRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:bundlePlayProprietaryRelease -Pvoice.warningsAsErrors=true -Pvoice.enableCrashlytics=true
 
       - name: Build Github Proprietary APK
-        run: ./gradlew :app:assembleGithubProprietaryRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:assembleGithubProprietaryRelease -Pvoice.warningsAsErrors=true -Pvoice.enableCrashlytics=true
 
       - name: Build Github Libre APK
         run: ./gradlew :app:assembleGithubLibreRelease -Pvoice.warningsAsErrors=true
