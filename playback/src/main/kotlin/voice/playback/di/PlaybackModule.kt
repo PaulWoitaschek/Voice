@@ -1,11 +1,9 @@
 package voice.playback.di
 
 import android.content.Context
-import android.os.Build
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.common.TrackSelectionParameters.AudioOffloadPreferences
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
@@ -69,22 +67,6 @@ object PlaybackModule {
         durationInconsistenciesUpdater.attachTo(player)
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
-        }
-        val disableAudioOffload = Build.MANUFACTURER.equals("samsung", ignoreCase = true)
-        if (!disableAudioOffload) {
-          // samsung being samsung 🤪
-          // https://github.com/PaulWoitaschek/Voice/issues/2807
-          player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setAudioOffloadPreferences(
-              AudioOffloadPreferences
-                .Builder()
-                .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
-                .setIsGaplessSupportRequired(true)
-                .setIsSpeedChangeSupportRequired(true)
-                .build(),
-            )
-            .build()
         }
       }
   }
