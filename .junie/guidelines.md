@@ -35,13 +35,8 @@ Each module contains its own `build.gradle.kts`, `src/main/kotlin`, and `src/tes
 ## Build & Run
 
    ```bash
-   ./gradlew :app:assemblePlayProprietaryDebug
+   ./gradlew :app:assemblePlayDebug
    ```
-
-**Build Variants**
-
-* `proprietary`: Includes Firebase analytics and crash reporting
-* `libre`: No proprietary dependencies (F-Droid compatible)
 
 ## Testing
 
