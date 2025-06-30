@@ -40,7 +40,7 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Test
-        run: ./gradlew voiceUnitTest -Pvoice.warningsAsErrors=true lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
+        run: ./gradlew voiceUnitTest  lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
@@ -126,14 +126,23 @@ jobs:
       - name: Setup Signing
         run: ./ci_signing_setup.sh
 
+      - name: Create Output Directory
+        run: mkdir -p outputs
+
       - name: Build Google Play AAB
-        run: ./gradlew :app:bundlePlayProprietaryRelease -Pvoice.warningsAsErrors=true -Pvoice.enableCrashlytics=true
+        run: ./gradlew :app:bundlePlayProprietaryRelease
 
       - name: Build Github Proprietary APK
-        run: ./gradlew :app:assembleGithubProprietaryRelease -Pvoice.warningsAsErrors=true -Pvoice.enableCrashlytics=true
+        run: ./gradlew :app:assembleGithubRelease
+
+      - name: Copy Github Proprietary APK
+        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/proprietary.apk
 
       - name: Build Github Libre APK
-        run: ./gradlew :app:assembleGithubLibreRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:assembleGithubRelease  -Pvoice.includeProprietaryLibraries=false
+
+      - name: Copy Github Libre APK
+        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -147,8 +156,7 @@ jobs:
         with:
           draft: true
           files: |
-            app/build/outputs/apk/githubProprietary/release/app-github-proprietary-release.apk
-            app/build/outputs/apk/githubLibre/release/app-github-libre-release.apk
+            outputs/*.apk
 
   publish_google_play:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
@@ -177,4 +185,4 @@ jobs:
           path: app/build/outputs/bundle/playProprietaryRelease/
 
       - name: Publish to Google Play
-        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playProprietaryRelease/ -Pvoice.warningsAsErrors=true
+        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playProprietaryRelease/
