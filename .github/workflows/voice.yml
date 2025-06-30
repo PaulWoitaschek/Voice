@@ -88,7 +88,7 @@ jobs:
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Test
-        run: ./gradlew voiceDeviceGithubLibreDebugAndroidTest
+        run: ./gradlew voiceDeviceGithubDebugAndroidTest
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

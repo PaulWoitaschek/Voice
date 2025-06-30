@@ -15,7 +15,7 @@ To run the unit tests, run the following command:
 To run the instrumentation tests, run the following command:
 
 ```sh
-./gradlew voiceDeviceGithubLibreDebugAndroidTest
+./gradlew voiceDeviceGithubDebugAndroidTest
 ```
 
 ## Ktlint
