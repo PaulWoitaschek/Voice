@@ -130,4 +130,10 @@
     <string name="migration_detail_content_root">Juurikansio</string>
     <string name="notification_sleep_timer_disable">Laita uniajastin pois päältä</string>
     <string name="notification_sleep_timer_enable">Laita uniajastin päälle</string>
+    <string name="auto_sleep_timer.subtitle">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
+    <string name="auto_sleep_timer.title">Automaattinen uniajastin</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Päättymisaika</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Aloitusaika</string>
+    <string name="pref_faq">UKK</string>
+    <string name="playback.current_chapter">Nykyinen luku</string>
 </resources>

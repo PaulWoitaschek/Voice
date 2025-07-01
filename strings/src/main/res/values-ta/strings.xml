@@ -128,4 +128,10 @@
         <item quantity="one">%d மணித்துளி</item>
         <item quantity="other">%d நிமிடங்கள்</item>
     </plurals>
+    <string name="pref_faq">கேள்விகள்</string>
+    <string name="auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
+    <string name="auto_sleep_timer.subtitle">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">தொடக்க நேரத்தை அமை</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">இறுதி நேரத்தை அமை</string>
+    <string name="playback.current_chapter">தற்போதைய பாடம்</string>
 </resources>

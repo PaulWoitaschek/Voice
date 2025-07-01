@@ -20,7 +20,7 @@
     <string name="mark_as_completed">Als \"Abgeschlossen\" markieren</string>
     <string name="mark_as_current">Als \"Aktuelles\" markieren</string>
     <string name="mark_as_not_started">Als \"Neu\" markieren</string>
-    <string name="audiobook_folders_title">Hörbuch Ordner</string>
+    <string name="audiobook_folders_title">Hörbuch-Ordner</string>
     <string name="playback_speed">Abspielgeschwindigkeit</string>
     <string name="bookmark">Lesezeichen</string>
     <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
@@ -35,11 +35,11 @@
     <string name="pref_theme_dark">Dunkles Design</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
     <string name="pref_suggest_idea">Schlag eine Idee vor</string>
-    <string name="pref_use_grid">Grid Layout</string>
+    <string name="pref_use_grid">Raster-Layout verwenden</string>
     <string name="pref_report_issue">Melde ein Problem</string>
     <string name="pref_help_translating">Hilf, Voice zu übersetzen</string>
     <string name="pref_get_support">Erhalte Unterstützung</string>
-    <string name="pref_app_version">App Version</string>
+    <string name="pref_app_version">App-Version</string>
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Entfernen</string>
     <string name="play_current">Spiel aktuelles</string>
@@ -94,7 +94,7 @@
     <string name="pause">Pause</string>
     <string name="generic_error_message">Etwas ist schief gelaufen 😢</string>
     <string name="generic_error_retry">Erneut versuchen</string>
-    <string name="cover_search_template_with_author">%1$s von %2$s Hörbuch Titelbild</string>
+    <string name="cover_search_template_with_author">%1$s von %2$s Hörbuch Cover</string>
     <string name="cover_search_template_no_author">%s Hörbuch Titelbild</string>
     <string name="storage_bug_title">Berechtigung benötigt</string>
     <string name="storage_bug_subtitle">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Ihre Hörbücher lesen zu können.</string>
@@ -135,4 +135,5 @@
     <string name="auto_sleep_timer.subtitle">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s beginnt</string>
     <string name="auto_sleep_timer.end">Endzeit</string>
     <string name="playback.current_chapter">Aktuelles Kapitel</string>
+    <string name="pref_faq">Häufige Fragen</string>
 </resources>
