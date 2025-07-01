@@ -57,6 +57,12 @@ android {
     generateLocaleConfig = true
   }
 
+  dependenciesInfo {
+    // disable the dependencies info in apks to allow reproducible builds
+    // see https://github.com/PaulWoitaschek/Voice/discussions/2862#discussioncomment-13622836
+    includeInApk = false
+  }
+
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionCode = libs.versions.versionCode.get().toInt()
