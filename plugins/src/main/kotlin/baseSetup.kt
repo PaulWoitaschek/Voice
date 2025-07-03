@@ -36,6 +36,7 @@ fun Project.baseSetup() {
       languageVersion.set(JavaLanguageVersion.of(17))
     }
   }
+  configureRobolectricSdk(this)
   extensions.configure<BaseExtension> {
     namespace = "voice." + path.removePrefix(":").replace(':', '.')
     compileOptions {
