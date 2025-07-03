@@ -6,6 +6,7 @@ versionName = "8.6.2"
 sdk-compile = "36"
 sdk-min = "28"
 sdk-target = "36"
+sdk-robolectric = "35"
 
 coroutines = "1.10.2"
 room = "2.7.2"
