@@ -134,4 +134,8 @@
     </plurals>
     <string name="sleep_timer.button.increment">Дольше</string>
     <string name="sleep_timer.button.decrement">Короче</string>
+    <string name="pref_faq">Частые Вопросы (ЧаВо)</string>
+    <string name="auto_sleep_timer.title">Автоматический таймер сна</string>
+    <string name="auto_sleep_timer.subtitle">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Задать время запуска</string>
 </resources>
