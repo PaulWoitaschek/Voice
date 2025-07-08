@@ -131,5 +131,7 @@
     <string name="pref_faq">ЧПП</string>
     <string name="auto_sleep_timer.title">Автоматски тајмер за спиење</string>
     <string name="auto_sleep_timer.subtitle">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
-    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Внеси време на стартување</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Внеси време за старт</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Внеси време за крај</string>
+    <string name="playback.current_chapter">Тековно поглавје</string>
 </resources>
