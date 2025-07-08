@@ -128,4 +128,8 @@
     <string name="more">Повеќе</string>
     <string name="action_sleep">Тајмер за спиење</string>
     <string name="migration_detail_content_position_current_file_position">Позиција во датотеката</string>
+    <string name="pref_faq">ЧПП</string>
+    <string name="auto_sleep_timer.title">Автоматски тајмер за спиење</string>
+    <string name="auto_sleep_timer.subtitle">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Внеси време на стартување</string>
 </resources>
