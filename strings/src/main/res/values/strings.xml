@@ -125,6 +125,9 @@
     <string name="sleep_timer.title">Sweet dreams! 🌙</string>
     <string name="sleep_timer.button.increment">Longer</string>
     <string name="sleep_timer.button.decrement">Shorter</string>
+    <string name="sleep_timer_custom_input">Enter custom time</string>
+    <string name="sleep_timer_custom_dialog_title">Enter custom time</string>
+    <string name="sleep_timer_custom_dialog_label">Minutes</string>
     <string name="auto_sleep_timer.title">Automatic Sleep Timer</string>
     <string name="auto_sleep_timer.subtitle">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Set start time</string>
