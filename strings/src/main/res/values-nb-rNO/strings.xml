@@ -130,4 +130,7 @@
     <string name="onboarding_welcome_subtitle">Din personlige lydbokspiller. La oss gjøre deg klar.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt opplegg</string>
     <string name="review.request.content">Din tilbakemelding er viktig for oss! Hvis du har tid, kan du rangere oss og dele din opplevelse. Det hjelper oss med å gjøre forbedringer og tilby en bedre lytteopplevelse.</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Sett starttid</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Sett sluttid</string>
+    <string name="playback.current_chapter">Gjeldende kapittel</string>
 </resources>

@@ -42,7 +42,7 @@
     <string name="pref_get_support">Поддержка</string>
     <string name="pref_app_version">Версия приложения</string>
     <string name="popup_edit">Редактировать</string>
-    <string name="remove">Удалить</string>
+    <string name="remove">Убрать</string>
     <string name="play_current">Воспроизвести текущую</string>
     <string name="book_header_current">Слушаю</string>
     <string name="book_header_not_started">Непрослушанные</string>
@@ -134,4 +134,10 @@
     </plurals>
     <string name="sleep_timer.button.increment">Дольше</string>
     <string name="sleep_timer.button.decrement">Короче</string>
+    <string name="pref_faq">Частые Вопросы (ЧаВо)</string>
+    <string name="auto_sleep_timer.title">Автоматический таймер сна</string>
+    <string name="auto_sleep_timer.subtitle">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Время начала</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Время конца</string>
+    <string name="playback.current_chapter">Текущая глава</string>
 </resources>
