@@ -15,7 +15,7 @@ dagger = "2.57"
 kotlin = "2.1.21"
 media3 = "1.7.1"
 agp = "8.11.1"
-ktlint-core = "1.6.0"
+ktlint-core = "1.7.0"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
 
