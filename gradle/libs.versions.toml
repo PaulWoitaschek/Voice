@@ -153,7 +153,7 @@ retrofit = [
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-anvil = { id = "com.squareup.anvil", version = "2.6.0" }
+anvil = { id = "com.squareup.anvil", version = "2.6.1" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.4" }
 googleServices = { id = "com.google.gms.google-services", version = "4.4.3" }
