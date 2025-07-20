@@ -1,8 +1,8 @@
 package voice.app
 
 import android.app.Application
-import dagger.BindsInstance
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import voice.app.injection.AppComponent
 import voice.common.AppScope
 import javax.inject.Singleton
@@ -18,6 +18,6 @@ interface TestComponent : AppComponent {
 
   @DependencyGraph.Factory
   interface Factory {
-    fun create(@BindsInstance application: Application): TestComponent
+    fun create(@Provides application: Application): TestComponent
   }
 }

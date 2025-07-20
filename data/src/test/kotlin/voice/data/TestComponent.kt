@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.room.migration.Migration
 import androidx.test.core.app.ApplicationProvider
-import dagger.BindsInstance
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.createGraphFactory
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
@@ -23,10 +23,10 @@ interface TestComponent {
   interface Factory {
 
     fun create(
-      @BindsInstance
+      @Provides
       @DarkThemeStore
       darkThemeStore: DataStore<Boolean>,
-      @BindsInstance
+      @Provides
       context: Context,
     ): TestComponent
   }
