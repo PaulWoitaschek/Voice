@@ -2,7 +2,8 @@ package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay

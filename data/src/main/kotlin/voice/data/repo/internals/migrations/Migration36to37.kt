@@ -4,7 +4,9 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
@@ -29,9 +31,9 @@ private const val CREATE_TABLE = """
       )
   """
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
 class Migration36to37
 @Inject constructor() : IncrementalMigration(36) {

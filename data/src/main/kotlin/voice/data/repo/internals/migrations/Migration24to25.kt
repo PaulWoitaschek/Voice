@@ -6,7 +6,8 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -18,9 +19,9 @@ import java.io.IOException
 import java.util.InvalidPropertiesFormatException
 import javax.inject.Inject
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
 class Migration24to25

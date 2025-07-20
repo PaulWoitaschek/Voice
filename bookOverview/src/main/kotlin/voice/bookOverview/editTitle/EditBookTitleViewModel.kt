@@ -2,7 +2,9 @@ package voice.bookOverview.editTitle
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetItem
@@ -13,9 +15,9 @@ import voice.data.repo.BookRepository
 import javax.inject.Inject
 
 @BookOverviewScope
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = BookOverviewScope::class,
-  boundType = BottomSheetItemViewModel::class,
+  binding = binding<BottomSheetItemViewModel>(),
 )
 class EditBookTitleViewModel
 @Inject

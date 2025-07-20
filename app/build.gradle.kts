@@ -8,9 +8,8 @@ plugins {
   id("voice.app")
   id("voice.compose")
   id("kotlin-parcelize")
-  id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
@@ -42,10 +41,10 @@ play {
   }
 }
 
-kapt {
-  arguments {
-    arg("dagger.fastInit", "enabled")
-    arg("dagger.fullBindingGraphValidation", "ERROR")
+metro {
+  interop {
+    includeDagger()
+    includeAnvil()
   }
 }
 
@@ -200,7 +199,6 @@ dependencies {
   debugImplementation(projects.logging.debug)
 
   implementation(libs.dagger.core)
-  kapt(libs.dagger.compiler)
 
   implementation(libs.androidxCore)
 
@@ -232,5 +230,4 @@ dependencies {
   androidTestImplementation(libs.androidX.test.services)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
-  kaptAndroidTest(libs.dagger.compiler)
 }

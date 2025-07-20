@@ -1,6 +1,8 @@
 package voice.bookOverview.editBookCategory
 
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
@@ -12,9 +14,9 @@ import java.time.Instant
 import javax.inject.Inject
 
 @BookOverviewScope
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = BookOverviewScope::class,
-  boundType = BottomSheetItemViewModel::class,
+  binding = binding<BottomSheetItemViewModel>(),
 )
 class EditBookCategoryViewModel
 @Inject

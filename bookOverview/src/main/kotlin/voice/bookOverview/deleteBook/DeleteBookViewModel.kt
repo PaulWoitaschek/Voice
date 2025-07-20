@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.app.scanner.MediaScanTrigger
@@ -16,9 +17,9 @@ import voice.logging.core.Logger
 import javax.inject.Inject
 
 @BookOverviewScope
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = BookOverviewScope::class,
-  boundType = BottomSheetItemViewModel::class,
+  binding = binding<BottomSheetItemViewModel>(),
 )
 class DeleteBookViewModel
 @Inject

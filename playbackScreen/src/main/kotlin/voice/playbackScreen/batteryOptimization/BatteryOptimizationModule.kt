@@ -1,7 +1,7 @@
 package voice.playbackScreen.batteryOptimization
 
 import androidx.datastore.core.DataStore
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import dagger.Module
 import dagger.Provides
 import voice.common.AppScope

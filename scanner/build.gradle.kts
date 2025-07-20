@@ -1,12 +1,14 @@
 plugins {
   id("voice.library")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
 }
 
-anvil {
-  generateDaggerFactories.set(true)
-  generateDaggerFactoriesOnly.set(true)
+metro {
+  interop {
+    includeDagger()
+    includeAnvil()
+  }
 }
 
 dependencies {

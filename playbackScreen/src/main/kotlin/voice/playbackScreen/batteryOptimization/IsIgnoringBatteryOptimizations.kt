@@ -3,7 +3,8 @@ package voice.playbackScreen.batteryOptimization
 import android.app.Application
 import android.os.PowerManager
 import androidx.core.content.getSystemService
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import javax.inject.Inject
 

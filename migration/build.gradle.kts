@@ -1,11 +1,14 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
 }
 
-anvil {
-  generateDaggerFactories.set(true)
+metro {
+  interop {
+    includeDagger()
+    includeAnvil()
+  }
 }
 
 dependencies {

@@ -7,7 +7,6 @@ import android.provider.MediaStore
 import dagger.Reusable
 import javax.inject.Inject
 
-@Reusable
 class BookSearchParser @Inject constructor() {
 
   fun parse(

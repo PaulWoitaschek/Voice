@@ -1,14 +1,16 @@
 plugins {
   id("voice.library")
   id("kotlin-parcelize")
-  id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.ksp)
 }
 
-anvil {
-  generateDaggerFactories.set(true)
+metro {
+  interop {
+    includeDagger()
+    includeAnvil()
+  }
 }
 
 ksp {
@@ -41,7 +43,6 @@ dependencies {
   ksp(libs.room.compiler)
 
   implementation(libs.dagger.core)
-  kaptTest(libs.dagger.compiler)
   implementation(libs.datastore)
   implementation(libs.documentFile)
 

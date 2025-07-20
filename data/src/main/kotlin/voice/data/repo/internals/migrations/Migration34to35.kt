@@ -2,14 +2,17 @@ package voice.data.repo.internals.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import javax.inject.Inject
+
 private const val TABLE_NAME = "tableBooks"
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
 class Migration34to35
 @Inject constructor() : IncrementalMigration(34) {

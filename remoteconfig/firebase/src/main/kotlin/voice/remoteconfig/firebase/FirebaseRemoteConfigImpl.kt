@@ -3,7 +3,8 @@ package voice.remoteconfig.firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
 import javax.inject.Inject

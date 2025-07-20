@@ -5,7 +5,9 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
@@ -71,9 +73,9 @@ private const val CREATE_TABLE_BOOKMARKS = """
     )
   """
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
 class Migration29to30

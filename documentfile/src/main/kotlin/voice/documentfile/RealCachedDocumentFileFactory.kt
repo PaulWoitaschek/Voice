@@ -2,7 +2,8 @@ package voice.documentfile
 
 import android.content.Context
 import android.net.Uri
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import javax.inject.Inject
 

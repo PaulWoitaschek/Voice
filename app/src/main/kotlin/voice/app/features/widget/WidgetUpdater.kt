@@ -28,9 +28,10 @@ import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.playback.receiver.WidgetButtonReceiver
 import javax.inject.Inject
+import javax.inject.Singleton
 import voice.common.R as CommonR
 
-@Reusable
+@Singleton
 class WidgetUpdater
 @Inject constructor(
   private val context: Context,

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.datastore.core.DataStore
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.builtins.SetSerializer

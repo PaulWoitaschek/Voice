@@ -1,6 +1,6 @@
 package voice.cover.api
 
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json

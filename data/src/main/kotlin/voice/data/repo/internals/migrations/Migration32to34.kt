@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
 import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
@@ -34,7 +34,7 @@ private const val CREATE_TABLE_BOOKMARKS = """
     )
   """
 
-@ContributesMultibinding(AppScope::class)
+@ContributesBinding(AppScope::class)
 class Migration32to34
 @Inject constructor() : Migration(32, 34) {
 

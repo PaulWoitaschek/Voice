@@ -1,6 +1,7 @@
 package voice.remoteconfig.noop
 
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
 import javax.inject.Inject

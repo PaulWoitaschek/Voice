@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStore
 import coil.Coil
 import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
+import dev.zacsweers.metro.createGraphFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -67,7 +68,7 @@ open class App : Application() {
   }
 
   open fun createAppComponent(): AppComponent {
-    return ProductionAppComponent.factory().create(this)
+    return createGraphFactory<ProductionAppComponent.Factory>().create(this)
   }
 }
 

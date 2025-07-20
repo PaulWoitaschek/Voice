@@ -1,7 +1,7 @@
 package voice.bookOverview
 
 import androidx.datastore.core.DataStore
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Qualifier
 annotation class BookMigrationExplanationQualifier

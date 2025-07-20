@@ -1,6 +1,6 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.kotlin.serialization)
 }
 
@@ -10,8 +10,11 @@ android {
   }
 }
 
-anvil {
-  generateDaggerFactories.set(true)
+metro {
+  interop {
+    includeDagger()
+    includeAnvil()
+  }
 }
 
 dependencies {

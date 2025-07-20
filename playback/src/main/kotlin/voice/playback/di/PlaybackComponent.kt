@@ -1,23 +1,27 @@
 package voice.playback.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeSubcomponent
+import android.content.Context
 import dagger.BindsInstance
-import dagger.Subcomponent
+import dev.zacsweers.metro.ContributesGraphExtension
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import voice.common.AppScope
 import voice.playback.session.PlaybackService
 
-@PlaybackScope
-@MergeSubcomponent(
+@ContributesGraphExtension(
   scope = PlaybackScope::class,
 )
+@PlaybackScope
 interface PlaybackComponent {
 
   fun inject(target: PlaybackService)
 
-  @Subcomponent.Factory
+  @ContributesGraphExtension.Factory(AppScope::class)
   interface Factory {
-    fun create(@BindsInstance playbackService: PlaybackService): PlaybackComponent
+    fun create(
+      @Provides playbackService: PlaybackService,
+    ): PlaybackComponent
   }
 
   @ContributesTo(AppScope::class)

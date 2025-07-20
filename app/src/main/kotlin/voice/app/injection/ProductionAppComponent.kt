@@ -1,24 +1,23 @@
 package voice.app.injection
 
 import android.app.Application
-import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.createGraphFactory
 import voice.common.AppScope
 import javax.inject.Singleton
 
 @Singleton
-@MergeComponent(
+@DependencyGraph(
   scope = AppScope::class,
+  isExtendable = true,
 )
 interface ProductionAppComponent : AppComponent {
 
-  @Component.Factory
+  @DependencyGraph.Factory
   interface Factory {
-    fun create(@BindsInstance application: Application): ProductionAppComponent
-  }
-
-  companion object {
-    fun factory(): Factory = DaggerProductionAppComponent.factory()
+    fun create(@Provides application: Application): ProductionAppComponent
   }
 }

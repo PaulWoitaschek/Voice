@@ -17,7 +17,7 @@ import com.google.android.play.core.ktx.launchReview
 import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -110,6 +110,6 @@ private fun Context.findActivity(): Activity? {
 
 @ContributesTo(AppScope::class)
 interface ReviewComponent {
-  var shouldShowReviewDialog: ShouldShowReviewDialog
+  val shouldShowReviewDialog: ShouldShowReviewDialog
   val reviewManager: ReviewManager
 }

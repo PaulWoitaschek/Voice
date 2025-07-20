@@ -3,9 +3,10 @@ package voice.app.injection
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.ContributesTo
 import dagger.Module
 import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 /**
  * Module providing Android SDK Related instances.
  */
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object AndroidModule {
 

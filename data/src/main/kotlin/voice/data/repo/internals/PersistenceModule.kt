@@ -3,9 +3,9 @@ package voice.data.repo.internals
 import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
 import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import voice.common.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
@@ -14,7 +14,7 @@ import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.dao.RecentBookSearchDao
 import javax.inject.Singleton
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object PersistenceModule {
 

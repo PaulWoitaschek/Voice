@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
 import javax.inject.Inject
@@ -17,9 +19,9 @@ private const val TABLE_CHAPTERS = "tableChapters"
 private const val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
 private const val CHAPTER_PATH = "chapterPath"
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
 class Migration31to32
