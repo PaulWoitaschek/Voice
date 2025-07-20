@@ -19,7 +19,7 @@ interface TestComponent {
 
   val migrations: Set<@JvmSuppressWildcards Migration>
 
-  @dagger.Component.Factory
+  @DependencyGraph.Factory
   interface Factory {
 
     fun create(
