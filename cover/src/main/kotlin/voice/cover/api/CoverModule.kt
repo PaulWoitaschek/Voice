@@ -1,8 +1,8 @@
 package voice.cover.api
 
-import dev.zacsweers.metro.ContributesTo
-import dagger.Module
 import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -15,7 +15,7 @@ import voice.remoteconfig.core.RemoteConfig
 import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 object CoverModule {
 
   @Provides

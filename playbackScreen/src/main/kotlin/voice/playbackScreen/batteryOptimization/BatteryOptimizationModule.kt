@@ -1,14 +1,14 @@
 package voice.playbackScreen.batteryOptimization
 
 import androidx.datastore.core.DataStore
-import dev.zacsweers.metro.ContributesTo
-import dagger.Module
 import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import voice.common.AppScope
 import voice.datastore.VoiceDataStoreFactory
 import javax.inject.Singleton
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object BatteryOptimizationModule {
 

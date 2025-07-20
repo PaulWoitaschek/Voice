@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.datastore.core.DataStore
-import dev.zacsweers.metro.ContributesTo
-import dagger.Module
 import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
@@ -35,7 +35,7 @@ import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object PrefsModule {
 

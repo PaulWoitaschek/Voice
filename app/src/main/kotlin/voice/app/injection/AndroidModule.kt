@@ -3,10 +3,9 @@ package voice.app.injection
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import dev.zacsweers.metro.ContributesTo
-import dagger.Module
-import dagger.Provides
 import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
