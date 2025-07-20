@@ -2,7 +2,6 @@ package voice.app
 
 import android.app.Application
 import dagger.BindsInstance
-import dagger.Component
 import dev.zacsweers.metro.DependencyGraph
 import voice.app.injection.AppComponent
 import voice.common.AppScope
@@ -17,7 +16,7 @@ interface TestComponent : AppComponent {
 
   fun inject(target: SleepTimerIntegrationTest)
 
-  @Component.Factory
+  @DependencyGraph.Factory
   interface Factory {
     fun create(@BindsInstance application: Application): TestComponent
   }
