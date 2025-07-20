@@ -1,7 +1,6 @@
 package voice.bookOverview.internetCover
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.binding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope

@@ -13,10 +13,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import dev.zacsweers.metro.ContributesTo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.flow.Flow
 import voice.common.AppScope
 import voice.common.BookId

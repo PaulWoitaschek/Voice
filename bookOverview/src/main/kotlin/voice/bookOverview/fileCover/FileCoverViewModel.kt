@@ -1,7 +1,6 @@
 package voice.bookOverview.fileCover
 
 import android.net.Uri
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
 import voice.bookOverview.bottomSheet.BottomSheetItem

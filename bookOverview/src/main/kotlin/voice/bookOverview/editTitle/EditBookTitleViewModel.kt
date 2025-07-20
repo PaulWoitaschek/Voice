@@ -2,7 +2,6 @@ package voice.bookOverview.editTitle
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
