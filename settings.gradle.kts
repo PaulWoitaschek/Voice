@@ -43,7 +43,6 @@ develocity {
 }
 
 include(":app")
-include(":appgraph")
 include(":strings")
 include(":common")
 include(":bookmark")
