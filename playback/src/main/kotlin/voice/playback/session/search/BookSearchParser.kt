@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import dagger.Reusable
 import javax.inject.Inject
 
 class BookSearchParser @Inject constructor() {
