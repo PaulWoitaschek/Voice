@@ -1,15 +1,18 @@
 package voice.data
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.room.migration.Migration
-import com.squareup.anvil.annotations.MergeComponent
+import androidx.test.core.app.ApplicationProvider
 import dagger.BindsInstance
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.createGraphFactory
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
 import javax.inject.Singleton
 
 @Singleton
-@MergeComponent(
+@DependencyGraph(
   scope = AppScope::class,
 )
 interface TestComponent {
@@ -23,12 +26,17 @@ interface TestComponent {
       @BindsInstance
       @DarkThemeStore
       darkThemeStore: DataStore<Boolean>,
+      @BindsInstance
+      context: Context,
     ): TestComponent
   }
 }
 
 internal fun allMigrations(): Array<Migration> {
-  return DaggerTestComponent.factory()
-    .create(MemoryDataStore(false))
+  return createGraphFactory<TestComponent.Factory>()
+    .create(
+      darkThemeStore = MemoryDataStore(false),
+      context = ApplicationProvider.getApplicationContext(),
+    )
     .migrations.toTypedArray()
 }
