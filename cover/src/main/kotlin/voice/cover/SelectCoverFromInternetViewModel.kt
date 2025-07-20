@@ -13,10 +13,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import voice.common.AppScope
 import voice.common.BookId
@@ -28,8 +28,8 @@ import voice.cover.api.SearchResponse
 import voice.data.repo.BookRepository
 import voice.strings.R as StringsR
 
-class SelectCoverFromInternetViewModel
-@AssistedInject constructor(
+@Inject
+class SelectCoverFromInternetViewModel(
   private val api: CoverApi,
   private val bookRepository: BookRepository,
   private val navigator: Navigator,
