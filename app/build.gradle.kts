@@ -44,7 +44,6 @@ play {
 metro {
   interop {
     includeDagger()
-    includeAnvil()
   }
 }
 

@@ -9,7 +9,6 @@ plugins {
 metro {
   interop {
     includeDagger()
-    includeAnvil()
   }
 }
 

@@ -13,7 +13,6 @@ android {
 metro {
   interop {
     includeDagger()
-    includeAnvil()
   }
 }
 
