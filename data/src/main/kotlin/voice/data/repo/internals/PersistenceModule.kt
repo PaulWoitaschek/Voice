@@ -3,9 +3,9 @@ package voice.data.repo.internals
 import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
-import dagger.Provides
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import voice.common.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao

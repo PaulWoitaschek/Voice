@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.datastore.core.DataStore
-import dagger.Provides
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
