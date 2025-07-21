@@ -14,7 +14,7 @@ materialDialog = "3.3.0"
 kotlin = "2.2.0"
 media3 = "1.7.1"
 agp = "8.11.1"
-ktlint-core = "1.6.0"
+ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
 
@@ -108,7 +108,7 @@ compose-typedNavigation = "com.kiwi.navigation-compose.typed:core:0.10.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.22"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.25"
 
 [bundles]
 compose = [
