@@ -7,17 +7,17 @@ import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.navigation.Destination
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 
 @ContributesTo(AppScope::class)
-interface AddContentComponent {
+interface AddContentGraph {
   val viewModelFactory: AddContentViewModel.Factory
 }
 
 @Composable
 fun AddContent(mode: Destination.AddContent.Mode) {
   val viewModel = rememberScoped(mode.name) {
-    rootComponentAs<AddContentComponent>().viewModelFactory.create(mode)
+    rootGraphAs<AddContentGraph>().viewModelFactory.create(mode)
   }
   SelectFolder(
     onBack = {

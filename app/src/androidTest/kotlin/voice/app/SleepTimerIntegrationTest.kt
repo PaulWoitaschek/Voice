@@ -14,7 +14,7 @@ import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.FadeOutStore
 import voice.common.pref.SleepTimerPreferenceStore
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.BookContent
 import voice.data.Chapter
@@ -58,7 +58,7 @@ class SleepTimerIntegrationTest {
 
   @Test
   fun test() = runTest {
-    rootComponentAs<TestComponent>().inject(this@SleepTimerIntegrationTest)
+    rootGraphAs<TestGraph>().inject(this@SleepTimerIntegrationTest)
 
     prepareTestBook()
 

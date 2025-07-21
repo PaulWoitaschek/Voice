@@ -11,7 +11,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.common.AppScope
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
 import voice.playback.PlayerController
 import kotlin.time.Duration.Companion.seconds
@@ -31,7 +31,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     Logger.d("onReceive ${intent?.action}. Parsed to $action")
     action ?: return
 
-    rootComponentAs<Component>().inject(this)
+    rootGraphAs<Graph>().inject(this)
 
     val result = goAsync()
     scope.launch {
@@ -58,7 +58,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   }
 
   @ContributesTo(AppScope::class)
-  interface Component {
+  interface Graph {
     fun inject(target: WidgetButtonReceiver)
   }
 

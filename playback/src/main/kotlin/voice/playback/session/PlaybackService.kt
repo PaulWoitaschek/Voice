@@ -5,9 +5,9 @@ import androidx.media3.session.MediaSession
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
-import voice.playback.di.PlaybackComponent
+import voice.playback.di.PlaybackGraph
 import voice.playback.player.VoicePlayer
 
 class PlaybackService : MediaLibraryService() {
@@ -26,8 +26,8 @@ class PlaybackService : MediaLibraryService() {
 
   override fun onCreate() {
     super.onCreate()
-    rootComponentAs<PlaybackComponent.Provider>()
-      .playbackComponentFactory
+    rootGraphAs<PlaybackGraph.Provider>()
+      .playbackGraphFactory
       .create(this)
       .inject(this)
     setMediaNotificationProvider(voiceNotificationProvider)

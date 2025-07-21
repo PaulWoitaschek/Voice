@@ -2,12 +2,12 @@ package voice.app
 
 import dev.zacsweers.metro.createGraphFactory
 import voice.app.injection.App
-import voice.app.injection.AppComponent
+import voice.app.injection.AppGraph
 
 class TestApp : App() {
 
-  override fun createAppComponent(): AppComponent {
-    return createGraphFactory<TestComponent.Factory>()
+  override fun createGraph(): AppGraph {
+    return createGraphFactory<TestGraph.Factory>()
       .create(this)
   }
 }

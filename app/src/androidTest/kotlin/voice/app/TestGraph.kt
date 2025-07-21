@@ -1,9 +1,10 @@
-package voice.app.injection
+package voice.app
 
 import android.app.Application
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import voice.app.injection.AppGraph
 import voice.common.AppScope
 
 @SingleIn(AppScope::class)
@@ -11,10 +12,12 @@ import voice.common.AppScope
   scope = AppScope::class,
   isExtendable = true,
 )
-interface ProductionAppComponent : AppComponent {
+interface TestGraph : AppGraph {
+
+  fun inject(target: SleepTimerIntegrationTest)
 
   @DependencyGraph.Factory
   interface Factory {
-    fun create(@Provides application: Application): ProductionAppComponent
+    fun create(@Provides application: Application): TestGraph
   }
 }

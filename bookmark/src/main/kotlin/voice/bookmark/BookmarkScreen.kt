@@ -49,20 +49,20 @@ import voice.bookmark.dialogs.EditBookmarkDialog
 import voice.common.AppScope
 import voice.common.BookId
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.data.Bookmark
 import java.util.UUID
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface Component {
+interface Graph {
   val bookmarkViewModelFactory: BookmarkViewModel.Factory
 }
 
 @Composable
 fun BookmarkScreen(bookId: BookId) {
   val viewModel = rememberScoped(bookId.value) {
-    rootComponentAs<Component>().bookmarkViewModelFactory.create(bookId)
+    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId)
   }
   val viewState = viewModel.viewState()
   BookmarkScreen(

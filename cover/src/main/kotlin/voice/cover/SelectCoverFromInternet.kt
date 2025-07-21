@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.cover.api.SearchResponse
 
 @Composable
@@ -20,7 +20,7 @@ fun SelectCoverFromInternet(
   onCloseClick: () -> Unit,
 ) {
   val viewModel = rememberScoped(bookId.value) {
-    rootComponentAs<SelectCoverFromInternetViewModel.Factory.Provider>()
+    rootGraphAs<SelectCoverFromInternetViewModel.Factory.Provider>()
       .factory
       .create(bookId)
   }

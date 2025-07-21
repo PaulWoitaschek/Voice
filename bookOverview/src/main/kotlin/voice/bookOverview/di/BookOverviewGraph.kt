@@ -15,7 +15,7 @@ annotation class BookOverviewScope
 
 @ContributesGraphExtension(scope = BookOverviewScope::class)
 @BookOverviewScope
-interface BookOverviewComponent {
+interface BookOverviewGraph {
   val bookOverviewViewModel: BookOverviewViewModel
   val editBookTitleViewModel: EditBookTitleViewModel
   val bottomSheetViewModel: BottomSheetViewModel
@@ -24,11 +24,11 @@ interface BookOverviewComponent {
 
   @ContributesGraphExtension.Factory(AppScope::class)
   interface Factory {
-    fun create(): BookOverviewComponent
+    fun create(): BookOverviewGraph
 
     @ContributesTo(AppScope::class)
     interface Provider {
-      val bookOverviewComponentProviderFactory: Factory
+      val bookOverviewGraphProviderFactory: Factory
     }
   }
 }

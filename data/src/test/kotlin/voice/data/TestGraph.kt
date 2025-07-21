@@ -6,6 +6,7 @@ import androidx.room.migration.Migration
 import androidx.test.core.app.ApplicationProvider
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
@@ -14,7 +15,7 @@ import voice.common.pref.DarkThemeStore
 @DependencyGraph(
   scope = AppScope::class,
 )
-interface TestComponent {
+interface TestGraph {
 
   val migrations: Set<@JvmSuppressWildcards Migration>
 
@@ -27,12 +28,12 @@ interface TestComponent {
       darkThemeStore: DataStore<Boolean>,
       @Provides
       context: Context,
-    ): TestComponent
+    ): TestGraph
   }
 }
 
 internal fun allMigrations(): Array<Migration> {
-  return createGraphFactory<TestComponent.Factory>()
+  return createGraphFactory<TestGraph.Factory>()
     .create(
       darkThemeStore = MemoryDataStore(false),
       context = ApplicationProvider.getApplicationContext(),

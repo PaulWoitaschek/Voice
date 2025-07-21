@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kiwi.navigationcompose.typed.composable
 import com.kiwi.navigationcompose.typed.createRoutePattern
 import dev.zacsweers.metro.Inject
-import voice.app.injection.appComponent
+import voice.app.injection.appGraph
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
 import voice.common.navigation.Destination
@@ -29,7 +29,7 @@ import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 class AppController : ComposeController() {
 
   init {
-    appComponent.inject(this)
+    appGraph.inject(this)
   }
 
   @Inject

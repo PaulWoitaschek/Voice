@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.features.bookOverview.EditCoverDialogController
-import voice.app.injection.appComponent
+import voice.app.injection.appGraph
 import voice.app.misc.conductor.asVerticalChangeHandlerTransaction
 import voice.bookmark.BookmarkController
 import voice.common.BookId
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    appComponent.inject(this)
+    appGraph.inject(this)
     super.onCreate(savedInstanceState)
 
     enableEdgeToEdge()

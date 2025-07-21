@@ -17,7 +17,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import voice.app.databinding.DialogCoverEditBinding
-import voice.app.injection.appComponent
+import voice.app.injection.appGraph
 import voice.app.misc.conductor.context
 import voice.app.scanner.CoverSaver
 import voice.app.uitools.CropTransformation
@@ -45,7 +45,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    appComponent.inject(this)
+    appGraph.inject(this)
 
     val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
     val arguments = args.parcelable<Arguments>(NI_ARGS)!!

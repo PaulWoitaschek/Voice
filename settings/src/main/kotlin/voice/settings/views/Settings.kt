@@ -27,7 +27,7 @@ import dev.zacsweers.metro.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
@@ -200,13 +200,13 @@ private fun Settings(
 }
 
 @ContributesTo(AppScope::class)
-interface SettingsComponent {
+interface SettingsGraph {
   val settingsViewModel: SettingsViewModel
 }
 
 @Composable
 fun Settings() {
-  val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
+  val viewModel = rememberScoped { rootGraphAs<SettingsGraph>().settingsViewModel }
   val viewState = viewModel.viewState()
   Settings(viewState, viewModel)
 }

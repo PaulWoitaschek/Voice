@@ -6,7 +6,7 @@ import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
 
 @ContributesTo(AppScope::class)
-interface SharedComponent {
+interface SharedGraph {
 
   @get:DarkThemeStore
   val useDarkThemeStore: DataStore<Boolean>

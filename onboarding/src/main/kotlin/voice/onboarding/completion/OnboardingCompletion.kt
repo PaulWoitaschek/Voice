@@ -28,19 +28,19 @@ import dev.zacsweers.metro.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.onboarding.R
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface OnboardingCompletionComponent {
+interface OnboardingCompletionGraph {
   val viewModel: OnboardingCompletionViewModel
 }
 
 @Composable
 fun OnboardingCompletion(modifier: Modifier = Modifier) {
   val viewModel = rememberScoped {
-    rootComponentAs<OnboardingCompletionComponent>().viewModel
+    rootGraphAs<OnboardingCompletionGraph>().viewModel
   }
   OnboardingCompletion(
     modifier = modifier,

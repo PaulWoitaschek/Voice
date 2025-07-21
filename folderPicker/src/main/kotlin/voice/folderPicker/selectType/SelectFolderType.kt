@@ -36,11 +36,11 @@ import dev.zacsweers.metro.ContributesTo
 import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.navigation.Destination
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface SelectFolderTypeComponent {
+interface SelectFolderTypeGraph {
   val selectFolderTypeViewModelFactory: SelectFolderTypeViewModel.Factory
 }
 
@@ -51,7 +51,7 @@ fun SelectFolderType(
 ) {
   val context = LocalContext.current
   val viewModel = rememberScoped {
-    rootComponentAs<SelectFolderTypeComponent>().selectFolderTypeViewModelFactory
+    rootGraphAs<SelectFolderTypeGraph>().selectFolderTypeViewModelFactory
       .create(
         uri = uri,
         mode = mode,

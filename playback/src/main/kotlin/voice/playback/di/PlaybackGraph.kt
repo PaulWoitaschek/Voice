@@ -10,17 +10,17 @@ import voice.playback.session.PlaybackService
   scope = PlaybackScope::class,
 )
 @PlaybackScope
-interface PlaybackComponent {
+interface PlaybackGraph {
 
   fun inject(target: PlaybackService)
 
   @ContributesGraphExtension.Factory(AppScope::class)
   interface Factory {
-    fun create(@Provides playbackService: PlaybackService): PlaybackComponent
+    fun create(@Provides playbackService: PlaybackService): PlaybackGraph
   }
 
   @ContributesTo(AppScope::class)
   interface Provider {
-    val playbackComponentFactory: Factory
+    val playbackGraphFactory: Factory
   }
 }
