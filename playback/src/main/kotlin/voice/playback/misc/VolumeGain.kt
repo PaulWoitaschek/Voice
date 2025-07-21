@@ -1,13 +1,14 @@
 package voice.playback.misc
 
 import android.media.audiofx.LoudnessEnhancer
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import voice.common.AppScope
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.properties.Delegates
 
-class VolumeGainSetter
-@Inject constructor() {
+@Inject
+class VolumeGainSetter {
 
   private var currentConfiguration: CurrentConfiguration? = null
 
@@ -95,9 +96,9 @@ class VolumeGainSetter
   )
 }
 
-@Singleton
-class VolumeGain
-@Inject constructor(private val volumeGainSetter: VolumeGainSetter) {
+@SingleIn(AppScope::class)
+@Inject
+class VolumeGain(private val volumeGainSetter: VolumeGainSetter) {
 
   var gain: Decibel by Delegates.observable(Decibel(0F)) { _, _, _ -> updateLoudnessEnhancer() }
   var audioSessionId: Int? by Delegates.observable(null) { _, _, _ -> updateLoudnessEnhancer() }

@@ -2,11 +2,11 @@ package voice.playbackScreen.batteryOptimization
 
 import android.os.Build
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
-class BatteryOptimization
-@Inject constructor(
+@Inject
+class BatteryOptimization(
   private val isIgnoringBatteryOptimizations: IsIgnoringBatteryOptimizations,
   private val amountOfBatteryOptimizationsRequested: DataStore<Int>,
 ) {

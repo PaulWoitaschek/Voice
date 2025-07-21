@@ -8,17 +8,17 @@ import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.metadata.flac.PictureFrame
 import androidx.media3.extractor.metadata.id3.ApicFrame
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import voice.app.scanner.matroska.MatroskaCoverExtractor
 import voice.logging.core.Logger
 import java.io.File
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
-class CoverExtractor
-@Inject constructor(
+@Inject
+class CoverExtractor(
   private val context: Context,
   private val matroskaCoverExtractor: MatroskaCoverExtractor,
 ) {

@@ -3,6 +3,7 @@ package voice.bookOverview.editTitle
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -11,16 +12,14 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
 import voice.data.repo.BookRepository
-import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesIntoSet(
   scope = BookOverviewScope::class,
   binding = binding<BottomSheetItemViewModel>(),
 )
-class EditBookTitleViewModel
 @Inject
-constructor(private val repo: BookRepository) : BottomSheetItemViewModel {
+class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 

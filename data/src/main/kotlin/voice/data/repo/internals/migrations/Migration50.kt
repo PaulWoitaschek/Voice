@@ -5,16 +5,16 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration50
-@Inject constructor() : IncrementalMigration(50) {
+@Inject
+class Migration50 : IncrementalMigration(50) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     with(db) {

@@ -7,13 +7,13 @@ import android.provider.BaseColumns
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 private const val BOOKMARK_TABLE_NAME = "tableBookmarks"
 private const val BM_PATH = "bookmarkPath"
@@ -35,8 +35,8 @@ private const val CREATE_TABLE_BOOKMARKS = """
   """
 
 @ContributesBinding(AppScope::class)
-class Migration32to34
-@Inject constructor() : Migration(32, 34) {
+@Inject
+class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

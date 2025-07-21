@@ -5,9 +5,8 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import voice.app.injection.AppComponent
 import voice.common.AppScope
-import javax.inject.Singleton
 
-@Singleton
+@SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
   isExtendable = true,

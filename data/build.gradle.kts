@@ -6,12 +6,6 @@ plugins {
   alias(libs.plugins.ksp)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
   allWarningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
@@ -41,7 +35,6 @@ dependencies {
   api(libs.room.runtime)
   ksp(libs.room.compiler)
 
-  implementation(libs.dagger.core)
   implementation(libs.datastore)
   implementation(libs.documentFile)
 

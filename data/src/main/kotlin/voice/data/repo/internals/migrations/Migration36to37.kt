@@ -5,13 +5,13 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
-import javax.inject.Inject
 
 private const val TABLE_NAME = "tableChapters"
 private const val DURATION = "chapterDuration"
@@ -34,8 +34,8 @@ private const val CREATE_TABLE = """
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration36to37
-@Inject constructor() : IncrementalMigration(36) {
+@Inject
+class Migration36to37 : IncrementalMigration(36) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val data = db.query("SELECT * FROM $TABLE_NAME").mapRows {

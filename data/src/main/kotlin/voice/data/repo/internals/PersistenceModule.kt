@@ -6,13 +6,13 @@ import androidx.room.migration.Migration
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import voice.common.AppScope
 import voice.data.repo.internals.dao.BookContentDao
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.dao.RecentBookSearchDao
-import javax.inject.Singleton
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -34,7 +34,7 @@ object PersistenceModule {
   fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   fun appDb(
     context: Context,
     migrations: Set<@JvmSuppressWildcards Migration>,

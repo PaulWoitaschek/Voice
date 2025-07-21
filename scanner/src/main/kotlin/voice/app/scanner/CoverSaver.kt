@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.graphics.scale
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.common.BookId
@@ -13,11 +14,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.UUID
-import javax.inject.Inject
 import kotlin.math.max
 
-class CoverSaver
-@Inject constructor(
+@Inject
+class CoverSaver(
   private val repo: BookRepository,
   private val context: Context,
 ) {

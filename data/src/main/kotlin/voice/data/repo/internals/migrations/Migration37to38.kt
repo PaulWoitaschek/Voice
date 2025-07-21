@@ -5,17 +5,17 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.transaction
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration37to38
-@Inject constructor() : IncrementalMigration(37) {
+@Inject
+class Migration37to38 : IncrementalMigration(37) {
   override fun migrate(db: SupportSQLiteDatabase) {
     db.transaction {
       // add new chapter mark table

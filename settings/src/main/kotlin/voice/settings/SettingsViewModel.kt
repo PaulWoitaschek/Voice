@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import voice.common.AppInfoProvider
 import voice.common.DARK_THEME_SETTABLE
@@ -24,10 +25,9 @@ import voice.common.pref.SeekTimeStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.sleepTimer.SleepTimerPreference
 import java.time.LocalTime
-import javax.inject.Inject
 
-class SettingsViewModel
-@Inject constructor(
+@Inject
+class SettingsViewModel(
   @DarkThemeStore
   private val useDarkThemeStore: DataStore<Boolean>,
   @AutoRewindAmountStore

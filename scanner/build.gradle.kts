@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 dependencies {
   implementation(projects.data)
   implementation(projects.common)
@@ -17,7 +11,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.slf4j.noop)
   implementation(libs.jebml)
-  implementation(libs.dagger.core)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)

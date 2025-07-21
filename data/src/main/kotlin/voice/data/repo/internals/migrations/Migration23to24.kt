@@ -3,16 +3,16 @@ package voice.data.repo.internals.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration23to24
-@Inject constructor() : IncrementalMigration(23) {
+@Inject
+class Migration23to24 : IncrementalMigration(23) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK")

@@ -1,9 +1,9 @@
 package voice.remoteconfig.noop
 
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class NoopRemoteConfig

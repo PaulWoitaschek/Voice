@@ -5,17 +5,17 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.getString
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration45
-@Inject constructor() : IncrementalMigration(45) {
+@Inject
+class Migration45 : IncrementalMigration(45) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("SELECT * FROM bookSettings").use { bookSettingsCursor ->

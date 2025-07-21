@@ -3,10 +3,10 @@ package voice.app.injection
 import android.app.Application
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import voice.common.AppScope
-import javax.inject.Singleton
 
-@Singleton
+@SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
   isExtendable = true,

@@ -2,16 +2,16 @@ package voice.app.scanner
 
 import android.content.Context
 import androidx.documentfile.provider.DocumentFile
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
 import voice.data.toUri
 import voice.logging.core.Logger
 import java.io.IOException
-import javax.inject.Inject
 
-class CoverScanner
-@Inject constructor(
+@Inject
+class CoverScanner(
   private val context: Context,
   private val coverSaver: CoverSaver,
   private val coverExtractor: CoverExtractor,

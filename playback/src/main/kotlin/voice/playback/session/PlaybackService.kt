@@ -2,13 +2,13 @@ package voice.playback.session
 
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import voice.common.rootComponentAs
 import voice.logging.core.Logger
 import voice.playback.di.PlaybackComponent
 import voice.playback.player.VoicePlayer
-import javax.inject.Inject
 
 class PlaybackService : MediaLibraryService() {
 

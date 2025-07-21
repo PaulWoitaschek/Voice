@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
   androidResources {
     enable = true
@@ -26,6 +20,4 @@ dependencies {
   implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
-
-  implementation(libs.dagger.core)
 }

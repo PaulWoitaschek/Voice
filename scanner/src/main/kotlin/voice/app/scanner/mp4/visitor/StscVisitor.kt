@@ -1,13 +1,14 @@
 package voice.app.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
+import dev.zacsweers.metro.Inject
 import voice.app.scanner.mp4.Mp4ChpaterExtractorOutput
 import voice.app.scanner.mp4.StscEntry
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 // https://developer.apple.com/documentation/quicktime-file-format/sample-to-chunk_atom/
-class StscVisitor @Inject constructor() : AtomVisitor {
+@Inject
+class StscVisitor : AtomVisitor {
 
   override val path: List<String> = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc")
 

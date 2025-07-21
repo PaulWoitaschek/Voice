@@ -4,12 +4,12 @@ import android.net.Uri
 import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
+import dev.zacsweers.metro.Inject
 import voice.data.MarkData
 import voice.logging.core.Logger
-import javax.inject.Inject
 
-class ChapterTrackProcessor
-@Inject constructor() {
+@Inject
+class ChapterTrackProcessor {
 
   operator fun invoke(
     uri: Uri,

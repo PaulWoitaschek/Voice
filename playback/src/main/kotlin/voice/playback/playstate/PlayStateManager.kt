@@ -1,14 +1,14 @@
 package voice.playback.playstate
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
-import javax.inject.Singleton
+import voice.common.AppScope
 
-@Singleton
-class PlayStateManager
+@SingleIn(AppScope::class)
 @Inject
-constructor() {
+class PlayStateManager {
 
   private val _playState = MutableStateFlow(PlayState.Paused)
 

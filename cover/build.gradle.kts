@@ -5,17 +5,10 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 dependencies {
   implementation(projects.data)
   implementation(projects.strings)
   implementation(projects.remoteconfig.core)
-  implementation(libs.dagger.core)
 
   implementation(libs.bundles.retrofit)
   implementation(libs.okhttp)

@@ -1,6 +1,7 @@
 package voice.cover
 
 import android.content.Context
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -11,10 +12,9 @@ import voice.logging.core.Logger
 import java.io.File
 import java.io.IOException
 import java.util.UUID
-import javax.inject.Inject
 
-class CoverDownloader
-@Inject constructor(
+@Inject
+class CoverDownloader(
   private val client: OkHttpClient,
   private val context: Context,
 ) {

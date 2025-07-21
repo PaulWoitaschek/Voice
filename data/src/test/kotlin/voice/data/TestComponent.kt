@@ -9,9 +9,8 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.createGraphFactory
 import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
-import javax.inject.Singleton
 
-@Singleton
+@SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
 )

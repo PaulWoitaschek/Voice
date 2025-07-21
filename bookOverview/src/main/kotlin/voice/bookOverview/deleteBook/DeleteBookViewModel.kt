@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -14,16 +15,14 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.common.BookId
 import voice.logging.core.Logger
-import javax.inject.Inject
 
 @BookOverviewScope
 @ContributesIntoSet(
   scope = BookOverviewScope::class,
   binding = binding<BottomSheetItemViewModel>(),
 )
-class DeleteBookViewModel
 @Inject
-constructor(
+class DeleteBookViewModel(
   private val application: Application,
   private val mediaScanTrigger: MediaScanTrigger,
 ) : BottomSheetItemViewModel {

@@ -1,5 +1,7 @@
 package voice.data.repo
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -10,15 +12,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import voice.common.AppScope
 import voice.common.BookId
 import voice.data.BookContent
 import voice.data.repo.internals.dao.BookContentDao
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class BookContentRepo
-@Inject constructor(private val dao: BookContentDao) {
+@SingleIn(AppScope::class)
+@Inject
+class BookContentRepo(private val dao: BookContentDao) {
 
   private val cacheMutex = Mutex()
   private var cacheFilled = false

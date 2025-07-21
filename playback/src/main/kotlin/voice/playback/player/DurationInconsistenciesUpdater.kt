@@ -1,16 +1,16 @@
 package voice.playback.player
 
 import androidx.media3.common.Player
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.data.repo.ChapterRepo
 import voice.logging.core.Logger
 import voice.playback.session.MediaId
 import voice.playback.session.toMediaIdOrNull
-import javax.inject.Inject
 
-class DurationInconsistenciesUpdater
-@Inject constructor(private val chapterRepo: ChapterRepo) : Player.Listener {
+@Inject
+class DurationInconsistenciesUpdater(private val chapterRepo: ChapterRepo) : Player.Listener {
 
   private lateinit var player: Player
 

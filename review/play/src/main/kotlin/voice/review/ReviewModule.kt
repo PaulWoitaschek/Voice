@@ -8,17 +8,17 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.serializer
 import voice.common.AppScope
 import voice.datastore.VoiceDataStoreFactory
-import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 object ReviewModule {
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @ReviewDialogShown
   fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.create(Boolean.serializer(), false, "reviewDialogShown")

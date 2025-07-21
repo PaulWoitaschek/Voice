@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
 
 // tables
 private const val TABLE_BOOK = "tableBooks"
@@ -77,8 +77,8 @@ private const val CREATE_TABLE_BOOKMARKS = """
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-class Migration29to30
-@Inject constructor() : IncrementalMigration(29) {
+@Inject
+class Migration29to30 : IncrementalMigration(29) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // fetching old contents

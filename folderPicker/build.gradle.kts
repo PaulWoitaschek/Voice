@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
   androidResources {
     enable = true
@@ -31,6 +25,4 @@ dependencies {
   implementation(libs.documentFile)
 
   testImplementation(libs.molecule)
-
-  implementation(libs.dagger.core)
 }

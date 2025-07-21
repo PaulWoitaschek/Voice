@@ -5,16 +5,16 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration42to43
-@Inject constructor() : IncrementalMigration(42) {
+@Inject
+class Migration42to43 : IncrementalMigration(42) {
   override fun migrate(db: SupportSQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned
     val lastModifiedCv = ContentValues().apply {

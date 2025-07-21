@@ -1,19 +1,20 @@
 package voice.data.repo
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import voice.common.AppScope
 import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class BookRepository
-@Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class BookRepository(
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
 ) {

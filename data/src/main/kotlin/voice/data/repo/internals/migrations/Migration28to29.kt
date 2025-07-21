@@ -5,19 +5,19 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.common.AppScope
 import voice.logging.core.Logger
 import java.io.File
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration28to29
-@Inject constructor() : IncrementalMigration(28) {
+@Inject
+class Migration28to29 : IncrementalMigration(28) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"))

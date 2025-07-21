@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -13,7 +14,6 @@ import voice.common.AppScope
 import voice.common.rootComponentAs
 import voice.logging.core.Logger
 import voice.playback.PlayerController
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {

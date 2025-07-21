@@ -1,12 +1,12 @@
 package voice.search
 
+import dev.zacsweers.metro.Inject
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.data.repo.internals.dao.BookContentDao
-import javax.inject.Inject
 
-class BookSearch
-@Inject constructor(
+@Inject
+class BookSearch(
   private val dao: BookContentDao,
   private val repo: BookRepository,
 ) {

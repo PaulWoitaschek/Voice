@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.getInt
@@ -12,14 +13,13 @@ import voice.data.repo.internals.getString
 import voice.data.repo.internals.moveToNextLoop
 import java.time.Instant
 import java.util.UUID
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration49
-@Inject constructor() : IncrementalMigration(49) {
+@Inject
+class Migration49 : IncrementalMigration(49) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     with(db) {

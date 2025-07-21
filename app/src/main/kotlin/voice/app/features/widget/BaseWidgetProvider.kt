@@ -5,8 +5,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import dev.zacsweers.metro.Inject
 import voice.app.injection.appComponent
-import javax.inject.Inject
 
 class BaseWidgetProvider : AppWidgetProvider() {
 

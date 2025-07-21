@@ -1,6 +1,7 @@
 package voice.playback.playstate
 
 import androidx.media3.common.Player
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -11,11 +12,10 @@ import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.session.MediaId
 import voice.playback.session.toMediaIdOrNull
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class PositionUpdater
-@Inject constructor(
+@Inject
+class PositionUpdater(
   private val bookRepo: BookRepository,
   private val scope: CoroutineScope,
   private val playStateManager: PlayStateManager,

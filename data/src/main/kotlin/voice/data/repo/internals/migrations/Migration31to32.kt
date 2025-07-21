@@ -7,10 +7,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
 
 private const val BOOK_ID = "bookId"
 private const val TABLE_BOOK = "tableBooks"
@@ -23,8 +23,8 @@ private const val CHAPTER_PATH = "chapterPath"
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-class Migration31to32
-@Inject constructor() : IncrementalMigration(31) {
+@Inject
+class Migration31to32 : IncrementalMigration(31) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query(

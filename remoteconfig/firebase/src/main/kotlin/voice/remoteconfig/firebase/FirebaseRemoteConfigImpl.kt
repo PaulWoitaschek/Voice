@@ -4,13 +4,13 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class FirebaseRemoteConfigImpl
-@Inject constructor() : RemoteConfig {
+@Inject
+class FirebaseRemoteConfigImpl : RemoteConfig {
 
   private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 

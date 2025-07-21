@@ -4,9 +4,10 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class BookSearchParser @Inject constructor() {
+@Inject
+class BookSearchParser {
 
   fun parse(
     query: String?,

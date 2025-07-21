@@ -41,12 +41,6 @@ play {
   }
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
 
   namespace = "voice.app"
@@ -196,8 +190,6 @@ dependencies {
   implementation(projects.remoteconfig.core)
 
   debugImplementation(projects.logging.debug)
-
-  implementation(libs.dagger.core)
 
   implementation(libs.androidxCore)
 

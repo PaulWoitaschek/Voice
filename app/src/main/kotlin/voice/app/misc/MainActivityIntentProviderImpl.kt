@@ -2,12 +2,12 @@ package voice.app.misc
 
 import android.app.PendingIntent
 import android.content.Context
+import dev.zacsweers.metro.Inject
 import voice.app.features.MainActivity
 import voice.playback.notification.MainActivityIntentProvider
-import javax.inject.Inject
 
-class MainActivityIntentProviderImpl
-@Inject constructor(private val context: Context) : MainActivityIntentProvider {
+@Inject
+class MainActivityIntentProviderImpl(private val context: Context) : MainActivityIntentProvider {
 
   override fun toCurrentBook(): PendingIntent {
     val intent = MainActivity.goToBookIntent(context)

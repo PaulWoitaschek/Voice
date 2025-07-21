@@ -1,10 +1,10 @@
 package voice.cover.api
 
+import dev.zacsweers.metro.Inject
 import voice.logging.core.Logger
-import javax.inject.Inject
 
-class CoverApi
-@Inject constructor(private val api: InternalCoverApi) {
+@Inject
+class CoverApi(private val api: InternalCoverApi) {
 
   internal suspend fun token(query: String): String? {
     Logger.d("query token")

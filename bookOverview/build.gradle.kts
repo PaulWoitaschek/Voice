@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 dependencies {
   implementation(projects.common)
   implementation(projects.search)
@@ -21,7 +15,6 @@ dependencies {
 
   implementation(libs.lifecycle)
   implementation(libs.documentFile)
-  implementation(libs.dagger.core)
   implementation(libs.datastore)
 
   testImplementation(libs.bundles.testing.jvm)

@@ -11,7 +11,6 @@ sdk-robolectric = "35"
 coroutines = "1.10.2"
 room = "2.7.2"
 materialDialog = "3.3.0"
-dagger = "2.57"
 kotlin = "2.2.0"
 media3 = "1.7.1"
 agp = "8.11.1"
@@ -81,9 +80,6 @@ conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
 
 materialDialog-core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialog" }
 materialDialog-input = { module = "com.afollestad.material-dialogs:input", version.ref = "materialDialog" }
-
-dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }

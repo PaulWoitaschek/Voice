@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.getFloat
@@ -14,7 +15,6 @@ import voice.data.repo.internals.getString
 import voice.data.repo.internals.getStringOrNull
 import voice.data.repo.internals.mapRows
 import voice.data.repo.internals.transaction
-import javax.inject.Inject
 
 private const val ID = "bookId"
 private const val NAME = "bookName"
@@ -44,8 +44,8 @@ private const val CREATE_TABLE = """
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration35to36
-@Inject constructor() : IncrementalMigration(35) {
+@Inject
+class Migration35to36 : IncrementalMigration(35) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val entries = db.query(TABLE_NAME)

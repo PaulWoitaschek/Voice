@@ -7,6 +7,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONArray
 import org.json.JSONException
@@ -17,15 +18,14 @@ import voice.logging.core.Logger
 import java.io.File
 import java.io.IOException
 import java.util.InvalidPropertiesFormatException
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-class Migration24to25
-@Inject constructor() : IncrementalMigration(24) {
+@Inject
+class Migration24to25 : IncrementalMigration(24) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"

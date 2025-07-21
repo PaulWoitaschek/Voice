@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStore
 import coil.Coil
 import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,7 +18,6 @@ import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.DarkThemeStore
 import voice.common.rootComponent
 import voice.sleepTimer.AutoEnableSleepTimer
-import javax.inject.Inject
 
 open class App : Application() {
 

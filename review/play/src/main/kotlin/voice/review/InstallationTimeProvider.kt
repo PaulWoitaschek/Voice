@@ -3,11 +3,11 @@ package voice.review
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import dev.zacsweers.metro.Inject
 import java.time.Instant
-import javax.inject.Inject
 
-class InstallationTimeProvider
-@Inject constructor(private val context: Context) {
+@Inject
+class InstallationTimeProvider(private val context: Context) {
 
   internal fun installationTime(): Instant {
     val packageManager = context.packageManager

@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
   buildFeatures {
     viewBinding = true
@@ -30,8 +24,6 @@ dependencies {
   implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.material)
-
-  implementation(libs.dagger.core)
 
   testImplementation(libs.turbine)
 }

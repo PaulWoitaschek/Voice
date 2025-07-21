@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -26,12 +27,11 @@ import voice.playback.session.MediaItemProvider
 import voice.playback.session.PlaybackService
 import voice.playback.session.sendCustomCommand
 import voice.playback.session.toMediaIdOrNull
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 
-class PlayerController
-@Inject constructor(
+@Inject
+class PlayerController(
   private val context: Context,
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,

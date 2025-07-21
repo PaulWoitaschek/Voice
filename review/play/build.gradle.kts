@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
   androidResources {
     enable = true
@@ -24,6 +18,5 @@ dependencies {
   implementation(projects.datastore)
   api(libs.review)
   implementation(libs.lottie)
-  implementation(libs.dagger.core)
   implementation(projects.remoteconfig.core)
 }

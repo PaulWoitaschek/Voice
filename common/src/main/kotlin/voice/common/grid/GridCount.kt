@@ -1,10 +1,10 @@
 package voice.common.grid
 
 import android.content.Context
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class GridCount
-@Inject constructor(private val context: Context) {
+@Inject
+class GridCount(private val context: Context) {
 
   fun useGridAsDefault(): Boolean {
     val displayMetrics = context.resources.displayMetrics

@@ -3,17 +3,17 @@ package voice.data.repo.internals.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.common.AppScope
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-class Migration25to26
-@Inject constructor() : IncrementalMigration(25) {
+@Inject
+class Migration25to26 : IncrementalMigration(25) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // get all books

@@ -1,16 +1,14 @@
 package voice.data.repo
 
+import dev.zacsweers.metro.Inject
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.repo.internals.dao.ChapterDao
 import voice.data.runForMaxSqlVariableNumber
 import java.time.Instant
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class ChapterRepo
-@Inject constructor(private val dao: ChapterDao) {
+@Inject
+class ChapterRepo(private val dao: ChapterDao) {
 
   private val cache = mutableMapOf<ChapterId, Chapter?>()
 

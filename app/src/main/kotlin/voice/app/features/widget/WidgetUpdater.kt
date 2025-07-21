@@ -13,12 +13,15 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.datastore.core.DataStore
 import coil.imageLoader
 import coil.request.ImageRequest
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
+import voice.common.AppScope
 import voice.common.BookId
 import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBookStore
@@ -26,13 +29,11 @@ import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.playback.receiver.WidgetButtonReceiver
-import javax.inject.Inject
-import javax.inject.Singleton
 import voice.common.R as CommonR
 
-@Singleton
-class WidgetUpdater
-@Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class WidgetUpdater(
   private val context: Context,
   private val repo: BookRepository,
   @CurrentBookStore

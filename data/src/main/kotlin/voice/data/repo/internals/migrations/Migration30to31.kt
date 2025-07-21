@@ -5,18 +5,18 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
 
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-class Migration30to31
-@Inject constructor() : IncrementalMigration(30) {
+@Inject
+class Migration30to31 : IncrementalMigration(30) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // book keys

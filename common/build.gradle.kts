@@ -6,12 +6,6 @@ plugins {
   alias(libs.plugins.kotlin.serialization)
 }
 
-metro {
-  interop {
-    includeDagger()
-  }
-}
-
 android {
   androidResources {
     enable = true
@@ -22,7 +16,6 @@ dependencies {
   implementation(projects.strings)
 
   implementation(libs.appCompat)
-  implementation(libs.dagger.core)
   implementation(libs.material)
   api(libs.immutable)
   api(libs.conductor)

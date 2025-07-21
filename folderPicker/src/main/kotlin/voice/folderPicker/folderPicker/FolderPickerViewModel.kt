@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -12,10 +13,9 @@ import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
 import voice.documentfile.nameWithoutExtension
-import javax.inject.Inject
 
-class FolderPickerViewModel
-@Inject constructor(
+@Inject
+class FolderPickerViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
 ) {
