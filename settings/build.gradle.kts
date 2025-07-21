@@ -1,11 +1,7 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
@@ -18,6 +14,4 @@ dependencies {
   implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.material)
-
-  implementation(libs.dagger.core)
 }

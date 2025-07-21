@@ -24,23 +24,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squareup.anvil.annotations.ContributesTo
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.onboarding.R
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface OnboardingCompletionComponent {
+interface OnboardingCompletionGraph {
   val viewModel: OnboardingCompletionViewModel
 }
 
 @Composable
 fun OnboardingCompletion(modifier: Modifier = Modifier) {
   val viewModel = rememberScoped {
-    rootComponentAs<OnboardingCompletionComponent>().viewModel
+    rootGraphAs<OnboardingCompletionGraph>().viewModel
   }
   OnboardingCompletion(
     modifier = modifier,

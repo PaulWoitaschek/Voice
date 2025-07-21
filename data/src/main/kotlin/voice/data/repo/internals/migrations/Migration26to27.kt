@@ -5,17 +5,18 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import voice.data.repo.internals.moveToNextLoop
-import javax.inject.Inject
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
-class Migration26to27
-@Inject constructor() : IncrementalMigration(26) {
+@Inject
+class Migration26to27 : IncrementalMigration(26) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

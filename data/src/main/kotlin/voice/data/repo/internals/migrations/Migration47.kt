@@ -4,16 +4,17 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
-class Migration47
-@Inject constructor() : IncrementalMigration(47) {
+@Inject
+class Migration47 : IncrementalMigration(47) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // the format of the marks has changed. Write an empty array. Also clear the fileLastModified to trigger a rescan.

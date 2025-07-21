@@ -15,8 +15,8 @@ fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-      languageVersion.set(KotlinVersion.KOTLIN_1_9)
       jvmTarget.set(JvmTarget.JVM_11)
+      freeCompilerArgs.add("-Xannotation-default-target=param-property")
       optIn.addAll(
         listOf(
           "kotlin.RequiresOptIn",

@@ -2,7 +2,10 @@ package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import com.squareup.anvil.annotations.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -11,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import voice.common.AppScope
 import voice.common.pref.FadeOutStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.sleepTimer.SleepTimerPreference
@@ -19,17 +21,15 @@ import voice.logging.core.Logger
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import voice.playback.session.SleepTimer as PlaybackSleepTimer
 
-@Singleton
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class SleepTimer
-@Inject constructor(
+@Inject
+class SleepTimer(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @SleepTimerPreferenceStore

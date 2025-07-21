@@ -1,12 +1,13 @@
 package voice.app.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
+import dev.zacsweers.metro.Inject
 import voice.app.scanner.mp4.Mp4ChpaterExtractorOutput
 import voice.data.MarkData
 import voice.logging.core.Logger
-import javax.inject.Inject
 
-class ChplVisitor @Inject constructor() : AtomVisitor {
+@Inject
+class ChplVisitor : AtomVisitor {
 
   override val path: List<String> = listOf("moov", "udta", "chpl")
 

@@ -1,20 +1,20 @@
 package voice.review
 
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.remoteconfig.core.RemoteConfig
 import java.time.Clock
 import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-class ShouldShowReviewDialog
-@Inject constructor(
+@Inject
+class ShouldShowReviewDialog(
   private val installationTimeProvider: InstallationTimeProvider,
   private val clock: Clock,
   @ReviewDialogShown

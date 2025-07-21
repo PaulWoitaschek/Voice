@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.Dispatchers
 import voice.common.DARK_THEME_SETTABLE
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
@@ -40,7 +40,7 @@ fun VoiceTheme(content: @Composable () -> Unit) {
 fun isDarkTheme(): Boolean {
   return if (DARK_THEME_SETTABLE) {
     val darkThemeFlow = remember {
-      rootComponentAs<SharedComponent>().useDarkThemeStore.data
+      rootGraphAs<SharedGraph>().useDarkThemeStore.data
     }
     darkThemeFlow.collectAsState(initial = false, context = Dispatchers.Unconfined).value
   } else {

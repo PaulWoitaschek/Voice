@@ -1,34 +1,62 @@
 package voice.app.injection
 
-import android.content.Context
+import android.app.Application
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.datastore.core.DataStore
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.createGraph
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import voice.common.grid.GridMode
+import voice.common.pref.AutoRewindAmountStore
+import voice.common.pref.DarkThemeStore
+import voice.common.pref.GridModeStore
+import voice.common.pref.SeekTimeStore
 import voice.datastore.VoiceDataStoreFactory
+
+@SingleIn(AppScope::class)
+@DependencyGraph(
+  scope = AppScope::class,
+  isExtendable = true,
+)
+interface MigrationTestGraph {
+  @SeekTimeStore
+  val seekTimeStore: DataStore<Int>
+
+  @AutoRewindAmountStore
+  val autoRewindAmountStore: DataStore<Int>
+
+  @DarkThemeStore
+  val darkThemeStore: DataStore<Boolean>
+
+  @GridModeStore
+  val gridModeStore: DataStore<GridMode>
+
+  @get:Provides
+  val application: Application get() = ApplicationProvider.getApplicationContext()
+
+  val sharedPreferences: SharedPreferences
+}
 
 @RunWith(AndroidJUnit4::class)
 class MigrationTests {
 
-  private lateinit var sharedPreferences: SharedPreferences
-  private lateinit var factory: VoiceDataStoreFactory
+  private val factory: VoiceDataStoreFactory =
+    VoiceDataStoreFactory(Json { ignoreUnknownKeys = true }, ApplicationProvider.getApplicationContext())
 
-  @Before
-  fun setup() {
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    sharedPreferences = context.getSharedPreferences("de.ph1b.audiobook_preferences", Context.MODE_PRIVATE)
-    factory = VoiceDataStoreFactory(Json { ignoreUnknownKeys = true }, context)
-  }
+  private val testGraph: MigrationTestGraph = createGraph()
+  private val sharedPreferences: SharedPreferences = testGraph.sharedPreferences
 
   @Test
   fun `seekTime migrates from SharedPreferences and cleans up`() = runTest {
@@ -38,7 +66,7 @@ class MigrationTests {
       putInt("SEEK_TIME", expected)
     }
 
-    val store = PrefsModule.provideSeekTimePreference(factory, sharedPreferences)
+    val store = testGraph.seekTimeStore
     store.data.first() shouldBe expected
     sharedPreferences.contains("SEEK_TIME") shouldBe false
   }
@@ -51,7 +79,7 @@ class MigrationTests {
       putInt("AUTO_REWIND", expected)
     }
 
-    val store = PrefsModule.provideAutoRewindAmountPreference(factory, sharedPreferences)
+    val store = testGraph.autoRewindAmountStore
     store.data.first() shouldBe expected
     sharedPreferences.contains("AUTO_REWIND") shouldBe false
   }
@@ -64,7 +92,7 @@ class MigrationTests {
       putBoolean("darkTheme", expected)
     }
 
-    val store = PrefsModule.darkThemePref(factory, sharedPreferences)
+    val store = testGraph.darkThemeStore
     store.data.first() shouldBe expected
     sharedPreferences.contains("darkTheme") shouldBe false
   }
@@ -73,9 +101,9 @@ class MigrationTests {
   fun `defaults are used when SharedPreferences empty`() = runTest {
     sharedPreferences.edit { clear() }
 
-    PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 20
-    PrefsModule.provideAutoRewindAmountPreference(factory, sharedPreferences).data.first() shouldBe 2
-    PrefsModule.darkThemePref(factory, sharedPreferences).data.first() shouldBe false
+    testGraph.seekTimeStore.data.first() shouldBe 20
+    testGraph.autoRewindAmountStore.data.first() shouldBe 2
+    testGraph.darkThemeStore.data.first() shouldBe false
   }
 
   @Test
@@ -85,7 +113,7 @@ class MigrationTests {
       putInt("OTHER_KEY", 50)
     }
 
-    PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 20
+    testGraph.seekTimeStore.data.first() shouldBe 20
     sharedPreferences.contains("OTHER_KEY") shouldBe true
   }
 
@@ -98,9 +126,9 @@ class MigrationTests {
       putBoolean("darkTheme", true)
     }
 
-    PrefsModule.provideSeekTimePreference(factory, sharedPreferences).data.first() shouldBe 15
-    PrefsModule.provideAutoRewindAmountPreference(factory, sharedPreferences).data.first() shouldBe 5
-    PrefsModule.darkThemePref(factory, sharedPreferences).data.first() shouldBe true
+    testGraph.seekTimeStore.data.first() shouldBe 15
+    testGraph.autoRewindAmountStore.data.first() shouldBe 5
+    testGraph.darkThemeStore.data.first() shouldBe true
 
     listOf("SLEEP_TIME", "SEEK_TIME", "AUTO_REWIND", "darkTheme")
       .forEach {
@@ -130,7 +158,7 @@ class MigrationTests {
       putString("gridView", "LIST")
     }
 
-    val store: DataStore<GridMode> = PrefsModule.gridModeStore(factory, sharedPreferences)
+    val store = testGraph.gridModeStore
     store.data.first() shouldBe GridMode.LIST
     sharedPreferences.contains("gridView") shouldBe false
   }
@@ -142,7 +170,7 @@ class MigrationTests {
       putString("gridView", "GRID")
     }
 
-    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    val store = testGraph.gridModeStore
     store.data.first() shouldBe GridMode.GRID
     sharedPreferences.contains("gridView") shouldBe false
   }
@@ -151,7 +179,7 @@ class MigrationTests {
   fun `falls back to FOLLOW_DEVICE when key missing`() = runTest {
     sharedPreferences.edit { clear() }
 
-    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    val store = testGraph.gridModeStore
     store.data.first() shouldBe GridMode.FOLLOW_DEVICE
     sharedPreferences.contains("gridView") shouldBe false
   }
@@ -163,7 +191,7 @@ class MigrationTests {
       putString("gridView", "UNKNOWN")
     }
 
-    val store = PrefsModule.gridModeStore(factory, sharedPreferences)
+    val store = testGraph.gridModeStore
     store.data.first() shouldBe GridMode.FOLLOW_DEVICE
     sharedPreferences.contains("gridView") shouldBe false
   }

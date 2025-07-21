@@ -2,16 +2,17 @@ package voice.data.repo.internals.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
-class Migration27to28
-@Inject constructor() : IncrementalMigration(27) {
+@Inject
+class Migration27to28 : IncrementalMigration(27) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK_COPY")

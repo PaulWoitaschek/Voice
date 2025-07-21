@@ -6,6 +6,7 @@ import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -25,13 +26,12 @@ import voice.playback.session.MediaId
 import voice.playback.session.MediaItemProvider
 import voice.playback.session.toMediaIdOrNull
 import java.time.Instant
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class VoicePlayer
-@Inject constructor(
+@Inject
+class VoicePlayer(
   private val player: Player,
   private val repo: BookRepository,
   @CurrentBookStore

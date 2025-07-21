@@ -3,24 +3,24 @@ package voice.app.injection
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.MainActivityIntentProviderImpl
 import voice.common.AppInfoProvider
-import voice.common.AppScope
 import voice.common.DispatcherProvider
 import voice.playback.notification.MainActivityIntentProvider
 import java.time.Clock
-import javax.inject.Singleton
 
 /**
  * Module providing Android SDK Related instances.
  */
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object AndroidModule {
 
@@ -28,7 +28,7 @@ object AndroidModule {
   fun provideContext(app: Application): Context = app
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   fun providePowerManager(context: Context): PowerManager {
     return context.getSystemService(Context.POWER_SERVICE) as PowerManager
   }
@@ -40,13 +40,13 @@ object AndroidModule {
   fun applicationIdProvider(impl: AppInfoProviderImpl): AppInfoProvider = impl
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   fun json(): Json {
     return Json.Default
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   fun dispatcherProvider(): DispatcherProvider {
     return DispatcherProvider(
       main = Dispatchers.Main,

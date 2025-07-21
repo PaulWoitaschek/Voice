@@ -1,12 +1,7 @@
 plugins {
   id("voice.library")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
-  generateDaggerFactoriesOnly.set(true)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
@@ -16,7 +11,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.slf4j.noop)
   implementation(libs.jebml)
-  implementation(libs.dagger.core)
   implementation(libs.serialization.json)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)

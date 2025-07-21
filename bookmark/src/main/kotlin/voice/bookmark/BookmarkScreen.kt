@@ -43,26 +43,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.bookmark.dialogs.AddBookmarkDialog
 import voice.bookmark.dialogs.EditBookmarkDialog
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.data.Bookmark
 import java.util.UUID
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface Component {
+interface Graph {
   val bookmarkViewModelFactory: BookmarkViewModel.Factory
 }
 
 @Composable
 fun BookmarkScreen(bookId: BookId) {
   val viewModel = rememberScoped(bookId.value) {
-    rootComponentAs<Component>().bookmarkViewModelFactory.create(bookId)
+    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId)
   }
   val viewState = viewModel.viewState()
   BookmarkScreen(

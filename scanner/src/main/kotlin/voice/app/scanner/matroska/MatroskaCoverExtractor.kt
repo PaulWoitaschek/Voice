@@ -2,15 +2,15 @@ package voice.app.scanner.matroska
 
 import android.content.Context
 import android.net.Uri
+import dev.zacsweers.metro.Inject
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.matroska.MatroskaDocTypes
 import voice.logging.core.Logger
 import java.io.File
-import javax.inject.Inject
 
-class MatroskaCoverExtractor
-@Inject constructor(private val context: Context) {
+@Inject
+class MatroskaCoverExtractor(private val context: Context) {
 
   init {
     // force static initialization of MatroskaDocTypes

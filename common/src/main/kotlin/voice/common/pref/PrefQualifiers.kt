@@ -1,6 +1,6 @@
 package voice.common.pref
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Qualifier
 annotation class OnboardingCompletedStore

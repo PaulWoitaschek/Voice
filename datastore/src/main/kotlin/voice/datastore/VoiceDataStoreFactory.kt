@@ -5,13 +5,13 @@ import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import dev.zacsweers.metro.Inject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
 
-class VoiceDataStoreFactory
-@Inject constructor(
+@Inject
+class VoiceDataStoreFactory(
   private val json: Json,
   private val context: Context,
 ) {

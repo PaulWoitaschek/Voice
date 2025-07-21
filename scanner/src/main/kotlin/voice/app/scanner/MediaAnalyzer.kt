@@ -16,6 +16,7 @@ import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -29,13 +30,12 @@ import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
 import voice.logging.core.Logger
 import java.io.IOException
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
-class MediaAnalyzer
-@Inject constructor(
+@Inject
+class MediaAnalyzer(
   private val context: Context,
   private val mp4ChapterExtractor: Mp4ChapterExtractor,
   private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,

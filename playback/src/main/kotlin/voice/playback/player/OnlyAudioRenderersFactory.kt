@@ -9,10 +9,10 @@ import androidx.media3.exoplayer.mediacodec.MediaCodecSelector
 import androidx.media3.exoplayer.metadata.MetadataOutput
 import androidx.media3.exoplayer.text.TextOutput
 import androidx.media3.exoplayer.video.VideoRendererEventListener
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class OnlyAudioRenderersFactory
-@Inject constructor(context: Context) : DefaultRenderersFactory(context) {
+@Inject
+class OnlyAudioRenderersFactory(context: Context) : DefaultRenderersFactory(context) {
 
   override fun buildVideoRenderers(
     context: Context,

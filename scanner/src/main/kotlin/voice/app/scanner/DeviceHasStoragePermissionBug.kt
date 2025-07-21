@@ -1,6 +1,7 @@
 package voice.app.scanner
 
 import android.content.Context
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -9,12 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import voice.documentfile.CachedDocumentFile
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class DeviceHasStoragePermissionBug
-@Inject constructor(private val context: Context) {
+@Inject
+class DeviceHasStoragePermissionBug(private val context: Context) {
 
   private val _hasBug = MutableStateFlow(false)
   val hasBug: StateFlow<Boolean> get() = _hasBug

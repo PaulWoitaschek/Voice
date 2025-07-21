@@ -4,16 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.datastore.core.DataStore
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.grid.GridMode
 import voice.common.pref.AuthorAudiobookFoldersStore
@@ -31,24 +32,23 @@ import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.serialization.UriSerializer
 import voice.common.sleepTimer.SleepTimerPreference
 import voice.datastore.VoiceDataStoreFactory
-import javax.inject.Singleton
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@Module
+@BindingContainer
 @ContributesTo(AppScope::class)
 object PrefsModule {
 
   @Provides
-  @Singleton
-  fun provideSharedPreferences(context: Context): SharedPreferences {
+  @SingleIn(AppScope::class)
+  fun sharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @DarkThemeStore
-  fun darkThemePref(
+  fun darkTheme(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Boolean> {
@@ -62,9 +62,9 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @AutoRewindAmountStore
-  fun provideAutoRewindAmountPreference(
+  fun autoRewindAmount(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -76,9 +76,9 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @FadeOutStore
-  fun fadeOutStore(factory: VoiceDataStoreFactory): DataStore<Duration> {
+  fun fadeOut(factory: VoiceDataStoreFactory): DataStore<Duration> {
     return factory.create(
       fileName = "fadeOut",
       defaultValue = 10.seconds,
@@ -87,9 +87,9 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @SeekTimeStore
-  fun provideSeekTimePreference(
+  fun seekTime(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -101,9 +101,9 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @SleepTimerPreferenceStore
-  fun provideSleepTimePreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
+  fun sleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
     return factory.create(
       serializer = SleepTimerPreference.serializer(),
       fileName = "sleepTime3",
@@ -112,9 +112,9 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @GridModeStore
-  fun gridModeStore(
+  fun gridMode(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<GridMode> {
@@ -139,42 +139,42 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @OnboardingCompletedStore
   fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("onboardingCompleted", defaultValue = false)
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @RootAudiobookFoldersStore
   fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("audiobookFolders")
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @SingleFolderAudiobookFoldersStore
   fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("SingleFolderAudiobookFolders")
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @SingleFileAudiobookFoldersStore
   fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("SingleFileAudiobookFolders")
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @AuthorAudiobookFoldersStore
   fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("AuthorAudiobookFolders")
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @CurrentBookStore
   fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
     return factory.create(
@@ -185,7 +185,7 @@ object PrefsModule {
   }
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @BookMigrationExplanationQualifier
   fun bookMigrationExplanationShown(factory: VoiceDataStoreFactory): BookMigrationExplanationShown {
     return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")

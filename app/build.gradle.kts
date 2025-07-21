@@ -8,9 +8,8 @@ plugins {
   id("voice.app")
   id("voice.compose")
   id("kotlin-parcelize")
-  id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
@@ -39,13 +38,6 @@ play {
   val serviceAccountJson = file("play_service_account.json")
   if (serviceAccountJson.exists()) {
     serviceAccountCredentials.set(serviceAccountJson)
-  }
-}
-
-kapt {
-  arguments {
-    arg("dagger.fastInit", "enabled")
-    arg("dagger.fullBindingGraphValidation", "ERROR")
   }
 }
 
@@ -199,9 +191,6 @@ dependencies {
 
   debugImplementation(projects.logging.debug)
 
-  implementation(libs.dagger.core)
-  kapt(libs.dagger.compiler)
-
   implementation(libs.androidxCore)
 
   testImplementation(libs.junit)
@@ -232,5 +221,4 @@ dependencies {
   androidTestImplementation(libs.androidX.test.services)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
-  kaptAndroidTest(libs.dagger.compiler)
 }

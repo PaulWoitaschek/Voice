@@ -1,5 +1,6 @@
 package voice.app.scanner
 
+import dev.zacsweers.metro.Inject
 import voice.common.BookId
 import voice.data.audioFileCount
 import voice.data.folders.FolderType
@@ -8,10 +9,9 @@ import voice.data.repo.BookContentRepo
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.walk
 import voice.logging.core.Logger
-import javax.inject.Inject
 
-class MediaScanner
-@Inject constructor(
+@Inject
+class MediaScanner(
   private val contentRepo: BookContentRepo,
   private val chapterParser: ChapterParser,
   private val bookParser: BookParser,

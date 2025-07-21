@@ -6,15 +6,15 @@ import androidx.media3.common.C
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.extractor.DefaultExtractorInput
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.MarkData
 import voice.logging.core.Logger
 import java.io.IOException
-import javax.inject.Inject
 
-class Mp4ChapterExtractor
-@Inject constructor(
+@Inject
+class Mp4ChapterExtractor(
   private val context: Context,
   private val boxParser: Mp4BoxParser,
   private val chapterTrackProcessor: ChapterTrackProcessor,

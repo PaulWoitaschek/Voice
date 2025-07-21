@@ -1,5 +1,8 @@
 package voice.app.scanner
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,13 +17,11 @@ import voice.data.repo.BookRepository
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.time.measureTime
 
-@Singleton
-class MediaScanTrigger
-@Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class MediaScanTrigger(
   private val audiobookFolders: AudiobookFolders,
   private val scanner: MediaScanner,
   private val coverScanner: CoverScanner,

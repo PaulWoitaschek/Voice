@@ -5,15 +5,15 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import voice.common.AppScope
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
 import voice.playback.PlayerController
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {
@@ -31,7 +31,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     Logger.d("onReceive ${intent?.action}. Parsed to $action")
     action ?: return
 
-    rootComponentAs<Component>().inject(this)
+    rootGraphAs<Graph>().inject(this)
 
     val result = goAsync()
     scope.launch {
@@ -58,7 +58,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   }
 
   @ContributesTo(AppScope::class)
-  interface Component {
+  interface Graph {
     fun inject(target: WidgetButtonReceiver)
   }
 

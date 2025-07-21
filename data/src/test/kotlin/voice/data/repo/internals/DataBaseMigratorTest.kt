@@ -59,7 +59,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `bookSettings`(`id`,`currentFile`,`positionInChapter`,`playbackSpeed`,`loudnessGain`,`skipSilence`," +
           "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
-        arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0),
+        arrayOf<Any>(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0),
       )
     }
 
@@ -67,7 +67,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `chapters`(`file`,`name`,`duration`,`fileLastModified`,`marks`,`bookId`,`id`) " +
           "VALUES (?,?,?,?,?,?,nullif(?, 0))",
-        arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId),
+        arrayOf<Any>(chapter.file, "name", 1L, 0L, "{}", chapter.bookId),
       )
     }
 

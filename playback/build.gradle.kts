@@ -1,6 +1,6 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.kotlin.serialization)
 }
 
@@ -8,10 +8,6 @@ android {
   androidResources {
     enable = true
   }
-}
-
-anvil {
-  generateDaggerFactories.set(true)
 }
 
 dependencies {
@@ -24,7 +20,6 @@ dependencies {
   implementation(libs.coil)
   implementation(libs.coroutines.guava)
   implementation(libs.serialization.json)
-  implementation(libs.dagger.core)
 
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)

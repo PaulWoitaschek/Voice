@@ -17,20 +17,20 @@ import com.google.android.play.core.ktx.launchReview
 import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
-import com.squareup.anvil.annotations.ContributesTo
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import voice.common.AppScope
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
 
 @Composable
 fun ReviewFeature() {
-  val reviewComponent = rootComponentAs<ReviewComponent>()
+  val reviewGraph = rootGraphAs<ReviewGraph>()
   val reviewInfoState = remember { mutableStateOf<ReviewInfo?>(null) }
   LaunchedEffect(Unit) {
-    val reviewManager = reviewComponent.reviewManager
+    val reviewManager = reviewGraph.reviewManager
     reviewInfoState.value = try {
       reviewManager.requestReview()
     } catch (e: Exception) {
@@ -42,7 +42,7 @@ fun ReviewFeature() {
   val reviewInfo = reviewInfoState.value ?: return
 
   val shouldShowReviewDialog = remember {
-    reviewComponent.shouldShowReviewDialog
+    reviewGraph.shouldShowReviewDialog
   }
   var showReviewDialog by remember { mutableStateOf(false) }
   var showFeedbackDialog by remember { mutableStateOf(false) }
@@ -51,7 +51,7 @@ fun ReviewFeature() {
   }
   val scope = rememberCoroutineScope()
   if (showReviewDialog) {
-    val reviewManager = reviewComponent.reviewManager
+    val reviewManager = reviewGraph.reviewManager
     val activity = LocalContext.current.findActivity() ?: return
     AskForReviewDialog(
       onReview = { stars ->
@@ -109,7 +109,7 @@ private fun Context.findActivity(): Activity? {
 }
 
 @ContributesTo(AppScope::class)
-interface ReviewComponent {
-  var shouldShowReviewDialog: ShouldShowReviewDialog
+interface ReviewGraph {
+  val shouldShowReviewDialog: ShouldShowReviewDialog
   val reviewManager: ReviewManager
 }

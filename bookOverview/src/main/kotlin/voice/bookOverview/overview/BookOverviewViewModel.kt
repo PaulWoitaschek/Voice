@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -37,12 +38,10 @@ import voice.data.repo.internals.dao.RecentBookSearchDao
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
 import voice.search.BookSearch
-import javax.inject.Inject
 
 @BookOverviewScope
-class BookOverviewViewModel
 @Inject
-constructor(
+class BookOverviewViewModel(
   private val repo: BookRepository,
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,

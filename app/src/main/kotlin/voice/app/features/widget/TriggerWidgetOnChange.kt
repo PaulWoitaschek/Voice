@@ -1,6 +1,9 @@
 package voice.app.features.widget
 
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -13,12 +16,10 @@ import voice.common.pref.CurrentBookStore
 import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TriggerWidgetOnChange
-@Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class TriggerWidgetOnChange(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val repo: BookRepository,
