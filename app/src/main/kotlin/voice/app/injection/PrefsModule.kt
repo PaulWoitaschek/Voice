@@ -41,14 +41,14 @@ object PrefsModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun provideSharedPreferences(context: Context): SharedPreferences {
+  fun sharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @DarkThemeStore
-  fun darkThemePref(
+  fun darkTheme(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Boolean> {
@@ -64,7 +64,7 @@ object PrefsModule {
   @Provides
   @SingleIn(AppScope::class)
   @AutoRewindAmountStore
-  fun provideAutoRewindAmountPreference(
+  fun autoRewindAmount(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -78,7 +78,7 @@ object PrefsModule {
   @Provides
   @SingleIn(AppScope::class)
   @FadeOutStore
-  fun fadeOutStore(factory: VoiceDataStoreFactory): DataStore<Duration> {
+  fun fadeOut(factory: VoiceDataStoreFactory): DataStore<Duration> {
     return factory.create(
       fileName = "fadeOut",
       defaultValue = 10.seconds,
@@ -89,7 +89,7 @@ object PrefsModule {
   @Provides
   @SingleIn(AppScope::class)
   @SeekTimeStore
-  fun provideSeekTimePreference(
+  fun seekTime(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -103,7 +103,7 @@ object PrefsModule {
   @Provides
   @SingleIn(AppScope::class)
   @SleepTimerPreferenceStore
-  fun provideSleepTimePreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
+  fun sleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
     return factory.create(
       serializer = SleepTimerPreference.serializer(),
       fileName = "sleepTime3",
@@ -114,7 +114,7 @@ object PrefsModule {
   @Provides
   @SingleIn(AppScope::class)
   @GridModeStore
-  fun gridModeStore(
+  fun gridMode(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<GridMode> {
