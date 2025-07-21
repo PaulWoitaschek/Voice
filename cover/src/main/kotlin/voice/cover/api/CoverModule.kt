@@ -1,5 +1,6 @@
 package voice.cover.api
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -11,7 +12,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
-import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
 
 @ContributesTo(AppScope::class)

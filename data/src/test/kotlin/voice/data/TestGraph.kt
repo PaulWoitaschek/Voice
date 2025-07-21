@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.room.migration.Migration
 import androidx.test.core.app.ApplicationProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
-import voice.common.AppScope
 import voice.common.pref.DarkThemeStore
 
 @SingleIn(AppScope::class)

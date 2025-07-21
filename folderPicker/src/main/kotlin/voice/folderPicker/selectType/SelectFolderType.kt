@@ -32,8 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
-import voice.common.AppScope
 import voice.common.compose.rememberScoped
 import voice.common.navigation.Destination
 import voice.common.rootGraphAs

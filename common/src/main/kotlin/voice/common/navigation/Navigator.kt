@@ -1,13 +1,13 @@
 package voice.common.navigation
 
 import androidx.navigation.NavController
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import voice.common.AppScope
 
 @SingleIn(AppScope::class)
 @Inject

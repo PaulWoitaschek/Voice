@@ -17,11 +17,11 @@ import com.google.android.play.core.ktx.launchReview
 import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import voice.common.AppScope
 import voice.common.rootGraphAs
 import voice.logging.core.Logger
 

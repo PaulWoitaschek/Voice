@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -14,7 +15,6 @@ import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.grid.GridMode
 import voice.common.pref.AuthorAudiobookFoldersStore

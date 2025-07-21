@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.compose.ComposeController
 import voice.common.rootGraphAs

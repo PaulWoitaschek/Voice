@@ -43,10 +43,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import voice.bookmark.dialogs.AddBookmarkDialog
 import voice.bookmark.dialogs.EditBookmarkDialog
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.compose.rememberScoped
 import voice.common.rootGraphAs

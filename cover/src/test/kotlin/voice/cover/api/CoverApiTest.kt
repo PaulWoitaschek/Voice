@@ -2,6 +2,7 @@ package voice.cover.api
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -10,7 +11,6 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldNotBeEmpty
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import voice.common.AppScope
 import voice.common.compose.SharedGraph
 
 @SingleIn(AppScope::class)

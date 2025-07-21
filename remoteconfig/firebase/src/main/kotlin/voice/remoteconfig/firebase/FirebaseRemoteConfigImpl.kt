@@ -3,9 +3,9 @@ package voice.remoteconfig.firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
 
 @ContributesBinding(AppScope::class)

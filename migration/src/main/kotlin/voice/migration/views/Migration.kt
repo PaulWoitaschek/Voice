@@ -32,8 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
-import voice.common.AppScope
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
 import voice.common.compose.rememberScoped

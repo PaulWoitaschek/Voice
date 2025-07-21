@@ -13,6 +13,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.datastore.core.DataStore
 import coil.imageLoader
 import coil.request.ImageRequest
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
-import voice.common.AppScope
 import voice.common.BookId
 import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBookStore

@@ -1,10 +1,10 @@
 package voice.playback.playstate
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import voice.common.AppScope
 
 @SingleIn(AppScope::class)
 @Inject

@@ -2,9 +2,9 @@ package voice.documentfile
 
 import android.content.Context
 import android.net.Uri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import voice.common.AppScope
 
 @ContributesBinding(AppScope::class)
 @Inject

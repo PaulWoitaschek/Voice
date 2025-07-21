@@ -1,9 +1,9 @@
 package voice.playback.misc
 
 import android.media.audiofx.LoudnessEnhancer
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.common.AppScope
 import voice.logging.core.Logger
 import kotlin.properties.Delegates
 

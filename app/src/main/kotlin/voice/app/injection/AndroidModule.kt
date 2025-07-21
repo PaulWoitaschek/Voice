@@ -3,6 +3,7 @@ package voice.app.injection
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -12,7 +13,6 @@ import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.MainActivityIntentProviderImpl
 import voice.common.AppInfoProvider
-import voice.common.AppScope
 import voice.common.DispatcherProvider
 import voice.playback.notification.MainActivityIntentProvider
 import java.time.Clock

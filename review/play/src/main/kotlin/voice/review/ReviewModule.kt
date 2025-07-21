@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.serializer
-import voice.common.AppScope
 import voice.datastore.VoiceDataStoreFactory
 
 @ContributesTo(AppScope::class)

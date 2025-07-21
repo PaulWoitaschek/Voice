@@ -3,9 +3,9 @@ package voice.playbackScreen.batteryOptimization
 import android.app.Application
 import android.os.PowerManager
 import androidx.core.content.getSystemService
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import voice.common.AppScope
 
 fun interface IsIgnoringBatteryOptimizations {
   operator fun invoke(): Boolean

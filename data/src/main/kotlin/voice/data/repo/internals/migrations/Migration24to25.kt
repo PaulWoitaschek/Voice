@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import voice.common.AppScope
 import voice.data.repo.internals.moveToNextLoop
 import voice.logging.core.Logger
 import java.io.File

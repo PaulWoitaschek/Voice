@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import voice.common.AppScope
 import voice.data.repo.internals.getLong
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.mapRows

@@ -2,6 +2,7 @@ package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import voice.common.AppScope
 import voice.common.pref.FadeOutStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.sleepTimer.SleepTimerPreference

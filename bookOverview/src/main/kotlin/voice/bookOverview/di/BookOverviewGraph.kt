@@ -1,5 +1,6 @@
 package voice.bookOverview.di
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesGraphExtension
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Scope
@@ -8,7 +9,6 @@ import voice.bookOverview.deleteBook.DeleteBookViewModel
 import voice.bookOverview.editTitle.EditBookTitleViewModel
 import voice.bookOverview.fileCover.FileCoverViewModel
 import voice.bookOverview.overview.BookOverviewViewModel
-import voice.common.AppScope
 
 @Scope
 annotation class BookOverviewScope

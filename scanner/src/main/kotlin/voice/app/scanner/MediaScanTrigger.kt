@@ -1,5 +1,6 @@
 package voice.app.scanner
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import voice.common.AppScope
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.data.repo.BookRepository
