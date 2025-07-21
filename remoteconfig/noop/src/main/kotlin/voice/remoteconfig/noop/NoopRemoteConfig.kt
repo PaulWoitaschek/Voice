@@ -6,8 +6,8 @@ import voice.common.AppScope
 import voice.remoteconfig.core.RemoteConfig
 
 @ContributesBinding(AppScope::class)
-class NoopRemoteConfig
-@Inject constructor() : RemoteConfig {
+@Inject
+class NoopRemoteConfig : RemoteConfig {
 
   override fun boolean(
     key: String,
