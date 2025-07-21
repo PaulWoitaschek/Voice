@@ -157,4 +157,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version = "2.2.0-2.0.2" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 playPublish = { id = "com.github.triplet.play", version = "3.12.1" }
-metro = { id = "dev.zacsweers.metro", version = "0.5.1" }
+metro = { id = "dev.zacsweers.metro", version = "0.5.2" }
