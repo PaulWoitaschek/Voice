@@ -1,6 +1,9 @@
 package voice.playback.session
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -30,6 +33,8 @@ import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer
+import voice.playback.session.button.KeyDownHandler
+import voice.playback.session.button.MediaButtonHandler
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 
@@ -44,6 +49,74 @@ class LibrarySessionCallback(
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
 ) : MediaLibrarySession.Callback {
+
+  private val mediaButtonHandler: MediaButtonHandler = KeyDownHandler(
+    scope,
+    { it ->
+      if (it == true) {
+        player.play()
+      } else if (it == false) {
+        player.pause()
+      }
+      player.isPlaying
+    },
+    { player.stop() },
+  )
+
+  init {
+    // configure available TAP / CLICK codes for mediaButtonHandler
+    mediaButtonHandler.addClickAction(1) {
+      Logger.d("1 click executed")
+      if(player.isPlaying) {
+        player.pause()
+      } else {
+        player.play()
+      }
+    }
+    mediaButtonHandler.addClickAction(2) {
+      Logger.d("2 clicks executed")
+      player.forceSeekToNext()
+    }
+    mediaButtonHandler.addClickAction(3) {
+      Logger.d("3 clicks executed")
+      player.forceSeekToPrevious()
+    }
+    mediaButtonHandler.addClickAction(4) {
+      Logger.d("4 clicks executed")
+      player.seekBack()
+    }
+    mediaButtonHandler.addClickAction(5) {
+      Logger.d("5 clicks executed")
+      player.seekForward()
+    }
+    /*
+    // longPress actions would also be possible
+    // - longPress will run the configured action repeatedly with a delay of 850ms unless the action is marked as "progressive" (like fastForward or rewind)
+    // problem:
+    // - Android 13 (TIRAMISU) is delaying longPress for 1000ms, this results in a minimum delay of 1050ms (which feels laggy)
+    // - longPress events don't work via Intent / in Background playback, so as soon as the app is not active, longPress no longer works
+
+    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      mediaButtonHandler.handlerDelay = 650.milliseconds
+    }
+
+    mediaButtonHandler.addHoldAction(0) {
+      Logger.d("0 clicks + hold executed");
+      playerNotificationService.jumpBackward()
+    }
+    mediaButtonHandler.addHoldAction(1) {
+      Logger.d("1 clicks + hold executed");
+      playerNotificationService.seekForward(15.seconds.inWholeMilliseconds)
+    }
+    mediaButtonHandler.addHoldAction(2) {
+      Logger.d("2 clicks + hold executed");
+      // playerNotificationService.rewind()
+      playerNotificationService.seekBackward(15.seconds.inWholeMilliseconds)
+    }
+     */
+
+  }
+
 
   override fun onAddMediaItems(
     mediaSession: MediaSession,
@@ -77,7 +150,8 @@ class LibrarySessionCallback(
     }
   }
 
-  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
+  private suspend
+  fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
@@ -152,7 +226,8 @@ class LibrarySessionCallback(
     }
   }
 
-  private suspend fun currentBook(): Book? {
+  private suspend
+  fun currentBook(): Book? {
     val bookId = currentBookStoreId.data.first() ?: return null
     return bookRepository.get(bookId)
   }
@@ -184,7 +259,8 @@ class LibrarySessionCallback(
     )
   }
 
-  private suspend fun prepareCurrentBook() {
+  private suspend
+  fun prepareCurrentBook() {
     val bookId = currentBookStoreId.data.first() ?: return
     val book = bookRepository.get(bookId) ?: return
     val item = mediaItemProvider.mediaItem(book)
@@ -218,5 +294,20 @@ class LibrarySessionCallback(
     }
 
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+  }
+
+  override fun onMediaButtonEvent(session: MediaSession, controllerInfo: ControllerInfo, intent: Intent): Boolean {
+    if(Intent.ACTION_MEDIA_BUTTON == intent.action) {
+      Logger.d("call onMediaButtonEvent")
+
+      val keyEvent = if (Build.VERSION.SDK_INT >= 33) {
+        intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
+      } else {
+        @Suppress("DEPRECATION")
+        intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
+      }
+      return mediaButtonHandler.handleKeyEvent(keyEvent)
+    }
+    return super.onMediaButtonEvent(session, controllerInfo, intent)
   }
 }
