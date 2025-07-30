@@ -65,7 +65,7 @@
     <string name="media_session_recent">Yakın zamanda</string>
     <string name="notification_sleep_timer_enable">Uyku Zamanlayıcısını Etkinleştir</string>
     <string name="notification_sleep_timer_disable">Uyku Zamanlayıcısını Devre Dışı Bırak</string>
-    <string name="mark_as_current">Geçerli olarak işaretle</string>
+    <string name="mark_as_current">Geçerli olan olarak işaretle</string>
     <string name="volume_boost">Ses yükseltme</string>
     <string name="mark_as_completed">Tamamlandı olarak işaretle</string>
     <string name="pref_suggest_idea">Fikir öner</string>
