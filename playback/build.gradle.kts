@@ -10,6 +10,12 @@ android {
   }
 }
 
+metro {
+  // necessary as SleepTimer is scoped to AppScope and used in the PlaybackScope.
+  // without this, compilation will fail.
+  enableScopedInjectClassHints.set(true)
+}
+
 dependencies {
   implementation(projects.common)
   implementation(projects.strings)
