@@ -71,11 +71,9 @@ class CoverExtractor(
 
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
     return try {
-      MetadataRetriever
-        .retrieveMetadata(
-          context,
-          MediaItem.fromUri(uri),
-        )
+      MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
+        .build()
+        .retrieveTrackGroups()
         .await()
     } catch (e: Exception) {
       if (e is CancellationException) coroutineContext.ensureActive()
