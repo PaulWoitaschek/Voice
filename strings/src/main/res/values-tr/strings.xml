@@ -127,7 +127,13 @@
     <string name="onboarding.completion.next_button">Dinlemeye başla</string>
     <string name="review.request.content">Geri bildiriminiz bizim için önemli! Vaktiniz varsa bizi değerlendirin ve deneyiminizi paylaşın. Bu bizim iyileştirmeler yapmamıza ve daha iyi bir dinleme deneyimi sunmamıza yardımcı olur.</string>
     <string name="storage_bug_subtitle">Belirli aygıtlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>
-    <string name="cover_search_template_no_author">Sesli kitabın %s\'si tamamlandı</string>
+    <string name="cover_search_template_no_author">%s Sesli kitap kapağı</string>
     <string name="folder_mode_author">Yazar-Kitap Modu: Alt klasörler yazarlar, onların alt klasörleri kitaplardır.</string>
-    <string name="cover_search_template_with_author">%2$s tarafından %1$s sesli kitap kapağı</string>
+    <string name="cover_search_template_with_author">%2$s taneden %1$s tane sesli kitap kapağı</string>
+    <string name="pref_faq">SSS</string>
+    <string name="auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
+    <string name="auto_sleep_timer.subtitle">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Başlama zamanı</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Bitiş zamanı</string>
+    <string name="playback.current_chapter">Şu anki bölüm</string>
 </resources>
