@@ -103,7 +103,7 @@ compose-animation-graphics = { module = "androidx.compose.animation:animation-gr
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.10.1"
-compose-navigation = "androidx.navigation:navigation-compose:2.9.2"
+compose-navigation = "androidx.navigation:navigation-compose:2.9.3"
 compose-typedNavigation = "com.kiwi.navigation-compose.typed:core:0.10.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
