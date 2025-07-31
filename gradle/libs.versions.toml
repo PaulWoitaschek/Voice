@@ -68,7 +68,7 @@ room-runtime = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
-androidX-test-runner = "androidx.test:runner:1.6.2"
+androidX-test-runner = "androidx.test:runner:1.7.0"
 androidX-test-junit = "androidx.test.ext:junit:1.2.1"
 androidX-test-core = "androidx.test:core-ktx:1.6.1"
 androidX-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
