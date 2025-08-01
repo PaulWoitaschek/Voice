@@ -74,7 +74,7 @@ androidX-test-core = "androidx.test:core-ktx:1.7.0"
 androidX-test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
 androidX-test-rules = "androidx.test:rules:1.7.0"
 androidX-test-services = "androidx.test.services:test-services:1.6.0"
-androidX-test-orchestrator = "androidx.test:orchestrator:1.6.0"
+androidX-test-orchestrator = "androidx.test:orchestrator:1.6.1"
 
 conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
 
