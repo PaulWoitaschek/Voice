@@ -6,15 +6,15 @@ import androidx.media3.common.C
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.extractor.DefaultExtractorInput
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.MarkData
 import voice.logging.core.Logger
 import java.io.IOException
-import javax.inject.Inject
 
-class Mp4ChapterExtractor
-@Inject constructor(
+@Inject
+class Mp4ChapterExtractor(
   private val context: Context,
   private val boxParser: Mp4BoxParser,
   private val chapterTrackProcessor: ChapterTrackProcessor,
@@ -39,6 +39,9 @@ class Mp4ChapterExtractor
       }
     } catch (e: IOException) {
       Logger.w(e, "Failed to open MP4 file for chapter extraction")
+      emptyList()
+    } catch (e: SecurityException) {
+      Logger.w(e, "Security exception while accessing MP4 file")
       emptyList()
     } catch (e: IllegalStateException) {
       Logger.w(e, "Invalid MP4 structure")

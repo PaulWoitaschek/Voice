@@ -1,6 +1,7 @@
 package voice.sleepTimer
 
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -16,10 +17,9 @@ import voice.playback.playstate.PlayStateManager
 import voice.playback.playstate.PlayStateManager.PlayState.Playing
 import voice.playback.session.SleepTimer
 import java.time.Clock
-import javax.inject.Inject
 
-class AutoEnableSleepTimer
-@Inject constructor(
+@Inject
+class AutoEnableSleepTimer(
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   dispatcherProvider: DispatcherProvider,

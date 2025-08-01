@@ -14,7 +14,11 @@
   <issue id="VectorRaster" severity="informational" />
   <issue id="VectorPath" severity="informational" />
   <issue id="UnusedResources" severity="informational" />
+  <!-- renovate takes care of this -->
+  <issue id="NewerVersionAvailable" severity="informational" />
+  <!-- renovate takes care of this -->
   <issue id="GradleDependency" severity="informational" />
+  <!-- renovate takes care of this -->
   <issue id="AndroidGradlePluginVersion" severity="informational" />
   <issue id="UnusedQuantity" severity="informational" />
   <issue id="ObsoleteLintCustomCheck" severity="informational" />

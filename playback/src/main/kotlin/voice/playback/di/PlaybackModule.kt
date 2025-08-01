@@ -1,20 +1,18 @@
 package voice.playback.di
 
 import android.content.Context
-import android.os.Build
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.common.TrackSelectionParameters.AudioOffloadPreferences
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.session.MediaLibraryService
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,9 +27,9 @@ import voice.playback.playstate.PositionUpdater
 import voice.playback.session.LibrarySessionCallback
 import voice.playback.session.PlaybackService
 
-@Module
+@BindingContainer
 @ContributesTo(PlaybackScope::class)
-object PlaybackModule {
+open class PlaybackModule {
 
   @Provides
   @PlaybackScope
@@ -69,24 +67,6 @@ object PlaybackModule {
         durationInconsistenciesUpdater.attachTo(player)
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
-        }
-        val disableAudioOffload =
-          Build.MANUFACTURER.equals("samsung", ignoreCase = true) &&
-            Build.VERSION.SDK_INT < 35
-        if (!disableAudioOffload) {
-          // samsung being samsung 🤪
-          // https://github.com/PaulWoitaschek/Voice/issues/2807
-          player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setAudioOffloadPreferences(
-              AudioOffloadPreferences
-                .Builder()
-                .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
-                .setIsGaplessSupportRequired(true)
-                .setIsSpeedChangeSupportRequired(true)
-                .build(),
-            )
-            .build()
         }
       }
   }

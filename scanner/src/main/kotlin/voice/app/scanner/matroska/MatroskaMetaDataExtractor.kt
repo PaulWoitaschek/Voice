@@ -2,19 +2,20 @@ package voice.app.scanner.matroska
 
 import android.content.Context
 import android.net.Uri
+import dev.zacsweers.metro.Inject
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.matroska.MatroskaDocTypes
 import voice.data.MarkData
 import java.util.Locale
-import javax.inject.Inject
 
 class MatroskaMetaDataExtractor(
   private val dataSource: SafSeekableDataSource,
   private val reader: EBMLReader,
 ) : AutoCloseable {
 
-  class Factory @Inject constructor(private val context: Context) {
+  @Inject
+  class Factory(private val context: Context) {
     fun create(uri: Uri): MatroskaMetaDataExtractor {
       val dataSource = SafSeekableDataSource(context.contentResolver, uri)
       val reader = EBMLReader(dataSource)

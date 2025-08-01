@@ -13,12 +13,13 @@ import com.bluelinelabs.conductor.ChangeHandlerFrameLayout
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
 import voice.app.features.bookOverview.EditCoverDialogController
-import voice.app.injection.appComponent
+import voice.app.injection.appGraph
 import voice.app.misc.conductor.asVerticalChangeHandlerTransaction
 import voice.bookmark.BookmarkController
 import voice.common.BookId
@@ -31,7 +32,6 @@ import voice.playback.PlayerController
 import voice.playback.session.search.BookSearchHandler
 import voice.playback.session.search.BookSearchParser
 import voice.playbackScreen.BookPlayController
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
   private lateinit var router: Router
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    appComponent.inject(this)
+    appGraph.inject(this)
     super.onCreate(savedInstanceState)
 
     enableEdgeToEdge()

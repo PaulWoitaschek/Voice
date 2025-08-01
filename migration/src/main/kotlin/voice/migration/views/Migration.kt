@@ -32,26 +32,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.squareup.anvil.annotations.ContributesTo
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
 import voice.common.compose.rememberScoped
 import voice.common.formatTime
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.migration.MigrationViewModel
 import java.time.Instant
 import kotlin.random.Random
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface MigrationComponent {
+interface MigrationGraph {
   val migrationViewModel: MigrationViewModel
 }
 
 @Composable
 fun Migration() {
-  val viewModel = rememberScoped { rootComponentAs<MigrationComponent>().migrationViewModel }
+  val viewModel = rememberScoped { rootGraphAs<MigrationGraph>().migrationViewModel }
   val viewState = viewModel.viewState()
   Migration(
     viewState = viewState,

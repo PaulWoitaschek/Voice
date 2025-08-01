@@ -4,21 +4,21 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Qualifier
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.serializer
-import voice.common.AppScope
 import voice.datastore.VoiceDataStoreFactory
-import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @ContributesTo(AppScope::class)
-@Module
+@BindingContainer
 object ReviewModule {
 
   @Provides
-  @Singleton
+  @SingleIn(AppScope::class)
   @ReviewDialogShown
   fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.create(Boolean.serializer(), false, "reviewDialogShown")

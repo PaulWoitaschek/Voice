@@ -136,4 +136,10 @@
     <string name="sleep_timer.button.increment">Даўжэй</string>
     <string name="sleep_timer.title">Дабранач! 🌙</string>
     <string name="sleep_timer.button.decrement">Карацей</string>
+    <string name="auto_sleep_timer.title">Аўтаматычны Таймер Сну</string>
+    <string name="pref_faq">FAQ</string>
+    <string name="auto_sleep_timer.subtitle">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Задаць час пачатку</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Задаць час фінішу</string>
+    <string name="playback.current_chapter">Бягучы раздзел</string>
 </resources>

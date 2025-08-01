@@ -13,7 +13,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.datastore.core.DataStore
 import coil.imageLoader
 import coil.request.ImageRequest
-import dagger.Reusable
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -27,12 +29,11 @@ import voice.data.Book
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.playback.receiver.WidgetButtonReceiver
-import javax.inject.Inject
 import voice.common.R as CommonR
 
-@Reusable
-class WidgetUpdater
-@Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class WidgetUpdater(
   private val context: Context,
   private val repo: BookRepository,
   @CurrentBookStore

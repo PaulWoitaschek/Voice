@@ -23,23 +23,23 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squareup.anvil.annotations.ContributesTo
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
-interface FolderPickerComponent {
+interface FolderPickerGraph {
   val folderPickerViewModel: FolderPickerViewModel
 }
 
 @Composable
 fun FolderOverview(onCloseClick: () -> Unit) {
   val viewModel: FolderPickerViewModel = rememberScoped {
-    rootComponentAs<FolderPickerComponent>()
+    rootGraphAs<FolderPickerGraph>()
       .folderPickerViewModel
   }
   val viewState = viewModel.viewState()

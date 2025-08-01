@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,12 +22,11 @@ import voice.data.legacy.LegacyChapterMark
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.migration.views.MigrationViewState
 import java.io.File
-import javax.inject.Inject
 
 private const val COMMON_STORAGE_PREFIX = "/storage/emulated/0/"
 
-class MigrationViewModel
-@Inject constructor(
+@Inject
+class MigrationViewModel(
   private val dao: LegacyBookDao,
   private val navigator: Navigator,
 ) {

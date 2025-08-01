@@ -3,6 +3,7 @@ package voice.app.scanner.mp4
 import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
+import dev.zacsweers.metro.Inject
 import voice.app.scanner.mp4.visitor.ChapVisitor
 import voice.app.scanner.mp4.visitor.ChplVisitor
 import voice.app.scanner.mp4.visitor.MdhdVisitor
@@ -10,10 +11,9 @@ import voice.app.scanner.mp4.visitor.StcoVisitor
 import voice.app.scanner.mp4.visitor.StscVisitor
 import voice.app.scanner.mp4.visitor.SttsVisitor
 import voice.logging.core.Logger
-import javax.inject.Inject
 
-class Mp4BoxParser
-@Inject constructor(
+@Inject
+class Mp4BoxParser(
   stscVisitor: StscVisitor,
   mdhdVisitor: MdhdVisitor,
   sttsVisitor: SttsVisitor,

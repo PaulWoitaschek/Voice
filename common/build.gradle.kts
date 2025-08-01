@@ -2,17 +2,13 @@ plugins {
   id("voice.library")
   id("voice.compose")
   id("kotlin-parcelize")
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.kotlin.serialization)
 }
 
-anvil {
-  generateDaggerFactories.set(true)
-}
-
 android {
-  buildFeatures {
-    androidResources = true
+  androidResources {
+    enable = true
   }
 }
 
@@ -20,7 +16,6 @@ dependencies {
   implementation(projects.strings)
 
   implementation(libs.appCompat)
-  implementation(libs.dagger.core)
   implementation(libs.material)
   api(libs.immutable)
   api(libs.conductor)

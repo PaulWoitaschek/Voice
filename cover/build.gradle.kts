@@ -2,18 +2,13 @@ plugins {
   id("voice.library")
   id("voice.compose")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
   implementation(projects.data)
   implementation(projects.strings)
   implementation(projects.remoteconfig.core)
-  implementation(libs.dagger.core)
 
   implementation(libs.bundles.retrofit)
   implementation(libs.okhttp)

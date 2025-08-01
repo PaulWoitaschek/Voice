@@ -3,14 +3,14 @@ package voice.remoteconfig.firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
-import com.squareup.anvil.annotations.ContributesBinding
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import voice.remoteconfig.core.RemoteConfig
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class FirebaseRemoteConfigImpl
-@Inject constructor() : RemoteConfig {
+@Inject
+class FirebaseRemoteConfigImpl : RemoteConfig {
 
   private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 

@@ -5,8 +5,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import voice.app.injection.appComponent
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import voice.app.injection.appGraph
 
 class BaseWidgetProvider : AppWidgetProvider() {
 
@@ -17,7 +17,7 @@ class BaseWidgetProvider : AppWidgetProvider() {
     context: Context,
     intent: Intent?,
   ) {
-    appComponent.inject(this)
+    appGraph.inject(this)
     super.onReceive(context, intent)
   }
 

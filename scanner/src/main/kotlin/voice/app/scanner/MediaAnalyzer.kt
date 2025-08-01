@@ -1,14 +1,11 @@
 package voice.app.scanner
 
 import android.content.Context
-import android.media.MediaFormat
 import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
-import androidx.media3.common.ParserException
 import androidx.media3.container.MdtaMetadataEntry
-import androidx.media3.exoplayer.MediaExtractorCompat
 import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
@@ -16,11 +13,10 @@ import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
-import kotlinx.coroutines.withContext
 import voice.app.scanner.matroska.MatroskaMetaDataExtractor
 import voice.app.scanner.matroska.MatroskaParseException
 import voice.app.scanner.mp4.Mp4ChapterExtractor
@@ -28,14 +24,12 @@ import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
 import voice.logging.core.Logger
-import java.io.IOException
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
-class MediaAnalyzer
-@Inject constructor(
+@Inject
+class MediaAnalyzer(
   private val context: Context,
   private val mp4ChapterExtractor: Mp4ChapterExtractor,
   private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
@@ -50,8 +44,12 @@ class MediaAnalyzer
 
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
     val builder = Metadata.Builder(file.nameWithoutExtension())
-    val duration = parseDuration(file)
+    val duration = retrieveDuration(file.uri)
       ?: return null
+    if (duration <= Duration.ZERO) {
+      Logger.w("Duration is zero or negative for file: ${file.uri}")
+      return null
+    }
 
     val trackGroups = retrieveMetadata(file.uri)
       ?: return null
@@ -193,12 +191,12 @@ class MediaAnalyzer
 
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
     return try {
-      MetadataRetriever
-        .retrieveMetadata(
-          mediaSourceFactory,
-          MediaItem.fromUri(uri),
-        )
-        .await()
+      MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
+        .setMediaSourceFactory(mediaSourceFactory)
+        .build()
+        .use {
+          it.retrieveTrackGroups().await()
+        }
     } catch (e: Exception) {
       if (e is CancellationException) coroutineContext.ensureActive()
       Logger.w(e, "Error retrieving metadata")
@@ -206,41 +204,18 @@ class MediaAnalyzer
     }
   }
 
-  private suspend fun parseDuration(file: CachedDocumentFile): Duration? {
-    val extractor = MediaExtractorCompat(context)
-
-    val prepared = withContext(Dispatchers.IO) {
-      try {
-        extractor.setDataSource(file.uri, 0)
-        true
-      } catch (e: IOException) {
-        Logger.w(e, "Error extracting duration")
-        false
-      } catch (e: ParserException) {
-        Logger.w(e, "Error extracting duration")
-        false
-      } catch (e: IllegalArgumentException) {
-        Logger.w(e, "Error extracting duration")
-        false
-      } catch (e: SecurityException) {
-        Logger.w(e, "Error extracting duration due to security exception")
-        false
-      }
-    }
-    if (!prepared) return null
-
-    repeat(extractor.trackCount) { trackIndex ->
-      val format = extractor.getTrackFormat(trackIndex)
-      if (format.getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true) {
-        extractor.selectTrack(trackIndex)
-        if (format.containsKey(MediaFormat.KEY_DURATION)) {
-          val durationUs = format.getLong(MediaFormat.KEY_DURATION)
-          if (durationUs != C.TIME_UNSET) {
-            return durationUs.microseconds
-          }
+  private suspend fun retrieveDuration(uri: Uri): Duration? {
+    return try {
+      MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
+        .setMediaSourceFactory(mediaSourceFactory)
+        .build()
+        .use {
+          it.retrieveDurationUs().await().microseconds
         }
-      }
+    } catch (e: Exception) {
+      if (e is CancellationException) coroutineContext.ensureActive()
+      Logger.w(e, "Error retrieving metadata")
+      null
     }
-    return null
   }
 }

@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.zacsweers.metro.Inject
 import io.kotest.matchers.longs.shouldBeGreaterThan
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -13,7 +14,7 @@ import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.FadeOutStore
 import voice.common.pref.SleepTimerPreferenceStore
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.BookContent
 import voice.data.Chapter
@@ -26,7 +27,6 @@ import voice.playback.session.SleepTimer
 import java.io.File
 import java.time.Instant
 import java.util.UUID
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -58,7 +58,7 @@ class SleepTimerIntegrationTest {
 
   @Test
   fun test() = runTest {
-    rootComponentAs<TestComponent>().inject(this@SleepTimerIntegrationTest)
+    rootGraphAs<TestGraph>().inject(this@SleepTimerIntegrationTest)
 
     prepareTestBook()
 

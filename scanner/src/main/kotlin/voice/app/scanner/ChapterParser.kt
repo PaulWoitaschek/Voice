@@ -1,15 +1,15 @@
 package voice.app.scanner
 
+import dev.zacsweers.metro.Inject
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.isAudioFile
 import voice.data.repo.ChapterRepo
 import voice.documentfile.CachedDocumentFile
 import java.time.Instant
-import javax.inject.Inject
 
-class ChapterParser
-@Inject constructor(
+@Inject
+class ChapterParser(
   private val chapterRepo: ChapterRepo,
   private val mediaAnalyzer: MediaAnalyzer,
 ) {

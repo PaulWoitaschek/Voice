@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetContent
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.deleteBook.DeleteBookDialog
-import voice.bookOverview.di.BookOverviewComponent
+import voice.bookOverview.di.BookOverviewGraph
 import voice.bookOverview.editTitle.EditBookTitleDialog
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
@@ -44,20 +44,20 @@ import voice.common.BookId
 import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import java.util.UUID
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
-  val bookComponent = rememberScoped {
-    rootComponentAs<BookOverviewComponent.Factory.Provider>()
-      .bookOverviewComponentProviderFactory.create()
+  val bookGraph = rememberScoped {
+    rootGraphAs<BookOverviewGraph.Factory.Provider>()
+      .bookOverviewGraphProviderFactory.create()
   }
-  val bookOverviewViewModel = bookComponent.bookOverviewViewModel
-  val editBookTitleViewModel = bookComponent.editBookTitleViewModel
-  val bottomSheetViewModel = bookComponent.bottomSheetViewModel
-  val deleteBookViewModel = bookComponent.deleteBookViewModel
-  val fileCoverViewModel = bookComponent.fileCoverViewModel
+  val bookOverviewViewModel = bookGraph.bookOverviewViewModel
+  val editBookTitleViewModel = bookGraph.editBookTitleViewModel
+  val bottomSheetViewModel = bookGraph.bottomSheetViewModel
+  val deleteBookViewModel = bookGraph.deleteBookViewModel
+  val fileCoverViewModel = bookGraph.fileCoverViewModel
 
   val lifecycleOwner = LocalLifecycleOwner.current
   DisposableEffect(lifecycleOwner) {

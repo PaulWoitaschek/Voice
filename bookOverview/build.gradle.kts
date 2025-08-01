@@ -1,11 +1,7 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
@@ -19,7 +15,6 @@ dependencies {
 
   implementation(libs.lifecycle)
   implementation(libs.documentFile)
-  implementation(libs.dagger.core)
   implementation(libs.datastore)
 
   testImplementation(libs.bundles.testing.jvm)

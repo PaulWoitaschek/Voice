@@ -4,11 +4,11 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
+import dev.zacsweers.metro.Inject
 import java.io.File
-import javax.inject.Inject
 
-class ImageFileProvider
-@Inject constructor(private val application: Application) {
+@Inject
+class ImageFileProvider(private val application: Application) {
 
   internal fun uri(file: File): Uri {
     return FileProvider

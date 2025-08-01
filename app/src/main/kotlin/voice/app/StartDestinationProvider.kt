@@ -1,14 +1,14 @@
 package voice.app
 
 import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.common.pref.OnboardingCompletedStore
 import voice.data.folders.AudiobookFolders
-import javax.inject.Inject
 
-class StartDestinationProvider
-@Inject constructor(
+@Inject
+class StartDestinationProvider(
   @OnboardingCompletedStore
   private val onboardingCompletedStore: DataStore<Boolean>,
   private val audiobookFolders: AudiobookFolders,

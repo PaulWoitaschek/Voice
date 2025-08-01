@@ -10,13 +10,11 @@ import io.kotest.matchers.shouldBe
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.data.allMigrations
 import java.util.UUID
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class DataBaseMigratorTest {
 
   @Rule
@@ -61,7 +59,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `bookSettings`(`id`,`currentFile`,`positionInChapter`,`playbackSpeed`,`loudnessGain`,`skipSilence`," +
           "`active`,`lastPlayedAtMillis`) VALUES (?,?,?,?,?,?,?,?)",
-        arrayOf(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0),
+        arrayOf<Any>(settings.id, settings.currentFile, settings.positionInChapter, 1F, 0, 0, 1, 0),
       )
     }
 
@@ -69,7 +67,7 @@ class DataBaseMigratorTest {
       db.execSQL(
         "INSERT OR REPLACE INTO `chapters`(`file`,`name`,`duration`,`fileLastModified`,`marks`,`bookId`,`id`) " +
           "VALUES (?,?,?,?,?,?,nullif(?, 0))",
-        arrayOf(chapter.file, "name", 1L, 0L, "{}", chapter.bookId),
+        arrayOf<Any>(chapter.file, "name", 1L, 0L, "{}", chapter.bookId),
       )
     }
 

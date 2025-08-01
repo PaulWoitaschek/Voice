@@ -1,16 +1,12 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 android {
-  buildFeatures {
-    androidResources = true
+  androidResources {
+    enable = true
   }
 }
 
@@ -24,6 +20,4 @@ dependencies {
   implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
-
-  implementation(libs.dagger.core)
 }

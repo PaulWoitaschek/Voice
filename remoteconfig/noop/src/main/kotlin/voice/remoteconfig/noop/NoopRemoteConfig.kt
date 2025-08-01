@@ -1,13 +1,13 @@
 package voice.remoteconfig.noop
 
-import com.squareup.anvil.annotations.ContributesBinding
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import voice.remoteconfig.core.RemoteConfig
-import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class NoopRemoteConfig
-@Inject constructor() : RemoteConfig {
+@Inject
+class NoopRemoteConfig : RemoteConfig {
 
   override fun boolean(
     key: String,

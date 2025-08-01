@@ -1,5 +1,6 @@
 package voice.data.repo
 
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
@@ -11,10 +12,9 @@ import voice.data.repo.internals.transaction
 import voice.data.runForMaxSqlVariableNumber
 import voice.logging.core.Logger
 import java.time.Instant
-import javax.inject.Inject
 
-class BookmarkRepo
-@Inject constructor(
+@Inject
+class BookmarkRepo(
   private val dao: BookmarkDao,
   private val appDb: AppDb,
 ) {

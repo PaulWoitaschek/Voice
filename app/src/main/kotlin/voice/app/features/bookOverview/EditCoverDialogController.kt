@@ -13,10 +13,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import voice.app.databinding.DialogCoverEditBinding
-import voice.app.injection.appComponent
+import voice.app.injection.appGraph
 import voice.app.misc.conductor.context
 import voice.app.scanner.CoverSaver
 import voice.app.uitools.CropTransformation
@@ -24,7 +25,6 @@ import voice.common.BookId
 import voice.common.conductor.DialogController
 import voice.common.parcelable
 import voice.data.repo.BookRepository
-import javax.inject.Inject
 import voice.strings.R as StringsR
 
 private const val NI_ARGS = "ni#bundle"
@@ -45,7 +45,7 @@ class EditCoverDialogController(bundle: Bundle) : DialogController(bundle) {
 
   @SuppressLint("InflateParams")
   override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-    appComponent.inject(this)
+    appGraph.inject(this)
 
     val binding = DialogCoverEditBinding.inflate(activity!!.layoutInflater)
     val arguments = args.parcelable<Arguments>(NI_ARGS)!!

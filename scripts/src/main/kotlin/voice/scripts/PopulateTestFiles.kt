@@ -67,7 +67,7 @@ class PopulateTestFiles : CliktCommand() {
   }
 
   private fun add(path: String) {
-    val testFile = File("app/src/androidTest/res/raw/intact.mp3")
+    val testFile = File("scanner/src/test/resources/auphonic_chapters_demo.mp3")
     val output = File(testFilesRoot, path)
     output.parentFile.mkdirs()
     runCommand(

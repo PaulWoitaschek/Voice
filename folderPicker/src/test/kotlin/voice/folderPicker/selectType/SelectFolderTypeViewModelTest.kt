@@ -14,13 +14,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.common.DispatcherProvider
 import voice.common.navigation.Destination
 import voice.documentfile.FileBasedDocumentFactory
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class SelectFolderTypeViewModelTest {
 
   @get:Rule

@@ -23,11 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.squareup.anvil.annotations.ContributesTo
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
 import voice.settings.SettingsViewState
@@ -200,13 +200,13 @@ private fun Settings(
 }
 
 @ContributesTo(AppScope::class)
-interface SettingsComponent {
+interface SettingsGraph {
   val settingsViewModel: SettingsViewModel
 }
 
 @Composable
 fun Settings() {
-  val viewModel = rememberScoped { rootComponentAs<SettingsComponent>().settingsViewModel }
+  val viewModel = rememberScoped { rootGraphAs<SettingsGraph>().settingsViewModel }
   val viewState = viewModel.viewState()
   Settings(viewState, viewModel)
 }

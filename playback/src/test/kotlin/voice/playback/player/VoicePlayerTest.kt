@@ -1,6 +1,5 @@
 package voice.playback.player
 
-import androidx.media3.common.AdPlaybackState
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
@@ -24,7 +23,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 import voice.common.BookId
 import voice.data.Book
 import voice.data.Chapter
@@ -43,7 +41,6 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class VoicePlayerTest {
 
   init {
@@ -75,30 +72,12 @@ class VoicePlayerTest {
           chapter.duration
           FakeMediaSource(
             FakeTimeline(
-              FakeTimeline.TimelineWindowDefinition(
-                /* periodCount = */
-                1,
-                /* id = */
-                mediaId,
-                /* isSeekable = */
-                true,
-                /* isDynamic = */
-                false,
-                /* isLive = */
-                false,
-                /* isPlaceholder = */
-                false,
-                /* durationUs = */
-                TimeUnit.MILLISECONDS.toMicros(chapter.duration),
-                /* defaultPositionUs = */
-                0,
-                /* windowOffsetInFirstPeriodUs = */
-                0,
-                /* adPlaybackStates = */
-                listOf(AdPlaybackState.NONE),
-                /* mediaItem = */
-                mediaItem,
-              ),
+              FakeTimeline.TimelineWindowDefinition.Builder()
+                .setPeriodCount(1)
+                .setSeekable(true)
+                .setDurationUs(TimeUnit.MILLISECONDS.toMicros(chapter.duration))
+                .setMediaItem(mediaItem)
+                .build(),
             ),
           )
         }

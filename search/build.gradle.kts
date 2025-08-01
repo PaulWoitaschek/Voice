@@ -1,13 +1,8 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 dependencies {
   implementation(projects.data)
-  implementation(libs.dagger.core)
 }

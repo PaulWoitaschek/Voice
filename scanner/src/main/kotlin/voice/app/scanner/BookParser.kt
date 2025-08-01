@@ -2,6 +2,7 @@ package voice.app.scanner
 
 import android.app.Application
 import android.net.Uri
+import dev.zacsweers.metro.Inject
 import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
@@ -16,10 +17,9 @@ import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 import java.io.File
 import java.time.Instant
-import javax.inject.Inject
 
-class BookParser
-@Inject constructor(
+@Inject
+class BookParser(
   private val contentRepo: BookContentRepo,
   private val mediaAnalyzer: MediaAnalyzer,
   private val legacyBookDao: LegacyBookDao,

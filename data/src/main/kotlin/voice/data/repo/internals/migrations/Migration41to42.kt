@@ -4,16 +4,17 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
-class Migration41to42
-@Inject constructor() : IncrementalMigration(41) {
+@Inject
+class Migration41to42 : IncrementalMigration(41) {
   override fun migrate(db: SupportSQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned
     val lastModifiedCv = ContentValues().apply {

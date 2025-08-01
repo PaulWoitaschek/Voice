@@ -4,21 +4,22 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.squareup.anvil.annotations.ContributesMultibinding
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import voice.data.repo.internals.getInt
 import voice.data.repo.internals.getString
 import voice.data.repo.internals.moveToNextLoop
 import java.time.Instant
 import java.util.UUID
-import javax.inject.Inject
 
-@ContributesMultibinding(
+@ContributesIntoSet(
   scope = AppScope::class,
-  boundType = Migration::class,
+  binding = binding<Migration>(),
 )
-class Migration49
-@Inject constructor() : IncrementalMigration(49) {
+@Inject
+class Migration49 : IncrementalMigration(49) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     with(db) {

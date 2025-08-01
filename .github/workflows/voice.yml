@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4
 
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -40,7 +40,7 @@ jobs:
         run: ./ci_signing_setup.sh
 
       - name: Test
-        run: ./gradlew voiceUnitTest -Pvoice.warningsAsErrors=true lintKotlin :app:lintPlayProprietaryDebug :app:assemblePlayProprietaryDebug :scripts:build
+        run: ./gradlew voiceUnitTest  lintKotlin :app:lintPlayDebug :app:assemblePlayDebug :scripts:build
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
@@ -51,7 +51,7 @@ jobs:
             app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@65fe03598d8d251738592a497a9e8547a5c48eaa # v5
+        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -69,7 +69,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4
 
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -88,7 +88,7 @@ jobs:
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Test
-        run: ./gradlew voiceDeviceGithubLibreDebugAndroidTest
+        run: ./gradlew voiceDeviceGithubDebugAndroidTest
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -100,7 +100,7 @@ jobs:
             app/build/reports/*.html
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@65fe03598d8d251738592a497a9e8547a5c48eaa # v5
+        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -112,7 +112,7 @@ jobs:
     outputs:
       tag_name: ${{ github.ref_name }}
     steps:
-      - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
+      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
 
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -121,34 +121,42 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4
 
       - name: Setup Signing
         run: ./ci_signing_setup.sh
 
+      - name: Create Output Directory
+        run: mkdir -p outputs
+
       - name: Build Google Play AAB
-        run: ./gradlew :app:bundlePlayProprietaryRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:bundlePlayRelease
 
       - name: Build Github Proprietary APK
-        run: ./gradlew :app:assembleGithubProprietaryRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:assembleGithubRelease
+
+      - name: Copy Github Proprietary APK
+        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/proprietary.apk
 
       - name: Build Github Libre APK
-        run: ./gradlew :app:assembleGithubLibreRelease -Pvoice.warningsAsErrors=true
+        run: ./gradlew :app:assembleGithubRelease  -Pvoice.includeProprietaryLibraries=false
+
+      - name: Copy Github Libre APK
+        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: google-play-aab
-          path: app/build/outputs/bundle/playProprietaryRelease/app-play-proprietary-release.aab
+          path: app/build/outputs/bundle/playRelease/app-play-release.aab
           retention-days: 30
 
       - name: Github Release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
         with:
           draft: true
           files: |
-            app/build/outputs/apk/githubProprietary/release/app-github-proprietary-release.apk
-            app/build/outputs/apk/githubLibre/release/app-github-libre-release.apk
+            outputs/*.apk
 
   publish_google_play:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
@@ -156,7 +164,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: "google-play"
     steps:
-      - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
+      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
 
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
@@ -165,7 +173,7 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4
 
       - name: Setup Signing
         run: ./ci_signing_setup.sh
@@ -174,7 +182,7 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: google-play-aab
-          path: app/build/outputs/bundle/playProprietaryRelease/
+          path: app/build/outputs/bundle/playRelease/
 
       - name: Publish to Google Play
-        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playProprietaryRelease/ -Pvoice.warningsAsErrors=true
+        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playRelease/

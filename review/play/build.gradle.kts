@@ -1,16 +1,12 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.anvil)
-}
-
-anvil {
-  generateDaggerFactories.set(true)
+  alias(libs.plugins.metro)
 }
 
 android {
-  buildFeatures {
-    androidResources = true
+  androidResources {
+    enable = true
   }
 }
 
@@ -22,6 +18,5 @@ dependencies {
   implementation(projects.datastore)
   api(libs.review)
   implementation(libs.lottie)
-  implementation(libs.dagger.core)
   implementation(projects.remoteconfig.core)
 }

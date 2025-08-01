@@ -14,11 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesTo
-import voice.common.AppScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import voice.common.BookId
 import voice.common.compose.ComposeController
-import voice.common.rootComponentAs
+import voice.common.rootGraphAs
 import voice.data.getBookId
 import voice.data.putBookId
 import voice.logging.core.Logger
@@ -33,7 +33,7 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
   constructor(bookId: BookId) : this(Bundle().apply { putBookId(NI_BOOK_ID, bookId) })
 
   private val bookId = bundle.getBookId(NI_BOOK_ID)!!
-  private val viewModel: BookPlayViewModel = rootComponentAs<Component>()
+  private val viewModel: BookPlayViewModel = rootGraphAs<Graph>()
     .bookPlayViewModelFactory
     .create(bookId)
 
@@ -125,7 +125,7 @@ class BookPlayController(bundle: Bundle) : ComposeController(bundle) {
   }
 
   @ContributesTo(AppScope::class)
-  interface Component {
+  interface Graph {
     val bookPlayViewModelFactory: BookPlayViewModel.Factory
   }
 }

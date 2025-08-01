@@ -8,15 +8,27 @@ plugins {
   id("voice.app")
   id("voice.compose")
   id("kotlin-parcelize")
-  id("kotlin-kapt")
   alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.anvil)
+  alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
   alias(libs.plugins.playPublish)
 }
 
-if (file("google-services.json").exists()) {
+fun includeProprietaryLibraries(): Boolean {
+  val includeProprietaryLibraries = providers.gradleProperty("voice.includeProprietaryLibraries").get().toBooleanStrict()
+  if (!includeProprietaryLibraries) {
+    return false
+  }
+  return file("google-services.json").exists()
+    .also { present ->
+      if (!present) {
+        logger.warn("Google Services JSON file not found, disabling proprietary libraries.")
+      }
+    }
+}
+
+if (includeProprietaryLibraries()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
@@ -29,19 +41,18 @@ play {
   }
 }
 
-kapt {
-  arguments {
-    arg("dagger.fastInit", "enabled")
-    arg("dagger.fullBindingGraphValidation", "ERROR")
-  }
-}
-
 android {
 
   namespace = "voice.app"
 
   androidResources {
     generateLocaleConfig = true
+  }
+
+  dependenciesInfo {
+    // disable the dependencies info in apks to allow reproducible builds
+    // see https://github.com/PaulWoitaschek/Voice/discussions/2862#discussioncomment-13622836
+    includeInApk = false
   }
 
   defaultConfig {
@@ -70,9 +81,7 @@ android {
   val githubSigningConfig = createSigningConfig("github")
 
   val signingFlavor = "signing"
-  val freeFlavor = "free"
   flavorDimensions += signingFlavor
-  flavorDimensions += freeFlavor
   productFlavors {
     register("github") {
       dimension = signingFlavor
@@ -81,12 +90,6 @@ android {
     register("play") {
       dimension = signingFlavor
       signingConfig = playSigningConfig
-    }
-    register("libre") {
-      dimension = freeFlavor
-    }
-    register("proprietary") {
-      dimension = freeFlavor
     }
   }
 
@@ -174,19 +177,19 @@ dependencies {
   implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
-  "proprietaryImplementation"(libs.firebase.crashlytics)
-  "proprietaryImplementation"(libs.firebase.analytics)
-  "proprietaryImplementation"(projects.logging.crashlytics)
-  "proprietaryImplementation"(projects.review.play)
-  "proprietaryImplementation"(projects.remoteconfig.firebase)
-  "libreImplementation"(projects.review.noop)
-  "libreImplementation"(projects.remoteconfig.noop)
+  if (includeProprietaryLibraries()) {
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(projects.logging.crashlytics)
+    implementation(projects.review.play)
+    implementation(projects.remoteconfig.firebase)
+  } else {
+    implementation(projects.review.noop)
+    implementation(projects.remoteconfig.noop)
+  }
   implementation(projects.remoteconfig.core)
 
   debugImplementation(projects.logging.debug)
-
-  implementation(libs.dagger.core)
-  kapt(libs.dagger.compiler)
 
   implementation(libs.androidxCore)
 
@@ -218,5 +221,4 @@ dependencies {
   androidTestImplementation(libs.androidX.test.services)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
-  kaptAndroidTest(libs.dagger.compiler)
 }

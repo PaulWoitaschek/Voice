@@ -5,7 +5,7 @@ import voice.app.features.MainActivity
 import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.features.widget.BaseWidgetProvider
 
-interface AppComponent {
+interface AppGraph {
 
   fun inject(target: App)
   fun inject(target: BaseWidgetProvider)

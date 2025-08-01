@@ -90,8 +90,8 @@
     <string name="notification_sleep_timer_disable">Slaapklok uitschakelen</string>
     <string name="generic_error_message">Er is iets fout gegaan 😢</string>
     <string name="generic_error_retry">Opnieuw proberen</string>
-    <string name="play">Afspelen</string>
-    <string name="pause">Pauzeren</string>
+    <string name="play">Speel af</string>
+    <string name="pause">Pauzeer</string>
     <string name="cover_search_template_no_author">%s luisterboekomslag</string>
     <string name="cover_search_template_with_author">%1$s door %2$s luisterboekomslag</string>
     <string name="select_folder_type_file">Bestand</string>
@@ -128,4 +128,10 @@
     <string name="onboarding.completion.title">Je bent helemaal klaar!</string>
     <string name="review.feedback.button.yes">Feedback verzenden</string>
     <string name="onboarding_welcome_subtitle">Jouw persoonlijke luisterboekspeler. Laten we je installatie afmaken.</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Zet eindtijd</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Zet starttijd</string>
+    <string name="playback.current_chapter">Huidig hoofdstuk</string>
+    <string name="pref_faq">Veelgestelde vragen</string>
+    <string name="auto_sleep_timer.title">Automatische Slaaptimer</string>
+    <string name="auto_sleep_timer.subtitle">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
 </resources>

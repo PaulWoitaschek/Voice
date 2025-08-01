@@ -7,6 +7,8 @@ import androidx.datastore.core.DataStore
 import coil.Coil
 import coil.ImageLoader
 import com.google.android.material.color.DynamicColors
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.createGraphFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -14,9 +16,8 @@ import voice.app.features.widget.TriggerWidgetOnChange
 import voice.app.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.DarkThemeStore
-import voice.common.rootComponent
+import voice.common.rootGraph
 import voice.sleepTimer.AutoEnableSleepTimer
-import javax.inject.Inject
 
 open class App : Application() {
 
@@ -46,9 +47,9 @@ open class App : Application() {
 
     DynamicColors.applyToActivitiesIfAvailable(this)
 
-    appComponent = createAppComponent()
-    rootComponent = appComponent
-    appComponent.inject(this)
+    appGraph = createGraph()
+    rootGraph = appGraph
+    appGraph.inject(this)
 
     if (DARK_THEME_SETTABLE) {
       MainScope().launch {
@@ -66,10 +67,10 @@ open class App : Application() {
     autoEnableSleepTimer.startMonitoring()
   }
 
-  open fun createAppComponent(): AppComponent {
-    return ProductionAppComponent.factory().create(this)
+  open fun createGraph(): AppGraph {
+    return createGraphFactory<ProductionAppGraph.Factory>().create(this)
   }
 }
 
-lateinit var appComponent: AppComponent
+lateinit var appGraph: AppGraph
   @VisibleForTesting set
