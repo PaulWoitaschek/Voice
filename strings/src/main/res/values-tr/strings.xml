@@ -41,7 +41,7 @@
     <string name="pref_get_support">Destek al</string>
     <string name="pref_app_version">Uygulama sürümü</string>
     <string name="add">Ekle</string>
-    <string name="folder_mode_root">Üst Seviye Kitap Modu: Alt klasörler kitaplardır</string>
+    <string name="folder_mode_root">EnÜst Seviye Kitap Modu: Alt klasörler kitaplardır</string>
     <string name="folder_mode_single">Tek kitap modu: Bir dosyada bir kitap bulunur.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d ses dosyası</item>
@@ -49,7 +49,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Bu, aşağıdaki kitapların algılanmasını sağlayacaktır</string>
     <string name="bookmark_just_now">Şimdi</string>
-    <string name="migration_hint_title">Eski kitap konumlarına erişim</string>
+    <string name="migration_hint_title">Eski kitap konumlarına erişiliyor</string>
     <string name="migration_hint_confirm">Anladım</string>
     <string name="migration_detail_content_root">Kök dizin</string>
     <string name="migration_detail_content_position">Konum</string>
@@ -62,7 +62,7 @@
     <string name="migration_delete_dialog_action_keep">Tut</string>
     <string name="delete_book_dialog_deletion_confirmation">Dosyalarımı sil</string>
     <string name="battery_optimization_rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>
-    <string name="media_session_recent">Yakın zamanda</string>
+    <string name="media_session_recent">Son açılanlar</string>
     <string name="notification_sleep_timer_enable">Uyku Zamanlayıcısını Etkinleştir</string>
     <string name="notification_sleep_timer_disable">Uyku Zamanlayıcısını Devre Dışı Bırak</string>
     <string name="mark_as_current">Geçerli olan olarak işaretle</string>
@@ -71,7 +71,7 @@
     <string name="pref_suggest_idea">Fikir öner</string>
     <string name="pref_report_issue">Sorun bildir</string>
     <string name="folder_type_title">Dosyalarınız nasıl yapılandırılıyor\?</string>
-    <string name="pref_help_translating">Voice\'i çevirmeye yardım et</string>
+    <string name="pref_help_translating">Voice\'u çevirmeye yardım et</string>
     <string name="close">Kapat</string>
     <string name="delete">Sil</string>
     <string name="folder_type_no_books">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı\?</string>
@@ -104,12 +104,12 @@
     <string name="cover_search.icon_recent">Son aramalar</string>
     <string name="review.feedback.title">Bunu duyduğumuz için üzgünüz!</string>
     <string name="sleep_timer.button.increment">Daha uzun</string>
-    <string name="onboarding.explanation.title">Senin kütüphanen,senin tarzın</string>
+    <string name="onboarding.explanation.title">Senin kütüphanen, senin tarzın</string>
     <string name="review.request.button.yes">Şimdi puanla</string>
     <string name="cover_search.author">Yazar</string>
     <string name="storage_bug_button">İzin ver</string>
     <string name="select_folder_type_file">Dosya</string>
-    <string name="onboarding_welcome_title">Voice\'e hoşgeldiniz!</string>
+    <string name="onboarding_welcome_title">Voice\'e hoş geldiniz!</string>
     <plurals name="minutes">
         <item quantity="one">%d dakika</item>
         <item quantity="other">%d dakika</item>
