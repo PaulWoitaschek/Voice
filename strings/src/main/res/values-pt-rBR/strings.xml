@@ -133,4 +133,10 @@
     <string name="select_folder_subtitle">Gostaria de adicionar um único arquivo como um livro ou pasta?</string>
     <string name="onboarding_welcome_title">Seja bem vindo ao Voice!</string>
     <string name="onboarding.completion.next_button">Começar a ouvir</string>
+    <string name="pref_faq">Perguntas frequentes</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Definir início</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir final</string>
+    <string name="playback.current_chapter">Capítulo atual</string>
+    <string name="auto_sleep_timer.title">Modo Soneca</string>
+    <string name="auto_sleep_timer.subtitle">Ativa o modo soneca automaticamente quando a reprodução estiver entre %1$s e %2$s</string>
 </resources>
