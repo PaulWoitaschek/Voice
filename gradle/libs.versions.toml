@@ -33,7 +33,7 @@ retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-se
 robolectric = "org.robolectric:robolectric:4.15.1"
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.7.1"
-androidxCore = "androidx.core:core-ktx:1.16.0"
+androidxCore = "androidx.core:core-ktx:1.17.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
