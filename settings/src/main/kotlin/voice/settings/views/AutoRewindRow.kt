@@ -20,10 +20,10 @@ internal fun AutoRewindRow(
 ) {
   ListItem(
     modifier = Modifier
-        .clickable {
-            openAutoRewindDialog()
-        }
-        .fillMaxWidth(),
+      .clickable {
+        openAutoRewindDialog()
+      }
+      .fillMaxWidth(),
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.FastRewind,
