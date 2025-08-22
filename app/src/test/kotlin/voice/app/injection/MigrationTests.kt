@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.app.scanner.MediaScanTrigger
 import voice.common.grid.GridMode
 import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.DarkThemeStore
@@ -29,11 +28,8 @@ import voice.datastore.VoiceDataStoreFactory
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
-  isExtendable = true,
 )
 interface MigrationTestGraph {
-
-  val mediaScanTrigger: MediaScanTrigger
 
   @SeekTimeStore
   val seekTimeStore: DataStore<Int>

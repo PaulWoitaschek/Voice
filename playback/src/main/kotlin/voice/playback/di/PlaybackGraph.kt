@@ -1,12 +1,12 @@
 package voice.playback.di
 
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesGraphExtension
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.Provides
 import voice.playback.session.PlaybackService
 
-@ContributesGraphExtension(
+@GraphExtension(
   scope = PlaybackScope::class,
 )
 @PlaybackScope
@@ -14,7 +14,8 @@ interface PlaybackGraph {
 
   fun inject(target: PlaybackService)
 
-  @ContributesGraphExtension.Factory(AppScope::class)
+  @ContributesTo(AppScope::class)
+  @GraphExtension.Factory
   interface Factory {
     fun create(@Provides playbackService: PlaybackService): PlaybackGraph
   }
