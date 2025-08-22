@@ -12,7 +12,6 @@ import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.folderPicker.folderPicker.FileTypeSelection
-import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 import voice.common.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
 
 @Inject
@@ -32,11 +31,7 @@ class AddContentViewModel(
         audiobookFolders.add(uri, FolderType.SingleFile)
         when (mode) {
           Mode.Default -> {
-            navigator.execute { navController ->
-              navController.typedNavigate(Destination.BookOverview) {
-                popUpTo(0)
-              }
-            }
+            navigator.setRoot(Destination.BookOverview)
           }
           Mode.Onboarding -> {
             navigator.goTo(OnboardingCompletion)

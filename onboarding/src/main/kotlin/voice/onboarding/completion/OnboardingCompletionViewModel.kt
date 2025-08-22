@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 import voice.common.pref.OnboardingCompletedStore
-import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 @Inject
 class OnboardingCompletionViewModel(
@@ -22,11 +21,7 @@ class OnboardingCompletionViewModel(
     scope.launch {
       onboardingCompletedStore.updateData { true }
     }
-    navigator.execute { navController ->
-      navController.typedNavigate(Destination.BookOverview) {
-        popUpTo(0)
-      }
-    }
+    navigator.setRoot(Destination.BookOverview)
   }
 
   fun back() {

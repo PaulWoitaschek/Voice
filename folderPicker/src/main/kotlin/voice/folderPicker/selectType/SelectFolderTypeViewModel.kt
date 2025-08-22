@@ -24,7 +24,6 @@ import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.documentfile.nameWithoutExtension
-import com.kiwi.navigationcompose.typed.navigate as typedNavigate
 
 @Inject
 class SelectFolderTypeViewModel(
@@ -78,11 +77,7 @@ class SelectFolderTypeViewModel(
     )
     when (mode) {
       Mode.Default -> {
-        navigator.execute { navController ->
-          navController.typedNavigate(Destination.BookOverview) {
-            popUpTo(0)
-          }
-        }
+        navigator.setRoot(Destination.BookOverview)
       }
       Mode.Onboarding -> {
         navigator.goTo(Destination.OnboardingCompletion)

@@ -1,6 +1,5 @@
 package voice.common.navigation
 
-import androidx.navigation.NavController
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -30,9 +29,9 @@ class Navigator {
     }
   }
 
-  fun execute(action: (NavController) -> Unit) {
+  fun setRoot(destination: Destination.Compose) {
     scope.launch {
-      _navigationCommands.emit(NavigationCommand.Execute(action))
+      _navigationCommands.emit(NavigationCommand.SetRoot(destination))
     }
   }
 }
