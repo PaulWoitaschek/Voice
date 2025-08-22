@@ -21,7 +21,9 @@ dependencies {
   api(libs.conductor)
   api(libs.datastore)
   implementation(libs.androidxCore)
+  api(libs.navigation3.runtime)
   implementation(libs.viewBinding)
+  implementation(libs.lifecycle.viewmodel.compose)
   implementation(libs.serialization.json)
 
   testImplementation(libs.junit)

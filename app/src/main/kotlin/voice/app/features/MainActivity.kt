@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
               }
             }
           }
-          is NavigationCommand.Execute -> {
+          is NavigationCommand.SetRoot -> {
             // handled in AppController
           }
         }

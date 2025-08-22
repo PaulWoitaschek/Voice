@@ -171,6 +171,8 @@ dependencies {
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
+  implementation(libs.navigation3.ui)
+
   implementation(libs.serialization.json)
 
   implementation(libs.materialDialog.core)
