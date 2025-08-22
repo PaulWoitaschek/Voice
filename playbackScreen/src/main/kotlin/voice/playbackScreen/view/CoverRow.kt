@@ -9,21 +9,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.common.compose.ImmutableFile
 import voice.common.formatTime
+import voice.strings.R
 import kotlin.time.Duration
 
 @Composable
 internal fun CoverRow(
   cover: ImmutableFile?,
   sleepTime: Duration,
+  sleepEoc: Boolean,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Box(modifier) {
     Cover(onDoubleClick = onPlayClick, cover = cover)
-    if (sleepTime != Duration.ZERO) {
+    if (sleepTime != Duration.ZERO || sleepEoc) {
       Text(
         modifier = Modifier
           .align(Alignment.TopEnd)
@@ -33,10 +36,13 @@ internal fun CoverRow(
             shape = RoundedCornerShape(20.dp),
           )
           .padding(horizontal = 20.dp, vertical = 16.dp),
-        text = formatTime(
-          timeMs = sleepTime.inWholeMilliseconds,
-          durationMs = sleepTime.inWholeMilliseconds,
-        ),
+        text = when (sleepEoc) {
+          true -> stringResource(R.string.end_of_chapter)
+          false -> formatTime(
+            timeMs = sleepTime.inWholeMilliseconds,
+            durationMs = sleepTime.inWholeMilliseconds,
+          )
+        },
         color = Color.White,
       )
     }
