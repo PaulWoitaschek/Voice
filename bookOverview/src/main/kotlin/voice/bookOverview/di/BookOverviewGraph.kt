@@ -1,8 +1,8 @@
 package voice.bookOverview.di
 
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesGraphExtension
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.GraphExtension
 import dev.zacsweers.metro.Scope
 import voice.bookOverview.bottomSheet.BottomSheetViewModel
 import voice.bookOverview.deleteBook.DeleteBookViewModel
@@ -13,7 +13,7 @@ import voice.bookOverview.overview.BookOverviewViewModel
 @Scope
 annotation class BookOverviewScope
 
-@ContributesGraphExtension(scope = BookOverviewScope::class)
+@GraphExtension(scope = BookOverviewScope::class)
 @BookOverviewScope
 interface BookOverviewGraph {
   val bookOverviewViewModel: BookOverviewViewModel
@@ -22,7 +22,8 @@ interface BookOverviewGraph {
   val deleteBookViewModel: DeleteBookViewModel
   val fileCoverViewModel: FileCoverViewModel
 
-  @ContributesGraphExtension.Factory(AppScope::class)
+  @GraphExtension.Factory
+  @ContributesTo(AppScope::class)
   interface Factory {
     fun create(): BookOverviewGraph
 

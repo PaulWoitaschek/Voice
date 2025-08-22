@@ -10,7 +10,6 @@ import voice.app.injection.AppGraph
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
-  isExtendable = true,
 )
 interface TestGraph : AppGraph {
 

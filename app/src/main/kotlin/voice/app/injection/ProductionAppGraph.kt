@@ -9,7 +9,6 @@ import dev.zacsweers.metro.SingleIn
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
-  isExtendable = true,
 )
 interface ProductionAppGraph : AppGraph {
 
