@@ -9,7 +9,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import voice.strings.R as StringsR
 
@@ -35,7 +35,7 @@ internal fun AutoRewindRow(
     },
     supportingContent = {
       Text(
-        text = LocalContext.current.resources.getQuantityString(
+        text = LocalResources.current.getQuantityString(
           StringsR.plurals.seconds,
           autoRewindInSeconds,
           autoRewindInSeconds,

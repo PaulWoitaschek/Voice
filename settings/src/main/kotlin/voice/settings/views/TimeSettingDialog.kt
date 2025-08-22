@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import kotlin.math.roundToInt
 import voice.strings.R as StringsR
@@ -35,7 +35,7 @@ fun TimeSettingDialog(
     text = {
       Column {
         Text(
-          LocalContext.current.resources.getQuantityString(
+          LocalResources.current.getQuantityString(
             textPluralRes,
             sliderValue.roundToInt(),
             sliderValue.roundToInt(),

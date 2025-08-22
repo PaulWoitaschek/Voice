@@ -24,8 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -144,7 +144,7 @@ internal fun GridBook(
 
 @Composable
 internal fun gridColumnCount(): Int {
-  val displayMetrics = LocalContext.current.resources.displayMetrics
+  val displayMetrics = LocalResources.current.displayMetrics
   val widthPx = displayMetrics.widthPixels.toFloat()
   val desiredPx = with(LocalDensity.current) {
     180.dp.toPx()
