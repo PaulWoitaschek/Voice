@@ -16,7 +16,7 @@ import voice.common.BookId
 import voice.logging.core.Logger
 
 @BookOverviewScope
-@ContributesIntoSet(BookOverviewScope::class,)
+@ContributesIntoSet(BookOverviewScope::class)
 @Inject
 class DeleteBookViewModel(
   private val application: Application,

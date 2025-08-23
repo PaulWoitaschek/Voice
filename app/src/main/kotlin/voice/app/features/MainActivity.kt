@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.app.AppController
-import voice.app.features.bookOverview.EditCoverDialogController
 import voice.app.injection.appGraph
 import voice.app.misc.conductor.asVerticalChangeHandlerTransaction
 import voice.bookmark.BookmarkController
@@ -100,10 +99,6 @@ class MainActivity : AppCompatActivity() {
                 } catch (exception: ActivityNotFoundException) {
                   Logger.w(exception)
                 }
-              }
-              is Destination.EditCover -> {
-                val args = EditCoverDialogController.Arguments(destination.cover, destination.bookId)
-                EditCoverDialogController(args).showDialog(router)
               }
               is Destination.Activity -> {
                 startActivity(destination.intent)

@@ -2,10 +2,14 @@ package voice.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metro.Inject
+import voice.app.features.bookOverview.EditCoverDialog
 import voice.app.injection.appGraph
 import voice.bookOverview.views.BookOverviewScreen
 import voice.common.compose.ComposeController
@@ -44,8 +48,11 @@ class AppController : ComposeController() {
       },
     )
 
+    val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
+
     NavDisplay(
       backStack = backStack,
+      sceneStrategy = dialogStrategy,
       onBack = {
         backStack.removeLastOrNull()
       },
@@ -121,6 +128,15 @@ class AppController : ComposeController() {
           Destination.Settings -> {
             NavEntry(key) {
               Settings()
+            }
+          }
+          is Destination.EditCover -> {
+            NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
+              EditCoverDialog(
+                bookId = key.bookId,
+                coverUri = key.cover,
+                onDismiss = { backStack.removeLastOrNull() },
+              )
             }
           }
         }
