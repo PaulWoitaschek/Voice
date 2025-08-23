@@ -40,7 +40,6 @@ documentFile = "androidx.documentfile:documentfile:1.1.0"
 koTest-assert = "io.kotest:kotest-assertions-core:6.0.0"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
-viewBinding = { module = "androidx.databinding:viewbinding", version.ref = "agp" }
 appStartup = "androidx.startup:startup-runtime:1.2.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.1.0"
