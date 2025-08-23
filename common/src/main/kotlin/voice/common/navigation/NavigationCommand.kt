@@ -24,7 +24,7 @@ sealed interface Destination {
   data class EditCover(
     val bookId: BookId,
     val cover: Uri,
-  ) : Destination
+  ) : Compose
 
   data class Activity(val intent: Intent) : Destination
 
