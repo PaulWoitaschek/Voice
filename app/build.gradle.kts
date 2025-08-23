@@ -204,8 +204,6 @@ dependencies {
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)
 
-  implementation(libs.conductor)
-
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.core)

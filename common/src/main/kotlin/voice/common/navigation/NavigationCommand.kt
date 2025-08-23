@@ -15,8 +15,10 @@ sealed interface NavigationCommand {
 }
 
 sealed interface Destination {
-  data class Playback(val bookId: BookId) : Destination
-  data class Bookmarks(val bookId: BookId) : Destination
+
+  @Serializable
+  data class Playback(val bookId: BookId) : Compose
+  data class Bookmarks(val bookId: BookId) : Compose
 
   @Serializable
   data class CoverFromInternet(val bookId: BookId) : Compose
@@ -67,6 +69,8 @@ sealed interface Destination {
 
   @Serializable
   data object OnboardingExplanation : Compose
+
+  data object BatteryOptimization : Destination
 
   @Serializable
   data class AddContent(val mode: Mode) : Compose {

@@ -196,6 +196,10 @@ class BookPlayViewModel(
     player.fastForward()
   }
 
+  fun onCloseClick() {
+    navigator.goBack()
+  }
+
   fun onCurrentChapterClick() {
     scope.launch {
       val book = bookRepository.get(bookId) ?: return@launch
@@ -295,6 +299,10 @@ class BookPlayViewModel(
         )
       }
     }
+  }
+
+  fun onBatteryOptimizationRequested() {
+    navigator.goTo(Destination.BatteryOptimization)
   }
 
   fun toggleSkipSilence() {
