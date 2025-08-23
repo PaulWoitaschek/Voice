@@ -1,9 +1,7 @@
 package voice.app.injection
 
 import android.content.SharedPreferences
-import android.net.Uri
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.datastore.core.DataMigration
 
 class PrefsDataMigration<T>(
@@ -24,20 +22,6 @@ class PrefsDataMigration<T>(
   override suspend fun shouldMigrate(currentData: T): Boolean {
     return sharedPreferences.contains(key)
   }
-}
-
-fun stringSetToUriSetMigration(
-  sharedPreferences: SharedPreferences,
-  key: String,
-): DataMigration<Set<Uri>> {
-  return PrefsDataMigration(
-    sharedPreferences = sharedPreferences,
-    key = key,
-    getFromSharedPreferences = {
-      sharedPreferences.getStringSet(key, emptySet())
-        ?.map(String::toUri)?.toSet() ?: emptySet()
-    },
-  )
 }
 
 fun booleanPrefsDataMigration(

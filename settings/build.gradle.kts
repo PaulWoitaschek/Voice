@@ -8,7 +8,6 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.playback)
-  implementation(projects.data)
 
   implementation(libs.androidxCore)
   implementation(libs.materialDialog.core)
