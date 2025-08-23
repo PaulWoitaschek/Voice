@@ -2,7 +2,6 @@ package voice.bookOverview.editBookCategory
 
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.binding
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
@@ -13,10 +12,7 @@ import voice.data.repo.BookRepository
 import java.time.Instant
 
 @BookOverviewScope
-@ContributesIntoSet(
-  scope = BookOverviewScope::class,
-  binding = binding<BottomSheetItemViewModel>(),
-)
+@ContributesIntoSet(BookOverviewScope::class)
 @Inject
 class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 

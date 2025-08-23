@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.binding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetItem
@@ -14,10 +13,7 @@ import voice.common.BookId
 import voice.data.repo.BookRepository
 
 @BookOverviewScope
-@ContributesIntoSet(
-  scope = BookOverviewScope::class,
-  binding = binding<BottomSheetItemViewModel>(),
-)
+@ContributesIntoSet(BookOverviewScope::class)
 @Inject
 class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 
