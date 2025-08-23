@@ -1,27 +1,50 @@
 package voice.app
 
+import android.content.Intent
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import voice.app.features.MainActivity.Companion.NI_GO_TO_BOOK
+import voice.common.BookId
+import voice.common.navigation.Destination
+import voice.common.pref.CurrentBookStore
 import voice.common.pref.OnboardingCompletedStore
 import voice.data.folders.AudiobookFolders
+import voice.playback.PlayerController
 
 @Inject
 class StartDestinationProvider(
   @OnboardingCompletedStore
   private val onboardingCompletedStore: DataStore<Boolean>,
   private val audiobookFolders: AudiobookFolders,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
+  private val playerController: PlayerController,
 ) {
 
-  operator fun invoke(): StartDestination {
-    return runBlocking {
-      if (showOnboarding()) {
-        StartDestination.OnboardingWelcome
-      } else {
-        StartDestination.BookOverview
+  operator fun invoke(intent: Intent): List<Destination.Compose> {
+    val showOnboarding = runBlocking { showOnboarding() }
+    if (showOnboarding) {
+      return listOf(Destination.OnboardingWelcome)
+    }
+
+    val goToBook = intent.getBooleanExtra(NI_GO_TO_BOOK, false)
+    if (goToBook) {
+      val bookId = runBlocking { currentBookStore.data.first() }
+      if (bookId != null) {
+        return listOf(Destination.BookOverview, Destination.Playback(bookId))
       }
     }
+
+    if (intent.action == "playCurrent") {
+      val bookId = runBlocking { currentBookStore.data.first() }
+      if (bookId != null) {
+        playerController.play()
+        return listOf(Destination.BookOverview, Destination.Playback(bookId))
+      }
+    }
+    return listOf(Destination.BookOverview)
   }
 
   private suspend fun showOnboarding(): Boolean {
@@ -30,10 +53,5 @@ class StartDestinationProvider(
       audiobookFolders.hasAnyFolders() -> false
       else -> true
     }
-  }
-
-  enum class StartDestination {
-    OnboardingWelcome,
-    BookOverview,
   }
 }

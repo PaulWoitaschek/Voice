@@ -76,8 +76,6 @@ androidX-test-rules = "androidx.test:rules:1.7.0"
 androidX-test-services = "androidx.test.services:test-services:1.6.0"
 androidX-test-orchestrator = "androidx.test:orchestrator:1.6.1"
 
-conductor = "com.bluelinelabs:conductor:4.0.0-preview-4"
-
 materialDialog-core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialog" }
 materialDialog-input = { module = "com.afollestad.material-dialogs:input", version.ref = "materialDialog" }
 
