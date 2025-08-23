@@ -58,27 +58,27 @@ fun EditCoverDialog(
     text = {
       Box {
         AsyncImage(
-            model = coverUri,
-            contentDescription = context.getString(StringsR.string.content_cover),
-            modifier = Modifier
-                .fillMaxWidth()
-                .onSizeChanged {
-                    imageWidth = it.width
-                    imageHeight = it.height
-                },
+          model = coverUri,
+          contentDescription = context.getString(StringsR.string.content_cover),
+          modifier = Modifier
+            .fillMaxWidth()
+            .onSizeChanged {
+              imageWidth = it.width
+              imageHeight = it.height
+            },
         )
 
         if (imageWidth > 0 && imageHeight > 0) {
           AndroidView(
-              modifier = Modifier
-                  .width(with(LocalDensity.current) { imageWidth.toDp() })
-                  .height(with(LocalDensity.current) { imageHeight.toDp() }),
-              factory = { ctx ->
-                  CropOverlay(ctx).apply {
-                      selectionOn = true
-                      cropOverlay = this
-                  }
-              },
+            modifier = Modifier
+              .width(with(LocalDensity.current) { imageWidth.toDp() })
+              .height(with(LocalDensity.current) { imageHeight.toDp() }),
+            factory = { ctx ->
+              CropOverlay(ctx).apply {
+                selectionOn = true
+                cropOverlay = this
+              }
+            },
           )
         }
       }
