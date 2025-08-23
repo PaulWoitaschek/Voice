@@ -4,12 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-android {
-  buildFeatures {
-    viewBinding = true
-  }
-}
-
 dependencies {
   implementation(projects.common)
   implementation(projects.strings)
