@@ -8,6 +8,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.LayoutInflater.from
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -15,7 +16,6 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import voice.app.R
 import voice.common.dpToPxRounded
-import voice.common.layoutInflater
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -89,7 +89,7 @@ class CropOverlay @JvmOverloads constructor(
   private var resizeType: Resize? = null
   private val touchOffset = context.dpToPxRounded(16F)
 
-  private fun newCircle() = context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
+  private fun newCircle() = from(context).inflate(R.layout.circle, this@CropOverlay, false).apply {
     isVisible = false
   }
 

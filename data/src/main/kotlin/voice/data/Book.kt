@@ -1,6 +1,5 @@
 package voice.data
 
-import android.os.Bundle
 import voice.common.BookId
 
 data class Book(
@@ -29,15 +28,4 @@ data class Book(
   inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
   }
-}
-
-fun Bundle.putBookId(
-  key: String,
-  id: BookId,
-) {
-  putString(key, id.value)
-}
-
-fun Bundle.getBookId(key: String): BookId? {
-  return getString(key)?.let(::BookId)
 }
