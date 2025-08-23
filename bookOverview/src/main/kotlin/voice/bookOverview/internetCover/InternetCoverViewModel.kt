@@ -1,6 +1,6 @@
 package voice.bookOverview.internetCover
 
-import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -10,7 +10,7 @@ import voice.common.navigation.Destination
 import voice.common.navigation.Navigator
 
 @BookOverviewScope
-@ContributesBinding(BookOverviewScope::class)
+@ContributesIntoSet(BookOverviewScope::class)
 @Inject
 class InternetCoverViewModel(private val navigator: Navigator) : BottomSheetItemViewModel {
 
