@@ -15,7 +15,6 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data)
-  implementation(projects.sleepTimer)
   implementation(projects.documentfile)
 
   implementation(libs.datastore)
