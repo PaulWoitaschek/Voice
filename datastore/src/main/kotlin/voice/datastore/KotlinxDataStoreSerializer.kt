@@ -9,15 +9,16 @@ import kotlinx.serialization.json.encodeToStream
 import java.io.InputStream
 import java.io.OutputStream
 
-@OptIn(ExperimentalSerializationApi::class)
 class KotlinxDataStoreSerializer<T>(
   override val defaultValue: T,
   private val json: Json,
   private val serializer: KSerializer<T>,
 ) : Serializer<T> {
 
+  @OptIn(ExperimentalSerializationApi::class)
   override suspend fun readFrom(input: InputStream): T = json.decodeFromStream(serializer, input)
 
+  @OptIn(ExperimentalSerializationApi::class)
   override suspend fun writeTo(
     t: T,
     output: OutputStream,

@@ -22,6 +22,12 @@ import voice.data.repo.internals.AppDb
 import voice.data.toUri
 import voice.documentfile.FileBasedDocumentFactory
 import voice.documentfile.FileBasedDocumentFile
+import voice.scanner.BookParser
+import voice.scanner.BookmarkMigrator
+import voice.scanner.ChapterParser
+import voice.scanner.MediaAnalyzer
+import voice.scanner.MediaScanner
+import voice.scanner.Metadata
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files

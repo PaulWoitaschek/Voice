@@ -28,10 +28,10 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.launch
 import voice.app.features.imagepicker.CropOverlay
-import voice.app.scanner.CoverSaver
 import voice.app.uitools.CropTransformation
 import voice.common.BookId
 import voice.common.rootGraphAs
+import voice.scanner.CoverSaver
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)

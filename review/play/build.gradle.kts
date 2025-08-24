@@ -11,12 +11,13 @@ android {
 }
 
 dependencies {
-  implementation(projects.strings)
-  implementation(projects.playback)
-  implementation(projects.data)
-  implementation(projects.common)
-  implementation(projects.datastore)
   api(libs.review)
+
   implementation(libs.lottie)
+  implementation(projects.common)
+  implementation(projects.data)
+  implementation(projects.datastore)
+  implementation(projects.playback)
   implementation(projects.remoteconfig.core)
+  implementation(projects.strings)
 }

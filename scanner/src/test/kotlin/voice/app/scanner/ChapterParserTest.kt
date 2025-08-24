@@ -16,6 +16,8 @@ import voice.data.repo.ChapterRepo
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.FileBasedDocumentFile
 import voice.documentfile.nameWithoutExtension
+import voice.scanner.ChapterParser
+import voice.scanner.Metadata
 
 @RunWith(AndroidJUnit4::class)
 class ChapterParserTest {

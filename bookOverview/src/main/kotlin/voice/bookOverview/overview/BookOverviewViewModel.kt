@@ -17,8 +17,6 @@ import dev.zacsweers.metro.Inject
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import voice.app.scanner.DeviceHasStoragePermissionBug
-import voice.app.scanner.MediaScanTrigger
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
 import voice.bookOverview.di.BookOverviewScope
@@ -37,6 +35,8 @@ import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.repo.internals.dao.RecentBookSearchDao
 import voice.playback.PlayerController
 import voice.playback.playstate.PlayStateManager
+import voice.scanner.DeviceHasStoragePermissionBug
+import voice.scanner.MediaScanTrigger
 import voice.search.BookSearch
 
 @BookOverviewScope
