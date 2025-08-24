@@ -17,22 +17,22 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
-import voice.scanner.matroska.MatroskaMetaDataExtractor
-import voice.scanner.matroska.MatroskaParseException
-import voice.scanner.mp4.Mp4ChapterExtractor
 import voice.data.MarkData
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.nameWithoutExtension
 import voice.logging.core.Logger
+import voice.scanner.matroska.MatroskaMetaDataExtractor
+import voice.scanner.matroska.MatroskaParseException
+import voice.scanner.mp4.Mp4ChapterExtractor
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
 @Inject
 internal class MediaAnalyzer(
-    private val context: Context,
-    private val mp4ChapterExtractor: Mp4ChapterExtractor,
-    private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
+  private val context: Context,
+  private val mp4ChapterExtractor: Mp4ChapterExtractor,
+  private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
 ) {
 
   // we use a custom MediaSourceFactory because the default one for the

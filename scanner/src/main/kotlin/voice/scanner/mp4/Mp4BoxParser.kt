@@ -4,22 +4,22 @@ import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
 import dev.zacsweers.metro.Inject
+import voice.logging.core.Logger
 import voice.scanner.mp4.visitor.ChapVisitor
 import voice.scanner.mp4.visitor.ChplVisitor
 import voice.scanner.mp4.visitor.MdhdVisitor
 import voice.scanner.mp4.visitor.StcoVisitor
 import voice.scanner.mp4.visitor.StscVisitor
 import voice.scanner.mp4.visitor.SttsVisitor
-import voice.logging.core.Logger
 
 @Inject
 internal class Mp4BoxParser(
-    stscVisitor: StscVisitor,
-    mdhdVisitor: MdhdVisitor,
-    sttsVisitor: SttsVisitor,
-    stcoVisitor: StcoVisitor,
-    chplVisitor: ChplVisitor,
-    chapVisitor: ChapVisitor,
+  stscVisitor: StscVisitor,
+  mdhdVisitor: MdhdVisitor,
+  sttsVisitor: SttsVisitor,
+  stcoVisitor: StcoVisitor,
+  chplVisitor: ChplVisitor,
+  chapVisitor: ChapVisitor,
 ) {
 
   private val visitors = listOf(

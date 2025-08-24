@@ -2,9 +2,9 @@ package voice.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
+import voice.logging.core.Logger
 import voice.scanner.mp4.Mp4ChpaterExtractorOutput
 import voice.scanner.mp4.StscEntry
-import voice.logging.core.Logger
 
 // https://developer.apple.com/documentation/quicktime-file-format/sample-to-chunk_atom/
 @Inject
@@ -13,8 +13,8 @@ internal class StscVisitor : AtomVisitor {
   override val path: List<String> = listOf("moov", "trak", "mdia", "minf", "stbl", "stsc")
 
   override fun visit(
-      buffer: ParsableByteArray,
-      parseOutput: Mp4ChpaterExtractorOutput,
+    buffer: ParsableByteArray,
+    parseOutput: Mp4ChpaterExtractorOutput,
   ) {
     val version = buffer.readUnsignedByte()
     if (version != 0) {
@@ -27,10 +27,10 @@ internal class StscVisitor : AtomVisitor {
         val firstChunk = buffer.readUnsignedInt()
         val samplesPerChunk = buffer.readUnsignedIntToInt()
         buffer.skipBytes(4) // skip sample description index
-          StscEntry(
-              firstChunk = firstChunk,
-              samplesPerChunk = samplesPerChunk,
-          )
+        StscEntry(
+          firstChunk = firstChunk,
+          samplesPerChunk = samplesPerChunk,
+        )
       }
       parseOutput.stscEntries.add(stscEntriesForTrack)
     }

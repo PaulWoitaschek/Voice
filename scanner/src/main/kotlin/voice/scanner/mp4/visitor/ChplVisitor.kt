@@ -2,9 +2,9 @@ package voice.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
-import voice.scanner.mp4.Mp4ChpaterExtractorOutput
 import voice.data.MarkData
 import voice.logging.core.Logger
+import voice.scanner.mp4.Mp4ChpaterExtractorOutput
 
 @Inject
 internal class ChplVisitor : AtomVisitor {
@@ -12,8 +12,8 @@ internal class ChplVisitor : AtomVisitor {
   override val path: List<String> = listOf("moov", "udta", "chpl")
 
   override fun visit(
-      buffer: ParsableByteArray,
-      parseOutput: Mp4ChpaterExtractorOutput,
+    buffer: ParsableByteArray,
+    parseOutput: Mp4ChpaterExtractorOutput,
   ) {
     buffer.setPosition(0)
     val version = buffer.readUnsignedByte()

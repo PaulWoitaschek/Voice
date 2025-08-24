@@ -10,8 +10,8 @@ internal class ChapVisitor : AtomVisitor {
   override val path: List<String> = listOf("moov", "trak", "tref", "chap")
 
   override fun visit(
-      buffer: ParsableByteArray,
-      parseOutput: Mp4ChpaterExtractorOutput,
+    buffer: ParsableByteArray,
+    parseOutput: Mp4ChpaterExtractorOutput,
   ) {
     val trackId = buffer.readUnsignedIntToInt()
     parseOutput.chapterTrackId = trackId

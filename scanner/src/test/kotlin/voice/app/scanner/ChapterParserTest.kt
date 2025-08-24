@@ -42,31 +42,31 @@ class ChapterParserTest {
     testFolder.newFile("audiobook/Chapter 30.mp3")
 
     val chapterParser = ChapterParser(
-        chapterRepo = ChapterRepo(
-            mockk {
-                coEvery {
-                    chapter(any())
-                } returns null
-                coEvery {
-                    insert(any())
-                } just Runs
-            },
-        ),
-        mediaAnalyzer = mockk {
-            coEvery {
-                analyze(any())
-            } answers {
-                val file = firstArg<CachedDocumentFile>()
-                Metadata(
-                    duration = 1000,
-                    fileName = file.nameWithoutExtension(),
-                    artist = null,
-                    album = null,
-                    chapters = emptyList(),
-                    title = null,
-                )
-            }
+      chapterRepo = ChapterRepo(
+        mockk {
+          coEvery {
+            chapter(any())
+          } returns null
+          coEvery {
+            insert(any())
+          } just Runs
         },
+      ),
+      mediaAnalyzer = mockk {
+        coEvery {
+          analyze(any())
+        } answers {
+          val file = firstArg<CachedDocumentFile>()
+          Metadata(
+            duration = 1000,
+            fileName = file.nameWithoutExtension(),
+            artist = null,
+            album = null,
+            chapters = emptyList(),
+            title = null,
+          )
+        }
+      },
     )
     chapterParser.parse(FileBasedDocumentFile(audiobook))
       .map { it.name }

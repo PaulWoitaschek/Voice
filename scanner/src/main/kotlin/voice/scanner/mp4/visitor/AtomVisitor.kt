@@ -7,7 +7,7 @@ internal interface AtomVisitor {
   val path: List<String>
 
   fun visit(
-      buffer: ParsableByteArray,
-      parseOutput: Mp4ChpaterExtractorOutput,
+    buffer: ParsableByteArray,
+    parseOutput: Mp4ChpaterExtractorOutput,
   )
 }
