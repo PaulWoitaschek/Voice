@@ -25,7 +25,6 @@ fun Project.baseSetup() {
           "kotlin.time.ExperimentalTime",
           "kotlinx.coroutines.ExperimentalCoroutinesApi",
           "kotlinx.coroutines.FlowPreview",
-          "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
       allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
