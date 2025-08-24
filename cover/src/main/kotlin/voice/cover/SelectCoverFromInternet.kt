@@ -4,15 +4,41 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.NavEntry
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import voice.common.BookId
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.cover.api.SearchResponse
+
+@ContributesTo(AppScope::class)
+interface SelectCoverFromInternetProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
+    if (key is Destination.CoverFromInternet) {
+      NavEntry(key) {
+        SelectCoverFromInternet(
+          bookId = key.bookId,
+          onCloseClick = { backStack.removeLastOrNull() },
+        )
+      }
+    } else {
+      null
+    }
+  }
+}
 
 @Composable
 fun SelectCoverFromInternet(

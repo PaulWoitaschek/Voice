@@ -17,8 +17,8 @@ sealed interface Destination {
   data class CoverFromInternet(val bookId: BookId) : Compose
   data class Website(val url: String) : Destination
   data class EditCover(
-      val bookId: BookId,
-      val cover: Uri,
+    val bookId: BookId,
+    val cover: Uri,
   ) : Compose
 
   data class Activity(val intent: Intent) : Destination
@@ -26,7 +26,7 @@ sealed interface Destination {
   @Serializable
   sealed interface Compose :
     Destination,
-      NavKey
+    NavKey
 
   @Serializable
   data object Migration : Compose
@@ -42,10 +42,10 @@ sealed interface Destination {
 
   @Serializable
   data class SelectFolderType(
-      val uri:
+    val uri:
     @Serializable(with = UriSerializer::class)
     Uri,
-      val mode: Mode,
+    val mode: Mode,
   ) : Compose {
 
     enum class Mode {

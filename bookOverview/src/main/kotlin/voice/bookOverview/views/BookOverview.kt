@@ -27,6 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.runtime.NavEntry
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetContent
@@ -44,8 +49,26 @@ import voice.common.BookId
 import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import java.util.UUID
+
+@ContributesTo(AppScope::class)
+interface BookOverviewProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
+    if (key is Destination.BookOverview) {
+      NavEntry(key) {
+        BookOverviewScreen()
+      }
+    } else {
+      null
+    }
+  }
+}
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {

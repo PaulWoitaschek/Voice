@@ -6,4 +6,3 @@ sealed interface NavigationCommand {
 
   data class SetRoot(val root: Destination.Compose) : NavigationCommand
 }
-

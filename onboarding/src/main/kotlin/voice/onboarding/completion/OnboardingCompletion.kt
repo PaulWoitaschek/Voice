@@ -24,10 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.onboarding.R
 import voice.strings.R as StringsR
@@ -35,6 +40,22 @@ import voice.strings.R as StringsR
 @ContributesTo(AppScope::class)
 interface OnboardingCompletionGraph {
   val viewModel: OnboardingCompletionViewModel
+}
+
+@ContributesTo(AppScope::class)
+interface OnboardingCompletionProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
+    if (key is Destination.OnboardingCompletion) {
+      NavEntry(key) {
+        OnboardingCompletion()
+      }
+    } else {
+      null
+    }
+  }
 }
 
 @Composable

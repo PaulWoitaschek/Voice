@@ -10,33 +10,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
-import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
-import voice.app.features.bookOverview.EditCoverDialog
 import voice.app.injection.appGraph
-import voice.bookOverview.views.BookOverviewScreen
-import voice.bookmark.BookmarkScreen
 import voice.common.compose.VoiceTheme
 import voice.common.navigation.Destination
 import voice.common.navigation.NavEntryProvider
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.cover.SelectCoverFromInternet
-import voice.folderPicker.folderPicker.FolderOverview
-import voice.folderPicker.selectType.SelectFolderType
 import voice.logging.core.Logger
-import voice.migration.views.Migration
-import voice.onboarding.OnboardingExplanation
-import voice.onboarding.OnboardingWelcome
-import voice.onboarding.completion.OnboardingCompletion
-import voice.playbackScreen.BookPlayScreen
 import voice.review.ReviewFeature
-import voice.settings.views.Settings
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,9 +45,7 @@ class MainActivity : AppCompatActivity() {
     setContent {
       val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray())
       VoiceTheme {
-
         val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
-
 
         NavDisplay(
           backStack = backStack,
@@ -69,100 +54,8 @@ class MainActivity : AppCompatActivity() {
             backStack.removeLastOrNull()
           },
           entryProvider = { key ->
-            check(key is Destination.Compose)
-            navEntryProviders.forEach {
-              val entry = it.create(key, backStack)
-              if (entry != null) {
-                return@NavDisplay entry
-              }
-            }
-            when (key) {
-              Destination.BookOverview -> {
-                NavEntry(key) {
-                  BookOverviewScreen()
-                }
-              }
-              is Destination.CoverFromInternet -> {
-                NavEntry(key) {
-                  SelectCoverFromInternet(
-                    bookId = key.bookId,
-                    onCloseClick = { backStack.removeLastOrNull() },
-                  )
-                }
-              }
-              Destination.FolderPicker -> {
-                NavEntry(key) {
-                  FolderOverview(
-                    onCloseClick = {
-                      backStack.removeLastOrNull()
-                    },
-                  )
-                }
-              }
-              Destination.Migration -> {
-                NavEntry(key) {
-                  Migration()
-                }
-              }
-              Destination.OnboardingCompletion -> {
-                NavEntry(key) {
-                  OnboardingCompletion()
-                }
-              }
-              Destination.OnboardingExplanation -> {
-                NavEntry(key) {
-                  OnboardingExplanation(
-                    onNext = {
-                      backStack.add(Destination.AddContent(mode = Destination.AddContent.Mode.Onboarding))
-                    },
-                    onBack = {
-                      if (backStack.isNotEmpty()) {
-                        backStack.removeLastOrNull()
-                      }
-                    },
-                  )
-                }
-              }
-              Destination.OnboardingWelcome -> {
-                NavEntry(key) {
-                  OnboardingWelcome(
-                    onNext = { backStack.add(Destination.OnboardingExplanation) },
-                  )
-                }
-              }
-              is Destination.SelectFolderType -> {
-                NavEntry(key) {
-                  SelectFolderType(
-                    uri = key.uri,
-                    mode = key.mode,
-                  )
-                }
-              }
-              Destination.Settings -> {
-                NavEntry(key) {
-                  Settings()
-                }
-              }
-              is Destination.EditCover -> {
-                NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
-                  EditCoverDialog(
-                    bookId = key.bookId,
-                    coverUri = key.cover,
-                    onDismiss = { backStack.removeLastOrNull() },
-                  )
-                }
-              }
-              is Destination.Bookmarks -> {
-                NavEntry(key) {
-                  BookmarkScreen(key.bookId)
-                }
-              }
-              is Destination.Playback -> {
-                NavEntry(key) {
-                  BookPlayScreen(key.bookId)
-                }
-              }
-              else -> error("unexpected key: $key")
+            navEntryProviders.firstNotNullOf {
+              it.create(key, backStack)
             }
           },
         )

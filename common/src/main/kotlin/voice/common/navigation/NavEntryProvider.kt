@@ -6,7 +6,7 @@ import androidx.navigation3.runtime.NavKey
 
 fun interface NavEntryProvider {
   fun create(
-      key: NavKey,
-      backStack: NavBackStack,
+    key: NavKey,
+    backStack: NavBackStack,
   ): NavEntry<NavKey>?
 }
