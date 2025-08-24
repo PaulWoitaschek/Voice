@@ -22,13 +22,20 @@ sealed interface Destination {
   @Serializable
   data class EditCover(
     val bookId: BookId,
-    val cover: @Serializable(with = UriSerializer::class) Uri,
-  ) : Compose
+    val cover:
+    @Serializable(with = UriSerializer::class)
+    Uri,
+  ) : Dialog
 
   data class Activity(val intent: Intent) : Destination
 
   @Serializable
   sealed interface Compose :
+    Destination,
+    NavKey
+
+  @Serializable
+  sealed interface Dialog :
     Destination,
     NavKey
 

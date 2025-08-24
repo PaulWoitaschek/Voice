@@ -26,16 +26,12 @@ interface SelectCoverFromInternetProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.CoverFromInternet) {
-      NavEntry(key) {
-        SelectCoverFromInternet(
-          bookId = key.bookId,
-          onCloseClick = { backStack.removeLastOrNull() },
-        )
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key, backStack ->
+    NavEntry(key) {
+      SelectCoverFromInternet(
+        bookId = key.bookId,
+        onCloseClick = { backStack.removeLastOrNull() },
+      )
     }
   }
 }

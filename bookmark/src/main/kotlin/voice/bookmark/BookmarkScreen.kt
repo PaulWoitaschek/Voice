@@ -69,13 +69,9 @@ interface BookmarkProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.Bookmarks) {
-      NavEntry(key) {
-        BookmarkScreen(bookId = key.bookId)
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Bookmarks> { key, backStack ->
+    NavEntry(key) {
+      BookmarkScreen(bookId = key.bookId)
     }
   }
 }

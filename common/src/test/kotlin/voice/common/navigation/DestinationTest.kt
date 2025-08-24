@@ -10,9 +10,7 @@ import kotlin.reflect.KClass
 
 @OptIn(InternalSerializationApi::class)
 @RunWith(Parameterized::class)
-class DestinationTest(
-  val destinationClass: KClass<out Destination>,
-) {
+class DestinationTest(val destinationClass: KClass<out Destination>) {
 
   /**
    * Navigation3 serializes the NavKeys, therefore all [Destination.Compose]s must be
@@ -37,6 +35,8 @@ class DestinationTest(
         }
         add(Destination.Compose::class)
         addChildren(Destination.Compose::class)
+        add(Destination.Dialog::class)
+        addChildren(Destination.Dialog::class)
       }
     }
   }

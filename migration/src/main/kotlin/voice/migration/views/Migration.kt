@@ -59,13 +59,9 @@ interface MigrationProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.Migration) {
-      NavEntry(key) {
-        Migration()
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Migration> { key, backStack ->
+    NavEntry(key) {
+      Migration()
     }
   }
 }

@@ -208,6 +208,7 @@ dependencies {
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.robolectric)
   testImplementation(libs.coroutines.test)
+  testImplementation(kotlin("reflect"))
 
   debugImplementation(libs.compose.ui.testManifest)
 

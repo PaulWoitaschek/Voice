@@ -53,16 +53,12 @@ interface SelectFolderTypeProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.SelectFolderType) {
-      NavEntry(key) {
-        SelectFolderType(
-          uri = key.uri,
-          mode = key.mode,
-        )
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SelectFolderType> { key, backStack ->
+    NavEntry(key) {
+      SelectFolderType(
+        uri = key.uri,
+        mode = key.mode,
+      )
     }
   }
 }

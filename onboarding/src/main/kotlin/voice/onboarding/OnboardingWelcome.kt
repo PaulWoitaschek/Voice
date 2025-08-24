@@ -39,15 +39,11 @@ interface OnboardingWelcomeProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.OnboardingWelcome) {
-      NavEntry(key) {
-        OnboardingWelcome(
-          onNext = { backStack.add(Destination.OnboardingExplanation) },
-        )
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingWelcome> { key, backStack ->
+    NavEntry(key) {
+      OnboardingWelcome(
+        onNext = { backStack.add(Destination.OnboardingExplanation) },
+      )
     }
   }
 }

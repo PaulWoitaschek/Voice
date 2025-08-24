@@ -23,13 +23,9 @@ interface AddContentProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.AddContent) {
-      NavEntry(key) {
-        AddContent(mode = key.mode)
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AddContent> { key, backStack ->
+    NavEntry(key) {
+      AddContent(mode = key.mode)
     }
   }
 }

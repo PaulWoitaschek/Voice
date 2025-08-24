@@ -7,5 +7,4 @@ interface AppGraph {
 
   fun inject(target: App)
   fun inject(target: BaseWidgetProvider)
-  fun inject(target: MainActivity)
 }

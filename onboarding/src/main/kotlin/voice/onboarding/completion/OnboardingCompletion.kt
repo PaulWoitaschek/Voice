@@ -47,13 +47,9 @@ interface OnboardingCompletionProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.OnboardingCompletion) {
-      NavEntry(key) {
-        OnboardingCompletion()
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingCompletion> { key, backStack ->
+    NavEntry(key) {
+      OnboardingCompletion()
     }
   }
 }

@@ -110,13 +110,9 @@ interface BookPlayProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.Playback) {
-      NavEntry(key) {
-        BookPlayScreen(bookId = key.bookId)
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Playback> { key, backStack ->
+    NavEntry(key) {
+      BookPlayScreen(bookId = key.bookId)
     }
   }
 }

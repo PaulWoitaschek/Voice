@@ -46,15 +46,11 @@ interface FolderPickerProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
-    if (key is Destination.FolderPicker) {
-      NavEntry(key) {
-        FolderOverview(
-          onCloseClick = { backStack.removeLastOrNull() },
-        )
-      }
-    } else {
-      null
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key, backStack ->
+    NavEntry(key) {
+      FolderOverview(
+        onCloseClick = { backStack.removeLastOrNull() },
+      )
     }
   }
 }

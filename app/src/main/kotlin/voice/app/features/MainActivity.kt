@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,30 +15,36 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
-import voice.app.injection.appGraph
 import voice.common.compose.VoiceTheme
 import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
 import voice.review.ReviewFeature
+
+@ContributesTo(AppScope::class)
+interface MainActivityGraph {
+  fun inject(activity: MainActivity)
+}
 
 class MainActivity : AppCompatActivity() {
 
   @Inject
-  lateinit var navigator: Navigator
+  private lateinit var navigator: Navigator
 
   @Inject
-  lateinit var startDestinationProvider: StartDestinationProvider
+  lateinit var navEntryResolver: NavEntryResolver
 
   @Inject
-  lateinit var navEntryProviders: Set<NavEntryProvider>
+  private lateinit var startDestinationProvider: StartDestinationProvider
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    appGraph.inject(this)
+    rootGraphAs<MainActivityGraph>().inject(this)
     super.onCreate(savedInstanceState)
 
     enableEdgeToEdge()
@@ -54,9 +61,7 @@ class MainActivity : AppCompatActivity() {
             backStack.removeLastOrNull()
           },
           entryProvider = { key ->
-            navEntryProviders.firstNotNullOf {
-              it.create(key, backStack)
-            }
+            navEntryResolver.create(key, backStack)
           },
         )
 
@@ -81,6 +86,9 @@ class MainActivity : AppCompatActivity() {
                       Logger.w(exception)
                     }
                   }
+                  is Destination.Dialog -> {
+                    backStack += destination
+                  }
                 }
               }
               NavigationCommand.GoBack -> {
@@ -103,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     val intent = Intent()
       .apply {
         @Suppress("BatteryLife")
-        action = android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         data = "package:$packageName".toUri()
       }
     try {
