@@ -12,7 +12,7 @@ import java.util.UUID
   tableName = "chapters",
   indices = [(Index(value = ["bookId"]))],
 )
-data class LegacyChapter(
+public data class LegacyChapter(
   @ColumnInfo(name = "file")
   val file: File,
   @ColumnInfo(name = "name")
@@ -44,7 +44,7 @@ data class LegacyChapter(
     }
   }
 
-  fun markForPosition(positionInChapterMs: Long): LegacyChapterMark {
+  public fun markForPosition(positionInChapterMs: Long): LegacyChapterMark {
     return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
       ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
       ?: chapterMarks.first()

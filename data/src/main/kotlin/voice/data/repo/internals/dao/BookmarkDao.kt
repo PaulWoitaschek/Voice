@@ -8,14 +8,14 @@ import voice.data.Bookmark
 import voice.data.ChapterId
 
 @Dao
-interface BookmarkDao {
+public interface BookmarkDao {
 
   @Query("DELETE FROM bookmark2 WHERE id = :id")
-  suspend fun deleteBookmark(id: Bookmark.Id)
+  public suspend fun deleteBookmark(id: Bookmark.Id)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun addBookmark(bookmark: Bookmark)
+  public suspend fun addBookmark(bookmark: Bookmark)
 
   @Query("SELECT * FROM bookmark2 WHERE chapterId IN(:chapters)")
-  suspend fun allForChapters(chapters: List<@JvmSuppressWildcards ChapterId>): List<Bookmark>
+  public suspend fun allForChapters(chapters: List<@JvmSuppressWildcards ChapterId>): List<Bookmark>
 }

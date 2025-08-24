@@ -21,7 +21,8 @@ import voice.documentfile.CachedDocumentFileFactory
 import voice.logging.core.Logger
 
 @Inject
-class AudiobookFolders(
+public class AudiobookFolders
+internal constructor(
   @RootAudiobookFoldersStore
   private val rootAudioBookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   @SingleFolderAudiobookFoldersStore
@@ -36,7 +37,7 @@ class AudiobookFolders(
 
   private val scope = MainScope()
 
-  fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
+  public fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
     val flows = FolderType.entries
       .map { folderType ->
         dataStore(folderType).data.map { uris ->
@@ -65,7 +66,7 @@ class AudiobookFolders(
     return cachedDocumentFileFactory.create(uri)
   }
 
-  fun add(
+  public fun add(
     uri: Uri,
     type: FolderType,
   ) {
@@ -80,7 +81,7 @@ class AudiobookFolders(
     }
   }
 
-  fun remove(
+  public fun remove(
     uri: Uri,
     folderType: FolderType,
   ) {
@@ -89,7 +90,7 @@ class AudiobookFolders(
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
       )
-    } catch (e: SecurityException) {
+    } catch (_: SecurityException) {
       Logger.w("Could not release uri permission for $uri")
     }
     scope.launch {
@@ -108,14 +109,14 @@ class AudiobookFolders(
     }
   }
 
-  suspend fun hasAnyFolders(): Boolean {
+  public suspend fun hasAnyFolders(): Boolean {
     return FolderType.entries.any {
       dataStore(it).data.first().isNotEmpty()
     }
   }
 }
 
-data class DocumentFileWithUri(
+public data class DocumentFileWithUri(
   val documentFile: CachedDocumentFile,
   val uri: Uri,
 )

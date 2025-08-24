@@ -24,7 +24,7 @@ private const val CHAPTER_PATH = "chapterPath"
 )
 @SuppressLint("Recycle")
 @Inject
-class Migration31to32 : IncrementalMigration(31) {
+public class Migration31to32 : IncrementalMigration(31) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query(

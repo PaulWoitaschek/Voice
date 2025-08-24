@@ -31,14 +31,14 @@ private val supportedAudioFormats = setOf(
   "xmf",
 )
 
-fun CachedDocumentFile.isAudioFile(): Boolean {
+public fun CachedDocumentFile.isAudioFile(): Boolean {
   if (!isFile) return false
   val name = name ?: return false
   val extension = name.substringAfterLast(".").lowercase()
   return extension in supportedAudioFormats
 }
 
-fun CachedDocumentFile.audioFileCount(): Int {
+public fun CachedDocumentFile.audioFileCount(): Int {
   return if (isAudioFile()) {
     1
   } else {

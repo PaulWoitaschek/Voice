@@ -40,7 +40,7 @@ import voice.data.repo.internals.dao.RecentBookSearchDao
   ],
 )
 @TypeConverters(Converters::class)
-abstract class AppDb : RoomDatabase() {
+internal abstract class AppDb : RoomDatabase() {
 
   abstract fun chapterDao(): ChapterDao
   abstract fun bookContentDao(): BookContentDao

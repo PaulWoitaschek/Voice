@@ -14,7 +14,7 @@ import dev.zacsweers.metro.binding
   binding = binding<Migration>(),
 )
 @Inject
-class Migration50 : IncrementalMigration(50) {
+public class Migration50 : IncrementalMigration(50) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     with(db) {

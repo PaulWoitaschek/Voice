@@ -13,7 +13,7 @@ import org.json.JSONObject
   binding = binding<Migration>(),
 )
 @Inject
-class Migration25to26 : IncrementalMigration(25) {
+public class Migration25to26 : IncrementalMigration(25) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // get all books

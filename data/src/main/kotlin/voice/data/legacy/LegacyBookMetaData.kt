@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.UUID
 
 @Entity(tableName = "bookMetaData")
-data class LegacyBookMetaData(
+public data class LegacyBookMetaData(
   @ColumnInfo(name = "id")
   @PrimaryKey
   val id: UUID,

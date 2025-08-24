@@ -16,7 +16,7 @@ import voice.data.repo.internals.dao.RecentBookSearchDao
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-object PersistenceModule {
+internal object PersistenceModule {
 
   @Provides
   fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()

@@ -2,7 +2,7 @@ package voice.data
 
 import voice.common.BookId
 
-data class Book(
+public data class Book(
   val content: BookContent,
   val chapters: List<Chapter>,
 ) {
@@ -25,7 +25,7 @@ data class Book(
     .sumOf { it.duration } + content.positionInChapter
   val duration: Long = chapters.sumOf { it.duration }
 
-  inline fun update(update: (BookContent) -> BookContent): Book {
+  public inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
   }
 }

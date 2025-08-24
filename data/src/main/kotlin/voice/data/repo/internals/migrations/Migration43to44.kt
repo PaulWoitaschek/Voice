@@ -24,7 +24,7 @@ import java.util.UUID
   binding = binding<Migration>(),
 )
 @Inject
-class Migration43to44 : IncrementalMigration(43) {
+public class Migration43to44 : IncrementalMigration(43) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     createNewTables(db)

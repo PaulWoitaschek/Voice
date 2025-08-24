@@ -8,7 +8,7 @@ import java.time.Instant
 import java.util.UUID
 
 @Entity(tableName = "bookmark")
-data class LegacyBookmark(
+public data class LegacyBookmark(
   @ColumnInfo(name = "file")
   val mediaFile: File,
   @ColumnInfo(name = "title")

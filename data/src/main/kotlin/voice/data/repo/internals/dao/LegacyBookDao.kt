@@ -10,41 +10,41 @@ import java.io.File
 import java.util.UUID
 
 @Dao
-interface LegacyBookDao {
+public interface LegacyBookDao {
 
   @Query("SELECT COUNT(*) from bookMetaData")
-  suspend fun bookMetaDataCount(): Int
+  public suspend fun bookMetaDataCount(): Int
 
   @Query("SELECT * FROM bookMetaData")
-  suspend fun bookMetaData(): List<LegacyBookMetaData>
+  public suspend fun bookMetaData(): List<LegacyBookMetaData>
 
   @Query("SELECT * FROM bookSettings")
-  suspend fun settings(): List<LegacyBookSettings>
+  public suspend fun settings(): List<LegacyBookSettings>
 
   @Query("SELECT * FROM bookSettings WHERE id = :id")
-  suspend fun settingsById(id: UUID): LegacyBookSettings?
+  public suspend fun settingsById(id: UUID): LegacyBookSettings?
 
   @Query("SELECT * FROM chapters")
-  suspend fun chapters(): List<LegacyChapter>
+  public suspend fun chapters(): List<LegacyChapter>
 
   @Query("SELECT * FROM bookmark")
-  suspend fun bookmarks(): List<LegacyBookmark>
+  public suspend fun bookmarks(): List<LegacyBookmark>
 
   @Query("SELECT * FROM bookmark WHERE file IN(:chapters)")
-  suspend fun bookmarksByFiles(chapters: List<@JvmSuppressWildcards File>): List<LegacyBookmark>
+  public suspend fun bookmarksByFiles(chapters: List<@JvmSuppressWildcards File>): List<LegacyBookmark>
 
   @Query("DELETE FROM bookmark")
-  suspend fun deleteBookmarks()
+  public suspend fun deleteBookmarks()
 
   @Query("DELETE FROM chapters")
-  suspend fun deleteChapters()
+  public suspend fun deleteChapters()
 
   @Query("DELETE FROM bookSettings")
-  suspend fun deleteSettings()
+  public suspend fun deleteSettings()
 
   @Query("DELETE FROM bookMetaData")
-  suspend fun deleteBookMetaData()
-  suspend fun deleteAll() {
+  public suspend fun deleteBookMetaData()
+  public suspend fun deleteAll() {
     deleteBookMetaData()
     deleteSettings()
     deleteChapters()

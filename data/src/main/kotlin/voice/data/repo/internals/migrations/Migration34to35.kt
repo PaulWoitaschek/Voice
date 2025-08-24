@@ -14,7 +14,7 @@ private const val TABLE_NAME = "tableBooks"
   binding = binding<Migration>(),
 )
 @Inject
-class Migration34to35 : IncrementalMigration(34) {
+public class Migration34to35 : IncrementalMigration(34) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.delete(TABLE_NAME, "bookId<=", arrayOf(-1))

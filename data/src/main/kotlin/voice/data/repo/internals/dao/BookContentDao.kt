@@ -11,13 +11,13 @@ import voice.common.BookId
 import voice.data.BookContent
 
 @Dao
-interface BookContentDao {
+public interface BookContentDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insert(content: BookContent)
+  public suspend fun insert(content: BookContent)
 
   @Query("SELECT * FROM content2")
-  suspend fun all(): List<BookContent>
+  public suspend fun all(): List<BookContent>
 
   @Query(
     """
@@ -27,7 +27,7 @@ interface BookContentDao {
   AND isActive = 1
     """,
   )
-  suspend fun search(query: String): List<BookId>
+  public suspend fun search(query: String): List<BookId>
 }
 
 @Entity(tableName = "bookSearchFts")
@@ -36,7 +36,7 @@ interface BookContentDao {
   tokenizer = TOKENIZER_UNICODE61,
   notIndexed = ["id", "isActive"],
 )
-data class BookSearchFts(
+internal data class BookSearchFts(
   val name: String,
   val author: String?,
   val id: BookId,

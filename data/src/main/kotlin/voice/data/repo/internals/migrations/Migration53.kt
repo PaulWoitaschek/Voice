@@ -16,7 +16,7 @@ import java.time.Instant
   binding = binding<Migration>(),
 )
 @Inject
-class Migration53 : IncrementalMigration(53) {
+public class Migration53 : IncrementalMigration(53) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val lastModifiedCv = ContentValues().apply {

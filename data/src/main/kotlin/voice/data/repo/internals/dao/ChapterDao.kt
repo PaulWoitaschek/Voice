@@ -8,7 +8,7 @@ import voice.data.Chapter
 import voice.data.ChapterId
 
 @Dao
-interface ChapterDao {
+internal interface ChapterDao {
 
   @Query("SELECT * FROM chapters2 WHERE id = :id")
   suspend fun chapter(id: ChapterId): Chapter?

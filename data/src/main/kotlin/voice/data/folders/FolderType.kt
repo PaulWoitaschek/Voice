@@ -1,6 +1,6 @@
 package voice.data.folders
 
-enum class FolderType {
+public enum class FolderType {
   SingleFile,
   SingleFolder,
   Root,

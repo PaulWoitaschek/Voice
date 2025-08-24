@@ -12,7 +12,7 @@ import dev.zacsweers.metro.binding
   binding = binding<Migration>(),
 )
 @Inject
-class Migration40to41 : IncrementalMigration(40) {
+public class Migration40to41 : IncrementalMigration(40) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("ALTER TABLE tableBooks ADD loudnessGain INTEGER")

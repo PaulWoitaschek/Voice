@@ -14,7 +14,7 @@ import dev.zacsweers.metro.binding
   binding = binding<Migration>(),
 )
 @Inject
-class Migration41to42 : IncrementalMigration(41) {
+public class Migration41to42 : IncrementalMigration(41) {
   override fun migrate(db: SupportSQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned
     val lastModifiedCv = ContentValues().apply {

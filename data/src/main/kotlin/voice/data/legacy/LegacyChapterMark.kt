@@ -3,7 +3,7 @@ package voice.data.legacy
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LegacyMarkData(
+public data class LegacyMarkData(
   val startMs: Long,
   val name: String,
 ) : Comparable<LegacyMarkData> {
@@ -12,7 +12,7 @@ data class LegacyMarkData(
   }
 }
 
-data class LegacyChapterMark(
+public data class LegacyChapterMark(
   val name: String,
   val startMs: Long,
   val endMs: Long,

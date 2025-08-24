@@ -17,7 +17,7 @@ private const val BOOK_TIME = "bookTime"
   binding = binding<Migration>(),
 )
 @Inject
-class Migration39to40 : IncrementalMigration(39) {
+public class Migration39to40 : IncrementalMigration(39) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val positionZeroContentValues = ContentValues().apply {

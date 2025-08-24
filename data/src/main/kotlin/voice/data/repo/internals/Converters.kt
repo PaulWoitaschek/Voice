@@ -15,7 +15,7 @@ import java.io.File
 import java.time.Instant
 import java.util.UUID
 
-class Converters {
+internal class Converters {
 
   private val json = Json { allowStructuredMapKeys = true }
 

@@ -36,7 +36,7 @@ private const val CREATE_TABLE_BOOKMARKS = """
 
 @ContributesBinding(AppScope::class)
 @Inject
-class Migration32to34 : Migration(32, 34) {
+public class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

@@ -19,7 +19,7 @@ import voice.data.repo.internals.dao.BookContentDao
 
 @SingleIn(AppScope::class)
 @Inject
-class BookContentRepo(private val dao: BookContentDao) {
+public class BookContentRepo(private val dao: BookContentDao) {
 
   private val cacheMutex = Mutex()
   private var cacheFilled = false
@@ -34,28 +34,28 @@ class BookContentRepo(private val dao: BookContentDao) {
     }
   }
 
-  fun flow(): Flow<List<BookContent>> {
+  public fun flow(): Flow<List<BookContent>> {
     return cache.onStart { fillCache() }.filterNotNull()
   }
 
-  suspend fun all(): List<BookContent> {
+  public suspend fun all(): List<BookContent> {
     fillCache()
     return cache.value!!
   }
 
-  fun flow(id: BookId): Flow<BookContent?> {
+  public fun flow(id: BookId): Flow<BookContent?> {
     return cache.onStart { fillCache() }
       .filterNotNull()
       .map { contents -> contents.find { it.id == id } }
       .distinctUntilChanged()
   }
 
-  suspend fun get(id: BookId): BookContent? {
+  public suspend fun get(id: BookId): BookContent? {
     fillCache()
     return cache.value!!.find { it.id == id }
   }
 
-  suspend fun setAllInactiveExcept(ids: List<BookId>) {
+  public suspend fun setAllInactiveExcept(ids: List<BookId>) {
     fillCache()
 
     cache
@@ -67,7 +67,7 @@ class BookContentRepo(private val dao: BookContentDao) {
       .onEach { dao.insert(it) }
   }
 
-  suspend fun put(content: BookContent) {
+  public suspend fun put(content: BookContent) {
     fillCache()
     cache.update { contents ->
       val newContents = contents!!.toMutableList()
@@ -78,7 +78,7 @@ class BookContentRepo(private val dao: BookContentDao) {
     }
   }
 
-  suspend inline fun getOrPut(
+  public suspend inline fun getOrPut(
     id: BookId,
     defaultValue: () -> BookContent,
   ): BookContent {

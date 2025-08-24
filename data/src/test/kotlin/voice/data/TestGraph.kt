@@ -15,7 +15,7 @@ import voice.common.pref.DarkThemeStore
 @DependencyGraph(
   scope = AppScope::class,
 )
-interface TestGraph {
+internal interface TestGraph {
 
   val migrations: Set<@JvmSuppressWildcards Migration>
 

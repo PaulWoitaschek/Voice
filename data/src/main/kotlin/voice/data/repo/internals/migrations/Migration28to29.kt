@@ -17,7 +17,7 @@ import java.io.File
   binding = binding<Migration>(),
 )
 @Inject
-class Migration28to29 : IncrementalMigration(28) {
+public class Migration28to29 : IncrementalMigration(28) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"))

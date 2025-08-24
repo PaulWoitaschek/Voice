@@ -16,7 +16,7 @@ import voice.data.repo.internals.moveToNextLoop
   binding = binding<Migration>(),
 )
 @Inject
-class Migration26to27 : IncrementalMigration(26) {
+public class Migration26to27 : IncrementalMigration(26) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {

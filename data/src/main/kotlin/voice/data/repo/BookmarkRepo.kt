@@ -14,20 +14,21 @@ import voice.logging.core.Logger
 import java.time.Instant
 
 @Inject
-class BookmarkRepo(
+public class BookmarkRepo
+internal constructor(
   private val dao: BookmarkDao,
   private val appDb: AppDb,
 ) {
 
-  suspend fun deleteBookmark(id: Bookmark.Id) {
+  public suspend fun deleteBookmark(id: Bookmark.Id) {
     dao.deleteBookmark(id)
   }
 
-  suspend fun addBookmark(bookmark: Bookmark) {
+  public suspend fun addBookmark(bookmark: Bookmark) {
     dao.addBookmark(bookmark)
   }
 
-  suspend fun addBookmarkAtBookPosition(
+  public suspend fun addBookmarkAtBookPosition(
     book: Book,
     title: String?,
     setBySleepTimer: Boolean,
@@ -48,7 +49,7 @@ class BookmarkRepo(
     }
   }
 
-  suspend fun bookmarks(book: BookContent): List<Bookmark> {
+  public suspend fun bookmarks(book: BookContent): List<Bookmark> {
     val chapters = book.chapters
     return appDb.transaction {
       chapters.runForMaxSqlVariableNumber {

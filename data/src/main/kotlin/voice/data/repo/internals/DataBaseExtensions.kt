@@ -10,14 +10,14 @@ import kotlinx.coroutines.withContext
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
+internal inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)
   while (moveToNext()) {
     func()
   }
 }
 
-inline fun Cursor.consumeEach(consume: (Cursor) -> Unit) = use {
+internal inline fun Cursor.consumeEach(consume: (Cursor) -> Unit) = use {
   moveToPosition(-1)
   while (moveToNext()) {
     consume(it)
@@ -25,7 +25,7 @@ inline fun Cursor.consumeEach(consume: (Cursor) -> Unit) = use {
 }
 
 /** a function that iterates of the rows of a cursor and maps all using a supplied mapper function */
-inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
+internal inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
   moveToPosition(-1)
   val list = ArrayList<T>(count)
   while (moveToNext()) {
@@ -34,7 +34,7 @@ inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
   list
 }
 
-inline fun <T> SupportSQLiteDatabase.transaction(
+internal inline fun <T> SupportSQLiteDatabase.transaction(
   exclusive: Boolean = true,
   body: SupportSQLiteDatabase.() -> T,
 ): T {
@@ -52,7 +52,7 @@ inline fun <T> SupportSQLiteDatabase.transaction(
   }
 }
 
-suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
+internal suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
   contract {
     callsInPlace(action, InvocationKind.EXACTLY_ONCE)
   }
@@ -72,7 +72,7 @@ suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -
 }
 
 @SuppressLint("Recycle")
-fun SQLiteDatabase.query(
+internal fun SQLiteDatabase.query(
   table: String,
   columns: List<String>? = null,
   selection: String? = null,
@@ -97,7 +97,7 @@ fun SQLiteDatabase.query(
   )
 }
 
-fun SQLiteDatabase.update(
+internal fun SQLiteDatabase.update(
   table: String,
   values: ContentValues,
   whereClause: String,
@@ -107,7 +107,7 @@ fun SQLiteDatabase.update(
   return update(table, values, whereClause, whereArgsMapped)
 }
 
-fun SQLiteDatabase.delete(
+internal fun SQLiteDatabase.delete(
   table: String,
   whereClause: String,
   vararg whereArgs: Any,

@@ -14,7 +14,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
-data class Chapter(
+public data class Chapter(
   @PrimaryKey
   val id: ChapterId,
   val name: String?,
@@ -74,7 +74,7 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
   }
 }
 
-object ChapterIdSerializer : KSerializer<ChapterId> {
+internal object ChapterIdSerializer : KSerializer<ChapterId> {
 
   override val descriptor: SerialDescriptor
     get() = PrimitiveSerialDescriptor("chapterId", PrimitiveKind.STRING)
@@ -89,4 +89,4 @@ object ChapterIdSerializer : KSerializer<ChapterId> {
   }
 }
 
-fun ChapterId.toUri(): Uri = value.toUri()
+public fun ChapterId.toUri(): Uri = value.toUri()

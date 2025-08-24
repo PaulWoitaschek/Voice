@@ -14,7 +14,8 @@ import voice.logging.core.Logger
 
 @SingleIn(AppScope::class)
 @Inject
-class BookRepository(
+public class BookRepository
+internal constructor(
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
 ) {
@@ -34,7 +35,7 @@ class BookRepository(
     }
   }
 
-  fun flow(): Flow<List<Book>> {
+  public fun flow(): Flow<List<Book>> {
     return contentRepo.flow()
       .map { contents ->
         contents.filter { it.isActive }
@@ -44,22 +45,22 @@ class BookRepository(
       }
   }
 
-  suspend fun all(): List<Book> {
+  public suspend fun all(): List<Book> {
     return contentRepo.all()
       .filter { it.isActive }
       .mapNotNull { it.book() }
   }
 
-  fun flow(id: BookId): Flow<Book?> {
+  public fun flow(id: BookId): Flow<Book?> {
     return contentRepo.flow(id)
       .map { it?.book() }
   }
 
-  suspend fun get(id: BookId): Book? {
+  public suspend fun get(id: BookId): Book? {
     return contentRepo.get(id)?.book()
   }
 
-  suspend fun updateBook(
+  public suspend fun updateBook(
     id: BookId,
     update: (BookContent) -> BookContent,
   ) {

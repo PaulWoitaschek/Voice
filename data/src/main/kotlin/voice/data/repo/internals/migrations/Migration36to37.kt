@@ -35,7 +35,7 @@ private const val CREATE_TABLE = """
   binding = binding<Migration>(),
 )
 @Inject
-class Migration36to37 : IncrementalMigration(36) {
+public class Migration36to37 : IncrementalMigration(36) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val data = db.query("SELECT * FROM $TABLE_NAME").mapRows {

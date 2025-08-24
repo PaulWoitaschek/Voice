@@ -25,7 +25,7 @@ import java.util.InvalidPropertiesFormatException
 )
 @SuppressLint("Recycle")
 @Inject
-class Migration24to25 : IncrementalMigration(24) {
+public class Migration24to25 : IncrementalMigration(24) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val copyBookTableName = "TABLE_BOOK_COPY"

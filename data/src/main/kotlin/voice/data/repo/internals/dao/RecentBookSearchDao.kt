@@ -5,21 +5,21 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class RecentBookSearchDao {
+public abstract class RecentBookSearchDao {
 
   @Query("SELECT searchTerm FROM recentBookSearch")
-  abstract suspend fun recentBookSearch(): List<String>
+  public abstract suspend fun recentBookSearch(): List<String>
 
   @Query("SELECT searchTerm FROM recentBookSearch")
-  abstract fun recentBookSearches(): Flow<List<String>>
+  public abstract fun recentBookSearches(): Flow<List<String>>
 
   @Query("DELETE FROM recentBookSearch WHERE searchTerm = :query")
-  abstract suspend fun delete(query: String)
+  public abstract suspend fun delete(query: String)
 
   @Query("INSERT OR REPLACE INTO recentBookSearch (searchTerm) VALUES (:query)")
   internal abstract suspend fun addRaw(query: String)
 
-  suspend fun add(query: String) {
+  public suspend fun add(query: String) {
     addRaw(query)
     val recentSearch = recentBookSearch()
     if (recentSearch.size > LIMIT) {
@@ -30,7 +30,7 @@ abstract class RecentBookSearchDao {
     }
   }
 
-  companion object {
+  internal companion object {
     const val LIMIT = 7
   }
 }

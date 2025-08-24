@@ -16,7 +16,7 @@ import voice.data.repo.internals.moveToNextLoop
 )
 @SuppressLint("Recycle")
 @Inject
-class Migration30to31 : IncrementalMigration(30) {
+public class Migration30to31 : IncrementalMigration(30) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // book keys

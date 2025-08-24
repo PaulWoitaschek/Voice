@@ -9,7 +9,10 @@ plugins {
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
   allWarningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
+}
 
+kotlin {
+  explicitApi()
 }
 
 android {

@@ -15,7 +15,7 @@ import voice.data.repo.internals.transaction
   binding = binding<Migration>(),
 )
 @Inject
-class Migration37to38 : IncrementalMigration(37) {
+public class Migration37to38 : IncrementalMigration(37) {
   override fun migrate(db: SupportSQLiteDatabase) {
     db.transaction {
       // add new chapter mark table

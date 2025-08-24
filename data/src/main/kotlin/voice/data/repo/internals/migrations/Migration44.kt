@@ -15,7 +15,7 @@ import voice.data.repo.internals.getString
   binding = binding<Migration>(),
 )
 @Inject
-class Migration44 : IncrementalMigration(44) {
+public class Migration44 : IncrementalMigration(44) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.query("SELECT * FROM bookSettings").use { bookSettingsCursor ->

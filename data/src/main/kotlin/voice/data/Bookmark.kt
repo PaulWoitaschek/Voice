@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.UUID
 
 @Entity(tableName = "bookmark2")
-data class Bookmark(
+public data class Bookmark(
   val bookId: BookId,
   val chapterId: ChapterId,
   val title: String?,
@@ -18,9 +18,9 @@ data class Bookmark(
   val id: Id,
 ) {
 
-  data class Id(val value: UUID) {
-    companion object {
-      fun random(): Id = Id(UUID.randomUUID())
+  public data class Id(val value: UUID) {
+    public companion object {
+      public fun random(): Id = Id(UUID.randomUUID())
     }
   }
 }

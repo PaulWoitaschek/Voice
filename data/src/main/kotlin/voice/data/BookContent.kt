@@ -9,7 +9,7 @@ import java.io.File
 import java.time.Instant
 
 @Entity(tableName = "content2")
-data class BookContent(
+public data class BookContent(
   @PrimaryKey
   val id: BookId,
   val playbackSpeed: Float,
@@ -28,7 +28,7 @@ data class BookContent(
 ) {
 
   @Ignore
-  val currentChapterIndex = chapters.indexOf(currentChapter)
+  val currentChapterIndex: Int = chapters.indexOf(currentChapter)
 
   init {
     require(currentChapter in chapters && positionInChapter >= 0) {

@@ -12,7 +12,7 @@ import dev.zacsweers.metro.binding
   binding = binding<Migration>(),
 )
 @Inject
-class Migration23to24 : IncrementalMigration(23) {
+public class Migration23to24 : IncrementalMigration(23) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK")

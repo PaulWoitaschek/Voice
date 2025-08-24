@@ -45,7 +45,7 @@ private const val CREATE_TABLE = """
   binding = binding<Migration>(),
 )
 @Inject
-class Migration35to36 : IncrementalMigration(35) {
+public class Migration35to36 : IncrementalMigration(35) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     val entries = db.query(TABLE_NAME)
@@ -82,7 +82,7 @@ class Migration35to36 : IncrementalMigration(35) {
     }
   }
 
-  data class Holder(
+  internal data class Holder(
     val id: Long,
     val name: String,
     val author: String?,

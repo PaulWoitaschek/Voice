@@ -14,7 +14,7 @@ import dev.zacsweers.metro.binding
   binding = binding<Migration>(),
 )
 @Inject
-class Migration47 : IncrementalMigration(47) {
+public class Migration47 : IncrementalMigration(47) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
     // the format of the marks has changed. Write an empty array. Also clear the fileLastModified to trigger a rescan.

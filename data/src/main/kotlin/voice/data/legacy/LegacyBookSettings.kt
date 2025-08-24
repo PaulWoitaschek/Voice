@@ -7,7 +7,7 @@ import java.io.File
 import java.util.UUID
 
 @Entity(tableName = "bookSettings")
-data class LegacyBookSettings(
+public data class LegacyBookSettings(
   @ColumnInfo(name = "id")
   @PrimaryKey
   val id: UUID,
