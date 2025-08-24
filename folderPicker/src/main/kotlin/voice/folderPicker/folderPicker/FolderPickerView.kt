@@ -23,9 +23,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.data.folders.FolderType
 import voice.folderPicker.FolderTypeIcon
@@ -34,6 +39,20 @@ import voice.strings.R as StringsR
 @ContributesTo(AppScope::class)
 interface FolderPickerGraph {
   val folderPickerViewModel: FolderPickerViewModel
+}
+
+@ContributesTo(AppScope::class)
+interface FolderPickerProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key, backStack ->
+    NavEntry(key) {
+      FolderOverview(
+        onCloseClick = { backStack.removeLastOrNull() },
+      )
+    }
+  }
 }
 
 @Composable

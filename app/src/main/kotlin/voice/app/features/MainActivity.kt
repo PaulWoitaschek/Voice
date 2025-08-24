@@ -4,50 +4,47 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
-import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
-import voice.app.features.bookOverview.EditCoverDialog
-import voice.app.injection.appGraph
-import voice.bookOverview.views.BookOverviewScreen
-import voice.bookmark.BookmarkScreen
 import voice.common.compose.VoiceTheme
 import voice.common.navigation.Destination
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
-import voice.cover.SelectCoverFromInternet
-import voice.folderPicker.addcontent.AddContent
-import voice.folderPicker.folderPicker.FolderOverview
-import voice.folderPicker.selectType.SelectFolderType
+import voice.common.rootGraphAs
 import voice.logging.core.Logger
-import voice.migration.views.Migration
-import voice.onboarding.OnboardingExplanation
-import voice.onboarding.OnboardingWelcome
-import voice.onboarding.completion.OnboardingCompletion
-import voice.playbackScreen.BookPlayScreen
 import voice.review.ReviewFeature
-import voice.settings.views.Settings
+
+@ContributesTo(AppScope::class)
+interface MainActivityGraph {
+  fun inject(activity: MainActivity)
+}
 
 class MainActivity : AppCompatActivity() {
 
   @Inject
-  lateinit var navigator: Navigator
+  private lateinit var navigator: Navigator
 
   @Inject
-  lateinit var startDestinationProvider: StartDestinationProvider
+  lateinit var navEntryResolver: NavEntryResolver
+
+  @Inject
+  private lateinit var startDestinationProvider: StartDestinationProvider
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    appGraph.inject(this)
+    rootGraphAs<MainActivityGraph>().inject(this)
     super.onCreate(savedInstanceState)
 
     enableEdgeToEdge()
@@ -55,9 +52,7 @@ class MainActivity : AppCompatActivity() {
     setContent {
       val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray())
       VoiceTheme {
-
         val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
-
 
         NavDisplay(
           backStack = backStack,
@@ -66,99 +61,7 @@ class MainActivity : AppCompatActivity() {
             backStack.removeLastOrNull()
           },
           entryProvider = { key ->
-            check(key is Destination.Compose)
-            when (key) {
-              is Destination.AddContent -> {
-                NavEntry(key) {
-                  AddContent(mode = key.mode)
-                }
-              }
-              Destination.BookOverview -> {
-                NavEntry(key) {
-                  BookOverviewScreen()
-                }
-              }
-              is Destination.CoverFromInternet -> {
-                NavEntry(key) {
-                  SelectCoverFromInternet(
-                    bookId = key.bookId,
-                    onCloseClick = { backStack.removeLastOrNull() },
-                  )
-                }
-              }
-              Destination.FolderPicker -> {
-                NavEntry(key) {
-                  FolderOverview(
-                    onCloseClick = {
-                      backStack.removeLastOrNull()
-                    },
-                  )
-                }
-              }
-              Destination.Migration -> {
-                NavEntry(key) {
-                  Migration()
-                }
-              }
-              Destination.OnboardingCompletion -> {
-                NavEntry(key) {
-                  OnboardingCompletion()
-                }
-              }
-              Destination.OnboardingExplanation -> {
-                NavEntry(key) {
-                  OnboardingExplanation(
-                    onNext = {
-                      backStack.add(Destination.AddContent(mode = Destination.AddContent.Mode.Onboarding))
-                    },
-                    onBack = {
-                      if (backStack.isNotEmpty()) {
-                        backStack.removeLastOrNull()
-                      }
-                    },
-                  )
-                }
-              }
-              Destination.OnboardingWelcome -> {
-                NavEntry(key) {
-                  OnboardingWelcome(
-                    onNext = { backStack.add(Destination.OnboardingExplanation) },
-                  )
-                }
-              }
-              is Destination.SelectFolderType -> {
-                NavEntry(key) {
-                  SelectFolderType(
-                    uri = key.uri,
-                    mode = key.mode,
-                  )
-                }
-              }
-              Destination.Settings -> {
-                NavEntry(key) {
-                  Settings()
-                }
-              }
-              is Destination.EditCover -> {
-                NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
-                  EditCoverDialog(
-                    bookId = key.bookId,
-                    coverUri = key.cover,
-                    onDismiss = { backStack.removeLastOrNull() },
-                  )
-                }
-              }
-              is Destination.Bookmarks -> {
-                NavEntry(key) {
-                  BookmarkScreen(key.bookId)
-                }
-              }
-              is Destination.Playback -> {
-                NavEntry(key) {
-                  BookPlayScreen(key.bookId)
-                }
-              }
-            }
+            navEntryResolver.create(key, backStack)
           },
         )
 
@@ -183,6 +86,9 @@ class MainActivity : AppCompatActivity() {
                       Logger.w(exception)
                     }
                   }
+                  is Destination.Dialog -> {
+                    backStack += destination
+                  }
                 }
               }
               NavigationCommand.GoBack -> {
@@ -205,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     val intent = Intent()
       .apply {
         @Suppress("BatteryLife")
-        action = android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         data = "package:$packageName".toUri()
       }
     try {

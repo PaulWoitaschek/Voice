@@ -23,10 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.settings.SettingsListener
 import voice.settings.SettingsViewModel
@@ -202,6 +207,18 @@ private fun Settings(
 @ContributesTo(AppScope::class)
 interface SettingsGraph {
   val settingsViewModel: SettingsViewModel
+}
+
+@ContributesTo(AppScope::class)
+interface SettingsProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key, backStack ->
+    NavEntry(key) {
+      Settings()
+    }
+  }
 }
 
 @Composable

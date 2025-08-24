@@ -24,6 +24,7 @@ dependencies {
   implementation(libs.lifecycle.viewmodel.compose)
   implementation(libs.serialization.json)
 
+  testImplementation(kotlin("reflect"))
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.androidX.test.junit)

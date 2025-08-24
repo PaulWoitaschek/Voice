@@ -9,10 +9,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import voice.common.BookId
 import voice.common.compose.rememberScoped
+import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.playbackScreen.view.BookPlayView
 import voice.sleepTimer.SleepTimerDialog
@@ -98,4 +103,16 @@ fun BookPlayScreen(bookId: BookId) {
 @ContributesTo(AppScope::class)
 interface BookPlayGraph {
   val bookPlayViewModelFactory: BookPlayViewModel.Factory
+}
+
+@ContributesTo(AppScope::class)
+interface BookPlayProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Playback> { key, backStack ->
+    NavEntry(key) {
+      BookPlayScreen(bookId = key.bookId)
+    }
+  }
 }
