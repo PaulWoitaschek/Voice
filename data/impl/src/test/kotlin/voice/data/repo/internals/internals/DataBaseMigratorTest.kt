@@ -1,4 +1,4 @@
-package voice.data.repo.internals
+package voice.data.repo.internals.internals
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
@@ -10,7 +10,13 @@ import io.kotest.matchers.shouldBe
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.data.allMigrations
+import voice.data.repo.internals.AppDb
+import voice.data.repo.internals.allMigrations
+import voice.data.repo.internals.getFloat
+import voice.data.repo.internals.getInt
+import voice.data.repo.internals.getString
+import voice.data.repo.internals.getStringOrNull
+import voice.data.repo.internals.mapRows
 import java.util.UUID
 import kotlin.random.Random
 
@@ -50,6 +56,7 @@ class DataBaseMigratorTest {
       val currentFile: String,
       val positionInChapter: Int,
     )
+
     data class Chapter(
       val file: String,
       val bookId: String,

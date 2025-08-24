@@ -4,11 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import kotlinx.coroutines.withContext
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 internal inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
   moveToPosition(-1)
@@ -32,43 +27,6 @@ internal inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
     list.add(mapper())
   }
   list
-}
-
-internal inline fun <T> SupportSQLiteDatabase.transaction(
-  exclusive: Boolean = true,
-  body: SupportSQLiteDatabase.() -> T,
-): T {
-  if (exclusive) {
-    beginTransaction()
-  } else {
-    beginTransactionNonExclusive()
-  }
-  try {
-    val result = body()
-    setTransactionSuccessful()
-    return result
-  } finally {
-    endTransaction()
-  }
-}
-
-internal suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
-  contract {
-    callsInPlace(action, InvocationKind.EXACTLY_ONCE)
-  }
-  return withContext(kotlinx.coroutines.Dispatchers.IO) {
-    @Suppress("DEPRECATION")
-    beginTransaction()
-    try {
-      action().also {
-        @Suppress("DEPRECATION")
-        setTransactionSuccessful()
-      }
-    } finally {
-      @Suppress("DEPRECATION")
-      endTransaction()
-    }
-  }
 }
 
 @SuppressLint("Recycle")

@@ -36,7 +36,7 @@ public interface BookContentDao {
   tokenizer = TOKENIZER_UNICODE61,
   notIndexed = ["id", "isActive"],
 )
-internal data class BookSearchFts(
+public data class BookSearchFts(
   val name: String,
   val author: String?,
   val id: BookId,

@@ -1,12 +1,12 @@
 package voice.data.repo
 
+import androidx.room.RoomDatabase
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.data.Book
 import voice.data.BookContent
 import voice.data.Bookmark
-import voice.data.repo.internals.AppDb
 import voice.data.repo.internals.dao.BookmarkDao
 import voice.data.repo.internals.transaction
 import voice.data.runForMaxSqlVariableNumber
@@ -17,7 +17,7 @@ import java.time.Instant
 public class BookmarkRepo
 internal constructor(
   private val dao: BookmarkDao,
-  private val appDb: AppDb,
+  private val appDb: RoomDatabase,
 ) {
 
   public suspend fun deleteBookmark(id: Bookmark.Id) {

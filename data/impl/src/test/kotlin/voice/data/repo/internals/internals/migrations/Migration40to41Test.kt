@@ -1,8 +1,9 @@
-package voice.data.repo.internals.migrations
+package voice.data.repo.internals.internals.migrations
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
@@ -16,9 +17,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import voice.data.repo.internals.getInt
 import voice.data.repo.internals.mapRows
+import voice.data.repo.internals.migrations.Migration40to41
 
+/**
+ * Test the migration from 40 to 41
+ */
 @RunWith(AndroidJUnit4::class)
-class Migration39to40Test {
+class Migration40to41Test {
 
   private lateinit var db: SupportSQLiteDatabase
   private lateinit var helper: SupportSQLiteOpenHelper
@@ -46,37 +51,54 @@ class Migration39to40Test {
     db = helper.writableDatabase
   }
 
-  @After
-  fun tearDown() {
-    helper.close()
+  @Test(expected = SQLiteException::class)
+  fun insertBeforeMigrationThrows() {
+    val bookCv = bookContentValues()
+    bookCv.put("loudnessGain", 100)
+    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
   }
 
   @Test
-  fun negativeNumbersBecomeZero() {
-    val bookCvWithNegativeTime = contentValuesForBookWithTime(-100)
-    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithNegativeTime)
+  fun insert() {
+    val bookCv = bookContentValues()
+    val id = db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCv)
 
-    val bookCvWithPositiveTime = contentValuesForBookWithTime(5000)
-    db.insert(BookTable.TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, bookCvWithPositiveTime)
+    Migration40to41().migrate(db)
 
-    Migration39to40().migrate(db)
+    val loudnessGainCv = ContentValues().apply {
+      put("loudnessGain", 100)
+    }
+    db.update(
+      BookTable.TABLE_NAME,
+      SQLiteDatabase.CONFLICT_FAIL,
+      loudnessGainCv,
+      "${BookTable.ID}=?",
+      arrayOf(id),
+    )
 
     val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
-      .columns(arrayOf(BookTable.TIME))
+      .columns(arrayOf("loudnessGain"))
       .create()
-    val times = db.query(query)
-      .mapRows { getInt(BookTable.TIME) }
-    times.shouldContainExactly(0, 5000)
+    val loudnessGains = db.query(query)
+      .mapRows {
+        getInt("loudnessGain")
+      }
+    loudnessGains.shouldContainExactly(100)
   }
 
   @SuppressLint("SdCardPath")
-  private fun contentValuesForBookWithTime(time: Int) = ContentValues().apply {
+  private fun bookContentValues() = ContentValues().apply {
     put(BookTable.NAME, "firstBookName")
     put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
     put(BookTable.PLAYBACK_SPEED, 1F)
     put(BookTable.ROOT, "/sdcard")
-    put(BookTable.TIME, time)
+    put(BookTable.TIME, 500)
     put(BookTable.TYPE, "COLLECTION_FOLDER")
+  }
+
+  @After
+  fun tearDown() {
+    helper.close()
   }
 
   private object BookTable {

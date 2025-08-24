@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+  api(projects.data.api)
   api(projects.common)
   api(projects.documentfile)
   implementation(libs.appCompat)

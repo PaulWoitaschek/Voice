@@ -26,10 +26,20 @@ internal class Converters {
   fun toMarks(string: String): List<MarkData> = json.decodeFromString(ListSerializer(MarkData.serializer()), string)
 
   @TypeConverter
-  fun fromLegacyMarks(data: List<LegacyMarkData>): String = json.encodeToString(ListSerializer(LegacyMarkData.serializer()), data)
+  fun fromLegacyMarks(data: List<LegacyMarkData>): String = json.encodeToString(
+    ListSerializer(
+      LegacyMarkData.serializer(),
+    ),
+    data,
+  )
 
   @TypeConverter
-  fun toLegacyMarks(string: String): List<LegacyMarkData> = json.decodeFromString(ListSerializer(LegacyMarkData.serializer()), string)
+  fun toLegacyMarks(string: String): List<LegacyMarkData> = json.decodeFromString(
+    ListSerializer(
+      LegacyMarkData.serializer(),
+    ),
+    string,
+  )
 
   @TypeConverter
   fun fromFile(file: File): String = file.absolutePath

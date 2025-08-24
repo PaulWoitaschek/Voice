@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "recentBookSearch")
-internal data class RecentBookSearch(
+public data class RecentBookSearch(
   @PrimaryKey
   val searchTerm: String,
 )

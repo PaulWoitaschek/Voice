@@ -3,12 +3,6 @@ plugins {
   id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.metro)
-  alias(libs.plugins.ksp)
-}
-
-ksp {
-  arg("room.schemaLocation", "$projectDir/schemas")
-  allWarningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
 }
 
 kotlin {
@@ -36,7 +30,6 @@ dependencies {
   implementation(libs.serialization.json)
 
   api(libs.room.runtime)
-  ksp(libs.room.compiler)
 
   implementation(libs.datastore)
   implementation(libs.documentFile)

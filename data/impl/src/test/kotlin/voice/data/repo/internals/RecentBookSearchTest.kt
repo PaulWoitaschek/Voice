@@ -1,4 +1,4 @@
-package voice.data
+package voice.data.repo.internals
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -8,7 +8,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.data.repo.internals.AppDb
 import voice.data.repo.internals.dao.RecentBookSearchDao
 
 @RunWith(AndroidJUnit4::class)
@@ -16,7 +15,10 @@ class RecentBookSearchTest {
 
   @Test
   fun `add delete replace`() = runTest {
-    val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
+    val db = Room.inMemoryDatabaseBuilder(
+      ApplicationProvider.getApplicationContext(),
+      AppDb::class.java,
+    )
       .build()
 
     with(db.recentBookSearchDao()) {
@@ -42,7 +44,10 @@ class RecentBookSearchTest {
 
   @Test
   fun `add over limit replaces`() = runTest {
-    val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
+    val db = Room.inMemoryDatabaseBuilder(
+      ApplicationProvider.getApplicationContext(),
+      AppDb::class.java,
+    )
       .build()
     val dao = db.recentBookSearchDao()
 
@@ -52,7 +57,7 @@ class RecentBookSearchTest {
     }
 
     dao.recentBookSearch()
-      .shouldContainExactly(terms.takeLast(RecentBookSearchDao.LIMIT))
+      .shouldContainExactly(terms.takeLast(RecentBookSearchDao.Companion.LIMIT))
 
     db.close()
   }

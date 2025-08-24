@@ -1,4 +1,4 @@
-package voice.data
+package voice.data.repo.internals
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -151,6 +151,7 @@ dependencies {
   implementation(projects.datastore)
   implementation(projects.common)
   implementation(projects.data.api)
+  implementation(projects.data.impl)
   implementation(projects.playback)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)

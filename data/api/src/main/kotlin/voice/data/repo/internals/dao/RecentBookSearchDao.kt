@@ -17,7 +17,7 @@ public abstract class RecentBookSearchDao {
   public abstract suspend fun delete(query: String)
 
   @Query("INSERT OR REPLACE INTO recentBookSearch (searchTerm) VALUES (:query)")
-  internal abstract suspend fun addRaw(query: String)
+  public abstract suspend fun addRaw(query: String)
 
   public suspend fun add(query: String) {
     addRaw(query)
@@ -30,7 +30,7 @@ public abstract class RecentBookSearchDao {
     }
   }
 
-  internal companion object {
-    const val LIMIT = 7
+  public companion object {
+    public const val LIMIT: Int = 7
   }
 }
