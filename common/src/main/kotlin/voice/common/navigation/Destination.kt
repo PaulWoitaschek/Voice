@@ -11,14 +11,18 @@ sealed interface Destination {
 
   @Serializable
   data class Playback(val bookId: BookId) : Compose
+
+  @Serializable
   data class Bookmarks(val bookId: BookId) : Compose
 
   @Serializable
   data class CoverFromInternet(val bookId: BookId) : Compose
   data class Website(val url: String) : Destination
+
+  @Serializable
   data class EditCover(
     val bookId: BookId,
-    val cover: Uri,
+    val cover: @Serializable(with = UriSerializer::class) Uri,
   ) : Compose
 
   data class Activity(val intent: Intent) : Destination
