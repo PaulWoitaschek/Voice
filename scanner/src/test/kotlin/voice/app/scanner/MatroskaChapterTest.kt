@@ -3,8 +3,8 @@ package voice.app.scanner
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import org.junit.Test
-import voice.app.scanner.matroska.MatroskaChapter
-import voice.app.scanner.matroska.MatroskaChapterName
+import voice.scanner.matroska.MatroskaChapter
+import voice.scanner.matroska.MatroskaChapterName
 
 class MatroskaChapterTest {
 

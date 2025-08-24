@@ -71,7 +71,6 @@ fun Project.baseSetup() {
       add("implementation", libs.findLibrary(it).get())
     }
 
-    add("implementation", libs.findLibrary("serialization-json").get())
     add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }

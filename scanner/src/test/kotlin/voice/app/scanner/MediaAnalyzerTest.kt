@@ -14,20 +14,22 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import voice.app.scanner.matroska.MatroskaMetaDataExtractor
-import voice.app.scanner.mp4.ChapterTrackProcessor
-import voice.app.scanner.mp4.Mp4BoxParser
-import voice.app.scanner.mp4.Mp4ChapterExtractor
-import voice.app.scanner.mp4.visitor.ChapVisitor
-import voice.app.scanner.mp4.visitor.ChplVisitor
-import voice.app.scanner.mp4.visitor.MdhdVisitor
-import voice.app.scanner.mp4.visitor.StcoVisitor
-import voice.app.scanner.mp4.visitor.StscVisitor
-import voice.app.scanner.mp4.visitor.SttsVisitor
+import voice.scanner.matroska.MatroskaMetaDataExtractor
+import voice.scanner.mp4.ChapterTrackProcessor
+import voice.scanner.mp4.Mp4BoxParser
+import voice.scanner.mp4.Mp4ChapterExtractor
+import voice.scanner.mp4.visitor.ChapVisitor
+import voice.scanner.mp4.visitor.ChplVisitor
+import voice.scanner.mp4.visitor.MdhdVisitor
+import voice.scanner.mp4.visitor.StcoVisitor
+import voice.scanner.mp4.visitor.StscVisitor
+import voice.scanner.mp4.visitor.SttsVisitor
 import voice.data.MarkData
 import voice.documentfile.FileBasedDocumentFile
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
+import voice.scanner.MediaAnalyzer
+import voice.scanner.Metadata
 import java.io.File
 import kotlin.time.Duration.Companion.minutes
 
@@ -39,22 +41,22 @@ internal class MediaAnalyzerTest {
   val tempFolder = TemporaryFolder()
 
   private val analyzer = MediaAnalyzer(
-    context = ApplicationProvider.getApplicationContext(),
-    mp4ChapterExtractor = Mp4ChapterExtractor(
       context = ApplicationProvider.getApplicationContext(),
-      boxParser = Mp4BoxParser(
-        stscVisitor = StscVisitor(),
-        mdhdVisitor = MdhdVisitor(),
-        sttsVisitor = SttsVisitor(),
-        stcoVisitor = StcoVisitor(),
-        chplVisitor = ChplVisitor(),
-        chapVisitor = ChapVisitor(),
+      mp4ChapterExtractor = Mp4ChapterExtractor(
+          context = ApplicationProvider.getApplicationContext(),
+          boxParser = Mp4BoxParser(
+              stscVisitor = StscVisitor(),
+              mdhdVisitor = MdhdVisitor(),
+              sttsVisitor = SttsVisitor(),
+              stcoVisitor = StcoVisitor(),
+              chplVisitor = ChplVisitor(),
+              chapVisitor = ChapVisitor(),
+          ),
+          chapterTrackProcessor = ChapterTrackProcessor(),
       ),
-      chapterTrackProcessor = ChapterTrackProcessor(),
-    ),
-    matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
-      context = ApplicationProvider.getApplicationContext(),
-    ),
+      matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
+          context = ApplicationProvider.getApplicationContext(),
+      ),
   )
   private val auphonicChapters = listOf(
     MarkData(startMs = 0L, name = "Intro"),

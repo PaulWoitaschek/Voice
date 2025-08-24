@@ -13,7 +13,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import voice.app.features.widget.TriggerWidgetOnChange
-import voice.app.scanner.MediaScanTrigger
+import voice.scanner.MediaScanTrigger
 import voice.common.DARK_THEME_SETTABLE
 import voice.common.pref.DarkThemeStore
 import voice.common.rootGraph

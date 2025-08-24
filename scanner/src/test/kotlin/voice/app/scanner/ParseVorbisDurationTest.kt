@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import voice.scanner.parseVorbisDuration
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes

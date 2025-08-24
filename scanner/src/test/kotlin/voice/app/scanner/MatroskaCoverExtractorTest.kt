@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import voice.app.scanner.matroska.MatroskaCoverExtractor
+import voice.scanner.matroska.MatroskaCoverExtractor
 import voice.logging.core.LogWriter
 import voice.logging.core.Logger
 import java.io.File
