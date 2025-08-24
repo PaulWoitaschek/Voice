@@ -2,16 +2,36 @@ package voice.folderPicker.addcontent
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
 import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 
 @ContributesTo(AppScope::class)
 interface AddContentGraph {
   val viewModelFactory: AddContentViewModel.Factory
+}
+
+@ContributesTo(AppScope::class)
+interface AddContentProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider = NavEntryProvider { key, backStack ->
+    if (key is Destination.AddContent) {
+      NavEntry(key) {
+        AddContent(mode = key.mode)
+      }
+    } else {
+      null
+    }
+  }
 }
 
 @Composable

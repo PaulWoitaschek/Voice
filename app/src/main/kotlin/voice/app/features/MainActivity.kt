@@ -23,10 +23,10 @@ import voice.bookOverview.views.BookOverviewScreen
 import voice.bookmark.BookmarkScreen
 import voice.common.compose.VoiceTheme
 import voice.common.navigation.Destination
+import voice.common.navigation.NavEntryProvider
 import voice.common.navigation.NavigationCommand
 import voice.common.navigation.Navigator
 import voice.cover.SelectCoverFromInternet
-import voice.folderPicker.addcontent.AddContent
 import voice.folderPicker.folderPicker.FolderOverview
 import voice.folderPicker.selectType.SelectFolderType
 import voice.logging.core.Logger
@@ -45,6 +45,9 @@ class MainActivity : AppCompatActivity() {
 
   @Inject
   lateinit var startDestinationProvider: StartDestinationProvider
+
+  @Inject
+  lateinit var navEntryProviders: Set<NavEntryProvider>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     appGraph.inject(this)
@@ -67,12 +70,13 @@ class MainActivity : AppCompatActivity() {
           },
           entryProvider = { key ->
             check(key is Destination.Compose)
-            when (key) {
-              is Destination.AddContent -> {
-                NavEntry(key) {
-                  AddContent(mode = key.mode)
-                }
+            navEntryProviders.forEach {
+              val entry = it.create(key, backStack)
+              if (entry != null) {
+                return@NavDisplay entry
               }
+            }
+            when (key) {
               Destination.BookOverview -> {
                 NavEntry(key) {
                   BookOverviewScreen()
@@ -158,6 +162,7 @@ class MainActivity : AppCompatActivity() {
                   BookPlayScreen(key.bookId)
                 }
               }
+              else -> error("unexpected key: $key")
             }
           },
         )
