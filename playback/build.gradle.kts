@@ -13,7 +13,7 @@ android {
 dependencies {
   implementation(projects.common)
   implementation(projects.strings)
-  implementation(projects.data)
+  implementation(projects.data.api)
 
   implementation(libs.androidxCore)
   implementation(libs.datastore)

@@ -8,7 +8,7 @@ kotlin {
 }
 
 dependencies {
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.common)
 
   implementation(libs.slf4j.noop)

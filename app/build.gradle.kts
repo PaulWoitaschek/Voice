@@ -150,7 +150,7 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.datastore)
   implementation(projects.common)
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.playback)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)

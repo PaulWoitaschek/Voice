@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.data)
+  implementation(projects.data.api)
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.strings)
   implementation(projects.remoteconfig.core)
 

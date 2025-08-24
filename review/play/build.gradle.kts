@@ -15,7 +15,7 @@ dependencies {
 
   implementation(libs.lottie)
   implementation(projects.common)
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.datastore)
   implementation(projects.playback)
   implementation(projects.remoteconfig.core)
