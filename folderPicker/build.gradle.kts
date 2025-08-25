@@ -14,7 +14,7 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.playback)
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.documentfile)
 
   implementation(libs.datastore)

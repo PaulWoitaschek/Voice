@@ -9,7 +9,7 @@ dependencies {
   implementation(projects.search)
   implementation(projects.strings)
   implementation(projects.playback)
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.scanner)
 
   implementation(libs.lifecycle)

@@ -15,9 +15,9 @@ import org.junit.runner.RunWith
 import voice.common.BookId
 import voice.data.ChapterId
 import voice.data.folders.FolderType
-import voice.data.repo.BookContentRepo
-import voice.data.repo.BookRepository
-import voice.data.repo.ChapterRepo
+import voice.data.repo.BookContentRepoImpl
+import voice.data.repo.BookRepositoryImpl
+import voice.data.repo.ChapterRepoImpl
 import voice.data.repo.internals.AppDb
 import voice.data.toUri
 import voice.documentfile.FileBasedDocumentFactory
@@ -199,8 +199,8 @@ class MediaScannerTest {
     private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .allowMainThreadQueries()
       .build()
-    val bookContentRepo = BookContentRepo(db.bookContentDao())
-    private val chapterRepo = ChapterRepo(db.chapterDao())
+    val bookContentRepo = BookContentRepoImpl(db.bookContentDao())
+    private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     private val scanner = MediaScanner(
       contentRepo = bookContentRepo,
@@ -222,7 +222,7 @@ class MediaScannerTest {
       deviceHasPermissionBug = mockk(),
     )
 
-    val bookRepo = BookRepository(chapterRepo, bookContentRepo)
+    val bookRepo = BookRepositoryImpl(chapterRepo, bookContentRepo)
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
