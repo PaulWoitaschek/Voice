@@ -148,7 +148,6 @@ class BookOverviewViewModel(
       val recentBookSearch = remember {
         recentBookSearchDao.recentBookSearches()
       }.collectAsState(initial = emptyList()).value.reversed()
-      recentBookSearchDao.recentBookSearches()
       var searchBooks by remember {
         mutableStateOf(emptyList<BookOverviewItemViewState>())
       }

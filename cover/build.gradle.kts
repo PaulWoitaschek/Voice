@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.data)
+  implementation(projects.data.api)
   implementation(projects.strings)
   implementation(projects.remoteconfig.core)
 
@@ -16,6 +16,7 @@ dependencies {
   implementation(libs.paging.runtime)
 
   implementation(libs.serialization.json)
+  testImplementation(projects.data.impl)
   testImplementation(libs.bundles.testing.jvm)
   testImplementation(projects.remoteconfig.noop)
 }
