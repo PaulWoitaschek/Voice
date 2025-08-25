@@ -9,9 +9,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import voice.common.BookId
 import voice.data.Book
-import voice.data.repo.BookContentRepo
-import voice.data.repo.BookRepository
-import voice.data.repo.ChapterRepo
+import voice.data.repo.BookContentRepoImpl
+import voice.data.repo.BookRepositoryImpl
+import voice.data.repo.ChapterRepoImpl
 import voice.data.repo.internals.AppDb
 import java.util.UUID
 
@@ -81,9 +81,9 @@ class BookSearchTest {
   private fun test(run: suspend TestBase.() -> Unit) {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
-    val repo = BookRepository(
-      chapterRepo = ChapterRepo(db.chapterDao()),
-      contentRepo = BookContentRepo(db.bookContentDao()),
+    val repo = BookRepositoryImpl(
+      chapterRepo = ChapterRepoImpl(db.chapterDao()),
+      contentRepo = BookContentRepoImpl(db.bookContentDao()),
     )
     val search = BookSearch(
       dao = db.bookContentDao(),

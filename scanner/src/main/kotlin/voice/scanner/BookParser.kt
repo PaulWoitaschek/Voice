@@ -10,6 +10,7 @@ import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.legacy.LegacyBookSettings
 import voice.data.repo.BookContentRepo
+import voice.data.repo.getOrPut
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.data.toUri
 import voice.documentfile.CachedDocumentFile

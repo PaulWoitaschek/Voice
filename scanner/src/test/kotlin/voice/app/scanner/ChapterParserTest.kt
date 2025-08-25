@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import voice.data.repo.ChapterRepo
+import voice.data.repo.ChapterRepoImpl
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.FileBasedDocumentFile
 import voice.documentfile.nameWithoutExtension
@@ -42,7 +42,7 @@ class ChapterParserTest {
     testFolder.newFile("audiobook/Chapter 30.mp3")
 
     val chapterParser = ChapterParser(
-      chapterRepo = ChapterRepo(
+      chapterRepo = ChapterRepoImpl(
         mockk {
           coEvery {
             chapter(any())
