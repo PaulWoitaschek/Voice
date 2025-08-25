@@ -32,15 +32,13 @@ dependencies {
   api(projects.data.api)
   api(projects.common)
   api(projects.documentfile)
-  implementation(libs.appCompat)
+
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
+  implementation(libs.coroutines.core)
 
   api(libs.room.runtime)
   ksp(libs.room.compiler)
-
-  implementation(libs.datastore)
-  implementation(libs.documentFile)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)

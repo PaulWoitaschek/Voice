@@ -8,19 +8,6 @@ kotlin {
   explicitApi()
 }
 
-android {
-
-  defaultConfig {
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  }
-
-  sourceSets {
-    named("test") {
-      assets.srcDir(project.file("schemas"))
-    }
-  }
-}
-
 dependencies {
   api(projects.common)
   api(projects.documentfile)
@@ -31,7 +18,6 @@ dependencies {
   api(libs.room.runtime)
 
   implementation(libs.datastore)
-  implementation(libs.documentFile)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)
