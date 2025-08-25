@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
   implementation(projects.common)
+  implementation(projects.navigation)
   implementation(projects.strings)
   implementation(projects.playback)
 

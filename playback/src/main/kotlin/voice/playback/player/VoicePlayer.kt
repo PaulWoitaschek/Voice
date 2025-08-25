@@ -11,11 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import voice.common.BookId
 import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.SeekTimeStore
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Chapter
 import voice.data.repo.BookRepository
 import voice.data.repo.ChapterRepo

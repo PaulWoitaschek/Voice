@@ -4,8 +4,8 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import dev.zacsweers.metro.Inject
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 
 @Inject
 class NavEntryResolver(private val providers: Set<NavEntryProvider<*>>) {

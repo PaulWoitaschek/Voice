@@ -11,7 +11,7 @@ import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import org.junit.Test
-import voice.common.navigation.Destination
+import voice.navigation.Destination
 import kotlin.reflect.KClass
 
 @SingleIn(AppScope::class)

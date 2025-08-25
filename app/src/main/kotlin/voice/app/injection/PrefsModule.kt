@@ -15,7 +15,6 @@ import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
 import voice.bookOverview.BookMigrationExplanationQualifier
 import voice.bookOverview.BookMigrationExplanationShown
-import voice.common.BookId
 import voice.common.grid.GridMode
 import voice.common.pref.AuthorAudiobookFoldersStore
 import voice.common.pref.AutoRewindAmountStore
@@ -31,6 +30,7 @@ import voice.common.pref.SingleFolderAudiobookFoldersStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.serialization.UriSerializer
 import voice.common.sleepTimer.SleepTimerPreference
+import voice.data.BookId
 import voice.datastore.VoiceDataStoreFactory
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

@@ -6,9 +6,9 @@ import dev.zacsweers.metro.Inject
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
-import voice.common.BookId
-import voice.common.navigation.Destination
-import voice.common.navigation.Navigator
+import voice.data.BookId
+import voice.navigation.Destination
+import voice.navigation.Navigator
 
 @BookOverviewScope
 @ContributesIntoSet(BookOverviewScope::class)

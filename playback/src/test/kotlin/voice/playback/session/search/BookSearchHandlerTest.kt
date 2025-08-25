@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.repo.BookRepository

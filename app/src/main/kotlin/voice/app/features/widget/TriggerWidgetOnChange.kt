@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
-import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.data.Book
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 

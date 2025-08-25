@@ -1,7 +1,7 @@
 package voice.scanner
 
 import dev.zacsweers.metro.Inject
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.audioFileCount
 import voice.data.folders.FolderType
 import voice.data.isAudioFile

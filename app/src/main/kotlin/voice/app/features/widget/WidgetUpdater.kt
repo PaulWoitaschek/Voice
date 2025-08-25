@@ -22,10 +22,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
-import voice.common.BookId
 import voice.common.dpToPxRounded
 import voice.common.pref.CurrentBookStore
 import voice.data.Book
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import voice.playback.playstate.PlayStateManager
 import voice.playback.receiver.WidgetButtonReceiver

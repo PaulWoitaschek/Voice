@@ -15,8 +15,8 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
-import voice.common.BookId
 import voice.common.pref.CurrentBookStore
+import voice.data.BookId
 import voice.data.ChapterId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger

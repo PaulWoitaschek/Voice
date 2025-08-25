@@ -1,7 +1,7 @@
 package voice.scanner
 
 import dev.zacsweers.metro.Inject
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.legacy.LegacyBookMetaData

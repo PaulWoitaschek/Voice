@@ -20,11 +20,11 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
 import voice.common.compose.VoiceTheme
-import voice.common.navigation.Destination
-import voice.common.navigation.NavigationCommand
-import voice.common.navigation.Navigator
 import voice.common.rootGraphAs
 import voice.logging.core.Logger
+import voice.navigation.Destination
+import voice.navigation.NavigationCommand
+import voice.navigation.Navigator
 import voice.review.ReviewFeature
 
 @ContributesTo(AppScope::class)

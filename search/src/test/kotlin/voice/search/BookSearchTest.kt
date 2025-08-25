@@ -7,8 +7,8 @@ import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.common.BookId
 import voice.data.Book
+import voice.data.BookId
 import voice.data.repo.BookContentRepoImpl
 import voice.data.repo.BookRepositoryImpl
 import voice.data.repo.ChapterRepoImpl

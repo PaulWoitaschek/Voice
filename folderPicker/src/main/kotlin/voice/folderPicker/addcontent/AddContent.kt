@@ -9,9 +9,9 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 
 @ContributesTo(AppScope::class)
 interface AddContentGraph {

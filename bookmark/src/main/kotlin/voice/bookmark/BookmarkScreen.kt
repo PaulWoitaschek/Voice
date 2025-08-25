@@ -50,12 +50,12 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.bookmark.dialogs.AddBookmarkDialog
 import voice.bookmark.dialogs.EditBookmarkDialog
-import voice.common.BookId
 import voice.common.compose.rememberScoped
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
+import voice.data.BookId
 import voice.data.Bookmark
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import java.util.UUID
 import voice.strings.R as StringsR
 

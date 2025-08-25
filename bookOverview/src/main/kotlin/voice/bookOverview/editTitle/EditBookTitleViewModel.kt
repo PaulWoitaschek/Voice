@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import voice.bookOverview.bottomSheet.BottomSheetItem
 import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.repo.BookRepository
 
 @BookOverviewScope

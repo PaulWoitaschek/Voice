@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+  implementation(projects.navigation)
   implementation(projects.common)
   implementation(projects.strings)
 

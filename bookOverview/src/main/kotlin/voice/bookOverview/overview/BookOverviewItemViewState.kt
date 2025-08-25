@@ -2,9 +2,9 @@ package voice.bookOverview.overview
 
 import android.text.format.DateUtils
 import androidx.compose.runtime.Immutable
-import voice.common.BookId
 import voice.common.compose.ImmutableFile
 import voice.data.Book
+import voice.data.BookId
 import voice.logging.core.Logger
 
 @Immutable

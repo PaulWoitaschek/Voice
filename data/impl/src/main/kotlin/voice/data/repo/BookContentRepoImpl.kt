@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import voice.common.BookId
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.repo.internals.dao.BookContentDao
 
 @SingleIn(AppScope::class)

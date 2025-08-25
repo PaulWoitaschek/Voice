@@ -1,9 +1,9 @@
 package voice.data.repo
 
 import kotlinx.coroutines.flow.Flow
-import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 
 public interface BookRepository {
 

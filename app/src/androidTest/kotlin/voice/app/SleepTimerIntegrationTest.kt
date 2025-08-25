@@ -10,13 +10,13 @@ import io.kotest.matchers.longs.shouldBeGreaterThan
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.FadeOutStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.rootGraphAs
 import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.repo.BookContentRepo

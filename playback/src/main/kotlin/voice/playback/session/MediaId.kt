@@ -2,7 +2,7 @@ package voice.playback.session
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.ChapterId
 
 @Serializable

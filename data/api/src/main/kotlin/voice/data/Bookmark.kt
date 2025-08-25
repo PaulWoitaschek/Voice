@@ -2,7 +2,6 @@ package voice.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import voice.common.BookId
 import java.time.Instant
 import java.util.UUID
 

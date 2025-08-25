@@ -13,7 +13,6 @@ android {
 
 dependencies {
   implementation(projects.strings)
-
   implementation(libs.appCompat)
   implementation(libs.material)
   api(libs.immutable)

@@ -4,9 +4,9 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import voice.common.navigation.Destination
-import voice.common.navigation.Navigator
 import voice.common.pref.OnboardingCompletedStore
+import voice.navigation.Destination
+import voice.navigation.Navigator
 
 @Inject
 class OnboardingCompletionViewModel(

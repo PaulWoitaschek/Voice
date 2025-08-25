@@ -154,6 +154,7 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)
+  implementation(projects.navigation)
   implementation(projects.sleepTimer)
   implementation(projects.settings)
   implementation(projects.folderPicker)

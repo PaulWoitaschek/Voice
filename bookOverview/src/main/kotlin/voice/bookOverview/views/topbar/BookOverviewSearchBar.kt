@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import voice.bookOverview.search.BookSearchContent
 import voice.bookOverview.search.BookSearchViewState
-import voice.common.BookId
+import voice.data.BookId
 
 @Composable
 internal fun ColumnScope.BookOverviewSearchBar(

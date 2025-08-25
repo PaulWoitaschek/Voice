@@ -1,4 +1,4 @@
-package voice.common.navigation
+package voice.navigation
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry

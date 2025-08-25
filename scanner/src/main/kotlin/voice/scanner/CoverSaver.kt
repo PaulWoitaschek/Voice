@@ -7,7 +7,7 @@ import androidx.core.graphics.scale
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import java.io.File

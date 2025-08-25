@@ -8,6 +8,7 @@ dependencies {
   implementation(projects.common)
   implementation(projects.strings)
   implementation(projects.playback)
+  implementation(projects.navigation)
   implementation(projects.data.api)
   implementation(libs.materialDialog.core)
   implementation(libs.materialDialog.input)

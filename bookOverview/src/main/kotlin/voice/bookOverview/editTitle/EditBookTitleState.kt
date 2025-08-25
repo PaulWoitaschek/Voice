@@ -1,6 +1,6 @@
 package voice.bookOverview.editTitle
 
-import voice.common.BookId
+import voice.data.BookId
 
 internal data class EditBookTitleState(
   val title: String,

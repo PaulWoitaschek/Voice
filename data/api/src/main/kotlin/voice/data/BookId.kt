@@ -1,4 +1,4 @@
-package voice.common
+package voice.data
 
 import android.net.Uri
 import androidx.core.net.toUri
@@ -11,16 +11,16 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = BookIdSerializer::class)
-data class BookId(val value: String) {
+public data class BookId(val value: String) {
 
-  constructor(uri: Uri) : this(uri.toString())
+  public constructor(uri: Uri) : this(uri.toString())
 
-  fun toUri(): Uri {
+  public fun toUri(): Uri {
     return value.toUri()
   }
 }
 
-object BookIdSerializer : KSerializer<BookId> {
+public object BookIdSerializer : KSerializer<BookId> {
 
   override val descriptor: SerialDescriptor
     get() = PrimitiveSerialDescriptor("bookId", PrimitiveKind.STRING)

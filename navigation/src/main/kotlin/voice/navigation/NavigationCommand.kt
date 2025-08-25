@@ -1,4 +1,4 @@
-package voice.common.navigation
+package voice.navigation
 
 sealed interface NavigationCommand {
   data object GoBack : NavigationCommand
