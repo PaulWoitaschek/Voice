@@ -13,13 +13,13 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import voice.common.BookId
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.cover.api.SearchResponse
+import voice.data.BookId
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 
 @ContributesTo(AppScope::class)
 interface SelectCoverFromInternetProvider {

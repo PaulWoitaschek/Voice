@@ -15,11 +15,11 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.Test
-import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.sleepTimer.SleepTimerPreference
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Bookmark
 import voice.data.Chapter
 import voice.data.ChapterId

@@ -7,8 +7,8 @@ import androidx.room.FtsOptions.TOKENIZER_UNICODE61
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import voice.common.BookId
 import voice.data.BookContent
+import voice.data.BookId
 
 @Dao
 public interface BookContentDao {

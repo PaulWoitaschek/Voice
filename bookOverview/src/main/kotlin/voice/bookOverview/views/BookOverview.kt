@@ -45,13 +45,13 @@ import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.search.BookSearchViewState
 import voice.bookOverview.views.topbar.BookOverviewTopBar
-import voice.common.BookId
 import voice.common.compose.PlayButton
 import voice.common.compose.VoiceTheme
 import voice.common.compose.rememberScoped
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
+import voice.data.BookId
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import java.util.UUID
 
 @ContributesTo(AppScope::class)

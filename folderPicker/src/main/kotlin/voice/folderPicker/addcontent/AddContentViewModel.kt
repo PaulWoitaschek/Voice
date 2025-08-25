@@ -4,15 +4,15 @@ import android.net.Uri
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
-import voice.common.navigation.Destination
-import voice.common.navigation.Destination.AddContent.Mode
-import voice.common.navigation.Destination.OnboardingCompletion
-import voice.common.navigation.Destination.SelectFolderType
-import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
 import voice.folderPicker.folderPicker.FileTypeSelection
-import voice.common.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
+import voice.navigation.Destination
+import voice.navigation.Destination.AddContent.Mode
+import voice.navigation.Destination.OnboardingCompletion
+import voice.navigation.Destination.SelectFolderType
+import voice.navigation.Navigator
+import voice.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
 
 @Inject
 class AddContentViewModel(

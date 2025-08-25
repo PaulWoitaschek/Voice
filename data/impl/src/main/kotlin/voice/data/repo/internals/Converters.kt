@@ -5,7 +5,7 @@ import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.Bookmark
 import voice.data.ChapterId
 import voice.data.MarkData

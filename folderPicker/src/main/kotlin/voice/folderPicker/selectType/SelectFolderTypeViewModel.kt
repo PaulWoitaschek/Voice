@@ -14,9 +14,6 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.withContext
 import voice.common.DispatcherProvider
-import voice.common.navigation.Destination
-import voice.common.navigation.Destination.SelectFolderType.Mode
-import voice.common.navigation.Navigator
 import voice.data.audioFileCount
 import voice.data.folders.AudiobookFolders
 import voice.data.folders.FolderType
@@ -24,6 +21,9 @@ import voice.data.isAudioFile
 import voice.documentfile.CachedDocumentFile
 import voice.documentfile.CachedDocumentFileFactory
 import voice.documentfile.nameWithoutExtension
+import voice.navigation.Destination
+import voice.navigation.Destination.SelectFolderType.Mode
+import voice.navigation.Navigator
 
 @Inject
 class SelectFolderTypeViewModel(

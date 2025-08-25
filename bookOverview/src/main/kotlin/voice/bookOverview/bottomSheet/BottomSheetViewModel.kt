@@ -7,7 +7,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.bookOverview.di.BookOverviewScope
-import voice.common.BookId
+import voice.data.BookId
 
 @BookOverviewScope
 @Inject

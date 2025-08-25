@@ -3,9 +3,9 @@ package voice.scanner
 import android.app.Application
 import android.net.Uri
 import dev.zacsweers.metro.Inject
-import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Chapter
 import voice.data.ChapterId
 import voice.data.legacy.LegacyBookSettings

@@ -19,8 +19,8 @@ import kotlinx.coroutines.delay
 import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.overview.BookOverviewViewState
 import voice.bookOverview.search.BookSearchViewState
-import voice.common.BookId
 import voice.common.compose.VoiceTheme
+import voice.data.BookId
 import kotlin.time.Duration.Companion.seconds
 
 @Composable

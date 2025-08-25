@@ -1,4 +1,4 @@
-package voice.common.navigation
+package voice.navigation
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject

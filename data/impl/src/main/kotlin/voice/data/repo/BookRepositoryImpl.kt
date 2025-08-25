@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 import voice.logging.core.Logger
 
 @SingleIn(AppScope::class)

@@ -19,13 +19,13 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
-import voice.common.BookId
-import voice.common.navigation.Destination
-import voice.common.navigation.Navigator
 import voice.cover.api.CoverApi
 import voice.cover.api.ImageSearchPagingSource
 import voice.cover.api.SearchResponse
+import voice.data.BookId
 import voice.data.repo.BookRepository
+import voice.navigation.Destination
+import voice.navigation.Navigator
 import voice.strings.R as StringsR
 
 @Inject

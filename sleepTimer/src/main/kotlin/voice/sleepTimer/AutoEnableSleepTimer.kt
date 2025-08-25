@@ -5,12 +5,12 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import voice.common.BookId
 import voice.common.DispatcherProvider
 import voice.common.MainScope
 import voice.common.pref.CurrentBookStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.sleepTimer.SleepTimerPreference
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import voice.data.repo.BookmarkRepo
 import voice.playback.playstate.PlayStateManager

@@ -7,7 +7,7 @@ import voice.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.bookOverview.di.BookOverviewScope
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.category
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import java.time.Instant
 

@@ -16,6 +16,7 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.data.api)
   implementation(projects.documentfile)
+  implementation(projects.navigation)
 
   implementation(libs.datastore)
   implementation(libs.coil)

@@ -1,9 +1,7 @@
-package voice.common
+package voice.data
 
 import android.net.Uri
-import android.os.Parcelable
 import androidx.core.net.toUri
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -13,17 +11,16 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = BookIdSerializer::class)
-@Parcelize
-data class BookId(val value: String) : Parcelable {
+public data class BookId(val value: String) {
 
-  constructor(uri: Uri) : this(uri.toString())
+  public constructor(uri: Uri) : this(uri.toString())
 
-  fun toUri(): Uri {
+  public fun toUri(): Uri {
     return value.toUri()
   }
 }
 
-object BookIdSerializer : KSerializer<BookId> {
+public object BookIdSerializer : KSerializer<BookId> {
 
   override val descriptor: SerialDescriptor
     get() = PrimitiveSerialDescriptor("bookId", PrimitiveKind.STRING)

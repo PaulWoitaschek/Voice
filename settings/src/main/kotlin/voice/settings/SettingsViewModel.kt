@@ -16,14 +16,14 @@ import voice.common.DispatcherProvider
 import voice.common.MainScope
 import voice.common.grid.GridCount
 import voice.common.grid.GridMode
-import voice.common.navigation.Destination
-import voice.common.navigation.Navigator
 import voice.common.pref.AutoRewindAmountStore
 import voice.common.pref.DarkThemeStore
 import voice.common.pref.GridModeStore
 import voice.common.pref.SeekTimeStore
 import voice.common.pref.SleepTimerPreferenceStore
 import voice.common.sleepTimer.SleepTimerPreference
+import voice.navigation.Destination
+import voice.navigation.Navigator
 import java.time.LocalTime
 
 @Inject

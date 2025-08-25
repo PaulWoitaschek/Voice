@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import voice.common.navigation.Destination
 import voice.folderPicker.R
 import voice.folderPicker.folderPicker.FileTypeSelection
+import voice.navigation.Destination
 import voice.strings.R as StringsR
 
 @Composable

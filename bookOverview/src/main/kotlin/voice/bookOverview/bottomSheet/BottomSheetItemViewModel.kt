@@ -1,6 +1,6 @@
 package voice.bookOverview.bottomSheet
 
-import voice.common.BookId
+import voice.data.BookId
 
 interface BottomSheetItemViewModel {
 

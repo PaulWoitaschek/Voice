@@ -1,7 +1,6 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  id("kotlin-parcelize")
   alias(libs.plugins.metro)
   alias(libs.plugins.kotlin.serialization)
 }
@@ -14,7 +13,6 @@ android {
 
 dependencies {
   implementation(projects.strings)
-
   implementation(libs.appCompat)
   implementation(libs.material)
   api(libs.immutable)

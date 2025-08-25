@@ -12,7 +12,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.common.BookId
+import voice.data.BookId
 import voice.data.ChapterId
 import voice.data.folders.FolderType
 import voice.data.repo.BookContentRepoImpl

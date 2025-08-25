@@ -9,10 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import voice.common.navigation.Destination
-import voice.common.navigation.Navigator
 import voice.data.folders.AudiobookFolders
 import voice.documentfile.nameWithoutExtension
+import voice.navigation.Destination
+import voice.navigation.Navigator
 
 @Inject
 class FolderPickerViewModel(

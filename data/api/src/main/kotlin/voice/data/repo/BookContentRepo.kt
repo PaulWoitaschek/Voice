@@ -1,8 +1,8 @@
 package voice.data.repo
 
 import kotlinx.coroutines.flow.Flow
-import voice.common.BookId
 import voice.data.BookContent
+import voice.data.BookId
 
 public interface BookContentRepo {
   public fun flow(): Flow<List<BookContent>>

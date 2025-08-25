@@ -29,8 +29,8 @@ import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.launch
 import voice.app.features.imagepicker.CropOverlay
 import voice.app.uitools.CropTransformation
-import voice.common.BookId
 import voice.common.rootGraphAs
+import voice.data.BookId
 import voice.scanner.CoverSaver
 import voice.strings.R as StringsR
 

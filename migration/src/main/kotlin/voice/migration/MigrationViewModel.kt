@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import voice.common.comparator.NaturalOrderComparator
 import voice.common.formatTime
-import voice.common.navigation.Navigator
 import voice.data.legacy.LegacyBookMetaData
 import voice.data.legacy.LegacyBookSettings
 import voice.data.legacy.LegacyBookmark
@@ -21,6 +20,7 @@ import voice.data.legacy.LegacyChapter
 import voice.data.legacy.LegacyChapterMark
 import voice.data.repo.internals.dao.LegacyBookDao
 import voice.migration.views.MigrationViewState
+import voice.navigation.Navigator
 import java.io.File
 
 private const val COMMON_STORAGE_PREFIX = "/storage/emulated/0/"

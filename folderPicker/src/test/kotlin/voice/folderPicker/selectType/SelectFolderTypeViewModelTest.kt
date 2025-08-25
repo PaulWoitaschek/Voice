@@ -15,8 +15,8 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.common.DispatcherProvider
-import voice.common.navigation.Destination
 import voice.documentfile.FileBasedDocumentFactory
+import voice.navigation.Destination
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {

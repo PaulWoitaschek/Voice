@@ -27,8 +27,8 @@ import voice.bookOverview.overview.BookOverviewLayoutMode
 import voice.bookOverview.views.GridBook
 import voice.bookOverview.views.ListBookRow
 import voice.bookOverview.views.gridColumnCount
-import voice.common.BookId
 import voice.common.compose.plus
+import voice.data.BookId
 import voice.strings.R as StringsR
 
 @Composable

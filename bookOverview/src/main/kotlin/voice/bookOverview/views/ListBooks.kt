@@ -32,8 +32,8 @@ import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
 import voice.bookOverview.overview.BookOverviewCategory
 import voice.bookOverview.overview.BookOverviewItemViewState
-import voice.common.BookId
 import voice.common.compose.ImmutableFile
+import voice.data.BookId
 import voice.common.R as CommonR
 
 @Composable

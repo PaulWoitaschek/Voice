@@ -9,6 +9,7 @@ dependencies {
   implementation(projects.strings)
   implementation(projects.playback)
   implementation(projects.data.api)
+  implementation(projects.navigation)
 
   implementation(libs.datastore)
 

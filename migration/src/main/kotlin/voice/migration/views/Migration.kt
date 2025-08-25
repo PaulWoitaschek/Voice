@@ -41,10 +41,10 @@ import voice.common.compose.VoiceTheme
 import voice.common.compose.plus
 import voice.common.compose.rememberScoped
 import voice.common.formatTime
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
 import voice.common.rootGraphAs
 import voice.migration.MigrationViewModel
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import java.time.Instant
 import kotlin.random.Random
 import voice.strings.R as StringsR

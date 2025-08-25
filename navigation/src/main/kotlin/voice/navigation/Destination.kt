@@ -1,11 +1,11 @@
-package voice.common.navigation
+package voice.navigation
 
 import android.content.Intent
 import android.net.Uri
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import voice.common.BookId
 import voice.common.serialization.UriSerializer
+import voice.data.BookId
 
 sealed interface Destination {
 
@@ -68,7 +68,7 @@ sealed interface Destination {
   @Serializable
   data object OnboardingWelcome : Compose
 
-  @Serializable
+  @kotlinx.serialization.Serializable
   data object OnboardingCompletion : Compose
 
   @Serializable

@@ -30,8 +30,8 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.common.compose.VoiceTheme
-import voice.common.navigation.Destination
-import voice.common.navigation.NavEntryProvider
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import voice.strings.R as StringsR
 
 @ContributesTo(AppScope::class)

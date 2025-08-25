@@ -1,7 +1,5 @@
 package voice.data
 
-import voice.common.BookId
-
 public data class Book(
   val content: BookContent,
   val chapters: List<Chapter>,

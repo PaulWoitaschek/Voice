@@ -24,9 +24,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.launch
-import voice.common.BookId
 import voice.common.pref.CurrentBookStore
 import voice.data.Book
+import voice.data.BookId
 import voice.data.repo.BookRepository
 import voice.logging.core.Logger
 import voice.playback.player.VoicePlayer

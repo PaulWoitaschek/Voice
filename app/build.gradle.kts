@@ -7,7 +7,6 @@ import java.util.Properties
 plugins {
   id("voice.app")
   id("voice.compose")
-  id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
@@ -155,6 +154,7 @@ dependencies {
   implementation(projects.playback)
   implementation(projects.scanner)
   implementation(projects.playbackScreen)
+  implementation(projects.navigation)
   implementation(projects.sleepTimer)
   implementation(projects.settings)
   implementation(projects.folderPicker)

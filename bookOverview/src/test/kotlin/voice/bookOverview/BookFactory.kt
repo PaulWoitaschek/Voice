@@ -1,8 +1,8 @@
 package voice.bookOverview
 
-import voice.common.BookId
 import voice.data.Book
 import voice.data.BookContent
+import voice.data.BookId
 import voice.data.Chapter
 import voice.data.ChapterId
 import java.time.Instant
