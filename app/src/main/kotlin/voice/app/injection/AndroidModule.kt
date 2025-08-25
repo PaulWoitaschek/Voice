@@ -12,9 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.MainActivityIntentProviderImpl
-import voice.common.AppInfoProvider
-import voice.common.DispatcherProvider
-import voice.playback.notification.MainActivityIntentProvider
+import voice.core.common.AppInfoProvider
+import voice.core.common.DispatcherProvider
+import voice.core.playback.notification.MainActivityIntentProvider
 import java.time.Clock
 
 /**

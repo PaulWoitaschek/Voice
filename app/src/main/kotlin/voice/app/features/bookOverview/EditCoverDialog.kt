@@ -29,10 +29,10 @@ import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.launch
 import voice.app.features.imagepicker.CropOverlay
 import voice.app.uitools.CropTransformation
-import voice.common.rootGraphAs
-import voice.data.BookId
-import voice.scanner.CoverSaver
-import voice.strings.R as StringsR
+import voice.core.common.rootGraphAs
+import voice.core.data.BookId
+import voice.core.scanner.CoverSaver
+import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface EditCoverComponent {

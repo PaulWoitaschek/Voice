@@ -4,8 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import voice.common.serialization.UriSerializer
-import voice.data.BookId
+import voice.core.common.serialization.UriSerializer
+import voice.core.data.BookId
 
 sealed interface Destination {
 

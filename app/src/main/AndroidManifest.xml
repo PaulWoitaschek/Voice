@@ -55,7 +55,7 @@
     </activity>
 
     <service
-      android:name="voice.playback.session.PlaybackService"
+      android:name="voice.core.playback.session.PlaybackService"
       android:foregroundServiceType="mediaPlayback"
       android:exported="true"
       android:enabled="true"
