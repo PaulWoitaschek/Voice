@@ -16,6 +16,7 @@ dependencies {
   implementation(libs.paging.runtime)
 
   implementation(libs.serialization.json)
+  testImplementation(projects.data.impl)
   testImplementation(libs.bundles.testing.jvm)
   testImplementation(projects.remoteconfig.noop)
 }

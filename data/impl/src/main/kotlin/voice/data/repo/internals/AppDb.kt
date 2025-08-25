@@ -40,15 +40,15 @@ import voice.data.repo.internals.dao.RecentBookSearchDao
   ],
 )
 @TypeConverters(Converters::class)
-internal abstract class AppDb : RoomDatabase() {
+public abstract class AppDb : RoomDatabase() {
 
-  abstract fun chapterDao(): ChapterDao
-  abstract fun bookContentDao(): BookContentDao
-  abstract fun bookmarkDao(): BookmarkDao
-  abstract fun legacyBookDao(): LegacyBookDao
-  abstract fun recentBookSearchDao(): RecentBookSearchDao
+  public abstract fun chapterDao(): ChapterDao
+  public abstract fun bookContentDao(): BookContentDao
+  public abstract fun bookmarkDao(): BookmarkDao
+  public abstract fun legacyBookDao(): LegacyBookDao
+  public abstract fun recentBookSearchDao(): RecentBookSearchDao
 
-  companion object {
+  internal companion object {
     const val VERSION = 56
     const val DATABASE_NAME = "autoBookDB"
   }

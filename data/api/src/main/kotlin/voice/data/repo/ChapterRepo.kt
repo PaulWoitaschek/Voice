@@ -8,8 +8,7 @@ import voice.data.runForMaxSqlVariableNumber
 import java.time.Instant
 
 @Inject
-public class ChapterRepo
-internal constructor(private val dao: ChapterDao) {
+public class ChapterRepo(private val dao: ChapterDao) {
 
   private val cache = mutableMapOf<ChapterId, Chapter?>()
 

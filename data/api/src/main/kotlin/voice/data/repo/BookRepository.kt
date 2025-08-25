@@ -14,8 +14,7 @@ import voice.logging.core.Logger
 
 @SingleIn(AppScope::class)
 @Inject
-public class BookRepository
-internal constructor(
+public class BookRepository(
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
 ) {

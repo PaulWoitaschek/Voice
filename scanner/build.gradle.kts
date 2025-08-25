@@ -18,6 +18,7 @@ dependencies {
   implementation(libs.media3.exoplayer)
   implementation(libs.coroutines.guava)
 
+  testImplementation(projects.data.impl)
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.core)

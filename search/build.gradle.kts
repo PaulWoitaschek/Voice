@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
   implementation(projects.data.api)
+  testImplementation(projects.data.impl)
 }
