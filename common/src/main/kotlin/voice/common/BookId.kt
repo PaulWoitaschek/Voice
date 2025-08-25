@@ -1,9 +1,7 @@
 package voice.common
 
 import android.net.Uri
-import android.os.Parcelable
 import androidx.core.net.toUri
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -13,8 +11,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = BookIdSerializer::class)
-@Parcelize
-data class BookId(val value: String) : Parcelable {
+data class BookId(val value: String) {
 
   constructor(uri: Uri) : this(uri.toString())
 

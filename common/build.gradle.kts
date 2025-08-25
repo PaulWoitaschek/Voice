@@ -1,7 +1,6 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  id("kotlin-parcelize")
   alias(libs.plugins.metro)
   alias(libs.plugins.kotlin.serialization)
 }

@@ -7,7 +7,6 @@ import java.util.Properties
 plugins {
   id("voice.app")
   id("voice.compose")
-  id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
