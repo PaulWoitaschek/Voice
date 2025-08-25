@@ -6,7 +6,6 @@ import kotlinx.serialization.serializerOrNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import voice.navigation.Destination
 import kotlin.reflect.KClass
 
 @OptIn(InternalSerializationApi::class)

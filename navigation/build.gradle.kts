@@ -7,4 +7,5 @@ plugins {
 dependencies {
   api(libs.navigation3.runtime)
   api(projects.data.api)
+  testImplementation(kotlin("reflect"))
 }
