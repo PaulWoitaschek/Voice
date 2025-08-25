@@ -37,7 +37,7 @@ androidxCore = "androidx.core:core-ktx:1.17.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
-koTest-assert = "io.kotest:kotest-assertions-core:6.0.0"
+koTest-assert = "io.kotest:kotest-assertions-core:6.0.1"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
 appStartup = "androidx.startup:startup-runtime:1.2.0"
