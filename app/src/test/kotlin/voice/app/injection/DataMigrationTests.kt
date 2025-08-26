@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.datastore.VoiceDataStoreFactory
+import voice.core.datastore.VoiceDataStoreFactory
 
 @RunWith(AndroidJUnit4::class)
 class DataMigrationTests {

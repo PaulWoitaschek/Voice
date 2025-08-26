@@ -2,36 +2,27 @@ package voice.app.injection
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
-import voice.bookOverview.BookMigrationExplanationQualifier
-import voice.bookOverview.BookMigrationExplanationShown
-import voice.common.grid.GridMode
-import voice.common.pref.AuthorAudiobookFoldersStore
-import voice.common.pref.AutoRewindAmountStore
-import voice.common.pref.CurrentBookStore
-import voice.common.pref.DarkThemeStore
-import voice.common.pref.FadeOutStore
-import voice.common.pref.GridModeStore
-import voice.common.pref.OnboardingCompletedStore
-import voice.common.pref.RootAudiobookFoldersStore
-import voice.common.pref.SeekTimeStore
-import voice.common.pref.SingleFileAudiobookFoldersStore
-import voice.common.pref.SingleFolderAudiobookFoldersStore
-import voice.common.pref.SleepTimerPreferenceStore
-import voice.common.serialization.UriSerializer
-import voice.common.sleepTimer.SleepTimerPreference
-import voice.data.BookId
-import voice.datastore.VoiceDataStoreFactory
+import voice.core.common.grid.GridMode
+import voice.core.common.pref.AutoRewindAmountStore
+import voice.core.common.pref.CurrentBookStore
+import voice.core.common.pref.DarkThemeStore
+import voice.core.common.pref.FadeOutStore
+import voice.core.common.pref.GridModeStore
+import voice.core.common.pref.OnboardingCompletedStore
+import voice.core.common.pref.SeekTimeStore
+import voice.core.common.pref.SleepTimerPreferenceStore
+import voice.core.common.sleepTimer.SleepTimerPreference
+import voice.core.data.BookId
+import voice.core.datastore.VoiceDataStoreFactory
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -147,34 +138,6 @@ object PrefsModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  @RootAudiobookFoldersStore
-  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("audiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @SingleFolderAudiobookFoldersStore
-  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("SingleFolderAudiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @SingleFileAudiobookFoldersStore
-  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("SingleFileAudiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @AuthorAudiobookFoldersStore
-  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("AuthorAudiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
   @CurrentBookStore
   fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
     return factory.create(
@@ -183,17 +146,4 @@ object PrefsModule {
       defaultValue = null,
     )
   }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @BookMigrationExplanationQualifier
-  fun bookMigrationExplanationShown(factory: VoiceDataStoreFactory): BookMigrationExplanationShown {
-    return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")
-  }
 }
-
-private fun VoiceDataStoreFactory.createUriSet(name: String): DataStore<Set<Uri>> = create(
-  serializer = SetSerializer(UriSerializer),
-  fileName = name,
-  defaultValue = emptySet(),
-)

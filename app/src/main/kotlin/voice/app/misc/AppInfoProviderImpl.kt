@@ -2,7 +2,7 @@ package voice.app.misc
 
 import dev.zacsweers.metro.Inject
 import voice.app.BuildConfig
-import voice.common.AppInfoProvider
+import voice.core.common.AppInfoProvider
 
 @Inject
 class AppInfoProviderImpl : AppInfoProvider {

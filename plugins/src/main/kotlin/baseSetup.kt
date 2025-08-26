@@ -57,8 +57,8 @@ fun Project.baseSetup() {
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
-    if (project.path != ":logging:core") {
-      add("implementation", project(":logging:core"))
+    if (project.path != ":core:logging:core") {
+      add("implementation", project(":core:logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))

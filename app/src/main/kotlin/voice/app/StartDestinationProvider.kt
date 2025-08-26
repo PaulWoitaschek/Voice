@@ -6,12 +6,12 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.app.features.MainActivity.Companion.NI_GO_TO_BOOK
-import voice.common.pref.CurrentBookStore
-import voice.common.pref.OnboardingCompletedStore
-import voice.data.BookId
-import voice.data.folders.AudiobookFolders
+import voice.core.common.pref.CurrentBookStore
+import voice.core.common.pref.OnboardingCompletedStore
+import voice.core.data.BookId
+import voice.core.data.folders.AudiobookFolders
+import voice.core.playback.PlayerController
 import voice.navigation.Destination
-import voice.playback.PlayerController
 
 @Inject
 class StartDestinationProvider(

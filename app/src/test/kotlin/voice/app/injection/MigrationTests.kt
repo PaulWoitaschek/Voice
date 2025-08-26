@@ -18,12 +18,12 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.common.grid.GridMode
-import voice.common.pref.AutoRewindAmountStore
-import voice.common.pref.DarkThemeStore
-import voice.common.pref.GridModeStore
-import voice.common.pref.SeekTimeStore
-import voice.datastore.VoiceDataStoreFactory
+import voice.core.common.grid.GridMode
+import voice.core.common.pref.AutoRewindAmountStore
+import voice.core.common.pref.DarkThemeStore
+import voice.core.common.pref.GridModeStore
+import voice.core.common.pref.SeekTimeStore
+import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
 @DependencyGraph(

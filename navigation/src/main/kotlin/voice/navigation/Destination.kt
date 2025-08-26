@@ -4,8 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import voice.common.serialization.UriSerializer
-import voice.data.BookId
+import voice.core.common.serialization.UriSerializer
+import voice.core.data.BookId
 
 sealed interface Destination {
 
@@ -25,7 +25,7 @@ sealed interface Destination {
     val cover:
     @Serializable(with = UriSerializer::class)
     Uri,
-  ) : Dialog
+  ) : Compose
 
   data class Activity(val intent: Intent) : Destination
 
@@ -33,14 +33,6 @@ sealed interface Destination {
   sealed interface Compose :
     Destination,
     NavKey
-
-  @Serializable
-  sealed interface Dialog :
-    Destination,
-    NavKey
-
-  @Serializable
-  data object Migration : Compose
 
   @Serializable
   data object Settings : Compose
@@ -68,7 +60,7 @@ sealed interface Destination {
   @Serializable
   data object OnboardingWelcome : Compose
 
-  @kotlinx.serialization.Serializable
+  @Serializable
   data object OnboardingCompletion : Compose
 
   @Serializable

@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 class DestinationTest(val destinationClass: KClass<out Destination>) {
 
   /**
-   * Navigation3 serializes the NavKeys, therefore all [voice.navigation.Destination.Compose]s must be
+   * Navigation3 serializes the NavKeys, therefore all [Destination.Compose]s must be
    * @Serializable.
    */
   @Test
@@ -35,8 +35,6 @@ class DestinationTest(val destinationClass: KClass<out Destination>) {
         }
         add(Destination.Compose::class)
         addChildren(Destination.Compose::class)
-        add(Destination.Dialog::class)
-        addChildren(Destination.Dialog::class)
       }
     }
   }

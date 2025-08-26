@@ -19,13 +19,13 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
-import voice.common.compose.VoiceTheme
-import voice.common.rootGraphAs
-import voice.logging.core.Logger
+import voice.core.common.compose.VoiceTheme
+import voice.core.common.rootGraphAs
+import voice.core.logging.core.Logger
+import voice.features.review.ReviewFeature
 import voice.navigation.Destination
 import voice.navigation.NavigationCommand
 import voice.navigation.Navigator
-import voice.review.ReviewFeature
 
 @ContributesTo(AppScope::class)
 interface MainActivityGraph {
@@ -85,9 +85,6 @@ class MainActivity : AppCompatActivity() {
                     } catch (exception: ActivityNotFoundException) {
                       Logger.w(exception)
                     }
-                  }
-                  is Destination.Dialog -> {
-                    backStack += destination
                   }
                 }
               }
