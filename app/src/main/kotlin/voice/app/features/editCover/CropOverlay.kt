@@ -1,4 +1,4 @@
-package voice.app.features.imagepicker
+package voice.app.features.editCover
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,7 +8,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.LayoutInflater.from
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -89,9 +89,10 @@ class CropOverlay @JvmOverloads constructor(
   private var resizeType: Resize? = null
   private val touchOffset = context.dpToPxRounded(16F)
 
-  private fun newCircle() = from(context).inflate(R.layout.circle, this@CropOverlay, false).apply {
-    isVisible = false
-  }
+  private fun newCircle() = LayoutInflater.from(context)
+    .inflate(R.layout.circle, this@CropOverlay, false).apply {
+      isVisible = false
+    }
 
   private fun minRectSize() = min(bounds.width(), bounds.height()) / 3f
 

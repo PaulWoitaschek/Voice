@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import dev.zacsweers.metro.Inject
-import voice.app.injection.appGraph
+import voice.app.di.appGraph
 
 class BaseWidgetProvider : AppWidgetProvider() {
 

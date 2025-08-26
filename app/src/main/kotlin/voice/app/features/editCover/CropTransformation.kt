@@ -1,10 +1,9 @@
-package voice.app.uitools
+package voice.app.features.editCover
 
 import android.graphics.Bitmap
 import android.graphics.Rect
 import coil.size.Size
 import coil.transform.Transformation
-import voice.app.features.imagepicker.CropOverlay
 
 class CropTransformation(
   cropOverlay: CropOverlay,

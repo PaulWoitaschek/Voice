@@ -1,8 +1,8 @@
 package voice.app
 
 import dev.zacsweers.metro.createGraphFactory
-import voice.app.injection.App
-import voice.app.injection.AppGraph
+import voice.app.di.App
+import voice.app.di.AppGraph
 
 class TestApp : App() {
 

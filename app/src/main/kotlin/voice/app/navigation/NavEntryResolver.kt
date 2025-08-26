@@ -1,4 +1,4 @@
-package voice.app.features
+package voice.app.navigation
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry

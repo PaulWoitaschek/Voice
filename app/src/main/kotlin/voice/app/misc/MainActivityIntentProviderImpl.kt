@@ -3,7 +3,7 @@ package voice.app.misc
 import android.app.PendingIntent
 import android.content.Context
 import dev.zacsweers.metro.Inject
-import voice.app.features.MainActivity
+import voice.app.MainActivity
 import voice.core.playback.notification.MainActivityIntentProvider
 
 @Inject

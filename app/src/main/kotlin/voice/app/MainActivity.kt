@@ -1,4 +1,4 @@
-package voice.app.features
+package voice.app
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -18,7 +18,8 @@ import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
-import voice.app.StartDestinationProvider
+import voice.app.navigation.NavEntryResolver
+import voice.app.navigation.StartDestinationProvider
 import voice.core.common.rootGraphAs
 import voice.core.logging.core.Logger
 import voice.core.ui.VoiceTheme

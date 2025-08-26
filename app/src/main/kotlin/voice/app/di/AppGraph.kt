@@ -1,6 +1,5 @@
-package voice.app.injection
+package voice.app.di
 
-import voice.app.features.MainActivity
 import voice.app.features.widget.BaseWidgetProvider
 
 interface AppGraph {

@@ -20,8 +20,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import voice.app.MainActivity
 import voice.app.R
-import voice.app.features.MainActivity
 import voice.core.common.dpToPxRounded
 import voice.core.data.Book
 import voice.core.data.BookId

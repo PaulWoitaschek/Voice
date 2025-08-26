@@ -1,4 +1,4 @@
-package voice.app.injection
+package voice.app.di
 
 import android.app.Application
 import android.content.Context

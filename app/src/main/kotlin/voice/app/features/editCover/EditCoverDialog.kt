@@ -1,4 +1,4 @@
-package voice.app.features.bookOverview
+package voice.app.features.editCover
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -31,8 +31,6 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
-import voice.app.features.imagepicker.CropOverlay
-import voice.app.uitools.CropTransformation
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.scanner.CoverSaver

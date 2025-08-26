@@ -1,11 +1,11 @@
-package voice.app
+package voice.app.navigation
 
 import android.content.Intent
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import voice.app.features.MainActivity.Companion.NI_GO_TO_BOOK
+import voice.app.MainActivity
 import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.store.CurrentBookStore
@@ -29,7 +29,7 @@ class StartDestinationProvider(
       return listOf(Destination.OnboardingWelcome)
     }
 
-    val goToBook = intent.getBooleanExtra(NI_GO_TO_BOOK, false)
+    val goToBook = intent.getBooleanExtra(MainActivity.Companion.NI_GO_TO_BOOK, false)
     if (goToBook) {
       val bookId = runBlocking { currentBookStore.data.first() }
       if (bookId != null) {
