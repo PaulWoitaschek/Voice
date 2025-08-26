@@ -5,5 +5,4 @@ plugins {
 
 dependencies {
   implementation(projects.core.remoteconfig.core)
-  implementation(projects.core.common)
 }

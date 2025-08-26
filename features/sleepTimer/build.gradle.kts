@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
   implementation(projects.core.strings)
-  implementation(projects.core.data.api)
 
   implementation(libs.materialDialog.core)
   implementation(libs.material)
