@@ -21,14 +21,37 @@ Voice is a minimal, user‑focused audiobook player for Android, built for relia
 
 Each module contains its own `build.gradle.kts`, `src/main/kotlin`, and `src/test/kotlin`:
 
-* **app**: Main application
-* **common**: Shared utilities
-* **data**: Repositories and data layer
-* **playback**: Audio playback logic
-* **scanner**: File scanning and metadata extraction
-* **cover**: Cover art handling
-* **settings**: Configuration UI
-* …additional feature modules
+**Infrastructure**:
+
+* `:app` - Main application entry point and DI setup
+* `:navigation` - Navigation framework
+* `:plugins` - Gradle build plugins
+* `:scripts` - Build and utility scripts
+
+**Core Modules** (shared domain logic):
+
+* `:core:common` - Legacy, to be removed
+* `:core:ui` - UI components and theming
+* `:core:data:api` & `:core:data:impl` - Data layer interfaces and implementations
+* `:core:playback` - Audio playback logic
+* `:core:scanner` - File scanning and metadata extraction
+* `:core:strings` - Localized strings
+* `:core:search` - Search functionality
+* `:core:documentfile` - File system abstractions
+* `:core:logging` - Logging implementations (crashlytics, debug, core)
+* `:core:remoteconfig` - Remote configuration (firebase, noop, core)
+
+**Feature Modules** (UI screens and features):
+
+* `:features:playbackScreen` - Book playing interface
+* `:features:bookOverview` - Library/book list
+* `:features:sleepTimer` - Sleep timer functionality
+* `:features:settings` - App settings
+* `:features:folderPicker` - Folder selection
+* `:features:cover` - Cover art management
+* `:features:onboarding` - First-time user flow
+* `:features:bookmark` - Bookmark management
+* `:features:review` - App review prompts (play/noop variants)
 
 ## Build & Run
 

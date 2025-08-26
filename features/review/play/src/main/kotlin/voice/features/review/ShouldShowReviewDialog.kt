@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.ReviewDialogShownStore
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.remoteconfig.core.RemoteConfig
 import java.time.Clock
@@ -17,7 +18,7 @@ import kotlin.time.Duration.Companion.minutes
 class ShouldShowReviewDialog(
   private val installationTimeProvider: InstallationTimeProvider,
   private val clock: Clock,
-  @ReviewDialogShown
+  @ReviewDialogShownStore
   private val reviewDialogShown: DataStore<Boolean>,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,

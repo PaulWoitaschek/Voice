@@ -15,7 +15,6 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.grid.GridMode
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
-import voice.core.datastore.VoiceDataStoreFactory
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -29,7 +28,10 @@ internal object StoreModule {
     context: Application,
     appInfoProvider: AppInfoProvider,
   ): SharedPreferences {
-    return context.getSharedPreferences("${appInfoProvider.applicationID}_preferences", Context.MODE_PRIVATE)
+    return context.getSharedPreferences(
+      "${appInfoProvider.applicationID}_preferences",
+      Context.MODE_PRIVATE,
+    )
   }
 
   @Provides
@@ -141,5 +143,19 @@ internal object StoreModule {
       fileName = "currentBook",
       defaultValue = null,
     )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @AmountOfBatteryOptimizationRequestedStore
+  fun amountOfBatteryOptimizationsRequestedStore(factory: VoiceDataStoreFactory): DataStore<Int> {
+    return factory.int("amountOfBatteryOptimizationsRequestedStore", 0)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ReviewDialogShownStore
+  fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.create(Boolean.serializer(), false, "reviewDialogShown")
   }
 }

@@ -24,8 +24,8 @@ import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
+import voice.core.data.store.VoiceDataStoreFactory
 import voice.core.data.store.intPrefsDataMigration
-import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
 @DependencyGraph(

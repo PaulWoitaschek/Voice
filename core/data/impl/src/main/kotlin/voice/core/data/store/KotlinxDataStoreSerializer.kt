@@ -1,4 +1,4 @@
-package voice.core.datastore
+package voice.core.data.store
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -9,7 +9,7 @@ import kotlinx.serialization.json.encodeToStream
 import java.io.InputStream
 import java.io.OutputStream
 
-class KotlinxDataStoreSerializer<T>(
+internal class KotlinxDataStoreSerializer<T>(
   override val defaultValue: T,
   private val json: Json,
   private val serializer: KSerializer<T>,

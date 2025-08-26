@@ -1,4 +1,4 @@
-package voice.core.datastore
+package voice.core.data.store
 
 import android.app.Application
 import androidx.datastore.core.DataMigration
@@ -11,7 +11,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 @Inject
-class VoiceDataStoreFactory(
+internal class VoiceDataStoreFactory(
   private val json: Json,
   private val context: Application,
 ) {

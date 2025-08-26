@@ -25,3 +25,9 @@ public annotation class DarkThemeStore
 
 @Qualifier
 public annotation class FadeOutStore
+
+@Qualifier
+public annotation class AmountOfBatteryOptimizationRequestedStore
+
+@Qualifier
+public annotation class ReviewDialogShownStore
