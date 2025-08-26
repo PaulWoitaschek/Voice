@@ -15,7 +15,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.common.grid.GridCount
 import voice.core.common.grid.GridMode
-import voice.core.common.sleepTimer.SleepTimerPreference
+import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore

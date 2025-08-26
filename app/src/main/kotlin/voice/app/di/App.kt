@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import voice.core.common.rootGraph
 import voice.core.data.store.DarkThemeStore
 import voice.core.scanner.MediaScanTrigger
+import voice.core.sleeptimer.AutoEnableSleepTimer
 import voice.core.ui.DARK_THEME_SETTABLE
-import voice.features.sleepTimer.AutoEnableSleepTimer
 import voice.features.widget.TriggerWidgetOnChange
 
 open class App : Application() {

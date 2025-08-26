@@ -1,4 +1,4 @@
-package voice.features.sleepTimer
+package voice.core.sleeptimer
 
 import io.kotest.matchers.shouldBe
 import org.junit.Test

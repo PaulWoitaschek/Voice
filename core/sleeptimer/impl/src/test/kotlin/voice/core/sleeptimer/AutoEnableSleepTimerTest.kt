@@ -1,4 +1,4 @@
-package voice.features.sleepTimer
+package voice.core.sleeptimer
 
 import androidx.datastore.core.DataStore
 import io.mockk.coEvery
@@ -20,13 +20,12 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import voice.core.common.DispatcherProvider
-import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.playback.session.SleepTimer
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -122,7 +121,7 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any()) }
+    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -138,7 +137,7 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any()) }
+    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -156,7 +155,7 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any()) }
+    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -173,7 +172,7 @@ class AutoEnableSleepTimerTest {
     advanceUntilIdle()
 
     coVerify(exactly = 0) { sleepTimerPreferenceStore.data }
-    coVerify(exactly = 0) { sleepTimer.setActive(any()) }
+    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -233,7 +232,7 @@ class AutoEnableSleepTimerTest {
     }
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any()) }
+    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 

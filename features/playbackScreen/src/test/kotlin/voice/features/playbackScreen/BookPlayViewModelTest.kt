@@ -16,7 +16,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.Test
 import voice.core.common.DispatcherProvider
-import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -24,8 +23,9 @@ import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
+import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
-import voice.features.sleepTimer.SleepTimer
+import voice.core.sleeptimer.SleepTimer
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
 import java.util.UUID

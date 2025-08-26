@@ -1,4 +1,4 @@
-package voice.features.sleepTimer
+package voice.core.sleeptimer
 
 import android.content.Context
 import android.hardware.SensorManager

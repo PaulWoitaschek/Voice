@@ -1,4 +1,4 @@
-package voice.features.sleepTimer
+package voice.core.sleeptimer
 
 import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import voice.core.common.sleepTimer.SleepTimerPreference
+import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.core.Logger
@@ -24,12 +24,12 @@ import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
-import voice.core.playback.session.SleepTimer as PlaybackSleepTimer
+import voice.core.sleeptimer.SleepTimer as SleepTimerApi
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 @Inject
-class SleepTimer(
+class SleepTimerImpl(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @SleepTimerPreferenceStore
@@ -37,7 +37,7 @@ class SleepTimer(
   private val playerController: PlayerController,
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
-) : PlaybackSleepTimer {
+) : SleepTimerApi {
 
   private val scope = MainScope()
 
@@ -68,7 +68,7 @@ class SleepTimer(
     }
   }
 
-  fun setActive(sleepTime: Duration) {
+  override fun setActive(sleepTime: Duration) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)

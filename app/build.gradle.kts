@@ -155,6 +155,8 @@ dependencies {
   implementation(projects.core.scanner)
   implementation(projects.features.playbackScreen)
   implementation(projects.navigation)
+  implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.sleeptimer.impl)
   implementation(projects.features.sleepTimer)
   implementation(projects.features.settings)
   implementation(projects.features.folderPicker)
