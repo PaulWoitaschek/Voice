@@ -54,8 +54,6 @@ interface MigrationTestGraph {
   @get:Provides
   val appInfoProvider: AppInfoProvider
     get() = object : AppInfoProvider {
-      override val applicationID: String
-        get() = "de.ph1b.audiobook"
       override val versionName: String
         get() = "1.2.3"
     }

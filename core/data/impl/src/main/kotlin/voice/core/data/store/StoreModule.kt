@@ -11,7 +11,6 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
-import voice.core.common.AppInfoProvider
 import voice.core.common.grid.GridMode
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
@@ -24,12 +23,9 @@ internal object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun sharedPreferences(
-    context: Application,
-    appInfoProvider: AppInfoProvider,
-  ): SharedPreferences {
+  fun sharedPreferences(context: Application): SharedPreferences {
     return context.getSharedPreferences(
-      "${appInfoProvider.applicationID}_preferences",
+      "${context.packageName}_preferences",
       Context.MODE_PRIVATE,
     )
   }
