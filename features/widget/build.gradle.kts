@@ -12,6 +12,7 @@ android {
 dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.common)
+  implementation(projects.core.ui)
   implementation(projects.core.data.api)
   implementation(projects.core.playback)
 

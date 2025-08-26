@@ -19,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.app.features.widget.BaseWidgetProvider
-import voice.core.common.dpToPxRounded
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
@@ -27,6 +26,7 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.receiver.WidgetButtonReceiver
+import voice.core.ui.dpToPxRounded
 import voice.core.common.R as CommonR
 
 @SingleIn(AppScope::class)

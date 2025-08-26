@@ -14,7 +14,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import voice.core.common.dpToPxRounded
+import voice.core.ui.dpToPxRounded
 import voice.features.cover.R
 import kotlin.math.max
 import kotlin.math.min
