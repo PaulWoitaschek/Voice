@@ -7,17 +7,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import voice.features.bookOverview.views.BookFolderIcon
-import voice.features.bookOverview.views.MigrateIcon
 import voice.features.bookOverview.views.SettingsIcon
 
 @Composable
 internal fun ColumnScope.TopBarTrailingIcon(
   searchActive: Boolean,
-  showMigrateIcon: Boolean,
-  showMigrateHint: Boolean,
   showAddBookHint: Boolean,
-  onBookMigrationClick: () -> Unit,
-  onBoomMigrationHelperConfirmClick: () -> Unit,
   onBookFolderClick: () -> Unit,
   onSettingsClick: () -> Unit,
 ) {
@@ -27,15 +22,7 @@ internal fun ColumnScope.TopBarTrailingIcon(
     exit = fadeOut(),
   ) {
     Row {
-      if (showMigrateIcon) {
-        MigrateIcon(
-          onClick = onBookMigrationClick,
-          withHint = showMigrateHint,
-          onHintClick = onBoomMigrationHelperConfirmClick,
-        )
-      }
       BookFolderIcon(withHint = showAddBookHint, onClick = onBookFolderClick)
-
       SettingsIcon(onSettingsClick)
     }
   }

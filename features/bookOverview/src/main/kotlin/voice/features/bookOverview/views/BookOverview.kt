@@ -114,11 +114,6 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     },
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onPlayButtonClick = bookOverviewViewModel::playPause,
-    onBookMigrationClick = {
-      bookOverviewViewModel.onBoomMigrationHelperConfirmClick()
-      bookOverviewViewModel.onBookMigrationClick()
-    },
-    onBoomMigrationHelperConfirmClick = bookOverviewViewModel::onBoomMigrationHelperConfirmClick,
     onSearchActiveChange = bookOverviewViewModel::onSearchActiveChange,
     onSearchQueryChange = bookOverviewViewModel::onSearchQueryChange,
     onSearchBookClick = bookOverviewViewModel::onSearchBookClick,
@@ -178,8 +173,6 @@ internal fun BookOverview(
   onBookLongClick: (BookId) -> Unit,
   onBookFolderClick: () -> Unit,
   onPlayButtonClick: () -> Unit,
-  onBookMigrationClick: () -> Unit,
-  onBoomMigrationHelperConfirmClick: () -> Unit,
   onSearchActiveChange: (Boolean) -> Unit,
   onSearchQueryChange: (String) -> Unit,
   onSearchBookClick: (BookId) -> Unit,
@@ -192,8 +185,6 @@ internal fun BookOverview(
     topBar = {
       BookOverviewTopBar(
         viewState = viewState,
-        onBookMigrationClick = onBookMigrationClick,
-        onBoomMigrationHelperConfirmClick = onBoomMigrationHelperConfirmClick,
         onBookFolderClick = onBookFolderClick,
         onSettingsClick = onSettingsClick,
         onActiveChange = onSearchActiveChange,
@@ -258,8 +249,6 @@ fun BookOverviewPreview(
       onBookLongClick = {},
       onBookFolderClick = {},
       onPlayButtonClick = {},
-      onBookMigrationClick = {},
-      onBoomMigrationHelperConfirmClick = {},
       onSearchActiveChange = {},
       onSearchQueryChange = {},
       onSearchBookClick = {},
@@ -290,8 +279,6 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       layoutMode = BookOverviewLayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
-      showMigrateHint = false,
-      showMigrateIcon = true,
       showSearchIcon = true,
       isLoading = true,
       searchActive = true,

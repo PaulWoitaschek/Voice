@@ -1,4 +1,4 @@
-package voice.app.scanner
+package voice.core.scanner
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.matchers.collections.shouldContainExactly

@@ -3,7 +3,6 @@ package voice.core.data.repo.internals
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 import voice.core.data.MarkData
-import voice.core.data.legacy.LegacyBookType
 import java.io.File
 import java.time.Instant
 import java.util.UUID
@@ -23,13 +22,6 @@ class ConvertersTest {
   @Test
   fun file() {
     test(File("/sdcard/audiobooks/potter.mp3"), Converters::fromFile, Converters::toFile)
-  }
-
-  @Test
-  fun bookType() {
-    LegacyBookType.entries.forEach { bookType ->
-      test(bookType, Converters::fromBookType, Converters::toBookType)
-    }
   }
 
   @Test

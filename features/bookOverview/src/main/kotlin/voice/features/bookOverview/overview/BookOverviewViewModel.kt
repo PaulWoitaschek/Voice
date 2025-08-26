@@ -25,15 +25,12 @@ import voice.core.common.pref.GridModeStore
 import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.LegacyBookDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.search.BookSearch
-import voice.features.bookOverview.BookMigrationExplanationQualifier
-import voice.features.bookOverview.BookMigrationExplanationShown
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
@@ -51,9 +48,6 @@ class BookOverviewViewModel(
   @GridModeStore
   private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
-  @BookMigrationExplanationQualifier
-  private val bookMigrationExplanationShown: BookMigrationExplanationShown,
-  private val legacyBookDao: LegacyBookDao,
   private val navigator: Navigator,
   private val recentBookSearchDao: RecentBookSearchDao,
   private val search: BookSearch,
@@ -84,16 +78,8 @@ class BookOverviewViewModel(
     val gridMode = remember { gridModeStore.data }
       .collectAsState(initial = null).value
       ?: return BookOverviewViewState.Loading
-    val bookMigrationExplanationShown = remember { bookMigrationExplanationShown.data }
-      .collectAsState(initial = null).value
-      ?: return BookOverviewViewState.Loading
-
-    val hasLegacyBooks = produceState<Boolean?>(initialValue = null) {
-      value = legacyBookDao.bookMetaDataCount() != 0
-    }.value ?: return BookOverviewViewState.Loading
 
     val noBooks = !scannerActive && books.isEmpty()
-    val showMigrateHint = hasLegacyBooks && !bookMigrationExplanationShown
 
     val layoutMode = when (gridMode) {
       GridMode.LIST -> BookOverviewLayoutMode.List
@@ -127,13 +113,11 @@ class BookOverviewViewModel(
       } else {
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
-      showAddBookHint = if (showMigrateHint || hasStoragePermissionBug) {
+      showAddBookHint = if (hasStoragePermissionBug) {
         false
       } else {
         noBooks
       },
-      showMigrateIcon = hasLegacyBooks,
-      showMigrateHint = showMigrateHint,
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
       searchActive = searchActive,
@@ -197,10 +181,6 @@ class BookOverviewViewModel(
     navigator.goTo(Destination.FolderPicker)
   }
 
-  fun onBookMigrationClick() {
-    navigator.goTo(Destination.Migration)
-  }
-
   fun onSearchActiveChange(active: Boolean) {
     if (active && !searchActive) {
       query = ""
@@ -221,12 +201,6 @@ class BookOverviewViewModel(
     }
     searchActive = false
     navigator.goTo(Destination.Playback(id))
-  }
-
-  fun onBoomMigrationHelperConfirmClick() {
-    scope.launch {
-      bookMigrationExplanationShown.updateData { true }
-    }
   }
 
   fun playPause() {

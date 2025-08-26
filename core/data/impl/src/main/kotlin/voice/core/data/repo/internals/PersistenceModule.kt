@@ -12,7 +12,6 @@ import dev.zacsweers.metro.SingleIn
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
-import voice.core.data.repo.internals.dao.LegacyBookDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
 @BindingContainer
@@ -27,9 +26,6 @@ internal object PersistenceModule {
 
   @Provides
   fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
-
-  @Provides
-  fun legacyBookDao(appDb: AppDb): LegacyBookDao = appDb.legacyBookDao()
 
   @Provides
   fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()

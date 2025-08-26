@@ -1,4 +1,4 @@
-package voice.app.scanner
+package voice.core.scanner
 
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -22,12 +22,6 @@ import voice.core.data.repo.internals.AppDb
 import voice.core.data.toUri
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.FileBasedDocumentFile
-import voice.core.scanner.BookParser
-import voice.core.scanner.BookmarkMigrator
-import voice.core.scanner.ChapterParser
-import voice.core.scanner.MediaAnalyzer
-import voice.core.scanner.MediaScanner
-import voice.core.scanner.Metadata
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files
@@ -211,12 +205,6 @@ class MediaScannerTest {
       bookParser = BookParser(
         contentRepo = bookContentRepo,
         mediaAnalyzer = mediaAnalyzer,
-        legacyBookDao = db.legacyBookDao(),
-        application = ApplicationProvider.getApplicationContext(),
-        bookmarkMigrator = BookmarkMigrator(
-          legacyBookDao = db.legacyBookDao(),
-          bookmarkDao = db.bookmarkDao(),
-        ),
         fileFactory = FileBasedDocumentFactory,
       ),
       deviceHasPermissionBug = mockk(),

@@ -1,4 +1,4 @@
-package voice.app.scanner
+package voice.core.scanner
 
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull

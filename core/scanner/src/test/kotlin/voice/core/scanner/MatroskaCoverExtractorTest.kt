@@ -1,4 +1,4 @@
-package voice.app.scanner
+package voice.core.scanner
 
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider

@@ -9,8 +9,6 @@ import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
-import voice.core.data.legacy.LegacyBookType
-import voice.core.data.legacy.LegacyMarkData
 import java.io.File
 import java.time.Instant
 import java.util.UUID
@@ -26,32 +24,10 @@ internal class Converters {
   fun toMarks(string: String): List<MarkData> = json.decodeFromString(ListSerializer(MarkData.serializer()), string)
 
   @TypeConverter
-  fun fromLegacyMarks(data: List<LegacyMarkData>): String = json.encodeToString(
-    ListSerializer(
-      LegacyMarkData.serializer(),
-    ),
-    data,
-  )
-
-  @TypeConverter
-  fun toLegacyMarks(string: String): List<LegacyMarkData> = json.decodeFromString(
-    ListSerializer(
-      LegacyMarkData.serializer(),
-    ),
-    string,
-  )
-
-  @TypeConverter
   fun fromFile(file: File): String = file.absolutePath
 
   @TypeConverter
   fun toFile(path: String) = File(path)
-
-  @TypeConverter
-  fun fromBookType(type: LegacyBookType): String = type.name
-
-  @TypeConverter
-  fun toBookType(name: String): LegacyBookType = LegacyBookType.valueOf(name)
 
   @TypeConverter
   fun fromUUID(uuid: UUID): String = uuid.toString()

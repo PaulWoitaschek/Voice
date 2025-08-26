@@ -159,7 +159,6 @@ dependencies {
   implementation(projects.features.settings)
   implementation(projects.features.folderPicker)
   implementation(projects.features.bookOverview)
-  implementation(projects.features.migration)
   implementation(projects.core.search)
   implementation(projects.features.cover)
   implementation(projects.core.documentfile)

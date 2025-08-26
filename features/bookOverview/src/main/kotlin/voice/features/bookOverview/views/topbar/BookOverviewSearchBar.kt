@@ -18,14 +18,10 @@ internal fun ColumnScope.BookOverviewSearchBar(
   horizontalPadding: Dp,
   onQueryChange: (String) -> Unit,
   onActiveChange: (Boolean) -> Unit,
-  onBookMigrationClick: () -> Unit,
-  onBoomMigrationHelperConfirmClick: () -> Unit,
   onBookFolderClick: () -> Unit,
   onSettingsClick: () -> Unit,
   onSearchBookClick: (BookId) -> Unit,
   searchActive: Boolean,
-  showMigrateIcon: Boolean,
-  showMigrateHint: Boolean,
   showAddBookHint: Boolean,
   searchViewState: BookSearchViewState,
 ) {
@@ -50,11 +46,7 @@ internal fun ColumnScope.BookOverviewSearchBar(
         trailingIcon = {
           TopBarTrailingIcon(
             searchActive = searchActive,
-            showMigrateIcon = showMigrateIcon,
-            showMigrateHint = showMigrateHint,
             showAddBookHint = showAddBookHint,
-            onBookMigrationClick = onBookMigrationClick,
-            onBoomMigrationHelperConfirmClick = onBoomMigrationHelperConfirmClick,
             onBookFolderClick = onBookFolderClick,
             onSettingsClick = onSettingsClick,
           )

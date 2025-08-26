@@ -40,9 +40,6 @@ sealed interface Destination {
     NavKey
 
   @Serializable
-  data object Migration : Compose
-
-  @Serializable
   data object Settings : Compose
 
   @Serializable

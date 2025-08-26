@@ -2,14 +2,12 @@ package voice.app.injection
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
@@ -22,12 +20,9 @@ import voice.core.common.pref.GridModeStore
 import voice.core.common.pref.OnboardingCompletedStore
 import voice.core.common.pref.SeekTimeStore
 import voice.core.common.pref.SleepTimerPreferenceStore
-import voice.core.common.serialization.UriSerializer
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
 import voice.core.datastore.VoiceDataStoreFactory
-import voice.features.bookOverview.BookMigrationExplanationQualifier
-import voice.features.bookOverview.BookMigrationExplanationShown
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -151,17 +146,4 @@ object PrefsModule {
       defaultValue = null,
     )
   }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @BookMigrationExplanationQualifier
-  fun bookMigrationExplanationShown(factory: VoiceDataStoreFactory): BookMigrationExplanationShown {
-    return factory.create(Boolean.serializer(), false, "bookMigrationExplanationShown2")
-  }
 }
-
-private fun VoiceDataStoreFactory.createUriSet(name: String): DataStore<Set<Uri>> = create(
-  serializer = SetSerializer(UriSerializer),
-  fileName = name,
-  defaultValue = emptySet(),
-)
