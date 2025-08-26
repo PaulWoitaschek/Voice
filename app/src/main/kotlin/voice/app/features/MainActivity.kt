@@ -86,9 +86,6 @@ class MainActivity : AppCompatActivity() {
                       Logger.w(exception)
                     }
                   }
-                  is Destination.Dialog -> {
-                    backStack += destination
-                  }
                 }
               }
               NavigationCommand.GoBack -> {

@@ -21,22 +21,42 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.DialogSceneStrategy
 import coil.compose.AsyncImage
 import coil.imageLoader
 import coil.request.ImageRequest
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.app.features.imagepicker.CropOverlay
 import voice.app.uitools.CropTransformation
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.scanner.CoverSaver
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface EditCoverComponent {
   val coverSaver: CoverSaver
+}
+
+@ContributesTo(AppScope::class)
+interface EditCoverDialogProvider {
+
+  @Provides
+  @IntoSet
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key, backStack ->
+    NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
+      EditCoverDialog(key.cover, key.bookId) {
+        backStack.removeLastOrNull()
+      }
+    }
+  }
 }
 
 @Composable

@@ -25,17 +25,12 @@ sealed interface Destination {
     val cover:
     @Serializable(with = UriSerializer::class)
     Uri,
-  ) : Dialog
+  ) : Compose
 
   data class Activity(val intent: Intent) : Destination
 
   @Serializable
   sealed interface Compose :
-    Destination,
-    NavKey
-
-  @Serializable
-  sealed interface Dialog :
     Destination,
     NavKey
 
@@ -65,7 +60,7 @@ sealed interface Destination {
   @Serializable
   data object OnboardingWelcome : Compose
 
-  @kotlinx.serialization.Serializable
+  @Serializable
   data object OnboardingCompletion : Compose
 
   @Serializable
