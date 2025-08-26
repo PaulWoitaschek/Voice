@@ -1,4 +1,4 @@
-package voice.core.common.grid
+package voice.core.ui
 
 import android.content.Context
 import dev.zacsweers.metro.Inject

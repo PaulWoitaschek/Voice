@@ -13,8 +13,7 @@ import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.common.grid.GridCount
-import voice.core.common.grid.GridMode
+import voice.core.data.GridMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
@@ -22,6 +21,7 @@ import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.ui.DARK_THEME_SETTABLE
+import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.LocalTime

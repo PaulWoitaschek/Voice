@@ -11,8 +11,8 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
-import voice.core.common.grid.GridMode
 import voice.core.data.BookId
+import voice.core.data.GridMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.common.AppInfoProvider
-import voice.core.common.grid.GridMode
+import voice.core.data.GridMode
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore

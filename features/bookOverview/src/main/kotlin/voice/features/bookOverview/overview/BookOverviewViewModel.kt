@@ -18,9 +18,8 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.common.comparator.sortedNaturally
-import voice.core.common.grid.GridCount
-import voice.core.common.grid.GridMode
 import voice.core.data.BookId
+import voice.core.data.GridMode
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -31,6 +30,7 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.search.BookSearch
+import voice.core.ui.GridCount
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
