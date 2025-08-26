@@ -62,7 +62,7 @@ class AutoEnableSleepTimerTest {
     bookRepository = mockk(relaxUnitFun = true)
     currentBookStore = mockk<DataStore<BookId?>>(relaxUnitFun = true)
 
-    val dispatcherProvider = DispatcherProvider(main = testDispatcher, testDispatcher)
+    val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
     autoEnableSleepTimer = AutoEnableSleepTimer(
       sleepTimerPreferenceStore = sleepTimerPreferenceStore,
       dispatcherProvider = dispatcherProvider,

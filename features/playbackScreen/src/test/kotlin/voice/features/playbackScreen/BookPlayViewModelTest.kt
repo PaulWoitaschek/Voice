@@ -72,7 +72,7 @@ class BookPlayViewModelTest {
     batteryOptimization = mockk(),
     sleepTimerPreferenceStore = sleepTimerDataStore,
     bookId = book.id,
-    dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext),
+    dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
   @Test

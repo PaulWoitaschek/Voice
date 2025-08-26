@@ -8,7 +8,6 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.MainActivityIntentProviderImpl
@@ -48,10 +47,7 @@ object AndroidModule {
   @Provides
   @SingleIn(AppScope::class)
   fun dispatcherProvider(): DispatcherProvider {
-    return DispatcherProvider(
-      main = Dispatchers.Main,
-      io = Dispatchers.IO,
-    )
+    return DispatcherProvider()
   }
 
   @Provides
