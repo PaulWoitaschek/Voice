@@ -38,8 +38,9 @@ Each module contains its own `build.gradle.kts`, `src/main/kotlin`, and `src/tes
 * `:core:strings` - Localized strings
 * `:core:search` - Search functionality
 * `:core:documentfile` - File system abstractions
-* `:core:logging` - Logging implementations (crashlytics, debug, core)
-* `:core:remoteconfig` - Remote configuration (firebase, noop, core)
+* `:core:logging:core`, `:core:logging:crashlytics`, `:core:logging:debug` - Logging implementations
+* `:core:remoteconfig:core`, `:core:remoteconfig:firebase`, `:core:remoteconfig:noop` - Remote configuration
+* `:core:sleeptimer:api` & `:core:sleeptimer:impl` - Sleep timer core logic
 
 **Feature Modules** (UI screens and features):
 
@@ -51,7 +52,8 @@ Each module contains its own `build.gradle.kts`, `src/main/kotlin`, and `src/tes
 * `:features:cover` - Cover art management
 * `:features:onboarding` - First-time user flow
 * `:features:bookmark` - Bookmark management
-* `:features:review` - App review prompts (play/noop variants)
+* `:features:widget` - Home screen widget functionality
+* `:features:review:play` & `:features:review:noop` - App review prompts
 
 ## Build & Run
 

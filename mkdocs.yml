@@ -14,6 +14,7 @@ nav:
   - Contributing: contributing.md
   - About: about.md
   - Development: development.md
+  - Architecture: architecture.md
   - FAQ: faq.md
 
 theme:
