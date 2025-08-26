@@ -15,10 +15,10 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.logging.core.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.session.CustomCommand

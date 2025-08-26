@@ -147,7 +147,7 @@ android {
 
 dependencies {
   implementation(projects.core.strings)
-  implementation(projects.core.datastore)
+  implementation(projects.core.ui)
   implementation(projects.core.common)
   implementation(projects.core.data.api)
   implementation(projects.core.data.impl)
@@ -155,6 +155,8 @@ dependencies {
   implementation(projects.core.scanner)
   implementation(projects.features.playbackScreen)
   implementation(projects.navigation)
+  implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.sleeptimer.impl)
   implementation(projects.features.sleepTimer)
   implementation(projects.features.settings)
   implementation(projects.features.folderPicker)
@@ -164,6 +166,7 @@ dependencies {
   implementation(projects.core.documentfile)
   implementation(projects.features.onboarding)
   implementation(projects.features.bookmark)
+  implementation(projects.features.widget)
 
   implementation(libs.appCompat)
   implementation(libs.material)
@@ -174,8 +177,6 @@ dependencies {
 
   implementation(libs.serialization.json)
 
-  implementation(libs.materialDialog.core)
-  implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
   if (includeProprietaryLibraries()) {

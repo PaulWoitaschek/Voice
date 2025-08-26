@@ -29,9 +29,9 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
-import voice.core.common.compose.VoiceTheme
-import voice.core.common.compose.rememberScoped
 import voice.core.common.rootGraphAs
+import voice.core.ui.VoiceTheme
+import voice.core.ui.rememberScoped
 import voice.features.onboarding.R
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider

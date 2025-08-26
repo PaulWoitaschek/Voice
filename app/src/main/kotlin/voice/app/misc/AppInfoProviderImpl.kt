@@ -6,8 +6,5 @@ import voice.core.common.AppInfoProvider
 
 @Inject
 class AppInfoProviderImpl : AppInfoProvider {
-
-  override val applicationID = BuildConfig.APPLICATION_ID
-
   override val versionName: String = BuildConfig.VERSION_NAME
 }

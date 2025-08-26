@@ -34,7 +34,7 @@ import voice.core.data.BookId
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
-import voice.core.common.R as CommonR
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun GridBooks(
@@ -116,8 +116,8 @@ internal fun GridBook(
           .clip(RoundedCornerShape(8.dp)),
         contentScale = ContentScale.Crop,
         model = book.cover?.file,
-        placeholder = painterResource(id = CommonR.drawable.album_art),
-        error = painterResource(id = CommonR.drawable.album_art),
+        placeholder = painterResource(id = UiR.drawable.album_art),
+        error = painterResource(id = UiR.drawable.album_art),
         contentDescription = null,
       )
       Text(

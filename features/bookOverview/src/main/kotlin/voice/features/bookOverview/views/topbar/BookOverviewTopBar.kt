@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
-import voice.core.common.compose.VoiceTheme
 import voice.core.data.BookId
+import voice.core.ui.VoiceTheme
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.search.BookSearchViewState

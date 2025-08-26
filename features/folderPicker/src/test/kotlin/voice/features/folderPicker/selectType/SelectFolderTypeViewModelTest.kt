@@ -34,7 +34,7 @@ class SelectFolderTypeViewModelTest {
       newFile("audiobooks/SecondBook/2.mp3")
     }
     val viewModel = SelectFolderTypeViewModel(
-      dispatcherProvider = DispatcherProvider(coroutineContext, coroutineContext),
+      dispatcherProvider = DispatcherProvider(coroutineContext, coroutineContext, coroutineContext),
       audiobookFolders = mockk(),
       navigator = mockk(),
       documentFileFactory = FileBasedDocumentFactory,

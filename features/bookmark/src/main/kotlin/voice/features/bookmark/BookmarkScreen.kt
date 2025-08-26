@@ -48,10 +48,10 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
-import voice.core.common.compose.rememberScoped
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.data.Bookmark
+import voice.core.ui.rememberScoped
 import voice.features.bookmark.dialogs.AddBookmarkDialog
 import voice.features.bookmark.dialogs.EditBookmarkDialog
 import voice.navigation.Destination

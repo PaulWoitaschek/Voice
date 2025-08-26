@@ -13,10 +13,10 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import voice.core.common.compose.VoiceTheme
-import voice.core.common.compose.rememberScoped
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.ui.VoiceTheme
+import voice.core.ui.rememberScoped
 import voice.features.cover.api.SearchResponse
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider

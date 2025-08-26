@@ -9,7 +9,7 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
-import voice.core.common.pref.DarkThemeStore
+import voice.core.data.store.DarkThemeStore
 
 @SingleIn(AppScope::class)
 @DependencyGraph(

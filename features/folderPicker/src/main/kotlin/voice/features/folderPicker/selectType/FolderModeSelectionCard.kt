@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import voice.core.common.compose.VoiceTheme
 import voice.core.data.folders.FolderType
+import voice.core.ui.VoiceTheme
 import voice.features.folderPicker.FolderTypeIcon
 import voice.core.strings.R as StringsR
 

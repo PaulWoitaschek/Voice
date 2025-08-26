@@ -9,7 +9,7 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.SetSerializer
 import voice.core.common.serialization.UriSerializer
-import voice.core.datastore.VoiceDataStoreFactory
+import voice.core.data.store.VoiceDataStoreFactory
 
 @BindingContainer
 @ContributesTo(AppScope::class)

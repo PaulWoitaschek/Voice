@@ -11,7 +11,7 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldNotBeEmpty
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import voice.core.common.compose.SharedGraph
+import voice.core.ui.SharedGraph
 
 @SingleIn(AppScope::class)
 @DependencyGraph(

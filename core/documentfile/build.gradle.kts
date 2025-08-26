@@ -4,6 +4,5 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.common)
   implementation(libs.androidxCore)
 }

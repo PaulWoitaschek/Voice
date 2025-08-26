@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import voice.core.common.compose.plus
 import voice.core.data.BookId
+import voice.core.ui.plus
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.views.GridBook
 import voice.features.bookOverview.views.ListBookRow

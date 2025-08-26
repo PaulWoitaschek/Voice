@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+  implementation(projects.core.ui)
   implementation(projects.core.common)
   implementation(projects.core.strings)
   implementation(projects.core.playback)
@@ -20,7 +21,6 @@ dependencies {
 
   implementation(libs.datastore)
   implementation(libs.coil)
-  implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
 

@@ -4,10 +4,12 @@ import android.os.Build
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
+import voice.core.data.store.AmountOfBatteryOptimizationRequestedStore
 
 @Inject
 class BatteryOptimization(
   private val isIgnoringBatteryOptimizations: IsIgnoringBatteryOptimizations,
+  @AmountOfBatteryOptimizationRequestedStore
   private val amountOfBatteryOptimizationsRequested: DataStore<Int>,
 ) {
 

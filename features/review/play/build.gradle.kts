@@ -14,9 +14,10 @@ dependencies {
   api(libs.review)
 
   implementation(libs.lottie)
+  implementation(libs.datastore)
+
   implementation(projects.core.common)
   implementation(projects.core.data.api)
-  implementation(projects.core.datastore)
   implementation(projects.core.playback)
   implementation(projects.core.remoteconfig.core)
   implementation(projects.core.strings)

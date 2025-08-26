@@ -34,11 +34,11 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
-import voice.core.common.compose.PlayButton
-import voice.core.common.compose.VoiceTheme
-import voice.core.common.compose.rememberScoped
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.ui.PlayButton
+import voice.core.ui.VoiceTheme
+import voice.core.ui.rememberScoped
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog

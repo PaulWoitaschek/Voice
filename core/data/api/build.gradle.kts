@@ -11,6 +11,7 @@ kotlin {
 dependencies {
   api(projects.core.common)
   api(projects.core.documentfile)
+  implementation(libs.metro.runtime)
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)

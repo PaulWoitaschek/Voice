@@ -18,22 +18,22 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.common.compose.ImmutableFile
-import voice.core.common.pref.CurrentBookStore
-import voice.core.common.pref.SleepTimerPreferenceStore
-import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.core.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.sleeptimer.SleepTimer
+import voice.core.ui.ImmutableFile
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
-import voice.features.sleepTimer.SleepTimer
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -82,7 +82,7 @@ class BookPlayViewModel(
       playStateManager.flow
     }.collectAsState()
 
-    val sleepTime by remember { sleepTimer.leftSleepTimeFlow }.collectAsState()
+    val sleepTime by remember { sleepTimer.leftSleepTimeFlow }.collectAsState(Duration.ZERO)
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1

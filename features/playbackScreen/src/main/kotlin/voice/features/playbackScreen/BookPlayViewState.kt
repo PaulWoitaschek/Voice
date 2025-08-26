@@ -1,8 +1,8 @@
 package voice.features.playbackScreen
 
 import androidx.compose.runtime.Immutable
-import voice.core.common.compose.ImmutableFile
 import voice.core.playback.misc.Decibel
+import voice.core.ui.ImmutableFile
 import voice.features.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
 
