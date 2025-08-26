@@ -33,6 +33,7 @@ dependencies {
   api(projects.core.common)
   api(projects.core.documentfile)
 
+  implementation(libs.datastore)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
   implementation(libs.coroutines.core)

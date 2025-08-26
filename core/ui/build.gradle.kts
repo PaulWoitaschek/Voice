@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+  api(libs.datastore)
   implementation(projects.core.data.api)
   implementation(projects.core.strings)
   implementation(libs.lifecycle.viewmodel.compose)

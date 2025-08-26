@@ -15,6 +15,7 @@ dependencies {
   implementation(projects.core.scanner)
 
   implementation(libs.lifecycle)
+  api(libs.immutable)
   implementation(libs.documentFile)
   implementation(libs.datastore)
 

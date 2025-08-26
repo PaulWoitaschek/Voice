@@ -12,7 +12,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import voice.core.common.R
 import voice.core.ui.ImmutableFile
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR

@@ -34,7 +34,6 @@ import voice.core.data.BookId
 import voice.core.ui.ImmutableFile
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
-import voice.core.common.R as CommonR
 import voice.core.ui.R as UiR
 
 @Composable

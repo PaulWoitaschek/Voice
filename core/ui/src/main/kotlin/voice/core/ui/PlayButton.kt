@@ -15,8 +15,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import voice.core.ui.R
-import voice.core.common.R as CommonR
 import voice.core.strings.R as StringsR
 
 @Composable

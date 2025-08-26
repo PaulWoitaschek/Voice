@@ -34,7 +34,6 @@ import voice.core.data.BookId
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
-import voice.core.common.R as CommonR
 import voice.core.ui.R as UiR
 
 @Composable

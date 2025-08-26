@@ -27,7 +27,6 @@ import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.receiver.WidgetButtonReceiver
 import voice.core.ui.dpToPxRounded
-import voice.core.common.R as CommonR
 import voice.core.ui.R as UiR
 
 @SingleIn(AppScope::class)
