@@ -10,7 +10,7 @@
       tools:node="merge">
 
       <meta-data
-        android:name="voice.logging.crashlytics.CrashlyticsLogWriterInitializer"
+        android:name="voice.core.logging.crashlytics.CrashlyticsLogWriterInitializer"
         android:value="androidx.startup" />
     </provider>
 

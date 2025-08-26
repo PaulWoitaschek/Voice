@@ -10,7 +10,7 @@
       tools:node="merge">
 
       <meta-data
-        android:name="voice.logging.debug.DebugLogWriterInitializer"
+        android:name="voice.core.logging.debug.DebugLogWriterInitializer"
         android:value="androidx.startup" />
     </provider>
 
