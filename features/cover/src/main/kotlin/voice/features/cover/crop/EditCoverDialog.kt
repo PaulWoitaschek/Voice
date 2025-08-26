@@ -1,4 +1,4 @@
-package voice.app.features.editCover
+package voice.features.cover.crop
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -138,7 +138,7 @@ fun EditCoverDialog(
     },
     dismissButton = {
       TextButton(onClick = { onDismiss() }) {
-        Text(text = context.getString(android.R.string.cancel))
+        Text(text = context.getString(StringsR.string.dialog_cancel))
       }
     },
   )

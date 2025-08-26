@@ -1,4 +1,4 @@
-package voice.app.features.editCover
+package voice.features.cover.crop
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,8 +14,8 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import voice.app.R
 import voice.core.common.dpToPxRounded
+import voice.features.cover.R
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt

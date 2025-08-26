@@ -5,9 +5,14 @@ plugins {
   alias(libs.plugins.metro)
 }
 
+android {
+  androidResources.enable = true
+}
+
 dependencies {
   implementation(projects.core.data.api)
   implementation(projects.navigation)
+  implementation(projects.core.scanner)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
   implementation(projects.core.remoteconfig.core)
@@ -16,6 +21,7 @@ dependencies {
   implementation(libs.okhttp)
   implementation(libs.paging.compose)
   implementation(libs.paging.runtime)
+  implementation(libs.navigation3.ui)
 
   implementation(libs.serialization.json)
   testImplementation(projects.core.data.impl)

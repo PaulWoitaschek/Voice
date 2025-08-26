@@ -1,4 +1,4 @@
-package voice.app.features.editCover
+package voice.features.cover.crop
 
 import android.graphics.Bitmap
 import android.graphics.Rect
