@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import voice.core.common.formatTime
+import voice.core.ui.formatTime
 import kotlin.time.Duration
 
 @Composable
