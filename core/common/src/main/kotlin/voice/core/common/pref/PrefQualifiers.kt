@@ -6,18 +6,6 @@ import dev.zacsweers.metro.Qualifier
 annotation class OnboardingCompletedStore
 
 @Qualifier
-annotation class RootAudiobookFoldersStore
-
-@Qualifier
-annotation class SingleFolderAudiobookFoldersStore
-
-@Qualifier
-annotation class SingleFileAudiobookFoldersStore
-
-@Qualifier
-annotation class AuthorAudiobookFoldersStore
-
-@Qualifier
 annotation class CurrentBookStore
 
 @Qualifier

@@ -14,17 +14,13 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.app.BuildConfig
 import voice.core.common.grid.GridMode
-import voice.core.common.pref.AuthorAudiobookFoldersStore
 import voice.core.common.pref.AutoRewindAmountStore
 import voice.core.common.pref.CurrentBookStore
 import voice.core.common.pref.DarkThemeStore
 import voice.core.common.pref.FadeOutStore
 import voice.core.common.pref.GridModeStore
 import voice.core.common.pref.OnboardingCompletedStore
-import voice.core.common.pref.RootAudiobookFoldersStore
 import voice.core.common.pref.SeekTimeStore
-import voice.core.common.pref.SingleFileAudiobookFoldersStore
-import voice.core.common.pref.SingleFolderAudiobookFoldersStore
 import voice.core.common.pref.SleepTimerPreferenceStore
 import voice.core.common.serialization.UriSerializer
 import voice.core.common.sleepTimer.SleepTimerPreference
@@ -143,34 +139,6 @@ object PrefsModule {
   @OnboardingCompletedStore
   fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("onboardingCompleted", defaultValue = false)
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @RootAudiobookFoldersStore
-  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("audiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @SingleFolderAudiobookFoldersStore
-  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("SingleFolderAudiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @SingleFileAudiobookFoldersStore
-  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("SingleFileAudiobookFolders")
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @AuthorAudiobookFoldersStore
-  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
-    return factory.createUriSet("AuthorAudiobookFolders")
   }
 
   @Provides
