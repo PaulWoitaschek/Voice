@@ -1,4 +1,4 @@
-package voice.core.bookmark.dialogs
+package voice.features.bookmark.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,27 +20,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import voice.core.data.Bookmark
 import voice.core.strings.R as StringsR
 
 @Composable
-internal fun AddBookmarkDialog(
+internal fun EditBookmarkDialog(
   onDismissRequest: () -> Unit,
-  onBookmarkNameChoose: (String) -> Unit,
+  onEditBookmark: (Bookmark.Id, String) -> Unit,
+  bookmarkId: Bookmark.Id,
+  initialTitle: String,
 ) {
-  var bookmarkName by remember { mutableStateOf("") }
+  var bookmarkTitle by remember {
+    mutableStateOf(
+      TextFieldValue(
+        text = initialTitle,
+        selection = TextRange(0, initialTitle.length),
+      ),
+    )
+  }
   val focusRequester = remember { FocusRequester() }
+
   AlertDialog(
     onDismissRequest = onDismissRequest,
-    title = { Text(text = stringResource(StringsR.string.bookmark)) },
+    title = { Text(text = stringResource(StringsR.string.bookmark_edit_title)) },
     text = {
       Column {
         OutlinedTextField(
-          value = bookmarkName,
-          onValueChange = { bookmarkName = it },
+          value = bookmarkTitle,
+          onValueChange = { bookmarkTitle = it },
           label = { Text(stringResource(StringsR.string.bookmark_edit_hint)) },
           modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +67,10 @@ internal fun AddBookmarkDialog(
           ),
           keyboardActions = KeyboardActions(
             onDone = {
-              onBookmarkNameChoose(bookmarkName)
+              if (bookmarkTitle.text.isNotEmpty()) {
+                onEditBookmark(bookmarkId, bookmarkTitle.text)
+                onDismissRequest()
+              }
             },
           ),
         )
@@ -63,9 +79,12 @@ internal fun AddBookmarkDialog(
     confirmButton = {
       Button(
         onClick = {
-          onBookmarkNameChoose(bookmarkName)
-          onDismissRequest()
+          if (bookmarkTitle.text.isNotEmpty()) {
+            onEditBookmark(bookmarkId, bookmarkTitle.text)
+            onDismissRequest()
+          }
         },
+        enabled = bookmarkTitle.text.isNotEmpty(),
       ) {
         Text(stringResource(StringsR.string.dialog_confirm))
       }

@@ -164,7 +164,7 @@ dependencies {
   implementation(projects.features.cover)
   implementation(projects.core.documentfile)
   implementation(projects.features.onboarding)
-  implementation(projects.core.bookmark)
+  implementation(projects.features.bookmark)
 
   implementation(libs.appCompat)
   implementation(libs.material)
