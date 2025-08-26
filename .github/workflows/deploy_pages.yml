@@ -35,7 +35,6 @@ jobs:
         with:
           python-version: '3.x'
       - run: pip install pipenv
-      - run: pipenv sync --dev
       - run: pipenv run mkdocs build --strict
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
