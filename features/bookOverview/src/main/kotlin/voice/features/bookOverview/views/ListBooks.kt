@@ -35,6 +35,7 @@ import voice.core.ui.ImmutableFile
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.common.R as CommonR
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun ListBooks(
@@ -149,8 +150,8 @@ private fun CoverImage(cover: ImmutableFile?) {
       .size(76.dp)
       .clip(RoundedCornerShape(8.dp)),
     model = cover?.file,
-    placeholder = painterResource(id = CommonR.drawable.album_art),
-    error = painterResource(id = CommonR.drawable.album_art),
+    placeholder = painterResource(id = UiR.drawable.album_art),
+    error = painterResource(id = UiR.drawable.album_art),
     contentDescription = null,
   )
 }

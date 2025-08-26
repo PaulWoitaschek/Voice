@@ -21,10 +21,8 @@ dependencies {
   api(libs.navigation3.runtime)
   implementation(libs.serialization.json)
 
-  testImplementation(kotlin("reflect"))
   testImplementation(libs.junit)
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.runner)
-  testImplementation(libs.robolectric)
 }

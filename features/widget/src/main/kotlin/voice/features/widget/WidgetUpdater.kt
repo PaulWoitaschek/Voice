@@ -28,6 +28,7 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.receiver.WidgetButtonReceiver
 import voice.core.ui.dpToPxRounded
 import voice.core.common.R as CommonR
+import voice.core.ui.R as UiR
 
 @SingleIn(AppScope::class)
 @Inject
@@ -109,7 +110,7 @@ class WidgetUpdater(
   private fun initWidgetForAbsentBook(widgetId: Int) {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget)
     val wholeWidgetClickPI = mainActivityIntentProvider.toCurrentBook()
-    remoteViews.setImageViewResource(R.id.imageView, CommonR.drawable.album_art)
+    remoteViews.setImageViewResource(R.id.imageView, UiR.drawable.album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
   }
@@ -135,9 +136,9 @@ class WidgetUpdater(
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     val playIcon = if (playStateManager.playState == PlayStateManager.PlayState.Playing) {
-      CommonR.drawable.ic_pause_white_36dp
+      UiR.drawable.ic_pause_white_36dp
     } else {
-      CommonR.drawable.ic_play_white_36dp
+      UiR.drawable.ic_play_white_36dp
     }
     remoteViews.setImageViewResource(R.id.playPause, playIcon)
 
@@ -157,15 +158,15 @@ class WidgetUpdater(
           ImageRequest.Builder(context)
             .data(coverFile)
             .size(coverSize, coverSize)
-            .fallback(CommonR.drawable.album_art)
-            .error(CommonR.drawable.album_art)
+            .fallback(UiR.drawable.album_art)
+            .error(UiR.drawable.album_art)
             .allowHardware(false)
             .build(),
         )
         .drawable!!.toBitmap()
       remoteViews.setImageViewBitmap(R.id.imageView, bitmap)
     } else {
-      remoteViews.setImageViewResource(R.id.imageView, CommonR.drawable.album_art)
+      remoteViews.setImageViewResource(R.id.imageView, UiR.drawable.album_art)
     }
 
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

@@ -15,6 +15,7 @@ import coil.compose.AsyncImage
 import voice.core.common.R
 import voice.core.ui.ImmutableFile
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun Cover(
@@ -34,8 +35,8 @@ internal fun Cover(
       .clip(RoundedCornerShape(20.dp)),
     contentScale = ContentScale.Crop,
     model = cover?.file,
-    placeholder = painterResource(id = R.drawable.album_art),
-    error = painterResource(id = R.drawable.album_art),
+    placeholder = painterResource(id = UiR.drawable.album_art),
+    error = painterResource(id = UiR.drawable.album_art),
     contentDescription = stringResource(id = StringsR.string.cover),
   )
 }

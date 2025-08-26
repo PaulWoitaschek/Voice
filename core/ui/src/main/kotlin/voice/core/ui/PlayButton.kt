@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import voice.core.ui.R
 import voice.core.common.R as CommonR
 import voice.core.strings.R as StringsR
 
@@ -53,7 +54,7 @@ fun PlayButton(
 private fun rememberPlayIconPainter(playing: Boolean): Painter {
   return rememberAnimatedVectorPainter(
     animatedImageVector = AnimatedImageVector.animatedVectorResource(
-      id = CommonR.drawable.avd_pause_to_play,
+      id = R.drawable.avd_pause_to_play,
     ),
     atEnd = !playing,
   )
