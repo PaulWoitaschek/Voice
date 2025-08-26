@@ -13,7 +13,6 @@ dependencies {
   implementation(projects.core.data.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.material)
 }

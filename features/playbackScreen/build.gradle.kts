@@ -17,7 +17,6 @@ dependencies {
   implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
-  implementation(libs.materialDialog.core)
   implementation(libs.androidxCore)
   implementation(libs.material)
 

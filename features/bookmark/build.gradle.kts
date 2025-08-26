@@ -11,7 +11,4 @@ dependencies {
   implementation(projects.core.playback)
   implementation(projects.navigation)
   implementation(projects.core.data.api)
-
-  implementation(libs.materialDialog.core)
-  implementation(libs.materialDialog.input)
 }

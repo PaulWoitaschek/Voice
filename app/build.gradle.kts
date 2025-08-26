@@ -177,8 +177,6 @@ dependencies {
 
   implementation(libs.serialization.json)
 
-  implementation(libs.materialDialog.core)
-  implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
   if (includeProprietaryLibraries()) {
