@@ -78,6 +78,29 @@ This ensures **unidirectional dependency flow**:
 Infrastructure → Core → Features
 ```
 
+## Diagram
+
+````mermaid
+flowchart LR
+    subgraph Infrastructure
+        app(":app")
+        navigation(":navigation")
+    end
+
+    subgraph Core
+        core(":core")
+    end
+
+    subgraph Features
+        features(":features")
+    end
+
+    app --> navigation
+    app --> features
+    features --> core
+    features --> navigation
+````
+
 ## Tech Decisions
 
 * **Compose (UI)** – Declarative UI with Material 3 for consistency and accessibility
@@ -93,3 +116,4 @@ Infrastructure → Core → Features
 1. **Add new functionality as a feature module.**
 2. **Extract reusable logic into `:core` modules** once multiple features need it.
 3. **Keep infrastructure minimal** — mainly for wiring and build configuration.
+
