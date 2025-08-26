@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import dev.zacsweers.metro.Inject
-import voice.app.di.appGraph
+import voice.core.common.rootGraph
+import voice.features.widget.WidgetGraph
+import voice.features.widget.WidgetUpdater
 
 class BaseWidgetProvider : AppWidgetProvider() {
 
@@ -17,7 +19,7 @@ class BaseWidgetProvider : AppWidgetProvider() {
     context: Context,
     intent: Intent?,
   ) {
-    appGraph.inject(this)
+    (rootGraph as WidgetGraph).inject(this)
     super.onReceive(context, intent)
   }
 

@@ -1,10 +1,8 @@
-package voice.app.features.widget
+package voice.features.widget
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
@@ -20,13 +18,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import voice.app.MainActivity
-import voice.app.R
+import voice.app.features.widget.BaseWidgetProvider
 import voice.core.common.dpToPxRounded
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.receiver.WidgetButtonReceiver
 import voice.core.common.R as CommonR
@@ -39,6 +37,7 @@ class WidgetUpdater(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val playStateManager: PlayStateManager,
+  private val mainActivityIntentProvider: MainActivityIntentProvider,
 ) {
 
   private val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -109,15 +108,7 @@ class WidgetUpdater(
 
   private fun initWidgetForAbsentBook(widgetId: Int) {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget)
-    // directly going back to bookChoose
-    val wholeWidgetClickI = Intent(context, MainActivity::class.java)
-    wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-    val wholeWidgetClickPI = PendingIntent.getActivity(
-      context,
-      System.currentTimeMillis().toInt(),
-      wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-    )
+    val wholeWidgetClickPI = mainActivityIntentProvider.toCurrentBook()
     remoteViews.setImageViewResource(R.id.imageView, CommonR.drawable.album_art)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
     appWidgetManager.updateAppWidget(widgetId, remoteViews)
@@ -157,13 +148,7 @@ class WidgetUpdater(
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = MainActivity.goToBookIntent(context)
-    val wholeWidgetClickPI = PendingIntent.getActivity(
-      context,
-      System.currentTimeMillis().toInt(),
-      wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-    )
+    val wholeWidgetClickPI = mainActivityIntentProvider.toCurrentBook()
 
     val coverFile = book.content.cover
     if (coverFile != null && coverSize > 0) {

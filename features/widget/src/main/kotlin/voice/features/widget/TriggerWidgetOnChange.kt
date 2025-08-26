@@ -1,4 +1,4 @@
-package voice.app.features.widget
+package voice.features.widget
 
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
