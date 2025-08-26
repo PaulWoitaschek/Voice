@@ -4,10 +4,10 @@ import android.provider.MediaStore
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.logging.core.Logger
 
 @Inject

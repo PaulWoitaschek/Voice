@@ -1,23 +1,17 @@
-package voice.core.common.compose
+package voice.core.ui
 
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
-import voice.core.common.DARK_THEME_SETTABLE
-import voice.core.common.rootGraphAs
-import androidx.compose.material3.MaterialTheme as Material3Theme
 
 @Composable
 fun VoiceTheme(content: @Composable () -> Unit) {
-  Material3Theme(
+  MaterialTheme(
     colorScheme = if (isDarkTheme()) {
       if (Build.VERSION.SDK_INT >= 31) {
         dynamicDarkColorScheme(LocalContext.current)
@@ -33,17 +27,5 @@ fun VoiceTheme(content: @Composable () -> Unit) {
     },
   ) {
     content()
-  }
-}
-
-@Composable
-fun isDarkTheme(): Boolean {
-  return if (DARK_THEME_SETTABLE) {
-    val darkThemeFlow = remember {
-      rootGraphAs<SharedGraph>().useDarkThemeStore.data
-    }
-    darkThemeFlow.collectAsState(initial = false, context = Dispatchers.Unconfined).value
-  } else {
-    isSystemInDarkTheme()
   }
 }

@@ -19,9 +19,9 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.StartDestinationProvider
-import voice.core.common.compose.VoiceTheme
 import voice.core.common.rootGraphAs
 import voice.core.logging.core.Logger
+import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
 import voice.navigation.NavigationCommand

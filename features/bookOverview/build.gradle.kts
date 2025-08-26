@@ -8,6 +8,7 @@ dependencies {
   implementation(projects.navigation)
   implementation(projects.core.common)
   implementation(projects.core.search)
+  implementation(projects.core.ui)
   implementation(projects.core.strings)
   implementation(projects.core.playback)
   implementation(projects.core.data.api)

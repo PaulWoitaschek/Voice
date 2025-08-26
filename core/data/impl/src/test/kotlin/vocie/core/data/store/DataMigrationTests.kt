@@ -1,5 +1,6 @@
-package voice.app.injection
+package vocie.core.data.store
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -12,6 +13,8 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import voice.core.data.store.booleanPrefsDataMigration
+import voice.core.data.store.intPrefsDataMigration
 import voice.core.datastore.VoiceDataStoreFactory
 
 @RunWith(AndroidJUnit4::class)
@@ -22,7 +25,7 @@ class DataMigrationTests {
 
   @Before
   fun setup() {
-    val context = ApplicationProvider.getApplicationContext<Context>()
+    val context = ApplicationProvider.getApplicationContext<Application>()
     sharedPreferences = context.getSharedPreferences("de.ph1b.audiobook_preferences", Context.MODE_PRIVATE)
     factory = VoiceDataStoreFactory(Json { ignoreUnknownKeys = true }, context)
   }

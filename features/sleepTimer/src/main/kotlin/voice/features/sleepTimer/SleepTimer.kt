@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import voice.core.common.pref.FadeOutStore
-import voice.core.common.pref.SleepTimerPreferenceStore
 import voice.core.common.sleepTimer.SleepTimerPreference
+import voice.core.data.store.FadeOutStore
+import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.core.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager

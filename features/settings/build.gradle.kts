@@ -9,6 +9,7 @@ dependencies {
   implementation(projects.navigation)
   implementation(projects.core.strings)
   implementation(projects.core.playback)
+  implementation(projects.core.ui)
 
   implementation(libs.androidxCore)
   implementation(libs.materialDialog.core)

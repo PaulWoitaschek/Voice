@@ -1,10 +1,10 @@
-package voice.app.injection
+package voice.core.data.store
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.datastore.core.DataMigration
 
-class PrefsDataMigration<T>(
+internal class PrefsDataMigration<T>(
   private val sharedPreferences: SharedPreferences,
   private val key: String,
   private val getFromSharedPreferences: () -> T,
@@ -24,7 +24,7 @@ class PrefsDataMigration<T>(
   }
 }
 
-fun booleanPrefsDataMigration(
+internal fun booleanPrefsDataMigration(
   sharedPreferences: SharedPreferences,
   key: String,
 ): DataMigration<Boolean> {
@@ -37,7 +37,7 @@ fun booleanPrefsDataMigration(
   )
 }
 
-fun intPrefsDataMigration(
+internal fun intPrefsDataMigration(
   sharedPreferences: SharedPreferences,
   key: String,
 ): DataMigration<Int> {

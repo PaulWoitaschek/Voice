@@ -1,5 +1,6 @@
-package voice.app.injection
+package voice.core.data.store
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
@@ -10,16 +11,8 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
-import voice.app.BuildConfig
+import voice.core.common.AppInfoProvider
 import voice.core.common.grid.GridMode
-import voice.core.common.pref.AutoRewindAmountStore
-import voice.core.common.pref.CurrentBookStore
-import voice.core.common.pref.DarkThemeStore
-import voice.core.common.pref.FadeOutStore
-import voice.core.common.pref.GridModeStore
-import voice.core.common.pref.OnboardingCompletedStore
-import voice.core.common.pref.SeekTimeStore
-import voice.core.common.pref.SleepTimerPreferenceStore
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
 import voice.core.datastore.VoiceDataStoreFactory
@@ -28,12 +21,15 @@ import kotlin.time.Duration.Companion.seconds
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-object PrefsModule {
+internal object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun sharedPreferences(context: Context): SharedPreferences {
-    return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
+  fun sharedPreferences(
+    context: Application,
+    appInfoProvider: AppInfoProvider,
+  ): SharedPreferences {
+    return context.getSharedPreferences("${appInfoProvider.applicationID}_preferences", Context.MODE_PRIVATE)
   }
 
   @Provides
@@ -73,7 +69,7 @@ object PrefsModule {
     return factory.create(
       fileName = "fadeOut",
       defaultValue = 10.seconds,
-      serializer = Duration.serializer(),
+      serializer = Duration.Companion.serializer(),
     )
   }
 
@@ -96,9 +92,9 @@ object PrefsModule {
   @SleepTimerPreferenceStore
   fun sleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
     return factory.create(
-      serializer = SleepTimerPreference.serializer(),
+      serializer = SleepTimerPreference.Companion.serializer(),
       fileName = "sleepTime3",
-      defaultValue = SleepTimerPreference.Default,
+      defaultValue = SleepTimerPreference.Companion.Default,
     )
   }
 

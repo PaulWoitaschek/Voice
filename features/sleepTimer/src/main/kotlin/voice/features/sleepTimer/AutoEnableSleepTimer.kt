@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.common.pref.CurrentBookStore
-import voice.core.common.pref.SleepTimerPreferenceStore
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
 import voice.core.playback.session.SleepTimer

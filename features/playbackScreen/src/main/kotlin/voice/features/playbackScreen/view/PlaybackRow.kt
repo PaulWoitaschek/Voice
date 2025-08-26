@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import voice.core.common.compose.PlayButton
+import voice.core.ui.PlayButton
 
 @Composable
 internal fun PlaybackRow(

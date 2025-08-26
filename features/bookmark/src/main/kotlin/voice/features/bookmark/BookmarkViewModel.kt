@@ -14,13 +14,13 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.common.formatTime
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.strings.R

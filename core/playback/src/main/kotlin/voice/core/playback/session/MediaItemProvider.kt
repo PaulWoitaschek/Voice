@@ -9,7 +9,6 @@ import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.Book
 import voice.core.data.BookComparator
 import voice.core.data.BookContent
@@ -18,6 +17,7 @@ import voice.core.data.Chapter
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
+import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
 import java.io.File
 import voice.core.strings.R as StringsR

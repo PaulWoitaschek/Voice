@@ -1,4 +1,4 @@
-package voice.app.injection
+package vocie.core.data.store
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -18,11 +18,13 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
+import voice.core.common.AppInfoProvider
 import voice.core.common.grid.GridMode
-import voice.core.common.pref.AutoRewindAmountStore
-import voice.core.common.pref.DarkThemeStore
-import voice.core.common.pref.GridModeStore
-import voice.core.common.pref.SeekTimeStore
+import voice.core.data.store.AutoRewindAmountStore
+import voice.core.data.store.DarkThemeStore
+import voice.core.data.store.GridModeStore
+import voice.core.data.store.SeekTimeStore
+import voice.core.data.store.intPrefsDataMigration
 import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
@@ -45,6 +47,18 @@ interface MigrationTestGraph {
 
   @get:Provides
   val application: Application get() = ApplicationProvider.getApplicationContext()
+
+  @get:Provides
+  val json: Json get() = Json.Default
+
+  @get:Provides
+  val appInfoProvider: AppInfoProvider
+    get() = object : AppInfoProvider {
+      override val applicationID: String
+        get() = "de.ph1b.audiobook"
+      override val versionName: String
+        get() = "1.2.3"
+    }
 
   val sharedPreferences: SharedPreferences
 }

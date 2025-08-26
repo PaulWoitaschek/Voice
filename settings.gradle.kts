@@ -77,4 +77,4 @@ include(":core:remoteconfig:noop")
 include(":core:scanner")
 include(":core:search")
 include(":core:strings")
-
+include(":core:ui")

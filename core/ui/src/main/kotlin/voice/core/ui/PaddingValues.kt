@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:filename")
 
-package voice.core.common.compose
+package voice.core.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp

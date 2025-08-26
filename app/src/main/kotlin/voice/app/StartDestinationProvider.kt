@@ -6,10 +6,10 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.app.features.MainActivity.Companion.NI_GO_TO_BOOK
-import voice.core.common.pref.CurrentBookStore
-import voice.core.common.pref.OnboardingCompletedStore
 import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
+import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.OnboardingCompletedStore
 import voice.core.playback.PlayerController
 import voice.navigation.Destination
 

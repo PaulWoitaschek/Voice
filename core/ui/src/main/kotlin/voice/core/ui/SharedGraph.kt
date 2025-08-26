@@ -1,9 +1,9 @@
-package voice.core.common.compose
+package voice.core.ui
 
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
-import voice.core.common.pref.DarkThemeStore
+import voice.core.data.store.DarkThemeStore
 
 @ContributesTo(AppScope::class)
 interface SharedGraph {

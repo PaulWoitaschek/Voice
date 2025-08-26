@@ -30,8 +30,8 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
-import voice.core.common.compose.ImmutableFile
 import voice.core.data.BookId
+import voice.core.ui.ImmutableFile
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.common.R as CommonR

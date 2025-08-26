@@ -10,9 +10,6 @@ import io.kotest.matchers.longs.shouldBeGreaterThan
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import voice.core.common.pref.CurrentBookStore
-import voice.core.common.pref.FadeOutStore
-import voice.core.common.pref.SleepTimerPreferenceStore
 import voice.core.common.rootGraphAs
 import voice.core.common.sleepTimer.SleepTimerPreference
 import voice.core.data.BookContent
@@ -21,6 +18,9 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.ChapterRepo
+import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.FadeOutStore
+import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.session.SleepTimer

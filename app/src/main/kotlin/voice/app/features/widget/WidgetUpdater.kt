@@ -23,10 +23,10 @@ import kotlinx.coroutines.launch
 import voice.app.R
 import voice.app.features.MainActivity
 import voice.core.common.dpToPxRounded
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.receiver.WidgetButtonReceiver
 import voice.core.common.R as CommonR

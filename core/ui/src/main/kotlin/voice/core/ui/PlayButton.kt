@@ -1,4 +1,4 @@
-package voice.core.common.compose
+package voice.core.ui
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.graphics.res.animatedVectorResource

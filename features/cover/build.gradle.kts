@@ -9,6 +9,7 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.navigation)
   implementation(projects.core.strings)
+  implementation(projects.core.ui)
   implementation(projects.core.remoteconfig.core)
 
   implementation(libs.bundles.retrofit)

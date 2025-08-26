@@ -1,4 +1,4 @@
-package voice.core.common.compose
+package voice.core.ui
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel

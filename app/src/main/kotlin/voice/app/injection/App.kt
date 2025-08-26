@@ -13,10 +13,10 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import voice.app.features.widget.TriggerWidgetOnChange
-import voice.core.common.DARK_THEME_SETTABLE
-import voice.core.common.pref.DarkThemeStore
 import voice.core.common.rootGraph
+import voice.core.data.store.DarkThemeStore
 import voice.core.scanner.MediaScanTrigger
+import voice.core.ui.DARK_THEME_SETTABLE
 import voice.features.sleepTimer.AutoEnableSleepTimer
 
 open class App : Application() {

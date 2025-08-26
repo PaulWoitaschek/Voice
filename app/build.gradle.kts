@@ -147,6 +147,7 @@ android {
 
 dependencies {
   implementation(projects.core.strings)
+  implementation(projects.core.ui)
   implementation(projects.core.datastore)
   implementation(projects.core.common)
   implementation(projects.core.data.api)

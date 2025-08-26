@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
-import voice.core.common.pref.CurrentBookStore
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.playback.playstate.PlayStateManager
 
 @SingleIn(AppScope::class)

@@ -2,10 +2,10 @@ package voice.features.bookOverview.overview
 
 import android.text.format.DateUtils
 import androidx.compose.runtime.Immutable
-import voice.core.common.compose.ImmutableFile
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.logging.core.Logger
+import voice.core.ui.ImmutableFile
 
 @Immutable
 data class BookOverviewItemViewState(
