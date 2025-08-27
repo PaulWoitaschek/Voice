@@ -307,7 +307,7 @@ class VoicePlayer(
         if (payload is Pair<*, *> && sleepTimer.sleepAtEoc) {
           player.pause()
           player.seekTo(payload.first as Int, payload.second as Long)
-          sleepTimer.sleepAtEoc = false
+          sleepTimer.disable()
         }
       }
       chapters.forEachIndexed { index, mediaItem ->

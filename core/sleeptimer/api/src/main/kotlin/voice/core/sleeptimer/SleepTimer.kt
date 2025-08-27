@@ -6,7 +6,7 @@ import kotlin.time.Duration
 interface SleepTimer {
   val leftSleepTimeFlow: Flow<Duration>
   val sleepAtEocFlow: Flow<Boolean>
-  var sleepAtEoc: Boolean
+  val sleepAtEoc: Boolean
   fun sleepTimerActive(): Boolean
   fun enable(mode: SleepTimerMode)
 
