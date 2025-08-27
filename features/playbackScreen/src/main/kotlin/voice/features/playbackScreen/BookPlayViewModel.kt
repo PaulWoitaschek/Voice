@@ -32,6 +32,7 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.ui.ImmutableFile
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
@@ -153,7 +154,7 @@ class BookPlayViewModel(
 
   fun onAcceptSleepAtEoc() {
     updateSleepTimeViewState {
-      sleepTimer.setEocActive(true)
+      sleepTimer.enable(SleepTimerMode.EndOfChapter)
       null
     }
   }

@@ -9,8 +9,6 @@ interface SleepTimer {
   var sleepAtEoc: Boolean
   fun sleepTimerActive(): Boolean
   fun setActive(enable: Boolean)
-  fun setEocActive(enable: Boolean)
-
   fun enable(mode: SleepTimerMode)
 
   fun disable()

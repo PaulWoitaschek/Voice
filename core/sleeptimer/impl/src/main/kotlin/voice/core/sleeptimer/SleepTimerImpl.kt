@@ -95,14 +95,6 @@ class SleepTimerImpl(
     }
   }
 
-  override fun setEocActive(enable: Boolean) {
-    if (enable) {
-      sleepAtEoc = true
-    } else {
-      cancel()
-    }
-  }
-
   private fun setActive() {
     scope.launch {
       setActive(sleepTimerPreferenceStore.data.first().duration)
