@@ -32,6 +32,7 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.ui.ImmutableFile
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
@@ -145,7 +146,7 @@ class BookPlayViewModel(
           title = null,
         )
       }
-      sleepTimer.setActive(time.minutes)
+      sleepTimer.enable(TimedWithDuration(time.minutes))
       null
     }
   }

@@ -10,7 +10,6 @@ interface SleepTimer {
   fun sleepTimerActive(): Boolean
   fun setActive(enable: Boolean)
   fun setEocActive(enable: Boolean)
-  fun setActive(sleepTime: Duration)
 
   fun enable(mode: SleepTimerMode)
 

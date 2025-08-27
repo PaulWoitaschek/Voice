@@ -109,7 +109,7 @@ class SleepTimerImpl(
     }
   }
 
-  override fun setActive(sleepTime: Duration) {
+  private fun setActive(sleepTime: Duration) {
     Logger.i("Starting sleepTimer. Pause in $sleepTime.")
     leftSleepTime = sleepTime
     playerController.setVolume(1F)
