@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
@@ -63,6 +64,27 @@ class SleepTimerImpl(
       _sleepAtEoc.value = value
     }
     get() = _sleepAtEoc.value
+
+  override fun enable(mode: SleepTimerMode) {
+    when (mode) {
+      SleepTimerMode.EndOfChapter -> {
+        sleepAtEoc = true
+      }
+      SleepTimerMode.TimedWithDefault -> {
+        val duration = runBlocking {
+          sleepTimerPreferenceStore.data.first().duration
+        }
+        setActive(duration)
+      }
+      is SleepTimerMode.TimedWithDuration -> {
+        setActive(mode.duration)
+      }
+    }
+  }
+
+  override fun disable() {
+    cancel()
+  }
 
   override fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")

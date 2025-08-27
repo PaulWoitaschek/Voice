@@ -11,4 +11,14 @@ interface SleepTimer {
   fun setActive(enable: Boolean)
   fun setEocActive(enable: Boolean)
   fun setActive(sleepTime: Duration)
+
+  fun enable(mode: SleepTimerMode)
+
+  fun disable()
+}
+
+sealed interface SleepTimerMode {
+  data class TimedWithDuration(val duration: Duration) : SleepTimerMode
+  data object TimedWithDefault : SleepTimerMode
+  object EndOfChapter : SleepTimerMode
 }
