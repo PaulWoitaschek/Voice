@@ -52,3 +52,11 @@ This triggers the CI to build and publish the release to the Play Store’s inte
 manually.
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
+
+## Pages Deployment
+
+To projects [Website](https://voice.woitaschek.de/) uses Github Pages and Mkdocs.
+To deploy a new website, use dispatch a workflow
+manually.
+
+[👉 Dispatch Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml)
