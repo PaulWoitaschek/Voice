@@ -8,7 +8,6 @@ interface SleepTimer {
   val sleepAtEocFlow: Flow<Boolean>
   var sleepAtEoc: Boolean
   fun sleepTimerActive(): Boolean
-  fun setActive(enable: Boolean)
   fun enable(mode: SleepTimerMode)
 
   fun disable()

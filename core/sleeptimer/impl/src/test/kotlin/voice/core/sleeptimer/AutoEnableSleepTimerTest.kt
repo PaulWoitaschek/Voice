@@ -105,7 +105,9 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify { sleepTimer.setActive(true) }
+    coVerify {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify { bookmarkRepo.addBookmarkAtBookPosition(book = mockBook, title = null, setBySleepTimer = true) }
   }
 
@@ -121,7 +123,10 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -137,7 +142,10 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -155,7 +163,10 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -172,7 +183,10 @@ class AutoEnableSleepTimerTest {
     advanceUntilIdle()
 
     coVerify(exactly = 0) { sleepTimerPreferenceStore.data }
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -190,7 +204,9 @@ class AutoEnableSleepTimerTest {
       playStateFlow.value = PlayStateManager.PlayState.Playing
       advanceUntilIdle()
 
-      coVerify { sleepTimer.setActive(true) }
+      coVerify {
+        sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+      }
       coVerify(exactly = 0) { bookRepository.get(any()) }
       coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
     }
@@ -209,7 +225,9 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify { sleepTimer.setActive(true) }
+    coVerify {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify { bookRepository.get(mockBookId) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
@@ -232,7 +250,10 @@ class AutoEnableSleepTimerTest {
     }
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -247,14 +268,19 @@ class AutoEnableSleepTimerTest {
 
     val slotIsActive = slot<Boolean>()
     coEvery { sleepTimer.sleepTimerActive() } returns false andThen true
-    every { sleepTimer.setActive(capture(slotIsActive)) } just runs
+    every {
+      capture<Boolean>(slotIsActive)
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    } just runs
 
     autoEnableSleepTimer.startMonitoring()
 
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 1) { bookmarkRepo.addBookmarkAtBookPosition(book = mockBook, title = null, setBySleepTimer = true) }
     assertTrue(slotIsActive.captured)
 
@@ -267,7 +293,9 @@ class AutoEnableSleepTimerTest {
     preferenceFlow.value = newPrefs
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 1) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -290,6 +318,8 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
   }
 }

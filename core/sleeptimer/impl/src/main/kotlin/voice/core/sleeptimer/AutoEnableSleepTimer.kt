@@ -44,7 +44,7 @@ class AutoEnableSleepTimer(
               sleepTimerActive = sleepTimer.sleepTimerActive(),
             )
           ) {
-            sleepTimer.setActive(true)
+            sleepTimer.enable(SleepTimerMode.TimedWithDefault)
             createBookmark()
           }
         }

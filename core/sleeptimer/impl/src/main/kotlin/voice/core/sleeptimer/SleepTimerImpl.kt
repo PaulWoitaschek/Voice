@@ -86,7 +86,7 @@ class SleepTimerImpl(
     cancel()
   }
 
-  override fun setActive(enable: Boolean) {
+  fun setActive(enable: Boolean) {
     Logger.i("enable=$enable")
     if (enable) {
       setActive()

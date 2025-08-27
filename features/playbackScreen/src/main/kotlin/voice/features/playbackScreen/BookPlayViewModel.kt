@@ -302,7 +302,7 @@ class BookPlayViewModel(
     scope.launch {
       Logger.d("toggleSleepTimer while active=${sleepTimer.sleepTimerActive()}")
       if (sleepTimer.sleepTimerActive()) {
-        sleepTimer.setActive(false)
+        sleepTimer.disable()
         _dialogState.value = null
       } else {
         _dialogState.value = BookPlayDialogViewState.SleepTimer(

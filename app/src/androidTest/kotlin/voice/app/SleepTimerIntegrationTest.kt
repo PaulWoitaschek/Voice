@@ -24,6 +24,7 @@ import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
 import java.io.File
 import java.time.Instant
 import java.util.UUID
@@ -70,7 +71,7 @@ class SleepTimerIntegrationTest {
     playerController.play()
     playStateManager.flow.first { it == PlayStateManager.PlayState.Playing }
 
-    sleepTimer.setActive(true)
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
 
     // wait for the sleep timer to trigger
     sleepTimer.leftSleepTimeFlow.first { it == Duration.ZERO }

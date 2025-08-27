@@ -26,6 +26,7 @@ import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
@@ -46,7 +47,10 @@ class BookPlayViewModelTest {
     } answers {
       sleepTimerActive = true
     }
-    coEvery { setActive(any<Boolean>()) } answers {
+    coEvery {
+      any<Boolean>()
+      enable(SleepTimerMode.TimedWithDefault)
+    } answers {
       sleepTimerActive = firstArg()
     }
   }
@@ -136,7 +140,7 @@ class BookPlayViewModelTest {
     yield()
     verifyOrder {
       sleepTimer.enable(TimedWithDuration(10.minutes))
-      sleepTimer.setActive(false)
+      sleepTimer.disable()
     }
     sleepTimer.sleepTimerActive() shouldBe false
   }
