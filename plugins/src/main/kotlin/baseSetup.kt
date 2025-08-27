@@ -25,7 +25,6 @@ fun Project.baseSetup() {
           "kotlin.time.ExperimentalTime",
           "kotlinx.coroutines.ExperimentalCoroutinesApi",
           "kotlinx.coroutines.FlowPreview",
-          "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
       allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
@@ -58,8 +57,8 @@ fun Project.baseSetup() {
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
-    if (project.path != ":logging:core") {
-      add("implementation", project(":logging:core"))
+    if (project.path != ":core:logging:core") {
+      add("implementation", project(":core:logging:core"))
     }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
@@ -71,7 +70,6 @@ fun Project.baseSetup() {
       add("implementation", libs.findLibrary(it).get())
     }
 
-    add("implementation", libs.findLibrary("serialization-json").get())
     add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }

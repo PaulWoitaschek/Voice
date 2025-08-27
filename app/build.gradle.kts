@@ -7,7 +7,6 @@ import java.util.Properties
 plugins {
   id("voice.app")
   id("voice.compose")
-  id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
@@ -142,54 +141,57 @@ android {
   }
 
   buildFeatures {
-    viewBinding = true
     buildConfig = true
   }
 }
 
 dependencies {
-  implementation(projects.strings)
-  implementation(projects.datastore)
-  implementation(projects.common)
-  implementation(projects.data)
-  implementation(projects.playback)
-  implementation(projects.scanner)
-  implementation(projects.playbackScreen)
-  implementation(projects.sleepTimer)
-  implementation(projects.settings)
-  implementation(projects.folderPicker)
-  implementation(projects.bookOverview)
-  implementation(projects.migration)
-  implementation(projects.search)
-  implementation(projects.cover)
-  implementation(projects.documentfile)
-  implementation(projects.onboarding)
-  implementation(projects.bookmark)
+  implementation(projects.core.strings)
+  implementation(projects.core.ui)
+  implementation(projects.core.common)
+  implementation(projects.core.data.api)
+  implementation(projects.core.data.impl)
+  implementation(projects.core.playback)
+  implementation(projects.core.scanner)
+  implementation(projects.features.playbackScreen)
+  implementation(projects.navigation)
+  implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.sleeptimer.impl)
+  implementation(projects.features.sleepTimer)
+  implementation(projects.features.settings)
+  implementation(projects.features.folderPicker)
+  implementation(projects.features.bookOverview)
+  implementation(projects.core.search)
+  implementation(projects.features.cover)
+  implementation(projects.core.documentfile)
+  implementation(projects.features.onboarding)
+  implementation(projects.features.bookmark)
+  implementation(projects.features.widget)
 
   implementation(libs.appCompat)
   implementation(libs.material)
   implementation(libs.datastore)
   implementation(libs.appStartup)
 
+  implementation(libs.navigation3.ui)
+
   implementation(libs.serialization.json)
 
-  implementation(libs.materialDialog.core)
-  implementation(libs.materialDialog.input)
   implementation(libs.coil)
 
   if (includeProprietaryLibraries()) {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-    implementation(projects.logging.crashlytics)
-    implementation(projects.review.play)
-    implementation(projects.remoteconfig.firebase)
+    implementation(projects.core.logging.crashlytics)
+    implementation(projects.features.review.play)
+    implementation(projects.core.remoteconfig.firebase)
   } else {
-    implementation(projects.review.noop)
-    implementation(projects.remoteconfig.noop)
+    implementation(projects.features.review.noop)
+    implementation(projects.core.remoteconfig.noop)
   }
-  implementation(projects.remoteconfig.core)
+  implementation(projects.core.remoteconfig.core)
 
-  debugImplementation(projects.logging.debug)
+  debugImplementation(projects.core.logging.debug)
 
   implementation(libs.androidxCore)
 
@@ -202,13 +204,12 @@ dependencies {
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)
 
-  implementation(libs.conductor)
-
   testImplementation(libs.androidX.test.runner)
   testImplementation(libs.androidX.test.junit)
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.robolectric)
   testImplementation(libs.coroutines.test)
+  testImplementation(kotlin("reflect"))
 
   debugImplementation(libs.compose.ui.testManifest)
 
