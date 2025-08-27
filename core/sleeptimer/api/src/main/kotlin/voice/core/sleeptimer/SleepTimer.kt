@@ -1,16 +1,29 @@
 package voice.core.sleeptimer
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
 
 interface SleepTimer {
-  val leftSleepTimeFlow: Flow<Duration>
-  val sleepAtEocFlow: Flow<Boolean>
-  val sleepAtEoc: Boolean
-  fun sleepTimerActive(): Boolean
+  val state: StateFlow<SleepTimerState>
   fun enable(mode: SleepTimerMode)
-
   fun disable()
+}
+
+sealed interface SleepTimerState {
+
+  data object Disabled : SleepTimerState
+  sealed interface Enabled : SleepTimerState {
+    data object WithEndOfChapter : Enabled
+
+    @JvmInline
+    value class WithDuration(val leftDuration: Duration) : Enabled
+  }
+
+  val enabled: Boolean
+    get() = when (this) {
+      Disabled -> false
+      is Enabled -> true
+    }
 }
 
 sealed interface SleepTimerMode {

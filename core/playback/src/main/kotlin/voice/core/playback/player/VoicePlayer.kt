@@ -28,6 +28,7 @@ import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
@@ -304,7 +305,7 @@ class VoicePlayer(
     if (player is ExoPlayer) {
       assert(chapters.size == player.mediaItemCount)
       val boundaryHandler = PlayerMessage.Target { _, payload ->
-        if (payload is Pair<*, *> && sleepTimer.sleepAtEoc) {
+        if (payload is Pair<*, *> && sleepTimer.state.value is SleepTimerState.Enabled.WithEndOfChapter) {
           player.pause()
           player.seekTo(payload.first as Int, payload.second as Long)
           sleepTimer.disable()

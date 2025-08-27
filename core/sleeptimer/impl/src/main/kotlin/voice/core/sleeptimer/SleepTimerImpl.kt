@@ -43,23 +43,27 @@ class SleepTimerImpl(
   private val scope = MainScope()
 
   private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
+  private val _state = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
   private var leftSleepTime: Duration
     get() = _leftSleepTime.value
     set(value) {
       _leftSleepTime.value = value
     }
-  override val leftSleepTimeFlow: StateFlow<Duration> get() = _leftSleepTime
+  private val leftSleepTimeFlow: StateFlow<Duration> get() = _leftSleepTime
 
-  override fun sleepTimerActive(): Boolean = (sleepJob?.isActive == true && leftSleepTime > Duration.ZERO) || sleepAtEoc
+  override val state: StateFlow<SleepTimerState>
+    get() = _state
+
+  private fun sleepTimerActive(): Boolean = (sleepJob?.isActive == true && leftSleepTime > Duration.ZERO) || sleepAtEoc
 
   private var sleepJob: Job? = null
 
   private val _sleepAtEoc = MutableStateFlow(false)
 
-  override val sleepAtEocFlow: StateFlow<Boolean>
+  private val sleepAtEocFlow: StateFlow<Boolean>
     get() = _sleepAtEoc
 
-  override var sleepAtEoc: Boolean
+  private var sleepAtEoc: Boolean
     set(value) {
       _sleepAtEoc.value = value
     }

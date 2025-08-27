@@ -41,7 +41,7 @@ class AutoEnableSleepTimer(
           val autoSleepTimerPreference = sleepTimerPreferenceStore.data.first()
           if (shouldEnableSleepTimer(
               autoSleepTimer = autoSleepTimerPreference,
-              sleepTimerActive = sleepTimer.sleepTimerActive(),
+              sleepTimerActive = sleepTimer.state.value.enabled,
             )
           ) {
             sleepTimer.enable(SleepTimerMode.TimedWithDefault)
