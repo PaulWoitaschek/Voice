@@ -80,10 +80,10 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.2"
-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2"
+lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.3"
+lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.3"
 
-compose-bom = "androidx.compose:compose-bom:2025.08.00"
+compose-bom = "androidx.compose:compose-bom:2025.08.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -98,8 +98,8 @@ compose-animation-graphics = { module = "androidx.compose.animation:animation-gr
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.10.1"
-navigation3-ui = "androidx.navigation3:navigation3-ui:1.0.0-alpha07"
-navigation3-runtime = "androidx.navigation3:navigation3-runtime:1.0.0-alpha07"
+navigation3-ui = "androidx.navigation3:navigation3-ui:1.0.0-alpha08"
+navigation3-runtime = "androidx.navigation3:navigation3-runtime:1.0.0-alpha08"
 
 metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 

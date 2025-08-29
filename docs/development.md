@@ -1,5 +1,26 @@
 # Development
 
+## Project Setup
+
+To run the project, open it in the latest Version of Android Studio and build the project as usual.
+
+By default, there is not enough memory configured for gradle. You can fix this by running.
+
+```sh
+scripts/bootstrap.sh
+```
+
+This will configure your global `~/.gradle/gradle.properties` to use more memory, depending on your machine.
+
+Example of the generated properties, check the `bootstrap.sh` script for exact details.
+
+```properties
+# Begin: Gradle JVM bootstrap-generated properties
+org.gradle.jvmargs=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms4g -Xmx16g
+kotlin.daemon.jvm.options=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms4g -Xmx16g
+# End: Gradle JVM bootstrap-generated properties
+```
+
 ## Tests
 
 ### Unit tests
