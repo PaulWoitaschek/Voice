@@ -9,36 +9,44 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R
 import voice.core.ui.ImmutableFile
 import voice.core.ui.formatTime
-import kotlin.time.Duration
+import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
 internal fun CoverRow(
   cover: ImmutableFile?,
-  sleepTime: Duration,
+  sleepTimerState: BookPlayViewState.SleepTimerViewState,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Box(modifier) {
     Cover(onDoubleClick = onPlayClick, cover = cover)
-    if (sleepTime != Duration.ZERO) {
-      Text(
-        modifier = Modifier
-          .align(Alignment.TopEnd)
-          .padding(top = 8.dp, end = 8.dp)
-          .background(
-            color = Color(0x7E000000),
-            shape = RoundedCornerShape(20.dp),
-          )
-          .padding(horizontal = 20.dp, vertical = 16.dp),
-        text = formatTime(
-          timeMs = sleepTime.inWholeMilliseconds,
-          durationMs = sleepTime.inWholeMilliseconds,
-        ),
-        color = Color.White,
-      )
+    when (sleepTimerState) {
+      BookPlayViewState.SleepTimerViewState.Disabled -> {
+      }
+      is BookPlayViewState.SleepTimerViewState.Enabled -> {
+        Text(
+          modifier = Modifier
+            .align(Alignment.TopEnd)
+            .padding(top = 8.dp, end = 8.dp)
+            .background(
+              color = Color(0x7E000000),
+              shape = RoundedCornerShape(20.dp),
+            )
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+          text = when (sleepTimerState) {
+            is BookPlayViewState.SleepTimerViewState.Enabled.WithDuration -> formatTime(
+              timeMs = sleepTimerState.leftDuration.inWholeMilliseconds,
+            )
+            BookPlayViewState.SleepTimerViewState.Enabled.WithEndOfChapter -> stringResource(R.string.end_of_chapter)
+          },
+          color = Color.White,
+        )
+      }
     }
   }
 }

@@ -7,11 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.data.BookId
-import voice.core.data.repo.BookRepository
-import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
-import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
@@ -24,11 +20,8 @@ class AutoEnableSleepTimer(
   dispatcherProvider: DispatcherProvider,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
-  private val bookmarkRepo: BookmarkRepo,
-  private val bookRepository: BookRepository,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
   private val clock: Clock,
+  private val createBookmarkAtCurrentPosition: CreateBookmarkAtCurrentPosition,
 ) {
 
   private val mainScope = MainScope(dispatcherProvider)
@@ -41,10 +34,10 @@ class AutoEnableSleepTimer(
           val autoSleepTimerPreference = sleepTimerPreferenceStore.data.first()
           if (shouldEnableSleepTimer(
               autoSleepTimer = autoSleepTimerPreference,
-              sleepTimerActive = sleepTimer.sleepTimerActive(),
+              sleepTimerActive = sleepTimer.state.value.enabled,
             )
           ) {
-            sleepTimer.setActive(true)
+            sleepTimer.enable(SleepTimerMode.TimedWithDefault)
             createBookmark()
           }
         }
@@ -52,13 +45,7 @@ class AutoEnableSleepTimer(
   }
 
   private suspend fun createBookmark() {
-    val currentBookId = currentBookStore.data.first() ?: return
-    val currentBook = bookRepository.get(currentBookId) ?: return
-    bookmarkRepo.addBookmarkAtBookPosition(
-      book = currentBook,
-      title = null,
-      setBySleepTimer = true,
-    )
+    createBookmarkAtCurrentPosition.create()
   }
 
   private fun shouldEnableSleepTimer(
