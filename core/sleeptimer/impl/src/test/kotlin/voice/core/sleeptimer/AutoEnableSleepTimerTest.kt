@@ -99,13 +99,15 @@ class AutoEnableSleepTimerTest {
     every { playStateManager.flow } returns playStateFlow
 
     mockPreferences(enabled = true, startTime = LocalTime.of(22, 0), endTime = LocalTime.of(6, 0))
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    coEvery { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify { sleepTimer.setActive(true) }
+    every {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify { bookmarkRepo.addBookmarkAtBookPosition(book = mockBook, title = null, setBySleepTimer = true) }
   }
 
@@ -115,13 +117,16 @@ class AutoEnableSleepTimerTest {
     every { playStateManager.flow } returns playStateFlow
 
     mockPreferences(enabled = true, startTime = LocalTime.of(22, 0), endTime = LocalTime.of(6, 0))
-    coEvery { sleepTimer.sleepTimerActive() } returns true
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -131,13 +136,16 @@ class AutoEnableSleepTimerTest {
     every { playStateManager.flow } returns playStateFlow
 
     mockPreferences(enabled = false)
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -149,13 +157,16 @@ class AutoEnableSleepTimerTest {
     clock.instant = LocalDateTime.now(clock).withHour(12).toInstant(ZoneOffset.UTC)
 
     mockPreferences(enabled = true, startTime = LocalTime.of(22, 0), endTime = LocalTime.of(6, 0))
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -164,15 +175,16 @@ class AutoEnableSleepTimerTest {
     val playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Paused)
     every { playStateManager.flow } returns playStateFlow
 
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
 
     playStateFlow.value = PlayStateManager.PlayState.Paused
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimerPreferenceStore.data }
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -183,14 +195,16 @@ class AutoEnableSleepTimerTest {
       every { playStateManager.flow } returns playStateFlow
 
       mockPreferences(enabled = true, startTime = LocalTime.of(22, 0), endTime = LocalTime.of(6, 0))
-      coEvery { sleepTimer.sleepTimerActive() } returns false
+      every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
       coEvery { currentBookStore.data } returns flowOf(null)
 
       autoEnableSleepTimer.startMonitoring()
       playStateFlow.value = PlayStateManager.PlayState.Playing
       advanceUntilIdle()
 
-      coVerify { sleepTimer.setActive(true) }
+      coVerify {
+        sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+      }
       coVerify(exactly = 0) { bookRepository.get(any()) }
       coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
     }
@@ -201,7 +215,7 @@ class AutoEnableSleepTimerTest {
     every { playStateManager.flow } returns playStateFlow
 
     mockPreferences(enabled = true, startTime = LocalTime.of(22, 0), endTime = LocalTime.of(6, 0))
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
     coEvery { currentBookStore.data } returns flowOf(mockBookId)
     coEvery { bookRepository.get(mockBookId) } returns null
 
@@ -209,7 +223,9 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify { sleepTimer.setActive(true) }
+    coVerify {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify { bookRepository.get(mockBookId) }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
@@ -221,8 +237,8 @@ class AutoEnableSleepTimerTest {
 
     val initialPrefs = SleepTimerPreference.Default
     val preferenceFlow = MutableStateFlow(initialPrefs)
-    coEvery { sleepTimerPreferenceStore.data } returns preferenceFlow
-    coEvery { sleepTimer.sleepTimerActive() } returns false
+    every { sleepTimerPreferenceStore.data } returns preferenceFlow
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
     advanceUntilIdle()
@@ -232,7 +248,10 @@ class AutoEnableSleepTimerTest {
     }
     advanceUntilIdle()
 
-    coVerify(exactly = 0) { sleepTimer.setActive(any<Boolean>()) }
+    coVerify(exactly = 0) {
+      any<Boolean>()
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 0) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -246,15 +265,20 @@ class AutoEnableSleepTimerTest {
     coEvery { sleepTimerPreferenceStore.data } returns preferenceFlow
 
     val slotIsActive = slot<Boolean>()
-    coEvery { sleepTimer.sleepTimerActive() } returns false andThen true
-    every { sleepTimer.setActive(capture(slotIsActive)) } just runs
+    every { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
+    every {
+      capture<Boolean>(slotIsActive)
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    } just runs
 
     autoEnableSleepTimer.startMonitoring()
 
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 1) { bookmarkRepo.addBookmarkAtBookPosition(book = mockBook, title = null, setBySleepTimer = true) }
     assertTrue(slotIsActive.captured)
 
@@ -267,7 +291,9 @@ class AutoEnableSleepTimerTest {
     preferenceFlow.value = newPrefs
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
     coVerify(exactly = 1) { bookmarkRepo.addBookmarkAtBookPosition(any(), any(), any()) }
   }
 
@@ -277,7 +303,7 @@ class AutoEnableSleepTimerTest {
     every { playStateManager.flow } returns playStateFlow
 
     mockPreferences(enabled = true)
-    coEvery { sleepTimer.sleepTimerActive() } returns false andThen true
+    coEvery { sleepTimer.state } returns MutableStateFlow(SleepTimerState.Disabled)
 
     autoEnableSleepTimer.startMonitoring()
 
@@ -290,6 +316,8 @@ class AutoEnableSleepTimerTest {
     playStateFlow.value = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
 
-    coVerify(exactly = 1) { sleepTimer.setActive(true) }
+    coVerify(exactly = 1) {
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    }
   }
 }

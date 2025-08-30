@@ -7,13 +7,14 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
+import voice.core.common.DispatcherProvider
+import voice.core.common.MainScope
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
 import voice.core.data.store.SleepTimerPreferenceStore
@@ -21,10 +22,10 @@ import voice.core.logging.core.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
+import kotlin.math.max
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
-import voice.core.sleeptimer.SleepTimer as SleepTimerApi
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -37,95 +38,88 @@ class SleepTimerImpl(
   private val playerController: PlayerController,
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
-) : SleepTimerApi {
+  dispatcherProvider: DispatcherProvider,
+) : SleepTimer {
 
-  private val scope = MainScope()
+  private val scope = MainScope(dispatcherProvider)
+  private val _state = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
+  override val state: StateFlow<SleepTimerState> get() = _state
 
-  private val _leftSleepTime = MutableStateFlow(Duration.ZERO)
-  private var leftSleepTime: Duration
-    get() = _leftSleepTime.value
-    set(value) {
-      _leftSleepTime.value = value
-    }
-  override val leftSleepTimeFlow: StateFlow<Duration> get() = _leftSleepTime
+  private var job: Job? = null
 
-  override fun sleepTimerActive(): Boolean = sleepJob?.isActive == true && leftSleepTime > Duration.ZERO
+  override fun enable(mode: SleepTimerMode) {
+    disable() // cancel any active job first
 
-  private var sleepJob: Job? = null
-
-  override fun setActive(enable: Boolean) {
-    Logger.i("enable=$enable")
-    if (enable) {
-      setActive()
-    } else {
-      cancel()
-    }
-  }
-
-  private fun setActive() {
-    scope.launch {
-      setActive(sleepTimerPreferenceStore.data.first().duration)
-    }
-  }
-
-  override fun setActive(sleepTime: Duration) {
-    Logger.i("Starting sleepTimer. Pause in $sleepTime.")
-    leftSleepTime = sleepTime
-    playerController.setVolume(1F)
-    sleepJob?.cancel()
-    sleepJob = scope.launch {
-      startSleepTimerCountdown()
-      val shakeToResetTime = 30.seconds
-      Logger.d("Wait for $shakeToResetTime for a shake")
-      withTimeout(shakeToResetTime) {
-        shakeDetector.detect()
-        Logger.i("Shake detected. Reset sleep time")
-        playerController.play()
-        setActive(sleepTime)
+    job = scope.launch {
+      when (mode) {
+        is SleepTimerMode.TimedWithDuration -> startCountdown(mode.duration)
+        SleepTimerMode.TimedWithDefault -> {
+          val pref = sleepTimerPreferenceStore.data.first()
+          startCountdown(pref.duration)
+        }
+        SleepTimerMode.EndOfChapter -> {
+          _state.value = SleepTimerState.Enabled.WithEndOfChapter
+        }
       }
-      Logger.i("exiting")
     }
   }
 
-  private suspend fun startSleepTimerCountdown() {
-    var interval = 500.milliseconds
+  override fun disable() {
+    job?.cancel()
+    job = null
+    _state.value = SleepTimerState.Disabled
+    playerController.setVolume(1F)
+  }
+
+  private suspend fun startCountdown(duration: Duration) {
+    Logger.d("startCountdown(duration=$duration)")
+    var left = duration
+    _state.value = SleepTimerState.Enabled.WithDuration(left)
+    playerController.setVolume(1F)
+
     val fadeOutDuration = fadeOutStore.data.first()
-    while (leftSleepTime > Duration.ZERO) {
+    var interval = 500.milliseconds
+
+    while (left > Duration.ZERO) {
       suspendUntilPlaying()
-      if (leftSleepTime < fadeOutDuration) {
+      if (left < fadeOutDuration) {
         interval = 200.milliseconds
-        updateVolumeForSleepTime(fadeOutDuration)
+        updateVolume(left, fadeOutDuration)
       }
       delay(interval)
-      leftSleepTime = (leftSleepTime - interval).coerceAtLeast(Duration.ZERO)
+      left = max((left - interval).inWholeMilliseconds, 0).milliseconds
+      _state.value = SleepTimerState.Enabled.WithDuration(left)
     }
+    playerController.setVolume(1f)
+    _state.value = SleepTimerState.Disabled
+
     playerController.pauseWithRewind(fadeOutDuration)
+
+    val shakeToResetTime = 30.seconds
+    Logger.d("Waiting $shakeToResetTime for shake...")
+    withTimeoutOrNull(shakeToResetTime) {
+      shakeDetector.detect()
+      Logger.i("Shake detected, resetting timer")
+      playerController.play()
+      startCountdown(duration)
+    }
     playerController.setVolume(1F)
   }
 
-  private fun updateVolumeForSleepTime(fadeOutDuration: Duration) {
-    val percentageOfTimeLeft = if (leftSleepTime == Duration.ZERO) {
-      0F
-    } else {
-      (leftSleepTime / fadeOutDuration).toFloat()
-    }.coerceIn(0F, 1F)
-
-    val volume = 1 - FastOutSlowInInterpolator().getInterpolation(1 - percentageOfTimeLeft)
+  private fun updateVolume(
+    left: Duration,
+    fadeOutDuration: Duration,
+  ) {
+    val percentage = (left / fadeOutDuration).toFloat().coerceIn(0f, 1f)
+    val volume = 1 - FastOutSlowInInterpolator().getInterpolation(1 - percentage)
     playerController.setVolume(volume)
   }
 
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
-      Logger.i("Not playing. Wait for Playback to continue.")
-      playStateManager.flow
-        .first { it == Playing }
-      Logger.i("Playback continued.")
+      Logger.i("Not playing. Waiting for playback to continue.")
+      playStateManager.flow.first { it == Playing }
+      Logger.i("Playback resumed.")
     }
-  }
-
-  private fun cancel() {
-    sleepJob?.cancel()
-    leftSleepTime = Duration.ZERO
-    playerController.setVolume(1F)
   }
 }

@@ -47,6 +47,7 @@ class PositionUpdater(
     newPosition: Player.PositionInfo,
     reason: Int,
   ) {
+    Logger.v("onPositionDiscontinuity: ${newPosition.positionMs}")
     scope.launch {
       updatePosition()
     }
@@ -61,6 +62,7 @@ class PositionUpdater(
     val chapterId = mediaId.chapterId
     bookRepo.updateBook(mediaId.bookId) { content ->
       if (chapterId in content.chapters) {
+        Logger.d("$currentPosition is the new position!")
         content.copy(
           currentChapter = chapterId,
           positionInChapter = currentPosition,

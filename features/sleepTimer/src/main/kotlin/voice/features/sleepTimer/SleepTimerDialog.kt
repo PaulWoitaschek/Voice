@@ -35,6 +35,7 @@ fun SleepTimerDialog(
   onIncrementSleepTime: () -> Unit,
   onDecrementSleepTime: () -> Unit,
   onAcceptSleepTime: (Int) -> Unit,
+  onAcceptSleepAtEndOfChapter: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   ModalBottomSheet(
@@ -63,6 +64,15 @@ fun SleepTimerDialog(
           },
         )
       }
+      ListItem(
+        modifier = Modifier.clickable {
+          onAcceptSleepAtEndOfChapter()
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        headlineContent = {
+          Text(text = stringResource(id = StringsR.string.end_of_chapter))
+        },
+      )
       ListItem(
         modifier = Modifier.clickable {
           onAcceptSleepTime(viewState.customSleepTime)

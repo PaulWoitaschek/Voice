@@ -26,6 +26,8 @@ import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
+import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
 import java.util.UUID
@@ -40,10 +42,15 @@ class BookPlayViewModelTest {
   private val sleepTimer = mockk<SleepTimer> {
     var sleepTimerActive = false
     every { sleepTimerActive() } answers { sleepTimerActive }
-    coEvery { setActive(any<Duration>()) } answers {
+    coEvery {
+      enable(TimedWithDuration(any<Duration>()))
+    } answers {
       sleepTimerActive = true
     }
-    coEvery { setActive(any<Boolean>()) } answers {
+    coEvery {
+      any<Boolean>()
+      enable(SleepTimerMode.TimedWithDefault)
+    } answers {
       sleepTimerActive = firstArg()
     }
   }
@@ -121,7 +128,7 @@ class BookPlayViewModelTest {
     sleepTimerDataStore.data.first().duration shouldBe 15.minutes
     yield()
     verify(exactly = 1) {
-      sleepTimer.setActive(10.minutes)
+      sleepTimer.enable(TimedWithDuration(10.minutes))
     }
   }
 
@@ -132,8 +139,8 @@ class BookPlayViewModelTest {
     viewModel.toggleSleepTimer()
     yield()
     verifyOrder {
-      sleepTimer.setActive(10.minutes)
-      sleepTimer.setActive(false)
+      sleepTimer.enable(TimedWithDuration(10.minutes))
+      sleepTimer.disable()
     }
     sleepTimer.sleepTimerActive() shouldBe false
   }

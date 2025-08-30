@@ -32,6 +32,9 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
+import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
+import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ImmutableFile
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
@@ -82,12 +85,12 @@ class BookPlayViewModel(
       playStateManager.flow
     }.collectAsState()
 
-    val sleepTime by remember { sleepTimer.leftSleepTimeFlow }.collectAsState(Duration.ZERO)
+    val sleepTime = remember { sleepTimer.state }.collectAsState().value
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
     return BookPlayViewState(
-      sleepTime = sleepTime,
+      sleepTimerState = sleepTime.toViewState(),
       playing = playState == PlayStateManager.PlayState.Playing,
       title = book.content.name,
       showPreviousNextButtons = hasMoreThanOneChapter,
@@ -141,7 +144,14 @@ class BookPlayViewModel(
           title = null,
         )
       }
-      sleepTimer.setActive(time.minutes)
+      sleepTimer.enable(TimedWithDuration(time.minutes))
+      null
+    }
+  }
+
+  fun onAcceptSleepAtEndOfChapter() {
+    updateSleepTimeViewState {
+      sleepTimer.enable(SleepTimerMode.EndOfChapter)
       null
     }
   }
@@ -287,9 +297,9 @@ class BookPlayViewModel(
 
   fun toggleSleepTimer() {
     scope.launch {
-      Logger.d("toggleSleepTimer while active=${sleepTimer.sleepTimerActive()}")
-      if (sleepTimer.sleepTimerActive()) {
-        sleepTimer.setActive(false)
+      Logger.d("toggleSleepTimer while active=${sleepTimer.state.value}")
+      if (sleepTimer.state.value.enabled) {
+        sleepTimer.disable()
         _dialogState.value = null
       } else {
         _dialogState.value = BookPlayDialogViewState.SleepTimer(
@@ -317,4 +327,10 @@ class BookPlayViewModel(
   interface Factory {
     fun create(bookId: BookId): BookPlayViewModel
   }
+}
+
+private fun SleepTimerState.toViewState(): BookPlayViewState.SleepTimerViewState = when (this) {
+  SleepTimerState.Disabled -> BookPlayViewState.SleepTimerViewState.Disabled
+  is SleepTimerState.Enabled.WithDuration -> BookPlayViewState.SleepTimerViewState.Enabled.WithDuration(this.leftDuration)
+  SleepTimerState.Enabled.WithEndOfChapter -> BookPlayViewState.SleepTimerViewState.Enabled.WithEndOfChapter
 }

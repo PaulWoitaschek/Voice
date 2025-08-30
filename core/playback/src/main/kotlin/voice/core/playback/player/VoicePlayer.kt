@@ -1,11 +1,13 @@
 package voice.core.playback.player
 
+import android.os.Looper
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.PlayerMessage
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -25,6 +27,8 @@ import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.toMediaIdOrNull
+import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
@@ -44,6 +48,7 @@ class VoicePlayer(
   private val scope: CoroutineScope,
   private val chapterRepo: ChapterRepo,
   private val volumeGain: VolumeGain,
+  private val sleepTimer: SleepTimer,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
@@ -112,10 +117,10 @@ class VoicePlayer(
     return super.getAvailableCommands()
       .buildUpon()
       .addAll(
-        Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
-        Player.COMMAND_SEEK_TO_PREVIOUS,
-        Player.COMMAND_SEEK_TO_NEXT,
-        Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+        COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
+        COMMAND_SEEK_TO_PREVIOUS,
+        COMMAND_SEEK_TO_NEXT,
+        COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
       )
       .build()
   }
@@ -226,7 +231,7 @@ class VoicePlayer(
 
   override fun getPlaybackState(): Int = when (val state = super.getPlaybackState()) {
     // redirect buffering to ready to prevent visual artifacts on seeking
-    Player.STATE_BUFFERING -> Player.STATE_READY
+    STATE_BUFFERING -> STATE_READY
     else -> state
   }
 
@@ -282,15 +287,52 @@ class VoicePlayer(
           player.setPlaybackSpeed(book.content.playbackSpeed)
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
+          val chapters = mediaItemProvider.chapters(book)
           player.setMediaItems(
-            mediaItemProvider.chapters(book),
+            chapters,
             book.content.currentChapterIndex,
             book.content.positionInChapter,
           )
+          registerChapterMarkCallbacks(book.chapters)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
       }
+    }
+  }
+
+  private fun registerChapterMarkCallbacks(chapters: List<Chapter>) {
+    if (player is ExoPlayer) {
+      val boundaryHandler = PlayerMessage.Target { _, payload ->
+        if (payload is ChapterPausePayload &&
+          payload != ChapterPausePayload.Zero &&
+          sleepTimer.state.value is SleepTimerState.Enabled.WithEndOfChapter
+        ) {
+          Logger.v("Chapter mark reached at $payload, pausing as per sleep timer")
+          player.seekTo(payload.chapterIndex, payload.positionMs)
+          player.pause()
+          sleepTimer.disable()
+        }
+      }
+      chapters.forEachIndexed { chapterIndex, chapter ->
+        chapter.chapterMarks.forEach { chapterMark ->
+          player.createMessage(boundaryHandler)
+            .setPosition(chapterIndex, chapterMark.startMs + 1)
+            .setPayload(ChapterPausePayload(chapterIndex, chapterMark.startMs))
+            .setDeleteAfterDelivery(false)
+            .setLooper(Looper.getMainLooper())
+            .send()
+        }
+      }
+    }
+  }
+
+  private data class ChapterPausePayload(
+    val chapterIndex: Int,
+    val positionMs: Long,
+  ) {
+    companion object {
+      val Zero = ChapterPausePayload(0, 0L)
     }
   }
 

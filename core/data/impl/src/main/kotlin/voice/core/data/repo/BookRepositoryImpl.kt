@@ -68,7 +68,9 @@ public class BookRepositoryImpl(
     mutex.withLock {
       val content = contentRepo.get(id) ?: return
       val updated = update(content)
-      contentRepo.put(updated)
+      if (updated != content) {
+        contentRepo.put(updated)
+      }
     }
   }
 
