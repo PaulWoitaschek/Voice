@@ -72,6 +72,7 @@ class SleepTimerImpl(
   }
 
   private suspend fun startCountdown(duration: Duration) {
+    Logger.d("startCountdown(duration=$duration)")
     var left = duration
     _state.value = SleepTimerState.Enabled.WithDuration(left)
     playerController.setVolume(1F)
@@ -89,6 +90,7 @@ class SleepTimerImpl(
       left = max((left - interval).inWholeMilliseconds, 0).milliseconds
       _state.value = SleepTimerState.Enabled.WithDuration(left)
     }
+    playerController.setVolume(1f)
     _state.value = SleepTimerState.Disabled
 
     playerController.pauseWithRewind(fadeOutDuration)
