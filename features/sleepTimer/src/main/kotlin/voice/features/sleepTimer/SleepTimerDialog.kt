@@ -66,15 +66,6 @@ fun SleepTimerDialog(
       }
       ListItem(
         modifier = Modifier.clickable {
-          onAcceptSleepAtEndOfChapter()
-        },
-        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        headlineContent = {
-          Text(text = stringResource(id = StringsR.string.end_of_chapter))
-        },
-      )
-      ListItem(
-        modifier = Modifier.clickable {
           onAcceptSleepTime(viewState.customSleepTime)
         },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -96,6 +87,13 @@ fun SleepTimerDialog(
               )
             }
           }
+        },
+      )
+      ListItem(
+        modifier = Modifier.clickable(onClick = onAcceptSleepAtEndOfChapter),
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        headlineContent = {
+          Text(text = stringResource(id = StringsR.string.end_of_chapter))
         },
       )
       Spacer(modifier = Modifier.size(32.dp))
