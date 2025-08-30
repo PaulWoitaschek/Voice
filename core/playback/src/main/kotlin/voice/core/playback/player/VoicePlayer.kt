@@ -293,7 +293,7 @@ class VoicePlayer(
             book.content.currentChapterIndex,
             book.content.positionInChapter,
           )
-          registerChapterMarkCallbacks(chapters)
+          registerChapterMarkCallbacks(book.chapters)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
@@ -301,29 +301,38 @@ class VoicePlayer(
     }
   }
 
-  private fun registerChapterMarkCallbacks(chapters: List<MediaItem>) {
+  private fun registerChapterMarkCallbacks(chapters: List<Chapter>) {
     if (player is ExoPlayer) {
-      assert(chapters.size == player.mediaItemCount)
       val boundaryHandler = PlayerMessage.Target { _, payload ->
-        if (payload is Pair<*, *> && sleepTimer.state.value is SleepTimerState.Enabled.WithEndOfChapter) {
+        if (payload is ChapterPausePayload &&
+          payload != ChapterPausePayload.Zero &&
+          sleepTimer.state.value is SleepTimerState.Enabled.WithEndOfChapter
+        ) {
+          Logger.v("Chapter mark reached at $payload, pausing as per sleep timer")
+          player.seekTo(payload.chapterIndex, payload.positionMs)
           player.pause()
-          player.seekTo(payload.first as Int, payload.second as Long)
           sleepTimer.disable()
         }
       }
-      chapters.forEachIndexed { index, mediaItem ->
-        val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
-        if (mediaId !is MediaId.Chapter) return
-        val marks = runBlocking { (chapterRepo.get(mediaId.chapterId)?.chapterMarks?.map { mark -> mark.startMs } ?: listOf(0L)) }
-        marks.forEach { startMs ->
+      chapters.forEachIndexed { chapterIndex, chapter ->
+        chapter.chapterMarks.forEach { chapterMark ->
           player.createMessage(boundaryHandler)
-            .setPosition(index, startMs)
-            .setPayload(Pair(index, startMs))
+            .setPosition(chapterIndex, chapterMark.startMs + 1)
+            .setPayload(ChapterPausePayload(chapterIndex, chapterMark.startMs))
             .setDeleteAfterDelivery(false)
             .setLooper(Looper.getMainLooper())
             .send()
         }
       }
+    }
+  }
+
+  private data class ChapterPausePayload(
+    val chapterIndex: Int,
+    val positionMs: Long,
+  ) {
+    companion object {
+      val Zero = ChapterPausePayload(0, 0L)
     }
   }
 
