@@ -15,6 +15,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.MarkData
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.CurrentBookStore
@@ -75,6 +76,30 @@ class SleepTimerIntegrationTest {
     bookContentRepo.get(bookId)!!.positionInChapter.shouldBeGreaterThan(0)
   }
 
+  @Test
+  fun testWithEndOfChapterMode() = runTest {
+    rootGraphAs<TestGraph>().inject(this@SleepTimerIntegrationTest)
+
+    val bookId = prepareTestBook()
+
+    // speed up the tests by using shorter fade out and sleep times
+    fadeOutStore.updateData { 1.seconds }
+
+    // play the book and wait for it to start
+    playerController.play()
+    playStateManager.flow.first { it == PlayStateManager.PlayState.Playing }
+
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+    // wait for the sleep timer to trigger
+    playStateManager.flow.first { it == PlayStateManager.PlayState.Paused }
+    sleepTimer.state.first { it == SleepTimerState.Disabled }
+
+    // suspend until the position is updated to the end of the chapter
+    bookContentRepo.flow(bookId)
+      .first { it!!.positionInChapter == 1000L }
+  }
+
   private suspend fun prepareTestBook(): BookId {
     val audioFile = copyTestAudioFile()
 
@@ -86,7 +111,10 @@ class SleepTimerIntegrationTest {
       duration = 119210,
       name = "Test Chapter",
       fileLastModified = Instant.EPOCH,
-      markData = emptyList(),
+      markData = listOf(
+        MarkData(startMs = 0, name = "Mark 1"),
+        MarkData(startMs = 1000, name = "Mark 2"),
+      ),
     )
 
     val bookContent = BookContent(
