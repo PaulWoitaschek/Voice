@@ -267,6 +267,10 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       progress = 0.8F,
       id = BookId(UUID.randomUUID().toString()),
       remainingTime = "01:04",
+      genre = "Genre",
+      narrator = "Narrator",
+      series = "Series",
+      part = "2.1"
     )
   }
 
