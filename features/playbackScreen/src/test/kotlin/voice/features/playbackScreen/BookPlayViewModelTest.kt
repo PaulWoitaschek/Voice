@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.minutes
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
-  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 15.minutes))
+  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes))
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
@@ -98,7 +98,7 @@ class BookPlayViewModelTest {
 
     viewModel.toggleSleepTimer()
     yield()
-    assertDialogSleepTime(15)
+    assertDialogSleepTime(5)
 
     suspend fun incrementAndAssert(time: Int) {
       viewModel.incrementSleepTime()
@@ -112,8 +112,6 @@ class BookPlayViewModelTest {
       assertDialogSleepTime(time)
     }
 
-    decrementAndAssert(10)
-    decrementAndAssert(5)
     decrementAndAssert(4)
     decrementAndAssert(3)
     decrementAndAssert(2)
@@ -123,17 +121,13 @@ class BookPlayViewModelTest {
 
     incrementAndAssert(2)
     incrementAndAssert(3)
-    incrementAndAssert(4)
-    incrementAndAssert(5)
-    incrementAndAssert(10)
-    incrementAndAssert(15)
   }
 
   @Test
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerDataStore.data.first().duration shouldBe 15.minutes
+    sleepTimerDataStore.data.first().duration shouldBe 5.minutes
     yield()
     verify(exactly = 1) {
       sleepTimer.enable(TimedWithDuration(10.minutes))

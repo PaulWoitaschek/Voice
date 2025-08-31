@@ -110,10 +110,7 @@ class BookPlayViewModel(
   fun incrementSleepTime() {
     updateSleepTimeViewState {
       val customTime = it.customSleepTime
-      val newTime = when {
-        customTime < 5 -> customTime + 1
-        else -> customTime + 5
-      }
+      val newTime = customTime + 1
       sleepTimerPreferenceStore.updateData { preference -> preference.copy(duration = newTime.minutes) }
       SleepTimerViewState(newTime)
     }
@@ -122,11 +119,7 @@ class BookPlayViewModel(
   fun decrementSleepTime() {
     updateSleepTimeViewState {
       val customTime = it.customSleepTime
-      val newTime = when {
-        customTime <= 1 -> 1
-        customTime <= 5 -> customTime - 1
-        else -> (customTime - 5).coerceAtLeast(5)
-      }
+      val newTime = (customTime - 1).coerceAtLeast(1)
       sleepTimerPreferenceStore.updateData { preference ->
         preference.copy(duration = newTime.minutes)
       }
