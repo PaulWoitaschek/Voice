@@ -18,7 +18,7 @@ jobs:
     outputs:
       tag: ${{ github.ref_name }}
     steps:
-      - uses: ./.github/actions/build_setup.yml
+      - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./ci_signing_setup.sh
       - name: Build Google Play AAB
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: google-play
     steps:
-      - uses: ./.github/actions/build_setup.yml
+      - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./ci_signing_setup.sh
       - name: Download AAB artifact

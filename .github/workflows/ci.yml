@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: ./.github/actions/build_setup.yml
+      - uses: ./.github/actions/build_setup
       - name: Run Unit Tests + Lint
         run: ./gradlew :app:lintPlayDebug
-      - uses: ./.github/actions/test_reporting.yml
+      - uses: ./.github/actions/test_reporting
   unit:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: ./.github/actions/build_setup.yml
+      - uses: ./.github/actions/build_setup
       - name: Run Unit Tests + Lint
         run: ./gradlew voiceUnitTest lintKotlin :scripts:build :app:assemblePlayDebug
-      - uses: ./.github/actions/test_reporting.yml
+      - uses: ./.github/actions/test_reporting
   instrumentation:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: ./.github/actions/build_setup.yml
+      - uses: ./.github/actions/build_setup
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -39,5 +39,4 @@ jobs:
         run: ./gradlew voiceDeviceSetup -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
       - name: Run Instrumentation Tests
         run: ./gradlew voiceDeviceGithubDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-      - uses: ./.github/actions/test_reporting.yml
-
+      - uses: ./.github/actions/test_reporting
