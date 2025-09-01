@@ -66,6 +66,7 @@ include(":core:scanner")
 include(":core:search")
 include(":core:strings")
 include(":core:ui")
+include(":core:initializer")
 
 include(":features:bookOverview")
 include(":features:bookmark")

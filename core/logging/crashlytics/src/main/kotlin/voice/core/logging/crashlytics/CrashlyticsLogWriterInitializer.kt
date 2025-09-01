@@ -1,15 +1,17 @@
 package voice.core.logging.crashlytics
 
-import android.content.Context
-import androidx.startup.Initializer
+import android.app.Application
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import voice.core.initializer.AppInitializer
 import voice.core.logging.core.Logger
 
-@Suppress("unused")
-class CrashlyticsLogWriterInitializer : Initializer<Unit> {
+@ContributesIntoSet(AppScope::class)
+@Inject
+class CrashlyticsLogWriterInitializer : AppInitializer {
 
-  override fun create(context: Context) {
+  override fun onAppStart(application: Application) {
     Logger.install(CrashlyticsLogWriter())
   }
-
-  override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }

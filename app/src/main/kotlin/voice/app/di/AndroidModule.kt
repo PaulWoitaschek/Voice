@@ -8,11 +8,13 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
 import voice.app.misc.MainActivityIntentProviderImpl
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
+import voice.core.common.MainScope
 import voice.core.playback.notification.MainActivityIntentProvider
 import java.time.Clock
 
@@ -25,6 +27,9 @@ object AndroidModule {
 
   @Provides
   fun provideContext(app: Application): Context = app
+
+  @Provides
+  fun coroutineScope(dispatcherProvider: DispatcherProvider): CoroutineScope = MainScope(dispatcherProvider)
 
   @Provides
   @SingleIn(AppScope::class)
