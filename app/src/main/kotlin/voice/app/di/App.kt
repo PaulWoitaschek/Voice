@@ -16,16 +16,12 @@ import voice.core.common.rootGraph
 import voice.core.data.store.DarkThemeStore
 import voice.core.initializer.AppInitializer
 import voice.core.scanner.MediaScanTrigger
-import voice.core.sleeptimer.AutoEnableSleepTimer
 import voice.core.ui.DARK_THEME_SETTABLE
 
 open class App : Application() {
 
   @Inject
   lateinit var mediaScanner: MediaScanTrigger
-
-  @Inject
-  lateinit var autoEnableSleepTimer: AutoEnableSleepTimer
 
   @Inject
   lateinit var appInitializers: Set<AppInitializer>
@@ -66,7 +62,6 @@ open class App : Application() {
       it.onAppStart(this)
     }
     mediaScanner.scan()
-    autoEnableSleepTimer.startMonitoring()
   }
 
   open fun createGraph(): AppGraph {
