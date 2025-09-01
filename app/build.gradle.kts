@@ -153,6 +153,7 @@ dependencies {
   implementation(projects.core.data.impl)
   implementation(projects.core.playback)
   implementation(projects.core.scanner)
+  implementation(projects.core.initializer)
   implementation(projects.features.playbackScreen)
   implementation(projects.navigation)
   implementation(projects.core.sleeptimer.api)
@@ -171,7 +172,6 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.material)
   implementation(libs.datastore)
-  implementation(libs.appStartup)
 
   implementation(libs.navigation3.ui)
 
@@ -197,9 +197,6 @@ dependencies {
 
   testImplementation(libs.junit)
   testImplementation(libs.mockk)
-
-  implementation(libs.leakcanary.plumber)
-  debugImplementation(libs.leakcanary.android)
 
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)

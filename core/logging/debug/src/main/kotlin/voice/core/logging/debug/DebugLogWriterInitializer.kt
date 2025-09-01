@@ -1,15 +1,17 @@
 package voice.core.logging.debug
 
-import android.content.Context
-import androidx.startup.Initializer
+import android.app.Application
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
+import voice.core.initializer.AppInitializer
 import voice.core.logging.core.Logger
 
-@Suppress("unused")
-class DebugLogWriterInitializer : Initializer<Unit> {
+@ContributesIntoSet(AppScope::class)
+@Inject
+class DebugLogWriterInitializer : AppInitializer {
 
-  override fun create(context: Context) {
+  override fun onAppStart(application: Application) {
     Logger.install(DebugLogWriter())
   }
-
-  override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
