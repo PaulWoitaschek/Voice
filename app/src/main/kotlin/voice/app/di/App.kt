@@ -6,12 +6,8 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
 import voice.core.common.rootGraph
 import voice.core.initializer.AppInitializer
-import voice.core.scanner.MediaScanTrigger
 
 open class App : Application() {
-
-  @Inject
-  lateinit var mediaScanner: MediaScanTrigger
 
   @Inject
   lateinit var appInitializers: Set<AppInitializer>
@@ -26,7 +22,6 @@ open class App : Application() {
     appInitializers.forEach {
       it.onAppStart(this)
     }
-    mediaScanner.scan()
   }
 
   open fun createGraph(): AppGraph {
