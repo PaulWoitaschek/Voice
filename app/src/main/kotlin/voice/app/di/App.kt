@@ -18,15 +18,11 @@ import voice.core.initializer.AppInitializer
 import voice.core.scanner.MediaScanTrigger
 import voice.core.sleeptimer.AutoEnableSleepTimer
 import voice.core.ui.DARK_THEME_SETTABLE
-import voice.features.widget.TriggerWidgetOnChange
 
 open class App : Application() {
 
   @Inject
   lateinit var mediaScanner: MediaScanTrigger
-
-  @Inject
-  lateinit var triggerWidgetOnChange: TriggerWidgetOnChange
 
   @Inject
   lateinit var autoEnableSleepTimer: AutoEnableSleepTimer
@@ -70,7 +66,6 @@ open class App : Application() {
       it.onAppStart(this)
     }
     mediaScanner.scan()
-    triggerWidgetOnChange.init()
     autoEnableSleepTimer.startMonitoring()
   }
 
