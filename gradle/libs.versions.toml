@@ -1,5 +1,4 @@
 [versions]
-leakcanary = "2.14"
 versionCode = "3603049"
 versionName = "8.6.2"
 
@@ -20,8 +19,6 @@ metro = "0.6.3"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
-leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 material = "com.google.android.material:material:1.12.0"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.14.5"
@@ -40,7 +37,6 @@ documentFile = "androidx.documentfile:documentfile:1.1.0"
 koTest-assert = "io.kotest:kotest-assertions-core:6.0.1"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
-appStartup = "androidx.startup:startup-runtime:1.2.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.1.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"

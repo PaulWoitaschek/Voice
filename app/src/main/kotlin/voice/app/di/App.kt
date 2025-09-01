@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraph
 import voice.core.data.store.DarkThemeStore
+import voice.core.initializer.AppInitializer
 import voice.core.scanner.MediaScanTrigger
 import voice.core.sleeptimer.AutoEnableSleepTimer
 import voice.core.ui.DARK_THEME_SETTABLE
@@ -29,6 +30,9 @@ open class App : Application() {
 
   @Inject
   lateinit var autoEnableSleepTimer: AutoEnableSleepTimer
+
+  @Inject
+  lateinit var appInitializers: Set<AppInitializer>
 
   @field:[
   Inject
@@ -62,6 +66,9 @@ open class App : Application() {
       }
     }
 
+    appInitializers.forEach {
+      it.onAppStart(this)
+    }
     mediaScanner.scan()
     triggerWidgetOnChange.init()
     autoEnableSleepTimer.startMonitoring()
