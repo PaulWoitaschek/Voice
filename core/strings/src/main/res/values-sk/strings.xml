@@ -23,10 +23,9 @@
     <string name="bookmark_added">Záložka pridaná</string>
     <string name="action_settings">Predvoľby</string>
     <plurals name="seconds">
-        <item quantity="one">%d sek.</item>
-        <item quantity="few">%d sek.</item>
-        <item quantity="many">%d sek.</item>
-        <item quantity="other">%d sek.</item>
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="other">%d sekúnd</item>
     </plurals>
     <string name="pref_seek_time">Preskočiť o</string>
     <string name="pref_theme_dark">Tmavá téma</string>
@@ -60,4 +59,21 @@
     <string name="mark_as_current">Označiť za aktuálne</string>
     <string name="play">Prehrať</string>
     <string name="volume_boost">Zvýrazniť hlasitosť</string>
+    <string name="sleep_timer.title">Sladké sny! 🌙</string>
+    <string name="review.request.button.no">Nie, ďakujem</string>
+    <string name="select_folder_type_file">Súbor</string>
+    <string name="select_folder_type_folder">Adresár</string>
+    <string name="playback.current_chapter">Aktuálna kapitola</string>
+    <string name="delete_book_dialog_deletion_confirmation">Vymazať moje súbory</string>
+    <string name="delete_book_dialog_title">Vymazať knihu</string>
+    <string name="end_of_chapter">Koniec kapitoly</string>
+    <string name="generic_error_message">Niečo sa pokazilo 😢</string>
+    <string name="generic_error_retry">Opakovať</string>
+    <string name="storage_bug_title">Vyžaduje sa povolenie</string>
+    <string name="search_hint">Čo hľadáte?</string>
+    <string name="pref_suggest_idea">Navrhnite nápad</string>
+    <string name="pref_faq">Často kladené otázky</string>
+    <string name="voice_intro_first_book">Pridajme vašu zložku s audioknihami, aby ste mohli začať počúvať!</string>
+    <string name="migration_hint_confirm">Rozumiem</string>
+    <string name="migration_detail_content_name">Názov</string>
 </resources>
