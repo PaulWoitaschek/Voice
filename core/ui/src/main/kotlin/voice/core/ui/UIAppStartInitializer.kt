@@ -18,7 +18,7 @@ import voice.core.initializer.AppInitializer
 
 @ContributesIntoSet(AppScope::class)
 @Inject
-internal class UIAppStartInitializer(
+class UIAppStartInitializer(
   @DarkThemeStore
   private val useDarkThemeStore: DataStore<Boolean>,
   private val scope: CoroutineScope,

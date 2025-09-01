@@ -19,7 +19,7 @@ import java.time.Clock
 
 @ContributesIntoSet(AppScope::class)
 @Inject
-internal class AutoEnableSleepTimer(
+class AutoEnableSleepTimer(
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   private val playStateManager: PlayStateManager,

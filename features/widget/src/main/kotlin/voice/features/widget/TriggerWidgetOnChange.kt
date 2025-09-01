@@ -22,7 +22,7 @@ import voice.core.playback.playstate.PlayStateManager
 
 @ContributesIntoSet(AppScope::class)
 @Inject
-internal class TriggerWidgetOnChange(
+class TriggerWidgetOnChange(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val repo: BookRepository,
