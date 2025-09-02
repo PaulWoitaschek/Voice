@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Run Unit Tests + Lint
+        run: ./gradlew :app:lintPlayDebug
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: lint-report
+          path: app/build/reports/**/*.html
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Run Unit Tests + Lint
+        run: ./gradlew voiceUnitTest lintKotlin :scripts:build :app:assemblePlayDebug
+      - name: Publish JUnit Report
+        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
+        if: always()
+        with:
+          report_paths: '**/test-results/**/TEST-*.xml'
+          check_name: "Unit Tests"
+
+  instrumentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Accept Android Licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+      - name: Setup Managed Devices
+        run: ./gradlew voiceDeviceSetup -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+      - name: Run Instrumentation Tests
+        run: ./gradlew voiceDeviceGithubDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+      - name: Publish JUnit Report
+        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
+        if: always()
+        with:
+          report_paths: '**/test-results/**/TEST-*.xml'
+          check_name: "Instrumentation Tests"
