@@ -33,6 +33,8 @@ jobs:
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
+          check_name: "Unit Tests"
+
   instrumentation:
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -55,3 +57,4 @@ jobs:
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
+          check_name: "Instrumentation Tests"
