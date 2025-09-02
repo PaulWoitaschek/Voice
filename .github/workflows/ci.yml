@@ -20,11 +20,6 @@ jobs:
         with:
           name: lint-report
           path: app/build/reports/**/*.html
-      - name: Publish JUnit Report
-        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
-        if: always()
-        with:
-          report_paths: '**/test-results/**/TEST-*.xml'
   unit:
     runs-on: ubuntu-latest
     timeout-minutes: 30
