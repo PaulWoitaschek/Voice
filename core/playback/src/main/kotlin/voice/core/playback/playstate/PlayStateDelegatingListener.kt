@@ -5,7 +5,6 @@ import dev.zacsweers.metro.Inject
 
 @Inject
 class PlayStateDelegatingListener(private val playStateManager: PlayStateManager) : Player.Listener {
-
   private lateinit var player: Player
 
   fun attachTo(player: Player) {

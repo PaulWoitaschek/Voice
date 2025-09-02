@@ -35,8 +35,8 @@ plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
   id("org.jetbrains.kotlin.android") version "2.2.10" apply false
   id("org.jetbrains.kotlin.jvm") version "2.2.10" apply false
-  id("com.android.application") version "8.12.1" apply false
-  id("com.android.library") version "8.12.1" apply false
+  id("com.android.application") version "8.12.2" apply false
+  id("com.android.library") version "8.12.2" apply false
   id("com.autonomousapps.build-health") version "3.0.1"
 }
 
@@ -66,6 +66,7 @@ include(":core:scanner")
 include(":core:search")
 include(":core:strings")
 include(":core:ui")
+include(":core:initializer")
 
 include(":features:bookOverview")
 include(":features:bookmark")

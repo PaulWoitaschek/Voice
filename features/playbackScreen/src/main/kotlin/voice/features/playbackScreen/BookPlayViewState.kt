@@ -11,13 +11,24 @@ data class BookPlayViewState(
   val chapterName: String?,
   val showPreviousNextButtons: Boolean,
   val title: String,
-  val sleepTime: Duration,
+  val sleepTimerState: SleepTimerViewState,
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
   val cover: ImmutableFile?,
   val skipSilence: Boolean,
 ) {
+
+  sealed interface SleepTimerViewState {
+    data object Disabled : SleepTimerViewState
+
+    sealed interface Enabled : SleepTimerViewState {
+      data object WithEndOfChapter : Enabled
+
+      @JvmInline
+      value class WithDuration(val leftDuration: Duration) : Enabled
+    }
+  }
 
   init {
     require(duration > Duration.ZERO) {

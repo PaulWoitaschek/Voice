@@ -8,6 +8,7 @@ import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.media3.test.utils.robolectric.TestPlayerRunHelper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.should
 import io.mockk.Runs
@@ -107,6 +108,7 @@ class VoicePlayerTest {
     },
     mediaItemProvider = mediaItemProvider,
     volumeGain = mockk(relaxed = true),
+    sleepTimer = mockk(relaxed = true),
   )
 
   @Test
@@ -344,7 +346,7 @@ class VoicePlayerTest {
 private fun havePosition(
   currentMediaItemIndex: Int,
   currentPosition: Long,
-) = object : io.kotest.matchers.Matcher<Player> {
+) = object : Matcher<Player> {
   override fun test(value: Player): MatcherResult {
     val actualCurrentMediaItemIndex = value.currentMediaItemIndex
     val actualCurrentPosition = value.currentPosition

@@ -139,7 +139,7 @@ class PlayerController(
 
   fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
     controller.pause()
-    controller.seekTo((controller.currentPosition - rewind.inWholeMilliseconds.coerceAtLeast(0)))
+    controller.seekTo((controller.currentPosition - rewind.inWholeMilliseconds).coerceAtLeast(0))
   }
 
   fun setSpeed(speed: Float) = executeAfterPrepare { controller ->

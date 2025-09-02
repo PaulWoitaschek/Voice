@@ -1,23 +1,26 @@
 package voice.features.widget
 
+import android.app.Application
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.initializer.AppInitializer
 import voice.core.playback.playstate.PlayStateManager
 
-@SingleIn(AppScope::class)
+@ContributesIntoSet(AppScope::class)
 @Inject
 class TriggerWidgetOnChange(
   @CurrentBookStore
@@ -25,14 +28,15 @@ class TriggerWidgetOnChange(
   private val repo: BookRepository,
   private val playStateManager: PlayStateManager,
   private val widgetUpdater: WidgetUpdater,
-) {
+  private val scope: CoroutineScope,
+) : AppInitializer {
 
-  fun init() {
-    MainScope().launch {
-      anythingChanged().collect {
+  override fun onAppStart(application: Application) {
+    anythingChanged()
+      .onEach {
         widgetUpdater.update()
       }
-    }
+      .launchIn(scope)
   }
 
   private fun anythingChanged(): Flow<Any?> {

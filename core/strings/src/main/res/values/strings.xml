@@ -96,6 +96,7 @@
     <string name="media_session_recent">Recent</string>
     <string name="notification_sleep_timer_enable">Enable Sleep Timer</string>
     <string name="notification_sleep_timer_disable">Disable Sleep Timer</string>
+    <string name="end_of_chapter">End of Chapter</string>
     <string name="generic_error_message">Something went wrong 😢</string>
     <string name="generic_error_retry">Retry</string>
     <string name="storage_bug_title">Permission required</string>

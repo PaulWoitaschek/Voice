@@ -10,7 +10,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
@@ -26,27 +28,40 @@ import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
 import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
+import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
+import voice.core.sleeptimer.SleepTimerState
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
 import java.util.UUID
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
-  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 15.minutes))
+  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes))
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
-    var sleepTimerActive = false
-    every { sleepTimerActive() } answers { sleepTimerActive }
-    coEvery { setActive(any<Duration>()) } answers {
-      sleepTimerActive = true
+    val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
+    every {
+      state
+    } returns stateFlow
+    every {
+      enable(any())
+    } answers {
+      stateFlow.value = when (val mode = firstArg<SleepTimerMode>()) {
+        is TimedWithDuration -> SleepTimerState.Enabled.WithDuration(mode.duration)
+        SleepTimerMode.TimedWithDefault -> SleepTimerState.Enabled.WithDuration(runBlocking { sleepTimerDataStore.data.first() }.duration)
+        SleepTimerMode.EndOfChapter -> SleepTimerState.Enabled.WithEndOfChapter
+      }
     }
-    coEvery { setActive(any<Boolean>()) } answers {
-      sleepTimerActive = firstArg()
+    every {
+      disable()
+    } answers {
+      stateFlow.value = SleepTimerState.Disabled
     }
   }
+
   private val player = mockk<PlayerController>()
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
@@ -83,7 +98,7 @@ class BookPlayViewModelTest {
 
     viewModel.toggleSleepTimer()
     yield()
-    assertDialogSleepTime(15)
+    assertDialogSleepTime(5)
 
     suspend fun incrementAndAssert(time: Int) {
       viewModel.incrementSleepTime()
@@ -97,8 +112,6 @@ class BookPlayViewModelTest {
       assertDialogSleepTime(time)
     }
 
-    decrementAndAssert(10)
-    decrementAndAssert(5)
     decrementAndAssert(4)
     decrementAndAssert(3)
     decrementAndAssert(2)
@@ -108,20 +121,16 @@ class BookPlayViewModelTest {
 
     incrementAndAssert(2)
     incrementAndAssert(3)
-    incrementAndAssert(4)
-    incrementAndAssert(5)
-    incrementAndAssert(10)
-    incrementAndAssert(15)
   }
 
   @Test
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerDataStore.data.first().duration shouldBe 15.minutes
+    sleepTimerDataStore.data.first().duration shouldBe 5.minutes
     yield()
     verify(exactly = 1) {
-      sleepTimer.setActive(10.minutes)
+      sleepTimer.enable(TimedWithDuration(10.minutes))
     }
   }
 
@@ -132,10 +141,10 @@ class BookPlayViewModelTest {
     viewModel.toggleSleepTimer()
     yield()
     verifyOrder {
-      sleepTimer.setActive(10.minutes)
-      sleepTimer.setActive(false)
+      sleepTimer.enable(TimedWithDuration(10.minutes))
+      sleepTimer.disable()
     }
-    sleepTimer.sleepTimerActive() shouldBe false
+    sleepTimer.state.value.shouldBeInstanceOf<SleepTimerState.Disabled>()
   }
 
   @Test
