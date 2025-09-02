@@ -145,4 +145,5 @@
     <string name="auto_sleep_timer.title">Uaineadóir Codlata Uathoibríoch</string>
     <string name="playback.current_chapter">Caibidil reatha</string>
     <string name="pref_faq">Ceisteanna Coitianta</string>
+    <string name="end_of_chapter">Deireadh na Caibidle</string>
 </resources>
