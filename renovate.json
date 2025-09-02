@@ -15,6 +15,15 @@
       ]
     },
     {
+      "groupName": "AGP, Lint",
+      "matchDepNames": [
+        "com.android.library{/,}**",
+        "androidx.databinding:viewbinding{/,}**",
+        "com.android.application{/,}**",
+        "com.android.tools{/,}**"
+      ]
+    },
+    {
       "groupName": "Kotlin, KSP",
       "matchPackageNames": [
         "org.jetbrains.kotlin:{/,}**",
