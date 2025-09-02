@@ -4,7 +4,7 @@ import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
 import voice.core.data.MarkData
 import voice.core.logging.core.Logger
-import voice.core.scanner.mp4.Mp4ChpaterExtractorOutput
+import voice.core.scanner.mp4.Mp4MetadataExtractorOutput
 
 @Inject
 internal class ChplVisitor : AtomVisitor {
@@ -13,7 +13,7 @@ internal class ChplVisitor : AtomVisitor {
 
   override fun visit(
     buffer: ParsableByteArray,
-    parseOutput: Mp4ChpaterExtractorOutput,
+    parseOutput: Mp4MetadataExtractorOutput,
   ) {
     buffer.setPosition(0)
     val version = buffer.readUnsignedByte()

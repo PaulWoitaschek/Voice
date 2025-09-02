@@ -3,7 +3,7 @@ package voice.core.scanner.mp4.visitor
 import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
 import voice.core.logging.core.Logger
-import voice.core.scanner.mp4.Mp4ChpaterExtractorOutput
+import voice.core.scanner.mp4.Mp4MetadataExtractorOutput
 
 // https://developer.apple.com/documentation/quicktime-file-format/chunk_offset_atom
 @Inject
@@ -13,7 +13,7 @@ internal class StcoVisitor : AtomVisitor {
 
   override fun visit(
     buffer: ParsableByteArray,
-    parseOutput: Mp4ChpaterExtractorOutput,
+    parseOutput: Mp4MetadataExtractorOutput,
   ) {
     val version = buffer.readUnsignedByte()
     if (version != 0) {

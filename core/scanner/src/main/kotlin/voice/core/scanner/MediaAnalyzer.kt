@@ -23,7 +23,7 @@ import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.core.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
-import voice.core.scanner.mp4.Mp4ChapterExtractor
+import voice.core.scanner.mp4.Mp4MetadataParser
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.microseconds
 @Inject
 internal class MediaAnalyzer(
   private val context: Context,
-  private val mp4ChapterExtractor: Mp4ChapterExtractor,
+  private val mp4MetadataParser: Mp4MetadataParser,
   private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
 ) {
 
@@ -66,6 +66,8 @@ internal class MediaAnalyzer(
                 is ChapterFrame -> visitChapter(entry, builder)
                 is VorbisComment -> visitVorbis(entry, builder)
                 is MdtaMetadataEntry -> visitMdta(entry, builder)
+                // is InternalFrame -> visitInternalFrame(entry, builder) // id=----, domain=com.apple.iTunes, description=AUDIBLE_ASIN,text=08154711
+                // is CommentFrame -> visitCommentFrame(entry, builder) // id=COMM, language=und, description=ITUNESGAPLESS, text=1
                 else -> Logger.d("Unknown metadata entry: $entry")
               }
             }
@@ -77,7 +79,7 @@ internal class MediaAnalyzer(
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
     val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
     if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
-      parseMp4Chapters(file, builder)
+      parseMp4Metadata(file, builder)
     }
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       parseMatroskaMetaData(file, builder)
@@ -103,11 +105,11 @@ internal class MediaAnalyzer(
     }
   }
 
-  private suspend fun parseMp4Chapters(
+  private suspend fun parseMp4Metadata(
     file: CachedDocumentFile,
     builder: Metadata.Builder,
   ) {
-    val chapters = mp4ChapterExtractor.extractChapters(file.uri)
+    val chapters = mp4MetadataParser.extractMetadata(file.uri, builder)
     builder.chapters += chapters
   }
 
@@ -187,6 +189,7 @@ internal class MediaAnalyzer(
       // "TRCK" -> Builder.trackNumber = value
       // "TDRC" -> Builder.releaseDate = value
       // "TIT3" -> Builder.chaptersDescription = value
+      // "TSSE" -> Builder.encoder = value
       "TIT2" -> builder.title = value
       "TPE1" -> builder.artist = value
       "TALB" -> builder.album = value

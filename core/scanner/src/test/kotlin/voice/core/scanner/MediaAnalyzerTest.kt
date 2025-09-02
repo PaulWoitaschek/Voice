@@ -6,6 +6,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveElementAt
 import io.kotest.matchers.longs.shouldBeWithinPercentageOf
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
@@ -18,15 +19,14 @@ import voice.core.data.MarkData
 import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.logging.core.LogWriter
 import voice.core.logging.core.Logger
-import voice.core.scanner.MediaAnalyzer
-import voice.core.scanner.Metadata
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.mp4.ChapterTrackProcessor
 import voice.core.scanner.mp4.Mp4BoxParser
-import voice.core.scanner.mp4.Mp4ChapterExtractor
+import voice.core.scanner.mp4.Mp4MetadataParser
 import voice.core.scanner.mp4.visitor.ChapVisitor
 import voice.core.scanner.mp4.visitor.ChplVisitor
 import voice.core.scanner.mp4.visitor.MdhdVisitor
+import voice.core.scanner.mp4.visitor.MetaVisitor
 import voice.core.scanner.mp4.visitor.StcoVisitor
 import voice.core.scanner.mp4.visitor.StscVisitor
 import voice.core.scanner.mp4.visitor.SttsVisitor
@@ -42,7 +42,7 @@ internal class MediaAnalyzerTest {
 
   private val analyzer = MediaAnalyzer(
     context = ApplicationProvider.getApplicationContext(),
-    mp4ChapterExtractor = Mp4ChapterExtractor(
+    mp4MetadataParser = Mp4MetadataParser(
       context = ApplicationProvider.getApplicationContext(),
       boxParser = Mp4BoxParser(
         stscVisitor = StscVisitor(),
@@ -51,6 +51,7 @@ internal class MediaAnalyzerTest {
         stcoVisitor = StcoVisitor(),
         chplVisitor = ChplVisitor(),
         chapVisitor = ChapVisitor(),
+        metaVisitor = MetaVisitor()
       ),
       chapterTrackProcessor = ChapterTrackProcessor(),
     ),
@@ -107,6 +108,7 @@ internal class MediaAnalyzerTest {
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
       metadata.chapters shouldContainExactly auphonicChapters
+      metadata.genre shouldBe "Podcast"
     }
   }
 
@@ -168,6 +170,19 @@ internal class MediaAnalyzerTest {
   }
 
   @Test
+  fun m4b_series() {
+    val metadata = parse("series.m4a")
+    assertSoftly {
+      metadata.shouldNotBeNull()
+      metadata.fileName shouldBe "series"
+      metadata.genre shouldBe "Podcast"
+      metadata.narrator shouldBe "Auphonic Narrator"
+      metadata.series shouldBe "Auphonic Movement"
+      metadata.part shouldBe "2.1"
+    }
+  }
+
+  @Test
   fun m4a() {
     val metadata = parse("auphonic_chapters_demo.m4a")
     assertSoftly {
@@ -177,6 +192,12 @@ internal class MediaAnalyzerTest {
       metadata.title shouldBe "Auphonic Chapter Marks Demo"
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
+      metadata.genre shouldBe "Podcast"
+      metadata.narrator shouldBe "Auphonic Narrator"
+      metadata.series shouldBe "Auphonic Movement"
+      metadata.part shouldBe "2.1"
+
+
       metadata.chapters shouldContainExactly auphonicChapters.filter {
         // for some reason only this one is missing in the test files
         it.name != "Creating a new production"
