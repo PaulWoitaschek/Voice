@@ -10,7 +10,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.Test
-import voice.core.common.DispatcherProvider
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
@@ -26,7 +25,6 @@ import kotlin.time.Duration.Companion.seconds
 class AutoEnableSleepTimerMinimalTest {
   private val testDispatcher = StandardTestDispatcher()
   private val testScope = TestScope(testDispatcher)
-  private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val playStateManager = PlayStateManager()
   private val sleepTimer = mockk<SleepTimer> {
@@ -59,18 +57,18 @@ class AutoEnableSleepTimerMinimalTest {
 
   private val sut = AutoEnableSleepTimer(
     sleepTimerPreferenceStore = sleepTimerPreferenceStore,
-    dispatcherProvider = dispatcherProvider,
     playStateManager = playStateManager,
     sleepTimer = sleepTimer,
     clock = Clock.fixed(Instant.parse("2020-01-01T23:00:00Z"), ZoneId.of("UTC")),
     createBookmarkAtCurrentPosition = mockk(relaxed = true),
+    scope = testScope.backgroundScope,
   )
 
   @Test
   fun `enables when playing and in time window`() = testScope.runTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = true) }
 
-    sut.startMonitoring()
+    sut.onAppStart(mockk())
     playStateManager.playState = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
     yield()
@@ -82,7 +80,7 @@ class AutoEnableSleepTimerMinimalTest {
   fun `does nothing when sleeptimer is disabled`() = testScope.runTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = false) }
 
-    sut.startMonitoring()
+    sut.onAppStart(mockk())
     playStateManager.playState = PlayStateManager.PlayState.Playing
     advanceUntilIdle()
     yield()

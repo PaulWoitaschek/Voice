@@ -1,7 +1,8 @@
 plugins {
   id("voice.library")
+  alias(libs.plugins.metro)
 }
 
 dependencies {
-  implementation(libs.appStartup)
+  implementation(projects.core.initializer)
 }

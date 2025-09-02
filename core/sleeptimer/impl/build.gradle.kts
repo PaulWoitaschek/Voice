@@ -8,6 +8,7 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.common)
   implementation(projects.core.playback)
+  implementation(projects.core.initializer)
   implementation(projects.core.logging.core)
 
   implementation(libs.datastore)

@@ -12,6 +12,7 @@ dependencies {
   api(libs.datastore)
   implementation(libs.material)
   implementation(projects.core.data.api)
+  implementation(projects.core.initializer)
   implementation(projects.core.strings)
   implementation(libs.lifecycle.viewmodel.compose)
 }
