@@ -181,12 +181,6 @@ internal class MediaAnalyzer(
   ) {
     val value = entry.values.first()
     when (entry.id) {
-      // "TPUB" -> Builder.publisher = value
-      // "TCOP" -> Builder.copyright = value
-      // "TENC" -> Builder.encoder = value
-      // "TRCK" -> Builder.trackNumber = value
-      // "TDRC" -> Builder.releaseDate = value
-      // "TIT3" -> Builder.chaptersDescription = value
       "TIT2" -> builder.title = value
       "TPE1" -> builder.artist = value
       "TALB" -> builder.album = value
