@@ -15,7 +15,7 @@ internal class ChapterTrackProcessor {
     uri: Uri,
     dataSource: DataSource,
     trackId: Int,
-    output: Mp4MetadataExtractorOutput,
+    output: Mp4ChpaterExtractorOutput,
   ): List<MarkData> {
     val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
     if (chunkOffsets == null) {

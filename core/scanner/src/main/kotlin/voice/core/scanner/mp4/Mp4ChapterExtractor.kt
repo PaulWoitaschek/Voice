@@ -11,31 +11,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.MarkData
 import voice.core.logging.core.Logger
-import voice.core.scanner.Metadata
 import java.io.IOException
 
 @Inject
-internal class Mp4MetadataParser(
+internal class Mp4ChapterExtractor(
   private val context: Context,
   private val boxParser: Mp4BoxParser,
   private val chapterTrackProcessor: ChapterTrackProcessor,
 ) {
 
-  suspend fun extractMetadata(uri: Uri, builder: Metadata.Builder): List<MarkData> = withContext(Dispatchers.IO) {
+  suspend fun extractChapters(uri: Uri): List<MarkData> = withContext(Dispatchers.IO) {
     val dataSource = DefaultDataSource.Factory(context).createDataSource()
 
     try {
       dataSource.open(DataSpec(uri))
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
-      val topLevelResult = boxParser.parse(input)
-
-      if(!topLevelResult.series.isNullOrBlank()) {
-        builder.series = topLevelResult.series
-      }
-      if(!topLevelResult.part.isNullOrBlank()) {
-        builder.part = topLevelResult.part
-      }
-
+      val topLevelResult = boxParser(input)
       val trackId = topLevelResult.chapterTrackId
       when {
         topLevelResult.chplChapters.isNotEmpty() -> {

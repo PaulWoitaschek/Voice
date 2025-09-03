@@ -5,11 +5,9 @@ import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
 import dev.zacsweers.metro.Inject
 import voice.core.logging.core.Logger
-import voice.core.scanner.Metadata
 import voice.core.scanner.mp4.visitor.ChapVisitor
 import voice.core.scanner.mp4.visitor.ChplVisitor
 import voice.core.scanner.mp4.visitor.MdhdVisitor
-import voice.core.scanner.mp4.visitor.MetaVisitor
 import voice.core.scanner.mp4.visitor.StcoVisitor
 import voice.core.scanner.mp4.visitor.StscVisitor
 import voice.core.scanner.mp4.visitor.SttsVisitor
@@ -22,7 +20,6 @@ internal class Mp4BoxParser(
   stcoVisitor: StcoVisitor,
   chplVisitor: ChplVisitor,
   chapVisitor: ChapVisitor,
-  metaVisitor: MetaVisitor
 ) {
 
   private val visitors = listOf(
@@ -32,13 +29,12 @@ internal class Mp4BoxParser(
     stcoVisitor,
     chplVisitor,
     chapVisitor,
-    metaVisitor
   )
   private val visitorByPath = visitors.associateBy { it.path }
 
-  fun parse(input: ExtractorInput): Mp4MetadataExtractorOutput {
+  operator fun invoke(input: ExtractorInput): Mp4ChpaterExtractorOutput {
     val scratch = ParsableByteArray(Mp4Box.LONG_HEADER_SIZE)
-    val parseOutput = Mp4MetadataExtractorOutput()
+    val parseOutput = Mp4ChpaterExtractorOutput()
     parseBoxes(
       input = input,
       path = emptyList(),
@@ -48,12 +44,13 @@ internal class Mp4BoxParser(
     )
     return parseOutput
   }
+
   private fun parseBoxes(
     input: ExtractorInput,
     path: List<String>,
     parentEnd: Long,
     scratch: ParsableByteArray,
-    parseOutput: Mp4MetadataExtractorOutput,
+    parseOutput: Mp4ChpaterExtractorOutput,
   ) {
     while (input.position < parentEnd) {
       scratch.reset(Mp4Box.HEADER_SIZE)
@@ -93,8 +90,7 @@ internal class Mp4BoxParser(
           visitor.visit(scratch, parseOutput)
 
           if (parseOutput.chplChapters.isNotEmpty()) {
-            // in case of multiple visitors matching the same path we need to continue, not return
-            continue
+            return
           }
         }
 
@@ -108,8 +104,7 @@ internal class Mp4BoxParser(
           )
 
           if (parseOutput.chplChapters.isNotEmpty()) {
-            // in case of multiple visitors matching the same path we need to continue, not return
-            continue
+            return
           }
         }
 
@@ -132,4 +127,3 @@ internal class Mp4BoxParser(
     return take(other.size) == other
   }
 }
-
