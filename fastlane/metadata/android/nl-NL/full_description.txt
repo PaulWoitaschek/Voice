@@ -1,0 +1,19 @@
+Zoek je een eenvoudige luisterboekspeler die alleen het broodnodige bevat?
+Eentje die je gewoon laat luisteren, niets meer en niets minder?
+Voeg gewoon je hoofdmap met luisterboeken toe en elke onderliggende map zal worden herkend als een los boek. Hierdoor blijft je bibliotheek netjes en overzichtelijk.
+
+Kenmerken:
+- Onthoudt de laatste locatie
+- Wijzig de afspeelsnelheid
+- Prachtig Material Design
+- Licht en donker thema
+- Bladwijzers
+- Android Auto-ondersteuning
+- Slaapklok: je hoeft de speler niet midden in de nacht te stoppen
+
+Voice is gratis en openbronsoftware. Dit betekent dat iedereen kan zien hoe het werkt en wat het doet. De app vereist slechts een minimaal aantal rechten.
+
+Als je suggesties hebt of bugs vindt, meld ze dan hier:
+https://github.com/PaulWoitaschek/Voice/issues
+
+De openbronlicentie is GNU GPLv3

@@ -11,7 +11,6 @@ plugins {
   alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
-  alias(libs.plugins.playPublish)
 }
 
 fun includeProprietaryLibraries(): Boolean {
@@ -30,14 +29,6 @@ fun includeProprietaryLibraries(): Boolean {
 if (includeProprietaryLibraries()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
-}
-
-play {
-  defaultToAppBundles.value(true)
-  val serviceAccountJson = file("play_service_account.json")
-  if (serviceAccountJson.exists()) {
-    serviceAccountCredentials.set(serviceAccountJson)
-  }
 }
 
 android {

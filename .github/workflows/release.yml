@@ -66,4 +66,4 @@ jobs:
           name: google-play-aab
           path: app/build/outputs/bundle/playRelease/
       - name: Publish to Google Play
-        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playRelease/
+        run: fastlane deploy

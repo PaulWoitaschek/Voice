@@ -1,0 +1,2 @@
+json_key_file("app/play_service_account.json")
+xpackage_name("de.ph1b.audiobook")
