@@ -1,5 +1,5 @@
 Voice
-![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/voice.yml/badge.svg?branch=main) <a href="https://hosted.weblate.org/engage/voice/">
+![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/ci.yml/badge.svg?branch=main) <a href="https://hosted.weblate.org/engage/voice/">
 <img src="https://hosted.weblate.org/widgets/voice/-/svg-badge.svg" alt="Translation status" />
 =======================
 
