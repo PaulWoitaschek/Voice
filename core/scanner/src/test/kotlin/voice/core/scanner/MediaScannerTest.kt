@@ -243,7 +243,7 @@ class MediaScannerTest {
               genre = "Genre",
               narrator = "Narrator",
               series = "Series",
-              part = "Part"
+              part = "Part",
             )
           }
         }

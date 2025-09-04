@@ -67,7 +67,7 @@ class ChapterParserTest {
             genre = null,
             narrator = null,
             series = null,
-            part = null
+            part = null,
           )
         }
       },

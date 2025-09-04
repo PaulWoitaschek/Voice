@@ -13,7 +13,7 @@ internal data class Metadata(
   val genre: String?,
   val narrator: String?,
   val series: String?,
-  val part: String?
+  val part: String?,
 ) {
 
   internal class Builder(val fileName: String) {
@@ -51,7 +51,7 @@ internal data class Metadata(
         genre = genre,
         narrator = narrator,
         series = series,
-        part = part
+        part = part,
       )
     }
   }

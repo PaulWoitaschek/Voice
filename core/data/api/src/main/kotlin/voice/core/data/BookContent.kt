@@ -24,13 +24,9 @@ public data class BookContent(
   val cover: File?,
   @ColumnInfo(defaultValue = "0")
   val gain: Float,
-  @ColumnInfo(defaultValue = "")
   val genre: String?,
-  @ColumnInfo(defaultValue = "")
   val narrator: String?,
-  @ColumnInfo(defaultValue = "")
   val series: String?,
-  @ColumnInfo(defaultValue = "")
   val part: String?,
 ) {
 
