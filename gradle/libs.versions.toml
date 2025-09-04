@@ -19,7 +19,7 @@ metro = "0.6.4"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-material = "com.google.android.material:material:1.12.0"
+material = "com.google.android.material:material:1.13.0"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.14.5"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.3.6"
