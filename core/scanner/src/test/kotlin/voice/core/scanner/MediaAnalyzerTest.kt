@@ -87,6 +87,10 @@ internal class MediaAnalyzerTest {
       metadata.title shouldBe "Auphonic Chapter Marks Demo"
       metadata.artist shouldBe "Auphonic"
       metadata.album shouldBe "Auphonic Examples"
+      metadata.genre shouldBe "Podcast"
+      metadata.narrator shouldBe "Auphonic Narrator"
+      metadata.series shouldBe "Auphonic Movement"
+      metadata.part shouldBe "2.1"
       metadata.chapters shouldContainExactly auphonicChapters
     }
   }

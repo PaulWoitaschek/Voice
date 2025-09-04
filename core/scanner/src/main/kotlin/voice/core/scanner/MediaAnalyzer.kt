@@ -184,7 +184,16 @@ internal class MediaAnalyzer(
       "TIT2" -> builder.title = value
       "TPE1" -> builder.artist = value
       "TALB" -> builder.album = value
-      "TRCK", "TYER", "TXXX", "TSSE", "TCOM" -> {}
+      "TCON" -> builder.genre = value
+      "TCOM" -> builder.narrator = value
+      "TXXX" -> when (entry.description) {
+        "MVNM" -> builder.series = value
+        "MVIN" -> builder.part = if (builder.part.isNullOrBlank()) value else builder.part
+        "TXXX:PART" -> builder.part = value
+        "TXXX:NARRATOR" -> builder.narrator = if (builder.narrator.isNullOrBlank()) value else builder.narrator
+        else -> Logger.v("Unknown TXXX frame description:  ${entry.description}, value: $value")
+      }
+      "TRCK", "TYER", "TSSE" -> {}
       else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
     }
   }

@@ -10,6 +10,10 @@ internal data class Metadata(
   val title: String?,
   val fileName: String,
   val chapters: List<MarkData>,
+  val genre: String?,
+  val narrator: String?,
+  val series: String?,
+  val part: String?,
 ) {
 
   internal class Builder(val fileName: String) {
@@ -17,6 +21,10 @@ internal data class Metadata(
     var album: String? = null
     var title: String? = null
     val chapters = mutableListOf<MarkData>()
+    var genre: String? = null
+    var narrator: String? = null
+    var series: String? = null
+    var part: String? = null
     val vorbisChapterNames = mutableMapOf<Int, String>()
     val vorbisChapterStarts = mutableMapOf<Int, Long>()
 
@@ -40,6 +48,10 @@ internal data class Metadata(
         title = title ?: fileName,
         fileName = fileName,
         chapters = chapters,
+        genre = genre,
+        narrator = narrator,
+        series = series,
+        part = part,
       )
     }
   }

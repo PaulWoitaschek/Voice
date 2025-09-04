@@ -24,6 +24,10 @@ public data class BookContent(
   val cover: File?,
   @ColumnInfo(defaultValue = "0")
   val gain: Float,
+  val genre: String?,
+  val narrator: String?,
+  val series: String?,
+  val part: String?,
 ) {
 
   @Ignore

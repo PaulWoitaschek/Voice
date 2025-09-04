@@ -235,6 +235,10 @@ private fun book(
       skipSilence = false,
       id = BookId(UUID.randomUUID().toString()),
       gain = 0F,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
     ),
     chapters = chapters,
   )
