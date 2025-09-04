@@ -28,7 +28,7 @@ kotlin.daemon.jvm.options=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms
 To run the unit tests, run the following command:
 
 ```sh
-./gradlew voiceUnitTests
+./gradlew voiceUnitTest
 ```
 
 ### Instrumentation tests
