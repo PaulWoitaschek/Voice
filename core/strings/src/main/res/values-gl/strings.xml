@@ -134,4 +134,5 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Hora de fin</string>
     <string name="review.request.button.yes">Valorar agora</string>
     <string name="pref_faq">PMF</string>
+    <string name="end_of_chapter">Fin do capítulo</string>
 </resources>

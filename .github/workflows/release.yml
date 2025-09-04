@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags: [ "*" ]
+
+env:
+  ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
+  SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
+  SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
+  SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
+  SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
+  GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Setup Signing
+        run: ./ci_signing_setup.sh
+      - name: Build Google Play AAB
+        run: ./gradlew :app:bundlePlayRelease
+      - name: Build Proprietary APK
+        run: ./gradlew :app:assembleGithubRelease
+      - name: Copy Proprietary APK
+        run: |
+          mkdir -p outputs
+          cp app/build/outputs/apk/github/release/app-github-release.apk outputs/proprietary.apk
+      - name: Build Libre APK
+        run: ./gradlew :app:assembleGithubRelease -Pvoice.includeProprietaryLibraries=false
+      - name: Copy Libre APK
+        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
+      - name: Upload AAB
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: google-play-aab
+          path: app/build/outputs/bundle/playRelease/app-play-release.aab
+          retention-days: 30
+      - name: Upload APKs
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: github-apks
+          path: outputs/*.apk
+          retention-days: 30
+      - name: Draft GitHub Release
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
+        with:
+          draft: true
+          files: outputs/*.apk
+  publish_google_play:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: google-play
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Setup Signing
+        run: ./ci_signing_setup.sh
+      - name: Download AAB artifact
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: google-play-aab
+          path: app/build/outputs/bundle/playRelease/
+      - name: Publish to Google Play
+        run: ./gradlew publishBundle --artifact-dir app/build/outputs/bundle/playRelease/

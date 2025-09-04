@@ -137,4 +137,5 @@
     <string name="auto_sleep_timer.title">Automatický časovač spánku</string>
     <string name="playback.current_chapter">Aktuální kapitola</string>
     <string name="auto_sleep_timer.subtitle">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
+    <string name="end_of_chapter">Konec kapitoly</string>
 </resources>
