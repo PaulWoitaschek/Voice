@@ -75,8 +75,9 @@ main() {
   local GRADLE_JVM_ARGS="-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms${gradle_xms}g -Xmx${gradle_xmx}g"
   local KOTLIN_JVM_ARGS="-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms${kotlin_xms}g -Xmx${kotlin_xmx}g"
 
-  local file="${HOME}/.gradle/gradle.properties"
-  mkdir -p "$(dirname "$file")"
+  local gradle_user_home="${GRADLE_USER_HOME:-$HOME/.gradle}"
+  local file="${gradle_user_home}/gradle.properties"
+  mkdir -p "$gradle_user_home"
   [[ -f "$file" ]] || : > "$file"
 
   local prefix="# Begin: Gradle JVM bootstrap-generated properties"
