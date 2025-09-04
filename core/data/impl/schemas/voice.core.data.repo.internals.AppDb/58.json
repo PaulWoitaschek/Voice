@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 58,
-    "identityHash": "35d867ed40ef0b6e8478d010246ad83a",
+    "identityHash": "70b2c1f7206e82c0e66e3bfa5f6c1f8b",
     "entities": [
       {
         "tableName": "chapters2",
@@ -47,7 +47,7 @@
       },
       {
         "tableName": "content2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `cover` TEXT, `gain` REAL NOT NULL DEFAULT 0, `genre` TEXT DEFAULT '', `narrator` TEXT DEFAULT '', `series` TEXT DEFAULT '', `part` TEXT DEFAULT '', PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `cover` TEXT, `gain` REAL NOT NULL DEFAULT 0, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -129,26 +129,22 @@
           {
             "fieldPath": "genre",
             "columnName": "genre",
-            "affinity": "TEXT",
-            "defaultValue": "''"
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "narrator",
             "columnName": "narrator",
-            "affinity": "TEXT",
-            "defaultValue": "''"
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "series",
             "columnName": "series",
-            "affinity": "TEXT",
-            "defaultValue": "''"
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "part",
             "columnName": "part",
-            "affinity": "TEXT",
-            "defaultValue": "''"
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -305,7 +301,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '35d867ed40ef0b6e8478d010246ad83a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '70b2c1f7206e82c0e66e3bfa5f6c1f8b')"
     ]
   }
 }
