@@ -5,7 +5,7 @@ on:
     tags: [ "*" ]
 
 env:
-  ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
+  PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
   SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
   SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
   SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
@@ -15,6 +15,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: google-play
     outputs:
       tag: ${{ github.ref_name }}
     steps:
