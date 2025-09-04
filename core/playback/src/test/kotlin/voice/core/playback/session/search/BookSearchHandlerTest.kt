@@ -122,7 +122,7 @@ fun book(
       genre = null,
       narrator = null,
       series = null,
-      part = null
+      part = null,
     ),
     chapters = chapters,
   )
