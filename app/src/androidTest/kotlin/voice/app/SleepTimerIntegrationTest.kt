@@ -131,6 +131,10 @@ class SleepTimerIntegrationTest {
       positionInChapter = 0L,
       cover = null,
       gain = 0f,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
     )
 
     bookContentRepo.put(bookContent)
