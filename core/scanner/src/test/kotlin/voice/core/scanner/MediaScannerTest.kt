@@ -240,6 +240,10 @@ class MediaScannerTest {
               fileName = "Chapter",
               chapters = emptyList(),
               title = "Title",
+              genre = "Genre",
+              narrator = "Narrator",
+              series = "Series",
+              part = "Part",
             )
           }
         }

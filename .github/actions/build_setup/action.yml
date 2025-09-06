@@ -9,6 +9,6 @@ runs:
         java-version: 17
     - name: Boostrap Gradle Memory
       shell: bash
-      run: ./scripts/bootstrap.sh
+      run: ./scripts/gradle_bootstrap.sh
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4

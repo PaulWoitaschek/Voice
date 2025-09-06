@@ -7,12 +7,12 @@ To run the project, open it in the latest Version of Android Studio and build th
 By default, there is not enough memory configured for gradle. You can fix this by running.
 
 ```sh
-scripts/bootstrap.sh
+scripts/gradle_bootstrap.sh
 ```
 
 This will configure your global `~/.gradle/gradle.properties` to use more memory, depending on your machine.
 
-Example of the generated properties, check the `bootstrap.sh` script for exact details.
+Example of the generated properties, check the `gradle_bootstrap.sh` script for exact details.
 
 ```properties
 # Begin: Gradle JVM bootstrap-generated properties
@@ -28,7 +28,7 @@ kotlin.daemon.jvm.options=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms
 To run the unit tests, run the following command:
 
 ```sh
-./gradlew voiceUnitTests
+./gradlew voiceUnitTest
 ```
 
 ### Instrumentation tests

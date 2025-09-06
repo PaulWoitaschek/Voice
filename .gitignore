@@ -21,3 +21,5 @@ releases
 /plugins/.idea/workspace.xml
 /.kotlin
 /.idea/deviceManager.xml
+/fastlane/README.md
+/fastlane/report.xml

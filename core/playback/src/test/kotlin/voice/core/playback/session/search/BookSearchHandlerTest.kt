@@ -119,6 +119,10 @@ fun book(
       skipSilence = false,
       id = id,
       gain = 0F,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
     ),
     chapters = chapters,
   )
