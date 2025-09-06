@@ -1,0 +1,19 @@
+Êtes-vous à la recherche d'un lecteur de livres audio simple, minimaliste, et fonctionnel ?
+Un lecteur qui vous permet de vous concentrer sur ce que vous souhaitez réellement faire : écouter des livres audio ?
+Ajoutez simplement votre dossier principal de livres audio, et chaque sous-dossier sera considérée comme un livre distinct. Votre bibliothèque reste ainsi simple et propre.
+
+Ce qu'il peut faire :
+- Se souvenir de la dernière position de lecture
+- Choisir la vitesse de lecture
+- Material design esthétique
+- Thème jour et nuit, apaisant pour la vue 
+- Marque-pages
+- Android Auto
+- Minuteur de mise en veille. Inutile d'éteindre le lecteur au milieu de la nuit.
+
+Voice est gratuit et open source. Cela signifie que chacun peut voir ce qu'il fait. Il ne requiert que des permissions minimales.
+
+Si vous avez des suggestions ou avez trouvé un bug, signalez-le à l'adresse :
+https://github.com/PaulWoitaschek/Voice/issues
+
+La licence open source est la Gnu GPLv3

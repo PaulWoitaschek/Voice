@@ -1,0 +1,19 @@
+Egyszerű, minimál kinézetű hangoskönyv-lejátszót keres, amely egyszerűen csak működik?
+Olyat, amely lehetővé teszi, hogy arra összpontosítson, amit valójában szeretne: Hangoskönyveket hallgatni?
+Csak hozzá kell adnia a fő hangoskönyv-mappát, és a rendszer minden mappát egyetlen könyvként felismer. Így a könyvtár egyszerű és rendezett marad.
+
+Lehetőségek:
+- Emlékezés az utolsó pozícióra
+- Lejátszási sebesség beállítása
+- Gyönyörű material kinézet
+- Nappali és éjszakai témák. Könnyebbség a szemnek
+- Könyvjelzők
+- Android Auto
+- Alvásidőzítő. Nem kell kikapcsolni a lejátszót az éjszaka közepén.
+
+A Voice ingyenes és nyílt forráskódú. Ez azt jelenti, hogy mindenki láthatja, mit csinál. Minimális engedélyeket igényel.
+
+Ha javaslatai vannak, vagy hibákat talál, jelentse azokat itt:
+https://github.com/PaulWoitaschek/Voice/issues
+
+A nyílt forráskódú licenc a Gnu GPLv3

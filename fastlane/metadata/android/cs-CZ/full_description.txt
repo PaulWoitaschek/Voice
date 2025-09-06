@@ -1,0 +1,19 @@
+Hledáte jednoduchý, minimální přehrávač audioknih, který prostě funguje?
+Takový, který vám umožní soustředit se na to, co chcete dělat: Poslouchat audioknihy?
+Jednoduše přidáte hlavní složku audioknih a každá složka v ní bude rozpoznána jako jedna kniha. Díky tomu bude vaše knihovna jednoduchá a nepřeplněná.
+
+Co umí:
+- Pamatuje si poslední pozici
+- Nastavit rychlost přehrávání
+- Krásný material design
+- Denní a noční téma. Příjemné pro oči
+- Záložky
+- Android Auto
+- Časovač spánku. Není třeba vypínat přehrávač uprostřed noci.
+
+Voice je zdarma a s otevřeným zdrojovým kódem. To znamená, že se každý může podívat, co dělá. Používá minimální oprávnění.
+
+Pokud máte návrhy nebo najdete chyby, nahlaste je zde:
+https://github.com/PaulWoitaschek/Voice/issues
+
+Licence open source je GNU GPLv3
