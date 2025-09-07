@@ -13,7 +13,7 @@ env:
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     environment: google-play
     outputs:
@@ -35,35 +35,16 @@ jobs:
         run: ./gradlew :app:assembleGithubRelease -Pvoice.includeProprietaryLibraries=false -Pvoice.versionName=${GITHUB_REF_NAME}
       - name: Copy Libre APK
         run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
-      - name: Upload AAB
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: google-play-aab
-          path: app/build/outputs/bundle/playRelease/app-play-release.aab
-          retention-days: 30
       - name: Upload APKs
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: github-apks
           path: outputs/*.apk
           retention-days: 30
+      - name: Publish to Google Play
+        run: fastlane deploy
       - name: Draft GitHub Release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
           draft: true
           files: outputs/*.apk
-  publish_google_play:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: google-play
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - name: Setup Signing
-        run: ./ci_signing_setup.sh
-      - name: Download AAB artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
-        with:
-          name: google-play-aab
-          path: app/build/outputs/bundle/playRelease/
-      - name: Publish to Google Play
-        run: fastlane deploy
