@@ -60,12 +60,12 @@ class Release : CliktCommand() {
   }
 
   fun newVersion(today: LocalDate, existingVersions: List<Version>): Version {
-    val major = today.year - 2017
+    val major = today.year - 2000
     val minor = today.monthValue
     val lastReleaseThisMonth = existingVersions
       .filter { it.major == major && it.minor == minor }
       .maxOfOrNull { it.patch }
-    val patch = if (lastReleaseThisMonth == null) 0 else lastReleaseThisMonth + 1
+    val patch = if (lastReleaseThisMonth == null) 1 else lastReleaseThisMonth + 1
     return Version(major = major, minor = minor, patch = patch)
   }
 
