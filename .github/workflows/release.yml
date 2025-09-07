@@ -24,15 +24,15 @@ jobs:
       - name: Setup Signing
         run: ./ci_signing_setup.sh
       - name: Build Google Play AAB
-        run: ./gradlew :app:bundlePlayRelease
+        run: ./gradlew :app:bundlePlayRelease -Pvoice.versionName=${GITHUB_REF_NAME}
       - name: Build Proprietary APK
-        run: ./gradlew :app:assembleGithubRelease
+        run: ./gradlew :app:assembleGithubRelease -Pvoice.versionName=${GITHUB_REF_NAME}
       - name: Copy Proprietary APK
         run: |
           mkdir -p outputs
           cp app/build/outputs/apk/github/release/app-github-release.apk outputs/proprietary.apk
       - name: Build Libre APK
-        run: ./gradlew :app:assembleGithubRelease -Pvoice.includeProprietaryLibraries=false
+        run: ./gradlew :app:assembleGithubRelease -Pvoice.includeProprietaryLibraries=false -Pvoice.versionName=${GITHUB_REF_NAME}
       - name: Copy Libre APK
         run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
       - name: Upload AAB
@@ -58,7 +58,6 @@ jobs:
     environment: google-play
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./ci_signing_setup.sh
       - name: Download AAB artifact

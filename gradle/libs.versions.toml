@@ -1,7 +1,4 @@
 [versions]
-versionCode = "3603051"
-versionName = "8.7.0"
-
 sdk-compile = "36"
 sdk-min = "28"
 sdk-target = "36"
