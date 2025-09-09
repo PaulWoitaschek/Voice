@@ -1,5 +1,0 @@
-🎧 Automatic Sleep Timer
-You can now set a daily timeframe (e.g., 10 PM – 6 AM) in which the sleep timer will automatically activate when you play an audiobook. Perfect for bedtime listening!
-
-📁 Added support for .ogx audio files
-🐞 Bug fixes and performance improvements
