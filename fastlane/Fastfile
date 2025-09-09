@@ -1,0 +1,12 @@
+default_platform(:android)
+
+platform :android do
+
+  lane :deploy do
+    upload_to_play_store(
+      track: 'internal',
+      aab: 'app/build/outputs/bundle/playRelease/app-play-release.aab',
+      sync_image_upload: true
+    )
+  end
+end

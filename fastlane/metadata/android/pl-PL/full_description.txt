@@ -1,0 +1,19 @@
+Szukasz prostego, minimalistycznego odtwarzacza audiobooków który po prostu działa?
+Takiego który pozwala Ci się skupić na tym co faktycznie chcesz robić czyli słuchaniu audiobooka?
+Po prostu dodaj swój główny folder z audiobookami, a każdy folder wewnątrz zostanie rozpoznany jako pojedyncza książka. Dzięki temu struktura twojej biblioteki jest prosta i niezaśmiecona.
+
+Co potrafi:
+- Zapamiętuje pozycję w książce
+- Ustawienia szybkości odtwarzania
+- Piękny Material Design
+- Motywy dzienny i nocny. Przyjemne dla oczu
+- Zakładki
+- Android Auto
+- Wyłącznik czasowy. Nie musisz specjalnie wyłączać odtwarzacza w środku nocy
+
+Voice jest wolnym i otwartym oprogramowaniem. To oznacza, że wszyscy mogą zobaczyć w jaki sposób on działa. Wykorzystuje on minimalny zestaw uprawnień.
+
+Jeśli masz jakieś sugestie, lub znajdziesz błędy, zgłoś je tutaj:
+https://github.com/PaulWoitaschek/Voice/issues
+
+Wykorzystana licencja open source to GNU GPLv3

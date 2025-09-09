@@ -64,15 +64,31 @@ chmod +x .git/hooks/pre-commit
 
 ## Releasing
 
-To release a new version:
+To release a new version, install the kotlin cli and run:
 
-1. Update versionCode and versionName in libs.versions.toml.
-2. Push a corresponding Git tag to the main branch.
+```shell
+./release.main.kts
+```
 
 This triggers the CI to build and publish the release to the Play Store’s internal track. From there, promotion to production must be done
 manually.
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
+
+## Versioning
+
+Voice uses [calendar versioning (CalVer)](https://calver.org/)
+
+Format: `YY.MM.RELEASE`
+
+- `YY`: release year, last 2 digits (2025 -> 25)
+- `MM`: release month (01–12)
+- `RELEASE`: counter for releases within the same month (starting at 1)
+
+Examples:
+
+- First release in September 2025 → `25.9.1`
+- Second release in September 2025 → `25.9.2`
 
 ## Pages Deployment
 

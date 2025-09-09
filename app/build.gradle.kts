@@ -11,7 +11,6 @@ plugins {
   alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
-  alias(libs.plugins.playPublish)
 }
 
 fun includeProprietaryLibraries(): Boolean {
@@ -32,12 +31,13 @@ if (includeProprietaryLibraries()) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
-play {
-  defaultToAppBundles.value(true)
-  val serviceAccountJson = file("play_service_account.json")
-  if (serviceAccountJson.exists()) {
-    serviceAccountCredentials.set(serviceAccountJson)
-  }
+fun calculateVersionCode(name: String): Int {
+  val (major, minor, patch) = name.split('.').map(String::toInt)
+  return buildString {
+    append(major + 28)
+    append(minor.toString().padStart(length = 2, padChar = '0'))
+    append(patch.toString().padStart(length = 3, padChar = '0'))
+  }.toInt()
 }
 
 android {
@@ -56,8 +56,8 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionCode = libs.versions.versionCode.get().toInt()
-    versionName = libs.versions.versionName.get()
+    versionName = project.findProperty("voice.versionName")?.toString() ?: "1.0.0"
+    versionCode = calculateVersionCode(versionName!!)
 
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }

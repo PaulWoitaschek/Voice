@@ -1,7 +1,4 @@
 [versions]
-versionCode = "3603049"
-versionName = "8.6.2"
-
 sdk-compile = "36"
 sdk-min = "28"
 sdk-target = "36"
@@ -147,5 +144,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.2.10-2.0.2" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-playPublish = { id = "com.github.triplet.play", version = "3.12.1" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
