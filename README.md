@@ -3,7 +3,7 @@ Voice
 <img src="https://hosted.weblate.org/widgets/voice/-/svg-badge.svg" alt="Translation status" />
 =======================
 
-<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/app/src/main/play/listings/en-US/graphics/feature-graphic/1.jpg" width="600" ></a>
+<a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/fastlane/metadata/android/en-US/images/featureGraphic.jpeg" width="600" ></a>
 
 **Voice** is a minimalistic, user-focused audiobook player built for reliability and simplicity.
 
