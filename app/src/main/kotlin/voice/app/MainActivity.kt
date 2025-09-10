@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
@@ -51,9 +50,10 @@ class MainActivity : AppCompatActivity() {
     enableEdgeToEdge()
 
     setContent {
-      val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray())
+      @Suppress("UNCHECKED_CAST")
+      val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray()) as MutableList<Destination.Compose>
       VoiceTheme {
-        val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
+        val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
 
         NavDisplay(
           backStack = backStack,
