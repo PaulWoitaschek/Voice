@@ -13,6 +13,7 @@ ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
 metro = "0.6.4"
+navigation3 = "1.0.0-alpha08"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -91,8 +92,8 @@ compose-animation-graphics = { module = "androidx.compose.animation:animation-gr
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.11.0"
-navigation3-ui = "androidx.navigation3:navigation3-ui:1.0.0-alpha08"
-navigation3-runtime = "androidx.navigation3:navigation3-runtime:1.0.0-alpha08"
+navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 
 metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
