@@ -13,38 +13,42 @@ env:
   GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
 jobs:
-  deploy:
+
+  build_github:
     runs-on: ubuntu-latest
-    environment: google-play
-    outputs:
-      tag: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
-        run: ./ci_signing_setup.sh
-      - name: Build Google Play AAB
-        run: ./gradlew :app:bundlePlayRelease -Pvoice.versionName=${GITHUB_REF_NAME}
-      - name: Build Proprietary APK
-        run: ./gradlew :app:assembleGithubRelease -Pvoice.versionName=${GITHUB_REF_NAME}
-      - name: Copy Proprietary APK
-        run: |
-          mkdir -p outputs
-          cp app/build/outputs/apk/github/release/app-github-release.apk outputs/proprietary.apk
-      - name: Build Libre APK
-        run: ./gradlew :app:assembleGithubRelease -Pvoice.includeProprietaryLibraries=false -Pvoice.versionName=${GITHUB_REF_NAME}
-      - name: Copy Libre APK
-        run: cp app/build/outputs/apk/github/release/app-github-release.apk outputs/libre.apk
-      - name: Upload APKs
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: github-apks
-          path: outputs/*.apk
-          retention-days: 30
-      - name: Publish to Google Play
-        run: fastlane deploy
+        run: ./scripts/ci_signing_setup.sh
+      - name: Build GitHub APKs via Fastlane
+        run: bundle exec fastlane android build_github version_name:${GITHUB_REF_NAME}
       - name: Draft GitHub Release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
           draft: true
           files: outputs/*.apk
+
+  play_internal:
+    runs-on: ubuntu-latest
+    environment: google-play
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Setup Signing
+        run: ./scripts/ci_signing_setup.sh
+      - name: Setup Play Access
+        run: ./scripts/ci_setup_play_access.sh
+      - name: Build & Upload to INTERNAL via Fastlane
+        run: bundle exec fastlane android build_and_upload_to_internal version_name:${GITHUB_REF_NAME}
+
+  promote:
+    runs-on: ubuntu-latest
+    needs: play_internal
+    environment: google-play
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Setup Play Access
+        run: ./scripts/ci_setup_play_access.sh
+      - name: Promote INTERNAL -> PRODUCTION (0.1%)
+        run: bundle exec fastlane android promote version_name:${GITHUB_REF_NAME}

@@ -1,12 +1,89 @@
 default_platform(:android)
+require 'fileutils'
+
+def calculate_version_code(name)
+  major, minor, patch = name.split('.').map(&:to_i)
+  "#{major + 28}#{format('%02d', minor)}#{format('%03d', patch)}".to_i
+end
+
+def package_name; 'de.ph1b.audiobook'; end
+
+def get_version_name!(options)
+  vn = options[:version_name]
+  UI.user_error!("version_name is required (e.g. version_name:1.2.3)") if vn.to_s.strip.empty?
+  vn
+end
 
 platform :android do
 
-  lane :deploy do
+  lane :build_github do |options|
+    version_name = get_version_name!(options)
+    version_code = calculate_version_code(version_name)
+
+    FileUtils.mkdir_p("outputs")
+
+    # Proprietary
+    gradle(
+      task: ":app:assembleGithubRelease",
+      properties: {
+        "voice.versionName" => version_name,
+        "voice.versionCode" => version_code,
+        "voice.includeProprietaryLibraries" => "true"
+      }
+    )
+    prop_apk = "app/build/outputs/apk/github/release/app-github-release.apk"
+    UI.user_error!("Proprietary APK not found at #{prop_apk}") unless File.exist?(prop_apk)
+    FileUtils.cp(prop_apk, "outputs/proprietary.apk")
+
+    # Libre
+    gradle(
+      task: ":app:assembleGithubRelease",
+      properties: {
+        "voice.versionName" => version_name,
+        "voice.versionCode" => version_code,
+        "voice.includeProprietaryLibraries" => "false"
+      }
+    )
+    libre_apk = "app/build/outputs/apk/github/release/app-github-release.apk"
+    UI.user_error!("Libre APK not found at #{libre_apk}") unless File.exist?(libre_apk)
+    FileUtils.cp(libre_apk, "outputs/libre.apk")
+  end
+
+  lane :build_and_upload_to_internal do |options|
+    version_name = get_version_name!(options)
+    version_code = calculate_version_code(version_name)
+
+    gradle(
+      task: ":app:bundlePlayRelease",
+      properties: {
+        "voice.versionName" => version_name,
+        "voice.versionCode" => version_code,
+        "voice.includeProprietaryLibraries" => "true"
+      }
+    )
+
+    aab_path = "app/build/outputs/bundle/playRelease/app-play-release.aab"
+    UI.user_error!("AAB not found at #{aab_path}") unless File.exist?(aab_path)
+
     upload_to_play_store(
+      package_name: package_name,
       track: 'internal',
-      aab: 'app/build/outputs/bundle/playRelease/app-play-release.aab',
+      aab: aab_path,
       sync_image_upload: true
+    )
+  end
+
+  lane :promote do |options|
+    version_name = get_version_name!(options)
+    version_code = calculate_version_code(version_name)
+
+    promote_track(
+      package_name: package_name,
+      from_track: 'internal',
+      to_track: 'production',
+      release_status: 'inProgress',
+      user_fraction: 0.001, # 0.1%
+      version_codes: [version_code]
     )
   end
 end
