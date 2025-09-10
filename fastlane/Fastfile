@@ -54,7 +54,10 @@ platform :android do
     upload_to_play_store(
       track: 'internal',
       aab: aab_path,
-      sync_image_upload: true
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
     )
   end
 
@@ -62,12 +65,16 @@ platform :android do
     version_name = get_version_name!(options)
     version_code = calculate_version_code(version_name)
 
-    promote_track(
-      from_track: 'internal',
-      to_track: 'production',
-      release_status: 'inProgress',
-      user_fraction: 0.001, # 0.1%
-      version_codes: [version_code]
+    supply(
+      track: 'internal',
+      track_promote_to: 'production',
+      track_promote_release_status: 'inProgress',
+      rollout: "0.001", # 0.1%
+      version_code: version_code,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
     )
   end
 end
