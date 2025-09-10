@@ -1,7 +1,9 @@
-package voice.scripts
+#!/usr/bin/env kotlin
+@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:5.0.3")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
+import com.github.ajalt.clikt.core.main
 import java.io.File
 
 class PopulateTestFiles : CliktCommand() {
@@ -67,9 +69,9 @@ class PopulateTestFiles : CliktCommand() {
   }
 
   private fun add(path: String) {
-    val testFile = File("scanner/src/test/resources/auphonic_chapters_demo.mp3")
+    val testFile = File("core/scanner/src/test/resources/auphonic_chapters_demo.mp3")
     val output = File(testFilesRoot, path)
-    output.parentFile.mkdirs()
+    output.parentFile?.mkdirs()
     runCommand(
       "ffmpeg",
       "-i",
@@ -81,4 +83,17 @@ class PopulateTestFiles : CliktCommand() {
       output.absolutePath,
     )
   }
+
+  fun runCommand(vararg command: String) {
+    val process = ProcessBuilder(command.toList())
+      .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+      .start()
+    process.waitFor().also {
+      check(it == 0) {
+        "output=${process.errorStream.bufferedReader().readText()}"
+      }
+    }
+  }
 }
+
+PopulateTestFiles().main(args)

@@ -49,7 +49,6 @@ develocity {
 
 include(":app")
 include(":navigation")
-include(":scripts")
 
 include(":core:common")
 include(":core:data:api")
