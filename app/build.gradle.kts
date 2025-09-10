@@ -120,6 +120,7 @@ android {
   lint {
     checkDependencies = true
     ignoreTestSources = true
+    checkReleaseBuilds = false
     warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
     lintConfig = rootProject.file("lint.xml")
   }
