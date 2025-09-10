@@ -21,7 +21,7 @@ jobs:
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
-      - name: Build GitHub APKs via Fastlane
+      - name: Build GitHub APKs
         run: fastlane android build_github version_name:${GITHUB_REF_NAME}
       - name: Upload APK artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - name: Download APK artifacts
-        uses: actions/download-artifact
+        uses: actions/download-artifact@v5
         with:
           name: github-apks
           path: artifacts
@@ -53,7 +53,7 @@ jobs:
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
-      - name: Build Play AAB via Fastlane
+      - name: Build Play AAB
         run: fastlane android build_play_aab version_name:${GITHUB_REF_NAME}
       - name: Upload AAB artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -71,11 +71,11 @@ jobs:
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Download AAB artifact
-        uses: actions/download-artifact
+        uses: actions/download-artifact@v5
         with:
           name: play-aab
           path: artifacts
-      - name: Upload to INTERNAL via Fastlane
+      - name: Upload to INTERNAL
         run: fastlane android upload_internal version_name:${GITHUB_REF_NAME} aab_path:artifacts/app-play-release.aab
 
   play_promote:
