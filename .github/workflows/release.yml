@@ -74,7 +74,6 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: play-aab
-          path: artifacts
       - name: Upload to INTERNAL
         run: fastlane android upload_internal version_name:${GITHUB_REF_NAME} aab_path:artifacts/app-play-release.aab
 
