@@ -75,7 +75,7 @@ jobs:
         with:
           name: play-aab
       - name: Upload to INTERNAL
-        run: fastlane android upload_internal version_name:${GITHUB_REF_NAME} aab_path:artifacts/app-play-release.aab
+        run: fastlane android upload_internal version_name:${GITHUB_REF_NAME} aab_path:app-play-release.aab
 
   play_promote:
     runs-on: ubuntu-latest
