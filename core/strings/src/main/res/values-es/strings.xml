@@ -134,4 +134,10 @@
         <item quantity="many">%d minutos</item>
         <item quantity="other">%d minutos</item>
     </plurals>
+    <string name="pref_faq">Preguntas frecuentes</string>
+    <string name="playback.current_chapter">Capítulo actual</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Definir hora inicio</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir hora fin</string>
+    <string name="auto_sleep_timer.title">Temporizador automático</string>
+    <string name="auto_sleep_timer.subtitle">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
 </resources>
