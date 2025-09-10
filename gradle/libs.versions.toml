@@ -92,7 +92,7 @@ compose-animation-animation = { module = "androidx.compose.animation:animation" 
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.11.0"
 navigation3-ui = "androidx.navigation3:navigation3-ui:1.0.0-alpha08"
-navigation3-runtime = "androidx.navigation3:navigation3-runtime:1.0.0-alpha08"
+navigation3-runtime = "androidx.navigation3:navigation3-runtime:1.0.0-alpha09"
 
 metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
