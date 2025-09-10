@@ -31,15 +31,6 @@ if (includeProprietaryLibraries()) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
-fun calculateVersionCode(name: String): Int {
-  val (major, minor, patch) = name.split('.').map(String::toInt)
-  return buildString {
-    append(major + 28)
-    append(minor.toString().padStart(length = 2, padChar = '0'))
-    append(patch.toString().padStart(length = 3, padChar = '0'))
-  }.toInt()
-}
-
 android {
 
   namespace = "voice.app"
@@ -57,7 +48,7 @@ android {
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionName = project.findProperty("voice.versionName")?.toString() ?: "1.0.0"
-    versionCode = calculateVersionCode(versionName!!)
+    versionCode = project.findProperty("voice.versionCode")?.toString()?.toInt() ?: 1
 
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
@@ -119,7 +110,7 @@ android {
     animationsDisabled = true
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
     managedDevices {
-      allDevices.create<ManagedVirtualDevice>("voiceDevice") {
+      allDevices.create("voiceDevice", ManagedVirtualDevice::class.java) {
         device = "Pixel 9"
         apiLevel = 33
       }
@@ -129,6 +120,7 @@ android {
   lint {
     checkDependencies = true
     ignoreTestSources = true
+    checkReleaseBuilds = false
     warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
     lintConfig = rootProject.file("lint.xml")
   }

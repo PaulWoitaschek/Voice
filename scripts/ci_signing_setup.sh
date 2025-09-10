@@ -25,5 +25,3 @@ decode_env_to_file "SIGNING_KEYSTORE_GITHUB" "signing/github/signing.keystore"
 decode_env_to_file "SIGNING_PROPERTIES_GITHUB" "signing/github/signing.properties"
 
 decode_env_to_file "GOOGLE_SERVICES" "app/google-services.json"
-
-decode_env_to_file "PLAY_SERVICE_ACCOUNT" "app/play_service_account.json"
