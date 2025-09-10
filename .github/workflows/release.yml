@@ -17,40 +17,6 @@ jobs:
   tests:
     uses: ./.github/workflows/ci.yml
 
-  github_build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - uses: ./.github/actions/build_setup
-      - name: Setup Signing
-        run: ./scripts/ci_signing_setup.sh
-      - name: Build GitHub APKs
-        run: fastlane android build_github version_name:${GITHUB_REF_NAME}
-      - name: Upload APK artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: github-apks
-          path: artifacts/*.apk
-          retention-days: 30
-
-  github_release_draft:
-    runs-on: ubuntu-latest
-    needs:
-      - github_build
-      - tests
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - name: Download APK artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: github-apks
-          path: artifacts
-      - name: Draft GitHub Release
-        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
-        with:
-          draft: true
-          files: artifacts/*.apk
-
   play_build:
     runs-on: ubuntu-latest
     steps:
@@ -94,3 +60,37 @@ jobs:
         run: ./scripts/ci_setup_play_access.sh
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
         run: fastlane android promote version_name:${GITHUB_REF_NAME}
+
+  github_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: ./.github/actions/build_setup
+      - name: Setup Signing
+        run: ./scripts/ci_signing_setup.sh
+      - name: Build GitHub APKs
+        run: fastlane android build_github version_name:${GITHUB_REF_NAME}
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: github-apks
+          path: artifacts/*.apk
+          retention-days: 30
+
+  github_release_draft:
+    runs-on: ubuntu-latest
+    needs:
+      - github_build
+      - tests
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: github-apks
+          path: artifacts
+      - name: Draft GitHub Release
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
+        with:
+          draft: true
+          files: artifacts/*.apk
