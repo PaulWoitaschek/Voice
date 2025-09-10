@@ -22,7 +22,7 @@ jobs:
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
       - name: Build GitHub APKs via Fastlane
-        run: bundle exec fastlane android build_github version_name:${GITHUB_REF_NAME}
+        run: fastlane android build_github version_name:${GITHUB_REF_NAME}
       - name: Draft GitHub Release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Build & Upload to INTERNAL via Fastlane
-        run: bundle exec fastlane android build_and_upload_to_internal version_name:${GITHUB_REF_NAME}
+        run: fastlane android build_and_upload_to_internal version_name:${GITHUB_REF_NAME}
 
   promote:
     runs-on: ubuntu-latest
@@ -51,4 +51,4 @@ jobs:
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
-        run: bundle exec fastlane android promote version_name:${GITHUB_REF_NAME}
+        run: fastlane android promote version_name:${GITHUB_REF_NAME}
