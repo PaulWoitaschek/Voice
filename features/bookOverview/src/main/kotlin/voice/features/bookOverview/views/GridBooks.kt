@@ -72,7 +72,7 @@ internal fun GridBooks(
       }
       items(
         items = books,
-        key = { it.id },
+        key = { it.id.value },
         contentType = { "item" },
       ) { book ->
         GridBook(
