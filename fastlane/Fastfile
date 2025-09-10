@@ -62,9 +62,9 @@ platform :android do
         "voice.includeProprietaryLibraries" => "true"
       }
     )
-    aab_src = "app/build/outputs/bundle/playRelease/app-play-release.aab"
-    UI.user_error!("AAB not found at #{aab_src}") unless File.exist?(aab_src)
-    FileUtils.cp(aab_src, "outputs/app-play-release.aab")
+    copy_artifacts(
+    artifacts: ["app/build/outputs/bundle/playRelease/app-play-release.aab"]
+    )
   end
 
   lane :upload_internal do |options|
