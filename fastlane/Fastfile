@@ -51,8 +51,6 @@ platform :android do
 
   lane :upload_internal do |options|
     aab_path = options[:aab_path]
-    UI.user_error!("AAB not found at #{aab_path}") unless File.exist?(aab_path)
-
     upload_to_play_store(
       track: 'internal',
       aab: aab_path,
