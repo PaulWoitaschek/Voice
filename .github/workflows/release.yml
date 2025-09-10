@@ -29,22 +29,41 @@ jobs:
           draft: true
           files: outputs/*.apk
 
-  play_internal:
+  play_build:
     runs-on: ubuntu-latest
-    environment: google-play
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
+      - name: Build Play AAB via Fastlane
+        run: fastlane android build_play_aab version_name:${GITHUB_REF_NAME}
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: play-aab
+          path: outputs/app-play-release.aab
+          retention-days: 14
+
+  play_upload:
+    runs-on: ubuntu-latest
+    needs: play_build
+    environment: google-play
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
-      - name: Build & Upload to INTERNAL via Fastlane
-        run: fastlane android build_and_upload_to_internal version_name:${GITHUB_REF_NAME}
+      - name: Download AAB artifact
+        uses: actions/download-artifact@fa0a91b85d7b32d4b4c6a91f9c93f874de7b38d1 # v4
+        with:
+          name: play-aab
+          path: outputs
+      - name: Upload to INTERNAL via Fastlane
+        run: fastlane android upload_internal version_name:${GITHUB_REF_NAME} aab_path:outputs/app-play-release.aab
 
-  promote:
+  play_promote:
     runs-on: ubuntu-latest
-    needs: play_internal
+    needs: play_upload
     environment: google-play
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5

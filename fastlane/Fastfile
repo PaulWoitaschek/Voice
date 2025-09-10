@@ -49,10 +49,11 @@ platform :android do
     FileUtils.cp(libre_apk, "outputs/libre.apk")
   end
 
-  lane :build_and_upload_to_internal do |options|
+  lane :build_play_aab do |options|
     version_name = get_version_name!(options)
     version_code = calculate_version_code(version_name)
 
+    FileUtils.mkdir_p("outputs")
     gradle(
       task: ":app:bundlePlayRelease",
       properties: {
@@ -61,8 +62,13 @@ platform :android do
         "voice.includeProprietaryLibraries" => "true"
       }
     )
+    aab_src = "app/build/outputs/bundle/playRelease/app-play-release.aab"
+    UI.user_error!("AAB not found at #{aab_src}") unless File.exist?(aab_src)
+    FileUtils.cp(aab_src, "outputs/app-play-release.aab")
+  end
 
-    aab_path = "app/build/outputs/bundle/playRelease/app-play-release.aab"
+  lane :upload_internal do |options|
+    aab_path = options[:aab_path]
     UI.user_error!("AAB not found at #{aab_path}") unless File.exist?(aab_path)
 
     upload_to_play_store(
