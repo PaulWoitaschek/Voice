@@ -3,6 +3,9 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "matchDatasources": [
