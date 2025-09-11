@@ -1,5 +1,14 @@
 changelog:
   exclude:
     authors:
-      - renovate
       - weblate
+  categories:
+    - title: 🚀 Features & Fixes
+      labels:
+        - "*"
+      exclude:
+        labels:
+          - dependencies
+    - title: ⚙️ Dependencies
+      labels:
+        - dependencies
