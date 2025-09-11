@@ -88,10 +88,10 @@ class Release : CliktCommand() {
         throw IllegalStateException("Expected $expectedVersion but got $newVersion")
       }
     }
-    test(today = LocalDate.of(2025, 1, 1), versions = listOf(), expectedVersion = "8.1.0")
-    test(today = LocalDate.of(2025, 1, 1), versions = listOf("8.1.5"), expectedVersion = "8.1.6")
-    test(today = LocalDate.of(2025, 2, 5), versions = listOf("8.1.5"), expectedVersion = "8.2.0")
-    test(today = LocalDate.of(2024, 12, 1), versions = listOf("7.11.0", "8.1.0"), expectedVersion = "7.12.0")
+    test(today = LocalDate.of(2025, 1, 1), versions = listOf(), expectedVersion = "25.1.1")
+    test(today = LocalDate.of(2025, 1, 1), versions = listOf("25.1.5"), expectedVersion = "25.1.6")
+    test(today = LocalDate.of(2025, 2, 5), versions = listOf("25.1.5"), expectedVersion = "25.2.1")
+    test(today = LocalDate.of(2024, 12, 1), versions = listOf("24.11.0", "25.1.0"), expectedVersion = "24.12.1")
   }
 
   override fun run() {
