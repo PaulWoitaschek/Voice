@@ -77,18 +77,29 @@ F-Droid builds are handled by their team and usually appear a few days after a s
 
 ## Versioning
 
-Voice uses [calendar versioning (CalVer)](https://calver.org/)
+Voice uses [calendar versioning (CalVer)](https://calver.org/).
 
-Format: `YY.MM.RELEASE`
-
-- `YY`: release year, last 2 digits (2025 -> 25)
-- `MM`: release month (01–12)
-- `RELEASE`: counter for releases within the same month (starting at 1)
+- Version name format: `YY.M.RELEASE`
+  - `YY`: release year, last 2 digits (2025 → 25)
+  - `M`: release month (1–12)
+  - `RELEASE`: counter for releases within the same month (starting at 1)
+- Tag format (used by CI): `YY.M.RELEASE-CODE`
+  - `CODE` is the numeric Android versionCode derived from the version name using the formula below.
 
 Examples:
 
-- First release in September 2025 → `25.9.1`
-- Second release in September 2025 → `25.9.2`
+- First release in September 2025 → version name `25.9.1`
+- Tag includes version code → `25.9.1-5309001`
+
+### Version code
+
+The Android `versionCode` is calculated from the version name with:
+
+`CODE = (YY + 28)(MM as 2 digits)(RELEASE as 3 digits)`
+
+Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
+
+This code is embedded in the git tag by `release.main.kts` and used by CI and Fastlane.
 
 ## Pages Deployment
 
