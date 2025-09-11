@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: ./.github/actions/build_setup
       - name: Run Unit Tests + Lint
-        run: ./gradlew voiceUnitTest lintKotlin :scripts:build :app:assemblePlayDebug
+        run: ./gradlew voiceUnitTest lintKotlin :app:assemblePlayDebug
       - name: Publish JUnit Report
         uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
         if: always()

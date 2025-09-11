@@ -1,7 +1,9 @@
-package voice.scripts
+#!/usr/bin/env kotlin
+@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:5.0.3")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
+import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.validate
 import java.io.File
@@ -24,7 +26,7 @@ class NewFeatureModule : CliktCommand() {
     val moduleRoot = File(components.joinToString(separator = "/"))
 
     val buildGradle = File(moduleRoot, "build.gradle.kts")
-    buildGradle.parentFile.mkdirs()
+    buildGradle.parentFile?.mkdirs()
     buildGradle.writeText(gradleContent())
 
     val packageName = components.joinToString(separator = ".")
@@ -69,3 +71,5 @@ class NewFeatureModule : CliktCommand() {
     }
   }
 }
+
+NewFeatureModule().main(args)
