@@ -12,7 +12,7 @@ agp = "8.13.0"
 ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.6.4"
+metro = "0.6.5"
 navigation3 = "1.0.0-alpha09"
 
 [libraries]
