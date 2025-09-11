@@ -24,11 +24,12 @@
       ]
     },
     {
-      "groupName": "Kotlin, KSP",
+      "groupName": "Kotlin, KSP, Mero",
       "matchPackageNames": [
         "org.jetbrains.kotlin:{/,}**",
         "org.jetbrains.kotlin.{/,}**",
-        "com.google.devtools.ksp{/,}**"
+        "com.google.devtools.ksp{/,}**",
+        "dev.zacsweers.metro**"
       ]
     },
     {
