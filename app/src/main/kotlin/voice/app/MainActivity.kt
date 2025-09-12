@@ -20,7 +20,7 @@ import dev.zacsweers.metro.Inject
 import voice.app.navigation.NavEntryResolver
 import voice.app.navigation.StartDestinationProvider
 import voice.core.common.rootGraphAs
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination

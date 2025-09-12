@@ -10,7 +10,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.MarkData
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.IOException
 
 @Inject

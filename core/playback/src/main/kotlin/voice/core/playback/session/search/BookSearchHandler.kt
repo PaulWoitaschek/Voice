@@ -8,7 +8,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 class BookSearchHandler(

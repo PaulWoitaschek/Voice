@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
 import voice.core.data.toUri
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.IOException
 
 @Inject

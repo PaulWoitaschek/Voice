@@ -12,7 +12,7 @@ import voice.core.data.Bookmark
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.transaction
 import voice.core.data.runForMaxSqlVariableNumber
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.time.Instant
 
 @Inject

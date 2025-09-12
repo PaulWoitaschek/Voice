@@ -5,7 +5,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.repo.ChapterRepo
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
 

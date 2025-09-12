@@ -6,7 +6,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 internal data class FileContents(
   val name: String?,

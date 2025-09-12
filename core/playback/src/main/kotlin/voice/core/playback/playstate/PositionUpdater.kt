@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.data.repo.BookRepository
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration.Companion.milliseconds

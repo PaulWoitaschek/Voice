@@ -1,8 +1,8 @@
 package voice.core.logging.crashlytics
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import voice.core.logging.core.LogWriter
-import voice.core.logging.core.Logger
+import voice.core.logging.api.LogWriter
+import voice.core.logging.api.Logger
 
 internal class CrashlyticsLogWriter : LogWriter {
 

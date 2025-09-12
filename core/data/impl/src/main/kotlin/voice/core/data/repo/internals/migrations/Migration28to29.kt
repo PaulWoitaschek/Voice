@@ -9,7 +9,7 @@ import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.File
 
 @ContributesIntoSet(

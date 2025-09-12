@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import voice.core.data.repo.internals.moveToNextLoop
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.File
 import java.io.IOException
 import java.util.InvalidPropertiesFormatException

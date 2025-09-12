@@ -12,7 +12,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.core.common.rootGraphAs
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import kotlin.time.Duration.Companion.seconds
 

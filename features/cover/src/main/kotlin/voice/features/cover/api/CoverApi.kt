@@ -1,7 +1,7 @@
 package voice.features.cover.api
 
 import dev.zacsweers.metro.Inject
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 class CoverApi(private val api: InternalCoverApi) {

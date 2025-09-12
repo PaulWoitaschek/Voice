@@ -1,4 +1,4 @@
-package voice.core.remoteconfig.core
+package voice.core.remoteconfig.api
 
 interface RemoteConfig {
   fun boolean(

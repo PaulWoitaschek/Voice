@@ -6,7 +6,7 @@ import com.google.firebase.remoteconfig.get
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import voice.core.remoteconfig.core.RemoteConfig
+import voice.core.remoteconfig.api.RemoteConfig
 
 @ContributesBinding(AppScope::class)
 @Inject

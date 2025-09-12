@@ -29,8 +29,8 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.MarkData
-import voice.core.logging.core.LogWriter
-import voice.core.logging.core.Logger
+import voice.core.logging.api.LogWriter
+import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider

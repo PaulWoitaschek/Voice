@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import voice.core.documentfile.CachedDocumentFile
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 public class DeviceHasStoragePermissionBug(private val context: Context) {

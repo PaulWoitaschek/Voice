@@ -4,7 +4,7 @@ import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
 import dev.zacsweers.metro.Inject
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.scanner.mp4.visitor.ChapVisitor
 import voice.core.scanner.mp4.visitor.ChplVisitor
 import voice.core.scanner.mp4.visitor.MdhdVisitor

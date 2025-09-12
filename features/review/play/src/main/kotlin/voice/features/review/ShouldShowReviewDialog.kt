@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.first
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.ReviewDialogShownStore
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.remoteconfig.core.RemoteConfig
+import voice.core.remoteconfig.api.RemoteConfig
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days

@@ -23,7 +23,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Composable
 fun ReviewFeature() {

@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.database.getStringOrNull
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 internal fun parseContents(
   uri: Uri,
