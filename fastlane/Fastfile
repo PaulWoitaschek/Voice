@@ -1,22 +1,21 @@
 default_platform(:android)
 require 'fileutils'
 
-def calculate_version_code(name)
-  major, minor, patch = name.split('.').map(&:to_i)
-  "#{major + 28}#{format('%02d', minor)}#{format('%03d', patch)}".to_i
-end
-
-def get_version_name!(options)
-  vn = options[:version_name]
-  UI.user_error!("version_name is required (e.g. version_name:1.2.3)") if vn.to_s.strip.empty?
-  vn
+def parse_version_option!(options)
+  v = options[:version]
+  UI.user_error!("version is required (e.g. version:1.2.3-123456)") if v.to_s.strip.empty?
+  parts = v.split('-', 2)
+  UI.user_error!("version must be in the form name-code, e.g. 1.2.3-123456") if parts.length != 2
+  version_name = parts[0]
+  version_code = parts[1].to_i
+  UI.user_error!("version_code must be numeric, got '#{parts[1]}'") if version_code <= 0
+  [version_name, version_code]
 end
 
 platform :android do
 
   lane :build_github do |options|
-    version_name = get_version_name!(options)
-    version_code = calculate_version_code(version_name)
+    version_name, version_code = parse_version_option!(options)
 
     gradle(
       task: ":app:assembleGithubRelease",
@@ -32,8 +31,7 @@ platform :android do
   end
 
   lane :build_play_aab do |options|
-    version_name = get_version_name!(options)
-    version_code = calculate_version_code(version_name)
+    version_name, version_code = parse_version_option!(options)
 
     gradle(
       task: ":app:bundlePlayRelease",
@@ -62,8 +60,7 @@ platform :android do
   end
 
   lane :promote do |options|
-    version_name = get_version_name!(options)
-    version_code = calculate_version_code(version_name)
+    _version_name, version_code = parse_version_option!(options)
 
     supply(
       track: 'internal',

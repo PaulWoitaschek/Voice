@@ -21,3 +21,5 @@ kotlinScripting.xml
 /runConfigurations.xml
 /AndroidProjectSystem.xml
 /appInsightsSettings.xml
+/copilot.data.migration.agent.xml
+/copilot.data.migration.edit.xml
