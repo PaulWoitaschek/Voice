@@ -12,7 +12,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
 import java.io.File
 import kotlin.coroutines.coroutineContext

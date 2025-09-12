@@ -11,7 +11,7 @@ import kotlinx.coroutines.sync.withLock
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @SingleIn(AppScope::class)
 @Inject

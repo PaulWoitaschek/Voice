@@ -13,7 +13,7 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.mapRows
 import voice.core.data.repo.internals.transaction
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 private const val BOOKMARK_TABLE_NAME = "tableBookmarks"
 private const val BM_PATH = "bookmarkPath"

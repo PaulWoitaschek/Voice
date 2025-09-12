@@ -8,7 +8,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
@@ -57,19 +56,13 @@ fun Project.baseSetup() {
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
-    if (project.path != ":core:logging:core") {
-      add("implementation", project(":core:logging:core"))
-    }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
-
-    listOf(
-      "coroutines.core",
-      "coroutines.android",
-    ).forEach {
-      add("implementation", libs.findLibrary(it).get())
+    add("implementation", libs.findLibrary("coroutines.core").get())
+    add("implementation", libs.findLibrary("coroutines.android").get())
+    if (project.path != ":core:logging:api") {
+      add("implementation", project(":core:logging:api"))
     }
-
     add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }

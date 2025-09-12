@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.strings.R
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 

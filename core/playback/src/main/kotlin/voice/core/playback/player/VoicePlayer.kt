@@ -21,7 +21,7 @@ import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId

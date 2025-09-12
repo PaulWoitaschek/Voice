@@ -18,7 +18,7 @@ import voice.core.common.MainScope
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
 import voice.core.data.store.SleepTimerPreferenceStore
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing

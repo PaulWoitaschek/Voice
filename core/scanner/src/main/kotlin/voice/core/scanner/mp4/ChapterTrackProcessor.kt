@@ -6,7 +6,7 @@ import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import dev.zacsweers.metro.Inject
 import voice.core.data.MarkData
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 internal class ChapterTrackProcessor {

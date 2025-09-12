@@ -19,6 +19,6 @@ dependencies {
   implementation(projects.core.common)
   implementation(projects.core.data.api)
   implementation(projects.core.playback)
-  implementation(projects.core.remoteconfig.core)
+  implementation(projects.core.remoteconfig.api)
   implementation(projects.core.strings)
 }

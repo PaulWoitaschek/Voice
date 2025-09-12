@@ -26,7 +26,7 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SleepTimerPreferenceStore
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain

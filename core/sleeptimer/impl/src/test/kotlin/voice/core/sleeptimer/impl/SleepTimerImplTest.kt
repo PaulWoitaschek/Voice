@@ -22,8 +22,8 @@ import org.junit.BeforeClass
 import org.junit.Test
 import voice.core.common.DispatcherProvider
 import voice.core.data.sleeptimer.SleepTimerPreference
-import voice.core.logging.core.LogWriter
-import voice.core.logging.core.Logger
+import voice.core.logging.api.LogWriter
+import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.ShakeDetector

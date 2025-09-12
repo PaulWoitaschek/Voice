@@ -8,7 +8,7 @@ import voice.core.data.isAudioFile
 import voice.core.data.repo.BookContentRepo
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.walk
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 internal class MediaScanner(

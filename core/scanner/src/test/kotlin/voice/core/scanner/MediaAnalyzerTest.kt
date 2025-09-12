@@ -16,8 +16,8 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.data.MarkData
 import voice.core.documentfile.FileBasedDocumentFile
-import voice.core.logging.core.LogWriter
-import voice.core.logging.core.Logger
+import voice.core.logging.api.LogWriter
+import voice.core.logging.api.Logger
 import voice.core.scanner.MediaAnalyzer
 import voice.core.scanner.Metadata
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor

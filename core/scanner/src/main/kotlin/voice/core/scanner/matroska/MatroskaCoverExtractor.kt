@@ -6,7 +6,7 @@ import dev.zacsweers.metro.Inject
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.matroska.MatroskaDocTypes
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.File
 
 @Inject

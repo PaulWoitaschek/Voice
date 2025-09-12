@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @Inject
 @ContributesBinding(AppScope::class)

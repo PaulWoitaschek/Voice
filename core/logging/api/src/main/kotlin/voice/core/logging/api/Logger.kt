@@ -1,4 +1,4 @@
-package voice.core.logging.core
+package voice.core.logging.api
 
 import java.io.PrintWriter
 import java.io.StringWriter

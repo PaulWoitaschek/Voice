@@ -5,7 +5,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import voice.core.initializer.AppInitializer
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 
 @ContributesIntoSet(AppScope::class)
 @Inject

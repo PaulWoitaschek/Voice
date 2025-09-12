@@ -16,7 +16,7 @@ import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import kotlin.time.measureTime
 
 @SingleIn(AppScope::class)

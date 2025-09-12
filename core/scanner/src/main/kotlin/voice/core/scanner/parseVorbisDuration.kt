@@ -1,6 +1,6 @@
 package voice.core.scanner
 
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
