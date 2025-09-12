@@ -26,12 +26,10 @@ class Release : CliktCommand() {
 
     companion object {
       fun parse(version: String): Version? {
-        val split = version.removePrefix("v").split(".").mapNotNull(String::toIntOrNull)
-        return if (split.size == 3) {
-          Version(split[0], split[1], split[2])
-        } else {
-          null
-        }
+        // Accept tags like "1.2.3" or "v1.2.3" or "1.2.3-123456"
+        val base = version.removePrefix("v").substringBefore("-")
+        val split = base.split(".").mapNotNull(String::toIntOrNull)
+        return if (split.size == 3) Version(split[0], split[1], split[2]) else null
       }
     }
   }
@@ -51,8 +49,18 @@ class Release : CliktCommand() {
       .mapNotNull(Version::parse)
   }
 
+  fun calculateVersionCode(version: Version): Int {
+    val majorPart = version.major + 28
+    val minorPart = "%02d".format(version.minor)
+    val patchPart = "%03d".format(version.patch)
+    return "$majorPart$minorPart$patchPart".toInt()
+  }
+
   fun gitTag(version: Version) {
-    runCommand("git", "tag", "-a", version.toVersionString(), "-m", "Release ${version.toVersionString()}")
+    val versionName = version.toVersionString()
+    val versionCode = calculateVersionCode(version)
+    val tag = "$versionName-$versionCode"
+    runCommand("git", "tag", "-a", tag, "-m", "Release $tag")
   }
 
   fun gitPush() {
@@ -98,8 +106,10 @@ class Release : CliktCommand() {
     val existingVersions = existingVersions().sortedDescending()
     echo("Last 5 versions: ${existingVersions.take(5).joinToString { it.toVersionString() }}")
     val newVersion = newVersion(LocalDate.now(), existingVersions)
+    val newVersionName = newVersion.toVersionString()
+    val newVersionCode = calculateVersionCode(newVersion)
     val shouldRelease = YesNoPrompt(
-      prompt = "Release version ${newVersion.toVersionString()}",
+      prompt = "Release version $newVersionName-$newVersionCode",
       terminal = terminal,
       default = true,
     ).ask() ?: false
@@ -108,7 +118,7 @@ class Release : CliktCommand() {
       echo("Aborting release")
       return
     }
-    echo("Tagging git with ${newVersion.toVersionString()}")
+    echo("Tagging git with $newVersionName-$newVersionCode")
     gitTag(newVersion)
     val shouldPush = YesNoPrompt(
       prompt = "Push tags to remote",
