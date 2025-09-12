@@ -9,7 +9,7 @@ dependencies {
   implementation(projects.core.common)
   implementation(projects.core.playback)
   implementation(projects.core.initializer)
-  implementation(projects.core.logging.core)
+  implementation(projects.core.logging.api)
 
   implementation(libs.datastore)
   implementation(libs.androidxCore)

@@ -6,7 +6,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import voice.core.common.rootGraphAs
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackGraph
 import voice.core.playback.player.VoicePlayer
 

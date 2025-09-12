@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
-import voice.core.remoteconfig.core.RemoteConfig
+import voice.core.remoteconfig.api.RemoteConfig
 
 @ContributesTo(AppScope::class)
 @BindingContainer

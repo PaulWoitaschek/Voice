@@ -4,7 +4,7 @@ import android.text.format.DateUtils
 import androidx.compose.runtime.Immutable
 import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.ui.ImmutableFile
 
 @Immutable

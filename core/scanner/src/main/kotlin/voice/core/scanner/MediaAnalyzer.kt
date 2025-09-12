@@ -20,7 +20,7 @@ import kotlinx.coroutines.guava.await
 import voice.core.data.MarkData
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
 import voice.core.scanner.mp4.Mp4ChapterExtractor

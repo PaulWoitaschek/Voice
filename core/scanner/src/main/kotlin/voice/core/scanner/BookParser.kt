@@ -11,7 +11,7 @@ import voice.core.data.repo.getOrPut
 import voice.core.data.toUri
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.time.Instant
 
 @Inject

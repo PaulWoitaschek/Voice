@@ -181,7 +181,7 @@ dependencies {
     implementation(projects.features.review.noop)
     implementation(projects.core.remoteconfig.noop)
   }
-  implementation(projects.core.remoteconfig.core)
+  implementation(projects.core.remoteconfig.api)
 
   debugImplementation(projects.core.logging.debug)
 

@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.coroutines.executeAsync
 import okio.sink
-import voice.core.logging.core.Logger
+import voice.core.logging.api.Logger
 import java.io.File
 import java.io.IOException
 import java.util.UUID
