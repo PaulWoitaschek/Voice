@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.sleeptimer.SleepTimerPreference
@@ -27,10 +28,37 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
+@Inject
+internal class SleepTimerTracker(private val analytics: Analytics) {
+
+  fun enabled(mode: SleepTimerMode) {
+    analytics.event(
+      "sleep_timer_enabled",
+      buildMap {
+        put(
+          "mode",
+          when (mode) {
+            SleepTimerMode.EndOfChapter -> "end_of_chapter"
+            SleepTimerMode.TimedWithDefault -> "timed_with_default"
+            is SleepTimerMode.TimedWithDuration -> "timed_with_duration"
+          },
+        )
+        if (mode is SleepTimerMode.TimedWithDuration) {
+          put("duration_minutes", mode.duration.inWholeMinutes.toString())
+        }
+      },
+    )
+  }
+
+  fun disabled() {
+    analytics.event("sleep_timer_disabled")
+  }
+}
+
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 @Inject
-class SleepTimerImpl(
+class SleepTimerImpl internal constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @SleepTimerPreferenceStore
@@ -39,6 +67,7 @@ class SleepTimerImpl(
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
   dispatcherProvider: DispatcherProvider,
+  private val tracker: SleepTimerTracker,
 ) : SleepTimer {
 
   private val scope = MainScope(dispatcherProvider)
@@ -48,7 +77,9 @@ class SleepTimerImpl(
   private var job: Job? = null
 
   override fun enable(mode: SleepTimerMode) {
-    disable() // cancel any active job first
+    tracker.enabled(mode)
+    job?.cancel()
+    playerController.setVolume(1F)
 
     job = scope.launch {
       when (mode) {
@@ -65,6 +96,7 @@ class SleepTimerImpl(
   }
 
   override fun disable() {
+    tracker.disabled()
     job?.cancel()
     job = null
     _state.value = SleepTimerState.Disabled

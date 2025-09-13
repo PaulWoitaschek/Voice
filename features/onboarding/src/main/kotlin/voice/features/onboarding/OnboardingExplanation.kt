@@ -32,6 +32,7 @@ import dev.zacsweers.metro.Provides
 import voice.core.ui.VoiceTheme
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
+import voice.navigation.Origin
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -42,7 +43,7 @@ interface OnboardingExplanationProvider {
   fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingExplanation> { key, backStack ->
     NavEntry(key) {
       OnboardingExplanation(
-        onNext = { backStack.add(Destination.AddContent(mode = Destination.AddContent.Mode.Onboarding)) },
+        onNext = { backStack.add(Destination.AddContent(origin = Origin.Onboarding)) },
         onBack = {
           backStack.removeLastOrNull()
         },
