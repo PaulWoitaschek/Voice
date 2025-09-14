@@ -173,10 +173,9 @@ class MediaScannerTest {
     val book4 = File(audioBooks, "author1/book2")
     val book4Chapter1 = audioFile(book4, "a.mp3")
 
-
     val author2 = File(audioBooks, "author2/")
-    val book5 = audioFile(author2,"book5.m4b")
-    val book6 = audioFile(author2,"book6.m4b")
+    val book5 = audioFile(author2, "book5.m4b")
+    val book6 = audioFile(author2, "book6.m4b")
 
     scan(FolderType.Author, audioBooks)
     assertBookContents(
@@ -186,9 +185,8 @@ class MediaScannerTest {
       BookContentView(book4, chapters = listOf(book4Chapter1)),
       BookContentView(book5, chapters = listOf(book5)),
       BookContentView(book6, chapters = listOf(book6)),
-      )
+    )
   }
-
 
   @Test
   fun scanSeries() = test {
