@@ -3,12 +3,16 @@ changelog:
     authors:
       - weblate
   categories:
-    - title: 🚀 Features & Fixes
+    - title: 🚀 New
       labels:
         - "*"
       exclude:
         labels:
           - dependencies
+          - bug
+    - title: 🐞 Fixed
+      labels:
+        - bug
     - title: ⚙️ Dependencies
       labels:
         - dependencies
