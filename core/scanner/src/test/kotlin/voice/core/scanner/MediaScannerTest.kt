@@ -173,12 +173,42 @@ class MediaScannerTest {
     val book4 = File(audioBooks, "author1/book2")
     val book4Chapter1 = audioFile(book4, "a.mp3")
 
+
+    val author2 = File(audioBooks, "author2/")
+    val book5 = audioFile(author2,"book5.m4b")
+    val book6 = audioFile(author2,"book6.m4b")
+
     scan(FolderType.Author, audioBooks)
     assertBookContents(
       BookContentView(book1, chapters = listOf(book1)),
       BookContentView(book2, chapters = listOf(book2)),
       BookContentView(book3, chapters = listOf(book3Chapter1, book3Chapter2)),
       BookContentView(book4, chapters = listOf(book4Chapter1)),
+      BookContentView(book5, chapters = listOf(book5)),
+      BookContentView(book6, chapters = listOf(book6)),
+      )
+  }
+
+
+  @Test
+  fun scanSeries() = test {
+    val audioBooks = folder("audiobooks")
+
+    val series1 = File(audioBooks, "author2/series1/")
+    val series1part1 = audioFile(series1, "1 - Part 1.m4b")
+    val series1part2 = audioFile(series1, "2 - Part 2.m4b")
+
+    val deepSubfolder = File(audioBooks, "one/two/three/four/")
+    val deepSubfolderPart1 = audioFile(deepSubfolder, "1 - Part 1.m4b")
+    val deepSubfolderPart2 = audioFile(deepSubfolder, "2 - Part 2.m4b")
+
+    // no available mode will allow to scan this structure as of 2025-09-14
+    scan(FolderType.Author, audioBooks)
+    assertBookContents(
+      BookContentView(series1part1, chapters = listOf(series1part1)),
+      BookContentView(series1part2, chapters = listOf(series1part2)),
+      BookContentView(deepSubfolderPart1, chapters = listOf(deepSubfolderPart1)),
+      BookContentView(deepSubfolderPart2, chapters = listOf(deepSubfolderPart2)),
     )
   }
 
@@ -225,7 +255,7 @@ class MediaScannerTest {
       parent: File,
       name: String,
     ): File {
-      check(name.endsWith(".mp3"))
+      check(name.endsWith(".mp3") || name.endsWith("m4b"))
       return File(parent, name)
         .also {
           it.parentFile?.mkdirs()
