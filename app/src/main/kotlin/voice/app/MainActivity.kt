@@ -59,10 +59,12 @@ class MainActivity : AppCompatActivity() {
           backStack = backStack,
           sceneStrategy = dialogStrategy,
           onBack = {
-            backStack.removeLastOrNull()
+            if (backStack.size > 1) {
+              backStack.removeLastOrNull()
+            }
           },
           entryProvider = { key ->
-            navEntryResolver.create(key, backStack)
+            navEntryResolver.create(key)
           },
         )
 
@@ -90,7 +92,9 @@ class MainActivity : AppCompatActivity() {
                 }
               }
               NavigationCommand.GoBack -> {
-                backStack.removeLastOrNull()
+                if (backStack.size > 1) {
+                  backStack.removeLastOrNull()
+                }
               }
               is NavigationCommand.SetRoot -> {
                 backStack.clear()

@@ -12,12 +12,9 @@ class NavEntryResolver(private val providers: Set<NavEntryProvider<*>>) {
 
   internal fun registeredClasses() = providers.map { it.key }
 
-  fun create(
-    key: Destination.Compose,
-    backStack: MutableList<Destination.Compose>,
-  ): NavEntry<Destination.Compose> {
+  fun create(key: Destination.Compose): NavEntry<Destination.Compose> {
     @Suppress("UNCHECKED_CAST")
     val provider = typedProviders[key::class]!! as NavEntryProvider<Destination.Compose>
-    return provider.create(key, backStack)
+    return provider.create(key)
   }
 }

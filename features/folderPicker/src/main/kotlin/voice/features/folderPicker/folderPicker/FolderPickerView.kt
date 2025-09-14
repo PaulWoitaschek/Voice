@@ -46,17 +46,15 @@ interface FolderPickerProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key ->
     NavEntry(key) {
-      FolderOverview(
-        onCloseClick = { backStack.removeLastOrNull() },
-      )
+      FolderOverview()
     }
   }
 }
 
 @Composable
-fun FolderOverview(onCloseClick: () -> Unit) {
+fun FolderOverview() {
   val viewModel: FolderPickerViewModel = rememberScoped {
     rootGraphAs<FolderPickerGraph>()
       .folderPickerViewModel
@@ -70,7 +68,7 @@ fun FolderOverview(onCloseClick: () -> Unit) {
     onDeleteClick = {
       viewModel.removeFolder(it)
     },
-    onCloseClick = onCloseClick,
+    onCloseClick = viewModel::onCloseClick,
   )
 }
 
