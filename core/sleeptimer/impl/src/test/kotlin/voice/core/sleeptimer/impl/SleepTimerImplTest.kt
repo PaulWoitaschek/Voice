@@ -6,16 +6,16 @@ import io.kotest.matchers.collections.shouldEndWith
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.suspendCancellableCoroutine
+import io.mockk.verify
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.BeforeClass
@@ -33,23 +33,34 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
 import kotlin.time.Duration.Companion.seconds
 
+private class TestShakeDetector : ShakeDetector {
+  private val shakes = Channel<Unit>(capacity = Channel.UNLIMITED)
+  override suspend fun detect() {
+    shakes.receive()
+  }
+
+  fun shake() {
+    shakes.trySend(Unit)
+  }
+}
+
 class SleepTimerImplTest {
 
   private val playStateManager = PlayStateManager().apply {
     playState = PlayStateManager.PlayState.Playing
   }
-  private val shakeDetector = mockk<ShakeDetector> {
-    coEvery { detect() } coAnswers {
-      delay(30.seconds)
-    }
-  }
-
+  private val shakeDetector = TestShakeDetector()
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val setVolumeSlots = mutableListOf<Float>()
   private val playerController = mockk<PlayerController> {
     every { setVolume(capture(setVolumeSlots)) } just Runs
     every { pauseWithRewind(any()) } answers {
       playStateManager.playState = PlayStateManager.PlayState.Paused
+    }
+    every {
+      play()
+    } answers {
+      playStateManager.playState = PlayStateManager.PlayState.Playing
     }
   }
 
@@ -78,10 +89,6 @@ class SleepTimerImplTest {
 
   @Test
   fun `enable with fixed duration eventually disables and pauses playback`() = testScope.runTest {
-    coEvery { shakeDetector.detect() } coAnswers {
-      suspendCancellableCoroutine { } // never completes
-    }
-
     sleepTimer.enable(SleepTimerMode.TimedWithDuration(1.seconds))
 
     advanceTimeBy(2.seconds)
@@ -128,6 +135,34 @@ class SleepTimerImplTest {
     advanceTimeBy(2.seconds)
     yield()
     setVolumeSlots.shouldEndWith(1f)
+  }
+
+  @Test
+  fun shake_does_not_cancel_second_countdown_after_window() = testScope.runTest {
+    // Use a LONG duration so we can observe behavior across the 30s window
+    val longDuration = SleepTimerImpl.SHAKE_TO_RESET_TIME * 2
+
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(longDuration))
+
+    // 1) Let the first countdown finish and enter the shake window
+    advanceTimeBy(longDuration + 1.seconds)
+    runCurrent()
+    coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
+    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+
+    // 2) Trigger the shake → a new countdown should start independently of the old timeout
+    shakeDetector.shake()
+    runCurrent()
+    verify(exactly = 1) { playerController.play() }
+    sleepTimer.state.value shouldBe SleepTimerState.Enabled.WithDuration(longDuration)
+
+    // 3) Advance past the original 30s shake window and allow the second countdown to finish
+    advanceTimeBy(SleepTimerImpl.SHAKE_TO_RESET_TIME + longDuration + 2.seconds)
+    runCurrent()
+
+    // The second countdown should complete normally
+    coVerify(exactly = 2) { playerController.pauseWithRewind(any()) }
+    sleepTimer.state.value shouldBe SleepTimerState.Disabled
   }
 
   companion object {
