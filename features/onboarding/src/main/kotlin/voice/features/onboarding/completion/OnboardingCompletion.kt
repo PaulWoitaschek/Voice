@@ -39,7 +39,7 @@ import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface OnboardingCompletionGraph {
-  val viewModel: OnboardingCompletionViewModel
+  val onboardingCompletionViewModel: OnboardingCompletionViewModel
 }
 
 @ContributesTo(AppScope::class)
@@ -47,7 +47,7 @@ interface OnboardingCompletionProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingCompletion> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingCompletion> { key ->
     NavEntry(key) {
       OnboardingCompletion()
     }
@@ -57,7 +57,7 @@ interface OnboardingCompletionProvider {
 @Composable
 fun OnboardingCompletion(modifier: Modifier = Modifier) {
   val viewModel = rememberScoped {
-    rootGraphAs<OnboardingCompletionGraph>().viewModel
+    rootGraphAs<OnboardingCompletionGraph>().onboardingCompletionViewModel
   }
   OnboardingCompletion(
     modifier = modifier,

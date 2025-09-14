@@ -36,6 +36,7 @@ import voice.core.data.BookId
 import voice.core.scanner.CoverSaver
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
+import voice.navigation.Navigator
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -48,11 +49,9 @@ interface EditCoverDialogProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key, backStack ->
+  fun navEntryProvider(navigator: Navigator): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key ->
     NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
-      EditCoverDialog(key.cover, key.bookId) {
-        backStack.removeLastOrNull()
-      }
+      EditCoverDialog(coverUri = key.cover, bookId = key.bookId, onDismiss = navigator::goBack)
     }
   }
 }
