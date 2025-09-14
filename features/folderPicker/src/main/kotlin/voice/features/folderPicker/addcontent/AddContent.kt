@@ -23,7 +23,7 @@ interface AddContentProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AddContent> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AddContent> { key ->
     NavEntry(key) {
       AddContent(mode = key.mode)
     }

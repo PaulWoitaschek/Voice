@@ -102,6 +102,10 @@ class SelectCoverFromInternetViewModel(
     return ViewState.Content(items, query)
   }
 
+  fun onCloseClick() {
+    navigator.goBack()
+  }
+
   internal sealed interface ViewState {
 
     val query: String
