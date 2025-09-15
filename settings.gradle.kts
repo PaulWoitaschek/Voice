@@ -37,7 +37,7 @@ plugins {
   id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
   id("com.android.application") version "8.13.0" apply false
   id("com.android.library") version "8.13.0" apply false
-  id("com.autonomousapps.build-health") version "3.0.2"
+  id("com.autonomousapps.build-health") version "3.0.3"
 }
 
 develocity {
