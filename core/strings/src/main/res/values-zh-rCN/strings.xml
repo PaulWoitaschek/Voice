@@ -103,4 +103,6 @@
     <string name="onboarding_welcome_title">欢迎使用Voice！</string>
     <string name="onboarding_welcome_subtitle">你的个人口袋有声读物播放器。现在来进行配置吧。</string>
     <string name="select_folder_title_onboarding">添加你的第一本有声书</string>
+    <string name="onboarding.explanation.subtitle">使用 Voice，您可以单独添加书籍文件或将它们组织到文件夹中。您来选择！</string>
+    <string name="onboarding.explanation.title">您的图书馆，您的风格</string>
 </resources>
