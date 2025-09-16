@@ -37,7 +37,7 @@
     <string name="pref_suggest_idea">Föreslå en idé</string>
     <string name="pref_use_grid">Använd rutnätslayout</string>
     <string name="pref_report_issue">Rapportera ett problem</string>
-    <string name="pref_help_translating">Hjälp till att översätta Voice</string>
+    <string name="pref_help_translating">Hjälp med att översätta Voice</string>
     <string name="pref_get_support">Få support</string>
     <string name="pref_app_version">Appversion</string>
     <string name="popup_edit">Redigera</string>
@@ -129,10 +129,10 @@
         <item quantity="other">%d minuter</item>
     </plurals>
     <string name="pref_faq">Vanliga frågor</string>
-    <string name="auto_sleep_timer.subtitle">Starta en insomningstidtagare automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
+    <string name="auto_sleep_timer.subtitle">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Ange starttid</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Ange sluttid</string>
     <string name="playback.current_chapter">Aktuellt kapitel</string>
-    <string name="auto_sleep_timer.title">Automatisk insomningstidtagare</string>
+    <string name="auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="end_of_chapter">Slut på kapitlet</string>
 </resources>
