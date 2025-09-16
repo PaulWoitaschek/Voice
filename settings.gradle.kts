@@ -31,7 +31,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.develocity") version "4.1.1"
+  id("com.gradle.develocity") version "4.2"
   id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
   id("org.jetbrains.kotlin.android") version "2.2.20" apply false
   id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
