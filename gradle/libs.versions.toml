@@ -75,7 +75,7 @@ media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.3"
-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.3"
+lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4"
 
 compose-bom = "androidx.compose:compose-bom:2025.09.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
