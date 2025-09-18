@@ -46,6 +46,9 @@ internal class Mp4ChapterExtractor(
     } catch (e: IllegalStateException) {
       Logger.w(e, "Invalid MP4 structure")
       emptyList()
+    } catch (e: OutOfMemoryError) {
+      Logger.w(e, "OOM during chapter extraction")
+      emptyList()
     } catch (e: ArrayIndexOutOfBoundsException) {
       Logger.w(e, "Undeclared")
       // https://github.com/androidx/media/issues/2467
