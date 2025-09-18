@@ -69,10 +69,14 @@ internal constructor(
     uri: Uri,
     type: FolderType,
   ) {
-    context.contentResolver.takePersistableUriPermission(
-      uri,
-      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
-    )
+    try {
+      context.contentResolver.takePersistableUriPermission(
+        uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
+      )
+    } catch (_: SecurityException) {
+      Logger.w("Could not release uri permission for $uri")
+    }
     scope.launch {
       dataStore(type).updateData {
         it + uri
