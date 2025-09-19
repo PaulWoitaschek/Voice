@@ -3,6 +3,7 @@ En som låter dig fokusera på vad du faktiskt vill göra: Lyssna på ljudböcke
 Du lägger helt enkelt till din huvudsakliga ljudboksmapp, och varje mapp i den känns igen som en enda bok. Detta håller ditt bibliotek enkelt och överskådligt.
 
 Vad den kan göra:
+
 - Kommer ihåg sista positionen
 - Ställ in uppspelningshastighet
 - Vacker materialdesign
@@ -14,6 +15,6 @@ Vad den kan göra:
 Voice är fri och har öppen källkod. Det betyder att alla kan se vad den gör. Den använder minimala behörigheter.
 
 Om du har förslag eller hittar fel, rapportera dem här:
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 Licensen för öppen källkod är Gnu GPLv3

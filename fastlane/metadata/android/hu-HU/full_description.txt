@@ -3,6 +3,7 @@ Olyat, amely lehetővé teszi, hogy arra összpontosítson, amit valójában sze
 Csak hozzá kell adnia a fő hangoskönyv-mappát, és a rendszer minden mappát egyetlen könyvként felismer. Így a könyvtár egyszerű és rendezett marad.
 
 Lehetőségek:
+
 - Emlékezés az utolsó pozícióra
 - Lejátszási sebesség beállítása
 - Gyönyörű material kinézet
@@ -14,6 +15,6 @@ Lehetőségek:
 A Voice ingyenes és nyílt forráskódú. Ez azt jelenti, hogy mindenki láthatja, mit csinál. Minimális engedélyeket igényel.
 
 Ha javaslatai vannak, vagy hibákat talál, jelentse azokat itt:
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 A nyílt forráskódú licenc a Gnu GPLv3
