@@ -3,6 +3,7 @@ Un player care îți permite să te focusezi pe ceea ce într-adevăr vrei să f
 E nevoie doar să-ți alegi directorul principal și fiecare subdirector va fi identificat ca o singură carte. Astfel, biblioteca ta va fi simplă și ordonată.
 
 Capabilități:
+
 - Reține ultima poziție.
 - Viteză de playback customizabilă.
 - Design familiar și intuitiv
@@ -14,6 +15,6 @@ Capabilități:
 Voice este gratuit și open source. Asta înseamnă că toată lumea poate să vadă ce se întâmplă "sub capotă". Folosește doar permisiunile absolut necesare.
 
 Dacă ai sugestii sau ai găsit un bug, te așteptăm aici:
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 Licența open source folosită este Gnu GPLv3

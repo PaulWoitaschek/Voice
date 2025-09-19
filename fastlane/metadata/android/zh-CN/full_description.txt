@@ -3,6 +3,7 @@
 您只需要添加您的有声书主文件夹，在它之下的每一个文件夹都会被识别为同一本书。这将保持您的书库简单整洁。
 
 它能做什么：
+
 - 记住上次离开的位置
 - 设置播放速度
 - 漂亮的Material Design
@@ -14,6 +15,6 @@
 Voice 是免费且开源的，这意味着每个人都可以了解它在干什么。只要求最低的权限
 
 如果您有任何建议或者发现了问题，请在这里描述：
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 开源许可证 Gnu GPLv3

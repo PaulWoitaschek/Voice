@@ -107,4 +107,4 @@ To projects [Website](https://voice.woitaschek.de/) uses Github Pages and Mkdocs
 To deploy a new website, use dispatch a workflow
 manually.
 
-[👉 Dispatch Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml)
+[👉 Dispatch Workflow](https://github.com/VoiceAudiobook/Voice/actions/workflows/deploy_pages.yml)
