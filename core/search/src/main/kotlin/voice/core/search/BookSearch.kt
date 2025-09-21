@@ -11,14 +11,33 @@ class BookSearch(
   private val repo: BookRepository,
 ) {
 
+  suspend fun search2(query: String): List<Book> {
+    val searchString = buildString {
+      append(
+        query.trim()
+          // replace all special chars except umlauts and other language specific letters
+          .replace("[^\\p{L}0-9\\s]".toRegex(), " ")
+          // replace all whitespaces with *
+          .split("\\s+".toRegex()).joinToString("*"),
+      )
+      append('*')
+    }
+    val results = dao.search(searchString)
+
+    return results.mapNotNull { repo.get(it) }
+  }
+
   suspend fun search(query: String): List<Book> {
     return dao.search(
       buildString {
-        append("\"")
+        append(
+          query.trim()
+            // replace all special chars except umlauts and other language specific letters
+            .replace("[^\\p{L}0-9\\s]".toRegex(), " ")
+            // replace all whitespaces with *
+            .split("\\s+".toRegex()).joinToString("*"),
+        )
         append('*')
-        append(query.trim().replace("\"", "\"\""))
-        append('*')
-        append("\"")
       },
     ).mapNotNull { repo.get(it) }
   }
