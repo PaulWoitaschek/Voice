@@ -59,7 +59,7 @@ class BookSearchTest {
     series = "Kingkiller Chronicle",
     part = "1",
   )
-  private val kingkiller2_5 = book(
+  private val kingkiller25 = book(
     name = "The Slow Regard of Silent Things",
     author = "Patrick Rothfuss",
     genre = "Fantasy",
@@ -119,10 +119,10 @@ class BookSearchTest {
     expectSearchResult("harry potter", harryPotter1, harryPotter2)
     expectSearchResult("kingkiller 1", kingkiller1)
     expectSearchResult("rupert degas 1", kingkiller1)
-    expectSearchResult("kingkiller 2.5", kingkiller2_5)
-    expectSearchResult("slow regard 2.5", kingkiller2_5)
-    expectSearchResult("rothfuss 2.5", kingkiller2_5)
-    expectSearchResult("kingkiller", kingkiller1, kingkiller2_5)
+    expectSearchResult("kingkiller 2.5", kingkiller25)
+    expectSearchResult("slow regard 2.5", kingkiller25)
+    expectSearchResult("rothfuss 2.5", kingkiller25)
+    expectSearchResult("kingkiller", kingkiller1, kingkiller25)
   }
 
   private fun test(run: suspend TestBase.() -> Unit) {
@@ -153,7 +153,7 @@ class BookSearchTest {
       addBook(harryPotter1)
       addBook(harryPotter2)
       addBook(kingkiller1)
-      addBook(kingkiller2_5)
+      addBook(kingkiller25)
 
       // this ensures that inactive books are never accounted for
       addBook(commendatore.withNewIdAndInactive())
@@ -162,7 +162,7 @@ class BookSearchTest {
       addBook(harryPotter1.withNewIdAndInactive())
       addBook(harryPotter2.withNewIdAndInactive())
       addBook(kingkiller1.withNewIdAndInactive())
-      addBook(kingkiller2_5.withNewIdAndInactive())
+      addBook(kingkiller25.withNewIdAndInactive())
 
       testBase.run()
       db.close()
