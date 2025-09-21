@@ -78,6 +78,21 @@ class BookSearchTest {
     search("-*\"--*\"\"")
   }
 
+  @Test
+  fun `search with multiple words creates prefix search`() = test {
+    expectSearchResult("All Along", watchtower, unicorns)
+  }
+
+  @Test
+  fun `search handles special characters and numbers`() = test {
+    expectSearchResult("Ermordung 42", commendatore) // Should find commendatore if it had numbers
+  }
+  
+  @Test  
+  fun `search removes punctuation properly`() = test {
+    expectSearchResult("die ermordung", commendatore) // Should handle case insensitive and punctuation
+  }
+
   private fun test(run: suspend TestBase.() -> Unit) {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()

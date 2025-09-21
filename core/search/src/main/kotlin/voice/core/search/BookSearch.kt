@@ -12,14 +12,19 @@ class BookSearch(
 ) {
 
   suspend fun search(query: String): List<Book> {
-    return dao.search(
-      buildString {
-        append("\"")
-        append('*')
-        append(query.trim().replace("\"", "\"\""))
-        append('*')
-        append("\"")
-      },
-    ).mapNotNull { repo.get(it) }
+    val searchString = buildString {
+      append(
+        query.trim()
+          // replace all special chars except letters, numbers and whitespace
+          .replace("[^\\p{L}0-9\\s]".toRegex(), " ")
+          // replace all whitespace sequences with *
+          .split("\\s+".toRegex())
+          .filter { it.isNotEmpty() }
+          .joinToString("*")
+      )
+      append('*')
+    }
+    
+    return dao.search(searchString).mapNotNull { repo.get(it) }
   }
 }
