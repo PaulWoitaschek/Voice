@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 import voice.core.common.comparator.sortedNaturally
 import voice.core.data.BookId
 import voice.core.data.GridMode
-import voice.core.data.repo.BookContentRepo
-import voice.core.data.repo.BookRepository
+import voice.core.data.mediasource.LocalMediaSource
+import voice.core.data.mediasource.VoiceMediaSource
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.GridModeStore
@@ -29,7 +29,6 @@ import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
-import voice.core.search.BookSearch
 import voice.core.ui.GridCount
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
@@ -39,7 +38,7 @@ import voice.navigation.Navigator
 @BookOverviewScope
 @Inject
 class BookOverviewViewModel(
-  private val repo: BookRepository,
+  private val mediaSource: LocalMediaSource,
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
@@ -50,8 +49,6 @@ class BookOverviewViewModel(
   private val gridCount: GridCount,
   private val navigator: Navigator,
   private val recentBookSearchDao: RecentBookSearchDao,
-  private val search: BookSearch,
-  private val contentRepo: BookContentRepo,
   private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
 ) {
 
@@ -69,7 +66,7 @@ class BookOverviewViewModel(
       .collectAsState(initial = PlayStateManager.PlayState.Paused).value
     val hasStoragePermissionBug = remember { deviceHasStoragePermissionBug.hasBug }
       .collectAsState().value
-    val books = remember { repo.flow() }
+    val books = remember { mediaSource.flowBooks() }
       .collectAsState(initial = emptyList()).value
     val currentBookId = remember { currentBookStoreDataStore.data }
       .collectAsState(initial = null).value
@@ -136,10 +133,10 @@ class BookOverviewViewModel(
         mutableStateOf(emptyList<BookOverviewItemViewState>())
       }
       LaunchedEffect(query) {
-        searchBooks = search.search(query).map { it.toItemViewState() }
+        searchBooks = mediaSource.search(query).map { it.toItemViewState() }
       }
       val suggestedAuthors: List<String> by produceState(initialValue = emptyList()) {
-        value = contentRepo.all()
+        value = mediaSource.allBookContents()
           .filter { it.isActive }
           .mapNotNull { it.author }
           .toSet()

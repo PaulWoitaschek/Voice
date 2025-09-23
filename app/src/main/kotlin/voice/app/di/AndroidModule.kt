@@ -15,6 +15,12 @@ import voice.app.misc.MainActivityIntentProviderImpl
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.data.mediasource.LocalMediaSource
+import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.BookRepository
+import voice.core.data.repo.BookSearchRepo
+import voice.core.data.repo.BookmarkRepo
+import voice.core.data.repo.ChapterRepo
 import voice.core.playback.notification.MainActivityIntentProvider
 import java.time.Clock
 
@@ -57,4 +63,22 @@ object AndroidModule {
 
   @Provides
   fun clock(): Clock = Clock.systemDefaultZone()
+
+  @Provides
+  @SingleIn(AppScope::class)
+  fun provideLocalMediaSource(
+    bookmarkRepo: BookmarkRepo,
+    bookRepo: BookRepository,
+    bookContentRepo: BookContentRepo,
+    chapterRepo: ChapterRepo,
+    bookSearch: BookSearchRepo,
+  ): LocalMediaSource {
+    return LocalMediaSource(
+      bookmarkRepo,
+      bookRepo,
+      bookContentRepo,
+      chapterRepo,
+      bookSearch,
+    )
+  }
 }

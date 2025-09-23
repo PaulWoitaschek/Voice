@@ -11,7 +11,6 @@ import dev.zacsweers.metro.SingleIn
   scope = AppScope::class,
 )
 interface ProductionAppGraph : AppGraph {
-
   @DependencyGraph.Factory
   interface Factory {
     fun create(@Provides application: Application): ProductionAppGraph

@@ -17,6 +17,8 @@ import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.markForPosition
+import voice.core.data.mediasource.LocalMediaSource
+import voice.core.data.mediasource.VoiceMediaSource
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
@@ -36,7 +38,7 @@ class BookmarkViewModel(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val repo: BookRepository,
-  private val bookmarkRepo: BookmarkRepo,
+  private val mediaSource: LocalMediaSource,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   private val navigator: Navigator,
@@ -57,7 +59,7 @@ class BookmarkViewModel(
     LaunchedEffect(bookId) {
       val book = repo.get(bookId)
       if (book != null) {
-        bookmarks = bookmarkRepo.bookmarks(book.content)
+        bookmarks = mediaSource.bookmarks(book.content)
           .sortedByDescending { it.addedAt }
         chapters = book.chapters
       }
@@ -99,7 +101,7 @@ class BookmarkViewModel(
 
   fun deleteBookmark(id: Bookmark.Id) {
     scope.launch {
-      bookmarkRepo.deleteBookmark(id)
+      mediaSource.deleteBookmark(id)
       bookmarks = bookmarks.filter { it.id != id }
     }
   }
@@ -132,7 +134,7 @@ class BookmarkViewModel(
           title = newTitle,
           setBySleepTimer = false,
         )
-        bookmarkRepo.addBookmark(withNewTitle)
+        mediaSource.addBookmark(withNewTitle)
         val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
         bookmarks = bookmarks.toMutableList().apply {
           this[index] = withNewTitle
@@ -144,7 +146,7 @@ class BookmarkViewModel(
   fun addBookmark(name: String) {
     scope.launch {
       val book = repo.get(bookId) ?: return@launch
-      val newBookmark = bookmarkRepo.addBookmarkAtBookPosition(
+      val newBookmark = mediaSource.addBookmarkAtBookPosition(
         book = book,
         title = name,
         setBySleepTimer = false,
