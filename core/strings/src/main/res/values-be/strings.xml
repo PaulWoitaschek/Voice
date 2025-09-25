@@ -137,8 +137,8 @@
     <string name="auto_sleep_timer.title">Аўтаматычны таймер сну</string>
     <string name="pref_faq">FAQ</string>
     <string name="auto_sleep_timer.subtitle">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
-    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Задаць час пачатку</string>
-    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Задаць час заканчэння</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Час пачатку</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Час заканчэння</string>
     <string name="playback.current_chapter">Бягучы раздзел</string>
     <string name="end_of_chapter">Канец раздзела</string>
 </resources>
