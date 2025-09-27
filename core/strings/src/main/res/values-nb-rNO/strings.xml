@@ -123,7 +123,7 @@
     <string name="review.feedback.button.yes">Send tilbakemelding</string>
     <string name="review.feedback.button.no">Avbryt</string>
     <string name="select_folder_subtitle">Vil du legge til en enkelt fil som en bok eller en mappe?</string>
-    <string name="onboarding.explanation.subtitle">Med Voice kan du legge til bøker som individuelle filer, eller organisere dem i mapper.</string>
+    <string name="onboarding.explanation.subtitle">Med Voice kan du legge til bøker som individuelle filer eller organisere dem i mapper. Ditt valg!</string>
     <string name="onboarding.completion.title">Du er ferdig!</string>
     <string name="onboarding_welcome_title">Velkommen til Voice!</string>
     <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
@@ -133,4 +133,8 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Sett starttid</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Sett sluttid</string>
     <string name="playback.current_chapter">Gjeldende kapittel</string>
+    <string name="auto_sleep_timer.subtitle">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>
+    <string name="auto_sleep_timer.title">Automatisk søvn-timer</string>
+    <string name="pref_faq">Ofte stilte spørsmål</string>
+    <string name="end_of_chapter">Kapittelslutt</string>
 </resources>
