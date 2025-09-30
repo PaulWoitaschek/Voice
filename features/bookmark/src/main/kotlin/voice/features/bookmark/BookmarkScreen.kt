@@ -198,22 +198,14 @@ internal fun BookmarkItem(
   modifier: Modifier = Modifier,
 ) {
   var expanded by remember { mutableStateOf(false) }
-
   SwipeToDismissBox(
     modifier = modifier,
-    state = rememberSwipeToDismissBoxState(
-      confirmValueChange = {
-        when (it) {
-          SwipeToDismissBoxValue.StartToEnd -> {
-            onDelete(bookmark.id)
-            true
-          }
-          SwipeToDismissBoxValue.EndToStart,
-          SwipeToDismissBoxValue.Settled,
-          -> false
-        }
-      },
-    ),
+    onDismiss = {
+      if (it == SwipeToDismissBoxValue.StartToEnd) {
+        onDelete(bookmark.id)
+      }
+    },
+    enableDismissFromEndToStart = false,
     backgroundContent = {
       Box(
         Modifier
@@ -230,6 +222,7 @@ internal fun BookmarkItem(
         )
       }
     },
+    state = rememberSwipeToDismissBoxState(),
     content = {
       ListItem(
         modifier = Modifier
