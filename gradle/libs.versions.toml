@@ -5,14 +5,14 @@ sdk-target = "36"
 sdk-robolectric = "35"
 
 coroutines = "1.10.2"
-room = "2.8.0"
+room = "2.8.1"
 kotlin = "2.2.20"
 media3 = "1.8.0"
 agp = "8.13.0"
 ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.6.6"
+metro = "0.6.9"
 navigation3 = "1.0.0-alpha10"
 
 [libraries]
@@ -36,7 +36,7 @@ koTest-assert = "io.kotest:kotest-assertions-core:6.0.3"
 datastore = "androidx.datastore:datastore-preferences:1.1.7"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
-molecule = "app.cash.molecule:molecule-runtime:2.1.0"
+molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.1.0"
 review = "com.google.android.play:review-ktx:2.0.1"
@@ -77,7 +77,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.4"
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4"
 
-compose-bom = "androidx.compose:compose-bom:2025.09.00"
+compose-bom = "androidx.compose:compose-bom:2025.09.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
