@@ -19,7 +19,7 @@ navigation3 = "1.0.0-alpha10"
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 material = "com.google.android.material:material:1.13.0"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.14.5"
+mockk = "io.mockk:mockk:1.14.6"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.3.6"
 paging-compose = "androidx.paging:paging-compose:3.3.6"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
