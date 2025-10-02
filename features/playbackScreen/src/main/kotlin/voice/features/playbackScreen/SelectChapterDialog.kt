@@ -33,7 +33,7 @@ internal fun SelectChapterDialog(
     onDismissRequest = { viewModel.dismissDialog() },
     content = {
       val selectedIndex = dialogState.items.indexOfFirst { it.active }
-      // -1 because we want to show the previous chapter as well
+      // -1 because we want to show the previous chapter on the screen
       val initialFirstVisibleItemIndex = (selectedIndex - 1).coerceAtLeast(0)
       LazyColumn(
         state = rememberLazyListState(initialFirstVisibleItemIndex = initialFirstVisibleItemIndex),
