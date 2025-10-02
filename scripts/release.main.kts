@@ -15,6 +15,7 @@ import java.time.LocalDate
 class Release : CliktCommand() {
 
   private val runTests by option("--test").flag()
+  private val noConfirm by option("--no-confirm").flag()
 
   data class Version(val major: Int, val minor: Int, val patch: Int) : Comparable<Version> {
 
@@ -120,7 +121,7 @@ class Release : CliktCommand() {
   }
 
   private fun confirmRelease(newTag: String): Boolean {
-    if (isCi()) return true
+    if (noConfirm) return true
     return YesNoPrompt(
       prompt = "Release version $newTag",
       terminal = terminal,
@@ -129,15 +130,13 @@ class Release : CliktCommand() {
   }
 
   private fun confirmPush(tag: String): Boolean {
-    if (isCi()) return true
+    if (noConfirm) return true
     return YesNoPrompt(
       prompt = "Tag $tag and push to remote",
       terminal = terminal,
       default = true,
     ).ask() ?: false
   }
-
-  private fun isCi(): Boolean = System.getenv("CI") == "true"
 }
 
 Release().main(args)
