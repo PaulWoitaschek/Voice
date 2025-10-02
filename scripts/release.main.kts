@@ -49,22 +49,22 @@ class Release : CliktCommand() {
       .mapNotNull(Version::parse)
   }
 
-  fun calculateVersionCode(version: Version): Int {
-    val majorPart = version.major + 28
-    val minorPart = "%02d".format(version.minor)
-    val patchPart = "%03d".format(version.patch)
+  fun Version.calculateVersionCode(): Int {
+    val majorPart = major + 28
+    val minorPart = "%02d".format(minor)
+    val patchPart = "%03d".format(patch)
     return "$majorPart$minorPart$patchPart".toInt()
   }
 
-  fun gitTag(version: Version) {
-    val versionName = version.toVersionString()
-    val versionCode = calculateVersionCode(version)
-    val tag = "$versionName-$versionCode"
-    runCommand("git", "tag", "-a", tag, "-m", "Release $tag")
+  fun Version.calculateGitTag(): String {
+    val versionName = toVersionString()
+    val versionCode = this.calculateVersionCode()
+    return "$versionName-$versionCode"
   }
 
-  fun gitPush() {
-    runCommand("git", "push", "--tags")
+  fun tagInGitAndPush(tag: String) {
+    runCommand("git", "tag", "-a", tag, "-m", "Release $tag")
+    runCommand("git", "push", "origin", "tag", tag)
   }
 
   fun newVersion(today: LocalDate, existingVersions: List<Version>): Version {
@@ -106,35 +106,38 @@ class Release : CliktCommand() {
     val existingVersions = existingVersions().sortedDescending()
     echo("Last 5 versions: ${existingVersions.take(5).joinToString { it.toVersionString() }}")
     val newVersion = newVersion(LocalDate.now(), existingVersions)
-    val newVersionName = newVersion.toVersionString()
-    val newVersionCode = calculateVersionCode(newVersion)
-    val shouldRelease = YesNoPrompt(
-      prompt = "Release version $newVersionName-$newVersionCode",
-      terminal = terminal,
-      default = true,
-    ).ask() ?: false
+    val newTag = newVersion.calculateGitTag()
+    val shouldRelease = confirmRelease(newTag)
 
     if (!shouldRelease) {
       echo("Aborting release")
       return
     }
-    echo("Tagging git with $newVersionName-$newVersionCode")
-    gitTag(newVersion)
-    val shouldPush = confirmPush()
 
-    if (shouldPush) {
-      gitPush()
+    if (confirmPush(newTag)) {
+      tagInGitAndPush(tag = newTag)
     }
   }
 
-  private fun confirmPush(): Boolean {
-    if (System.getenv("CI") == "true") return true
+  private fun confirmRelease(newTag: String): Boolean {
+    if (isCi()) return true
     return YesNoPrompt(
-      prompt = "Push tags to remote",
+      prompt = "Release version $newTag",
       terminal = terminal,
       default = true,
     ).ask() ?: false
   }
+
+  private fun confirmPush(tag: String): Boolean {
+    if (isCi()) return true
+    return YesNoPrompt(
+      prompt = "Tag $tag and push to remote",
+      terminal = terminal,
+      default = true,
+    ).ask() ?: false
+  }
+
+  private fun isCi(): Boolean = System.getenv("CI") == "true"
 }
 
 Release().main(args)
