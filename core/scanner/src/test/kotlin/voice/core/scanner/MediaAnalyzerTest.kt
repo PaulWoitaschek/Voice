@@ -111,6 +111,22 @@ internal class MediaAnalyzerTest {
   }
 
   @Test
+  fun ogg_endless_loop_issue() {
+    val metadata = parse("auphonic_chapters_demo_issue.ogg")
+
+    assertSoftly {
+      metadata.shouldNotBeNull()
+      metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
+      metadata.fileName shouldBe "auphonic_chapters_demo"
+      metadata.title shouldBe "Auphonic Chapter Marks Demo"
+      metadata.artist shouldBe "Auphonic"
+      metadata.album shouldBe "Auphonic Examples"
+      metadata.chapters shouldContainExactly auphonicChapters
+    }
+  }
+
+
+  @Test
   fun mka_simple_chapters() {
     val metadata = parse("mka_simple_chapters.mka")
     assertSoftly {
