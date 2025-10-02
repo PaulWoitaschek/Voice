@@ -21,3 +21,7 @@ releases
 /plugins/.idea/workspace.xml
 /.kotlin
 /.idea/deviceManager.xml
+/fastlane/README.md
+/fastlane/report.xml
+/.idea/copilot.data.migration.ask.xml
+/.idea/copilot.data.migration.ask2agent.xml

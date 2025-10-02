@@ -1,4 +1,5 @@
+blank_issues_enabled: false
 contact_links:
   - name: Discussion
-    url: https://github.com/PaulWoitaschek/Voice/discussions
+    url: https://github.com/VoiceAudiobook/Voice/discussions
     about: Please use the discussions for feature ideas, upvotes and general ideas.

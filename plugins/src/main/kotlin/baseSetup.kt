@@ -8,15 +8,14 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-      languageVersion.set(KotlinVersion.KOTLIN_1_9)
       jvmTarget.set(JvmTarget.JVM_11)
+      freeCompilerArgs.add("-Xannotation-default-target=param-property")
       optIn.addAll(
         listOf(
           "kotlin.RequiresOptIn",
@@ -25,7 +24,6 @@ fun Project.baseSetup() {
           "kotlin.time.ExperimentalTime",
           "kotlinx.coroutines.ExperimentalCoroutinesApi",
           "kotlinx.coroutines.FlowPreview",
-          "kotlinx.serialization.ExperimentalSerializationApi",
         ),
       )
       allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
@@ -36,6 +34,7 @@ fun Project.baseSetup() {
       languageVersion.set(JavaLanguageVersion.of(17))
     }
   }
+  configureRobolectricSdk(this)
   extensions.configure<BaseExtension> {
     namespace = "voice." + path.removePrefix(":").replace(':', '.')
     compileOptions {
@@ -57,20 +56,13 @@ fun Project.baseSetup() {
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
-    if (project.path != ":logging:core") {
-      add("implementation", project(":logging:core"))
-    }
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
-
-    listOf(
-      "coroutines.core",
-      "coroutines.android",
-    ).forEach {
-      add("implementation", libs.findLibrary(it).get())
+    add("implementation", libs.findLibrary("coroutines.core").get())
+    add("implementation", libs.findLibrary("coroutines.android").get())
+    if (project.path != ":core:logging:api") {
+      add("implementation", project(":core:logging:api"))
     }
-
-    add("implementation", libs.findLibrary("serialization-json").get())
     add("testImplementation", libs.findBundle("testing-jvm").get())
   }
 }

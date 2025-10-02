@@ -11,7 +11,7 @@ class AppPlugin : Plugin<Project> {
       withPlugin("com.android.application") {
         target.baseSetup()
         target.tasks.register("voiceUnitTest") {
-          dependsOn("testPlayProprietaryDebugUnitTest")
+          dependsOn("testPlayDebugUnitTest")
         }
       }
     }

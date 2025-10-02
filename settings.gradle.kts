@@ -31,8 +31,13 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.develocity") version "4.0.2"
+  id("com.gradle.develocity") version "4.2.1"
   id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
+  id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+  id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
+  id("com.android.application") version "8.13.0" apply false
+  id("com.android.library") version "8.13.0" apply false
+  id("com.autonomousapps.build-health") version "3.0.4"
 }
 
 develocity {
@@ -43,29 +48,35 @@ develocity {
 }
 
 include(":app")
-include(":strings")
-include(":common")
-include(":bookmark")
-include(":data")
-include(":playback")
-include(":scanner")
-include(":playbackScreen")
-include(":sleepTimer")
-include(":settings")
-include(":search")
-include(":cover")
-include(":datastore")
-include(":folderPicker")
-include(":bookOverview")
-include(":migration")
-include(":scripts")
-include(":logging:core")
-include(":logging:debug")
-include(":documentfile")
-include(":onboarding")
-include(":logging:crashlytics")
-include(":review:play")
-include(":review:noop")
-include(":remoteconfig:core")
-include(":remoteconfig:firebase")
-include(":remoteconfig:noop")
+include(":navigation")
+
+include(":core:common")
+include(":core:data:api")
+include(":core:data:impl")
+include(":core:documentfile")
+include(":core:logging:api")
+include(":core:logging:crashlytics")
+include(":core:logging:debug")
+include(":core:playback")
+include(":core:remoteconfig:api")
+include(":core:remoteconfig:firebase")
+include(":core:remoteconfig:noop")
+include(":core:scanner")
+include(":core:search")
+include(":core:strings")
+include(":core:ui")
+include(":core:initializer")
+
+include(":features:bookOverview")
+include(":features:bookmark")
+include(":features:cover")
+include(":features:folderPicker")
+include(":features:onboarding")
+include(":features:playbackScreen")
+include(":features:review:noop")
+include(":features:review:play")
+include(":features:settings")
+include(":features:sleepTimer")
+include(":features:widget")
+include(":core:sleeptimer:api")
+include(":core:sleeptimer:impl")

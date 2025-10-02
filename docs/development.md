@@ -1,5 +1,26 @@
 # Development
 
+## Project Setup
+
+To run the project, open it in the latest Version of Android Studio and build the project as usual.
+
+By default, there is not enough memory configured for gradle. You can fix this by running.
+
+```sh
+scripts/gradle_bootstrap.sh
+```
+
+This will configure your global `~/.gradle/gradle.properties` to use more memory, depending on your machine.
+
+Example of the generated properties, check the `gradle_bootstrap.sh` script for exact details.
+
+```properties
+# Begin: Gradle JVM bootstrap-generated properties
+org.gradle.jvmargs=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms4g -Xmx16g
+kotlin.daemon.jvm.options=-Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xms4g -Xmx16g
+# End: Gradle JVM bootstrap-generated properties
+```
+
 ## Tests
 
 ### Unit tests
@@ -7,7 +28,7 @@
 To run the unit tests, run the following command:
 
 ```sh
-./gradlew voiceUnitTests
+./gradlew voiceUnitTest
 ```
 
 ### Instrumentation tests
@@ -15,7 +36,7 @@ To run the unit tests, run the following command:
 To run the instrumentation tests, run the following command:
 
 ```sh
-./gradlew voiceDeviceGithubLibreDebugAndroidTest
+./gradlew voiceDeviceGithubDebugAndroidTest
 ```
 
 ## Ktlint
@@ -43,12 +64,47 @@ chmod +x .git/hooks/pre-commit
 
 ## Releasing
 
-To release a new version:
+To release a new version, install the kotlin cli and run:
 
-1. Update versionCode and versionName in libs.versions.toml.
-2. Push a corresponding Git tag to the main branch.
+```shell
+./release.main.kts
+```
 
 This triggers the CI to build and publish the release to the Play Store’s internal track. From there, promotion to production must be done
 manually.
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
+
+## Versioning
+
+Voice uses [calendar versioning (CalVer)](https://calver.org/).
+
+- Version name format: `YY.M.RELEASE`
+  - `YY`: release year, last 2 digits (2025 → 25)
+  - `M`: release month (1–12)
+  - `RELEASE`: counter for releases within the same month (starting at 1)
+- Tag format (used by CI): `YY.M.RELEASE-CODE`
+  - `CODE` is the numeric Android versionCode derived from the version name using the formula below.
+
+Examples:
+
+- First release in September 2025 → version name `25.9.1`
+- Tag includes version code → `25.9.1-5309001`
+
+### Version code
+
+The Android `versionCode` is calculated from the version name with:
+
+`CODE = (YY + 28)(MM as 2 digits)(RELEASE as 3 digits)`
+
+Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
+
+This code is embedded in the git tag by `release.main.kts` and used by CI and Fastlane.
+
+## Pages Deployment
+
+To projects [Website](https://voice.woitaschek.de/) uses Github Pages and Mkdocs.
+To deploy a new website, use dispatch a workflow
+manually.
+
+[👉 Dispatch Workflow](https://github.com/VoiceAudiobook/Voice/actions/workflows/deploy_pages.yml)

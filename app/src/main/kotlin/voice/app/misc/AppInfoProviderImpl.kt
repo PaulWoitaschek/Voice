@@ -1,13 +1,10 @@
 package voice.app.misc
 
+import dev.zacsweers.metro.Inject
 import voice.app.BuildConfig
-import voice.common.AppInfoProvider
-import javax.inject.Inject
+import voice.core.common.AppInfoProvider
 
-class AppInfoProviderImpl
-@Inject constructor() : AppInfoProvider {
-
-  override val applicationID = BuildConfig.APPLICATION_ID
-
+@Inject
+class AppInfoProviderImpl : AppInfoProvider {
   override val versionName: String = BuildConfig.VERSION_NAME
 }

@@ -1,6 +1,10 @@
 {
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "labels": [
+    "dependencies"
   ],
   "packageRules": [
     {
@@ -14,11 +18,21 @@
       ]
     },
     {
-      "groupName": "Kotlin, KSP",
+      "groupName": "AGP, Lint",
+      "matchDepNames": [
+        "com.android.library{/,}**",
+        "androidx.databinding:viewbinding{/,}**",
+        "com.android.application{/,}**",
+        "com.android.tools{/,}**"
+      ]
+    },
+    {
+      "groupName": "Kotlin, KSP, Mero",
       "matchPackageNames": [
         "org.jetbrains.kotlin:{/,}**",
         "org.jetbrains.kotlin.{/,}**",
-        "com.google.devtools.ksp{/,}**"
+        "com.google.devtools.ksp{/,}**",
+        "dev.zacsweers.metro**"
       ]
     },
     {
@@ -27,17 +41,6 @@
         "com.pinterest.ktlint{/,}**",
         "io.nlopez.compose.rules{/,}**",
         "io.github.usefulness{/,}**"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "maven"
-      ],
-      "registryUrls": [
-        "https://jitpack.io/"
-      ],
-      "matchPackageNames": [
-        "com.github.PaulWoitaschek{/,}**"
       ]
     },
     {
@@ -55,13 +58,6 @@
         "com.google.android.play:review-ktx"
       ],
       "allowedVersions": "!/^(2\\.0\\.2)$/"
-    },
-    {
-      "matchPackageNames": [
-        "com.google.dagger:dagger",
-        "com.google.dagger:dagger-compiler"
-      ],
-      "allowedVersions": "!/^(2\\.56|2\\.56\\.1)$/"
     }
   ],
   "prHourlyLimit": 0,
