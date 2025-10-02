@@ -36,6 +36,7 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ImmutableFile
+import voice.core.ui.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
@@ -209,10 +210,12 @@ class BookPlayViewModel(
       _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
         items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
           chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
+            val previousChapters = book.chapters.take(chapterIndex)
             BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-              number = book.chapters.take(chapterIndex).sumOf { it.chapterMarks.count() } + markIndex + 1,
+              number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
               name = chapterMark.name ?: "",
               active = chapterMark == book.currentMark && chapter == book.currentChapter,
+              time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
             )
           }
         },
