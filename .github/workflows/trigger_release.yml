@@ -10,6 +10,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    environment: trigger-release
+
     steps:
       - name: Checkout (with tags)
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -19,6 +21,8 @@ jobs:
           fetch-tags: true
           # We need the credentials to push the tag
           persist-credentials: true
+          # The standard GITHUB_TOKEN creates no workflow on pushes. That prevents the tag not triggering a release
+          token: ${{ secrets.PUSH_PAT }}
 
       - name: Configure git author
         run: |
@@ -26,7 +30,5 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
       - name: Run release script (non-interactive)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./scripts/release.main.kts --no-confirm
