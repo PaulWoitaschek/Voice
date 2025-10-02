@@ -11,6 +11,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +29,7 @@ internal fun SelectChapterDialog(
   viewModel: BookPlayViewModel,
 ) {
   ModalBottomSheet(
+    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismissRequest = { viewModel.dismissDialog() },
     content = {
       val selectedIndex = dialogState.items.indexOfFirst { it.active }
