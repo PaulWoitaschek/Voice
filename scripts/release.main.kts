@@ -120,15 +120,20 @@ class Release : CliktCommand() {
     }
     echo("Tagging git with $newVersionName-$newVersionCode")
     gitTag(newVersion)
-    val shouldPush = YesNoPrompt(
-      prompt = "Push tags to remote",
-      terminal = terminal,
-      default = true,
-    ).ask() ?: false
+    val shouldPush = confirmPush()
 
     if (shouldPush) {
       gitPush()
     }
+  }
+
+  private fun confirmPush(): Boolean {
+    if (System.getenv("CI") == "true") return true
+    return YesNoPrompt(
+      prompt = "Push tags to remote",
+      terminal = terminal,
+      default = true,
+    ).ask() ?: false
   }
 }
 
