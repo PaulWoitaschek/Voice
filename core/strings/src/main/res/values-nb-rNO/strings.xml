@@ -16,18 +16,16 @@
     <string name="book_header_completed">Fullført</string>
     <string name="folder_mode_root">Samlet lydboksmappe: hver undermappe er én bok</string>
     <string name="folder_mode_single">Enkelvis lydboksmappe: denne mappen er én bok.</string>
-    <string name="folder_type_title">Hvilken struktur har filene dine\?</string>
+    <string name="folder_type_title">Hvilken struktur har filene dine?</string>
     <string name="migration_detail_content_bookmarks">Bokmerker</string>
     <string name="voice_intro_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
     <string name="migration_hint_confirm">Skjønner</string>
     <string name="migration_detail_title">Gamle bokposisjoner</string>
     <string name="migration_detail_content_name">Navn</string>
-    <string name="migration_hint_content">På grunn av endringer i nyere Android-versjoner er det nødvendig å velge lydbokmappen din ved hjelp av systemvelgeren.
-\n
-\nKlikk på ikonet ovenfor for å vise dine gamle bokposisjoner.</string>
+    <string name="migration_hint_content">På grunn av endringer i nyere Android-versjoner er det nødvendig å velge lydbokmappen din ved hjelp av systemvelgeren. \n \nKlikk på ikonet ovenfor for å vise dine gamle bokposisjoner.</string>
     <string name="migration_detail_content_position_current_chapter_title">Nåværende kapittel</string>
     <string name="migration_delete_dialog_content">Når du sletter de gamle posisjonene vil du ikke kunne gjenopprette dine gamle avspillingsposisjoner.</string>
-    <string name="search_hint">Hva leter du etter\?</string>
+    <string name="search_hint">Hva leter du etter?</string>
     <string name="delete_book_dialog_content">Dette sletter filene på enheten din.</string>
     <string name="media_session_root">Alle lydbøker</string>
     <string name="media_session_recent">Nylig</string>
