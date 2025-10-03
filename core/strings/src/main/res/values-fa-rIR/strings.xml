@@ -17,7 +17,7 @@
     <string name="audiobook_folders_title">پوشه‌های کتاب صوتی</string>
     <string name="playback_speed">سرعت بازپخش</string>
     <string name="bookmark">نشان‌گذاری</string>
-    <string name="bookmark_edit_title">ویرایش نشانه </string>
+    <string name="bookmark_edit_title">ویرایش نشانه</string>
     <string name="bookmark_edit_hint">نام گذاری نشانه</string>
     <string name="bookmark_added">نشانه‌گذاری انجام شد</string>
     <string name="action_settings">تنظیمات</string>
@@ -127,7 +127,5 @@
     <string name="review.request.button.yes">الان امتیاز بدهید</string>
     <string name="onboarding_welcome_subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.button_next">بعدی</string>
-    <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید.
-\n
-\nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
+    <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید. \n \nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
 </resources>

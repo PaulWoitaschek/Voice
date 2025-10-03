@@ -119,7 +119,7 @@
     <string name="onboarding.completion.title">Усё гатова!</string>
     <string name="onboarding.completion.subtitle">Ваша першая аўдыякніга гатова да прайгравання. Прыемнага падарожжа з Voice!</string>
     <string name="onboarding.completion.next_button">Слухаць</string>
-    <string name="review.request.title">Упадабалі Voice\?</string>
+    <string name="review.request.title">Упадабалі Voice?</string>
     <string name="review.request.button.yes">Паставіць адзнаку</string>
     <string name="review.request.button.no">Не, дзякуй</string>
     <string name="review.feedback.title">Нам вельмі шкада!</string>

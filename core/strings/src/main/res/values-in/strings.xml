@@ -69,9 +69,7 @@
     <string name="folder_mode_author">Mode Penulis-Buku: Subfolder adalah penulis, sub-subfolder adalah buku.</string>
     <string name="migration_detail_content_name">Nama</string>
     <string name="voice_intro_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
-    <string name="migration_hint_content">Karena adanya perubahan pada Versi Android yang lebih baru, Anda perlu memilih folder buku audio Anda menggunakan pemilih sistem.
-\n
-\nKlik ikon di atas untuk melihat posisi buku lama Anda.</string>
+    <string name="migration_hint_content">Karena adanya perubahan pada Versi Android yang lebih baru, Anda perlu memilih folder buku audio Anda menggunakan pemilih sistem. \n \nKlik ikon di atas untuk melihat posisi buku lama Anda.</string>
     <string name="migration_detail_content_position">Posisi</string>
     <string name="migration_detail_content_added_at">Ditambahkan di</string>
     <string name="migration_detail_content_bookmarks">Markah</string>

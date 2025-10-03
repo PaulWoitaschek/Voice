@@ -57,8 +57,8 @@
     <string name="folder_mode_root">Modalità libro di primo livello: le sottocartelle sono libri</string>
     <string name="folder_mode_single">Modalità libro singolo: una cartella equivale a un libro.</string>
     <string name="folder_type_book_example_header">Questo porterebbe al rilevamento dei seguenti libri</string>
-    <string name="folder_type_no_books">Voice non ha rilevato alcun libro. Ci sono file audio\?</string>
-    <string name="folder_type_title">Come sono organizzati i tuoi file\?</string>
+    <string name="folder_type_no_books">Voice non ha rilevato alcun libro. Ci sono file audio?</string>
+    <string name="folder_type_title">Come sono organizzati i tuoi file?</string>
     <string name="migration_hint_title">Accesso alle vecchie posizioni del libro</string>
     <string name="migration_hint_confirm">Ho capito</string>
     <string name="migration_detail_content_name">Nome</string>
@@ -75,7 +75,7 @@
     <string name="delete_book_bottom_sheet_title">Elimina libro</string>
     <string name="delete_book_dialog_deletion_confirmation">Elimina i miei file</string>
     <string name="delete_book_dialog_content">Questo eliminerà i file sul tuo dispositivo.</string>
-    <string name="search_hint">Cosa stai cercando\?</string>
+    <string name="search_hint">Cosa stai cercando?</string>
     <string name="battery_optimization_action">Aggiornamento</string>
     <string name="media_session_root">Tutti gli audiolibri</string>
     <string name="media_session_recent">Recente</string>
@@ -84,9 +84,7 @@
     <string name="pref_suggest_idea">Suggerisci un\'idea</string>
     <string name="bookmark_just_now">Proprio adesso</string>
     <string name="voice_intro_first_book">Aggiungiamo la tua cartella degli audiolibri per iniziare ad ascoltare!</string>
-    <string name="migration_hint_content">A causa dei cambiamenti nelle versioni Android più recenti, è necessario selezionare la cartella degli audiolibri utilizzando il selettore di sistema.
-\n
-\nFai clic sull\'icona in alto per visualizzare le tue vecchie posizioni del libro.</string>
+    <string name="migration_hint_content">A causa dei cambiamenti nelle versioni Android più recenti, è necessario selezionare la cartella degli audiolibri utilizzando il selettore di sistema. \n \nFai clic sull\'icona in alto per visualizzare le tue vecchie posizioni del libro.</string>
     <string name="migration_detail_title">Vecchie posizioni dei libri</string>
     <string name="migration_detail_content_root">Cartella radice</string>
     <string name="battery_optimization_rationale">A causa delle impostazioni di risparmio energetico, potrebbero verificarsi interruzioni nella riproduzione.</string>
@@ -108,15 +106,15 @@
     <string name="review.feedback.button.no">Cancella</string>
     <string name="cover_search.author">Autore</string>
     <string name="review.request.content">I tuoi commenti sono importanti per noi! Se hai un momento, votaci e condividi la tua esperienza. Ci aiuta a migliorare e offrire una migliore esperienza di ascolto.</string>
-    <string name="review.request.title">Ti stai divertendo con Voice\?</string>
+    <string name="review.request.title">Ti stai divertendo con Voice?</string>
     <string name="review.request.button.no">No, grazie</string>
-    <string name="review.feedback.content">Ci può dire cosa è andato storto\? Apprezziamo il tuo feedback e ci aiuta a migliorare la tua esperienza.</string>
+    <string name="review.feedback.content">Ci può dire cosa è andato storto? Apprezziamo il tuo feedback e ci aiuta a migliorare la tua esperienza.</string>
     <string name="cover_search.icon_recent">Interrogazione recente</string>
     <string name="select_folder_title_onboarding">Aggiungi il tuo primo audiolibro</string>
     <string name="select_folder_title_default">Aggiungi il tuo audiolibro(i)</string>
     <string name="select_folder_type_file">File</string>
     <string name="select_folder_type_folder">Cartella</string>
-    <string name="select_folder_subtitle">Vuoi aggiungere un singolo file come un libro o una cartella\?</string>
+    <string name="select_folder_subtitle">Vuoi aggiungere un singolo file come un libro o una cartella?</string>
     <string name="onboarding_welcome_title">Benvenuto in Voice!</string>
     <string name="onboarding_welcome_subtitle">Il tuo lettore di audiolibri tascabile personale. Ti prepariamo.</string>
     <string name="onboarding.button_next">Avanti</string>
