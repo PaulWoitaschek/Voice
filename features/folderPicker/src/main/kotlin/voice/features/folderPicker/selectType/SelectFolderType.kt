@@ -69,7 +69,7 @@ fun SelectFolderType(
   mode: Destination.SelectFolderType.Mode,
 ) {
   val context = LocalContext.current
-  val viewModel = rememberScoped {
+  val viewModel = rememberScoped(uri.toString(), mode.name) {
     rootGraphAs<SelectFolderTypeGraph>().selectFolderTypeViewModelFactory
       .create(
         uri = uri,
