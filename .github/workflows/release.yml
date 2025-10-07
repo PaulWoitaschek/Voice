@@ -90,7 +90,7 @@ jobs:
           name: github-apks
           path: artifacts
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
+        uses: softprops/action-gh-release@aec2ec56f94eb8180ceec724245f64ef008b89f5 # v2
         with:
           files: artifacts/*.apk
           generate_release_notes: true
