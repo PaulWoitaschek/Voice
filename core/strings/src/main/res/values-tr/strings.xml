@@ -134,4 +134,5 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Başlama zamanı</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Bitiş zamanı</string>
     <string name="playback.current_chapter">Şu anki bölüm</string>
+    <string name="end_of_chapter">Bölüm Sonu</string>
 </resources>
