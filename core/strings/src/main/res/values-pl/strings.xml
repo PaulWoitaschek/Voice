@@ -139,4 +139,6 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Rozpocznij</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Zakończ</string>
     <string name="playback.current_chapter">Aktualny rozdział</string>
+    <string name="pref_faq">Najczęściej zadawane pytania (FAQ)</string>
+    <string name="end_of_chapter">Koniec rozdziału</string>
 </resources>
