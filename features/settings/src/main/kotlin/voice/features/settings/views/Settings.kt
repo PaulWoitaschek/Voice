@@ -85,6 +85,11 @@ private fun Settings(
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
       }
+      if (viewState.showAnalyticSetting) {
+        item {
+          AnalyticsRow(analyticsEnabled = viewState.analyticsEnabled, toggle = listener::toggleAnalytics)
+        }
+      }
       item {
         ListItem(
           modifier = Modifier.clickable { listener.toggleGrid() },
@@ -202,6 +207,28 @@ private fun Settings(
     }
     Dialog(viewState, listener)
   }
+}
+
+@Composable
+private fun AnalyticsRow(
+  analyticsEnabled: Boolean,
+  toggle: () -> Unit,
+) {
+  ListItem(
+    modifier = Modifier.clickable { toggle() },
+    headlineContent = {
+      Text(text = stringResource(StringsR.string.settings_analytics_consent_title))
+    },
+    supportingContent = {
+      Text(text = stringResource(StringsR.string.settings_analytics_consent_description))
+    },
+    trailingContent = {
+      Switch(
+        checked = analyticsEnabled,
+        onCheckedChange = { toggle() },
+      )
+    },
+  )
 }
 
 @ContributesTo(AppScope::class)
