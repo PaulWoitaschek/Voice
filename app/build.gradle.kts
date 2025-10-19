@@ -99,6 +99,7 @@ android {
           "proguard.pro",
         ),
       )
+      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = includeProprietaryLibraries().toString())
     }
   }
 
