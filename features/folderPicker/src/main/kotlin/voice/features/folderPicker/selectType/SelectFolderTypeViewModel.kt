@@ -11,7 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.data.audioFileCount
@@ -25,7 +25,7 @@ import voice.navigation.Destination
 import voice.navigation.Destination.SelectFolderType.Mode
 import voice.navigation.Navigator
 
-@Inject
+@AssistedInject
 class SelectFolderTypeViewModel(
   private val dispatcherProvider: DispatcherProvider,
   private val audiobookFolders: AudiobookFolders,

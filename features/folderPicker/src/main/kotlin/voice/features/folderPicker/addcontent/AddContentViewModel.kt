@@ -3,7 +3,7 @@ package voice.features.folderPicker.addcontent
 import android.net.Uri
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.features.folderPicker.folderPicker.FileTypeSelection
@@ -14,7 +14,7 @@ import voice.navigation.Destination.SelectFolderType
 import voice.navigation.Navigator
 import voice.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
 
-@Inject
+@AssistedInject
 class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
