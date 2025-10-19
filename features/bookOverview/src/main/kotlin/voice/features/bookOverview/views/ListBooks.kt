@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -16,7 +17,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,9 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableMap
@@ -92,65 +95,105 @@ internal fun ListBookRow(
   onBookLongClick: (BookId) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Card(
+  ElevatedCard(
+    shape = MaterialTheme.shapes.extraLarge,
     modifier = modifier
       .fillMaxWidth()
       .combinedClickable(
-        onClick = {
-          onBookClick(book.id)
-        },
-        onLongClick = {
-          onBookLongClick(book.id)
-        },
+        onClick = { onBookClick(book.id) },
+        onLongClick = { onBookLongClick(book.id) },
       ),
-    content = {
-      Column {
-        Row {
-          CoverImage(book.cover)
-          Column(
-            Modifier
-              .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-              .align(Alignment.CenterVertically),
+  ) {
+    Column(Modifier.padding()) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        CoverImage(book.cover)
+
+        Column(
+          Modifier
+            .padding(start = 12.dp)
+            .weight(1f),
+        ) {
+          if (book.author != null) {
+            Text(
+              text = book.author.toUpperCase(LocaleList.current),
+              style = MaterialTheme.typography.labelSmall,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              maxLines = 1,
+            )
+          }
+
+          Text(
+            text = book.name,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 2,
+          )
+
+          Row(
+            modifier = Modifier.fillMaxWidth().padding(end = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
           ) {
-            if (book.author != null) {
+            Text(
+              text = book.remainingTime,
+              style = MaterialTheme.typography.labelMedium,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              maxLines = 1,
+            )
+
+            if (book.progress > 0f) {
               Text(
-                text = book.author.toUpperCase(LocaleList.current),
-                style = MaterialTheme.typography.labelSmall,
+                text = "${(book.progress * 100).toInt()}%",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
               )
             }
-            Text(
-              text = book.name,
-              style = MaterialTheme.typography.bodyMedium,
-            )
-            Text(
-              text = book.remainingTime,
-              style = MaterialTheme.typography.bodySmall,
-            )
           }
         }
-
-        if (book.progress > 0.05) {
-          LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth(),
-            progress = { book.progress },
-          )
-        }
       }
-    },
-  )
+
+      if (book.progress > 0.05f) {
+        Spacer(Modifier.size(0.dp))
+        LinearProgressIndicator(
+          progress = { book.progress },
+          modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .height(4.dp),
+          color = MaterialTheme.colorScheme.primary,
+          trackColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
+      }
+    }
+  }
 }
 
 @Composable
 private fun CoverImage(cover: ImmutableFile?) {
+  val startPadding = 16.dp
+  val endPadding = 16.dp
   AsyncImage(
     modifier = Modifier
       .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
       .size(76.dp)
-      .clip(RoundedCornerShape(8.dp)),
+      .clip(RoundedCornerShape(topStart = startPadding, bottomStart = startPadding, topEnd = endPadding, bottomEnd = endPadding)),
     model = cover?.file,
     placeholder = painterResource(id = UiR.drawable.album_art),
     error = painterResource(id = UiR.drawable.album_art),
+    contentScale = ContentScale.Crop,
     contentDescription = null,
   )
+}
+
+@Composable
+@Preview
+private fun ListBookRowPreviewWithProgress() {
+  ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.6f), {}, {})
+}
+
+@Composable
+@Preview
+private fun ListBookRowPreviewWithoutProgress() {
+  ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0f), {}, {})
 }

@@ -103,7 +103,7 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1F)
   }
 
-  private suspend fun startCountdown(duration: Duration) {
+  private tailrec suspend fun startCountdown(duration: Duration) {
     Logger.d("startCountdown(duration=$duration)")
     var left = duration
     _state.value = SleepTimerState.Enabled.WithDuration(left)
@@ -127,15 +127,21 @@ class SleepTimerImpl internal constructor(
 
     playerController.pauseWithRewind(fadeOutDuration)
 
-    val shakeToResetTime = 30.seconds
-    Logger.d("Waiting $shakeToResetTime for shake...")
-    withTimeoutOrNull(shakeToResetTime) {
-      shakeDetector.detect()
+    val shakeDetected = detectShakeWithTimeout()
+    playerController.setVolume(1F)
+    if (shakeDetected) {
       Logger.i("Shake detected, resetting timer")
       playerController.play()
       startCountdown(duration)
     }
-    playerController.setVolume(1F)
+  }
+
+  private suspend fun detectShakeWithTimeout(): Boolean {
+    Logger.d("Waiting $SHAKE_TO_RESET_TIME for shake...")
+    return withTimeoutOrNull(SHAKE_TO_RESET_TIME) {
+      shakeDetector.detect()
+      true
+    } ?: false
   }
 
   private fun updateVolume(
@@ -153,5 +159,9 @@ class SleepTimerImpl internal constructor(
       playStateManager.flow.first { it == Playing }
       Logger.i("Playback resumed.")
     }
+  }
+
+  internal companion object {
+    val SHAKE_TO_RESET_TIME = 30.seconds
   }
 }

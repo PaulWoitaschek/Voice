@@ -3,10 +3,10 @@
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>
     <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
-    <string name="rewind">Επανάληψη </string>
+    <string name="rewind">Επανάληψη</string>
     <string name="fast_forward">Γρήγορη προώθηση</string>
     <string name="previous_track">Προηγούμενο κομμάτι</string>
-    <string name="next_track">Επόμενο κομμάτι </string>
+    <string name="next_track">Επόμενο κομμάτι</string>
     <string name="skip_silence">Παράλειψη ησυχίας</string>
     <string name="dialog_confirm">Ορισμός</string>
     <string name="dialog_cancel">Ακύρωση</string>
@@ -27,13 +27,13 @@
         <item quantity="other">%d δευτερόλεπτα</item>
     </plurals>
     <string name="pref_seek_time">Χρονική μετακίνηση</string>
-    <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
-    <string name="popup_edit">Επεξεργασία </string>
+    <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω</string>
+    <string name="popup_edit">Επεξεργασία</string>
     <string name="remove">Αφαίρεση</string>
     <string name="play_current">Αναπαραγωγή τρέχοντος</string>
     <string name="book_header_current">Τρέχον</string>
     <string name="book_header_not_started">Μη διαβασμένα</string>
-    <string name="book_header_completed">Ολοκληρωμένα </string>
+    <string name="book_header_completed">Ολοκληρωμένα</string>
     <string name="more">Περισσότερα</string>
     <string name="volume_boost">Ενίσχυση έντασης</string>
     <string name="mark_as_completed">Επισήμανση ως ολοκληρωμένο</string>
@@ -80,9 +80,7 @@
     <string name="folder_type_book_example_header">Αυτό θα οδηγήσει στον εντοπισμό των παρακάτω βιβλίων</string>
     <string name="migration_hint_confirm">Κατανοητό</string>
     <string name="migration_detail_content_position">Θέση</string>
-    <string name="migration_hint_content">Λόγω των αλλαγών στις νεότερες εκδόσεις Android, είναι απαραίτητο να επιλέξετε το φάκελο του ηχητικού βιβλίου σας χρησιμοποιώντας τον επιλογέα του συστήματος.
-\n
-\nΚάντε κλικ στο παραπάνω εικονίδιο για να δείτε τις παλιές θέσεις των βιβλίων σας.</string>
+    <string name="migration_hint_content">Λόγω των αλλαγών στις νεότερες εκδόσεις Android, είναι απαραίτητο να επιλέξετε το φάκελο του ηχητικού βιβλίου σας χρησιμοποιώντας τον επιλογέα του συστήματος. \n \nΚάντε κλικ στο παραπάνω εικονίδιο για να δείτε τις παλιές θέσεις των βιβλίων σας.</string>
     <string name="migration_detail_content_position_current_file_position">Θέση στο αρχείο</string>
     <string name="migration_delete_dialog_content">Μόλις διαγράψετε τις παλιές θέσεις, δεν θα μπορείτε να ανακτήσετε τα παλιά σημεία αναπαραγωγής.</string>
     <string name="battery_optimization_action">Αλλαγή</string>

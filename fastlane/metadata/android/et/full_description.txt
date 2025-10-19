@@ -3,6 +3,7 @@ Niisugust, mis lubaks sul keskenduda sellele, mida tahad teha - heliraamatute ku
 Sa vaid lisad rakendusse oma heliraamatute põhikausta ja iga sealne alamkaust saab tuvastatud ühe heliraamatuna. See hoiab sinu kogu lihtsa ja müravabana.
 
 Mida see rakendus oskab:
+
 - mäletab viimast asukohta heliraamatus
 - saad valida taasesituse kiirust
 - ilus kujundus, mis põhineb Material Designi kujunduskeelel
@@ -14,6 +15,6 @@ Mida see rakendus oskab:
 Voice on vaba tarkvara ja põhineb avatud lähtekoodil. See tähendab, et kõik huvilised saavad kontrollida, kuidas ta töötab. Lisaks vajab ta minimaalselt õigusi.
 
 Kui sul on soovitusi või leiad mõne vea, siis teata neist siin:
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 Voice on avaldatud GNU Üldise Avaliku Litsentsi versioon 3 alusel

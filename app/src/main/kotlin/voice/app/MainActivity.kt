@@ -12,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.ui.DialogSceneStrategy
+import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
@@ -66,10 +66,12 @@ class MainActivity : AppCompatActivity() {
           backStack = backStack,
           sceneStrategy = dialogStrategy,
           onBack = {
-            backStack.removeLastOrNull()
+            if (backStack.size > 1) {
+              backStack.removeLastOrNull()
+            }
           },
           entryProvider = { key ->
-            navEntryResolver.create(key, backStack)
+            navEntryResolver.create(key)
           },
         )
 
@@ -97,7 +99,9 @@ class MainActivity : AppCompatActivity() {
                 }
               }
               NavigationCommand.GoBack -> {
-                backStack.removeLastOrNull()
+                if (backStack.size > 1) {
+                  backStack.removeLastOrNull()
+                }
               }
               is NavigationCommand.SetRoot -> {
                 backStack.clear()

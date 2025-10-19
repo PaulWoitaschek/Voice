@@ -56,7 +56,7 @@ interface BookOverviewProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.BookOverview> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.BookOverview> { key ->
     NavEntry(key) {
       BookOverviewScreen()
     }

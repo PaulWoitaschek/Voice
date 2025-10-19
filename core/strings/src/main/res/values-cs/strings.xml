@@ -30,6 +30,7 @@
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="pref_seek_time">Přeskočit o</string>
@@ -76,6 +77,7 @@
     <plurals name="minutes">
         <item quantity="one">%d minuta</item>
         <item quantity="few">%d minuty</item>
+        <item quantity="many">%d minut</item>
         <item quantity="other">%d minut</item>
     </plurals>
     <string name="search_hint">Co hledáte?</string>
@@ -84,6 +86,7 @@
     <plurals name="folder_type_file_count">
         <item quantity="one">%d zvukový soubor</item>
         <item quantity="few">%d zvukové soubory</item>
+        <item quantity="many">%d zvukových souborů</item>
         <item quantity="other">%d zvukových souborů</item>
     </plurals>
     <string name="voice_intro_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>

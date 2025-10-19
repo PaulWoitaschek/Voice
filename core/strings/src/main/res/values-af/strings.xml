@@ -45,8 +45,8 @@
     <string name="delete">Skrap</string>
     <string name="add">Voeg toe</string>
     <string name="folder_mode_single">Enkele audioboek gids</string>
-    <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers\?</string>
-    <string name="folder_type_title">Hoe is jou lêers onderverdeel\?</string>
+    <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers?</string>
+    <string name="folder_type_title">Hoe is jou lêers onderverdeel?</string>
     <string name="bookmark_just_now">Nou net</string>
     <string name="migration_hint_title">Oud lees posisies</string>
     <string name="migration_hint_confirm">Ek verstaan</string>
@@ -62,7 +62,7 @@
     <string name="delete_book_bottom_sheet_title">Skrap boek</string>
     <string name="delete_book_dialog_title">Skrap boek</string>
     <string name="delete_book_dialog_deletion_confirmation">Skrap my lêers</string>
-    <string name="search_hint">Waarna is jy opsoek\?</string>
+    <string name="search_hint">Waarna is jy opsoek?</string>
     <string name="battery_optimization_rationale">As geval van energiebeperkinge kan daar onderbrekings ervaar word.</string>
     <string name="battery_optimization_action">Opdateer</string>
     <string name="media_session_root">Die sin word getoon vir die hoof inhoud van Voice soos gesien op Android Auto. Dis die merker vir die hoof kaart wat alle boeke bevat.</string>
@@ -81,9 +81,7 @@
     <string name="folder_mode_root">Hoof audioboek gids. Een subgids = een audioboek.</string>
     <string name="folder_type_book_example_header">Dit sal lei tot die volgende boeke wat opgetel word</string>
     <string name="voice_intro_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
-    <string name="migration_hint_content">As gevolg van veranderinge aan nuwer Android weergawes is dit noodsaaklik om jou audioboek gids te kies met behulp van die stelsel gids kieser.
-\n
-\nKliek die ikoon bo om jou ou boek posisies te sien.</string>
+    <string name="migration_hint_content">As gevolg van veranderinge aan nuwer Android weergawes is dit noodsaaklik om jou audioboek gids te kies met behulp van die stelsel gids kieser. \n \nKliek die ikoon bo om jou ou boek posisies te sien.</string>
     <string name="migration_detail_title">Oud boek posisies</string>
     <string name="migration_detail_content_root">Hoofgids</string>
     <string name="migration_delete_dialog_title">Skrap posisies</string>

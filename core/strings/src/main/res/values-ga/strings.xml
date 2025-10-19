@@ -102,9 +102,7 @@
     <string name="bookmark_just_now">Anois féin</string>
     <string name="voice_intro_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
     <string name="migration_hint_title">Teacht ar phoist na Seanleabhar</string>
-    <string name="migration_hint_content">De bharr athruithe ar Leaganacha Android níos nuaí, ní mór d’fhillteán closleabhar a roghnú ag baint úsáide as an roghnóir córais.
-\n
-\nCliceáil ar an deilbhín thuas chun féachaint ar do sheanleabhair.</string>
+    <string name="migration_hint_content">De bharr athruithe ar Leaganacha Android níos nuaí, ní mór d’fhillteán closleabhar a roghnú ag baint úsáide as an roghnóir córais. \n \nCliceáil ar an deilbhín thuas chun féachaint ar do sheanleabhair.</string>
     <string name="migration_hint_confirm">Tuigeadh</string>
     <string name="migration_detail_content_position_current_file_title">Comhad reatha</string>
     <string name="migration_detail_content_root">Fillteán fréimhe</string>

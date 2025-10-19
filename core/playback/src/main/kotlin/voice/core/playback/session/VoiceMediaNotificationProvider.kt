@@ -22,7 +22,7 @@ class VoiceMediaNotificationProvider(context: Context) : DefaultMediaNotificatio
         forEachIndexed { index, commandButton ->
           /**
            * This shows the previous / next icons in compact mode for Android < 13
-           * https://github.com/PaulWoitaschek/Voice/issues/1904
+           * https://github.com/VoiceAudiobook/Voice/issues/1904
            */
           commandButton?.extras?.putInt(COMMAND_KEY_COMPACT_VIEW_INDEX, index)
         }

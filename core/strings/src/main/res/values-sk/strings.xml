@@ -25,6 +25,7 @@
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekúnd</item>
         <item quantity="other">%d sekúnd</item>
     </plurals>
     <string name="pref_seek_time">Preskočiť o</string>
@@ -44,18 +45,19 @@
     <string name="mark_as_completed">Označiť za ukončené</string>
     <string name="pause">Pozastaviť</string>
     <string name="pref_help_translating">Pomôcť s prekladom</string>
-    <string name="folder_type_no_books">Aplikácia nenašla žiadne knihy. Sú tam nejaké audio súbory\?</string>
+    <string name="folder_type_no_books">Aplikácia nenašla žiadne knihy. Sú tam nejaké audio súbory?</string>
     <string name="pref_app_version">Verzia aplikácie</string>
     <string name="cover_search.author">Autor</string>
     <string name="pref_report_issue">Nahlásiť problém</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d audio súbor</item>
         <item quantity="few">%d audio súbory</item>
+        <item quantity="many">%d audio súborov</item>
         <item quantity="other">%d audio súborov</item>
     </plurals>
     <string name="more">Viac</string>
     <string name="bookmark_just_now">Práve teraz</string>
-    <string name="folder_type_title">Ako sú organizované vaše súbory\?</string>
+    <string name="folder_type_title">Ako sú organizované vaše súbory?</string>
     <string name="mark_as_current">Označiť za aktuálne</string>
     <string name="play">Prehrať</string>
     <string name="volume_boost">Zvýrazniť hlasitosť</string>

@@ -45,6 +45,10 @@ class FolderPickerViewModel(
     }
   }
 
+  internal fun onCloseClick() {
+    navigator.goBack()
+  }
+
   internal fun add() {
     navigator.goTo(
       Destination.AddContent(

@@ -88,10 +88,10 @@
     <string name="media_session_root">Alle lydbøger</string>
     <string name="storage_bug_subtitle">På visse enheder mangler en system-app den nødvendige tilladelse til at få adgang til det eksterne lager. Denne adgang er afgørende for, at Voice kan læse dine lydbøger.</string>
     <string name="onboarding.completion.next_button">Begynd at lytte</string>
-    <string name="review.request.title">Kan du lide Voice\?</string>
+    <string name="review.request.title">Kan du lide Voice?</string>
     <string name="review.request.button.yes">Bedøm nu</string>
     <string name="review.request.button.no">Nej tak</string>
-    <string name="review.feedback.content">Kan du fortælle os, hvad der gik galt\? Vi sætter pris på din feedback, og det hjælper os med at forbedre din oplevelse.</string>
+    <string name="review.feedback.content">Kan du fortælle os, hvad der gik galt? Vi sætter pris på din feedback, og det hjælper os med at forbedre din oplevelse.</string>
     <string name="review.feedback.button.yes">Send feedback</string>
     <string name="review.feedback.button.no">Annulér</string>
     <string name="review.request.content">Din feedback betyder noget for os! Hvis du har et øjeblik, så bedøm os og del din oplevelse. Det hjælper os med at lave forbedringer og tilbyde en bedre lytteoplevelse.</string>
@@ -113,7 +113,7 @@
     <string name="select_folder_title_default">Tilføj din/dine lydbøger</string>
     <string name="select_folder_type_file">Fil</string>
     <string name="select_folder_type_folder">Mappe</string>
-    <string name="select_folder_subtitle">Vil du tilføje en enkelt fil som en bog eller som en mappe\?</string>
+    <string name="select_folder_subtitle">Vil du tilføje en enkelt fil som en bog eller som en mappe?</string>
     <string name="onboarding_welcome_title">Velkommen til Voice!</string>
     <string name="onboarding.button_next">Næste</string>
     <string name="folder_mode_author">Forfatter-Bog-tilstand: Undermapper er forfattere, under-undermapper er bøger.</string>

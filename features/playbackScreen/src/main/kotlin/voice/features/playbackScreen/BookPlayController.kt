@@ -111,7 +111,7 @@ interface BookPlayProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Playback> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Playback> { key ->
     NavEntry(key) {
       BookPlayScreen(bookId = key.bookId)
     }

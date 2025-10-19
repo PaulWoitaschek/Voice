@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-@Inject
+@AssistedInject
 class BookmarkViewModel(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,

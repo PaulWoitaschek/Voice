@@ -3,6 +3,7 @@ Takiego który pozwala Ci się skupić na tym co faktycznie chcesz robić czyli 
 Po prostu dodaj swój główny folder z audiobookami, a każdy folder wewnątrz zostanie rozpoznany jako pojedyncza książka. Dzięki temu struktura twojej biblioteki jest prosta i niezaśmiecona.
 
 Co potrafi:
+
 - Zapamiętuje pozycję w książce
 - Ustawienia szybkości odtwarzania
 - Piękny Material Design
@@ -14,6 +15,6 @@ Co potrafi:
 Voice jest wolnym i otwartym oprogramowaniem. To oznacza, że wszyscy mogą zobaczyć w jaki sposób on działa. Wykorzystuje on minimalny zestaw uprawnień.
 
 Jeśli masz jakieś sugestie, lub znajdziesz błędy, zgłoś je tutaj:
-https://github.com/PaulWoitaschek/Voice/issues
+https://github.com/VoiceAudiobook/Voice/issues
 
 Wykorzystana licencja open source to GNU GPLv3

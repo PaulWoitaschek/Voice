@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cover">Viršelis</string>
     <string name="play_pause">Atkurti / pristabdyti</string>
@@ -29,7 +29,7 @@
     <plurals name="seconds">
         <item quantity="one">%d sekundė</item>
         <item quantity="few">%d sekundės</item>
-        <item quantity="many">%d sekundė</item>
+        <item quantity="many">%d sekundžių</item>
         <item quantity="other">%d sekundžių</item>
     </plurals>
     <string name="pref_seek_time">Peršokimo trukmė</string>
@@ -55,7 +55,7 @@
     <plurals name="folder_type_file_count">
         <item quantity="one">%d garsinis failas</item>
         <item quantity="few">%d garsiniai failai</item>
-        <item quantity="many">%d garsinis failas</item>
+        <item quantity="many">%d garsinių failų</item>
         <item quantity="other">%d garsinių failų</item>
     </plurals>
     <string name="folder_type_book_example_header">Tai leistų aptikti šias knygas</string>

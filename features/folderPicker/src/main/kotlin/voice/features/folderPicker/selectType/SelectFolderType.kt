@@ -54,7 +54,7 @@ interface SelectFolderTypeProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SelectFolderType> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SelectFolderType> { key ->
     NavEntry(key) {
       SelectFolderType(
         uri = key.uri,
@@ -70,7 +70,7 @@ fun SelectFolderType(
   origin: Origin,
 ) {
   val context = LocalContext.current
-  val viewModel = rememberScoped {
+  val viewModel = rememberScoped(uri.toString(), mode.name) {
     rootGraphAs<SelectFolderTypeGraph>().selectFolderTypeViewModelFactory
       .create(
         uri = uri,

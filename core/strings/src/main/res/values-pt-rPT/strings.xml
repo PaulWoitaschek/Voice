@@ -61,10 +61,10 @@
     <string name="migration_detail_content_root">Pasta raiz</string>
     <string name="migration_detail_content_position">Posição</string>
     <string name="migration_detail_content_added_at">Adicionado em</string>
-    <string name="search_hint">O que procura\?</string>
+    <string name="search_hint">O que procura?</string>
     <string name="notification_sleep_timer_disable">Desativar desligamento automático</string>
-    <string name="folder_type_no_books">Voice não conseguiu encontrar nenhum livro. O ficheiro está no formato certo\?</string>
-    <string name="folder_type_title">Como os seus ficheiros estão organizados\?</string>
+    <string name="folder_type_no_books">Voice não conseguiu encontrar nenhum livro. O ficheiro está no formato certo?</string>
+    <string name="folder_type_title">Como os seus ficheiros estão organizados?</string>
     <string name="migration_hint_title">Aceder posições de livros antigos</string>
     <string name="delete_book_dialog_content">Isso deletará os ficheiros no seu aparelho.</string>
     <string name="delete_book_dialog_title">Deletar livro</string>
@@ -80,9 +80,7 @@
     <string name="migration_delete_dialog_title">Deletar posições</string>
     <string name="play">Play</string>
     <string name="pause">Parar</string>
-    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu aparelho.
-\n
-\nClique no ícone acima para ver a localização antiga dos livros.</string>
+    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu aparelho. \n \nClique no ícone acima para ver a localização antiga dos livros.</string>
     <string name="migration_hint_confirm">Entendido</string>
     <string name="migration_detail_content_position_current_chapter_title">Capítulo atual</string>
     <string name="migration_delete_dialog_content">Assim que deletar posições antigas, não poderá recupera-las.</string>

@@ -26,21 +26,17 @@ interface SelectCoverFromInternetProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key ->
     NavEntry(key) {
       SelectCoverFromInternet(
         bookId = key.bookId,
-        onCloseClick = { backStack.removeLastOrNull() },
       )
     }
   }
 }
 
 @Composable
-fun SelectCoverFromInternet(
-  bookId: BookId,
-  onCloseClick: () -> Unit,
-) {
+fun SelectCoverFromInternet(bookId: BookId) {
   val viewModel = rememberScoped(bookId.value) {
     rootGraphAs<SelectCoverFromInternetViewModel.Factory.Provider>()
       .factory
@@ -50,7 +46,7 @@ fun SelectCoverFromInternet(
   val sink = MutableSharedFlow<SelectCoverFromInternetViewModel.Events>(extraBufferCapacity = 1)
   SelectCoverFromInternet(
     viewState = viewModel.viewState(sink),
-    onCloseClick = onCloseClick,
+    onCloseClick = viewModel::onCloseClick,
     onCoverClick = {
       sink.tryEmit(SelectCoverFromInternetViewModel.Events.CoverClick(it))
     },

@@ -61,9 +61,7 @@
     <string name="bookmark_just_now">Gerade eben</string>
     <string name="voice_intro_first_book">Füge deinen Hörbuchordner hinzu, damit du mit dem Hören beginnen kannst!</string>
     <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
-    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem System Dateimanager auszuwählen.
-\n
-\nKlicke auf das Symbol oben, um deine alten Buchpositionen zu sehen.</string>
+    <string name="migration_hint_content">Aufgrund von Änderungen in neueren Android-Versionen ist es notwendig, deinen Hörbuchordner mit dem System Dateimanager auszuwählen. \n \nKlicke auf das Symbol oben, um deine alten Buchpositionen zu sehen.</string>
     <string name="migration_hint_confirm">Verstanden</string>
     <string name="migration_detail_title">Alte Buch Positionen</string>
     <string name="migration_detail_content_name">Name</string>
@@ -106,7 +104,7 @@
     <string name="select_folder_title_default">Füge deine Hörbücher hinzu</string>
     <string name="select_folder_type_file">Datei</string>
     <string name="select_folder_type_folder">Ordner</string>
-    <string name="select_folder_subtitle">Möchtest du eine einzelne Datei als Buch hinzufügen oder einen Ordner\?</string>
+    <string name="select_folder_subtitle">Möchtest du eine einzelne Datei als Buch hinzufügen oder einen Ordner?</string>
     <string name="onboarding_welcome_title">Willkommen bei Voice!</string>
     <string name="onboarding.explanation.title">Deine Bibliothek, Deine Wahl</string>
     <string name="onboarding.completion.title">Du bist fertig!</string>
@@ -120,10 +118,10 @@
     <string name="review.request.button.no">Nein, danke</string>
     <string name="review.feedback.button.yes">Feedback senden</string>
     <string name="review.feedback.button.no">Abbrechen</string>
-    <string name="review.request.title">Gefällt dir Voice\?</string>
+    <string name="review.request.title">Gefällt dir Voice?</string>
     <string name="review.request.content">Deine Meinung ist uns wichtig! Wenn du einen Moment Zeit hast, bewerte uns und teile deine Erfahrungen. Das hilft uns dabei, Verbesserungen vorzunehmen und ein besseres Hörerlebnis zu bieten.</string>
     <string name="review.feedback.title">Es tut uns leid, das zu hören!</string>
-    <string name="review.feedback.content">Kannst du uns mitteilen, was falsch gelaufen ist\? Wir schätzen dein Feedback sehr, es hilft uns dabei, dein Erlebnis zu verbessern.</string>
+    <string name="review.feedback.content">Kannst du uns mitteilen, was falsch gelaufen ist? Wir schätzen dein Feedback sehr, es hilft uns dabei, dein Erlebnis zu verbessern.</string>
     <string name="sleep_timer.title">Schlaf gut! 🌙</string>
     <string name="sleep_timer.button.increment">Länger</string>
     <string name="sleep_timer.button.decrement">Kürzer</string>

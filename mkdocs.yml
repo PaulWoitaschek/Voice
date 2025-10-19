@@ -3,7 +3,7 @@ site_description: "Voice is an open source audiobook player built for simplicity
 site_author: Paul Woitaschek
 site_url: https://voice.woitaschek.de
 
-repo_url: https://github.com/PaulWoitaschek/Voice
+repo_url: https://github.com/VoiceAudiobook/Voice
 repo_name: "Voice on GitHub"
 
 nav:

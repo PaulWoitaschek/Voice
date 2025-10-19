@@ -42,9 +42,7 @@
     <string name="bookmark_just_now">Justo ahora</string>
     <string name="voice_intro_first_book">¡Agreguemos tu carpeta de audiolibros para que puedas empezar a escuchar!</string>
     <string name="migration_hint_title">Accediendo a posiciones antiguas de libros</string>
-    <string name="migration_hint_content">Debido a los cambios en las versiones más recientes de Android, debes seleccionar la carpeta de los audiolibros con el selector del sistema.
-\n
-\nHaz clic en el icono de arriba para ver la ubicación de los libros antiguos.</string>
+    <string name="migration_hint_content">Debido a los cambios en las versiones más recientes de Android, debes seleccionar la carpeta de los audiolibros con el selector del sistema. \n \nHaz clic en el icono de arriba para ver la ubicación de los libros antiguos.</string>
     <string name="migration_hint_confirm">Entendido</string>
     <string name="migration_detail_title">Posiciones antiguas</string>
     <string name="migration_detail_content_name">Nombre</string>
@@ -75,7 +73,7 @@
         <item quantity="many">%d archivos de audio</item>
         <item quantity="other">%d archivos de audio</item>
     </plurals>
-    <string name="folder_type_title">¿Cómo están estructurados tus archivos\?</string>
+    <string name="folder_type_title">¿Cómo están estructurados tus archivos?</string>
     <string name="migration_detail_content_position_current_file_position">Posición en el archivo</string>
     <string name="migration_detail_content_position_current_chapter_position">Situación en el capítulo</string>
     <string name="battery_optimization_action">Actualizar</string>
@@ -85,7 +83,7 @@
     <string name="migration_detail_content_position_current_chapter_title">Capítulo actual</string>
     <string name="folder_type_book_example_header">Así se detectarían los siguientes libros</string>
     <string name="notification_sleep_timer_disable">Desactivar temporizador</string>
-    <string name="folder_type_no_books">Voice no detecta ningún libro. ¿Hay archivos de audio\?</string>
+    <string name="folder_type_no_books">Voice no detecta ningún libro. ¿Hay archivos de audio?</string>
     <string name="migration_detail_content_position_current_file_title">Archivo actual</string>
     <string name="media_session_root">Todos los audiolibros</string>
     <string name="migration_delete_dialog_content">Una vez que elimines las posiciones antiguas, no podrás recuperar tus antiguas posiciones de reproducción.</string>
@@ -109,7 +107,7 @@
     <string name="select_folder_title_default">Añade tus audiolibros</string>
     <string name="select_folder_type_file">Archivo</string>
     <string name="select_folder_type_folder">Carpeta</string>
-    <string name="select_folder_subtitle">¿Quieres añadir un solo archivo como libro o carpeta\?</string>
+    <string name="select_folder_subtitle">¿Quieres añadir un solo archivo como libro o carpeta?</string>
     <string name="onboarding_welcome_title">¡Bienvenido a Voice!</string>
     <string name="onboarding_welcome_subtitle">Tu reproductor personal de audiolibros de bolsillo. Vamos a configurarlo.</string>
     <string name="onboarding.button_next">Siguiente</string>
@@ -121,7 +119,7 @@
     <string name="review.request.button.yes">Valorar ahora</string>
     <string name="review.request.button.no">No, gracias</string>
     <string name="review.feedback.title">¡Lamentamos escuchar eso!</string>
-    <string name="review.feedback.content">¿Podrías decirnos qué salió mal\? Agradecemos tus comentarios ya que nos ayudan a mejorar tu experiencia.</string>
+    <string name="review.feedback.content">¿Podrías decirnos qué salió mal? Agradecemos tus comentarios ya que nos ayudan a mejorar tu experiencia.</string>
     <string name="review.feedback.button.yes">Envía tus comentarios</string>
     <string name="review.request.content">¡Tu opinión nos importa! Si tienes un momento, valóranos y comparte tu experiencia. Nos ayuda a mejorar y a ofrecerte una mejor experiencia de escucha.</string>
     <string name="review.request.title">¿Disfrutando de Voice?</string>

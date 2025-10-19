@@ -41,7 +41,7 @@ android {
 
   dependenciesInfo {
     // disable the dependencies info in apks to allow reproducible builds
-    // see https://github.com/PaulWoitaschek/Voice/discussions/2862#discussioncomment-13622836
+    // see https://github.com/VoiceAudiobook/Voice/discussions/2862#discussioncomment-13622836
     includeInApk = false
   }
 

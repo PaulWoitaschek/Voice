@@ -214,7 +214,7 @@ interface SettingsProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key, backStack ->
+  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key ->
     NavEntry(key) {
       Settings()
     }

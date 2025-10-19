@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -36,6 +36,7 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ImmutableFile
+import voice.core.ui.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
@@ -44,7 +45,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-@Inject
+@AssistedInject
 class BookPlayViewModel(
   private val bookRepository: BookRepository,
   private val player: PlayerController,
@@ -209,10 +210,12 @@ class BookPlayViewModel(
       _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
         items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
           chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
+            val previousChapters = book.chapters.take(chapterIndex)
             BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-              number = book.chapters.take(chapterIndex).sumOf { it.chapterMarks.count() } + markIndex + 1,
+              number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
               name = chapterMark.name ?: "",
               active = chapterMark == book.currentMark && chapter == book.currentChapter,
+              time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
             )
           }
         },

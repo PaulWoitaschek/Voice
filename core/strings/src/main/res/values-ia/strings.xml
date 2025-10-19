@@ -121,9 +121,7 @@
     <string name="sleep_timer.button.decrement">Plus curte</string>
     <string name="migration_hint_title">Accesante al positiones ancian del libro</string>
     <string name="onboarding.explanation.subtitle">Con Voice, tu pote adder libros como files individual o arrangiar los in dossieres. Tu selige!</string>
-    <string name="migration_hint_content">Debite al cambiamentos in versiones plus nove de Android, es necessari seliger tu dossier de audiolibros usante le selector de systema.
-\n
-\nClicca in le icone in alto pro vider le positiones ancian del libro.</string>
+    <string name="migration_hint_content">Debite al cambiamentos in versiones plus nove de Android, es necessari seliger tu dossier de audiolibros usante le selector de systema. \n \nClicca in le icone in alto pro vider le positiones ancian del libro.</string>
     <string name="search_hint">Que cerca tu?</string>
     <string name="storage_bug_subtitle">In certe apparatos, un application de systema manca le permissiones necessari pro acceder al immagazinage externe. Iste accesso es essential pro que Voice pote leger tu audiolibros.</string>
     <string name="review.request.content">Tu commentos nos importa! Si tu habe un momento, evaluta nos e comparti tu experientia. Illo nos adjuta a facer melioramentos e offerer un melior experientia de ascoltamento.</string>

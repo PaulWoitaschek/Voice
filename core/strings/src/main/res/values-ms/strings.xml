@@ -44,10 +44,8 @@
     <string name="book_header_completed">Selesai</string>
     <string name="close">Tutup</string>
     <string name="migration_hint_title">Mengakses posisi buku lama</string>
-    <string name="folder_type_title">Bagaimanakah struktur fail anda\?</string>
-    <string name="migration_hint_content">Disebabkan perubahan dalam Versi Android baharu, adalah perlu untuk pilih folder audiobook anda menggunakan system picker.
-\n
-\nKlik pada ikon di atas untuk melihat kedudukan buku lama anda.</string>
+    <string name="folder_type_title">Bagaimanakah struktur fail anda?</string>
+    <string name="migration_hint_content">Disebabkan perubahan dalam Versi Android baharu, adalah perlu untuk pilih folder audiobook anda menggunakan system picker. \n \nKlik pada ikon di atas untuk melihat kedudukan buku lama anda.</string>
     <plurals name="seconds">
         <item quantity="other">%d saat</item>
     </plurals>
@@ -68,5 +66,5 @@
     <plurals name="folder_type_file_count">
         <item quantity="other">%d fail audio</item>
     </plurals>
-    <string name="folder_type_no_books">Voice tidak dapat mengesan mana-mana buku. Adakah di sana ada sebarang fail audio\?</string>
+    <string name="folder_type_no_books">Voice tidak dapat mengesan mana-mana buku. Adakah di sana ada sebarang fail audio?</string>
 </resources>

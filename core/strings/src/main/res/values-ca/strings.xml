@@ -130,7 +130,5 @@
     <string name="delete_book_dialog_deletion_confirmation">Suprimeix els fitxers</string>
     <string name="review.request.content">Els seus comentaris ens importen. Si teniu un moment, valoreu-nos i compartiu la seva experiència. Ens ajuda a fer millores i a oferir una millor experiència.</string>
     <string name="storage_bug_subtitle">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè el Voice llegeixi els audiollibres.</string>
-    <string name="migration_hint_content">A causa dels canvis en les versions més noves d\'Android, és necessari seleccionar la carpeta de l\'audiollibre utilitzant el selector del sistema.
-\n
-\nFeu clic a la icona de dalt per veure les posicions antigues del llibre.</string>
+    <string name="migration_hint_content">A causa dels canvis en les versions més noves d\'Android, és necessari seleccionar la carpeta de l\'audiollibre utilitzant el selector del sistema. \n \nFeu clic a la icona de dalt per veure les posicions antigues del llibre.</string>
 </resources>

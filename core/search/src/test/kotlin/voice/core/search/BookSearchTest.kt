@@ -34,6 +34,40 @@ class BookSearchTest {
     author = "Jimi Hendrix",
   )
 
+  private val harryPotter1 = book(
+    name = "Harry Potter and the Philosopher's Stone",
+    author = "J. K. Rowling",
+    genre = "Fantasy",
+    narrator = "Stephen Fry",
+    series = "Harry Potter",
+    part = "1",
+  )
+
+  private val harryPotter2 = book(
+    name = "Harry Potter and the Chamber of Secrets",
+    author = "J. K. Rowling",
+    genre = "Fantasy",
+    narrator = "Stephen Fry",
+    series = "Harry Potter",
+    part = "2",
+  )
+  private val kingkiller1 = book(
+    name = "The Name of the Wind",
+    author = "Patrick Rothfuss",
+    genre = "Fantasy",
+    narrator = "Rupert Degas",
+    series = "Kingkiller Chronicle",
+    part = "1",
+  )
+  private val kingkiller25 = book(
+    name = "The Slow Regard of Silent Things",
+    author = "Patrick Rothfuss",
+    genre = "Fantasy",
+    narrator = "Patrick Rothfuss",
+    series = "Kingkiller Chronicle",
+    part = "2.5",
+  )
+
   @Test
   fun `search complete name`() = test {
     expectSearchResult("Die Ermordung des Commendatore", commendatore)
@@ -78,6 +112,19 @@ class BookSearchTest {
     search("-*\"--*\"\"")
   }
 
+  @Test
+  fun `search for narrator, series and part`() = test {
+    expectSearchResult("Harry Potter 1", harryPotter1)
+    expectSearchResult("harry potter 1", harryPotter1)
+    expectSearchResult("harry potter", harryPotter1, harryPotter2)
+    expectSearchResult("kingkiller 1", kingkiller1)
+    expectSearchResult("rupert degas 1", kingkiller1)
+    expectSearchResult("kingkiller 2.5", kingkiller25)
+    expectSearchResult("slow regard 2.5", kingkiller25)
+    expectSearchResult("rothfuss 2.5", kingkiller25)
+    expectSearchResult("kingkiller", kingkiller1, kingkiller25)
+  }
+
   private fun test(run: suspend TestBase.() -> Unit) {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
@@ -103,11 +150,19 @@ class BookSearchTest {
       addBook(commendatore)
       addBook(watchtower)
       addBook(unicorns)
+      addBook(harryPotter1)
+      addBook(harryPotter2)
+      addBook(kingkiller1)
+      addBook(kingkiller25)
 
       // this ensures that inactive books are never accounted for
       addBook(commendatore.withNewIdAndInactive())
       addBook(watchtower.withNewIdAndInactive())
       addBook(unicorns.withNewIdAndInactive())
+      addBook(harryPotter1.withNewIdAndInactive())
+      addBook(harryPotter2.withNewIdAndInactive())
+      addBook(kingkiller1.withNewIdAndInactive())
+      addBook(kingkiller25.withNewIdAndInactive())
 
       testBase.run()
       db.close()
