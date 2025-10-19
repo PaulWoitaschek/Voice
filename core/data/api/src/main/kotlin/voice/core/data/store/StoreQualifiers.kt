@@ -31,3 +31,6 @@ public annotation class AmountOfBatteryOptimizationRequestedStore
 
 @Qualifier
 public annotation class ReviewDialogShownStore
+
+@Qualifier
+public annotation class AnalyticsConsentStore
