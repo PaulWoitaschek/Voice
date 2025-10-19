@@ -15,6 +15,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.GridMode
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore
@@ -40,6 +41,8 @@ class SettingsViewModel(
   private val gridModeStore: DataStore<GridMode>,
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
+  @AnalyticsConsentStore
+  private val analyticsConsentStore: DataStore<Boolean>,
   private val gridCount: GridCount,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
@@ -56,6 +59,7 @@ class SettingsViewModel(
     val autoSleepTimer by remember { sleepTimerPreferenceStore.data }.collectAsState(
       initial = SleepTimerPreference.Default,
     )
+    val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -73,6 +77,8 @@ class SettingsViewModel(
         startTime = autoSleepTimer.autoSleepStartTime,
         endTime = autoSleepTimer.autoSleepEndTime,
       ),
+      analyticsEnabled = analyticsEnabled,
+      showAnalyticSetting = appInfoProvider.analyticsIncluded,
     )
   }
 
@@ -175,6 +181,12 @@ class SettingsViewModel(
       sleepTimerPreferenceStore.updateData { currentPrefs ->
         currentPrefs.copy(autoSleepEndTime = time)
       }
+    }
+  }
+
+  override fun toggleAnalytics() {
+    mainScope.launch {
+      analyticsConsentStore.updateData { !it }
     }
   }
 }
