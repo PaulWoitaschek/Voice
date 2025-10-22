@@ -16,8 +16,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
@@ -28,7 +28,7 @@ import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.core.strings.R as StringsR
 
-@Inject
+@AssistedInject
 class SelectCoverFromInternetViewModel(
   private val api: CoverApi,
   private val bookRepository: BookRepository,

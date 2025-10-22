@@ -1,7 +1,6 @@
 package voice.app.di
 
 import android.app.Application
-import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
 import voice.core.common.rootGraph
@@ -15,9 +14,10 @@ open class App : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    appGraph = createGraph()
-    rootGraph = appGraph
-    appGraph.inject(this)
+    rootGraph = createGraph()
+      .also { graph ->
+        graph.inject(this)
+      }
 
     appInitializers.forEach {
       it.onAppStart(this)
@@ -28,6 +28,3 @@ open class App : Application() {
     return createGraphFactory<ProductionAppGraph.Factory>().create(this)
   }
 }
-
-lateinit var appGraph: AppGraph
-  @VisibleForTesting set
