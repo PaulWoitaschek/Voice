@@ -12,7 +12,7 @@ agp = "8.13.0"
 ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.7.0"
+metro = "0.7.1"
 navigation3 = "1.0.0-alpha11"
 
 [libraries]
@@ -143,6 +143,6 @@ googleServices = { id = "com.google.gms.google-services", version = "4.4.4" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.2.20-2.0.4" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.0" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
