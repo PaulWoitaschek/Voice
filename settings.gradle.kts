@@ -33,8 +33,8 @@ dependencyResolutionManagement {
 plugins {
   id("com.gradle.develocity") version "4.2.2"
   id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
-  id("org.jetbrains.kotlin.android") version "2.2.20" apply false
-  id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
+  id("org.jetbrains.kotlin.android") version "2.2.21" apply false
+  id("org.jetbrains.kotlin.jvm") version "2.2.21" apply false
   id("com.android.application") version "8.13.0" apply false
   id("com.android.library") version "8.13.0" apply false
   id("com.autonomousapps.build-health") version "3.2.0"
