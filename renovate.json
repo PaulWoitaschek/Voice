@@ -38,6 +38,6 @@
   "prConcurrentLimit": 0,
   "configMigration": true,
   "schedule": [
-    "every saturday"
+    "on saturday"
   ]
 }
