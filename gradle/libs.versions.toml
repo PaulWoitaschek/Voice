@@ -5,15 +5,15 @@ sdk-target = "36"
 sdk-robolectric = "35"
 
 coroutines = "1.10.2"
-room = "2.8.2"
-kotlin = "2.2.20"
+room = "2.8.3"
+kotlin = "2.2.21"
 media3 = "1.8.0"
 agp = "8.13.0"
 ktlint-core = "1.7.1"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.7.0"
-navigation3 = "1.0.0-alpha11"
+metro = "0.7.2"
+navigation3 = "1.0.0-beta01"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -77,7 +77,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.4"
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4"
 
-compose-bom = "androidx.compose:compose-bom:2025.10.00"
+compose-bom = "androidx.compose:compose-bom:2025.10.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -143,6 +143,6 @@ googleServices = { id = "com.google.gms.google-services", version = "4.4.4" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.2.20-2.0.4" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.0" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
