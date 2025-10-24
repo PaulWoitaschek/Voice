@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.ViewList
+import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
@@ -216,6 +217,12 @@ private fun AnalyticsRow(
 ) {
   ListItem(
     modifier = Modifier.clickable { toggle() },
+    leadingContent = {
+      Icon(
+        imageVector = Icons.Outlined.Analytics,
+        contentDescription = null,
+      )
+    },
     headlineContent = {
       Text(text = stringResource(StringsR.string.settings_analytics_consent_title))
     },
