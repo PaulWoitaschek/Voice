@@ -18,40 +18,14 @@
       ]
     },
     {
-      "groupName": "AGP, Lint",
-      "matchDepNames": [
-        "com.android.library{/,}**",
-        "androidx.databinding:viewbinding{/,}**",
-        "com.android.application{/,}**",
-        "com.android.tools{/,}**"
-      ]
-    },
-    {
-      "groupName": "Kotlin, KSP, Mero",
-      "matchPackageNames": [
-        "org.jetbrains.kotlin:{/,}**",
-        "org.jetbrains.kotlin.{/,}**",
-        "com.google.devtools.ksp{/,}**",
-        "dev.zacsweers.metro**"
-      ]
-    },
-    {
-      "groupName": "Ktlint",
-      "matchPackageNames": [
-        "com.pinterest.ktlint{/,}**",
-        "io.nlopez.compose.rules{/,}**",
-        "io.github.usefulness{/,}**"
-      ]
-    },
-    {
+      "groupName": "All dependencies",
       "matchUpdateTypes": [
         "major",
         "minor",
         "patch",
         "pin",
         "digest"
-      ],
-      "automerge": true
+      ]
     },
     {
       "matchPackageNames": [
@@ -62,5 +36,8 @@
   ],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
-  "configMigration": true
+  "configMigration": true,
+  "schedule": [
+    "on saturday"
+  ]
 }
