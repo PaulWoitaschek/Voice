@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.sleeptimer.SleepTimerPreference
@@ -27,33 +26,6 @@ import kotlin.math.max
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
-
-@Inject
-internal class SleepTimerTracker(private val analytics: Analytics) {
-
-  fun enabled(mode: SleepTimerMode) {
-    analytics.event(
-      "sleep_timer_enabled",
-      buildMap {
-        put(
-          "mode",
-          when (mode) {
-            SleepTimerMode.EndOfChapter -> "end_of_chapter"
-            SleepTimerMode.TimedWithDefault -> "timed_with_default"
-            is SleepTimerMode.TimedWithDuration -> "timed_with_duration"
-          },
-        )
-        if (mode is SleepTimerMode.TimedWithDuration) {
-          put("duration_minutes", mode.duration.inWholeMinutes.toString())
-        }
-      },
-    )
-  }
-
-  fun disabled() {
-    analytics.event("sleep_timer_disabled")
-  }
-}
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
