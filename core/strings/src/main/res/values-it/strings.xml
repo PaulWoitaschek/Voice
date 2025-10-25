@@ -137,4 +137,5 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Ora di fine</string>
     <string name="playback.current_chapter">Capitolo corrente</string>
     <string name="pref_faq">Domande frequenti</string>
+    <string name="end_of_chapter">Fine del capitolo</string>
 </resources>
