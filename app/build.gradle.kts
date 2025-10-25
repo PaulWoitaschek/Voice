@@ -99,6 +99,7 @@ android {
           "proguard.pro",
         ),
       )
+      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = includeProprietaryLibraries().toString())
     }
   }
 
@@ -176,12 +177,23 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(projects.core.logging.crashlytics)
     implementation(projects.features.review.play)
-    implementation(projects.core.remoteconfig.firebase)
   } else {
     implementation(projects.features.review.noop)
+  }
+
+  implementation(projects.core.remoteconfig.api)
+  if (includeProprietaryLibraries()) {
+    implementation(projects.core.remoteconfig.firebase)
+  } else {
     implementation(projects.core.remoteconfig.noop)
   }
-  implementation(projects.core.remoteconfig.api)
+
+  implementation(projects.core.analytics.api)
+  if (includeProprietaryLibraries()) {
+    implementation(projects.core.analytics.firebase)
+  } else {
+    implementation(projects.core.analytics.noop)
+  }
 
   debugImplementation(projects.core.logging.debug)
 

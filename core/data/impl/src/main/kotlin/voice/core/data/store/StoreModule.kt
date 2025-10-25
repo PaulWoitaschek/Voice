@@ -154,4 +154,11 @@ internal object StoreModule {
   fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.create(Boolean.serializer(), false, "reviewDialogShown")
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @AnalyticsConsentStore
+  fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("analyticsConsent", defaultValue = false)
+  }
 }

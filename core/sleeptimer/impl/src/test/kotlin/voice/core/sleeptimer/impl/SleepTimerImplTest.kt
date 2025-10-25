@@ -79,6 +79,7 @@ class SleepTimerImplTest {
       playerController,
       fadeOutStore,
       dispatcherProvider,
+      tracker = mockk(relaxed = true),
     )
   }
 

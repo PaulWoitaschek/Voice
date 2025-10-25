@@ -18,7 +18,7 @@ dependencies {
 
   api(libs.room.runtime)
 
-  implementation(libs.datastore)
+  api(libs.datastore)
 
   testImplementation(libs.room.testing)
   testImplementation(libs.androidX.test.core)

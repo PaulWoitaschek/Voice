@@ -11,6 +11,8 @@ data class SettingsViewState(
   val dialog: Dialog?,
   val useGrid: Boolean,
   val autoSleepTimer: AutoSleepTimerViewState,
+  val showAnalyticSetting: Boolean,
+  val analyticsEnabled: Boolean,
 ) {
 
   enum class Dialog {
@@ -29,6 +31,8 @@ data class SettingsViewState(
         appVersion = "1.2.3",
         useGrid = true,
         autoSleepTimer = AutoSleepTimerViewState.preview(),
+        analyticsEnabled = false,
+        showAnalyticSetting = true,
       )
     }
   }

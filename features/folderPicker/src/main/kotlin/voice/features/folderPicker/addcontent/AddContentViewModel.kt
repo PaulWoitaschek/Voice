@@ -8,18 +8,17 @@ import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 import voice.navigation.Destination
-import voice.navigation.Destination.AddContent.Mode
 import voice.navigation.Destination.OnboardingCompletion
 import voice.navigation.Destination.SelectFolderType
 import voice.navigation.Navigator
-import voice.navigation.Destination.SelectFolderType.Mode as SelectFolderTypeMode
+import voice.navigation.Origin
 
 @AssistedInject
 class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
   @Assisted
-  private val mode: Mode,
+  private val origin: Origin,
 ) {
 
   internal fun add(
@@ -29,11 +28,11 @@ class AddContentViewModel(
     when (type) {
       FileTypeSelection.File -> {
         audiobookFolders.add(uri, FolderType.SingleFile)
-        when (mode) {
-          Mode.Default -> {
+        when (origin) {
+          Origin.Default -> {
             navigator.setRoot(Destination.BookOverview)
           }
-          Mode.Onboarding -> {
+          Origin.Onboarding -> {
             navigator.goTo(OnboardingCompletion)
           }
         }
@@ -42,10 +41,7 @@ class AddContentViewModel(
         navigator.goTo(
           SelectFolderType(
             uri = uri,
-            mode = when (mode) {
-              Mode.Default -> SelectFolderTypeMode.Default
-              Mode.Onboarding -> SelectFolderTypeMode.Onboarding
-            },
+            origin = origin,
           ),
         )
       }
@@ -58,6 +54,6 @@ class AddContentViewModel(
 
   @AssistedFactory
   interface Factory {
-    fun create(mode: Mode): AddContentViewModel
+    fun create(origin: Origin): AddContentViewModel
   }
 }

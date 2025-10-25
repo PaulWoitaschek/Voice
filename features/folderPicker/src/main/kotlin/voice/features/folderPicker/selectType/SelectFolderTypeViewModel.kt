@@ -22,8 +22,8 @@ import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.nameWithoutExtension
 import voice.navigation.Destination
-import voice.navigation.Destination.SelectFolderType.Mode
 import voice.navigation.Navigator
+import voice.navigation.Origin
 
 @AssistedInject
 class SelectFolderTypeViewModel(
@@ -36,7 +36,7 @@ class SelectFolderTypeViewModel(
   @Assisted
   private val documentFile: DocumentFile,
   @Assisted
-  private val mode: Mode,
+  private val origin: Origin,
 ) {
 
   private var selectedFolderMode: MutableState<FolderMode?> = mutableStateOf(null)
@@ -75,11 +75,11 @@ class SelectFolderTypeViewModel(
         null -> error("Add should not be clickable at this point")
       },
     )
-    when (mode) {
-      Mode.Default -> {
+    when (origin) {
+      Origin.Default -> {
         navigator.setRoot(Destination.BookOverview)
       }
-      Mode.Onboarding -> {
+      Origin.Onboarding -> {
         navigator.goTo(Destination.OnboardingCompletion)
       }
     }
@@ -155,7 +155,7 @@ class SelectFolderTypeViewModel(
     fun create(
       uri: Uri,
       documentFile: DocumentFile,
-      mode: Mode,
+      origin: Origin,
     ): SelectFolderTypeViewModel
   }
 }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.analytics.api.Analytics
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.logging.api.Logger
@@ -32,6 +33,7 @@ internal constructor(
   private val authorAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
+  private val analytics: Analytics,
 ) : AudiobookFolders {
 
   private val scope = MainScope()
@@ -69,6 +71,7 @@ internal constructor(
     uri: Uri,
     type: FolderType,
   ) {
+    analytics.event("add_folder", mapOf("type" to type.name))
     try {
       context.contentResolver.takePersistableUriPermission(
         uri,
@@ -88,6 +91,7 @@ internal constructor(
     uri: Uri,
     folderType: FolderType,
   ) {
+    analytics.event("remove_folder", mapOf("type" to folderType.name))
     try {
       context.contentResolver.releasePersistableUriPermission(
         uri,
