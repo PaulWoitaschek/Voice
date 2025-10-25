@@ -50,8 +50,7 @@ class SleepTimerImpl internal constructor(
 
   override fun enable(mode: SleepTimerMode) {
     tracker.enabled(mode)
-    job?.cancel()
-    playerController.setVolume(1F)
+    disable() // cancel any active job first
 
     job = scope.launch {
       when (mode) {
