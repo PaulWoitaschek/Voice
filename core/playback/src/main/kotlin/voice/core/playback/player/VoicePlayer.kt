@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
@@ -49,6 +50,7 @@ class VoicePlayer(
   private val chapterRepo: ChapterRepo,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
+  private val analytics: Analytics,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
@@ -197,6 +199,8 @@ class VoicePlayer(
 
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     Logger.d("setPlayWhenReady=$playWhenReady")
+    analytics.event(if (playWhenReady) "play" else "pause")
+
     if (playWhenReady) {
       updateLastPlayedAt()
     } else {
