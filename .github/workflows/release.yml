@@ -27,7 +27,7 @@ jobs:
       - name: Build Play AAB
         run: fastlane android build_play_aab version:${GITHUB_REF_NAME}
       - name: Upload AAB artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: play-aab
           path: artifacts/app-play-release.aab
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Download AAB artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: play-aab
       - name: Upload to INTERNAL
@@ -71,7 +71,7 @@ jobs:
       - name: Build GitHub APKs
         run: fastlane android build_github version:${GITHUB_REF_NAME}
       - name: Upload APK artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: github-apks
           path: artifacts/*.apk
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - name: Download APK artifacts
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: github-apks
           path: artifacts
