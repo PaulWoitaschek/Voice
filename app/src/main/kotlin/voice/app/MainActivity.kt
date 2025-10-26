@@ -19,6 +19,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.navigation.NavEntryResolver
 import voice.app.navigation.StartDestinationProvider
+import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
 import voice.core.logging.api.Logger
 import voice.core.ui.VoiceTheme
@@ -43,6 +44,9 @@ class MainActivity : AppCompatActivity() {
   @Inject
   private lateinit var startDestinationProvider: StartDestinationProvider
 
+  @Inject
+  private lateinit var analytics: Analytics
+
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
     super.onCreate(savedInstanceState)
@@ -52,6 +56,9 @@ class MainActivity : AppCompatActivity() {
     setContent {
       @Suppress("UNCHECKED_CAST")
       val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray()) as MutableList<Destination.Compose>
+      LaunchedEffect(backStack.last()) {
+        analytics.screenView(backStack.last().trackingName)
+      }
       VoiceTheme {
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
 
