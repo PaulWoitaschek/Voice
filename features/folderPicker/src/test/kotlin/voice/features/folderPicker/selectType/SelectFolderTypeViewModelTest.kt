@@ -16,7 +16,7 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
 import voice.core.documentfile.FileBasedDocumentFactory
-import voice.navigation.Destination
+import voice.navigation.Origin
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {
@@ -40,7 +40,7 @@ class SelectFolderTypeViewModelTest {
       documentFileFactory = FileBasedDocumentFactory,
       uri = audiobookFolder.toUri(),
       documentFile = DocumentFile.fromFile(audiobookFolder),
-      mode = Destination.SelectFolderType.Mode.Default,
+      origin = Origin.Default,
     )
     viewModel.setFolderMode(FolderMode.Audiobooks)
 

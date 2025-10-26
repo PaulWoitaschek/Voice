@@ -21,14 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.features.folderPicker.R
 import voice.features.folderPicker.folderPicker.FileTypeSelection
-import voice.navigation.Destination
+import voice.navigation.Origin
 import voice.core.strings.R as StringsR
 
 @Composable
 internal fun SelectFolder(
   onBack: () -> Unit,
   onAdd: (FileTypeSelection, Uri) -> Unit,
-  mode: Destination.AddContent.Mode,
+  origin: Origin,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
@@ -56,9 +56,9 @@ internal fun SelectFolder(
           Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(
-              when (mode) {
-                Destination.AddContent.Mode.Default -> StringsR.string.select_folder_title_default
-                Destination.AddContent.Mode.Onboarding -> StringsR.string.select_folder_title_onboarding
+              when (origin) {
+                Origin.Default -> StringsR.string.select_folder_title_default
+                Origin.Onboarding -> StringsR.string.select_folder_title_onboarding
               },
             ),
             style = MaterialTheme.typography.displayMedium,
@@ -90,6 +90,6 @@ private fun SelectFolderPreview() {
   SelectFolder(
     onBack = {},
     onAdd = { _, _ -> },
-    mode = Destination.AddContent.Mode.Default,
+    origin = Origin.Default,
   )
 }

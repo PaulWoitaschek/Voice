@@ -37,6 +37,7 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
   implementation(libs.coroutines.core)
+  implementation(projects.core.analytics.api)
 
   api(libs.room.runtime)
   ksp(libs.room.compiler)

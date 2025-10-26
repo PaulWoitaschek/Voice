@@ -10,6 +10,7 @@ dependencies {
   implementation(projects.core.playback)
   implementation(projects.core.initializer)
   implementation(projects.core.logging.api)
+  implementation(projects.core.analytics.api)
 
   implementation(libs.datastore)
   implementation(libs.androidxCore)
