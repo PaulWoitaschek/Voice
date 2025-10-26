@@ -115,6 +115,13 @@
     <string name="onboarding.completion.title">You\'re All Set!</string>
     <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
     <string name="onboarding.completion.next_button">Start Listening</string>
+    <string name="onboarding_analytics_consent_title">Help improve Voice</string>
+    <string name="onboarding_analytics_consent_description">Allow us to collect anonymous usage data to help improve the app. You can change this later in settings.</string>
+    <string name="onboarding_analytics_consent_button_enable">Continue with analytics</string>
+    <string name="onboarding_analytics_consent_button_disable">Continue without analytics</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Privacy Policy</string>
+    <string name="settings_analytics_consent_title">Analytics</string>
+    <string name="settings_analytics_consent_description">Allow anonymous usage data collection to help improve the app</string>
     <string name="review.request.title">Enjoying Voice?</string>
     <string name="review.request.content">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
     <string name="review.request.button.yes">Rate Now</string>
