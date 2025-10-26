@@ -10,7 +10,6 @@
     <string name="skip_silence">Пропускать тишину</string>
     <string name="volume_boost">Усиление звука</string>
     <string name="dialog_confirm">Установить</string>
-    <string name="dialog_cancel">Отмена</string>
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
     <string name="download_book_cover">Обложка из интернета</string>

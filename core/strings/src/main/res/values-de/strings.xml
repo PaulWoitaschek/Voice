@@ -135,4 +135,11 @@
     <string name="auto_sleep_timer.end">Endzeit</string>
     <string name="playback.current_chapter">Aktuelles Kapitel</string>
     <string name="pref_faq">Häufige Fragen</string>
+    <string name="onboarding_analytics_consent_title">Hilf dabei, Voice zu verbessern</string>
+    <string name="onboarding_analytics_consent_description">Erlaube uns, anonyme Nutzungsdaten zu sammeln, um die App zu verbessern. Du kannst dies später in den Einstellungen ändern.</string>
+    <string name="onboarding_analytics_consent_button_enable">Mit Datenfreigabe fortfahren</string>
+    <string name="onboarding_analytics_consent_button_disable">Ohne Datenfreigabe fortfahren</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Datenschutzerklärung</string>
+    <string name="settings_analytics_consent_title">Nutzungsdaten</string>
+    <string name="settings_analytics_consent_description">Erlaube die Freigabe anonymer Nutzungsdaten zur Verbesserung der App</string>
 </resources>
