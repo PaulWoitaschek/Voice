@@ -29,7 +29,7 @@ jobs:
       - name: Run Unit Tests + Lint
         run: ./gradlew voiceUnitTest lintKotlin :app:assemblePlayDebug
       - name: Publish JUnit Report
-        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
+        uses: mikepenz/action-junit-report@e08919a3b1fb83a78393dfb775a9c37f17d8eea6 # v6
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -53,7 +53,7 @@ jobs:
       - name: Run Instrumentation Tests
         run: ./gradlew voiceDeviceGithubDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
       - name: Publish JUnit Report
-        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
+        uses: mikepenz/action-junit-report@e08919a3b1fb83a78393dfb775a9c37f17d8eea6 # v6
         if: always()
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
