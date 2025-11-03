@@ -2,7 +2,8 @@
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
-    "group:all"
+    "group:all",
+    "schedule:weekly"
   ],
   "labels": [
     "dependencies"
