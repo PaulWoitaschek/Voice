@@ -1,7 +1,8 @@
 {
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "group:all"
   ],
   "labels": [
     "dependencies"
@@ -18,16 +19,6 @@
       ]
     },
     {
-      "groupName": "All dependencies",
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ]
-    },
-    {
       "matchPackageNames": [
         "com.google.android.play:review-ktx"
       ],
@@ -36,8 +27,5 @@
   ],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
-  "configMigration": true,
-  "schedule": [
-    "on saturday"
-  ]
+  "configMigration": true
 }
