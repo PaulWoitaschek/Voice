@@ -15,7 +15,7 @@
     <string name="content_cover">Pokazuje okładki do wyboru</string>
     <string name="change_book_name">Nazwa</string>
     <string name="download_book_cover">Okładka z internetu</string>
-    <string name="pick_book_cover">Okładka z pamięci telefonu</string>
+    <string name="pick_book_cover">Okładka z pamięci wewnętrznej</string>
     <string name="edit_book_title">Edytuj książkę</string>
     <string name="mark_as_completed">Oznacz jako ukończona</string>
     <string name="mark_as_current">Oznacz jako aktualna</string>
@@ -49,7 +49,7 @@
     <string name="book_header_not_started">Nierozpoczęte</string>
     <string name="book_header_completed">Ukończone</string>
     <string name="close">Zamknij</string>
-    <string name="delete">Usuń</string>
+    <string name="delete">Skasuj</string>
     <string name="add">Dodaj</string>
     <string name="folder_mode_root">Tryb folderu z wieloma audiobookami: Jeden podfolder to jedna książka</string>
     <string name="folder_mode_single">Tryb pojedynczej książki: Jeden folder równa się jednej książce.</string>
@@ -60,7 +60,7 @@
         <item quantity="other">%d plików audio</item>
     </plurals>
     <string name="folder_type_book_example_header">Będzie to skutkowało wykryciem następujących książek</string>
-    <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy są tam pliki audio?</string>
+    <string name="folder_type_no_books">Voice nie wykrył żadnych książek. Czy na pewno są tam pliki audio?</string>
     <string name="folder_type_title">Jaka jest struktura twoich plików?</string>
     <string name="bookmark_just_now">Przed chwilą</string>
     <string name="voice_intro_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
@@ -100,7 +100,7 @@
     <string name="cover_search_template_with_author">Okładka audiobooka %1$s autorstwa %2$s</string>
     <string name="cover_search.author">Autor</string>
     <string name="review.feedback.button.no">Anuluj</string>
-    <string name="select_folder_subtitle">Chcesz dodać pojedynczy plik jako książkę lub folder?</string>
+    <string name="select_folder_subtitle">Chcesz dodać książkę w formie pojedynczego pliku czy folderu?</string>
     <string name="sleep_timer.title">Słodkich snów! 🌙</string>
     <string name="onboarding.button_next">Dalej</string>
     <string name="select_folder_type_folder">Folder</string>
@@ -112,7 +112,7 @@
     <string name="onboarding.explanation.title">Twoja Biblioteka, Twój Wybór</string>
     <string name="review.request.button.yes">Oceń Teraz</string>
     <string name="select_folder_type_file">Plik</string>
-    <string name="onboarding_welcome_title">Witamy w Voice!</string>
+    <string name="onboarding_welcome_title">Witaj w Voice!</string>
     <plurals name="minutes">
         <item quantity="one">%d minuta</item>
         <item quantity="few">%d minut</item>
@@ -120,14 +120,14 @@
         <item quantity="other">%d minut</item>
     </plurals>
     <string name="review.feedback.button.yes">Wyślij Opinię</string>
-    <string name="onboarding_welcome_subtitle">Twój osobisty kieszonkowy odtwarzacz audiobooków. Zacznijmy od konfiguracji.</string>
+    <string name="onboarding_welcome_subtitle">W twoim osobistym kieszonkowym odtwarzaczu audiobooków. Zacznijmy konfigurację.</string>
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
     <string name="review.request.button.no">Nie, Dziękuję</string>
     <string name="review.feedback.content">Czy możesz nam powiedzieć, co poszło nie tak? Doceniamy Twoją opinię, która pomoże nam poprawić Twoje doświadczenia.</string>
     <string name="onboarding.explanation.subtitle">Aplikacja Voice umożliwia dodawanie książek jako pojedynczych plików lub organizowanie ich w folderach. To ty wybierasz!</string>
     <string name="onboarding.completion.next_button">Zacznij Słuchać</string>
     <string name="review.request.content">Twoja opinia ma dla nas znaczenie! Jeśli masz chwilę, oceń nas i podziel się swoimi doświadczeniami. Pomaga nam to wprowadzać ulepszenia i oferować lepsze wrażenia słuchowe.</string>
-    <string name="select_folder_title_default">Dodaj swój Audiobook(i)</string>
+    <string name="select_folder_title_default">Dodaj swoje Audiobooki</string>
     <string name="storage_bug_button">Przyznaj uprawnienie</string>
     <string name="select_folder_title_onboarding">Dodaj Swój Pierwszy Audiobook</string>
     <string name="sleep_timer.button.increment">Dłużej</string>
@@ -141,4 +141,11 @@
     <string name="playback.current_chapter">Aktualny rozdział</string>
     <string name="pref_faq">Najczęściej zadawane pytania (FAQ)</string>
     <string name="end_of_chapter">Koniec rozdziału</string>
+    <string name="onboarding_analytics_consent_title">Pomóż ulepszać Voice</string>
+    <string name="onboarding_analytics_consent_description">Zezwól na gromadzenie anonimowych danych dotyczących użytkowania, aby pomóc nam ulepszyć aplikację. Możesz zmienić to ustawienie później w opcjach.</string>
+    <string name="onboarding_analytics_consent_button_enable">Kontynuuj z analizą</string>
+    <string name="onboarding_analytics_consent_button_disable">Kontynuuj bez analizy</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Polityka prywatności</string>
+    <string name="settings_analytics_consent_title">Analityka</string>
+    <string name="settings_analytics_consent_description">Zezwól na gromadzenie anonimowych danych dotyczących użytkowania, aby pomóc ulepszyć aplikację</string>
 </resources>
