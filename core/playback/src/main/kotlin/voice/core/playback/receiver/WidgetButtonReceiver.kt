@@ -44,7 +44,6 @@ class WidgetButtonReceiver : BroadcastReceiver() {
               player.fastForward()
               player.play()
             }
-
             Action.Rewind -> {
               player.rewind()
               player.play()

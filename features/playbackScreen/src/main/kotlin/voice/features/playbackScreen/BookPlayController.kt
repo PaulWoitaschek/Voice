@@ -41,7 +41,6 @@ fun BookPlayScreen(bookId: BookId) {
         BookPlayViewEffect.BookmarkAdded -> {
           snackbarHostState.showSnackbar(message = context.getString(StringsR.string.bookmark_added))
         }
-
         BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
           val result = snackbarHostState.showSnackbar(
             message = context.getString(StringsR.string.battery_optimization_rationale),
@@ -79,11 +78,9 @@ fun BookPlayScreen(bookId: BookId) {
       is BookPlayDialogViewState.SpeedDialog -> {
         SpeedDialog(dialogState, viewModel)
       }
-
       is BookPlayDialogViewState.VolumeGainDialog -> {
         VolumeGainDialog(dialogState, viewModel)
       }
-
       is BookPlayDialogViewState.SelectChapterDialog -> {
         SelectChapterDialog(dialogState, viewModel)
       }
