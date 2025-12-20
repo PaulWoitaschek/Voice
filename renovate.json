@@ -1,7 +1,6 @@
 {
   "extends": [
-    "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    "config:recommended"
   ],
   "labels": [
     "dependencies"
