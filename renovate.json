@@ -1,8 +1,7 @@
 {
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests",
-    "group:all"
+    "helpers:pinGitHubActionDigests"
   ],
   "labels": [
     "dependencies"
@@ -19,11 +18,48 @@
       ]
     },
     {
+      "groupName": "AGP, Lint",
+      "matchDepNames": [
+        "com.android.library{/,}**",
+        "androidx.databinding:viewbinding{/,}**",
+        "com.android.application{/,}**",
+        "com.android.tools{/,}**"
+      ]
+    },
+    {
+      "groupName": "Kotlin, KSP, Mero",
+      "matchPackageNames": [
+        "org.jetbrains.kotlin:{/,}**",
+        "org.jetbrains.kotlin.{/,}**",
+        "com.google.devtools.ksp{/,}**",
+        "dev.zacsweers.metro**"
+      ]
+    },
+    {
+      "groupName": "Ktlint",
+      "matchPackageNames": [
+        "com.pinterest.ktlint{/,}**",
+        "io.nlopez.compose.rules{/,}**",
+        "io.github.usefulness{/,}**"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
       "matchPackageNames": [
         "com.google.android.play:review-ktx"
       ],
       "allowedVersions": "!/^(2\\.0\\.2)$/"
     }
   ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
   "configMigration": true
 }
