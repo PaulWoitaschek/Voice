@@ -15,7 +15,7 @@ jobs:
       - uses: ./.github/actions/build_setup
       - name: Run Unit Tests + Lint
         run: ./gradlew :app:lintPlayDebug
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: lint-report
