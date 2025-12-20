@@ -2,8 +2,7 @@
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
-    "group:all",
-    "schedule:weekly"
+    "group:all"
   ],
   "labels": [
     "dependencies"
@@ -26,7 +25,5 @@
       "allowedVersions": "!/^(2\\.0\\.2)$/"
     }
   ],
-  "prHourlyLimit": 0,
-  "prConcurrentLimit": 0,
   "configMigration": true
 }
