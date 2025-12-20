@@ -5,21 +5,21 @@ sdk-target = "36"
 sdk-robolectric = "35"
 
 coroutines = "1.10.2"
-room = "2.8.3"
-kotlin = "2.2.21"
-media3 = "1.8.0"
-agp = "8.13.0"
-ktlint-core = "1.7.1"
+room = "2.8.4"
+kotlin = "2.3.0"
+media3 = "1.9.0"
+agp = "8.13.2"
+ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.7.4"
-navigation3 = "1.0.0-beta01"
+metro = "0.9.2"
+navigation3 = "1.0.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 material = "com.google.android.material:material:1.13.0"
 junit = "junit:junit:4.13.2"
-mockk = "io.mockk:mockk:1.14.6"
+mockk = "io.mockk:mockk:1.14.7"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.3.6"
 paging-compose = "androidx.paging:paging-compose:3.3.6"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
@@ -32,13 +32,13 @@ androidxCore = "androidx.core:core-ktx:1.17.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
-koTest-assert = "io.kotest:kotest-assertions-core:6.0.4"
-datastore = "androidx.datastore:datastore-preferences:1.1.7"
+koTest-assert = "io.kotest:kotest-assertions-core:6.0.7"
+datastore = "androidx.datastore:datastore-preferences:1.2.0"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
-okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.3.0"
+okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.3.2"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
 clikt = "com.github.ajalt.clikt:clikt:5.0.3"
@@ -50,7 +50,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:34.5.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.7.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config" }
@@ -74,10 +74,10 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.4"
-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4"
+lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.10.0"
+lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0"
 
-compose-bom = "androidx.compose:compose-bom:2025.10.01"
+compose-bom = "androidx.compose:compose-bom:2025.12.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -91,7 +91,7 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-activity = "androidx.activity:activity-compose:1.11.0"
+compose-activity = "androidx.activity:activity-compose:1.12.2"
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 
@@ -99,7 +99,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.27"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.5.3"
 
 [bundles]
 compose = [
@@ -143,6 +143,6 @@ googleServices = { id = "com.google.gms.google-services", version = "4.4.4" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.1" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
