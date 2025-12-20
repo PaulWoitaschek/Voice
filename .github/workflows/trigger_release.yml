@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout (with tags)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # We need the tags to determine the next release
           fetch-depth: 0
