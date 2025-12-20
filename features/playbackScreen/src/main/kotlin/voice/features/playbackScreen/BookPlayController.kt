@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
@@ -34,19 +34,20 @@ fun BookPlayScreen(bookId: BookId) {
   val dialogState = viewModel.dialogState.value
   val viewState = viewModel.viewState()
     ?: return
-  val context = LocalContext.current
+  val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added)
+  val batteryOptimizationMessage = stringResource(StringsR.string.battery_optimization_rationale)
+  val batteryOptimizationAction = stringResource(StringsR.string.battery_optimization_action)
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         BookPlayViewEffect.BookmarkAdded -> {
-          snackbarHostState.showSnackbar(message = context.getString(StringsR.string.bookmark_added))
+          snackbarHostState.showSnackbar(message = bookmarkAddedMessage)
         }
-
         BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
           val result = snackbarHostState.showSnackbar(
-            message = context.getString(StringsR.string.battery_optimization_rationale),
+            message = batteryOptimizationMessage,
             duration = SnackbarDuration.Long,
-            actionLabel = context.getString(StringsR.string.battery_optimization_action),
+            actionLabel = batteryOptimizationAction,
           )
           if (result == SnackbarResult.ActionPerformed) {
             viewModel.onBatteryOptimizationRequested()
@@ -79,11 +80,9 @@ fun BookPlayScreen(bookId: BookId) {
       is BookPlayDialogViewState.SpeedDialog -> {
         SpeedDialog(dialogState, viewModel)
       }
-
       is BookPlayDialogViewState.VolumeGainDialog -> {
         VolumeGainDialog(dialogState, viewModel)
       }
-
       is BookPlayDialogViewState.SelectChapterDialog -> {
         SelectChapterDialog(dialogState, viewModel)
       }
