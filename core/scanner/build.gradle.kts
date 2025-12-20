@@ -15,7 +15,7 @@ dependencies {
   implementation(libs.jebml)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
-  implementation(libs.media3.exoplayer)
+  implementation(libs.media3.inspector)
   implementation(libs.coroutines.guava)
 
   testImplementation(projects.core.data.impl)
