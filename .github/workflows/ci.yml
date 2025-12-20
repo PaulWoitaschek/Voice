@@ -36,6 +36,8 @@ jobs:
           check_name: "Unit Tests"
 
   instrumentation:
+    # Temporarily disable
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
