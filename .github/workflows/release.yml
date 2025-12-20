@@ -20,7 +20,7 @@ jobs:
   play_build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
@@ -40,7 +40,7 @@ jobs:
       - tests
     environment: google-play
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Download AAB artifact
@@ -55,7 +55,7 @@ jobs:
     needs: play_upload
     environment: google-play
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
@@ -64,7 +64,7 @@ jobs:
   github_build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/build_setup
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
@@ -83,7 +83,7 @@ jobs:
       - github_build
       - tests
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Download APK artifacts
         uses: actions/download-artifact@v7
         with:
