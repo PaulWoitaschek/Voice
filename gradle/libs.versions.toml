@@ -7,9 +7,9 @@ sdk-robolectric = "35"
 coroutines = "1.10.2"
 room = "2.8.4"
 kotlin = "2.2.21"
-media3 = "1.8.0"
+media3 = "1.9.0"
 agp = "8.13.2"
-ktlint-core = "1.7.1"
+ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
 metro = "0.7.4"
@@ -71,6 +71,7 @@ androidX-test-orchestrator = "androidx.test:orchestrator:1.6.1"
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
+media3-inspector = { module = "androidx.media3:media3-inspector", version.ref = "media3" }
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
@@ -99,7 +100,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.4.27"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.5.3"
 
 [bundles]
 compose = [

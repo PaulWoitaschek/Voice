@@ -6,13 +6,13 @@ import androidx.media3.common.C
 import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
 import androidx.media3.container.MdtaMetadataEntry
-import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
+import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
@@ -119,11 +119,9 @@ internal class MediaAnalyzer(
       "com.apple.quicktime.title" -> {
         builder.title = entry.value.toString(Charsets.UTF_8)
       }
-
       "com.apple.quicktime.artist" -> {
         builder.artist = entry.value.toString(Charsets.UTF_8)
       }
-
       "com.apple.quicktime.album" -> {
         builder.album = entry.value.toString(Charsets.UTF_8)
       }
@@ -158,7 +156,6 @@ internal class MediaAnalyzer(
           }
         }
       }
-
       else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
     }
   }
