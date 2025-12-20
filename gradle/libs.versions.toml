@@ -6,13 +6,13 @@ sdk-robolectric = "35"
 
 coroutines = "1.10.2"
 room = "2.8.4"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 media3 = "1.9.0"
 agp = "8.13.2"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.11.0"
 retrofit = "3.0.0"
-metro = "0.7.4"
+metro = "0.9.2"
 navigation3 = "1.0.0"
 
 [libraries]
@@ -144,6 +144,6 @@ googleServices = { id = "com.google.gms.google-services", version = "4.4.4" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.1" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
