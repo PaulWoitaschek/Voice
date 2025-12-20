@@ -119,11 +119,9 @@ internal class MediaAnalyzer(
       "com.apple.quicktime.title" -> {
         builder.title = entry.value.toString(Charsets.UTF_8)
       }
-
       "com.apple.quicktime.artist" -> {
         builder.artist = entry.value.toString(Charsets.UTF_8)
       }
-
       "com.apple.quicktime.album" -> {
         builder.album = entry.value.toString(Charsets.UTF_8)
       }
@@ -158,7 +156,6 @@ internal class MediaAnalyzer(
           }
         }
       }
-
       else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
     }
   }

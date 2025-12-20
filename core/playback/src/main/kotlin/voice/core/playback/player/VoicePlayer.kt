@@ -107,15 +107,13 @@ class VoicePlayer(
   }
 
   override fun getAvailableCommands(): Player.Commands {
-    /**
-     * On Android 13, the notification always shows the "skip to next" and "skip to previous"
-     * actions.
-     * However these are also used internally when seeking for example through a bluetooth headset
-     * We use these and delegate them to fast forward / rewind.
-     * The player however only advertises the seek to next and previous item in the case
-     * that it's not the first or last track. Therefore we manually advertise that these
-     * are available.
-     */
+    // On Android 13, the notification always shows the "skip to next" and "skip to previous"
+    // actions.
+    // However these are also used internally when seeking for example through a bluetooth headset
+    // We use these and delegate them to fast forward / rewind.
+    // The player however only advertises the seek to next and previous item in the case
+    // that it's not the first or last track. Therefore we manually advertise that these
+    // are available.
     return super.getAvailableCommands()
       .buildUpon()
       .addAll(

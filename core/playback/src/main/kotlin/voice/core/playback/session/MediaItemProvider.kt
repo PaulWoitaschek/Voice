@@ -56,7 +56,6 @@ class MediaItemProvider(
       is MediaId.Book -> {
         bookRepository.get(mediaId.id)?.let(::mediaItem)
       }
-
       is MediaId.Chapter -> {
         val content = contentRepo.get(mediaId.bookId) ?: return null
         chapterRepo.get(mediaId.chapterId)?.let {
