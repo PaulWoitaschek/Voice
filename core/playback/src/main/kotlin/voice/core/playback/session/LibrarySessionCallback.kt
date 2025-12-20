@@ -140,6 +140,7 @@ class LibrarySessionCallback(
   override fun onPlaybackResumption(
     mediaSession: MediaSession,
     controller: ControllerInfo,
+    isForPlayback: Boolean,
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
     return scope.future {

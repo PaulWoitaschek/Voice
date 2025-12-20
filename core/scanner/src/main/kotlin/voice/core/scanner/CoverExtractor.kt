@@ -4,10 +4,10 @@ import android.content.Context
 import android.net.Uri
 import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.MetadataRetriever
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.metadata.flac.PictureFrame
 import androidx.media3.extractor.metadata.id3.ApicFrame
+import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
