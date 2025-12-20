@@ -93,7 +93,6 @@ internal class Mp4BoxParser(
             return
           }
         }
-
         visitors.any { it.path.startsWith(currentPath) } -> {
           parseBoxes(
             input = input,
@@ -107,7 +106,6 @@ internal class Mp4BoxParser(
             return
           }
         }
-
         else -> {
           if (!input.skipFully(payloadSize, true)) {
             return
