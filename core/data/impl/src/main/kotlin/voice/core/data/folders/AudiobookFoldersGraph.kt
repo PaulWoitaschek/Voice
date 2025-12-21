@@ -13,33 +13,33 @@ import voice.core.data.store.VoiceDataStoreFactory
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object AudiobookFoldersGraph {
+public object AudiobookFoldersGraph {
 
   @Provides
   @SingleIn(AppScope::class)
   @RootAudiobookFoldersStore
-  fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+  private fun audiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("audiobookFolders")
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @SingleFolderAudiobookFoldersStore
-  fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+  private fun singleFolderAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("SingleFolderAudiobookFolders")
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @SingleFileAudiobookFoldersStore
-  fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+  private fun singleFileAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("SingleFileAudiobookFolders")
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @AuthorAudiobookFoldersStore
-  fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
+  private fun authorAudiobookFolders(factory: VoiceDataStoreFactory): DataStore<Set<Uri>> {
     return factory.createUriSet("AuthorAudiobookFolders")
   }
 }
