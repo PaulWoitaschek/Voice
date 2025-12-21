@@ -16,23 +16,23 @@ import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object PersistenceModule {
+public object PersistenceModule {
 
   @Provides
-  fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
+  private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
 
   @Provides
-  fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
+  private fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
 
   @Provides
-  fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
+  private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
 
   @Provides
-  fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
+  private fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
 
   @Provides
   @SingleIn(AppScope::class)
-  fun appDb(
+  private fun appDb(
     context: Context,
     migrations: Set<@JvmSuppressWildcards Migration>,
   ): AppDb {
@@ -42,5 +42,5 @@ internal object PersistenceModule {
   }
 
   @Provides
-  fun bindRoomDatabase(appDb: AppDb): RoomDatabase = appDb
+  private fun bindRoomDatabase(appDb: AppDb): RoomDatabase = appDb
 }

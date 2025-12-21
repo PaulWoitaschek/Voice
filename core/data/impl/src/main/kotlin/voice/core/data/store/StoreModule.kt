@@ -19,11 +19,11 @@ import kotlin.time.Duration.Companion.seconds
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-internal object StoreModule {
+public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun sharedPreferences(context: Application): SharedPreferences {
+  private fun sharedPreferences(context: Application): SharedPreferences {
     return context.getSharedPreferences(
       "${context.packageName}_preferences",
       Context.MODE_PRIVATE,
@@ -33,7 +33,7 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @DarkThemeStore
-  fun darkTheme(
+  private fun darkTheme(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Boolean> {
@@ -49,7 +49,7 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @AutoRewindAmountStore
-  fun autoRewindAmount(
+  private fun autoRewindAmount(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -63,18 +63,18 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @FadeOutStore
-  fun fadeOut(factory: VoiceDataStoreFactory): DataStore<Duration> {
+  private fun fadeOut(factory: VoiceDataStoreFactory): DataStore<Duration> {
     return factory.create(
       fileName = "fadeOut",
       defaultValue = 10.seconds,
-      serializer = Duration.Companion.serializer(),
+      serializer = Duration.serializer(),
     )
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @SeekTimeStore
-  fun seekTime(
+  private fun seekTime(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<Int> {
@@ -88,18 +88,18 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @SleepTimerPreferenceStore
-  fun sleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
+  private fun sleepTimerPreference(factory: VoiceDataStoreFactory): DataStore<SleepTimerPreference> {
     return factory.create(
       serializer = SleepTimerPreference.Companion.serializer(),
       fileName = "sleepTime3",
-      defaultValue = SleepTimerPreference.Companion.Default,
+      defaultValue = SleepTimerPreference.Default,
     )
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @GridModeStore
-  fun gridMode(
+  private fun gridMode(
     factory: VoiceDataStoreFactory,
     sharedPreferences: SharedPreferences,
   ): DataStore<GridMode> {
@@ -126,14 +126,14 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @OnboardingCompletedStore
-  fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+  private fun onboardingCompleted(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("onboardingCompleted", defaultValue = false)
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @CurrentBookStore
-  fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
+  private fun currentBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
     return factory.create(
       serializer = BookId.serializer().nullable,
       fileName = "currentBook",
@@ -144,21 +144,21 @@ internal object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @AmountOfBatteryOptimizationRequestedStore
-  fun amountOfBatteryOptimizationsRequestedStore(factory: VoiceDataStoreFactory): DataStore<Int> {
+  private fun amountOfBatteryOptimizationsRequestedStore(factory: VoiceDataStoreFactory): DataStore<Int> {
     return factory.int("amountOfBatteryOptimizationsRequestedStore", 0)
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @ReviewDialogShownStore
-  fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+  private fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.create(Boolean.serializer(), false, "reviewDialogShown")
   }
 
   @Provides
   @SingleIn(AppScope::class)
   @AnalyticsConsentStore
-  fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+  private fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("analyticsConsent", defaultValue = false)
   }
 }
