@@ -139,4 +139,13 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Время начала</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Время конца</string>
     <string name="playback.current_chapter">Текущая глава</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="end_of_chapter">Конец главы</string>
+    <string name="onboarding_analytics_consent_title">Помогите улучшить Voice</string>
+    <string name="onboarding_analytics_consent_description">Разрешите нам собирать анонимные данные об использовании, чтобы улучшить приложение. Вы можете изменить это позже в настройках.</string>
+    <string name="onboarding_analytics_consent_button_enable">Продолжить с отправкой аналитики</string>
+    <string name="onboarding_analytics_consent_button_disable">Продолжить без отправки аналитики</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_analytics_consent_title">Аналитика</string>
+    <string name="settings_analytics_consent_description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
 </resources>

@@ -138,4 +138,11 @@
     <string name="playback.current_chapter">Capitolo corrente</string>
     <string name="pref_faq">Domande frequenti</string>
     <string name="end_of_chapter">Fine del capitolo</string>
+    <string name="onboarding_analytics_consent_title">Aiutaci a migliorare Voice</string>
+    <string name="onboarding_analytics_consent_description">Consentici di raccogliere dati di utilizzo anonimi per aiutarci a migliorare l\'app. Puoi modificare questa impostazione in seguito.</string>
+    <string name="onboarding_analytics_consent_button_enable">Continua con analytics</string>
+    <string name="onboarding_analytics_consent_button_disable">Continua senza analytics</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Informativa sulla privacy</string>
+    <string name="settings_analytics_consent_title">Analytics</string>
+    <string name="settings_analytics_consent_description">Consenti la raccolta anonima dei dati di utilizzo per contribuire a migliorare l\'app</string>
 </resources>

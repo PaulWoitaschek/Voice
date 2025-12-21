@@ -135,4 +135,11 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Bitiş zamanı</string>
     <string name="playback.current_chapter">Şu anki bölüm</string>
     <string name="end_of_chapter">Bölüm Sonu</string>
+    <string name="onboarding_analytics_consent_title">Voice\'u iyileştirmeye katkı sağlayın</string>
+    <string name="onboarding_analytics_consent_description">Uygulamayı iyileştirmemize yardımcı olması için anonim kullanım verileri toplamamıza izin verin. Bunu daha sonra ayarlardan değiştirebilirsiniz.</string>
+    <string name="onboarding_analytics_consent_button_enable">Analitiğe izin ver</string>
+    <string name="onboarding_analytics_consent_button_disable">Analitiksiz devam et</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Gizlilik Politikası</string>
+    <string name="settings_analytics_consent_title">Analitik</string>
+    <string name="settings_analytics_consent_description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
 </resources>
