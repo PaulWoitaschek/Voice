@@ -190,6 +190,7 @@ private class TestBase(private val search: BookSearch) {
   }
 
   suspend fun search(query: String) {
+    @Suppress("RETURN_VALUE_NOT_USED")
     search.search(query)
   }
 }

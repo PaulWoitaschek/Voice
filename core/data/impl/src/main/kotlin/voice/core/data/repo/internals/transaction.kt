@@ -2,6 +2,7 @@ package voice.core.data.repo.internals
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+@IgnorableReturnValue
 internal inline fun <T> SupportSQLiteDatabase.transaction(
   exclusive: Boolean = true,
   body: SupportSQLiteDatabase.() -> T,

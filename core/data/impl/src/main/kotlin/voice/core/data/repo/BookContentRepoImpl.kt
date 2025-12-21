@@ -66,7 +66,7 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
           content.copy(isActive = content.id in ids)
         }
       }!!
-      .onEach { dao.insert(it) }
+      .forEach { dao.insert(it) }
   }
 
   override suspend fun put(content: BookContent) {

@@ -345,15 +345,12 @@ class VoicePlayer(
     }
   }
 
-  fun setSkipSilenceEnabled(enabled: Boolean): Boolean {
+  fun setSkipSilenceEnabled(enabled: Boolean) {
     scope.launch {
       updateBook { it.copy(skipSilence = enabled) }
     }
-    return if (player is ExoPlayer) {
+    if (player is ExoPlayer) {
       player.skipSilenceEnabled = enabled
-      true
-    } else {
-      false
     }
   }
 
