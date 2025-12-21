@@ -3,6 +3,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
@@ -28,6 +29,10 @@ fun Project.baseSetup() {
       )
       allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
     }
+  }
+  tasks.withType(Test::class.java).configureEach {
+    // run tests in parallel https://docs.gradle.org/current/userguide/performance.html#a_run_tests_in_parallel
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
   }
   extensions.configure<KotlinProjectExtension> {
     jvmToolchain {
