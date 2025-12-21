@@ -164,6 +164,7 @@ class PlayerController(
     }
   }
 
+  @IgnorableReturnValue
   suspend fun awaitConnect(): MediaController? {
     return try {
       controller.await()

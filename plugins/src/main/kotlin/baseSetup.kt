@@ -16,7 +16,10 @@ fun Project.baseSetup() {
   tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
       jvmTarget.set(JvmTarget.JVM_11)
-      freeCompilerArgs.add("-Xannotation-default-target=param-property")
+      freeCompilerArgs.addAll(
+        "-Xannotation-default-target=param-property",
+        "-Xreturn-value-checker=full",
+      )
       optIn.addAll(
         listOf(
           "kotlin.RequiresOptIn",

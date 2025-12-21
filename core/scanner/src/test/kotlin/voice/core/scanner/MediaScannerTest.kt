@@ -221,6 +221,7 @@ class MediaScannerTest {
       scanner.scan(mapOf(type to roots.map(::FileBasedDocumentFile)))
     }
 
+    @IgnorableReturnValue
     fun audioFile(
       parent: File,
       name: String,
