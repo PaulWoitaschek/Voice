@@ -10,12 +10,12 @@ import androidx.media3.extractor.metadata.id3.ApicFrame
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
 import java.io.File
-import kotlin.coroutines.coroutineContext
 
 @Inject
 internal class CoverExtractor(
@@ -76,7 +76,7 @@ internal class CoverExtractor(
         .retrieveTrackGroups()
         .await()
     } catch (e: Exception) {
-      if (e is CancellationException) coroutineContext.ensureActive()
+      if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Error retrieving metadata")
       null
     }
