@@ -141,4 +141,11 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Час заканчэння</string>
     <string name="playback.current_chapter">Бягучы раздзел</string>
     <string name="end_of_chapter">Канец раздзела</string>
+    <string name="onboarding_analytics_consent_title">Дапамажыце палепшыць Voice</string>
+    <string name="onboarding_analytics_consent_description">Дазвольце нам збіраць ананімныя даныя аб выкарыстанні, каб палепшыць праграму. Вы можаце змяніць гэта пазней у наладах.</string>
+    <string name="onboarding_analytics_consent_button_enable">Працягнуць з аналітыкай</string>
+    <string name="onboarding_analytics_consent_button_disable">Працягнуць без аналітыкі</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Палітыка прыватнасці</string>
+    <string name="settings_analytics_consent_title">Аналітыка</string>
+    <string name="settings_analytics_consent_description">Дазволіць ананімны збор даных аб выкарыстанні, каб палепшыць праграму</string>
 </resources>

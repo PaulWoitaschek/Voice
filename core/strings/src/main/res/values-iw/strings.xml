@@ -137,4 +137,6 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">בחר זמן התחלה</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">בחר זמן סיום</string>
     <string name="playback.current_chapter">פרק נוכחי</string>
+    <string name="end_of_chapter">סוף פרק</string>
+    <string name="onboarding_analytics_consent_title">עזרו לשפר את Voice</string>
 </resources>

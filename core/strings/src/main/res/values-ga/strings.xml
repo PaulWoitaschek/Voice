@@ -144,4 +144,11 @@
     <string name="playback.current_chapter">Caibidil reatha</string>
     <string name="pref_faq">Ceisteanna Coitianta</string>
     <string name="end_of_chapter">Deireadh na Caibidle</string>
+    <string name="onboarding_analytics_consent_title">Cabhraigh le Guth a fheabhsú</string>
+    <string name="onboarding_analytics_consent_description">Lig dúinn sonraí úsáide gan ainm a bhailiú chun cabhrú leis an aip a fheabhsú. Is féidir leat é seo a athrú níos déanaí sna socruithe.</string>
+    <string name="onboarding_analytics_consent_button_enable">Lean ar aghaidh leis an anailísíocht</string>
+    <string name="onboarding_analytics_consent_button_disable">Lean ar aghaidh gan anailísíocht</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Polasaí Príobháideachais</string>
+    <string name="settings_analytics_consent_title">Anailísíocht</string>
+    <string name="settings_analytics_consent_description">Ceadaigh bailiú sonraí úsáide gan ainm chun cabhrú le feabhas a chur ar an aip</string>
 </resources>

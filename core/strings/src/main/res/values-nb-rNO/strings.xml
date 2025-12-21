@@ -135,4 +135,5 @@
     <string name="auto_sleep_timer.title">Automatisk søvn-timer</string>
     <string name="pref_faq">Ofte stilte spørsmål</string>
     <string name="end_of_chapter">Kapittelslutt</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Personvernpraksis</string>
 </resources>
