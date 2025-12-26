@@ -10,6 +10,7 @@ At a high level:
 * **Infrastructure modules** provide the app entry point, build tooling, and navigation.
 * **Core modules** encapsulate reusable domain and service logic (playback, scanning, data, logging, etc.).
 * **Feature modules** implement user-facing screens, composed from core logic and UI components.
+* **Feature flags** are defined per-feature and implemented via `:core:featureflag`, sourced through remote config.
 
 ## Layers
 
@@ -48,6 +49,7 @@ Core modules provide the underlying services and abstractions:
 * **Cross-Cutting Concerns**
 
   * Logging: `:core:logging:core`, `:core:logging:crashlytics`, `:core:logging:debug`
+  * Feature Flags: `:core:featureflag` – Feature flag abstractions backed by remote config
   * Remote Config: `:core:remoteconfig:core`, `:core:remoteconfig:firebase`, `:core:remoteconfig:noop`
 
 ### Features
@@ -116,4 +118,3 @@ flowchart LR
 1. **Add new functionality as a feature module.**
 2. **Extract reusable logic into `:core` modules** once multiple features need it.
 3. **Keep infrastructure minimal** — mainly for wiring and build configuration.
-

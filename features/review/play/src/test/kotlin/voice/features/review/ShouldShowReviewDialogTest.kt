@@ -7,6 +7,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.playstate.PlayStateManager
 import java.time.Clock
 import java.time.Instant
@@ -99,9 +100,7 @@ class ShouldShowReviewDialogTest {
       reviewDialogShown = mockk {
         every { data } returns flowOf(reviewDialogShown)
       },
-      remoteConfig = mockk {
-        every { boolean("review_enabled") } returns true
-      },
+      reviewEnabledFeatureFlag = MemoryFeatureFlag(true),
     )
     val showsReviewDialog = runBlocking {
       shouldShowReviewDialog.shouldShow()
