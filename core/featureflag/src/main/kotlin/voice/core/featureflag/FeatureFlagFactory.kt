@@ -6,9 +6,12 @@ import voice.core.remoteconfig.api.RemoteConfig
 @Inject
 class FeatureFlagFactory(private val remoteConfig: RemoteConfig) {
 
-  fun boolean(key: String): FeatureFlag<Boolean> {
+  fun boolean(
+    key: String,
+    defaultValue: Boolean = false,
+  ): FeatureFlag<Boolean> {
     return RemoteConfigFeatureFlag(remoteConfig = remoteConfig) {
-      it.boolean(key = key)
+      it.boolean(key = key, defaultValue = defaultValue)
     }
   }
 
