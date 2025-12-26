@@ -15,7 +15,7 @@ dependencies {
   implementation(projects.core.scanner)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-  implementation(projects.core.remoteconfig.api)
+  implementation(projects.core.featureflag)
 
   implementation(libs.bundles.retrofit)
   implementation(libs.okhttp)

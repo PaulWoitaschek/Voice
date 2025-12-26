@@ -146,6 +146,7 @@ dependencies {
   implementation(projects.core.data.impl)
   implementation(projects.core.playback)
   implementation(projects.core.scanner)
+  implementation(projects.core.featureflag)
   implementation(projects.core.initializer)
   implementation(projects.features.playbackScreen)
   implementation(projects.navigation)
