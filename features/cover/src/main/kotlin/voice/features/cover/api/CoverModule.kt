@@ -13,7 +13,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.FeatureFlagFactory
+import voice.core.featureflag.UserAgentFeatureFlagQualifier
 
 @ContributesTo(AppScope::class)
 @BindingContainer
@@ -51,12 +51,5 @@ object CoverModule {
       .client(client)
       .build()
       .create()
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @UserAgentFeatureFlagQualifier
-  fun userAgentFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
-    return factory.string(key = "user_agent", defaultValue = "Mozilla/5.0")
   }
 }

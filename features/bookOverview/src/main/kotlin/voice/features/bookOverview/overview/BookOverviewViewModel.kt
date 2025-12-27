@@ -25,6 +25,8 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.GridModeStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
@@ -53,6 +55,8 @@ class BookOverviewViewModel(
   private val search: BookSearch,
   private val contentRepo: BookContentRepo,
   private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
+  @FolderPickerInSettingsFeatureFlagQualifier
+  private val folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
 ) {
 
   private val scope = MainScope()
@@ -123,6 +127,7 @@ class BookOverviewViewModel(
       searchActive = searchActive,
       searchViewState = bookSearchViewState,
       showStoragePermissionBugCard = hasStoragePermissionBug,
+      showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get(),
     )
   }
 
