@@ -21,6 +21,8 @@ import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
 import voice.core.ui.DARK_THEME_SETTABLE
 import voice.core.ui.GridCount
 import voice.navigation.Destination
@@ -44,6 +46,8 @@ class SettingsViewModel(
   @AnalyticsConsentStore
   private val analyticsConsentStore: DataStore<Boolean>,
   private val gridCount: GridCount,
+  @FolderPickerInSettingsFeatureFlagQualifier
+  private val folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -60,6 +64,9 @@ class SettingsViewModel(
       initial = SleepTimerPreference.Default,
     )
     val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
+    val showFolderPickerEntry = remember {
+      folderPickerInSettingsFeatureFlag.get()
+    }
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -79,6 +86,7 @@ class SettingsViewModel(
       ),
       analyticsEnabled = analyticsEnabled,
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
+      showFolderPickerEntry = showFolderPickerEntry,
     )
   }
 
@@ -158,6 +166,10 @@ class SettingsViewModel(
 
   override fun openFaq() {
     navigator.goTo(Destination.Website("https://voice.woitaschek.de/faq/"))
+  }
+
+  override fun openFolderPicker() {
+    navigator.goTo(Destination.FolderPicker)
   }
 
   override fun setAutoSleepTimer(checked: Boolean) {

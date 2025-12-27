@@ -13,6 +13,7 @@ dependencies {
   implementation(projects.core.playback)
   implementation(projects.core.data.api)
   implementation(projects.core.scanner)
+  implementation(projects.core.featureflag)
 
   implementation(libs.lifecycle)
   api(libs.immutable)

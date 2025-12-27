@@ -13,6 +13,7 @@ data class SettingsViewState(
   val autoSleepTimer: AutoSleepTimerViewState,
   val showAnalyticSetting: Boolean,
   val analyticsEnabled: Boolean,
+  val showFolderPickerEntry: Boolean,
 ) {
 
   enum class Dialog {
@@ -33,6 +34,7 @@ data class SettingsViewState(
         autoSleepTimer = AutoSleepTimerViewState.preview(),
         analyticsEnabled = false,
         showAnalyticSetting = true,
+        showFolderPickerEntry = false,
       )
     }
   }

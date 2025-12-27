@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
@@ -81,6 +82,25 @@ private fun Settings(
     },
   ) { contentPadding ->
     LazyColumn(contentPadding = contentPadding) {
+      if (viewState.showFolderPickerEntry) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable { listener.openFolderPicker() },
+            leadingContent = {
+              Icon(
+                imageVector = Icons.Outlined.Book,
+                contentDescription = stringResource(StringsR.string.audiobook_folders_title),
+              )
+            },
+            headlineContent = {
+              Text(stringResource(StringsR.string.audiobook_folders_title))
+            },
+            supportingContent = {
+              Text(stringResource(StringsR.string.pref_audiobook_folders_explanation))
+            },
+          )
+        }
+      }
       if (viewState.showDarkThemePref) {
         item {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)

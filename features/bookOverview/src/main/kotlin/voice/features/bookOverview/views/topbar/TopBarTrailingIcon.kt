@@ -13,6 +13,7 @@ import voice.features.bookOverview.views.SettingsIcon
 internal fun ColumnScope.TopBarTrailingIcon(
   searchActive: Boolean,
   showAddBookHint: Boolean,
+  showFolderPickerIcon: Boolean,
   onBookFolderClick: () -> Unit,
   onSettingsClick: () -> Unit,
 ) {
@@ -22,7 +23,9 @@ internal fun ColumnScope.TopBarTrailingIcon(
     exit = fadeOut(),
   ) {
     Row {
-      BookFolderIcon(withHint = showAddBookHint, onClick = onBookFolderClick)
+      if (showFolderPickerIcon) {
+        BookFolderIcon(withHint = showAddBookHint, onClick = onBookFolderClick)
+      }
       SettingsIcon(onSettingsClick)
     }
   }

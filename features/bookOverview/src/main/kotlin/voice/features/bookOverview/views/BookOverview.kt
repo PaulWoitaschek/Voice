@@ -276,6 +276,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         query = "",
       ),
       showStoragePermissionBugCard = false,
+      showFolderPickerIcon = true,
     ),
   )
 }
