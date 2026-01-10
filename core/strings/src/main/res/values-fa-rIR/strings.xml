@@ -128,4 +128,18 @@
     <string name="onboarding_welcome_subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.button_next">بعدی</string>
     <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید. \n \nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
+    <string name="pref_faq">سوالات متداول</string>
+    <string name="end_of_chapter">پایان فصل</string>
+    <string name="onboarding_analytics_consent_title">به بهبود Voice کمک کنید</string>
+    <string name="onboarding_analytics_consent_description">به ما اجازه بدهید تا برای بهبود دادن برنامه به صورت ناشناس اقدام به جمع‌آوری اطلاعات استفاده شما کنیم. شما بعداً می‌توانید این را در تنظیمات تغییر بدهید.</string>
+    <string name="onboarding_analytics_consent_button_enable">قبول کردن تجزیه‌وتحلیل آماری</string>
+    <string name="onboarding_analytics_consent_button_disable">قبول نکردن تجزیه‌وتحلیل آماری</string>
+    <string name="onboarding_analytics_consent_privacy_policy">سیاست حفظ حریم خصوصی</string>
+    <string name="settings_analytics_consent_title">تجزیه‌وتحلیل آماری</string>
+    <string name="settings_analytics_consent_description">اجازه بدهید برای بهبود دادن برنامه اطلاعات استفاده شما به شکل ناشناس گردآوری شود</string>
+    <string name="auto_sleep_timer.title">زمان خواب خودکار</string>
+    <string name="auto_sleep_timer.subtitle">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">زمان شروع</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">زمان پایان</string>
+    <string name="playback.current_chapter">فصل فعلی</string>
 </resources>

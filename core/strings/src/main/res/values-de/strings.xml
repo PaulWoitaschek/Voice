@@ -142,4 +142,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Datenschutzerklärung</string>
     <string name="settings_analytics_consent_title">Nutzungsdaten</string>
     <string name="settings_analytics_consent_description">Erlaube die Freigabe anonymer Nutzungsdaten zur Verbesserung der App</string>
+    <string name="pref_audiobook_folders_explanation">Ordner verwalten, die nach Hörbüchern durchsucht werden sollen</string>
 </resources>
