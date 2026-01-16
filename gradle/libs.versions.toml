@@ -41,7 +41,7 @@ immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.3.2"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
-clikt = "com.github.ajalt.clikt:clikt:5.0.3"
+clikt = "com.github.ajalt.clikt:clikt:5.1.0"
 jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
 slf4j-noop = "org.slf4j:slf4j-nop:2.0.17"
 
