@@ -1,6 +1,6 @@
-Bist du auf der Suche nach einem einfachen, minimalen Hörbuch-Player, der einfach funktioniert?
-Einen, mit dem du dich auf das konzentrieren kannst, was Du eigentlich tun willst: Hörbücher hören?
-Du fügst einfach Deinen Haupt-Hörbuchordner hinzu, und jeder Ordner darin wird als einzelnes Buch erkannt. So bleibt deine Bibliothek einfach und übersichtlich.
+Bist Du auf der Suche nach einem einfachen, minimalistischen Hörbuch-Player, der einfach funktioniert?
+Einen, mit dem Du Dich auf das konzentrieren kannst, was Du eigentlich tun willst: Hörbücher hören?
+Du fügst einfach Deinen Haupt-Hörbuchordner hinzu, und jeder Ordner darin wird als einzelnes Buch erkannt. So bleibt Deine Bibliothek einfach und übersichtlich.
 
 Was Voice kann:
 
@@ -10,7 +10,7 @@ Was Voice kann:
 - Tag- und Nacht-Thema. Einfach für die Augen!
 - Lesezeichen
 - Android Auto
-- Schlaf-Timer. Damit Sie das Buch nicht mitten in der Nacht anhalten müssen.
+- Schlaf-Timer. Damit Du das Buch nicht mitten in der Nacht anhalten musst.
 
 Voice ist kostenlos und quelloffen. Das heißt, jeder kann sehen, was er tut. Voice verwendet minimale Berechtigungen.
 
