@@ -94,7 +94,7 @@
     <string name="pause">Pausa</string>
     <string name="cover_search.author">Författare</string>
     <string name="storage_bug_button">Tillåta behörigheter</string>
-    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som en bok eller en mapp\?</string>
+    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som en bok eller en mapp?</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dem i mappar. Du väljer!</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas. Njut av din resa med Voice!</string>
@@ -116,9 +116,9 @@
     <string name="review.feedback.title">Vi är ledsna att höra det!</string>
     <string name="cover_search_template_with_author">%1$s av %2$s ljudboksomslag</string>
     <string name="folder_mode_author">Författarbokläge: Undermappar är författare, under-undermappar är böcker.</string>
-    <string name="review.request.title">Gillar du Voice\?</string>
+    <string name="review.request.title">Gillar du Voice?</string>
     <string name="review.request.content">Din feedback är viktig för oss! Om du har en stund, betygsätt oss och dela din upplevelse. Det hjälper oss att göra förbättringar och erbjuda en bättre lyssningsupplevelse.</string>
-    <string name="review.feedback.content">Kan du berätta vad som gick fel\? Vi uppskattar din feedback och den hjälper oss att förbättra din upplevelse.</string>
+    <string name="review.feedback.content">Kan du berätta vad som gick fel? Vi uppskattar din feedback och den hjälper oss att förbättra din upplevelse.</string>
     <string name="review.feedback.button.yes">Skicka feedback</string>
     <string name="cover_search.icon_recent">Senaste sökning</string>
     <string name="sleep_timer.title">Söta drömmar! 🌙</string>

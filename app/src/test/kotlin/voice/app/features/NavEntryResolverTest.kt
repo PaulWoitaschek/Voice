@@ -7,8 +7,6 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraph
-import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import org.junit.Test
 import voice.app.navigation.NavEntryResolver
@@ -21,7 +19,7 @@ import kotlin.reflect.KClass
 )
 interface NavEntryResolverTestGraph {
 
-  @get:Provides
+  @Provides
   val application: Application get() = ApplicationProvider.getApplicationContext()
 
   val resolver: NavEntryResolver
@@ -38,7 +36,6 @@ class NavEntryResolverTest {
           addChildren(it)
         }
       }
-      //  add(Destination.Compose::class)
       addChildren(Destination.Compose::class)
     }
     val testGraph: NavEntryResolverTestGraph = createGraph()

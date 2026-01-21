@@ -140,6 +140,7 @@ class LibrarySessionCallback(
   override fun onPlaybackResumption(
     mediaSession: MediaSession,
     controller: ControllerInfo,
+    isForPlayback: Boolean,
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
     return scope.future {
@@ -204,11 +205,9 @@ class LibrarySessionCallback(
       CustomCommand.ForceSeekToNext -> {
         player.forceSeekToNext()
       }
-
       CustomCommand.ForceSeekToPrevious -> {
         player.forceSeekToPrevious()
       }
-
       is CustomCommand.SetSkipSilence -> {
         player.setSkipSilenceEnabled(command.skipSilence)
       }

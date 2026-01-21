@@ -46,6 +46,7 @@ internal fun BookOverviewTopBar(
       onSearchBookClick = onSearchBookClick,
       searchActive = viewState.searchActive,
       showAddBookHint = viewState.showAddBookHint,
+      showFolderPickerIcon = viewState.showFolderPickerIcon,
       searchViewState = viewState.searchViewState,
     )
     var showLoading by remember { mutableStateOf(true) }
@@ -84,6 +85,7 @@ private fun BookOverviewTopBarPreview() {
           query = "",
         ),
         showStoragePermissionBugCard = false,
+        showFolderPickerIcon = true,
       ),
       onBookFolderClick = {},
       onSettingsClick = {},

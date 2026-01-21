@@ -10,7 +10,6 @@
     <string name="skip_silence">Пропускать тишину</string>
     <string name="volume_boost">Усиление звука</string>
     <string name="dialog_confirm">Установить</string>
-    <string name="dialog_cancel">Отмена</string>
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
     <string name="download_book_cover">Обложка из интернета</string>
@@ -30,7 +29,7 @@
         <item quantity="one">%d секунда</item>
         <item quantity="few">%d секунды</item>
         <item quantity="many">%d секунд</item>
-        <item quantity="other">%d с</item>
+        <item quantity="other">%d секунд</item>
     </plurals>
     <string name="pref_seek_time">Интервал перемотки</string>
     <string name="pref_theme_dark">Темная тема</string>
@@ -56,7 +55,7 @@
         <item quantity="one">%d аудиофайл</item>
         <item quantity="few">%d аудиофайла</item>
         <item quantity="many">%d аудиофайлов</item>
-        <item quantity="other">%d аудиофайла</item>
+        <item quantity="other">%d аудиофайлов</item>
     </plurals>
     <string name="folder_type_book_example_header">Будут обнаружены следующие книги</string>
     <string name="folder_type_no_books">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
@@ -107,14 +106,14 @@
     <string name="review.feedback.title">Нам жаль это слышать!</string>
     <string name="review.feedback.button.yes">Отправить отзыв</string>
     <string name="review.feedback.button.no">Отмена</string>
-    <string name="review.request.title">Нравится Voice\?</string>
+    <string name="review.request.title">Нравится Voice?</string>
     <string name="select_folder_title_onboarding">Добавьте свою первую аудиокнигу</string>
-    <string name="select_folder_subtitle">Хотите добавить один файл в виде книги или папки\?</string>
+    <string name="select_folder_subtitle">Хотите добавить один файл в виде книги или папки?</string>
     <string name="onboarding_welcome_title">Добро пожаловать в Voice!</string>
     <string name="onboarding_welcome_subtitle">Ваш личный карманный проигрыватель аудиокниг. Давайте настроим.</string>
     <string name="onboarding.explanation.subtitle">С помощью Voice вы можете добавлять книги в виде отдельных файлов или формировать их в папкам. Выбирайте!</string>
     <string name="review.request.content">Ваш отзыв важен для нас! Если у вас есть время, оцените нас и поделитесь своим опытом. Это помогает нам вносить улучшения и обеспечивает качество прослушивания.</string>
-    <string name="review.feedback.content">Не могли бы вы рассказать нам, что пошло не так\? Мы ценим ваши отзывы, и они помогают нам улучшить ваш опыт.</string>
+    <string name="review.feedback.content">Не могли бы вы рассказать нам, что пошло не так? Мы ценим ваши отзывы, и они помогают нам улучшить ваш опыт.</string>
     <string name="cover_search.author">Автор</string>
     <string name="cover_search.icon_recent">Недавний запрос</string>
     <string name="select_folder_title_default">Добавьте свои аудиокниги</string>
@@ -140,4 +139,13 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Время начала</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Время конца</string>
     <string name="playback.current_chapter">Текущая глава</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="end_of_chapter">Конец главы</string>
+    <string name="onboarding_analytics_consent_title">Помогите улучшить Voice</string>
+    <string name="onboarding_analytics_consent_description">Разрешите нам собирать анонимные данные об использовании, чтобы улучшить приложение. Вы можете изменить это позже в настройках.</string>
+    <string name="onboarding_analytics_consent_button_enable">Продолжить с отправкой аналитики</string>
+    <string name="onboarding_analytics_consent_button_disable">Продолжить без отправки аналитики</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_analytics_consent_title">Аналитика</string>
+    <string name="settings_analytics_consent_description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
 </resources>

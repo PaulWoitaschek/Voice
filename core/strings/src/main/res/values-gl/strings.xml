@@ -135,4 +135,11 @@
     <string name="review.request.button.yes">Valorar agora</string>
     <string name="pref_faq">PMF</string>
     <string name="end_of_chapter">Fin do capítulo</string>
+    <string name="onboarding_analytics_consent_title">Axuda a mellorar Voice</string>
+    <string name="onboarding_analytics_consent_description">Permite que recollamos datos anónimos de uso para axudarnos a mellorar a app. Podes cambiar isto despois nos axustes.</string>
+    <string name="onboarding_analytics_consent_button_enable">Continuar con análise</string>
+    <string name="onboarding_analytics_consent_button_disable">Continuar sen o análise</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Directiva de Privacidade</string>
+    <string name="settings_analytics_consent_title">Análise</string>
+    <string name="settings_analytics_consent_description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
 </resources>

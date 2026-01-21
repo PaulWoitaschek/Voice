@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 @Inject
-class SleepTimerImpl(
+class SleepTimerImpl internal constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   @SleepTimerPreferenceStore
@@ -39,6 +39,7 @@ class SleepTimerImpl(
   @FadeOutStore
   private val fadeOutStore: DataStore<Duration>,
   dispatcherProvider: DispatcherProvider,
+  private val tracker: SleepTimerTracker,
 ) : SleepTimer {
 
   private val scope = MainScope(dispatcherProvider)
@@ -48,6 +49,7 @@ class SleepTimerImpl(
   private var job: Job? = null
 
   override fun enable(mode: SleepTimerMode) {
+    tracker.enabled(mode)
     disable() // cancel any active job first
 
     job = scope.launch {
@@ -65,6 +67,7 @@ class SleepTimerImpl(
   }
 
   override fun disable() {
+    tracker.disabled()
     job?.cancel()
     job = null
     _state.value = SleepTimerState.Disabled

@@ -44,9 +44,9 @@
     <string name="close">Sluit</string>
     <string name="delete">Skrap</string>
     <string name="add">Voeg toe</string>
-    <string name="folder_mode_single">Enkele audioboek gids</string>
-    <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers\?</string>
-    <string name="folder_type_title">Hoe is jou lêers onderverdeel\?</string>
+    <string name="folder_mode_single">Enkelboek-modus: Een gids staan vir een boek.</string>
+    <string name="folder_type_no_books">Geen boeke wat opgetel nie. Is daar enige Audio lêers?</string>
+    <string name="folder_type_title">Hoe is jou lêers onderverdeel?</string>
     <string name="bookmark_just_now">Nou net</string>
     <string name="migration_hint_title">Oud lees posisies</string>
     <string name="migration_hint_confirm">Ek verstaan</string>
@@ -62,10 +62,10 @@
     <string name="delete_book_bottom_sheet_title">Skrap boek</string>
     <string name="delete_book_dialog_title">Skrap boek</string>
     <string name="delete_book_dialog_deletion_confirmation">Skrap my lêers</string>
-    <string name="search_hint">Waarna is jy opsoek\?</string>
+    <string name="search_hint">Waarna is jy opsoek?</string>
     <string name="battery_optimization_rationale">As geval van energiebeperkinge kan daar onderbrekings ervaar word.</string>
     <string name="battery_optimization_action">Opdateer</string>
-    <string name="media_session_root">Die sin word getoon vir die hoof inhoud van Voice soos gesien op Android Auto. Dis die merker vir die hoof kaart wat alle boeke bevat.</string>
+    <string name="media_session_root">Alle luisterboeke</string>
     <string name="media_session_recent">Onlangs</string>
     <string name="notification_sleep_timer_enable">Skakel aan slaapklok</string>
     <string name="notification_sleep_timer_disable">Skakel af slaapklok</string>
@@ -78,16 +78,68 @@
     <string name="volume_boost">Volumeverhooging</string>
     <string name="pref_theme_dark">Donker tema</string>
     <string name="pref_app_version">Toep weergawe</string>
-    <string name="folder_mode_root">Hoof audioboek gids. Een subgids = een audioboek.</string>
+    <string name="folder_mode_root">Boeke-op-hoofvlak-modus: Subgidse is boeke</string>
     <string name="folder_type_book_example_header">Dit sal lei tot die volgende boeke wat opgetel word</string>
     <string name="voice_intro_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
-    <string name="migration_hint_content">As gevolg van veranderinge aan nuwer Android weergawes is dit noodsaaklik om jou audioboek gids te kies met behulp van die stelsel gids kieser.
-\n
-\nKliek die ikoon bo om jou ou boek posisies te sien.</string>
+    <string name="migration_hint_content">As gevolg van veranderinge aan nuwer Android weergawes is dit noodsaaklik om jou audioboek gids te kies met behulp van die stelsel gids kieser. \n \nKliek die ikoon bo om jou ou boek posisies te sien.</string>
     <string name="migration_detail_title">Oud boek posisies</string>
     <string name="migration_detail_content_root">Hoofgids</string>
     <string name="migration_delete_dialog_title">Skrap posisies</string>
     <string name="migration_delete_dialog_content">As die posisies eers geskrap of verwyder is sal jy dit nie kan terug kry nie.</string>
     <string name="migration_delete_dialog_action_delete">Skrap</string>
     <string name="delete_book_dialog_content">Die aksie sal die lêers op jou toestel verwyder of skrap.</string>
+    <string name="play">Speel</string>
+    <string name="pause">Pouse</string>
+    <string name="cover_search_template_no_author">%s luisterboekomslag</string>
+    <string name="cover_search_template_with_author">%1$s deur %2$s luisterboekomslag</string>
+    <string name="cover_search.icon_recent">Onlangse navraag</string>
+    <string name="cover_search.author">Outeur</string>
+    <string name="pref_faq">Gereelde vrae</string>
+    <string name="folder_mode_author">In hierdie modus is subgidse outeurs, en sub-subgidse boeke.</string>
+    <string name="end_of_chapter">Einde van Hoofstuk</string>
+    <string name="generic_error_message">Iets het skeef geloop 😢</string>
+    <string name="generic_error_retry">Probeer weer</string>
+    <string name="storage_bug_title">Toestemming vereis</string>
+    <string name="storage_bug_subtitle">Vir sekere toestelle ontbreek die nodige toestemming vir ’n stelseltoep om toegang tot die eksterne berging te kry. Hierdie toegang is noodsaaklik sodat Voice jou luisterboeke kan lees.</string>
+    <string name="storage_bug_button">Gee toestemming</string>
+    <string name="select_folder_title_onboarding">Voeg jou eerste luisterboek by</string>
+    <string name="select_folder_title_default">Voeg jou luisterboek(e) by</string>
+    <string name="select_folder_type_file">Lêer</string>
+    <string name="select_folder_type_folder">Gids</string>
+    <string name="select_folder_subtitle">Wil jy ’n enkele lêer as ’n boek byvoeg, of ’n gids?</string>
+    <string name="onboarding_welcome_title">Welkom by Voice!</string>
+    <string name="onboarding_welcome_subtitle">Jou persoonlike sak-luisterboekspeler. Kom ons kry jou opgestel.</string>
+    <string name="onboarding.button_next">Volgende</string>
+    <string name="onboarding.explanation.title">Jou biblioteek, op jou manier</string>
+    <string name="onboarding.explanation.subtitle">Met Voice kan jy boeke as individuele lêers byvoeg of dit in gidse organiseer. Jy kies!</string>
+    <string name="onboarding.completion.title">Alles is gereed!</string>
+    <string name="onboarding.completion.subtitle">Jou eerste luisterboek is gereed om te speel. Geniet jou reis met Voice!</string>
+    <string name="onboarding.completion.next_button">Begin om te luister</string>
+    <string name="onboarding_analytics_consent_title">Help verbeter Voice</string>
+    <string name="onboarding_analytics_consent_description">Laat ons anonieme gebruiksdata insamel om die toep te verbeter. Jy kan dit later in die instellings verander.</string>
+    <string name="onboarding_analytics_consent_button_enable">Gaan voort met analise</string>
+    <string name="onboarding_analytics_consent_button_disable">Gaan voort sonder analise</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Privaatheidsbeleid</string>
+    <string name="settings_analytics_consent_title">Analise</string>
+    <string name="settings_analytics_consent_description">Laat anonieme gebruiksdata insamel om die toep te verbeter</string>
+    <string name="review.request.title">Geniet jy Voice?</string>
+    <string name="review.request.content">Jou terugvoer beteken baie vir ons! As jy ’n oomblik het, gee vir ons ’n gradering en deel jou ervaring. Dit help ons om verbeteringe aan te bring en ’n beter luisterervaring te bied.</string>
+    <string name="review.request.button.yes">Gradeer nou</string>
+    <string name="review.request.button.no">Nee, dankie</string>
+    <string name="review.feedback.title">Jammer om dit te hoor!</string>
+    <string name="review.feedback.content">Kan jy vir ons sê wat verkeerd gegaan het? Ons waardeer jou terugvoer, dit help ons om jou ervaring te verbeter.</string>
+    <string name="review.feedback.button.yes">Stuur terugvoer</string>
+    <string name="review.feedback.button.no">Kanselleer</string>
+    <string name="sleep_timer.title">Lekker slaap! 🌙</string>
+    <string name="sleep_timer.button.increment">Langer</string>
+    <string name="sleep_timer.button.decrement">Korter</string>
+    <string name="auto_sleep_timer.title">Outomatiese slaaptimer</string>
+    <string name="auto_sleep_timer.subtitle">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Stel begintyd</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Stel eindtyd</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuut</item>
+        <item quantity="other">%d minute</item>
+    </plurals>
+    <string name="playback.current_chapter">Huidige hoofstuk</string>
 </resources>

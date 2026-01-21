@@ -19,10 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.ui.DialogSceneStrategy
+import androidx.navigation3.scene.DialogSceneStrategy
 import coil.compose.AsyncImage
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -71,12 +72,12 @@ fun EditCoverDialog(
 
   AlertDialog(
     onDismissRequest = { onDismiss() },
-    title = { Text(text = context.getString(StringsR.string.cover)) },
+    title = { Text(text = stringResource(StringsR.string.cover)) },
     text = {
       Box {
         AsyncImage(
           model = coverUri,
-          contentDescription = context.getString(StringsR.string.content_cover),
+          contentDescription = stringResource(StringsR.string.content_cover),
           modifier = Modifier
             .fillMaxWidth()
             .onSizeChanged {
@@ -132,12 +133,12 @@ fun EditCoverDialog(
           }
         },
       ) {
-        Text(text = context.getString(StringsR.string.dialog_confirm))
+        Text(text = stringResource(StringsR.string.dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = { onDismiss() }) {
-        Text(text = context.getString(StringsR.string.dialog_cancel))
+        Text(text = stringResource(StringsR.string.dialog_cancel))
       }
     },
   )

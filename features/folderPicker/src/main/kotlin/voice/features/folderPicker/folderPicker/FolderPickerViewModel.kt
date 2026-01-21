@@ -13,6 +13,7 @@ import voice.core.data.folders.AudiobookFolders
 import voice.core.documentfile.nameWithoutExtension
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import voice.navigation.Origin
 
 @Inject
 class FolderPickerViewModel(
@@ -51,7 +52,7 @@ class FolderPickerViewModel(
   internal fun add() {
     navigator.goTo(
       Destination.AddContent(
-        Destination.AddContent.Mode.Default,
+        Origin.Default,
       ),
     )
   }

@@ -28,7 +28,7 @@
     <string name="content_cover">Näita kaanepilte, mille vahel valida</string>
     <string name="cover_search_template_no_author">Heliraamatu kaanepilt: %s</string>
     <string name="cover_search_template_with_author">Heliraamatu kaanepilt: %2$s - %1$s</string>
-    <string name="bookmark">Järjehoidjad</string>
+    <string name="bookmark">Järjehoidja</string>
     <string name="bookmark_edit_title">Muuda järjehoidjat</string>
     <string name="bookmark_added">Järjehoidja on lisatud</string>
     <plurals name="seconds">
@@ -135,4 +135,11 @@
     <string name="playback.current_chapter">Praegune peatükk</string>
     <string name="pref_faq">KKK</string>
     <string name="end_of_chapter">Peatüki lõpp</string>
+    <string name="onboarding_analytics_consent_title">Aita muuta rakendust Voice paremaks</string>
+    <string name="onboarding_analytics_consent_description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta. Sa saad seda seadistustest alati hiljem muuta.</string>
+    <string name="onboarding_analytics_consent_button_enable">Jätka nii, et analüütiline andmekogumine on lubatud</string>
+    <string name="onboarding_analytics_consent_button_disable">Jätka nii, et analüütiline andmekogumine pole lubatud</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Andmekaitse - ja privaatsusreeglid</string>
+    <string name="settings_analytics_consent_title">Analüütika</string>
+    <string name="settings_analytics_consent_description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
 </resources>

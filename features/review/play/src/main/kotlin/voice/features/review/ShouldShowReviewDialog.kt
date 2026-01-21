@@ -5,8 +5,9 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.ReviewDialogShownStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.ReviewEnabledFeatureFlagQualifier
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.remoteconfig.api.RemoteConfig
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
@@ -22,11 +23,12 @@ class ShouldShowReviewDialog(
   private val reviewDialogShown: DataStore<Boolean>,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
-  private val remoteConfig: RemoteConfig,
+  @ReviewEnabledFeatureFlagQualifier
+  private val reviewEnabledFeatureFlag: FeatureFlag<Boolean>,
 ) {
 
   internal suspend fun shouldShow(): Boolean {
-    return enabledInRemoteConfig() &&
+    return reviewEnabledFeatureFlag.get() &&
       isNotPlaying() &&
       enoughTimeElapsedSinceInstallation() &&
       reviewDialogNotShown() &&
@@ -35,10 +37,6 @@ class ShouldShowReviewDialog(
 
   internal suspend fun setShown() {
     reviewDialogShown.updateData { true }
-  }
-
-  private fun enabledInRemoteConfig(): Boolean {
-    return remoteConfig.boolean("review_enabled")
   }
 
   private fun enoughTimeElapsedSinceInstallation(): Boolean {

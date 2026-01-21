@@ -70,17 +70,15 @@
     <string name="mark_as_completed">Tamamlandı olarak işaretle</string>
     <string name="pref_suggest_idea">Fikir öner</string>
     <string name="pref_report_issue">Sorun bildir</string>
-    <string name="folder_type_title">Dosyalarınız nasıl yapılandırılıyor\?</string>
+    <string name="folder_type_title">Dosyalarınız nasıl yapılandırılıyor?</string>
     <string name="pref_help_translating">Voice\'u çevirmeye yardım et</string>
     <string name="close">Kapat</string>
     <string name="delete">Sil</string>
-    <string name="folder_type_no_books">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı\?</string>
+    <string name="folder_type_no_books">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı?</string>
     <string name="migration_detail_title">Eski kitap konumları</string>
     <string name="migration_detail_content_position_current_file_title">Geçerli dosya</string>
     <string name="voice_intro_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
-    <string name="migration_hint_content">Daha yeni Android sürümlerindeki değişiklikler nedeniyle, sistem seçicisini kullanarak sesli kitap dizininizi seçmeniz gerekir.
-\n
-\nEski kitap konumlarınızı görüntülemek için yukarıdaki simgeye tıklayın.</string>
+    <string name="migration_hint_content">Daha yeni Android sürümlerindeki değişiklikler nedeniyle, sistem seçicisini kullanarak sesli kitap dizininizi seçmeniz gerekir. \n \nEski kitap konumlarınızı görüntülemek için yukarıdaki simgeye tıklayın.</string>
     <string name="migration_detail_content_name">Ad</string>
     <string name="migration_detail_content_added_at">Eklendi</string>
     <string name="migration_detail_content_position_current_file_position">Dosyadaki konum</string>
@@ -88,15 +86,15 @@
     <string name="battery_optimization_action">Güncelle</string>
     <string name="delete_book_dialog_content">Bu, aygıtınızdaki dosyaları silecektir.</string>
     <string name="delete_book_bottom_sheet_title">Kitabı Sil</string>
-    <string name="search_hint">Ne arıyorsunuz\?</string>
+    <string name="search_hint">Ne arıyorsunuz?</string>
     <string name="media_session_root">Tüm sesli kitaplar</string>
     <string name="review.feedback.button.no">İptal et</string>
-    <string name="select_folder_subtitle">Tek bir dosyayı kitap olarak mı yoksa klasör olarak mı eklemek istiyorsunuz\?</string>
+    <string name="select_folder_subtitle">Tek bir dosyayı kitap olarak mı yoksa klasör olarak mı eklemek istiyorsunuz?</string>
     <string name="sleep_timer.title">Tatlı rüyalar! 🌙</string>
     <string name="onboarding.button_next">Sonraki</string>
     <string name="select_folder_type_folder">Klasör</string>
     <string name="onboarding.completion.subtitle">İlk sesli kitabın dinlemen için hazır. Voice ile yolculuğunda iyi eğlenceler!</string>
-    <string name="review.request.title">Voice\'den memnun musun\?</string>
+    <string name="review.request.title">Voice\'den memnun musun?</string>
     <string name="pause">Beklet</string>
     <string name="generic_error_retry">Tekrar dene</string>
     <string name="select_folder_title_default">Sesli kitabını (kitaplarını) ekle</string>
@@ -119,7 +117,7 @@
     <string name="onboarding.completion.title">Hazırsın!</string>
     <string name="review.request.button.no">Hayır, teşekkürler</string>
     <string name="select_folder_title_onboarding">İlk sesli kitabını ekle</string>
-    <string name="review.feedback.content">Bize neyin yanlış gittiğini söyleyebilir misiniz\? Geri bildiriminizi takdir ediyoruz ve bu, deneyiminizi geliştirmemize yardımcı oluyor.</string>
+    <string name="review.feedback.content">Bize neyin yanlış gittiğini söyleyebilir misiniz? Geri bildiriminizi takdir ediyoruz ve bu, deneyiminizi geliştirmemize yardımcı oluyor.</string>
     <string name="sleep_timer.button.decrement">Daha kısa</string>
     <string name="generic_error_message">Bir şeyler ters gitti😢</string>
     <string name="play">Yürüt</string>
@@ -136,4 +134,12 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Başlama zamanı</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Bitiş zamanı</string>
     <string name="playback.current_chapter">Şu anki bölüm</string>
+    <string name="end_of_chapter">Bölüm Sonu</string>
+    <string name="onboarding_analytics_consent_title">Voice\'u iyileştirmeye katkı sağlayın</string>
+    <string name="onboarding_analytics_consent_description">Uygulamayı iyileştirmemize yardımcı olması için anonim kullanım verileri toplamamıza izin verin. Bunu daha sonra ayarlardan değiştirebilirsiniz.</string>
+    <string name="onboarding_analytics_consent_button_enable">Analitiğe izin ver</string>
+    <string name="onboarding_analytics_consent_button_disable">Analitiksiz devam et</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Gizlilik Politikası</string>
+    <string name="settings_analytics_consent_title">Analitik</string>
+    <string name="settings_analytics_consent_description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
 </resources>

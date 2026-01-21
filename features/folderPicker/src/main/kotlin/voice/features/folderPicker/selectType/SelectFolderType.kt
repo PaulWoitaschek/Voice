@@ -41,6 +41,7 @@ import voice.core.common.rootGraphAs
 import voice.core.ui.rememberScoped
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
+import voice.navigation.Origin
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -57,7 +58,7 @@ interface SelectFolderTypeProvider {
     NavEntry(key) {
       SelectFolderType(
         uri = key.uri,
-        mode = key.mode,
+        origin = key.origin,
       )
     }
   }
@@ -66,14 +67,14 @@ interface SelectFolderTypeProvider {
 @Composable
 fun SelectFolderType(
   uri: Uri,
-  mode: Destination.SelectFolderType.Mode,
+  origin: Origin,
 ) {
   val context = LocalContext.current
-  val viewModel = rememberScoped {
+  val viewModel = rememberScoped(uri.toString(), origin.name) {
     rootGraphAs<SelectFolderTypeGraph>().selectFolderTypeViewModelFactory
       .create(
         uri = uri,
-        mode = mode,
+        origin = origin,
         documentFile = DocumentFile.fromTreeUri(context, uri)!!,
       )
   }

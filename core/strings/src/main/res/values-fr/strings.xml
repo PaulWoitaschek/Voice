@@ -40,7 +40,7 @@
     <string name="pref_report_issue">Signaler un problème</string>
     <string name="pref_help_translating">Aidez à traduire Voice</string>
     <string name="pref_get_support">Demander de l\'aide</string>
-    <string name="pref_app_version">Version de l\'application </string>
+    <string name="pref_app_version">Version de l\'application</string>
     <string name="popup_edit">Modifier</string>
     <string name="remove">Enlever</string>
     <string name="play_current">Lire l\'actuel</string>
@@ -50,15 +50,15 @@
     <string name="close">Fermer</string>
     <string name="delete">Supprimer</string>
     <string name="add">Ajouter</string>
-    <string name="folder_mode_root">Mode livres : chaque sous-dossier est un livre</string>
-    <string name="folder_mode_single">Mode livre unique : un dossier est un livre.</string>
+    <string name="folder_mode_root">Mode livres : chaque sous-dossier est un livre</string>
+    <string name="folder_mode_single">Mode livre unique : un dossier est un livre.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d fichier audio</item>
         <item quantity="many">%d fichiers audio</item>
         <item quantity="other">%d fichiers audio</item>
     </plurals>
     <string name="folder_type_book_example_header">Cela conduirait à la détection des livres suivants</string>
-    <string name="folder_type_no_books">Voice n\'a pu détecter aucun livre. Y a-t-il des fichiers audio \?</string>
+    <string name="folder_type_no_books">Voice n\'a pu détecter aucun livre. Y a-t-il des fichiers audio ?</string>
     <string name="folder_type_title">Comment vos fichiers sont ils structurés ?</string>
     <string name="bookmark_just_now">À l\'instant</string>
     <string name="voice_intro_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
@@ -90,20 +90,20 @@
     <string name="media_session_recent">Récent</string>
     <string name="notification_sleep_timer_enable">Activer la minuterie de mise en veille</string>
     <string name="notification_sleep_timer_disable">Désactiver la minuterie de mise en veille</string>
-    <string name="onboarding_welcome_title">Bienvenue dans Voice !</string>
-    <string name="sleep_timer.title">Bonne nuit ! 🌙</string>
+    <string name="onboarding_welcome_title">Bienvenue dans Voice !</string>
+    <string name="sleep_timer.title">Bonne nuit ! 🌙</string>
     <string name="sleep_timer.button.increment">Plus long</string>
-    <string name="folder_mode_author">Mode auteurs : chaque sous-dossier est un auteur, dont chaque sous-dossier est un livre.</string>
+    <string name="folder_mode_author">Mode auteurs : chaque sous-dossier est un auteur, dont chaque sous-dossier est un livre.</string>
     <string name="generic_error_message">Quelque chose s\'est mal passé 😢</string>
     <string name="generic_error_retry">Réessayer</string>
     <string name="storage_bug_subtitle">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>
     <string name="storage_bug_button">Accorder la permission</string>
     <string name="onboarding.explanation.title">Votre bibliothèque sur mesure</string>
-    <string name="review.request.title">Vous aimez Voice ?</string>
+    <string name="review.request.title">Vous aimez Voice ?</string>
     <string name="review.request.button.yes">Évaluer</string>
     <string name="review.request.button.no">Non merci</string>
-    <string name="review.feedback.title">Désolé de l\'apprendre !</string>
-    <string name="review.feedback.content">Pourriez-vous nous indiquer ce qui s\'est mal passé ? Nous apprécions vos retours, ils nous aident à améliorer votre expérience.</string>
+    <string name="review.feedback.title">Désolé de l\'apprendre !</string>
+    <string name="review.feedback.content">Pourriez-vous nous indiquer ce qui s\'est mal passé ? Nous apprécions vos retours, ils nous aident à améliorer votre expérience.</string>
     <string name="sleep_timer.button.decrement">Moins long</string>
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
@@ -113,12 +113,12 @@
     <string name="cover_search_template_no_author">%s couverture livre audio</string>
     <string name="cover_search_template_with_author">%1$s par %2$s couverture livre audio</string>
     <string name="onboarding.button_next">Suivant</string>
-    <string name="onboarding.explanation.subtitle">Avec Voice, vous pouvez ajouter des livres comme des fichiers individuels, ou les organiser en dossier. Comme vous préférez !</string>
-    <string name="onboarding.completion.title">Tout est en ordre !</string>
+    <string name="onboarding.explanation.subtitle">Avec Voice, vous pouvez ajouter des livres comme des fichiers individuels, ou les organiser en dossier. Comme vous préférez !</string>
+    <string name="onboarding.completion.title">Tout est en ordre !</string>
     <string name="review.feedback.button.yes">Donnez votre avis</string>
-    <string name="onboarding.completion.subtitle">Votre premier livre audio est prêt à être lu. Profitez de votre voyage avec Voice !</string>
+    <string name="onboarding.completion.subtitle">Votre premier livre audio est prêt à être lu. Profitez de votre voyage avec Voice !</string>
     <string name="onboarding.completion.next_button">Commencer à écouter</string>
-    <string name="review.request.content">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Cela nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
+    <string name="review.request.content">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Cela nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
     <string name="review.feedback.button.no">Annuler</string>
     <string name="onboarding_welcome_subtitle">Votre lecteur de livres audio personnel. Configurons votre application.</string>
     <string name="play">Lecture</string>
@@ -130,11 +130,14 @@
     <string name="select_folder_title_default">Ajoutez vos livres audio</string>
     <string name="select_folder_type_file">Fichier</string>
     <string name="select_folder_type_folder">Dossier</string>
-    <string name="select_folder_subtitle">Les livres sont-ils des fichiers ou des dossiers ?</string>
+    <string name="select_folder_subtitle">Les livres sont-ils des fichiers ou des dossiers ?</string>
     <string name="auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="auto_sleep_timer.subtitle">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Heure de début</string>
     <string name="pref_faq">FAQ</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Heure de fin</string>
     <string name="playback.current_chapter">Chapitre en cours</string>
+    <string name="end_of_chapter">Fin du chapitre</string>
+    <string name="onboarding_analytics_consent_title">Aidez-nous à améliorer Voice</string>
+    <string name="onboarding_analytics_consent_description">Autorisez-nous à collecter des données d\'utilisation anonymes afin d\'améliorer l\'application. Vous pouvez modifier ce paramètre ultérieurement dans les réglages.</string>
 </resources>

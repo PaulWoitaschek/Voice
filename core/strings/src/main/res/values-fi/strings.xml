@@ -121,9 +121,7 @@
     <string name="migration_delete_dialog_action_delete">Poista</string>
     <string name="migration_delete_dialog_action_keep">Säilytä</string>
     <string name="folder_type_title">Miten tiedostosi ovat järjestelty?</string>
-    <string name="migration_hint_content">Johtuen muutoksista uusimmissa Android-versioissa, äänikirjakansiosi täytyy valita järjestelmän valitsimella
-\n
-\nPaina yllä olevaa kuvaketta nähdäksesi vanhat sijaintisi kirjassa.</string>
+    <string name="migration_hint_content">Johtuen muutoksista uusimmissa Android-versioissa, äänikirjakansiosi täytyy valita järjestelmän valitsimella \n \nPaina yllä olevaa kuvaketta nähdäksesi vanhat sijaintisi kirjassa.</string>
     <string name="migration_hint_confirm">Ymmärretty</string>
     <string name="migration_detail_title">Vanhat sijainnit kirjoissa</string>
     <string name="migration_detail_content_name">Nimi</string>

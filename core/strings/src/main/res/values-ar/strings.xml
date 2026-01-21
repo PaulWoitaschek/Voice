@@ -63,7 +63,7 @@
         <item quantity="many">%d ملفاً صوتياً</item>
         <item quantity="other">%d ملف صوتي</item>
     </plurals>
-    <string name="folder_type_book_example_header">سيؤدي هذا إلى اكتشاف الكتاب التالي </string>
+    <string name="folder_type_book_example_header">سيؤدي هذا إلى اكتشاف الكتاب التالي</string>
     <string name="folder_type_no_books">لم يتمكن فويس من اكتشاف أي كتب. هل هناك أي ملفات صوتية؟</string>
     <string name="folder_type_title">ما هي هيكلية ملفاتك؟</string>
     <string name="bookmark_just_now">الآن</string>
@@ -79,7 +79,7 @@
     <string name="migration_detail_content_added_at">مضافة في</string>
     <string name="migration_detail_content_position_current_file_title">الملف الحالي</string>
     <string name="migration_detail_content_position_current_file_position">الموضع في الملف</string>
-    <string name="migration_detail_content_position_current_chapter_title">الفصل  الحالي</string>
+    <string name="migration_detail_content_position_current_chapter_title">الفصل الحالي</string>
     <string name="migration_detail_content_position_current_chapter_position">الموضوع في الفصل</string>
     <string name="migration_delete_dialog_title">احذف المواضع</string>
     <string name="migration_delete_dialog_content">بمجرد حذف المواضع القديمة، لن تتمكن من استعادة مواضع التشغيل القديمة.</string>

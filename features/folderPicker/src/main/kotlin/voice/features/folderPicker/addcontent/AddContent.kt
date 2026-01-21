@@ -12,6 +12,7 @@ import voice.core.ui.VoiceTheme
 import voice.core.ui.rememberScoped
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
+import voice.navigation.Origin
 
 @ContributesTo(AppScope::class)
 interface AddContentGraph {
@@ -25,21 +26,21 @@ interface AddContentProvider {
   @IntoSet
   fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AddContent> { key ->
     NavEntry(key) {
-      AddContent(mode = key.mode)
+      AddContent(origin = key.origin)
     }
   }
 }
 
 @Composable
-fun AddContent(mode: Destination.AddContent.Mode) {
-  val viewModel = rememberScoped(mode.name) {
-    rootGraphAs<AddContentGraph>().viewModelFactory.create(mode)
+fun AddContent(origin: Origin) {
+  val viewModel = rememberScoped(origin.name) {
+    rootGraphAs<AddContentGraph>().viewModelFactory.create(origin)
   }
   SelectFolder(
     onBack = {
       viewModel.back()
     },
-    mode = mode,
+    origin = origin,
     onAdd = { folderType, uri ->
       viewModel.add(uri, folderType)
     },
@@ -50,6 +51,6 @@ fun AddContent(mode: Destination.AddContent.Mode) {
 @Preview
 private fun AddContentPreview() {
   VoiceTheme {
-    AddContent(Destination.AddContent.Mode.Default)
+    AddContent(Origin.Default)
   }
 }

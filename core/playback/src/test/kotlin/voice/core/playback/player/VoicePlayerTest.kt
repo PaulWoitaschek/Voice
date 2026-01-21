@@ -69,7 +69,6 @@ class VoicePlayerTest {
           val chapter = currentBook.chapters.single {
             it.id == (mediaId.toMediaIdOrNull()!! as MediaId.Chapter).chapterId
           }
-          chapter.duration
           FakeMediaSource(
             FakeTimeline(
               FakeTimeline.TimelineWindowDefinition.Builder()
@@ -109,6 +108,7 @@ class VoicePlayerTest {
     mediaItemProvider = mediaItemProvider,
     volumeGain = mockk(relaxed = true),
     sleepTimer = mockk(relaxed = true),
+    analytics = mockk(relaxed = true),
   )
 
   @Test
@@ -333,6 +333,7 @@ class VoicePlayerTest {
     TestPlayerRunHelper.runUntilPlaybackState(internalPlayer, Player.STATE_READY)
   }
 
+  @IgnorableReturnValue
   private fun Player.shouldHavePosition(
     currentMediaItemIndex: Int,
     currentPosition: Long,

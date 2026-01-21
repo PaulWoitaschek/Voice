@@ -80,6 +80,7 @@ internal fun validateIntegrity(
   chapters: List<Chapter>,
 ) {
   // the init block performs integrity validation
+  @Suppress("RETURN_VALUE_NOT_USED")
   Book(content, chapters)
 }
 

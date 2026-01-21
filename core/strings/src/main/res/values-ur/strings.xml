@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover">سرورق</string>
+    <string name="play_pause">چلائیں / وقفہ کریں</string>
+    <string name="play">چلائیں</string>
+    <string name="pause">وقفہ کریں</string>
+    <string name="rewind">مکرر</string>
+    <string name="fast_forward">مقدم بالاسراع</string>
+    <string name="previous_track">سابقہ کلام</string>
+    <string name="next_track">اگلا کلام</string>
+    <string name="skip_silence">سکوت سے نکلیں</string>
+    <string name="volume_boost">آواز ابھاریں</string>
+    <string name="more">مزید</string>
+    <string name="dialog_confirm">ثبت کریں</string>
+    <string name="dialog_cancel">تنسیخ کریں</string>
+    <string name="content_cover">انتخاب کے لیے سرورق دکھاتا ہے</string>
+    <string name="change_book_name">نام</string>
+    <string name="download_book_cover">انٹرنیٹ سے سرورق</string>
+    <string name="pick_book_cover">فائلوں کے نظام سے سرورق</string>
+    <string name="cover_search_template_no_author">%s صوتی کتاب کا سرورق</string>
+    <string name="cover_search_template_with_author">%1$s ضرب %2$s صوتی کتاب کا سرورق</string>
+    <string name="cover_search.icon_recent">حالیہ استفسار</string>
+    <string name="cover_search.author">مصنف</string>
+    <string name="edit_book_title">کتاب میں ترمیم کریں</string>
+    <string name="mark_as_completed">تکمیل کی مہر لگائیں</string>
+    <string name="mark_as_current">حالیہ کی مہر لگائیں</string>
+    <string name="mark_as_not_started">غیر آغازشدہ کی مہر لگائیں</string>
+    <string name="audiobook_folders_title">صوتی کتب کے کھاتے</string>
+    <string name="playback_speed">بجانے کی رفتار</string>
+    <string name="bookmark">نشانی</string>
+    <string name="bookmark_edit_title">نشانی میں تبدیلی کریں</string>
+    <string name="bookmark_edit_hint">نشانی کا نام</string>
+    <string name="bookmark_added">نشانی لگ گئی ہے</string>
+    <string name="action_settings">ترجیحات</string>
+    <plurals name="seconds">
+        <item quantity="one">%d لمحہ</item>
+        <item quantity="other">%d لمحے</item>
+    </plurals>
+    <string name="pref_seek_time">گزارنے کی مقدار</string>
+</resources>

@@ -79,7 +79,6 @@ public class Migration24to25 : IncrementalMigration(24) {
       var playingInformation: JSONObject? = null
       try {
         if (configFileValid) {
-          configFile.readText(Charsets.UTF_8)
           val retString = configFile.readText(Charsets.UTF_8)
           if (retString.isNotEmpty()) {
             playingInformation = JSONObject(retString)
@@ -179,7 +178,7 @@ public class Migration24to25 : IncrementalMigration(24) {
       if (name.isEmpty()) {
         name = if (chapterPaths.size == 1) {
           val chapterPath = chapterPaths.first()
-          chapterPath.substring(0, chapterPath.lastIndexOf("."))
+          chapterPath.take(chapterPath.lastIndexOf("."))
         } else {
           File(root).name
         }

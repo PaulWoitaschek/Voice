@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
@@ -49,6 +50,7 @@ class VoicePlayer(
   private val chapterRepo: ChapterRepo,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
+  private val analytics: Analytics,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
@@ -105,15 +107,13 @@ class VoicePlayer(
   }
 
   override fun getAvailableCommands(): Player.Commands {
-    /**
-     * On Android 13, the notification always shows the "skip to next" and "skip to previous"
-     * actions.
-     * However these are also used internally when seeking for example through a bluetooth headset
-     * We use these and delegate them to fast forward / rewind.
-     * The player however only advertises the seek to next and previous item in the case
-     * that it's not the first or last track. Therefore we manually advertise that these
-     * are available.
-     */
+    // On Android 13, the notification always shows the "skip to next" and "skip to previous"
+    // actions.
+    // However these are also used internally when seeking for example through a bluetooth headset
+    // We use these and delegate them to fast forward / rewind.
+    // The player however only advertises the seek to next and previous item in the case
+    // that it's not the first or last track. Therefore we manually advertise that these
+    // are available.
     return super.getAvailableCommands()
       .buildUpon()
       .addAll(
@@ -197,6 +197,8 @@ class VoicePlayer(
 
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     Logger.d("setPlayWhenReady=$playWhenReady")
+    analytics.event(if (playWhenReady) "play" else "pause")
+
     if (playWhenReady) {
       updateLastPlayedAt()
     } else {
@@ -343,15 +345,12 @@ class VoicePlayer(
     }
   }
 
-  fun setSkipSilenceEnabled(enabled: Boolean): Boolean {
+  fun setSkipSilenceEnabled(enabled: Boolean) {
     scope.launch {
       updateBook { it.copy(skipSilence = enabled) }
     }
-    return if (player is ExoPlayer) {
+    if (player is ExoPlayer) {
       player.skipSilenceEnabled = enabled
-      true
-    } else {
-      false
     }
   }
 

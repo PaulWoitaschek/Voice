@@ -61,9 +61,7 @@
     <string name="bookmark_just_now">Nesse exato momento</string>
     <string name="voice_intro_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="migration_hint_title">Aceder posições de livros antigos</string>
-    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu aparelho.
-\n
-\nClique no ícone acima para ver a localização antiga dos livros.</string>
+    <string name="migration_hint_content">Devido alterações na versão do Android, é necessário selecionar a pasta de Audiolivros manualmente no seu aparelho. \n \nClique no ícone acima para ver a localização antiga dos livros.</string>
     <string name="migration_hint_confirm">Percebido</string>
     <string name="migration_detail_title">Posições antigas de livro</string>
     <string name="migration_detail_content_name">Nome</string>

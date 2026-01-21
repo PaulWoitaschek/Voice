@@ -11,6 +11,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
@@ -27,7 +28,6 @@ import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.sendCustomCommand
 import voice.core.playback.session.toMediaIdOrNull
-import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 
 @Inject
@@ -164,11 +164,12 @@ class PlayerController(
     }
   }
 
+  @IgnorableReturnValue
   suspend fun awaitConnect(): MediaController? {
     return try {
       controller.await()
     } catch (e: Exception) {
-      if (e is CancellationException) coroutineContext.ensureActive()
+      if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Error while connecting to media controller")
       null
     }

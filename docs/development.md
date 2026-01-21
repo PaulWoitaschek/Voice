@@ -64,13 +64,9 @@ chmod +x .git/hooks/pre-commit
 
 ## Releasing
 
-To release a new version, install the kotlin cli and run:
+To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/trigger_release.yml)
 
-```shell
-./release.main.kts
-```
-
-This triggers the CI to build and publish the release to the Play Store’s internal track. From there, promotion to production must be done
+This pushes a tag and publishes the release to the Play Store’s internal track. From there, promotion to production must be done
 manually.
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.

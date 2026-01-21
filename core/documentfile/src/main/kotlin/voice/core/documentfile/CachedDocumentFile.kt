@@ -21,8 +21,12 @@ fun CachedDocumentFile.nameWithoutExtension(): String {
       ?.takeUnless { it.isBlank() }
       ?: uri.toString()
   } else {
-    name.substringBeforeLast(".")
-      .takeUnless { it.isEmpty() }
-      ?: name
+    if (isFile) {
+      name.substringBeforeLast(".")
+        .takeUnless { it.isEmpty() }
+        ?: name
+    } else {
+      name
+    }
   }
 }

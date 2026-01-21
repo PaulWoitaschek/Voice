@@ -31,13 +31,13 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.develocity") version "4.2"
+  id("com.gradle.develocity") version "4.3.1"
   id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
-  id("org.jetbrains.kotlin.android") version "2.2.20" apply false
-  id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
-  id("com.android.application") version "8.13.0" apply false
-  id("com.android.library") version "8.13.0" apply false
-  id("com.autonomousapps.build-health") version "3.0.4"
+  id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+  id("org.jetbrains.kotlin.jvm") version "2.3.0" apply false
+  id("com.android.application") version "8.13.2" apply false
+  id("com.android.library") version "8.13.2" apply false
+  id("com.autonomousapps.build-health") version "3.5.1"
 }
 
 develocity {
@@ -50,10 +50,14 @@ develocity {
 include(":app")
 include(":navigation")
 
+include(":core:analytics:api")
+include(":core:analytics:noop")
+include(":core:analytics:firebase")
 include(":core:common")
 include(":core:data:api")
 include(":core:data:impl")
 include(":core:documentfile")
+include(":core:initializer")
 include(":core:logging:api")
 include(":core:logging:crashlytics")
 include(":core:logging:debug")
@@ -63,9 +67,10 @@ include(":core:remoteconfig:firebase")
 include(":core:remoteconfig:noop")
 include(":core:scanner")
 include(":core:search")
+include(":core:sleeptimer:api")
+include(":core:sleeptimer:impl")
 include(":core:strings")
 include(":core:ui")
-include(":core:initializer")
 
 include(":features:bookOverview")
 include(":features:bookmark")
@@ -78,5 +83,4 @@ include(":features:review:play")
 include(":features:settings")
 include(":features:sleepTimer")
 include(":features:widget")
-include(":core:sleeptimer:api")
-include(":core:sleeptimer:impl")
+include(":core:featureflag")

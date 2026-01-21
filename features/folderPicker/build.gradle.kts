@@ -18,6 +18,7 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.documentfile)
   implementation(projects.navigation)
+  implementation(projects.core.featureflag)
 
   implementation(libs.datastore)
   implementation(libs.coil)

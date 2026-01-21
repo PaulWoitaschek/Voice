@@ -45,17 +45,17 @@ interface MigrationTestGraph {
   @GridModeStore
   val gridModeStore: DataStore<GridMode>
 
-  @get:Provides
+  @Provides
   val application: Application get() = ApplicationProvider.getApplicationContext()
 
-  @get:Provides
+  @Provides
   val json: Json get() = Json.Default
 
-  @get:Provides
+  @Provides
   val appInfoProvider: AppInfoProvider
     get() = object : AppInfoProvider {
-      override val versionName: String
-        get() = "1.2.3"
+      override val versionName: String get() = "1.2.3"
+      override val analyticsIncluded: Boolean get() = false
     }
 
   val sharedPreferences: SharedPreferences

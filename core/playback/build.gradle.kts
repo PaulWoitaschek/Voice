@@ -15,6 +15,7 @@ dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.core.data.api)
+  implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
   implementation(libs.datastore)

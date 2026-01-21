@@ -9,6 +9,7 @@ public interface BookmarkRepo {
 
   public suspend fun addBookmark(bookmark: Bookmark)
 
+  @IgnorableReturnValue
   public suspend fun addBookmarkAtBookPosition(
     book: Book,
     title: String?,

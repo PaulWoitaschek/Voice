@@ -1,7 +1,6 @@
 {
   "extends": [
-    "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    "config:recommended"
   ],
   "labels": [
     "dependencies"
@@ -45,7 +44,6 @@
     },
     {
       "matchUpdateTypes": [
-        "major",
         "minor",
         "patch",
         "pin",

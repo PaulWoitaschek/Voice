@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.ViewList
+import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GridView
@@ -80,9 +82,33 @@ private fun Settings(
     },
   ) { contentPadding ->
     LazyColumn(contentPadding = contentPadding) {
+      if (viewState.showFolderPickerEntry) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable { listener.openFolderPicker() },
+            leadingContent = {
+              Icon(
+                imageVector = Icons.Outlined.Book,
+                contentDescription = stringResource(StringsR.string.audiobook_folders_title),
+              )
+            },
+            headlineContent = {
+              Text(stringResource(StringsR.string.audiobook_folders_title))
+            },
+            supportingContent = {
+              Text(stringResource(StringsR.string.pref_audiobook_folders_explanation))
+            },
+          )
+        }
+      }
       if (viewState.showDarkThemePref) {
         item {
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+        }
+      }
+      if (viewState.showAnalyticSetting) {
+        item {
+          AnalyticsRow(analyticsEnabled = viewState.analyticsEnabled, toggle = listener::toggleAnalytics)
         }
       }
       item {
@@ -202,6 +228,34 @@ private fun Settings(
     }
     Dialog(viewState, listener)
   }
+}
+
+@Composable
+private fun AnalyticsRow(
+  analyticsEnabled: Boolean,
+  toggle: () -> Unit,
+) {
+  ListItem(
+    modifier = Modifier.clickable { toggle() },
+    leadingContent = {
+      Icon(
+        imageVector = Icons.Outlined.Analytics,
+        contentDescription = null,
+      )
+    },
+    headlineContent = {
+      Text(text = stringResource(StringsR.string.settings_analytics_consent_title))
+    },
+    supportingContent = {
+      Text(text = stringResource(StringsR.string.settings_analytics_consent_description))
+    },
+    trailingContent = {
+      Switch(
+        checked = analyticsEnabled,
+        onCheckedChange = { toggle() },
+      )
+    },
+  )
 }
 
 @ContributesTo(AppScope::class)

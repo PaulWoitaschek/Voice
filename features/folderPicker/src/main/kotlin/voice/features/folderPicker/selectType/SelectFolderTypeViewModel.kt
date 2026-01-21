@@ -11,7 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.data.audioFileCount
@@ -22,10 +22,10 @@ import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.nameWithoutExtension
 import voice.navigation.Destination
-import voice.navigation.Destination.SelectFolderType.Mode
 import voice.navigation.Navigator
+import voice.navigation.Origin
 
-@Inject
+@AssistedInject
 class SelectFolderTypeViewModel(
   private val dispatcherProvider: DispatcherProvider,
   private val audiobookFolders: AudiobookFolders,
@@ -36,7 +36,7 @@ class SelectFolderTypeViewModel(
   @Assisted
   private val documentFile: DocumentFile,
   @Assisted
-  private val mode: Mode,
+  private val origin: Origin,
 ) {
 
   private var selectedFolderMode: MutableState<FolderMode?> = mutableStateOf(null)
@@ -75,11 +75,11 @@ class SelectFolderTypeViewModel(
         null -> error("Add should not be clickable at this point")
       },
     )
-    when (mode) {
-      Mode.Default -> {
+    when (origin) {
+      Origin.Default -> {
         navigator.setRoot(Destination.BookOverview)
       }
-      Mode.Onboarding -> {
+      Origin.Onboarding -> {
         navigator.goTo(Destination.OnboardingCompletion)
       }
     }
@@ -155,7 +155,7 @@ class SelectFolderTypeViewModel(
     fun create(
       uri: Uri,
       documentFile: DocumentFile,
-      mode: Mode,
+      origin: Origin,
     ): SelectFolderTypeViewModel
   }
 }
