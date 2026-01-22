@@ -142,4 +142,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Directiva de Privacidade</string>
     <string name="settings_analytics_consent_title">Análise</string>
     <string name="settings_analytics_consent_description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
+    <string name="pref_audiobook_folders_explanation">Xestionar cartafoles onde buscar audiolibros</string>
 </resources>
