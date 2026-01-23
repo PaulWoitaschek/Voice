@@ -1,7 +1,6 @@
 package voice.features.bookOverview.editBookCategory
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -13,7 +12,6 @@ import java.time.Instant
 
 @BookOverviewScope
 @ContributesIntoSet(BookOverviewScope::class)
-@Inject
 class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {

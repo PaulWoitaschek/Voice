@@ -6,7 +6,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 
 private const val BOOK_TABLE_NAME = "tableBooks"
@@ -16,7 +15,6 @@ private const val BOOK_TIME = "bookTime"
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-@Inject
 public class Migration39to40 : IncrementalMigration(39) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

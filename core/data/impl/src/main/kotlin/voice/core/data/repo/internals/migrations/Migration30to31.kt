@@ -6,7 +6,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.core.data.repo.internals.moveToNextLoop
 
@@ -15,7 +14,6 @@ import voice.core.data.repo.internals.moveToNextLoop
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-@Inject
 public class Migration30to31 : IncrementalMigration(30) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

@@ -7,7 +7,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.core.data.repo.internals.moveToNextLoop
@@ -77,7 +76,6 @@ private const val CREATE_TABLE_BOOKMARKS = """
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-@Inject
 public class Migration29to30 : IncrementalMigration(29) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

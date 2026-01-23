@@ -6,7 +6,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
@@ -34,7 +33,6 @@ private const val CREATE_TABLE = """
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-@Inject
 public class Migration36to37 : IncrementalMigration(36) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

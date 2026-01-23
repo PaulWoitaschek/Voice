@@ -2,7 +2,6 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,6 @@ import voice.core.data.BookId
 import voice.core.data.repo.internals.dao.BookContentDao
 
 @SingleIn(AppScope::class)
-@Inject
 @ContributesBinding(AppScope::class)
 public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentRepo {
 

@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -29,7 +28,6 @@ import kotlin.time.Duration.Companion.seconds
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class SleepTimerImpl internal constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
