@@ -26,7 +26,7 @@ interface SelectCoverFromInternetProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key ->
+  fun selectCoverFromInternetNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key ->
     NavEntry(key) {
       SelectCoverFromInternet(
         bookId = key.bookId,

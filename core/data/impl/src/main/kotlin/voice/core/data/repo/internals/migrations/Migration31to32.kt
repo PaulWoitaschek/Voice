@@ -8,7 +8,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.core.data.repo.internals.moveToNextLoop
 
@@ -23,7 +22,6 @@ private const val CHAPTER_PATH = "chapterPath"
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-@Inject
 public class Migration31to32 : IncrementalMigration(31) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

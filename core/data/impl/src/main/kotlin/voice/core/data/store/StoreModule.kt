@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -17,9 +16,8 @@ import voice.core.data.sleeptimer.SleepTimerPreference
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@BindingContainer
 @ContributesTo(AppScope::class)
-public object StoreModule {
+public interface StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
