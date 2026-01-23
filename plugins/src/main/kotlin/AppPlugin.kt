@@ -7,7 +7,6 @@ class AppPlugin : Plugin<Project> {
     target.pluginManager.run {
       apply("voice.ktlint")
       apply("com.android.application")
-      apply("kotlin-android")
       withPlugin("com.android.application") {
         target.baseSetup()
         target.tasks.register("voiceUnitTest") {
