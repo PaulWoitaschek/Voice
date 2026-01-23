@@ -50,7 +50,7 @@ interface EditCoverDialogProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(navigator: Navigator): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key ->
+  fun editCoverDialogNavEntryProvider(navigator: Navigator): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key ->
     NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
       EditCoverDialog(coverUri = key.cover, bookId = key.bookId, onDismiss = navigator::goBack)
     }
