@@ -8,7 +8,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.mapRows
@@ -35,7 +34,6 @@ private const val CREATE_TABLE_BOOKMARKS = """
   """
 
 @ContributesBinding(AppScope::class)
-@Inject
 public class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")

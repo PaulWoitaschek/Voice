@@ -2,20 +2,19 @@ package voice.core.sleeptimer
 
 import android.content.Context
 import android.hardware.SensorManager
+import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 @ContributesBinding(AppScope::class)
-@Inject
 class ShakeDetectorImpl(private val context: Context) : ShakeDetector {
 
   override suspend fun detect() {
     suspendCancellableCoroutine { cont ->
-      val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+      val sensorManager = context.getSystemService<SensorManager>()
         ?: return@suspendCancellableCoroutine
       val listener = SeismicShakeDetector.Listener {
         if (!cont.isCompleted) {

@@ -11,7 +11,6 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
-import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -29,9 +28,8 @@ import voice.core.playback.session.LibrarySessionCallback
 import voice.core.playback.session.PlaybackService
 import voice.core.strings.R as StringsR
 
-@BindingContainer
 @ContributesTo(PlaybackScope::class)
-open class PlaybackModule {
+interface PlaybackModule {
 
   @Provides
   @PlaybackScope
