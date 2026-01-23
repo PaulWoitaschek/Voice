@@ -32,7 +32,7 @@ androidxCore = "androidx.core:core-ktx:1.17.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
-koTest-assert = "io.kotest:kotest-assertions-core:6.1.0"
+koTest-assert = "io.kotest:kotest-assertions-core:6.1.1"
 datastore = "androidx.datastore:datastore-preferences:1.2.0"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
@@ -78,7 +78,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.10.0"
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0"
 
-compose-bom = "androidx.compose:compose-bom:2025.12.01"
+compose-bom = "androidx.compose:compose-bom:2026.01.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
