@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -18,7 +17,6 @@ import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
 import java.time.Clock
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AutoEnableSleepTimer(
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,

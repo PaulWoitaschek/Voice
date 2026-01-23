@@ -1,7 +1,6 @@
 package voice.features.bookOverview.internetCover
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -11,7 +10,6 @@ import voice.navigation.Navigator
 
 @BookOverviewScope
 @ContributesIntoSet(BookOverviewScope::class)
-@Inject
 class InternetCoverViewModel(private val navigator: Navigator) : BottomSheetItemViewModel {
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
