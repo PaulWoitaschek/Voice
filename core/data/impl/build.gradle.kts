@@ -23,7 +23,7 @@ android {
 
   sourceSets {
     named("test") {
-      assets.srcDir(project.file("schemas"))
+      assets.directories += "schemas"
     }
   }
 }
