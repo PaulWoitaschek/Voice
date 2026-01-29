@@ -21,7 +21,7 @@ material = "com.google.android.material:material:1.13.0"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.14.9"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.4.0"
-paging-compose = "androidx.paging:paging-compose:3.3.6"
+paging-compose = "androidx.paging:paging-compose:3.4.0"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
