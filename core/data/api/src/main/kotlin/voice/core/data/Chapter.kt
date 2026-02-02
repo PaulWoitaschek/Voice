@@ -32,45 +32,45 @@ public data class Chapter(
 }
 
 private fun Chapter.parseMarkData(): List<ChapterMark> {
-  return if (markData.isEmpty()) {
-    listOf(ChapterMark(name, 0L, duration - 1))
-  } else {
-    try {
-      val positions = markData.map { it.startMs }.toSet()
-      val sorted = markData.filterNot { it.startMs - 1 in positions || it.startMs < 0 }
-        .distinctBy { it.startMs }
-        .sortedBy { it.startMs }
-
-      val result = mutableListOf<ChapterMark>()
-      for ((index, mark) in sorted.withIndex()) {
-        val name = mark.name
-        val previous = result.lastOrNull()
-        val next = sorted.getOrNull(index + 1)
-
-        val endMs = if (next != null && next.startMs <= duration - 2) {
-          next.startMs - 1
-        } else {
-          duration - 1
-        }
-
-        if (previous == null) {
-          result += ChapterMark(
-            name = name,
-            startMs = 0L,
-            endMs = endMs,
-          )
-        } else if (previous.endMs + 1 < duration && previous.endMs + 1 < endMs) {
-          result += ChapterMark(
-            name = name,
-            startMs = previous.endMs + 1,
-            endMs = endMs,
-          )
-        }
-      }
-      result
-    } catch (e: Exception) {
-      throw IllegalStateException("Could not parse marks from $this", e)
+  return try {
+    val positions = markData.map { it.startMs }.toSet()
+    val sorted = markData.filterNot { it.startMs - 1 in positions || it.startMs < 0 }
+      .distinctBy { it.startMs }
+      .sortedBy { it.startMs }
+    val maxEndMs = (duration - 1).coerceAtLeast(1)
+    if (sorted.isEmpty()) {
+      return listOf(ChapterMark(name, 0L, maxEndMs))
     }
+
+    val result = mutableListOf<ChapterMark>()
+    for ((index, mark) in sorted.withIndex()) {
+      val name = mark.name
+      val previous = result.lastOrNull()
+      val next = sorted.getOrNull(index + 1)
+
+      val endMs = if (next != null && next.startMs <= duration - 2) {
+        next.startMs - 1
+      } else {
+        maxEndMs
+      }
+
+      if (previous == null) {
+        result += ChapterMark(
+          name = name,
+          startMs = 0L,
+          endMs = endMs,
+        )
+      } else if (previous.endMs + 1 < duration && previous.endMs + 1 < endMs) {
+        result += ChapterMark(
+          name = name,
+          startMs = previous.endMs + 1,
+          endMs = endMs,
+        )
+      }
+    }
+    result
+  } catch (e: Exception) {
+    throw IllegalStateException("Could not parse marks from $this", e)
   }
 }
 
