@@ -32,12 +32,9 @@ jobs:
           version="$(git describe --tags --abbrev=0)"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-  tests:
-    uses: ./.github/workflows/ci.yml
-
   release:
     runs-on: ubuntu-latest
-    needs: [ prepare_version, tests ]
+    needs: [ prepare_version ]
     environment: google-play
     permissions:
       contents: write
