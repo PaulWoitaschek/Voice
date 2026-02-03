@@ -21,6 +21,9 @@ interface SettingsListener {
   fun setAutoSleepTimerEnd(time: LocalTime)
   fun toggleAnalytics()
   fun openFolderPicker()
+  fun onAppVersionClick()
+
+  fun openDeveloperMenu()
 
   companion object {
     fun noop() = object : SettingsListener {
@@ -42,6 +45,8 @@ interface SettingsListener {
       override fun setAutoSleepTimerEnd(time: LocalTime) {}
       override fun toggleAnalytics() {}
       override fun openFolderPicker() {}
+      override fun onAppVersionClick() {}
+      override fun openDeveloperMenu() {}
     }
   }
 }
