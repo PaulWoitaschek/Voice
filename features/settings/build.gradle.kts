@@ -16,4 +16,7 @@ dependencies {
 
   implementation(libs.androidxCore)
   implementation(libs.material)
+
+  testImplementation(libs.molecule)
+  testImplementation(libs.turbine)
 }

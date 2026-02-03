@@ -210,7 +210,7 @@ class SettingsViewModel(
 
   override fun onAppVersionClick() {
     mainScope.launch {
-      if (appVersionTapCount++ >= 13) {
+      if (++appVersionTapCount >= 13) {
         developerMenuUnlockedStore.updateData { true }
       }
     }
