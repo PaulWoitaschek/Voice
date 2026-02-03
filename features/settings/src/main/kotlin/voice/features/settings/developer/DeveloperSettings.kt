@@ -57,6 +57,24 @@ private fun DeveloperSettings(
     },
   ) { contentPadding ->
     LazyColumn(contentPadding = contentPadding) {
+      item {
+        ListItem(
+          headlineContent = {
+            Text("Refresh FCM")
+          },
+          trailingContent = {
+            TextButton(
+              onClick = {
+                viewModel.refreshRemoteConfig()
+              },
+              content = {
+                Text("Refresh")
+              },
+            )
+          },
+        )
+      }
+
       val fcmToken = viewState.fcmToken
       if (fcmToken != null) {
         item {

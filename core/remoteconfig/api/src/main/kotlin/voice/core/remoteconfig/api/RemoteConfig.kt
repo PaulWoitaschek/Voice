@@ -9,4 +9,6 @@ interface RemoteConfig {
     key: String,
     defaultValue: String,
   ): String
+
+  suspend fun refresh()
 }
