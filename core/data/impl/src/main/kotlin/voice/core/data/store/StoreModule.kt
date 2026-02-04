@@ -159,4 +159,11 @@ public interface StoreModule {
   private fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("analyticsConsent", defaultValue = false)
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @DeveloperMenuUnlockedStore
+  private fun developerMenuUnlocked(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("developerMenuUnlocked", defaultValue = false)
+  }
 }

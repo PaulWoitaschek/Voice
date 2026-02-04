@@ -1,5 +1,6 @@
 package voice.features.settings.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Tag
@@ -13,9 +14,16 @@ import androidx.compose.ui.res.stringResource
 import voice.core.strings.R as StringsR
 
 @Composable
-internal fun AppVersion(appVersion: String) {
+internal fun AppVersion(
+  appVersion: String,
+  onClick: () -> Unit,
+) {
   ListItem(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable {
+        onClick()
+      },
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.Tag,

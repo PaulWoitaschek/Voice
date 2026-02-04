@@ -223,7 +223,17 @@ private fun Settings(
         )
       }
       item {
-        AppVersion(appVersion = viewState.appVersion)
+        AppVersion(
+          appVersion = viewState.appVersion,
+          onClick = listener::onAppVersionClick,
+        )
+      }
+      if (viewState.showDeveloperMenu) {
+        item {
+          DeveloperMenuItem(
+            onClick = listener::openDeveloperMenu,
+          )
+        }
       }
     }
     Dialog(viewState, listener)
