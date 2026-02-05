@@ -6,7 +6,7 @@ sdk-robolectric = "35"
 
 coroutines = "1.10.2"
 room = "2.8.4"
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 media3 = "1.9.1"
 agp = "9.0.0"
 ktlint-core = "1.8.0"
