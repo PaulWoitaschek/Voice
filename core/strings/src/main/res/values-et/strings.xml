@@ -142,4 +142,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Andmekaitse - ja privaatsusreeglid</string>
     <string name="settings_analytics_consent_title">Analüütika</string>
     <string name="settings_analytics_consent_description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
+    <string name="pref_audiobook_folders_explanation">Halda kaustu, kust otsitakse heliraamatuid</string>
 </resources>

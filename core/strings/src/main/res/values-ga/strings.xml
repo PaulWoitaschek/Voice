@@ -151,4 +151,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Polasaí Príobháideachais</string>
     <string name="settings_analytics_consent_title">Anailísíocht</string>
     <string name="settings_analytics_consent_description">Ceadaigh bailiú sonraí úsáide gan ainm chun cabhrú le feabhas a chur ar an aip</string>
+    <string name="pref_audiobook_folders_explanation">Bainistigh fillteáin scanta le haghaidh closleabhair</string>
 </resources>

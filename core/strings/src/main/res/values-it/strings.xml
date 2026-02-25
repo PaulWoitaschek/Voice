@@ -145,4 +145,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Informativa sulla privacy</string>
     <string name="settings_analytics_consent_title">Analytics</string>
     <string name="settings_analytics_consent_description">Consenti la raccolta anonima dei dati di utilizzo per contribuire a migliorare l\'app</string>
+    <string name="pref_audiobook_folders_explanation">Gestisci cartelle audiolibri</string>
 </resources>
