@@ -178,6 +178,6 @@ class BookmarkViewModel(
 
   @AssistedFactory
   interface Factory {
-    fun create(id: BookId): BookmarkViewModel
+    fun create(bookId: BookId): BookmarkViewModel
   }
 }
