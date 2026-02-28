@@ -148,4 +148,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Политика конфиденциальности</string>
     <string name="settings_analytics_consent_title">Аналитика</string>
     <string name="settings_analytics_consent_description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
+    <string name="pref_audiobook_folders_explanation">Управление папками, отсканированными на наличие аудиокниг</string>
 </resources>
