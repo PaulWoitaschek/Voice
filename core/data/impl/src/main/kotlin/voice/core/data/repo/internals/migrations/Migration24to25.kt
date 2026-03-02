@@ -8,7 +8,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import org.json.JSONArray
 import org.json.JSONException
@@ -24,7 +23,6 @@ import java.util.InvalidPropertiesFormatException
   binding = binding<Migration>(),
 )
 @SuppressLint("Recycle")
-@Inject
 public class Migration24to25 : IncrementalMigration(24) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

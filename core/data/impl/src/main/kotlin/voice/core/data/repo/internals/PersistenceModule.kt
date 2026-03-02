@@ -5,7 +5,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -14,9 +13,8 @@ import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
-@BindingContainer
 @ContributesTo(AppScope::class)
-public object PersistenceModule {
+public interface PersistenceModule {
 
   @Provides
   private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()

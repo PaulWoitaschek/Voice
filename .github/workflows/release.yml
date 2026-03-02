@@ -1,96 +1,78 @@
 name: Release
 
 on:
-  push:
-    tags: [ "*" ]
+  workflow_dispatch: { }
 
-env:
-  PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
-  SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
-  SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
-  SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
-  SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
-  GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+permissions:
+  contents: write
 
 jobs:
-
-  tests:
-    uses: ./.github/workflows/ci.yml
-
-  play_build:
+  prepare_version:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.out.outputs.version }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: true
+
+      - name: Configure git author
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Run release script (non-interactive)
+        run: ./scripts/release.main.kts --no-confirm
+
+      - name: Determine release tag
+        id: out
+        run: |
+          version="$(git describe --tags --abbrev=0)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [ prepare_version ]
+    environment: google-play
+    permissions:
+      contents: write
+    env:
+      PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
+      SIGNING_KEYSTORE_PLAY: ${{ secrets.SIGNING_KEYSTORE }}
+      SIGNING_PROPERTIES_PLAY: ${{ secrets.SIGNING_PROPERTIES }}
+      SIGNING_KEYSTORE_GITHUB: ${{ secrets.SIGNING_KEYSTORE_GITHUB }}
+      SIGNING_PROPERTIES_GITHUB: ${{ secrets.SIGNING_PROPERTIES_GITHUB }}
+      GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prepare_version.outputs.version }}
+
       - uses: ./.github/actions/build_setup
+
       - name: Setup Signing
         run: ./scripts/ci_signing_setup.sh
+
+      - name: Setup Play Access
+        run: ./scripts/ci_setup_play_access.sh
+
       - name: Build Play AAB
-        run: fastlane android build_play_aab version:${GITHUB_REF_NAME}
-      - name: Upload AAB artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: play-aab
-          path: artifacts/app-play-release.aab
-          retention-days: 14
+        run: fastlane android build_play_aab version:${{ needs.prepare_version.outputs.version }}
 
-  play_upload:
-    runs-on: ubuntu-latest
-    needs:
-      - play_build
-      - tests
-    environment: google-play
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup Play Access
-        run: ./scripts/ci_setup_play_access.sh
-      - name: Download AAB artifact
-        uses: actions/download-artifact@v7
-        with:
-          name: play-aab
       - name: Upload to INTERNAL
-        run: fastlane android upload_internal version:${GITHUB_REF_NAME} aab_path:app-play-release.aab
+        run: fastlane android upload_internal version:${{ needs.prepare_version.outputs.version }} aab_path:artifacts/app-play-release.aab
 
-  play_promote:
-    runs-on: ubuntu-latest
-    needs: play_upload
-    environment: google-play
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup Play Access
-        run: ./scripts/ci_setup_play_access.sh
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
-        run: fastlane android promote version:${GITHUB_REF_NAME}
+        run: fastlane android promote version:${{ needs.prepare_version.outputs.version }}
 
-  github_build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: ./.github/actions/build_setup
-      - name: Setup Signing
-        run: ./scripts/ci_signing_setup.sh
       - name: Build GitHub APKs
-        run: fastlane android build_github version:${GITHUB_REF_NAME}
-      - name: Upload APK artifacts
-        uses: actions/upload-artifact@v6
-        with:
-          name: github-apks
-          path: artifacts/*.apk
-          retention-days: 30
+        run: fastlane android build_github version:${{ needs.prepare_version.outputs.version }}
 
-  github_release:
-    runs-on: ubuntu-latest
-    needs:
-      - github_build
-      - tests
-    steps:
-      - uses: actions/checkout@v6
-      - name: Download APK artifacts
-        uses: actions/download-artifact@v7
-        with:
-          name: github-apks
-          path: artifacts
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.prepare_version.outputs.version }}
           files: artifacts/*.apk
           generate_release_notes: true
