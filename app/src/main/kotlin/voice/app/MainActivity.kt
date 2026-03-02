@@ -8,6 +8,10 @@ import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
@@ -61,6 +65,7 @@ class MainActivity : AppCompatActivity() {
       }
       VoiceTheme {
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
+        val transitionSpec = fadeIn(animationSpec = tween()) togetherWith fadeOut(animationSpec = tween())
 
         NavDisplay(
           backStack = backStack,
@@ -73,6 +78,15 @@ class MainActivity : AppCompatActivity() {
           entryProvider = { key ->
             navEntryResolver.create(key)
           },
+          transitionSpec = {
+            transitionSpec
+          },
+          popTransitionSpec = {
+            transitionSpec
+          },
+          predictivePopTransitionSpec = {
+            transitionSpec
+          }
         )
 
         LaunchedEffect(navigator) {
