@@ -142,4 +142,5 @@
     <string name="onboarding_analytics_consent_privacy_policy">Gizlilik Politikası</string>
     <string name="settings_analytics_consent_title">Analitik</string>
     <string name="settings_analytics_consent_description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
+    <string name="pref_audiobook_folders_explanation">Sesli kitaplar için taranan dizinleri yönetin</string>
 </resources>
