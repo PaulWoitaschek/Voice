@@ -134,4 +134,19 @@
     <string name="sleep_timer.button.increment">Довше</string>
     <string name="sleep_timer.button.decrement">Коротше</string>
     <string name="storage_bug_subtitle">На деяких пристроях системні програми не мають необхідного дозволу на доступ до зовнішнього накопичувача. Цей дозвіл необхідний для того, аби Voice мав змогу читати ваші аудіокниги.</string>
+    <string name="pref_audiobook_folders_explanation">Налаштування папок, які скануються для пошуку аудіокних</string>
+    <string name="pref_faq">ЧаПи</string>
+    <string name="end_of_chapter">Кінець розділу</string>
+    <string name="onboarding_analytics_consent_title">Допоможіть покращити Voice</string>
+    <string name="onboarding_analytics_consent_description">Дозвольте нам збирати анонімні данні, щоб допомогти нам покращити додаток. Можете змінити думку в налаштуваннях.</string>
+    <string name="onboarding_analytics_consent_button_enable">Продовжити з збиранням данних</string>
+    <string name="onboarding_analytics_consent_button_disable">Продовжити без збирання данних</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Політика Конфіденційності</string>
+    <string name="settings_analytics_consent_title">Аналітика</string>
+    <string name="settings_analytics_consent_description">Дозволити анонімне збирання данних для покращення додатку</string>
+    <string name="auto_sleep_timer.title">Автоматичний таймер сну</string>
+    <string name="auto_sleep_timer.subtitle">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Час початку</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Час кінця</string>
+    <string name="playback.current_chapter">Глава</string>
 </resources>
