@@ -134,4 +134,13 @@
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">தொடக்க நேரத்தை அமை</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">இறுதி நேரத்தை அமை</string>
     <string name="playback.current_chapter">தற்போதைய பாடம்</string>
+    <string name="pref_audiobook_folders_explanation">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
+    <string name="end_of_chapter">அத்தியாயத்தின் முடிவு</string>
+    <string name="onboarding_analytics_consent_title">குரலை மேம்படுத்த உதவுங்கள்</string>
+    <string name="onboarding_analytics_consent_description">பயன்பாட்டை மேம்படுத்த உதவ, அநாமதேய பயன்பாட்டுத் தரவைச் சேகரிக்க எங்களை அனுமதிக்கவும். இதை நீங்கள் பின்னர் அமைப்புகளில் மாற்றலாம்.</string>
+    <string name="onboarding_analytics_consent_button_enable">பகுப்பாய்வுகளைத் தொடரவும்</string>
+    <string name="onboarding_analytics_consent_button_disable">பகுப்பாய்வு இல்லாமல் தொடரவும்</string>
+    <string name="onboarding_analytics_consent_privacy_policy">தனியுரிமைக் கொள்கை</string>
+    <string name="settings_analytics_consent_title">பகுப்பாய்வு</string>
+    <string name="settings_analytics_consent_description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>
 </resources>
