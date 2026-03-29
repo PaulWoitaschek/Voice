@@ -27,6 +27,7 @@ import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.VoiceDataStoreFactory
 import voice.core.data.store.intPrefsDataMigration
 
+@Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
