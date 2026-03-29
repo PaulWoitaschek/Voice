@@ -22,10 +22,13 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: '3.0'
           bundler-cache: true
 
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
 
       - name: Upload Play Metadata
-        run: bundle exec fastlane android upload_metadata
+        run: |
+          bundle install
+          bundle exec fastlane android upload_metadata
