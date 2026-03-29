@@ -2,12 +2,16 @@ name: "Pre Build"
 runs:
   using: "composite"
   steps:
+    - id: jvm-version
+      name: Extract Java Version
+      shell: bash
+      run: echo "version=$(awk -F'"' '/jvm-toolchain/ {print $2}' gradle/libs.versions.toml)" >> "$GITHUB_OUTPUT"
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
         distribution: zulu
-        java-version: 17
-    - name: Boostrap Gradle Memory
+        java-version: ${{ steps.jvm-version.outputs.version }}
+    - name: Bootstrap Gradle Memory
       shell: bash
       run: ./scripts/gradle_bootstrap.sh
     - name: Setup Gradle
