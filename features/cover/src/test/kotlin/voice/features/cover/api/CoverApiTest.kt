@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Test
 import voice.core.ui.SharedGraph
 
-@Suppress("Metro/SuspiciousUnusedMultibinding")
+@Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
