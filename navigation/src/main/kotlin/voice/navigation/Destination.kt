@@ -51,6 +51,11 @@ sealed interface Destination {
   }
 
   @Serializable
+  data object DeveloperSettings : Compose {
+    override val trackingName: String get() = "DeveloperSettings"
+  }
+
+  @Serializable
   data object BookOverview : Compose {
     override val trackingName: String get() = "BookOverview"
   }

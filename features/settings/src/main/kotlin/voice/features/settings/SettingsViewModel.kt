@@ -18,6 +18,7 @@ import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DarkThemeStore
+import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
@@ -48,11 +49,14 @@ class SettingsViewModel(
   private val gridCount: GridCount,
   @FolderPickerInSettingsFeatureFlagQualifier
   private val folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
+  @DeveloperMenuUnlockedStore
+  private val developerMenuUnlockedStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
+  private var appVersionTapCount = 0
 
   @Composable
   fun viewState(): SettingsViewState {
@@ -67,6 +71,7 @@ class SettingsViewModel(
     val showFolderPickerEntry = remember {
       folderPickerInSettingsFeatureFlag.get()
     }
+    val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -87,6 +92,7 @@ class SettingsViewModel(
       analyticsEnabled = analyticsEnabled,
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showFolderPickerEntry = showFolderPickerEntry,
+      showDeveloperMenu = showDeveloperMenu,
     )
   }
 
@@ -200,5 +206,17 @@ class SettingsViewModel(
     mainScope.launch {
       analyticsConsentStore.updateData { !it }
     }
+  }
+
+  override fun onAppVersionClick() {
+    mainScope.launch {
+      if (++appVersionTapCount >= 13) {
+        developerMenuUnlockedStore.updateData { true }
+      }
+    }
+  }
+
+  override fun openDeveloperMenu() {
+    navigator.goTo(Destination.DeveloperSettings)
   }
 }

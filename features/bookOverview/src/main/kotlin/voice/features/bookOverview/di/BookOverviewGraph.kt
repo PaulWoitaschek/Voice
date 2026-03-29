@@ -3,14 +3,12 @@ package voice.features.bookOverview.di
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
-import dev.zacsweers.metro.Scope
 import voice.features.bookOverview.bottomSheet.BottomSheetViewModel
 import voice.features.bookOverview.deleteBook.DeleteBookViewModel
 import voice.features.bookOverview.editTitle.EditBookTitleViewModel
 import voice.features.bookOverview.fileCover.FileCoverViewModel
 import voice.features.bookOverview.overview.BookOverviewViewModel
 
-@Scope
 annotation class BookOverviewScope
 
 @GraphExtension(scope = BookOverviewScope::class)

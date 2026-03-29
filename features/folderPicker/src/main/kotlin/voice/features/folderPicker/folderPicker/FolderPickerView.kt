@@ -46,7 +46,7 @@ interface FolderPickerProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key ->
+  fun folderPickerNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key ->
     NavEntry(key) {
       FolderOverview()
     }

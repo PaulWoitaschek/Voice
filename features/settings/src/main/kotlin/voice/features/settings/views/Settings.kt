@@ -223,7 +223,17 @@ private fun Settings(
         )
       }
       item {
-        AppVersion(appVersion = viewState.appVersion)
+        AppVersion(
+          appVersion = viewState.appVersion,
+          onClick = listener::onAppVersionClick,
+        )
+      }
+      if (viewState.showDeveloperMenu) {
+        item {
+          DeveloperMenuItem(
+            onClick = listener::openDeveloperMenu,
+          )
+        }
       }
     }
     Dialog(viewState, listener)
@@ -268,7 +278,7 @@ interface SettingsProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key ->
+  fun settingsNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key ->
     NavEntry(key) {
       Settings()
     }

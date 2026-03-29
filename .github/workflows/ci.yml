@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/build_setup
-      - name: Run Unit Tests + Lint
+      - name: Lint
         run: ./gradlew :app:lintPlayDebug
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lint-report
@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/build_setup
-      - name: Run Unit Tests + Lint
+      - name: Tests + Formatting + Build
         run: ./gradlew voiceUnitTest lintKotlin :app:assemblePlayDebug
       - name: Publish JUnit Report
         uses: mikepenz/action-junit-report@v6

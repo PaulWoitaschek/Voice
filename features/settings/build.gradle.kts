@@ -11,8 +11,12 @@ dependencies {
   implementation(projects.core.featureflag)
   implementation(projects.core.playback)
   implementation(projects.core.ui)
+  implementation(projects.core.remoteconfig.api)
   implementation(projects.core.data.api)
 
   implementation(libs.androidxCore)
   implementation(libs.material)
+
+  testImplementation(libs.molecule)
+  testImplementation(libs.turbine)
 }

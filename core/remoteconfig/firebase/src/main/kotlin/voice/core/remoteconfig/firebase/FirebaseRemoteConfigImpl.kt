@@ -5,11 +5,11 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.tasks.await
+import voice.core.logging.api.Logger
 import voice.core.remoteconfig.api.RemoteConfig
 
 @ContributesBinding(AppScope::class)
-@Inject
 class FirebaseRemoteConfigImpl : RemoteConfig {
 
   private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
@@ -38,6 +38,14 @@ class FirebaseRemoteConfigImpl : RemoteConfig {
       get(value)
     } else {
       default
+    }
+  }
+
+  override suspend fun refresh() {
+    try {
+      firebaseRemoteConfig.fetchAndActivate().await()
+    } catch (e: Exception) {
+      Logger.w(e)
     }
   }
 }

@@ -1,4 +1,5 @@
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
@@ -13,9 +14,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+  val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
+  val jvmToolchainVersion = libs.findVersion("jvm-toolchain").get().requiredVersion.toInt()
   tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-      jvmTarget.set(JvmTarget.JVM_11)
+      jvmTarget.set(JvmTarget.fromTarget(jvmBytecodeVersion.toString()))
       freeCompilerArgs.addAll(
         "-Xannotation-default-target=param-property",
         "-Xreturn-value-checker=full",
@@ -39,24 +42,26 @@ fun Project.baseSetup() {
   }
   extensions.configure<KotlinProjectExtension> {
     jvmToolchain {
-      languageVersion.set(JavaLanguageVersion.of(25))
+      languageVersion.set(JavaLanguageVersion.of(jvmToolchainVersion))
     }
   }
   configureRobolectricSdk(this)
-  extensions.configure<BaseExtension> {
+  extensions.configure<CommonExtension> {
     namespace = "voice." + path.removePrefix(":").replace(':', '.')
-    compileOptions {
+    compileOptions.apply {
       isCoreLibraryDesugaringEnabled = true
-      sourceCompatibility = JavaVersion.VERSION_11
-      targetCompatibility = JavaVersion.VERSION_11
+      sourceCompatibility = JavaVersion.toVersion(jvmBytecodeVersion)
+      targetCompatibility = JavaVersion.toVersion(jvmBytecodeVersion)
     }
-    defaultConfig {
-      multiDexEnabled = true
+    defaultConfig.apply {
+      if (this is ApplicationDefaultConfig) {
+        multiDexEnabled = true
+        targetSdk = libs.findVersion("sdk-target").get().requiredVersion.toInt()
+      }
       minSdk = libs.findVersion("sdk-min").get().requiredVersion.toInt()
-      targetSdk = libs.findVersion("sdk-target").get().requiredVersion.toInt()
     }
-    compileSdkVersion(libs.findVersion("sdk-compile").get().requiredVersion.toInt())
-    testOptions {
+    compileSdk = libs.findVersion("sdk-compile").get().requiredVersion.toInt()
+    testOptions.apply {
       unitTests.isReturnDefaultValues = true
       animationsDisabled = true
       unitTests.isIncludeAndroidResources = true

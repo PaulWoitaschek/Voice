@@ -6,7 +6,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import voice.core.data.repo.internals.getString
 
@@ -14,7 +13,6 @@ import voice.core.data.repo.internals.getString
   scope = AppScope::class,
   binding = binding<Migration>(),
 )
-@Inject
 public class Migration44 : IncrementalMigration(44) {
 
   override fun migrate(db: SupportSQLiteDatabase) {

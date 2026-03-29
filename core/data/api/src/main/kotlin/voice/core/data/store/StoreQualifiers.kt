@@ -34,3 +34,6 @@ public annotation class ReviewDialogShownStore
 
 @Qualifier
 public annotation class AnalyticsConsentStore
+
+@Qualifier
+public annotation class DeveloperMenuUnlockedStore

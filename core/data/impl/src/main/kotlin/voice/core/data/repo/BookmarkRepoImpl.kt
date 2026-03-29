@@ -3,7 +3,6 @@ package voice.core.data.repo
 import androidx.room.RoomDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
@@ -15,7 +14,6 @@ import voice.core.data.runForMaxSqlVariableNumber
 import voice.core.logging.api.Logger
 import java.time.Instant
 
-@Inject
 @ContributesBinding(AppScope::class)
 public class BookmarkRepoImpl
 internal constructor(

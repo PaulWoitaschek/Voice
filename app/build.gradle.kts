@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.dsl.ApkSigningConfig
 import com.android.build.api.dsl.ManagedVirtualDevice
-import com.android.build.gradle.internal.dsl.SigningConfig
 import java.util.Properties
 
 plugins {
@@ -53,7 +53,7 @@ android {
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
 
-  fun createSigningConfig(name: String): SigningConfig {
+  fun createSigningConfig(name: String): ApkSigningConfig {
     return signingConfigs.create(name) {
       val properties = Properties()
       val propertiesFile = rootProject.file("signing/$name/signing.properties")

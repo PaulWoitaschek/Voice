@@ -13,6 +13,18 @@ The project architecture and gradle module structure is defined in [the Architec
 - Run tests of a module: `./gradlew :<moduleName>:testDebugUnitTest`
 - Create and register a new gradle module: `./scripts/new_module.kts :features:<name>`
 
+## Testing Conventions
+
+- For Compose view state tests, use Molecule + Turbine. Minimal pattern:
+  ```kotlin
+  backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+    viewModel.viewState()
+  }.test {
+    awaitItem()
+  }
+  ```
+- Prefer lightweight in-memory fakes (e.g., `MemoryFeatureFlag`, `MemoryDataStore`) over mocks when available
+
 ## Information Lookup
 
 - Project Dependencies are declared in `gradle/libs.versions.toml`

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,7 +20,6 @@ import voice.core.initializer.AppInitializer
 import voice.core.playback.playstate.PlayStateManager
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class TriggerWidgetOnChange(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,

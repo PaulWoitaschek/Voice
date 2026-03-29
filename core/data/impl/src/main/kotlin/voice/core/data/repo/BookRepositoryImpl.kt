@@ -2,7 +2,6 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,7 +13,6 @@ import voice.core.data.BookId
 import voice.core.logging.api.Logger
 
 @SingleIn(AppScope::class)
-@Inject
 @ContributesBinding(AppScope::class)
 public class BookRepositoryImpl(
   private val chapterRepo: ChapterRepoImpl,
