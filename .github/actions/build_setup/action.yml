@@ -11,7 +11,7 @@ runs:
       with:
         distribution: zulu
         java-version: ${{ steps.jvm-version.outputs.version }}
-    - name: Boostrap Gradle Memory
+    - name: Bootstrap Gradle Memory
       shell: bash
       run: ./scripts/gradle_bootstrap.sh
     - name: Setup Gradle
