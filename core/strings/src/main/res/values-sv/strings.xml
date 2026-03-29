@@ -135,4 +135,12 @@
     <string name="playback.current_chapter">Aktuellt kapitel</string>
     <string name="auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="end_of_chapter">Slut på kapitlet</string>
+    <string name="pref_audiobook_folders_explanation">Hantera mappar som skannas efter ljudböcker</string>
+    <string name="onboarding_analytics_consent_title">Hjälp till att förbättra Voice</string>
+    <string name="onboarding_analytics_consent_description">Tillåt oss att samla in anonym användningsdata för att kunna förbättra appen. Du kan ändra på inställningen senare.</string>
+    <string name="onboarding_analytics_consent_button_enable">Fortsätt med analys</string>
+    <string name="onboarding_analytics_consent_button_disable">Fortsätt utan analys</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Integritetspolicy</string>
+    <string name="settings_analytics_consent_title">Analys</string>
+    <string name="settings_analytics_consent_description">Tillåt anonym insamling av användningsdata för att förbättra appen</string>
 </resources>

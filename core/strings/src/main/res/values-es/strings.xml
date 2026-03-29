@@ -3,14 +3,14 @@
     <string name="cover">Portada</string>
     <string name="play_pause">Reproducir / Pausar</string>
     <string name="action_sleep">Temporizador</string>
-    <string name="rewind">Retrasar</string>
-    <string name="fast_forward">Adelantar</string>
+    <string name="rewind">Retroceder</string>
+    <string name="fast_forward">Avanzar</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Pista siguiente</string>
     <string name="skip_silence">Saltar silencio</string>
     <string name="dialog_confirm">Establecer</string>
     <string name="dialog_cancel">Cancelar</string>
-    <string name="content_cover">Muestra la portada seleccionada</string>
+    <string name="content_cover">Muestra la portada a elegir</string>
     <string name="change_book_name">Nombre</string>
     <string name="download_book_cover">Portada desde Internet</string>
     <string name="pick_book_cover">Portada desde el sistema de archivos</string>
@@ -48,7 +48,7 @@
     <string name="migration_detail_content_name">Nombre</string>
     <string name="migration_detail_content_root">Directorio raíz</string>
     <string name="migration_detail_content_position">Posición</string>
-    <string name="migration_detail_content_bookmarks">Marcadores de libros</string>
+    <string name="migration_detail_content_bookmarks">Marcadores</string>
     <string name="migration_detail_content_added_at">Agregado a</string>
     <string name="migration_delete_dialog_title">Eliminar posiciones</string>
     <string name="migration_delete_dialog_action_delete">Eliminar</string>
@@ -88,7 +88,7 @@
     <string name="media_session_root">Todos los audiolibros</string>
     <string name="migration_delete_dialog_content">Una vez que elimines las posiciones antiguas, no podrás recuperar tus antiguas posiciones de reproducción.</string>
     <string name="search_hint">¿Qué estás buscando?</string>
-    <string name="battery_optimization_rationale">Debido a sus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>
+    <string name="battery_optimization_rationale">Debido a tus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>
     <string name="media_session_recent">Reciente</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproducir</string>
@@ -138,4 +138,12 @@
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir hora fin</string>
     <string name="auto_sleep_timer.title">Temporizador automático</string>
     <string name="auto_sleep_timer.subtitle">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
+    <string name="pref_audiobook_folders_explanation">Administrar directorios escaneados en busca de audiolibros</string>
+    <string name="onboarding_analytics_consent_button_disable">Continuar sin compartir estadísticas</string>
+    <string name="onboarding_analytics_consent_button_enable">Continuar compartiendo estadísticas</string>
+    <string name="settings_analytics_consent_description">Permite recopilar datos de uso anónimos para ayudar a mejorar la aplicación</string>
+    <string name="settings_analytics_consent_title">Analíticas</string>
+    <string name="onboarding_analytics_consent_title">Ayuda a mejorar Voice</string>
+    <string name="onboarding_analytics_consent_description">Permítenos recopilar datos de uso anónimos para ayudarnos a mejorar la aplicación. Puedes cambiar tu decisión más tarde en los ajustes.</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Política de privacidad</string>
 </resources>
