@@ -1,1 +1,1 @@
-minimalistic - intuitive - fast
+Minimalist offline audiobook player. Free, no ads, volume boost & sleep timer.
