@@ -20,12 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
 
       - name: Upload Play Metadata
-        run: bundle exec fastlane android upload_metadata
+        run: fastlane android upload_metadata
