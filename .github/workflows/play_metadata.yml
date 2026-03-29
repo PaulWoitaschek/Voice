@@ -1,0 +1,31 @@
+name: Upload Play Metadata
+
+on:
+  workflow_dispatch: { }
+
+permissions:
+  contents: read
+
+concurrency:
+  group: play-metadata
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: google-play
+    env:
+      PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Setup Play Access
+        run: ./scripts/ci_setup_play_access.sh
+
+      - name: Upload Play Metadata
+        run: bundle exec fastlane android upload_metadata
