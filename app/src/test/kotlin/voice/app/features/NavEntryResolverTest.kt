@@ -13,6 +13,7 @@ import voice.app.navigation.NavEntryResolver
 import voice.navigation.Destination
 import kotlin.reflect.KClass
 
+@Suppress("Metro/SuspiciousUnusedMultibinding")
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
