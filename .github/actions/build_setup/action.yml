@@ -11,4 +11,4 @@ runs:
       shell: bash
       run: ./scripts/gradle_bootstrap.sh
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v5
+      uses: gradle/actions/setup-gradle@v6
