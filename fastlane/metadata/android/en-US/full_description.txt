@@ -1,20 +1,20 @@
-Are you looking for a simple, minimal audiobook player that just works?
-One that lets you focus on what you actually want to do: Listen to audiobooks?
-You simply add your main audiobook folder, and each folder in it is recognized as a single book. This keeps your library simple and uncluttered.
+Are you looking for a clean, minimalist audiobook player that just works? Voice is your ultimate offline companion for listening to your favorite DRM-free audiobooks without distractions. We believe your listening experience should be seamless, which is why Voice is 100% free, open-source, and contains absolutely no ads.
 
-What it can do:
+Designed for audiobook enthusiasts who manage their own local files (M4B, MP3, M4A, OGG, OGA, OPUS, etc.), Voice lets you focus on what matters most: the story. Simply add your main audiobook folder, and the app automatically recognizes each subfolder as a single book. No complex syncing, no forced cloud accounts—just your local files, played perfectly.
 
-- Remembers the last position
-- Set playback speed
-- Beautiful material design
-- Day & night theme. Easy on the eyes
-- Bookmarks
-- Android Auto
-- Sleep Timer. No need to turn off the player in the middle of the night.
+Despite its clean interface, Voice packs powerful features for power users:
+• 100% Offline & Ad-Free: Enjoy uninterrupted listening anywhere. No internet connection required, no subscriptions, and zero advertisements.
+• Advanced Audio Controls: Adjust playback speed, activate Volume Boost for quiet recordings, and use the Skip Silence toggle to seamlessly breeze through pauses.
+• Configurable Auto-Rewind: Paused for a while? The app automatically rewinds a few seconds when you resume, so you can easily catch the context.
+• Smart Search: Easily search your entire library for titles and authors to instantly find the exact book you want to hear.
+• Smart Bookmarks & Position Tracking: The app precisely remembers your last playback position for every single book. You can also easily add, manage, and rename custom bookmarks.
+• Sleep Timer: Set a custom timer, play until the end of the chapter, or define a daily time window (e.g., 10 PM - 6 AM) for auto-pause. Shake your device to quickly reset the timer without unlocking your screen!
+• Cover Art Management: Use embedded cover art, pick local images, or let the app search online for missing covers.
+• System Integration: Control playback directly via the Home Screen Widget, media notifications, or safely from your car's dashboard with full Android Auto support.
+• Folder-Based Library: Filter books by "Current," "Completed," and "Not Started." Easily switch views between lists and grids.
 
-Voice is free and open source. This means that everyone can see what it does. It uses minimal permissions.
+Voice is completely free and open-source software (GNU GPLv3 license). This means the community can see exactly what it does. We respect your privacy and only use the most minimal Android permissions necessary to read your local audio files.
 
-If you have suggestions or find bugs, report them here:
-https://github.com/VoiceAudiobook/Voice/issues
+Transform your Android device into the perfect offline audio sanctuary today!
 
-The open source license is Gnu GPLv3
+Feedback or bugs? Join our community and report them on our GitHub page: https://github.com/PaulWoitaschek/Voice/issues
