@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,7 +36,6 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
-import voice.core.ui.rememberScoped
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
@@ -65,7 +65,7 @@ interface BookOverviewProvider {
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
-  val bookGraph = rememberScoped {
+  val bookGraph = retain<BookOverviewGraph> {
     rootGraphAs<BookOverviewGraph.Factory.Provider>()
       .bookOverviewGraphProviderFactory.create()
   }

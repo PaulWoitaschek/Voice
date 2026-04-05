@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -31,7 +32,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.rememberScoped
 import voice.features.onboarding.R
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -56,7 +56,7 @@ interface OnboardingCompletionProvider {
 
 @Composable
 fun OnboardingCompletion(modifier: Modifier = Modifier) {
-  val viewModel = rememberScoped {
+  val viewModel = retain<OnboardingCompletionViewModel> {
     rootGraphAs<OnboardingCompletionGraph>().onboardingCompletionViewModel
   }
   OnboardingCompletion(

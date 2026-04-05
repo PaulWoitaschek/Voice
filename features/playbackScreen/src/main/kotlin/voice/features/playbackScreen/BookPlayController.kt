@@ -7,6 +7,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
@@ -16,7 +17,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
-import voice.core.ui.rememberScoped
 import voice.features.playbackScreen.view.BookPlayView
 import voice.features.sleepTimer.SleepTimerDialog
 import voice.navigation.Destination
@@ -25,7 +25,7 @@ import voice.core.strings.R as StringsR
 
 @Composable
 fun BookPlayScreen(bookId: BookId) {
-  val viewModel = rememberScoped(bookId.value) {
+  val viewModel = retain(bookId.value) {
     rootGraphAs<BookPlayGraph>()
       .bookPlayViewModelFactory
       .create(bookId)

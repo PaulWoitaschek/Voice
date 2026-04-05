@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -30,7 +31,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
-import voice.core.ui.rememberScoped
 import voice.features.folderPicker.FolderTypeIcon
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -55,7 +55,7 @@ interface FolderPickerProvider {
 
 @Composable
 fun FolderOverview() {
-  val viewModel: FolderPickerViewModel = rememberScoped {
+  val viewModel: FolderPickerViewModel = retain<FolderPickerViewModel> {
     rootGraphAs<FolderPickerGraph>()
       .folderPickerViewModel
   }
