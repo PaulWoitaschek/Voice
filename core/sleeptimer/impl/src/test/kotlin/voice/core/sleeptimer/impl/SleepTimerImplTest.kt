@@ -166,6 +166,46 @@ class SleepTimerImplTest {
     sleepTimer.state.value shouldBe SleepTimerState.Disabled
   }
 
+  @Test
+  fun `play button resets timer within window`() = testScope.runTest {
+    val duration = 5.seconds
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(duration))
+
+    // 1) Let the countdown finish and enter the shake window
+    advanceTimeBy(duration + 1.seconds)
+    runCurrent()
+    coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
+    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+
+    // 2) Simulate play button press on headphones
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    runCurrent()
+
+    // 3) New countdown should start
+    sleepTimer.state.value shouldBe SleepTimerState.Enabled.WithDuration(duration)
+    // and player should be playing
+    verify(exactly = 1) { playerController.play() }
+  }
+
+  @Test
+  fun `play button after window does not reset timer`() = testScope.runTest {
+    val duration = 5.seconds
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(duration))
+
+    // 1) Let the countdown finish and advance past the window
+    advanceTimeBy(duration + 1.seconds + SleepTimerImpl.SHAKE_TO_RESET_TIME)
+    runCurrent()
+    coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
+    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+
+    // 2) Simulate play button press on headphones
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    runCurrent()
+
+    // 3) No new countdown should start
+    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+  }
+
   companion object {
 
     @BeforeClass
