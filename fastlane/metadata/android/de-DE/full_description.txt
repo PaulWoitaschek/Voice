@@ -1,16 +1,16 @@
-Bist du auf der Suche nach einem einfachen, minimalistischen Hörbuch-Player, der einfach funktioniert? Voice ist deine ultimative Offline-App, um deine DRM-freien Hörbücher völlig ungestört zu genießen. Wir glauben, dass dein Hörerlebnis im Mittelpunkt stehen sollte. Deshalb ist Voice zu 100 % kostenlos, Open Source und komplett ohne Werbung.
+Bist du auf der Suche nach einem einfachen, minimalistischen Hörbuch-Player, der einfach funktioniert? Voice ist deine ultimativer Begleiter, um deine DRM-freien Hörbücher völlig ungestört zu genießen. Wir glauben, dass dein Hörerlebnis im Mittelpunkt stehen sollte. Deshalb ist Voice zu 100 % kostenlos, Open Source und komplett werbefrei.
 
-Entwickelt für Nutzer, die ihre eigenen lokalen Audiodateien (M4B, MP3, M4A, OGG, OPUS, OGA, etc.) verwalten, lässt Voice dich auf das fokussieren, was wirklich zählt: die Geschichte. Füge einfach deinen Haupt-Hörbuchordner hinzu, und die App erkennt jeden Unterordner automatisch als einzelnes Buch. Keine Cloud-Zwänge, kein Abo – nur deine lokalen Dateien.
+Entwickelt für Hörbuch-Enthusiasten, die ihre eigenen lokalen Audiodateien (M4B, MP3, M4A, OGG, OPUS, OGA, etc.) verwalten, lässt Voice dich auf das fokussieren, was wirklich zählt: die Geschichte. Füge einfach deinen Haupt-Hörbuchordner hinzu, und die App erkennt jeden Unterordner automatisch als einzelnes Buch. Keine Cloud-Zwänge, kein Abo – nur deine lokalen Dateien, perfekt abgespielt.
 
-Trotz des aufgeräumten Designs bietet Voice mächtige Funktionen für Power-User:
+Trotz des minimalistischen Designs bietet Voice mächtige Funktionen für Power-User:
 • 100% Offline & Werbefrei: Genieße deine Hörbücher ohne Unterbrechungen. Keine Internetverbindung nötig, keine Abos und absolut keine Werbeanzeigen.
-• Erweiterte Audio-Kontrolle: Passe die Abspielgeschwindigkeit an, aktiviere den Volume Boost (Lautstärke-Verstärker) für leise Aufnahmen und nutze die Funktion zum Überspringen von Stille (Skip Silence).
-• Konfigurierbarer Auto-Rewind: Nach einer längeren Pause spult die App beim Fortsetzen automatisch ein paar Sekunden zurück, damit du wieder direkt in die Geschichte findest.
-• Intelligente Suche: Durchsuche deine gesamte Bibliothek blitzschnell nach Titeln und Autoren, um sofort genau das richtige Buch zu finden.
+• Erweiterte Audio-Kontrolle: Passe die Abspielgeschwindigkeit an, aktiviere den Volume Boost (Lautstärke-Verstärker) für leise Aufnahmen und nutze die Funktion "Skip Silence", um automatisch Stille zu überspringen.
+• Konfigurierbarer Auto-Rewind: Nach einer längeren Pause spult die App beim Fortsetzen automatisch ein paar Sekunden zurück, damit du wieder in die Handlung hineinfindest.
+• Intelligente Suche: Durchsuche deine gesamte Bibliothek blitzschnell nach Titeln und Autoren, um sofort genau das Buch zu finden, das du hören möchtest.
 • Lesezeichen & Positionsspeicherung: Die App merkt sich deine exakte Position für jedes einzelne Buch. Eigene Lesezeichen lassen sich kinderleicht setzen und benennen.
-• Schlaf-Timer (Sleep-Timer): Lege einen Timer fest, höre bis zum Ende des Kapitels oder definiere ein tägliches Zeitfenster. Schüttle dein Smartphone einfach leicht, um den Timer zurückzusetzen, ohne das Display einzuschalten!
+• Schlaf-Timer (Sleep-Timer): Lege einen Timer fest, höre bis zum Ende des Kapitels oder definiere ein tägliches Zeitfenster. Schüttle dein Smartphone, um den Timer zurückzusetzen, ohne das Display einzuschalten!
 • Cover-Verwaltung: Nutze eingebettete Cover, wähle eigene Bilder oder lass die App online nach fehlenden Cover-Artworks suchen.
-• System-Integration: Steuere die Wiedergabe direkt über das Homescreen-Widget, Medienbenachrichtigungen oder sicher im Auto dank Android Auto-Unterstützung.
+• System-Integration: Steuere die Wiedergabe direkt über das Homescreen-Widget, Medienbenachrichtigungen oder sicher im Auto dank Android-Auto-Unterstützung.
 • Ordner-basierte Bibliothek: Filtere bequem nach "Aktuell", "Abgeschlossen" und "Noch nicht gestartet". Wechsle nahtlos zwischen Listen- und Rasteransicht.
 
 Voice ist ein Open-Source-Projekt (GNU GPLv3 Lizenz). Jeder kann den Code einsehen. Wir respektieren deine Privatsphäre und fordern nur die absolut minimalen Android-Berechtigungen an, die zum Abspielen deiner lokalen Dateien notwendig sind.
