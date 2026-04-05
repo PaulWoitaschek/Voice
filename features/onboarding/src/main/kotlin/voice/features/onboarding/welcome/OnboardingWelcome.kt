@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,13 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.rememberScoped
 import voice.features.onboarding.R
 import voice.core.strings.R as StringsR
 
 @Composable
 fun OnboardingWelcome(modifier: Modifier = Modifier) {
-  val viewModel = rememberScoped {
+  val viewModel = retain<OnboardingWelcomeViewModel> {
     rootGraphAs<OnboardingWelcomeProvider>()
       .onboardingWelcomeViewModel
   }

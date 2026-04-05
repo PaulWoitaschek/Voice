@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipEntry
@@ -26,7 +27,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
-import voice.core.ui.rememberScoped
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -124,7 +124,7 @@ interface DeveloperSettingsProvider {
 
 @Composable
 fun DeveloperSettings() {
-  val viewModel = rememberScoped { rootGraphAs<DeveloperSettingsGraph>().developerSettingsViewModel }
+  val viewModel = retain<DeveloperSettingsViewModel> { rootGraphAs<DeveloperSettingsGraph>().developerSettingsViewModel }
   val viewState = viewModel.viewState()
   DeveloperSettings(viewState, viewModel)
 }

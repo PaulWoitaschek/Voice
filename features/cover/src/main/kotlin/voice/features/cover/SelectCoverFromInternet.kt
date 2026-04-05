@@ -3,6 +3,7 @@ package voice.features.cover
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavEntry
 import androidx.paging.PagingData
@@ -16,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
-import voice.core.ui.rememberScoped
 import voice.features.cover.api.SearchResponse
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -37,7 +37,7 @@ interface SelectCoverFromInternetProvider {
 
 @Composable
 fun SelectCoverFromInternet(bookId: BookId) {
-  val viewModel = rememberScoped(bookId.value) {
+  val viewModel = retain(bookId.value) {
     rootGraphAs<SelectCoverFromInternetViewModel.Factory.Provider>()
       .factory
       .create(bookId)

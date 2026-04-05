@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -32,7 +33,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.rememberScoped
 import voice.features.settings.SettingsListener
 import voice.features.settings.SettingsViewModel
 import voice.features.settings.SettingsViewState
@@ -287,7 +287,7 @@ interface SettingsProvider {
 
 @Composable
 fun Settings() {
-  val viewModel = rememberScoped { rootGraphAs<SettingsGraph>().settingsViewModel }
+  val viewModel = retain<SettingsViewModel> { rootGraphAs<SettingsGraph>().settingsViewModel }
   val viewState = viewModel.viewState()
   Settings(viewState, viewModel)
 }
