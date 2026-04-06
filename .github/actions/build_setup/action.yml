@@ -17,4 +17,4 @@ runs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v6
       with:
-        cache-read-only: ${{ github.ref != github.event.repository.default_branch }}
+        cache-read-only: ${{ github.ref_name != github.event.repository.default_branch }}
