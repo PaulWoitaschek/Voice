@@ -18,6 +18,12 @@ jobs:
           fetch-tags: true
           persist-credentials: true
 
+      - name: Ensure release runs from default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "Release must be dispatched from the default branch (${{ github.event.repository.default_branch }}); got ${GITHUB_REF_NAME}." >&2
+          exit 1
+
       - name: Configure git author
         run: |
           git config user.name "${GITHUB_ACTOR}"
