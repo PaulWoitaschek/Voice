@@ -41,7 +41,15 @@ class Release : CliktCommand() {
       .start()
     val output = process.inputStream.bufferedReader().readText().trim()
     val exitCode = process.waitFor()
-    check(exitCode == 0) { "Command ${args.joinToString(" ")} failed with exit $exitCode" }
+    check(exitCode == 0) {
+      buildString {
+        append("Command ${args.joinToString(" ")} failed with exit $exitCode")
+        if (output.isNotBlank()) {
+          append('\n')
+          append(output)
+        }
+      }
+    }
     return output
   }
 
@@ -65,7 +73,7 @@ class Release : CliktCommand() {
 
   fun tagInGitAndPush(tag: String) {
     runCommand("git", "tag", "-a", tag, "-m", "Release $tag")
-    runCommand("git", "push", "origin", "tag", tag)
+    runCommand("git", "push", "origin", "refs/tags/$tag")
   }
 
   fun newVersion(today: LocalDate, existingVersions: List<Version>): Version {
@@ -89,10 +97,10 @@ class Release : CliktCommand() {
         throw IllegalStateException("Expected $expectedVersion but got $newVersion")
       }
     }
-    test(today = LocalDate.of(2025, 1, 1), versions = listOf(), expectedVersion = "8.1.0")
-    test(today = LocalDate.of(2025, 1, 1), versions = listOf("8.1.5"), expectedVersion = "8.1.6")
-    test(today = LocalDate.of(2025, 2, 5), versions = listOf("8.1.5"), expectedVersion = "8.2.0")
-    test(today = LocalDate.of(2024, 12, 1), versions = listOf("7.11.0", "8.1.0"), expectedVersion = "7.12.0")
+    test(today = LocalDate.of(2025, 1, 1), versions = listOf(), expectedVersion = "25.1.1")
+    test(today = LocalDate.of(2025, 1, 1), versions = listOf("25.1.5"), expectedVersion = "25.1.6")
+    test(today = LocalDate.of(2025, 2, 5), versions = listOf("25.1.5"), expectedVersion = "25.2.1")
+    test(today = LocalDate.of(2024, 12, 1), versions = listOf("24.11.2", "25.1.1"), expectedVersion = "24.12.1")
   }
 
   override fun run() {
