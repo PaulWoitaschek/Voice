@@ -13,6 +13,7 @@ import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,7 +33,7 @@ import voice.core.strings.R as StringsR
 interface PlaybackModule {
 
   @Provides
-  @PlaybackScope
+  @SingleIn(PlaybackScope::class)
   fun mediaSourceFactory(context: Context): MediaSource.Factory {
     val dataSourceFactory = DefaultDataSource.Factory(context)
     val extractorsFactory = DefaultExtractorsFactory()
@@ -41,7 +42,7 @@ interface PlaybackModule {
   }
 
   @Provides
-  @PlaybackScope
+  @SingleIn(PlaybackScope::class)
   fun player(
     context: Context,
     onlyAudioRenderersFactory: OnlyAudioRenderersFactory,
@@ -72,11 +73,11 @@ interface PlaybackModule {
   }
 
   @Provides
-  @PlaybackScope
+  @SingleIn(PlaybackScope::class)
   fun scope(): CoroutineScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
   @Provides
-  @PlaybackScope
+  @SingleIn(PlaybackScope::class)
   fun session(
     service: PlaybackService,
     player: VoicePlayer,
