@@ -23,7 +23,7 @@ class BottomSheetViewModel(private val viewModels: Set<@JvmSuppressWildcards Bot
 
   internal fun bookSelected(bookId: BookId) {
     this.bookId = bookId
-scope.launch {
+    scope.launch {
       val items = viewModels.flatMap { it.items(bookId) }
         .toSet()
         .sorted()
