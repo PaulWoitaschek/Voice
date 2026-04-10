@@ -9,7 +9,6 @@ import voice.core.playback.session.PlaybackService
 @GraphExtension(
   scope = PlaybackScope::class,
 )
-@PlaybackScope
 interface PlaybackGraph {
 
   fun inject(target: PlaybackService)
