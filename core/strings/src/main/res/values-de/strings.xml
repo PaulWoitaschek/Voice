@@ -88,7 +88,7 @@
     <string name="media_session_recent">Kürzlich</string>
     <string name="notification_sleep_timer_enable">Einschlaf-Timer einschalten</string>
     <string name="notification_sleep_timer_disable">Einschlaf-Timer ausschalten</string>
-    <string name="play">Play</string>
+    <string name="play">Abspielen</string>
     <string name="pause">Pause</string>
     <string name="end_of_chapter">Kapitelende</string>
     <string name="generic_error_message">Etwas ist schiefgelaufen 😢</string>
