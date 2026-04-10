@@ -4,12 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.features.bookOverview.di.BookOverviewScope
 
-@BookOverviewScope
+@SingleIn(BookOverviewScope::class)
 @Inject
 class BottomSheetViewModel(private val viewModels: Set<@JvmSuppressWildcards BottomSheetItemViewModel>) {
 
@@ -22,7 +23,7 @@ class BottomSheetViewModel(private val viewModels: Set<@JvmSuppressWildcards Bot
 
   internal fun bookSelected(bookId: BookId) {
     this.bookId = bookId
-    scope.launch {
+scope.launch {
       val items = viewModels.flatMap { it.items(bookId) }
         .toSet()
         .sorted()

@@ -1,6 +1,7 @@
 package voice.features.bookOverview.editBookCategory
 
 import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.SingleIn
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -10,7 +11,7 @@ import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.category
 import java.time.Instant
 
-@BookOverviewScope
+@SingleIn(BookOverviewScope::class)
 @ContributesIntoSet(BookOverviewScope::class)
 class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 

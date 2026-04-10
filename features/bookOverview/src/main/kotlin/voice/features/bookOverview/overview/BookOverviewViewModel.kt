@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
-@BookOverviewScope
+@SingleIn(BookOverviewScope::class)
 @Inject
 class BookOverviewViewModel(
   private val repo: BookRepository,

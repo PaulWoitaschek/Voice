@@ -9,10 +9,9 @@ import voice.features.bookOverview.editTitle.EditBookTitleViewModel
 import voice.features.bookOverview.fileCover.FileCoverViewModel
 import voice.features.bookOverview.overview.BookOverviewViewModel
 
-annotation class BookOverviewScope
+abstract class BookOverviewScope private constructor()
 
 @GraphExtension(scope = BookOverviewScope::class)
-@BookOverviewScope
 interface BookOverviewGraph {
   val bookOverviewViewModel: BookOverviewViewModel
   val editBookTitleViewModel: EditBookTitleViewModel
