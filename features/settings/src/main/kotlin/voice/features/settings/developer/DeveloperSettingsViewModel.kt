@@ -31,12 +31,14 @@ class DeveloperSettingsViewModel(
     }
     return DeveloperSettingsViewState(
       fcmToken = fcmToken,
-      featureFlags = featureFlags.map { featureFlag ->
-        DeveloperSettingsViewState.FeatureFlag(
-          key = featureFlag.key,
-          value = featureFlag.get().toString(),
-        )
-      },
+      featureFlags = featureFlags
+        .sortedBy { it.key }
+        .map { featureFlag ->
+          DeveloperSettingsViewState.FeatureFlag(
+            key = featureFlag.key,
+            value = featureFlag.get().toString(),
+          )
+        },
     )
   }
 
