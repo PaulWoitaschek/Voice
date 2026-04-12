@@ -103,7 +103,7 @@ private fun DeveloperSettings(
         }
       }
 
-      items(viewState.featureFlags) {
+      items(viewState.featureFlags, key = { it.key }) {
         ListItem(
           headlineContent = {
             Text(it.key)
