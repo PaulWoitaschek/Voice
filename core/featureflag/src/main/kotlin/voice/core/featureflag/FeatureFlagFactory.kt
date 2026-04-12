@@ -10,7 +10,7 @@ class FeatureFlagFactory(private val remoteConfig: RemoteConfig) {
     key: String,
     defaultValue: Boolean = false,
   ): FeatureFlag<Boolean> {
-    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig) {
+    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig, key = key) {
       it.boolean(key = key, defaultValue = defaultValue)
     }
   }
@@ -19,7 +19,7 @@ class FeatureFlagFactory(private val remoteConfig: RemoteConfig) {
     key: String,
     defaultValue: String,
   ): FeatureFlag<String> {
-    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig) {
+    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig, key = key) {
       it.string(key = key, defaultValue = defaultValue)
     }
   }

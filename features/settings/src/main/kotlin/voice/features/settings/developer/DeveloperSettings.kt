@@ -2,6 +2,7 @@ package voice.features.settings.developer
 
 import android.content.ClipData
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
@@ -100,6 +101,17 @@ private fun DeveloperSettings(
             },
           )
         }
+      }
+
+      items(viewState.featureFlags) {
+        ListItem(
+          headlineContent = {
+            Text(it.key)
+          },
+          trailingContent = {
+            Text(it.value)
+          },
+        )
       }
     }
   }
