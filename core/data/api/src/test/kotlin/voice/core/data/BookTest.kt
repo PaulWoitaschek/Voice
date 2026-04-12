@@ -123,6 +123,85 @@ class BookTest {
     book.content.currentChapterIndex shouldBeExactly 1
   }
 
+  @Test
+  fun elapsedPositionStaysInCurrentChapter() {
+    val chapter = chapter(duration = 1000)
+    val book = book(
+      chapters = listOf(chapter),
+      time = 200,
+      currentChapter = chapter.id,
+    )
+
+    val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1F)
+
+    updated.content.currentChapter shouldBe chapter.id
+    updated.content.positionInChapter shouldBeExactly 300
+  }
+
+  @Test
+  fun elapsedPositionMovesIntoNextChapter() {
+    val firstChapter = chapter(duration = 1000)
+    val secondChapter = chapter(duration = 500)
+    val book = book(
+      chapters = listOf(firstChapter, secondChapter),
+      time = 900,
+      currentChapter = firstChapter.id,
+    )
+
+    val updated = book.withElapsedPosition(elapsedTime = 200, playbackSpeed = 1F)
+
+    updated.content.currentChapter shouldBe secondChapter.id
+    updated.content.positionInChapter shouldBeExactly 100
+  }
+
+  @Test
+  fun elapsedPositionUsesPlaybackSpeed() {
+    val firstChapter = chapter(duration = 1000)
+    val secondChapter = chapter(duration = 500)
+    val book = book(
+      chapters = listOf(firstChapter, secondChapter),
+      time = 900,
+      currentChapter = firstChapter.id,
+    )
+
+    val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1.5F)
+
+    updated.content.currentChapter shouldBe secondChapter.id
+    updated.content.positionInChapter shouldBeExactly 50
+  }
+
+  @Test
+  fun elapsedPositionUsesNextChapterAtBoundary() {
+    val firstChapter = chapter(duration = 1000)
+    val secondChapter = chapter(duration = 500)
+    val book = book(
+      chapters = listOf(firstChapter, secondChapter),
+      time = 900,
+      currentChapter = firstChapter.id,
+    )
+
+    val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1F)
+
+    updated.content.currentChapter shouldBe secondChapter.id
+    updated.content.positionInChapter shouldBeExactly 0
+  }
+
+  @Test
+  fun elapsedPositionClampsAtBookEnd() {
+    val firstChapter = chapter(duration = 1000)
+    val secondChapter = chapter(duration = 500)
+    val book = book(
+      chapters = listOf(firstChapter, secondChapter),
+      time = 900,
+      currentChapter = firstChapter.id,
+    )
+
+    val updated = book.withElapsedPosition(elapsedTime = 1000, playbackSpeed = 1F)
+
+    updated.content.currentChapter shouldBe secondChapter.id
+    updated.content.positionInChapter shouldBeExactly secondChapter.duration
+  }
+
   @Suppress("SameParameterValue")
   private fun bookPosition(
     chapters: List<Chapter>,

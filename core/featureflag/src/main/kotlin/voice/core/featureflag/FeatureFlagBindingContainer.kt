@@ -27,6 +27,13 @@ interface FeatureFlagBindingContainer {
   fun folderPickerInSettingsFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
     return factory.boolean(key = "folder_picker_in_settings")
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ExperimentalPlaybackPersistenceQualifier
+  fun experimentalPlaybackPersistenceQualifier(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean("experimental_playback_persistence")
+  }
 }
 
 @Qualifier
@@ -37,3 +44,6 @@ annotation class UserAgentFeatureFlagQualifier
 
 @Qualifier
 annotation class FolderPickerInSettingsFeatureFlagQualifier
+
+@Qualifier
+annotation class ExperimentalPlaybackPersistenceQualifier

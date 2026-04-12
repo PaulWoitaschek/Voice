@@ -261,8 +261,22 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
   override val values = sequenceOf(
     BookOverviewViewState(
       books = persistentMapOf(
-        BookOverviewCategory.CURRENT to buildList { repeat(10) { add(book()) } },
-        BookOverviewCategory.FINISHED to listOf(book(), book()),
+        BookOverviewCategory.CURRENT to buildMap {
+          repeat(10) {
+            put(
+              BookId(UUID.randomUUID().toString()),
+              mutableStateOf(book()),
+            )
+          }
+        },
+        BookOverviewCategory.FINISHED to buildMap {
+          repeat(2) {
+            put(
+              BookId(UUID.randomUUID().toString()),
+              mutableStateOf(book()),
+            )
+          }
+        },
       ),
       layoutMode = BookOverviewLayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,

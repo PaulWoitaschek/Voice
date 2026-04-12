@@ -1,41 +1,60 @@
 package voice.core.playback.playstate
 
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.data.repo.BookRepository
+import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
+import voice.core.featureflag.FeatureFlag
 import voice.core.logging.api.Logger
+import voice.core.playback.di.PlaybackScope
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @Inject
+@SingleIn(PlaybackScope::class)
 class PositionUpdater(
   private val bookRepo: BookRepository,
   private val scope: CoroutineScope,
   private val playStateManager: PlayStateManager,
+  @ExperimentalPlaybackPersistenceQualifier
+  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
 ) : Player.Listener {
 
-  private lateinit var player: Player
+  private var player: Player? = null
+  private var updateJob: Job? = null
 
   fun attachTo(player: Player) {
+    Logger.d("attachTo $player, $this")
+    this.player?.removeListener(this)
     this.player = player
     player.addListener(this)
 
-    scope.launch {
+    updateJob = scope.launch {
       playStateManager.flow
         .map { it == PlayStateManager.PlayState.Playing }
         .distinctUntilChanged()
         .collectLatest { playing ->
           if (playing) {
             while (true) {
-              updatePosition()
-              delay(400.milliseconds)
+              delay(
+                if (experimentalPlaybackPersistenceFeatureFlag.get()) {
+                  10.seconds
+                } else {
+                  400.milliseconds
+                },
+              )
+              flushPositionNow()
             }
           }
         }
@@ -47,13 +66,39 @@ class PositionUpdater(
     newPosition: Player.PositionInfo,
     reason: Int,
   ) {
-    Logger.v("onPositionDiscontinuity: ${newPosition.positionMs}")
-    scope.launch {
-      updatePosition()
+    flushPosition()
+  }
+
+  override fun onPlayWhenReadyChanged(
+    playWhenReady: Boolean,
+    reason: Int,
+  ) {
+    if (!playWhenReady) {
+      flushPosition()
     }
   }
 
-  private suspend fun updatePosition() {
+  override fun onPlaybackStateChanged(playbackState: Int) {
+    if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
+      flushPosition()
+    }
+  }
+
+  override fun onMediaItemTransition(
+    mediaItem: MediaItem?,
+    reason: Int,
+  ) {
+    flushPosition()
+  }
+
+  private fun flushPosition() {
+    scope.launch {
+      flushPositionNow()
+    }
+  }
+
+  suspend fun flushPositionNow() {
+    val player = player ?: return
     val mediaItem = player.currentMediaItem ?: return
     val currentPosition = player.currentPosition
       .takeIf { it >= 0 } ?: return
@@ -72,5 +117,10 @@ class PositionUpdater(
         content
       }
     }
+  }
+
+  fun release() {
+    player?.removeListener(this)
+    updateJob?.cancel()
   }
 }

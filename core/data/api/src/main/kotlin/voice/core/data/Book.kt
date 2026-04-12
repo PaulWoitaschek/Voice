@@ -26,4 +26,26 @@ public data class Book(
   public inline fun update(update: (BookContent) -> BookContent): Book {
     return copy(content = update(content))
   }
+
+  public fun withElapsedPosition(
+    elapsedTime: Long,
+    playbackSpeed: Float,
+  ): Book {
+    val targetPosition = (position + (elapsedTime * playbackSpeed).toLong())
+      .coerceIn(0L, duration)
+    var remainingPosition = targetPosition
+    for ((index, chapter) in chapters.withIndex()) {
+      if (remainingPosition < chapter.duration || index == chapters.lastIndex) {
+        return update {
+          it.copy(
+            currentChapter = chapter.id,
+            positionInChapter = remainingPosition.coerceAtMost(chapter.duration),
+          )
+        }
+      }
+      remainingPosition -= chapter.duration
+    }
+
+    return this
+  }
 }
