@@ -34,7 +34,7 @@ class DeveloperSettingsViewModel(
       featureFlags = featureFlags
         .sortedBy { it.key }
         .map { featureFlag ->
-          DeveloperSettingsViewState.FeatureFlag(
+          DeveloperSettingsViewState.FeatureFlagViewState(
             key = featureFlag.key,
             value = featureFlag.get().toString(),
           )

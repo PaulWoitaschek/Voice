@@ -2,9 +2,9 @@ package voice.features.settings.developer
 
 data class DeveloperSettingsViewState(
   val fcmToken: String?,
-  val featureFlags: List<FeatureFlag>,
+  val featureFlags: List<FeatureFlagViewState>,
 ) {
-  data class FeatureFlag(
+  data class FeatureFlagViewState(
     val key: String,
     val value: String,
   )
