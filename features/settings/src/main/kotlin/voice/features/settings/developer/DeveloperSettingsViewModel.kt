@@ -8,6 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.featureflag.FeatureFlag
 import voice.core.remoteconfig.api.FmcTokenProvider
 import voice.core.remoteconfig.api.RemoteConfig
 import voice.navigation.Navigator
@@ -18,6 +19,7 @@ class DeveloperSettingsViewModel(
   private val fmcTokenProvider: FmcTokenProvider,
   private val remoteConfig: RemoteConfig,
   dispatcherProvider: DispatcherProvider,
+  private val featureFlags: Set<FeatureFlag<*>>,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -27,7 +29,17 @@ class DeveloperSettingsViewModel(
     val fcmToken: String? by produceState(null) {
       value = fmcTokenProvider.token()
     }
-    return DeveloperSettingsViewState(fcmToken = fcmToken)
+    return DeveloperSettingsViewState(
+      fcmToken = fcmToken,
+      featureFlags = featureFlags
+        .sortedBy { it.key }
+        .map { featureFlag ->
+          DeveloperSettingsViewState.FeatureFlagViewState(
+            key = featureFlag.key,
+            value = featureFlag.get().toString(),
+          )
+        },
+    )
   }
 
   private var refreshJob: Job? = null

@@ -2,6 +2,7 @@ package voice.core.featureflag
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.ElementsIntoSet
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
@@ -26,6 +27,18 @@ interface FeatureFlagBindingContainer {
   @FolderPickerInSettingsFeatureFlagQualifier
   fun folderPickerInSettingsFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
     return factory.boolean(key = "folder_picker_in_settings")
+  }
+
+  @Provides
+  @ElementsIntoSet
+  fun allFeatureFlags(
+    @ReviewEnabledFeatureFlagQualifier reviewEnabledFeatureFlag: FeatureFlag<Boolean>,
+    @FolderPickerInSettingsFeatureFlagQualifier folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
+  ): Set<FeatureFlag<*>> {
+    return setOf(
+      reviewEnabledFeatureFlag,
+      folderPickerInSettingsFeatureFlag,
+    )
   }
 }
 
