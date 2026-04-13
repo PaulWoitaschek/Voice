@@ -8,11 +8,13 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.featureflag.FeatureFlagOverride
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -165,5 +167,16 @@ public interface StoreModule {
   @DeveloperMenuUnlockedStore
   private fun developerMenuUnlocked(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("developerMenuUnlocked", defaultValue = false)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @FeatureFlagOverridesStore
+  private fun featureFlagOverrides(factory: VoiceDataStoreFactory): DataStore<Map<String, FeatureFlagOverride>> {
+    return factory.create(
+      serializer = MapSerializer(String.serializer(), FeatureFlagOverride.serializer()),
+      defaultValue = emptyMap(),
+      fileName = "featureFlagOverrides",
+    )
   }
 }

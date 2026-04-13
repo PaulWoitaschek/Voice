@@ -1,21 +1,30 @@
 package voice.features.settings.developer
 
 import android.content.ClipData
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipEntry
@@ -103,18 +112,160 @@ private fun DeveloperSettings(
         }
       }
 
-      items(viewState.featureFlags, key = { it.key }) {
-        ListItem(
-          headlineContent = {
-            Text(it.key)
-          },
-          trailingContent = {
-            Text(it.value)
-          },
-        )
+      items(viewState.featureFlags, key = { it.key }) { viewState ->
+        when (viewState) {
+          is DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag -> {
+            BooleanFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setBooleanOverride(viewState.key, it) },
+            )
+          }
+          is DeveloperSettingsViewState.FeatureFlagViewState.StringFlag -> {
+            StringFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setStringOverride(viewState.key, it) },
+            )
+          }
+        }
       }
     }
   }
+}
+
+@Composable
+private fun BooleanFeatureFlagRow(
+  viewState: DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag,
+  clearOverride: () -> Unit,
+  setOverride: (Boolean) -> Unit,
+) {
+  ListItem(
+    modifier = Modifier.clickable {
+      setOverride(!viewState.value)
+    },
+    headlineContent = {
+      Text(viewState.key)
+    },
+    supportingContent = {
+      Text(if (viewState.isOverridden) "Override active" else "Using remote config")
+    },
+    trailingContent = {
+      Row {
+        if (viewState.isOverridden) {
+          TextButton(
+            onClick = {
+              clearOverride()
+            },
+          ) {
+            Text("Reset")
+          }
+        }
+        Switch(
+          checked = viewState.value,
+          onCheckedChange = {
+            setOverride(it)
+          },
+        )
+      }
+    },
+  )
+}
+
+@Composable
+private fun StringFeatureFlagRow(
+  viewState: DeveloperSettingsViewState.FeatureFlagViewState.StringFlag,
+  clearOverride: () -> Unit,
+  setOverride: (String) -> Unit,
+) {
+  var showDialog by remember { mutableStateOf(false) }
+  ListItem(
+    modifier = Modifier.clickable {
+      showDialog = true
+    },
+    headlineContent = {
+      Text(viewState.key)
+    },
+    supportingContent = {
+      Text(viewState.value)
+    },
+    trailingContent = {
+      Row {
+        if (viewState.isOverridden) {
+          TextButton(
+            onClick = {
+              clearOverride()
+            },
+          ) {
+            Text("Reset")
+          }
+        }
+        TextButton(
+          onClick = {
+            showDialog = true
+          },
+        ) {
+          Text("Edit")
+        }
+      }
+    },
+  )
+  if (showDialog) {
+    EditStringFeatureFlagDialog(
+      key = viewState.key,
+      initialValue = viewState.value,
+      onDismiss = {
+        showDialog = false
+      },
+      onConfirm = { value ->
+        setOverride(value)
+        showDialog = false
+      },
+    )
+  }
+}
+
+@Composable
+private fun EditStringFeatureFlagDialog(
+  key: String,
+  initialValue: String,
+  onDismiss: () -> Unit,
+  onConfirm: (String) -> Unit,
+) {
+  var value by remember(initialValue) { mutableStateOf(initialValue) }
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    title = {
+      Text(key)
+    },
+    text = {
+      OutlinedTextField(
+        value = value,
+        onValueChange = {
+          value = it
+        },
+        singleLine = true,
+      )
+    },
+    confirmButton = {
+      TextButton(
+        onClick = {
+          onConfirm(value)
+        },
+      ) {
+        Text("Save")
+      }
+    },
+    dismissButton = {
+      TextButton(onClick = onDismiss) {
+        Text("Cancel")
+      }
+    },
+  )
 }
 
 @ContributesTo(AppScope::class)

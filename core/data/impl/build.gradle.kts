@@ -32,6 +32,7 @@ dependencies {
   api(projects.core.data.api)
   api(projects.core.common)
   api(projects.core.documentfile)
+  implementation(projects.core.featureflag)
 
   implementation(libs.datastore)
   implementation(libs.androidxCore)
