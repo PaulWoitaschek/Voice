@@ -27,9 +27,18 @@ class MemoryFeatureFlag<T : Any>(
           isOverridden = false,
         )
       }
-    }
+  override val key: String = "key",
+) : FeatureFlag<T> {
 
-  override val key: String get() = "key"
+  @Suppress("UNCHECKED_CAST")
+  constructor(
+    value: T,
+    key: String = "key",
+  ) : this(
+    value = value,
+    type = value::class as KClass<T>,
+    key = key,
+  )
 
   override fun get(): T = state.value.value
 
