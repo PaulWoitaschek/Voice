@@ -59,7 +59,9 @@ android {
       val propertiesFile = layout.settingsDirectory.file("signing/$name/signing.properties").asFile
         .takeIf { it.canRead() }
         ?: layout.settingsDirectory.file("signing/ci/signing.properties").asFile
-      properties.load(propertiesFile.inputStream())
+      propertiesFile.inputStream().use { input ->
+        properties.load(input)
+      }
       storeFile = File(propertiesFile.parentFile, "signing.keystore")
       storePassword = properties["STORE_PASSWORD"] as String
       keyAlias = properties["KEY_ALIAS"] as String
