@@ -1,31 +1,51 @@
 package voice.core.featureflag
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.reflect.KClass
 
 class MemoryFeatureFlag<T : Any>(
-  var value: T,
+  initialValue: T,
   override val type: KClass<T>,
 ) : FeatureFlag<T> {
 
+  private var defaultValue: T = initialValue
+  private val state = MutableStateFlow(
+    FeatureFlagValue(
+      value = initialValue,
+      isOverridden = false,
+    ),
+  )
+
+  var value: T
+    get() = state.value.value
+    set(value) {
+      defaultValue = value
+      if (!state.value.isOverridden) {
+        state.value = FeatureFlagValue(
+          value = value,
+          isOverridden = false,
+        )
+      }
+    }
+
   override val key: String get() = "key"
 
-  override fun get(): T = value
+  override fun get(): T = state.value.value
 
   override fun overwrite(value: T) {
-    error("Unsupported")
+    state.value = FeatureFlagValue(
+      value = value,
+      isOverridden = true,
+    )
   }
 
   override fun clearOverwrite() {
-    error("Unsupported")
+    state.value = FeatureFlagValue(
+      value = defaultValue,
+      isOverridden = false,
+    )
   }
 
-  override val flow: Flow<FeatureFlagValue<T>>
-    get() = flowOf(
-      FeatureFlagValue(
-        value = value,
-        isOverridden = false,
-      ),
-    )
+  override val flow: Flow<FeatureFlagValue<T>> = state
 }
