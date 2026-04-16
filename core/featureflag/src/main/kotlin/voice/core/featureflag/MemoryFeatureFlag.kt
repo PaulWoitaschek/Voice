@@ -4,6 +4,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.reflect.KClass
 
+inline fun <reified T : Any> MemoryFeatureFlag(initialValue: T): MemoryFeatureFlag<T> {
+  return MemoryFeatureFlag(initialValue, T::class)
+}
+
 class MemoryFeatureFlag<T : Any>(
   initialValue: T,
   override val type: KClass<T>,
@@ -27,18 +31,9 @@ class MemoryFeatureFlag<T : Any>(
           isOverridden = false,
         )
       }
-  override val key: String = "key",
-) : FeatureFlag<T> {
-
-  @Suppress("UNCHECKED_CAST")
-  constructor(
-    value: T,
-    key: String = "key",
-  ) : this(
-    value = value,
-    type = value::class as KClass<T>,
-    key = key,
-  )
+    }
+  override val key: String
+    get() = error("Unsupported")
 
   override fun get(): T = state.value.value
 
