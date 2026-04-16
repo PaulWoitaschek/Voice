@@ -47,8 +47,8 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionName = project.findProperty("voice.versionName")?.toString() ?: "1.0.0"
-    versionCode = project.findProperty("voice.versionCode")?.toString()?.toInt() ?: 1
+    versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
+    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: 1
 
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
@@ -56,10 +56,12 @@ android {
   fun createSigningConfig(name: String): ApkSigningConfig {
     return signingConfigs.create(name) {
       val properties = Properties()
-      val propertiesFile = rootProject.file("signing/$name/signing.properties")
+      val propertiesFile = layout.settingsDirectory.file("signing/$name/signing.properties").asFile
         .takeIf { it.canRead() }
-        ?: rootProject.file("signing/ci/signing.properties")
-      properties.load(propertiesFile.inputStream())
+        ?: layout.settingsDirectory.file("signing/ci/signing.properties").asFile
+      propertiesFile.inputStream().use { input ->
+        properties.load(input)
+      }
       storeFile = File(propertiesFile.parentFile, "signing.keystore")
       storePassword = properties["STORE_PASSWORD"] as String
       keyAlias = properties["KEY_ALIAS"] as String
@@ -123,7 +125,7 @@ android {
     ignoreTestSources = true
     checkReleaseBuilds = false
     warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
-    lintConfig = rootProject.file("lint.xml")
+    lintConfig = file("lint.xml")
   }
 
   packaging {
