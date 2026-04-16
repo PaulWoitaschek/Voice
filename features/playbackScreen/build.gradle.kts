@@ -14,7 +14,6 @@ dependencies {
   implementation(projects.core.sleeptimer.api)
   implementation(projects.features.sleepTimer)
 
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.androidxCore)
