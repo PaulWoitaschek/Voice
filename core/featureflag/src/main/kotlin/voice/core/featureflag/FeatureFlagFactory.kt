@@ -111,9 +111,10 @@ class FeatureFlagFactory(
         get() = overridesStore.data
           .map { overrides ->
             val override = overrides[key]
+            val overrideValue = override?.let(getOverrideValue)
             FeatureFlagValue(
-              value = override?.let(getOverrideValue) ?: readRemoteConfig(),
-              isOverridden = override != null,
+              value = overrideValue ?: readRemoteConfig(),
+              isOverridden = overrideValue != null,
             )
           }
           .distinctUntilChanged()
