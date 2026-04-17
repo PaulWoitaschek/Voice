@@ -16,7 +16,6 @@ dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.ui)
 
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
 }
