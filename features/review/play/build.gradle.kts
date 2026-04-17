@@ -14,7 +14,6 @@ dependencies {
   api(libs.review)
 
   implementation(libs.lottie)
-  implementation(libs.datastore)
 
   implementation(projects.core.common)
   implementation(projects.core.data.api)

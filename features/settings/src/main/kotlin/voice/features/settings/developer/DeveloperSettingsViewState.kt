@@ -4,8 +4,20 @@ data class DeveloperSettingsViewState(
   val fcmToken: String?,
   val featureFlags: List<FeatureFlagViewState>,
 ) {
-  data class FeatureFlagViewState(
-    val key: String,
-    val value: String,
-  )
+  sealed interface FeatureFlagViewState {
+    val key: String
+    val isOverridden: Boolean
+
+    data class BooleanFlag(
+      override val key: String,
+      val value: Boolean,
+      override val isOverridden: Boolean,
+    ) : FeatureFlagViewState
+
+    data class StringFlag(
+      override val key: String,
+      val value: String,
+      override val isOverridden: Boolean,
+    ) : FeatureFlagViewState
+  }
 }

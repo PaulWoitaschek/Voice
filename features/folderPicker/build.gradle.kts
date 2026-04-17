@@ -20,7 +20,6 @@ dependencies {
   implementation(projects.navigation)
   implementation(projects.core.featureflag)
 
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
