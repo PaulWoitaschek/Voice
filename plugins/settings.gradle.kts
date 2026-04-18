@@ -5,7 +5,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "plugins"
 
 plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
+  if(System.getenv("CI") != "true") {
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
+  }
 }
 
 dependencyResolutionManagement {
