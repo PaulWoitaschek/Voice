@@ -22,11 +22,7 @@ dependencyResolutionManagement {
 
 plugins {
   id("com.gradle.develocity") version "4.4.0"
-  // on CI we want it pre-installed. On copilot we don't want to install azul as it has
-  // problems with cert store
-  if (System.getenv("CI") != "true" || System.getenv("COPILOT_AGENT_FIREWALL_ENABLE_RULESET_ALLOW_LIST") != null) {
-    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
-  }
+  id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
   id("org.jetbrains.kotlin.android") version "2.3.20" apply false
   id("org.jetbrains.kotlin.jvm") version "2.3.20" apply false
   id("com.android.application") version "9.1.1" apply false
