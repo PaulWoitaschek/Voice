@@ -30,7 +30,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
@@ -260,7 +259,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
 
   override val values = sequenceOf(
     BookOverviewViewState(
-      books = persistentMapOf(
+      books = mapOf(
         BookOverviewCategory.CURRENT to buildMap {
           repeat(10) {
             put(

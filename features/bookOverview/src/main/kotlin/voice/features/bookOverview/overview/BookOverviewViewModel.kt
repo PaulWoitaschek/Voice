@@ -18,7 +18,6 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.common.comparator.sortedNaturally
@@ -124,8 +123,7 @@ class BookOverviewViewModel(
               }
             }
         }
-        .toSortedMap()
-        .toImmutableMap(),
+        .toSortedMap(),
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
       } else {
