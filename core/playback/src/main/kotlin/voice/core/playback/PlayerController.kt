@@ -3,6 +3,7 @@ package voice.core.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -155,6 +156,20 @@ class PlayerController(
     it.volume = volume
   }
 
+  suspend fun currentBookPosition(bookId: BookId? = null): PlaybackPosition? {
+    val controller = awaitConnect() ?: return null
+    val mediaId = controller.currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.Chapter ?: return null
+    if (bookId != null && mediaId.bookId != bookId) {
+      return null
+    }
+    val positionMs = controller.currentPosition.takeUnless { it == C.TIME_UNSET || it < 0 } ?: return null
+    return PlaybackPosition(
+      bookId = mediaId.bookId,
+      chapterId = mediaId.chapterId,
+      positionMs = positionMs,
+    )
+  }
+
   private inline fun executeAfterPrepare(crossinline action: suspend (MediaController) -> Unit) {
     scope.launch {
       val controller = awaitConnect() ?: return@launch
@@ -175,3 +190,9 @@ class PlayerController(
     }
   }
 }
+
+data class PlaybackPosition(
+  val bookId: BookId,
+  val chapterId: ChapterId,
+  val positionMs: Long,
+)

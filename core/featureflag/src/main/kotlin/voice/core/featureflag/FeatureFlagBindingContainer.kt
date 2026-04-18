@@ -1,8 +1,9 @@
 package voice.core.featureflag
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.ElementsIntoSet
+import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
@@ -14,6 +15,10 @@ interface FeatureFlagBindingContainer {
   @SingleIn(AppScope::class)
   @ReviewEnabledFeatureFlagQualifier
   fun reviewEnabledFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> = factory.boolean("review_enabled", defaultValue = false)
+
+  @Binds
+  @IntoSet
+  fun bindReviewEnabledFeatureFlag(@ReviewEnabledFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 
   @Provides
   @SingleIn(AppScope::class)
@@ -29,17 +34,20 @@ interface FeatureFlagBindingContainer {
     return factory.boolean(key = "folder_picker_in_settings")
   }
 
+  @Binds
+  @IntoSet
+  fun bindFolderPickerInSettingsFeatureFlag(@FolderPickerInSettingsFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
+
   @Provides
-  @ElementsIntoSet
-  fun allFeatureFlags(
-    @ReviewEnabledFeatureFlagQualifier reviewEnabledFeatureFlag: FeatureFlag<Boolean>,
-    @FolderPickerInSettingsFeatureFlagQualifier folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
-  ): Set<FeatureFlag<*>> {
-    return setOf(
-      reviewEnabledFeatureFlag,
-      folderPickerInSettingsFeatureFlag,
-    )
+  @SingleIn(AppScope::class)
+  @ExperimentalPlaybackPersistenceQualifier
+  fun experimentalPlaybackPersistenceQualifier(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean("experimental_playback_persistence")
   }
+
+  @Binds
+  @IntoSet
+  fun bindExperimentalPlaybackPersistenceFeatureFlag(@ExperimentalPlaybackPersistenceQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 }
 
 @Qualifier
@@ -50,3 +58,6 @@ annotation class UserAgentFeatureFlagQualifier
 
 @Qualifier
 annotation class FolderPickerInSettingsFeatureFlagQualifier
+
+@Qualifier
+annotation class ExperimentalPlaybackPersistenceQualifier
