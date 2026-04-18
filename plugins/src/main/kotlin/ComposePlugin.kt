@@ -33,6 +33,7 @@ class ComposePlugin : Plugin<Project> {
       if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {
         reportsDestination.set(target.layout.buildDirectory.dir("compose_compiler"))
       }
+      stabilityConfigurationFiles.add(target.layout.settingsDirectory.file("compose_stability.conf"))
     }
     extension.buildFeatures.compose = true
     target.tasks.withType<KotlinCompile> {
