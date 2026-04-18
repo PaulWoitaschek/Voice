@@ -29,10 +29,9 @@ class ComposePlugin : Plugin<Project> {
     target.dependencies.add("implementation", libs.findBundle("compose").get())
     target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {
-      target.extensions.configure<ComposeCompilerGradlePluginExtension> {
-        reportsDestination.set(target.layout.buildDirectory.dir("compose_compiler/reports"))
-        metricsDestination.set(target.layout.buildDirectory.dir("compose_compiler/metrics"))
+    target.extensions.configure<ComposeCompilerGradlePluginExtension> {
+      if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {
+        reportsDestination.set(target.layout.buildDirectory.dir("compose_compiler"))
       }
     }
     extension.buildFeatures.compose = true
