@@ -48,6 +48,17 @@ interface FeatureFlagBindingContainer {
   @Binds
   @IntoSet
   fun bindExperimentalPlaybackPersistenceFeatureFlag(@ExperimentalPlaybackPersistenceQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @Media3AudioOffloadFeatureFlagQualifier
+  fun media3AudioOffloadFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean("media3_audio_offload")
+  }
+
+  @Binds
+  @IntoSet
+  fun bindMedia3AudioOffloadFeatureFlag(@Media3AudioOffloadFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 }
 
 @Qualifier
@@ -61,3 +72,6 @@ annotation class FolderPickerInSettingsFeatureFlagQualifier
 
 @Qualifier
 annotation class ExperimentalPlaybackPersistenceQualifier
+
+@Qualifier
+annotation class Media3AudioOffloadFeatureFlagQualifier

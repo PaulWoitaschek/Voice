@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
@@ -17,6 +18,8 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
@@ -51,6 +54,7 @@ interface PlaybackModule {
     positionUpdater: PositionUpdater,
     volumeGain: VolumeGain,
     durationInconsistenciesUpdater: DurationInconsistenciesUpdater,
+    @Media3AudioOffloadFeatureFlagQualifier media3AudioOffloadFeatureFlag: FeatureFlag<Boolean>,
   ): Player {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
@@ -63,6 +67,10 @@ interface PlaybackModule {
       .setWakeMode(C.WAKE_MODE_LOCAL)
       .build()
       .also { player ->
+        player.trackSelectionParameters = player.trackSelectionParameters
+          .buildUpon()
+          .setAudioOffloadPreferences(audioOffloadPreferences(media3AudioOffloadFeatureFlag.get()))
+          .build()
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
         durationInconsistenciesUpdater.attachTo(player)
@@ -103,4 +111,16 @@ interface PlaybackModule {
       )
       .build()
   }
+}
+
+internal fun audioOffloadPreferences(enabled: Boolean): TrackSelectionParameters.AudioOffloadPreferences {
+  return TrackSelectionParameters.AudioOffloadPreferences.Builder()
+    .setAudioOffloadMode(
+      if (enabled) {
+        TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED
+      } else {
+        TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_DISABLED
+      },
+    )
+    .build()
 }
