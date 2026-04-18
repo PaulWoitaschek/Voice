@@ -2,6 +2,7 @@ package voice.features.settings.developer
 
 import android.content.ClipData
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
@@ -99,6 +100,29 @@ private fun DeveloperSettings(
               )
             },
           )
+        }
+      }
+
+      items(viewState.featureFlags, key = { it.key }) { viewState ->
+        when (viewState) {
+          is DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag -> {
+            BooleanFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setBooleanOverride(viewState.key, it) },
+            )
+          }
+          is DeveloperSettingsViewState.FeatureFlagViewState.StringFlag -> {
+            StringFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setStringOverride(viewState.key, it) },
+            )
+          }
         }
       }
     }

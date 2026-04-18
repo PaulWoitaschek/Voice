@@ -19,7 +19,6 @@ dependencies {
   implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.coroutines.guava)
   implementation(libs.serialization.json)
