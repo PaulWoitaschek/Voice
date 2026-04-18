@@ -67,10 +67,18 @@ interface PlaybackModule {
       .setWakeMode(C.WAKE_MODE_LOCAL)
       .build()
       .also { player ->
-        player.trackSelectionParameters = player.trackSelectionParameters
-          .buildUpon()
-          .setAudioOffloadPreferences(audioOffloadPreferences(media3AudioOffloadFeatureFlag.get()))
-          .build()
+        if (media3AudioOffloadFeatureFlag.get()) {
+          player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setAudioOffloadPreferences(
+              TrackSelectionParameters.AudioOffloadPreferences.Builder()
+                .setAudioOffloadMode(TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
+                .setIsGaplessSupportRequired(true)
+                .setIsSpeedChangeSupportRequired(true)
+                .build(),
+            )
+            .build()
+        }
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
         durationInconsistenciesUpdater.attachTo(player)
@@ -111,16 +119,4 @@ interface PlaybackModule {
       )
       .build()
   }
-}
-
-internal fun audioOffloadPreferences(enabled: Boolean): TrackSelectionParameters.AudioOffloadPreferences {
-  return TrackSelectionParameters.AudioOffloadPreferences.Builder()
-    .setAudioOffloadMode(
-      if (enabled) {
-        TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED
-      } else {
-        TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_DISABLED
-      },
-    )
-    .build()
 }
