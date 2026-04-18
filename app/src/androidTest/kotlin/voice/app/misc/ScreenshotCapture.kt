@@ -13,7 +13,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.services.storage.TestStorage
 import androidx.test.uiautomator.UiDevice
-import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentMap
 import org.junit.Rule
 import org.junit.Test
 import voice.core.data.BookId
@@ -177,10 +177,12 @@ class ScreenshotCapture {
       )
     }
     return BookOverviewViewState(
-      books = persistentMapOf(
+      books = mapOf(
         BookOverviewCategory.CURRENT to books.take(3),
         BookOverviewCategory.NOT_STARTED to books.drop(3).map { it.copy(progress = 0F) },
-      ),
+      ).mapValues {
+        it.value.associate { it.id to mutableStateOf(it) }
+      }.toPersistentMap(),
       layoutMode = BookOverviewLayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
