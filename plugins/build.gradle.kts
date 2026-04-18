@@ -5,6 +5,7 @@ plugins {
 dependencies {
   implementation(libs.androidPluginForGradle)
   implementation(libs.kotlin.pluginForGradle)
+  implementation(libs.compose.compiler.gradle.plugin)
   implementation(libs.ktlint.gradlePlugin)
 }
 
