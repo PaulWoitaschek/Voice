@@ -16,16 +16,6 @@ pluginManagement {
 dependencyResolutionManagement {
   repositories {
     google()
-
-    exclusiveContent {
-      forRepository {
-        maven(url = "https://jitpack.io")
-      }
-      filter {
-        includeGroupByRegex("com.github.PaulWoitaschek.*")
-      }
-    }
-
     mavenCentral()
   }
 }
