@@ -5,7 +5,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "plugins"
 
 plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
+  if(System.getenv("CI") != "true" || System.getenv("COPILOT_AGENT_FIREWALL_ENABLE_RULESET_ALLOW_LIST")!= null) {
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
+  }
 }
 
 dependencyResolutionManagement {
