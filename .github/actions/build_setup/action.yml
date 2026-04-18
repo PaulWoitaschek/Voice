@@ -2,6 +2,9 @@ name: "Pre Build"
 runs:
   using: "composite"
   steps:
+    - name: Disable JDK Auto Download
+      shell: bash
+      run: echo "org.gradle.java.installations.auto-download=false" >> gradle.properties
     - id: jvm-version
       name: Extract Java Version
       shell: bash
