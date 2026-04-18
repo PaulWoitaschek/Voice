@@ -19,7 +19,7 @@ import voice.core.playback.di.PlaybackScope
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 @Inject
 @SingleIn(PlaybackScope::class)
@@ -48,7 +48,7 @@ class PositionUpdater(
             while (true) {
               delay(
                 if (experimentalPlaybackPersistenceFeatureFlag.get()) {
-                  10.seconds
+                  5.minutes
                 } else {
                   400.milliseconds
                 },
