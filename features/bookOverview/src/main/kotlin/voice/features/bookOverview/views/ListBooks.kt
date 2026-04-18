@@ -33,7 +33,6 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import kotlinx.collections.immutable.ImmutableMap
 import voice.core.data.BookId
 import voice.core.ui.ImmutableFile
 import voice.features.bookOverview.overview.BookOverviewCategory
@@ -42,7 +41,7 @@ import voice.core.ui.R as UiR
 
 @Composable
 internal fun ListBooks(
-  books: ImmutableMap<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
+  books: Map<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   showPermissionBugCard: Boolean,

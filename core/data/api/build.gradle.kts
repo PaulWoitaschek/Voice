@@ -1,5 +1,6 @@
 plugins {
   id("voice.library")
+  id("voice.compose")
   alias(libs.plugins.kotlin.serialization)
 }
 
@@ -14,6 +15,9 @@ dependencies {
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
+
+  // https://issuetracker.google.com/issues/209688774
+  api(libs.compose.runtime)
 
   api(libs.room.runtime)
 

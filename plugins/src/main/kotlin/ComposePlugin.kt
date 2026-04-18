@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class ComposePlugin : Plugin<Project> {
@@ -28,6 +29,12 @@ class ComposePlugin : Plugin<Project> {
     target.dependencies.add("implementation", libs.findBundle("compose").get())
     target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
+    target.extensions.configure<ComposeCompilerGradlePluginExtension> {
+      if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {
+        reportsDestination.set(target.layout.buildDirectory.dir("compose_compiler"))
+      }
+      stabilityConfigurationFiles.add(target.layout.settingsDirectory.file("compose_stability.conf"))
+    }
     extension.buildFeatures.compose = true
     target.tasks.withType<KotlinCompile> {
       compilerOptions {

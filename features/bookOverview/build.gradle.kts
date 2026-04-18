@@ -16,7 +16,6 @@ dependencies {
   implementation(projects.core.featureflag)
 
   implementation(libs.lifecycle)
-  api(libs.immutable)
   implementation(libs.documentFile)
 
   testImplementation(libs.bundles.testing.jvm)

@@ -2,14 +2,12 @@ package voice.features.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
-import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
 import voice.core.data.BookId
 import voice.features.bookOverview.search.BookSearchViewState
 
 @Immutable
 data class BookOverviewViewState(
-  val books: ImmutableMap<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
+  val books: Map<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
   val layoutMode: BookOverviewLayoutMode,
   val playButtonState: PlayButtonState?,
   val showAddBookHint: Boolean,
@@ -23,7 +21,7 @@ data class BookOverviewViewState(
 
   companion object {
     val Loading = BookOverviewViewState(
-      books = persistentMapOf(),
+      books = mapOf(),
       layoutMode = BookOverviewLayoutMode.List,
       playButtonState = null,
       showAddBookHint = false,

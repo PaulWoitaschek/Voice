@@ -32,6 +32,7 @@ coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidxCore = "androidx.core:core-ktx:1.18.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 documentFile = "androidx.documentfile:documentfile:1.1.0"
 koTest-assert = "io.kotest:kotest-assertions-core:6.1.11"
@@ -39,7 +40,6 @@ datastore = "androidx.datastore:datastore-preferences:1.2.1"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.3.2"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
@@ -96,6 +96,7 @@ compose-animation-graphics = { module = "androidx.compose.animation:animation-gr
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 
