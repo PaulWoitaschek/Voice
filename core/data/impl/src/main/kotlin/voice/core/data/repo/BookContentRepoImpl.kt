@@ -68,7 +68,6 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
   }
 
   override suspend fun put(content: BookContent) {
-    voice.core.logging.api.Logger.d("put")
     fillCache()
     cache.update { contents ->
       val newContents = contents!!.toMutableList()

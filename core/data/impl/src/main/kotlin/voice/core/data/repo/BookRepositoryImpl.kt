@@ -5,7 +5,6 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.data.Book
@@ -54,9 +53,6 @@ public class BookRepositoryImpl(
   override fun flow(id: BookId): Flow<Book?> {
     return contentRepo.flow(id)
       .map { it?.book() }
-      .onEach {
-        Logger.d("contentRepo emitted for $it")
-      }
   }
 
   override suspend fun get(id: BookId): Book? {
