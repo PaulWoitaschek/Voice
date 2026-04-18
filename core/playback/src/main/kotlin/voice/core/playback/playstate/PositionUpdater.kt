@@ -35,7 +35,6 @@ class PositionUpdater(
   private var updateJob: Job? = null
 
   fun attachTo(player: Player) {
-    Logger.d("attachTo $player, $this")
     this.player?.removeListener(this)
     this.player = player
     player.addListener(this)
