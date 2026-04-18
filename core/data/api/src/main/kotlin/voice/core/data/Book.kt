@@ -31,19 +31,19 @@ public data class Book(
     elapsedTime: Long,
     playbackSpeed: Float,
   ): Book {
-    val targetPosition = (position + (elapsedTime * playbackSpeed).toLong())
-      .coerceIn(0L, duration)
-    var remainingPosition = targetPosition
-    for ((index, chapter) in chapters.withIndex()) {
-      if (remainingPosition < chapter.duration || index == chapters.lastIndex) {
+    val addedAudioTime = (elapsedTime * playbackSpeed).toLong()
+    var remainingPositionInChapter = content.positionInChapter + addedAudioTime
+    for (index in content.currentChapterIndex until chapters.size) {
+      val chapter = chapters[index]
+      if (remainingPositionInChapter < chapter.duration || index == chapters.lastIndex) {
         return update {
           it.copy(
             currentChapter = chapter.id,
-            positionInChapter = remainingPosition.coerceAtMost(chapter.duration),
+            positionInChapter = remainingPositionInChapter.coerceAtMost(chapter.duration),
           )
         }
       }
-      remainingPosition -= chapter.duration
+      remainingPositionInChapter -= chapter.duration
     }
 
     return this
