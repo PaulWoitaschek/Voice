@@ -42,10 +42,12 @@ class FeatureFlagFactory(
 
   fun boolean(
     key: String,
+    description: String,
     defaultValue: Boolean = false,
   ): FeatureFlag<Boolean> {
     return create(
       key = key,
+      description = description,
       readRemoteConfig = {
         remoteConfig.boolean(key = key, defaultValue = defaultValue)
       },
@@ -58,10 +60,12 @@ class FeatureFlagFactory(
 
   fun string(
     key: String,
+    description: String,
     defaultValue: String,
   ): FeatureFlag<String> {
     return create(
       key = key,
+      description = description,
       readRemoteConfig = {
         remoteConfig.string(key = key, defaultValue = defaultValue)
       },
@@ -74,6 +78,7 @@ class FeatureFlagFactory(
 
   private inline fun <reified T : Any> create(
     key: String,
+    description: String,
     noinline readRemoteConfig: () -> T,
     noinline createOverride: (T) -> FeatureFlagOverride,
     noinline getOverrideValue: (FeatureFlagOverride) -> T?,
@@ -81,6 +86,7 @@ class FeatureFlagFactory(
     return object : FeatureFlag<T> {
 
       override val key: String get() = key
+      override val description: String get() = description
 
       override fun get(): T {
         return overrides()[key]?.let(getOverrideValue) ?: readRemoteConfig()
