@@ -6,8 +6,3 @@ name = "pypi"
 [packages]
 mkdocs-material = "*"
 mkdocs-redirects = "*"
-
-[dev-packages]
-
-[requires]
-python_version = "3.*"
