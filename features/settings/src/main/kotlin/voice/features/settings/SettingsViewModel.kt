@@ -59,9 +59,9 @@ class SettingsViewModel(
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
+  private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   internal val viewEffects: SharedFlow<SettingsViewEffect> = _viewEffects.asSharedFlow()
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
-  private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   private var appVersionTapCount = 0
 
   @Composable
