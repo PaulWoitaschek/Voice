@@ -300,8 +300,7 @@ fun Settings() {
   val viewModel = retain<SettingsViewModel> { rootGraphAs<SettingsGraph>().settingsViewModel }
   val snackbarHostState = remember { SnackbarHostState() }
   val viewState = viewModel.viewState()
-  val developerMenuUnlocked = stringResource(StringsR.string.developer_menu_unlocked)
-  val currentDeveloperMenuUnlockedMessage = rememberUpdatedState(developerMenuUnlocked)
+  val currentDeveloperMenuUnlockedMessage = rememberUpdatedState("Developer menu unlocked")
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {

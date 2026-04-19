@@ -44,7 +44,7 @@ private fun DeveloperSettings(
       TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(stringResource(StringsR.string.developer_menu_title))
+          Text("Developer Menu")
         },
         navigationIcon = {
           IconButton(onClick = viewModel::close) {
