@@ -301,12 +301,12 @@ fun Settings() {
   val snackbarHostState = remember { SnackbarHostState() }
   val viewState = viewModel.viewState()
   val developerMenuUnlocked = stringResource(StringsR.string.developer_menu_unlocked)
-  val currentDeveloperMenuUnlocked = rememberUpdatedState(developerMenuUnlocked)
+  val currentDeveloperMenuUnlockedMessage = rememberUpdatedState(developerMenuUnlocked)
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         SettingsViewEffect.DeveloperMenuUnlocked -> {
-          snackbarHostState.showSnackbar(currentDeveloperMenuUnlocked.value)
+          snackbarHostState.showSnackbar(currentDeveloperMenuUnlockedMessage.value)
         }
       }
     }
