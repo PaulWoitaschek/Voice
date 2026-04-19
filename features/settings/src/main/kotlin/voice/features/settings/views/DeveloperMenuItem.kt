@@ -9,6 +9,8 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import voice.core.strings.R as StringsR
 
 @Composable
 internal fun DeveloperMenuItem(onClick: () -> Unit) {
@@ -26,7 +28,7 @@ internal fun DeveloperMenuItem(onClick: () -> Unit) {
     },
     headlineContent = {
       Text(
-        text = "Developer Menu",
+        text = stringResource(StringsR.string.developer_menu_title),
       )
     },
   )

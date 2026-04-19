@@ -9,6 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -55,7 +58,9 @@ class SettingsViewModel(
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
+  internal val viewEffects: Flow<SettingsViewEffect> get() = _viewEffects
   private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
+  private val _viewEffects = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   private var appVersionTapCount = 0
 
   @Composable
@@ -210,8 +215,12 @@ class SettingsViewModel(
 
   override fun onAppVersionClick() {
     mainScope.launch {
+      if (developerMenuUnlockedStore.data.first()) {
+        return@launch
+      }
       if (++appVersionTapCount >= 13) {
         developerMenuUnlockedStore.updateData { true }
+        _viewEffects.tryEmit(SettingsViewEffect.DeveloperMenuUnlocked)
       }
     }
   }
