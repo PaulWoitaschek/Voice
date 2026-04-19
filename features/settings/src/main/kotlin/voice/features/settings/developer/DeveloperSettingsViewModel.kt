@@ -50,11 +50,13 @@ class DeveloperSettingsViewModel(
           when (featureFlag.type) {
             Boolean::class -> DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
               key = featureFlag.key,
+              description = featureFlag.description,
               value = value.value as Boolean,
               isOverridden = value.isOverridden,
             )
             String::class -> DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
               key = featureFlag.key,
+              description = featureFlag.description,
               value = value.value as String,
               isOverridden = value.isOverridden,
             )
