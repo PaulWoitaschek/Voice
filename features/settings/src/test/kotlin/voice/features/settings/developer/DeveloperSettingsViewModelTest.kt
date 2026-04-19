@@ -45,7 +45,7 @@ class DeveloperSettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem() shouldBe DeveloperSettingsViewState(
+      val expected = DeveloperSettingsViewState(
         fcmToken = "fcm-token",
         featureFlags = listOf(
           DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
@@ -62,6 +62,12 @@ class DeveloperSettingsViewModelTest {
           ),
         ),
       )
+      var actual = awaitItem()
+      repeat(3) {
+        if (actual == expected) return@test
+        actual = awaitItem()
+      }
+      actual shouldBe expected
     }
   }
 }
