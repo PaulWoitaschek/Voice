@@ -25,6 +25,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -300,11 +301,12 @@ fun Settings() {
   val snackbarHostState = remember { SnackbarHostState() }
   val viewState = viewModel.viewState()
   val developerMenuUnlocked = stringResource(StringsR.string.developer_menu_unlocked)
-  LaunchedEffect(viewModel, developerMenuUnlocked) {
+  val currentDeveloperMenuUnlocked = rememberUpdatedState(developerMenuUnlocked)
+  LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         SettingsViewEffect.DeveloperMenuUnlocked -> {
-          snackbarHostState.showSnackbar(developerMenuUnlocked)
+          snackbarHostState.showSnackbar(currentDeveloperMenuUnlocked.value)
         }
       }
     }
