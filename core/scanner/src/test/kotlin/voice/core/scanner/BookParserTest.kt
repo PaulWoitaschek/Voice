@@ -28,7 +28,7 @@ class BookParserTest {
   )
 
   @Test
-  fun multiChapterBookUsesFolderNameWhenAlbumMissing() {
+  fun folderBookUsesFolderNameWhenAlbumMissing() {
     val bookFolder = testFolder.newFolder("My Audiobook")
     val chapters = listOf(
       chapter(File(bookFolder, "1.mp3").apply { createNewFile() }),
@@ -46,7 +46,22 @@ class BookParserTest {
   }
 
   @Test
-  fun singleChapterBookUsesTitleWhenAlbumMissing() {
+  fun folderBookWithSingleChapterStillUsesFolderName() {
+    val bookFolder = testFolder.newFolder("Harry Potter 3")
+    val chapters = listOf(chapter(File(bookFolder, "track01.mp3").apply { createNewFile() }))
+
+    val content = parser.parse(
+      chapters = chapters,
+      id = BookId(bookFolder.toUri()),
+      analyzed = metadata(album = null, title = "Track Title"),
+      file = FileBasedDocumentFile(bookFolder),
+    )
+
+    content.name shouldBe "Harry Potter 3"
+  }
+
+  @Test
+  fun singleFileBookUsesTitleWhenAlbumMissing() {
     val bookFile = testFolder.newFile("book.mp3")
     val chapters = listOf(chapter(bookFile))
 

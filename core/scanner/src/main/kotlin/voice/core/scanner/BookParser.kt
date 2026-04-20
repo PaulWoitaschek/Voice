@@ -46,7 +46,7 @@ internal class BookParser(
       author = analyzed?.artist,
       lastPlayedAt = Instant.EPOCH,
       name = analyzed?.album
-        ?: analyzed?.title?.takeIf { chapters.size == 1 }
+        ?: analyzed?.title?.takeIf { file.isFile }
         ?: file.bookName(),
       playbackSpeed = 1F,
       skipSilence = false,
