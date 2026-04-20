@@ -5,6 +5,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -74,6 +75,17 @@ class SettingsViewModelTest {
       }
 
       awaitItem().showDeveloperMenu shouldBe true
+    }
+  }
+
+  @Test
+  fun `developer menu unlock emits snackbar effect`() = scope.runTest {
+    viewModel.viewEffects.test {
+      repeat(13) {
+        viewModel.onAppVersionClick()
+      }
+
+      awaitItem().shouldBeInstanceOf<SettingsViewEffect.DeveloperMenuUnlocked>()
     }
   }
 

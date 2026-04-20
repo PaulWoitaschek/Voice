@@ -10,6 +10,7 @@ data class FeatureFlagValue<T : Any>(
 
 interface FeatureFlag<T : Any> {
   val key: String
+  val description: String
   fun get(): T
 
   val flow: Flow<FeatureFlagValue<T>>

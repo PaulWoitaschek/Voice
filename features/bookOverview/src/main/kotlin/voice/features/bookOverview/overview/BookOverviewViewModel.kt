@@ -5,20 +5,23 @@ import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.common.comparator.sortedNaturally
+import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.repo.BookContentRepo
@@ -26,6 +29,7 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.GridModeStore
+import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
 import voice.core.playback.PlayerController
@@ -34,6 +38,7 @@ import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.search.BookSearch
 import voice.core.ui.GridCount
+import voice.core.ui.rememberProgressingBook
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
@@ -58,6 +63,8 @@ class BookOverviewViewModel(
   private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
   @FolderPickerInSettingsFeatureFlagQualifier
   private val folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
+  @ExperimentalPlaybackPersistenceQualifier
+  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
 ) {
 
   private val scope = MainScope()
@@ -107,12 +114,16 @@ class BookOverviewViewModel(
         .mapValues { (category, books) ->
           books
             .sortedWith(category.comparator)
-            .map { book ->
-              book.toItemViewState()
+            .associate { book ->
+              val isPlaying = playState == PlayStateManager.PlayState.Playing && currentBookId == book.id
+              book.id to if (experimentalPlaybackPersistenceFeatureFlag.get() && isPlaying) {
+                rememberProgressingBookItemViewState(book)
+              } else {
+                rememberUpdatedState(book.toItemViewState())
+              }
             }
         }
-        .toSortedMap()
-        .toImmutableMap(),
+        .toSortedMap(),
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
       } else {
@@ -221,6 +232,16 @@ class BookOverviewViewModel(
             .setData("package:com.android.externalstorage".toUri()),
         ),
       )
+    }
+  }
+}
+
+@Composable
+private fun rememberProgressingBookItemViewState(book: Book): State<BookOverviewItemViewState> {
+  val progressingBookState = rememberProgressingBook(book)
+  return remember(progressingBookState) {
+    derivedStateOf {
+      progressingBookState.value.toItemViewState()
     }
   }
 }

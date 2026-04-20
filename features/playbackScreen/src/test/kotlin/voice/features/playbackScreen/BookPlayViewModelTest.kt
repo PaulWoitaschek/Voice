@@ -26,6 +26,8 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
@@ -63,14 +65,22 @@ class BookPlayViewModelTest {
   }
 
   private val player = mockk<PlayerController>()
+  private val currentBookStoreId = MemoryDataStore<BookId?>(null)
+  private val currentBookResolver = mockk<CurrentBookResolver> {
+    coEvery { book(book.id) } returns book
+  }
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
+      every { flow(book.id) } returns MutableStateFlow(book)
     },
-    player = player,
+    currentBookResolver = currentBookResolver,
+    player = player.apply {
+      every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
+    },
     sleepTimer = sleepTimer,
     playStateManager = mockk(),
-    currentBookStoreId = mockk(),
+    currentBookStoreId = currentBookStoreId,
     navigator = mockk(),
     bookmarkRepository = mockk {
       coEvery { addBookmarkAtBookPosition(book, any(), any()) } returns Bookmark(
@@ -88,6 +98,7 @@ class BookPlayViewModelTest {
     sleepTimerPreferenceStore = sleepTimerDataStore,
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+    experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
   )
 
   @Test

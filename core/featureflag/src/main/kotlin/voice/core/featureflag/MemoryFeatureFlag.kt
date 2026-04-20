@@ -4,13 +4,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.reflect.KClass
 
-inline fun <reified T : Any> MemoryFeatureFlag(initialValue: T): MemoryFeatureFlag<T> {
-  return MemoryFeatureFlag(initialValue, T::class)
+inline fun <reified T : Any> MemoryFeatureFlag(
+  initialValue: T,
+  key: String = "memory_feature_flag",
+  description: String = "",
+): MemoryFeatureFlag<T> {
+  return MemoryFeatureFlag(initialValue, T::class, key, description)
 }
 
 class MemoryFeatureFlag<T : Any>(
   initialValue: T,
   override val type: KClass<T>,
+  override val key: String = "memory_feature_flag",
+  override val description: String = "",
 ) : FeatureFlag<T> {
 
   private var defaultValue: T = initialValue
@@ -32,9 +38,6 @@ class MemoryFeatureFlag<T : Any>(
         )
       }
     }
-  override val key: String
-    get() = error("Unsupported")
-
   override fun get(): T = state.value.value
 
   override fun overwrite(value: T) {

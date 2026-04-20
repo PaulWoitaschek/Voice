@@ -1,6 +1,7 @@
 package voice.features.settings.developer
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -27,7 +28,10 @@ internal fun StringFeatureFlagRow(
       Text(viewState.key)
     },
     supportingContent = {
-      Text(viewState.value)
+      Column {
+        Text(viewState.description)
+        Text(viewState.value)
+      }
     },
     trailingContent = {
       Row {

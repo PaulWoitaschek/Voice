@@ -99,6 +99,8 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
+      applicationIdSuffix = ".debug"
+      versionNameSuffix = "-debug"
     }
     all {
       setProguardFiles(
