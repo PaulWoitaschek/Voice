@@ -1,26 +1,129 @@
 package voice.core.featureflag
 
+import androidx.datastore.core.DataStore
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import voice.core.data.store.FeatureFlagOverridesStore
 import voice.core.remoteconfig.api.RemoteConfig
+import kotlin.reflect.KClass
 
 @Inject
-class FeatureFlagFactory(private val remoteConfig: RemoteConfig) {
+@SingleIn(AppScope::class)
+class FeatureFlagFactory(
+  private val remoteConfig: RemoteConfig,
+  @FeatureFlagOverridesStore
+  private val overridesStore: DataStore<Map<String, FeatureFlagOverride>>,
+  private val scope: CoroutineScope,
+) {
+
+  private var overrides: Map<String, FeatureFlagOverride>? = null
+
+  init {
+    scope.launch {
+      overridesStore.data.collect {
+        overrides = it
+      }
+    }
+  }
+
+  private fun overrides(): Map<String, FeatureFlagOverride> {
+    return overrides ?: runBlocking {
+      overridesStore.data.first()
+    }
+  }
 
   fun boolean(
     key: String,
+    description: String,
     defaultValue: Boolean = false,
   ): FeatureFlag<Boolean> {
-    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig, key = key) {
-      it.boolean(key = key, defaultValue = defaultValue)
-    }
+    return create(
+      key = key,
+      description = description,
+      readRemoteConfig = {
+        remoteConfig.boolean(key = key, defaultValue = defaultValue)
+      },
+      createOverride = FeatureFlagOverride::BooleanValue,
+      getOverrideValue = { override ->
+        (override as? FeatureFlagOverride.BooleanValue)?.value
+      },
+    )
   }
 
   fun string(
     key: String,
+    description: String,
     defaultValue: String,
   ): FeatureFlag<String> {
-    return RemoteConfigFeatureFlag(remoteConfig = remoteConfig, key = key) {
-      it.string(key = key, defaultValue = defaultValue)
+    return create(
+      key = key,
+      description = description,
+      readRemoteConfig = {
+        remoteConfig.string(key = key, defaultValue = defaultValue)
+      },
+      createOverride = FeatureFlagOverride::StringValue,
+      getOverrideValue = { override ->
+        (override as? FeatureFlagOverride.StringValue)?.value
+      },
+    )
+  }
+
+  private inline fun <reified T : Any> create(
+    key: String,
+    description: String,
+    noinline readRemoteConfig: () -> T,
+    noinline createOverride: (T) -> FeatureFlagOverride,
+    noinline getOverrideValue: (FeatureFlagOverride) -> T?,
+  ): FeatureFlag<T> {
+    return object : FeatureFlag<T> {
+
+      override val key: String get() = key
+      override val description: String get() = description
+
+      override fun get(): T {
+        return overrides()[key]?.let(getOverrideValue) ?: readRemoteConfig()
+      }
+
+      override val type: KClass<T>
+        get() = T::class
+
+      override fun overwrite(value: T) {
+        scope.launch {
+          overridesStore.updateData {
+            it + (key to createOverride(value))
+          }
+        }
+      }
+
+      override fun clearOverwrite() {
+        scope.launch {
+          overridesStore.updateData { overrides ->
+            overrides.toMutableMap().also {
+              it.remove(key)
+            }
+          }
+        }
+      }
+
+      override val flow: Flow<FeatureFlagValue<T>>
+        get() = overridesStore.data
+          .map { overrides ->
+            val override = overrides[key]
+            val overrideValue = override?.let(getOverrideValue)
+            FeatureFlagValue(
+              value = overrideValue ?: readRemoteConfig(),
+              isOverridden = overrideValue != null,
+            )
+          }
+          .distinctUntilChanged()
     }
   }
 }

@@ -10,11 +10,11 @@ dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.playback)
   implementation(projects.core.data.api)
+  implementation(projects.core.featureflag)
   implementation(projects.core.ui)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.features.sleepTimer)
 
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.androidxCore)

@@ -103,15 +103,27 @@ private fun DeveloperSettings(
         }
       }
 
-      items(viewState.featureFlags) {
-        ListItem(
-          headlineContent = {
-            Text(it.key)
-          },
-          trailingContent = {
-            Text(it.value)
-          },
-        )
+      items(viewState.featureFlags, key = { it.key }) { viewState ->
+        when (viewState) {
+          is DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag -> {
+            BooleanFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setBooleanOverride(viewState.key, it) },
+            )
+          }
+          is DeveloperSettingsViewState.FeatureFlagViewState.StringFlag -> {
+            StringFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setStringOverride(viewState.key, it) },
+            )
+          }
+        }
       }
     }
   }

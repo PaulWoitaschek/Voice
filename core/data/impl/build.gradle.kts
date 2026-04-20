@@ -1,6 +1,5 @@
 plugins {
   id("voice.library")
-  id("kotlin-parcelize")
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.metro)
   alias(libs.plugins.ksp)
@@ -32,6 +31,7 @@ dependencies {
   api(projects.core.data.api)
   api(projects.core.common)
   api(projects.core.documentfile)
+  implementation(projects.core.featureflag)
 
   implementation(libs.datastore)
   implementation(libs.androidxCore)

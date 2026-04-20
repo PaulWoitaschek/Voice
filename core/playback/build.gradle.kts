@@ -13,12 +13,12 @@ android {
 dependencies {
   implementation(projects.core.common)
   implementation(projects.core.strings)
+  implementation(projects.core.featureflag)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.core.data.api)
   implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.datastore)
   implementation(libs.coil)
   implementation(libs.coroutines.guava)
   implementation(libs.serialization.json)

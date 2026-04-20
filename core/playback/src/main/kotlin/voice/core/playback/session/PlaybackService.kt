@@ -5,10 +5,12 @@ import androidx.media3.session.MediaSession
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.runBlocking
 import voice.core.common.rootGraphAs
 import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackGraph
 import voice.core.playback.player.VoicePlayer
+import voice.core.playback.playstate.PositionUpdater
 
 class PlaybackService : MediaLibraryService() {
 
@@ -20,6 +22,9 @@ class PlaybackService : MediaLibraryService() {
 
   @Inject
   lateinit var player: VoicePlayer
+
+  @Inject
+  lateinit var positionUpdater: PositionUpdater
 
   @Inject
   lateinit var voiceNotificationProvider: VoiceMediaNotificationProvider
@@ -34,6 +39,10 @@ class PlaybackService : MediaLibraryService() {
   }
 
   private fun release() {
+    runBlocking {
+      positionUpdater.flushPositionNow()
+    }
+    positionUpdater.release()
     player.release()
     session.release()
     scope.cancel()

@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.delay
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
@@ -72,7 +71,7 @@ private fun BookOverviewTopBarPreview() {
   VoiceTheme {
     BookOverviewTopBar(
       viewState = BookOverviewViewState(
-        books = persistentMapOf(),
+        books = emptyMap(),
         layoutMode = BookOverviewLayoutMode.List,
         playButtonState = BookOverviewViewState.PlayButtonState.Paused,
         showAddBookHint = true,

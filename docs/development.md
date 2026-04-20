@@ -39,6 +39,16 @@ To run the instrumentation tests, run the following command:
 ./gradlew voiceDeviceGithubDebugAndroidTest
 ```
 
+## Developer Menu
+
+The developer menu is hidden by default.
+
+To unlock it:
+
+1. Open `Settings`.
+2. Tap the app version entry 13 times.
+3. Open the newly visible developer menu from `Settings`.
+
 ## Ktlint
 
 Voice uses **Ktlint** to enforce consistent code formatting.

@@ -47,19 +47,27 @@ android {
 
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
-    versionName = project.findProperty("voice.versionName")?.toString() ?: "1.0.0"
-    versionCode = project.findProperty("voice.versionCode")?.toString()?.toInt() ?: 1
+    versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
+    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: 1
 
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
+  }
+
+  sourceSets {
+    named("androidTest") {
+      assets.directories += layout.projectDirectory.dir("../Images").asFile.path
+    }
   }
 
   fun createSigningConfig(name: String): ApkSigningConfig {
     return signingConfigs.create(name) {
       val properties = Properties()
-      val propertiesFile = rootProject.file("signing/$name/signing.properties")
+      val propertiesFile = layout.settingsDirectory.file("signing/$name/signing.properties").asFile
         .takeIf { it.canRead() }
-        ?: rootProject.file("signing/ci/signing.properties")
-      properties.load(propertiesFile.inputStream())
+        ?: layout.settingsDirectory.file("signing/ci/signing.properties").asFile
+      propertiesFile.inputStream().use { input ->
+        properties.load(input)
+      }
       storeFile = File(propertiesFile.parentFile, "signing.keystore")
       storePassword = properties["STORE_PASSWORD"] as String
       keyAlias = properties["KEY_ALIAS"] as String
@@ -91,6 +99,8 @@ android {
     getByName("debug") {
       isMinifyEnabled = false
       isShrinkResources = false
+      applicationIdSuffix = ".debug"
+      versionNameSuffix = "-debug"
     }
     all {
       setProguardFiles(
@@ -123,7 +133,7 @@ android {
     ignoreTestSources = true
     checkReleaseBuilds = false
     warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
-    lintConfig = rootProject.file("lint.xml")
+    lintConfig = file("lint.xml")
   }
 
   packaging {
@@ -215,6 +225,7 @@ dependencies {
 
   debugImplementation(libs.compose.ui.testManifest)
 
+  androidTestImplementation(platform(libs.compose.bom))
   androidTestImplementation(libs.androidX.test.espresso.core)
   androidTestImplementation(libs.androidX.test.runner)
   androidTestImplementation(libs.androidX.test.rules)
@@ -222,6 +233,8 @@ dependencies {
   androidTestImplementation(libs.media3.testUtils.core)
   androidTestImplementation(libs.koTest.assert)
   androidTestImplementation(libs.androidX.test.services)
+  androidTestImplementation(libs.androidX.test.uiautomator)
+  androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
 }
