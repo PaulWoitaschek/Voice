@@ -29,29 +29,38 @@ internal class BookParser(
     return contentRepo.getOrPut(id) {
       val uri = chapters.first().id.toUri()
       val analyzed = mediaAnalyzer.analyze(fileFactory.create(uri))
-      BookContent(
-        id = id,
-        isActive = true,
-        addedAt = Instant.now(),
-        author = analyzed?.artist,
-        lastPlayedAt = Instant.EPOCH,
-        name = analyzed?.album
-          ?: analyzed?.title
-          ?: file.bookName(),
-        playbackSpeed = 1F,
-        skipSilence = false,
-        chapters = chapters.map { it.id },
-        positionInChapter = 0L,
-        currentChapter = chapters.first().id,
-        cover = null,
-        gain = 0F,
-        genre = analyzed?.genre,
-        narrator = analyzed?.narrator,
-        series = analyzed?.series,
-        part = analyzed?.part,
-      ).also {
-        validateIntegrity(it, chapters)
-      }
+      parse(chapters, id, analyzed, file)
+    }
+  }
+
+  fun parse(
+    chapters: List<Chapter>,
+    id: BookId,
+    analyzed: Metadata?,
+    file: CachedDocumentFile,
+  ): BookContent {
+    return BookContent(
+      id = id,
+      isActive = true,
+      addedAt = Instant.now(),
+      author = analyzed?.artist,
+      lastPlayedAt = Instant.EPOCH,
+      name = analyzed?.album
+        ?: analyzed?.title?.takeIf { file.isFile }
+        ?: file.bookName(),
+      playbackSpeed = 1F,
+      skipSilence = false,
+      chapters = chapters.map { it.id },
+      positionInChapter = 0L,
+      currentChapter = chapters.first().id,
+      cover = null,
+      gain = 0F,
+      genre = analyzed?.genre,
+      narrator = analyzed?.narrator,
+      series = analyzed?.series,
+      part = analyzed?.part,
+    ).also {
+      validateIntegrity(it, chapters)
     }
   }
 
