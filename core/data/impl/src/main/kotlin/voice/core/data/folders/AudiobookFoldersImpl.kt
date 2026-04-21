@@ -32,6 +32,7 @@ internal constructor(
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
   private val analytics: Analytics,
+  private val persistedUriPermissions: PersistedUriPermissions,
 ) : AudiobookFolders {
 
   private val scope = MainScope()
@@ -40,9 +41,17 @@ internal constructor(
     val flows = FolderType.entries
       .map { folderType ->
         dataStore(folderType).data.map { uris ->
-          val documentFiles = uris.map { uri ->
-            DocumentFileWithUri(uri.toDocumentFile(folderType), uri)
-          }
+          val persistedUris = persistedUriPermissions.persistedUris()
+          val documentFiles = uris
+            .filter {
+              it in persistedUris
+            }
+            .map { uri ->
+              DocumentFileWithUri(
+                documentFile = uri.toDocumentFile(folderType),
+                uri = uri,
+              )
+            }
           folderType to documentFiles
         }
       }
