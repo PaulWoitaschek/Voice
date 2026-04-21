@@ -63,7 +63,7 @@ class EditBookCategoryViewModelTest {
   }
 
   @Test
-  fun `recategorizing always calls seekAndPauseIfCurrent — guard lives in PlayerController`() = runTest {
+  fun `recategorizing always delegates to seekAndPauseIfCurrent regardless of which book is loaded`() = runTest {
     val (vm, player) = viewModel()
 
     vm.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsNotStarted)

@@ -127,12 +127,12 @@ class PlayerController(
     expectedBookId: BookId,
     time: Long,
     chapterId: ChapterId,
-  ) = executeAfterPrepare { controller ->
-    val currentId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
-    if (currentId != expectedBookId) return@executeAfterPrepare
-    val book = bookRepository.get(currentId) ?: return@executeAfterPrepare
-    val index = book.chapters.indexOfFirst { it.id == chapterId }
-    if (index != -1) {
+  ) {
+    scope.launch {
+      val index = resolveSeekIndex(expectedBookId, chapterId, currentBookStoreId, bookRepository)
+        ?: return@launch
+      val controller = awaitConnect() ?: return@launch
+      if (!maybePrepare(controller)) return@launch
       controller.seekTo(index, time)
       controller.pause()
     }
@@ -213,6 +213,19 @@ class PlayerController(
       null
     }
   }
+}
+
+internal suspend fun resolveSeekIndex(
+  expectedBookId: BookId,
+  chapterId: ChapterId,
+  currentBookStoreId: DataStore<BookId?>,
+  bookRepository: BookRepository,
+): Int? {
+  val currentId = currentBookStoreId.data.first() ?: return null
+  if (currentId != expectedBookId) return null
+  val book = bookRepository.get(currentId) ?: return null
+  val index = book.chapters.indexOfFirst { it.id == chapterId }
+  return if (index != -1) index else null
 }
 
 data class PlaybackPosition(
