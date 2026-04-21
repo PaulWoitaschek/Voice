@@ -33,6 +33,7 @@ import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
+import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
@@ -40,7 +41,6 @@ import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ImmutableFile
 import voice.core.ui.formatTime
-import voice.core.ui.rememberProgressingBook
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
@@ -88,32 +88,46 @@ class BookPlayViewModel(
 
   @Composable
   fun viewState(): BookPlayViewState? {
-    val initialBook = remember(bookId) {
+    val persistedBook = remember(bookId) {
       bookRepository.flow(bookId).filterNotNull()
     }.collectAsState(initial = null).value ?: return null
 
-    val playState by remember {
+    val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
+    val livePlaybackState = if (experimentalPlaybackPersistence) {
+      remember(bookId) { player.livePlaybackStateFlow(bookId) }
+        .collectAsState(null).value
+    } else {
+      null
+    }
+    val managerPlayState by remember {
       playStateManager.flow
     }.collectAsState()
 
-    val book = if (experimentalPlaybackPersistenceFeatureFlag.get() && playState == PlayStateManager.PlayState.Playing) {
-      rememberProgressingBook(initialBook).value
+    val book = if (livePlaybackState != null) {
+      persistedBook.overlay(livePlaybackState)
     } else {
-      initialBook
+      persistedBook
+    }
+    val isPlaying = livePlaybackState?.isPlaying ?: (managerPlayState == PlayStateManager.PlayState.Playing)
+
+    val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
+    val positionInCurrentMark = if (isPlaying && currentMark.durationMs > 0) {
+      val relativePosition = book.content.positionInChapter - currentMark.startMs
+      relativePosition.coerceIn(0L, currentMark.durationMs)
+    } else {
+      book.content.positionInChapter - currentMark.startMs
     }
 
     val sleepTime = remember { sleepTimer.state }.collectAsState().value
-
-    val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
-      playing = playState == PlayStateManager.PlayState.Playing,
+      playing = isPlaying,
       title = book.content.name,
       showPreviousNextButtons = hasMoreThanOneChapter,
       chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
       duration = currentMark.durationMs.milliseconds,
-      playedTime = (book.content.positionInChapter - currentMark.startMs).milliseconds,
+      playedTime = positionInCurrentMark.milliseconds,
       cover = book.content.cover?.let(::ImmutableFile),
       skipSilence = book.content.skipSilence,
     )

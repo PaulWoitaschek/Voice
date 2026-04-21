@@ -33,7 +33,7 @@ class CurrentBookResolver(
     if (!experimentalPlaybackPersistenceFeatureFlag.get()) {
       return book
     }
-    val livePosition = playerController.currentBookPosition(bookId) ?: return book
+    val livePosition = playerController.livePlaybackState(bookId) ?: return book
     return book.update {
       it.copy(
         currentChapter = livePosition.chapterId,

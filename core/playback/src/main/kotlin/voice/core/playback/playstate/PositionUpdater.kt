@@ -18,6 +18,7 @@ import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackScope
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
+import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -72,9 +73,7 @@ class PositionUpdater(
     playWhenReady: Boolean,
     reason: Int,
   ) {
-    if (!playWhenReady) {
-      flushPosition()
-    }
+    flushPosition()
   }
 
   override fun onPlaybackStateChanged(playbackState: Int) {
@@ -110,6 +109,7 @@ class PositionUpdater(
         content.copy(
           currentChapter = chapterId,
           positionInChapter = currentPosition,
+          lastPlayedAt = Instant.now(),
         )
       } else {
         Logger.w("$mediaId not in $content")

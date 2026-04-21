@@ -19,4 +19,5 @@ dependencies {
   implementation(libs.documentFile)
 
   testImplementation(libs.bundles.testing.jvm)
+  testImplementation(libs.molecule)
 }

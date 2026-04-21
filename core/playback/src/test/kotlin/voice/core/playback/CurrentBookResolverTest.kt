@@ -55,10 +55,12 @@ class CurrentBookResolverTest {
         coEvery { get(book.id) } returns book
       },
       playerController = mockk {
-        coEvery { currentBookPosition(book.id) } returns PlaybackPosition(
+        coEvery { livePlaybackState(book.id) } returns LivePlaybackState(
           bookId = book.id,
           chapterId = book.chapters.last().id,
           positionMs = 1234L,
+          isPlaying = false,
+          playbackSpeed = 1f,
         )
       },
       currentBookStore = currentBookStore,
@@ -67,5 +69,21 @@ class CurrentBookResolverTest {
 
     resolver.currentBook()?.content?.currentChapter shouldBe book.chapters.last().id
     resolver.currentBook()?.content?.positionInChapter shouldBe 1234L
+  }
+
+  @Test
+  fun `returns persisted book when no live playback state is available`() = runTest {
+    val resolver = CurrentBookResolver(
+      bookRepository = mockk {
+        coEvery { get(book.id) } returns book
+      },
+      playerController = mockk {
+        coEvery { livePlaybackState(book.id) } returns null
+      },
+      currentBookStore = currentBookStore,
+      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
+    )
+
+    resolver.currentBook() shouldBe book
   }
 }

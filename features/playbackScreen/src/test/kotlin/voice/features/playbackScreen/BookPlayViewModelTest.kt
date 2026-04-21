@@ -1,5 +1,8 @@
 package voice.features.playbackScreen
 
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.launchMolecule
+import app.cash.turbine.test
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -28,7 +31,10 @@ import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
+import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
@@ -37,6 +43,7 @@ import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
 import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 class BookPlayViewModelTest {
 
@@ -65,6 +72,9 @@ class BookPlayViewModelTest {
   }
 
   private val player = mockk<PlayerController>()
+  private val playStateManager = mockk<PlayStateManager> {
+    every { flow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
+  }
   private val currentBookStoreId = MemoryDataStore<BookId?>(null)
   private val currentBookResolver = mockk<CurrentBookResolver> {
     coEvery { book(book.id) } returns book
@@ -79,7 +89,7 @@ class BookPlayViewModelTest {
       every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
     },
     sleepTimer = sleepTimer,
-    playStateManager = mockk(),
+    playStateManager = playStateManager,
     currentBookStoreId = currentBookStoreId,
     navigator = mockk(),
     bookmarkRepository = mockk {
@@ -225,6 +235,105 @@ class BookPlayViewModelTest {
     }
 
     viewModel.dialogState.value shouldBe null
+  }
+
+  @Test
+  fun `overlay prefers live controller position`() {
+    val persistedBook = book()
+    val overlaidBook = persistedBook.overlay(
+      LivePlaybackState(
+        bookId = persistedBook.id,
+        chapterId = persistedBook.chapters.first().id,
+        positionMs = 1.minutes.inWholeMilliseconds,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      ),
+    )
+
+    overlaidBook.currentChapter.id shouldBe persistedBook.chapters.first().id
+    overlaidBook.content.positionInChapter shouldBe 1.minutes.inWholeMilliseconds
+  }
+
+  @Test
+  fun `viewState prefers live playback state when feature flag is enabled`() = scope.runTest {
+    val persistedBook = book()
+    val livePlaybackFlow = MutableStateFlow<LivePlaybackState?>(null)
+    val viewModel = viewModel(
+      book = persistedBook,
+      experimentalPlaybackPersistence = true,
+      livePlaybackFlow = livePlaybackFlow,
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem() shouldBe null
+      awaitItem()!!.playedTime shouldBe 30.seconds
+
+      livePlaybackFlow.value = LivePlaybackState(
+        bookId = persistedBook.id,
+        chapterId = persistedBook.chapters.first().id,
+        positionMs = 1.minutes.inWholeMilliseconds,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      )
+
+      val state = awaitItem()!!
+      state.playing shouldBe true
+      state.chapterName shouldBe "Chapter Start"
+      state.playedTime shouldBe 1.minutes
+    }
+  }
+
+  @Test
+  fun `viewState falls back to manager play state when live playback is unavailable`() = scope.runTest {
+    val viewModel = viewModel(
+      experimentalPlaybackPersistence = true,
+      livePlaybackFlow = MutableStateFlow(null),
+      playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem() shouldBe null
+      val state = awaitItem()!!
+      state.playing shouldBe true
+      state.playedTime shouldBe 30.seconds
+    }
+  }
+
+  private fun viewModel(
+    book: Book = this.book,
+    experimentalPlaybackPersistence: Boolean = false,
+    livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
+    playStateFlow: MutableStateFlow<PlayStateManager.PlayState> = MutableStateFlow(PlayStateManager.PlayState.Paused),
+  ): BookPlayViewModel {
+    return BookPlayViewModel(
+      bookRepository = mockk {
+        coEvery { get(book.id) } returns book
+        every { flow(book.id) } returns MutableStateFlow(book)
+      },
+      currentBookResolver = currentBookResolver,
+      player = mockk {
+        every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
+        every { livePlaybackStateFlow(book.id) } returns livePlaybackFlow
+      },
+      sleepTimer = sleepTimer,
+      playStateManager = mockk {
+        every { flow } returns playStateFlow
+        every { playState } returns playStateFlow.value
+      },
+      currentBookStoreId = MemoryDataStore(null),
+      navigator = mockk(),
+      bookmarkRepository = mockk(),
+      volumeGainFormatter = mockk(),
+      batteryOptimization = mockk(),
+      sleepTimerPreferenceStore = sleepTimerDataStore,
+      bookId = book.id,
+      dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
+    )
   }
 }
 
