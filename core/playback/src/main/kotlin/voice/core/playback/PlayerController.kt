@@ -114,6 +114,8 @@ class PlayerController(
     }
   }
 
+  // Routed through executeAfterPrepare for symmetry with play()/playPause(); this means pause()
+  // will prepare the current book into the session if it isn't already loaded, then pause it.
   fun pause() = executeAfterPrepare { controller ->
     controller.pause()
   }

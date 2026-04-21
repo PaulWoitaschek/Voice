@@ -5,11 +5,12 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import voice.core.data.BookId
@@ -32,12 +33,9 @@ class EditBookCategoryViewModelTest {
     currentBookStoreId: BookId? = null,
     playerController: PlayerController = mockk(relaxed = true),
   ): Pair<EditBookCategoryViewModel, PlayerController> {
-    val currentBookStore = mockk<DataStore<BookId?>> {
-      every { data } returns flowOf(currentBookStoreId)
-    }
     val vm = EditBookCategoryViewModel(
       repo = repo,
-      currentBookStore = currentBookStore,
+      currentBookStore = MemoryDataStore(currentBookStoreId),
       playerController = playerController,
     )
     return vm to playerController
@@ -89,5 +87,16 @@ class EditBookCategoryViewModelTest {
 
     coVerify(exactly = 0) { player.setPosition(any(), any()) }
     verify(exactly = 0) { player.pause() }
+  }
+}
+
+private class MemoryDataStore<T>(initial: T) : DataStore<T> {
+
+  private val value = MutableStateFlow(initial)
+
+  override val data: Flow<T> get() = value
+
+  override suspend fun updateData(transform: suspend (t: T) -> T): T {
+    return value.updateAndGet { transform(it) }
   }
 }
