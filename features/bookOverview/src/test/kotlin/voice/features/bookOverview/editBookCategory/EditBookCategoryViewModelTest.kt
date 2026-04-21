@@ -1,16 +1,11 @@
 package voice.features.bookOverview.editBookCategory
 
-import androidx.datastore.core.DataStore
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.coVerifyOrder
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import voice.core.data.BookId
@@ -30,12 +25,10 @@ class EditBookCategoryViewModelTest {
   }
 
   private fun viewModel(
-    currentBookStoreId: BookId? = null,
     playerController: PlayerController = mockk(relaxed = true),
   ): Pair<EditBookCategoryViewModel, PlayerController> {
     val vm = EditBookCategoryViewModel(
       repo = repo,
-      currentBookStore = MemoryDataStore(currentBookStoreId),
       playerController = playerController,
     )
     return vm to playerController
@@ -43,60 +36,39 @@ class EditBookCategoryViewModelTest {
 
   @Test
   fun `MarkAsNotStarted on currently loaded book seeks player to 0 and pauses`() = runTest {
-    val (vm, player) = viewModel(currentBookStoreId = book.id)
+    val (vm, player) = viewModel()
 
     vm.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsNotStarted)
 
-    coVerifyOrder {
-      player.setPosition(0L, book.chapters.first().id)
-      player.pause()
-    }
+    coVerify { player.seekAndPauseIfCurrent(book.id, 0L, book.chapters.first().id) }
   }
 
   @Test
   fun `MarkAsCurrent on currently loaded book seeks player to position 1 and pauses`() = runTest {
-    val (vm, player) = viewModel(currentBookStoreId = book.id)
+    val (vm, player) = viewModel()
 
     vm.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCurrent)
 
-    coVerifyOrder {
-      player.setPosition(1L, book.chapters.first().id)
-      player.pause()
-    }
+    coVerify { player.seekAndPauseIfCurrent(book.id, 1L, book.chapters.first().id) }
   }
 
   @Test
   fun `MarkAsCompleted on currently loaded book seeks player to last chapter duration and pauses`() = runTest {
-    val (vm, player) = viewModel(currentBookStoreId = book.id)
+    val (vm, player) = viewModel()
 
     vm.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCompleted)
 
     val lastChapter = book.chapters.last()
-    coVerifyOrder {
-      player.setPosition(lastChapter.duration, lastChapter.id)
-      player.pause()
-    }
+    coVerify { player.seekAndPauseIfCurrent(book.id, lastChapter.duration, lastChapter.id) }
   }
 
   @Test
-  fun `recategorizing a non-loaded book does not touch the player`() = runTest {
-    val otherBookId = BookId("other")
-    val (vm, player) = viewModel(currentBookStoreId = otherBookId)
+  fun `recategorizing always calls seekAndPauseIfCurrent — guard lives in PlayerController`() = runTest {
+    val (vm, player) = viewModel()
 
     vm.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsNotStarted)
 
-    coVerify(exactly = 0) { player.setPosition(any(), any()) }
+    coVerify(exactly = 1) { player.seekAndPauseIfCurrent(book.id, any(), any()) }
     verify(exactly = 0) { player.pause() }
-  }
-}
-
-private class MemoryDataStore<T>(initial: T) : DataStore<T> {
-
-  private val value = MutableStateFlow(initial)
-
-  override val data: Flow<T> get() = value
-
-  override suspend fun updateData(transform: suspend (t: T) -> T): T {
-    return value.updateAndGet { transform(it) }
   }
 }

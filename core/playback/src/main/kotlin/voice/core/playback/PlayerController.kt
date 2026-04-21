@@ -120,6 +120,24 @@ class PlayerController(
     controller.pause()
   }
 
+  // Seek and pause atomically in one coroutine to prevent PositionUpdater flushing a stale
+  // position between the two operations. The expectedBookId guard skips the call if the user
+  // navigated to a different book between the DB write and this invocation.
+  fun seekAndPauseIfCurrent(
+    expectedBookId: BookId,
+    time: Long,
+    chapterId: ChapterId,
+  ) = executeAfterPrepare { controller ->
+    val currentId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
+    if (currentId != expectedBookId) return@executeAfterPrepare
+    val book = bookRepository.get(currentId) ?: return@executeAfterPrepare
+    val index = book.chapters.indexOfFirst { it.id == chapterId }
+    if (index != -1) {
+      controller.seekTo(index, time)
+      controller.pause()
+    }
+  }
+
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookStoreId.data.first() ?: return false
     if (controller.currentBookId() == bookId &&

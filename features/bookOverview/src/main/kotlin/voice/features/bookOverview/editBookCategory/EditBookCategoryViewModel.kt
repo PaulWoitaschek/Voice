@@ -1,12 +1,9 @@
 package voice.features.bookOverview.editBookCategory
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
-import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -19,7 +16,6 @@ import java.time.Instant
 @ContributesIntoSet(BookOverviewScope::class)
 class EditBookCategoryViewModel(
   private val repo: BookRepository,
-  @CurrentBookStore private val currentBookStore: DataStore<BookId?>,
   private val playerController: PlayerController,
 ) : BottomSheetItemViewModel {
 
@@ -69,9 +65,10 @@ class EditBookCategoryViewModel(
       )
     }
 
-    if (currentBookStore.data.first() == bookId) {
-      playerController.setPosition(positionInChapter, currentChapter)
-      playerController.pause()
-    }
+    playerController.seekAndPauseIfCurrent(
+      expectedBookId = bookId,
+      time = positionInChapter,
+      chapterId = currentChapter,
+    )
   }
 }
