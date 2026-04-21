@@ -48,7 +48,7 @@ internal fun BookOverviewTopBar(
       showFolderPickerIcon = viewState.showFolderPickerIcon,
       searchViewState = viewState.searchViewState,
     )
-    var showLoading by remember { mutableStateOf(true) }
+    var showLoading by remember { mutableStateOf(false) }
     LaunchedEffect(viewState.isLoading) {
       if (viewState.isLoading) {
         delay(3.seconds)
