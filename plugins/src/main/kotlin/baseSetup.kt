@@ -66,6 +66,7 @@ fun Project.baseSetup() {
       animationsDisabled = true
       unitTests.isIncludeAndroidResources = true
     }
+    lint.lintConfig = project.layout.settingsDirectory.file("lint.xml").asFile
   }
   dependencies.run {
     add("coreLibraryDesugaring", libs.findLibrary("desugar").get())

@@ -133,7 +133,6 @@ android {
     ignoreTestSources = true
     checkReleaseBuilds = false
     warningsAsErrors = providers.gradleProperty("voice.warningsAsErrors").get().toBooleanStrict()
-    lintConfig = file("lint.xml")
   }
 
   packaging {
