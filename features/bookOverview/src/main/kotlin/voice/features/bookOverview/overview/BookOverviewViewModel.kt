@@ -251,9 +251,10 @@ private fun Book.itemViewState(
   if (id != currentBookId) {
     return rememberUpdatedState(toItemViewState())
   }
-  return remember(this, currentBookId, livePlaybackState) {
+  val currentPlaybackState by rememberUpdatedState(livePlaybackState)
+  return remember(this, currentBookId) {
     derivedStateOf {
-      val livePlayback = livePlaybackState()
+      val livePlayback = currentPlaybackState()
       if (livePlayback != null) {
         overlay(livePlayback)
       } else {
