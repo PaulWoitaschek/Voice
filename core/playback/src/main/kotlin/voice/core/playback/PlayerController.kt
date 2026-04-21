@@ -114,6 +114,10 @@ class PlayerController(
     }
   }
 
+  fun pause() = executeAfterPrepare { controller ->
+    controller.pause()
+  }
+
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookStoreId.data.first() ?: return false
     if (controller.currentBookId() == bookId &&

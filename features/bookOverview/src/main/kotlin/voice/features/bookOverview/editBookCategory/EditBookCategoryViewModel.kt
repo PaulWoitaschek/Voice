@@ -1,9 +1,13 @@
 package voice.features.bookOverview.editBookCategory
 
+import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
+import voice.core.playback.PlayerController
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.features.bookOverview.di.BookOverviewScope
@@ -13,7 +17,11 @@ import java.time.Instant
 
 @SingleIn(BookOverviewScope::class)
 @ContributesIntoSet(BookOverviewScope::class)
-class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
+class EditBookCategoryViewModel(
+  private val repo: BookRepository,
+  @CurrentBookStore private val currentBookStore: DataStore<BookId?>,
+  private val playerController: PlayerController,
+) : BottomSheetItemViewModel {
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     val book = repo.get(bookId) ?: return emptyList()
@@ -59,6 +67,11 @@ class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetI
         positionInChapter = positionInChapter,
         lastPlayedAt = Instant.now(),
       )
+    }
+
+    if (currentBookStore.data.first() == bookId) {
+      playerController.setPosition(positionInChapter, currentChapter)
+      playerController.pause()
     }
   }
 }
