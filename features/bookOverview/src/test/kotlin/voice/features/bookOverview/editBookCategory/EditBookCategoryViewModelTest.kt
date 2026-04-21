@@ -24,9 +24,7 @@ class EditBookCategoryViewModelTest {
     coEvery { updateBook(book.id, any()) } just Runs
   }
 
-  private fun viewModel(
-    playerController: PlayerController = mockk(relaxed = true),
-  ): Pair<EditBookCategoryViewModel, PlayerController> {
+  private fun viewModel(playerController: PlayerController = mockk(relaxed = true)): Pair<EditBookCategoryViewModel, PlayerController> {
     val vm = EditBookCategoryViewModel(
       repo = repo,
       playerController = playerController,
