@@ -9,7 +9,6 @@ import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.category
-import java.time.Instant
 
 @SingleIn(BookOverviewScope::class)
 @ContributesIntoSet(BookOverviewScope::class)
@@ -57,7 +56,6 @@ class EditBookCategoryViewModel(private val repo: BookRepository) : BottomSheetI
       it.copy(
         currentChapter = currentChapter,
         positionInChapter = positionInChapter,
-        lastPlayedAt = Instant.now(),
       )
     }
   }

@@ -3,7 +3,6 @@ package voice.core.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -12,10 +11,16 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -30,6 +35,7 @@ import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.sendCustomCommand
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Inject
 class PlayerController(
@@ -156,18 +162,71 @@ class PlayerController(
     it.volume = volume
   }
 
-  suspend fun currentBookPosition(bookId: BookId? = null): PlaybackPosition? {
+  suspend fun livePlaybackState(bookId: BookId? = null): LivePlaybackState? {
     val controller = awaitConnect() ?: return null
-    val mediaId = controller.currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.Chapter ?: return null
-    if (bookId != null && mediaId.bookId != bookId) {
-      return null
+    return controller.livePlaybackStateSnapshot(bookId)
+  }
+
+  fun livePlaybackStateFlow(bookId: BookId? = null): Flow<LivePlaybackState?> = callbackFlow {
+    val controller = awaitConnect()
+    if (controller == null) {
+      trySend(null)
+      close()
+      return@callbackFlow
     }
-    val positionMs = controller.currentPosition.takeUnless { it == C.TIME_UNSET || it < 0 } ?: return null
-    return PlaybackPosition(
-      bookId = mediaId.bookId,
-      chapterId = mediaId.chapterId,
-      positionMs = positionMs,
-    )
+
+    fun emitSnapshot() {
+      trySend(controller.livePlaybackStateSnapshot(bookId))
+    }
+
+    var tickJob: Job? = null
+    fun updateTicking() {
+      if (!controller.isPlaying) {
+        tickJob?.cancel()
+        return
+      }
+      if (tickJob?.isActive == true) {
+        return
+      }
+      tickJob = launch {
+        while (isActive) {
+          delay(250.milliseconds)
+          emitSnapshot()
+        }
+      }
+    }
+
+    val listener = object : Player.Listener {
+      override fun onEvents(
+        player: Player,
+        events: Player.Events,
+      ) {
+        if (events.containsAny(
+            Player.EVENT_PLAY_WHEN_READY_CHANGED,
+            Player.EVENT_MEDIA_ITEM_TRANSITION,
+            Player.EVENT_PLAYBACK_STATE_CHANGED,
+          )
+        ) {
+          emitSnapshot()
+          updateTicking()
+        }
+        if (events.containsAny(
+            Player.EVENT_POSITION_DISCONTINUITY,
+            Player.EVENT_PLAYBACK_PARAMETERS_CHANGED,
+          )
+        ) {
+          emitSnapshot()
+        }
+      }
+    }
+
+    controller.addListener(listener)
+    emitSnapshot()
+    updateTicking()
+    awaitClose {
+      tickJob?.cancel()
+      controller.removeListener(listener)
+    }
   }
 
   private inline fun executeAfterPrepare(crossinline action: suspend (MediaController) -> Unit) {
@@ -190,9 +249,3 @@ class PlayerController(
     }
   }
 }
-
-data class PlaybackPosition(
-  val bookId: BookId,
-  val chapterId: ChapterId,
-  val positionMs: Long,
-)

@@ -32,13 +32,14 @@ import voice.core.data.store.GridModeStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
+import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.search.BookSearch
 import voice.core.ui.GridCount
-import voice.core.ui.rememberProgressingBook
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
@@ -104,6 +105,14 @@ class BookOverviewViewModel(
     }
 
     val bookSearchViewState = bookSearchViewState(layoutMode)
+    val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
+    val livePlaybackState: State<LivePlaybackState?> = if (experimentalPlaybackPersistence && currentBookId != null) {
+      remember(currentBookId) {
+        playerController.livePlaybackStateFlow(currentBookId)
+      }.collectAsState(null)
+    } else {
+      remember { mutableStateOf(null) }
+    }
 
     return BookOverviewViewState(
       layoutMode = layoutMode,
@@ -115,12 +124,10 @@ class BookOverviewViewModel(
           books
             .sortedWith(category.comparator)
             .associate { book ->
-              val isPlaying = playState == PlayStateManager.PlayState.Playing && currentBookId == book.id
-              book.id to if (experimentalPlaybackPersistenceFeatureFlag.get() && isPlaying) {
-                rememberProgressingBookItemViewState(book)
-              } else {
-                rememberUpdatedState(book.toItemViewState())
-              }
+              book.id to book.itemViewState(
+                currentBookId = currentBookId,
+                livePlaybackState = { livePlaybackState.value },
+              )
             }
         }
         .toSortedMap(),
@@ -237,11 +244,22 @@ class BookOverviewViewModel(
 }
 
 @Composable
-private fun rememberProgressingBookItemViewState(book: Book): State<BookOverviewItemViewState> {
-  val progressingBookState = rememberProgressingBook(book)
-  return remember(progressingBookState) {
+private fun Book.itemViewState(
+  currentBookId: BookId?,
+  livePlaybackState: () -> LivePlaybackState?,
+): State<BookOverviewItemViewState> {
+  if (id != currentBookId) {
+    return rememberUpdatedState(toItemViewState())
+  }
+  val currentPlaybackState by rememberUpdatedState(livePlaybackState)
+  return remember(this, currentBookId) {
     derivedStateOf {
-      progressingBookState.value.toItemViewState()
+      val livePlayback = currentPlaybackState()
+      if (livePlayback != null) {
+        overlay(livePlayback)
+      } else {
+        this
+      }.toItemViewState()
     }
   }
 }

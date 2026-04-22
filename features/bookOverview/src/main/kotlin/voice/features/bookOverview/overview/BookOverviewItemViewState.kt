@@ -1,11 +1,11 @@
 package voice.features.bookOverview.overview
 
-import android.text.format.DateUtils
 import androidx.compose.runtime.Immutable
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.logging.api.Logger
 import voice.core.ui.ImmutableFile
+import voice.core.ui.formatTime
 
 @Immutable
 data class BookOverviewItemViewState(
@@ -23,7 +23,7 @@ internal fun Book.toItemViewState() = BookOverviewItemViewState(
   cover = content.cover?.let(::ImmutableFile),
   id = id,
   progress = progress(),
-  remainingTime = DateUtils.formatElapsedTime((duration - position) / 1000),
+  remainingTime = formatTime(duration - position),
 )
 
 private fun Book.progress(): Float {
