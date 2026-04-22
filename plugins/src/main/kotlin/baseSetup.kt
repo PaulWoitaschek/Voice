@@ -49,7 +49,6 @@ fun Project.baseSetup() {
   extensions.configure<CommonExtension> {
     namespace = "voice." + path.removePrefix(":").replace(':', '.')
     compileOptions.apply {
-      isCoreLibraryDesugaringEnabled = true
       sourceCompatibility = JavaVersion.toVersion(jvmBytecodeVersion)
       targetCompatibility = JavaVersion.toVersion(jvmBytecodeVersion)
     }
@@ -69,7 +68,6 @@ fun Project.baseSetup() {
     lint.lintConfig = project.layout.settingsDirectory.file("lint.xml").asFile
   }
   dependencies.run {
-    add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
     add("implementation", libs.findLibrary("coroutines.core").get())
