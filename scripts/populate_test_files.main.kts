@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption
 class PopulateTestFiles : CliktCommand() {
 
   private val skipAdb by option("--skip-adb").flag(default = false)
+  private val regenerate by option("--regenerate").flag(default = false)
 
   private val testFilesRoot = File("build/testfiles/")
   private val tempBooksRoot = File(testFilesRoot, "_generated_books")
@@ -91,7 +92,7 @@ class PopulateTestFiles : CliktCommand() {
 
   override fun run() {
     validateEnvironment()
-    cleanFolder()
+    prepareFolders()
 
     println("Preparing multi-chapter audiobooks")
     val generatedFolderBooks = generateSourceBooks(folderBooks)
@@ -102,7 +103,7 @@ class PopulateTestFiles : CliktCommand() {
     copyIntoSingleAudiobookStructure(generatedFolderBooks)
     copyIntoAuthorStructure(generatedFolderBooks, generatedSingleBooks)
 
-    tempBooksRoot.deleteRecursively()
+    cleanupTempFolder()
 
     if (!skipAdb) {
       pushToAdb()
@@ -121,16 +122,28 @@ class PopulateTestFiles : CliktCommand() {
     }
   }
 
-  private fun cleanFolder() {
-    println("Cleaning output folder: ${testFilesRoot.absolutePath}")
-    testFilesRoot.deleteRecursively()
+  private fun prepareFolders() {
+    if (regenerate) {
+      println("Cleaning output folder: ${testFilesRoot.absolutePath}")
+      testFilesRoot.deleteRecursively()
+    }
     testFilesRoot.mkdirs()
+    tempBooksRoot.deleteRecursively()
     tempBooksRoot.mkdirs()
+  }
+
+  private fun cleanupTempFolder() {
+    tempBooksRoot.deleteRecursively()
   }
 
   private fun generateSourceBooks(bookSpecs: List<BookSpec>): List<GeneratedBook> {
     println("Generating audiobook chapters with embedded covers (${bookSpecs.size} books)")
     return bookSpecs.map { spec ->
+      if (!needsGeneration(spec)) {
+        println("- Reusing existing output for ${spec.title} by ${spec.author}")
+        return@map GeneratedBook(spec = spec, chapterFiles = emptyList())
+      }
+
       val outputDir = File(tempBooksRoot, spec.directoryName()).apply { mkdirs() }
       println("- Building ${spec.title} by ${spec.author}")
       val chapters = spec.chapters.mapIndexed { index, chapter ->
@@ -237,6 +250,7 @@ class PopulateTestFiles : CliktCommand() {
   }
 
   private fun GeneratedBook.copyChaptersTo(destinationDir: File) {
+    if (chapterFiles.isEmpty()) return
     destinationDir.mkdirs()
     chapterFiles.forEach { sourceFile ->
       val targetFile = File(destinationDir, sourceFile.name)
@@ -253,8 +267,37 @@ class PopulateTestFiles : CliktCommand() {
   }
 
   private fun copyFile(source: File, target: File) {
+    if (!regenerate && target.exists()) return
     target.parentFile?.mkdirs()
     Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+  }
+
+  private fun needsGeneration(spec: BookSpec): Boolean {
+    if (regenerate) return true
+    return expectedOutputs(spec).any { !it.exists() }
+  }
+
+  private fun expectedOutputs(spec: BookSpec): List<File> {
+    val authorDir = File(testFilesRoot, "Authors/${spec.author}")
+    return if (spec.chapters.size == 1) {
+      listOf(
+        File(testFilesRoot, "Audiobooks/${spec.title}.mp3"),
+        File(authorDir, "${spec.title}.mp3"),
+      )
+    } else {
+      val chapterFiles = spec.chapters.mapIndexed { index, chapter ->
+        "%02d - %s.mp3".format(index + 1, chapter.title)
+      }
+      buildList {
+        chapterFiles.forEach { fileName ->
+          add(File(testFilesRoot, "Audiobooks/${spec.directoryName()}/$fileName"))
+          add(File(authorDir, "${spec.directoryName()}/$fileName"))
+          if (spec == folderBooks.first()) {
+            add(File(testFilesRoot, "SingleAudiobook/$fileName"))
+          }
+        }
+      }
+    }
   }
 
   private fun runCommand(command: List<String>) {

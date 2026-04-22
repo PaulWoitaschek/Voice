@@ -35,7 +35,7 @@
     <!-- auto theme -->
     <meta-data
       android:name="com.google.android.gms.car.application.theme"
-      android:resource="@style/Theme.Material3.DayNight" />
+      android:resource="@style/AppTheme" />
 
     <activity-alias
       android:name=".features.MainActivity"

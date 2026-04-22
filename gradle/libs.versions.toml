@@ -19,7 +19,6 @@ navigation3 = "1.1.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-material = "com.google.android.material:material:1.13.0"
 junit = "junit:junit:4.13.2"
 mockk = "io.mockk:mockk:1.14.9"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.4.2"
