@@ -17,8 +17,6 @@ dependencies {
 
   implementation(libs.coil)
   implementation(libs.androidxCore)
-  implementation(libs.androidxCore)
-  implementation(libs.material)
 
   testImplementation(libs.molecule)
   testImplementation(libs.turbine)

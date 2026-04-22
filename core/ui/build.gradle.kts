@@ -10,7 +10,7 @@ android {
 
 dependencies {
   api(libs.datastore)
-  implementation(libs.material)
+  implementation(libs.appCompat)
   implementation(projects.core.data.api)
   implementation(projects.core.initializer)
   implementation(projects.core.strings)
