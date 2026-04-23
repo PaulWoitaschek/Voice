@@ -6,7 +6,7 @@ sdk-robolectric = "35"
 
 coroutines = "1.10.2"
 room = "2.8.4"
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 media3 = "1.10.0"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
