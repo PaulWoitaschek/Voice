@@ -25,6 +25,19 @@ class AudiologRecorder(
   private var lastShortSkipTime: Instant = Instant.MIN
 
   suspend fun record(reason: String) {
+    lastShortSkipTime = Instant.MIN
+    writeEntry(reason)
+  }
+
+  suspend fun recordShortSkip() {
+    val now = Instant.now()
+    val withinWindow = Duration.between(lastShortSkipTime, now) <= SHORT_SKIP_WINDOW
+    lastShortSkipTime = now
+    if (withinWindow) return
+    writeEntry("skipping")
+  }
+
+  private suspend fun writeEntry(reason: String) {
     val bookId = currentBookStore.data.first() ?: return
     val book = bookRepository.get(bookId) ?: return
     bookmarkRepo.addBookmarkAtBookPosition(
@@ -33,14 +46,6 @@ class AudiologRecorder(
       setBySleepTimer = false,
       setByAudiolog = true,
     )
-  }
-
-  suspend fun recordShortSkip() {
-    val now = Instant.now()
-    val withinWindow = Duration.between(lastShortSkipTime, now) <= SHORT_SKIP_WINDOW
-    lastShortSkipTime = now
-    if (withinWindow) return
-    record("skipping")
   }
 
   private companion object {
