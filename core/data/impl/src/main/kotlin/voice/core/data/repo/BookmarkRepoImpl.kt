@@ -33,6 +33,7 @@ internal constructor(
     book: Book,
     title: String?,
     setBySleepTimer: Boolean,
+    setByAudiolog: Boolean,
   ): Bookmark {
     return withContext(Dispatchers.IO) {
       val bookMark = Bookmark(
@@ -41,6 +42,7 @@ internal constructor(
         id = Bookmark.Id.random(),
         addedAt = Instant.now(),
         setBySleepTimer = setBySleepTimer,
+        setByAudiolog = setByAudiolog,
         chapterId = book.content.currentChapter,
         bookId = book.id,
       )

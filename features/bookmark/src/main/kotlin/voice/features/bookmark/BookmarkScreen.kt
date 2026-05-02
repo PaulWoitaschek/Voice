@@ -84,7 +84,7 @@ interface BookmarkProvider {
 @Composable
 fun BookmarkScreen(bookId: BookId) {
   val viewModel = retain(bookId.value) {
-    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId)
+    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId, audiolog = false)
   }
   val viewState = viewModel.viewState()
   BookmarkScreen(

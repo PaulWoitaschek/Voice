@@ -19,6 +19,7 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
+import voice.core.playback.AudiologRecorder
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
@@ -51,6 +52,7 @@ class VoicePlayer(
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
+  private val audiologRecorder: AudiologRecorder,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
@@ -211,6 +213,7 @@ class VoicePlayer(
             .inWholeMilliseconds,
         )
       }
+      scope.launch { audiologRecorder.record("paused") }
     }
     super.setPlayWhenReady(playWhenReady)
   }

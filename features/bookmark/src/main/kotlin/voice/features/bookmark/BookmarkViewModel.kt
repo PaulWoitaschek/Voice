@@ -45,6 +45,8 @@ class BookmarkViewModel(
   private val autoSaveBookmarkController: AutoSaveBookmarkController,
   @Assisted
   private val bookId: BookId,
+  @Assisted
+  private val audiolog: Boolean,
 ) {
 
   private val scope = MainScope()
@@ -60,13 +62,17 @@ class BookmarkViewModel(
       val book = repo.get(bookId)
       if (book != null) {
         bookmarks = bookmarkRepo.bookmarks(book.content)
+          .filter { it.setByAudiolog == audiolog }
           .sortedByDescending { it.addedAt }
         chapters = book.chapters
       }
     }
     LaunchedEffect(bookId) {
       autoSaveBookmarkController.added.collect { added ->
-        if (added.bookId == bookId && bookmarks.none { it.id == added.id }) {
+        if (added.bookId == bookId &&
+          added.setByAudiolog == audiolog &&
+          bookmarks.none { it.id == added.id }
+        ) {
           bookmarks = (bookmarks + added).sortedByDescending { it.addedAt }
           shouldScrollTo = added.id
         }
@@ -164,6 +170,7 @@ class BookmarkViewModel(
         book = book,
         title = name,
         setBySleepTimer = false,
+        setByAudiolog = audiolog,
       )
       bookmarks = (bookmarks + newBookmark)
         .sortedByDescending { it.addedAt }
@@ -194,6 +201,6 @@ class BookmarkViewModel(
 
   @AssistedFactory
   interface Factory {
-    fun create(bookId: BookId): BookmarkViewModel
+    fun create(bookId: BookId, audiolog: Boolean): BookmarkViewModel
   }
 }
