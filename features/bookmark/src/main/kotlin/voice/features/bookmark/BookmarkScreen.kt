@@ -2,7 +2,9 @@ package voice.features.bookmark
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +25,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SwipeToDismissBox
@@ -86,6 +90,7 @@ fun BookmarkScreen(bookId: BookId) {
     viewState = viewState,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
+    onAutoSaveToggle = viewModel::onAutoSaveToggle,
     onDelete = viewModel::deleteBookmark,
     onEdit = viewModel::onEditClick,
     onScrollConfirm = viewModel::onScrollConfirm,
@@ -101,6 +106,7 @@ internal fun BookmarkScreen(
   viewState: BookmarkViewState,
   onClose: () -> Unit,
   onAdd: () -> Unit,
+  onAutoSaveToggle: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
   onEdit: (Bookmark.Id) -> Unit,
   onScrollConfirm: () -> Unit,
@@ -131,12 +137,27 @@ internal fun BookmarkScreen(
       )
     },
     floatingActionButton = {
-      FloatingActionButton(
-        onClick = onAdd,
-        content = {
-          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
-        },
-      )
+      Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.End,
+      ) {
+        SmallFloatingActionButton(
+          onClick = onAutoSaveToggle,
+          containerColor = if (viewState.autoSaveEnabled) {
+            MaterialTheme.colorScheme.primary
+          } else {
+            MaterialTheme.colorScheme.secondaryContainer
+          },
+        ) {
+          Text(text = "A")
+        }
+        FloatingActionButton(
+          onClick = onAdd,
+          content = {
+            Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
+          },
+        )
+      }
     },
   ) { paddingValues ->
     val lazyListState = rememberLazyListState()

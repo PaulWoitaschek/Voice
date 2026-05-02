@@ -1,0 +1,160 @@
+@Voice Android Audiobook Player — Repository Structure
+========================================================
+Derived from git commit history (not code inspection).
+Generated: 2026-05-01
+
+
+OVERVIEW
+--------
+@Voice is an Android audiobook player built with a clean multi-module Gradle
+architecture. The codebase is split into two primary groups: `core/` (shared
+infrastructure) and `features/` (user-facing functionality). The modularization
+was introduced in a major refactor (commit c8a81ee6f: "Create a core and a
+features module (#3027)"). Dependency injection, Room databases, Jetpack
+Compose UI, and Firebase integrations are used throughout.
+
+
+TOP-LEVEL DIRECTORIES
+---------------------
+app/          Main Android application module. Entry point, wires modules together.
+core/         14 infrastructure/library modules shared across features (see below).
+features/     10 user-facing feature modules (see below).
+navigation/   Navigation graph and routing between screens.
+plugins/      Custom Gradle build plugins for the project.
+gradle/       Gradle wrapper and version catalog configuration.
+docs/         Project documentation (MkDocs-based, mkdocs.yml at root).
+fastlane/     Mobile CI/CD automation (deploy, screenshots, metadata).
+.github/      GitHub Actions workflows and PR/issue templates.
+scripts/      Build utilities and helper scripts.
+signing/      Keystore and signing configuration for release builds.
+Images/       App store graphics, icons, and promotional images.
+.junie/       Project-level configuration for the Junie tool.
+
+
+CORE MODULES  (core/)
+---------------------
+These are infrastructure modules with no direct user-facing UI. Most follow an
+api/impl split introduced in commit 99066d0bd ("Modularize the data module into
+:api and :impl").
+
+core/analytics/      Firebase Analytics integration and a NoOp implementation
+                     for builds without analytics consent. Added in commit
+                     f9bcb816f ("Add analytics module with Firebase integration
+                     and NoOp implementation"). Tracks screen views and events;
+                     includes an analytics consent store.
+
+core/common/         Shared utilities: theming, formatting helpers, Kotlin
+                     extensions, and dependency injection setup used across
+                     all other modules.
+
+core/data/           Persistence layer. Room database, DAOs, and repositories.
+                     *** BOOKMARK-RELATED *** — stores bookmark records with
+                     timestamps and a flag indicating whether the bookmark was
+                     created automatically by the sleep timer.
+                     Split into api/impl submodules (commit 99066d0bd).
+
+core/documentfile/   Abstractions over Android's DocumentFile API for scoped
+                     storage access to audio files.
+
+core/featureflag/    Feature flag system introduced in commit 4e755b89c
+                     ("Refactor: Introduce a feature flag module (#3279)").
+                     Gates experimental features such as media3 audio offload
+                     and the new folder picker.
+
+core/initializer/    App startup logic via AppInitializer. Handles tasks that
+                     must run early in the app lifecycle (e.g., scheduling the
+                     auto sleep timer).
+
+core/logging/        Logging infrastructure built on Timber. Includes debug
+                     logging helpers.
+
+core/playback/       Playback state management and playback logic.
+                     *** BOOKMARK-RELATED *** — integrates with the bookmark
+                     system; automatically creates a bookmark when the auto
+                     sleep timer activates (commit 9255e4a65: "Create a
+                     bookmark when the auto sleep timer starts").
+
+core/remoteconfig/   Firebase Remote Config abstraction with a local fallback.
+                     Config is refreshed on app start.
+
+core/scanner/        Audio file scanner. Detects supported formats (MP3, M4A,
+                     MKA/MKV, OGX, etc.), extracts metadata (title, author,
+                     narrator, series, genre, chapter markers).
+
+core/search/         Search functionality across the book library.
+
+core/sleeptimer/     Sleep timer business logic (API + implementation).
+                     Extracted into its own module (commit 15bbd2233:
+                     "Extract the SleepTimer into a separate module"). Supports
+                     fixed-duration timers, end-of-chapter sleep, and the
+                     auto sleep timer.
+
+core/strings/        Centralized string resources for internationalisation (i18n).
+
+core/ui/             Shared Jetpack Compose UI components and design tokens
+                     reused across feature modules.
+
+
+FEATURE MODULES  (features/)
+-----------------------------
+User-facing screens and flows. Each module owns its own UI and depends on
+core modules for data and logic.
+
+features/bookmark/   *** BOOKMARK PRIMARY MODULE ***
+                     The bookmark feature: lets users long-press during
+                     playback to save a position with an optional note.
+                     History: bookmarks existed from the project's earliest
+                     days and were moved into this dedicated module in commit
+                     28481ac48 ("Move the bookmarks to a separate module").
+                     Key milestones from commit history:
+                       - Swipe-to-delete bookmarks
+                       - Multi-line bookmark notes (commit 6e77e39be)
+                       - Fully migrated to Jetpack Compose UI
+                       - Retain API for stable Compose state (commit a801072a1)
+                       - Room-backed persistence via core/data/
+                       - Auto-bookmarks from sleep timer (via core/playback/)
+
+features/bookOverview/  Library/bookshelf screen. Displays all audiobooks in
+                        grid or list view. Supports sorting by name, date added,
+                        and shows per-book progress.
+
+features/cover/      Cover art display, loading, and cropping UI. Handles
+                     missing covers with generated placeholders.
+
+features/folderPicker/  Folder selection flow for adding audio directories to
+                        the library. Gated behind a feature flag in early
+                        rollout.
+
+features/onboarding/ First-run setup wizard guiding the user to pick their
+                     audio folders.
+
+features/playbackScreen/  Main player screen. Shows current book, chapter,
+                          playback controls, speed/pitch settings, rewind/
+                          fast-forward buttons (commit 4c956d5d0), and sleep
+                          timer controls.
+
+features/review/     In-app review / rating prompt (Google Play review API).
+
+features/settings/   Settings and preferences UI. Includes developer menu
+                     with feature flag toggles, analytics consent screen,
+                     and playback behaviour options.
+
+features/sleepTimer/ Sleep timer UI (picker and active-timer display).
+                     Counterpart to core/sleeptimer/ which holds the logic.
+
+features/widget/     Android home-screen widget showing current book and
+                     basic playback controls.
+
+
+BOOKMARK SUMMARY  ★
+--------------------
+Bookmark-related code is spread across three locations:
+
+  features/bookmark/   ← UI, user interactions, Compose screens
+  core/data/           ← Room database: bookmark table, DAOs, repository API
+  core/playback/       ← Auto-bookmark trigger on sleep timer activation
+
+The feature has one of the longest commit histories in the repo, predating the
+modularization refactor. It supports manual bookmarks (long-press), automatic
+bookmarks (sleep timer), optional multi-line notes, swipe-to-delete, and is
+fully implemented in Jetpack Compose.
