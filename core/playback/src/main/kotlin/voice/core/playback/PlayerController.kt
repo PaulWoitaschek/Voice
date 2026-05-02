@@ -44,6 +44,7 @@ class PlayerController(
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
+  private val audiologRecorder: AudiologRecorder,
 ) {
 
   private var _controller: Deferred<MediaController> = newControllerAsync()
@@ -74,6 +75,7 @@ class PlayerController(
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
     val index = book.chapters.indexOfFirst { it.id == id }
     if (index != -1) {
+      audiologRecorder.record("setting position")
       controller.seekTo(index, time)
     }
   }
