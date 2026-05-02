@@ -217,7 +217,13 @@ class VoicePlayer(
             .inWholeMilliseconds,
         )
       }
-      scope.launch { audiologRecorder.record("paused") }
+      val reason = if (audiologRecorder.pausedDueToSleeping) {
+        audiologRecorder.pausedDueToSleeping = false
+        "sleeping"
+      } else {
+        "paused"
+      }
+      scope.launch { audiologRecorder.record(reason) }
     }
     super.setPlayWhenReady(playWhenReady)
   }

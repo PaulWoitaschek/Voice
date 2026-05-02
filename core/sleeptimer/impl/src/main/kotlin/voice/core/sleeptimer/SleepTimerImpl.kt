@@ -96,7 +96,7 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1f)
     _state.value = SleepTimerState.Disabled
 
-    audiologRecorder.record("sleeping")
+    audiologRecorder.pausedDueToSleeping = true
     playerController.pauseWithRewind(fadeOutDuration)
 
     val shakeDetected = detectShakeWithTimeout()
