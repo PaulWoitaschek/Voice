@@ -147,7 +147,7 @@ class VoicePlayer(
 
   override fun seekBack() {
     scope.launch {
-      audiologRecorder.record("skipping")
+      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
@@ -174,7 +174,7 @@ class VoicePlayer(
 
   override fun seekForward() {
     scope.launch {
-      audiologRecorder.record("skipping")
+      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
