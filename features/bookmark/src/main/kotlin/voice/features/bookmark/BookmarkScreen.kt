@@ -44,6 +44,7 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,6 +89,7 @@ fun BookmarkScreen(bookId: BookId) {
   val viewState = viewModel.viewState()
   BookmarkScreen(
     viewState = viewState,
+    titleRes = StringsR.string.bookmark,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
     onAutoSaveToggle = viewModel::onAutoSaveToggle,
@@ -104,6 +106,7 @@ fun BookmarkScreen(bookId: BookId) {
 @Composable
 internal fun BookmarkScreen(
   viewState: BookmarkViewState,
+  @StringRes titleRes: Int,
   onClose: () -> Unit,
   onAdd: () -> Unit,
   onAutoSaveToggle: () -> Unit,
@@ -125,7 +128,7 @@ internal fun BookmarkScreen(
     },
     topBar = {
       TopAppBar(
-        title = { Text(text = stringResource(id = StringsR.string.bookmark)) },
+        title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
           IconButton(onClick = onClose) {
             Icon(

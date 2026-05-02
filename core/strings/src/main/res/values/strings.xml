@@ -30,6 +30,7 @@
     <string name="pref_audiobook_folders_explanation">Manage folders scanned for audiobooks</string>
     <string name="playback_speed">Playback speed</string>
     <string name="bookmark">Bookmark</string>
+    <string name="audiolog">Audiolog</string>
     <string name="bookmark_edit_title">Edit bookmark</string>
     <string name="bookmark_edit_hint">Bookmark name</string>
     <string name="bookmark_added">Bookmark added</string>
