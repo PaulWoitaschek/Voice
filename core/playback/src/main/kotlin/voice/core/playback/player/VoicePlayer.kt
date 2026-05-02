@@ -19,6 +19,7 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
+import voice.core.playback.AudiologRecorder
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
@@ -51,10 +52,12 @@ class VoicePlayer(
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
+  private val audiologRecorder: AudiologRecorder,
 ) : ForwardingPlayer(player) {
 
   fun forceSeekToNext() {
     scope.launch {
+      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentMarkIndex = marks.indexOfFirst { mark ->
@@ -77,6 +80,7 @@ class VoicePlayer(
 
   fun forceSeekToPrevious() {
     scope.launch {
+      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentPosition = player.currentPosition
@@ -143,6 +147,7 @@ class VoicePlayer(
 
   override fun seekBack() {
     scope.launch {
+      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
@@ -169,6 +174,7 @@ class VoicePlayer(
 
   override fun seekForward() {
     scope.launch {
+      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
@@ -211,6 +217,13 @@ class VoicePlayer(
             .inWholeMilliseconds,
         )
       }
+      val reason = if (audiologRecorder.pausedDueToSleeping) {
+        audiologRecorder.pausedDueToSleeping = false
+        "sleeping"
+      } else {
+        "paused"
+      }
+      scope.launch { audiologRecorder.record(reason) }
     }
     super.setPlayWhenReady(playWhenReady)
   }

@@ -43,6 +43,8 @@ class BookmarkViewModel(
   private val context: Context,
   @Assisted
   private val bookId: BookId,
+  @Assisted
+  private val audiolog: Boolean,
 ) {
 
   private val scope = MainScope()
@@ -58,6 +60,7 @@ class BookmarkViewModel(
       val book = repo.get(bookId)
       if (book != null) {
         bookmarks = bookmarkRepo.bookmarks(book.content)
+          .filter { it.setByAudiolog == audiolog }
           .sortedByDescending { it.addedAt }
         chapters = book.chapters
       }
@@ -148,6 +151,7 @@ class BookmarkViewModel(
         book = book,
         title = name,
         setBySleepTimer = false,
+        setByAudiolog = audiolog,
       )
       bookmarks = (bookmarks + newBookmark)
         .sortedByDescending { it.addedAt }
@@ -178,6 +182,6 @@ class BookmarkViewModel(
 
   @AssistedFactory
   interface Factory {
-    fun create(bookId: BookId): BookmarkViewModel
+    fun create(bookId: BookId, audiolog: Boolean): BookmarkViewModel
   }
 }

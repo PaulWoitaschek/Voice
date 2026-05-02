@@ -1,5 +1,6 @@
 package voice.core.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
@@ -13,6 +14,8 @@ public data class Bookmark(
   val time: Long,
   val addedAt: Instant,
   val setBySleepTimer: Boolean,
+  @ColumnInfo(defaultValue = "0")
+  val setByAudiolog: Boolean = false,
   @PrimaryKey
   val id: Id,
 ) {

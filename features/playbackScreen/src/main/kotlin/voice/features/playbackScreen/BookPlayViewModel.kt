@@ -296,6 +296,10 @@ class BookPlayViewModel(
     navigator.goTo(Destination.Bookmarks(bookId))
   }
 
+  fun onAudiologClick() {
+    navigator.goTo(Destination.Audiolog(bookId))
+  }
+
   fun onBookmarkLongClick() {
     scope.launch {
       val book = currentBook() ?: return@launch
