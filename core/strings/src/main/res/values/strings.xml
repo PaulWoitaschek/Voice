@@ -33,6 +33,8 @@
     <string name="audiolog">Audiolog</string>
     <string name="bookmark_edit_title">Edit bookmark</string>
     <string name="bookmark_edit_hint">Bookmark name</string>
+    <string name="audiolog_edit_title">Edit audiolog entry</string>
+    <string name="audiolog_edit_hint">Audiolog entry name</string>
     <string name="bookmark_added">Bookmark added</string>
     <string name="action_settings">Preferences</string>
     <plurals name="seconds">
