@@ -28,7 +28,7 @@ interface AudiologProvider {
 @Composable
 fun AudiologScreen(bookId: BookId) {
   val viewModel = retain(bookId.value) {
-    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId)
+    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId, audiolog = true)
   }
   val viewState = viewModel.viewState()
   BookmarkScreen(
