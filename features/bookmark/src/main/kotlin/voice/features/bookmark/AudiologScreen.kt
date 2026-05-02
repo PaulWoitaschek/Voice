@@ -36,7 +36,6 @@ fun AudiologScreen(bookId: BookId) {
     titleRes = StringsR.string.audiolog,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
-    onAutoSaveToggle = viewModel::onAutoSaveToggle,
     onDelete = viewModel::deleteBookmark,
     onEdit = viewModel::onEditClick,
     onScrollConfirm = viewModel::onScrollConfirm,
