@@ -9,6 +9,8 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
+import java.time.Duration
+import java.time.Instant
 
 @SingleIn(AppScope::class)
 @Inject
@@ -20,6 +22,7 @@ class AudiologRecorder(
 ) {
 
   var pausedDueToSleeping: Boolean = false
+  private var lastShortSkipTime: Instant = Instant.MIN
 
   suspend fun record(reason: String) {
     val bookId = currentBookStore.data.first() ?: return
@@ -30,5 +33,17 @@ class AudiologRecorder(
       setBySleepTimer = false,
       setByAudiolog = true,
     )
+  }
+
+  suspend fun recordShortSkip() {
+    val now = Instant.now()
+    val withinWindow = Duration.between(lastShortSkipTime, now) <= SHORT_SKIP_WINDOW
+    lastShortSkipTime = now
+    if (withinWindow) return
+    record("skipping")
+  }
+
+  private companion object {
+    val SHORT_SKIP_WINDOW: Duration = Duration.ofSeconds(30)
   }
 }
