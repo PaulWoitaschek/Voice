@@ -34,6 +34,7 @@ fun AudiologScreen(bookId: BookId) {
   BookmarkScreen(
     viewState = viewState,
     titleRes = StringsR.string.audiolog,
+    showAddButton = false,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
     onDelete = viewModel::deleteBookmark,
