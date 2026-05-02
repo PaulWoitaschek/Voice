@@ -86,6 +86,7 @@ fun BookmarkScreen(bookId: BookId) {
   BookmarkScreen(
     viewState = viewState,
     titleRes = StringsR.string.bookmark,
+    showAddButton = true,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
     onDelete = viewModel::deleteBookmark,
@@ -102,6 +103,7 @@ fun BookmarkScreen(bookId: BookId) {
 internal fun BookmarkScreen(
   viewState: BookmarkViewState,
   @StringRes titleRes: Int,
+  showAddButton: Boolean,
   onClose: () -> Unit,
   onAdd: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
@@ -134,12 +136,14 @@ internal fun BookmarkScreen(
       )
     },
     floatingActionButton = {
-      FloatingActionButton(
-        onClick = onAdd,
-        content = {
-          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
-        },
-      )
+      if (showAddButton) {
+        FloatingActionButton(
+          onClick = onAdd,
+          content = {
+            Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
+          },
+        )
+      }
     },
   ) { paddingValues ->
     val lazyListState = rememberLazyListState()
