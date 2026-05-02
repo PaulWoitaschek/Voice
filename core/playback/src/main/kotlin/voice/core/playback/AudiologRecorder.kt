@@ -19,6 +19,8 @@ class AudiologRecorder(
   private val bookmarkRepo: BookmarkRepo,
 ) {
 
+  var pausedDueToSleeping: Boolean = false
+
   suspend fun record(reason: String) {
     val bookId = currentBookStore.data.first() ?: return
     val book = bookRepository.get(bookId) ?: return
