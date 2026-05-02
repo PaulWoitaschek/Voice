@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.BedtimeOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +31,7 @@ internal fun BookPlayAppBar(
   onSleepTimerClick: () -> Unit,
   onBookmarkClick: () -> Unit,
   onBookmarkLongClick: () -> Unit,
+  onAudiologClick: () -> Unit,
   onSpeedChangeClick: () -> Unit,
   onSkipSilenceClick: () -> Unit,
   onVolumeBoostClick: () -> Unit,
@@ -61,6 +63,12 @@ internal fun BookPlayAppBar(
       Icon(
         imageVector = Icons.Outlined.CollectionsBookmark,
         contentDescription = stringResource(id = R.string.bookmark),
+      )
+    }
+    IconButton(onClick = onAudiologClick) {
+      Icon(
+        imageVector = Icons.Outlined.History,
+        contentDescription = stringResource(id = R.string.audiolog),
       )
     }
     IconButton(onClick = onSpeedChangeClick) {
