@@ -18,6 +18,7 @@ import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.api.Logger
+import voice.core.playback.AudiologRecorder
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
@@ -38,6 +39,7 @@ class SleepTimerImpl internal constructor(
   private val fadeOutStore: DataStore<Duration>,
   dispatcherProvider: DispatcherProvider,
   private val tracker: SleepTimerTracker,
+  private val audiologRecorder: AudiologRecorder,
 ) : SleepTimer {
 
   private val scope = MainScope(dispatcherProvider)
@@ -94,6 +96,7 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1f)
     _state.value = SleepTimerState.Disabled
 
+    audiologRecorder.record("sleeping")
     playerController.pauseWithRewind(fadeOutDuration)
 
     val shakeDetected = detectShakeWithTimeout()
