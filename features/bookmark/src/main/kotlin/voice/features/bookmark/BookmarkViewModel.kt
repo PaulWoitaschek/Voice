@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -41,6 +42,7 @@ class BookmarkViewModel(
   private val playerController: PlayerController,
   private val navigator: Navigator,
   private val context: Context,
+  private val autoSaveBookmarkController: AutoSaveBookmarkController,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -62,6 +64,15 @@ class BookmarkViewModel(
         chapters = book.chapters
       }
     }
+    LaunchedEffect(bookId) {
+      autoSaveBookmarkController.added.collect { added ->
+        if (added.bookId == bookId && bookmarks.none { it.id == added.id }) {
+          bookmarks = (bookmarks + added).sortedByDescending { it.addedAt }
+          shouldScrollTo = added.id
+        }
+      }
+    }
+    val activeBookId by autoSaveBookmarkController.activeBookId.collectAsState()
     return BookmarkViewState(
       bookmarks = bookmarks.map { bookmark ->
         val currentChapter = chapters.single { it.id == bookmark.chapterId }
@@ -94,7 +105,12 @@ class BookmarkViewModel(
       },
       shouldScrollTo = shouldScrollTo,
       dialogViewState = dialogViewState,
+      autoSaveEnabled = activeBookId == bookId,
     )
+  }
+
+  fun onAutoSaveToggle() {
+    autoSaveBookmarkController.toggle(bookId)
   }
 
   fun deleteBookmark(id: Bookmark.Id) {

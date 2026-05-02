@@ -13,6 +13,7 @@ data class BookmarkViewState(
   val bookmarks: List<BookmarkItemViewState>,
   val shouldScrollTo: Bookmark.Id?,
   val dialogViewState: BookmarkDialogViewState,
+  val autoSaveEnabled: Boolean,
 )
 
 sealed interface BookmarkDialogViewState {
