@@ -54,6 +54,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.features.bookmark.dialogs.AddBookmarkDialog
+import voice.features.bookmark.dialogs.EditAudiologDialog
 import voice.features.bookmark.dialogs.EditBookmarkDialog
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -87,6 +88,7 @@ fun BookmarkScreen(bookId: BookId) {
     viewState = viewState,
     titleRes = StringsR.string.bookmark,
     showAddButton = true,
+    audiolog = false,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
     onDelete = viewModel::deleteBookmark,
@@ -104,6 +106,7 @@ internal fun BookmarkScreen(
   viewState: BookmarkViewState,
   @StringRes titleRes: Int,
   showAddButton: Boolean,
+  audiolog: Boolean,
   onClose: () -> Unit,
   onAdd: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
@@ -186,12 +189,21 @@ internal fun BookmarkScreen(
     BookmarkDialogViewState.None -> {
     }
     is BookmarkDialogViewState.EditBookmark -> {
-      EditBookmarkDialog(
-        onDismissRequest = onCloseDialog,
-        onEditBookmark = onEditBookmark,
-        bookmarkId = viewState.dialogViewState.id,
-        initialTitle = viewState.dialogViewState.title ?: "",
-      )
+      if (audiolog) {
+        EditAudiologDialog(
+          onDismissRequest = onCloseDialog,
+          onEditBookmark = onEditBookmark,
+          bookmarkId = viewState.dialogViewState.id,
+          initialTitle = viewState.dialogViewState.title ?: "",
+        )
+      } else {
+        EditBookmarkDialog(
+          onDismissRequest = onCloseDialog,
+          onEditBookmark = onEditBookmark,
+          bookmarkId = viewState.dialogViewState.id,
+          initialTitle = viewState.dialogViewState.title ?: "",
+        )
+      }
     }
   }
 }
