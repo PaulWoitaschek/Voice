@@ -40,7 +40,6 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +53,6 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.features.bookmark.dialogs.AddBookmarkDialog
-import voice.features.bookmark.dialogs.EditAudiologDialog
 import voice.features.bookmark.dialogs.EditBookmarkDialog
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -86,9 +84,6 @@ fun BookmarkScreen(bookId: BookId) {
   val viewState = viewModel.viewState()
   BookmarkScreen(
     viewState = viewState,
-    titleRes = StringsR.string.bookmark,
-    showAddButton = true,
-    audiolog = false,
     onClose = viewModel::closeScreen,
     onAdd = viewModel::onAddClick,
     onDelete = viewModel::deleteBookmark,
@@ -104,9 +99,6 @@ fun BookmarkScreen(bookId: BookId) {
 @Composable
 internal fun BookmarkScreen(
   viewState: BookmarkViewState,
-  @StringRes titleRes: Int,
-  showAddButton: Boolean,
-  audiolog: Boolean,
   onClose: () -> Unit,
   onAdd: () -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
@@ -127,7 +119,7 @@ internal fun BookmarkScreen(
     },
     topBar = {
       TopAppBar(
-        title = { Text(text = stringResource(id = titleRes)) },
+        title = { Text(text = stringResource(id = StringsR.string.bookmark)) },
         navigationIcon = {
           IconButton(onClick = onClose) {
             Icon(
@@ -139,14 +131,12 @@ internal fun BookmarkScreen(
       )
     },
     floatingActionButton = {
-      if (showAddButton) {
-        FloatingActionButton(
-          onClick = onAdd,
-          content = {
-            Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
-          },
-        )
-      }
+      FloatingActionButton(
+        onClick = onAdd,
+        content = {
+          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
+        },
+      )
     },
   ) { paddingValues ->
     val lazyListState = rememberLazyListState()
@@ -189,21 +179,12 @@ internal fun BookmarkScreen(
     BookmarkDialogViewState.None -> {
     }
     is BookmarkDialogViewState.EditBookmark -> {
-      if (audiolog) {
-        EditAudiologDialog(
-          onDismissRequest = onCloseDialog,
-          onEditBookmark = onEditBookmark,
-          bookmarkId = viewState.dialogViewState.id,
-          initialTitle = viewState.dialogViewState.title ?: "",
-        )
-      } else {
-        EditBookmarkDialog(
-          onDismissRequest = onCloseDialog,
-          onEditBookmark = onEditBookmark,
-          bookmarkId = viewState.dialogViewState.id,
-          initialTitle = viewState.dialogViewState.title ?: "",
-        )
-      }
+      EditBookmarkDialog(
+        onDismissRequest = onCloseDialog,
+        onEditBookmark = onEditBookmark,
+        bookmarkId = viewState.dialogViewState.id,
+        initialTitle = viewState.dialogViewState.title ?: "",
+      )
     }
   }
 }
