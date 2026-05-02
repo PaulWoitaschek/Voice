@@ -57,6 +57,7 @@ class VoicePlayer(
 
   fun forceSeekToNext() {
     scope.launch {
+      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentMarkIndex = marks.indexOfFirst { mark ->
@@ -79,6 +80,7 @@ class VoicePlayer(
 
   fun forceSeekToPrevious() {
     scope.launch {
+      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentPosition = player.currentPosition
