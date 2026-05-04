@@ -32,7 +32,7 @@
     <string name="pref_theme_dark">Tmavá téma</string>
     <string name="pref_auto_rewind_title">Automaticky pretočiť dozadu</string>
     <string name="popup_edit">Upraviť</string>
-    <string name="remove">Zmazať</string>
+    <string name="remove">Vymazať</string>
     <string name="play_current">Prehrať aktuálnu</string>
     <string name="book_header_current">Rozpočúvané</string>
     <string name="book_header_not_started">Ešte nepočúvané</string>
@@ -100,7 +100,7 @@
     <string name="migration_detail_content_position_current_chapter_position">Pozícia v kapitole</string>
     <string name="migration_delete_dialog_title">Zmazať pozície</string>
     <string name="migration_delete_dialog_content">Keď zmažete uložené informácie o pozíciách, záložky a údaje o rozpočúvaných knihách nebude možné obnoviť.</string>
-    <string name="migration_delete_dialog_action_delete">Zmazať</string>
+    <string name="migration_delete_dialog_action_delete">Vymazať</string>
     <string name="migration_delete_dialog_action_keep">Ponechať</string>
     <string name="delete_book_bottom_sheet_title">Zmazať knihu</string>
     <string name="delete_book_dialog_content">Týmto odstránite súbory zo zariadenia.</string>
@@ -131,4 +131,22 @@
     <string name="settings_analytics_consent_title">Analytické údaje</string>
     <string name="settings_analytics_consent_description">Povoliť zber anonymných údajov o používaní s cieľom ďalej vylepšovať aplikáciu</string>
     <string name="review.request.title">Páči sa vám aplikácia Voice?</string>
+    <string name="review.request.content">Vaša spätná väzba je pre nás dôležitá! Ak si nájdete chvíľočku, prosím ohodnoťte nás a podeľte sa o svoje skúsenosti. Pomáha nám to aplikáciu ďalej vyvíjať a poskytovať tak lepší zážitok s počúvania.</string>
+    <string name="review.request.button.yes">Ohodnotiť teraz</string>
+    <string name="review.feedback.title">To nás mrzí!</string>
+    <string name="review.feedback.content">Môžete nám povedať, čo sa stalo? Vaše pripomienky si veľmi ceníme a pomáhajú nám pri zlepšovaní vašej používateľskej skúsenosti.</string>
+    <string name="review.feedback.button.yes">Odoslať spätnú väzbu</string>
+    <string name="review.feedback.button.no">Zrušiť</string>
+    <string name="sleep_timer.button.increment">Dlhšie</string>
+    <string name="sleep_timer.button.decrement">Kradšie</string>
+    <string name="auto_sleep_timer.title">Automatický časovač zastavenia</string>
+    <string name="auto_sleep_timer.subtitle">Automaticky aktivovať časovač zastavenia, ak sa prehrávanie spustí medzi %1$s a %2$s</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Nastaviť počiatočný čas</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Nastaviť konečný čas</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minúta</item>
+        <item quantity="few">%d minúty</item>
+        <item quantity="many">%d minút</item>
+        <item quantity="other">%d minút</item>
+    </plurals>
 </resources>
