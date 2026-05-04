@@ -1,20 +1,20 @@
-Kas sa otsid lihtsat ja minimalistlikku heliraamatute esitajat, mis lihtsalt toimib?
-Niisugust, mis lubaks sul keskenduda sellele, mida tahad teha - heliraamatute kuulamisele?
-Sa vaid lisad rakendusse oma heliraamatute põhikausta ja iga sealne alamkaust saab tuvastatud ühe heliraamatuna. See hoiab sinu kogu lihtsa ja müravabana.
+Kas otsid lihtsat ja minimalistlikku audioraamatute mängijat, mis lihtsalt toimib? Voice on sinu parim kaaslane, millega saad häirimatult kuulata oma (DRM-vabasid) lemmik audioraamatuid. Usume, et sinu kuulamiskogemus peaks olema sujuv, mistõttu on Voice 100% tasuta, avatud lähtekoodiga ja ei sisalda ainsamatki reklaami.
 
-Mida see rakendus oskab:
+Voice on loodud audioraamatute entusiastidele, kes haldavad oma kohalikke faile (M4B, MP3, M4A, OGG, OGA, OPUS jne), ning võimaldab kuulajatel keskenduda sellele, mis on kõige olulisem: loole. Lihtsalt lisa oma peamine audioraamatute kaust ja rakendus tuvastab iga alamkausta automaatselt ühe raamatuna. Ei mingeid keerukaid sünkroniseerimisi ega sunduslikke pilvekontosid – lihtsalt sinu kohalikus seadmes leiduvad failid, mida kuuled täiuslikult.
 
-- mäletab viimast asukohta heliraamatus
-- saad valida taasesituse kiirust
-- ilus kujundus, mis põhineb Material Designi kujunduskeelel
-- öö- ja päevavaated, mis ei väsita silmi
-- järjehoidjad
-- liidestus Android Autoga
-- unetaimer, mis tagab selle, et sa ei pea keset ööd umbkaudu seda rakendust välja lülitama
+Hoolimata oma puhtast kasutajaliidesest pakub Voice mitmeid funktsionaalsusi kogenud kasutajatele:
+• 100% võrguvaba ja reklaamivaba: naudi katkematut kuulamist kõikjal. Internetiühendust ei ole vaja, pole vaja tellimusi ja reklaame pole üldse.
+• Täiustatud heli haldus: reguleeri taasesituskiirust, aktiveeri helitugevuse suurendamine vaiksetele salvestustele ja kasuta pausidest edasiminemiseks vaikuse vahelejätmise lülitit.
+• Konfigureeritav automaatne tagasikerimine: kas tegid pausi? Rakendus kerib jätkamisel automaatselt paar sekundit tagasi ja nii saaksid konteksti hõlpsasti jälgida.
+• Nutikas otsing: otsi hõlpsasti kogu oma raamatukogust pealkirju ja autoreid, et leida kohe täpselt see raamat, mida kuulata tahad.
+• Nutikad järjehoidjad ja kuulamisjärje tuvastus: rakendus mäletab täpselt iga raamatu viimast kuulamiskohta. Samuti saad hõlpsasti lisada, hallata ja ümber nimetada isikupäraseid järjehoidjaid.
+• Unetaimer: seadista sulle vajalik taimer, lase mängida kuni peatüki lõpuni või määra automaatseks pausiks igapäevane ajavahemik (nt 22:00–06:00). Raputa seadet, et taimerit kiiresti nullida ilma ekraani lukust avamata!
+• Kaanepiltide haldamine: Kasuta sisseehitatud kaanepilte, vali kohalikud pildid või lase rakendusel otsida puuduvaid kaanepilte internetist.
+• Süsteemi lõiming: Juhi taasesitust otse avalehe vidinast, meediateadete kaudu või turvaliselt oma auto armatuurlaudalt täieliku Android Auto toega.
+• Kaustapõhine raamatukogu: Filtri raamatuid kategooriate „Praegune”, „Lõpetatud” ja „Alustamata” järgi. Vaheta loendi- ja ruudustikuvaadete vahel.
 
-Voice on vaba tarkvara ja põhineb avatud lähtekoodil. See tähendab, et kõik huvilised saavad kontrollida, kuidas ta töötab. Lisaks vajab ta minimaalselt õigusi.
+Voice on täiesti tasuta ja avatud lähtekoodiga tarkvara (GNU GPLv3 litsents). See tähendab, et kogukond ja huvilised saavad täpselt näha, mida see rakendus teeb. Me austame sinu privaatsust ja kasutame ainult minimaalselt vajalikke Androidi õigusi, et avada sinu nutiseadme kohalikke helifaile.
 
-Kui sul on soovitusi või leiad mõne vea, siis teata neist siin:
-https://github.com/VoiceAudiobook/Voice/issues
+Muuda oma Android-seade juba täna ideaalseks võrguvabaks heliparadiisiks!
 
-Voice on avaldatud GNU Üldise Avaliku Litsentsi versioon 3 alusel
+Kas tahad jagada tagasisidet või leidsid vea? Liitu meie kogukonnaga ja teata neist meie GitHubi lehel: https://github.com/PaulWoitaschek/Voice/issues
