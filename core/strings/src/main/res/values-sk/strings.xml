@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cover">Obal</string>
+    <string name="cover">Obálka</string>
     <string name="play_pause">Prehrať / Pozastaviť</string>
-    <string name="action_sleep">Časovač vypnutia</string>
-    <string name="rewind">Pretočiť</string>
+    <string name="action_sleep">Časovač zastavenia</string>
+    <string name="rewind">Dozadu</string>
     <string name="fast_forward">Dopredu</string>
     <string name="previous_track">Predchádzajúca skladba</string>
     <string name="next_track">Nasledujúca skladba</string>
     <string name="skip_silence">Preskočiť ticho</string>
     <string name="dialog_confirm">Nastaviť</string>
     <string name="dialog_cancel">Zrušiť</string>
-    <string name="content_cover">Zobraziť obal pre vybratie</string>
+    <string name="content_cover">Zobrazí výber obálky</string>
     <string name="change_book_name">Názov</string>
-    <string name="download_book_cover">Obal z internetu</string>
-    <string name="pick_book_cover">Obal zo súboru</string>
+    <string name="download_book_cover">Obálka z internetu</string>
+    <string name="pick_book_cover">Obálka zo súboru</string>
     <string name="edit_book_title">Upraviť knihu</string>
     <string name="audiobook_folders_title">Zložka s audioknihami</string>
     <string name="playback_speed">Rýchlosť prehrávania</string>
@@ -78,4 +78,7 @@
     <string name="voice_intro_first_book">Pridajme vašu zložku s audioknihami, aby ste mohli začať počúvať!</string>
     <string name="migration_hint_confirm">Rozumiem</string>
     <string name="migration_detail_content_name">Názov</string>
+    <string name="cover_search_template_no_author">%s audiobook cover</string>
+    <string name="cover_search_template_with_author">%1$s by %2$s audiobook cover</string>
+    <string name="cover_search.icon_recent">Posledné hľadanie</string>
 </resources>
