@@ -19,7 +19,7 @@
     <string name="edit_book_title">Buch bearbeiten</string>
     <string name="mark_as_completed">Als „Abgeschlossen“ markieren</string>
     <string name="mark_as_current">Als „Aktuell“ markieren</string>
-    <string name="mark_as_not_started">Als \"Neu\" markieren</string>
+    <string name="mark_as_not_started">Als „Neu“ markieren</string>
     <string name="audiobook_folders_title">Hörbuch-Ordner</string>
     <string name="playback_speed">Abspielgeschwindigkeit</string>
     <string name="bookmark">Lesezeichen</string>
@@ -37,19 +37,19 @@
     <string name="pref_suggest_idea">Eine Idee vorschlagen</string>
     <string name="pref_use_grid">Raster-Layout verwenden</string>
     <string name="pref_report_issue">Ein Problem melden</string>
-    <string name="pref_help_translating">Helfen, Voice zu übersetzen</string>
+    <string name="pref_help_translating">Bei der Übersetzung von Voice helfen</string>
     <string name="pref_get_support">Hilfe erhalten</string>
     <string name="pref_app_version">App-Version</string>
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Entfernen</string>
-    <string name="play_current">Aktuelles abspielen</string>
+    <string name="play_current">Jetzt abspielen</string>
     <string name="book_header_current">Aktuell</string>
     <string name="book_header_not_started">Neu</string>
     <string name="book_header_completed">Abgeschlossen</string>
     <string name="close">Schließen</string>
     <string name="delete">Löschen</string>
     <string name="add">Hinzufügen</string>
-    <string name="folder_mode_root">Buch-Modus auf oberster Ebene: Unterordner sind Bücher</string>
+    <string name="folder_mode_root">Buchmodus auf oberster Ebene: Unterordner sind Bücher</string>
     <string name="folder_mode_single">Einzelbuchmodus: Ein Ordner entspricht einem Buch.</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d Audiodatei</item>
@@ -57,7 +57,7 @@
     </plurals>
     <string name="folder_type_book_example_header">Dies würde dazu führen, dass die folgenden Bücher erkannt werden</string>
     <string name="folder_type_no_books">Voice konnte keine Bücher erkennen. Gibt es hier Audio-Dateien?</string>
-    <string name="folder_type_title">Wie sind deine Dateien organisiert?</string>
+    <string name="folder_type_title">Wie sind Deine Dateien organisiert?</string>
     <string name="bookmark_just_now">Gerade eben</string>
     <string name="voice_intro_first_book">Füge Deinen Hörbuchordner hinzu, damit Du mit dem Hören beginnen kannst!</string>
     <string name="migration_hint_title">Zugriff auf alte Buchpositionen</string>
@@ -82,7 +82,7 @@
     <string name="delete_book_dialog_deletion_confirmation">Lösche meine Dateien</string>
     <string name="delete_book_dialog_content">Dies wird die Dateien auf Deinem Gerät löschen.</string>
     <string name="search_hint">Wonach suchst Du?</string>
-    <string name="battery_optimization_rationale">Aufgrund Deiner Akkueinstellungen kann es zu Abspielunterbrechnungen kommen.</string>
+    <string name="battery_optimization_rationale">Aufgrund Deiner Akkueinstellungen kann es zu Abspielunterbrechungen kommen.</string>
     <string name="battery_optimization_action">Update</string>
     <string name="media_session_root">Alle Hörbücher</string>
     <string name="media_session_recent">Kürzlich</string>
@@ -98,7 +98,7 @@
     <string name="storage_bug_title">Berechtigung benötigt</string>
     <string name="storage_bug_subtitle">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Deine Hörbücher lesen zu können.</string>
     <string name="storage_bug_button">Berechtigung erteilen</string>
-    <string name="folder_mode_author">Autor-Buch-Modus: Unterordner sind Autoren, Unter-Unterordner sind Bücher.</string>
+    <string name="folder_mode_author">Autor-Buchmodus: Unterordner sind Autoren, Unter-Unterordner sind Bücher.</string>
     <string name="cover_search.author">Autor</string>
     <string name="select_folder_title_onboarding">Füge Dein erstes Hörbuch hinzu</string>
     <string name="select_folder_title_default">Füge Deine Hörbücher hinzu</string>
