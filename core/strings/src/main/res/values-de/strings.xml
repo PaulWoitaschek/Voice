@@ -17,8 +17,8 @@
     <string name="download_book_cover">Cover aus dem Internet</string>
     <string name="pick_book_cover">Cover aus dem Dateisystem</string>
     <string name="edit_book_title">Buch bearbeiten</string>
-    <string name="mark_as_completed">Als \"Abgeschlossen\" markieren</string>
-    <string name="mark_as_current">Als \"Aktuell\" markieren</string>
+    <string name="mark_as_completed">Als „Abgeschlossen“ markieren</string>
+    <string name="mark_as_current">Als „Aktuell“ markieren</string>
     <string name="mark_as_not_started">Als \"Neu\" markieren</string>
     <string name="audiobook_folders_title">Hörbuch-Ordner</string>
     <string name="playback_speed">Abspielgeschwindigkeit</string>
