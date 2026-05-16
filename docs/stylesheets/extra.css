@@ -1,0 +1,49 @@
+.md-typeset .md-button.md-button--sponsor {
+  background-color: #e91e63;
+  border-color: #e91e63;
+  color: #fff;
+}
+
+.md-typeset .md-button.md-button--sponsor:hover,
+.md-typeset .md-button.md-button--sponsor:focus {
+  background-color: #c2185b;
+  border-color: #c2185b;
+  color: #fff;
+}
+
+.md-typeset .md-button.md-button--sponsor .heart-pulse,
+.md-typeset .md-button.md-button--sponsor svg {
+  color: #fff;
+  fill: currentColor;
+}
+
+.heart-pulse {
+  color: #e91e63;
+  animation: heart-pulse 1.6s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart-pulse { animation: none; }
+}
+
+.md-typeset .grid.cards > :is(ul, ol) > li,
+.md-typeset .grid > .card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-typeset .grid.cards > :is(ul, ol) > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.md-typeset .md-button {
+  margin: 0.25rem 0.25rem 0.25rem 0;
+}
