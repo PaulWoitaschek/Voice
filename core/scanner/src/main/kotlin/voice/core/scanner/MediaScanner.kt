@@ -2,7 +2,6 @@ package voice.core.scanner
 
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
-import voice.core.data.audioFileCount
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
 import voice.core.data.repo.BookContentRepo
@@ -47,7 +46,21 @@ internal class MediaScanner(
 
     contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
 
-    val probeFile = folders.values.flatten().findProbeFile()
+    // Walk each candidate book exactly once and remember the audio files we find.
+    // Reused below for the permission probe, ordering and chapter parsing instead
+    // of walking the SAF tree three separate times.
+    val booksWithAudioFiles: List<Pair<CachedDocumentFile, List<CachedDocumentFile>>> = files.map { file ->
+      val audioFiles = if (file.isAudioFile()) {
+        listOf(file)
+      } else {
+        file.walk().filter { it.isAudioFile() }.toList()
+      }
+      file to audioFiles
+    }
+
+    val probeFile = booksWithAudioFiles.asSequence()
+      .flatMap { it.second.asSequence() }
+      .firstOrNull { it.uri.authority == "com.android.externalstorage.documents" }
     if (probeFile != null) {
       if (deviceHasPermissionBug.checkForBugAndSet(probeFile)) {
         Logger.w("Device has permission bug, aborting scan! Probed $probeFile")
@@ -55,25 +68,22 @@ internal class MediaScanner(
       }
     }
 
-    files
-      .sortedBy { it.audioFileCount() }
-      .forEach { file ->
-        scan(file)
+    booksWithAudioFiles
+      .sortedBy { it.second.size }
+      .forEach { (file, audioFiles) ->
+        scan(file, audioFiles)
       }
   }
 
-  private fun List<CachedDocumentFile>.findProbeFile(): CachedDocumentFile? {
-    return asSequence().flatMap { it.walk() }
-      .firstOrNull { child ->
-        child.isAudioFile() && child.uri.authority == "com.android.externalstorage.documents"
-      }
-  }
-
-  private suspend fun scan(file: CachedDocumentFile) {
-    val chapters = chapterParser.parse(file)
+  private suspend fun scan(
+    file: CachedDocumentFile,
+    audioFiles: List<CachedDocumentFile>,
+  ) {
+    val parseResult = chapterParser.parse(audioFiles)
+    val chapters = parseResult.chapters
     if (chapters.isEmpty()) return
 
-    val content = bookParser.parseAndStore(chapters, file)
+    val content = bookParser.parseAndStore(chapters, file, parseResult.firstFileMetadata)
 
     val chapterIds = chapters.map { it.id }
     val currentChapterGone = content.currentChapter !in chapterIds

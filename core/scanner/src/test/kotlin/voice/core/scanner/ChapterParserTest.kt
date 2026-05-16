@@ -72,7 +72,9 @@ class ChapterParserTest {
         }
       },
     )
-    chapterParser.parse(FileBasedDocumentFile(audiobook))
+    val audioFiles = FileBasedDocumentFile(audiobook).children
+    chapterParser.parse(audioFiles)
+      .chapters
       .map { it.name }
       .shouldContainExactly(
         "Chapter 1",
