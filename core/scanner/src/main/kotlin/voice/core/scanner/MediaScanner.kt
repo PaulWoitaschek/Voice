@@ -70,10 +70,11 @@ internal class MediaScanner(
   }
 
   private suspend fun scan(file: CachedDocumentFile) {
-    val chapters = chapterParser.parse(file)
+    val parseResult = chapterParser.parse(file)
+    val chapters = parseResult.chapters
     if (chapters.isEmpty()) return
 
-    val content = bookParser.parseAndStore(chapters, file)
+    val content = bookParser.parseAndStore(chapters, file, parseResult.firstChapterMetadata)
 
     val chapterIds = chapters.map { it.id }
     val currentChapterGone = content.currentChapter !in chapterIds

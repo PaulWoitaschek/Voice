@@ -1,6 +1,5 @@
 package voice.core.scanner
 
-import android.net.Uri
 import dev.zacsweers.metro.Inject
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -24,11 +23,12 @@ internal class BookParser(
   suspend fun parseAndStore(
     chapters: List<Chapter>,
     file: CachedDocumentFile,
+    firstChapterMetadata: Metadata?,
   ): BookContent {
     val id = BookId(file.uri)
     return contentRepo.getOrPut(id) {
-      val uri = chapters.first().id.toUri()
-      val analyzed = mediaAnalyzer.analyze(fileFactory.create(uri))
+      val analyzed = firstChapterMetadata
+        ?: mediaAnalyzer.analyze(fileFactory.create(chapters.first().id.toUri()))
       parse(chapters, id, analyzed, file)
     }
   }
@@ -91,10 +91,4 @@ internal fun validateIntegrity(
   // the init block performs integrity validation
   @Suppress("RETURN_VALUE_NOT_USED")
   Book(content, chapters)
-}
-
-internal fun Uri.filePath(): String? {
-  return pathSegments.lastOrNull()
-    ?.dropWhile { it != ':' }
-    ?.removePrefix(":")
 }

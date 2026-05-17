@@ -159,6 +159,17 @@ class MediaScannerTest {
   }
 
   @Test
+  fun newBookReusesFirstChapterMetadata() = test {
+    val folder = folder("book")
+    audioFile(parent = folder, "1.mp3")
+    audioFile(parent = folder, "2.mp3")
+
+    scan(FolderType.SingleFolder, folder)
+
+    analyzeCalls shouldBe 2
+  }
+
+  @Test
   fun scanAuthor() = test {
     val audioBooks = folder("audiobooks")
 
@@ -196,6 +207,7 @@ class MediaScannerTest {
     val bookContentRepo = BookContentRepoImpl(db.bookContentDao())
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
+    var analyzeCalls = 0
     private val scanner = MediaScanner(
       contentRepo = bookContentRepo,
       chapterParser = ChapterParser(
@@ -234,6 +246,7 @@ class MediaScannerTest {
         }
         .also {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
+            analyzeCalls++
             Metadata(
               duration = 1000L,
               artist = "Author",
