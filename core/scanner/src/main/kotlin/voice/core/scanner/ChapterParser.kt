@@ -9,20 +9,27 @@ import voice.core.data.repo.getOrPut
 import voice.core.documentfile.CachedDocumentFile
 import java.time.Instant
 
+internal data class ChapterParseResult(
+  val chapters: List<Chapter>,
+  val firstChapterMetadata: Metadata?,
+)
+
 @Inject
 internal class ChapterParser(
   private val chapterRepo: ChapterRepo,
   private val mediaAnalyzer: MediaAnalyzer,
 ) {
 
-  suspend fun parse(documentFile: CachedDocumentFile): List<Chapter> {
+  suspend fun parse(documentFile: CachedDocumentFile): ChapterParseResult {
     val result = mutableListOf<Chapter>()
+    val analyzedMetadata = mutableMapOf<ChapterId, Metadata>()
 
     suspend fun parseChapters(file: CachedDocumentFile) {
       if (file.isAudioFile()) {
         val id = ChapterId(file.uri)
         val chapter = chapterRepo.getOrPut(id, Instant.ofEpochMilli(file.lastModified)) {
           val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
+          analyzedMetadata[id] = metaData
           Chapter(
             id = id,
             duration = metaData.duration,
@@ -43,6 +50,10 @@ internal class ChapterParser(
     }
 
     parseChapters(file = documentFile)
-    return result.sorted()
+    val chapters = result.sorted()
+    return ChapterParseResult(
+      chapters = chapters,
+      firstChapterMetadata = chapters.firstOrNull()?.let { analyzedMetadata[it.id] },
+    )
   }
 }

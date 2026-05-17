@@ -16,8 +16,6 @@ import voice.core.data.repo.ChapterRepoImpl
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
-import voice.core.scanner.ChapterParser
-import voice.core.scanner.Metadata
 
 @RunWith(AndroidJUnit4::class)
 class ChapterParserTest {
@@ -73,6 +71,7 @@ class ChapterParserTest {
       },
     )
     chapterParser.parse(FileBasedDocumentFile(audiobook))
+      .chapters
       .map { it.name }
       .shouldContainExactly(
         "Chapter 1",
