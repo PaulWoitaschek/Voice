@@ -7,11 +7,11 @@ hide:
 
 A minimal, user-focused audiobook player for Android.
 
-[:octicons-heart-fill-16:{ .heart-pulse } &nbsp;Sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek){ .md-button .md-button--sponsor }
+[:simple-kofi:{ .heart-pulse } &nbsp;Support on Ko-fi](https://ko-fi.com/paul_voice){ .md-button .md-button--sponsor }
 [:simple-googleplay: &nbsp;Google Play](https://play.google.com/store/apps/details?id=de.ph1b.audiobook){ .md-button }
 [:simple-fdroid: &nbsp;F-Droid](https://f-droid.org/packages/de.ph1b.audiobook){ .md-button }
 
-<small>Voice is free and built in spare time. Prefer a one-time tip? [Ko-fi](https://ko-fi.com/paul_voice).</small>
+<small>Voice is free and built in spare time. Ko-fi supports one-time or monthly contributions with no sign-up. You can also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
 
 ## Why Voice?
 
@@ -21,7 +21,7 @@ A minimal, user-focused audiobook player for Android.
 
     ---
 
-    Only the features you actually need — no clutter, no upsells, no tracking.
+    Only the features you actually need — no clutter, no upsells.
 
 -   :material-shield-check:{ .lg .middle } **Open source & private**
 
