@@ -117,6 +117,7 @@ class BookParserTest {
     duration = 1000L,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),
+    fileSize = 0,
   )
 
   private fun metadata(

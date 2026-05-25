@@ -381,5 +381,6 @@ private fun chapter(): Chapter {
       MarkData(startMs = 4.minutes.inWholeMilliseconds, name = "Final Section"),
     ),
     name = "name",
+    fileSize = 0,
   )
 }

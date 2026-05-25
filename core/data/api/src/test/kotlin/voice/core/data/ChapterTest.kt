@@ -150,6 +150,7 @@ class ChapterTest {
       id = ChapterId(""),
       markData = marks,
       name = "Chapter",
+      fileSize = 0,
     ).chapterMarks.map { MarkPosition(it.startMs, it.endMs) }
 
     val expectedPositions = coverageToPositions(expectedCoverage)
