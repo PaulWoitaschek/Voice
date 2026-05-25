@@ -135,6 +135,7 @@ private fun chapter(): Chapter {
     duration = 10000,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),
+    fileSize = 0,
   )
 }
 

@@ -115,6 +115,7 @@ class SleepTimerIntegrationTest {
         MarkData(startMs = 0, name = "Mark 1"),
         MarkData(startMs = 1000, name = "Mark 2"),
       ),
+      fileSize = 0,
     )
 
     val bookContent = BookContent(

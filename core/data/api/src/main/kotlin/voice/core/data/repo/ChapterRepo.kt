@@ -13,10 +13,11 @@ public interface ChapterRepo {
 public suspend inline fun ChapterRepo.getOrPut(
   id: ChapterId,
   lastModified: Instant,
+  fileSize: Long,
   defaultValue: () -> Chapter?,
 ): Chapter? {
   val chapter = get(id)
-  if (chapter != null && chapter.fileLastModified == lastModified) {
+  if (chapter != null && chapter.fileLastModified == lastModified && chapter.fileSize == fileSize) {
     return chapter
   }
   return defaultValue()?.also { put(it) }

@@ -22,6 +22,7 @@ class CurrentBookResolverTest {
         duration = 10_000,
         fileLastModified = Instant.EPOCH,
         markData = emptyList(),
+        fileSize = 0,
       ),
       Chapter(
         id = ChapterId("chapter-2"),
@@ -29,6 +30,7 @@ class CurrentBookResolverTest {
         duration = 10_000,
         fileLastModified = Instant.EPOCH,
         markData = emptyList(),
+        fileSize = 0,
       ),
     ),
   )

@@ -326,6 +326,7 @@ class VoicePlayerTest {
       markData = marks.map {
         MarkData(it.startMs, it.name ?: "mark ")
       },
+      fileSize = 0,
     )
   }
 
